@@ -46,7 +46,9 @@ pub struct End {
     receiver: Receiver<()>,
 }
 
-pub trait Role {}
+pub trait Role {
+    fn new(name: String) -> StructRole;
+}
 
 impl Role for StructRole{
     fn new(name: String) -> StructRole {
@@ -73,25 +75,28 @@ impl Session for End {
     }
 }
 
-impl<T: marker::Send, RS: Role, RR: Role, S: Session> Session for Send<T, RS, RR, S> {
+impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role, S: Session> Session for Send<T, RS, RR, S> {
     type Dual = Recv<T, RR, RS, S::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
+
+        let basicRole = Role::new(String::from(""));
+
         return (Send {
             channel: sender,
-            //sender: RS,
-            //receiver: RR,
+            sender: basicRole,
+            receiver: basicRole,
         }, Recv {
             channel: receiver,
-            //sender: RR,
-            //receiver: RS,
+            sender: basicRole,
+            receiver: basicRole,
         });
     }
 }
 
-impl<T: marker::Send, RS: Role, RR: Role, S: Session> Session for Recv<T, RS, RR, S> {
+impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role, S: Session> Session for Recv<T, RS, RR, S> {
     type Dual = Send<T, RR, RS, S::Dual>;
 
     #[doc(hidden)]
