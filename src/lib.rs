@@ -13,12 +13,19 @@ use std::panic;
 use crossbeam_channel::{Sender, Receiver, bounded, Select};
 use either::Either;
 
-/// Send `T`, then continue as `S`.
+/// Type Role
 #[must_use]
-#[derive(Debug)]
-pub struct Send<T, S: Session> {
-    channel: Sender<(T, S::Dual)>,
-}
+#[derive(Debug)]    
+pub struct Role {    
+    name: String,    
+}    
+     
+/// Send `T`, then continue as `S`.    
+#[must_use]    
+#[derive(Debug)]    
+pub struct Send<T, S: Session> {    
+    channel: Sender<(T, S::Dual)>,    
+}    
 
 /// Receive `T`, then continue as `S`.
 #[must_use]
@@ -97,6 +104,80 @@ where
     s.channel.send((x, there)).unwrap_or(());
     here
 }
+
+
+
+
+
+
+
+
+enum Types {
+    Send,
+    Recv,
+    End,
+    Offer,
+    Choose,
+}
+
+/// Define Vec with Sessions and Roles for each Role
+#[derive(Debug)]
+pub struct SessionMPST<S: Session> {
+    roles: Vec<Role>,
+    sessions: Vec<S>,
+}
+
+/// Comparing Roles
+impl PartialEq for Role {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
+
+/// Implement get for SessionMPST
+impl<S: Session> SessionMPST<S> {
+    fn get_index_role(&self, r: &Role) -> Option<usize> {
+        self.roles.iter().position(|x| x == r)
+    }
+
+    fn get_session(&mut self, r: &Role) -> S {
+        let index = self.roles.iter().position(|x| x == r);
+        self.sessions[index.unwrap()]
+    }
+}
+
+/// Implement Session for Vec<S>
+impl<S: Session> Session for Vec<S> {    
+    type Dual = Vec<S>;    
+    
+    #[doc(hidden)]    
+    fn new() -> (Self, Self::Dual) {    
+        return (Vec::new(), Vec::new());
+    }    
+}
+
+pub fn sendMPST<T, S>(x: T, r: Role, s: SessionMPST<S>) -> SessionMPST<S>    
+where    
+    T: marker::Send,
+    S: Session,    
+{    
+    let (here, there) = S::new();    
+    let session = s.get_session(&r);
+    let session = send(x, session);
+    s
+}  
+
+
+
+
+
+
+
+
+
+
+
+
 
 /// Receive a value of type `T`. Can fail. Returns either a pair of the received
 /// value and the continuation of the session `S` or an error.
