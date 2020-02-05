@@ -25,8 +25,8 @@ pub struct StructRole {
 #[derive(Debug)]
 pub struct Send<T, RS: Role, RR: Role, S: Session> {
     channel: Sender<(T, S::Dual)>,
-    sender: RS,
-    receiver: RR,
+    sender: Role,
+    receiver: Role,
 }
 
 /// Receive `T`, then continue as `S`.
@@ -34,8 +34,8 @@ pub struct Send<T, RS: Role, RR: Role, S: Session> {
 #[derive(Debug)]
 pub struct Recv<T, RS: Role, RR: Role, S: Session> {
     channel: Receiver<(T, S)>,
-    sender: RS,
-    receiver: RR,
+    sender: Role,
+    receiver: Role,
 }
 
 /// End of communication.
@@ -46,7 +46,7 @@ pub struct End {
     receiver: Receiver<()>,
 }
 
-pub trait Role {
+pub trait Role: marker::Sized + marker::Send {
     fn new(name: String) -> StructRole;
 }
 
@@ -75,7 +75,7 @@ impl Session for End {
     }
 }
 
-impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role, S: Session> Session for Send<T, RS, RR, S> {
+impl<T: marker::Send, RS: Role, RR: Role, S: Session> Session for Send<T, RS, RR, S> {
     type Dual = Recv<T, RR, RS, S::Dual>;
 
     #[doc(hidden)]
@@ -96,7 +96,7 @@ impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role
     }
 }
 
-impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role, S: Session> Session for Recv<T, RS, RR, S> {
+impl<T: marker::Send, RS: Role, RR: Role, S: Session> Session for Recv<T, RS, RR, S> {
     type Dual = Send<T, RR, RS, S::Dual>;
 
     #[doc(hidden)]
@@ -123,7 +123,7 @@ where
 
 /// Receive a value of type `T`. Can fail. Returns either a pair of the received    
 /// value and the continuation of the session `S` or an error.    
-pub fn recv<T, RS, RR, S>(rs: RS, rr: RR, s: Recv<T, RS, RR, S>) -> Result<(T, RS, RR, S), Box<dyn Error>>    
+pub fn recv<T, RS, RR, S>(rs: RS, rr: RR, s: Recv<T, RS, RR, S>) -> Result<(T, S), Box<dyn Error>>    
 where    
     T: marker::Send,
     RS: Role,
@@ -291,7 +291,7 @@ impl Error for SelectError {
 /// Selects the first active session. Receives from the selected session, and
 /// removes the endpoint from the input vector. Returns the received value and
 /// the continuation of the selected session.
-pub fn select_mut<T, RS, RR, S>(rs: RS, rr: RR, result: &mut Vec<Recv<T, RS, RR, S>>) -> Result<(T, RS, RR, S), Box<dyn Error>>
+pub fn select_mut<T, RS, RR, S>(rs: RS, rr: RR, result: &mut Vec<Recv<T, RS, RR, S>>) -> Result<(T, S), Box<dyn Error>>
 where
     T: marker::Send,
     RS: Role,
@@ -306,7 +306,7 @@ where
             let mut sel = Select::new();
             let iter = result.iter();
             for r in iter {
-                sel.recv(rs, rr, &r.channel);
+                sel.recv(&r.channel);
             }
             loop {                                                                                                
                 let index = sel.ready();                                                                         
@@ -318,13 +318,13 @@ where
                     }
                 }
 
-                break (index, res)
+                break (index, res);
             }
         };                                                                                                            
        let _ = result.swap_remove(index);
        match res {
            Ok(res) => Ok(res),
-           Err(e)  => Err(Box::new(e))
+           Err(e)  => Err(Box::new(e)),
        }
     }
 }
@@ -332,7 +332,7 @@ where
 /// Selects the first active session. Receives from the selected session.
 /// Returns the received value, the continuation of the selected session, and a
 /// copy of the input vector without the selected session.
-pub fn select<T, RS, RR, S>(rs: RS, rr: RR, result: Vec<Recv<T, RS, RR, S>>) -> (Result<(T, RS, RR, S), Box<dyn Error>>, Vec<Recv<T, RS, RR, S>>)
+pub fn select<T, RS, RR, S>(rs: RS, rr: RR, result: Vec<Recv<T, RS, RR, S>>) -> (Result<(T, S), Box<dyn Error>>, Vec<Recv<T, RS, RR, S>>)
 where
     T: marker::Send,
     RS: Role,
