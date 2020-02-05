@@ -13,29 +13,18 @@ use std::panic;
 use crossbeam_channel::{Sender, Receiver, bounded, Select};
 use either::Either;
 
-/// Creation of the Role
-#[must_use]
-#[derive(Debug)]
-pub struct StructRole {
-    name: String,
-}
-
 /// Send `T`, then continue as `S`.
 #[must_use]
 #[derive(Debug)]
-pub struct Send<T, RS: Role, RR: Role, S: Session> {
+pub struct Send<T, S: Session> {
     channel: Sender<(T, S::Dual)>,
-    sender: RS,
-    receiver: RR,
 }
 
 /// Receive `T`, then continue as `S`.
 #[must_use]
 #[derive(Debug)]
-pub struct Recv<T, RS: Role, RR: Role, S: Session> {
+pub struct Recv<T, S: Session> {
     channel: Receiver<(T, S)>,
-    sender: RS,
-    receiver: RR,
 }
 
 /// End of communication.
@@ -46,19 +35,20 @@ pub struct End {
     receiver: Receiver<()>,
 }
 
-pub trait Role {
-    fn new(name: String) -> StructRole;
-}
-
-impl Role for StructRole{
-    fn new(name: String) -> StructRole {
-        StructRole { name: name }
-    }
-}
-
+/// Trait for session types. Provides duality.
 pub trait Session: marker::Sized + marker::Send {
+
+    /// The session type dual to `Self`.
     type Dual: Session<Dual=Self>;
 
+    /// Creates two new *dual* channels.
+    ///
+    /// *Here be dragons!*
+    ///
+    /// The `new` function is used internally in this library to define
+    /// functions such as `send` and `fork`. When combined with `thread::spawn`,
+    /// it can be used to construct deadlocks.
+    #[doc(hidden)]
     fn new() -> (Self, Self::Dual);
 }
 
@@ -75,29 +65,18 @@ impl Session for End {
     }
 }
 
-impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role, S: Session> Session for Send<T, RS, RR, S> {
-    type Dual = Recv<T, RR, RS, S::Dual>;
+impl<T: marker::Send, S: Session> Session for Send<T, S> {
+    type Dual = Recv<T, S::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
-
-        let basicRole = Role::new(String::from(""));
-
-        return (Send {
-            channel: sender,
-            sender: basicRole,
-            receiver: basicRole,
-        }, Recv {
-            channel: receiver,
-            sender: basicRole,
-            receiver: basicRole,
-        });
+        return (Send { channel: sender }, Recv { channel: receiver });
     }
 }
 
-impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role, S: Session> Session for Recv<T, RS, RR, S> {
-    type Dual = Send<T, RR, RS, S::Dual>;
+impl<T: marker::Send, S: Session> Session for Recv<T, S> {
+    type Dual = Send<T, S::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
@@ -106,138 +85,132 @@ impl<T: marker::Send, RS: std::marker::Send + Role, RR: std::marker::Send + Role
     }
 }
 
+
 /// Send a value of type `T`. Always succeeds. Returns the continuation of the
 /// session `S`.
-pub fn send<T, RS, RR, S>(x: T, rs: RS, rr: RR, s: Send<T, RS, RR, S>) -> S
+pub fn send<T, S>(x: T, s: Send<T, S>) -> S
 where
     T: marker::Send,
-    RS: Role,
-    RR: Role,
     S: Session,
 {
     let (here, there) = S::new();
     s.channel.send((x, there)).unwrap_or(());
     here
-
 }
 
-/// Receive a value of type `T`. Can fail. Returns either a pair of the received    
-/// value and the continuation of the session `S` or an error.    
-pub fn recv<T, RS, RR, S>(rs: RS, rr: RR, s: Recv<T, RS, RR, S>) -> Result<(T, RS, RR, S), Box<dyn Error>>    
-where    
+/// Receive a value of type `T`. Can fail. Returns either a pair of the received
+/// value and the continuation of the session `S` or an error.
+pub fn recv<T, S>(s: Recv<T, S>) -> Result<(T, S), Box<dyn Error>>
+where
     T: marker::Send,
-    RS: Role,
-    RR: Role,
-    S: Session,    
-{    
-    let (v, s) = s.channel.recv()?;    
-    Ok((v, s))    
+    S: Session,
+{
+    let (v, s) = s.channel.recv()?;
+    Ok((v, s))
 }
 
-/// Cancels a session. Always succeeds. If the partner calls `recv` or `close`    
-/// after cancellation, those calls fail.    
-pub fn cancel<T>(x: T) -> () {    
-    mem::drop(x);    
-}    
-    
-/// Closes a session. Synchronises with the partner, and fails if the partner    
-/// has crashed.    
-pub fn close(s: End) -> Result<(), Box<dyn Error>> {    
-    s.sender.send(()).unwrap_or(());    
+
+/// Cancels a session. Always succeeds. If the partner calls `recv` or `close`
+/// after cancellation, those calls fail.
+pub fn cancel<T>(x: T) -> () {
+    mem::drop(x);
+}
+
+/// Closes a session. Synchronises with the partner, and fails if the partner
+/// has crashed.
+pub fn close(s: End) -> Result<(), Box<dyn Error>> {
+    s.sender.send(()).unwrap_or(());
     s.receiver.recv()?;
-    Ok(())    
+    Ok(())
 }
 
-#[doc(hidden)]    
-pub fn fork_with_thread_id<S, P>(p: P) -> (JoinHandle<()>, S::Dual)    
-where    
-    S: Session + 'static,    
-    P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static    
-{    
-    let (there, here) = Session::new();    
-    let other_thread = spawn(move || {    
-        panic::set_hook(Box::new(|_info| {    
-            // do nothing    
-        }));    
-        match p(there) {    
-            Ok(()) => (),    
-            Err(e) => panic!("{}", e.description()),    
-        }    
-    });    
-    (other_thread, here)    
-}    
 
-/// Creates a child process, and a session with two dual endpoints of type `S`    
-/// and `S::Dual`. The first endpoint is given to the child process. Returns the    
-/// second endpoint.    
-pub fn fork<S, P>(p: P) -> S::Dual    
-where    
+#[doc(hidden)]
+pub fn fork_with_thread_id<S, P>(p: P) -> (JoinHandle<()>, S::Dual)
+where
+    S: Session + 'static,
+    P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static
+{
+    let (there, here) = Session::new();
+    let other_thread = spawn(move || {
+        panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match p(there) {
+            Ok(()) => (),
+            Err(e) => panic!("{}", e.description()),
+        }
+    });
+    (other_thread, here)
+}
+
+/// Creates a child process, and a session with two dual endpoints of type `S`
+/// and `S::Dual`. The first endpoint is given to the child process. Returns the
+/// second endpoint.
+pub fn fork<S, P>(p: P) -> S::Dual
+where
     S: Session + 'static,
     P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static
 {
     fork_with_thread_id(p).1
 }
 
+
 /// Offer a choice between two sessions `S1` and `S1`. Implemented using `Recv`
 /// and `Either`.
-pub type Offer<S1, RS, RR, S2> =
-    Recv<Either<S1, S2>, RS, RR, End>;
+pub type Offer<S1, S2> =
+    Recv<Either<S1, S2>, End>;
 
 /// Choose between two sessions `S1` and `S2`. Implemented using `Send` and
 /// `Either`.
-pub type Choose<S1, RS, RR, S2> =
-    Send<Either<<S1 as Session>::Dual, <S2 as Session>::Dual>, RS, RR, End>;
+pub type Choose<S1, S2> =
+    Send<Either<<S1 as Session>::Dual, <S2 as Session>::Dual>, End>;
 
 /// Offer a choice between two sessions `S1` and `S2`.
-pub fn offer_either<'a, S1, S2, F, G, R, RS, RR>(rs: RS, rr: RR, s: Offer<S1, RS, RR, S2>, f: F, g: G)
+pub fn offer_either<'a, S1, S2, F, G, R>(s: Offer<S1, S2>, f: F, g: G)
                                          -> Result<R, Box<dyn Error + 'a>>
 where
     S1: Session,
     S2: Session,
-    RS: Role,
-    RR: Role,
     F: FnOnce(S1) -> Result<R, Box<dyn Error + 'a>>,
     G: FnOnce(S2) -> Result<R, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv(rs, rr, s)?;
+    let (e, s) = recv(s)?;
     cancel(s);
     e.either(f, g)
 }
 
 /// Given a choice between sessions `S1` and `S1`, choose the first option.
-pub fn choose_left<'a, S1, RS, RR, S2>(rs: RS, rr: RR, s: Choose<S1, RS, RR, S2>) -> S1
+pub fn choose_left<'a, S1, S2>(s: Choose<S1, S2>) -> S1
 where
     S1: Session + 'a,
     S2: Session + 'a,
-    RS: Role,
-    RR: Role,
 {
     let (here, there) = S1::new();
-    let s = send(Either::Left(there), rs, rr, s);
+    let s = send(Either::Left(there), s);
     cancel(s);
     here
 }
 
 /// Given a choice between sessions `S1` and `S1`, choose the second option.
-pub fn choose_right<'a, S1, RS, RR, S2>(rs: RS, rr: RR, s: Choose<S1, RS, RR, S2>) -> S2
+pub fn choose_right<'a, S1, S2>(s: Choose<S1, S2>) -> S2
 where
     S1: Session + 'a,
     S2: Session + 'a,
-    RS: Role,
-    RR: Role,
 {
     let (here, there) = S2::new();
-    let s = send(Either::Right(there), rs, rr, s);
+    let s = send(Either::Right(there), s);
     cancel(s);
     here
 }
 
+
 /// Offer a choice between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! offer {
-    ($session:expr, $sender:expr, $receiver:expr, { $($pat:pat => $result:expr,)* }) => {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
-            let (l, s) = recv($sender, $receiver, $session)?;
+            let (l, s) = recv($session)?;
             cancel(s);
             match l {
                 $(
@@ -251,13 +224,14 @@ macro_rules! offer {
 /// Choose between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose {
-    ($label:path, $sender:expr, $receiver:expr, $session:expr) => {{
+    ($label:path, $session:expr) => {{
         let (here, there) = <_ as Session>::new();
-        let s = send($label(there), $sender, $receiver, $session);
+        let s = send($label(there), $session);
         cancel(s);
         here
     }};
 }
+
 
 /// Error returned when `select` or `select_mut` are called with an empty vector.
 #[derive(Debug)]
@@ -291,26 +265,24 @@ impl Error for SelectError {
 /// Selects the first active session. Receives from the selected session, and
 /// removes the endpoint from the input vector. Returns the received value and
 /// the continuation of the selected session.
-pub fn select_mut<T, RS, RR, S>(rs: RS, rr: RR, result: &mut Vec<Recv<T, RS, RR, S>>) -> Result<(T, RS, RR, S), Box<dyn Error>>
+pub fn select_mut<T, S>(rs: &mut Vec<Recv<T, S>>) -> Result<(T, S), Box<dyn Error>>
 where
     T: marker::Send,
-    RS: Role,
-    RR: Role,
     S: Session,
 {
-    if result.is_empty() {
+    if rs.is_empty() {
         Err(Box::new(SelectError::EmptyVec))
     }
     else {
         let (index, res) = {
             let mut sel = Select::new();
-            let iter = result.iter();
+            let iter = rs.iter();
             for r in iter {
-                sel.recv(rs, rr, &r.channel);
+                sel.recv(&r.channel);
             }
-            loop {                                                                                                
-                let index = sel.ready();                                                                         
-                let res = result[index].channel.try_recv();
+            loop {
+                let index = sel.ready();
+                let res = rs[index].channel.try_recv();
 
                 if let Err(e) = res {
                     if e.is_empty() {
@@ -318,28 +290,27 @@ where
                     }
                 }
 
-                break (index, res)
+                break (index, res);
             }
-        };                                                                                                            
-       let _ = result.swap_remove(index);
-       match res {
-           Ok(res) => Ok(res),
-           Err(e)  => Err(Box::new(e))
-       }
+        };
+
+        let _ = rs.swap_remove(index);
+        match res {
+            Ok(res) => Ok(res),
+            Err(e)  => Err(Box::new(e)),
+        }
     }
 }
 
 /// Selects the first active session. Receives from the selected session.
 /// Returns the received value, the continuation of the selected session, and a
 /// copy of the input vector without the selected session.
-pub fn select<T, RS, RR, S>(rs: RS, rr: RR, result: Vec<Recv<T, RS, RR, S>>) -> (Result<(T, RS, RR, S), Box<dyn Error>>, Vec<Recv<T, RS, RR, S>>)
+pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (Result<(T, S), Box<dyn Error>>, Vec<Recv<T, S>>)
 where
     T: marker::Send,
-    RS: Role,
-    RR: Role,
     S: Session,
 {
-    let mut result = result;
-    let res = select_mut(rs, rr, &mut result);
-    (res, result)
+    let mut rs = rs;
+    let res = select_mut(&mut rs);
+    (res, rs)
 }
