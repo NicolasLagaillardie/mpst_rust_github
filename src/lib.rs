@@ -112,20 +112,37 @@ where
 
 
 
-enum Types {
-    Send,
-    Recv,
-    End,
-    Offer,
-    Choose,
+
+
+//#[allow(dead_code)]
+//enum TypesOp<T, S: Session> {
+//    SendOp(Send<T, S>),
+//    SessionOp(S),
+//}
+
+#[allow(dead_code)]
+//pub struct SessionMpst<T, S: Session> {
+//    session1: TypesOp<T, S>,
+//    session2: TypesOp<T, S>,
+//}
+
+pub struct SessionMpst<T, S: Session> {
+    session1: S,
+    session2: S,
+    //    other: SessionMpst<T, S>,
 }
 
-/// Define Vec with Sessions and Roles for each Role
-#[derive(Debug)]
-pub struct SessionMPST<S: Session> {
-    roles: Vec<Role>,
-    sessions: Vec<S>,
+pub struct SessionMpstiSend<T, S: Session> {
+    session1: Send<T, S>,
+    session2: S,
+    //    other: SessionMpst<T, S>,
 }
+
+///// Define Vec with Sessions and Roles for each Role
+//pub struct SessionMPST1<T, S: Session> {
+//    roles: Vec<Role>,
+//    sessions: Vec<TypesOp<T, S>>,
+//}
 
 /// Comparing Roles
 impl PartialEq for Role {
@@ -134,37 +151,67 @@ impl PartialEq for Role {
     }
 }
 
-/// Implement get for SessionMPST
-impl<S: Session> SessionMPST<S> {
-    fn get_index_role(&self, r: &Role) -> Option<usize> {
-        self.roles.iter().position(|x| x == r)
-    }
+///// Implement get for SessionMPST
+//impl<T: marker::Send, S: Session> SessionMPST<T, S> {
+////    fn get_index_role(&self, r: &Role) -> Option<usize> {
+////        self.roles.iter().position(|x| x == r)
+////    }
+////
+////    fn get_channel(&mut self, r: &Role) -> TypesOp<T, S> {
+////        let index = self.get_index_role(r);
+////        //self.roles.iter().position(|x| x == r);
+////        self.sessions[index.unwrap()]
+////    }
+//    fn first(self) -> TypesOp<T, S> {
+//        self.session1
+//    }
+//
+//    fn second(self) -> TypesOp<T, S> {
+//        self.session2
+//    }
+//}
 
-    fn get_session(&mut self, r: &Role) -> S {
-        let index = self.roles.iter().position(|x| x == r);
-        self.sessions[index.unwrap()]
-    }
-}
+///// Implement Session for Vec<S>
+//impl<S: Session> Session for Vec<S> {    
+//    type Dual = Vec<S>;    
+//    
+//    #[doc(hidden)]    
+//    fn new() -> (Self, Self::Dual) {    
+//        return (Vec::new(), Vec::new());
+//    }    
+//}
 
-/// Implement Session for Vec<S>
-impl<S: Session> Session for Vec<S> {    
-    type Dual = Vec<S>;    
-    
-    #[doc(hidden)]    
-    fn new() -> (Self, Self::Dual) {    
-        return (Vec::new(), Vec::new());
-    }    
-}
-
-pub fn sendMPST<T, S>(x: T, r: Role, s: SessionMPST<S>) -> SessionMPST<S>    
+pub fn send_mpst<T, S>(x: T, r: Role, mut s: SessionMpstSend<T, S>) -> ()    
 where    
     T: marker::Send,
     S: Session,    
 {    
-    let (here, there) = S::new();    
-    let session = s.get_session(&r);
-    let session = send(x, session);
-    s
+//    let index_role = s.get_index_role(&r).unwrap();
+//    let binary_channel = s.get_channel(&r);
+//    let binary_channel = s.first();
+    
+    if r.name == "one" {
+        s.session1 = send(x, s.session1);
+        s
+//        match s.session1 {
+//            TypesOp::SendOp(channel) => {
+//                    let result = send(x, channel);
+//                    s.session1 = TypesOp::SessionOp(result);
+//                    ()
+//                },
+//            _ => (),
+//        }
+    } else {
+        send_mpst(x, r, s.session2)
+//        match s.session2 {
+//            TypesOp::SendOp(channel)=> {
+//                    let result = send(x, channel);
+//                    s.session2 = TypesOp::SessionOp(result);
+//                    ()
+//                },
+//            _ => (),
+//        }
+    }
 }  
 
 
