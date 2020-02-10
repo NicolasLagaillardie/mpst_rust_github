@@ -123,28 +123,6 @@ pub struct SessionMpst<S1: Session, S2: Session> {
     session2: S2,
 }
 
-//impl<S1: Session, S2: Session> Session for SessionMpst<S1, S2> {
-//    type Dual = SessionMpst<S1::Dual, S2::Dual>;
-//
-//    #[doc(hidden)]
-//    fn new() -> (Self, Self::Dual) {
-//
-//        let (sender_one, receiver_one) = bounded::<S1::Dual>(1);
-//
-//        let (sender_two, receiver_two) = bounded::<S2::Dual>(1);
-//
-//        return (
-//            SessionMpst {
-//                session1: Recv { channel: receiver_one },
-//                session2: Recv { channel: receiver_two },
-//            },
-//            SessionMpst {
-//                session1: Send { channel: sender_one },
-//                session2: Send { channel: sender_two },
-//            });
-//    }
-//}
-
 impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for SessionMpst<Recv<T1, S1>, Recv<T2, S2>> {
     type Dual = SessionMpst<Send<T1, S1::Dual>, Send<T2, S2::Dual>>;
 
@@ -352,128 +330,12 @@ impl Session for SessionMpst<End, End> {
     }
 }
 
-//#[allow(dead_code)]
-//pub struct SessionMpstSendOne<T, S1: Session, S2: Session> {
-//    session1: Send<T, S1>,
-//    session2: S2,
-//}
-//
-//#[allow(dead_code)]
-//pub struct SessionMpstSendTwo<T, S1: Session, S2: Session> {
-//    session1: S1,
-//    session2: Send<T, S2>,
-//}
-//
-//#[allow(dead_code)]
-//pub struct SessionMpstRecvOne<T, S1: Session, S2: Session> {
-//    session1: Recv<T, S1>,
-//    session2: S2,
-//}
-//
-//#[allow(dead_code)]
-//pub struct SessionMpstRecvTwo<T, S1: Session, S2: Session> {
-//    session1: S1,
-//    session2: Recv<T, S2>,
-//}
-//
-//#[allow(dead_code)]
-//pub struct SessionMpstEndOne<S: Session> {
-//    session1: End,
-//    session2: S,
-//}
-//
-//#[allow(dead_code)]
-//pub struct SessionMpstEndTwo<S: Session> {
-//    session1: S,
-//    session2: End,
-//}
-
 /// Comparing Roles
 impl PartialEq for Role {
     fn eq(&self, other: &Self) -> bool {
         self.name == other.name
     }
 }
-
-///// Sending on session 1
-//pub fn send_mpst_session_one<T, S1, S2>(x: T, s: SessionMpstSendOne<T, S1, S2>) -> SessionMpst<S1, S2> 
-//where    
-//    T: marker::Send,
-//    S1: Session,    
-//    S2: Session,    
-//{    
-//    let new_session = send(x, s.session1);
-//    let result = SessionMpst {
-//        session1: new_session,
-//        session2: s.session2,
-//    };
-//    result
-//}  
-//
-///// Sending on session 2
-//pub fn send_mpst_session_two<T, S1, S2>(x: T, s: SessionMpstSendTwo<T, S1, S2>) -> SessionMpst<S1, S2> 
-//where    
-//    T: marker::Send,
-//    S1: Session,    
-//    S2: Session,    
-//{    
-//    let new_session = send(x, s.session2);
-//    let result = SessionMpst {
-//        session1: s.session1,
-//        session2: new_session,
-//    };
-//    result
-//}
-//
-///// Recving on session 1
-//pub fn recv_mpst_session_one<T, S1, S2>(s: SessionMpstRecvOne<T, S1, S2>) -> Result<(T, SessionMpst<S1, S2>), Box<dyn Error>> 
-//where    
-//    T: marker::Send,
-//    S1: Session,    
-//    S2: Session,    
-//{    
-//    let (v, new_session) = recv(s.session1)?;
-//    let result = SessionMpst {
-//        session1: new_session,
-//        session2: s.session2,
-//    };
-//    Ok((v, result))
-//}  
-//
-///// Recving on session 2
-//pub fn recv_mpst_session_two<T, S1, S2>(s: SessionMpstRecvTwo<T, S1, S2>) -> Result<(T, SessionMpst<S1, S2>), Box<dyn Error>> 
-//where    
-//    T: marker::Send,
-//    S1: Session,    
-//    S2: Session,    
-//{    
-//    let (v, new_session) = recv(s.session2)?;
-//    let result = SessionMpst {
-//        session1: s.session1,
-//        session2: new_session,
-//    };
-//    Ok((v, result))
-//}
-//
-///// Closes session one. Synchronises with the partner, and fails if the partner
-///// has crashed.
-//pub fn close_mpst_one<S>(s: SessionMpstEndOne<S>) -> Result<(), Box<dyn Error>> 
-//where
-//    S: Session,
-//{
-//    close(s.session1)?;
-//    Ok(())
-//}
-//
-///// Closes session two. Synchronises with the partner, and fails if the partner
-///// has crashed.
-//pub fn close_mpst_two<S>(s: SessionMpstEndTwo<S>) -> Result<(), Box<dyn Error>> 
-//where
-//    S: Session,
-//{
-//    close(s.session2)?;
-//    Ok(())
-//}
 
 /// Sending on session 1
 pub fn send_mpst_session_one<T, S1, S2>(x: T, s: SessionMpst<Send<T, S1>, S2>) -> SessionMpst<S1, S2> 
@@ -548,38 +410,6 @@ pub fn close_mpst(s: SessionMpst<End, End>) -> Result<(), Box<dyn Error>>
 
     Ok(())
 }
-
-///// Closes session one. Synchronises with the partner, and fails if the partner
-///// has crashed.
-//pub fn close_mpst_one<S>(s: SessionMpst<End, S>) -> Result<(SessionMpst<End, S>), Box<dyn Error>> 
-//where
-//    S: Session,
-//{
-//    close(s.session1)?;
-//
-//    let result = SessionMpst {
-//        session1: End, 
-//        session2: s.session2,
-//    };
-//
-//    Ok((result))
-//}
-//
-///// Closes session two. Synchronises with the partner, and fails if the partner
-///// has crashed.
-//pub fn close_mpst_two<S>(s: SessionMpst<S, End>) -> Result<(SessionMpst<S, End>), Box<dyn Error>> 
-//where
-//    S: Session,
-//{
-//    close(s.session2)?;
-// 
-//    let result = SessionMpst {
-//        session1: s.session1,
-//        session2: End, 
-//    };   
-//
-//    Ok((result))
-//}
 
 #[doc(hidden)]
 pub fn fork_with_thread_id_mpst<S1, S2, P1, P2>(p_one: P1, p_two: P2) -> (JoinHandle<()>, JoinHandle<()>, SessionMpst<S1::Dual, S2::Dual>)
