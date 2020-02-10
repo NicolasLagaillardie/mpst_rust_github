@@ -13,12 +13,19 @@ use std::panic;
 use crossbeam_channel::{Sender, Receiver, bounded, Select};
 use either::Either;
 
-/// Send `T`, then continue as `S`.
+/// Type Role
 #[must_use]
-#[derive(Debug)]
-pub struct Send<T, S: Session> {
-    channel: Sender<(T, S::Dual)>,
-}
+#[derive(Debug)]    
+pub struct Role {    
+    name: String,    
+}    
+     
+/// Send `T`, then continue as `S`.    
+#[must_use]    
+#[derive(Debug)]    
+pub struct Send<T, S: Session> {    
+    channel: Sender<(T, S::Dual)>,    
+}    
 
 /// Receive `T`, then continue as `S`.
 #[must_use]
@@ -97,6 +104,380 @@ where
     s.channel.send((x, there)).unwrap_or(());
     here
 }
+
+
+
+
+
+
+
+
+
+
+
+/// MPST Block from here...
+
+#[allow(dead_code)]
+pub struct SessionMpst<S1: Session, S2: Session> {
+    session1: S1,
+    session2: S2,
+}
+
+impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for SessionMpst<Recv<T1, S1>, Recv<T2, S2>> {
+    type Dual = SessionMpst<Send<T1, S1::Dual>, Send<T2, S2::Dual>>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+
+        let (sender_one, receiver_one) = bounded::<(T1, S1)>(1);
+
+        let (sender_two, receiver_two) = bounded::<(T2, S2)>(1);
+
+        return (
+            SessionMpst {
+                session1: Recv { channel: receiver_one },
+                session2: Recv { channel: receiver_two },
+            },
+            SessionMpst {
+                session1: Send { channel: sender_one },
+                session2: Send { channel: sender_two },
+            }
+        );
+    }
+}
+
+impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for SessionMpst<Send<T1, S1>, Send<T2, S2>> {
+    type Dual = SessionMpst<Recv<T1, S1::Dual>, Recv<T2, S2::Dual>>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+
+        let (sender_one, receiver_one) = bounded::<(T1, S1::Dual)>(1);
+
+        let (sender_two, receiver_two) = bounded::<(T2, S2::Dual)>(1);
+
+        return (
+            SessionMpst {
+                session1: Send { channel: sender_one },
+                session2: Send { channel: sender_two },
+            },
+            SessionMpst {
+                session1: Recv { channel: receiver_one },
+                session2: Recv { channel: receiver_two },
+            }
+        );
+    }
+}
+
+impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for SessionMpst<Send<T1, S1>, Recv<T2, S2>> {
+    type Dual = SessionMpst<Recv<T1, S1::Dual>, Send<T2, S2::Dual>>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+
+        let (sender_one, receiver_one) = bounded::<(T1, S1::Dual)>(1);
+
+        let (sender_two, receiver_two) = bounded::<(T2, S2)>(1);
+
+        return (
+            SessionMpst {
+                session1: Send { channel: sender_one },
+                session2: Recv { channel: receiver_two },
+            },
+            SessionMpst {
+                session1: Recv { channel: receiver_one },
+                session2: Send { channel: sender_two },
+            }
+        );
+    }
+}
+
+impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for SessionMpst<Recv<T1, S1>, Send<T2, S2>> {
+    type Dual = SessionMpst<Send<T1, S1::Dual>, Recv<T2, S2::Dual>>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+
+        let (sender_one, receiver_one) = bounded::<(T1, S1)>(1);
+
+        let (sender_two, receiver_two) = bounded::<(T2, S2::Dual)>(1);
+
+        return (
+            SessionMpst {
+                session1: Recv { channel: receiver_one },
+                session2: Send { channel: sender_two },
+            },
+            SessionMpst {
+                session1: Send { channel: sender_one },
+                session2: Recv { channel: receiver_two },
+            }
+        );
+    }
+}
+
+impl<T: marker::Send, S: Session> Session for SessionMpst<Recv<T, S>, End> {
+    type Dual = SessionMpst<Send<T, S::Dual>, End>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+        let (sender1, receiver1) = bounded::<()>(1);
+        let (sender2, receiver2) = bounded::<()>(1);
+
+        let (sender, receiver) = bounded::<(T, S)>(1);
+
+        return (
+            SessionMpst {
+                session1: Recv { channel: receiver },
+                session2: End { sender: sender1, receiver: receiver2 },
+            },
+            SessionMpst {
+                session1: Send { channel: sender },
+                session2: End { sender: sender2, receiver: receiver1 },
+            }
+        );
+    }
+}
+
+impl<T: marker::Send, S: Session> Session for SessionMpst<End, Recv<T, S>> {
+    type Dual = SessionMpst<End, Send<T, S::Dual>>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+        let (sender1, receiver1) = bounded::<()>(1);
+        let (sender2, receiver2) = bounded::<()>(1);
+
+        let (sender, receiver) = bounded::<(T, S)>(1);
+
+        return (
+            SessionMpst {
+                session1: End { sender: sender1, receiver: receiver2 },
+                session2: Recv { channel: receiver },
+            },
+            SessionMpst {
+                session1: End { sender: sender2, receiver: receiver1 },
+                session2: Send { channel: sender },
+            }
+        );
+    }
+}
+
+impl<T: marker::Send, S: Session> Session for SessionMpst<End, Send<T, S>> {
+    type Dual = SessionMpst<End, Recv<T, S::Dual>>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+        let (sender1, receiver1) = bounded::<()>(1);
+        let (sender2, receiver2) = bounded::<()>(1);
+
+        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
+
+        return (
+            SessionMpst {
+                session1: End { sender: sender1, receiver: receiver2 },
+                session2: Send { channel: sender },
+            },
+            SessionMpst {
+                session1: End { sender: sender2, receiver: receiver1 },
+                session2: Recv { channel: receiver },
+            }
+        );
+    }
+}
+
+impl<T: marker::Send, S: Session> Session for SessionMpst<Send<T, S>, End> {
+    type Dual = SessionMpst<Recv<T, S::Dual>, End>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+        let (sender1, receiver1) = bounded::<()>(1);
+        let (sender2, receiver2) = bounded::<()>(1);
+
+        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
+
+        return (
+            SessionMpst {
+                session1: Send { channel: sender },
+                session2: End { sender: sender1, receiver: receiver2 },
+            },
+            SessionMpst {
+                session1: Recv { channel: receiver },
+                session2: End { sender: sender2, receiver: receiver1 },
+            }
+        );
+    }
+}
+
+impl Session for SessionMpst<End, End> {
+    type Dual = SessionMpst<End, End>;
+
+    #[doc(hidden)]
+    fn new() -> (Self, Self::Dual) {
+        let (sender1_one, receiver1_one) = bounded::<()>(1);
+        let (sender2_one, receiver2_one) = bounded::<()>(1);
+        let (sender1_two, receiver1_two) = bounded::<()>(1);
+        let (sender2_two, receiver2_two) = bounded::<()>(1);
+
+        return (
+            SessionMpst {
+                session1: End { sender: sender1_one, receiver: receiver2_one },
+                session2: End { sender: sender1_two, receiver: receiver2_two },
+            },
+            SessionMpst {
+                session1: End { sender: sender2_one, receiver: receiver1_one },
+                session2: End { sender: sender2_two, receiver: receiver1_two },
+            }
+        );
+    }
+}
+
+/// Comparing Roles
+impl PartialEq for Role {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
+
+/// Sending on session 1
+pub fn send_mpst_session_one<T, S1, S2>(x: T, s: SessionMpst<Send<T, S1>, S2>) -> SessionMpst<S1, S2> 
+where    
+    T: marker::Send,
+    S1: Session,    
+    S2: Session,    
+{    
+    let new_session = send(x, s.session1);
+    let result = SessionMpst {
+        session1: new_session,
+        session2: s.session2,
+    };
+
+    result
+}  
+
+/// Sending on session 2
+pub fn send_mpst_session_two<T, S1, S2>(x: T, s: SessionMpst<S1, Send<T, S2>>) -> SessionMpst<S1, S2> 
+where    
+    T: marker::Send,
+    S1: Session,    
+    S2: Session,    
+{    
+    let new_session = send(x, s.session2);
+    let result = SessionMpst {
+        session1: s.session1,
+        session2: new_session,
+    };
+
+    result
+}
+
+/// Recving on session 1
+pub fn recv_mpst_session_one<T, S1, S2>(s: SessionMpst<Recv<T, S1>, S2>) -> Result<(T, SessionMpst<S1, S2>), Box<dyn Error>> 
+where    
+    T: marker::Send,
+    S1: Session,    
+    S2: Session,    
+{    
+    let (v, new_session) = recv(s.session1)?;
+    let result = SessionMpst {
+        session1: new_session,
+        session2: s.session2,
+    };
+
+    Ok((v, result))
+}  
+
+/// Recving on session 2
+pub fn recv_mpst_session_two<T, S1, S2>(s: SessionMpst<S1, Recv<T, S2>>) -> Result<(T, SessionMpst<S1, S2>), Box<dyn Error>> 
+where    
+    T: marker::Send,
+    S1: Session,    
+    S2: Session,    
+{    
+    let (v, new_session) = recv(s.session2)?;
+    let result = SessionMpst {
+        session1: s.session1,
+        session2: new_session,
+    };
+
+    Ok((v, result))
+}
+
+/// Closes session one. Synchronises with the partner, and fails if the partner
+/// has crashed.
+pub fn close_mpst(s: SessionMpst<End, End>) -> Result<(), Box<dyn Error>> 
+{
+    close(s.session1)?;
+    close(s.session2)?;
+
+    Ok(())
+}
+
+#[doc(hidden)]
+pub fn fork_with_thread_id_mpst<S1, S2, P1, P2>(p_one: P1, p_two: P2) -> (JoinHandle<()>, JoinHandle<()>, SessionMpst<S1::Dual, S2::Dual>)
+where
+    S1: Session + 'static,
+    P1: FnOnce(S1) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+    S2: Session + 'static,
+    P2: FnOnce(S2) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+{
+    let (there_one, here_one) = Session::new();
+    let (there_two, here_two) = Session::new();
+
+    let other_thread_one = spawn(move || {
+        panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+
+        match p_one(there_one) {
+            Ok(()) => (),
+            Err(e) => panic!("{}", e.description()),
+        }
+    });
+
+    let other_thread_two = spawn(move || {
+        panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+
+        match p_two(there_two) {
+            Ok(()) => (),
+            Err(e) => panic!("{}", e.description()),
+        }
+    });
+
+    let result = SessionMpst {
+        session1: here_one,
+        session2: here_two,
+    };
+
+    (other_thread_one, other_thread_two, result)
+}
+
+/// Creates a child process, and a session with two dual endpoints of type `S`
+/// and `S::Dual`. The first endpoint is given to the child process. Returns the
+/// second endpoint.
+pub fn fork_mpst<S1, S2, P1, P2>(p_one: P1, p_two: P2) -> SessionMpst<S1::Dual, S2::Dual>
+where
+    S1: Session + 'static,
+    P1: FnOnce(S1) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+    S2: Session + 'static,
+    P2: FnOnce(S2) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+{
+    fork_with_thread_id_mpst(p_one, p_two).2
+}
+
+/// ... to there
+
+
+
+
+
+
+
+
+
+
+
+
 
 /// Receive a value of type `T`. Can fail. Returns either a pair of the received
 /// value and the continuation of the session `S` or an error.
