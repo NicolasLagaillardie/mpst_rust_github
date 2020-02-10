@@ -11,3 +11,9 @@ cargo build
 ```sh
 cargo run
 ```
+
+## Run test
+
+```sh
+cargo test
+```
