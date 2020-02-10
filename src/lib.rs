@@ -151,9 +151,9 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
 
-        let (sender_one, receiver_one) = bounded::<(T1, S1::Dual)>(1);
+        let (sender_one, receiver_one) = bounded::<(T1, S1)>(1);
 
-        let (sender_two, receiver_two) = bounded::<(T2, S2::Dual)>(1);
+        let (sender_two, receiver_two) = bounded::<(T2, S2)>(1);
 
         return (
             SessionMpst {
@@ -163,7 +163,8 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
             SessionMpst {
                 session1: Send { channel: sender_one },
                 session2: Send { channel: sender_two },
-            });
+            }
+        );
     }
 }
 
@@ -185,7 +186,8 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
             SessionMpst {
                 session1: Recv { channel: receiver_one },
                 session2: Recv { channel: receiver_two },
-            });
+            }
+        );
     }
 }
 
@@ -197,7 +199,7 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
 
         let (sender_one, receiver_one) = bounded::<(T1, S1::Dual)>(1);
 
-        let (sender_two, receiver_two) = bounded::<(T2, S2::Dual)>(1);
+        let (sender_two, receiver_two) = bounded::<(T2, S2)>(1);
 
         return (
             SessionMpst {
@@ -207,7 +209,8 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
             SessionMpst {
                 session1: Recv { channel: receiver_one },
                 session2: Send { channel: sender_two },
-            });
+            }
+        );
     }
 }
 
@@ -217,7 +220,7 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
 
-        let (sender_one, receiver_one) = bounded::<(T1, S1::Dual)>(1);
+        let (sender_one, receiver_one) = bounded::<(T1, S1)>(1);
 
         let (sender_two, receiver_two) = bounded::<(T2, S2::Dual)>(1);
 
@@ -229,7 +232,8 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session for S
             SessionMpst {
                 session1: Send { channel: sender_one },
                 session2: Recv { channel: receiver_two },
-            });
+            }
+        );
     }
 }
 
@@ -241,7 +245,7 @@ impl<T: marker::Send, S: Session> Session for SessionMpst<Recv<T, S>, End> {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
 
-        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
+        let (sender, receiver) = bounded::<(T, S)>(1);
 
         return (
             SessionMpst {
@@ -251,7 +255,8 @@ impl<T: marker::Send, S: Session> Session for SessionMpst<Recv<T, S>, End> {
             SessionMpst {
                 session1: Send { channel: sender },
                 session2: End { sender: sender2, receiver: receiver1 },
-            });
+            }
+        );
     }
 }
 
@@ -263,7 +268,7 @@ impl<T: marker::Send, S: Session> Session for SessionMpst<End, Recv<T, S>> {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
 
-        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
+        let (sender, receiver) = bounded::<(T, S)>(1);
 
         return (
             SessionMpst {
@@ -273,7 +278,8 @@ impl<T: marker::Send, S: Session> Session for SessionMpst<End, Recv<T, S>> {
             SessionMpst {
                 session1: End { sender: sender2, receiver: receiver1 },
                 session2: Send { channel: sender },
-            });
+            }
+        );
     }
 }
 
@@ -295,7 +301,8 @@ impl<T: marker::Send, S: Session> Session for SessionMpst<End, Send<T, S>> {
             SessionMpst {
                 session1: End { sender: sender2, receiver: receiver1 },
                 session2: Recv { channel: receiver },
-            });
+            }
+        );
     }
 }
 
@@ -317,7 +324,8 @@ impl<T: marker::Send, S: Session> Session for SessionMpst<Send<T, S>, End> {
             SessionMpst {
                 session1: Recv { channel: receiver },
                 session2: End { sender: sender2, receiver: receiver1 },
-            });
+            }
+        );
     }
 }
 
@@ -339,7 +347,8 @@ impl Session for SessionMpst<End, End> {
             SessionMpst {
                 session1: End { sender: sender2_one, receiver: receiver1_one },
                 session2: End { sender: sender2_two, receiver: receiver1_two },
-            });
+            }
+        );
     }
 }
 
@@ -478,6 +487,7 @@ where
         session1: new_session,
         session2: s.session2,
     };
+
     result
 }  
 
@@ -493,6 +503,7 @@ where
         session1: s.session1,
         session2: new_session,
     };
+
     result
 }
 
@@ -508,6 +519,7 @@ where
         session1: new_session,
         session2: s.session2,
     };
+
     Ok((v, result))
 }  
 
@@ -523,28 +535,52 @@ where
         session1: s.session1,
         session2: new_session,
     };
+
     Ok((v, result))
 }
 
 /// Closes session one. Synchronises with the partner, and fails if the partner
 /// has crashed.
-pub fn close_mpst_one<S>(s: SessionMpst<End, S>) -> Result<(), Box<dyn Error>> 
-where
-    S: Session,
+pub fn close_mpst(s: SessionMpst<End, End>) -> Result<(), Box<dyn Error>> 
 {
     close(s.session1)?;
+    close(s.session2)?;
+
     Ok(())
 }
 
-/// Closes session two. Synchronises with the partner, and fails if the partner
-/// has crashed.
-pub fn close_mpst_two<S>(s: SessionMpst<S, End>) -> Result<(), Box<dyn Error>> 
-where
-    S: Session,
-{
-    close(s.session2)?;
-    Ok(())
-}
+///// Closes session one. Synchronises with the partner, and fails if the partner
+///// has crashed.
+//pub fn close_mpst_one<S>(s: SessionMpst<End, S>) -> Result<(SessionMpst<End, S>), Box<dyn Error>> 
+//where
+//    S: Session,
+//{
+//    close(s.session1)?;
+//
+//    let result = SessionMpst {
+//        session1: End, 
+//        session2: s.session2,
+//    };
+//
+//    Ok((result))
+//}
+//
+///// Closes session two. Synchronises with the partner, and fails if the partner
+///// has crashed.
+//pub fn close_mpst_two<S>(s: SessionMpst<S, End>) -> Result<(SessionMpst<S, End>), Box<dyn Error>> 
+//where
+//    S: Session,
+//{
+//    close(s.session2)?;
+// 
+//    let result = SessionMpst {
+//        session1: s.session1,
+//        session2: End, 
+//    };   
+//
+//    Ok((result))
+//}
+
 #[doc(hidden)]
 pub fn fork_with_thread_id_mpst<S1, S2, P1, P2>(p_one: P1, p_two: P2) -> (JoinHandle<()>, JoinHandle<()>, SessionMpst<S1::Dual, S2::Dual>)
 where

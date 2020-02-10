@@ -27,49 +27,54 @@ type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>>;
 
 type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>>;
 
-//type EndpointA<N> = SessionMpst<S> {
-//    session1: AtoB<N>,
-//    session2: AtoC<N>,
-//};
-//
-//type EndpointADual<N> = SessionMpst<S> {
-//    session1: BtoA<N>,
-//    session2: CtoA<N>,
-//};
-//
-//type EndpointB<N> = SessionMpst<S> {
-//    session1: BtoC<N>,
-//    session2: BtoC<N>,
-//};
-//
-//type EndpointC<N> = SessionMpst<S> {
-//    session1: CtoA<N>,
-//    session2: CtoB<N>,
-//};
-
 fn endpoint_A(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_session_one(1, s);
     let (x, s) = recv_mpst_session_two(s)?;
-    close_mpst_one(s)?;
-    close_mpst_two(s)?;
+    close_mpst(s)?;
+    Ok(())
+}
+
+fn endpoint_A_for_B(s: AtoB<i32>) -> Result<(), Box<dyn Error>> {
+    let s = send(1, s);
+    close(s)?;
+    Ok(())
+}
+
+fn endpoint_A_for_C(s: AtoC<i32>) -> Result<(), Box<dyn Error>> {
+    let (x, s) = recv(s)?;
+    close(s)?;
     Ok(())
 }
 
 fn endpoint_B(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = recv_mpst_session_one(s)?;
     let s = send_mpst_session_two(x, s);
-    close_mpst_one(s)?;
-    close_mpst_two(s)?;
+    close_mpst(s)?;
     Ok(())
 }
 
 fn endpoint_C(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_session_one(2, s);
     let (x, s) = recv_mpst_session_two(s)?;
-    close_mpst_one(s)?;
-    close_mpst_two(s)?;
+    close_mpst(s)?;
     Ok(())
 }
+
+//fn endpoint_B(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+//    let (x, s) = recv_mpst_session_one(s)?;
+//    let s = send_mpst_session_two(x, s);
+//    close_mpst_one(s)?;
+//    close_mpst_two(s)?;
+//    Ok(())
+//}
+//
+//fn endpoint_C(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+//    let s = send_mpst_session_one(2, s);
+//    let (x, s) = recv_mpst_session_two(s)?;
+//    close_mpst_one(s)?;
+//    close_mpst_two(s)?;
+//    Ok(())
+//}
 
 #[test]
 fn simple_triple_endpoint() {
@@ -77,12 +82,11 @@ fn simple_triple_endpoint() {
 
         // Test endpoint A 
         {
-            let s: EndpointADual<i32> = fork_mpst(endpoint_B, endpoint_C);
+            let s: EndpointADual<i32> = fork_mpst(endpoint_A_for_B, endpoint_A_for_C);
 
             let (x, s) = recv_mpst_session_one(s)?;
             let s = send_mpst_session_two(1, s);
-            close_mpst_one(s)?;
-            close_mpst_two(s)?;
+            close_mpst(s)?;
 
             assert_eq!(x, 1);
         }
