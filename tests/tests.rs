@@ -8,7 +8,6 @@ use std::error::Error;
 /// B = ?A.!C
 /// C = !A.?B
 
-
 /// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
@@ -70,8 +69,7 @@ fn endpoint_c_for_b(s: CtoB<i32>) -> Result<(), Box<dyn Error>> {
 #[test]
 fn simple_triple_endpoint_a() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
-        // Test endpoint A 
+        // Test endpoint A
         {
             let s: EndpointADual<i32> = fork_mpst(endpoint_a_for_b, endpoint_a_for_c);
 
@@ -83,16 +81,15 @@ fn simple_triple_endpoint_a() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
 
 /// Single test for B
 #[test]
 fn simple_triple_endpoint_b() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
-        // Test endpoint B 
+        // Test endpoint B
         {
             let s: EndpointBDual<i32> = fork_mpst(endpoint_b_for_a, endpoint_b_for_c);
 
@@ -104,15 +101,14 @@ fn simple_triple_endpoint_b() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
 /// Single test for C
 #[test]
 fn simple_triple_endpoint_c() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
-        // Test endpoint C 
+        // Test endpoint C
         {
             let s: EndpointCDual<i32> = fork_mpst(endpoint_c_for_a, endpoint_c_for_b);
 
@@ -124,6 +120,6 @@ fn simple_triple_endpoint_c() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
