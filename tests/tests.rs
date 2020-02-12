@@ -19,11 +19,14 @@ type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 
 /// Creating the MP sessions
-type EndpointADual<N> = SessionMpst<<AtoB<N> as Session>::Dual, <AtoC<N> as Session>::Dual>;
+//type EndpointADual<N> = SessionMpst<<AtoB<N> as Session>::Dual, <AtoC<N> as Session>::Dual>;
+type EndpointADual<N> = SessionMpst<BtoA<N>, CtoA<N>>;
 
-type EndpointBDual<N> = SessionMpst<<BtoA<N> as Session>::Dual, <BtoC<N> as Session>::Dual>;
+//type EndpointBDual<N> = SessionMpst<<BtoA<N> as Session>::Dual, <BtoC<N> as Session>::Dual>;
+type EndpointBDual<N> = SessionMpst<AtoB<N>, CtoB<N>>;
 
-type EndpointCDual<N> = SessionMpst<<CtoA<N> as Session>::Dual, <CtoB<N> as Session>::Dual>;
+//type EndpointCDual<N> = SessionMpst<<CtoA<N> as Session>::Dual, <CtoB<N> as Session>::Dual>;
+type EndpointCDual<N> = SessionMpst<AtoC<N>, BtoC<N>>;
 
 /// Creating the endoint's functions
 /// Here for A
@@ -66,12 +69,12 @@ fn endpoint_c_for_b(s: CtoB<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 /// Single test for A
-#[test]
-fn simple_triple_endpoint_a() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+///#[test]
+fn simple_triple_endpoint_a(s: EndpointADual<i32>) -> Result<(), Box<dyn Error>>  {
+//    assert!(|| -> Result<(), Box<dyn Error>> {
         // Test endpoint A
         {
-            let s: EndpointADual<i32> = fork_mpst(endpoint_a_for_b, endpoint_a_for_c);
+//            let s: EndpointADual<i32> = fork_mpst(endpoint_a_for_b, endpoint_a_for_c);
 
             let (x, s) = recv_mpst_session_one(s)?;
             let s = send_mpst_session_two(1, s);
@@ -81,17 +84,17 @@ fn simple_triple_endpoint_a() {
         }
 
         Ok(())
-    }()
-    .is_ok());
+//    }()
+//    .is_ok());
 }
 
 /// Single test for B
-#[test]
-fn simple_triple_endpoint_b() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+///#[test]
+fn simple_triple_endpoint_b(s: EndpointBDual<i32>) -> Result<(), Box<dyn Error>>  {
+//    assert!(|| -> Result<(), Box<dyn Error>> {
         // Test endpoint B
         {
-            let s: EndpointBDual<i32> = fork_mpst(endpoint_b_for_a, endpoint_b_for_c);
+//            let s: EndpointBDual<i32> = fork_mpst(endpoint_b_for_a, endpoint_b_for_c);
 
             let s = send_mpst_session_one(1, s);
             let (x, s) = recv_mpst_session_two(s)?;
@@ -101,16 +104,16 @@ fn simple_triple_endpoint_b() {
         }
 
         Ok(())
-    }()
-    .is_ok());
+//    }()
+//    .is_ok());
 }
 /// Single test for C
-#[test]
-fn simple_triple_endpoint_c() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+///#[test]
+fn simple_triple_endpoint_c(s: EndpointCDual<i32>) -> Result<(), Box<dyn Error>> {
+//    assert!(|| -> Result<(), Box<dyn Error>> {
         // Test endpoint C
         {
-            let s: EndpointCDual<i32> = fork_mpst(endpoint_c_for_a, endpoint_c_for_b);
+//            let s: EndpointCDual<i32> = fork_mpst(endpoint_c_for_a, endpoint_c_for_b);
 
             let (x, s) = recv_mpst_session_one(s)?;
             let s = send_mpst_session_two(1, s);
@@ -120,6 +123,29 @@ fn simple_triple_endpoint_c() {
         }
 
         Ok(())
-    }()
-    .is_ok());
+//    }()
+//    .is_ok());
+}
+
+#[test]
+fn main() {
+    let (channel_ab, channel_ba) = Session::new();
+    let (channel_ac, channel_ca) = Session::new();
+    let (channel_bc, channel_cb) = Session::new();
+
+    let a: EndpointADual<i32> = SessionMpst { session1: channel_ab, session2: channel_ac };
+    let b: EndpointBDual<i32> = SessionMpst { session1: channel_ba, session2: channel_bc };
+    let c: EndpointCDual<i32> = SessionMpst { session1: channel_ca, session2: channel_cb };
+
+    let thread_a = fork_simple(simple_triple_endpoint_a, a);
+    let thread_b = fork_simple(simple_triple_endpoint_b, b);
+    let thread_c = fork_simple(simple_triple_endpoint_c, c);
+
+    thread_a.join();
+    thread_b.join();
+    thread_c.join();
+
+//    simple_triple_endpoint_a(a);
+//    simple_triple_endpoint_b(b);
+//    simple_triple_endpoint_c(c);
 }
