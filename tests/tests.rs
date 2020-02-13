@@ -69,7 +69,6 @@ fn endpoint_c_for_b(s: CtoB<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 /// Single test for A
-///#[test]
 fn simple_triple_endpoint_a(s: EndpointADual<i32>) -> Result<(), Box<dyn Error>>  {
 //    assert!(|| -> Result<(), Box<dyn Error>> {
         // Test endpoint A
@@ -89,7 +88,6 @@ fn simple_triple_endpoint_a(s: EndpointADual<i32>) -> Result<(), Box<dyn Error>>
 }
 
 /// Single test for B
-///#[test]
 fn simple_triple_endpoint_b(s: EndpointBDual<i32>) -> Result<(), Box<dyn Error>>  {
 //    assert!(|| -> Result<(), Box<dyn Error>> {
         // Test endpoint B
@@ -108,7 +106,6 @@ fn simple_triple_endpoint_b(s: EndpointBDual<i32>) -> Result<(), Box<dyn Error>>
 //    .is_ok());
 }
 /// Single test for C
-///#[test]
 fn simple_triple_endpoint_c(s: EndpointCDual<i32>) -> Result<(), Box<dyn Error>> {
 //    assert!(|| -> Result<(), Box<dyn Error>> {
         // Test endpoint C
