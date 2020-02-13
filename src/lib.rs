@@ -314,56 +314,59 @@ where
     (res, rs)
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /// MPST Block from here...
 
-///// Type Role
-//#[derive(Debug)]
-//pub enum Role {
-//    one,
-//    two,
-//    end,
-//}
+pub enum Role {
+    A,
+    B,
+    C,
+    End,
+}
 
-//pub struct RoleQueue<R: Role, Q: Queue> {
-//    main: (R, Q);
-//}
-//
-//pub trait Queue: marker::Sized + marker::Send {
-//    #[doc(hidden)]
-//    fn new() -> Self; 
-//}
-//
-//impl<R: Role, Q: Queue> Queue for RoleQueue<R, Q> {
-//    #[doc(hidden)]
-//    fn new() -> Self {
-//        let result = (R, Q);
-//        return RoleQueue { main: result, } ;
-//    }
-//}
-
-//#[derive(Debug)]
-//pub struct RoleOne<Q: Queue> {
-////    sender: Sender<(Q)>,
-////    receiver: Receiver<(Q)>,
-//}
-//
-//#[derive(Debug)]
-//pub struct RoleTwo<Q: Queue> {
-////    sender: Sender<(Q)>,
-////    receiver: Receiver<(Q)>,
-//}
-//
-//#[derive(Debug)]
-//pub struct RoleEnd {
-////    sender: Sender<()>,
-////    receiver: Receiver<()>,
-//}
+pub struct Head<R: Role, S: Session> {
+    role: R,
+    session: S,
+}
 
 //pub struct SessionMpst<S1: Session, S2: Session, Q: Queue> {
-pub struct SessionMpst<S1: Session, S2: Session> {
-    pub session1: S1,
-    pub session2: S2,
-//    queue: Q,
+pub struct SessionMpst<R: Role, Q: Queue, H: Head> {
+    name: R,
+    queue: (H, Q),
+}
+
+
+
+
+
+
+pub trait Queue: marker::Sized + marker::Send {
+    fn new() -> Self;
+}
+
+impl<R1: Role, R2: Role, S: Session, T: marker::Send> Queue for Head<R1, R2, S> {
+    fn new() -> Self {
+        return Head { sender: R1, receiver: R2, session: S };
+    }
 }
 
 
@@ -373,71 +376,21 @@ pub struct SessionMpst<S1: Session, S2: Session> {
 
 
 
-//pub struct End {
-//    sender: Sender<()>,
-//    receiver: Receiver<()>,
-//}
-//
-///// Trait for session types. Provides duality.
-//pub trait Session: marker::Sized + marker::Send {
-//    /// The session type dual to `Self`.
-//    type Dual: Session<Dual = Self>;
-//
-//    /// Creates two new *dual* channels.
-//    ///
-//    /// *Here be dragons!*
-//    ///
-//    /// The `new` function is used internally in this library to define
-//    /// functions such as `send` and `fork`. When combined with `thread::spawn`,
-//    /// it can be used to construct deadlocks.
-//    #[doc(hidden)]
-//    fn new() -> (Self, Self::Dual);
-//}
-//
-//pub trait Queue: marker::Sized + marker::Send {
-//    fn new() -> Self;
-//}
-//
-//impl Queue for RoleEnd {
-//    #[doc(hidden)]
-//    fn new() -> Self {
-//        let (sender1, receiver1) = bounded::<()>(1);
-//
-//        return (
-//            End {
-//                sender: sender1,
-//                receiver: receiver2,
-//            },
-//            End {
-//                sender: sender2,
-//                receiver: receiver1,
-//            },
-//        );
-//    }
-//}
 
 
 
-
-
-
-
-
-
-
-
-impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session
-    for SessionMpst<Recv<T1, S1>, Recv<T2, S2>>
+impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session, R: Role> Session
+    for SessionMpst<Recv<T1, S1>, Recv<T2, S2>, R>
 {
-    type Dual = SessionMpst<Send<T1, S1::Dual>, Send<T2, S2::Dual>>;
+    type Dual = SessionMpst<Send<T1, S1::Dual>, Send<T2, S2::Dual>, R>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender_one, receiver_one) = bounded::<(T1, S1)>(1);
         let (sender_two, receiver_two) = bounded::<(T2, S2)>(1);
 
-//        let queue_one = Vec::new();
-//        let queue_two = Vec::new() ;
+        let queue_one = Vec::new();
+        let queue_two = Vec::new() ;
 
         return (
             SessionMpst {
@@ -447,7 +400,7 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session
                 session2: Recv {
                     channel: receiver_two,
                 },
-//                queue: queue_one,
+                queue: queue_one,
             },
             SessionMpst {
                 session1: Send {
@@ -456,7 +409,7 @@ impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session> Session
                 session2: Send {
                     channel: sender_two,
                 },
-//                queue: queue_two,
+                queue: queue_two,
             },
         );
     }
