@@ -323,65 +323,15 @@ where
 
 
 
-
-
-
-
-
-
-
-
 /// MPST Block from here...
 
 /// Creation of each role, should be extended for more
-
-pub struct RoleStructA {} 
-pub struct RoleStructB {} 
-pub struct RoleStructC {} 
-pub struct RoleStructEnd {} 
+pub trait RoleA: Role {fn new() -> Self;}
+pub trait RoleB: Role {fn new() -> Self;}
+pub trait RoleC: Role {fn new() -> Self;}
 
 pub trait Role: marker::Sized + marker::Send {
     fn new() -> Self;
-}
-
-pub trait RoleA: marker::Sized + marker::Send {
-    fn new() -> Self;
-}
-
-pub trait RoleB: marker::Sized + marker::Send {
-    fn new() -> Self;
-}
-
-pub trait RoleC: marker::Sized + marker::Send {
-    fn new() -> Self;
-}
-
-impl Role for RoleA {
-    #[doc(hidden)]
-    fn new() -> Self {
-        return RoleA{};
-    }
-}
-
-impl Role for RoleB {
-    #[doc(hidden)]
-    fn new() -> Self {
-        return RoleB{};
-    }
-}
-
-impl Role for RoleC {
-    #[doc(hidden)]
-    fn new() -> Self {
-        return RoleC{};
-    }
-}
-
-impl Role for RoleEnd {
-    #[doc(hidden)]
-    fn new() -> Self {
-        return RoleEnd{};
-    }
 }
 
 /// Handle types
@@ -402,7 +352,7 @@ pub struct QueueEnd {
 /// The common trait
 
 pub trait Queue: marker::Sized + marker::Send {
-    type Dual: Session<Dual = Self>;
+    type Dual: Queue<Dual = Self>;
 
     fn new() -> (Self, Self::Dual);
 }
@@ -464,11 +414,11 @@ pub fn send_mpst_a_to_b<RSender, RReceiver, T, Q>(x: T, q: QueueSend<RSender, RR
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::RoleA,
-    RReceiver: Role::RoleB,
+    RSender: RoleA,
+    RReceiver: RoleB,
 {
     let (here, there) = Q::new();
-    q.channel.send((x, there)).unwrap_or(());
+    q.channel.send((RoleA::new(), RoleB::new(), x, there)).unwrap_or(());
     here
 }
 
@@ -476,11 +426,11 @@ pub fn send_mpst_b_to_a<RSender, RReceiver, T, Q>(x: T, q: QueueSend<RSender, RR
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::B,
-    RReceiver: Role::A,
+    RSender: RoleB,
+    RReceiver: RoleA,
 {
     let (here, there) = Q::new();
-    q.channel.send((x, there)).unwrap_or(());
+    q.channel.send((RoleB::new(), RoleA::new(),x, there)).unwrap_or(());
     here
 }
 
@@ -488,11 +438,11 @@ pub fn send_mpst_a_to_c<RSender, RReceiver, T, Q>(x: T, q: QueueSend<RSender, RR
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::A,
-    RReceiver: Role::C,
+    RSender: RoleA,
+    RReceiver: RoleC,
 {
     let (here, there) = Q::new();
-    q.channel.send((x, there)).unwrap_or(());
+    q.channel.send((RoleA::new(), RoleC::new(),x, there)).unwrap_or(());
     here
 }
 
@@ -500,11 +450,11 @@ pub fn send_mpst_c_to_a<RSender, RReceiver, T, Q>(x: T, q: QueueSend<RSender, RR
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::C,
-    RReceiver: Role::A,
+    RSender: RoleC,
+    RReceiver: RoleA,
 {
     let (here, there) = Q::new();
-    q.channel.send((x, there)).unwrap_or(());
+    q.channel.send((RoleC::new(), RoleA::new(),x, there)).unwrap_or(());
     here
 }
 
@@ -512,11 +462,11 @@ pub fn send_mpst_b_to_c<RSender, RReceiver, T, Q>(x: T, q: QueueSend<RSender, RR
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::B,
-    RReceiver: Role::C,
+    RSender: RoleB,
+    RReceiver: RoleC,
 {
     let (here, there) = Q::new();
-    q.channel.send((x, there)).unwrap_or(());
+    q.channel.send((RoleB::new(), RoleC::new(),x, there)).unwrap_or(());
     here
 }
 
@@ -524,80 +474,92 @@ pub fn send_mpst_c_to_b<RSender, RReceiver, T, Q>(x: T, q: QueueSend<RSender, RR
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::C,
-    RReceiver: Role::B,
+    RSender: RoleC,
+    RReceiver: RoleB,
 {
     let (here, there) = Q::new();
-    q.channel.send((x, there)).unwrap_or(());
+    q.channel.send((RoleC::new(), RoleB::new(),x, there)).unwrap_or(());
     here
 }
 
 /// Block of code for handling receive
 
-pub fn recv_mpst_a_to_b<RSender, RReceiver, T, Q>(q: QueueRecv<RSender, RReceiver, T, Q>) -> Result<(T, Q), Box<dyn Error>>
+pub fn recv_mpst_a_to_b<RSender, RReceiver, T, Q>(
+    q: QueueRecv<RSender, RReceiver, T, Q>,
+) -> Result<(RSender, RReceiver, T, Q), Box<dyn Error>>
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::A,
-    RReceiver: Role::B,
+    RSender: RoleA,
+    RReceiver: RoleB,
 {
-    let (v, q) = q.channel.recv()?;
-    Ok((v, q))
+    let (rs, rr, v, q) = q.channel.recv()?;
+    Ok((rs, rr, v, q))
 }
 
-pub fn recv_mpst_b_to_a<RSender, RReceiver, T, Q>(q: QueueRecv<RSender, RReceiver, T, Q>) -> Result<(T, Q), Box<dyn Error>>
+pub fn recv_mpst_b_to_a<RSender, RReceiver, T, Q>(
+    q: QueueRecv<RSender, RReceiver, T, Q>,
+) -> Result<(RSender, RReceiver, T, Q), Box<dyn Error>>
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::B,
-    RReceiver: Role::A,
+    RSender: RoleB,
+    RReceiver: RoleA,
 {
-    let (v, q) = q.channel.recv()?;
-    Ok((v, q))
+    let (rs, rr, v, q) = q.channel.recv()?;
+    Ok((rs, rr, v, q))
 }
 
-pub fn recv_mpst_a_to_c<RSender, RReceiver, T, Q>(q: QueueRecv<RSender, RReceiver, T, Q>) -> Result<(T, Q), Box<dyn Error>>
+pub fn recv_mpst_a_to_c<RSender, RReceiver, T, Q>(
+    q: QueueRecv<RSender, RReceiver, T, Q>,
+) -> Result<(RSender, RReceiver, T, Q), Box<dyn Error>>
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::A,
-    RReceiver: Role::C,
+    RSender: RoleA,
+    RReceiver: RoleC,
 {
-    let (v, q) = q.channel.recv()?;
-    Ok((v, q))
+    let (rs, rr, v, q) = q.channel.recv()?;
+    Ok((rs, rr, v, q))
 }
 
-pub fn recv_mpst_c_to_a<RSender, RReceiver, T, Q>(q: QueueRecv<RSender, RReceiver, T, Q>) -> Result<(T, Q), Box<dyn Error>>
+pub fn recv_mpst_c_to_a<RSender, RReceiver, T, Q>(
+    q: QueueRecv<RSender, RReceiver, T, Q>,
+) -> Result<(RSender, RReceiver, T, Q), Box<dyn Error>>
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::C,
-    RReceiver: Role::A,
+    RSender: RoleC,
+    RReceiver: RoleA,
 {
-    let (v, q) = q.channel.recv()?;
-    Ok((v, q))
+    let (rs, rr, v, q) = q.channel.recv()?;
+    Ok((rs, rr, v, q))
 }
 
-pub fn recv_mpst_b_to_c<RSender, RReceiver, T, Q>(q: QueueRecv<RSender, RReceiver, T, Q>) -> Result<(T, Q), Box<dyn Error>>
+pub fn recv_mpst_b_to_c<RSender, RReceiver, T, Q>(
+    q: QueueRecv<RSender, RReceiver, T, Q>,
+) -> Result<(RSender, RReceiver, T, Q), Box<dyn Error>>
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::B,
-    RReceiver: Role::C,
+    RSender: RoleB,
+    RReceiver: RoleC,
 {
-    let (v, q) = q.channel.recv()?;
-    Ok((v, q))
+    let (rs, rr, v, q) = q.channel.recv()?;
+    Ok((rs, rr, v, q))
 }
 
-pub fn recv_mpst_c_to_b<RSender, RReceiver, T, Q>(q: QueueRecv<RSender, RReceiver, T, Q>) -> Result<(T, Q), Box<dyn Error>>
+pub fn recv_mpst_c_to_b<RSender, RReceiver, T, Q>(
+    q: QueueRecv<RSender, RReceiver, T, Q>,
+) -> Result<(RSender, RReceiver, T, Q), Box<dyn Error>>
 where
     T: marker::Send,
     Q: Queue,
-    RSender: Role::C,
-    RReceiver: Role::B,
+    RSender: RoleC,
+    RReceiver: RoleB,
 {
-    let (v, q) = q.channel.recv()?;
-    Ok((v, q))
+    let (rs, rr, v, q) = q.channel.recv()?;
+    Ok((rs, rr, v, q))
 }
 
 /// Closes a session with everyone
@@ -608,124 +570,122 @@ pub fn close_mpst(q: QueueEnd) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-
-
 ///// Recv from A to B
-//impl<R1: Role::A, R2: Role::B, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
+//impl<R1: RoleA, R2: RoleB, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
 //
-//        return (Head { sender: Role::A, receiver: Role::B, session: Recv { channel: receiver } },
-//        Head { sender: Role::B, receiver: Role::A, session: Send { channel: sender } });
+//        return (Head { sender: RoleA, receiver: RoleB, session: Recv { channel: receiver } },
+//        Head { sender: RoleB, receiver: RoleA, session: Send { channel: sender } });
 //    }
 //}
 //
 ///// Send from A to B
-//impl<R1: Role::A, R2: Role::B, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
+//impl<R1: RoleA, R2: RoleB, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::A, receiver: Role::B, session: Send { channel: sender } },
-//        Head { sender: Role::B, receiver: Role::A, session: Recv { channel: receiver } });
+//        return (Head { sender: RoleA, receiver: RoleB, session: Send { channel: sender } },
+//        Head { sender: RoleB, receiver: RoleA, session: Recv { channel: receiver } });
 //    }
 //}
 //
 ///// Recv from B to A
-//impl<R1: Role::B, R2: Role::A, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
+//impl<R1: RoleB, R2: RoleA, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::B, receiver: Role::A, session: Recv { channel: receiver } },
-//        Head { sender: Role::A, receiver: Role::B, session: Send { channel: sender } });
+//        return (Head { sender: RoleB, receiver: RoleA, session: Recv { channel: receiver } },
+//        Head { sender: RoleA, receiver: RoleB, session: Send { channel: sender } });
 //    }
 //}
 //
 ///// Send from B to A
-//impl<R1: Role::B, R2: Role::A, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
+//impl<R1: RoleB, R2: RoleA, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
 //
-//        return Head { sender: Role::B, receiver: Role::A, session: Send { channel: sender } },
-//        Head { sender: Role::A, receiver: Role::B, session: Recv { channel: receiver} });
+//        return Head { sender: RoleB, receiver: RoleA, session: Send { channel: sender } },
+//        Head { sender: RoleA, receiver: RoleB, session: Recv { channel: receiver} });
 //    }
 //}
 //
 ///// Recv from A to C
-//impl<R1: Role::A, R2: Role::C, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
+//impl<R1: RoleA, R2: RoleC, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::A, receiver: Role::C, session: Recv { channel: receiver } },
-//        Head { sender: Role::C, receiver: Role::A, session: Send { channel: sender} });
+//        return (Head { sender: RoleA, receiver: RoleC, session: Recv { channel: receiver } },
+//        Head { sender: RoleC, receiver: RoleA, session: Send { channel: sender} });
 //    }
 //}
 //
 ///// Send from A to C
-//impl<R1: Role::A, R2: Role::C, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
+//impl<R1: RoleA, R2: RoleC, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
 //        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
 //
-//        return (Head { sender: Role::A, receiver: Role::C, session: Send { channel: sender } },
-//        Head { sender: Role::C, receiver: Role::A, session: Recv { channel: receiver} });
+//        return (Head { sender: RoleA, receiver: RoleC, session: Send { channel: sender } },
+//        Head { sender: RoleC, receiver: RoleA, session: Recv { channel: receiver} });
 //    }
 //}
 //
 ///// Recv from C to A
-//impl<R1: Role::C, R2: Role::A, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
+//impl<R1: RoleC, R2: RoleA, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::C, receiver: Role::A, session: Recv { channel: receiver } },
-//        Head { sender: Role::A, receiver: Role::C, session: Send { channel: sender } });
+//        return (Head { sender: RoleC, receiver: RoleA, session: Recv { channel: receiver } },
+//        Head { sender: RoleA, receiver: RoleC, session: Send { channel: sender } });
 //    }
 //}
 //
 ///// Send from C to A
-//impl<R1: Role::C, R2: Role::A, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
+//impl<R1: RoleC, R2: RoleA, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
 //
-//        return (Head { sender: Role::C, receiver: Role::A, session: Send { channel: sender } },
-//        Head { sender: Role::A, receiver: Role::C, session: Recv { channel: receiver } });
+//        return (Head { sender: RoleC, receiver: RoleA, session: Send { channel: sender } },
+//        Head { sender: RoleA, receiver: RoleC, session: Recv { channel: receiver } });
 //    }
 //}
 //
 ///// Recv from C to B
-//impl<R1: Role::C, R2: Role::B, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
+//impl<R1: RoleC, R2: RoleB, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::C, receiver: Role::B, session: Recv { channel: receiver } },
-//        Head { sender: Role::B, receiver: Role::C, session: Send { channel: sender } });
+//        return (Head { sender: RoleC, receiver: RoleB, session: Recv { channel: receiver } },
+//        Head { sender: RoleB, receiver: RoleC, session: Send { channel: sender } });
 //    }
 //}
 //
 ///// Send from C to B
-//impl<R1: Role::C, R2: Role::B, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
+//impl<R1: RoleC, R2: RoleB, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
 //
-//        return (Head { sender: Role::C, receiver: Role::B, session: Send { channel: sender } },
-//        Head { sender: Role::B, receiver: Role::C, session: Recv { channel: receiver } });
+//        return (Head { sender: RoleC, receiver: RoleB, session: Send { channel: sender } },
+//        Head { sender: RoleB, receiver: RoleC, session: Recv { channel: receiver } });
 //    }
 //}
 //
 ///// Recv from B to C
-//impl<R1: Role::B, R2: Role::C, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
+//impl<R1: RoleB, R2: RoleC, S: Session, T: marker::Send> Queue for Head<R1, R2, Recv<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::B, receiver: Role::C, session: Recv { channel: receiver } },
-//        Head { sender: Role::C, receiver: Role::B, session: Send { channel: sender } });
+//        return (Head { sender: RoleB, receiver: RoleC, session: Recv { channel: receiver } },
+//        Head { sender: RoleC, receiver: RoleB, session: Send { channel: sender } });
 //    }
 //}
 //
 ///// Send from B to C
-//impl<R1: Role::B, R2: Role::C, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
+//impl<R1: RoleB, R2: RoleC, S: Session, T: marker::Send> Queue for Head<R1, R2, Send<T, S>> {
 //    fn new() -> (Self, Self::Dual) {
 //        let (sender, receiver) = bounded::<(T, S)>(1);
 //
-//        return (Head { sender: Role::B, receiver: Role::C, session: Send { channel: sender } },
-//        Head { sender: Role::C, receiver: Role::B, session: Recv { channel: receiver } });
+//        return (Head { sender: RoleB, receiver: RoleC, session: Send { channel: sender } },
+//        Head { sender: RoleC, receiver: RoleB, session: Recv { channel: receiver } });
 //    }
 //}
 //
@@ -739,7 +699,7 @@ pub fn close_mpst(q: QueueEnd) -> Result<(), Box<dyn Error>> {
 //    }
 //}
 
-//impl<H: Head, Q: Queue, R1: Role::A, R2: Role::B, T: marker::Send, S: Session> Session
+//impl<H: Head, Q: Queue, R1: RoleA, R2: RoleB, T: marker::Send, S: Session> Session
 //    for SessionMpst<H<R1, R2, Send<T, S>>, Q>
 //{
 //    type Dual = SessionMpst<H<R2, R1, Recv<T, S::Dual>>, Q>;
@@ -1256,21 +1216,20 @@ pub fn close_mpst(q: QueueEnd) -> Result<(), Box<dyn Error>> {
 //    fork_with_thread_id_mpst(p_one, p_two).2
 //}
 //
-//pub fn fork_simple<S1, S2, P>(p: P, s: SessionMpst<S1, S2>) -> JoinHandle<()>
-//where
-//    S1: Session + 'static,
-//    S2: Session + 'static,
-//    P: FnOnce(SessionMpst<S1, S2>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
-//{
-//    let other_thread = spawn(move || {
-//        panic::set_hook(Box::new(|_info| {
-//            // do nothing
-//        }));
-//        match p(s) {
-//            Ok(()) => (),
-//            Err(e) => panic!("{}", e.description()),
-//        }
-//    });
-//    other_thread
-//}
+pub fn fork_simple<P>(p: P, q: Q) -> JoinHandle<()>
+where
+    Q: Queue + 'static,
+    P: FnOnce(Q) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+{
+    let other_thread = spawn(move || {
+        panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match p(q) {
+            Ok(()) => (),
+            Err(e) => panic!("{}", e.description()),
+        }
+    });
+    other_thread
+}
 // ... to there
