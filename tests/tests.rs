@@ -18,113 +18,44 @@ type BtoC<N> = Send<N, End>;
 type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 
+/// Queueus
+type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
+type QueueB = RoleBtoA<RoleBtoC<RoleEnd>>;
+type QueueC = RoleCtoA<RoleCtoB<RoleEnd>>;
+
 /// Creating the MP sessions
-//type EndpointADual<N> = SessionMpst<<AtoB<N> as Session>::Dual, <AtoC<N> as Session>::Dual>;
-type EndpointADual<N> = SessionMpst<BtoA<N>, CtoA<N>>;
-
-//type EndpointBDual<N> = SessionMpst<<BtoA<N> as Session>::Dual, <BtoC<N> as Session>::Dual>;
-type EndpointBDual<N> = SessionMpst<AtoB<N>, CtoB<N>>;
-
-//type EndpointCDual<N> = SessionMpst<<CtoA<N> as Session>::Dual, <CtoB<N> as Session>::Dual>;
-type EndpointCDual<N> = SessionMpst<AtoC<N>, BtoC<N>>;
-
-/// Creating the endoint's functions
-/// Here for A
-fn endpoint_a_for_b(s: AtoB<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send(1, s);
-    close(s)?;
-    Ok(())
-}
-
-fn endpoint_a_for_c(s: AtoC<i32>) -> Result<(), Box<dyn Error>> {
-    let (_x, s) = recv(s)?;
-    close(s)?;
-    Ok(())
-}
-
-/// Here for B
-fn endpoint_b_for_a(s: BtoA<i32>) -> Result<(), Box<dyn Error>> {
-    let (_x, s) = recv(s)?;
-    close(s)?;
-    Ok(())
-}
-
-fn endpoint_b_for_c(s: BtoC<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send(2, s);
-    close(s)?;
-    Ok(())
-}
-
-/// Here for C
-fn endpoint_c_for_a(s: CtoA<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send(1, s);
-    close(s)?;
-    Ok(())
-}
-
-fn endpoint_c_for_b(s: CtoB<i32>) -> Result<(), Box<dyn Error>> {
-    let (_x, s) = recv(s)?;
-    close(s)?;
-    Ok(())
-}
+type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA>;
+type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
+type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
 
 /// Single test for A
-///#[test]
-fn simple_triple_endpoint_a(s: EndpointADual<i32>) -> Result<(), Box<dyn Error>>  {
-//    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test endpoint A
-        {
-//            let s: EndpointADual<i32> = fork_mpst(endpoint_a_for_b, endpoint_a_for_c);
-
-            let (x, s) = recv_mpst_session_one(s)?;
-            let s = send_mpst_session_two(1, s);
-            close_mpst(s)?;
-
-            assert_eq!(x, 1);
-        }
-
-        Ok(())
-//    }()
-//    .is_ok());
+fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+    {
+        let s = send_mpst_session_one_A_to_B(1, s);
+        let (x, s) = recv_mpst_session_two_A_to_C(s)?;
+        // close_mpst(s)?;
+    }
+    Ok(())
 }
 
 /// Single test for B
-///#[test]
-fn simple_triple_endpoint_b(s: EndpointBDual<i32>) -> Result<(), Box<dyn Error>>  {
-//    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test endpoint B
-        {
-//            let s: EndpointBDual<i32> = fork_mpst(endpoint_b_for_a, endpoint_b_for_c);
-
-            let s = send_mpst_session_one(1, s);
-            let (x, s) = recv_mpst_session_two(s)?;
-            close_mpst(s)?;
-
-            assert_eq!(x, 2);
-        }
-
-        Ok(())
-//    }()
-//    .is_ok());
+fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+    {
+        let (x, s) = recv_mpst_session_one_B_to_A(s)?;
+        let s = send_mpst_session_two_B_to_C(1, s);
+        // close_mpst(s)?;
+    }
+    Ok(())
 }
+
 /// Single test for C
-///#[test]
-fn simple_triple_endpoint_c(s: EndpointCDual<i32>) -> Result<(), Box<dyn Error>> {
-//    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test endpoint C
-        {
-//            let s: EndpointCDual<i32> = fork_mpst(endpoint_c_for_a, endpoint_c_for_b);
-
-            let (x, s) = recv_mpst_session_one(s)?;
-            let s = send_mpst_session_two(1, s);
-            close_mpst(s)?;
-
-            assert_eq!(x, 1);
-        }
-
-        Ok(())
-//    }()
-//    .is_ok());
+fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    {
+        let s = send_mpst_session_one_C_to_A(1, s);
+        let (x, s) = recv_mpst_session_two_C_to_B(s)?;
+        // close_mpst(s)?;
+    }
+    Ok(())
 }
 
 #[test]
@@ -133,9 +64,25 @@ fn main() {
     let (channel_ac, channel_ca) = Session::new();
     let (channel_bc, channel_cb) = Session::new();
 
-    let a: EndpointADual<i32> = SessionMpst { session1: channel_ab, session2: channel_ac };
-    let b: EndpointBDual<i32> = SessionMpst { session1: channel_ba, session2: channel_bc };
-    let c: EndpointCDual<i32> = SessionMpst { session1: channel_ca, session2: channel_cb };
+    let (roleA, _) = Role::new();
+    let (roleB, _) = Role::new();
+    let (roleC, _) = Role::new();
+
+    let a: EndpointA<i32> = SessionMpst {
+        session1: channel_ab,
+        session2: channel_ac,
+        queue: roleA,
+    };
+    let b: EndpointB<i32> = SessionMpst {
+        session1: channel_ba,
+        session2: channel_bc,
+        queue: roleB,
+    };
+    let c: EndpointC<i32> = SessionMpst {
+        session1: channel_ca,
+        session2: channel_cb,
+        queue: roleC,
+    };
 
     let thread_a = fork_simple(simple_triple_endpoint_a, a);
     let thread_b = fork_simple(simple_triple_endpoint_b, b);
@@ -144,8 +91,143 @@ fn main() {
     thread_a.join();
     thread_b.join();
     thread_c.join();
-
-//    simple_triple_endpoint_a(a);
-//    simple_triple_endpoint_b(b);
-//    simple_triple_endpoint_c(c);
 }
+
+// Test a simple calculator server, implemented using binary choice.
+/// Simple types
+type AtoBNeg<N> = Recv<N, End>;
+type BtoANeg<N> = Send<N, End>; 
+
+type AtoBAdd<N> = Recv<N, End>;
+type BtoAAdd<N> = Send<N, End>; 
+
+type SimpleCalcServer<N> = Offer<AtoBNeg<N>, AtoBAdd<N>>;
+type SimpleCalcClient<N> = <SimpleCalcServer<N> as Session>::Dual;
+
+/// Queues
+
+type QueueA = RoleAtoB<RoleAtoB<RoleEnd>>;
+type QueueB = RoleBtoA<RoleBtoA<RoleEnd>>;
+type QueueC = RoleEnd;
+
+/// Creating the MP sessions
+type EndpointA<N> = SessionMpst<SimpleCalcClient<N>, End, QueueA>;
+type EndpointB<N> = SessionMpst<SimpleCalcServer<N>, End, QueueB>;
+type EndpointC<N> = SessionMpst<End, End, QueueC>;
+
+fn simple_calc_server(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+    offer_either(s,
+                 |s: AtoBNeg<i32>| {
+                     let (x, s) = recv_mpst_session_one_B_to_A(s)?;
+                     
+                     close(s)?;
+                     Ok(())
+                 },
+                 |s: AtoBAdd<i32>| {
+                     let (x, s) = recv_mpst_session_one_B_to_A(s)?;                 
+                     close(s)?;
+                     Ok(())
+                 })
+}
+
+#[test]
+fn simple_calc_works() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+
+        let mut rng = thread_rng();
+
+        // Test the negation function.
+        {
+            let s: SimpleCalcClient<i32> = fork(simple_calc_server);
+            let x: i32 = rng.gen();
+            let s = choose_left::<_, AddClient<i32>>(s);
+            let s = send(x, s);
+            let (y, s) = recv(s)?;
+            close(s)?;
+            assert_eq!(-x, y);
+        }
+
+        // Test the addition function.
+        {
+            let s: SimpleCalcClient<i32> = fork(simple_calc_server);
+            let x: i32 = rng.gen();
+            let y: i32 = rng.gen();
+            let s = choose_right::<NegClient<i32>, _>(s);
+            let s = send(x, s);
+            let s = send(y, s);
+            let (z, s) = recv(s)?;
+            close(s)?;
+            assert_eq!(x.wrapping_add(y), z);
+        }
+
+        Ok(())
+
+    }().is_ok());
+}
+
+
+// Test a nice calculator server, implemented using variant types.
+
+enum CalcOp<N: marker::Send> {
+    Neg(NegServer<N>),
+    Add(AddServer<N>),
+}
+type NiceCalcServer<N> = Recv<CalcOp<N>, End>;
+type NiceCalcClient<N> = <NiceCalcServer<N> as Session>::Dual;
+
+fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
+    offer!(s, {
+        CalcOp::Neg(s) => {
+            let (x, s) = recv(s)?;
+            let s = send(-x, s);
+            close(s)?;
+            Ok(())
+        },
+        CalcOp::Add(s) => {
+            let (x, s) = recv(s)?;
+            let (y, s) = recv(s)?;
+            let s = send(x.wrapping_add(y), s);
+            close(s)?;
+            Ok(())
+        },
+    })
+}
+
+#[test]
+fn nice_calc_works() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+
+        // Pick some random numbers.
+        let mut rng = thread_rng();
+
+        // Test the negation function.
+        {
+            let s: NiceCalcClient<i32> = fork(nice_calc_server);
+            let x: i32 = rng.gen();
+            let s = choose!(CalcOp::Neg, s);
+            let s = send(x, s);
+            let (y, s) = recv(s)?;
+            close(s)?;
+            assert_eq!(-x, y);
+        }
+
+        // Test the addition function.
+        {
+            let s: NiceCalcClient<i32> = fork(nice_calc_server);
+            let x: i32 = rng.gen();
+            let y: i32 = rng.gen();
+            let s = choose!(CalcOp::Add, s);
+            let s = send(x, s);
+            let s = send(y, s);
+            let (z, s) = recv(s)?;
+            close(s)?;
+            assert_eq!(x.wrapping_add(y), z);
+        }
+
+        Ok(())
+
+    }().is_ok());
+}
+
+
+
