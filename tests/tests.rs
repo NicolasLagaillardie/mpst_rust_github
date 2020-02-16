@@ -96,10 +96,10 @@ fn main() {
 // Test a simple calculator server, implemented using binary choice.
 /// Simple types
 type AtoBNeg<N> = Recv<N, End>;
-type BtoANeg<N> = Send<N, End>; 
+type BtoANeg<N> = Send<N, End>;
 
 type AtoBAdd<N> = Recv<N, End>;
-type BtoAAdd<N> = Send<N, End>; 
+type BtoAAdd<N> = Send<N, End>;
 
 type SimpleCalcServer<N> = Offer<AtoBNeg<N>, AtoBAdd<N>>;
 type SimpleCalcClient<N> = <SimpleCalcServer<N> as Session>::Dual;
@@ -111,29 +111,31 @@ type QueueB = RoleBtoA<RoleBtoA<RoleEnd>>;
 type QueueC = RoleEnd;
 
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<SimpleCalcClient<N>, End, QueueA>;
+type EndpointAAdd<N> = SessionMpst<AtoBNeg<N>, End, QueueA>;
+type EndpointANeg<N> = SessionMpst<AtoBAdd<N>, End, QueueA>;
+type EndpointA<N> = Offer<EndpointAAdd<N>, EndpointANeg<N>>;
+
 type EndpointB<N> = SessionMpst<SimpleCalcServer<N>, End, QueueB>;
 type EndpointC<N> = SessionMpst<End, End, QueueC>;
 
 fn simple_calc_server(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_either(s,
-                 |s: AtoBNeg<i32>| {
-                     let (x, s) = recv_mpst_session_one_B_to_A(s)?;
-                     
-                     close(s)?;
-                     Ok(())
-                 },
-                 |s: AtoBAdd<i32>| {
-                     let (x, s) = recv_mpst_session_one_B_to_A(s)?;                 
-                     close(s)?;
-                     Ok(())
-                 })
+    offer_either(
+        s,
+        |s: AtoBNeg<i32>| {
+            close(s)?;
+            Ok(())
+        },
+        |s: AtoBAdd<i32>| {
+            let (x, s) = recv_mpst_session_one_B_to_A(s)?;
+            close(s)?;
+            Ok(())
+        },
+    )
 }
 
 #[test]
 fn simple_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         let mut rng = thread_rng();
 
         // Test the negation function.
@@ -161,10 +163,9 @@ fn simple_calc_works() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
-
 
 // Test a nice calculator server, implemented using variant types.
 
@@ -196,7 +197,6 @@ fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
 #[test]
 fn nice_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         // Pick some random numbers.
         let mut rng = thread_rng();
 
@@ -225,9 +225,6 @@ fn nice_calc_works() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
-
-
-
