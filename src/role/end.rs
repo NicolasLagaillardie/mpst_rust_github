@@ -1,6 +1,6 @@
-use std::error::Error;
-use crossbeam_channel::{bounded, Sender, Receiver};
+use crossbeam_channel::{bounded, Receiver, Sender};
 use role::Role;
+use std::error::Error;
 
 pub struct RoleEnd {
     pub sender: Sender<()>,

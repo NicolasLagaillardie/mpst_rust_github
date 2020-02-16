@@ -1,12 +1,12 @@
-use sessionmpst::SessionMpst;
-use role::c_to_b::{next_c_to_b, RoleCtoB};
-use role::b_to_c::{next_b_to_c, RoleBtoC};
+use binary::{recv, Recv, Session};
 use role::a_to_b::{next_a_to_b, RoleAtoB};
-use role::b_to_a::{next_b_to_a, RoleBtoA};
-use role::c_to_a::{next_c_to_a, RoleCtoA};
 use role::a_to_c::{next_a_to_c, RoleAtoC};
+use role::b_to_a::{next_b_to_a, RoleBtoA};
+use role::b_to_c::{next_b_to_c, RoleBtoC};
+use role::c_to_a::{next_c_to_a, RoleCtoA};
+use role::c_to_b::{next_c_to_b, RoleCtoB};
 use role::Role;
-use binary::{Session, Recv, recv};
+use sessionmpst::SessionMpst;
 use std::error::Error;
 use std::marker;
 

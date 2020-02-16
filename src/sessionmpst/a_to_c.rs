@@ -1,9 +1,9 @@
-use binary::{Session, Send, Recv, End};
-use sessionmpst::SessionMpst;
-use role::c_to_a::RoleCtoA;
-use role::a_to_c::RoleAtoC;
-use role::Role;
+use binary::{End, Recv, Send, Session};
 use crossbeam_channel::bounded;
+use role::a_to_c::RoleAtoC;
+use role::c_to_a::RoleCtoA;
+use role::Role;
+use sessionmpst::SessionMpst;
 use std::marker;
 
 impl<T1: marker::Send, T2: marker::Send, S1: Session, S2: Session, R: Role> Session

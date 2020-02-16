@@ -6,8 +6,8 @@ pub mod c_to_a;
 pub mod c_to_b;
 pub mod end;
 
-use role::Role;
 use binary::Session;
+use role::Role;
 
 pub struct SessionMpst<S1: Session, S2: Session, R: Role> {
     pub session1: S1,

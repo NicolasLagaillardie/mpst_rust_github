@@ -1,9 +1,8 @@
 use binary::End;
-use role::end::RoleEnd;
 use binary::Session;
-use sessionmpst::SessionMpst;
 use crossbeam_channel::bounded;
-
+use role::end::RoleEnd;
+use sessionmpst::SessionMpst;
 
 impl Session for SessionMpst<End, End, RoleEnd> {
     type Dual = SessionMpst<End, End, RoleEnd>;

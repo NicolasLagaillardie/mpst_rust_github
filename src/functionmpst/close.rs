@@ -1,7 +1,7 @@
+use binary::{close, End};
 use role::end::{next_end, RoleEnd};
-use binary::{End, close};
-use std::error::Error;
 use sessionmpst::SessionMpst;
+use std::error::Error;
 
 /// Closes session one. Synchronises with the partner, and fails if the partner
 /// has crashed.

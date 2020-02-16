@@ -1,6 +1,6 @@
+use crossbeam_channel::{bounded, Receiver, Sender};
 use role::a_to_c::RoleAtoC;
 use role::Role;
-use crossbeam_channel::{bounded, Sender, Receiver};
 
 pub struct RoleCtoA<R: Role> {
     pub sender: Sender<R::Dual>,
