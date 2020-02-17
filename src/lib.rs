@@ -2,13 +2,8 @@
 extern crate crossbeam_channel;
 extern crate either;
 
-//use crossbeam_channel::{bounded, Receiver, Select, Sender};
-//use either::Either;
-//use std::boxed::Box;
 use std::error::Error;
-//use std::fmt;
 use std::marker;
-//use std::mem;
 use std::panic;
 use std::thread::{spawn, JoinHandle};
 
@@ -17,9 +12,9 @@ pub mod functionmpst;
 pub mod role;
 pub mod sessionmpst;
 
-use binary::*;
-use role::*;
-use sessionmpst::*;
+use binary::Session;
+use role::Role;
+use sessionmpst::SessionMpst;
 
 pub fn fork_simple<S1, S2, R, P>(p: P, s: SessionMpst<S1, S2, R>) -> JoinHandle<()>
 where
