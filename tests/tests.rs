@@ -61,37 +61,61 @@ type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
 
 /// Single test for A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let s = send_mpst_session_one_a_to_b(1, s);
-        let (x, s) = recv_mpst_session_two_a_to_c(s)?;
-        close_mpst(s)?;
 
-        assert_eq!(x, 3);
-    }
+    println!("Start A");
+
+    let s = send_mpst_session_one_a_to_b(1, s);
+
+    println!("Send A to B");
+
+    let (x, s) = recv_mpst_session_two_a_to_c(s)?;
+
+    println!("Recv from C to A");
+
+    assert_eq!(x, 3);
+
+    //close_mpst(s)?;
+
     Ok(())
 }
 
 /// Single test for B
 fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let (x, s) = recv_mpst_session_one_b_to_a(s)?;
-        let s = send_mpst_session_two_b_to_c(2, s);
-        close_mpst(s)?;
 
-        assert_eq!(x, 1);
-    }
+    println!("Start B");
+
+    let (x, s) = recv_mpst_session_one_b_to_a(s)?;
+
+    println!("Recv from A to B");
+
+    let s = send_mpst_session_two_b_to_c(2, s);
+
+    println!("Send B to C");
+
+    assert_eq!(x, 1);
+
+    //close_mpst(s)?;
+
     Ok(())
 }
 
 /// Single test for C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let s = send_mpst_session_one_c_to_a(3, s);
-        let (x, s) = recv_mpst_session_two_c_to_b(s)?;
-        close_mpst(s)?;
 
-        assert_eq!(x, 2);
-    }
+    println!("Start C");
+
+    let s = send_mpst_session_one_c_to_a(3, s);
+
+    println!("Send C to A");
+
+    let (x, s) = recv_mpst_session_two_c_to_b(s)?;
+
+    println!("Recv C to B");
+
+    assert_eq!(x, 2);
+    
+    //close_mpst(s)?;
+
     Ok(())
 }
 
@@ -123,20 +147,36 @@ fn simple_triple_endpoints() {
                 queue: role_c,
             };
 
+            println!("Start");
+
             let thread_a = fork_simple(simple_triple_endpoint_a, a);
             let thread_b = fork_simple(simple_triple_endpoint_b, b);
             let thread_c = fork_simple(simple_triple_endpoint_c, c);
 
-            thread_a.join();
-            thread_b.join();
-            thread_c.join();
+            let x_a = thread_a.join().unwrap();
+            let x_b = thread_b.join().unwrap();
+            let x_c = thread_c.join().unwrap();
+
+            println!("x_a : {:?}", x_a);
+            println!("x_b : {:?}", x_b);
+            println!("x_c : {:?}", x_c);
+
+            // let x_a = thread_a.join().unwrap();
+            // let x_b = thread_b.join().unwrap();
+            // let x_c = thread_c.join().unwrap();
+
+            // assert_eq!(x_a, 3);
+            // assert_eq!(x_b, 1);
+            // assert_eq!(x_c, 2);
+
+            println!("Finnish");
         }
         Ok(())
     }()
     .is_ok());
 }
 
-// Test a simple calculator server, implemented using binary choice.
+/// Test a simple calculator server, implemented using binary choice.
 /// Simple types
 type AtoBNeg<N> = Recv<N, End>;
 type AtoBAdd<N> = Recv<N, End>;
