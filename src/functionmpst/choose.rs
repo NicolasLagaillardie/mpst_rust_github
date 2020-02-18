@@ -7,17 +7,19 @@ use functionmpst::send::send_mpst_session_two_a_to_c;
 use functionmpst::send::send_mpst_session_two_b_to_c;
 use functionmpst::send::send_mpst_session_two_c_to_b;
 use functionmpst::ChooseMpst;
-use role::a_to_b::RoleAtoB;
-use role::a_to_c::RoleAtoC;
-use role::b_to_a::RoleBtoA;
-use role::b_to_c::RoleBtoC;
-use role::c_to_a::RoleCtoA;
-use role::c_to_b::RoleCtoB;
+
+use role::a_sends_to_b::RoleASendToB;
+use role::b_sends_to_a::RoleBSendToA;
+use role::c_sends_to_b::RoleCSendToB;
+use role::b_sends_to_c::RoleBSendToC;
+use role::a_sends_to_c::RoleASendToC;
+use role::c_sends_to_a::RoleCSendToA;
+
 use role::Role;
 use sessionmpst::SessionMpst;
 
-pub fn choose_left_mpst_session_a_to_b<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleAtoB<R3>>,
+pub fn choose_left_mpst_session_a_to_b<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleASendToB<R3>>,
 ) -> SessionMpst<S1, S2, R1>
 where
     S1: Session + 'a,
@@ -50,8 +52,8 @@ where
     };
 }
 
-pub fn choose_right_mpst_session_a_to_b<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleAtoB<R3>>,
+pub fn choose_right_mpst_session_a_to_b<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleASendToB<R3>>,
 ) -> SessionMpst<S3, S4, R2>
 where
     S1: Session + 'a,
@@ -84,8 +86,8 @@ where
     };
 }
 
-pub fn choose_left_mpst_session_b_to_a<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleBtoA<R3>>,
+pub fn choose_left_mpst_session_b_to_a<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleBSendToA<R3>>,
 ) -> SessionMpst<S1, S2, R1>
 where
     S1: Session + 'a,
@@ -118,8 +120,8 @@ where
     };
 }
 
-pub fn choose_right_mpst_session_b_to_a<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleBtoA<R3>>,
+pub fn choose_right_mpst_session_b_to_a<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleBSendToA<R3>>,
 ) -> SessionMpst<S3, S4, R2>
 where
     S1: Session + 'a,
@@ -152,8 +154,8 @@ where
     };
 }
 
-pub fn choose_left_mpst_session_a_to_c<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleAtoC<R3>>,
+pub fn choose_left_mpst_session_a_to_c<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleASendToC<R3>>,
 ) -> SessionMpst<S1, S2, R1>
 where
     S1: Session + 'a,
@@ -186,8 +188,8 @@ where
     };
 }
 
-pub fn choose_right_mpst_session_a_to_c<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleAtoC<R3>>,
+pub fn choose_right_mpst_session_a_to_c<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleASendToC<R3>>,
 ) -> SessionMpst<S3, S4, R2>
 where
     S1: Session + 'a,
@@ -220,8 +222,8 @@ where
     };
 }
 
-pub fn choose_left_mpst_session_c_to_a<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleCtoA<R3>>,
+pub fn choose_left_mpst_session_c_to_a<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleCSendToA<R3>>,
 ) -> SessionMpst<S1, S2, R1>
 where
     S1: Session + 'a,
@@ -254,8 +256,8 @@ where
     };
 }
 
-pub fn choose_right_mpst_session_c_to_a<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleCtoA<R3>>,
+pub fn choose_right_mpst_session_c_to_a<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleCSendToA<R3>>,
 ) -> SessionMpst<S3, S4, R2>
 where
     S1: Session + 'a,
@@ -288,8 +290,8 @@ where
     };
 }
 
-pub fn choose_left_mpst_session_b_to_c<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleBtoC<R3>>,
+pub fn choose_left_mpst_session_b_to_c<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleBSendToC<R3>>,
 ) -> SessionMpst<S1, S2, R1>
 where
     S1: Session + 'a,
@@ -322,8 +324,8 @@ where
     };
 }
 
-pub fn choose_right_mpst_session_b_to_c<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleBtoC<R3>>,
+pub fn choose_right_mpst_session_b_to_c<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleBSendToC<R3>>,
 ) -> SessionMpst<S3, S4, R2>
 where
     S1: Session + 'a,
@@ -356,8 +358,8 @@ where
     };
 }
 
-pub fn choose_left_mpst_session_c_to_b<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleCtoB<R3>>,
+pub fn choose_left_mpst_session_c_to_b<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleCSendToB<R3>>,
 ) -> SessionMpst<S1, S2, R1>
 where
     S1: Session + 'a,
@@ -390,8 +392,8 @@ where
     };
 }
 
-pub fn choose_right_mpst_session_c_to_b<'a, S1, S2, S3, S4, S5, R1, R2, R3>(
-    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleCtoB<R3>>,
+pub fn choose_right_mpst_session_c_to_b<'a, S1, S2, R1, S3, S4, R2, S5, R3>(
+    s: SessionMpst<S5, ChooseMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleCSendToB<R3>>,
 ) -> SessionMpst<S3, S4, R2>
 where
     S1: Session + 'a,

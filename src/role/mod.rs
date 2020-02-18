@@ -1,9 +1,17 @@
-pub mod a_to_b;
-pub mod a_to_c;
-pub mod b_to_a;
-pub mod b_to_c;
-pub mod c_to_a;
-pub mod c_to_b;
+pub mod a_receives_from_b;
+pub mod b_receives_from_a;
+pub mod a_receives_from_c;
+pub mod c_receives_from_a;
+pub mod c_receives_from_b;
+pub mod b_receives_from_c;
+
+pub mod a_sends_to_b;
+pub mod b_sends_to_a;
+pub mod a_sends_to_c;
+pub mod c_sends_to_a;
+pub mod c_sends_to_b;
+pub mod b_sends_to_c;
+
 pub mod end;
 use std::marker;
 
