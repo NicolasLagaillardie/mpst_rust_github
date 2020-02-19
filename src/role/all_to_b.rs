@@ -1,28 +1,28 @@
 use crossbeam_channel::{bounded, Sender};
-use role::c_to_b::RoleCtoB;
+use role::b_to_all::RoleBtoAll;
 use role::Role;
 
-pub struct RoleBtoC<R: Role> {
+pub struct RoleAlltoB<R: Role> {
     pub sender: Sender<R::Dual>,
 }
 
-impl<R: Role> Role for RoleBtoC<R> {
-    type Dual = RoleCtoB<R::Dual>;
+impl<R: Role> Role for RoleAlltoB<R> {
+    type Dual = RoleBtoAll<R::Dual>;
 
     fn new() -> (Self, Self::Dual) {
         let (sender, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
         return (
-            RoleBtoC {
+            RoleAlltoB {
                 sender: sender_dual,
             },
-            RoleCtoB { sender: sender },
+            RoleBtoAll { sender: sender },
         );
     }
 }
 
-pub fn next_b_to_c<R>(r: RoleBtoC<R>) -> R
+pub fn next_all_to_b<R>(r: RoleAlltoB<R>) -> R
 where
     R: Role,
 {
