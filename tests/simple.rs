@@ -1,10 +1,11 @@
 extern crate mpst;
 
-use binary::*;
-use mpst::*;
-use sessionmpst::SessionMpst;
 use std::boxed::Box;
 use std::error::Error;
+
+use mpst::run_processes;
+use mpst::binary::{End, Recv, Send};
+use mpst::sessionmpst::SessionMpst;
 
 use mpst::functionmpst::close::close_mpst;
 

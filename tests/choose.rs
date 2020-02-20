@@ -1,12 +1,13 @@
 extern crate mpst;
 
-use binary::*;
-use mpst::*;
-use sessionmpst::SessionMpst;
 use std::boxed::Box;
 use std::error::Error;
 
 use mpst::functionmpst::close::close_mpst;
+
+use mpst::run_processes;
+use mpst::binary::{End, Recv, Send};
+use mpst::sessionmpst::SessionMpst;
 
 use mpst::role::a_to_b::RoleAtoB;
 use mpst::role::b_to_a::RoleBtoA;

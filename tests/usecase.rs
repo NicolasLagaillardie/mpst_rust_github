@@ -1,243 +1,244 @@
-// extern crate mpst;
+extern crate mpst;
 
-// use binary::*;
-// use mpst::*;
-// use role::*;
-// use sessionmpst::SessionMpst;
-// use std::boxed::Box;
-// use std::error::Error;
+use mpst::run_processes;
+use mpst::binary::{End, Recv, Send};
+use mpst::sessionmpst::SessionMpst;
 
-// use mpst::functionmpst::close::close_mpst;
+use std::boxed::Box;
+use std::error::Error;
+use std::marker;
 
-// use mpst::role::a_to_b::RoleAtoB;
-// use mpst::role::a_to_c::RoleAtoC;
-// use mpst::role::b_to_a::RoleBtoA;
-// use mpst::role::b_to_all::RoleBtoAll;
-// use mpst::role::b_to_c::RoleBtoC;
-// use mpst::role::c_to_a::RoleCtoA;
-// use mpst::role::c_to_b::RoleCtoB;
-// use mpst::role::end::RoleEnd;
+use mpst::functionmpst::close::close_mpst;
 
-// use mpst::functionmpst::recv::recv_mpst_session_one_a_to_b;
+use mpst::role::a_to_b::RoleAtoB;
+use mpst::role::a_to_c::RoleAtoC;
+use mpst::role::b_to_a::RoleBtoA;
+use mpst::role::b_to_all::RoleBtoAll;
+use mpst::role::c_to_all::RoleCtoAll;
+use mpst::role::a_to_all::RoleAtoAll;
+use mpst::role::b_to_c::RoleBtoC;
+use mpst::role::c_to_a::RoleCtoA;
+use mpst::role::c_to_b::RoleCtoB;
+use mpst::role::end::RoleEnd;
 
-// use mpst::functionmpst::send::send_mpst_session_one_b_to_a;
+use mpst::functionmpst::recv::recv_mpst_session_one_a_to_b;
 
-// use mpst::functionmpst::offer::offer_mpst_session_a_to_b;
-// use mpst::functionmpst::offer::offer_mpst_session_c_to_b;
+use mpst::functionmpst::send::send_mpst_session_one_b_to_a;
 
-// use mpst::functionmpst::choose::choose_left_mpst_session_b_to_all;
-// use mpst::functionmpst::choose::choose_right_mpst_session_b_to_all;
+use mpst::functionmpst::offer::offer_mpst_session_a_to_b;
+use mpst::functionmpst::offer::offer_mpst_session_c_to_b;
 
-// use mpst::functionmpst::ChooseMpst;
-// use mpst::functionmpst::OfferMpst;
+use mpst::functionmpst::choose::choose_left_mpst_session_b_to_all;
+use mpst::functionmpst::choose::choose_right_mpst_session_b_to_all;
 
-// /// Test our usecase from Places 2020
-// /// Simple types
-// /// Client = C
-// /// Authenticator = A
-// /// Server = B
+use mpst::functionmpst::ChooseMpst;
+use mpst::functionmpst::OfferMpst;
 
-// type CtoAClose = End;
-// type CtoAVideo<N> = Send<N, Recv<N, End>>;
+/// Test our usecase from Places 2020
+/// Simple types
+/// Client = C
+/// Authenticator = A
+/// Server = B
 
-// type AtoCClose = End;
-// type AtoAVideo<N> = Recv<N, Send<N, End>>;
-// type AtoBVideo<N> = Send<N, Recv<N, End>>;
+type CtoAClose = End;
+type CtoAVideo<N> = Send<N, Recv<N, Box<ChooseC<N>>>>;
 
-// type BtoAEnd = End;
-// type BtoAVideo<N> = Recv<N, Send<N, End>>;
+type AtoCClose = End;
+type AtoCVideo<N> = Recv<N, Send<N, End>>;
+type AtoBVideo<N> = Send<N, Recv<N, End>>;
 
-// // /// Queues
-// type QueueCEnd = RoleEnd;
-// type QueueCVideo = RoleCtoA<RoleCtoB<RoleEnd>>;
-// type QueueCFull = RoleCtoA<RoleCtoA<RoleEnd>>;
+type BtoAEnd = End;
+type BtoAVideo<N> = Recv<N, Send<N, End>>;
 
-// type QueueBEnd = RoleEnd;
-// type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
+// /// Queues
+type QueueCEnd = RoleEnd;
+type QueueCVideo = RoleCtoA<RoleCtoB<RoleEnd>>;
+type QueueCChoice = RoleCtoAll<QueueCVideo, QueueCEnd>;
+type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
 
-// type QueueAEnd = RoleEnd;
-// type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
-// type QueueAFull = RoleAtoC<RoleAtoC<RoleEnd>>;
+type QueueBEnd = RoleEnd;
+type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
+type QueueBFull = RoleBtoC<RoleEnd>;
 
-// // type QueueChoiceB = RoleBtoA<RoleEnd>;
-// // type QueueFullB = RoleBtoAll<QueueChoiceB>;
+type QueueAEnd = RoleEnd;
+type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
+type QueueAFull = RoleAtoC<RoleAtoC<RoleEnd>>;
 
-// // type QueueOfferC = RoleEnd;
-// // type QueueFullC = RoleCtoB<QueueOfferC>;
+/// Creating the MP sessions
+/// For C
+enum BranchesC<N: marker::Send> {
+    Stop(SessionMpst<End, End, QueueCEnd>),
+    Request(SessionMpst<Send<N, Recv<N, ChooseC<N>>>, End, QueueCVideo>),
+}
 
-// // /// Creating the MP sessions
-// // /// For A
-// // type EndpointAAdd<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA>;
-// // type EndpointANeg<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA>;
+type ChooseC<N> = Send<BranchesC<N>, End>;
+type InitC<N> = Send<N, Recv<N, ChooseC<N>>>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, End, QueueCFull>;
 
-// // type OfferA<N> = OfferMpst<EndpointAAdd<N>, EndpointANeg<N>>;
-// // type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
+/// For A
+enum BranchesA<N: marker::Send> {
+    Stop(SessionMpst<End, End, QueueAEnd>),
+    Request(SessionMpst<Send<N, Recv<N, End>>, Recv<N, Send<N, OfferA<N>>>, QueueAVideo>),
+}
 
-// // /// For B
-// // type EndpointBAdd<N> = SessionMpst<BtoAAdd<N>, End, QueueChoiceB>;
-// // type EndpointBNeg<N> = SessionMpst<BtoANeg<N>, End, QueueChoiceB>;
+type OfferA<N> = Recv<BranchesA<N>, End>;
+type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull>;
 
-// // type EndpointBEnd = SessionMpst<End, End, RoleEnd>;
+/// For B
+enum BranchesB<N: marker::Send> {
+    Stop(SessionMpst<End, End, QueueBEnd>),
+    Request(SessionMpst<Recv<N, Send<N, OfferB<N>>>, End, QueueBVideo>),
+}
 
-// // type ChooseBtoA<N> = ChooseMpst<EndpointBAdd<N>, EndpointBNeg<N>>;
-// // type ChooseBtoC = ChooseMpst<EndpointBEnd, EndpointBEnd>;
-// // type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, QueueFullB>;
+type OfferB<N> = Recv<BranchesB<N>, End>;
+type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull>;
 
-// // /// For C
-// // type EndpointCAdd = SessionMpst<End, End, QueueOfferC>;
-// // type EndpointCNeg = SessionMpst<End, End, QueueOfferC>;
+fn simple_authenticator_offer(s: OfferA<i32>) -> Result<(), Box<dyn Error>> {
+    offer_mpst_session_a_to_b(
+        s,
+        |s: BranchesA::Request(s)| {
+            let (x, s) = recv_mpst_session_one_a_to_b(s)?;
+            close_mpst(s)?;
 
-// // type OfferC = OfferMpst<EndpointCAdd, EndpointCNeg>;
-// // type EndpointChoiceC = SessionMpst<End, OfferC, QueueFullC>;
+            assert_eq!(x, 1);
+            Ok(())
+        },
+        |s: EndpointAEnd| {
+            close_mpst(s)?;
+            Ok(())
+        },
+    )
+}
 
-// // fn simple_calc_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-// //     offer_mpst_session_a_to_b(
-// //         s,
-// //         |s: EndpointAAdd<i32>| {
-// //             let (x, s) = recv_mpst_session_one_a_to_b(s)?;
-// //             close_mpst(s)?;
+// fn simple_calc_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
+//     {
+//         let s = choose_left_mpst_session_b_to_all::<
+//             End,
+//             BtoAAdd<i32>,
+//             End,
+//             BtoANeg<i32>,
+//             End,
+//             QueueChoiceB,
+//             QueueChoiceB,
+//             RoleEnd,
+//             RoleEnd,
+//             QueueChoiceB,
+//         >(s);
+//         let s = send_mpst_session_one_b_to_a(1, s);
+//         close_mpst(s)?;
+//     }
+//     Ok(())
+// }
 
-// //             assert_eq!(x, 1);
-// //             Ok(())
-// //         },
-// //         |s: EndpointANeg<i32>| {
-// //             let (x, s) = recv_mpst_session_one_a_to_b(s)?;
-// //             close_mpst(s)?;
+// fn simple_calc_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
+//     {
+//         let s = choose_right_mpst_session_b_to_all::<
+//             End,
+//             BtoAAdd<i32>,
+//             End,
+//             BtoANeg<i32>,
+//             End,
+//             QueueChoiceB,
+//             QueueChoiceB,
+//             RoleEnd,
+//             RoleEnd,
+//             QueueChoiceB,
+//         >(s);
+//         let s = send_mpst_session_one_b_to_a(2, s);
+//         close_mpst(s)?;
+//     }
+//     Ok(())
+// }
 
-// //             assert_eq!(x, 2);
-// //             Ok(())
-// //         },
-// //     )
-// // }
+// fn simple_calc_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
+//     offer_mpst_session_c_to_b(
+//         s,
+//         |s: EndpointCAdd| {
+//             close_mpst(s)?;
+//             Ok(())
+//         },
+//         |s: EndpointCNeg| {
+//             close_mpst(s)?;
+//             Ok(())
+//         },
+//     )
+// }
 
-// // fn simple_calc_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
-// //     {
-// //         let s = choose_left_mpst_session_b_to_all::<
-// //             End,
-// //             BtoAAdd<i32>,
-// //             End,
-// //             BtoANeg<i32>,
-// //             End,
-// //             QueueChoiceB,
-// //             QueueChoiceB,
-// //             RoleEnd,
-// //             RoleEnd,
-// //             QueueChoiceB,
-// //         >(s);
-// //         let s = send_mpst_session_one_b_to_a(1, s);
-// //         close_mpst(s)?;
-// //     }
-// //     Ok(())
-// // }
+// #[test]
+// fn simple_calc_works() {
+//     assert!(|| -> Result<(), Box<dyn Error>> {
+//         // Test the left branch.
+//         {
+//             let (channel_ab, channel_ba) = Session::new();
+//             let (channel_ac, channel_ca) = Session::new();
+//             let (channel_bc, channel_cb) = Session::new();
 
-// // fn simple_calc_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
-// //     {
-// //         let s = choose_right_mpst_session_b_to_all::<
-// //             End,
-// //             BtoAAdd<i32>,
-// //             End,
-// //             BtoANeg<i32>,
-// //             End,
-// //             QueueChoiceB,
-// //             QueueChoiceB,
-// //             RoleEnd,
-// //             RoleEnd,
-// //             QueueChoiceB,
-// //         >(s);
-// //         let s = send_mpst_session_one_b_to_a(2, s);
-// //         close_mpst(s)?;
-// //     }
-// //     Ok(())
-// // }
+//             let (role_a, _) = Role::new();
+//             let (role_b, _) = Role::new();
+//             let (role_c, _) = Role::new();
 
-// // fn simple_calc_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
-// //     offer_mpst_session_c_to_b(
-// //         s,
-// //         |s: EndpointCAdd| {
-// //             close_mpst(s)?;
-// //             Ok(())
-// //         },
-// //         |s: EndpointCNeg| {
-// //             close_mpst(s)?;
-// //             Ok(())
-// //         },
-// //     )
-// // }
+//             let a: EndpointChoiceA<i32> = SessionMpst {
+//                 session1: channel_ab,
+//                 session2: channel_ac,
+//                 queue: role_a,
+//             };
+//             let b: EndpointChoiceB<i32> = SessionMpst {
+//                 session1: channel_ba,
+//                 session2: channel_bc,
+//                 queue: role_b,
+//             };
+//             let c: EndpointChoiceC = SessionMpst {
+//                 session1: channel_ca,
+//                 session2: channel_cb,
+//                 queue: role_c,
+//             };
 
-// // #[test]
-// // fn simple_calc_works() {
-// //     assert!(|| -> Result<(), Box<dyn Error>> {
-// //         // Test the left branch.
-// //         {
-// //             let (channel_ab, channel_ba) = Session::new();
-// //             let (channel_ac, channel_ca) = Session::new();
-// //             let (channel_bc, channel_cb) = Session::new();
+//             let thread_a = fork_simple(simple_calc_server, a);
+//             let thread_b = fork_simple(simple_calc_client_left, b);
+//             let thread_c = fork_simple(simple_calc_pawn, c);
 
-// //             let (role_a, _) = Role::new();
-// //             let (role_b, _) = Role::new();
-// //             let (role_c, _) = Role::new();
+//             thread_a.join().unwrap();
+//             thread_b.join().unwrap();
+//             thread_c.join().unwrap();
+//         }
 
-// //             let a: EndpointChoiceA<i32> = SessionMpst {
-// //                 session1: channel_ab,
-// //                 session2: channel_ac,
-// //                 queue: role_a,
-// //             };
-// //             let b: EndpointChoiceB<i32> = SessionMpst {
-// //                 session1: channel_ba,
-// //                 session2: channel_bc,
-// //                 queue: role_b,
-// //             };
-// //             let c: EndpointChoiceC = SessionMpst {
-// //                 session1: channel_ca,
-// //                 session2: channel_cb,
-// //                 queue: role_c,
-// //             };
+//         // Test the right branch.
+//         {
+//             let (channel_ab, channel_ba) = Session::new();
+//             let (channel_ac, channel_ca) = Session::new();
+//             let (channel_bc, channel_cb) = Session::new();
 
-// //             let thread_a = fork_simple(simple_calc_server, a);
-// //             let thread_b = fork_simple(simple_calc_client_left, b);
-// //             let thread_c = fork_simple(simple_calc_pawn, c);
+//             let (role_a, _) = Role::new();
+//             let (role_b, _) = Role::new();
+//             let (role_c, _) = Role::new();
 
-// //             thread_a.join().unwrap();
-// //             thread_b.join().unwrap();
-// //             thread_c.join().unwrap();
-// //         }
+//             let a: EndpointChoiceA<i32> = SessionMpst {
+//                 session1: channel_ab,
+//                 session2: channel_ac,
+//                 queue: role_a,
+//             };
+//             let b: EndpointChoiceB<i32> = SessionMpst {
+//                 session1: channel_ba,
+//                 session2: channel_bc,
+//                 queue: role_b,
+//             };
+//             let c: EndpointChoiceC = SessionMpst {
+//                 session1: channel_ca,
+//                 session2: channel_cb,
+//                 queue: role_c,
+//             };
 
-// //         // Test the right branch.
-// //         {
-// //             let (channel_ab, channel_ba) = Session::new();
-// //             let (channel_ac, channel_ca) = Session::new();
-// //             let (channel_bc, channel_cb) = Session::new();
+//             let thread_a = fork_simple(simple_calc_server, a);
+//             let thread_b = fork_simple(simple_calc_client_right, b);
+//             let thread_c = fork_simple(simple_calc_pawn, c);
 
-// //             let (role_a, _) = Role::new();
-// //             let (role_b, _) = Role::new();
-// //             let (role_c, _) = Role::new();
+//             thread_a.join().unwrap();
+//             thread_b.join().unwrap();
+//             thread_c.join().unwrap();
+//         }
 
-// //             let a: EndpointChoiceA<i32> = SessionMpst {
-// //                 session1: channel_ab,
-// //                 session2: channel_ac,
-// //                 queue: role_a,
-// //             };
-// //             let b: EndpointChoiceB<i32> = SessionMpst {
-// //                 session1: channel_ba,
-// //                 session2: channel_bc,
-// //                 queue: role_b,
-// //             };
-// //             let c: EndpointChoiceC = SessionMpst {
-// //                 session1: channel_ca,
-// //                 session2: channel_cb,
-// //                 queue: role_c,
-// //             };
-
-// //             let thread_a = fork_simple(simple_calc_server, a);
-// //             let thread_b = fork_simple(simple_calc_client_right, b);
-// //             let thread_c = fork_simple(simple_calc_pawn, c);
-
-// //             thread_a.join().unwrap();
-// //             thread_b.join().unwrap();
-// //             thread_c.join().unwrap();
-// //         }
-
-// //         Ok(())
-// //     }()
-// //     .is_ok());
-// // }
+//         Ok(())
+//     }()
+//     .is_ok());
+// }
