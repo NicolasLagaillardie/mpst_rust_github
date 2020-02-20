@@ -2,7 +2,6 @@ extern crate mpst;
 
 use binary::*;
 use mpst::*;
-use role::*;
 use sessionmpst::SessionMpst;
 use std::boxed::Box;
 use std::error::Error;
@@ -89,37 +88,15 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 fn simple_triple_endpoints() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (channel_ab, channel_ba) = Session::new();
-            let (channel_ac, channel_ca) = Session::new();
-            let (channel_bc, channel_cb) = Session::new();
+            let (thread_a, thread_b, thread_c) = run_processes(
+                simple_triple_endpoint_a,
+                simple_triple_endpoint_b,
+                simple_triple_endpoint_c,
+            );
 
-            let (role_a, _) = Role::new();
-            let (role_b, _) = Role::new();
-            let (role_c, _) = Role::new();
-
-            let a: EndpointA<i32> = SessionMpst {
-                session1: channel_ab,
-                session2: channel_ac,
-                queue: role_a,
-            };
-            let b: EndpointB<i32> = SessionMpst {
-                session1: channel_ba,
-                session2: channel_bc,
-                queue: role_b,
-            };
-            let c: EndpointC<i32> = SessionMpst {
-                session1: channel_ca,
-                session2: channel_cb,
-                queue: role_c,
-            };
-
-            let thread_a = fork_simple(simple_triple_endpoint_a, a);
-            let thread_b = fork_simple(simple_triple_endpoint_b, b);
-            let thread_c = fork_simple(simple_triple_endpoint_c, c);
-
-            thread_a.join().unwrap();
-            thread_b.join().unwrap();
-            thread_c.join().unwrap();
+            thread_a.unwrap();
+            thread_b.unwrap();
+            thread_c.unwrap();
         }
         Ok(())
     }()
