@@ -3,8 +3,8 @@ extern crate mpst;
 use std::boxed::Box;
 use std::error::Error;
 
-use mpst::run_processes;
 use mpst::binary::{End, Recv, Send};
+use mpst::run_processes;
 use mpst::sessionmpst::SessionMpst;
 
 use mpst::functionmpst::close::close_mpst;
@@ -39,7 +39,7 @@ type BtoC<N> = Send<N, End>;
 type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 
-/// Queueus
+/// Queues
 type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
 type QueueB = RoleBtoA<RoleBtoC<RoleEnd>>;
 type QueueC = RoleCtoA<RoleCtoB<RoleEnd>>;

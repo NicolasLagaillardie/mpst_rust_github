@@ -5,8 +5,8 @@ use std::error::Error;
 
 use mpst::functionmpst::close::close_mpst;
 
-use mpst::run_processes;
 use mpst::binary::{End, Recv, Send};
+use mpst::run_processes;
 use mpst::sessionmpst::SessionMpst;
 
 use mpst::role::a_to_b::RoleAtoB;
@@ -71,6 +71,7 @@ type EndpointCNeg = SessionMpst<End, End, QueueOfferC>;
 type OfferC = OfferMpst<EndpointCAdd, EndpointCNeg>;
 type EndpointChoiceC = SessionMpst<End, OfferC, QueueFullC>;
 
+/// Functions related to endpoints
 fn simple_calc_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_a_to_b(
         s,
@@ -95,10 +96,11 @@ fn simple_calc_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>
     {
         let s = choose_left_mpst_session_b_to_all::<
             End,
+            End,
             BtoAAdd<i32>,
             End,
-            BtoANeg<i32>,
             End,
+            BtoANeg<i32>,
             QueueChoiceB,
             QueueChoiceB,
             RoleEnd,
@@ -116,10 +118,11 @@ fn simple_calc_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error
     {
         let s = choose_right_mpst_session_b_to_all::<
             End,
+            End,
             BtoAAdd<i32>,
             End,
-            BtoANeg<i32>,
             End,
+            BtoANeg<i32>,
             QueueChoiceB,
             QueueChoiceB,
             RoleEnd,
