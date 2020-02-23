@@ -1,11 +1,13 @@
 extern crate mpst;
 
-use mpst::binary::{End, Recv, Send};
+use mpst::binary::{End, Recv, Send, Session};
 use mpst::run_processes;
 use mpst::sessionmpst::SessionMpst;
+use mpst::role::Role;
 
 use std::boxed::Box;
 use std::error::Error;
+use std::marker;
 
 use mpst::functionmpst::close::close_mpst;
 
@@ -16,16 +18,17 @@ use mpst::role::b_to_c::RoleBtoC;
 use mpst::role::c_to_a::RoleCtoA;
 use mpst::role::c_to_all::RoleCtoAll;
 use mpst::role::end::RoleEnd;
+use mpst::role::recurs::RoleRecurs;
 
-use mpst::functionmpst::recv::recv_mpst_session_one_a_to_b;
-use mpst::functionmpst::recv::recv_mpst_session_one_b_to_a;
-use mpst::functionmpst::recv::recv_mpst_session_one_c_to_a;
-use mpst::functionmpst::recv::recv_mpst_session_two_a_to_c;
+use mpst::functionmpst::recv::recv_mpst_a_to_b;
+use mpst::functionmpst::recv::recv_mpst_a_to_c;
+use mpst::functionmpst::recv::recv_mpst_b_to_a;
+use mpst::functionmpst::recv::recv_mpst_c_to_a;
 
-use mpst::functionmpst::send::send_mpst_session_one_a_to_b;
-use mpst::functionmpst::send::send_mpst_session_one_b_to_a;
-use mpst::functionmpst::send::send_mpst_session_one_c_to_a;
-use mpst::functionmpst::send::send_mpst_session_two_a_to_c;
+use mpst::functionmpst::send::send_mpst_a_to_b;
+use mpst::functionmpst::send::send_mpst_a_to_c;
+use mpst::functionmpst::send::send_mpst_b_to_a;
+use mpst::functionmpst::send::send_mpst_c_to_a;
 
 use mpst::functionmpst::offer::offer_mpst_session_a_to_c;
 use mpst::functionmpst::offer::offer_mpst_session_b_to_c;
@@ -42,33 +45,37 @@ use mpst::functionmpst::OfferMpst;
 /// Authenticator = A
 /// Server = B
 
-type CtoBClose = End;
-type CtoAVideo<N> = Send<N, Recv<N, End>>;
-
+// enum BranchesA<N: marker::Send> {
+//     End(End),
+//     Video(Recv<N, Send<N, Recv<BranchesA<N>, End>>>),
+// }
 type AtoCClose = End;
 type AtoBClose = End;
 type AtoCVideo<N> = Recv<N, Send<N, End>>;
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
 
-type BtoAClose = End;
-type BtoCClose = End;
-type BtoAVideo<N> = Recv<N, Send<N, End>>;
+type BtoAClose = <AtoBClose as Session>::Dual;
+type BtoCClose = <CtoBClose as Session>::Dual;
+type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+
+type CtoBClose = End;
+type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
 // /// Queues
+type QueueAEnd = RoleEnd;
+type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
+type QueueAVideoDual = <QueueAVideo as Role>::Dual;
+type QueueAFull = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
+
+type QueueBEnd = RoleEnd;
+type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
+type QueueBVideoDual = <QueueBVideo as Role>::Dual;
+type QueueBFull = RoleBtoC<RoleEnd>;
+
 type QueueCEnd = RoleEnd;
 type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
 type QueueCChoice = RoleCtoAll<QueueCVideo, QueueCEnd>;
 type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
-
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
-type QueueBVideoDual = RoleAtoB<RoleAtoB<RoleEnd>>;
-type QueueBFull = RoleBtoC<RoleEnd>;
-
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
-type QueueAVideoDual = RoleCtoA<RoleBtoA<RoleBtoA<RoleCtoA<RoleEnd>>>>;
-type QueueAFull = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
 
 /// Creating the MP sessions
 /// For C
@@ -102,8 +109,8 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_b_to_c(
         s,
         |s: EndpointBVideo<i32>| {
-            let (request, s) = recv_mpst_session_one_b_to_a(s)?;
-            let s = send_mpst_session_one_b_to_a(request + 1, s);
+            let (request, s) = recv_mpst_b_to_a(s)?;
+            let s = send_mpst_b_to_a(request + 1, s);
 
             close_mpst(s)?;
 
@@ -119,21 +126,21 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_session_two_a_to_c(s)?;
-    let s = send_mpst_session_two_a_to_c(id + 1, s);
+    let (id, s) = recv_mpst_a_to_c(s)?;
+    let s = send_mpst_a_to_c(id + 1, s);
 
     assert_eq!(id, 0);
 
     offer_mpst_session_a_to_c(
         s,
         |s: EndpointAVideo<i32>| {
-            let (request, s) = recv_mpst_session_two_a_to_c(s)?;
-            let s = send_mpst_session_one_a_to_b(request + 1, s);
-            let (video, s) = recv_mpst_session_one_a_to_b(s)?;
-            let s = send_mpst_session_two_a_to_c(video + 1, s);
+            let (request, s) = recv_mpst_a_to_c(s)?;
+            let s = send_mpst_a_to_b(request + 1, s);
+            let (video, s) = recv_mpst_a_to_b(s)?;
+            let s = send_mpst_a_to_c(video + 1, s);
 
-            assert_eq!(request, 1);
-            assert_eq!(video, 3);
+            assert_eq!(request, id + 1);
+            assert_eq!(video, id + 3);
 
             close_mpst(s)?;
             Ok(())
@@ -148,8 +155,8 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     {
-        let s = send_mpst_session_one_c_to_a(0, s);
-        let (accept, s) = recv_mpst_session_one_c_to_a(s)?;
+        let s = send_mpst_c_to_a(0, s);
+        let (accept, s) = recv_mpst_c_to_a(s)?;
 
         assert_eq!(accept, 1);
 
@@ -168,10 +175,10 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
             QueueCEnd,
         >(s);
 
-        let s = send_mpst_session_one_c_to_a(1, s);
-        let (result, s) = recv_mpst_session_one_c_to_a(s)?;
+        let s = send_mpst_c_to_a(1, s);
+        let (result, s) = recv_mpst_c_to_a(s)?;
 
-        assert_eq!(result, 4);
+        assert_eq!(result, accept + 3);
 
         close_mpst(s)?;
     }
@@ -180,8 +187,8 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     {
-        let s = send_mpst_session_one_c_to_a(0, s);
-        let (accept, s) = recv_mpst_session_one_c_to_a(s)?;
+        let s = send_mpst_c_to_a(0, s);
+        let (accept, s) = recv_mpst_c_to_a(s)?;
 
         assert_eq!(accept, 1);
 

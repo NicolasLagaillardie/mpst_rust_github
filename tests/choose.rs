@@ -5,7 +5,7 @@ use std::error::Error;
 
 use mpst::functionmpst::close::close_mpst;
 
-use mpst::binary::{End, Recv, Send};
+use mpst::binary::{End, Recv, Session};
 use mpst::run_processes;
 use mpst::sessionmpst::SessionMpst;
 
@@ -15,9 +15,9 @@ use mpst::role::b_to_all::RoleBtoAll;
 use mpst::role::c_to_b::RoleCtoB;
 use mpst::role::end::RoleEnd;
 
-use mpst::functionmpst::recv::recv_mpst_session_one_a_to_b;
+use mpst::functionmpst::recv::recv_mpst_a_to_b;
 
-use mpst::functionmpst::send::send_mpst_session_one_b_to_a;
+use mpst::functionmpst::send::send_mpst_b_to_a;
 
 use mpst::functionmpst::offer::offer_mpst_session_a_to_b;
 use mpst::functionmpst::offer::offer_mpst_session_c_to_b;
@@ -28,13 +28,15 @@ use mpst::functionmpst::choose::choose_right_mpst_session_b_to_all;
 use mpst::functionmpst::ChooseMpst;
 use mpst::functionmpst::OfferMpst;
 
-/// Test a simple calculator server, implemented using binary choice.
+/// Test a simple storage server, implemented using binary choice.
 /// Simple types
 type AtoBNeg<N> = Recv<N, End>;
 type AtoBAdd<N> = Recv<N, End>;
 
-type BtoANeg<N> = Send<N, End>;
-type BtoAAdd<N> = Send<N, End>;
+// type BtoANeg<N> = Send<N, End>;
+// type BtoAAdd<N> = Send<N, End>;
+type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
+type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
 /// Queues
 type QueueOfferA = RoleAtoB<RoleEnd>;
@@ -48,8 +50,8 @@ type QueueFullC = RoleCtoB<QueueOfferC>;
 
 /// Creating the MP sessions
 /// For A
-type EndpointAAdd<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA>;
-type EndpointANeg<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA>;
+type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA>;
+type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA>;
 
 type OfferA<N> = OfferMpst<EndpointAAdd<N>, EndpointANeg<N>>;
 type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
@@ -72,18 +74,18 @@ type OfferC = OfferMpst<EndpointCAdd, EndpointCNeg>;
 type EndpointChoiceC = SessionMpst<End, OfferC, QueueFullC>;
 
 /// Functions related to endpoints
-fn simple_calc_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_a_to_b(
         s,
         |s: EndpointAAdd<i32>| {
-            let (x, s) = recv_mpst_session_one_a_to_b(s)?;
+            let (x, s) = recv_mpst_a_to_b(s)?;
             close_mpst(s)?;
 
             assert_eq!(x, 1);
             Ok(())
         },
         |s: EndpointANeg<i32>| {
-            let (x, s) = recv_mpst_session_one_a_to_b(s)?;
+            let (x, s) = recv_mpst_a_to_b(s)?;
             close_mpst(s)?;
 
             assert_eq!(x, 2);
@@ -92,7 +94,7 @@ fn simple_calc_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
-fn simple_calc_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     {
         let s = choose_left_mpst_session_b_to_all::<
             End,
@@ -108,13 +110,13 @@ fn simple_calc_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>
             QueueChoiceB,
             QueueChoiceB,
         >(s);
-        let s = send_mpst_session_one_b_to_a(1, s);
+        let s = send_mpst_b_to_a(1, s);
         close_mpst(s)?;
     }
     Ok(())
 }
 
-fn simple_calc_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     {
         let s = choose_right_mpst_session_b_to_all::<
             End,
@@ -130,13 +132,13 @@ fn simple_calc_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error
             QueueChoiceB,
             QueueChoiceB,
         >(s);
-        let s = send_mpst_session_one_b_to_a(2, s);
+        let s = send_mpst_b_to_a(2, s);
         close_mpst(s)?;
     }
     Ok(())
 }
 
-fn simple_calc_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
+fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_c_to_b(
         s,
         |s: EndpointCAdd| {
@@ -151,14 +153,14 @@ fn simple_calc_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn simple_calc_works() {
+fn simple_store_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
             let (thread_a, thread_b, thread_c) = run_processes(
-                simple_calc_server,
-                simple_calc_client_left,
-                simple_calc_pawn,
+                simple_store_server,
+                simple_store_client_left,
+                simple_store_pawn,
             );
 
             thread_a.unwrap();
@@ -169,9 +171,9 @@ fn simple_calc_works() {
         // Test the right branch.
         {
             let (thread_a, thread_b, thread_c) = run_processes(
-                simple_calc_server,
-                simple_calc_client_right,
-                simple_calc_pawn,
+                simple_store_server,
+                simple_store_client_right,
+                simple_store_pawn,
             );
 
             thread_a.unwrap();

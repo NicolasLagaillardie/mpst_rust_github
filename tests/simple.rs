@@ -17,13 +17,13 @@ use mpst::role::c_to_a::RoleCtoA;
 use mpst::role::c_to_b::RoleCtoB;
 use mpst::role::end::RoleEnd;
 
-use mpst::functionmpst::recv::recv_mpst_session_one_b_to_a;
-use mpst::functionmpst::recv::recv_mpst_session_two_a_to_c;
-use mpst::functionmpst::recv::recv_mpst_session_two_c_to_b;
+use mpst::functionmpst::recv::recv_mpst_a_to_c;
+use mpst::functionmpst::recv::recv_mpst_b_to_a;
+use mpst::functionmpst::recv::recv_mpst_c_to_b;
 
-use mpst::functionmpst::send::send_mpst_session_one_a_to_b;
-use mpst::functionmpst::send::send_mpst_session_one_c_to_a;
-use mpst::functionmpst::send::send_mpst_session_two_b_to_c;
+use mpst::functionmpst::send::send_mpst_a_to_b;
+use mpst::functionmpst::send::send_mpst_b_to_c;
+use mpst::functionmpst::send::send_mpst_c_to_a;
 
 /// A = !B.?C
 /// B = ?A.!C
@@ -51,8 +51,8 @@ type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
 
 /// Single test for A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_session_one_a_to_b(1, s);
-    let (x, s) = recv_mpst_session_two_a_to_c(s)?;
+    let s = send_mpst_a_to_b(1, s);
+    let (x, s) = recv_mpst_a_to_c(s)?;
 
     assert_eq!(x, 3);
 
@@ -63,8 +63,8 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 
 /// Single test for B
 fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-    let (x, s) = recv_mpst_session_one_b_to_a(s)?;
-    let s = send_mpst_session_two_b_to_c(2, s);
+    let (x, s) = recv_mpst_b_to_a(s)?;
+    let s = send_mpst_b_to_c(2, s);
 
     assert_eq!(x, 1);
 
@@ -75,8 +75,8 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 
 /// Single test for C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_session_one_c_to_a(3, s);
-    let (x, s) = recv_mpst_session_two_c_to_b(s)?;
+    let s = send_mpst_c_to_a(3, s);
+    let (x, s) = recv_mpst_c_to_b(s)?;
 
     assert_eq!(x, 2);
 

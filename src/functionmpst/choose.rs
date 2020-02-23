@@ -378,3 +378,13 @@ where
         queue: role_c,
     }
 }
+
+#[macro_export]
+macro_rules! choose_mpst {
+    ($label:path, $session:expr) => {{
+        let (here, there) = <_ as Session>::new();
+        let s = send($label(there), $session);
+        cancel(s);
+        here
+    }};
+}
