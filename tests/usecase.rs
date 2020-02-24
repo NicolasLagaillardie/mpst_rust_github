@@ -1,13 +1,12 @@
 extern crate mpst;
 
 use mpst::binary::{End, Recv, Send, Session};
+use mpst::role::Role;
 use mpst::run_processes;
 use mpst::sessionmpst::SessionMpst;
-use mpst::role::Role;
 
 use std::boxed::Box;
 use std::error::Error;
-use std::marker;
 
 use mpst::functionmpst::close::close_mpst;
 
@@ -18,7 +17,6 @@ use mpst::role::b_to_c::RoleBtoC;
 use mpst::role::c_to_a::RoleCtoA;
 use mpst::role::c_to_all::RoleCtoAll;
 use mpst::role::end::RoleEnd;
-use mpst::role::recurs::RoleRecurs;
 
 use mpst::functionmpst::recv::recv_mpst_a_to_b;
 use mpst::functionmpst::recv::recv_mpst_a_to_c;
@@ -45,20 +43,17 @@ use mpst::functionmpst::OfferMpst;
 /// Authenticator = A
 /// Server = B
 
-// enum BranchesA<N: marker::Send> {
-//     End(End),
-//     Video(Recv<N, Send<N, Recv<BranchesA<N>, End>>>),
-// }
 type AtoCClose = End;
 type AtoBClose = End;
 type AtoCVideo<N> = Recv<N, Send<N, End>>;
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
 
 type BtoAClose = <AtoBClose as Session>::Dual;
-type BtoCClose = <CtoBClose as Session>::Dual;
+type BtoCClose = End;
 type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 
-type CtoBClose = End;
+type CtoBClose = <BtoCClose as Session>::Dual;
+type CtoAClose = <AtoCClose as Session>::Dual;
 type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
 // /// Queues
@@ -80,9 +75,9 @@ type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
 /// Creating the MP sessions
 /// For C
 type EndpointCtoAVideo<N> = SessionMpst<BtoAVideo<N>, CtoAVideo<N>, QueueAVideoDual>;
-type EndpointCtoAEnd = SessionMpst<AtoCClose, AtoCClose, QueueAEnd>;
+type EndpointCtoAEnd = SessionMpst<BtoAClose, CtoAClose, QueueAEnd>;
 type EndpointCtoBVideo<N> = SessionMpst<AtoBVideo<N>, CtoBClose, QueueBVideoDual>;
-type EndpointCtoBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd>;
+type EndpointCtoBEnd = SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
 
 type ChooseCtoB<N> = ChooseMpst<EndpointCtoBVideo<N>, EndpointCtoBEnd>;
 type ChooseCtoA<N> = ChooseMpst<EndpointCtoAVideo<N>, EndpointCtoAEnd>;
@@ -90,7 +85,7 @@ type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, QueueCFull>;
 
 /// For A
-type EndpointAEnd = SessionMpst<End, End, QueueAEnd>;
+type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd>;
 type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>;
 
 type OfferA<N> = OfferMpst<EndpointAVideo<N>, EndpointAEnd>;
@@ -219,18 +214,18 @@ fn run_usecase() {
         {
             let (thread_a, thread_b, thread_c) = run_processes(authenticator, server, client_video);
 
-            thread_a.unwrap();
-            thread_b.unwrap();
-            thread_c.unwrap();
+            assert!(thread_a.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
         }
 
-        // Test right branch.
+        // Test end branch.
         {
             let (thread_a, thread_b, thread_c) = run_processes(authenticator, server, client_close);
 
-            thread_a.unwrap();
-            thread_b.unwrap();
-            thread_c.unwrap();
+            assert!(thread_a.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
         }
 
         Ok(())

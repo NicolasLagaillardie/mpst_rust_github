@@ -1,7 +1,7 @@
-use crossbeam_channel::{bounded, Sender, Receiver};
+use crossbeam_channel::{bounded, Receiver, Sender};
 use role::Role;
-use std::marker;
 use std::error::Error;
+use std::marker;
 
 pub struct RoleRecurs<T> {
     pub sender: Sender<T>,

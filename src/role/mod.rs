@@ -10,8 +10,8 @@ pub mod b_to_c;
 pub mod c_to_a;
 pub mod c_to_all;
 pub mod c_to_b;
-pub mod recurs;
 pub mod end;
+pub mod recurs;
 use std::marker;
 
 pub trait Role: marker::Sized + marker::Send {
@@ -19,4 +19,3 @@ pub trait Role: marker::Sized + marker::Send {
 
     fn new() -> (Self, Self::Dual);
 }
-

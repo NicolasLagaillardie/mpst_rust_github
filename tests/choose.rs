@@ -163,9 +163,9 @@ fn simple_store_works() {
                 simple_store_pawn,
             );
 
-            thread_a.unwrap();
-            thread_b.unwrap();
-            thread_c.unwrap();
+            assert!(thread_a.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
         }
 
         // Test the right branch.
@@ -176,9 +176,9 @@ fn simple_store_works() {
                 simple_store_pawn,
             );
 
-            thread_a.unwrap();
-            thread_b.unwrap();
-            thread_c.unwrap();
+            assert!(thread_a.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
         }
 
         Ok(())

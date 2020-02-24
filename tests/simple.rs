@@ -95,9 +95,9 @@ fn simple_triple_endpoints() {
                 simple_triple_endpoint_c,
             );
 
-            thread_a.unwrap();
-            thread_b.unwrap();
-            thread_c.unwrap();
+            assert!(thread_a.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
         }
         Ok(())
     }()
