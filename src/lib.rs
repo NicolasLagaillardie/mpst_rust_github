@@ -30,7 +30,7 @@ where
         }));
         match p(s) {
             Ok(()) => (),
-            Err(e) => panic!("{}", e.description()),
+            Err(e) => panic!("{}", e.to_string()),
         }
     });
     other_thread
