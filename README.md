@@ -1,6 +1,6 @@
 # Multiparty session types for Rust
 
-[![Build Status](https://travis-ci.org/NicolasLagaillardie/mpst_rust_github.svg?branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
+[![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
 
 ## Installation
 
