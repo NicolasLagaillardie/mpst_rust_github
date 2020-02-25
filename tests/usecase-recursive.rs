@@ -31,6 +31,10 @@ use mpst::functionmpst::send::send_mpst_b_to_a;
 use mpst::functionmpst::send::send_mpst_c_to_a;
 use mpst::functionmpst::send::send_mpst_c_to_b;
 
+use mpst::choose_mpst_c_to_all;
+use mpst::offer_mpst_a_to_c;
+use mpst::offer_mpst_b_to_c;
+
 /// Test our usecase from Places 2020
 /// Simple types
 /// Client = C
@@ -76,7 +80,7 @@ type QueueBRecurs = RoleBtoC<RoleEnd>;
 type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
 type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
 
-/// Creating the MP sessions
+/// Creating the MP sessios
 /// For C
 
 type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs>;
@@ -89,12 +93,9 @@ type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
 /// For B
 type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
 
-/// Functions related to endpoints
+/// Functios related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
-    let (l, s) = recv_mpst_b_to_c(s)?;
-    cancel(s);
-
-    match l {
+    offer_mpst_b_to_c!(s, {
         CBranchesBtoC::End((session_ba, session_bc, queue)) => {
             let s = SessionMpst {
                 session1: session_ba,
@@ -104,7 +105,7 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)?;
             Ok(())
-        }
+        },
         CBranchesBtoC::Video((session_ba, session_bc, queue)) => {
             let s = SessionMpst {
                 session1: session_ba,
@@ -115,8 +116,9 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
             let (request, s) = recv_mpst_b_to_a(s)?;
             let s = send_mpst_b_to_a(request + 1, s);
             server(s)
-        }
-    }
+        },
+    })?;
+    Ok(())
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -129,10 +131,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
-    let (l, s) = recv_mpst_a_to_c(s)?;
-    cancel(s);
-
-    match l {
+    offer_mpst_a_to_c!(s, {
         CBranchesAtoC::End((session_ab, session_ac, queue)) => {
             let s = SessionMpst {
                 session1: session_ab,
@@ -142,7 +141,7 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)?;
             Ok(())
-        }
+        },
         CBranchesAtoC::Video((session_ab, session_ac, queue)) => {
             let s = SessionMpst {
                 session1: session_ab,
@@ -155,8 +154,9 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
             let (video, s) = recv_mpst_a_to_b(s)?;
             let s = send_mpst_a_to_c(video + 1, s);
             authenticator_recurs(s)
-        }
-    }
+        },
+    })?;
+    Ok(())
 }
 
 fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -177,49 +177,17 @@ fn client_recurs(
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let (session_ac, session_ca) = <_ as Session>::new();
-            let (session_bc, session_cb) = <_ as Session>::new();
-            let (session_ab, session_ba) = <_ as Session>::new();
-            let (queue_a, _) = <_ as Role>::new();
-            let (queue_b, _) = <_ as Role>::new();
-            let (queue_c, _) = <_ as Role>::new();
+            let s = choose_mpst_c_to_all!(CBranchesAtoC::Video, CBranchesBtoC::Video, s);
 
-            let s = send_mpst_c_to_a(CBranchesAtoC::Video((session_ab, session_ac, queue_a)), s);
-            let s = send_mpst_c_to_b(CBranchesBtoC::Video((session_ba, session_bc, queue_b)), s);
+            let s = send_mpst_c_to_a(1, s);
+            let (_, s) = recv_mpst_c_to_a(s)?;
 
-            cancel(s);
-
-            let ns = SessionMpst {
-                session1: session_ca,
-                session2: session_cb,
-                queue: queue_c,
-            };
-
-            let ns = send_mpst_c_to_a(1, ns);
-            let (_, ns) = recv_mpst_c_to_a(ns)?;
-
-            client_recurs(ns, xs, index + 1)
+            client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let (session_ac, session_ca) = <_ as Session>::new();
-            let (session_bc, session_cb) = <_ as Session>::new();
-            let (session_ab, session_ba) = <_ as Session>::new();
-            let (queue_a, _) = <_ as Role>::new();
-            let (queue_b, _) = <_ as Role>::new();
-            let (queue_c, _) = <_ as Role>::new();
+            let s = choose_mpst_c_to_all!(CBranchesAtoC::End, CBranchesBtoC::End, s);
 
-            let s = send_mpst_c_to_a(CBranchesAtoC::End((session_ab, session_ac, queue_a)), s);
-            let s = send_mpst_c_to_b(CBranchesBtoC::End((session_ba, session_bc, queue_b)), s);
-
-            cancel(s);
-
-            let ns = SessionMpst {
-                session1: session_ca,
-                session2: session_cb,
-                queue: queue_c,
-            };
-
-            close_mpst(ns)?;
+            close_mpst(s)?;
 
             assert_eq!(index, 10);
 
