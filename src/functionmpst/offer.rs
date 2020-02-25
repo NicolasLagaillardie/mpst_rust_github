@@ -149,6 +149,36 @@ where
 }
 
 #[macro_export]
+macro_rules! offer_mpst_a_to_c {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_a_to_c($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
+macro_rules! offer_mpst_b_to_c {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_b_to_c($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
 macro_rules! offer_mpst_a_to_b {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
@@ -179,10 +209,10 @@ macro_rules! offer_mpst_b_to_a {
 }
 
 #[macro_export]
-macro_rules! offer_mpst_a_to_c {
+macro_rules! offer_mpst_c_to_b {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
-            let (l, s) = recv_mpst_a_to_c($session)?;
+            let (l, s) = recv_mpst_c_to_b($session)?;
             cancel(s);
             match l {
                 $(
@@ -198,36 +228,6 @@ macro_rules! offer_mpst_c_to_a {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
             let (l, s) = recv_mpst_c_to_a($session)?;
-            cancel(s);
-            match l {
-                $(
-                    $pat => $result,
-                )*
-            }
-        })()
-    };
-}
-
-#[macro_export]
-macro_rules! offer_mpst_b_to_c {
-    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = recv_mpst_b_to_c($session)?;
-            cancel(s);
-            match l {
-                $(
-                    $pat => $result,
-                )*
-            }
-        })()
-    };
-}
-
-#[macro_export]
-macro_rules! offer_mpst_c_to_b {
-    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = recv_mpst_c_to_b($session)?;
             cancel(s);
             match l {
                 $(

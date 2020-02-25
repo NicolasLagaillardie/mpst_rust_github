@@ -380,11 +380,70 @@ where
 }
 
 #[macro_export]
-macro_rules! choose_mpst {
-    ($label:path, $session:expr) => {{
-        let (here, there) = <_ as Session>::new();
-        let s = send($label(there), $session);
+macro_rules! choose_mpst_a_to_all {
+    ($labelone:path, $labeltwo:path, $session:expr) => {{
+        let (session_ac, session_ca) = <_ as Session>::new();
+        let (session_bc, session_cb) = <_ as Session>::new();
+        let (session_ab, session_ba) = <_ as Session>::new();
+        let (queue_a, _) = <_ as Role>::new();
+        let (queue_b, _) = <_ as Role>::new();
+        let (queue_c, _) = <_ as Role>::new();
+
+        let s = send_mpst_a_to_b($labelone((session_ba, session_bc, queue_b)), $session);
+        let s = send_mpst_a_to_c($labeltwo((session_ca, session_cb, queue_c)), s);
+
         cancel(s);
-        here
+
+        SessionMpst {
+            session1: session_ab,
+            session2: session_ac,
+            queue: queue_a,
+        }
+    }};
+}
+
+#[macro_export]
+macro_rules! choose_mpst_b_to_all {
+    ($labelone:path, $labeltwo:path, $session:expr) => {{
+        let (session_ac, session_ca) = <_ as Session>::new();
+        let (session_bc, session_cb) = <_ as Session>::new();
+        let (session_ab, session_ba) = <_ as Session>::new();
+        let (queue_a, _) = <_ as Role>::new();
+        let (queue_b, _) = <_ as Role>::new();
+        let (queue_c, _) = <_ as Role>::new();
+
+        let s = send_mpst_b_to_a($labelone((session_ab, session_ac, queue_a)), $session);
+        let s = send_mpst_b_to_c($labeltwo((session_ca, session_cb, queue_c)), s);
+
+        cancel(s);
+
+        SessionMpst {
+            session1: session_ba,
+            session2: session_bc,
+            queue: queue_b,
+        }
+    }};
+}
+
+#[macro_export]
+macro_rules! choose_mpst_c_to_all {
+    ($labelone:path, $labeltwo:path, $session:expr) => {{
+        let (session_ac, session_ca) = <_ as Session>::new();
+        let (session_bc, session_cb) = <_ as Session>::new();
+        let (session_ab, session_ba) = <_ as Session>::new();
+        let (queue_a, _) = <_ as Role>::new();
+        let (queue_b, _) = <_ as Role>::new();
+        let (queue_c, _) = <_ as Role>::new();
+
+        let s = send_mpst_c_to_a($labelone((session_ab, session_ac, queue_a)), $session);
+        let s = send_mpst_c_to_b($labeltwo((session_ba, session_bc, queue_b)), s);
+
+        cancel(s);
+
+        SessionMpst {
+            session1: session_ca,
+            session2: session_cb,
+            queue: queue_c,
+        }
     }};
 }
