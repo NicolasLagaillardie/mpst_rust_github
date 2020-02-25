@@ -1,10 +1,10 @@
 use binary::{cancel, Session};
-use functionmpst::recv::recv_mpst_session_one_a_to_b;
-use functionmpst::recv::recv_mpst_session_one_b_to_a;
-use functionmpst::recv::recv_mpst_session_one_c_to_a;
-use functionmpst::recv::recv_mpst_session_two_a_to_c;
-use functionmpst::recv::recv_mpst_session_two_b_to_c;
-use functionmpst::recv::recv_mpst_session_two_c_to_b;
+use functionmpst::recv::recv_mpst_a_to_b;
+use functionmpst::recv::recv_mpst_a_to_c;
+use functionmpst::recv::recv_mpst_b_to_a;
+use functionmpst::recv::recv_mpst_b_to_c;
+use functionmpst::recv::recv_mpst_c_to_a;
+use functionmpst::recv::recv_mpst_c_to_b;
 use functionmpst::OfferMpst;
 use role::a_to_b::RoleAtoB;
 use role::a_to_c::RoleAtoC;
@@ -33,7 +33,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_session_one_b_to_a(s)?;
+    let (e, s) = recv_mpst_b_to_a(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -55,7 +55,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_session_one_a_to_b(s)?;
+    let (e, s) = recv_mpst_a_to_b(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -77,7 +77,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_session_two_a_to_c(s)?;
+    let (e, s) = recv_mpst_a_to_c(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -99,7 +99,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_session_one_c_to_a(s)?;
+    let (e, s) = recv_mpst_c_to_a(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -121,7 +121,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_session_two_b_to_c(s)?;
+    let (e, s) = recv_mpst_b_to_c(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -143,7 +143,97 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_session_two_c_to_b(s)?;
+    let (e, s) = recv_mpst_c_to_b(s)?;
     cancel(s);
     e.either(f, g)
+}
+
+#[macro_export]
+macro_rules! offer_mpst_a_to_b {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_a_to_b($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
+macro_rules! offer_mpst_b_to_a {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_b_to_a($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
+macro_rules! offer_mpst_a_to_c {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_a_to_c($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
+macro_rules! offer_mpst_c_to_a {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_c_to_a($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
+macro_rules! offer_mpst_b_to_c {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_b_to_c($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
+#[macro_export]
+macro_rules! offer_mpst_c_to_b {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = recv_mpst_c_to_b($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
 }

@@ -1,28 +1,23 @@
-use crossbeam_channel::{bounded, Receiver, Sender};
+use crossbeam_channel::{bounded, Sender};
 use role::c_to_b::RoleCtoB;
 use role::Role;
 
 pub struct RoleBtoC<R: Role> {
     pub sender: Sender<R::Dual>,
-    pub receiver: Receiver<R>,
 }
 
 impl<R: Role> Role for RoleBtoC<R> {
     type Dual = RoleCtoB<R::Dual>;
 
     fn new() -> (Self, Self::Dual) {
-        let (sender, receiver) = bounded::<R>(1);
-        let (sender_dual, receiver_dual) = bounded::<R::Dual>(1);
+        let (sender, _) = bounded::<R>(1);
+        let (sender_dual, _) = bounded::<R::Dual>(1);
 
         return (
             RoleBtoC {
                 sender: sender_dual,
-                receiver: receiver,
             },
-            RoleCtoB {
-                sender: sender,
-                receiver: receiver_dual,
-            },
+            RoleCtoB { sender: sender },
         );
     }
 }
@@ -33,6 +28,5 @@ where
 {
     let (here, there) = R::new();
     r.sender.send(there).unwrap_or(());
-    r.receiver.recv();
     here
 }
