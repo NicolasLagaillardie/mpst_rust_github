@@ -56,7 +56,7 @@ type CtoBClose = <BtoCClose as Session>::Dual;
 type CtoAClose = <AtoCClose as Session>::Dual;
 type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
-// /// Queues
+/// Queues
 type QueueAEnd = RoleEnd;
 type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
 type QueueAVideoDual = <QueueAVideo as Role>::Dual;
