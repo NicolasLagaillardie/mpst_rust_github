@@ -1,3 +1,12 @@
+---
+name: Screenshot
+about: Create a report with a screenshot
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ### Issue and Steps to Reproduce
 <!-- Describe your issue and tell us how to reproduce it (include any useful information). -->
 
