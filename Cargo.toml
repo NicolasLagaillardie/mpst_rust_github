@@ -1,12 +1,12 @@
 [package]
 name = "mpst"
 version = "0.0.1"
-authors = ["N <lagaillardie.nicolas@live.fr>"]
+authors = ["NicoLag <lagaillardie.nicolas@live.fr>"]
 description = "A library implementing multiparty session types"
 readme = "README.md"
-license = "MIT"
-repository = "https://github.com/NicolasLagaillardie/mpst.git"
-categories = ["concurrency", "mpst"]
+license-file = "LICENSE"
+repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+categories = ["concurrency", "mpst", "session"]
 exclude = ["/doc/*"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

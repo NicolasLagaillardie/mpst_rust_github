@@ -80,7 +80,7 @@ type QueueBRecurs = RoleBtoC<RoleEnd>;
 type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
 type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
 
-/// Creating the MP sessios
+/// Creating the MP sessions
 /// For C
 
 type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs>;
