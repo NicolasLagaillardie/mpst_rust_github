@@ -1,4 +1,3 @@
-///#![feature(never_type)]
 extern crate crossbeam_channel;
 extern crate either;
 
