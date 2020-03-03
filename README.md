@@ -1,6 +1,6 @@
 # Multiparty session types for Rust
 
-[![Build Status](https://travis-ci.org/NicolasLagaillardie/mpst_rust_github.svg?branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
+[![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for three participants. It relies on [sesh](https://github.com/wenkokke/sesh). An other library is coming soon to extend to any number of participants.
 
