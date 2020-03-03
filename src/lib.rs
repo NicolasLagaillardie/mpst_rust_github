@@ -16,6 +16,7 @@ use binary::Session;
 use role::Role;
 use sessionmpst::SessionMpst;
 
+#[doc(hidden)]
 pub fn fork_simple<S1, S2, R, P>(p: P, s: SessionMpst<S1, S2, R>) -> JoinHandle<()>
 where
     S1: Session + 'static,
@@ -35,6 +36,12 @@ where
     other_thread
 }
 
+/// Creates and returns three child processes for three `SessionMpst` linked together.
+///
+/// Creates 3 pairs of endpoints, each pair of type `S` and `S::Dual`.
+/// Creates 3 `Role` for each queue.
+/// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes from `fork_simple`.
+/// Returns the tuple of the 3 child processes.
 pub fn run_processes<S1, S2, S3, R1, R2, R3, F1, F2, F3>(
     f1: F1,
     f2: F2,

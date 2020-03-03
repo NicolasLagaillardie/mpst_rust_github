@@ -3,7 +3,7 @@ use role::end::RoleEnd;
 use sessionmpst::SessionMpst;
 use std::error::Error;
 
-/// Closes session one. Synchronises with the partner, and fails if the partner
+/// Closes a `SessionMpst`. Synchronises with all partners, and fails if one of the partners
 /// has crashed.
 pub fn close_mpst(s: SessionMpst<End, End, RoleEnd>) -> Result<(), Box<dyn Error>> {
     s.session1.sender.send(()).unwrap_or(());

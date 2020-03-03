@@ -7,6 +7,11 @@ use role::c_to_all::{next_c_to_all, RoleCtoAll};
 use role::Role;
 use sessionmpst::SessionMpst;
 
+/// Given a choice from A, to other processes, between two `SessionMpst`, choose the first option for each.
+///
+/// A has to encapsulate all possible `SessionMpst` for each other role.
+/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
+/// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
         ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S5, S1, R2>>,
@@ -69,6 +74,11 @@ where
     }
 }
 
+/// Given a choice from A, to other processes, between two `SessionMpst`, choose the second option for each.
+///
+/// A has to encapsulate all possible `SessionMpst` for each other role.
+/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
+/// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
         ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
@@ -131,6 +141,11 @@ where
     }
 }
 
+/// Given a choice from B, to other processes, between two `SessionMpst`, choose the first option for each.
+///
+/// B has to encapsulate all possible `SessionMpst` for each other role.
+/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
+/// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
         ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S5, S1, R2>>,
@@ -193,6 +208,11 @@ where
     }
 }
 
+/// Given a choice from B, to other processes, between two `SessionMpst`, choose the second option for each.
+///
+/// B has to encapsulate all possible `SessionMpst` for each other role.
+/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
+/// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
         ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S5, S1, R2>>,
@@ -255,6 +275,11 @@ where
     }
 }
 
+/// Given a choice from C, to other processes, between two `SessionMpst`, choose the first option for each.
+///
+/// C has to encapsulate all possible `SessionMpst` for each other role.
+/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
+/// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
         ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S5, R2>>,
@@ -317,6 +342,11 @@ where
     }
 }
 
+/// Given a choice from C, to other processes, between two `SessionMpst`, choose the second option for each.
+///
+/// C has to encapsulate all possible `SessionMpst` for each other role.
+/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
+/// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
         ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S5, R2>>,
@@ -379,6 +409,7 @@ where
     }
 }
 
+/// Choose, for A, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
     ($labelone:path, $labeltwo:path, $session:expr) => {{
@@ -402,6 +433,7 @@ macro_rules! choose_mpst_a_to_all {
     }};
 }
 
+/// Choose, for B, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($labelone:path, $labeltwo:path, $session:expr) => {{
@@ -425,6 +457,7 @@ macro_rules! choose_mpst_b_to_all {
     }};
 }
 
+/// Choose, for C, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($labelone:path, $labeltwo:path, $session:expr) => {{

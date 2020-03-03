@@ -2,6 +2,9 @@ use crossbeam_channel::{bounded, Sender};
 use role::b_to_all::RoleBtoAll;
 use role::Role;
 
+/// The required `Dual` of `RoleBtoAll`.
+///
+/// It is never used in our current functions, but may be in the future.
 pub struct RoleAlltoB<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
@@ -10,6 +13,7 @@ pub struct RoleAlltoB<R1: Role, R2: Role> {
 impl<R1: Role, R2: Role> Role for RoleAlltoB<R1, R2> {
     type Dual = RoleBtoAll<R1::Dual, R2::Dual>;
 
+    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender1, _) = bounded::<R1>(1);
         let (sender2, _) = bounded::<R2>(1);
@@ -29,6 +33,8 @@ impl<R1: Role, R2: Role> Role for RoleAlltoB<R1, R2> {
     }
 }
 
+/// Send two values of type `Role`, which may be different. Always succeeds. Returns the continuation of the
+/// queue `(R1, R2)`.
 pub fn next_all_to_b<R1, R2>(r: RoleAlltoB<R1, R2>) -> (R1, R2)
 where
     R1: Role,

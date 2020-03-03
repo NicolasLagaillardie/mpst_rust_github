@@ -9,6 +9,8 @@ use role::Role;
 use sessionmpst::SessionMpst;
 use std::marker;
 
+/// Send a value of type `T` from A to B. Always succeeds. Returns the continuation of the
+/// `SessionMpst<S1, S2, R>`.
 pub fn send_mpst_a_to_b<T, S1, S2, R>(
     x: T,
     s: SessionMpst<Send<T, S1>, S2, RoleAtoB<R>>,
@@ -30,6 +32,8 @@ where
     result
 }
 
+/// Send a value of type `T` from B to A. Always succeeds. Returns the continuation of the
+/// `SessionMpst<S1, S2, R>`.
 pub fn send_mpst_b_to_a<T, S1, S2, R>(
     x: T,
     s: SessionMpst<Send<T, S1>, S2, RoleBtoA<R>>,
@@ -49,6 +53,8 @@ where
     }
 }
 
+/// Send a value of type `T` from C to A. Always succeeds. Returns the continuation of the
+/// `SessionMpst<S1, S2, R>`.
 pub fn send_mpst_c_to_a<T, S1, S2, R>(
     x: T,
     s: SessionMpst<Send<T, S1>, S2, RoleCtoA<R>>,
@@ -68,6 +74,8 @@ where
     }
 }
 
+/// Send a value of type `T` from A to C. Always succeeds. Returns the continuation of the
+/// `SessionMpst<S1, S2, R>`.
 pub fn send_mpst_a_to_c<T, S1, S2, R>(
     x: T,
     s: SessionMpst<S1, Send<T, S2>, RoleAtoC<R>>,
@@ -87,6 +95,8 @@ where
     }
 }
 
+/// Send a value of type `T` from B to C. Always succeeds. Returns the continuation of the
+/// `SessionMpst<S1, S2, R>`.
 pub fn send_mpst_b_to_c<T, S1, S2, R>(
     x: T,
     s: SessionMpst<S1, Send<T, S2>, RoleBtoC<R>>,
@@ -106,6 +116,8 @@ where
     }
 }
 
+/// Send a value of type `T` from C to B. Always succeeds. Returns the continuation of the
+/// `SessionMpst<S1, S2, R>`.
 pub fn send_mpst_c_to_b<T, S1, S2, R>(
     x: T,
     s: SessionMpst<S1, Send<T, S2>, RoleCtoB<R>>,
