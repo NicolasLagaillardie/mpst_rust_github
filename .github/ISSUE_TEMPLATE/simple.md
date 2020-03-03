@@ -1,3 +1,12 @@
+---
+name: Simple report
+about: Create a simple report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## Expected Behavior
 
 

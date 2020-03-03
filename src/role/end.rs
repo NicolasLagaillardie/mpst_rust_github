@@ -1,7 +1,7 @@
 use crossbeam_channel::{bounded, Receiver, Sender};
 use role::Role;
-use std::error::Error;
 
+/// End of communication.
 pub struct RoleEnd {
     pub sender: Sender<()>,
     pub receiver: Receiver<()>,
@@ -26,10 +26,4 @@ impl Role for RoleEnd {
             },
         );
     }
-}
-
-pub fn next_end(r: RoleEnd) -> Result<(), Box<dyn Error>> {
-    r.sender.send(()).unwrap_or(());
-    r.receiver.recv()?;
-    Ok(())
 }

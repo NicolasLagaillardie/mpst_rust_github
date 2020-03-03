@@ -1,3 +1,13 @@
+---
+name: Questions-Answers
+about: Create a pull request with a serie of questions and answers
+title: ''
+labels: ''
+assignees: ''
+
+---
+
+
 <!--- Provide a general summary of your changes in the Title above -->
 
 ## Description

@@ -157,7 +157,7 @@ where
     fork_with_thread_id(p).1
 }
 
-/// Offer a choice between two sessions `S1` and `S1`. Implemented using `Recv`
+/// Offer a choice between two sessions `S1` and `S2`. Implemented using `Recv`
 /// and `Either`.
 pub type Offer<S1, S2> = Recv<Either<S1, S2>, End>;
 
@@ -182,7 +182,7 @@ where
     e.either(f, g)
 }
 
-/// Given a choice between sessions `S1` and `S1`, choose the first option.
+/// Given a choice between sessions `S1` and `S2`, choose the first option.
 pub fn choose_left<'a, S1, S2>(s: Choose<S1, S2>) -> S1
 where
     S1: Session + 'a,
@@ -194,7 +194,7 @@ where
     here
 }
 
-/// Given a choice between sessions `S1` and `S1`, choose the second option.
+/// Given a choice between sessions `S1` and `S2`, choose the second option.
 pub fn choose_right<'a, S1, S2>(s: Choose<S1, S2>) -> S2
 where
     S1: Session + 'a,

@@ -67,7 +67,7 @@ type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
-// /// Queues
+/// Queues
 type QueueAEnd = RoleEnd;
 type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleAtoC<RoleEnd>>>>>;
 type QueueARecurs = RoleAtoC<RoleEnd>;
@@ -80,7 +80,7 @@ type QueueBRecurs = RoleBtoC<RoleEnd>;
 type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
 type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
 
-/// Creating the MP sessios
+/// Creating the MP sessions
 /// For C
 
 type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs>;
@@ -93,7 +93,7 @@ type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
 /// For B
 type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
 
-/// Functios related to endpoints
+/// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         CBranchesBtoC::End((session_ba, session_bc, queue)) => {
