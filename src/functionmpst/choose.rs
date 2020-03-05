@@ -14,10 +14,10 @@ use sessionmpst::SessionMpst;
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S5, S1, R2>>,
+        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
         ChooseMpst<
             SessionMpst<S3, <S0 as Session>::Dual, R3>,
-            SessionMpst<S4, <S1 as Session>::Dual, R4>,
+            SessionMpst<S5, <S1 as Session>::Dual, R4>,
         >,
         RoleAtoAll<R5, R6>,
     >,
@@ -148,10 +148,10 @@ where
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S5, S1, R2>>,
+        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
         ChooseMpst<
             SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S4, R4>,
+            SessionMpst<<S1 as Session>::Dual, S5, R4>,
         >,
         RoleBtoAll<R5, R6>,
     >,
@@ -215,14 +215,14 @@ where
 /// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S5, S1, R2>>,
+        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
         ChooseMpst<
             SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S4, R4>,
+            SessionMpst<<S1 as Session>::Dual, S5, R4>,
         >,
         RoleBtoAll<R5, R6>,
     >,
-) -> SessionMpst<S5, S4, R6>
+) -> SessionMpst<S4, S5, R6>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -237,8 +237,8 @@ where
     R5: Role,
     R6: Role,
 {
-    let (session_ba, session_ab) = S5::new();
-    let (session_bc, session_cb) = S4::new();
+    let (session_ba, session_ab) = S4::new();
+    let (session_bc, session_cb) = S5::new();
     let (session_ca, session_ac) = S1::new();
     let (_, role_a) = R2::new();
     let (_, role_c) = R4::new();
@@ -349,14 +349,14 @@ where
 /// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
-        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S5, R2>>,
+        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>,
         ChooseMpst<
             SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S4, R4>,
+            SessionMpst<<S1 as Session>::Dual, S5, R4>,
         >,
         RoleCtoAll<R5, R6>,
     >,
-) -> SessionMpst<S5, S4, R6>
+) -> SessionMpst<S4, S5, R6>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -371,8 +371,8 @@ where
     R5: Role,
     R6: Role,
 {
-    let (session_ca, session_ac) = S5::new();
-    let (session_cb, session_bc) = S4::new();
+    let (session_ca, session_ac) = S4::new();
+    let (session_cb, session_bc) = S5::new();
     let (session_ba, session_ab) = S1::new();
     let (_, role_a) = R2::new();
     let (_, role_b) = R4::new();
