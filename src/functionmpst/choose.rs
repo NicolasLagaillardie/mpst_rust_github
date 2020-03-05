@@ -282,10 +282,10 @@ where
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
-        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S5, R2>>,
+        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>,
         ChooseMpst<
             SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S4, R4>,
+            SessionMpst<<S1 as Session>::Dual, S5, R4>,
         >,
         RoleCtoAll<R5, R6>,
     >,
