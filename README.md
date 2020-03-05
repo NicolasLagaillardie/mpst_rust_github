@@ -18,7 +18,7 @@ You need to have [Rust](https://www.rust-lang.org/). You should get `cargo` inst
 For building the library, run this code.
 
 ```sh
-cargo build
+$ cargo build
 ```
 
 ### Running
@@ -26,7 +26,7 @@ cargo build
 For running the library, run this code.
 
 ```sh
-cargo run
+$ cargo run
 ```
 
 ### Run test
@@ -34,7 +34,7 @@ cargo run
 For running the tests, run this code.
 
 ```sh
-cargo test
+$ cargo test
 ```
 
 Tests are divided in 4 files:
