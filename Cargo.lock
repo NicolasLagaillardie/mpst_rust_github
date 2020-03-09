@@ -34,7 +34,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "mpstthree"
-version = "0.0.1-a"
+version = "0.0.1-b"
 dependencies = [
  "crossbeam-channel 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "either 1.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
