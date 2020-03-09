@@ -19,7 +19,100 @@ mpstthree = "0.0.1"
 ## Example
 
 ```rust
+extern crate mpstthree;
 
+use std::boxed::Box;
+use std::error::Error;
+
+use mpstthree::binary::{End, Recv, Send};
+use mpstthree::run_processes;
+use mpstthree::sessionmpst::SessionMpst;
+
+use mpstthree::functionmpst::close::close_mpst;
+
+use mpstthree::role::a_to_b::RoleAtoB;
+use mpstthree::role::a_to_c::RoleAtoC;
+use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::b_to_c::RoleBtoC;
+use mpstthree::role::c_to_a::RoleCtoA;
+use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::end::RoleEnd;
+
+use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+
+use mpstthree::functionmpst::send::send_mpst_a_to_b;
+use mpstthree::functionmpst::send::send_mpst_b_to_c;
+use mpstthree::functionmpst::send::send_mpst_c_to_a;
+
+/// Local endpoints
+/// A = !B.?C
+/// B = ?A.!C
+/// C = !A.?B
+
+/// Creating the binary sessions
+type AtoB<N> = Send<N, End>;
+type AtoC<N> = Recv<N, End>;
+
+type BtoA<N> = Recv<N, End>;
+type BtoC<N> = Send<N, End>;
+
+type CtoA<N> = Send<N, End>;
+type CtoB<N> = Recv<N, End>;
+
+/// Queues
+type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
+type QueueB = RoleBtoA<RoleBtoC<RoleEnd>>;
+type QueueC = RoleCtoA<RoleCtoB<RoleEnd>>;
+
+/// Creating the MP sessions
+type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA>;
+type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
+type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
+
+/// Endpoint for A
+fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+    let s = send_mpst_a_to_b(1, s);
+    let (x, s) = recv_mpst_a_to_c(s)?;
+
+    close_mpst(s)?;
+
+    Ok(())
+}
+
+/// Endpoint for B
+fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+    let (x, s) = recv_mpst_b_to_a(s)?;
+    let s = send_mpst_b_to_c(2, s);
+
+    close_mpst(s)?;
+
+    Ok(())
+}
+
+/// Single test for B
+fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    let s = send_mpst_c_to_a(3, s);
+    let (x, s) = recv_mpst_c_to_b(s)?;
+
+    close_mpst(s)?;
+
+    Ok(())
+}
+
+/// Fork all endpoints
+fn simple_triple_endpoints() {
+    let (thread_a, thread_b, thread_c) = run_processes(
+        simple_triple_endpoint_a,
+        simple_triple_endpoint_b,
+        simple_triple_endpoint_c,
+    );
+
+    thread_a.unwrap();
+    thread_b.unwrap();
+    thread_c.unwrap();
+}
 ```
 
 ## Getting started

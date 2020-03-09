@@ -1,4 +1,7 @@
 extern crate mpstthree;
+extern crate rand;
+
+use rand::{Rng, thread_rng};
 
 use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::Role;
@@ -109,7 +112,6 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)?;
 
-            assert_eq!(request, 2);
             Ok(())
         },
         |s: EndpointBEnd| {
@@ -123,8 +125,6 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_a_to_c(s)?;
     let s = send_mpst_a_to_c(id + 1, s);
-
-    assert_eq!(id, 0);
 
     offer_mpst_session_a_to_c(
         s,
@@ -150,10 +150,13 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     {
-        let s = send_mpst_c_to_a(0, s);
+        let mut rng = thread_rng();
+        let id: i32 = rng.gen();
+
+        let s = send_mpst_c_to_a(id, s);
         let (accept, s) = recv_mpst_c_to_a(s)?;
 
-        assert_eq!(accept, 1);
+        assert_eq!(accept, id + 1);
 
         let s = choose_left_mpst_session_c_to_all::<
             BtoAVideo<i32>,
@@ -170,7 +173,7 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
             QueueCEnd,
         >(s);
 
-        let s = send_mpst_c_to_a(1, s);
+        let s = send_mpst_c_to_a(accept, s);
         let (result, s) = recv_mpst_c_to_a(s)?;
 
         assert_eq!(result, accept + 3);
@@ -182,10 +185,13 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     {
-        let s = send_mpst_c_to_a(0, s);
+        let mut rng = thread_rng();
+        let id: i32 = rng.gen();
+
+        let s = send_mpst_c_to_a(id, s);
         let (accept, s) = recv_mpst_c_to_a(s)?;
 
-        assert_eq!(accept, 1);
+        assert_eq!(accept, id + 1);
 
         let s = choose_right_mpst_session_c_to_all::<
             BtoAVideo<i32>,

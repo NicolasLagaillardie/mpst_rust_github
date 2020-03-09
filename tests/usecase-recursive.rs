@@ -1,4 +1,7 @@
 extern crate mpstthree;
+extern crate rand;
+
+use rand::{Rng, thread_rng};
 
 use mpstthree::binary::{cancel, End, Recv, Send, Session};
 use mpstthree::role::Role;
@@ -160,7 +163,8 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
-    let xs: Vec<i32> = (1..10).map(|_| 1).collect();
+    let mut rng = thread_rng();
+    let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
     let s = send_mpst_c_to_a(0, s);
     let (_, s) = recv_mpst_c_to_a(s)?;
@@ -189,7 +193,7 @@ fn client_recurs(
 
             close_mpst(s)?;
 
-            assert_eq!(index, 10);
+            assert_eq!(index, 100);
 
             Ok(())
         }
@@ -197,7 +201,7 @@ fn client_recurs(
 }
 
 #[test]
-fn run_usecase() {
+fn run_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test whole usecase.
         {
