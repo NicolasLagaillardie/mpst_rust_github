@@ -6,7 +6,7 @@ description = "A library implementing Multiparty Session Types for 3 participant
 readme = "README.md"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
-categories = ["concurrency", "mpst", "session types"]
+categories = ["concurrency"]
 exclude = ["/doc/*"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
