@@ -1,39 +1,39 @@
-extern crate mpst;
+extern crate mpstthree;
 
-use mpst::binary::{cancel, End, Recv, Send, Session};
-use mpst::role::Role;
-use mpst::run_processes;
-use mpst::sessionmpst::SessionMpst;
+use mpstthree::binary::{cancel, End, Recv, Send, Session};
+use mpstthree::role::Role;
+use mpstthree::run_processes;
+use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
 
-use mpst::functionmpst::close::close_mpst;
+use mpstthree::functionmpst::close::close_mpst;
 
-use mpst::role::a_to_b::RoleAtoB;
-use mpst::role::a_to_c::RoleAtoC;
-use mpst::role::b_to_a::RoleBtoA;
-use mpst::role::b_to_c::RoleBtoC;
-use mpst::role::c_to_a::RoleCtoA;
-use mpst::role::c_to_b::RoleCtoB;
-use mpst::role::end::RoleEnd;
+use mpstthree::role::a_to_b::RoleAtoB;
+use mpstthree::role::a_to_c::RoleAtoC;
+use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::b_to_c::RoleBtoC;
+use mpstthree::role::c_to_a::RoleCtoA;
+use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::end::RoleEnd;
 
-use mpst::functionmpst::recv::recv_mpst_a_to_b;
-use mpst::functionmpst::recv::recv_mpst_a_to_c;
-use mpst::functionmpst::recv::recv_mpst_b_to_a;
-use mpst::functionmpst::recv::recv_mpst_b_to_c;
-use mpst::functionmpst::recv::recv_mpst_c_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
+use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
 
-use mpst::functionmpst::send::send_mpst_a_to_b;
-use mpst::functionmpst::send::send_mpst_a_to_c;
-use mpst::functionmpst::send::send_mpst_b_to_a;
-use mpst::functionmpst::send::send_mpst_c_to_a;
-use mpst::functionmpst::send::send_mpst_c_to_b;
+use mpstthree::functionmpst::send::send_mpst_a_to_b;
+use mpstthree::functionmpst::send::send_mpst_a_to_c;
+use mpstthree::functionmpst::send::send_mpst_b_to_a;
+use mpstthree::functionmpst::send::send_mpst_c_to_a;
+use mpstthree::functionmpst::send::send_mpst_c_to_b;
 
-use mpst::choose_mpst_c_to_all;
-use mpst::offer_mpst_a_to_c;
-use mpst::offer_mpst_b_to_c;
+use mpstthree::choose_mpst_c_to_all;
+use mpstthree::offer_mpst_a_to_c;
+use mpstthree::offer_mpst_b_to_c;
 
 /// Test our usecase from Places 2020
 /// Simple types

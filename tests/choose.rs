@@ -1,32 +1,32 @@
-extern crate mpst;
+extern crate mpstthree;
 
 use std::boxed::Box;
 use std::error::Error;
 
-use mpst::functionmpst::close::close_mpst;
+use mpstthree::functionmpst::close::close_mpst;
 
-use mpst::binary::{End, Recv, Session};
-use mpst::run_processes;
-use mpst::sessionmpst::SessionMpst;
+use mpstthree::binary::{End, Recv, Session};
+use mpstthree::run_processes;
+use mpstthree::sessionmpst::SessionMpst;
 
-use mpst::role::a_to_b::RoleAtoB;
-use mpst::role::b_to_a::RoleBtoA;
-use mpst::role::b_to_all::RoleBtoAll;
-use mpst::role::c_to_b::RoleCtoB;
-use mpst::role::end::RoleEnd;
+use mpstthree::role::a_to_b::RoleAtoB;
+use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::b_to_all::RoleBtoAll;
+use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::end::RoleEnd;
 
-use mpst::functionmpst::recv::recv_mpst_a_to_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
 
-use mpst::functionmpst::send::send_mpst_b_to_a;
+use mpstthree::functionmpst::send::send_mpst_b_to_a;
 
-use mpst::functionmpst::offer::offer_mpst_session_a_to_b;
-use mpst::functionmpst::offer::offer_mpst_session_c_to_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_a_to_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_c_to_b;
 
-use mpst::functionmpst::choose::choose_left_mpst_session_b_to_all;
-use mpst::functionmpst::choose::choose_right_mpst_session_b_to_all;
+use mpstthree::functionmpst::choose::choose_left_mpst_session_b_to_all;
+use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
 
-use mpst::functionmpst::ChooseMpst;
-use mpst::functionmpst::OfferMpst;
+use mpstthree::functionmpst::ChooseMpst;
+use mpstthree::functionmpst::OfferMpst;
 
 /// Test a simple storage server, implemented using binary choice.
 /// Simple types
