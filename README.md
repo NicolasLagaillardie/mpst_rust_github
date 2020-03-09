@@ -18,6 +18,9 @@ mpstthree = "0.0.1"
 
 ## Example
 
+Here a way to create a simple protocol involving 3 participants, **A**, **B** and **C**. **A** sends a payoad to **B**, then receives an other from **C**. Upon receiving the payload from **A**, **B** sends a payload to **C**. This protocol can be written as **A!B.A?C.B!C**. 
+To implement this example, first, get the right components from the library.
+
 ```rust
 extern crate mpstthree;
 
@@ -45,12 +48,11 @@ use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
+```
 
-/// Local endpoints
-/// A = !B.?C
-/// B = ?A.!C
-/// C = !A.?B
+Then, you have to create the **binary session types** defining the interactions for each pair of participants.
 
+```rust
 /// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
@@ -60,17 +62,29 @@ type BtoC<N> = Send<N, End>;
 
 type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
+```
 
+Add the **queues**, which give the correct order of the operations for each participants.
+
+```rust
 /// Queues
 type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
 type QueueB = RoleBtoA<RoleBtoC<RoleEnd>>;
 type QueueC = RoleCtoA<RoleCtoB<RoleEnd>>;
+```
 
+You can now encapsulate those **binary session types** and **queues** into **SessionMpst** for each participant.
+
+```rust
 /// Creating the MP sessions
 type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA>;
 type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
 type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
+```
 
+To check to the protocol is *correct*, it is  mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.
+
+```rust
 /// Endpoint for A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
@@ -100,7 +114,11 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+```
 
+In the end, you have to link the threads, related to the functions above, together with **run_processes()**. Do not forget to **unwrap()** the returned threads.
+
+```rust
 /// Fork all endpoints
 fn simple_triple_endpoints() {
     let (thread_a, thread_b, thread_c) = run_processes(
@@ -149,8 +167,8 @@ $ cargo test
 
 Tests are divided in 4 files:
 
-* [simple](tests/simple.rs) checks that a basic global protocol works  and is well implemented. In this test, a role A sends a payoad to a role B, then receives an other from a role C. Upon receiving the payload from A, B sends a payload to C. This protocol can be written as **A!B.A?C.B!C**.
-* [choose](tests/choose.rs) checks that a protocol where a role B spreads a choice to the two other roles. For simplifying the test, role C is doing nothing. The protocol can be written as **B→A:{B!A, B!A}**.
+* [simple](tests/simple.rs) is the basic global protocol shown in [Examples](#Example).
+* [choose](tests/choose.rs) checks that a protocol where a role **B** spreads a choice to the two other roles. For simplifying the test, role **C** is doing nothing. The protocol can be written as **B→A:{B!A, B!A}**.
 * [usecase](test/usecase.rs) is implementing the protocol given in [1](.github/pdf/GPS.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 * [usecase-recursive](test/usecase-recursive.rs) is implementing the protocol given in [2](.github/pdf/GPR.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 
