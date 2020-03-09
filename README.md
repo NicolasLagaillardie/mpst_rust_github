@@ -1,9 +1,26 @@
 # Multiparty session types for Rust
 
 [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
+[![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.41+-lightgray.svg)](https://github.com/rust-random/rand#rust-version-requirements)
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for three participants. It relies on [sesh](https://github.com/wenkokke/sesh).
 An other library is coming soon to extend to any number of participants.
+
+## Usage
+
+Add this to your `Cargo.toml`:
+
+```toml
+[dependencies]
+mpstthree = "0.0.1"
+```
+
+## Example
+
+```rust
+
+```
 
 ## Getting started
 
@@ -11,7 +28,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to have [Rust](https://www.rust-lang.org/). You should get `cargo` installed. The project has been coded using version `cargo 1.41.0`, and may not work with other versions.
+You need to have [Rust](https://www.rust-lang.org/). You should get `cargo` installed.
 
 ### Building
 
