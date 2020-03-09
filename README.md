@@ -91,7 +91,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Single test for B
+/// Endpoint for C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_to_b(s)?;
