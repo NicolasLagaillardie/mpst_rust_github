@@ -2,12 +2,13 @@
 name = "mpstthree"
 version = "0.0.1-a"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
+license = "MIT"
 description = "A library implementing Multiparty Session Types for 3 participants"
 readme = "README.md"
-license = "MIT/Apache-2.0"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 categories = ["concurrency"]
 exclude = ["/doc/*"]
+include = ["/src/**/*", "/Cargo.toml", "/LICENSE", "/README.md"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
