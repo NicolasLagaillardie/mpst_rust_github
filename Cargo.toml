@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.0.1-b"
+version = "0.0.1-c"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 license = "MIT"
 description = "A library implementing Multiparty Session Types for 3 participants"
