@@ -282,10 +282,10 @@ where
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: SessionMpst<
-        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S5, R2>>,
+        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>,
         ChooseMpst<
             SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S4, R4>,
+            SessionMpst<<S1 as Session>::Dual, S5, R4>,
         >,
         RoleCtoAll<R5, R6>,
     >,
@@ -420,8 +420,8 @@ macro_rules! choose_mpst_a_to_all {
         let (queue_b, _) = <_ as Role>::new();
         let (queue_c, _) = <_ as Role>::new();
 
-        let s = send_mpst_a_to_b($labelone((session_ba, session_bc, queue_b)), $session);
-        let s = send_mpst_a_to_c($labeltwo((session_ca, session_cb, queue_c)), s);
+        let s = send_mpst_a_to_b($labelone(session_ba, session_bc, queue_b), $session);
+        let s = send_mpst_a_to_c($labeltwo(session_ca, session_cb, queue_c), s);
 
         cancel(s);
 
@@ -444,8 +444,8 @@ macro_rules! choose_mpst_b_to_all {
         let (queue_b, _) = <_ as Role>::new();
         let (queue_c, _) = <_ as Role>::new();
 
-        let s = send_mpst_b_to_a($labelone((session_ab, session_ac, queue_a)), $session);
-        let s = send_mpst_b_to_c($labeltwo((session_ca, session_cb, queue_c)), s);
+        let s = send_mpst_b_to_a($labelone(session_ab, session_ac, queue_a), $session);
+        let s = send_mpst_b_to_c($labeltwo(session_ca, session_cb, queue_c), s);
 
         cancel(s);
 
@@ -468,8 +468,8 @@ macro_rules! choose_mpst_c_to_all {
         let (queue_b, _) = <_ as Role>::new();
         let (queue_c, _) = <_ as Role>::new();
 
-        let s = send_mpst_c_to_a($labelone((session_ab, session_ac, queue_a)), $session);
-        let s = send_mpst_c_to_b($labeltwo((session_ba, session_bc, queue_b)), s);
+        let s = send_mpst_c_to_a($labelone(session_ab, session_ac, queue_a), $session);
+        let s = send_mpst_c_to_b($labeltwo(session_ba, session_bc, queue_b), s);
 
         cancel(s);
 

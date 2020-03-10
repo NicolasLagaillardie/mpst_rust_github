@@ -1,41 +1,44 @@
-extern crate mpst;
+extern crate mpstthree;
+extern crate rand;
 
-use mpst::binary::{End, Recv, Send, Session};
-use mpst::role::Role;
-use mpst::run_processes;
-use mpst::sessionmpst::SessionMpst;
+use rand::{Rng, thread_rng};
+
+use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::role::Role;
+use mpstthree::run_processes;
+use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
 use std::error::Error;
 
-use mpst::functionmpst::close::close_mpst;
+use mpstthree::functionmpst::close::close_mpst;
 
-use mpst::role::a_to_b::RoleAtoB;
-use mpst::role::a_to_c::RoleAtoC;
-use mpst::role::b_to_a::RoleBtoA;
-use mpst::role::b_to_c::RoleBtoC;
-use mpst::role::c_to_a::RoleCtoA;
-use mpst::role::c_to_all::RoleCtoAll;
-use mpst::role::end::RoleEnd;
+use mpstthree::role::a_to_b::RoleAtoB;
+use mpstthree::role::a_to_c::RoleAtoC;
+use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::b_to_c::RoleBtoC;
+use mpstthree::role::c_to_a::RoleCtoA;
+use mpstthree::role::c_to_all::RoleCtoAll;
+use mpstthree::role::end::RoleEnd;
 
-use mpst::functionmpst::recv::recv_mpst_a_to_b;
-use mpst::functionmpst::recv::recv_mpst_a_to_c;
-use mpst::functionmpst::recv::recv_mpst_b_to_a;
-use mpst::functionmpst::recv::recv_mpst_c_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
 
-use mpst::functionmpst::send::send_mpst_a_to_b;
-use mpst::functionmpst::send::send_mpst_a_to_c;
-use mpst::functionmpst::send::send_mpst_b_to_a;
-use mpst::functionmpst::send::send_mpst_c_to_a;
+use mpstthree::functionmpst::send::send_mpst_a_to_b;
+use mpstthree::functionmpst::send::send_mpst_a_to_c;
+use mpstthree::functionmpst::send::send_mpst_b_to_a;
+use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
-use mpst::functionmpst::offer::offer_mpst_session_a_to_c;
-use mpst::functionmpst::offer::offer_mpst_session_b_to_c;
+use mpstthree::functionmpst::offer::offer_mpst_session_a_to_c;
+use mpstthree::functionmpst::offer::offer_mpst_session_b_to_c;
 
-use mpst::functionmpst::choose::choose_left_mpst_session_c_to_all;
-use mpst::functionmpst::choose::choose_right_mpst_session_c_to_all;
+use mpstthree::functionmpst::choose::choose_left_mpst_session_c_to_all;
+use mpstthree::functionmpst::choose::choose_right_mpst_session_c_to_all;
 
-use mpst::functionmpst::ChooseMpst;
-use mpst::functionmpst::OfferMpst;
+use mpstthree::functionmpst::ChooseMpst;
+use mpstthree::functionmpst::OfferMpst;
 
 /// Test our usecase from Places 2020
 /// Simple types
@@ -109,7 +112,6 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)?;
 
-            assert_eq!(request, 2);
             Ok(())
         },
         |s: EndpointBEnd| {
@@ -123,8 +125,6 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_a_to_c(s)?;
     let s = send_mpst_a_to_c(id + 1, s);
-
-    assert_eq!(id, 0);
 
     offer_mpst_session_a_to_c(
         s,
@@ -150,10 +150,13 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     {
-        let s = send_mpst_c_to_a(0, s);
+        let mut rng = thread_rng();
+        let id: i32 = rng.gen();
+
+        let s = send_mpst_c_to_a(id, s);
         let (accept, s) = recv_mpst_c_to_a(s)?;
 
-        assert_eq!(accept, 1);
+        assert_eq!(accept, id + 1);
 
         let s = choose_left_mpst_session_c_to_all::<
             BtoAVideo<i32>,
@@ -170,7 +173,7 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
             QueueCEnd,
         >(s);
 
-        let s = send_mpst_c_to_a(1, s);
+        let s = send_mpst_c_to_a(accept, s);
         let (result, s) = recv_mpst_c_to_a(s)?;
 
         assert_eq!(result, accept + 3);
@@ -182,10 +185,13 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     {
-        let s = send_mpst_c_to_a(0, s);
+        let mut rng = thread_rng();
+        let id: i32 = rng.gen();
+
+        let s = send_mpst_c_to_a(id, s);
         let (accept, s) = recv_mpst_c_to_a(s)?;
 
-        assert_eq!(accept, 1);
+        assert_eq!(accept, id + 1);
 
         let s = choose_right_mpst_session_c_to_all::<
             BtoAVideo<i32>,
