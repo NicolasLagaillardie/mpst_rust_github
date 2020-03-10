@@ -160,24 +160,6 @@ where
     e.either(f, g)
 }
 
-
-// https://www.reddit.com/r/rust/comments/bv5mo7/matching_on_enum_variant/epn7esy/
-// https://stackoverflow.com/questions/37006835/building-an-enum-inside-a-macro
-// https://danielkeep.github.io/tlborm/book/pat-repetition-replacement.html
-// https://stackoverflow.com/questions/56701611/how-to-expand-subpatterns-in-recursive-macro-rules
-// https://doc.rust-lang.org/1.2.0/book/macros.html
-// https://danielkeep.github.io/tlborm/book/mbe-macro-rules.html
-
-#[macro_export]
-macro_rules! offer_aux {
-    ($pat:ident ( ( $a:ty, $b:ty, $c:ty ) ), $result:block) => {
-        
-
-
-        $result
-    };
-}
-
 /// Offer a choice at A from C between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! offer_mpst_a_to_c {

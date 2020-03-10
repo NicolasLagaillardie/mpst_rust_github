@@ -37,7 +37,6 @@ use mpstthree::functionmpst::send::send_mpst_c_to_b;
 use mpstthree::choose_mpst_c_to_all;
 use mpstthree::offer_mpst_a_to_c;
 use mpstthree::offer_mpst_b_to_c;
-//use mpstthree::offer_aux;
 
 /// Test our usecase from Places 2020
 /// Simple types
