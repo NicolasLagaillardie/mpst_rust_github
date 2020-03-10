@@ -37,6 +37,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_b;
 use mpstthree::choose_mpst_c_to_all;
 use mpstthree::offer_mpst_a_to_c;
 use mpstthree::offer_mpst_b_to_c;
+//use mpstthree::offer_aux;
 
 /// Test our usecase from Places 2020
 /// Simple types
@@ -58,12 +59,12 @@ type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
 type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
-    End((AtoBClose, AtoCClose, QueueAEnd)),
-    Video((AtoBVideo<N>, Recv<N, Send<N, RecursAtoC<N>>>, QueueAVideo)),
+    End(AtoBClose, AtoCClose, QueueAEnd),
+    Video(AtoBVideo<N>, Recv<N, Send<N, RecursAtoC<N>>>, QueueAVideo),
 }
 enum CBranchesBtoC<N: marker::Send> {
-    End((BtoAClose, BtoCClose, QueueBEnd)),
-    Video((BtoAVideo<N>, RecursBtoC<N>, QueueBVideo)),
+    End(BtoAClose, BtoCClose, QueueBEnd),
+    Video(BtoAVideo<N>, RecursBtoC<N>, QueueBVideo),
 }
 type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
 type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
@@ -99,7 +100,7 @@ type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
-        CBranchesBtoC::End((session_ba, session_bc, queue)) => {
+        CBranchesBtoC::End(session_ba, session_bc, queue) => {
             let s = SessionMpst {
                 session1: session_ba,
                 session2: session_bc,
@@ -109,7 +110,7 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst(s)?;
             Ok(())
         },
-        CBranchesBtoC::Video((session_ba, session_bc, queue)) => {
+        CBranchesBtoC::Video(session_ba, session_bc, queue) => {
             let s = SessionMpst {
                 session1: session_ba,
                 session2: session_bc,
@@ -135,7 +136,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_c!(s, {
-        CBranchesAtoC::End((session_ab, session_ac, queue)) => {
+        CBranchesAtoC::End(session_ab, session_ac, queue) => {
             let s = SessionMpst {
                 session1: session_ab,
                 session2: session_ac,
@@ -145,7 +146,7 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst(s)?;
             Ok(())
         },
-        CBranchesAtoC::Video((session_ab, session_ac, queue)) => {
+        CBranchesAtoC::Video(session_ab, session_ac, queue) => {
             let s = SessionMpst {
                 session1: session_ab,
                 session2: session_ac,
