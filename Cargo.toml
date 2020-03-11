@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.0.1-c"
+version = "0.0.1-d"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 license = "MIT"
 description = "A library implementing Multiparty Session Types for 3 participants"
@@ -15,3 +15,6 @@ exclude = [".travis.yml", ".gitignore"]
 crossbeam-channel = "^0.3.8"
 either = "^1.5.0"
 rand = "0.7"
+
+[badges]
+travis-ci = { repository = "NicolasLagaillardie/mpst_rust_github", branch = "master" }
