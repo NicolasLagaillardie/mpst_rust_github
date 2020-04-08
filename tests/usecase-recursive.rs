@@ -1,7 +1,7 @@
 extern crate mpstthree;
 extern crate rand;
 
-use rand::{Rng, thread_rng};
+use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{cancel, End, Recv, Send, Session};
 use mpstthree::role::Role;

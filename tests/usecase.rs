@@ -1,7 +1,7 @@
 extern crate mpstthree;
 extern crate rand;
 
-use rand::{Rng, thread_rng};
+use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::Role;
@@ -79,6 +79,7 @@ type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
 /// For C
 type EndpointCtoAVideo<N> = SessionMpst<BtoAVideo<N>, CtoAVideo<N>, QueueAVideoDual>;
 type EndpointCtoAEnd = SessionMpst<BtoAClose, CtoAClose, QueueAEnd>;
+
 type EndpointCtoBVideo<N> = SessionMpst<AtoBVideo<N>, CtoBClose, QueueBVideoDual>;
 type EndpointCtoBEnd = SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
 
