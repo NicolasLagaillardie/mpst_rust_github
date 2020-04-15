@@ -7,20 +7,42 @@ use role::c_to_all::{next_c_to_all, RoleCtoAll};
 use role::Role;
 use sessionmpst::SessionMpst;
 
+type ShortChooseMpstOne<S0, S1, S2, S4, R1, R2> =
+    ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>;
+type ShortChooseMpstTwo<S0, S1, S3, S5, R3, R4> = ChooseMpst<
+    SessionMpst<S3, <S0 as Session>::Dual, R3>,
+    SessionMpst<S5, <S1 as Session>::Dual, R4>,
+>;
+type ShortChooseMpstThree<S0, S1, S3, S5, R3, R4> = ChooseMpst<
+    SessionMpst<<S0 as Session>::Dual, S3, R3>,
+    SessionMpst<<S1 as Session>::Dual, S5, R4>,
+>;
+type ShortChooseMpstFour<S0, S1, S2, S4, R1, R2> =
+    ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>;
+
+type ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
+    ShortChooseMpstOne<S0, S1, S2, S4, R1, R2>,
+    ShortChooseMpstTwo<S0, S1, S3, S5, R3, R4>,
+    RoleAtoAll<R5, R6>,
+>;
+type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
+    ShortChooseMpstOne<S0, S1, S2, S4, R1, R2>,
+    ShortChooseMpstThree<S0, S1, S3, S5, R3, R4>,
+    RoleBtoAll<R5, R6>,
+>;
+type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
+    ShortChooseMpstFour<S0, S1, S2, S4, R1, R2>,
+    ShortChooseMpstThree<S0, S1, S3, S5, R3, R4>,
+    RoleCtoAll<R5, R6>,
+>;
+
 /// Given a choice from A, to other processes, between two `SessionMpst`, choose the first option for each.
 ///
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
-        ChooseMpst<
-            SessionMpst<S3, <S0 as Session>::Dual, R3>,
-            SessionMpst<S5, <S1 as Session>::Dual, R4>,
-        >,
-        RoleAtoAll<R5, R6>,
-    >,
+    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
     S0: Session + 'a,
@@ -80,14 +102,7 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
-        ChooseMpst<
-            SessionMpst<S3, <S0 as Session>::Dual, R3>,
-            SessionMpst<S5, <S1 as Session>::Dual, R4>,
-        >,
-        RoleAtoAll<R5, R6>,
-    >,
+    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
     S0: Session + 'a,
@@ -147,14 +162,7 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
-        ChooseMpst<
-            SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S5, R4>,
-        >,
-        RoleBtoAll<R5, R6>,
-    >,
+    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
     S0: Session + 'a,
@@ -214,14 +222,7 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: SessionMpst<
-        ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>,
-        ChooseMpst<
-            SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S5, R4>,
-        >,
-        RoleBtoAll<R5, R6>,
-    >,
+    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
     S0: Session + 'a,
@@ -281,14 +282,7 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: SessionMpst<
-        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>,
-        ChooseMpst<
-            SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S5, R4>,
-        >,
-        RoleCtoAll<R5, R6>,
-    >,
+    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
     S0: Session + 'a,
@@ -348,14 +342,7 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: SessionMpst<
-        ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>,
-        ChooseMpst<
-            SessionMpst<<S0 as Session>::Dual, S3, R3>,
-            SessionMpst<<S1 as Session>::Dual, S5, R4>,
-        >,
-        RoleCtoAll<R5, R6>,
-    >,
+    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
     S0: Session + 'a,

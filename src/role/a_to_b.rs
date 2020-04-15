@@ -14,15 +14,17 @@ impl<R: Role> Role for RoleAtoB<R> {
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
-        let (sender, _) = bounded::<R>(1);
+        let (sender_normal, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
-        return (
+        (
             RoleAtoB {
                 sender: sender_dual,
             },
-            RoleBtoA { sender: sender },
-        );
+            RoleBtoA {
+                sender: sender_normal,
+            },
+        )
     }
 }
 

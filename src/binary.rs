@@ -57,7 +57,7 @@ impl Session for End {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
 
-        return (
+        (
             End {
                 sender: sender1,
                 receiver: receiver2,
@@ -66,7 +66,7 @@ impl Session for End {
                 sender: sender2,
                 receiver: receiver1,
             },
-        );
+        )
     }
 }
 
@@ -76,7 +76,7 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
-        return (Send { channel: sender }, Recv { channel: receiver });
+        (Send { channel: sender }, Recv { channel: receiver })
     }
 }
 
@@ -86,7 +86,7 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (there, here) = Self::Dual::new();
-        return (here, there);
+        (here, there)
     }
 }
 
@@ -115,7 +115,7 @@ where
 
 /// Cancels a session. Always succeeds. If the partner calls `recv` or `close`
 /// after cancellation, those calls fail.
-pub fn cancel<T>(x: T) -> () {
+pub fn cancel<T>(x: T) {
     mem::drop(x);
 }
 
@@ -300,10 +300,13 @@ where
     }
 }
 
+type BoxError<T, S> = Result<(T, S), Box<dyn Error>>;
+type VecRecv<T, S> = Vec<Recv<T, S>>;
+
 /// Selects the first active session. Receives from the selected session.
 /// Returns the received value, the continuation of the selected session, and a
 /// copy of the input vector without the selected session.
-pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (Result<(T, S), Box<dyn Error>>, Vec<Recv<T, S>>)
+pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (BoxError<T, S>, VecRecv<T, S>)
 where
     T: marker::Send,
     S: Session,

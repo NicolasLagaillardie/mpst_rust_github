@@ -23,7 +23,7 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
 
         let (role_one, role_two) = R::new();
 
-        return (
+        (
             SessionMpst {
                 session1: sender_one,
                 session2: sender_two,
@@ -34,6 +34,6 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
                 session2: receiver_two,
                 queue: role_two,
             },
-        );
+        )
     }
 }

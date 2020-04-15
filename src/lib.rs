@@ -16,6 +16,8 @@ use binary::Session;
 use role::Role;
 use sessionmpst::SessionMpst;
 
+type ResultAnySend = Result<(), Box<(dyn Any + marker::Send + 'static)>>;
+
 #[doc(hidden)]
 pub fn fork_simple<S1, S2, R, P>(p: P, s: SessionMpst<S1, S2, R>) -> JoinHandle<()>
 where
@@ -24,7 +26,7 @@ where
     R: Role + 'static,
     P: FnOnce(SessionMpst<S1, S2, R>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    let other_thread = spawn(move || {
+    spawn(move || {
         panic::set_hook(Box::new(|_info| {
             // do nothing
         }));
@@ -32,8 +34,7 @@ where
             Ok(()) => (),
             Err(e) => panic!("{}", e.to_string()),
         }
-    });
-    other_thread
+    })
 }
 
 /// Creates and returns three child processes for three `SessionMpst` linked together.
@@ -46,11 +47,7 @@ pub fn run_processes<S1, S2, S3, R1, R2, R3, F1, F2, F3>(
     f1: F1,
     f2: F2,
     f3: F3,
-) -> (
-    Result<(), Box<(dyn Any + marker::Send + 'static)>>,
-    Result<(), Box<(dyn Any + marker::Send + 'static)>>,
-    Result<(), Box<(dyn Any + marker::Send + 'static)>>,
-)
+) -> (ResultAnySend, ResultAnySend, ResultAnySend)
 where
     S1: Session + 'static,
     S2: Session + 'static,

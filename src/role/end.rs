@@ -15,7 +15,7 @@ impl Role for RoleEnd {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
 
-        return (
+        (
             RoleEnd {
                 sender: sender1,
                 receiver: receiver2,
@@ -24,6 +24,6 @@ impl Role for RoleEnd {
                 sender: sender2,
                 receiver: receiver1,
             },
-        );
+        )
     }
 }

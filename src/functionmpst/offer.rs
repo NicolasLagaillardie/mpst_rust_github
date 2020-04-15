@@ -16,10 +16,26 @@ use role::Role;
 use sessionmpst::SessionMpst;
 use std::error::Error;
 
+type OfferMpstGeneric<S1, S2, S3, S4, R1, R2> =
+    OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>;
+
+type SessionMpstBtoA<S1, S2, S3, S4, S5, R1, R2, R3> =
+    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleBtoA<R3>>;
+type SessionMpstAtoB<S1, S2, S3, S4, S5, R1, R2, R3> =
+    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleAtoB<R3>>;
+type SessionMpstAtoC<S1, S2, S3, S4, S5, R1, R2, R3> =
+    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleAtoC<R3>>;
+type SessionMpstCtoA<S1, S2, S3, S4, S5, R1, R2, R3> =
+    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleCtoA<R3>>;
+type SessionMpstBtoC<S1, S2, S3, S4, S5, R1, R2, R3> =
+    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleBtoC<R3>>;
+type SessionMpstCtoB<S1, S2, S3, S4, S5, R1, R2, R3> =
+    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleCtoB<R3>>;
+
 /// Offer a choice to B from A (on its session field related to A)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
 pub fn offer_mpst_session_b_to_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-    s: SessionMpst<OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleBtoA<R3>>,
+    s: SessionMpstBtoA<S1, S2, S3, S4, S5, R1, R2, R3>,
     f: F,
     g: G,
 ) -> Result<U, Box<dyn Error + 'a>>
@@ -43,7 +59,7 @@ where
 /// Offer a choice to A from B (on its session field related to B)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
 pub fn offer_mpst_session_a_to_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-    s: SessionMpst<OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleAtoB<R3>>,
+    s: SessionMpstAtoB<S1, S2, S3, S4, S5, R1, R2, R3>,
     f: F,
     g: G,
 ) -> Result<U, Box<dyn Error + 'a>>
@@ -67,7 +83,7 @@ where
 /// Offer a choice to A from C (on its session field related to C)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
 pub fn offer_mpst_session_a_to_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-    s: SessionMpst<S5, OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleAtoC<R3>>,
+    s: SessionMpstAtoC<S1, S2, S3, S4, S5, R1, R2, R3>,
     f: F,
     g: G,
 ) -> Result<U, Box<dyn Error + 'a>>
@@ -91,7 +107,7 @@ where
 /// Offer a choice to C from A (on its session field related to A)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
 pub fn offer_mpst_session_c_to_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-    s: SessionMpst<OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, S5, RoleCtoA<R3>>,
+    s: SessionMpstCtoA<S1, S2, S3, S4, S5, R1, R2, R3>,
     f: F,
     g: G,
 ) -> Result<U, Box<dyn Error + 'a>>
@@ -115,7 +131,7 @@ where
 /// Offer a choice to B from C (on its session field related to C)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
 pub fn offer_mpst_session_b_to_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-    s: SessionMpst<S5, OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleBtoC<R3>>,
+    s: SessionMpstBtoC<S1, S2, S3, S4, S5, R1, R2, R3>,
     f: F,
     g: G,
 ) -> Result<U, Box<dyn Error + 'a>>
@@ -139,7 +155,7 @@ where
 /// Offer a choice to C from B (on its session field related to B)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
 pub fn offer_mpst_session_c_to_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-    s: SessionMpst<S5, OfferMpst<SessionMpst<S1, S2, R1>, SessionMpst<S3, S4, R2>>, RoleCtoB<R3>>,
+    s: SessionMpstCtoB<S1, S2, S3, S4, S5, R1, R2, R3>,
     f: F,
     g: G,
 ) -> Result<U, Box<dyn Error + 'a>>
