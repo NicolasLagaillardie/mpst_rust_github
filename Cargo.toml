@@ -1,12 +1,12 @@
 [package]
 name = "mpstthree"
-version = "0.0.1-d"
+version = "0.0.2"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 license = "MIT"
 description = "A library implementing Multiparty Session Types for 3 participants"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
-categories = ["concurrency"]
+categories = ["concurrency", "development-tools::cargo-plugins"]
 exclude = [".travis.yml", ".gitignore"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
