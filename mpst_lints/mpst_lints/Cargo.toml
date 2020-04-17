@@ -13,16 +13,16 @@ keywords = ["mpstthree", "lint", "plugin"]
 
 [dependencies]
 # Will need to remove some of them
-cargo_metadata = "0.9.0"
+cargo_metadata = "0.9.1"
 if_chain = "1.0.0"
 itertools = "0.9"
-lazy_static = "1.0.2"
+lazy_static = "1.4.0"
 pulldown-cmark = { version = "0.7", default-features = false }
-quine-mc_cluskey = "0.2.2"
+quine-mc_cluskey = "0.2.4"
 regex-syntax = "0.6"
 serde = { version = "1.0", features = ["derive"] }
 smallvec = { version = "1", features = ["union"] }
-toml = "0.5.3"
+toml = "0.5.6"
 unicode-normalization = "0.1"
 semver = "0.9.0"
 # NOTE: cargo requires serde feat in its url dep
