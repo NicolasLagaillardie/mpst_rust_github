@@ -2,6 +2,8 @@ use crossbeam_channel::{bounded, Sender};
 use role::all_to_a::RoleAlltoA;
 use role::Role;
 
+use std::fmt;
+
 /// Gives the order to the `SessionMpst` related to A to execute its `session`
 /// fields with every other processes.
 ///
@@ -31,6 +33,17 @@ impl<R1: Role, R2: Role> Role for RoleAtoAll<R1, R2> {
                 sender2: sender_normal_2,
             },
         )
+    }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("RoleAtoAll")
+    }
+}
+
+impl<R1: Role, R2: Role> fmt::Display for RoleAtoAll<R1, R2> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RoleAtoAll")
     }
 }
 

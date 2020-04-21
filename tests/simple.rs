@@ -3,7 +3,7 @@ extern crate mpstthree;
 use std::boxed::Box;
 use std::error::Error;
 
-use mpstthree::binary::{End, Recv, Send};
+use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::run_processes;
 use mpstthree::sessionmpst::SessionMpst;
 
@@ -33,11 +33,11 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 
-type BtoA<N> = Recv<N, End>;
+type BtoA<N> = <AtoB<N> as Session>::Dual;
 type BtoC<N> = Send<N, End>;
 
-type CtoA<N> = Send<N, End>;
-type CtoB<N> = Recv<N, End>;
+type CtoA<N> = <AtoC<N> as Session>::Dual;
+type CtoB<N> = <BtoC<N> as Session>::Dual;
 
 /// Queues
 type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;

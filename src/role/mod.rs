@@ -25,4 +25,6 @@ pub trait Role: marker::Sized + marker::Send {
     /// but may be necessary for specific cases, such as closing a connection.
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual);
+
+    fn head() -> String;
 }

@@ -13,11 +13,12 @@ exclude = [".travis.yml", ".gitignore"]
 
 [dependencies]
 crossbeam-channel = "0.4.2"
-either = "1.5.0"
+either = "1.5.3"
 rand = "0.7"
 
 [dev-dependencies]
 criterion = "0.3"
+# compiletest_rs = { version = "0.5.0", features = ["stable"] }
 
 [[bench]]
 name = "simple"
