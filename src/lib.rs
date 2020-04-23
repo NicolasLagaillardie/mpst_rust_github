@@ -33,7 +33,7 @@ where
         }));
         match p(s) {
             Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
+            Err(e) => panic!("{:?}", e),
         }
     })
 }

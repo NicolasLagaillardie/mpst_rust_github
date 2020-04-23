@@ -1,8 +1,10 @@
 extern crate crossbeam_channel;
+// extern crate downcast_rs;
 extern crate either;
 
 use crossbeam_channel::{bounded, Receiver, Select, Sender};
 use either::Either;
+use std::any::Any;
 use std::boxed::Box;
 use std::error::Error;
 use std::fmt;
@@ -47,6 +49,12 @@ pub trait Session: marker::Sized + marker::Send {
     /// it can be used to construct deadlocks.
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual);
+
+    #[doc(hidden)]
+    fn head() -> String;
+
+    #[doc(hidden)]
+    fn as_any(&self) -> &dyn Any;
 }
 
 impl Session for End {
@@ -68,9 +76,19 @@ impl Session for End {
             },
         )
     }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("End")
+    }
+
+    #[doc(hidden)]
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
 }
 
-impl<T: marker::Send, S: Session> Session for Send<T, S> {
+impl<T: marker::Send + 'static, S: Session + 'static> Session for Send<T, S> {
     type Dual = Recv<T, S::Dual>;
 
     #[doc(hidden)]
@@ -78,15 +96,35 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
         (Send { channel: sender }, Recv { channel: receiver })
     }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("Send")
+    }
+
+    #[doc(hidden)]
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
 }
 
-impl<T: marker::Send, S: Session> Session for Recv<T, S> {
+impl<T: marker::Send + 'static, S: Session + 'static> Session for Recv<T, S> {
     type Dual = Send<T, S::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (there, here) = Self::Dual::new();
         (here, there)
+    }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("Recv")
+    }
+
+    #[doc(hidden)]
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 
@@ -140,7 +178,7 @@ where
         }));
         match p(there) {
             Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
+            Err(e) => panic!("{:?}", e),
         }
     });
     (other_thread, here)

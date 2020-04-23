@@ -1,5 +1,6 @@
 use binary::Session;
 use role::Role;
+use std::any::Any;
 
 /// A `struct` which encapsulates two binary session types and a queue.
 ///
@@ -13,7 +14,9 @@ pub struct SessionMpst<S1: Session, S2: Session, R: Role> {
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
+impl<S1: Session + 'static, S2: Session + 'static, R: Role + 'static> Session
+    for SessionMpst<S1, S2, R>
+{
     type Dual = SessionMpst<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual>;
 
     #[doc(hidden)]
@@ -35,5 +38,15 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
                 queue: role_two,
             },
         )
+    }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        format!("{} + {}", S1::head(), S2::head())
+    }
+
+    #[doc(hidden)]
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }

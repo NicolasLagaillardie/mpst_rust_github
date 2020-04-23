@@ -77,30 +77,27 @@ type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
 
 /// Creating the MP sessions
 /// For C
-type EndpointCtoAVideo<N> = SessionMpst<BtoAVideo<N>, CtoAVideo<N>, QueueAVideoDual>;
-type EndpointCtoAEnd = SessionMpst<BtoAClose, CtoAClose, QueueAEnd>;
-
-type EndpointCtoBVideo<N> = SessionMpst<AtoBVideo<N>, CtoBClose, QueueBVideoDual>;
-type EndpointCtoBEnd = SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
-
-type ChooseCtoB<N> = ChooseMpst<EndpointCtoBVideo<N>, EndpointCtoBEnd>;
-type ChooseCtoA<N> = ChooseMpst<EndpointCtoAVideo<N>, EndpointCtoAEnd>;
+type ChooseCtoA<N> =
+    ChooseMpst<BtoAVideo<N>, CtoAVideo<N>, BtoAClose, CtoAClose, QueueAVideoDual, QueueAEnd>;
+type ChooseCtoB<N> =
+    ChooseMpst<AtoBVideo<N>, CtoBClose, AtoBClose, CtoBClose, QueueBVideoDual, QueueBEnd>;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, QueueCFull>;
 
 /// For A
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd>;
 type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>;
+type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd>;
 
-type OfferA<N> = OfferMpst<EndpointAVideo<N>, EndpointAEnd>;
+type OfferA<N> =
+    OfferMpst<AtoBVideo<N>, AtoCVideo<N>, AtoBClose, AtoCClose, QueueAVideo, QueueAEnd>;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull>;
 
 /// For B
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd>;
 type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo>;
+type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd>;
 
-type OfferB<N> = OfferMpst<EndpointBVideo<N>, EndpointBEnd>;
+type OfferB<N> = OfferMpst<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, QueueBVideo, QueueBEnd>;
 type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull>;
 
 /// Functions related to endpoints

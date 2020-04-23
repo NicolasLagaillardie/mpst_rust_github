@@ -42,7 +42,18 @@ fn simple_triple_endpoints() {
     let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
     let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
 
-    checker(s1, s2, s3);
+    // let mut mut_s1: EndpointA<i32> = s1;
+    // let mut mut_s2: EndpointB<i32> = s2;
+    // let mut mut_s3: EndpointC<i32> = s3;
+
+    // let deref_s1: *mut EndpointA<i32> = &mut mut_s1;
+    // let deref_s2: *mut EndpointB<i32> = &mut mut_s2;
+    // let deref_s3: *mut EndpointC<i32> = &mut mut_s3;
+
+    // checker(deref_s1, deref_s2, deref_s3);
+
+    let result = checker(s1, s2, s3);
+    result.unwrap();
 
     // assert!(|| -> Result<(), Box<dyn Error>> {
     //     {

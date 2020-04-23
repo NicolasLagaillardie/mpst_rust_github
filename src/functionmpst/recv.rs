@@ -18,10 +18,10 @@ pub fn recv_mpst_a_to_b<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAtoB<R>>,
 ) -> ResultBoxError<T, S1, S2, R>
 where
-    T: marker::Send,
-    S1: Session,
-    S2: Session,
-    R: Role,
+    T: marker::Send + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let (v, new_session) = recv(s.session1)?;
     let new_queue = next_a_to_b(s.queue);
@@ -40,10 +40,10 @@ pub fn recv_mpst_b_to_a<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleBtoA<R>>,
 ) -> ResultBoxError<T, S1, S2, R>
 where
-    T: marker::Send,
-    S1: Session,
-    S2: Session,
-    R: Role,
+    T: marker::Send + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let (v, new_session) = recv(s.session1)?;
     let new_queue = next_b_to_a(s.queue);
@@ -62,10 +62,10 @@ pub fn recv_mpst_c_to_a<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleCtoA<R>>,
 ) -> ResultBoxError<T, S1, S2, R>
 where
-    T: marker::Send,
-    S1: Session,
-    S2: Session,
-    R: Role,
+    T: marker::Send + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let (v, new_session) = recv(s.session1)?;
     let new_queue = next_c_to_a(s.queue);
@@ -84,10 +84,10 @@ pub fn recv_mpst_a_to_c<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAtoC<R>>,
 ) -> ResultBoxError<T, S1, S2, R>
 where
-    T: marker::Send,
-    S1: Session,
-    S2: Session,
-    R: Role,
+    T: marker::Send + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let (v, new_session) = recv(s.session2)?;
     let new_queue = next_a_to_c(s.queue);
@@ -106,10 +106,10 @@ pub fn recv_mpst_b_to_c<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleBtoC<R>>,
 ) -> ResultBoxError<T, S1, S2, R>
 where
-    T: marker::Send,
-    S1: Session,
-    S2: Session,
-    R: Role,
+    T: marker::Send + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let (v, new_session) = recv(s.session2)?;
     let new_queue = next_b_to_c(s.queue);
@@ -128,10 +128,10 @@ pub fn recv_mpst_c_to_b<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleCtoB<R>>,
 ) -> ResultBoxError<T, S1, S2, R>
 where
-    T: marker::Send,
-    S1: Session,
-    S2: Session,
-    R: Role,
+    T: marker::Send + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let (v, new_session) = recv(s.session2)?;
     let new_queue = next_c_to_b(s.queue);

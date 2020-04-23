@@ -7,18 +7,12 @@ use role::c_to_all::{next_c_to_all, RoleCtoAll};
 use role::Role;
 use sessionmpst::SessionMpst;
 
-type ShortChooseMpstOne<S0, S1, S2, S4, R1, R2> =
-    ChooseMpst<SessionMpst<S2, S0, R1>, SessionMpst<S4, S1, R2>>;
-type ShortChooseMpstTwo<S0, S1, S3, S5, R3, R4> = ChooseMpst<
-    SessionMpst<S3, <S0 as Session>::Dual, R3>,
-    SessionMpst<S5, <S1 as Session>::Dual, R4>,
->;
-type ShortChooseMpstThree<S0, S1, S3, S5, R3, R4> = ChooseMpst<
-    SessionMpst<<S0 as Session>::Dual, S3, R3>,
-    SessionMpst<<S1 as Session>::Dual, S5, R4>,
->;
-type ShortChooseMpstFour<S0, S1, S2, S4, R1, R2> =
-    ChooseMpst<SessionMpst<S0, S2, R1>, SessionMpst<S1, S4, R2>>;
+type ShortChooseMpstOne<S0, S1, S2, S4, R1, R2> = ChooseMpst<S2, S0, S4, S1, R1, R2>;
+type ShortChooseMpstTwo<S0, S1, S3, S5, R3, R4> =
+    ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R3, R4>;
+type ShortChooseMpstThree<S0, S1, S3, S5, R3, R4> =
+    ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R3, R4>;
+type ShortChooseMpstFour<S0, S1, S2, S4, R1, R2> = ChooseMpst<S0, S2, S1, S4, R1, R2>;
 
 type ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
     ShortChooseMpstOne<S0, S1, S2, S4, R1, R2>,
@@ -41,22 +35,22 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = Se
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_left_mpst_session_a_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
-    S0: Session + 'a,
-    S1: Session + 'a,
-    S2: Session + 'a,
-    S3: Session + 'a,
-    S4: Session + 'a,
-    S5: Session + 'a,
-    R1: Role,
-    R2: Role,
-    R3: Role,
-    R4: Role,
-    R5: Role,
-    R6: Role,
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    S4: Session + 'static,
+    S5: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
+    R4: Role + 'static,
+    R5: Role + 'static,
+    R6: Role + 'static,
 {
     let (session_ab, session_ba) = S2::new();
     let (session_ac, session_ca) = S3::new();
@@ -101,22 +95,22 @@ where
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_right_mpst_session_a_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
-    S0: Session + 'a,
-    S1: Session + 'a,
-    S2: Session + 'a,
-    S3: Session + 'a,
-    S4: Session + 'a,
-    S5: Session + 'a,
-    R1: Role,
-    R2: Role,
-    R3: Role,
-    R4: Role,
-    R5: Role,
-    R6: Role,
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    S4: Session + 'static,
+    S5: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
+    R4: Role + 'static,
+    R5: Role + 'static,
+    R6: Role + 'static,
 {
     let (session_ab, session_ba) = S4::new();
     let (session_ac, session_ca) = S5::new();
@@ -161,22 +155,22 @@ where
 /// B has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_left_mpst_session_b_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
-    S0: Session + 'a,
-    S1: Session + 'a,
-    S2: Session + 'a,
-    S3: Session + 'a,
-    S4: Session + 'a,
-    S5: Session + 'a,
-    R1: Role,
-    R2: Role,
-    R3: Role,
-    R4: Role,
-    R5: Role,
-    R6: Role,
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    S4: Session + 'static,
+    S5: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
+    R4: Role + 'static,
+    R5: Role + 'static,
+    R6: Role + 'static,
 {
     let (session_ba, session_ab) = S2::new();
     let (session_bc, session_cb) = S3::new();
@@ -221,22 +215,22 @@ where
 /// B has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_right_mpst_session_b_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
-    S0: Session + 'a,
-    S1: Session + 'a,
-    S2: Session + 'a,
-    S3: Session + 'a,
-    S4: Session + 'a,
-    S5: Session + 'a,
-    R1: Role,
-    R2: Role,
-    R3: Role,
-    R4: Role,
-    R5: Role,
-    R6: Role,
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    S4: Session + 'static,
+    S5: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
+    R4: Role + 'static,
+    R5: Role + 'static,
+    R6: Role + 'static,
 {
     let (session_ba, session_ab) = S4::new();
     let (session_bc, session_cb) = S5::new();
@@ -281,22 +275,22 @@ where
 /// C has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_left_mpst_session_c_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
-    S0: Session + 'a,
-    S1: Session + 'a,
-    S2: Session + 'a,
-    S3: Session + 'a,
-    S4: Session + 'a,
-    S5: Session + 'a,
-    R1: Role,
-    R2: Role,
-    R3: Role,
-    R4: Role,
-    R5: Role,
-    R6: Role,
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    S4: Session + 'static,
+    S5: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
+    R4: Role + 'static,
+    R5: Role + 'static,
+    R6: Role + 'static,
 {
     let (session_ca, session_ac) = S2::new();
     let (session_cb, session_bc) = S3::new();
@@ -341,22 +335,22 @@ where
 /// C has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_right_mpst_session_c_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
-    S0: Session + 'a,
-    S1: Session + 'a,
-    S2: Session + 'a,
-    S3: Session + 'a,
-    S4: Session + 'a,
-    S5: Session + 'a,
-    R1: Role,
-    R2: Role,
-    R3: Role,
-    R4: Role,
-    R5: Role,
-    R6: Role,
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    S4: Session + 'static,
+    S5: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
+    R4: Role + 'static,
+    R5: Role + 'static,
+    R6: Role + 'static,
 {
     let (session_ca, session_ac) = S4::new();
     let (session_cb, session_bc) = S5::new();
@@ -407,8 +401,22 @@ macro_rules! choose_mpst_a_to_all {
         let (queue_b, _) = <_ as Role>::new();
         let (queue_c, _) = <_ as Role>::new();
 
-        let s = send_mpst_a_to_b($labelone(session_ba, session_bc, queue_b), $session);
-        let s = send_mpst_a_to_c($labeltwo(session_ca, session_cb, queue_c), s);
+        let s = send_mpst_a_to_b(
+            $labelone(SessionMpst {
+                session1: session_ba,
+                session2: session_bc,
+                queue: queue_b,
+            }),
+            $session,
+        );
+        let s = send_mpst_a_to_c(
+            $labeltwo(SessionMpst {
+                session1: session_ca,
+                session2: session_cb,
+                queue: queue_c,
+            }),
+            s,
+        );
 
         cancel(s);
 
@@ -431,8 +439,22 @@ macro_rules! choose_mpst_b_to_all {
         let (queue_b, _) = <_ as Role>::new();
         let (queue_c, _) = <_ as Role>::new();
 
-        let s = send_mpst_b_to_a($labelone(session_ab, session_ac, queue_a), $session);
-        let s = send_mpst_b_to_c($labeltwo(session_ca, session_cb, queue_c), s);
+        let s = send_mpst_b_to_a(
+            $labelone(SessionMpst {
+                session1: session_ab,
+                session2: session_ac,
+                queue: queue_a,
+            }),
+            $session,
+        );
+        let s = send_mpst_b_to_c(
+            $labeltwo(SessionMpst {
+                session1: session_ca,
+                session2: session_cb,
+                queue: queue_c,
+            }),
+            s,
+        );
 
         cancel(s);
 
@@ -455,8 +477,22 @@ macro_rules! choose_mpst_c_to_all {
         let (queue_b, _) = <_ as Role>::new();
         let (queue_c, _) = <_ as Role>::new();
 
-        let s = send_mpst_c_to_a($labelone(session_ab, session_ac, queue_a), $session);
-        let s = send_mpst_c_to_b($labeltwo(session_ba, session_bc, queue_b), s);
+        let s = send_mpst_c_to_a(
+            $labelone(SessionMpst {
+                session1: session_ab,
+                session2: session_ac,
+                queue: queue_a,
+            }),
+            $session,
+        );
+        let s = send_mpst_c_to_b(
+            $labeltwo(SessionMpst {
+                session1: session_ba,
+                session2: session_bc,
+                queue: queue_b,
+            }),
+            s,
+        );
 
         cancel(s);
 

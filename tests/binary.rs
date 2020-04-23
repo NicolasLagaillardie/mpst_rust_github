@@ -30,25 +30,6 @@ fn ping_works() {
     .is_ok());
 }
 
-/// Test writing a program which duplicates a session.
-///
-/// ```compile_fail
-/// assert!(|| -> Result<(), Box<dyn Error>> {
-///
-///     let r1 = fork(move |s1: Send<(), End>| {
-///         let s2 = send((), s1);
-///         close(s2)?;
-///         let s3 = send((), s1);
-///         close(s3)?;
-///         Ok(())
-///     });
-///     let ((), r2) = recv(r1)?;
-///     close(r2)?;
-///     Ok(())
-///
-/// }().is_ok());
-/// ```
-
 // Test a simple calculator server, implemented using binary choice.
 
 type NegServer<N> = Recv<N, Send<N, End>>;
@@ -115,7 +96,7 @@ fn simple_calc_works() {
 
 // Test a nice calculator server, implemented using variant types.
 
-enum CalcOp<N: marker::Send> {
+enum CalcOp<N: marker::Send + 'static> {
     Neg(NegServer<N>),
     Add(AddServer<N>),
 }
@@ -255,7 +236,7 @@ fn closure_works() {
 
 // Test recursive sessions.
 
-enum SumOp<N: marker::Send> {
+enum SumOp<N: marker::Send + 'static> {
     More(Recv<N, NiceSumServer<N>>),
     Done(Send<N, End>),
 }

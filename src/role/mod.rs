@@ -26,5 +26,6 @@ pub trait Role: marker::Sized + marker::Send {
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual);
 
+    #[doc(hidden)]
     fn head() -> String;
 }

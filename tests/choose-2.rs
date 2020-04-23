@@ -64,25 +64,21 @@ type QueueFullC = RoleCtoB<QueueOfferC>;
 type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, AtoCAdd<N>, QueueOfferA>;
 type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, AtoCNeg<N>, QueueOfferA>;
 
-type OfferA<N> = OfferMpst<EndpointAAdd<N>, EndpointANeg<N>>;
+type OfferA<N> =
+    OfferMpst<AtoBAdd<N>, AtoCAdd<N>, AtoBNeg<N>, AtoCNeg<N>, QueueOfferA, QueueOfferA>;
 type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
 
 /// For B
-type EndpointBtoAAdd<N> = SessionMpst<BtoAAdd<N>, CtoAAdd<N>, QueueOfferADual>;
-type EndpointBtoANeg<N> = SessionMpst<BtoANeg<N>, CtoANeg<N>, QueueOfferADual>;
-
-type EndpointBtoCAdd<N> = SessionMpst<AtoCAdd<N>, End, QueueOfferCDual>;
-type EndpointBtoCNeg<N> = SessionMpst<AtoCNeg<N>, End, QueueOfferCDual>;
-
-type ChooseBtoA<N> = ChooseMpst<EndpointBtoAAdd<N>, EndpointBtoANeg<N>>;
-type ChooseBtoC<N> = ChooseMpst<EndpointBtoCAdd<N>, EndpointBtoCNeg<N>>;
+type ChooseBtoA<N> =
+    ChooseMpst<BtoAAdd<N>, CtoAAdd<N>, BtoANeg<N>, CtoANeg<N>, QueueOfferADual, QueueOfferADual>;
+type ChooseBtoC<N> = ChooseMpst<AtoCAdd<N>, End, AtoCNeg<N>, End, QueueOfferCDual, QueueOfferCDual>;
 type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC<N>, QueueFullB>;
 
 /// For C
 type EndpointCAdd<N> = SessionMpst<CtoAAdd<N>, End, QueueOfferC>;
 type EndpointCNeg<N> = SessionMpst<CtoANeg<N>, End, QueueOfferC>;
 
-type OfferC<N> = OfferMpst<EndpointCAdd<N>, EndpointCNeg<N>>;
+type OfferC<N> = OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, QueueOfferC, QueueOfferC>;
 type EndpointChoiceC<N> = SessionMpst<End, OfferC<N>, QueueFullC>;
 
 /// Functions related to endpoints
