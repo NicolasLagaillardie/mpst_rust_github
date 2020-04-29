@@ -4,8 +4,8 @@ extern crate rand;
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::fork_mpst;
 use mpstthree::role::Role;
-use mpstthree::run_processes;
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
@@ -216,7 +216,7 @@ fn run_usecase() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test video branch.
         {
-            let (thread_a, thread_b, thread_c) = run_processes(authenticator, server, client_video);
+            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
 
             assert!(thread_a.is_ok());
             assert!(thread_b.is_ok());
@@ -225,7 +225,7 @@ fn run_usecase() {
 
         // Test end branch.
         {
-            let (thread_a, thread_b, thread_c) = run_processes(authenticator, server, client_close);
+            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
 
             assert!(thread_a.is_ok());
             assert!(thread_b.is_ok());

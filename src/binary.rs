@@ -1,10 +1,5 @@
-extern crate crossbeam_channel;
-// extern crate downcast_rs;
-extern crate either;
-
 use crossbeam_channel::{bounded, Receiver, Select, Sender};
 use either::Either;
-use std::any::Any;
 use std::boxed::Box;
 use std::error::Error;
 use std::fmt;
@@ -52,9 +47,6 @@ pub trait Session: marker::Sized + marker::Send {
 
     #[doc(hidden)]
     fn head() -> String;
-
-    #[doc(hidden)]
-    fn as_any(&self) -> &dyn Any;
 }
 
 impl Session for End {
@@ -81,14 +73,9 @@ impl Session for End {
     fn head() -> String {
         String::from("End")
     }
-
-    #[doc(hidden)]
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
 }
 
-impl<T: marker::Send + 'static, S: Session + 'static> Session for Send<T, S> {
+impl<T: marker::Send, S: Session> Session for Send<T, S> {
     type Dual = Recv<T, S::Dual>;
 
     #[doc(hidden)]
@@ -101,14 +88,9 @@ impl<T: marker::Send + 'static, S: Session + 'static> Session for Send<T, S> {
     fn head() -> String {
         String::from("Send")
     }
-
-    #[doc(hidden)]
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
 }
 
-impl<T: marker::Send + 'static, S: Session + 'static> Session for Recv<T, S> {
+impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     type Dual = Send<T, S::Dual>;
 
     #[doc(hidden)]
@@ -120,11 +102,6 @@ impl<T: marker::Send + 'static, S: Session + 'static> Session for Recv<T, S> {
     #[doc(hidden)]
     fn head() -> String {
         String::from("Recv")
-    }
-
-    #[doc(hidden)]
-    fn as_any(&self) -> &dyn Any {
-        self
     }
 }
 

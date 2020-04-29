@@ -22,12 +22,12 @@ where
     R: Role + 'static,
 {
     let new_session = send(x, s.session1);
-    let new_queue = next_a_to_b(s.queue);
+    let new_queue = next_a_to_b(s.stack);
 
     SessionMpst {
         session1: new_session,
         session2: s.session2,
-        queue: new_queue,
+        stack: new_queue,
     }
 }
 
@@ -44,12 +44,12 @@ where
     R: Role + 'static,
 {
     let new_session = send(x, s.session1);
-    let new_queue = next_b_to_a(s.queue);
+    let new_queue = next_b_to_a(s.stack);
 
     SessionMpst {
         session1: new_session,
         session2: s.session2,
-        queue: new_queue,
+        stack: new_queue,
     }
 }
 
@@ -66,12 +66,12 @@ where
     R: Role + 'static,
 {
     let new_session = send(x, s.session1);
-    let new_queue = next_c_to_a(s.queue);
+    let new_queue = next_c_to_a(s.stack);
 
     SessionMpst {
         session1: new_session,
         session2: s.session2,
-        queue: new_queue,
+        stack: new_queue,
     }
 }
 
@@ -88,12 +88,12 @@ where
     R: Role + 'static,
 {
     let new_session = send(x, s.session2);
-    let new_queue = next_a_to_c(s.queue);
+    let new_queue = next_a_to_c(s.stack);
 
     SessionMpst {
         session1: s.session1,
         session2: new_session,
-        queue: new_queue,
+        stack: new_queue,
     }
 }
 
@@ -110,12 +110,12 @@ where
     R: Role + 'static,
 {
     let new_session = send(x, s.session2);
-    let new_queue = next_b_to_c(s.queue);
+    let new_queue = next_b_to_c(s.stack);
 
     SessionMpst {
         session1: s.session1,
         session2: new_session,
-        queue: new_queue,
+        stack: new_queue,
     }
 }
 
@@ -132,11 +132,11 @@ where
     R: Role + 'static,
 {
     let new_session = send(x, s.session2);
-    let new_queue = next_c_to_b(s.queue);
+    let new_queue = next_c_to_b(s.stack);
 
     SessionMpst {
         session1: s.session1,
         session2: new_session,
-        queue: new_queue,
+        stack: new_queue,
     }
 }

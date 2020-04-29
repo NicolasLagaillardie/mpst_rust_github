@@ -62,23 +62,23 @@ where
     let choice_b = SessionMpst {
         session1: session_ba,
         session2: session_bc,
-        queue: role_b,
+        stack: role_b,
     };
 
     let choice_c = SessionMpst {
         session1: session_ca,
         session2: session_cb,
-        queue: role_c,
+        stack: role_c,
     };
 
     let new_session_1 = send(Either::Left(choice_b), s.session1);
     let new_session_2 = send(Either::Left(choice_c), s.session2);
-    let (new_queue, _) = next_a_to_all(s.queue);
+    let (new_queue, _) = next_a_to_all(s.stack);
 
     let s = SessionMpst {
         session1: new_session_1,
         session2: new_session_2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     cancel(s);
@@ -86,7 +86,7 @@ where
     SessionMpst {
         session1: session_ab,
         session2: session_ac,
-        queue: role_a,
+        stack: role_a,
     }
 }
 
@@ -122,23 +122,23 @@ where
     let choice_b = SessionMpst {
         session1: session_ba,
         session2: session_bc,
-        queue: role_b,
+        stack: role_b,
     };
 
     let choice_c = SessionMpst {
         session1: session_ca,
         session2: session_cb,
-        queue: role_c,
+        stack: role_c,
     };
 
     let new_session_1 = send(Either::Right(choice_b), s.session1);
     let new_session_2 = send(Either::Right(choice_c), s.session2);
-    let (_, new_queue) = next_a_to_all(s.queue);
+    let (_, new_queue) = next_a_to_all(s.stack);
 
     let s = SessionMpst {
         session1: new_session_1,
         session2: new_session_2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     cancel(s);
@@ -146,7 +146,7 @@ where
     SessionMpst {
         session1: session_ab,
         session2: session_ac,
-        queue: role_a,
+        stack: role_a,
     }
 }
 
@@ -182,23 +182,23 @@ where
     let choice_a = SessionMpst {
         session1: session_ab,
         session2: session_ac,
-        queue: role_a,
+        stack: role_a,
     };
 
     let choice_c = SessionMpst {
         session1: session_ca,
         session2: session_cb,
-        queue: role_c,
+        stack: role_c,
     };
 
     let new_session_1 = send(Either::Left(choice_a), s.session1);
     let new_session_2 = send(Either::Left(choice_c), s.session2);
-    let (new_queue, _) = next_b_to_all(s.queue);
+    let (new_queue, _) = next_b_to_all(s.stack);
 
     let s = SessionMpst {
         session1: new_session_1,
         session2: new_session_2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     cancel(s);
@@ -206,7 +206,7 @@ where
     SessionMpst {
         session1: session_ba,
         session2: session_bc,
-        queue: role_b,
+        stack: role_b,
     }
 }
 
@@ -242,23 +242,23 @@ where
     let choice_a = SessionMpst {
         session1: session_ab,
         session2: session_ac,
-        queue: role_a,
+        stack: role_a,
     };
 
     let choice_c = SessionMpst {
         session1: session_ca,
         session2: session_cb,
-        queue: role_c,
+        stack: role_c,
     };
 
     let new_session_1 = send(Either::Right(choice_a), s.session1);
     let new_session_2 = send(Either::Right(choice_c), s.session2);
-    let (_, new_queue) = next_b_to_all(s.queue);
+    let (_, new_queue) = next_b_to_all(s.stack);
 
     let s = SessionMpst {
         session1: new_session_1,
         session2: new_session_2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     cancel(s);
@@ -266,7 +266,7 @@ where
     SessionMpst {
         session1: session_ba,
         session2: session_bc,
-        queue: role_b,
+        stack: role_b,
     }
 }
 
@@ -302,23 +302,23 @@ where
     let choice_a = SessionMpst {
         session1: session_ab,
         session2: session_ac,
-        queue: role_a,
+        stack: role_a,
     };
 
     let choice_b = SessionMpst {
         session1: session_ba,
         session2: session_bc,
-        queue: role_b,
+        stack: role_b,
     };
 
     let new_session_1 = send(Either::Left(choice_a), s.session1);
     let new_session_2 = send(Either::Left(choice_b), s.session2);
-    let (new_queue, _) = next_c_to_all(s.queue);
+    let (new_queue, _) = next_c_to_all(s.stack);
 
     let s = SessionMpst {
         session1: new_session_1,
         session2: new_session_2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     cancel(s);
@@ -326,7 +326,7 @@ where
     SessionMpst {
         session1: session_ca,
         session2: session_cb,
-        queue: role_c,
+        stack: role_c,
     }
 }
 
@@ -362,23 +362,23 @@ where
     let choice_a = SessionMpst {
         session1: session_ab,
         session2: session_ac,
-        queue: role_a,
+        stack: role_a,
     };
 
     let choice_b = SessionMpst {
         session1: session_ba,
         session2: session_bc,
-        queue: role_b,
+        stack: role_b,
     };
 
     let new_session_1 = send(Either::Right(choice_a), s.session1);
     let new_session_2 = send(Either::Right(choice_b), s.session2);
-    let (_, new_queue) = next_c_to_all(s.queue);
+    let (_, new_queue) = next_c_to_all(s.stack);
 
     let s = SessionMpst {
         session1: new_session_1,
         session2: new_session_2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     cancel(s);
@@ -386,7 +386,7 @@ where
     SessionMpst {
         session1: session_ca,
         session2: session_cb,
-        queue: role_c,
+        stack: role_c,
     }
 }
 
@@ -405,7 +405,7 @@ macro_rules! choose_mpst_a_to_all {
             $labelone(SessionMpst {
                 session1: session_ba,
                 session2: session_bc,
-                queue: queue_b,
+                stack: queue_b,
             }),
             $session,
         );
@@ -413,7 +413,7 @@ macro_rules! choose_mpst_a_to_all {
             $labeltwo(SessionMpst {
                 session1: session_ca,
                 session2: session_cb,
-                queue: queue_c,
+                stack: queue_c,
             }),
             s,
         );
@@ -423,7 +423,7 @@ macro_rules! choose_mpst_a_to_all {
         SessionMpst {
             session1: session_ab,
             session2: session_ac,
-            queue: queue_a,
+            stack: queue_a,
         }
     }};
 }
@@ -443,7 +443,7 @@ macro_rules! choose_mpst_b_to_all {
             $labelone(SessionMpst {
                 session1: session_ab,
                 session2: session_ac,
-                queue: queue_a,
+                stack: queue_a,
             }),
             $session,
         );
@@ -451,7 +451,7 @@ macro_rules! choose_mpst_b_to_all {
             $labeltwo(SessionMpst {
                 session1: session_ca,
                 session2: session_cb,
-                queue: queue_c,
+                stack: queue_c,
             }),
             s,
         );
@@ -461,7 +461,7 @@ macro_rules! choose_mpst_b_to_all {
         SessionMpst {
             session1: session_ba,
             session2: session_bc,
-            queue: queue_b,
+            stack: queue_b,
         }
     }};
 }
@@ -481,7 +481,7 @@ macro_rules! choose_mpst_c_to_all {
             $labelone(SessionMpst {
                 session1: session_ab,
                 session2: session_ac,
-                queue: queue_a,
+                stack: queue_a,
             }),
             $session,
         );
@@ -489,7 +489,7 @@ macro_rules! choose_mpst_c_to_all {
             $labeltwo(SessionMpst {
                 session1: session_ba,
                 session2: session_bc,
-                queue: queue_b,
+                stack: queue_b,
             }),
             s,
         );
@@ -499,7 +499,7 @@ macro_rules! choose_mpst_c_to_all {
         SessionMpst {
             session1: session_ca,
             session2: session_cb,
-            queue: queue_c,
+            stack: queue_c,
         }
     }};
 }

@@ -44,7 +44,7 @@ where
 /// Creates 3 `Role` for each queue.
 /// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes from `fork_simple`.
 /// Returns the tuple of the 3 child processes.
-pub fn run_processes<S1, S2, S3, R1, R2, R3, F1, F2, F3>(
+pub fn fork_mpst<S1, S2, S3, R1, R2, R3, F1, F2, F3>(
     f1: F1,
     f2: F2,
     f3: F3,
@@ -77,17 +77,17 @@ where
     let a = SessionMpst {
         session1: channel_ab,
         session2: channel_ac,
-        queue: role_a,
+        stack: role_a,
     };
     let b = SessionMpst {
         session1: channel_ba,
         session2: channel_bc,
-        queue: role_b,
+        stack: role_b,
     };
     let c = SessionMpst {
         session1: channel_ca,
         session2: channel_cb,
-        queue: role_c,
+        stack: role_c,
     };
 
     let thread_a = fork_simple(f1, a);

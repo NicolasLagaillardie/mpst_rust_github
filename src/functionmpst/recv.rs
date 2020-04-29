@@ -24,11 +24,11 @@ where
     R: Role + 'static,
 {
     let (v, new_session) = recv(s.session1)?;
-    let new_queue = next_a_to_b(s.queue);
+    let new_queue = next_a_to_b(s.stack);
     let result = SessionMpst {
         session1: new_session,
         session2: s.session2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     Ok((v, result))
@@ -46,11 +46,11 @@ where
     R: Role + 'static,
 {
     let (v, new_session) = recv(s.session1)?;
-    let new_queue = next_b_to_a(s.queue);
+    let new_queue = next_b_to_a(s.stack);
     let result = SessionMpst {
         session1: new_session,
         session2: s.session2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     Ok((v, result))
@@ -68,11 +68,11 @@ where
     R: Role + 'static,
 {
     let (v, new_session) = recv(s.session1)?;
-    let new_queue = next_c_to_a(s.queue);
+    let new_queue = next_c_to_a(s.stack);
     let result = SessionMpst {
         session1: new_session,
         session2: s.session2,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     Ok((v, result))
@@ -90,11 +90,11 @@ where
     R: Role + 'static,
 {
     let (v, new_session) = recv(s.session2)?;
-    let new_queue = next_a_to_c(s.queue);
+    let new_queue = next_a_to_c(s.stack);
     let result = SessionMpst {
         session1: s.session1,
         session2: new_session,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     Ok((v, result))
@@ -112,11 +112,11 @@ where
     R: Role + 'static,
 {
     let (v, new_session) = recv(s.session2)?;
-    let new_queue = next_b_to_c(s.queue);
+    let new_queue = next_b_to_c(s.stack);
     let result = SessionMpst {
         session1: s.session1,
         session2: new_session,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     Ok((v, result))
@@ -134,11 +134,11 @@ where
     R: Role + 'static,
 {
     let (v, new_session) = recv(s.session2)?;
-    let new_queue = next_c_to_b(s.queue);
+    let new_queue = next_c_to_b(s.stack);
     let result = SessionMpst {
         session1: s.session1,
         session2: new_session,
-        queue: new_queue,
+        stack: new_queue,
     };
 
     Ok((v, result))

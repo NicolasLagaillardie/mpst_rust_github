@@ -37,7 +37,7 @@ type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
 type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
 
 #[test]
-fn simple_triple_endpoints() {
+fn test_checker() {
     let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
     let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
     let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
@@ -53,7 +53,8 @@ fn simple_triple_endpoints() {
     // checker(deref_s1, deref_s2, deref_s3);
 
     let result = checker(s1, s2, s3);
-    result.unwrap();
+
+    assert!(result.is_ok());
 
     // assert!(|| -> Result<(), Box<dyn Error>> {
     //     {

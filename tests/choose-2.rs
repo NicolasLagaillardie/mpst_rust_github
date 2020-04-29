@@ -6,8 +6,8 @@ use std::error::Error;
 use mpstthree::functionmpst::close::close_mpst;
 
 use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::fork_mpst;
 use mpstthree::role::Role;
-use mpstthree::run_processes;
 use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::role::a_to_b::RoleAtoB;
@@ -173,7 +173,7 @@ fn simple_store_2_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
-            let (thread_a, thread_b, thread_c) = run_processes(
+            let (thread_a, thread_b, thread_c) = fork_mpst(
                 simple_store_server,
                 simple_store_client_left,
                 simple_store_pawn,
@@ -186,7 +186,7 @@ fn simple_store_2_works() {
 
         // Test the right branch.
         {
-            let (thread_a, thread_b, thread_c) = run_processes(
+            let (thread_a, thread_b, thread_c) = fork_mpst(
                 simple_store_server,
                 simple_store_client_right,
                 simple_store_pawn,

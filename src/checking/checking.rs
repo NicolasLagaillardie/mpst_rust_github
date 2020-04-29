@@ -4,10 +4,13 @@ use role::Role;
 use sessionmpst::SessionMpst;
 
 use std::any::type_name;
-use std::any::Any;
+// use std::any::Any;
 use std::collections::HashMap;
 use std::error::Error;
 use std::marker;
+use std::mem::transmute_copy;
+
+// use role::a_to_b::RoleAtoB;
 
 // use role::a_to_b::{next_a_to_b, RoleAtoB};
 // use role::a_to_c::{next_a_to_c, RoleAtoC};
@@ -63,6 +66,19 @@ where
     Ok(())
 }
 
+// unsafe fn send_a_to_b<T, S1, S2, S3, S4, R1, R2>(s: SessionMpst<S1, S2, R1>) -> SessionMpst<Send<T, S3>, S4, R2>
+// where
+//     T: marker::Send,
+//     S1: Session,
+//     S2: Session,
+//     S3: Session,
+//     S4: Session,
+//     R1: Role,
+//     R2: Role,
+// {
+//     transmute_copy::<SessionMpst<S1, S2, R1>, SessionMpst<Send<T, S3>, S4, R2> >(&s)
+// }
+
 fn checker_aux<S1, S2, R>(s: SessionMpst<S1, S2, R>) -> Result<String, Box<dyn Error>>
 where
     S1: Session,
@@ -71,7 +87,9 @@ where
 {
     let head = R::head();
 
-    let _parsed = parse_type(type_of(&s));
+    let parsed = parse_type(type_of(&s));
+
+    println!("Type: {}", parsed);
 
     if head.contains("toAll") {
         let (_sender, _receiver) = get_name(head);
@@ -84,19 +102,16 @@ where
             let result = match sender.as_str() {
                 "A" => match receiver.as_str() {
                     "B" => match S1::head().as_str() {
-                        // "Send" => String::from("Send"),
-                        "Send" =>
-                        {
-
+                        "Send" => {
                             //let s = try!(send_mpst_a_to_b(0, s));
-
-                            // let test: Send<_, _> = s.session1;
 
                             // let new_session = send(0, s.session1);
                             // let new_queue = next_a_to_b(s.queue);
 
-                            format!("{}!{}.{}", sender, receiver, checker_aux(s)?)
-                        },
+                            // format!("{}!{}.{}", sender, receiver, checker_aux(s)?)
+
+                            String::from("Send")
+                        }
                         "Recv" => String::from("Recv"),
                         "End" => String::from("End"),
                         _ => panic!("Wrong session, not recognized"),
@@ -155,6 +170,7 @@ fn type_of<T>(_: T) -> &'static str {
 
 fn parse_type(s: &str) -> String {
     let result = &s.replace("&", "");
+    let result = &result.replace("mpstthree::", "");
     let result = &result.replace("sessionmpst::", "");
     let result = &result.replace("binary::", "");
     let result = &result.replace("role::a_to_b::", "");
