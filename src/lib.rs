@@ -8,6 +8,7 @@ use std::panic;
 use std::thread::{spawn, JoinHandle};
 
 pub mod binary;
+pub mod checking;
 pub mod functionmpst;
 pub mod role;
 pub mod sessionmpst;
@@ -15,6 +16,8 @@ pub mod sessionmpst;
 use binary::Session;
 use role::Role;
 use sessionmpst::SessionMpst;
+
+type ResultAnySend = Result<(), Box<(dyn Any + marker::Send + 'static)>>;
 
 #[doc(hidden)]
 pub fn fork_simple<S1, S2, R, P>(p: P, s: SessionMpst<S1, S2, R>) -> JoinHandle<()>
@@ -24,16 +27,15 @@ where
     R: Role + 'static,
     P: FnOnce(SessionMpst<S1, S2, R>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    let other_thread = spawn(move || {
+    spawn(move || {
         panic::set_hook(Box::new(|_info| {
             // do nothing
         }));
         match p(s) {
             Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
+            Err(e) => panic!("{:?}", e),
         }
-    });
-    other_thread
+    })
 }
 
 /// Creates and returns three child processes for three `SessionMpst` linked together.
@@ -42,15 +44,11 @@ where
 /// Creates 3 `Role` for each queue.
 /// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes from `fork_simple`.
 /// Returns the tuple of the 3 child processes.
-pub fn run_processes<S1, S2, S3, R1, R2, R3, F1, F2, F3>(
+pub fn fork_mpst<S1, S2, S3, R1, R2, R3, F1, F2, F3>(
     f1: F1,
     f2: F2,
     f3: F3,
-) -> (
-    Result<(), Box<(dyn Any + marker::Send + 'static)>>,
-    Result<(), Box<(dyn Any + marker::Send + 'static)>>,
-    Result<(), Box<(dyn Any + marker::Send + 'static)>>,
-)
+) -> (ResultAnySend, ResultAnySend, ResultAnySend)
 where
     S1: Session + 'static,
     S2: Session + 'static,
@@ -79,17 +77,17 @@ where
     let a = SessionMpst {
         session1: channel_ab,
         session2: channel_ac,
-        queue: role_a,
+        stack: role_a,
     };
     let b = SessionMpst {
         session1: channel_ba,
         session2: channel_bc,
-        queue: role_b,
+        stack: role_b,
     };
     let c = SessionMpst {
         session1: channel_ca,
         session2: channel_cb,
-        queue: role_c,
+        stack: role_c,
     };
 
     let thread_a = fork_simple(f1, a);

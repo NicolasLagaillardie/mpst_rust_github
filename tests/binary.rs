@@ -1,8 +1,10 @@
 extern crate mpstthree;
 extern crate rand;
 
-use rand::{Rng, thread_rng};
 use mpstthree::binary::*;
+use mpstthree::choose;
+use mpstthree::offer;
+use rand::{thread_rng, Rng};
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
@@ -10,16 +12,12 @@ use std::mem;
 use std::sync::mpsc;
 use std::thread::sleep;
 use std::time::Duration;
-use mpstthree::offer;
-use mpstthree::choose;
-
 
 // Test sending a ping across threads.
 
 #[test]
 fn ping_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         let s = fork(move |s: Send<(), End>| {
             let s = send((), s);
             close(s)?;
@@ -28,29 +26,9 @@ fn ping_works() {
         let ((), s) = recv(s)?;
         close(s)?;
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
-
-
-/// Test writing a program which duplicates a session.
-///
-/// ```compile_fail
-/// assert!(|| -> Result<(), Box<dyn Error>> {
-///
-///     let r1 = fork(move |s1: Send<(), End>| {
-///         let s2 = send((), s1);
-///         close(s2)?;
-///         let s3 = send((), s1);
-///         close(s3)?;
-///         Ok(())
-///     });
-///     let ((), r2) = recv(r1)?;
-///     close(r2)?;
-///     Ok(())
-///
-/// }().is_ok());
-/// ```
 
 // Test a simple calculator server, implemented using binary choice.
 
@@ -64,26 +42,27 @@ type SimpleCalcServer<N> = Offer<NegServer<N>, AddServer<N>>;
 type SimpleCalcClient<N> = <SimpleCalcServer<N> as Session>::Dual;
 
 fn simple_calc_server(s: SimpleCalcServer<i32>) -> Result<(), Box<dyn Error>> {
-    offer_either(s,
-                 |s: NegServer<i32>| {
-                     let (x, s) = recv(s)?;
-                     let s = send(-x, s);
-                     close(s)?;
-                     Ok(())
-                 },
-                 |s: AddServer<i32>| {
-                     let (x, s) = recv(s)?;
-                     let (y, s) = recv(s)?;
-                     let s = send(x.wrapping_add(y), s);
-                     close(s)?;
-                     Ok(())
-                 })
+    offer_either(
+        s,
+        |s: NegServer<i32>| {
+            let (x, s) = recv(s)?;
+            let s = send(-x, s);
+            close(s)?;
+            Ok(())
+        },
+        |s: AddServer<i32>| {
+            let (x, s) = recv(s)?;
+            let (y, s) = recv(s)?;
+            let s = send(x.wrapping_add(y), s);
+            close(s)?;
+            Ok(())
+        },
+    )
 }
 
 #[test]
 fn simple_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         let mut rng = thread_rng();
 
         // Test the negation function.
@@ -111,14 +90,13 @@ fn simple_calc_works() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
-
 
 // Test a nice calculator server, implemented using variant types.
 
-enum CalcOp<N: marker::Send> {
+enum CalcOp<N: marker::Send + 'static> {
     Neg(NegServer<N>),
     Add(AddServer<N>),
 }
@@ -146,7 +124,6 @@ fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
 #[test]
 fn nice_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         // Pick some random numbers.
         let mut rng = thread_rng();
 
@@ -175,71 +152,62 @@ fn nice_calc_works() {
         }
 
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 }
 
 // Test cancellation.
 
 #[test]
 fn cancel_recv_works() {
-
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         cancel(s);
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 
     assert!(other_thread.join().is_err());
 }
 
 #[test]
 fn cancel_send_works() {
-
-    let (other_thread, s) = fork_with_thread_id(
-        move |s: Recv<(), End>| {
-            cancel(s);
-            Ok(())
-        });
+    let (other_thread, s) = fork_with_thread_id(move |s: Recv<(), End>| {
+        cancel(s);
+        Ok(())
+    });
 
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         let s = send((), s);
         close(s)?;
         Ok(())
-
-    }().is_err());
+    }()
+    .is_err());
 
     assert!(other_thread.join().is_ok());
 }
-
 
 // Test cancellation of delegation.
 
 #[test]
 fn delegation_works() {
     let (other_thread1, s) = fork_with_thread_id(nice_calc_server);
-    let (other_thread2, u) = fork_with_thread_id(
-        move |u: Recv<NiceCalcClient<i32>, End>| {
-            cancel(u);
-            Ok(())
+    let (other_thread2, u) = fork_with_thread_id(move |u: Recv<NiceCalcClient<i32>, End>| {
+        cancel(u);
+        Ok(())
     });
 
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         let u = send(s, u);
         close(u)?;
         Ok(())
-
-    }().is_err());
+    }()
+    .is_err());
 
     assert!(other_thread1.join().is_err());
     assert!(other_thread2.join().is_ok());
 }
-
 
 // Test cancellation of closures.
 
@@ -248,7 +216,6 @@ fn closure_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
     assert!(|| -> Result<i32, Box<dyn Error>> {
-
         // Create a closure which uses the session.
         let f = move |x: i32| -> Result<i32, Box<dyn Error>> {
             let s = choose!(CalcOp::Neg, s);
@@ -261,16 +228,15 @@ fn closure_works() {
         // Let the closure go out of scope.
         Err(Box::new(mpsc::RecvError))?;
         f(5)
-
-    }().is_err());
+    }()
+    .is_err());
 
     assert!(other_thread.join().is_err());
 }
 
-
 // Test recursive sessions.
 
-enum SumOp<N: marker::Send> {
+enum SumOp<N: marker::Send + 'static> {
     More(Recv<N, NiceSumServer<N>>),
     Done(Send<N, End>),
 }
@@ -296,26 +262,24 @@ fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Er
     Ok(())
 }
 
-fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>)
-                         -> Result<i32, Box<dyn Error>> {
+fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
     match xs.pop() {
         Option::Some(x) => {
             let s = choose!(SumOp::More, s);
             let s = send(x, s);
             nice_sum_client_accum(s, xs)
-        },
+        }
         Option::None => {
             let s = choose!(SumOp::Done, s);
             let (sum, s) = recv(s)?;
             close(s)?;
             Ok(sum)
-        },
+        }
     }
 }
 
 #[test]
 fn recursion_works() {
-
     // Pick some random numbers.
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
@@ -324,22 +288,19 @@ fn recursion_works() {
     let (other_thread, s) = fork_with_thread_id(nice_sum_server);
 
     assert!(|| -> Result<(), Box<dyn Error>> {
-
         let sum2 = nice_sum_client_accum(s, xs)?;
         assert_eq!(sum1, sum2);
         Ok(())
-
-    }().is_ok());
+    }()
+    .is_ok());
 
     assert!(other_thread.join().is_ok());
 }
-
 
 // Test selection.
 
 #[test]
 fn selection_works() {
-
     let mut other_threads = Vec::new();
     let mut rs = Vec::new();
 
@@ -353,20 +314,23 @@ fn selection_works() {
         rs.push(s);
     }
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        let mut current_index = 9;
-        loop {
-            if rs.is_empty() {
-                break Ok(());
+    assert!(
+        || -> Result<(), Box<dyn Error>> {
+            let mut current_index = 9;
+            loop {
+                if rs.is_empty() {
+                    break Ok(());
+                } else {
+                    let (i, r) = select_mut(&mut rs)?;
+                    close(r)?;
+                    assert_eq!(current_index, i, "Messages were received out of order.");
+                    current_index = current_index.overflowing_sub(1).0; // decrement
+                }
             }
-            else {
-                let (i, r) = select_mut(&mut rs)?;
-                close(r)?;
-                assert_eq!(current_index, i, "Messages were received out of order.");
-                current_index = current_index.overflowing_sub(1).0; // decrement
-            }
-        }
-    }().is_ok(), "Main thread crashed.");
+        }()
+        .is_ok(),
+        "Main thread crashed."
+    );
 
     for other_thread in other_threads {
         let msg = format!("Thread {:?} crashed.", other_thread);
@@ -374,14 +338,14 @@ fn selection_works() {
     }
 }
 
-
 #[allow(dead_code)]
 fn deadlock_loop() {
-
     let s = fork(move |s: Send<(), End>| {
         loop {
             // Let's trick the reachability checker
-            if false { break; }
+            if false {
+                break;
+            }
         }
         let s = send((), s);
         close(s)?;
@@ -392,13 +356,12 @@ fn deadlock_loop() {
         let ((), s) = recv(s)?;
         close(s)?;
         Ok(())
-    }().unwrap();
+    }()
+    .unwrap();
 }
-
 
 #[allow(dead_code)]
 fn deadlock_forget() {
-
     let s = fork(move |s: Send<(), End>| {
         mem::forget(s);
         Ok(())
@@ -408,13 +371,12 @@ fn deadlock_forget() {
         let ((), s) = recv(s)?;
         close(s)?;
         Ok(())
-    }().unwrap();
+    }()
+    .unwrap();
 }
-
 
 #[allow(dead_code)]
 fn deadlock_new() {
-
     let (s1, r1) = <Send<(), End>>::new();
     let r2 = fork(move |s2: Send<(), End>| {
         let (x, r1) = recv(r1)?;
@@ -430,5 +392,6 @@ fn deadlock_new() {
         close(r2)?;
         close(s1)?;
         Ok(())
-    }().unwrap();
+    }()
+    .unwrap();
 }

@@ -2,6 +2,8 @@ use crossbeam_channel::{bounded, Sender};
 use role::c_to_all::RoleCtoAll;
 use role::Role;
 
+use std::fmt;
+
 /// The required `Dual` of `RoleCtoAll`.
 ///
 /// It is never used in our current functions, but may be in the future.
@@ -15,21 +17,32 @@ impl<R1: Role, R2: Role> Role for RoleAlltoC<R1, R2> {
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
-        let (sender1, _) = bounded::<R1>(1);
-        let (sender2, _) = bounded::<R2>(1);
-        let (sender_dual1, _) = bounded::<R1::Dual>(1);
-        let (sender_dual2, _) = bounded::<R2::Dual>(1);
+        let (sender_normal_1, _) = bounded::<R1>(1);
+        let (sender_normal_2, _) = bounded::<R2>(1);
+        let (sender_dual_1, _) = bounded::<R1::Dual>(1);
+        let (sender_dual_2, _) = bounded::<R2::Dual>(1);
 
-        return (
+        (
             RoleAlltoC {
-                sender1: sender_dual1,
-                sender2: sender_dual2,
+                sender1: sender_dual_1,
+                sender2: sender_dual_2,
             },
             RoleCtoAll {
-                sender1: sender1,
-                sender2: sender2,
+                sender1: sender_normal_1,
+                sender2: sender_normal_2,
             },
-        );
+        )
+    }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("RoleAlltoC")
+    }
+}
+
+impl<R1: Role, R2: Role> fmt::Display for RoleAlltoC<R1, R2> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RoleAlltoC")
     }
 }
 

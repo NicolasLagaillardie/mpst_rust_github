@@ -10,3 +10,4 @@ jobs:
 script:
   - cargo build --verbose --all
   - cargo test --verbose --all
+  - cargo bench --verbose --all

@@ -3,8 +3,8 @@ extern crate mpstthree;
 use std::boxed::Box;
 use std::error::Error;
 
-use mpstthree::binary::{End, Recv, Send};
-use mpstthree::run_processes;
+use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -33,11 +33,11 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 
-type BtoA<N> = Recv<N, End>;
+type BtoA<N> = <AtoB<N> as Session>::Dual;
 type BtoC<N> = Send<N, End>;
 
-type CtoA<N> = Send<N, End>;
-type CtoB<N> = Recv<N, End>;
+type CtoA<N> = <AtoC<N> as Session>::Dual;
+type CtoB<N> = <BtoC<N> as Session>::Dual;
 
 /// Queues
 type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
@@ -89,7 +89,7 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 fn simple_triple_endpoints() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (thread_a, thread_b, thread_c) = run_processes(
+            let (thread_a, thread_b, thread_c) = fork_mpst(
                 simple_triple_endpoint_a,
                 simple_triple_endpoint_b,
                 simple_triple_endpoint_c,

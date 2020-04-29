@@ -2,6 +2,8 @@ use crossbeam_channel::{bounded, Sender};
 use role::all_to_c::RoleAlltoC;
 use role::Role;
 
+use std::fmt;
+
 /// Gives the order to the `SessionMpst` related to C to execute its `session`
 /// fields with every other processes.
 ///
@@ -16,21 +18,32 @@ impl<R1: Role, R2: Role> Role for RoleCtoAll<R1, R2> {
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
-        let (sender1, _) = bounded::<R1>(1);
-        let (sender2, _) = bounded::<R2>(1);
-        let (sender_dual1, _) = bounded::<R1::Dual>(1);
-        let (sender_dual2, _) = bounded::<R2::Dual>(1);
+        let (sender_normal_1, _) = bounded::<R1>(1);
+        let (sender_normal_2, _) = bounded::<R2>(1);
+        let (sender_dual_1, _) = bounded::<R1::Dual>(1);
+        let (sender_dual_2, _) = bounded::<R2::Dual>(1);
 
-        return (
+        (
             RoleCtoAll {
-                sender1: sender_dual1,
-                sender2: sender_dual2,
+                sender1: sender_dual_1,
+                sender2: sender_dual_2,
             },
             RoleAlltoC {
-                sender1: sender1,
-                sender2: sender2,
+                sender1: sender_normal_1,
+                sender2: sender_normal_2,
             },
-        );
+        )
+    }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("RoleCtoAll")
+    }
+}
+
+impl<R1: Role, R2: Role> fmt::Display for RoleCtoAll<R1, R2> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RoleCtoAll")
     }
 }
 

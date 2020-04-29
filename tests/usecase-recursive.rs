@@ -1,11 +1,11 @@
 extern crate mpstthree;
 extern crate rand;
 
-use rand::{Rng, thread_rng};
+use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{cancel, End, Recv, Send, Session};
 use mpstthree::role::Role;
-use mpstthree::run_processes;
+use mpstthree::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
@@ -58,12 +58,12 @@ type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
 type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
-    End(AtoBClose, AtoCClose, QueueAEnd),
-    Video(AtoBVideo<N>, Recv<N, Send<N, RecursAtoC<N>>>, QueueAVideo),
+    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd>),
+    Video(SessionMpst<AtoBVideo<N>, Recv<N, Send<N, RecursAtoC<N>>>, QueueAVideo>),
 }
 enum CBranchesBtoC<N: marker::Send> {
-    End(BtoAClose, BtoCClose, QueueBEnd),
-    Video(BtoAVideo<N>, RecursBtoC<N>, QueueBVideo),
+    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo>),
 }
 type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
 type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
@@ -99,23 +99,11 @@ type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
-        CBranchesBtoC::End(session_ba, session_bc, queue) => {
-            let s = SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                queue: queue,
-            };
-
+        CBranchesBtoC::End(s) => {
             close_mpst(s)?;
             Ok(())
         },
-        CBranchesBtoC::Video(session_ba, session_bc, queue) => {
-            let s = SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                queue: queue,
-            };
-
+        CBranchesBtoC::Video(s) => {
             let (request, s) = recv_mpst_b_to_a(s)?;
             let s = send_mpst_b_to_a(request + 1, s);
             server(s)
@@ -135,23 +123,11 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_c!(s, {
-        CBranchesAtoC::End(session_ab, session_ac, queue) => {
-            let s = SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                queue: queue,
-            };
-
+        CBranchesAtoC::End(s) => {
             close_mpst(s)?;
             Ok(())
         },
-        CBranchesAtoC::Video(session_ab, session_ac, queue) => {
-            let s = SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                queue: queue,
-            };
-
+        CBranchesAtoC::Video(s) => {
             let (request, s) = recv_mpst_a_to_c(s)?;
             let s = send_mpst_a_to_b(request + 1, s);
             let (video, s) = recv_mpst_a_to_b(s)?;
@@ -205,7 +181,7 @@ fn run_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test whole usecase.
         {
-            let (thread_a, thread_b, thread_c) = run_processes(authenticator, server, client);
+            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
             assert!(thread_a.is_ok());
             assert!(thread_b.is_ok());

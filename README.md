@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
 [![Minimum rustc version](https://img.shields.io/badge/rustc-1.41+-lightgray.svg)](https://github.com/rust-random/rand#rust-version-requirements)
+[![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
+
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for three participants. It relies on [sesh](https://github.com/wenkokke/sesh).
 An other library is coming soon to extend to any number of participants.

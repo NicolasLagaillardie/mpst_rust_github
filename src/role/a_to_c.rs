@@ -2,6 +2,8 @@ use crossbeam_channel::{bounded, Sender};
 use role::c_to_a::RoleCtoA;
 use role::Role;
 
+use std::fmt;
+
 /// Gives the order to the `SessionMpst` related to A to execute its `session` field with C.
 ///
 /// This `struct` should only be used in the `queue` field of the `SessionMpst` related to A.
@@ -14,15 +16,28 @@ impl<R: Role> Role for RoleAtoC<R> {
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
-        let (sender, _) = bounded::<R>(1);
+        let (sender_normal, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
-        return (
+        (
             RoleAtoC {
                 sender: sender_dual,
             },
-            RoleCtoA { sender: sender },
-        );
+            RoleCtoA {
+                sender: sender_normal,
+            },
+        )
+    }
+
+    #[doc(hidden)]
+    fn head() -> String {
+        String::from("RoleAtoC")
+    }
+}
+
+impl<R: Role> fmt::Display for RoleAtoC<R> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RoleAtoC")
     }
 }
 
