@@ -4,8 +4,8 @@ extern crate rand;
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{cancel, End, Recv, Send, Session};
-use mpstthree::role::Role;
 use mpstthree::fork_mpst;
+use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;

@@ -1,3 +1,5 @@
+//#[macro_use]
+// extern crate downcast_rs;
 extern crate crossbeam_channel;
 extern crate either;
 

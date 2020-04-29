@@ -12,8 +12,10 @@ pub mod c_to_all;
 pub mod c_to_b;
 pub mod end;
 use std::marker;
+// use downcast_rs::Downcast;
 
 /// Trait for session types. Provides duality.
+// pub trait Role: marker::Sized + marker::Send + Downcast {
 pub trait Role: marker::Sized + marker::Send {
     /// The Role type dual to `Self`.
     type Dual: Role<Dual = Self>;

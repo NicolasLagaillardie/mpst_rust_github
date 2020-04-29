@@ -35,22 +35,22 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = Se
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_a_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    S5: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    R4: Role + 'static,
-    R5: Role + 'static,
-    R6: Role + 'static,
+    S0: Session + 'a,
+    S1: Session + 'a,
+    S2: Session + 'a,
+    S3: Session + 'a,
+    S4: Session + 'a,
+    S5: Session + 'a,
+    R1: Role + 'a,
+    R2: Role + 'a,
+    R3: Role + 'a,
+    R4: Role + 'a,
+    R5: Role + 'a,
+    R6: Role + 'a,
 {
     let (session_ab, session_ba) = S2::new();
     let (session_ac, session_ca) = S3::new();
@@ -95,22 +95,22 @@ where
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_a_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    S5: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    R4: Role + 'static,
-    R5: Role + 'static,
-    R6: Role + 'static,
+    S0: Session + 'a,
+    S1: Session + 'a,
+    S2: Session + 'a,
+    S3: Session + 'a,
+    S4: Session + 'a,
+    S5: Session + 'a,
+    R1: Role + 'a,
+    R2: Role + 'a,
+    R3: Role + 'a,
+    R4: Role + 'a,
+    R5: Role + 'a,
+    R6: Role + 'a,
 {
     let (session_ab, session_ba) = S4::new();
     let (session_ac, session_ca) = S5::new();
@@ -155,22 +155,22 @@ where
 /// B has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_b_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    S5: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    R4: Role + 'static,
-    R5: Role + 'static,
-    R6: Role + 'static,
+    S0: Session + 'a,
+    S1: Session + 'a,
+    S2: Session + 'a,
+    S3: Session + 'a,
+    S4: Session + 'a,
+    S5: Session + 'a,
+    R1: Role + 'a,
+    R2: Role + 'a,
+    R3: Role + 'a,
+    R4: Role + 'a,
+    R5: Role + 'a,
+    R6: Role + 'a,
 {
     let (session_ba, session_ab) = S2::new();
     let (session_bc, session_cb) = S3::new();
@@ -215,22 +215,22 @@ where
 /// B has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_b_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    S5: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    R4: Role + 'static,
-    R5: Role + 'static,
-    R6: Role + 'static,
+    S0: Session + 'a,
+    S1: Session + 'a,
+    S2: Session + 'a,
+    S3: Session + 'a,
+    S4: Session + 'a,
+    S5: Session + 'a,
+    R1: Role + 'a,
+    R2: Role + 'a,
+    R3: Role + 'a,
+    R4: Role + 'a,
+    R5: Role + 'a,
+    R6: Role + 'a,
 {
     let (session_ba, session_ab) = S4::new();
     let (session_bc, session_cb) = S5::new();
@@ -275,22 +275,22 @@ where
 /// C has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_c_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S2, S3, R5>
 where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    S5: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    R4: Role + 'static,
-    R5: Role + 'static,
-    R6: Role + 'static,
+    S0: Session + 'a,
+    S1: Session + 'a,
+    S2: Session + 'a,
+    S3: Session + 'a,
+    S4: Session + 'a,
+    S5: Session + 'a,
+    R1: Role + 'a,
+    R2: Role + 'a,
+    R3: Role + 'a,
+    R4: Role + 'a,
+    R5: Role + 'a,
+    R6: Role + 'a,
 {
     let (session_ca, session_ac) = S2::new();
     let (session_cb, session_bc) = S3::new();
@@ -335,22 +335,22 @@ where
 /// C has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_c_to_all<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
+pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
 ) -> SessionMpst<S4, S5, R6>
 where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    S5: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    R4: Role + 'static,
-    R5: Role + 'static,
-    R6: Role + 'static,
+    S0: Session + 'a,
+    S1: Session + 'a,
+    S2: Session + 'a,
+    S3: Session + 'a,
+    S4: Session + 'a,
+    S5: Session + 'a,
+    R1: Role + 'a,
+    R2: Role + 'a,
+    R3: Role + 'a,
+    R4: Role + 'a,
+    R5: Role + 'a,
+    R6: Role + 'a,
 {
     let (session_ca, session_ac) = S4::new();
     let (session_cb, session_bc) = S5::new();

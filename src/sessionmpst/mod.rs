@@ -6,6 +6,8 @@ use role::Role;
 /// This `struct` is the main one used in this library.
 /// Each process is linked to the others with one `Session`,
 /// and the order of the operations is given by the queue composed of `Role`.
+#[must_use]
+#[derive(Debug)]
 pub struct SessionMpst<S1: Session, S2: Session, R: Role> {
     pub session1: S1,
     pub session2: S2,
