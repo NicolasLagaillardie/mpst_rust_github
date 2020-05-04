@@ -1,7 +1,7 @@
 extern crate mpstthree;
 
 use mpstthree::binary::{End, Recv, Send, Session};
-use mpstthree::checking::checking::checker;
+use mpstthree::checking::checker;
 use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::role::a_to_b::RoleAtoB;
