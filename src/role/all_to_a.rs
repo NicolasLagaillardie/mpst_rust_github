@@ -2,11 +2,10 @@ use crossbeam_channel::{bounded, Sender};
 use role::a_to_all::RoleAtoAll;
 use role::Role;
 
-use std::fmt;
-
 /// The required `Dual` of `RoleAtoAll`.
 ///
 /// It is never used in our current functions, but may be in the future.
+#[derive(Debug)]
 pub struct RoleAlltoA<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
@@ -37,12 +36,6 @@ impl<R1: Role, R2: Role> Role for RoleAlltoA<R1, R2> {
     #[doc(hidden)]
     fn head() -> String {
         String::from("RoleAlltoA")
-    }
-}
-
-impl<R1: Role, R2: Role> fmt::Display for RoleAlltoA<R1, R2> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RoleAlltoA")
     }
 }
 

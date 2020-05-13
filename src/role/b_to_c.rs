@@ -2,11 +2,10 @@ use crossbeam_channel::{bounded, Sender};
 use role::c_to_b::RoleCtoB;
 use role::Role;
 
-use std::fmt;
-
 /// Gives the order to the `SessionMpst` related to B to execute its `session` field with C.
 ///
 /// This `struct` should only be used in the `queue` field of the `SessionMpst` related to B.
+#[derive(Debug)]
 pub struct RoleBtoC<R: Role> {
     pub sender: Sender<R::Dual>,
 }
@@ -32,12 +31,6 @@ impl<R: Role> Role for RoleBtoC<R> {
     #[doc(hidden)]
     fn head() -> String {
         String::from("RoleBtoC")
-    }
-}
-
-impl<R: Role> fmt::Display for RoleBtoC<R> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RoleBtoC")
     }
 }
 

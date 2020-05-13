@@ -1,3 +1,5 @@
+//#![allow(clippy::mpst_three)]
+
 extern crate mpstthree;
 
 use std::boxed::Box;

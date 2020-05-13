@@ -1,13 +1,12 @@
-// use binary::{recv, send, End, Recv, Send, Session};
-use binary::Session;
+use binary::{recv, send, End, Recv, Send, Session};
 use role::Role;
 use sessionmpst::SessionMpst;
 
 use std::any::type_name;
-// use std::any::Any;
+use std::any::Any;
 use std::collections::HashMap;
 use std::error::Error;
-// use std::marker;
+use std::marker;
 // use std::mem::transmute_copy;
 
 // use role::a_to_b::RoleAtoB;
@@ -41,15 +40,43 @@ pub fn checker<S1, S2, S3, R1, R2, R3>(
     s3: SessionMpst<S3, <S2 as Session>::Dual, R3>,
 ) -> Result<(), Box<dyn Error>>
 where
-    S1: Session,
-    S2: Session,
-    S3: Session,
-    R1: Role,
-    R2: Role,
-    R3: Role,
+    S1: Session + 'static + std::fmt::Debug,
+    S2: Session + 'static + std::fmt::Debug,
+    S3: Session + 'static + std::fmt::Debug,
+    R1: Role + 'static + std::fmt::Debug,
+    R2: Role + 'static + std::fmt::Debug,
+    R3: Role + 'static + std::fmt::Debug,
 {
     let mut result = HashMap::new();
     //let mut seen: &HashMap<String, String> = HashMap::new();
+
+    let (channel_ab, channel_ba) = S1::new();
+    let (channel_ca, channel_ac) = S3::new();
+    let (channel_bc, channel_cb) = S2::new();
+
+    let (role_a, _) = R1::new();
+    let (role_b, _) = R2::new();
+    let (role_c, _) = R3::new();
+
+    // let a = SessionMpst {
+    //     session1: channel_ab,
+    //     session2: channel_ac,
+    //     stack: role_a,
+    // };
+    // let b = SessionMpst {
+    //     session1: channel_ba,
+    //     session2: channel_bc,
+    //     stack: role_b,
+    // };
+    // let c = SessionMpst {
+    //     session1: channel_ca,
+    //     session2: channel_cb,
+    //     stack: role_c,
+    // };
+
+    println!("role_a: {:?}", role_a);
+    println!("role_b: {:?}", role_b);
+    println!("role_c: {:?}", role_c);
 
     let result_1 = checker_aux(s1)?;
     let result_2 = checker_aux(s2)?;
@@ -79,11 +106,19 @@ where
 //     transmute_copy::<SessionMpst<S1, S2, R1>, SessionMpst<Send<T, S3>, S4, R2> >(&s)
 // }
 
+fn is_string(s: &dyn Any) {
+    if let Some(_test) = s.downcast_ref::<End>() {
+        println!("Cool");
+    } else {
+        println!("Bad");
+    }
+}
+
 fn checker_aux<S1, S2, R>(s: SessionMpst<S1, S2, R>) -> Result<String, Box<dyn Error>>
 where
-    S1: Session,
-    S2: Session,
-    R: Role,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
 {
     let head = R::head();
 
@@ -91,76 +126,76 @@ where
 
     println!("Type: {}", parsed);
 
+    is_string(&s);
+
     if head.contains("toAll") {
         let (_sender, _receiver) = get_name(head);
 
         Ok(String::from(""))
+    } else if head.as_str() != "RoleEnd" {
+        let (sender, receiver) = get_name(head);
+
+        let result = match sender.as_str() {
+            "A" => match receiver.as_str() {
+                "B" => match S1::head().as_str() {
+                    "Send" => {
+                        //let s = try!(send_mpst_a_to_b(0, s));
+
+                        // let new_session = send(0, s.session1);
+                        // let new_queue = next_a_to_b(s.queue);
+
+                        // format!("{}!{}.{}", sender, receiver, checker_aux(s)?)
+
+                        String::from("Send")
+                    }
+                    "Recv" => String::from("Recv"),
+                    "End" => String::from("End"),
+                    _ => panic!("Wrong session, not recognized"),
+                },
+                "C" => match S2::head().as_str() {
+                    "Send" => String::from("Send"),
+                    "Recv" => String::from("Recv"),
+                    "End" => String::from("End"),
+                    _ => panic!("Wrong session, not recognized"),
+                },
+                _ => panic!("Wrong receiver, not recognized"),
+            },
+            "B" => match receiver.as_str() {
+                "A" => match S1::head().as_str() {
+                    "Send" => String::from("Send"),
+                    "Recv" => String::from("Recv"),
+                    "End" => String::from("End"),
+                    _ => panic!("Wrong session, not recognized"),
+                },
+                "C" => match S2::head().as_str() {
+                    "Send" => String::from("Send"),
+                    "Recv" => String::from("Recv"),
+                    "End" => String::from("End"),
+                    _ => panic!("Wrong session, not recognized"),
+                },
+                _ => panic!("Wrong receiver, not recognized"),
+            },
+            "C" => match receiver.as_str() {
+                "A" => match S1::head().as_str() {
+                    "Send" => String::from("Send"),
+                    "Recv" => String::from("Recv"),
+                    "End" => String::from("End"),
+                    _ => panic!("Wrong session, not recognized"),
+                },
+                "B" => match S2::head().as_str() {
+                    "Send" => String::from("Send"),
+                    "Recv" => String::from("Recv"),
+                    "End" => String::from("End"),
+                    _ => panic!("Wrong session, not recognized"),
+                },
+                _ => panic!("Wrong receiver, not recognized"),
+            },
+            _ => panic!("Wrong sender, not recognized"),
+        };
+
+        Ok(result)
     } else {
-        if head.as_str() != "RoleEnd" {
-            let (sender, receiver) = get_name(head);
-
-            let result = match sender.as_str() {
-                "A" => match receiver.as_str() {
-                    "B" => match S1::head().as_str() {
-                        "Send" => {
-                            //let s = try!(send_mpst_a_to_b(0, s));
-
-                            // let new_session = send(0, s.session1);
-                            // let new_queue = next_a_to_b(s.queue);
-
-                            // format!("{}!{}.{}", sender, receiver, checker_aux(s)?)
-
-                            String::from("Send")
-                        }
-                        "Recv" => String::from("Recv"),
-                        "End" => String::from("End"),
-                        _ => panic!("Wrong session, not recognized"),
-                    },
-                    "C" => match S2::head().as_str() {
-                        "Send" => String::from("Send"),
-                        "Recv" => String::from("Recv"),
-                        "End" => String::from("End"),
-                        _ => panic!("Wrong session, not recognized"),
-                    },
-                    _ => panic!("Wrong receiver, not recognized"),
-                },
-                "B" => match receiver.as_str() {
-                    "A" => match S1::head().as_str() {
-                        "Send" => String::from("Send"),
-                        "Recv" => String::from("Recv"),
-                        "End" => String::from("End"),
-                        _ => panic!("Wrong session, not recognized"),
-                    },
-                    "C" => match S2::head().as_str() {
-                        "Send" => String::from("Send"),
-                        "Recv" => String::from("Recv"),
-                        "End" => String::from("End"),
-                        _ => panic!("Wrong session, not recognized"),
-                    },
-                    _ => panic!("Wrong receiver, not recognized"),
-                },
-                "C" => match receiver.as_str() {
-                    "A" => match S1::head().as_str() {
-                        "Send" => String::from("Send"),
-                        "Recv" => String::from("Recv"),
-                        "End" => String::from("End"),
-                        _ => panic!("Wrong session, not recognized"),
-                    },
-                    "B" => match S2::head().as_str() {
-                        "Send" => String::from("Send"),
-                        "Recv" => String::from("Recv"),
-                        "End" => String::from("End"),
-                        _ => panic!("Wrong session, not recognized"),
-                    },
-                    _ => panic!("Wrong receiver, not recognized"),
-                },
-                _ => panic!("Wrong sender, not recognized"),
-            };
-
-            Ok(result)
-        } else {
-            Ok(String::from(""))
-        }
+        Ok(String::from(""))
     }
 }
 

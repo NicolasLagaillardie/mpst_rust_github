@@ -7,7 +7,6 @@ use std::marker;
 use std::mem;
 use std::panic;
 use std::thread::{spawn, JoinHandle};
-// use downcast_rs::Downcast;
 
 /// Send `T`, then continue as `S`.    
 #[must_use]

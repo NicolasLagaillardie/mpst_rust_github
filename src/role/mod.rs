@@ -31,3 +31,14 @@ pub trait Role: marker::Sized + marker::Send {
     #[doc(hidden)]
     fn head() -> String;
 }
+
+//For forcing roles
+// pub trait RoleA: Role {}
+
+// pub trait RoleB: Role {}
+
+// pub trait RoleC: Role {}
+
+// pub trait RoleAll: Role {}
+
+// pub trait RoleEnd: Role {}
