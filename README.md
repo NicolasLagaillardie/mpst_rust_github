@@ -186,6 +186,7 @@ We use [SemVer](http://semver.org/) for versioning.
 
 * **Nicolas Lagaillardie** - *Initial work* - [NicolasLagaillardie](https://github.com/NicolasLagaillardie)
 * **Rumyana Neykova** - *Initial work* - [rumineykova](https://github.com/rumineykova)
+* **Nobuko Yoshida** - *Initial work* - [NobukoYoshida](https://github.com/NobukoYoshida)
 
 See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_rust_github/graphs/contributors) who participated in this project.
 

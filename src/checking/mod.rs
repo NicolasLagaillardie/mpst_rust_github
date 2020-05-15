@@ -1,4 +1,5 @@
-use binary::{recv, send, End, Recv, Send, Session};
+// use binary::{recv, send, End, Recv, Send, Session};
+use binary::{End, Session};
 use role::Role;
 use sessionmpst::SessionMpst;
 
@@ -6,7 +7,7 @@ use std::any::type_name;
 use std::any::Any;
 use std::collections::HashMap;
 use std::error::Error;
-use std::marker;
+// use std::marker;
 // use std::mem::transmute_copy;
 
 // use role::a_to_b::RoleAtoB;
@@ -50,13 +51,13 @@ where
     let mut result = HashMap::new();
     //let mut seen: &HashMap<String, String> = HashMap::new();
 
-    let (channel_ab, channel_ba) = S1::new();
-    let (channel_ca, channel_ac) = S3::new();
-    let (channel_bc, channel_cb) = S2::new();
+    // let (channel_ab, channel_ba) = S1::new();
+    // let (channel_ca, channel_ac) = S3::new();
+    // let (channel_bc, channel_cb) = S2::new();
 
-    let (role_a, _) = R1::new();
-    let (role_b, _) = R2::new();
-    let (role_c, _) = R3::new();
+    // let (role_a, _) = R1::new();
+    // let (role_b, _) = R2::new();
+    // let (role_c, _) = R3::new();
 
     // let a = SessionMpst {
     //     session1: channel_ab,
@@ -74,9 +75,9 @@ where
     //     stack: role_c,
     // };
 
-    println!("role_a: {:?}", role_a);
-    println!("role_b: {:?}", role_b);
-    println!("role_c: {:?}", role_c);
+    // println!("role_a: {:?}", role_a);
+    // println!("role_b: {:?}", role_b);
+    // println!("role_c: {:?}", role_c);
 
     let result_1 = checker_aux(s1)?;
     let result_2 = checker_aux(s2)?;
