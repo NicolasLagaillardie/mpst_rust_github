@@ -29,7 +29,10 @@ pub trait Role: marker::Sized + marker::Send {
     fn new() -> (Self, Self::Dual);
 
     #[doc(hidden)]
-    fn head() -> String;
+    fn head_str() -> String;
+
+    #[doc(hidden)]
+    fn tail_str() -> String;
 }
 
 pub trait RoleA: marker::Sized + marker::Send {
@@ -45,7 +48,10 @@ pub trait RoleA: marker::Sized + marker::Send {
     fn new() -> (Self, Self::Dual);
 
     #[doc(hidden)]
-    fn head() -> String;
+    fn head_str() -> String;
+
+    #[doc(hidden)]
+    fn tail_str() -> String;
 }
 
 pub trait RoleB: marker::Sized + marker::Send {
@@ -61,7 +67,10 @@ pub trait RoleB: marker::Sized + marker::Send {
     fn new() -> (Self, Self::Dual);
 
     #[doc(hidden)]
-    fn head() -> String;
+    fn head_str() -> String;
+
+    #[doc(hidden)]
+    fn tail_str() -> String;
 }
 
 pub trait RoleC: marker::Sized + marker::Send {
@@ -77,7 +86,10 @@ pub trait RoleC: marker::Sized + marker::Send {
     fn new() -> (Self, Self::Dual);
 
     #[doc(hidden)]
-    fn head() -> String;
+    fn head_str() -> String;
+
+    #[doc(hidden)]
+    fn tail_str() -> String;
 }
 
 // impl<R: RoleA> Role for R {
@@ -99,7 +111,7 @@ pub trait RoleC: marker::Sized + marker::Send {
 //     }
 
 //     #[doc(hidden)]
-//     fn head() -> String {
+//     fn head_str() -> String {
 //         String::from("RoleA")
 //     }
 // }

@@ -44,6 +44,10 @@ use mpstthree::offer_mpst_b_to_c;
 /// Authenticator = A
 /// Server = B
 
+/// A: A?C.A!C.( A?C.A!B.A?B.A!C.0 & 0 )
+/// B: ( B?A.B!A.0 & 0 )
+/// C: C!A.C?A.( C!A.C?A.0 + 0 )
+
 type AtoCClose = End;
 type AtoBClose = End;
 type AtoBVideo<N> = Send<N, Recv<N, End>>;

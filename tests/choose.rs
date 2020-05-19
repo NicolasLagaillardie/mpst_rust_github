@@ -28,6 +28,10 @@ use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
+/// A: (A?B.0 + A?B.0 )
+/// B: (B!A.0 + B!A.0 )
+/// C: (0 + 0 )
+
 /// Test a simple storage server, implemented using binary choice.
 /// Simple types
 type AtoBNeg<N> = Recv<N, End>;

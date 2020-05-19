@@ -40,7 +40,22 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
-        format!("{} + {}", S1::head(), S2::head())
+    fn head_str() -> String {
+        format!(
+            "{} + {} + {}",
+            S1::head_str(),
+            S2::head_str(),
+            R::head_str()
+        )
+    }
+
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        format!(
+            "{} + {} + {}",
+            S1::tail_str(),
+            S2::tail_str(),
+            R::tail_str()
+        )
     }
 }

@@ -29,7 +29,12 @@ impl Role for RoleEnd {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("RoleEnd")
+    }
+
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        String::from("")
     }
 }

@@ -1,41 +1,18 @@
 // use binary::{recv, send, End, Recv, Send, Session};
-use binary::{End, Session};
+use binary::Session;
 use role::Role;
 use sessionmpst::SessionMpst;
 
 use std::any::type_name;
-use std::any::Any;
+use std::cmp;
 use std::collections::HashMap;
 use std::error::Error;
-// use std::marker;
-// use std::mem::transmute_copy;
-
-// use role::a_to_b::RoleAtoB;
-
-// use role::a_to_b::{next_a_to_b, RoleAtoB};
-// use role::a_to_c::{next_a_to_c, RoleAtoC};
-// use role::b_to_a::{next_b_to_a, RoleBtoA};
-// use role::b_to_c::{next_b_to_c, RoleBtoC};
-// use role::c_to_a::{next_c_to_a, RoleCtoA};
-// use role::c_to_b::{next_c_to_b, RoleCtoB};
-// use role::end::RoleEnd;
-
-// use functionmpst::recv::recv_mpst_a_to_c;
-// use functionmpst::recv::recv_mpst_b_to_a;
-// use functionmpst::recv::recv_mpst_c_to_b;
-
-// use functionmpst::send::send_mpst_a_to_b;
-// use functionmpst::send::send_mpst_b_to_c;
-// use functionmpst::send::send_mpst_c_to_a;
 
 /// Displays the local endpoints of each roles.
 /// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
 ///
 /// Returns unit if everything wen right.
 pub fn checker<S1, S2, S3, R1, R2, R3>(
-    // s1: *mut SessionMpst<S1, <S3 as Session>::Dual, R1>,
-    // s2: *mut SessionMpst<<S1 as Session>::Dual, S2, R2>,
-    // s3: *mut SessionMpst<S3, <S2 as Session>::Dual, R3>,
     s1: SessionMpst<S1, <S3 as Session>::Dual, R1>,
     s2: SessionMpst<<S1 as Session>::Dual, S2, R2>,
     s3: SessionMpst<S3, <S2 as Session>::Dual, R3>,
@@ -79,9 +56,25 @@ where
     // println!("role_b: {:?}", role_b);
     // println!("role_c: {:?}", role_c);
 
-    let result_1 = checker_aux(s1)?;
-    let result_2 = checker_aux(s2)?;
-    let result_3 = checker_aux(s3)?;
+    println!("SessionMpst A : {}", parse_type(type_of(&s1)));
+    println!("SessionMpst B : {}", parse_type(type_of(&s2)));
+    println!("SessionMpst C : {}", parse_type(type_of(&s3)));
+
+    let result_1 = checker_aux(
+        &parse_type(type_of(&s1.session1)),
+        &parse_type(type_of(&s1.session2)),
+        &parse_type(type_of(&s1.stack)),
+    )?;
+    let result_2 = checker_aux(
+        &parse_type(type_of(&s2.session1)),
+        &parse_type(type_of(&s2.session2)),
+        &parse_type(type_of(&s2.stack)),
+    )?;
+    let result_3 = checker_aux(
+        &parse_type(type_of(&s3.session1)),
+        &parse_type(type_of(&s3.session2)),
+        &parse_type(type_of(&s3.stack)),
+    )?;
 
     println!("result_1: {}", result_1);
     println!("result_2: {}", result_2);
@@ -94,109 +87,295 @@ where
     Ok(())
 }
 
-// unsafe fn send_a_to_b<T, S1, S2, S3, S4, R1, R2>(s: SessionMpst<S1, S2, R1>) -> SessionMpst<Send<T, S3>, S4, R2>
-// where
-//     T: marker::Send,
-//     S1: Session,
-//     S2: Session,
-//     S3: Session,
-//     S4: Session,
-//     R1: Role,
-//     R2: Role,
-// {
-//     transmute_copy::<SessionMpst<S1, S2, R1>, SessionMpst<Send<T, S3>, S4, R2> >(&s)
-// }
+fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Box<dyn Error>> {
+    let head_stack = get_head(&stack);
+    let head_session1 = get_head(&session1);
+    let head_session2 = get_head(&session2);
 
-fn is_string(s: &dyn Any) {
-    if let Some(_test) = s.downcast_ref::<End>() {
-        println!("Cool");
-    } else {
-        println!("Bad");
-    }
-}
+    println!("Session 1 : {}", &session1);
+    println!("Session 2 : {}", &session2);
+    println!("Stack : {}", &stack);
+    println!("Head 1 : {}", get_head(&session1));
+    println!("Head 2 : {}", get_head(&session2));
+    println!("Head stack : {}", get_head(&stack));
+    println!("Payload 1 : {}", get_head_payload(&session1));
+    println!("Payload 2 : {}", get_head_payload(&session2));
 
-fn checker_aux<S1, S2, R>(s: SessionMpst<S1, S2, R>) -> Result<String, Box<dyn Error>>
-where
-    S1: Session + 'static,
-    S2: Session + 'static,
-    R: Role + 'static,
-{
-    let head = R::head();
-
-    let parsed = parse_type(type_of(&s));
-
-    println!("Type: {}", parsed);
-
-    is_string(&s);
-
-    if head.contains("toAll") {
-        let (_sender, _receiver) = get_name(head);
-
-        Ok(String::from(""))
-    } else if head.as_str() != "RoleEnd" {
-        let (sender, receiver) = get_name(head);
+    if !head_stack.contains("RoleEnd") {
+        let (sender, receiver) = get_name(&head_stack);
 
         let result = match sender.as_str() {
             "A" => match receiver.as_str() {
-                "B" => match S1::head().as_str() {
-                    "Send" => {
-                        //let s = try!(send_mpst_a_to_b(0, s));
-
-                        // let new_session = send(0, s.session1);
-                        // let new_queue = next_a_to_b(s.queue);
-
-                        // format!("{}!{}.{}", sender, receiver, checker_aux(s)?)
-
-                        String::from("Send")
+                "B" => match head_session1.as_str() {
+                    "Send" => format!(
+                        "{}!{}.{}",
+                        sender,
+                        receiver,
+                        checker_aux(&get_tail(&session1), session2, &get_tail(&stack))?
+                    ),
+                    "Recv" => {
+                        if get_head_payload(&session1).contains("Either") {
+                            let branching: [String; 6] =
+                                divide_either(&get_head_payload(&session1));
+                            format!(
+                                "( {} & {} )",
+                                checker_aux(&branching[0], &branching[1], &branching[2])?,
+                                checker_aux(&branching[3], &branching[4], &branching[5])?,
+                            )
+                        } else {
+                            format!(
+                                "{}?{}.{}",
+                                sender,
+                                receiver,
+                                checker_aux(&get_tail(&session1), session2, &get_tail(&stack))?
+                            )
+                        }
                     }
-                    "Recv" => String::from("Recv"),
-                    "End" => String::from("End"),
-                    _ => panic!("Wrong session, not recognized"),
+                    _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
-                "C" => match S2::head().as_str() {
-                    "Send" => String::from("Send"),
-                    "Recv" => String::from("Recv"),
-                    "End" => String::from("End"),
-                    _ => panic!("Wrong session, not recognized"),
+                "C" => match head_session2.as_str() {
+                    "Send" => format!(
+                        "{}!{}.{}",
+                        sender,
+                        receiver,
+                        checker_aux(session1, &get_tail(&session2), &get_tail(&stack))?
+                    ),
+                    "Recv" => {
+                        if get_head_payload(&session2).contains("Either") {
+                            let branching: [String; 6] =
+                                divide_either(&get_head_payload(&session2));
+                            format!(
+                                "( {} & {} )",
+                                checker_aux(&branching[0], &branching[1], &branching[2])?,
+                                checker_aux(&branching[3], &branching[4], &branching[5])?,
+                            )
+                        } else {
+                            format!(
+                                "{}?{}.{}",
+                                sender,
+                                receiver,
+                                checker_aux(session1, &get_tail(&session2), &get_tail(&stack))?
+                            )
+                        }
+                    }
+                    _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
+                "All" => {
+                    if get_head_payload(&session1).contains("Either")
+                        && get_head_payload(&session2).contains("Either")
+                    {
+                        let branching_1: [String; 6] = divide_either(&get_head_payload(&session1));
+                        let branching_2: [String; 6] = divide_either(&get_head_payload(&session2));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        println!(
+                            "Choices: {:?} + {} / {:?} + {}",
+                            &branching_1, &tails[0], &branching_2, &tails[1]
+                        );
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&branching_1[0]),
+                                &get_dual(&branching_2[0]),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&branching_1[3]),
+                                &get_dual(&branching_2[3]),
+                                &tails[1]
+                            )?,
+                        )
+                    } else {
+                        panic!(
+                            "Wrong payloads, not recognized: {:?} , {:?} and {:?}",
+                            divide_either(&get_head_payload(&session1)),
+                            divide_either(&get_head_payload(&session2)),
+                            get_two_tails(&stack)
+                        );
+                    }
+                }
                 _ => panic!("Wrong receiver, not recognized"),
             },
             "B" => match receiver.as_str() {
-                "A" => match S1::head().as_str() {
-                    "Send" => String::from("Send"),
-                    "Recv" => String::from("Recv"),
-                    "End" => String::from("End"),
-                    _ => panic!("Wrong session, not recognized"),
+                "A" => match head_session1.as_str() {
+                    "Send" => format!(
+                        "{}!{}.{}",
+                        sender,
+                        receiver,
+                        checker_aux(&get_tail(&session1), session2, &get_tail(&stack))?
+                    ),
+                    "Recv" => {
+                        if get_head_payload(&session1).contains("Either") {
+                            let branching: [String; 6] =
+                                divide_either(&get_head_payload(&session1));
+                            format!(
+                                "( {} & {} )",
+                                checker_aux(&branching[0], &branching[1], &branching[2])?,
+                                checker_aux(&branching[3], &branching[4], &branching[5])?,
+                            )
+                        } else {
+                            format!(
+                                "{}?{}.{}",
+                                sender,
+                                receiver,
+                                checker_aux(&get_tail(&session1), session2, &get_tail(&stack))?
+                            )
+                        }
+                    }
+                    _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
-                "C" => match S2::head().as_str() {
-                    "Send" => String::from("Send"),
-                    "Recv" => String::from("Recv"),
-                    "End" => String::from("End"),
-                    _ => panic!("Wrong session, not recognized"),
+                "C" => match head_session2.as_str() {
+                    "Send" => format!(
+                        "{}!{}.{}",
+                        sender,
+                        receiver,
+                        checker_aux(session1, &get_tail(&session2), &get_tail(&stack))?
+                    ),
+                    "Recv" => {
+                        if get_head_payload(&session2).contains("Either") {
+                            let branching: [String; 6] =
+                                divide_either(&get_head_payload(&session2));
+                            format!(
+                                "( {} & {} )",
+                                checker_aux(&branching[0], &branching[1], &branching[2])?,
+                                checker_aux(&branching[3], &branching[4], &branching[5])?,
+                            )
+                        } else {
+                            format!(
+                                "{}?{}.{}",
+                                sender,
+                                receiver,
+                                checker_aux(session1, &get_tail(&session2), &get_tail(&stack))?
+                            )
+                        }
+                    }
+                    _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
+                "All" => {
+                    if get_head_payload(&session1).contains("Either")
+                        && get_head_payload(&session2).contains("Either")
+                    {
+                        let branching_1: [String; 6] = divide_either(&get_head_payload(&session1));
+                        let branching_2: [String; 6] = divide_either(&get_head_payload(&session2));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&branching_1[0]),
+                                &get_dual(&branching_2[1]),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&branching_1[3]),
+                                &get_dual(&branching_2[4]),
+                                &tails[1]
+                            )?,
+                        )
+                    } else {
+                        panic!(
+                            "Wrong payloads, not recognized: {:?} , {:?} and {:?}",
+                            divide_either(&get_head_payload(&session1)),
+                            divide_either(&get_head_payload(&session2)),
+                            get_two_tails(&stack)
+                        );
+                    }
+                }
                 _ => panic!("Wrong receiver, not recognized"),
             },
             "C" => match receiver.as_str() {
-                "A" => match S1::head().as_str() {
-                    "Send" => String::from("Send"),
-                    "Recv" => String::from("Recv"),
-                    "End" => String::from("End"),
-                    _ => panic!("Wrong session, not recognized"),
+                "A" => match head_session1.as_str() {
+                    "Send" => format!(
+                        "{}!{}.{}",
+                        sender,
+                        receiver,
+                        checker_aux(&get_tail(&session1), session2, &get_tail(&stack))?
+                    ),
+                    "Recv" => {
+                        if get_head_payload(&session1).contains("Either") {
+                            let branching: [String; 6] =
+                                divide_either(&get_head_payload(&session1));
+                            format!(
+                                "( {} & {} )",
+                                checker_aux(&branching[0], &branching[1], &branching[2])?,
+                                checker_aux(&branching[3], &branching[4], &branching[5])?,
+                            )
+                        } else {
+                            format!(
+                                "{}?{}.{}",
+                                sender,
+                                receiver,
+                                checker_aux(&get_tail(&session1), session2, &get_tail(&stack))?
+                            )
+                        }
+                    }
+                    _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
-                "B" => match S2::head().as_str() {
-                    "Send" => String::from("Send"),
-                    "Recv" => String::from("Recv"),
-                    "End" => String::from("End"),
-                    _ => panic!("Wrong session, not recognized"),
+                "B" => match head_session2.as_str() {
+                    "Send" => format!(
+                        "{}!{}.{}",
+                        sender,
+                        receiver,
+                        checker_aux(session1, &get_tail(&session2), &get_tail(&stack))?
+                    ),
+                    "Recv" => {
+                        if get_head_payload(&session2).contains("Either") {
+                            let branching: [String; 6] =
+                                divide_either(&get_head_payload(&session2));
+                            format!(
+                                "( {} & {} )",
+                                checker_aux(&branching[0], &branching[1], &branching[2])?,
+                                checker_aux(&branching[3], &branching[4], &branching[5])?,
+                            )
+                        } else {
+                            format!(
+                                "{}?{}.{}",
+                                sender,
+                                receiver,
+                                checker_aux(session1, &get_tail(&session2), &get_tail(&stack))?
+                            )
+                        }
+                    }
+                    _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
-                _ => panic!("Wrong receiver, not recognized"),
-            },
-            _ => panic!("Wrong sender, not recognized"),
-        };
+                "All" => {
+                    if get_head_payload(&session1).contains("Either")
+                        && get_head_payload(&session2).contains("Either")
+                    {
+                        let branching_1: [String; 6] = divide_either(&get_head_payload(&session1));
+                        let branching_2: [String; 6] = divide_either(&get_head_payload(&session2));
+                        let tails: [String; 2] = get_two_tails(&stack);
 
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&branching_1[1]),
+                                &get_dual(&branching_2[1]),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&branching_1[4]),
+                                &get_dual(&branching_2[4]),
+                                &tails[1]
+                            )?,
+                        )
+                    } else {
+                        panic!(
+                            "Wrong payloads, not recognized: {:?} , {:?} and {:?}",
+                            divide_either(&get_head_payload(&session1)),
+                            divide_either(&get_head_payload(&session2)),
+                            get_two_tails(&stack)
+                        );
+                    }
+                }
+                _ => panic!("Wrong receiver, not recognized: {}", receiver),
+            },
+            _ => panic!("Wrong sender, not recognized: {}", sender),
+        };
         Ok(result)
     } else {
-        Ok(String::from(""))
+        Ok(String::from("0"))
     }
 }
 
@@ -224,12 +403,11 @@ fn parse_type(s: &str) -> String {
     let result = &result.replace("role::end::", "");
     let result = &result.replace("either::", "");
     let result = &result.replace("checker::", "");
-
-    String::from(result)
+    result.chars().filter(|c| !c.is_whitespace()).collect()
 }
 
-fn get_name(head: String) -> (String, String) {
-    let (sender, receiver) = match head.as_str() {
+fn get_name(head: &str) -> (String, String) {
+    let (sender, receiver) = match head {
         "RoleAtoAll" => (String::from("A"), String::from("All")),
         "RoleBtoAll" => (String::from("B"), String::from("All")),
         "RoleCtoAll" => (String::from("C"), String::from("All")),
@@ -244,4 +422,132 @@ fn get_name(head: String) -> (String, String) {
     };
 
     (sender, receiver)
+}
+
+fn get_head(s: &str) -> String {
+    let mut result: Vec<&str> = s.split('<').collect();
+    if result[0] == "Either" {
+        return String::from(s);
+    }
+    result = result
+        .iter()
+        .map(|&x| {
+            if x.contains(',') {
+                let temp: Vec<&str> = x.split(',').collect();
+                temp[1]
+            } else {
+                x
+            }
+        })
+        .collect::<Vec<_>>();
+    String::from(result[0])
+}
+
+fn get_head_payload(s: &str) -> String {
+    String::from(&get_two_tails(s)[0])
+}
+
+fn get_two_tails(s: &str) -> [String; 2] {
+    let mut result: [String; 2] = Default::default();
+    let mut index = -1;
+    let mut index_session = 0;
+    for c in s.chars() {
+        match c {
+            ',' => {
+                if index <= 0 {
+                    index_session = index_session + 1;
+                } else if index >= 0 {
+                    result[index_session].push(c);
+                }
+            }
+            '<' => {
+                if index >= 0 {
+                    result[index_session].push(c);
+                }
+                index = index + 1;
+            }
+            '>' => {
+                if index >= 0 {
+                    result[index_session].push(c);
+                }
+                index = cmp::max(index - 1, 0);
+            }
+            _ => {
+                if index >= 0 {
+                    result[index_session].push(c);
+                }
+            }
+        }
+    }
+    result
+}
+
+fn divide_either(s: &str) -> [String; 6] {
+    let mut result: [String; 6] = Default::default();
+    let mut index = 0;
+    let mut index_session = 0;
+    let new_s = s.replace("Either<", "");
+    let new_s = &new_s.replace("SessionMpst<", "");
+    for c in new_s.chars() {
+        match c {
+            ',' => {
+                if index <= 0 {
+                    index_session = index_session + 1;
+                } else {
+                    result[index_session].push(c);
+                }
+            }
+            '<' => {
+                result[index_session].push(c);
+                index = index + 1;
+            }
+            '>' => {
+                if index >= 0 {
+                    result[index_session].push(c);
+                }
+                index = cmp::max(index - 1, 0);
+            }
+            _ => {
+                result[index_session].push(c);
+            }
+        }
+    }
+    result
+}
+
+fn get_tail(s: &str) -> String {
+    let result: Vec<&str> = s.split('<').collect();
+    String::from(result[1..].join("<"))
+}
+
+fn get_dual(s: &str) -> String {
+    // Switch Send / Recv
+    let result = &s.replace("Send<", "Revc<");
+    let result = &result.replace("Recv<", "Send<");
+    let result = &result.replace("Revc<", "Recv<");
+    // Switch RoleAtoB / RoleBtoA
+    let result = &result.replace("RoleAtoB", "RoleBtoX");
+    let result = &result.replace("RoleBtoA", "RoleAtoB");
+    let result = &result.replace("RoleBtoX", "RoleBtoA");
+    // Switch RoleAtoC / RoleCtoA
+    let result = &result.replace("RoleAtoC", "RoleCtoX");
+    let result = &result.replace("RoleCtoA", "RoleAtoC");
+    let result = &result.replace("RoleCtoX", "RoleCtoA");
+    // Switch RoleBtoC / RoleCtoB
+    let result = &result.replace("RoleCtoB", "RoleBtoX");
+    let result = &result.replace("RoleBtoC", "RoleCtoB");
+    let result = &result.replace("RoleBtoX", "RoleBtoC");
+    // Switch RoleAtoAll / RoleAlltoA
+    let result = &result.replace("RoleAtoAll", "RoleAlltoX");
+    let result = &result.replace("RoleAlltoA", "RoleAtoAll");
+    let result = &result.replace("RoleAlltoX", "RoleAlltoA");
+    // Switch RoleBtoAll / RoleAlltoB
+    let result = &result.replace("RoleBtoAll", "RoleAlltoX");
+    let result = &result.replace("RoleAlltoB", "RoleBtoAll");
+    let result = &result.replace("RoleAlltoX", "RoleAlltoB");
+    // Switch RoleCtoAll / RoleAlltoC
+    let result = &result.replace("RoleCtoAll", "RoleAlltoX");
+    let result = &result.replace("RoleAlltoC", "RoleCtoAll");
+    let result = &result.replace("RoleAlltoX", "RoleAlltoC");
+    String::from(result)
 }

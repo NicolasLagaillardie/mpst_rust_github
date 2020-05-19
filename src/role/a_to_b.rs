@@ -29,8 +29,13 @@ impl<R: Role> Role for RoleAtoB<R> {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("RoleAtoB")
+    }
+
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }
 

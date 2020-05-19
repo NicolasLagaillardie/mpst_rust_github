@@ -46,6 +46,10 @@ use mpstthree::functionmpst::OfferMpst;
 /// Authenticator = A
 /// Server = B
 
+/// A: A?C.A!C.μX.( 0 & A?C.A?C.A!B.A?B.A!C.X )
+/// B: μX.( 0 & B?A.B!A.X )
+/// C: C!A.C?A.μX.( 0 + C!A.C?A.X )
+
 type AtoCClose = End;
 type AtoBClose = End;
 type AtoCVideo<N> = Recv<N, Send<N, End>>;
