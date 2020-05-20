@@ -4,28 +4,30 @@ use role::Role;
 use sessionmpst::SessionMpst;
 
 use std::any::type_name;
-use std::cmp;
-use std::collections::HashMap;
+// use std::collections::HashMap;
 use std::error::Error;
 
 /// Displays the local endpoints of each roles.
 /// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
 ///
 /// Returns unit if everything wen right.
-pub fn checker<S1, S2, S3, R1, R2, R3>(
-    s1: SessionMpst<S1, <S3 as Session>::Dual, R1>,
-    s2: SessionMpst<<S1 as Session>::Dual, S2, R2>,
-    s3: SessionMpst<S3, <S2 as Session>::Dual, R3>,
-) -> Result<(), Box<dyn Error>>
+pub fn checker<S1, S2, S3, S4, S5, S6, R1, R2, R3>(
+    s1: SessionMpst<S1, S2, R1>,
+    s2: SessionMpst<S3, S4, R2>,
+    s3: SessionMpst<S5, S6, R3>,
+) -> Result<(String, String, String), Box<dyn Error>>
 where
-    S1: Session + 'static + std::fmt::Debug,
-    S2: Session + 'static + std::fmt::Debug,
-    S3: Session + 'static + std::fmt::Debug,
-    R1: Role + 'static + std::fmt::Debug,
-    R2: Role + 'static + std::fmt::Debug,
-    R3: Role + 'static + std::fmt::Debug,
+    S1: Session,
+    S2: Session,
+    S3: Session,
+    S4: Session,
+    S5: Session,
+    S6: Session,
+    R1: Role,
+    R2: Role,
+    R3: Role,
 {
-    let mut result = HashMap::new();
+    // let mut result = HashMap::new();
     //let mut seen: &HashMap<String, String> = HashMap::new();
 
     // let (channel_ab, channel_ba) = S1::new();
@@ -76,15 +78,19 @@ where
         &parse_type(type_of(&s3.stack)),
     )?;
 
-    println!("result_1: {}", result_1);
-    println!("result_2: {}", result_2);
-    println!("result_3: {}", result_3);
+    println!("result_1: {}", &result_1);
+    println!("result_2: {}", &result_2);
+    println!("result_3: {}", &result_3);
 
-    result.insert(String::from("A"), result_1);
-    result.insert(String::from("B"), result_2);
-    result.insert(String::from("C"), result_3);
+    // result.insert(String::from("A"), result_1);
+    // result.insert(String::from("B"), result_2);
+    // result.insert(String::from("C"), result_3);
 
-    Ok(())
+    Ok((
+        format!("A: {}", &result_1),
+        format!("B: {}", &result_2),
+        format!("C: {}", &result_3),
+    ))
 }
 
 fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Box<dyn Error>> {
@@ -131,6 +137,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
+                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
                 "C" => match head_session2.as_str() {
@@ -158,6 +165,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
+                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
                 "All" => {
@@ -186,12 +194,51 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                                 &tails[1]
                             )?,
                         )
+                    } else if get_head_payload(&session1).contains("Either") {
+                        let branching_1: [String; 6] = divide_either(&get_head_payload(&session1));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&branching_1[0]),
+                                &get_dual(&session2),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&branching_1[3]),
+                                &get_dual(&session2),
+                                &tails[1]
+                            )?,
+                        )
+                    } else if get_head_payload(&session2).contains("Either") {
+                        let branching_2: [String; 6] = divide_either(&get_head_payload(&session2));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&session1),
+                                &get_dual(&branching_2[0]),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&session1),
+                                &get_dual(&branching_2[3]),
+                                &tails[1]
+                            )?,
+                        )
                     } else {
                         panic!(
-                            "Wrong payloads, not recognized: {:?} , {:?} and {:?}",
+                            "Wrong payloads, not recognized: {:?} , {:?} and {:?} ( {:?} / {:?} ) for {:?} , {:?} and {:?}",
                             divide_either(&get_head_payload(&session1)),
                             divide_either(&get_head_payload(&session2)),
-                            get_two_tails(&stack)
+                            get_two_tails(&stack),
+                            &get_head_payload(&session1),
+                            &get_head_payload(&session2),
+                            &session1,
+                            &session2,
+                            &stack
                         );
                     }
                 }
@@ -223,6 +270,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
+                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
                 "C" => match head_session2.as_str() {
@@ -250,6 +298,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
+                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
                 "All" => {
@@ -273,12 +322,51 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                                 &tails[1]
                             )?,
                         )
+                    } else if get_head_payload(&session1).contains("Either") {
+                        let branching_1: [String; 6] = divide_either(&get_head_payload(&session1));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&branching_1[0]),
+                                &get_dual(&session2),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&branching_1[3]),
+                                &get_dual(&session2),
+                                &tails[1]
+                            )?,
+                        )
+                    } else if get_head_payload(&session2).contains("Either") {
+                        let branching_2: [String; 6] = divide_either(&get_head_payload(&session2));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&session1),
+                                &get_dual(&branching_2[1]),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&session1),
+                                &get_dual(&branching_2[4]),
+                                &tails[1]
+                            )?,
+                        )
                     } else {
                         panic!(
-                            "Wrong payloads, not recognized: {:?} , {:?} and {:?}",
+                            "Wrong payloads, not recognized: {:?} , {:?} and {:?} ( {:?} / {:?} ) for {:?} , {:?} and {:?}",
                             divide_either(&get_head_payload(&session1)),
                             divide_either(&get_head_payload(&session2)),
-                            get_two_tails(&stack)
+                            get_two_tails(&stack),
+                            &get_head_payload(&session1),
+                            &get_head_payload(&session2),
+                            &session1,
+                            &session2,
+                            &stack
                         );
                     }
                 }
@@ -310,6 +398,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
+                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
                 "B" => match head_session2.as_str() {
@@ -337,6 +426,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
+                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
                 "All" => {
@@ -360,12 +450,51 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                                 &tails[1]
                             )?,
                         )
+                    } else if get_head_payload(&session1).contains("Either") {
+                        let branching_1: [String; 6] = divide_either(&get_head_payload(&session1));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&branching_1[1]),
+                                &get_dual(&session2),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&branching_1[4]),
+                                &get_dual(&session2),
+                                &tails[1]
+                            )?,
+                        )
+                    } else if get_head_payload(&session2).contains("Either") {
+                        let branching_2: [String; 6] = divide_either(&get_head_payload(&session2));
+                        let tails: [String; 2] = get_two_tails(&stack);
+
+                        format!(
+                            "( {} + {} )",
+                            checker_aux(
+                                &get_dual(&session1),
+                                &get_dual(&branching_2[1]),
+                                &tails[0]
+                            )?,
+                            checker_aux(
+                                &get_dual(&session1),
+                                &get_dual(&branching_2[4]),
+                                &tails[1]
+                            )?,
+                        )
                     } else {
                         panic!(
-                            "Wrong payloads, not recognized: {:?} , {:?} and {:?}",
+                            "Wrong payloads, not recognized: {:?} , {:?} and {:?} ( {:?} / {:?} ) for {:?} , {:?} and {:?}",
                             divide_either(&get_head_payload(&session1)),
                             divide_either(&get_head_payload(&session2)),
-                            get_two_tails(&stack)
+                            get_two_tails(&stack),
+                            &get_head_payload(&session1),
+                            &get_head_payload(&session2),
+                            &session1,
+                            &session2,
+                            &stack
                         );
                     }
                 }
@@ -449,13 +578,17 @@ fn get_head_payload(s: &str) -> String {
 
 fn get_two_tails(s: &str) -> [String; 2] {
     let mut result: [String; 2] = Default::default();
+    if s == "End" {
+        result[1].push_str("End");
+        return result;
+    }
     let mut index = -1;
     let mut index_session = 0;
     for c in s.chars() {
         match c {
             ',' => {
-                if index <= 0 {
-                    index_session = index_session + 1;
+                if index <= 0 && result[index_session] != "" {
+                    index_session += 1;
                 } else if index >= 0 {
                     result[index_session].push(c);
                 }
@@ -464,13 +597,13 @@ fn get_two_tails(s: &str) -> [String; 2] {
                 if index >= 0 {
                     result[index_session].push(c);
                 }
-                index = index + 1;
+                index += 1;
             }
             '>' => {
                 if index >= 0 {
                     result[index_session].push(c);
                 }
-                index = cmp::max(index - 1, 0);
+                index -= 1;
             }
             _ => {
                 if index >= 0 {
@@ -479,45 +612,49 @@ fn get_two_tails(s: &str) -> [String; 2] {
             }
         }
     }
+    println!("Result get_two_tails: {:?} / {}", result, s);
     result
 }
 
 fn divide_either(s: &str) -> [String; 6] {
     let mut result: [String; 6] = Default::default();
-    let mut index = 0;
+    let mut index = -2;
     let mut index_session = 0;
-    let new_s = s.replace("Either<", "");
-    let new_s = &new_s.replace("SessionMpst<", "");
+    let new_s = s.replacen("Either", "", 1);
+    let new_s = &new_s.replace("SessionMpst", "");
     for c in new_s.chars() {
         match c {
             ',' => {
-                if index <= 0 {
-                    index_session = index_session + 1;
+                if index <= 0 && result[index_session] != "" {
+                    index_session += 1;
                 } else {
                     result[index_session].push(c);
                 }
             }
             '<' => {
-                result[index_session].push(c);
-                index = index + 1;
+                if index >= 0 {
+                    result[index_session].push(c);
+                }
+                index += 1;
             }
             '>' => {
                 if index >= 0 {
                     result[index_session].push(c);
                 }
-                index = cmp::max(index - 1, 0);
+                index -= 1;
             }
             _ => {
                 result[index_session].push(c);
             }
         }
     }
+    println!("Result divide_either: {:?} / {}", result, s);
     result
 }
 
 fn get_tail(s: &str) -> String {
     let result: Vec<&str> = s.split('<').collect();
-    String::from(result[1..].join("<"))
+    result[1..].join("<")
 }
 
 fn get_dual(s: &str) -> String {

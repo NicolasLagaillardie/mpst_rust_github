@@ -3,6 +3,8 @@ extern crate rand;
 
 use rand::{thread_rng, Rng};
 
+use mpstthree::checking::checker;
+
 use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::fork_mpst;
 use mpstthree::role::Role;
@@ -45,10 +47,6 @@ use mpstthree::functionmpst::OfferMpst;
 /// Client = C
 /// Authenticator = A
 /// Server = B
-
-/// A: A?C.A!C.μX.( 0 & A?C.A?C.A!B.A?B.A!C.X )
-/// B: μX.( 0 & B?A.B!A.X )
-/// C: C!A.C?A.μX.( 0 + C!A.C?A.X )
 
 type AtoCClose = End;
 type AtoBClose = End;
@@ -236,6 +234,22 @@ fn run_usecase() {
             assert!(thread_c.is_ok());
         }
 
+        Ok(())
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+
+            let (a, b, c) = checker(s1, s2, s3)?;
+
+            assert_eq!(a, "A: A?C.A!C.( A?C.A!B.A?B.A!C.0 & 0 )");
+            assert_eq!(b, "B: ( B?A.B!A.0 & 0 )");
+            assert_eq!(c, "C: C!A.C?A.( C!A.C?A.0 + 0 )");
+        }
         Ok(())
     }()
     .is_ok());

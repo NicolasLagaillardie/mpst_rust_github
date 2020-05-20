@@ -1,4 +1,5 @@
 extern crate mpstthree;
+use mpstthree::checking::checker;
 
 use std::boxed::Box;
 use std::error::Error;
@@ -28,9 +29,9 @@ use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
-/// A: (A?B.0 + A?B.0 )
-/// B: (B!A.0 + B!A.0 )
-/// C: (0 + 0 )
+/// A: ( A?B.0 + A?B.0 )
+/// B: ( B!A.0 + B!A.0 )
+/// C: ( 0 + 0 )
 
 /// Test a simple storage server, implemented using binary choice.
 /// Simple types
@@ -152,7 +153,7 @@ fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn simple_store_works() {
+fn simple_choice() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
@@ -180,6 +181,22 @@ fn simple_store_works() {
             assert!(thread_c.is_ok());
         }
 
+        Ok(())
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let (s1, _): (EndpointChoiceA<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointChoiceB<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointChoiceC, _) = SessionMpst::new();
+
+            let (a, b, c) = checker(s1, s2, s3)?;
+
+            assert_eq!(a, "A: ( A?B.0 & A?B.0 )");
+            assert_eq!(b, "B: ( B!A.0 + B!A.0 )");
+            assert_eq!(c, "C: ( 0 & 0 )");
+        }
         Ok(())
     }()
     .is_ok());

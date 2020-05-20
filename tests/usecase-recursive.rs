@@ -44,9 +44,9 @@ use mpstthree::offer_mpst_b_to_c;
 /// Authenticator = A
 /// Server = B
 
-/// A: A?C.A!C.( A?C.A!B.A?B.A!C.0 & 0 )
-/// B: ( B?A.B!A.0 & 0 )
-/// C: C!A.C?A.( C!A.C?A.0 + 0 )
+/// A: A?C.A!C.μX.( 0 & A?C.A?C.A!B.A?B.A!C.X )
+/// B: μX.( 0 & B?A.B!A.X )
+/// C: C!A.C?A.μX.( 0 + C!A.C?A.X )
 
 type AtoCClose = End;
 type AtoBClose = End;

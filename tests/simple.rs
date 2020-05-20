@@ -1,6 +1,5 @@
-//#![allow(clippy::mpst_three)]
-
 extern crate mpstthree;
+use mpstthree::checking::checker;
 
 use std::boxed::Box;
 use std::error::Error;
@@ -100,6 +99,22 @@ fn simple_triple_endpoints() {
             assert!(thread_a.is_ok());
             assert!(thread_b.is_ok());
             assert!(thread_c.is_ok());
+        }
+        Ok(())
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
+
+            let (a, b, c) = checker(s1, s2, s3)?;
+
+            assert_eq!(a, "A: A!B.A?C.0");
+            assert_eq!(b, "B: B?A.B!C.0");
+            assert_eq!(c, "C: C!A.C?B.0");
         }
         Ok(())
     }()

@@ -2,68 +2,82 @@ extern crate mpstthree;
 use mpstthree::checking::checker;
 
 use mpstthree::binary::{End, Recv, Send, Session};
-use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
+
+use std::marker;
 
 use mpstthree::role::a_to_b::RoleAtoB;
 use mpstthree::role::a_to_c::RoleAtoC;
 use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::b_to_all::RoleBtoAll;
+use mpstthree::role::b_to_c::RoleBtoC;
 use mpstthree::role::c_to_a::RoleCtoA;
 use mpstthree::role::c_to_b::RoleCtoB;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::functionmpst::ChooseMpst;
-use mpstthree::functionmpst::OfferMpst;
-
-/// Test a simple storage server, implemented using binary choice.
+/// Test our usecase from Places 2020
 /// Simple types
-type AtoBNeg<N> = Recv<N, End>;
-type AtoBAdd<N> = Recv<N, End>;
+/// Client = C
+/// Authenticator = A
+/// Server = B
 
-type AtoCNeg<N> = Send<N, End>;
-type AtoCAdd<N> = Send<N, End>;
+/// A: A?C.A!C.μX.( 0 & A?C.A?C.A!B.A?B.A!C.X )
+/// B: μX.( 0 & B?A.B!A.X )
+/// C: C!A.C?A.μX.( 0 + C!A.C?A.X )
 
-type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
-type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
+type AtoCClose = End;
+type AtoBClose = End;
+type AtoBVideo<N> = Send<N, Recv<N, End>>;
 
-type CtoANeg<N> = <AtoCNeg<N> as Session>::Dual;
-type CtoAAdd<N> = <AtoCAdd<N> as Session>::Dual;
+type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
+
+type BtoAClose = <AtoBClose as Session>::Dual;
+type BtoCClose = End;
+type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+
+type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
+type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
+
+enum CBranchesAtoC<N: marker::Send> {
+    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd>),
+    Video(SessionMpst<AtoBVideo<N>, Recv<N, Send<N, RecursAtoC<N>>>, QueueAVideo>),
+}
+enum CBranchesBtoC<N: marker::Send> {
+    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo>),
+}
+type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
+type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
+
+type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
 /// Queues
-type QueueOfferA = RoleAtoB<RoleAtoC<RoleEnd>>;
-type QueueOfferADual = <QueueOfferA as Role>::Dual;
-type QueueFullA = RoleAtoB<QueueOfferA>;
+type QueueAEnd = RoleEnd;
+type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleAtoC<RoleEnd>>>>>;
+type QueueAInit = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
 
-type QueueChoiceB = RoleBtoA<RoleEnd>;
-type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;
+type QueueBEnd = RoleEnd;
+type QueueBVideo = RoleBtoA<RoleBtoA<RoleBtoC<RoleEnd>>>;
+type QueueBRecurs = RoleBtoC<RoleEnd>;
 
-type QueueOfferC = RoleCtoA<RoleEnd>;
-type QueueOfferCDual = <QueueOfferC as Role>::Dual;
-type QueueFullC = RoleCtoB<QueueOfferC>;
+type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
+type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
 
 /// Creating the MP sessions
-/// For A
-type OfferA<N> =
-    OfferMpst<AtoBAdd<N>, AtoCAdd<N>, AtoBNeg<N>, AtoCNeg<N>, QueueOfferA, QueueOfferA>;
-type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
-
-/// For B
-type ChooseBtoA<N> =
-    ChooseMpst<BtoAAdd<N>, CtoAAdd<N>, BtoANeg<N>, CtoANeg<N>, QueueOfferADual, QueueOfferADual>;
-type ChooseBtoC<N> = ChooseMpst<AtoCAdd<N>, End, AtoCNeg<N>, End, QueueOfferCDual, QueueOfferCDual>;
-type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC<N>, QueueFullB>;
-
 /// For C
 
-type OfferC<N> = OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, QueueOfferC, QueueOfferC>;
-type EndpointChoiceC<N> = SessionMpst<End, OfferC<N>, QueueFullC>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull>;
+
+/// For A
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
+
+/// For B
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
 
 #[test]
 fn test_checker() {
-    let (s1, _): (EndpointChoiceA<i32>, _) = SessionMpst::new();
-    let (s2, _): (EndpointChoiceB<i32>, _) = SessionMpst::new();
-    let (s3, _): (EndpointChoiceC<i32>, _) = SessionMpst::new();
+    let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+    let (s2, _): (EndpointBRecurs<i32>, _) = SessionMpst::new();
+    let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
 
     let result = checker(s1, s2, s3);
 
