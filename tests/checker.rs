@@ -53,6 +53,7 @@ type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 /// Queues
 type QueueAEnd = RoleEnd;
 type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleAtoC<RoleEnd>>>>>;
+// type QueueARecurs = RoleAtoC<RoleEnd>;
 type QueueAInit = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
@@ -65,9 +66,11 @@ type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
 /// Creating the MP sessions
 /// For C
 
+// type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs>;
 type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull>;
 
 /// For A
+// type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, QueueARecurs>;
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
 
 /// For B

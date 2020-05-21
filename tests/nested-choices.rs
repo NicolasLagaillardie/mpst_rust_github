@@ -3,6 +3,8 @@
 
 // use rand::{thread_rng, Rng};
 
+// use mpstthree::checking::checker;
+
 // use mpstthree::binary::{End, Recv, Send, Session};
 // use mpstthree::fork_mpst;
 // use mpstthree::role::Role;
@@ -72,7 +74,7 @@
 
 // type QueueCEnd = RoleEnd;
 // type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
-// type QueueCChoice2 = RoleCtoAll<QueueCEnd, QueueCVideo>;
+// type QueueCChoice2 = RoleCtoAll<QueueCVideo, QueueCEnd>;
 // type QueueCChoice = RoleCtoAll<QueueCChoice2, QueueCEnd>;
 // type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
 
@@ -109,8 +111,14 @@
 // type EndpointCtoBVideo<N> = SessionMpst<AtoBVideo<N>, CtoBClose, QueueBVideoDual>;
 // type EndpointCtoBEnd = SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
 
-// type ChooseCtoA<N> =
-//     ChooseMpst<ChooseCtoA2<N>, ChooseCtoB2<N>, BtoAClose, CtoAClose, QueueCChoice2, QueueAEnd>;
+// type ChooseCtoA<N> = ChooseMpst<
+//     BtoAClose,
+//     <ChooseCtoA2<N> as Session>::Dual,
+//     CtoAClose,
+//     <ChooseCtoB2<N> as Session>::Dual,
+//     QueueCChoice2,
+//     QueueAEnd,
+// >;
 // type ChooseCtoB<N> =
 //     ChooseMpst<AtoBVideo<N>, CtoBClose, AtoBClose, CtoBClose, QueueBVideoDual, QueueBEnd>;
 
@@ -163,7 +171,7 @@
 //     )
 // }
 
-// fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+// fn client_video_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 //     {
 //         let mut rng = thread_rng();
 //         let id: i32 = rng.gen();
@@ -198,7 +206,7 @@
 //     Ok(())
 // }
 
-// fn client_nested(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+// fn client_video_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 //     {
 //         let mut rng = thread_rng();
 //         let id: i32 = rng.gen();
@@ -258,6 +266,11 @@
 //             QueueCEnd,
 //         >(s);
 
+//         let s = send_mpst_c_to_a(accept, s);
+//         let (result, s) = recv_mpst_c_to_a(s)?;
+
+//         assert_eq!(result, accept + 3);
+
 //         close_mpst(s)?;
 //     }
 //     Ok(())
@@ -268,7 +281,7 @@
 //     assert!(|| -> Result<(), Box<dyn Error>> {
 //         // Test video branch.
 //         {
-//             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
+//             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video_video);
 
 //             assert!(thread_a.is_ok());
 //             assert!(thread_b.is_ok());
@@ -284,6 +297,22 @@
 //             assert!(thread_c.is_ok());
 //         }
 
+//         Ok(())
+//     }()
+//     .is_ok());
+
+//     assert!(|| -> Result<(), Box<dyn Error>> {
+//         {
+//             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+//             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
+//             let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+
+//             let (a, b, c) = checker(s1, s2, s3)?;
+
+//             assert_eq!(a, "A: A?C.A!C.( ( A?C.A!B.A?B.A!C.0 & 0 ) & 0 )");
+//             assert_eq!(b, "B: ( ( B?A.B!A.0 & 0 ) & 0 )");
+//             assert_eq!(c, "C: C!A.C?A.( ( C?A.C!A.0 + 0 ) + 0 )");
+//         }
 //         Ok(())
 //     }()
 //     .is_ok());

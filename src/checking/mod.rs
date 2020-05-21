@@ -11,21 +11,24 @@ use std::error::Error;
 /// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
 ///
 /// Returns unit if everything wen right.
-pub fn checker<S1, S2, S3, S4, S5, S6, R1, R2, R3>(
-    s1: SessionMpst<S1, S2, R1>,
-    s2: SessionMpst<S3, S4, R2>,
-    s3: SessionMpst<S5, S6, R3>,
+pub fn checker<S1, S2, S3, R1, R2, R3>(
+    s1: SessionMpst<S1, <S3 as Session>::Dual, R1>,
+    s2: SessionMpst<<S1 as Session>::Dual, S2, R2>,
+    s3: SessionMpst<S3, <S2 as Session>::Dual, R3>,
+    // s1: SessionMpst<S1, S2, R1>,
+    // s2: SessionMpst<S3, S4, R2>,
+    // s3: SessionMpst<S5, S6, R3>,
 ) -> Result<(String, String, String), Box<dyn Error>>
 where
-    S1: Session,
-    S2: Session,
-    S3: Session,
-    S4: Session,
-    S5: Session,
-    S6: Session,
-    R1: Role,
-    R2: Role,
-    R3: Role,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    S3: Session + 'static,
+    // S4: Session + 'static,
+    // S5: Session + 'static,
+    // S6: Session + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    R3: Role + 'static,
 {
     // let mut result = HashMap::new();
     //let mut seen: &HashMap<String, String> = HashMap::new();
@@ -137,7 +140,6 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
-                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
                 "C" => match head_session2.as_str() {
@@ -165,7 +167,6 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
-                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
                 "All" => {
@@ -242,7 +243,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                         );
                     }
                 }
-                _ => panic!("Wrong receiver, not recognized"),
+                _ => panic!("Wrong receiver, not recognized: {}", receiver),
             },
             "B" => match receiver.as_str() {
                 "A" => match head_session1.as_str() {
@@ -270,7 +271,6 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
-                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
                 "C" => match head_session2.as_str() {
@@ -298,7 +298,6 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
-                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
                 "All" => {
@@ -370,7 +369,7 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                         );
                     }
                 }
-                _ => panic!("Wrong receiver, not recognized"),
+                _ => panic!("Wrong receiver, not recognized: {}", receiver),
             },
             "C" => match receiver.as_str() {
                 "A" => match head_session1.as_str() {
@@ -398,7 +397,6 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
-                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session1),
                 },
                 "B" => match head_session2.as_str() {
@@ -426,7 +424,6 @@ fn checker_aux(session1: &str, session2: &str, stack: &str) -> Result<String, Bo
                             )
                         }
                     }
-                    "End" => String::from("0"),
                     _ => panic!("Wrong session type, not recognized: {}", head_session2),
                 },
                 "All" => {
@@ -547,7 +544,7 @@ fn get_name(head: &str) -> (String, String) {
         "RoleCtoA" => (String::from("C"), String::from("A")),
         "RoleCtoB" => (String::from("C"), String::from("B")),
         "RoleEnd" => (String::from("End"), String::from("End")),
-        _ => panic!("Wrong head, not recognized"),
+        _ => panic!("Wrong head, not recognized: {}", head),
     };
 
     (sender, receiver)
