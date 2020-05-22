@@ -63,7 +63,7 @@ type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
     End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd>),
-    Video(SessionMpst<AtoBVideo<N>, Recv<N, Send<N, RecursAtoC<N>>>, QueueAVideo>),
+    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo>),
 }
 enum CBranchesBtoC<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd>),

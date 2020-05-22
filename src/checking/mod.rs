@@ -61,6 +61,8 @@ where
     // println!("role_b: {:?}", role_b);
     // println!("role_c: {:?}", role_c);
 
+    println!("test: {}", type_of(&s1));
+
     println!("SessionMpst A : {}", parse_type(type_of(&s1)));
     println!("SessionMpst B : {}", parse_type(type_of(&s2)));
     println!("SessionMpst C : {}", parse_type(type_of(&s3)));
