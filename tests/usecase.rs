@@ -11,6 +11,7 @@ use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
+use std::collections::HashMap;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -240,11 +241,13 @@ fn run_usecase() {
 
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
+            let hm: HashMap<String, &Vec<String>> = HashMap::new();
+
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
             let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
 
-            let (a, b, c) = checker(s1, s2, s3)?;
+            let (a, b, c) = checker(s1, s2, s3, &hm)?;
 
             assert_eq!(a, "A: A?C.A!C.( A?C.A!B.A?B.A!C.0 & 0 )");
             assert_eq!(b, "B: ( B?A.B!A.0 & 0 )");

@@ -1,1 +1,0 @@
-This crate contains MPSTThree lints. For the main crate, check [GitHub](https://github.com/NicolasLagaillardie/mpst_rust_github).

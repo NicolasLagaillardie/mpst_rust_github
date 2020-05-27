@@ -2,6 +2,7 @@ extern crate mpstthree;
 use mpstthree::checking::checker;
 
 use std::boxed::Box;
+use std::collections::HashMap;
 use std::error::Error;
 
 use mpstthree::binary::{End, Recv, Send, Session};
@@ -106,11 +107,13 @@ fn simple_triple_endpoints() {
 
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
+            let hm: HashMap<String, &Vec<String>> = HashMap::new();
+
             let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
             let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
 
-            let (a, b, c) = checker(s1, s2, s3)?;
+            let (a, b, c) = checker(s1, s2, s3, &hm)?;
 
             assert_eq!(a, "A: A!B.A?C.0");
             assert_eq!(b, "B: B?A.B!C.0");
