@@ -64,11 +64,13 @@ type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
 /// Queues
 type QueueAEnd = RoleEnd;
+type QueueAEndDual = <QueueAEnd as Role>::Dual;
 type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
 type QueueAVideoDual = <QueueAVideo as Role>::Dual;
 type QueueAFull = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
+type QueueBEndDual = <QueueBEnd as Role>::Dual;
 type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
 type QueueBVideoDual = <QueueBVideo as Role>::Dual;
 type QueueBFull = RoleBtoC<RoleEnd>;
@@ -161,15 +163,15 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
         let s = choose_left_mpst_session_c_to_all::<
             BtoAVideo<i32>,
-            AtoBClose,
+            BtoAClose,
             CtoAVideo<i32>,
-            BtoCClose,
+            CtoAClose,
             BtoCClose,
             AtoCClose,
             QueueAVideoDual,
-            QueueAEnd,
+            QueueAEndDual,
             QueueBVideoDual,
-            QueueBEnd,
+            QueueBEndDual,
             QueueCVideo,
             QueueCEnd,
         >(s);
@@ -196,15 +198,15 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
         let s = choose_right_mpst_session_c_to_all::<
             BtoAVideo<i32>,
-            AtoBClose,
+            BtoAClose,
             CtoAVideo<i32>,
-            BtoCClose,
+            CtoAClose,
             BtoCClose,
             AtoCClose,
             QueueAVideoDual,
-            QueueAEnd,
+            QueueAEndDual,
             QueueBVideoDual,
-            QueueBEnd,
+            QueueBEndDual,
             QueueCVideo,
             QueueCEnd,
         >(s);

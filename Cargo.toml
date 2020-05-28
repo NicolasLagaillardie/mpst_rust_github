@@ -16,6 +16,7 @@ crossbeam-channel = "0.4.2"
 either = "1.5.3"
 rand = "0.7"
 downcast-rs = "1.1.1"
+dot = "0.1.4"
 
 [dev-dependencies]
 criterion = "0.3"

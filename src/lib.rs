@@ -1,6 +1,5 @@
-//#[macro_use]
 extern crate crossbeam_channel;
-// extern crate downcast_rs;
+extern crate dot;
 extern crate either;
 
 use std::any::Any;

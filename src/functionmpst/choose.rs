@@ -14,20 +14,20 @@ type ShortChooseMpstThree<S0, S1, S3, S5, R3, R4> =
     ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R3, R4>;
 type ShortChooseMpstFour<S0, S1, S2, S4, R1, R2> = ChooseMpst<S0, S2, S1, S4, R1, R2>;
 
-type ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
-    ShortChooseMpstOne<S0, S1, S2, S4, R1, R2>,
-    ShortChooseMpstTwo<S0, S1, S3, S5, R3, R4>,
-    RoleAtoAll<R5, R6>,
+type ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
+    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1>,
+    ShortChooseMpstTwo<S0, S1, S3, S5, R2, R3>,
+    RoleAtoAll<R4, R5>,
 >;
-type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
-    ShortChooseMpstOne<S0, S1, S2, S4, R1, R2>,
-    ShortChooseMpstThree<S0, S1, S3, S5, R3, R4>,
-    RoleBtoAll<R5, R6>,
+type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
+    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1>,
+    ShortChooseMpstThree<S0, S1, S3, S5, R2, R3>,
+    RoleBtoAll<R4, R5>,
 >;
-type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = SessionMpst<
-    ShortChooseMpstFour<S0, S1, S2, S4, R1, R2>,
-    ShortChooseMpstThree<S0, S1, S3, S5, R3, R4>,
-    RoleCtoAll<R5, R6>,
+type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
+    ShortChooseMpstFour<S0, S1, S2, S4, R0, R1>,
+    ShortChooseMpstThree<S0, S1, S3, S5, R2, R3>,
+    RoleCtoAll<R4, R5>,
 >;
 
 /// Given a choice from A, to other processes, between two `SessionMpst`, choose the first option for each.
@@ -35,9 +35,23 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6> = Se
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
-) -> SessionMpst<S2, S3, R5>
+///
+/// S0: dual session from B to C on left branch
+/// S1: dual session from B to C on right branch
+/// S2: session from A to B on left branch
+/// S3: session from A to C on left branch
+/// S4: session from A to B on right branch
+/// S5: session from A to C on right branch
+///
+/// R0: dual stack of B on left branch
+/// R1: dual stack of B on right branch
+/// R2: dual stack of C on left branch
+/// R3: dual stack of C on right branch
+/// R4: stack of A on left branch
+/// R5: stack of A on right branch
+pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> SessionMpst<S2, S3, R4>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -45,19 +59,19 @@ where
     S3: Session + 'a,
     S4: Session + 'a,
     S5: Session + 'a,
+    R0: Role + 'a,
     R1: Role + 'a,
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
     R5: Role + 'a,
-    R6: Role + 'a,
 {
     let (session_ab, session_ba) = S2::new();
     let (session_ac, session_ca) = S3::new();
     let (session_cb, session_bc) = S0::new();
-    let (_, role_b) = R1::new();
-    let (_, role_c) = R3::new();
-    let (role_a, _) = R5::new();
+    let (_, role_b) = R0::new();
+    let (_, role_c) = R2::new();
+    let (role_a, _) = R4::new();
 
     let choice_b = SessionMpst {
         session1: session_ba,
@@ -95,9 +109,23 @@ where
 /// A has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
-) -> SessionMpst<S4, S5, R6>
+///
+/// S0: dual session from B to C on left branch
+/// S1: dual session from B to C on right branch
+/// S2: session from A to B on left branch
+/// S3: session from A to C on left branch
+/// S4: session from A to B on right branch
+/// S5: session from A to C on right branch
+///
+/// R0: dual stack of B on left branch
+/// R1: dual stack of B on right branch
+/// R2: dual stack of C on left branch
+/// R3: dual stack of C on right branch
+/// R4: stack of A on left branch
+/// R5: stack of A on right branch
+pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> SessionMpst<S4, S5, R5>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -105,19 +133,20 @@ where
     S3: Session + 'a,
     S4: Session + 'a,
     S5: Session + 'a,
+    R0: Role + 'a,
+    R0: Role + 'a,
     R1: Role + 'a,
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
     R5: Role + 'a,
-    R6: Role + 'a,
 {
     let (session_ab, session_ba) = S4::new();
     let (session_ac, session_ca) = S5::new();
     let (session_cb, session_bc) = S1::new();
-    let (_, role_b) = R2::new();
-    let (_, role_c) = R4::new();
-    let (role_a, _) = R6::new();
+    let (_, role_b) = R1::new();
+    let (_, role_c) = R3::new();
+    let (role_a, _) = R5::new();
 
     let choice_b = SessionMpst {
         session1: session_ba,
@@ -155,9 +184,23 @@ where
 /// B has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
-) -> SessionMpst<S2, S3, R5>
+///
+/// S0: dual session from A to C on left branch
+/// S1: dual session from A to C on right branch
+/// S2: session from B to A on left branch
+/// S3: session from B to C on left branch
+/// S4: session from B to A on right branch
+/// S5: session from B to C on right branch
+///
+/// R0: dual stack of A on left branch
+/// R1: dual stack of A on right branch
+/// R2: dual stack of C on left branch
+/// R3: dual stack of C on right branch
+/// R4: stack of B on left branch
+/// R5: stack of B on right branch
+pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> SessionMpst<S2, S3, R4>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -165,19 +208,19 @@ where
     S3: Session + 'a,
     S4: Session + 'a,
     S5: Session + 'a,
+    R0: Role + 'a,
     R1: Role + 'a,
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
     R5: Role + 'a,
-    R6: Role + 'a,
 {
     let (session_ba, session_ab) = S2::new();
     let (session_bc, session_cb) = S3::new();
     let (session_ca, session_ac) = S0::new();
-    let (_, role_a) = R1::new();
-    let (_, role_c) = R3::new();
-    let (role_b, _) = R5::new();
+    let (_, role_a) = R0::new();
+    let (_, role_c) = R2::new();
+    let (role_b, _) = R4::new();
 
     let choice_a = SessionMpst {
         session1: session_ab,
@@ -215,9 +258,23 @@ where
 /// B has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
-) -> SessionMpst<S4, S5, R6>
+///
+/// S0: dual session from A to C on left branch
+/// S1: dual session from A to C on right branch
+/// S2: session from B to A on left branch
+/// S3: session from B to C on left branch
+/// S4: session from B to A on right branch
+/// S5: session from B to C on right branch
+///
+/// R0: dual stack of A on left branch
+/// R1: dual stack of A on right branch
+/// R2: dual stack of C on left branch
+/// R3: dual stack of C on right branch
+/// R4: stack of B on left branch
+/// R5: stack of B on right branch
+pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> SessionMpst<S4, S5, R5>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -225,19 +282,19 @@ where
     S3: Session + 'a,
     S4: Session + 'a,
     S5: Session + 'a,
+    R0: Role + 'a,
     R1: Role + 'a,
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
     R5: Role + 'a,
-    R6: Role + 'a,
 {
     let (session_ba, session_ab) = S4::new();
     let (session_bc, session_cb) = S5::new();
     let (session_ca, session_ac) = S1::new();
-    let (_, role_a) = R2::new();
-    let (_, role_c) = R4::new();
-    let (role_b, _) = R6::new();
+    let (_, role_a) = R1::new();
+    let (_, role_c) = R3::new();
+    let (role_b, _) = R5::new();
 
     let choice_a = SessionMpst {
         session1: session_ab,
@@ -275,9 +332,23 @@ where
 /// C has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
-) -> SessionMpst<S2, S3, R5>
+///
+/// S0: dual session from A to B on left branch
+/// S1: dual session from A to B on right branch
+/// S2: session from C to A on left branch
+/// S3: session from C to B on left branch
+/// S4: session from C to A on right branch
+/// S5: session from C to B on right branch
+///
+/// R0: dual stack of A on left branch
+/// R1: dual stack of A on right branch
+/// R2: dual stack of B on left branch
+/// R3: dual stack of B on right branch
+/// R4: stack of C on left branch
+/// R5: stack of C on right branch
+pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> SessionMpst<S2, S3, R4>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -285,19 +356,19 @@ where
     S3: Session + 'a,
     S4: Session + 'a,
     S5: Session + 'a,
+    R0: Role + 'a,
     R1: Role + 'a,
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
     R5: Role + 'a,
-    R6: Role + 'a,
 {
     let (session_ca, session_ac) = S2::new();
     let (session_cb, session_bc) = S3::new();
     let (session_ba, session_ab) = S0::new();
-    let (_, role_a) = R1::new();
-    let (_, role_b) = R3::new();
-    let (role_c, _) = R5::new();
+    let (_, role_a) = R0::new();
+    let (_, role_b) = R2::new();
+    let (role_c, _) = R4::new();
 
     let choice_a = SessionMpst {
         session1: session_ab,
@@ -335,9 +406,23 @@ where
 /// C has to encapsulate all possible `SessionMpst` for each other role.
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
-pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>(
-    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R1, R2, R3, R4, R5, R6>,
-) -> SessionMpst<S4, S5, R6>
+///
+/// S0: dual session from A to B on left branch
+/// S1: dual session from A to B on right branch
+/// S2: session from C to A on left branch
+/// S3: session from C to B on left branch
+/// S4: session from C to A on right branch
+/// S5: session from C to B on right branch
+///
+/// R0: dual stack of A on left branch
+/// R1: dual stack of A on right branch
+/// R2: dual stack of B on left branch
+/// R3: dual stack of B on right branch
+/// R4: stack of C on left branch
+/// R5: stack of C on right branch
+pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> SessionMpst<S4, S5, R5>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -345,19 +430,19 @@ where
     S3: Session + 'a,
     S4: Session + 'a,
     S5: Session + 'a,
+    R0: Role + 'a,
     R1: Role + 'a,
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
     R5: Role + 'a,
-    R6: Role + 'a,
 {
     let (session_ca, session_ac) = S4::new();
     let (session_cb, session_bc) = S5::new();
     let (session_ba, session_ab) = S1::new();
-    let (_, role_a) = R2::new();
-    let (_, role_b) = R4::new();
-    let (role_c, _) = R6::new();
+    let (_, role_a) = R1::new();
+    let (_, role_b) = R3::new();
+    let (role_c, _) = R5::new();
 
     let choice_a = SessionMpst {
         session1: session_ab,
