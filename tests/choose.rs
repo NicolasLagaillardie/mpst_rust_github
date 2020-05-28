@@ -12,9 +12,9 @@ use mpstthree::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::role::a_to_b::RoleAtoB;
+use mpstthree::role::all_to_b::RoleAlltoB;
 use mpstthree::role::b_to_a::RoleBtoA;
 use mpstthree::role::b_to_all::RoleBtoAll;
-use mpstthree::role::c_to_b::RoleCtoB;
 use mpstthree::role::end::RoleEnd;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
@@ -46,13 +46,13 @@ type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
 /// Queues
 type QueueOfferA = RoleAtoB<RoleEnd>;
-type QueueFullA = RoleAtoB<QueueOfferA>;
+type QueueFullA = RoleAlltoB<QueueOfferA, QueueOfferA>;
 
 type QueueChoiceB = RoleBtoA<RoleEnd>;
 type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;
 
 type QueueOfferC = RoleEnd;
-type QueueFullC = RoleCtoB<QueueOfferC>;
+type QueueFullC = RoleAlltoB<QueueOfferC, QueueOfferC>;
 
 /// Creating the MP sessions
 /// For A

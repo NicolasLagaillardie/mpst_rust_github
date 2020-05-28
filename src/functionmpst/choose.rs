@@ -36,19 +36,19 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 ///
-/// S0: dual session from B to C on left branch
-/// S1: dual session from B to C on right branch
-/// S2: session from A to B on left branch
-/// S3: session from A to C on left branch
-/// S4: session from A to B on right branch
-/// S5: session from A to C on right branch
+/// * S0: dual session from B to C on left branch
+/// * S1: dual session from B to C on right branch
+/// * S2: session from A to B on left branch
+/// * S3: session from A to C on left branch
+/// * S4: session from A to B on right branch
+/// * S5: session from A to C on right branch
 ///
-/// R0: dual stack of B on left branch
-/// R1: dual stack of B on right branch
-/// R2: dual stack of C on left branch
-/// R3: dual stack of C on right branch
-/// R4: stack of A on left branch
-/// R5: stack of A on right branch
+/// * R0: dual stack of B on left branch
+/// * R1: dual stack of B on right branch
+/// * R2: dual stack of C on left branch
+/// * R3: dual stack of C on right branch
+/// * R4: stack of A on left branch
+/// * R5: stack of A on right branch
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4>
@@ -110,19 +110,19 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 ///
-/// S0: dual session from B to C on left branch
-/// S1: dual session from B to C on right branch
-/// S2: session from A to B on left branch
-/// S3: session from A to C on left branch
-/// S4: session from A to B on right branch
-/// S5: session from A to C on right branch
+/// * S0: dual session from B to C on left branch
+/// * S1: dual session from B to C on right branch
+/// * S2: session from A to B on left branch
+/// * S3: session from A to C on left branch
+/// * S4: session from A to B on right branch
+/// * S5: session from A to C on right branch
 ///
-/// R0: dual stack of B on left branch
-/// R1: dual stack of B on right branch
-/// R2: dual stack of C on left branch
-/// R3: dual stack of C on right branch
-/// R4: stack of A on left branch
-/// R5: stack of A on right branch
+/// * R0: dual stack of B on left branch
+/// * R1: dual stack of B on right branch
+/// * R2: dual stack of C on left branch
+/// * R3: dual stack of C on right branch
+/// * R4: stack of A on left branch
+/// * R5: stack of A on right branch
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5>
@@ -185,19 +185,19 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 ///
-/// S0: dual session from A to C on left branch
-/// S1: dual session from A to C on right branch
-/// S2: session from B to A on left branch
-/// S3: session from B to C on left branch
-/// S4: session from B to A on right branch
-/// S5: session from B to C on right branch
+/// * S0: dual session from A to C on left branch
+/// * S1: dual session from A to C on right branch
+/// * S2: session from B to A on left branch
+/// * S3: session from B to C on left branch
+/// * S4: session from B to A on right branch
+/// * S5: session from B to C on right branch
 ///
-/// R0: dual stack of A on left branch
-/// R1: dual stack of A on right branch
-/// R2: dual stack of C on left branch
-/// R3: dual stack of C on right branch
-/// R4: stack of B on left branch
-/// R5: stack of B on right branch
+/// * R0: dual stack of A on left branch
+/// * R1: dual stack of A on right branch
+/// * R2: dual stack of C on left branch
+/// * R3: dual stack of C on right branch
+/// * R4: stack of B on left branch
+/// * R5: stack of B on right branch
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4>
@@ -259,19 +259,19 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 ///
-/// S0: dual session from A to C on left branch
-/// S1: dual session from A to C on right branch
-/// S2: session from B to A on left branch
-/// S3: session from B to C on left branch
-/// S4: session from B to A on right branch
-/// S5: session from B to C on right branch
+/// * S0: dual session from A to C on left branch
+/// * S1: dual session from A to C on right branch
+/// * S2: session from B to A on left branch
+/// * S3: session from B to C on left branch
+/// * S4: session from B to A on right branch
+/// * S5: session from B to C on right branch
 ///
-/// R0: dual stack of A on left branch
-/// R1: dual stack of A on right branch
-/// R2: dual stack of C on left branch
-/// R3: dual stack of C on right branch
-/// R4: stack of B on left branch
-/// R5: stack of B on right branch
+/// * R0: dual stack of A on left branch
+/// * R1: dual stack of A on right branch
+/// * R2: dual stack of C on left branch
+/// * R3: dual stack of C on right branch
+/// * R4: stack of B on left branch
+/// * R5: stack of B on right branch
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5>
@@ -333,19 +333,19 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 ///
-/// S0: dual session from A to B on left branch
-/// S1: dual session from A to B on right branch
-/// S2: session from C to A on left branch
-/// S3: session from C to B on left branch
-/// S4: session from C to A on right branch
-/// S5: session from C to B on right branch
+/// * S0: dual session from A to B on left branch
+/// * S1: dual session from A to B on right branch
+/// * S2: session from C to A on left branch
+/// * S3: session from C to B on left branch
+/// * S4: session from C to A on right branch
+/// * S5: session from C to B on right branch
 ///
-/// R0: dual stack of A on left branch
-/// R1: dual stack of A on right branch
-/// R2: dual stack of B on left branch
-/// R3: dual stack of B on right branch
-/// R4: stack of C on left branch
-/// R5: stack of C on right branch
+/// * R0: dual stack of A on left branch
+/// * R1: dual stack of A on right branch
+/// * R2: dual stack of B on left branch
+/// * R3: dual stack of B on right branch
+/// * R4: stack of C on left branch
+/// * R5: stack of C on right branch
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4>
@@ -407,19 +407,19 @@ where
 /// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
 /// It then sends those options to the related processes.
 ///
-/// S0: dual session from A to B on left branch
-/// S1: dual session from A to B on right branch
-/// S2: session from C to A on left branch
-/// S3: session from C to B on left branch
-/// S4: session from C to A on right branch
-/// S5: session from C to B on right branch
+/// * S0: dual session from A to B on left branch
+/// * S1: dual session from A to B on right branch
+/// * S2: session from C to A on left branch
+/// * S3: session from C to B on left branch
+/// * S4: session from C to A on right branch
+/// * S5: session from C to B on right branch
 ///
-/// R0: dual stack of A on left branch
-/// R1: dual stack of A on right branch
-/// R2: dual stack of B on left branch
-/// R3: dual stack of B on right branch
-/// R4: stack of C on left branch
-/// R5: stack of C on right branch
+/// * R0: dual stack of A on left branch
+/// * R1: dual stack of A on right branch
+/// * R2: dual stack of B on left branch
+/// * R3: dual stack of B on right branch
+/// * R4: stack of C on left branch
+/// * R5: stack of C on right branch
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5>

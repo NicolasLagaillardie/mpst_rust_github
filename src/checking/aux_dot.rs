@@ -1,6 +1,6 @@
 use dot;
-use std::io::Write;
 use std::fs::File;
+use std::io::Write;
 
 type Nd = usize;
 type Ed<'a> = &'a (usize, usize);

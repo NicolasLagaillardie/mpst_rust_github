@@ -1,17 +1,12 @@
 use binary::{cancel, Session};
-use functionmpst::recv::recv_mpst_a_to_b;
-use functionmpst::recv::recv_mpst_a_to_c;
-use functionmpst::recv::recv_mpst_b_to_a;
-use functionmpst::recv::recv_mpst_b_to_c;
-use functionmpst::recv::recv_mpst_c_to_a;
-use functionmpst::recv::recv_mpst_c_to_b;
+use functionmpst::recv::{
+    recv_mpst_a_all_to_b, recv_mpst_a_all_to_c, recv_mpst_b_all_to_a, recv_mpst_b_all_to_c,
+    recv_mpst_c_all_to_a, recv_mpst_c_all_to_b,
+};
 use functionmpst::OfferMpst;
-use role::a_to_b::RoleAtoB;
-use role::a_to_c::RoleAtoC;
-use role::b_to_a::RoleBtoA;
-use role::b_to_c::RoleBtoC;
-use role::c_to_a::RoleCtoA;
-use role::c_to_b::RoleCtoB;
+use role::all_to_a::RoleAlltoA;
+use role::all_to_b::RoleAlltoB;
+use role::all_to_c::RoleAlltoC;
 use role::Role;
 use sessionmpst::SessionMpst;
 use std::error::Error;
@@ -19,17 +14,17 @@ use std::error::Error;
 type OfferMpstGeneric<S1, S2, S3, S4, R1, R2> = OfferMpst<S1, S2, S3, S4, R1, R2>;
 
 type SessionMpstBtoA<S1, S2, S3, S4, S5, R1, R2, R3> =
-    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleBtoA<R3>>;
+    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleAlltoA<R3, R3>>;
 type SessionMpstAtoB<S1, S2, S3, S4, S5, R1, R2, R3> =
-    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleAtoB<R3>>;
+    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleAlltoB<R3, R3>>;
 type SessionMpstAtoC<S1, S2, S3, S4, S5, R1, R2, R3> =
-    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleAtoC<R3>>;
+    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleAlltoC<R3, R3>>;
 type SessionMpstCtoA<S1, S2, S3, S4, S5, R1, R2, R3> =
-    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleCtoA<R3>>;
+    SessionMpst<OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, S5, RoleAlltoA<R3, R3>>;
 type SessionMpstBtoC<S1, S2, S3, S4, S5, R1, R2, R3> =
-    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleBtoC<R3>>;
+    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleAlltoC<R3, R3>>;
 type SessionMpstCtoB<S1, S2, S3, S4, S5, R1, R2, R3> =
-    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleCtoB<R3>>;
+    SessionMpst<S5, OfferMpstGeneric<S1, S2, S3, S4, R1, R2>, RoleAlltoB<R3, R3>>;
 
 /// Offer a choice to B from A (on its session field related to A)
 /// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
@@ -50,7 +45,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_b_to_a(s)?;
+    let (e, s) = recv_mpst_b_all_to_a(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -74,7 +69,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_a_to_b(s)?;
+    let (e, s) = recv_mpst_a_all_to_b(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -98,7 +93,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_a_to_c(s)?;
+    let (e, s) = recv_mpst_a_all_to_c(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -122,7 +117,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_c_to_a(s)?;
+    let (e, s) = recv_mpst_c_all_to_a(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -146,7 +141,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_b_to_c(s)?;
+    let (e, s) = recv_mpst_b_all_to_c(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -170,7 +165,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_c_to_b(s)?;
+    let (e, s) = recv_mpst_c_all_to_b(s)?;
     cancel(s);
     e.either(f, g)
 }

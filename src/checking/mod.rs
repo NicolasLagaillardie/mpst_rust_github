@@ -14,20 +14,30 @@ use std::error::Error;
 /// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
 ///
 /// Returns the 3 strings if everything went right.
-pub fn checker<S1, S2, S3, R1, R2, R3>(
-    s1: SessionMpst<S1, <S3 as Session>::Dual, R1>,
-    s2: SessionMpst<<S1 as Session>::Dual, S2, R2>,
-    s3: SessionMpst<S3, <S2 as Session>::Dual, R3>,
+pub fn checker<S0, S1, S2, R1, R2, R3>(
+    s1: SessionMpst<S0, <S2 as Session>::Dual, R1>,
+    s2: SessionMpst<<S0 as Session>::Dual, S1, R2>,
+    s3: SessionMpst<S2, <S1 as Session>::Dual, R3>,
+    // s1: SessionMpst<S0, S1, R1>,
+    // s2: SessionMpst<S2, S3, R2>,
+    // s3: SessionMpst<S4, S5, R3>,
     hm: &HashMap<String, &Vec<String>>,
 ) -> Result<(String, String, String), Box<dyn Error>>
 where
+    S0: Session + 'static,
     S1: Session + 'static,
     S2: Session + 'static,
-    S3: Session + 'static,
+    // S3: Session + 'static,
+    // S4: Session + 'static,
+    // S5: Session + 'static,
     R1: Role + 'static,
     R2: Role + 'static,
     R3: Role + 'static,
 {
+    println!("Type of s1: {}", parse_type_of(&s1));
+    println!("Type of s2: {}", parse_type_of(&s2));
+    println!("Type of s3: {}", parse_type_of(&s3));
+
     let result_1 = checker_aux(
         &parse_type_of(&s1.session1),
         &parse_type_of(&s1.session2),

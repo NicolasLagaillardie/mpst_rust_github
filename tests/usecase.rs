@@ -18,8 +18,8 @@ use mpstthree::functionmpst::close::close_mpst;
 
 use mpstthree::role::a_to_b::RoleAtoB;
 use mpstthree::role::a_to_c::RoleAtoC;
+use mpstthree::role::all_to_c::RoleAlltoC;
 use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::b_to_c::RoleBtoC;
 use mpstthree::role::c_to_a::RoleCtoA;
 use mpstthree::role::c_to_all::RoleCtoAll;
 use mpstthree::role::end::RoleEnd;
@@ -67,13 +67,13 @@ type QueueAEnd = RoleEnd;
 type QueueAEndDual = <QueueAEnd as Role>::Dual;
 type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
 type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-type QueueAFull = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
+type QueueAFull = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd, RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
 type QueueBEndDual = <QueueBEnd as Role>::Dual;
 type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
 type QueueBVideoDual = <QueueBVideo as Role>::Dual;
-type QueueBFull = RoleBtoC<RoleEnd>;
+type QueueBFull = RoleAlltoC<RoleEnd, RoleEnd>;
 
 type QueueCEnd = RoleEnd;
 type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
