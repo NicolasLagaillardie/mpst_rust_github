@@ -67,7 +67,7 @@
 // type QueueAEnd = RoleEnd;
 // type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
 // type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-// type QueueASecond = RoleAlltoC<RoleEnd, RoleEnd>;
+// type QueueASecond = RoleAlltoC<RoleAtoC<RoleAtoC<RoleEnd>>, RoleEnd>;
 // type QueueAIniit = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd, RoleEnd>>>;
 
 // type QueueBEnd = RoleEnd;
@@ -246,16 +246,7 @@
 //         _,
 //         mpstthree::binary::Recv<
 //             either::Either<
-//                 mpstthree::sessionmpst::SessionMpst<
-//                     _,
-//                     _,
-//                     mpstthree::role::all_to_c::RoleAlltoC<
-//                         mpstthree::role::a_to_c::RoleAtoC<
-//                             mpstthree::role::a_to_c::RoleAtoC<mpstthree::role::end::RoleEnd>,
-//                         >,
-//                         _,
-//                     >,
-//                 >,
+//                 _,
 //                 mpstthree::sessionmpst::SessionMpst<
 //                     _,
 //                     mpstthree::binary::Recv<
@@ -293,14 +284,7 @@
 //     mpstthree::binary::Send<
 //         _,
 //         mpstthree::binary::Recv<
-//             either::Either<
-//                 mpstthree::sessionmpst::SessionMpst<
-//                     _,
-//                     _,
-//                     mpstthree::role::all_to_c::RoleAlltoC<mpstthree::role::end::RoleEnd, _>,
-//                 >,
-//                 mpstthree::sessionmpst::SessionMpst<_, mpstthree::binary::End, _>,
-//             >,
+//             either::Either<_, mpstthree::sessionmpst::SessionMpst<_, mpstthree::binary::End, _>>,
 //             _,
 //         >,
 //     >,

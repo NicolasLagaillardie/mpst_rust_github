@@ -34,28 +34,37 @@ where
     R2: Role + 'static,
     R3: Role + 'static,
 {
-    println!("Type of s1: {}", parse_type_of(&s1));
-    println!("Type of s2: {}", parse_type_of(&s2));
-    println!("Type of s3: {}", parse_type_of(&s3));
+    // println!("Type of s1: {}", parse_type_of(&s1));
+    // println!("Type of s2: {}", parse_type_of(&s2));
+    // println!("Type of s3: {}", parse_type_of(&s3));
 
     let result_1 = checker_aux(
-        &parse_type_of(&s1.session1),
-        &parse_type_of(&s1.session2),
-        &parse_type_of(&s1.stack),
+        [
+            &parse_type_of(&s1.session1),
+            &parse_type_of(&s1.session2),
+            &parse_type_of(&s1.stack),
+        ],
+        "A",
         &hm,
         &mut vec![],
     )?;
     let result_2 = checker_aux(
-        &parse_type_of(&s2.session1),
-        &parse_type_of(&s2.session2),
-        &parse_type_of(&s2.stack),
+        [
+            &parse_type_of(&s2.session1),
+            &parse_type_of(&s2.session2),
+            &parse_type_of(&s2.stack),
+        ],
+        "B",
         &hm,
         &mut vec![],
     )?;
     let result_3 = checker_aux(
-        &parse_type_of(&s3.session1),
-        &parse_type_of(&s3.session2),
-        &parse_type_of(&s3.stack),
+        [
+            &parse_type_of(&s3.session1),
+            &parse_type_of(&s3.session2),
+            &parse_type_of(&s3.stack),
+        ],
+        "C",
         &hm,
         &mut vec![],
     )?;

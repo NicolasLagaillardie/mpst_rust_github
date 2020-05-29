@@ -4,15 +4,14 @@ use std::error::Error;
 
 #[doc(hidden)]
 pub fn checker_aux(
-    session1: &str,
-    session2: &str,
-    stack: &str,
+    sessionmpst: [&str; 3],
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    let head_stack = get_head(&stack);
-    let head_session1 = get_head(&session1);
-    let head_session2 = get_head(&session2);
+    let head_session1 = get_head(&sessionmpst[0]);
+    let head_session2 = get_head(&sessionmpst[1]);
+    let head_stack = get_head(&sessionmpst[2]);
 
     if !head_stack.contains("RoleEnd") {
         let (sender, receiver) = get_name(&head_stack);
@@ -21,35 +20,85 @@ pub fn checker_aux(
             "A" => match_headers(
                 ["B", "C"],
                 [head_session1.as_str(), head_session2.as_str()],
-                [session1, session2, stack],
+                sessionmpst,
                 [sender, receiver],
                 [0, 0, 3, 3],
+                role,
                 hm,
                 seen,
             )?,
             "B" => match_headers(
                 ["A", "C"],
                 [head_session1.as_str(), head_session2.as_str()],
-                [session1, session2, stack],
+                sessionmpst,
                 [sender, receiver],
                 [0, 1, 3, 4],
+                role,
                 hm,
                 seen,
             )?,
             "C" => match_headers(
                 ["A", "B"],
                 [head_session1.as_str(), head_session2.as_str()],
-                [session1, session2, stack],
+                sessionmpst,
                 [sender, receiver],
                 [1, 1, 4, 4],
+                role,
                 hm,
                 seen,
             )?,
+            "All" => match receiver.as_str() {
+                "A" => match_recv_from_all("A", ["B", "C"], sessionmpst, role, hm, seen)?,
+                "B" => match_recv_from_all("B", ["A", "C"], sessionmpst, role, hm, seen)?,
+                "C" => match_recv_from_all("C", ["A", "B"], sessionmpst, role, hm, seen)?,
+                _ => panic!("Wrong receiver on All, not recognized: {}", receiver),
+            },
             _ => panic!("Wrong sender, not recognized: {}", sender),
         };
         Ok(result)
     } else {
         Ok(String::from("0"))
+    }
+}
+
+fn match_recv_from_all(
+    sender: &str,
+    receivers: [&str; 2],
+    sessionmpst: [&str; 3],
+    role: &str,
+    hm: &HashMap<String, &Vec<String>>,
+    seen: &mut Vec<String>,
+) -> Result<String, Box<dyn Error>> {
+    match role {
+        receiver if receiver == receivers[0] => checker_aux(
+            [
+                sessionmpst[0],
+                sessionmpst[1],
+                &sessionmpst[2].replacen(
+                    &format!("RoleAllto{}", sender),
+                    &format!("Role{}to{}", receiver, sender),
+                    1,
+                ),
+            ],
+            role,
+            hm,
+            seen,
+        ),
+        receiver if receiver == receivers[1] => checker_aux(
+            [
+                sessionmpst[0],
+                sessionmpst[1],
+                &sessionmpst[2].replacen(
+                    &format!("RoleAllto{}", sender),
+                    &format!("Role{}to{}", receiver, sender),
+                    1,
+                ),
+            ],
+            role,
+            hm,
+            seen,
+        ),
+        _ => panic!("Wrong role, not recognized: {}", role),
     }
 }
 
@@ -60,6 +109,7 @@ fn match_headers(
     sessionmpst: [&str; 3], // session1, session2, stack
     involved: [String; 2],  // sender, receiver
     index: [usize; 4],
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
@@ -73,6 +123,7 @@ fn match_headers(
             ],
             involved,
             &get_head_payload(&sessionmpst[0]),
+            role,
             hm,
             seen,
         ),
@@ -85,10 +136,11 @@ fn match_headers(
             ],
             involved,
             &get_head_payload(&sessionmpst[1]),
+            role,
             hm,
             seen,
         ),
-        h if h == "All" => all_type(sessionmpst, index, hm, seen),
+        h if h == "All" => all_type(sessionmpst, index, role, hm, seen),
         _ => panic!("Wrong receiver, not recognized: {}", involved[1]),
     }
 }
@@ -99,12 +151,13 @@ fn match_full_types(
     sessionmpst: [&str; 3], // session1, session2, stack
     involved: [String; 2],  // sender, receiver
     payload: &str,
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     match head_session {
-        "Send" => send_type(sessionmpst, involved, payload, hm, seen, " + "),
-        "Recv" => recv_type(sessionmpst, involved, payload, hm, seen, " & "),
+        "Send" => send_type(sessionmpst, involved, payload, role, hm, seen, " + "),
+        "Recv" => recv_type(sessionmpst, involved, payload, role, hm, seen, " & "),
         _ => panic!("Wrong session type, not recognized: {}", head_session),
     }
 }
@@ -149,6 +202,9 @@ fn get_name(head: &str) -> (String, String) {
         "RoleAtoAll" => (String::from("A"), String::from("All")),
         "RoleBtoAll" => (String::from("B"), String::from("All")),
         "RoleCtoAll" => (String::from("C"), String::from("All")),
+        "RoleAlltoA" => (String::from("All"), String::from("A")),
+        "RoleAlltoB" => (String::from("All"), String::from("B")),
+        "RoleAlltoC" => (String::from("All"), String::from("C")),
         "RoleAtoB" => (String::from("A"), String::from("B")),
         "RoleAtoC" => (String::from("A"), String::from("C")),
         "RoleBtoA" => (String::from("B"), String::from("A")),
@@ -311,7 +367,6 @@ fn get_tail(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_dual(s: &str) -> String {
-    // Switch Send / Recv
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
     let result = &result.replace("Revc<", "Recv<");
@@ -336,6 +391,7 @@ fn send_type(
     sessionmpst: [&str; 3], // session1, session2, stack
     involved: [String; 2],  // sender, receiver
     payload: &str,
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
     symbol: &str,
@@ -343,13 +399,13 @@ fn send_type(
     if seen.contains(&String::from(payload)) {
         Ok(String::from("X"))
     } else if hm.contains_key(payload) {
-        recurs_type(payload, hm, seen, symbol)
+        recurs_type(payload, role, hm, seen, symbol)
     } else {
         Ok(format!(
             "{}!{}.{}",
             involved[0],
             involved[1],
-            checker_aux(sessionmpst[0], sessionmpst[1], sessionmpst[2], &hm, seen)?
+            checker_aux(sessionmpst, role, &hm, seen)?
         ))
     }
 }
@@ -359,6 +415,7 @@ fn recv_type(
     sessionmpst: [&str; 3], // session1, session2, stack
     involved: [String; 2],  // sender, receiver
     payload: &str,
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
     symbol: &str,
@@ -367,19 +424,29 @@ fn recv_type(
         let branching: [String; 6] = divide_either(payload);
         Ok(format!(
             "( {} & {} )",
-            checker_aux(&branching[0], &branching[1], &branching[2], &hm, seen)?,
-            checker_aux(&branching[3], &branching[4], &branching[5], &hm, seen)?,
+            checker_aux(
+                [&branching[0], &branching[1], &branching[2]],
+                role,
+                &hm,
+                seen
+            )?,
+            checker_aux(
+                [&branching[3], &branching[4], &branching[5]],
+                role,
+                &hm,
+                seen
+            )?,
         ))
     } else if seen.contains(&String::from(payload)) {
         Ok(String::from("X"))
     } else if hm.contains_key(payload) {
-        recurs_type(payload, hm, seen, symbol)
+        recurs_type(payload, role, hm, seen, symbol)
     } else {
         Ok(format!(
             "{}?{}.{}",
             involved[0],
             involved[1],
-            checker_aux(sessionmpst[0], sessionmpst[1], sessionmpst[2], &hm, seen)?
+            checker_aux(sessionmpst, role, &hm, seen)?
         ))
     }
 }
@@ -387,6 +454,7 @@ fn recv_type(
 #[doc(hidden)]
 fn recurs_type(
     payload: &str,
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
     symbol: &str,
@@ -401,9 +469,12 @@ fn recurs_type(
             for branch in branches.iter() {
                 let sessions_and_stack = get_sessions_and_stack(&parse_type(branch));
                 let result_branch = checker_aux(
-                    &sessions_and_stack[0],
-                    &sessions_and_stack[1],
-                    &sessions_and_stack[2],
+                    [
+                        &sessions_and_stack[0],
+                        &sessions_and_stack[1],
+                        &sessions_and_stack[2],
+                    ],
+                    role,
                     &hm,
                     seen,
                 )?;
@@ -426,6 +497,7 @@ fn recurs_type(
 fn all_type(
     sessionmpst: [&str; 3], // session1, session2, stack
     index: [usize; 4],      // index for branches
+    role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
@@ -439,16 +511,22 @@ fn all_type(
         Ok(format!(
             "( {} + {} )",
             checker_aux(
-                &get_dual(&branching_1[index[0]]),
-                &get_dual(&branching_2[index[1]]),
-                &tails[0],
+                [
+                    &get_dual(&branching_1[index[0]]),
+                    &get_dual(&branching_2[index[1]]),
+                    &tails[0]
+                ],
+                role,
                 &hm,
                 seen
             )?,
             checker_aux(
-                &get_dual(&branching_1[index[2]]),
-                &get_dual(&branching_2[index[3]]),
-                &tails[1],
+                [
+                    &get_dual(&branching_1[index[2]]),
+                    &get_dual(&branching_2[index[3]]),
+                    &tails[1]
+                ],
+                role,
                 &hm,
                 seen
             )?,
@@ -460,16 +538,22 @@ fn all_type(
         Ok(format!(
             "( {} + {} )",
             checker_aux(
-                &get_dual(&branching_1[index[0]]),
-                &get_dual(&sessionmpst[1]),
-                &tails[0],
+                [
+                    &get_dual(&branching_1[index[0]]),
+                    &get_dual(&sessionmpst[1]),
+                    &tails[0]
+                ],
+                role,
                 &hm,
                 seen
             )?,
             checker_aux(
-                &get_dual(&branching_1[index[2]]),
-                &get_dual(&sessionmpst[1]),
-                &tails[1],
+                [
+                    &get_dual(&branching_1[index[2]]),
+                    &get_dual(&sessionmpst[1]),
+                    &tails[1]
+                ],
+                role,
                 &hm,
                 seen
             )?,
@@ -481,16 +565,22 @@ fn all_type(
         Ok(format!(
             "( {} + {} )",
             checker_aux(
-                &get_dual(&sessionmpst[0]),
-                &get_dual(&branching_2[index[1]]),
-                &tails[0],
+                [
+                    &get_dual(&sessionmpst[0]),
+                    &get_dual(&branching_2[index[1]]),
+                    &tails[0]
+                ],
+                role,
                 &hm,
                 seen
             )?,
             checker_aux(
-                &get_dual(&sessionmpst[0]),
-                &get_dual(&branching_2[index[3]]),
-                &tails[1],
+                [
+                    &get_dual(&sessionmpst[0]),
+                    &get_dual(&branching_2[index[3]]),
+                    &tails[1]
+                ],
+                role,
                 &hm,
                 seen
             )?,
