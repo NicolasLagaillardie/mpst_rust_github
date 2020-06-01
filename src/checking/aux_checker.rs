@@ -61,6 +61,7 @@ pub fn checker_aux(
     }
 }
 
+#[doc(hidden)]
 fn match_recv_from_all(
     sender: &str,
     receivers: [&str; 2],
