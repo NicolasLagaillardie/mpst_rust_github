@@ -56,6 +56,7 @@ use mpstthree::offer_mpst_b_to_c;
 type AtoCClose = End;
 type AtoBClose = End;
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
+type AtoCVideo<N> = Recv<N, Send<N, RecursAtoC<N>>>;
 
 type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
 
@@ -68,7 +69,7 @@ type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
     End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd>),
-    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo>),
+    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>),
 }
 enum CBranchesBtoC<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd>),
