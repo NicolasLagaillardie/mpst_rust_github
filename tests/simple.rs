@@ -27,10 +27,6 @@ use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
-/// A = !B.?C
-/// B = ?A.!C
-/// C = !A.?B
-
 /// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
