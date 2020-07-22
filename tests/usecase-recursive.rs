@@ -43,7 +43,7 @@ use mpstthree::choose_mpst_c_to_all;
 use mpstthree::offer_mpst_a_to_c;
 use mpstthree::offer_mpst_b_to_c;
 
-/// Test our usecase from Places 2020
+/// Test our usecase
 /// Simple types
 /// Client = C
 /// Authenticator = A
