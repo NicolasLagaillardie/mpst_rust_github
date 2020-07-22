@@ -35,87 +35,104 @@ pub trait Role: marker::Sized + marker::Send {
     fn tail_str() -> String;
 }
 
-pub trait RoleA: marker::Sized + marker::Send {
-    /// The Role type dual to `Self`.
-    type Dual: RoleA<Dual = Self>;
+#[macro_export]
+macro_rules! create_role {
+    ($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
+        ////////////////////////////////////////////
+        /// The Role
 
-    /// Creates two new *dual* roles.
-    ///
-    /// The `new` function is used internally in this library to define
-    /// functions such as `fork_simple`. The `Dual` is often unused,
-    /// but may be necessary for specific cases, such as closing a connection.
-    #[doc(hidden)]
-    fn new() -> (Self, Self::Dual);
+        #[derive(Debug)]
+        pub struct $role_name<R: Role> {
+            pub sender: Sender<R::Dual>,
+        }
 
-    #[doc(hidden)]
-    fn head_str() -> String;
+        ////////////////////////////////////////////
+        /// The Dual
 
-    #[doc(hidden)]
-    fn tail_str() -> String;
+        #[derive(Debug)]
+        pub struct $dual_name<R: Role> {
+            pub sender: Sender<R::Dual>,
+        }
+        ////////////////////////////////////////////
+        /// The Role functions
+
+        impl<R: Role> Role for $dual_name<R> {
+            type Dual = $role_name<R::Dual>;
+
+            #[doc(hidden)]
+            fn new() -> (Self, Self::Dual) {
+                let (sender_normal, _) = bounded::<R>(1);
+                let (sender_dual, _) = bounded::<R::Dual>(1);
+
+                (
+                    $dual_name {
+                        sender: sender_dual,
+                    },
+                    $role_name {
+                        sender: sender_normal,
+                    },
+                )
+            }
+
+            #[doc(hidden)]
+            fn head_str() -> String {
+                String::from(stringify!($role_name))
+            }
+
+            #[doc(hidden)]
+            fn tail_str() -> String {
+                format!("{}<{}>", R::head_str(), R::tail_str())
+            }
+        }
+
+        pub fn $dual_next<R>(r: $dual_name<R>) -> R
+        where
+            R: Role,
+        {
+            let (here, there) = R::new();
+            r.sender.send(there).unwrap_or(());
+            here
+        }
+
+        ////////////////////////////////////////////
+        /// The Dual functions
+
+        impl<R: Role> Role for $role_name<R> {
+            type Dual = $dual_name<R::Dual>;
+
+            #[doc(hidden)]
+            fn new() -> (Self, Self::Dual) {
+                let (sender_normal, _) = bounded::<R>(1);
+                let (sender_dual, _) = bounded::<R::Dual>(1);
+
+                (
+                    $role_name {
+                        sender: sender_dual,
+                    },
+                    $dual_name {
+                        sender: sender_normal,
+                    },
+                )
+            }
+
+            #[doc(hidden)]
+            fn head_str() -> String {
+                String::from(stringify!($dual_name))
+            }
+
+            #[doc(hidden)]
+            fn tail_str() -> String {
+                format!("{}<{}>", R::head_str(), R::tail_str())
+            }
+        }
+
+        pub fn $role_next<R>(r: $role_name<R>) -> R
+        where
+            R: Role,
+        {
+            let (here, there) = R::new();
+            r.sender.send(there).unwrap_or(());
+            here
+        }
+    };
 }
-
-pub trait RoleB: marker::Sized + marker::Send {
-    /// The Role type dual to `Self`.
-    type Dual: RoleB<Dual = Self>;
-
-    /// Creates two new *dual* roles.
-    ///
-    /// The `new` function is used internally in this library to define
-    /// functions such as `fork_simple`. The `Dual` is often unused,
-    /// but may be necessary for specific cases, such as closing a connection.
-    #[doc(hidden)]
-    fn new() -> (Self, Self::Dual);
-
-    #[doc(hidden)]
-    fn head_str() -> String;
-
-    #[doc(hidden)]
-    fn tail_str() -> String;
-}
-
-pub trait RoleC: marker::Sized + marker::Send {
-    /// The Role type dual to `Self`.
-    type Dual: RoleC<Dual = Self>;
-
-    /// Creates two new *dual* roles.
-    ///
-    /// The `new` function is used internally in this library to define
-    /// functions such as `fork_simple`. The `Dual` is often unused,
-    /// but may be necessary for specific cases, such as closing a connection.
-    #[doc(hidden)]
-    fn new() -> (Self, Self::Dual);
-
-    #[doc(hidden)]
-    fn head_str() -> String;
-
-    #[doc(hidden)]
-    fn tail_str() -> String;
-}
-
-// impl<R: RoleA> Role for R {
-//     type Dual = RoleA<R::Dual>;
-
-//     #[doc(hidden)]
-//     fn new() -> (Self, Self::Dual) {
-//         let (sender_normal, _) = bounded::<R>(1);
-//         let (sender_dual, _) = bounded::<R::Dual>(1);
-
-//         (
-//             RoleCtoB {
-//                 sender: sender_dual,
-//             },
-//             RoleBtoC {
-//                 sender: sender_normal,
-//             },
-//         )
-//     }
-
-//     #[doc(hidden)]
-//     fn head_str() -> String {
-//         String::from("RoleA")
-//     }
-// }
-
-// pub trait RoleAll: Role {}
-
-// pub trait RoleEnd: Role {}
