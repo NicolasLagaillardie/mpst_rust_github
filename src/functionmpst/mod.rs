@@ -19,3 +19,4 @@ pub type ChooseMpst<S0, S1, S2, S3, R0, R1> = Send<
     Either<<SessionMpst<S0, S1, R0> as Session>::Dual, <SessionMpst<S2, S3, R1> as Session>::Dual>,
     End,
 >;
+

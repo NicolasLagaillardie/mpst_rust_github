@@ -141,57 +141,57 @@ where
     }
 }
 
-// // create a function send_mpst for the first session
-// #[macro_export]
-// macro_rules! create_send_mpst_session_1 {
-//     ($func_name:ident, $session:expr, $role:ty, $next:expr) => {
-//         fn $func_name<T, S1, S2, R>(
-//             x: T,
-//             s: SessionMpst<Send<T, S1>, S2,  $role<R>>,
-//         ) -> SessionMpst<S1, S2, R>
-//         where
-//             T: marker::Send,
-//             S1: Session,
-//             S2: Session,
-//             R: Role,
-//         {
-//             let new_session = send(x, s.session1);
-//             let new_queue = $next(s.stack);
+// create a function send_mpst for the first session
+#[macro_export]
+macro_rules! create_send_mpst_session_1 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<T, S1, S2, R>(
+            x: T,
+            s: SessionMpst<Send<T, S1>, S2,  $role<R>>,
+        ) -> SessionMpst<S1, S2, R>
+        where
+            T: marker::Send,
+            S1: Session,
+            S2: Session,
+            R: Role,
+        {
+            let new_session = send(x, s.session1);
+            let new_queue = $next(s.stack);
 
-//             SessionMpst {
-//                 session1: new_session,
-//                 session2: s.session2,
-//                 stack: new_queue,
-//             }
-//         }
-//     }
-// }
+            SessionMpst {
+                session1: new_session,
+                session2: s.session2,
+                stack: new_queue,
+            }
+        }
+    }
+}
 
-// // create a function send_mpst for the first session
-// #[macro_export]
-// macro_rules! create_send_mpst_session_2 {
-//     ($func_name:ident, $session:expr, $role:ty, $next:expr) => {
-//         fn $func_name<T, S1, S2, R>(
-//             x: T,
-//             s: SessionMpst<S1,  Send<T, S2>, $role<R>>,
-//         ) -> SessionMpst<S1, S2, R>
-//         where
-//             T: marker::Send,
-//             S1: Session,
-//             S2: Session,
-//             R: Role,
-//         {
-//             let new_session = send(x, s.session2);
-//             let new_queue = $next(s.stack);
+// create a function send_mpst for the second session
+#[macro_export]
+macro_rules! create_send_mpst_session_2 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<T, S1, S2, R>(
+            x: T,
+            s: SessionMpst<S1,  Send<T, S2>, $role<R>>,
+        ) -> SessionMpst<S1, S2, R>
+        where
+            T: marker::Send,
+            S1: Session,
+            S2: Session,
+            R: Role,
+        {
+            let new_session = send(x, s.session2);
+            let new_queue = $next(s.stack);
 
-//             SessionMpst {
-//                 session1: s.session1,
-//                 session2: new_session,
-//                 stack: new_queue,
-//             }
-//         }
-//     }
-// }
+            SessionMpst {
+                session1: s.session1,
+                session2: new_session,
+                stack: new_queue,
+            }
+        }
+    }
+}
 
 // // create a function send_mpst for a session depending of the
 // #[macro_export]

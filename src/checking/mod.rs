@@ -75,3 +75,47 @@ where
         format!("C: {}", &result_3),
     ))
 }
+
+/// macro to create hashmap function, necessary for recursion
+#[macro_export]
+macro_rules! checker_hashmaps {
+    // ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:path, )* }, )*) => {
+        ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:pat,)* }, )*) => {
+            
+        let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
+
+        fn type_of<T>(_: T) -> &'static str {
+            type_name::<T>()
+        }
+
+        $(
+            impl<N: marker::Send> fmt::Display for $branch {
+                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                    match self {
+                        $(
+                            $pat(s) => write!(f, stringify!($branch_name), type_of(&s)),
+                        )*
+                    }
+                }
+            }
+
+            fn $func() -> Vec<String> {
+                let vec = Vec::new();
+
+                $(
+                    vec.push((&$label(SessionMpst {
+                        session1: <_ as Session>::new(),
+                        session2: <_ as Session>::new(),
+                        stack: <_ as Role>::new(),
+                    }).to_string()));
+                )*
+
+                vec
+            }
+
+            hm.insert(String::from($branch_type), &$func());
+        )*
+
+        hm
+    };
+}
