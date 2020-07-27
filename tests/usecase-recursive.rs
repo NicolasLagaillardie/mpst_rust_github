@@ -20,6 +20,7 @@ use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
 
+// Get roles
 use mpstthree::role::a_to_b::RoleAtoB;
 use mpstthree::role::a_to_c::RoleAtoC;
 use mpstthree::role::b_to_a::RoleBtoA;
@@ -28,12 +29,14 @@ use mpstthree::role::c_to_a::RoleCtoA;
 use mpstthree::role::c_to_b::RoleCtoB;
 use mpstthree::role::end::RoleEnd;
 
+// Get recv functions
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
 use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
 use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
 use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
 use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
 
+// Get send functions
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_a_to_c;
 use mpstthree::functionmpst::send::send_mpst_b_to_a;

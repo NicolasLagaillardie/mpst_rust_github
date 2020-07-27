@@ -265,3 +265,19 @@ macro_rules! offer_mpst_c_to_a {
         })()
     };
 }
+
+/// Offer a choice at C from A between many different sessions wrapped in an `enum`
+#[macro_export]
+macro_rules! offer_mpst {
+    ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:block, )* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = $recv_mpst($session)?;
+            cancel(s);
+            match l {
+                $(
+                    $pat => { $result },
+                )*
+            }
+        })()
+    };
+}
