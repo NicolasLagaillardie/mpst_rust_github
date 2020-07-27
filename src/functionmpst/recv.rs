@@ -278,3 +278,107 @@ where
 
     Ok((v, result))
 }
+
+// create a function send_mpst for the first session
+#[macro_export]
+macro_rules! create_recv_mpst_session_1 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<T, S1, S2, R>(
+            s: SessionMpst<Recv<T, S1>, S2, $role<R>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+        where
+            T: marker::Send,
+            S1: Session,
+            S2: Session,
+            R: Role,
+        {
+            let (v, new_session) = recv(s.session1)?;
+            let new_queue = $next(s.stack);
+            let result = SessionMpst {
+                session1: new_session,
+                session2: s.session2,
+                stack: new_queue,
+            };
+
+            Ok((v, result))
+        }
+    };
+}
+
+// create a function send_mpst for the second session
+#[macro_export]
+macro_rules! create_recv_mpst_session_2 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<T, S1, S2, R>(
+            s: SessionMpst<S1, Recv<T, S2>, $role<R>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+        where
+            T: marker::Send,
+            S1: Session,
+            S2: Session,
+            R: Role,
+        {
+            let (v, new_session) = recv(s.session2)?;
+            let new_queue = $next(s.stack);
+            let result = SessionMpst {
+                session1: s.session1,
+                session2: new_session,
+                stack: new_queue,
+            };
+
+            Ok((v, result))
+        }
+    };
+}
+
+// create a function send_mpst for the first session
+#[macro_export]
+macro_rules! create_recv_mpst_all_session_1 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<T, S1, S2, R>(
+            s: SessionMpst<Recv<T, S1>, S2, $role<R, R>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+        where
+            T: marker::Send,
+            S1: Session,
+            S2: Session,
+            R: Role,
+        {
+            let (v, new_session) = recv(s.session1)?;
+            let (new_queue, _) = $next(s.stack);
+            let result = SessionMpst {
+                session1: new_session,
+                session2: s.session2,
+                stack: new_queue,
+            };
+
+            Ok((v, result))
+        }
+    };
+}
+
+// create a function send_mpst for the second session
+#[macro_export]
+macro_rules! create_recv_mpst_all_session_2 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<T, S1, S2, R>(
+            s: SessionMpst<S1, Recv<T, S2>, $role<R, R>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+        where
+            T: marker::Send,
+            S1: Session,
+            S2: Session,
+            R: Role,
+        {
+            let (v, new_session) = recv(s.session2)?;
+            let (new_queue, _) = $next(s.stack);
+            let result = SessionMpst {
+                session1: s.session1,
+                session2: new_session,
+                stack: new_queue,
+            };
+
+            Ok((v, result))
+        }
+    };
+}

@@ -27,17 +27,10 @@ where
     S0: Session + 'static,
     S1: Session + 'static,
     S2: Session + 'static,
-    // S3: Session + 'static,
-    // S4: Session + 'static,
-    // S5: Session + 'static,
     R1: Role + 'static,
     R2: Role + 'static,
     R3: Role + 'static,
 {
-    // println!("Type of s1: {}", parse_type_of(&s1));
-    // println!("Type of s2: {}", parse_type_of(&s2));
-    // println!("Type of s3: {}", parse_type_of(&s3));
-
     let result_1 = checker_aux(
         [
             &parse_type_of(&s1.session1),
@@ -76,12 +69,12 @@ where
     ))
 }
 
-/// macro to create hashmap function, necessary for recursion
+/// macro to create hashmap function, necessary for recursion. Need to sort out the path
 #[macro_export]
 macro_rules! checker_hashmaps {
     // ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:path, )* }, )*) => {
-        ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:pat,)* }, )*) => {
-            
+        ({ $($branch:path, $func:ident, { $($pat:path, )* }, )* }) => {
+
         let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
         fn type_of<T>(_: T) -> &'static str {
@@ -89,11 +82,11 @@ macro_rules! checker_hashmaps {
         }
 
         $(
-            impl<N: marker::Send> fmt::Display for $branch {
+            impl<N: marker::Send> fmt::Display for $branch<N> {
                 fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                     match self {
                         $(
-                            $pat(s) => write!(f, stringify!($branch_name), type_of(&s)),
+                            $pat(s) => write!(f, stringify!($pat), type_of(&s)),
                         )*
                     }
                 }
@@ -103,17 +96,15 @@ macro_rules! checker_hashmaps {
                 let vec = Vec::new();
 
                 $(
-                    vec.push((&$label(SessionMpst {
-                        session1: <_ as Session>::new(),
-                        session2: <_ as Session>::new(),
-                        stack: <_ as Role>::new(),
-                    }).to_string()));
+                    let (s, _) = <_ as Session>::new();
+
+                    vec.push((&$pat::<i32>(s).to_string()));
                 )*
 
                 vec
             }
 
-            hm.insert(String::from($branch_type), &$func());
+            hm.insert(String::from(stringify!($branch)), &$func());
         )*
 
         hm

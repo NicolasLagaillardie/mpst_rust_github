@@ -147,7 +147,7 @@ macro_rules! create_send_mpst_session_1 {
     ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<T, S1, S2, R>(
             x: T,
-            s: SessionMpst<Send<T, S1>, S2,  $role<R>>,
+            s: SessionMpst<Send<T, S1>, S2, $role<R>>,
         ) -> SessionMpst<S1, S2, R>
         where
             T: marker::Send,
@@ -164,7 +164,7 @@ macro_rules! create_send_mpst_session_1 {
                 stack: new_queue,
             }
         }
-    }
+    };
 }
 
 // create a function send_mpst for the second session
@@ -173,7 +173,7 @@ macro_rules! create_send_mpst_session_2 {
     ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<T, S1, S2, R>(
             x: T,
-            s: SessionMpst<S1,  Send<T, S2>, $role<R>>,
+            s: SessionMpst<S1, Send<T, S2>, $role<R>>,
         ) -> SessionMpst<S1, S2, R>
         where
             T: marker::Send,
@@ -190,14 +190,5 @@ macro_rules! create_send_mpst_session_2 {
                 stack: new_queue,
             }
         }
-    }
+    };
 }
-
-// // create a function send_mpst for a session depending of the
-// #[macro_export]
-// macro_rules! create_send_mpst {
-//     ($func_name:ident, $session:expr, $role:ty, $next:expr, $number:expr) => {
-//         if $number
-//             create_send_mpst!()
-//     }
-// }

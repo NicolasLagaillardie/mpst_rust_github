@@ -588,3 +588,133 @@ macro_rules! choose_mpst_c_to_all {
         }
     }};
 }
+
+// create a function send_mpst for the second session
+#[macro_export]
+macro_rules! create_choose_right_from_3_to_1_and_2 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+            s: SessionMpst<
+                ChooseMpst<S0, S2, S1, S4, R1, R2>,
+                ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R3, R4>,
+                $role<R4, R5>,
+            >,
+        ) -> SessionMpst<S4, S5, R5>
+        where
+            S0: Session + 'a,
+            S1: Session + 'a,
+            S2: Session + 'a,
+            S3: Session + 'a,
+            S4: Session + 'a,
+            S5: Session + 'a,
+            R0: Role + 'a,
+            R1: Role + 'a,
+            R2: Role + 'a,
+            R3: Role + 'a,
+            R4: Role + 'a,
+            R5: Role + 'a,
+        {
+            let (session_3_1, session_1_3) = S4::new();
+            let (session_3_2, session_2_3) = S5::new();
+            let (session_2_1, session_1_2) = S1::new();
+            let (_, role_1) = R1::new();
+            let (_, role_2) = R3::new();
+            let (role_3, _) = R5::new();
+
+            let choice_1 = SessionMpst {
+                session1: session_1_2,
+                session2: session_1_3,
+                stack: role_1,
+            };
+
+            let choice_2 = SessionMpst {
+                session1: session_2_1,
+                session2: session_2_3,
+                stack: role_2,
+            };
+
+            let new_session_1 = send(Either::Right(choice_1), s.session1);
+            let new_session_2 = send(Either::Right(choice_2), s.session2);
+            let (_, new_queue) = $next(s.stack);
+
+            let s = SessionMpst {
+                session1: new_session_1,
+                session2: new_session_2,
+                stack: new_queue,
+            };
+
+            cancel(s);
+
+            SessionMpst {
+                session1: session_3_1,
+                session2: session_3_2,
+                stack: role_3,
+            }
+        }
+    };
+}
+
+// create a function send_mpst for the second session
+#[macro_export]
+macro_rules! create_choose_left_from_3_to_1_and_2 {
+    ($func_name:ident, $role:ident, $next:ident) => {
+        fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
+            s: SessionMpst<
+                ChooseMpst<S0, S2, S1, S4, R1, R2>,
+                ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R3, R4>,
+                $role<R4, R5>,
+            >,
+        ) -> SessionMpst<S2, S3, R5>
+        where
+            S0: Session + 'a,
+            S1: Session + 'a,
+            S2: Session + 'a,
+            S3: Session + 'a,
+            S4: Session + 'a,
+            S5: Session + 'a,
+            R0: Role + 'a,
+            R1: Role + 'a,
+            R2: Role + 'a,
+            R3: Role + 'a,
+            R4: Role + 'a,
+            R5: Role + 'a,
+        {
+            let (session_3_1, session_1_3) = S4::new();
+            let (session_3_2, session_2_3) = S5::new();
+            let (session_2_1, session_1_2) = S1::new();
+            let (_, role_1) = R1::new();
+            let (_, role_2) = R3::new();
+            let (role_3, _) = R5::new();
+
+            let choice_1 = SessionMpst {
+                session1: session_1_2,
+                session2: session_1_3,
+                stack: role_1,
+            };
+
+            let choice_2 = SessionMpst {
+                session1: session_2_1,
+                session2: session_2_3,
+                stack: role_2,
+            };
+
+            let new_session_1 = send(Either::Left(choice_1), s.session1);
+            let new_session_2 = send(Either::Left(choice_2), s.session2);
+            let (_, new_queue) = $next(s.stack);
+
+            let s = SessionMpst {
+                session1: new_session_1,
+                session2: new_session_2,
+                stack: new_queue,
+            };
+
+            cancel(s);
+
+            SessionMpst {
+                session1: session_3_1,
+                session2: session_3_2,
+                stack: role_3,
+            }
+        }
+    };
+}

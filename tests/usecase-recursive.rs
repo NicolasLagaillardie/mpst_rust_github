@@ -15,7 +15,7 @@ use std::error::Error;
 use std::fmt;
 use std::marker;
 
-use mpstthree::checker_hashmaps;
+// use mpstthree::checker_hashmaps;
 use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -199,28 +199,13 @@ impl<N: marker::Send> fmt::Display for CBranchesAtoC<N> {
 }
 
 fn hashmap_c_branches_a_to_c() -> Vec<String> {
-    let (channel_1_video, _) = <_ as Session>::new();
-    let (channel_2_video, _) = <_ as Session>::new();
-    let (role_video, _) = <_ as Role>::new();
+    let (s_video, _) = <_ as Session>::new();
 
-    let s_video = SessionMpst {
-        session1: channel_1_video,
-        session2: channel_2_video,
-        stack: role_video,
-    };
+    let video = CBranchesAtoC::Video::<i32>(s_video);
 
-    let video = CBranchesAtoC::<i32>::Video(s_video);
+    let (s_end, _) = <_ as Session>::new();
 
-    let (channel_1_end, _) = <_ as Session>::new();
-    let (channel_2_end, _) = <_ as Session>::new();
-    let (role_end, _) = <_ as Role>::new();
-
-    let s_end = SessionMpst {
-        session1: channel_1_end,
-        session2: channel_2_end,
-        stack: role_end,
-    };
-    let end = CBranchesAtoC::<i32>::End(s_end);
+    let end = CBranchesAtoC::End::<i32>(s_end);
 
     vec![
         String::from(&video.to_string()),
@@ -238,36 +223,17 @@ impl<N: marker::Send> fmt::Display for CBranchesBtoC<N> {
 }
 
 fn hashmap_c_branches_b_to_c() -> Vec<String> {
-    let (channel_1_video, _) = <_ as Session>::new();
-    let (channel_2_video, _) = <_ as Session>::new();
-    let (role_video, _) = <_ as Role>::new();
+    let (s_video, _) = <_ as Session>::new();
 
-    let s_video = SessionMpst {
-        session1: channel_1_video,
-        session2: channel_2_video,
-        stack: role_video,
-    };
+    let video = CBranchesBtoC::Video::<i32>(s_video);
 
-    let video = CBranchesBtoC::<i32>::Video(s_video);
+    let (s_end, _) = <_ as Session>::new();
 
-    let (channel_1_end, _) = <_ as Session>::new();
-    let (channel_2_end, _) = <_ as Session>::new();
-    let (role_end, _) = <_ as Role>::new();
-
-    let s_end = SessionMpst {
-        session1: channel_1_end,
-        session2: channel_2_end,
-        stack: role_end,
-    };
-
-    let end = CBranchesBtoC::<i32>::End(s_end);
+    let end = CBranchesBtoC::End::<i32>(s_end);
 
     println!("Type of end {}", type_of(&end));
 
-    vec![
-        (&video).to_string(),
-        (&end).to_string(),
-    ]
+    vec![(&video).to_string(), (&end).to_string()]
 }
 
 /////////////////////////////////////////
@@ -290,14 +256,13 @@ fn run_usecase_recursive() {
         {
             // ($($branch:ty, $func:ident, {$($pat:pat, $branch_name:expr, $label:path, $branch_type:expr)*})*)
 
-            // let hm = checker_hashmaps!(CBranchesAtoC<N>, hashmap_c_branches_a_to_c,"CBranchesAtoC<i32>",
-            //     { CBranchesAtoC::Video, "Video:{}", CBranchesAtoC::<i32>::Video, },
-            //     );
+            // let hm = checker_hashmaps!(CBranchesAtoC, hashmap_c_branches_a_to_c,
+            //     CBranchesAtoC::Video,
+            // );
 
             // CBranchesBtoC<N>, hashmap_c_branches_b_to_c, "CBranchesBtoC<i32>",
             // { CBranchesBtoC::Video, "Video:{}", CBranchesBtoC::<i32>::Video,
             // CBranchesBtoC::End, "End:{}", CBranchesBtoC::<i32>::End, },
-        
 
             let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
