@@ -266,7 +266,7 @@ macro_rules! offer_mpst_c_to_a {
     };
 }
 
-/// Offer a choice at C from A between many different sessions wrapped in an `enum`
+/// Get a mpst offer
 #[macro_export]
 macro_rules! offer_mpst {
     ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:block, )* }) => {
@@ -279,5 +279,61 @@ macro_rules! offer_mpst {
                 )*
             }
         })()
+    };
+}
+
+/// Get an offer on session 1
+#[macro_export]
+macro_rules! create_offer_mpst_session_1 {
+    ($func_name:ident, $role:ident, $recv_func:ident) => {
+        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
+            s: SessionMpst<OfferMpst<S1, S2, S3, S4, R1, R2>, S5, $role<R3, R3>>,
+            f: F,
+            g: G,
+        ) -> Result<U, Box<dyn Error + 'a>>
+        where
+            S1: Session,
+            S2: Session,
+            S3: Session,
+            S4: Session,
+            S5: Session,
+            R1: Role,
+            R2: Role,
+            R3: Role,
+            F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
+            G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
+        {
+            let (e, s) = $recv_func(s)?;
+            cancel(s);
+            e.either(f, g)
+        }
+    };
+}
+
+/// Get an offer on session 2
+#[macro_export]
+macro_rules! create_offer_mpst_session_2 {
+    ($func_name:ident, $role:ident, $recv_func:ident) => {
+        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
+            s: SessionMpst<S5, OfferMpst<S1, S2, S3, S4, R1, R2>, $role<R3, R3>>,
+            f: F,
+            g: G,
+        ) -> Result<U, Box<dyn Error + 'a>>
+        where
+            S1: Session,
+            S2: Session,
+            S3: Session,
+            S4: Session,
+            S5: Session,
+            R1: Role,
+            R2: Role,
+            R3: Role,
+            F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
+            G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
+        {
+            let (e, s) = $recv_func(s)?;
+            cancel(s);
+            e.either(f, g)
+        }
     };
 }

@@ -603,24 +603,24 @@ macro_rules! choose_mpst_c_to_all {
 // create the core for the choose_mpst macros
 #[macro_export]
 macro_rules! create_choose {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty,$role_2:ty,$role_3:ty, $session:expr, $pat:pat, $next:ident) => {{
-        let (session_3_1, session_1_3) = session_1::new();
-        let (session_3_2, session_2_3) = session_2::new();
-        let (session_2_1, session_1_2) = session_3::new();
-        let (_, role_1) = role_1::new();
-        let (_, role_2) = role_2::new();
-        let (role_3, _) = role_3::new();
+    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty,$role_2:ty,$role_3:ty, $session:expr, $pat:path, $next:ident) => {{
+        let (session_3_1, session_1_3) = <$session_1>::new();
+        let (session_3_2, session_2_3) = <$session_2>::new();
+        let (session_2_1, session_1_2) = <$session_3>::new();
+        let (_, role_1) = <$role_1>::new();
+        let (_, role_2) = <$role_2>::new();
+        let (role_3, _) = <$role_3>::new();
 
         let choice_1 = SessionMpst {
-            session1: $session_1_2,
-            session2: $session_1_3,
-            stack: $role_1,
+            session1: session_1_2,
+            session2: session_1_3,
+            stack: role_1,
         };
 
         let choice_2 = SessionMpst {
-            session1: $session_2_1,
-            session2: $session_2_3,
-            stack: $role_2,
+            session1: session_2_1,
+            session2: session_2_3,
+            stack: role_2,
         };
 
         let new_session_1 = send($pat(choice_1), $session.session1);
@@ -636,9 +636,9 @@ macro_rules! create_choose {
         cancel(s);
 
         SessionMpst {
-            session1: $session_3_1,
-            session2: $session_3_2,
-            stack: $role_3,
+            session1: session_3_1,
+            session2: session_3_2,
+            stack: role_3,
         }
     }};
 }
@@ -646,7 +646,7 @@ macro_rules! create_choose {
 // create a function choose_mpst right from the 3rd role
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {{
+    ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S0, S2, S1, S4, R0, R1>,
@@ -670,20 +670,20 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
         {
             create_choose!(S4, S5, S1, R1, R3, R5, s, Either::Right, $next)
         }
-    }};
+    };
 }
 
 // create a function choose_mpst left from the 3rd role
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {{
+    ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S0, S2, S1, S4, R0, R1>,
                 ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R2, R3>,
                 $role<R4, R5>,
             >,
-        ) -> SessionMpst<S2, S3, R5>
+        ) -> SessionMpst<S2, S3, R4>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -700,20 +700,20 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
         {
             create_choose!(S2, S3, S0, R0, R2, R4, s, Either::Left, $next)
         }
-    }};
+    };
 }
 
 // create a function choose_mpst left from the 1st role
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {{
+    ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
                 ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R2, R3>,
                 $role<R4, R5>,
             >,
-        ) -> SessionMpst<S2, S3, R5>
+        ) -> SessionMpst<S2, S3, R4>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -730,13 +730,13 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
         {
             create_choose!(S2, S3, S0, R0, R2, R4, s, Either::Left, $next)
         }
-    }};
+    };
 }
 
 // create a function choose_mpst right from the 1st role
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {{
+    ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
@@ -760,20 +760,20 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
         {
             create_choose!(S4, S5, S1, R1, R3, R5, s, Either::Right, $next)
         }
-    }};
+    };
 }
 
 // create a function choose_mpst left from the 2nd role
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {{
+    ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
                 ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R2, R3>,
                 $role<R4, R5>,
             >,
-        ) -> SessionMpst<S2, S3, R5>
+        ) -> SessionMpst<S2, S3, R4>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -790,13 +790,13 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
         {
             create_choose!(S2, S3, S0, R0, R2, R4, s, Either::Left, $next)
         }
-    }};
+    };
 }
 
 // create a function choose_mpst right from the 2nd role
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {{
+    ($func_name:ident, $role:ident, $next:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
@@ -820,7 +820,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
         {
             create_choose!(S4, S5, S1, R1, R3, R5, s, Either::Right, $next)
         }
-    }};
+    };
 }
 
 /// Choose, for C, between many different sessions wrapped in an `enum`

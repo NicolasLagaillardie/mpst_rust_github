@@ -50,11 +50,11 @@ type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
 type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
-    End(SessionMpst<End, End, QueueAEnd>),
+    End(SessionMpst<End, End, RoleEnd>),
     Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>),
 }
 enum CBranchesBtoC<N: marker::Send> {
-    End(SessionMpst<End, End, QueueBEnd>),
+    End(SessionMpst<End, End, RoleEnd>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo>),
 }
 type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
@@ -63,14 +63,10 @@ type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
 type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
 /// Queues
-type QueueAEnd = RoleEnd;
 type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleAtoC<RoleEnd>>>>>;
-type QueueARecurs = RoleAtoC<RoleEnd>;
 type QueueAInit = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
 
-type QueueBEnd = RoleEnd;
 type QueueBVideo = RoleBtoA<RoleBtoA<RoleBtoC<RoleEnd>>>;
-type QueueBRecurs = RoleBtoC<RoleEnd>;
 
 type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
 type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
@@ -82,11 +78,11 @@ type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, Queu
 type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, QueueARecurs>;
+type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, RoleAtoC<RoleEnd>>;
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, RoleBtoC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
@@ -181,7 +177,7 @@ fn client_recurs(
 }
 
 #[test]
-fn run_macro_broadcast() {
+fn run_macro_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);

@@ -59,3 +59,69 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
         )
     }
 }
+
+#[macro_export]
+macro_rules! create_sessionmpst {
+    ($struct_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
+        ////////////////////////////////////////////
+        /// The Role
+
+        #[must_use]
+        #[derive(Debug)]
+        struct SessionMpst<S1: Session, S2: Session, R: Role> {
+            pub session1: S1,
+            pub session2: S2,
+            pub stack: R,
+        }
+
+        ////////////////////////////////////////////
+        /// The Role functions
+
+        #[doc(hidden)]
+        impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
+            type Dual =
+                SessionMpst<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual>;
+
+            #[doc(hidden)]
+            fn new() -> (Self, Self::Dual) {
+                let (sender_one, receiver_one) = S1::new();
+                let (sender_two, receiver_two) = S2::new();
+
+                let (role_one, role_two) = R::new();
+
+                (
+                    SessionMpst {
+                        session1: sender_one,
+                        session2: sender_two,
+                        stack: role_one,
+                    },
+                    SessionMpst {
+                        session1: receiver_one,
+                        session2: receiver_two,
+                        stack: role_two,
+                    },
+                )
+            }
+
+            #[doc(hidden)]
+            fn head_str() -> String {
+                format!(
+                    "{} + {} + {}",
+                    S1::head_str(),
+                    S2::head_str(),
+                    R::head_str()
+                )
+            }
+
+            #[doc(hidden)]
+            fn tail_str() -> String {
+                format!(
+                    "{} + {} + {}",
+                    S1::tail_str(),
+                    S2::tail_str(),
+                    R::tail_str()
+                )
+            }
+        }
+    };
+}
