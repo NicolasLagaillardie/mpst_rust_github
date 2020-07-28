@@ -60,68 +60,74 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
     }
 }
 
-#[macro_export]
-macro_rules! create_sessionmpst {
-    ($struct_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
-        ////////////////////////////////////////////
-        /// The Role
+// #[macro_export]
+// macro_rules! create_sessionmpst {
+//     ($struct_name:ident, $($session_name: ident, $session_type: ident, )*) => {
+//         ////////////////////////////////////////////
+//         /// The Role
 
-        #[must_use]
-        #[derive(Debug)]
-        struct SessionMpst<S1: Session, S2: Session, R: Role> {
-            pub session1: S1,
-            pub session2: S2,
-            pub stack: R,
-        }
+//         #[must_use]
+//         #[derive(Debug)]
+//         struct $struct_name<$($session_type: Session, )* R: Role> {
+//             $(pub $session_name: $session_type, )*
+//             pub stack: R,
+//         }
 
-        ////////////////////////////////////////////
-        /// The Role functions
+//         ////////////////////////////////////////////
+//         /// The Role functions
 
-        #[doc(hidden)]
-        impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
-            type Dual =
-                SessionMpst<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual>;
+//         #[doc(hidden)]
+//         impl<$($session_type: Session, )* R: Role> Session for $struct_name<$($session_type, )* R> {
+//             type Dual =
+//                 $struct_name<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual>;
 
-            #[doc(hidden)]
-            fn new() -> (Self, Self::Dual) {
-                let (sender_one, receiver_one) = S1::new();
-                let (sender_two, receiver_two) = S2::new();
+//             #[doc(hidden)]
+//             fn new() -> (Self, Self::Dual) {
+//                 let vec = Vec::new();
 
-                let (role_one, role_two) = R::new();
+//                 $(
+//                     let (sender, receiver) = $session_type::new();
+//                     vec.push((sender, receiver));
+//                 )*
 
-                (
-                    SessionMpst {
-                        session1: sender_one,
-                        session2: sender_two,
-                        stack: role_one,
-                    },
-                    SessionMpst {
-                        session1: receiver_one,
-                        session2: receiver_two,
-                        stack: role_two,
-                    },
-                )
-            }
+//                 // let (sender_one, receiver_one) = S1::new();
+//                 // let (sender_two, receiver_two) = S2::new();
 
-            #[doc(hidden)]
-            fn head_str() -> String {
-                format!(
-                    "{} + {} + {}",
-                    S1::head_str(),
-                    S2::head_str(),
-                    R::head_str()
-                )
-            }
+//                 let (role_one, role_two) = R::new();
 
-            #[doc(hidden)]
-            fn tail_str() -> String {
-                format!(
-                    "{} + {} + {}",
-                    S1::tail_str(),
-                    S2::tail_str(),
-                    R::tail_str()
-                )
-            }
-        }
-    };
-}
+//                 (
+//                     $struct_name {
+//                         session1: sender_one,
+//                         session2: sender_two,
+//                         stack: role_one,
+//                     },
+//                     $struct_name {
+//                         session1: receiver_one,
+//                         session2: receiver_two,
+//                         stack: role_two,
+//                     },
+//                 )
+//             }
+
+//             #[doc(hidden)]
+//             fn head_str() -> String {
+//                 format!(
+//                     "{} + {} + {}",
+//                     S1::head_str(),
+//                     S2::head_str(),
+//                     R::head_str()
+//                 )
+//             }
+
+//             #[doc(hidden)]
+//             fn tail_str() -> String {
+//                 format!(
+//                     "{} + {} + {}",
+//                     S1::tail_str(),
+//                     S2::tail_str(),
+//                     R::tail_str()
+//                 )
+//             }
+//         }
+//     };
+// }

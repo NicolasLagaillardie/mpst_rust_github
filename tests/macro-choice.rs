@@ -28,10 +28,11 @@ use mpstthree::{
 };
 
 // Create new roles
+// normal
 create_normal_role!(RoleAtoB, next_a_to_b, RoleBtoA, next_b_to_a);
 create_normal_role!(RoleAtoC, next_a_to_c, RoleCtoA, next_c_to_a);
 create_normal_role!(RoleCtoB, next_c_to_b, RoleBtoC, next_b_to_c);
-// normal
+// broadcast
 create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 
 // Create new send functions
@@ -48,7 +49,7 @@ create_recv_mpst_session_2!(recv_mpst_a_to_c, RoleAtoC, next_a_to_c);
 create_recv_mpst_session_2!(recv_mpst_b_to_c, RoleBtoC, next_b_to_c);
 create_recv_mpst_session_1!(recv_mpst_b_to_a, RoleBtoA, next_b_to_a);
 create_recv_mpst_session_1!(recv_mpst_a_to_b, RoleAtoB, next_a_to_b);
-// all
+// broadcast
 create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, next_all_to_c);
 create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c, RoleAlltoC, next_all_to_c);
 
