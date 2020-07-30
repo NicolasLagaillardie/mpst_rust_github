@@ -60,6 +60,7 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
     }
 }
 
+// Macro doesn't work: current created functions expect mpstthree::sessionmpst::SessionMpst, and not SessionMpst
 // #[macro_export]
 // macro_rules! create_sessionmpst {
 //     ($struct_name:ident, $($session_name: ident, $session_type: ident, )*) => {
@@ -79,33 +80,38 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
 //         #[doc(hidden)]
 //         impl<$($session_type: Session, )* R: Role> Session for $struct_name<$($session_type, )* R> {
 //             type Dual =
-//                 $struct_name<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual>;
+//                 $struct_name<$(<$session_type as Session>::Dual, )* <R as Role>::Dual>;
 
 //             #[doc(hidden)]
 //             fn new() -> (Self, Self::Dual) {
-//                 let vec = Vec::new();
+//                 let vec_1 = Vec::new();
+//                 let vec_2 = Vec::new();
 
 //                 $(
 //                     let (sender, receiver) = $session_type::new();
-//                     vec.push((sender, receiver));
+//                     vec_1.push(sender);
+//                     vec_2.push(receiver);
 //                 )*
-
-//                 // let (sender_one, receiver_one) = S1::new();
-//                 // let (sender_two, receiver_two) = S2::new();
 
 //                 let (role_one, role_two) = R::new();
 
+//                 let first = $struct_name {
+//                     $(
+//                         $session_name: End,
+//                     )*
+//                     stack: role_one,
+//                 }
+
+//                 let second = $struct_name {
+//                     $(
+//                         $session_name: End,
+//                     )*
+//                     stack: Rolerole_twoEnd,
+//                 }
+
 //                 (
-//                     $struct_name {
-//                         session1: sender_one,
-//                         session2: sender_two,
-//                         stack: role_one,
-//                     },
-//                     $struct_name {
-//                         session1: receiver_one,
-//                         session2: receiver_two,
-//                         stack: role_two,
-//                     },
+//                     first,
+//                     second
 //                 )
 //             }
 

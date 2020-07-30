@@ -489,7 +489,7 @@ where
 /// Choose, for A, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
-    ($labelone:path, $labeltwo:path, $session:expr) => {{
+    ($session:expr, $labelone:path, $labeltwo:path) => {{
         let (session_ac, session_ca) = <_ as Session>::new();
         let (session_bc, session_cb) = <_ as Session>::new();
         let (session_ab, session_ba) = <_ as Session>::new();
@@ -527,7 +527,7 @@ macro_rules! choose_mpst_a_to_all {
 /// Choose, for B, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
-    ($labelone:path, $labeltwo:path, $session:expr) => {{
+    ($session:expr, $labelone:path, $labeltwo:path) => {{
         let (session_ac, session_ca) = <_ as Session>::new();
         let (session_bc, session_cb) = <_ as Session>::new();
         let (session_ab, session_ba) = <_ as Session>::new();
@@ -565,7 +565,7 @@ macro_rules! choose_mpst_b_to_all {
 /// Choose, for C, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
-    ($labelone:path, $labeltwo:path, $session:expr) => {{
+    ($session:expr, $labelone:path, $labeltwo:path) => {{
         let (session_ac, session_ca) = <_ as Session>::new();
         let (session_bc, session_cb) = <_ as Session>::new();
         let (session_ab, session_ba) = <_ as Session>::new();
@@ -826,7 +826,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// Choose, for C, between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose_mpst_to_all {
-    ($label_1:path, $label_2:path, $session:expr, $fn_send_1:ident, $fn_send_2:ident) => {{
+    ($session:expr, $label_1:path, $label_2:path, $fn_send_1:ident, $fn_send_2:ident) => {{
         let (session_1_3, session_3_1) = <_ as Session>::new();
         let (session_2_3, session_3_2) = <_ as Session>::new();
         let (session_1_2, session_2_1) = <_ as Session>::new();

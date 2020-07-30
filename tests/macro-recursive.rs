@@ -1,3 +1,4 @@
+// Test for Macro, exact same as usecase-recursive
 extern crate crossbeam_channel;
 extern crate mpstthree;
 extern crate rand;
@@ -146,9 +147,9 @@ fn client_recurs(
     match xs.pop() {
         Option::Some(_) => {
             let s = choose_mpst_to_all!(
+                s,
                 CBranchesAtoC::Video,
                 CBranchesBtoC::Video,
-                s,
                 send_mpst_c_to_a,
                 send_mpst_c_to_b
             );
@@ -160,9 +161,9 @@ fn client_recurs(
         }
         Option::None => {
             let s = choose_mpst_to_all!(
+                s,
                 CBranchesAtoC::End,
                 CBranchesBtoC::End,
-                s,
                 send_mpst_c_to_a,
                 send_mpst_c_to_b
             );

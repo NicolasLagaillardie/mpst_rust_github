@@ -167,7 +167,7 @@ fn client_recurs(
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s = choose_mpst_c_to_all!(CBranchesAtoC::Video, CBranchesBtoC::Video, s);
+            let s = choose_mpst_c_to_all!(s, CBranchesAtoC::Video, CBranchesBtoC::Video);
 
             let s = send_mpst_c_to_a(1, s);
             let (_, s) = recv_mpst_c_to_a(s)?;
@@ -175,7 +175,7 @@ fn client_recurs(
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_c_to_all!(CBranchesAtoC::End, CBranchesBtoC::End, s);
+            let s = choose_mpst_c_to_all!(s, CBranchesAtoC::End, CBranchesBtoC::End);
 
             close_mpst(s)?;
 

@@ -1,3 +1,4 @@
+// Test for Macro, exact same as usecase
 extern crate crossbeam_channel;
 extern crate either;
 extern crate mpstthree;

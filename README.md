@@ -9,6 +9,8 @@
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for three participants. It relies on [sesh](https://github.com/wenkokke/sesh).
 An other library is coming soon to extend to any number of participants.
 
+A short video presentation of the library can be found here: [https://youtu.be/ej1FetN31HE](https://youtu.be/ej1FetN31HE).
+
 ## Usage
 
 Add this to your `Cargo.toml`:
@@ -173,6 +175,57 @@ Tests are divided in 4 files:
 * [choose](tests/choose.rs) checks that a protocol where a role **B** spreads a choice to the two other roles. For simplifying the test, role **C** is doing nothing. The protocol can be written as **B→A:{B!A, B!A}**.
 * [usecase](test/usecase.rs) is implementing the protocol given in [1](.github/pdf/GPS.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 * [usecase-recursive](test/usecase-recursive.rs) is implementing the protocol given in [2](.github/pdf/GPR.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
+
+### Going further
+
+This subsection explains more complex and diverse features of the library.
+
+#### Parametrisation on the names of the roles
+
+This part details how to create new roles and how to use them.
+
+##### Creation of new roles
+
+Instead of being limited by roles `RoleAtoB`, `RoleBtoC` and so on, you can now create your own roles. To achieve this, you need to use the macros  `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleAtoD`. The expected code will be:
+
+```rust
+create_normal_role!(RoleAtoD, next_a_to_d, RoleDtoA, next_d_to_a);
+```
+
+##### Sending and receiving with those new roles
+
+To create the role `RoleAtoD`, you need the related `next` function, that can be named `next_a_to_d`, to go through a stack which head is `RoleAtoD`, such as `RoleAtoD<RoleEnd>`. The *dual* of `RoleAtoD`is `RoleDtoA`and the related `next` function, that can be named `next_d_to_a`.
+
+To *send* and *receive* with those new roles, it is mandatory to define new `send` and `recv` functions. This can easily be done with the macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2`.
+As you may notice, there is a difference made between `session_1` and `session_2`. This is due to the current limitation of the library: this is for making the difference between the binary channels used during the communication. If `A` sends to `B`, it will send on the first channel, and by convention (alphanumerical order), it will be the first binary channel, hence `create_send_mpst_session_1` will be used. If `A` send to `C` and `B` is among the participants, then `create_send_mpst_session_2` will be used.
+The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the names of the role and the related `next`function. To create the `send` function from `A` to `B`, here is the expected line of code: 
+
+```rust
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleAtoB, next_a_to_b);
+```
+
+##### Making choice and offer with those new roles
+
+To add a layer of features, one may expect to implement `choice` and `offer`. There are two different kind of branching: *binary* and *multiple*. The former refers to a branching with only two choices, whereas the latter refers to branching with as many choices as wanted.
+For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the names of the role and the related `next` function. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
+
+```rust
+create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, next_all_to_c);
+```
+
+On the opposite side, to create a *choice* from role `C` to the other roles, where `C` will choose the left choice, here is the expected code.
+
+```rust
+create_choose_left_from_3_to_1_and_2!(choose_left_mpst_session_c_to_all, RoleCtoAll, next_c_to_all);
+```
+
+To compare the traditional and the more complex methods, you can check the [usecse](tests/usecase.rs) and [macro-choice](tests/macro-choice.rs) files
+
+For the *multipke branching*, instead of creating new functions, the macro `offer_mpst` and `choose_mpst_to_all` can be used directly. The `offer_mpst` macro expects a session, the name of the `recv` function used and the branches for the matching. The `choose_mpst_to_all` macro expects the path to the different choices, the session and the `send` functions used for sending the choice. A comparison can be made between the files [usecase-recursive](tests/usecase-recursive.rs) and [macro-recursive](test/macro-recursive.rs), which are respectively the traditional methode and the more complex method.
+
+#### Parametrisation on the  number of roles
+
+This part details how to create create protocols many multiple roles. This is still a work in progress.
 
 ## Contributing
 
