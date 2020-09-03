@@ -1,4 +1,4 @@
-// Test for Macro
+// Test for parametrisation on the name of the roles
 extern crate crossbeam_channel;
 extern crate either;
 extern crate mpstthree;

@@ -176,15 +176,15 @@ Tests are divided in 4 files:
 * [usecase](test/usecase.rs) is implementing the protocol given in [1](.github/pdf/GPS.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 * [usecase-recursive](test/usecase-recursive.rs) is implementing the protocol given in [2](.github/pdf/GPR.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 
-### Going further
+## Going further
 
 This subsection explains more complex and diverse features of the library.
 
-#### Parametrisation on the names of the roles
+### Parametrisation on the names of the roles
 
 This part details how to create new roles and how to use them.
 
-##### Creation of new roles
+#### Creation of new roles
 
 Instead of being limited by roles `RoleAtoB`, `RoleBtoC` and so on, you can now create your own roles. To achieve this, you need to use the macros  `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleAtoD`. The expected code will be:
 
@@ -192,7 +192,7 @@ Instead of being limited by roles `RoleAtoB`, `RoleBtoC` and so on, you can now 
 create_normal_role!(RoleAtoD, next_a_to_d, RoleDtoA, next_d_to_a);
 ```
 
-##### Sending and receiving with those new roles
+#### Sending and receiving with those new roles
 
 To create the role `RoleAtoD`, you need the related `next` function, that can be named `next_a_to_d`, to go through a stack which head is `RoleAtoD`, such as `RoleAtoD<RoleEnd>`. The *dual* of `RoleAtoD`is `RoleDtoA`and the related `next` function, that can be named `next_d_to_a`.
 
@@ -204,7 +204,7 @@ The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_r
 create_send_mpst_session_1!(send_mpst_a_to_b, RoleAtoB, next_a_to_b);
 ```
 
-##### Making choice and offer with those new roles
+#### Making choice and offer with those new roles
 
 To add a layer of features, one may expect to implement `choice` and `offer`. There are two different kind of branching: *binary* and *multiple*. The former refers to a branching with only two choices, whereas the latter refers to branching with as many choices as wanted.
 For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the names of the role and the related `next` function. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
@@ -219,11 +219,11 @@ On the opposite side, to create a *choice* from role `C` to the other roles, whe
 create_choose_left_from_3_to_1_and_2!(choose_left_mpst_session_c_to_all, RoleCtoAll, next_c_to_all);
 ```
 
-To compare the traditional and the more complex methods, you can check the [usecse](tests/usecase.rs) and [macro-choice](tests/macro-choice.rs) files
+To compare the traditional and the more complex methods, you can check the [usecase](tests/usecase.rs) and [macro-choice](tests/macro-choice.rs) files
 
 For the *multipke branching*, instead of creating new functions, the macro `offer_mpst` and `choose_mpst_to_all` can be used directly. The `offer_mpst` macro expects a session, the name of the `recv` function used and the branches for the matching. The `choose_mpst_to_all` macro expects the path to the different choices, the session and the `send` functions used for sending the choice. A comparison can be made between the files [usecase-recursive](tests/usecase-recursive.rs) and [macro-recursive](test/macro-recursive.rs), which are respectively the traditional methode and the more complex method.
 
-#### Parametrisation on the  number of roles
+### Parametrisation on the  number of roles
 
 This part details how to create create protocols many multiple roles. This is still a work in progress.
 

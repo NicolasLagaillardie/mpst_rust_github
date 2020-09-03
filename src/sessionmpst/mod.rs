@@ -61,79 +61,121 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
 }
 
 // Macro doesn't work: current created functions expect mpstthree::sessionmpst::SessionMpst, and not SessionMpst
-// #[macro_export]
-// macro_rules! create_sessionmpst {
-//     ($struct_name:ident, $($session_name: ident, $session_type: ident, )*) => {
-//         ////////////////////////////////////////////
-//         /// The Role
+#[macro_export]
+macro_rules! create_sessionmpst {
+    ($struct_name:ident, $($session_name: ident, $session_type: ident, )*) => {
+        ////////////////////////////////////////////
+        /// The SessionMpst
 
-//         #[must_use]
-//         #[derive(Debug)]
-//         struct $struct_name<$($session_type: Session, )* R: Role> {
-//             $(pub $session_name: $session_type, )*
-//             pub stack: R,
-//         }
+        #[must_use]
+        #[derive(Debug)]
+        struct $struct_name<$($session_type: Session, )* R: Role> {
+            $(
+                pub $session_name: $session_type,
+            )*
+            pub stack: R,
+        }
 
-//         ////////////////////////////////////////////
-//         /// The Role functions
+        ////////////////////////////////////////////
+        /// The SessionMpst functions
 
-//         #[doc(hidden)]
-//         impl<$($session_type: Session, )* R: Role> Session for $struct_name<$($session_type, )* R> {
-//             type Dual =
-//                 $struct_name<$(<$session_type as Session>::Dual, )* <R as Role>::Dual>;
+        #[doc(hidden)]
+        impl<$($session_type: Session, )* R: Role> Session for $struct_name<$($session_type, )* R> {
+            type Dual =
+                $struct_name<$(<$session_type as Session>::Dual, )* <R as Role>::Dual>;
 
-//             #[doc(hidden)]
-//             fn new() -> (Self, Self::Dual) {
-//                 let vec_1 = Vec::new();
-//                 let vec_2 = Vec::new();
+            #[doc(hidden)]
+            fn new() -> (Self, Self::Dual) {
 
-//                 $(
-//                     let (sender, receiver) = $session_type::new();
-//                     vec_1.push(sender);
-//                     vec_2.push(receiver);
-//                 )*
+                let (role_one, role_two) = R::new();
 
-//                 let (role_one, role_two) = R::new();
+                // Issue with no link between the two new SessionMpst
+                (
+                    $struct_name {
+                        $(
+                            $session_name: {
+                                let (sender, _) = $session_type::new();
+                                sender
+                            },
+                        )*
+                        stack: role_one,
+                    },
+                    $struct_name {
+                        $(
+                            $session_name: {
+                                let (_, receiver) = $session_type::new();
+                                receiver
+                            },
+                        )*
+                        stack: role_two,
+                    }
+                )
+            }
 
-//                 let first = $struct_name {
-//                     $(
-//                         $session_name: End,
-//                     )*
-//                     stack: role_one,
-//                 }
+            #[doc(hidden)]
+            fn head_str() -> String {
+                format!(
+                    "{} + {} + {}",
+                    S1::head_str(),
+                    S2::head_str(),
+                    R::head_str()
+                )
+            }
 
-//                 let second = $struct_name {
-//                     $(
-//                         $session_name: End,
-//                     )*
-//                     stack: Rolerole_twoEnd,
-//                 }
+            #[doc(hidden)]
+            fn tail_str() -> String {
+                format!(
+                    "{} + {} + {}",
+                    S1::tail_str(),
+                    S2::tail_str(),
+                    R::tail_str()
+                )
+            }
+        }
+    };
+}
 
-//                 (
-//                     first,
-//                     second
-//                 )
-//             }
-
-//             #[doc(hidden)]
-//             fn head_str() -> String {
-//                 format!(
-//                     "{} + {} + {}",
-//                     S1::head_str(),
-//                     S2::head_str(),
-//                     R::head_str()
-//                 )
-//             }
-
-//             #[doc(hidden)]
-//             fn tail_str() -> String {
-//                 format!(
-//                     "{} + {} + {}",
-//                     S1::tail_str(),
-//                     S2::tail_str(),
-//                     R::tail_str()
-//                 )
-//             }
-//         }
+// macro_rules! new_struct {
+//     // input is empty: time to output
+//     (@munch () -> {$(#[$attr:meta])* struct $name:ident $(($id:ident: $ty:ty))*}) => {
+//         $(#[$attr])* struct $name { $($id: $ty),* }
 //     };
+
+//     // branch off to generate an inner struct
+//     (@munch ($id:ident: struct $name:ident {$($inner:tt)*} $($next:tt)*) -> {$(#[$attr:meta])* struct $($output:tt)*}) => {
+//         new_struct!(@munch ($($inner)*) -> {$(#[$attr])* struct $name});
+//         new_struct!(@munch ($($next)*) -> {$(#[$attr])* struct $($output)* ($id: $name)});
+//     };
+
+//     // throw on the last field
+//     (@munch ($id:ident: $ty:ty) -> {$($output:tt)*}) => {
+//         new_struct!(@munch () -> {$($output)* ($id: $ty)});
+//     };
+
+//     // throw on another field (not the last one)
+//     (@munch ($id:ident: $ty:ty, $($next:tt)*) -> {$($output:tt)*}) => {
+//         new_struct!(@munch ($($next)*) -> {$($output)* ($id: $ty)});
+//     };
+
+//     // entry point (this is where a macro call starts)
+//     ($(#[$attr:meta])* struct $name:ident { $($input:tt)*} ) => {
+//         new_struct!(@munch ($($input)*) -> {$(#[$attr])* struct $name});
+//         //                 ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//         //                     input       output
+//     }
+// }
+
+// new_struct! {
+//     #[derive(Debug)]
+//     struct Foo {
+//         foo: i32,
+//         bar: struct Bar {
+//             bar: i32,
+//             foobar: i64
+//         }
+//     }
+// }
+
+// fn main() {
+//     println!("{:#?}", Foo { foo: 1, bar: Bar { bar: 2, foobar: 3 } });
 // }
