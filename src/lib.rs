@@ -1,7 +1,3 @@
-extern crate crossbeam_channel;
-extern crate dot;
-extern crate either;
-
 use std::any::Any;
 use std::error::Error;
 use std::marker;

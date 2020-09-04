@@ -1,5 +1,5 @@
-use binary::Session;
-use role::Role;
+use crate::binary::Session;
+use crate::role::Role;
 
 /// A `struct` which encapsulates two binary session types and a queue.
 ///
@@ -134,48 +134,3 @@ macro_rules! create_sessionmpst {
         }
     };
 }
-
-// macro_rules! new_struct {
-//     // input is empty: time to output
-//     (@munch () -> {$(#[$attr:meta])* struct $name:ident $(($id:ident: $ty:ty))*}) => {
-//         $(#[$attr])* struct $name { $($id: $ty),* }
-//     };
-
-//     // branch off to generate an inner struct
-//     (@munch ($id:ident: struct $name:ident {$($inner:tt)*} $($next:tt)*) -> {$(#[$attr:meta])* struct $($output:tt)*}) => {
-//         new_struct!(@munch ($($inner)*) -> {$(#[$attr])* struct $name});
-//         new_struct!(@munch ($($next)*) -> {$(#[$attr])* struct $($output)* ($id: $name)});
-//     };
-
-//     // throw on the last field
-//     (@munch ($id:ident: $ty:ty) -> {$($output:tt)*}) => {
-//         new_struct!(@munch () -> {$($output)* ($id: $ty)});
-//     };
-
-//     // throw on another field (not the last one)
-//     (@munch ($id:ident: $ty:ty, $($next:tt)*) -> {$($output:tt)*}) => {
-//         new_struct!(@munch ($($next)*) -> {$($output)* ($id: $ty)});
-//     };
-
-//     // entry point (this is where a macro call starts)
-//     ($(#[$attr:meta])* struct $name:ident { $($input:tt)*} ) => {
-//         new_struct!(@munch ($($input)*) -> {$(#[$attr])* struct $name});
-//         //                 ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//         //                     input       output
-//     }
-// }
-
-// new_struct! {
-//     #[derive(Debug)]
-//     struct Foo {
-//         foo: i32,
-//         bar: struct Bar {
-//             bar: i32,
-//             foobar: i64
-//         }
-//     }
-// }
-
-// fn main() {
-//     println!("{:#?}", Foo { foo: 1, bar: Bar { bar: 2, foobar: 3 } });
-// }

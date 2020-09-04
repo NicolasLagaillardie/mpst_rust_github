@@ -1,12 +1,13 @@
 pub mod choose;
 pub mod close;
+pub mod macros;
 pub mod offer;
 pub mod recv;
 pub mod send;
 
-use binary::{End, Recv, Send, Session};
+use crate::binary::{End, Recv, Send, Session};
+use crate::sessionmpst::SessionMpst;
 use either::Either;
-use sessionmpst::SessionMpst;
 
 /// Offer a choice between two sessions `S1` and `S1`. Those sessions should be `SessionMpst`, as requested by functions
 /// such as `offer_mpst_session_b_to_a`. Implemented using `Recv` and `Either`.

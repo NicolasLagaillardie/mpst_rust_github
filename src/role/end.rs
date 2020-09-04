@@ -1,5 +1,5 @@
+use crate::role::Role;
 use crossbeam_channel::{bounded, Receiver, Sender};
-use role::Role;
 
 /// End of communication.
 #[derive(Debug)]

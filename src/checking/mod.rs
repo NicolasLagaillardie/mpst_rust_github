@@ -3,9 +3,9 @@ mod aux_dot;
 
 use self::aux_checker::{checker_aux, parse_type_of};
 
-use binary::Session;
-use role::Role;
-use sessionmpst::SessionMpst;
+use crate::binary::Session;
+use crate::role::Role;
+use crate::sessionmpst::SessionMpst;
 
 use std::collections::HashMap;
 use std::error::Error;

@@ -1,6 +1,6 @@
-use binary::End;
-use role::end::RoleEnd;
-use sessionmpst::SessionMpst;
+use crate::binary::End;
+use crate::role::end::RoleEnd;
+use crate::sessionmpst::SessionMpst;
 use std::error::Error;
 
 /// Closes a `SessionMpst`. Synchronises with all partners, and fails if one of the partners

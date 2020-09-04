@@ -1,6 +1,6 @@
+use crate::role::all_to_c::RoleAlltoC;
+use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
-use role::all_to_c::RoleAlltoC;
-use role::Role;
 
 /// Gives the order to the `SessionMpst` related to C to execute its `session`
 /// fields with every other processes.

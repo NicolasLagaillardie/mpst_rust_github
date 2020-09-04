@@ -1,6 +1,6 @@
+use crate::role::a_to_c::RoleAtoC;
+use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
-use role::a_to_c::RoleAtoC;
-use role::Role;
 
 /// Gives the order to the `SessionMpst` related to C to execute its `session` field with A.
 ///

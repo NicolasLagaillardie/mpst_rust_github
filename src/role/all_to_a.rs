@@ -1,6 +1,6 @@
+use crate::role::a_to_all::RoleAtoAll;
+use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
-use role::a_to_all::RoleAtoAll;
-use role::Role;
 
 /// The required `Dual` of `RoleAtoAll`.
 ///
