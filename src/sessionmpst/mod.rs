@@ -60,7 +60,6 @@ impl<S1: Session, S2: Session, R: Role> Session for SessionMpst<S1, S2, R> {
     }
 }
 
-// Macro doesn't work: current created functions expect mpstthree::sessionmpst::SessionMpst, and not SessionMpst
 #[macro_export]
 macro_rules! create_sessionmpst {
     ($struct_name:ident, $($session_name: ident, $session_type: ident, )*) => {

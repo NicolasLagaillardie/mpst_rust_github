@@ -1,6 +1,7 @@
 pub mod choose;
 pub mod close;
-pub mod macros;
+pub mod macros_multiple;
+pub mod macros_simple;
 pub mod offer;
 pub mod recv;
 pub mod send;

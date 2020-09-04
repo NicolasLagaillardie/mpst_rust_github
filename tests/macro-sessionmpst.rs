@@ -3,10 +3,9 @@ extern crate crossbeam_channel;
 extern crate either;
 extern crate mpstthree;
 use mpstthree::binary::{End, Session};
+use mpstthree::create_sessionmpst;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
-// use mpstthree::sessionmpst::SessionMpst;
-use mpstthree::create_sessionmpst;
 use std::error::Error;
 
 // Create new SessionMpst for three participants

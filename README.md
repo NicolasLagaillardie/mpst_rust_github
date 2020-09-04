@@ -86,7 +86,7 @@ type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
 type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
 ```
 
-To check to the protocol is *correct*, it is  mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.
+To check to the protocol is *correct*, it is mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.
 
 ```rust
 /// Endpoint for A
@@ -180,13 +180,13 @@ Tests are divided in 4 files:
 
 This subsection explains more complex and diverse features of the library.
 
-### Parametrisation on the names of the roles
+### Parametrisation on the name of the roles
 
 This part details how to create new roles and how to use them.
 
 #### Creation of new roles
 
-Instead of being limited by roles `RoleAtoB`, `RoleBtoC` and so on, you can now create your own roles. To achieve this, you need to use the macros  `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleAtoD`. The expected code will be:
+Instead of being limited by roles `RoleAtoB`, `RoleBtoC` and so on, you can now create your own roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleAtoD`. The expected code will be:
 
 ```rust
 create_normal_role!(RoleAtoD, next_a_to_d, RoleDtoA, next_d_to_a);
@@ -223,7 +223,7 @@ To compare the traditional and the more complex methods, you can check the [usec
 
 For the *multipke branching*, instead of creating new functions, the macro `offer_mpst` and `choose_mpst_to_all` can be used directly. The `offer_mpst` macro expects a session, the name of the `recv` function used and the branches for the matching. The `choose_mpst_to_all` macro expects the path to the different choices, the session and the `send` functions used for sending the choice. A comparison can be made between the files [usecase-recursive](tests/usecase-recursive.rs) and [macro-recursive](test/macro-recursive.rs), which are respectively the traditional methode and the more complex method.
 
-### Parametrisation on the  number of roles
+### Parametrisation on the number of roles
 
 This part details how to create create protocols many multiple roles. This is still a work in progress.
 
