@@ -1,0 +1,20 @@
+[package]
+name = "mpst_seq"
+version = "0.0.1"
+authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
+license = "MIT"
+description = "Lib for mpst_rust to manage any number of participants"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+proc-macro = true
+
+[dev-dependencies]
+trybuild = { version = "1.0", features = ["diff"] }
+
+[dependencies]
+crossbeam-channel = "0.4.2"
+either = "1.5.3"
+rand = "0.7"
+mpstthree = { git = "https://github.com/NicolasLagaillardie/mpst_rust_github", branch = "50-plugin-lint" }

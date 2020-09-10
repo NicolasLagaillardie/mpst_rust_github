@@ -11,12 +11,9 @@ use std::error::Error;
 use std::fmt;
 use std::marker;
 
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
-use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::b_to_c::RoleBtoC;
-use mpstthree::role::c_to_a::RoleCtoA;
-use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
 use mpstthree::role::Role;
@@ -41,12 +38,12 @@ type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
 type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd>),
-    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo>),
+    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
+    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo, RoleA<RoleEnd>>),
 }
 enum CBranchesBtoC<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo>),
+    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
 type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
 type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
@@ -55,25 +52,25 @@ type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
 /// Queues
 type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleAtoC<RoleEnd>>>>>;
-type QueueAInit = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
+type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleBtoA<RoleBtoA<RoleBtoC<RoleEnd>>>;
-type QueueBRecurs = RoleBtoC<RoleEnd>;
+type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type QueueBRecurs = RoleC<RoleEnd>;
 
-type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
-type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
+type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 
 /// Creating the MP sessions
 /// For C
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleB<RoleEnd>>;
 
 fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
@@ -101,21 +98,25 @@ fn hashmap_c_branches_a_to_c() -> Vec<String> {
     let (channel_1_video, _) = <_ as Session>::new();
     let (channel_2_video, _) = <_ as Session>::new();
     let (role_video, _) = <_ as Role>::new();
+    let (name_video, _) = <_ as Role>::new();
 
     let (channel_1_end, _) = <_ as Session>::new();
     let (channel_2_end, _) = <_ as Session>::new();
     let (role_end, _) = <_ as Role>::new();
+    let (name_end, _) = <_ as Role>::new();
 
     let s_video = SessionMpst {
         session1: channel_1_video,
         session2: channel_2_video,
         stack: role_video,
+        name: name_video,
     };
 
     let s_end = SessionMpst {
         session1: channel_1_end,
         session2: channel_2_end,
         stack: role_end,
+        name: name_end,
     };
 
     let video = CBranchesAtoC::<i32>::Video(s_video);
@@ -131,21 +132,25 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
     let (channel_1_video, _) = <_ as Session>::new();
     let (channel_2_video, _) = <_ as Session>::new();
     let (role_video, _) = <_ as Role>::new();
+    let (name_video, _) = <_ as Role>::new();
 
     let (channel_1_end, _) = <_ as Session>::new();
     let (channel_2_end, _) = <_ as Session>::new();
     let (role_end, _) = <_ as Role>::new();
+    let (name_end, _) = <_ as Role>::new();
 
     let s_video = SessionMpst {
         session1: channel_1_video,
         session2: channel_2_video,
         stack: role_video,
+        name: name_video,
     };
 
     let s_end = SessionMpst {
         session1: channel_1_end,
         session2: channel_2_end,
         stack: role_end,
+        name: name_end,
     };
 
     let video = CBranchesBtoC::<i32>::Video(s_video);

@@ -1,4 +1,4 @@
-use crate::role::a_to_b::RoleAtoB;
+use crate::role::b_dual::RoleBDual;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
@@ -6,12 +6,12 @@ use crossbeam_channel::{bounded, Sender};
 ///
 /// This `struct` should only be used in the `queue` field of the `SessionMpst` related to B.
 #[derive(Debug)]
-pub struct RoleBtoA<R: Role> {
+pub struct RoleB<R: Role> {
     pub sender: Sender<R::Dual>,
 }
 
-impl<R: Role> Role for RoleBtoA<R> {
-    type Dual = RoleAtoB<R::Dual>;
+impl<R: Role> Role for RoleB<R> {
+    type Dual = RoleBDual<R::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
@@ -19,10 +19,10 @@ impl<R: Role> Role for RoleBtoA<R> {
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
         (
-            RoleBtoA {
+            RoleB {
                 sender: sender_dual,
             },
-            RoleAtoB {
+            RoleBDual {
                 sender: sender_normal,
             },
         )
@@ -30,7 +30,7 @@ impl<R: Role> Role for RoleBtoA<R> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleBtoA")
+        String::from("RoleB")
     }
 
     #[doc(hidden)]
@@ -41,7 +41,7 @@ impl<R: Role> Role for RoleBtoA<R> {
 
 /// Send a value of type `Role`. Always succeeds. Returns the continuation of the
 /// queue `R`.
-pub fn next_b_to_a<R>(r: RoleBtoA<R>) -> R
+pub fn next_b<R>(r: RoleB<R>) -> R
 where
     R: Role,
 {

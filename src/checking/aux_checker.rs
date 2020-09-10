@@ -371,9 +371,9 @@ fn get_dual(s: &str) -> String {
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
     let result = &result.replace("Revc<", "Recv<");
-    let result = switch_role(&result, "RoleAtoB", "RoleBtoA");
-    let result = switch_role(&result, "RoleAtoC", "RoleCtoA");
-    let result = switch_role(&result, "RoleCtoB", "RoleBtoC");
+    let result = switch_role(&result, "RoleA", "RoleADual");
+    let result = switch_role(&result, "RoleC", "RoleCDual");
+    let result = switch_role(&result, "RoleB", "RoleBDual");
     let result = switch_role(&result, "RoleAtoAll", "RoleAlltoA");
     let result = switch_role(&result, "RoleBtoAll", "RoleAlltoB");
     switch_role(&result, "RoleCtoAll", "RoleAlltoC")

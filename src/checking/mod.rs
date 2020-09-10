@@ -14,13 +14,10 @@ use std::error::Error;
 /// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
 ///
 /// Returns the 3 strings if everything went right.
-pub fn checker<S0, S1, S2, R1, R2, R3>(
-    s1: SessionMpst<S0, <S2 as Session>::Dual, R1>,
-    s2: SessionMpst<<S0 as Session>::Dual, S1, R2>,
-    s3: SessionMpst<S2, <S1 as Session>::Dual, R3>,
-    // s1: SessionMpst<S0, S1, R1>,
-    // s2: SessionMpst<S2, S3, R2>,
-    // s3: SessionMpst<S4, S5, R3>,
+pub fn checker<S0, S1, S2, R1, R2, R3, N1, N2, N3>(
+    s1: SessionMpst<S0, <S2 as Session>::Dual, R1, N1>,
+    s2: SessionMpst<<S0 as Session>::Dual, S1, R2, N2>,
+    s3: SessionMpst<S2, <S1 as Session>::Dual, R3, N3>,
     hm: &HashMap<String, &Vec<String>>,
 ) -> Result<(String, String, String), Box<dyn Error>>
 where
@@ -30,6 +27,9 @@ where
     R1: Role + 'static,
     R2: Role + 'static,
     R3: Role + 'static,
+    N1: Role + 'static,
+    N2: Role + 'static,
+    N3: Role + 'static,
 {
     let result_1 = checker_aux(
         [

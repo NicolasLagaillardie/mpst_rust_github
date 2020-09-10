@@ -1,17 +1,17 @@
-use crate::role::b_to_a::RoleBtoA;
+use crate::role::c::RoleC;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// Gives the order to the `SessionMpst` related to A to execute its `session` field with B.
+/// Gives the order to the `SessionMpst` related to C to execute its `session` field with A.
 ///
-/// This `struct` should only be used in the `queue` field of the `SessionMpst` related to A.
+/// This `struct` should only be used in the `queue` field of the `SessionMpst` related to C.
 #[derive(Debug)]
-pub struct RoleAtoB<R: Role> {
+pub struct RoleCDual<R: Role> {
     pub sender: Sender<R::Dual>,
 }
 
-impl<R: Role> Role for RoleAtoB<R> {
-    type Dual = RoleBtoA<R::Dual>;
+impl<R: Role> Role for RoleCDual<R> {
+    type Dual = RoleC<R::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
@@ -19,10 +19,10 @@ impl<R: Role> Role for RoleAtoB<R> {
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
         (
-            RoleAtoB {
+            RoleCDual {
                 sender: sender_dual,
             },
-            RoleBtoA {
+            RoleC {
                 sender: sender_normal,
             },
         )
@@ -30,7 +30,7 @@ impl<R: Role> Role for RoleAtoB<R> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleAtoB")
+        String::from("RoleCDual")
     }
 
     #[doc(hidden)]
@@ -41,7 +41,7 @@ impl<R: Role> Role for RoleAtoB<R> {
 
 /// Send a value of type `Role`. Always succeeds. Returns the continuation of the
 /// queue `R`.
-pub fn next_a_to_b<R>(r: RoleAtoB<R>) -> R
+pub fn next_c_dual<R>(r: RoleCDual<R>) -> R
 where
     R: Role,
 {

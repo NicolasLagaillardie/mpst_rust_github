@@ -11,18 +11,21 @@ use mpstthree::binary::{End, Recv, Session};
 use mpstthree::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 
-use mpstthree::role::a_to_b::RoleAtoB;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
-use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::b::RoleB;
 use mpstthree::role::b_to_all::RoleBtoAll;
+use mpstthree::role::c::RoleC;
+use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
 
 use mpstthree::functionmpst::send::send_mpst_b_to_a;
 
-use mpstthree::functionmpst::offer::offer_mpst_session_a_to_b;
-use mpstthree::functionmpst::offer::offer_mpst_session_c_to_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_a_from_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_c_from_b;
 
 use mpstthree::functionmpst::choose::choose_left_mpst_session_b_to_all;
 use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
@@ -41,10 +44,10 @@ type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
 type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
 /// Queues
-type QueueOfferA = RoleAtoB<RoleEnd>;
+type QueueOfferA = RoleB<RoleEnd>;
 type QueueFullA = RoleAlltoB<QueueOfferA, QueueOfferA>;
 
-type QueueChoiceB = RoleBtoA<RoleEnd>;
+type QueueChoiceB = RoleA<RoleEnd>;
 type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;
 
 type QueueOfferC = RoleEnd;
@@ -52,27 +55,46 @@ type QueueFullC = RoleAlltoB<QueueOfferC, QueueOfferC>;
 
 /// Creating the MP sessions
 /// For A
-type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA>;
-type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA>;
+type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA, RoleA<RoleEnd>>;
+type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA, RoleA<RoleEnd>>;
 
-type OfferA<N> = OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, QueueOfferA, QueueOfferA>;
-type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
+type OfferAfromB<N> = OfferMpst<
+    AtoBAdd<N>,
+    End,
+    AtoBNeg<N>,
+    End,
+    QueueOfferA,
+    QueueOfferA,
+    RoleA<RoleEnd>,
+    RoleA<RoleEnd>,
+>;
+type EndpointChoiceA<N> = SessionMpst<OfferAfromB<N>, End, QueueFullA, RoleA<RoleEnd>>;
 
 /// For B
-type ChooseBtoA<N> = ChooseMpst<BtoAAdd<N>, End, BtoANeg<N>, End, QueueChoiceB, QueueChoiceB>;
-type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd>;
-type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, QueueFullB>;
+type ChooseBtoA<N> = ChooseMpst<
+    BtoAAdd<N>,
+    End,
+    BtoANeg<N>,
+    End,
+    QueueChoiceB,
+    QueueChoiceB,
+    RoleADual<RoleEnd>,
+    RoleADual<RoleEnd>,
+>;
+type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>, RoleCDual<RoleEnd>>;
+type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, QueueFullB, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCAdd = SessionMpst<End, End, QueueOfferC>;
-type EndpointCNeg = SessionMpst<End, End, QueueOfferC>;
+type EndpointCAdd = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
+type EndpointCNeg = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
 
-type OfferC = OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC>;
-type EndpointChoiceC = SessionMpst<End, OfferC, QueueFullC>;
+type OfferCfromB =
+    OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC, RoleB<RoleEnd>, RoleB<RoleEnd>>;
+type EndpointChoiceC = SessionMpst<End, OfferCfromB, QueueFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_a_to_b(
+    offer_mpst_session_to_a_from_b(
         s,
         |s: EndpointAAdd<i32>| {
             let (x, s) = recv_mpst_a_to_b(s)?;
@@ -136,7 +158,7 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
 }
 
 fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_c_to_b(
+    offer_mpst_session_to_c_from_b(
         s,
         |s: EndpointCAdd| {
             close_mpst(s)?;
