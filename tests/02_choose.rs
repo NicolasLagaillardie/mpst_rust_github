@@ -59,16 +59,8 @@ type QueueFullC = RoleAlltoB<QueueOfferC, QueueOfferC>;
 type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA, RoleA<RoleEnd>>;
 type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA, RoleA<RoleEnd>>;
 
-type OfferAfromB<N> = OfferMpst<
-    AtoBAdd<N>,
-    End,
-    AtoBNeg<N>,
-    End,
-    QueueOfferA,
-    QueueOfferA,
-    RoleA<RoleEnd>,
-    RoleA<RoleEnd>,
->;
+type OfferAfromB<N> =
+    OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, QueueOfferA, QueueOfferA, RoleA<RoleEnd>>;
 type EndpointChoiceA<N> = SessionMpst<OfferAfromB<N>, End, QueueFullA, RoleA<RoleEnd>>;
 
 /// For B
@@ -80,18 +72,15 @@ type ChooseBtoA<N> = ChooseMpst<
     <QueueOfferA as Role>::Dual,
     <QueueOfferA as Role>::Dual,
     RoleADual<RoleEnd>,
-    RoleADual<RoleEnd>,
 >;
-type ChooseBtoC =
-    ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>, RoleCDual<RoleEnd>>;
+type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>>;
 type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, QueueFullB, RoleB<RoleEnd>>;
 
 /// For C
 type EndpointCAdd = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
 type EndpointCNeg = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
 
-type OfferCfromB =
-    OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC, RoleC<RoleEnd>, RoleC<RoleEnd>>;
+type OfferCfromB = OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC, RoleC<RoleEnd>>;
 type EndpointChoiceC = SessionMpst<End, OfferCfromB, QueueFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints

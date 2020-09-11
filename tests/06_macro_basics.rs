@@ -33,7 +33,7 @@ type RecvSessionMPSTD<N> = SessionMpst<Recv<N, End>, End, TestA, TestD>;
 
 type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
 
-// Create an End pawn
+// Create an B pawn
 type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
 
 // Create new send functions

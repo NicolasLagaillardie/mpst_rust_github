@@ -91,7 +91,6 @@ type ChooseCtoA<N> = ChooseMpst<
     QueueAVideoDual,
     QueueAEnd,
     RoleADual<RoleEnd>,
-    RoleADual<RoleEnd>,
 >;
 type ChooseCtoB<N> = ChooseMpst<
     AtoBVideo<N>,
@@ -100,7 +99,6 @@ type ChooseCtoB<N> = ChooseMpst<
     CtoBClose,
     QueueBVideoDual,
     QueueBEnd,
-    RoleBDual<RoleEnd>,
     RoleBDual<RoleEnd>,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
@@ -118,7 +116,6 @@ type OfferA<N> = OfferMpst<
     QueueAVideo,
     QueueAEnd,
     RoleA<RoleEnd>,
-    RoleA<RoleEnd>,
 >;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull, RoleA<RoleEnd>>;
@@ -134,7 +131,6 @@ type OfferB<N> = OfferMpst<
     BtoCClose,
     QueueBVideo,
     QueueBEnd,
-    RoleB<RoleEnd>,
     RoleB<RoleEnd>,
 >;
 type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull, RoleB<RoleEnd>>;

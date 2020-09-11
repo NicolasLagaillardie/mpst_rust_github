@@ -14,12 +14,12 @@ use mpstthree::sessionmpst::SessionMpst;
 use std::error::Error;
 use std::marker;
 
+use either::Either;
+
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
 use rand::{thread_rng, Rng};
-
-use either::Either;
 
 use mpstthree::{
     create_broadcast_role, create_choose, create_choose_left_from_3_to_1_and_2,
@@ -72,12 +72,16 @@ create_offer_mpst_session_2!(
 create_choose_right_from_3_to_1_and_2!(
     choose_right_mpst_session_c_to_all,
     RoleCtoAll,
+    RoleADual,
+    RoleBDual,
     next_c_to_all,
     RoleC
 );
 create_choose_left_from_3_to_1_and_2!(
     choose_left_mpst_session_c_to_all,
     RoleCtoAll,
+    RoleADual,
+    RoleBDual,
     next_c_to_all,
     RoleC
 );
@@ -99,45 +103,74 @@ type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 /// Queues
 type QueueAEnd = RoleEnd;
 type QueueAEndDual = <QueueAEnd as Role>::Dual;
-type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
+type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleEnd>>>>;
 type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-type QueueAFull = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd, RoleEnd>>>;
+type QueueAFull = RoleC<RoleC<RoleAlltoC<RoleEnd, RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
 type QueueBEndDual = <QueueBEnd as Role>::Dual;
-type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
+type QueueBVideo = RoleA<RoleA<RoleEnd>>;
 type QueueBVideoDual = <QueueBVideo as Role>::Dual;
 type QueueBFull = RoleAlltoC<RoleEnd, RoleEnd>;
 
 type QueueCEnd = RoleEnd;
-type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
+type QueueCVideo = RoleA<RoleA<RoleEnd>>;
 type QueueCChoice = RoleCtoAll<QueueCVideo, QueueCEnd>;
-type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
+type QueueCFull = RoleA<RoleA<QueueCChoice>>;
 
 /// Creating the MP sessions
 /// For C
-type ChooseCtoA<N> =
-    ChooseMpst<BtoAVideo<N>, CtoAVideo<N>, BtoAClose, CtoAClose, QueueAVideoDual, QueueAEnd>;
-type ChooseCtoB<N> =
-    ChooseMpst<AtoBVideo<N>, CtoBClose, AtoBClose, CtoBClose, QueueBVideoDual, QueueBEnd>;
+type ChooseCtoA<N> = ChooseMpst<
+    BtoAVideo<N>,
+    CtoAVideo<N>,
+    BtoAClose,
+    CtoAClose,
+    QueueAVideoDual,
+    QueueAEnd,
+    RoleADual<RoleEnd>,
+>;
+type ChooseCtoB<N> = ChooseMpst<
+    AtoBVideo<N>,
+    CtoBClose,
+    AtoBClose,
+    CtoBClose,
+    QueueBVideoDual,
+    QueueBEnd,
+    RoleBDual<RoleEnd>,
+>;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, QueueCFull>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, QueueCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>;
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd>;
+type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>;
+type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>;
 
-type OfferA<N> =
-    OfferMpst<AtoBVideo<N>, AtoCVideo<N>, AtoBClose, AtoCClose, QueueAVideo, QueueAEnd>;
+type OfferA<N> = OfferMpst<
+    AtoBVideo<N>,
+    AtoCVideo<N>,
+    AtoBClose,
+    AtoCClose,
+    QueueAVideo,
+    QueueAEnd,
+    RoleA<RoleEnd>,
+>;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd>;
+type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo, RoleB<RoleEnd>>;
+type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>;
 
-type OfferB<N> = OfferMpst<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, QueueBVideo, QueueBEnd>;
-type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull>;
+type OfferB<N> = OfferMpst<
+    BtoAVideo<N>,
+    BtoCClose,
+    BtoAClose,
+    BtoCClose,
+    QueueBVideo,
+    QueueBEnd,
+    RoleB<RoleEnd>,
+>;
+type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {

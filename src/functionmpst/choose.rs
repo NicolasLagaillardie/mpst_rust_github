@@ -14,19 +14,18 @@ use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use either::Either;
 
-type ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, N0, N1> =
-    ChooseMpst<S2, S0, S4, S1, R0, R1, N0, N1>;
-type ShortChooseMpstTwo<S0, S1, S3, S5, R0, R1, N0, N1> =
-    ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R0, R1, N0, N1>;
+type ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, N0> = ChooseMpst<S2, S0, S4, S1, R0, R1, N0>;
+type ShortChooseMpstTwo<S0, S1, S3, S5, R0, R1, N0> =
+    ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R0, R1, N0>;
 
 type ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
-    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleBDual<RoleEnd>, RoleBDual<RoleEnd>>,
-    ShortChooseMpstTwo<S0, S1, S3, S5, R2, R3, RoleCDual<RoleEnd>, RoleCDual<RoleEnd>>,
+    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleBDual<RoleEnd>>,
+    ShortChooseMpstTwo<S0, S1, S3, S5, R2, R3, RoleCDual<RoleEnd>>,
     RoleAtoAll<R4, R5>,
     RoleA<RoleEnd>,
 >;
 type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
-    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleADual<RoleEnd>, RoleADual<RoleEnd>>,
+    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleADual<RoleEnd>>,
     ShortChooseMpstTwo<
         <S3 as Session>::Dual,
         <S5 as Session>::Dual,
@@ -34,14 +33,13 @@ type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
         <S1 as Session>::Dual,
         R2,
         R3,
-        RoleCDual<RoleEnd>,
         RoleCDual<RoleEnd>,
     >,
     RoleBtoAll<R4, R5>,
     RoleB<RoleEnd>,
 >;
 type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
-    ShortChooseMpstOne<S2, S4, S0, S1, R0, R1, RoleADual<RoleEnd>, RoleADual<RoleEnd>>,
+    ShortChooseMpstOne<S2, S4, S0, S1, R0, R1, RoleADual<RoleEnd>>,
     ShortChooseMpstTwo<
         <S3 as Session>::Dual,
         <S5 as Session>::Dual,
@@ -49,7 +47,6 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
         <S1 as Session>::Dual,
         R2,
         R3,
-        RoleBDual<RoleEnd>,
         RoleBDual<RoleEnd>,
     >,
     RoleCtoAll<R4, R5>,
@@ -671,56 +668,6 @@ macro_rules! choose_mpst_c_to_all {
             session2: session_cb,
             stack: queue_c,
             name: name_c,
-        }
-    }};
-}
-
-// create the core for the choose_mpst macros
-#[macro_export]
-macro_rules! create_choose {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $name_1:ty, $name_2:ty, $name_3:ty, $session:expr, $pat:path, $next:ident) => {{
-        let (session_3_1, session_1_3) = <$session_1>::new();
-        let (session_3_2, session_2_3) = <$session_2>::new();
-        let (session_2_1, session_1_2) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
-        let (name_1, _) = <$name_1>::new();
-        let (name_2, _) = <$name_2>::new();
-        let (name_3, _) = <$name_3>::new();
-
-        let choice_1 = SessionMpst {
-            session1: session_1_2,
-            session2: session_1_3,
-            stack: role_1,
-            name: name_1,
-        };
-
-        let choice_2 = SessionMpst {
-            session1: session_2_1,
-            session2: session_2_3,
-            stack: role_2,
-            name: name_2,
-        };
-
-        let new_session_1 = send($pat(choice_1), $session.session1);
-        let new_session_2 = send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
-
-        let s = SessionMpst {
-            session1: new_session_1,
-            session2: new_session_2,
-            stack: new_queue,
-            name: name_3,
-        };
-
-        cancel(s);
-
-        SessionMpst {
-            session1: session_3_1,
-            session2: session_3_2,
-            stack: role_3,
-            name: name_3,
         }
     }};
 }

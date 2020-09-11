@@ -84,7 +84,7 @@ macro_rules! create_sessionmpst {
                 pub $session_name: $session_type,
             )*
             pub stack: R,
-            pub stack: N,
+            pub name: N,
         }
 
         ////////////////////////////////////////////
@@ -99,7 +99,7 @@ macro_rules! create_sessionmpst {
             fn new() -> (Self, Self::Dual) {
 
                 let (role_one, role_two) = R::new();
-                let (name_one, name_two) = R::new();
+                let (name_one, name_two) = N::new();
 
                 // Issue with no link between the two new SessionMpst
                 (

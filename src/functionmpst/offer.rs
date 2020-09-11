@@ -18,38 +18,38 @@ use std::error::Error;
 // type OfferMpstGeneric<S1, S2, S3, S4, R1, R2, N1, N2> = OfferMpst<S1, S2, S3, S4, R1, R2, N1, N2>;
 
 type SessionMpstToAFromB<S1, S2, S3, S4, S5, R1, R2, R3> = SessionMpst<
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>, RoleA<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
     S5,
     RoleAlltoB<R3, R3>,
     RoleA<RoleEnd>,
 >;
 type SessionMpstToAFromC<S1, S2, S3, S4, S5, R1, R2, R3> = SessionMpst<
     S5,
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>, RoleA<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
     RoleAlltoC<R3, R3>,
     RoleA<RoleEnd>,
 >;
 type SessionMpstToBFromA<S1, S2, S3, S4, S5, R1, R2, R3> = SessionMpst<
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>, RoleB<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>>,
     S5,
     RoleAlltoA<R3, R3>,
     RoleB<RoleEnd>,
 >;
 type SessionMpstToBFromC<S1, S2, S3, S4, S5, R1, R2, R3> = SessionMpst<
     S5,
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>, RoleB<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>>,
     RoleAlltoC<R3, R3>,
     RoleB<RoleEnd>,
 >;
 type SessionMpstToCFromA<S1, S2, S3, S4, S5, R1, R2, R3> = SessionMpst<
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleC<RoleEnd>, RoleC<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, RoleC<RoleEnd>>,
     S5,
     RoleAlltoA<R3, R3>,
     RoleC<RoleEnd>,
 >;
 type SessionMpstToCFromB<S1, S2, S3, S4, S5, R1, R2, R3> = SessionMpst<
     S5,
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleC<RoleEnd>, RoleC<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, RoleC<RoleEnd>>,
     RoleAlltoB<R3, R3>,
     RoleC<RoleEnd>,
 >;
