@@ -19,6 +19,7 @@ use mpstthree::role::b_to_all::RoleBtoAll;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
+use mpstthree::role::Role;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
 
@@ -76,12 +77,13 @@ type ChooseBtoA<N> = ChooseMpst<
     End,
     BtoANeg<N>,
     End,
-    QueueChoiceB,
-    QueueChoiceB,
+    <QueueOfferA as Role>::Dual,
+    <QueueOfferA as Role>::Dual,
     RoleADual<RoleEnd>,
     RoleADual<RoleEnd>,
 >;
-type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>, RoleCDual<RoleEnd>>;
+type ChooseBtoC =
+    ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>, RoleCDual<RoleEnd>>;
 type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, QueueFullB, RoleB<RoleEnd>>;
 
 /// For C
@@ -89,7 +91,7 @@ type EndpointCAdd = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
 type EndpointCNeg = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
 
 type OfferCfromB =
-    OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC, RoleB<RoleEnd>, RoleB<RoleEnd>>;
+    OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC, RoleC<RoleEnd>, RoleC<RoleEnd>>;
 type EndpointChoiceC = SessionMpst<End, OfferCfromB, QueueFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
@@ -122,8 +124,8 @@ fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error
             End,
             BtoANeg<i32>,
             End,
-            QueueChoiceB,
-            QueueChoiceB,
+            <QueueOfferA as Role>::Dual,
+            <QueueOfferA as Role>::Dual,
             RoleEnd,
             RoleEnd,
             QueueChoiceB,
@@ -144,8 +146,8 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
             End,
             BtoANeg<i32>,
             End,
-            QueueChoiceB,
-            QueueChoiceB,
+            <QueueOfferA as Role>::Dual,
+            <QueueOfferA as Role>::Dual,
             RoleEnd,
             RoleEnd,
             QueueChoiceB,

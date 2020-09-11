@@ -17,55 +17,53 @@ use std::error::Error;
 use std::marker;
 
 // Create new roles
-create_normal_role!(RoleAtoD, next_a_to_d, RoleDtoA, next_d_to_a);
+create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 
-type TestAtoD = RoleAtoD<RoleEnd>;
+type TestA = RoleA<RoleEnd>;
+type TestB = RoleB<RoleEnd>;
+type TestD = RoleD<RoleEnd>;
 
-type TestDtoA = RoleDtoA<RoleEnd>;
+type SendSessionMPSTD<N> = SessionMpst<Send<N, End>, End, TestA, TestD>;
 
-create_normal_role!(RoleBtoD, next_b_to_d, RoleDtoB, next_d_to_b);
+type SendSessionMPSTA<N> = SessionMpst<End, Send<N, End>, TestD, TestA>;
 
-// Create new send functions
-create_send_mpst_session_1!(send_mpst_d_to_a, RoleDtoA, next_d_to_a);
+type RecvSessionMPSTD<N> = SessionMpst<Recv<N, End>, End, TestA, TestD>;
 
-type SendSessionMPSTDtoA<N> = SessionMpst<Send<N, End>, End, TestDtoA>;
-
-create_send_mpst_session_2!(send_mpst_a_to_d, RoleAtoD, next_a_to_d);
-
-type SendSessionMPSTAtoD<N> = SessionMpst<End, Send<N, End>, TestAtoD>;
-
-// Create new recv functions and related types
-create_recv_mpst_session_1!(recv_mpst_d_to_a, RoleDtoA, next_d_to_a);
-
-type RecvSessionMPSTDtoA<N> = SessionMpst<Recv<N, End>, End, TestDtoA>;
-
-create_recv_mpst_session_2!(recv_mpst_a_to_d, RoleAtoD, next_a_to_d);
-
-type RecvSessionMPSTAtoD<N> = SessionMpst<End, Recv<N, End>, TestAtoD>;
+type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
 
 // Create an End pawn
-type Pawn = SessionMpst<End, End, RoleEnd>;
+type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
+
+// Create new send functions
+create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, next_a, RoleD);
+create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, next_d, RoleA);
+
+// Create new recv functions
+create_recv_mpst_session_1!(recv_mpst_d_to_a, RoleA, next_a, RoleD);
+create_recv_mpst_session_2!(recv_mpst_a_to_d, RoleD, next_d, RoleA);
 
 // The functions for the basic exchanges
-fn send_a_to_d(s: SendSessionMPSTAtoD<i32>) -> Result<(), Box<dyn Error>> {
+fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_d(0, s);
     close_mpst(s)?;
     Ok(())
 }
 
-fn send_d_to_a(s: SendSessionMPSTDtoA<i32>) -> Result<(), Box<dyn Error>> {
+fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_d_to_a(0, s);
     close_mpst(s)?;
     Ok(())
 }
 
-fn recv_a_to_d(s: RecvSessionMPSTAtoD<i32>) -> Result<(), Box<dyn Error>> {
+fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_d(s)?;
     close_mpst(s)?;
     Ok(())
 }
 
-fn recv_d_to_a(s: RecvSessionMPSTDtoA<i32>) -> Result<(), Box<dyn Error>> {
+fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_to_a(s)?;
     close_mpst(s)?;
     Ok(())

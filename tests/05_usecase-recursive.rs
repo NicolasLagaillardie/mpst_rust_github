@@ -21,12 +21,9 @@ use mpstthree::checking::checker;
 use mpstthree::functionmpst::close::close_mpst;
 
 // Get roles
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
-use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::b_to_c::RoleBtoC;
-use mpstthree::role::c_to_a::RoleCtoA;
-use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
 // Get recv functions
@@ -68,12 +65,12 @@ type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
 type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
 
 enum CBranchesAtoC<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd>),
-    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>),
+    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
+    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>),
 }
 enum CBranchesBtoC<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo>),
+    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
 type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
 type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
@@ -82,29 +79,30 @@ type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
 /// Queues
 type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleAtoC<RoleEnd>>>>>;
-type QueueARecurs = RoleAtoC<RoleEnd>;
-type QueueAInit = RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>;
+type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type QueueARecurs = RoleC<RoleEnd>;
+type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleBtoA<RoleBtoA<RoleBtoC<RoleEnd>>>;
-type QueueBRecurs = RoleBtoC<RoleEnd>;
+type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type QueueBRecurs = RoleC<RoleEnd>;
 
-type QueueCRecurs = RoleCtoA<RoleCtoB<RoleEnd>>;
-type QueueCFull = RoleCtoA<RoleCtoA<QueueCRecurs>>;
+type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 
 /// Creating the MP sessions
 /// For C
 
-type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull>;
+type EndpointCRecurs<N> =
+    SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs, RoleC<RoleEnd>>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, QueueARecurs>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit>;
+type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, QueueARecurs, RoleA<RoleEnd>>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs>;
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {

@@ -12,12 +12,13 @@ use mpstthree::fork_mpst;
 use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
-use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::b::RoleB;
 use mpstthree::role::b_to_all::RoleBtoAll;
-use mpstthree::role::c_to_a::RoleCtoA;
+use mpstthree::role::c::RoleC;
+use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
@@ -26,8 +27,8 @@ use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
 use mpstthree::functionmpst::send::send_mpst_a_to_c;
 use mpstthree::functionmpst::send::send_mpst_b_to_a;
 
-use mpstthree::functionmpst::offer::offer_mpst_session_a_to_b;
-use mpstthree::functionmpst::offer::offer_mpst_session_c_to_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_a_from_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_c_from_b;
 
 use mpstthree::functionmpst::choose::choose_left_mpst_session_b_to_all;
 use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
@@ -50,42 +51,76 @@ type CtoANeg<N> = <AtoCNeg<N> as Session>::Dual;
 type CtoAAdd<N> = <AtoCAdd<N> as Session>::Dual;
 
 /// Queues
-type QueueOfferA = RoleAtoB<RoleAtoC<RoleEnd>>;
+type QueueOfferA = RoleB<RoleC<RoleEnd>>;
 type QueueOfferADual = <QueueOfferA as Role>::Dual;
 type QueueFullA = RoleAlltoB<QueueOfferA, QueueOfferA>;
 
-type QueueChoiceB = RoleBtoA<RoleEnd>;
+type QueueChoiceB = RoleA<RoleEnd>;
 type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;
 
-type QueueOfferC = RoleCtoA<RoleEnd>;
+type QueueOfferC = RoleA<RoleEnd>;
 type QueueOfferCDual = <QueueOfferC as Role>::Dual;
 type QueueFullC = RoleAlltoB<QueueOfferC, QueueOfferC>;
 
 /// Creating the MP sessions
 /// For A
-type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, AtoCAdd<N>, QueueOfferA>;
-type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, AtoCNeg<N>, QueueOfferA>;
+type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, AtoCAdd<N>, QueueOfferA, RoleA<RoleEnd>>;
+type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, AtoCNeg<N>, QueueOfferA, RoleA<RoleEnd>>;
 
-type OfferA<N> =
-    OfferMpst<AtoBAdd<N>, AtoCAdd<N>, AtoBNeg<N>, AtoCNeg<N>, QueueOfferA, QueueOfferA>;
-type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
+type OfferA<N> = OfferMpst<
+    AtoBAdd<N>,
+    AtoCAdd<N>,
+    AtoBNeg<N>,
+    AtoCNeg<N>,
+    QueueOfferA,
+    QueueOfferA,
+    RoleA<RoleEnd>,
+    RoleA<RoleEnd>,
+>;
+type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA, RoleA<RoleEnd>>;
 
 /// For B
-type ChooseBtoA<N> =
-    ChooseMpst<BtoAAdd<N>, CtoAAdd<N>, BtoANeg<N>, CtoANeg<N>, QueueOfferADual, QueueOfferADual>;
-type ChooseBtoC<N> = ChooseMpst<AtoCAdd<N>, End, AtoCNeg<N>, End, QueueOfferCDual, QueueOfferCDual>;
-type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC<N>, QueueFullB>;
+type ChooseBtoA<N> = ChooseMpst<
+    BtoAAdd<N>,
+    CtoAAdd<N>,
+    BtoANeg<N>,
+    CtoANeg<N>,
+    QueueOfferADual,
+    QueueOfferADual,
+    RoleADual<RoleEnd>,
+    RoleADual<RoleEnd>,
+>;
+type ChooseBtoC<N> = ChooseMpst<
+    AtoCAdd<N>,
+    End,
+    AtoCNeg<N>,
+    End,
+    QueueOfferCDual,
+    QueueOfferCDual,
+    RoleCDual<RoleEnd>,
+    RoleCDual<RoleEnd>,
+>;
+type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC<N>, QueueFullB, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCAdd<N> = SessionMpst<CtoAAdd<N>, End, QueueOfferC>;
-type EndpointCNeg<N> = SessionMpst<CtoANeg<N>, End, QueueOfferC>;
+type EndpointCAdd<N> = SessionMpst<CtoAAdd<N>, End, QueueOfferC, RoleC<RoleEnd>>;
+type EndpointCNeg<N> = SessionMpst<CtoANeg<N>, End, QueueOfferC, RoleC<RoleEnd>>;
 
-type OfferC<N> = OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, QueueOfferC, QueueOfferC>;
-type EndpointChoiceC<N> = SessionMpst<End, OfferC<N>, QueueFullC>;
+type OfferC<N> = OfferMpst<
+    CtoAAdd<N>,
+    End,
+    CtoANeg<N>,
+    End,
+    QueueOfferC,
+    QueueOfferC,
+    RoleC<RoleEnd>,
+    RoleC<RoleEnd>,
+>;
+type EndpointChoiceC<N> = SessionMpst<End, OfferC<N>, QueueFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_a_to_b(
+    offer_mpst_session_to_a_from_b(
         s,
         |s: EndpointAAdd<i32>| {
             let (x, s) = recv_mpst_a_to_b(s)?;
@@ -151,7 +186,7 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
 }
 
 fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_c_to_b(
+    offer_mpst_session_to_c_from_b(
         s,
         |s: EndpointCAdd<i32>| {
             let (x, s) = recv_mpst_c_to_a(s)?;

@@ -30,41 +30,57 @@ use mpstthree::{
 
 // Create new roles
 // normal
-create_normal_role!(RoleAtoB, next_a_to_b, RoleBtoA, next_b_to_a);
-create_normal_role!(RoleAtoC, next_a_to_c, RoleCtoA, next_c_to_a);
-create_normal_role!(RoleCtoB, next_c_to_b, RoleBtoC, next_b_to_c);
+create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 // broadcast
 create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_c_to_a, RoleCtoA, next_c_to_a);
-create_send_mpst_session_2!(send_mpst_a_to_c, RoleAtoC, next_a_to_c);
-create_send_mpst_session_2!(send_mpst_c_to_b, RoleCtoB, next_c_to_b);
-create_send_mpst_session_1!(send_mpst_b_to_a, RoleBtoA, next_b_to_a);
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleAtoB, next_a_to_b);
+create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, next_a, RoleC);
+create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, next_c, RoleA);
+create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, next_b, RoleC);
+create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, next_a, RoleB);
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, next_b, RoleA);
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session_1!(recv_mpst_c_to_a, RoleCtoA, next_c_to_a);
-create_recv_mpst_session_2!(recv_mpst_a_to_c, RoleAtoC, next_a_to_c);
-create_recv_mpst_session_2!(recv_mpst_b_to_c, RoleBtoC, next_b_to_c);
-create_recv_mpst_session_1!(recv_mpst_b_to_a, RoleBtoA, next_b_to_a);
-create_recv_mpst_session_1!(recv_mpst_a_to_b, RoleAtoB, next_a_to_b);
+create_recv_mpst_session_1!(recv_mpst_c_to_a, RoleA, next_a, RoleC);
+create_recv_mpst_session_2!(recv_mpst_a_to_c, RoleC, next_c, RoleA);
+create_recv_mpst_session_2!(recv_mpst_b_to_c, RoleC, next_c, RoleB);
+create_recv_mpst_session_1!(recv_mpst_b_to_a, RoleA, next_a, RoleB);
+create_recv_mpst_session_1!(recv_mpst_a_to_b, RoleB, next_b, RoleA);
 // broadcast
-create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, next_all_to_c);
-create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c, RoleAlltoC, next_all_to_c);
+create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, next_all_to_c, RoleB);
+create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c, RoleAlltoC, next_all_to_c, RoleA);
 
 // Create the offer functions
-create_offer_mpst_session_2!(offer_mpst_session_b_to_c, RoleAlltoC, recv_mpst_b_all_to_c);
-create_offer_mpst_session_2!(offer_mpst_session_a_to_c, RoleAlltoC, recv_mpst_a_all_to_c);
+create_offer_mpst_session_2!(
+    offer_mpst_session_b_to_c,
+    RoleAlltoC,
+    recv_mpst_b_all_to_c,
+    RoleB
+);
+create_offer_mpst_session_2!(
+    offer_mpst_session_a_to_c,
+    RoleAlltoC,
+    recv_mpst_a_all_to_c,
+    RoleA
+);
 
 // Create the choose functions
 create_choose_right_from_3_to_1_and_2!(
     choose_right_mpst_session_c_to_all,
     RoleCtoAll,
-    next_c_to_all
+    next_c_to_all,
+    RoleC
 );
-create_choose_left_from_3_to_1_and_2!(choose_left_mpst_session_c_to_all, RoleCtoAll, next_c_to_all);
+create_choose_left_from_3_to_1_and_2!(
+    choose_left_mpst_session_c_to_all,
+    RoleCtoAll,
+    next_c_to_all,
+    RoleC
+);
 
 // Types
 type AtoCClose = End;

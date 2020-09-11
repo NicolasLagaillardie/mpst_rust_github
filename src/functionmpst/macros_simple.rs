@@ -4,11 +4,11 @@
 // create a function send_mpst for the first session
 #[macro_export]
 macro_rules! create_send_mpst_session_1 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
             x: T,
-            s: SessionMpst<Send<T, S1>, S2, $role<R>>,
-        ) -> SessionMpst<S1, S2, R>
+            s: SessionMpst<Send<T, S1>, S2, $role<R>, $name<RoleEnd>>,
+        ) -> SessionMpst<S1, S2, R, $name<RoleEnd>>
         where
             T: marker::Send,
             S1: Session,
@@ -22,6 +22,7 @@ macro_rules! create_send_mpst_session_1 {
                 session1: new_session,
                 session2: s.session2,
                 stack: new_queue,
+                name: s.name,
             }
         }
     };
@@ -30,11 +31,11 @@ macro_rules! create_send_mpst_session_1 {
 // create a function send_mpst for the second session
 #[macro_export]
 macro_rules! create_send_mpst_session_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
             x: T,
-            s: SessionMpst<S1, Send<T, S2>, $role<R>>,
-        ) -> SessionMpst<S1, S2, R>
+            s: SessionMpst<S1, Send<T, S2>, $role<R>, $name<RoleEnd>>,
+        ) -> SessionMpst<S1, S2, R, $name<RoleEnd>>
         where
             T: marker::Send,
             S1: Session,
@@ -48,6 +49,7 @@ macro_rules! create_send_mpst_session_2 {
                 session1: s.session1,
                 session2: new_session,
                 stack: new_queue,
+                name: s.name,
             }
         }
     };
@@ -59,10 +61,10 @@ macro_rules! create_send_mpst_session_2 {
 // create a function recv_mpst for the first session
 #[macro_export]
 macro_rules! create_recv_mpst_session_1 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<Recv<T, S1>, S2, $role<R>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+            s: SessionMpst<Recv<T, S1>, S2, $role<R>, $name<RoleEnd>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
         where
             T: marker::Send,
             S1: Session,
@@ -75,6 +77,7 @@ macro_rules! create_recv_mpst_session_1 {
                 session1: new_session,
                 session2: s.session2,
                 stack: new_queue,
+                name: s.name,
             };
 
             Ok((v, result))
@@ -85,10 +88,10 @@ macro_rules! create_recv_mpst_session_1 {
 // create a function recv_mpst for the second session
 #[macro_export]
 macro_rules! create_recv_mpst_session_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<S1, Recv<T, S2>, $role<R>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+            s: SessionMpst<S1, Recv<T, S2>, $role<R>, $name<RoleEnd>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
         where
             T: marker::Send,
             S1: Session,
@@ -101,6 +104,7 @@ macro_rules! create_recv_mpst_session_2 {
                 session1: s.session1,
                 session2: new_session,
                 stack: new_queue,
+                name: s.name,
             };
 
             Ok((v, result))
@@ -111,10 +115,10 @@ macro_rules! create_recv_mpst_session_2 {
 // create a function recv_mpst_all for the first session
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_1 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<Recv<T, S1>, S2, $role<R, R>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+            s: SessionMpst<Recv<T, S1>, S2, $role<R, R>, $name<RoleEnd>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
         where
             T: marker::Send,
             S1: Session,
@@ -127,6 +131,7 @@ macro_rules! create_recv_mpst_all_session_1 {
                 session1: new_session,
                 session2: s.session2,
                 stack: new_queue,
+                name: s.name,
             };
 
             Ok((v, result))
@@ -137,10 +142,10 @@ macro_rules! create_recv_mpst_all_session_1 {
 // create a function recv_mpst_all for the second session
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<S1, Recv<T, S2>, $role<R, R>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R>), Box<dyn Error>>
+            s: SessionMpst<S1, Recv<T, S2>, $role<R, R>, $name<RoleEnd>>,
+        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
         where
             T: marker::Send,
             S1: Session,
@@ -153,6 +158,7 @@ macro_rules! create_recv_mpst_all_session_2 {
                 session1: s.session1,
                 session2: new_session,
                 stack: new_queue,
+                name: s.name,
             };
 
             Ok((v, result))
@@ -166,9 +172,14 @@ macro_rules! create_recv_mpst_all_session_2 {
 /// Get an offer on session 1
 #[macro_export]
 macro_rules! create_offer_mpst_session_1 {
-    ($func_name:ident, $role:ident, $recv_func:ident) => {
+    ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
         fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-            s: SessionMpst<OfferMpst<S1, S2, S3, S4, R1, R2>, S5, $role<R3, R3>>,
+            s: SessionMpst<
+                OfferMpst<S1, S2, S3, S4, R1, R2, $name<RoleEnd>, $name<RoleEnd>>,
+                S5,
+                $role<R3, R3>,
+                $name<RoleEnd>,
+            >,
             f: F,
             g: G,
         ) -> Result<U, Box<dyn Error + 'a>>
@@ -181,8 +192,8 @@ macro_rules! create_offer_mpst_session_1 {
             R1: Role,
             R2: Role,
             R3: Role,
-            F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
-            G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
+            F: FnOnce(SessionMpst<S1, S2, R1, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+            G: FnOnce(SessionMpst<S3, S4, R2, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
         {
             let (e, s) = $recv_func(s)?;
             cancel(s);
@@ -194,9 +205,14 @@ macro_rules! create_offer_mpst_session_1 {
 /// Get an offer on session 2
 #[macro_export]
 macro_rules! create_offer_mpst_session_2 {
-    ($func_name:ident, $role:ident, $recv_func:ident) => {
+    ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
         fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-            s: SessionMpst<S5, OfferMpst<S1, S2, S3, S4, R1, R2>, $role<R3, R3>>,
+            s: SessionMpst<
+                S5,
+                OfferMpst<S1, S2, S3, S4, R1, R2, $name<RoleEnd>, $name<RoleEnd>>,
+                $role<R3, R3>,
+                $name<RoleEnd>,
+            >,
             f: F,
             g: G,
         ) -> Result<U, Box<dyn Error + 'a>>
@@ -209,8 +225,8 @@ macro_rules! create_offer_mpst_session_2 {
             R1: Role,
             R2: Role,
             R3: Role,
-            F: FnOnce(SessionMpst<S1, S2, R1>) -> Result<U, Box<dyn Error + 'a>>,
-            G: FnOnce(SessionMpst<S3, S4, R2>) -> Result<U, Box<dyn Error + 'a>>,
+            F: FnOnce(SessionMpst<S1, S2, R1, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+            G: FnOnce(SessionMpst<S3, S4, R2, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
         {
             let (e, s) = $recv_func(s)?;
             cancel(s);
@@ -225,14 +241,15 @@ macro_rules! create_offer_mpst_session_2 {
 /// // create a function choose_mpst right from the 3rd role
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S0, S2, S1, S4, R0, R1>,
                 ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R2, R3>,
                 $role<R4, R5>,
+                $name<RoleEnd>,
             >,
-        ) -> SessionMpst<S4, S5, R5>
+        ) -> SessionMpst<S4, S5, R5, $name<RoleEnd>>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -255,14 +272,15 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 // create a function choose_mpst left from the 3rd role
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S0, S2, S1, S4, R0, R1>,
                 ChooseMpst<<S0 as Session>::Dual, S3, <S1 as Session>::Dual, S5, R2, R3>,
                 $role<R4, R5>,
+                $name<RoleEnd>,
             >,
-        ) -> SessionMpst<S2, S3, R4>
+        ) -> SessionMpst<S2, S3, R4, $name<RoleEnd>>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -285,14 +303,15 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 // create a function choose_mpst left from the 1st role
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
                 ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R2, R3>,
                 $role<R4, R5>,
+                $name<RoleEnd>,
             >,
-        ) -> SessionMpst<S2, S3, R4>
+        ) -> SessionMpst<S2, S3, R4, $name<RoleEnd>>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -315,14 +334,15 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 // create a function choose_mpst right from the 1st role
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
                 ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R2, R3>,
                 $role<R4, R5>,
+                $name<RoleEnd>,
             >,
-        ) -> SessionMpst<S4, S5, R5>
+        ) -> SessionMpst<S4, S5, R5, $name<RoleEnd>>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -345,14 +365,15 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 // create a function choose_mpst left from the 2nd role
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
                 ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R2, R3>,
                 $role<R4, R5>,
+                $name<RoleEnd>,
             >,
-        ) -> SessionMpst<S2, S3, R4>
+        ) -> SessionMpst<S2, S3, R4, $name<RoleEnd>>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -375,14 +396,15 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 // create a function choose_mpst right from the 2nd role
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
-    ($func_name:ident, $role:ident, $next:ident) => {
+    ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: SessionMpst<
                 ChooseMpst<S2, S0, S4, S1, R0, R1>,
                 ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R2, R3>,
                 $role<R4, R5>,
+                $name<RoleEnd>,
             >,
-        ) -> SessionMpst<S4, S5, R5>
+        ) -> SessionMpst<S4, S5, R5, $name<RoleEnd>>
         where
             S0: Session + 'a,
             S1: Session + 'a,
@@ -412,12 +434,16 @@ macro_rules! choose_mpst_to_all {
         let (role_1, _) = <_ as Role>::new();
         let (role_2, _) = <_ as Role>::new();
         let (role_3, _) = <_ as Role>::new();
+        let (name_1, _) = <_ as Role>::new();
+        let (name_2, _) = <_ as Role>::new();
+        let (name_3, _) = <_ as Role>::new();
 
         let s = $fn_send_1(
             $label_1(SessionMpst {
                 session1: session_1_2,
                 session2: session_1_3,
                 stack: role_1,
+                name: name_1,
             }),
             $session,
         );
@@ -426,6 +452,7 @@ macro_rules! choose_mpst_to_all {
                 session1: session_2_1,
                 session2: session_2_3,
                 stack: role_2,
+                name: name_2,
             }),
             s,
         );
@@ -436,6 +463,7 @@ macro_rules! choose_mpst_to_all {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_3,
+            name: name_3,
         }
     }};
 }

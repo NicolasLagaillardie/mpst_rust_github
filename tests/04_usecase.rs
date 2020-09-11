@@ -16,11 +16,12 @@ use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
 
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_c::RoleAlltoC;
-use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::c_to_a::RoleCtoA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::b_dual::RoleBDual;
+use mpstthree::role::c::RoleC;
 use mpstthree::role::c_to_all::RoleCtoAll;
 use mpstthree::role::end::RoleEnd;
 
@@ -34,8 +35,8 @@ use mpstthree::functionmpst::send::send_mpst_a_to_c;
 use mpstthree::functionmpst::send::send_mpst_b_to_a;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
-use mpstthree::functionmpst::offer::offer_mpst_session_a_to_c;
-use mpstthree::functionmpst::offer::offer_mpst_session_b_to_c;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_a_from_c;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_b_from_c;
 
 use mpstthree::functionmpst::choose::choose_left_mpst_session_c_to_all;
 use mpstthree::functionmpst::choose::choose_right_mpst_session_c_to_all;
@@ -65,49 +66,82 @@ type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 /// Queues
 type QueueAEnd = RoleEnd;
 type QueueAEndDual = <QueueAEnd as Role>::Dual;
-type QueueAVideo = RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
+type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleEnd>>>>;
 type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-type QueueAFull = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd, RoleEnd>>>;
+type QueueAFull = RoleC<RoleC<RoleAlltoC<RoleEnd, RoleEnd>>>;
 
 type QueueBEnd = RoleEnd;
 type QueueBEndDual = <QueueBEnd as Role>::Dual;
-type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
+type QueueBVideo = RoleA<RoleA<RoleEnd>>;
 type QueueBVideoDual = <QueueBVideo as Role>::Dual;
 type QueueBFull = RoleAlltoC<RoleEnd, RoleEnd>;
 
 type QueueCEnd = RoleEnd;
-type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
+type QueueCVideo = RoleA<RoleA<RoleEnd>>;
 type QueueCChoice = RoleCtoAll<QueueCVideo, QueueCEnd>;
-type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
+type QueueCFull = RoleA<RoleA<QueueCChoice>>;
 
 /// Creating the MP sessions
 /// For C
-type ChooseCtoA<N> =
-    ChooseMpst<BtoAVideo<N>, CtoAVideo<N>, BtoAClose, CtoAClose, QueueAVideoDual, QueueAEnd>;
-type ChooseCtoB<N> =
-    ChooseMpst<AtoBVideo<N>, CtoBClose, AtoBClose, CtoBClose, QueueBVideoDual, QueueBEnd>;
+type ChooseCtoA<N> = ChooseMpst<
+    BtoAVideo<N>,
+    CtoAVideo<N>,
+    BtoAClose,
+    CtoAClose,
+    QueueAVideoDual,
+    QueueAEnd,
+    RoleADual<RoleEnd>,
+    RoleADual<RoleEnd>,
+>;
+type ChooseCtoB<N> = ChooseMpst<
+    AtoBVideo<N>,
+    CtoBClose,
+    AtoBClose,
+    CtoBClose,
+    QueueBVideoDual,
+    QueueBEnd,
+    RoleBDual<RoleEnd>,
+    RoleBDual<RoleEnd>,
+>;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, QueueCFull>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, QueueCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>;
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd>;
+type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>;
+type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>;
 
-type OfferA<N> =
-    OfferMpst<AtoBVideo<N>, AtoCVideo<N>, AtoBClose, AtoCClose, QueueAVideo, QueueAEnd>;
+type OfferA<N> = OfferMpst<
+    AtoBVideo<N>,
+    AtoCVideo<N>,
+    AtoBClose,
+    AtoCClose,
+    QueueAVideo,
+    QueueAEnd,
+    RoleA<RoleEnd>,
+    RoleA<RoleEnd>,
+>;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAFull, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd>;
+type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo, RoleB<RoleEnd>>;
+type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>;
 
-type OfferB<N> = OfferMpst<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, QueueBVideo, QueueBEnd>;
-type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull>;
+type OfferB<N> = OfferMpst<
+    BtoAVideo<N>,
+    BtoCClose,
+    BtoAClose,
+    BtoCClose,
+    QueueBVideo,
+    QueueBEnd,
+    RoleB<RoleEnd>,
+    RoleB<RoleEnd>,
+>;
+type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_b_to_c(
+    offer_mpst_session_to_b_from_c(
         s,
         |s: EndpointBVideo<i32>| {
             let (request, s) = recv_mpst_b_to_a(s)?;
@@ -129,7 +163,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_a_to_c(s)?;
     let s = send_mpst_a_to_c(id + 1, s);
 
-    offer_mpst_session_a_to_c(
+    offer_mpst_session_to_a_from_c(
         s,
         |s: EndpointAVideo<i32>| {
             let (request, s) = recv_mpst_a_to_c(s)?;

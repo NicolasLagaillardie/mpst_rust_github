@@ -10,6 +10,12 @@ categories = ["concurrency", "development-tools::cargo-plugins"]
 exclude = [".travis.yml", ".gitignore"]
 edition = "2018"
 
+[workspace]
+
+[[bin]]
+name = "mpst"
+path = "main.rs"
+
 [dependencies]
 crossbeam-channel = "0.4.2"
 either = "1.5.3"
