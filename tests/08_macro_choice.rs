@@ -21,8 +21,9 @@ use mpstthree::functionmpst::OfferMpst;
 
 use rand::{thread_rng, Rng};
 
+use mpstthree::create_choose_from_3_to_1_2;
 use mpstthree::{
-    create_broadcast_role, create_choose, create_choose_left_from_3_to_1_and_2,
+    create_broadcast_role, create_choose_left_from_3_to_1_and_2,
     create_choose_right_from_3_to_1_and_2, create_normal_role, create_offer_mpst_session_2,
     create_recv_mpst_all_session_2, create_recv_mpst_session_1, create_recv_mpst_session_2,
     create_send_mpst_session_1, create_send_mpst_session_2,
@@ -284,20 +285,28 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn run_usecase() {
+fn run_usecase_right() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test video branch.
+        // Test end branch.
         {
-            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
+            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
 
             assert!(thread_a.is_ok());
             assert!(thread_b.is_ok());
             assert!(thread_c.is_ok());
         }
 
-        // Test end branch.
+        Ok(())
+    }()
+    .is_ok());
+}
+
+#[test]
+fn run_usecase_left() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        // Test video branch.
         {
-            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
+            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
 
             assert!(thread_a.is_ok());
             assert!(thread_b.is_ok());

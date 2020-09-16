@@ -36,31 +36,37 @@ where
             &parse_type_of(&s1.session1),
             &parse_type_of(&s1.session2),
             &parse_type_of(&s1.stack),
+            &parse_type_of(&s1.name),
         ],
         "A",
         &hm,
         &mut vec![],
     )?;
+    // println!("result A: {}", &result_1);
     let result_2 = checker_aux(
         [
             &parse_type_of(&s2.session1),
             &parse_type_of(&s2.session2),
             &parse_type_of(&s2.stack),
+            &parse_type_of(&s2.name),
         ],
         "B",
         &hm,
         &mut vec![],
     )?;
+    // println!("result B: {}", &result_2);
     let result_3 = checker_aux(
         [
             &parse_type_of(&s3.session1),
             &parse_type_of(&s3.session2),
             &parse_type_of(&s3.stack),
+            &parse_type_of(&s3.name),
         ],
         "C",
         &hm,
         &mut vec![],
     )?;
+    // println!("result C: {}", &result_3);
 
     Ok((
         format!("A: {}", &result_1),

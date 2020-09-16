@@ -4,7 +4,7 @@ use std::error::Error;
 
 #[doc(hidden)]
 pub fn checker_aux(
-    sessionmpst: [&str; 3],
+    sessionmpst: [&str; 4],
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
@@ -12,9 +12,14 @@ pub fn checker_aux(
     let head_session1 = get_head(&sessionmpst[0]);
     let head_session2 = get_head(&sessionmpst[1]);
     let head_stack = get_head(&sessionmpst[2]);
+    let sender = get_name(&get_head(&sessionmpst[3]));
+
+    // println!("sender checker_aux: {:?}", &sender);
+    // println!("sessionmpst checker_aux: {:?}", &sessionmpst);
+    // println!("head_stack checker_aux: {:?}", &head_stack);
 
     if !head_stack.contains("RoleEnd") {
-        let (sender, receiver) = get_name(&head_stack);
+        let receiver = get_name(&head_stack);
 
         let result = match sender.as_str() {
             "A" => match_headers(
@@ -22,7 +27,7 @@ pub fn checker_aux(
                 [head_session1.as_str(), head_session2.as_str()],
                 sessionmpst,
                 [sender, receiver],
-                [0, 0, 3, 3],
+                [0, 0, 4, 4],
                 role,
                 hm,
                 seen,
@@ -32,7 +37,7 @@ pub fn checker_aux(
                 [head_session1.as_str(), head_session2.as_str()],
                 sessionmpst,
                 [sender, receiver],
-                [0, 1, 3, 4],
+                [0, 1, 4, 5],
                 role,
                 hm,
                 seen,
@@ -42,7 +47,7 @@ pub fn checker_aux(
                 [head_session1.as_str(), head_session2.as_str()],
                 sessionmpst,
                 [sender, receiver],
-                [1, 1, 4, 4],
+                [1, 1, 5, 5],
                 role,
                 hm,
                 seen,
@@ -65,11 +70,14 @@ pub fn checker_aux(
 fn match_recv_from_all(
     sender: &str,
     receivers: [&str; 2],
-    sessionmpst: [&str; 3],
+    sessionmpst: [&str; 4],
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
+
     match role {
         receiver if receiver == receivers[0] => checker_aux(
             [
@@ -77,9 +85,10 @@ fn match_recv_from_all(
                 sessionmpst[1],
                 &sessionmpst[2].replacen(
                     &format!("RoleAllto{}", sender),
-                    &format!("Role{}to{}", receiver, sender),
+                    &format!("Role{}", receiver),
                     1,
                 ),
+                sessionmpst[3],
             ],
             role,
             hm,
@@ -91,9 +100,10 @@ fn match_recv_from_all(
                 sessionmpst[1],
                 &sessionmpst[2].replacen(
                     &format!("RoleAllto{}", sender),
-                    &format!("Role{}to{}", receiver, sender),
+                    &format!("Role{}", receiver),
                     1,
                 ),
+                sessionmpst[3],
             ],
             role,
             hm,
@@ -107,13 +117,22 @@ fn match_recv_from_all(
 fn match_headers(
     headers: [&str; 2],
     head_sessions: [&str; 2],
-    sessionmpst: [&str; 3], // session1, session2, stack
-    involved: [String; 2],  // sender, receiver
+    sessionmpst: [&str; 4],
+    involved: [String; 2],
     index: [usize; 4],
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("head_sessions match_headers: {:?}", &head_sessions);
+    // println!("sessionmpst match_headers: {:?}", &sessionmpst);
+    // println!("headers match_headers: {:?}", &headers);
+    // println!("involved match_headers: {:?}", &involved);
+    // println!("index match_headers: {:?}", &index);
+    // println!("seen match_headers: {:?}", &seen);
+    // println!("role match_headers: {:?}", &role);
+
     match involved[1].as_str() {
         h if h == headers[0] => match_full_types(
             head_sessions[0],
@@ -121,6 +140,7 @@ fn match_headers(
                 &get_tail(&sessionmpst[0]),
                 sessionmpst[1],
                 &get_tail(&sessionmpst[2]),
+                sessionmpst[3],
             ],
             involved,
             &get_head_payload(&sessionmpst[0]),
@@ -134,6 +154,7 @@ fn match_headers(
                 sessionmpst[0],
                 &get_tail(&sessionmpst[1]),
                 &get_tail(&sessionmpst[2]),
+                sessionmpst[3],
             ],
             involved,
             &get_head_payload(&sessionmpst[1]),
@@ -149,13 +170,17 @@ fn match_headers(
 #[doc(hidden)]
 fn match_full_types(
     head_session: &str,
-    sessionmpst: [&str; 3], // session1, session2, stack
-    involved: [String; 2],  // sender, receiver
+    sessionmpst: [&str; 4],
+    involved: [String; 2],
     payload: &str,
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("sessionmpst match_full_types: {:?}", &sessionmpst);
+    // println!("head_session match_full_types: {:?}", &head_session);
+
     match head_session {
         "Send" => send_type(sessionmpst, involved, payload, role, hm, seen, " + "),
         "Recv" => recv_type(sessionmpst, involved, payload, role, hm, seen, " & "),
@@ -179,12 +204,9 @@ fn parse_type(s: &str) -> String {
         .replace("mpstthree::", "")
         .replace("sessionmpst::", "")
         .replace("binary::", "")
-        .replace("role::a_to_b::", "")
-        .replace("role::a_to_c::", "")
-        .replace("role::b_to_a::", "")
-        .replace("role::b_to_c::", "")
-        .replace("role::c_to_a::", "")
-        .replace("role::c_to_b::", "")
+        .replace("role::a::", "")
+        .replace("role::b::", "")
+        .replace("role::c::", "")
         .replace("role::a_to_all::", "")
         .replace("role::b_to_all::", "")
         .replace("role::c_to_all::", "")
@@ -198,29 +220,29 @@ fn parse_type(s: &str) -> String {
 }
 
 #[doc(hidden)]
-fn get_name(head: &str) -> (String, String) {
-    let (sender, receiver) = match head {
-        "RoleAtoAll" => (String::from("A"), String::from("All")),
-        "RoleBtoAll" => (String::from("B"), String::from("All")),
-        "RoleCtoAll" => (String::from("C"), String::from("All")),
-        "RoleAlltoA" => (String::from("All"), String::from("A")),
-        "RoleAlltoB" => (String::from("All"), String::from("B")),
-        "RoleAlltoC" => (String::from("All"), String::from("C")),
-        "RoleAtoB" => (String::from("A"), String::from("B")),
-        "RoleAtoC" => (String::from("A"), String::from("C")),
-        "RoleBtoA" => (String::from("B"), String::from("A")),
-        "RoleBtoC" => (String::from("B"), String::from("C")),
-        "RoleCtoA" => (String::from("C"), String::from("A")),
-        "RoleCtoB" => (String::from("C"), String::from("B")),
-        "RoleEnd" => (String::from("End"), String::from("End")),
+fn get_name(head: &str) -> String {
+    let receiver = match head {
+        "RoleAtoAll" => String::from("All"),
+        "RoleBtoAll" => String::from("All"),
+        "RoleCtoAll" => String::from("All"),
+        "RoleAlltoA" => String::from("A"),
+        "RoleAlltoB" => String::from("B"),
+        "RoleAlltoC" => String::from("C"),
+        "RoleA" => String::from("A"),
+        "RoleB" => String::from("B"),
+        "RoleC" => String::from("C"),
+        "RoleEnd" => String::from("End"),
         _ => panic!("Wrong head, not recognized: {}", head),
     };
 
-    (sender, receiver)
+    receiver
 }
 
 #[doc(hidden)]
 fn get_head(s: &str) -> String {
+
+    // println!("get_head: {}", &s);
+
     let mut result: Vec<&str> = s.split('<').collect();
     if result[0] == "Either" {
         return String::from(s);
@@ -236,12 +258,21 @@ fn get_head(s: &str) -> String {
             }
         })
         .collect::<Vec<_>>();
+
+    // println!("result get_head : {}", &result[0]);
+    
     String::from(result[0])
 }
 
 #[doc(hidden)]
 fn get_head_payload(s: &str) -> String {
+
+    // println!("get_head_payload: {}", &s);
+
     let payload = &get_two_tails(s)[0];
+
+    // println!("payload get_head_payload: {}", &payload);
+
     if payload.contains("::") {
         String::from(payload.split("::").collect::<Vec<_>>()[1])
     } else {
@@ -251,6 +282,9 @@ fn get_head_payload(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_two_tails(s: &str) -> [String; 2] {
+
+    // println!("get_two_tails: {}", &s);
+
     let mut result: [String; 2] = Default::default();
     if s == "End" {
         result[1].push_str("End");
@@ -286,12 +320,25 @@ fn get_two_tails(s: &str) -> [String; 2] {
             }
         }
     }
-    result
+
+    // println!("result get_two_tails: {}", &s);
+
+    if result[1] == "" {
+        let mut temp: [String; 2] = Default::default();
+        temp[0].push_str(&result[0]);
+        temp[1].push_str(&result[0]);
+        temp
+    } else {
+        result
+    }
 }
 
 #[doc(hidden)]
-fn get_sessions_and_stack(s: &str) -> [String; 3] {
-    let mut result: [String; 3] = Default::default();
+fn get_fields(s: &str) -> [String; 4] {
+
+    // println!("get_fields: {}", &s);
+
+    let mut result: [String; 4] = Default::default();
     let mut index = -1;
     let mut index_session = 0;
     let new_s = &s.replace("SessionMpst", "");
@@ -321,12 +368,18 @@ fn get_sessions_and_stack(s: &str) -> [String; 3] {
             }
         }
     }
+
+    // println!("result get_fields: {}", &s);
+
     result
 }
 
 #[doc(hidden)]
-fn divide_either(s: &str) -> [String; 6] {
-    let mut result: [String; 6] = Default::default();
+fn divide_either(s: &str) -> [String; 8] {
+
+    // println!("divide_either: {}", &s);
+
+    let mut result: [String; 8] = Default::default();
     let mut index = -2;
     let mut index_session = 0;
     let new_s = s.replacen("Either", "", 1);
@@ -357,6 +410,9 @@ fn divide_either(s: &str) -> [String; 6] {
             }
         }
     }
+
+    // println!("result divide_either: {:?}", &result);
+
     result
 }
 
@@ -368,35 +424,42 @@ fn get_tail(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_dual(s: &str) -> String {
+
+    // println!("Dual: {}", &s);
+
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
     let result = &result.replace("Revc<", "Recv<");
-    let result = switch_role(&result, "RoleA", "RoleADual");
-    let result = switch_role(&result, "RoleC", "RoleCDual");
-    let result = switch_role(&result, "RoleB", "RoleBDual");
-    let result = switch_role(&result, "RoleAtoAll", "RoleAlltoA");
-    let result = switch_role(&result, "RoleBtoAll", "RoleAlltoB");
-    switch_role(&result, "RoleCtoAll", "RoleAlltoC")
+    let result = switch_role(&result, "A", "ADual");
+    let result = switch_role(&result, "C", "CDual");
+    let result = switch_role(&result, "B", "BDual");
+    let result = switch_role(&result, "AtoAll", "AlltoA");
+    let result = switch_role(&result, "BtoAll", "AlltoB");
+    switch_role(&result, "CtoAll", "AlltoC")
 }
 
 #[doc(hidden)]
 fn switch_role(s: &str, a: &str, b: &str) -> String {
-    let result = &s.replace(&format!("Role{}to{}", a, b), &format!("Role{}to{}", b, "X"));
-    let result = &result.replace(&format!("Role{}to{}", b, a), &format!("Role{}to{}", a, b));
-    let result = &result.replace(&format!("Role{}to{}", b, "X"), &format!("Role{}to{}", b, a));
+    let result = &s.replace(&format!("Role{}<", a), &format!("Role{}<", "XxX"));
+    let result = &result.replace(&format!("Role{}<", b), &format!("Role{}<", a));
+    let result = &result.replace(&format!("Role{}<", "XxX"), &format!("Role{}<", a));
     String::from(result)
 }
 
 #[doc(hidden)]
 fn send_type(
-    sessionmpst: [&str; 3], // session1, session2, stack
-    involved: [String; 2],  // sender, receiver
+    sessionmpst: [&str; 4],
+    involved: [String; 2],
     payload: &str,
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("sessionmpst send_type: {:?}", &sessionmpst);
+    // println!("payload send_type: {:?}", &payload);
+
     if seen.contains(&String::from(payload)) {
         Ok(String::from("X"))
     } else if hm.contains_key(payload) {
@@ -413,26 +476,30 @@ fn send_type(
 
 #[doc(hidden)]
 fn recv_type(
-    sessionmpst: [&str; 3], // session1, session2, stack
-    involved: [String; 2],  // sender, receiver
+    sessionmpst: [&str; 4],
+    involved: [String; 2],
     payload: &str,
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("sessionmpst recv_type: {:?}", &sessionmpst);
+    // println!("payload recv_type: {:?}", &payload);
+
     if payload.contains("Either") {
-        let branching: [String; 6] = divide_either(payload);
+        let branching: [String; 8] = divide_either(payload);
         Ok(format!(
             "( {} & {} )",
             checker_aux(
-                [&branching[0], &branching[1], &branching[2]],
+                [&branching[0], &branching[1], &branching[2], &branching[3]],
                 role,
                 &hm,
                 seen
             )?,
             checker_aux(
-                [&branching[3], &branching[4], &branching[5]],
+                [&branching[4], &branching[5], &branching[6], &branching[7]],
                 role,
                 &hm,
                 seen
@@ -460,6 +527,9 @@ fn recurs_type(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("payload recurs_type: {}", &payload);
+
     let mut vec_result = Vec::new();
     let mut recurs = false;
 
@@ -468,12 +538,13 @@ fn recurs_type(
     match hm.get(payload) {
         Some(&branches) => {
             for branch in branches.iter() {
-                let sessions_and_stack = get_sessions_and_stack(&parse_type(branch));
+                let sessions_and_stack = get_fields(&parse_type(branch));
                 let result_branch = checker_aux(
                     [
                         &sessions_and_stack[0],
                         &sessions_and_stack[1],
                         &sessions_and_stack[2],
+                        &sessions_and_stack[3],
                     ],
                     role,
                     &hm,
@@ -487,6 +558,9 @@ fn recurs_type(
     }
 
     let result = vec_result.join(symbol);
+
+    // println!("result recurs_type: {}", &result);
+
     if recurs {
         Ok(format!("µX( {} )", result))
     } else {
@@ -496,18 +570,23 @@ fn recurs_type(
 
 #[doc(hidden)]
 fn all_type(
-    sessionmpst: [&str; 3], // session1, session2, stack
-    index: [usize; 4],      // index for branches
+    sessionmpst: [&str; 4],
+    index: [usize; 4],
     role: &str,
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
+
+    // println!("sessionmpst all_type: {:?}", &sessionmpst);
+
     let payload_1 = get_head_payload(&sessionmpst[0]);
     let payload_2 = get_head_payload(&sessionmpst[1]);
     if payload_1.contains("Either") && payload_2.contains("Either") {
-        let branching_1: [String; 6] = divide_either(&payload_1);
-        let branching_2: [String; 6] = divide_either(&payload_2);
+        let branching_1: [String; 8] = divide_either(&payload_1);
+        let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+
+        // println!("tails: {:?}", &tails);    
 
         Ok(format!(
             "( {} + {} )",
@@ -515,7 +594,8 @@ fn all_type(
                 [
                     &get_dual(&branching_1[index[0]]),
                     &get_dual(&branching_2[index[1]]),
-                    &tails[0]
+                    &tails[0],
+                    sessionmpst[3]
                 ],
                 role,
                 &hm,
@@ -525,7 +605,8 @@ fn all_type(
                 [
                     &get_dual(&branching_1[index[2]]),
                     &get_dual(&branching_2[index[3]]),
-                    &tails[1]
+                    &tails[1],
+                    sessionmpst[3]
                 ],
                 role,
                 &hm,
@@ -533,8 +614,10 @@ fn all_type(
             )?,
         ))
     } else if payload_1.contains("Either") {
-        let branching_1: [String; 6] = divide_either(&payload_1);
+        let branching_1: [String; 8] = divide_either(&payload_1);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+
+        // println!("tails: {:?}", &tails);    
 
         Ok(format!(
             "( {} + {} )",
@@ -542,7 +625,8 @@ fn all_type(
                 [
                     &get_dual(&branching_1[index[0]]),
                     &get_dual(&sessionmpst[1]),
-                    &tails[0]
+                    &tails[0],
+                    sessionmpst[3]
                 ],
                 role,
                 &hm,
@@ -552,7 +636,8 @@ fn all_type(
                 [
                     &get_dual(&branching_1[index[2]]),
                     &get_dual(&sessionmpst[1]),
-                    &tails[1]
+                    &tails[1],
+                    sessionmpst[3]
                 ],
                 role,
                 &hm,
@@ -560,8 +645,10 @@ fn all_type(
             )?,
         ))
     } else if payload_2.contains("Either") {
-        let branching_2: [String; 6] = divide_either(&payload_2);
+        let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+
+        // println!("tails: {:?}", &tails);    
 
         Ok(format!(
             "( {} + {} )",
@@ -569,7 +656,8 @@ fn all_type(
                 [
                     &get_dual(&sessionmpst[0]),
                     &get_dual(&branching_2[index[1]]),
-                    &tails[0]
+                    &tails[0],
+                    sessionmpst[3]
                 ],
                 role,
                 &hm,
@@ -579,7 +667,8 @@ fn all_type(
                 [
                     &get_dual(&sessionmpst[0]),
                     &get_dual(&branching_2[index[3]]),
-                    &tails[1]
+                    &tails[1],
+                    sessionmpst[3]
                 ],
                 role,
                 &hm,

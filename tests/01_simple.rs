@@ -97,7 +97,9 @@ fn simple_triple_endpoints() {
         Ok(())
     }()
     .is_ok());
-
+}
+#[test]
+fn simple_triple_endpoints_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let hm: HashMap<String, &Vec<String>> = HashMap::new();

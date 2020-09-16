@@ -1,4 +1,4 @@
-// Issue with protocol functions
+// Issue with protocol functions, need to work on it asap
 
 // extern crate mpstthree;
 // extern crate rand;

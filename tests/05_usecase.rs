@@ -247,17 +247,8 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn run_usecase() {
+fn run_usecase_right() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test video branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
-
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
-        }
-
         // Test end branch.
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
@@ -270,7 +261,27 @@ fn run_usecase() {
         Ok(())
     }()
     .is_ok());
+}
 
+#[test]
+fn run_usecase_left() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        // Test video branch.
+        {
+            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
+
+            assert!(thread_a.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
+        }
+        
+        Ok(())
+    }()
+    .is_ok());
+}
+
+#[test]
+fn run_usecase_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let hm: HashMap<String, &Vec<String>> = HashMap::new();

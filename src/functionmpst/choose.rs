@@ -53,6 +53,150 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
     RoleC<RoleEnd>,
 >;
 
+macro_rules! choose_mpst_a {
+    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+        let (session_1_2, session_2_1) = <$session_1>::new();
+        let (session_1_3, session_3_1) = <$session_2>::new();
+        let (session_3_2, session_2_3) = <$session_3>::new();
+        let (_, role_1) = <$role_1>::new();
+        let (_, role_2) = <$role_2>::new();
+        let (role_3, _) = <$role_3>::new();
+        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
+        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
+        let (name_3, _) = $sender::<RoleEnd>::new();
+
+        let choice_1 = SessionMpst {
+            session1: session_2_1,
+            session2: session_2_3,
+            stack: role_1,
+            name: name_1,
+        };
+
+        let choice_2 = SessionMpst {
+            session1: session_3_1,
+            session2: session_3_2,
+            stack: role_2,
+            name: name_2,
+        };
+
+        let new_session_1 = send($pat(choice_1), $session.session1);
+        let new_session_2 = send($pat(choice_2), $session.session2);
+        let (_, new_queue) = $next($session.stack);
+
+        let s = SessionMpst {
+            session1: new_session_1,
+            session2: new_session_2,
+            stack: new_queue,
+            name: $session.name,
+        };
+
+        cancel(s);
+
+        SessionMpst {
+            session1: session_1_2,
+            session2: session_1_3,
+            stack: role_3,
+            name: name_3,
+        }
+    }};
+}
+
+macro_rules! choose_mpst_b {
+    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+        let (session_2_1, session_1_2) = <$session_1>::new();
+        let (session_2_3, session_3_2) = <$session_2>::new();
+        let (session_3_1, session_1_3) = <$session_3>::new();
+        let (_, role_1) = <$role_1>::new();
+        let (_, role_2) = <$role_2>::new();
+        let (role_3, _) = <$role_3>::new();
+        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
+        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
+        let (name_3, _) = $sender::<RoleEnd>::new();
+
+        let choice_1 = SessionMpst {
+            session1: session_1_2,
+            session2: session_1_3,
+            stack: role_1,
+            name: name_1,
+        };
+
+        let choice_2 = SessionMpst {
+            session1: session_3_1,
+            session2: session_3_2,
+            stack: role_2,
+            name: name_2,
+        };
+
+        let new_session_1 = send($pat(choice_1), $session.session1);
+        let new_session_2 = send($pat(choice_2), $session.session2);
+        let (_, new_queue) = $next($session.stack);
+
+        let s = SessionMpst {
+            session1: new_session_1,
+            session2: new_session_2,
+            stack: new_queue,
+            name: $session.name,
+        };
+
+        cancel(s);
+
+        SessionMpst {
+            session1: session_2_1,
+            session2: session_2_3,
+            stack: role_3,
+            name: name_3,
+        }
+    }};
+}
+
+macro_rules! choose_mpst_c {
+    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+        let (session_3_1, session_1_3) = <$session_1>::new();
+        let (session_3_2, session_2_3) = <$session_2>::new();
+        let (session_2_1, session_1_2) = <$session_3>::new();
+        let (_, role_1) = <$role_1>::new();
+        let (_, role_2) = <$role_2>::new();
+        let (role_3, _) = <$role_3>::new();
+        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
+        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
+        let (name_3, _) = $sender::<RoleEnd>::new();
+
+        let choice_1 = SessionMpst {
+            session1: session_1_2,
+            session2: session_1_3,
+            stack: role_1,
+            name: name_1,
+        };
+
+        let choice_2 = SessionMpst {
+            session1: session_2_1,
+            session2: session_2_3,
+            stack: role_2,
+            name: name_2,
+        };
+
+        let new_session_1 = send($pat(choice_1), $session.session1);
+        let new_session_2 = send($pat(choice_2), $session.session2);
+        let (_, new_queue) = $next($session.stack);
+
+        let s = SessionMpst {
+            session1: new_session_1,
+            session2: new_session_2,
+            stack: new_queue,
+            name: $session.name,
+        };
+
+        cancel(s);
+
+        SessionMpst {
+            session1: session_3_1,
+            session2: session_3_2,
+            stack: role_3,
+            name: name_3,
+        }
+    }};
+}
+
 /// Given a choice from A, to other processes, between two `SessionMpst`, choose the first option for each.
 ///
 /// A has to encapsulate all possible `SessionMpst` for each other role.
@@ -89,49 +233,20 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    let (session_ab, session_ba) = S2::new();
-    let (session_ac, session_ca) = S3::new();
-    let (session_cb, session_bc) = S0::new();
-    let (_, role_b) = R0::new();
-    let (_, role_c) = R2::new();
-    let (role_a, _) = R4::new();
-    let (name_a, _) = RoleA::<RoleEnd>::new();
-    let (name_b, _) = RoleB::<RoleEnd>::new();
-    let (name_c, _) = RoleC::<RoleEnd>::new();
-
-    let choice_b = SessionMpst {
-        session1: session_ba,
-        session2: session_bc,
-        stack: role_b,
-        name: name_b,
-    };
-
-    let choice_c = SessionMpst {
-        session1: session_ca,
-        session2: session_cb,
-        stack: role_c,
-        name: name_c,
-    };
-
-    let new_session_1 = send(Either::Left(choice_b), s.session1);
-    let new_session_2 = send(Either::Left(choice_c), s.session2);
-    let (new_queue, _) = next_a_to_all(s.stack);
-
-    let s = SessionMpst {
-        session1: new_session_1,
-        session2: new_session_2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    cancel(s);
-
-    SessionMpst {
-        session1: session_ab,
-        session2: session_ac,
-        stack: role_a,
-        name: name_a,
-    }
+    choose_mpst_a!(
+        S2,
+        S3,
+        S0,
+        R0,
+        R2,
+        R4,
+        RoleBDual,
+        RoleCDual,
+        RoleA,
+        s,
+        Either::Left,
+        next_a_to_all
+    )
 }
 
 /// Given a choice from A, to other processes, between two `SessionMpst`, choose the second option for each.
@@ -171,49 +286,20 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    let (session_ab, session_ba) = S4::new();
-    let (session_ac, session_ca) = S5::new();
-    let (session_cb, session_bc) = S1::new();
-    let (_, role_b) = R1::new();
-    let (_, role_c) = R3::new();
-    let (role_a, _) = R5::new();
-    let (name_a, _) = RoleA::<RoleEnd>::new();
-    let (name_b, _) = RoleB::<RoleEnd>::new();
-    let (name_c, _) = RoleC::<RoleEnd>::new();
-
-    let choice_b = SessionMpst {
-        session1: session_ba,
-        session2: session_bc,
-        stack: role_b,
-        name: name_b,
-    };
-
-    let choice_c = SessionMpst {
-        session1: session_ca,
-        session2: session_cb,
-        stack: role_c,
-        name: name_c,
-    };
-
-    let new_session_1 = send(Either::Right(choice_b), s.session1);
-    let new_session_2 = send(Either::Right(choice_c), s.session2);
-    let (_, new_queue) = next_a_to_all(s.stack);
-
-    let s = SessionMpst {
-        session1: new_session_1,
-        session2: new_session_2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    cancel(s);
-
-    SessionMpst {
-        session1: session_ab,
-        session2: session_ac,
-        stack: role_a,
-        name: name_a,
-    }
+    choose_mpst_a!(
+        S4,
+        S5,
+        S1,
+        R1,
+        R3,
+        R5,
+        RoleBDual,
+        RoleCDual,
+        RoleA,
+        s,
+        Either::Right,
+        next_a_to_all
+    )
 }
 
 /// Given a choice from B, to other processes, between two `SessionMpst`, choose the first option for each.
@@ -252,49 +338,20 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    let (session_ba, session_ab) = S2::new();
-    let (session_bc, session_cb) = S3::new();
-    let (session_ca, session_ac) = S0::new();
-    let (_, role_a) = R0::new();
-    let (_, role_c) = R2::new();
-    let (role_b, _) = R4::new();
-    let (name_a, _) = RoleA::<RoleEnd>::new();
-    let (name_b, _) = RoleB::<RoleEnd>::new();
-    let (name_c, _) = RoleC::<RoleEnd>::new();
-
-    let choice_a = SessionMpst {
-        session1: session_ab,
-        session2: session_ac,
-        stack: role_a,
-        name: name_a,
-    };
-
-    let choice_c = SessionMpst {
-        session1: session_ca,
-        session2: session_cb,
-        stack: role_c,
-        name: name_c,
-    };
-
-    let new_session_1 = send(Either::Left(choice_a), s.session1);
-    let new_session_2 = send(Either::Left(choice_c), s.session2);
-    let (new_queue, _) = next_b_to_all(s.stack);
-
-    let s = SessionMpst {
-        session1: new_session_1,
-        session2: new_session_2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    cancel(s);
-
-    SessionMpst {
-        session1: session_ba,
-        session2: session_bc,
-        stack: role_b,
-        name: name_b,
-    }
+    choose_mpst_b!(
+        S2,
+        S3,
+        S0,
+        R0,
+        R2,
+        R4,
+        RoleADual,
+        RoleCDual,
+        RoleB,
+        s,
+        Either::Left,
+        next_b_to_all
+    )
 }
 
 /// Given a choice from B, to other processes, between two `SessionMpst`, choose the second option for each.
@@ -333,49 +390,20 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    let (session_ba, session_ab) = S4::new();
-    let (session_bc, session_cb) = S5::new();
-    let (session_ca, session_ac) = S1::new();
-    let (_, role_a) = R1::new();
-    let (_, role_c) = R3::new();
-    let (role_b, _) = R5::new();
-    let (name_a, _) = RoleA::<RoleEnd>::new();
-    let (name_b, _) = RoleB::<RoleEnd>::new();
-    let (name_c, _) = RoleC::<RoleEnd>::new();
-
-    let choice_a = SessionMpst {
-        session1: session_ab,
-        session2: session_ac,
-        stack: role_a,
-        name: name_a,
-    };
-
-    let choice_c = SessionMpst {
-        session1: session_ca,
-        session2: session_cb,
-        stack: role_c,
-        name: name_c,
-    };
-
-    let new_session_1 = send(Either::Right(choice_a), s.session1);
-    let new_session_2 = send(Either::Right(choice_c), s.session2);
-    let (_, new_queue) = next_b_to_all(s.stack);
-
-    let s = SessionMpst {
-        session1: new_session_1,
-        session2: new_session_2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    cancel(s);
-
-    SessionMpst {
-        session1: session_ba,
-        session2: session_bc,
-        stack: role_b,
-        name: name_b,
-    }
+    choose_mpst_b!(
+        S4,
+        S5,
+        S1,
+        R1,
+        R3,
+        R5,
+        RoleADual,
+        RoleCDual,
+        RoleB,
+        s,
+        Either::Right,
+        next_b_to_all
+    )
 }
 
 /// Given a choice from C, to other processes, between two `SessionMpst`, choose the first option for each.
@@ -414,49 +442,20 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    let (session_ca, session_ac) = S2::new();
-    let (session_cb, session_bc) = S3::new();
-    let (session_ba, session_ab) = S0::new();
-    let (_, role_a) = R0::new();
-    let (_, role_b) = R2::new();
-    let (role_c, _) = R4::new();
-    let (name_a, _) = RoleA::<RoleEnd>::new();
-    let (name_b, _) = RoleB::<RoleEnd>::new();
-    let (name_c, _) = RoleC::<RoleEnd>::new();
-
-    let choice_a = SessionMpst {
-        session1: session_ab,
-        session2: session_ac,
-        stack: role_a,
-        name: name_a,
-    };
-
-    let choice_b = SessionMpst {
-        session1: session_ba,
-        session2: session_bc,
-        stack: role_b,
-        name: name_b,
-    };
-
-    let new_session_1 = send(Either::Left(choice_a), s.session1);
-    let new_session_2 = send(Either::Left(choice_b), s.session2);
-    let (new_queue, _) = next_c_to_all(s.stack);
-
-    let s = SessionMpst {
-        session1: new_session_1,
-        session2: new_session_2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    cancel(s);
-
-    SessionMpst {
-        session1: session_ca,
-        session2: session_cb,
-        stack: role_c,
-        name: name_c,
-    }
+    choose_mpst_c!(
+        S2,
+        S3,
+        S0,
+        R0,
+        R2,
+        R4,
+        RoleADual,
+        RoleBDual,
+        RoleC,
+        s,
+        Either::Left,
+        next_c_to_all
+    )
 }
 
 /// Given a choice from C, to other processes, between two `SessionMpst`, choose the second option for each.
@@ -495,49 +494,20 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    let (session_ca, session_ac) = S4::new();
-    let (session_cb, session_bc) = S5::new();
-    let (session_ba, session_ab) = S1::new();
-    let (_, role_a) = R1::new();
-    let (_, role_b) = R3::new();
-    let (role_c, _) = R5::new();
-    let (name_a, _) = RoleA::<RoleEnd>::new();
-    let (name_b, _) = RoleB::<RoleEnd>::new();
-    let (name_c, _) = RoleC::<RoleEnd>::new();
-
-    let choice_a = SessionMpst {
-        session1: session_ab,
-        session2: session_ac,
-        stack: role_a,
-        name: name_a,
-    };
-
-    let choice_b = SessionMpst {
-        session1: session_ba,
-        session2: session_bc,
-        stack: role_b,
-        name: name_b,
-    };
-
-    let new_session_1 = send(Either::Right(choice_a), s.session1);
-    let new_session_2 = send(Either::Right(choice_b), s.session2);
-    let (_, new_queue) = next_c_to_all(s.stack);
-
-    let s = SessionMpst {
-        session1: new_session_1,
-        session2: new_session_2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    cancel(s);
-
-    SessionMpst {
-        session1: session_ca,
-        session2: session_cb,
-        stack: role_c,
-        name: name_c,
-    }
+    choose_mpst_c!(
+        S4,
+        S5,
+        S1,
+        R1,
+        R3,
+        R5,
+        RoleADual,
+        RoleBDual,
+        RoleC,
+        s,
+        Either::Right,
+        next_c_to_all
+    )
 }
 
 /// Choose, for A, between many different sessions wrapped in an `enum`

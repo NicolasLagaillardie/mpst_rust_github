@@ -252,19 +252,12 @@ fn run_usecase_recursive() {
         Ok(())
     }()
     .is_ok());
+}
 
+#[test]
+fn run_usecase_recursive_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            // ($($branch:ty, $func:ident, {$($pat:pat, $branch_name:expr, $label:path, $branch_type:expr)*})*)
-
-            // let hm = checker_hashmaps!(CBranchesAtoC, hashmap_c_branches_a_to_c,
-            //     CBranchesAtoC::Video,
-            // );
-
-            // CBranchesBtoC<N>, hashmap_c_branches_b_to_c, "CBranchesBtoC<i32>",
-            // { CBranchesBtoC::Video, "Video:{}", CBranchesBtoC::<i32>::Video,
-            // CBranchesBtoC::End, "End:{}", CBranchesBtoC::<i32>::End, },
-
             let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();

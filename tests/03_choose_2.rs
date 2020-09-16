@@ -226,7 +226,10 @@ fn double_choice() {
         Ok(())
     }()
     .is_ok());
+}
 
+#[test]
+fn double_choice_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let hm: HashMap<String, &Vec<String>> = HashMap::new();

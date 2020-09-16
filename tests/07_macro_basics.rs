@@ -75,7 +75,7 @@ fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn basic_macros() {
+fn basic_macros_send() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(send_a_to_d, pawn, recv_d_to_a);
@@ -87,7 +87,10 @@ fn basic_macros() {
         Ok(())
     }()
     .is_ok());
+}
 
+#[test]
+fn basic_macros_recv() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(recv_a_to_d, pawn, send_d_to_a);
