@@ -23,8 +23,7 @@ pub fn checker_aux(
 
         let result = match sender.as_str() {
             "A" => match_headers(
-                ["B", "C"],
-                [head_session1.as_str(), head_session2.as_str()],
+                ["B", head_session1.as_str(), "C", head_session2.as_str()],
                 sessionmpst,
                 [sender, receiver],
                 [0, 0, 4, 4],
@@ -33,8 +32,7 @@ pub fn checker_aux(
                 seen,
             )?,
             "B" => match_headers(
-                ["A", "C"],
-                [head_session1.as_str(), head_session2.as_str()],
+                ["A", head_session1.as_str(), "C", head_session2.as_str()],
                 sessionmpst,
                 [sender, receiver],
                 [0, 1, 4, 5],
@@ -43,8 +41,7 @@ pub fn checker_aux(
                 seen,
             )?,
             "C" => match_headers(
-                ["A", "B"],
-                [head_session1.as_str(), head_session2.as_str()],
+                ["A", head_session1.as_str(), "B", head_session2.as_str()],
                 sessionmpst,
                 [sender, receiver],
                 [1, 1, 5, 5],
@@ -115,8 +112,7 @@ fn match_recv_from_all(
 
 #[doc(hidden)]
 fn match_headers(
-    headers: [&str; 2],
-    head_sessions: [&str; 2],
+    roles_and_sessions: [&str; 4], // role 1, session 1, role 2, session 2
     sessionmpst: [&str; 4],
     involved: [String; 2],
     index: [usize; 4],
@@ -134,8 +130,8 @@ fn match_headers(
     // println!("role match_headers: {:?}", &role);
 
     match involved[1].as_str() {
-        h if h == headers[0] => match_full_types(
-            head_sessions[0],
+        h if h == roles_and_sessions[0] => match_full_types(
+            roles_and_sessions[1],
             [
                 &get_tail(&sessionmpst[0]),
                 sessionmpst[1],
@@ -148,8 +144,8 @@ fn match_headers(
             hm,
             seen,
         ),
-        h if h == headers[1] => match_full_types(
-            head_sessions[1],
+        h if h == roles_and_sessions[2] => match_full_types(
+            roles_and_sessions[3],
             [
                 sessionmpst[0],
                 &get_tail(&sessionmpst[1]),
@@ -221,7 +217,7 @@ fn parse_type(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_name(head: &str) -> String {
-    let receiver = match head {
+    match head {
         "RoleAtoAll" => String::from("All"),
         "RoleBtoAll" => String::from("All"),
         "RoleCtoAll" => String::from("All"),
@@ -233,9 +229,7 @@ fn get_name(head: &str) -> String {
         "RoleC" => String::from("C"),
         "RoleEnd" => String::from("End"),
         _ => panic!("Wrong head, not recognized: {}", head),
-    };
-
-    receiver
+    }
 }
 
 #[doc(hidden)]
