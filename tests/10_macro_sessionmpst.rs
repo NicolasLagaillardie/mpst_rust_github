@@ -2,7 +2,6 @@
 extern crate crossbeam_channel;
 extern crate either;
 extern crate mpstthree;
-use crossbeam_channel::{bounded, Sender};
 use mpstthree::binary::{End, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;

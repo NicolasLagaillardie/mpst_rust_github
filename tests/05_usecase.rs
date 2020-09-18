@@ -274,7 +274,7 @@ fn run_usecase_left() {
             assert!(thread_b.is_ok());
             assert!(thread_c.is_ok());
         }
-        
+
         Ok(())
     }()
     .is_ok());

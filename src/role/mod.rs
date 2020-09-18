@@ -42,28 +42,28 @@ macro_rules! create_normal_role {
         /// The Role
 
         #[derive(Debug)]
-        pub struct $role_name<R: Role> {
-            pub sender: Sender<R::Dual>,
+        pub struct $role_name<R: mpstthree::role::Role> {
+            pub sender: crossbeam_channel::Sender<R::Dual>,
         }
 
         ////////////////////////////////////////////
         /// The Dual
 
         #[derive(Debug)]
-        pub struct $dual_name<R: Role> {
-            pub sender: Sender<R::Dual>,
+        pub struct $dual_name<R: mpstthree::role::Role> {
+            pub sender: crossbeam_channel::Sender<R::Dual>,
         }
 
         ////////////////////////////////////////////
         /// The Role functions
 
-        impl<R: Role> Role for $dual_name<R> {
+        impl<R: mpstthree::role::Role> mpstthree::role::Role for $dual_name<R> {
             type Dual = $role_name<R::Dual>;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
-                let (sender_normal, _) = bounded::<R>(1);
-                let (sender_dual, _) = bounded::<R::Dual>(1);
+                let (sender_normal, _) = crossbeam_channel::bounded::<R>(1);
+                let (sender_dual, _) = crossbeam_channel::bounded::<R::Dual>(1);
 
                 (
                     $dual_name {
@@ -88,7 +88,7 @@ macro_rules! create_normal_role {
 
         pub fn $dual_next<R>(r: $dual_name<R>) -> R
         where
-            R: Role,
+            R: mpstthree::role::Role,
         {
             let (here, there) = R::new();
             r.sender.send(there).unwrap_or(());
@@ -98,13 +98,13 @@ macro_rules! create_normal_role {
         ////////////////////////////////////////////
         /// The Dual functions
 
-        impl<R: Role> Role for $role_name<R> {
+        impl<R: mpstthree::role::Role> mpstthree::role::Role for $role_name<R> {
             type Dual = $dual_name<R::Dual>;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
-                let (sender_normal, _) = bounded::<R>(1);
-                let (sender_dual, _) = bounded::<R::Dual>(1);
+                let (sender_normal, _) = crossbeam_channel::bounded::<R>(1);
+                let (sender_dual, _) = crossbeam_channel::bounded::<R::Dual>(1);
 
                 (
                     $role_name {
@@ -129,7 +129,7 @@ macro_rules! create_normal_role {
 
         pub fn $role_next<R>(r: $role_name<R>) -> R
         where
-            R: Role,
+            R: mpstthree::role::Role,
         {
             let (here, there) = R::new();
             r.sender.send(there).unwrap_or(());
@@ -145,32 +145,34 @@ macro_rules! create_broadcast_role {
         /// The Role
 
         #[derive(Debug)]
-        pub struct $role_name<R1: Role, R2: Role> {
-            pub sender1: Sender<R1::Dual>,
-            pub sender2: Sender<R2::Dual>,
+        pub struct $role_name<R1: mpstthree::role::Role, R2: mpstthree::role::Role> {
+            pub sender1: crossbeam_channel::Sender<R1::Dual>,
+            pub sender2: crossbeam_channel::Sender<R2::Dual>,
         }
 
         ////////////////////////////////////////////
         /// The Dual
 
         #[derive(Debug)]
-        pub struct $dual_name<R1: Role, R2: Role> {
-            pub sender1: Sender<R1::Dual>,
-            pub sender2: Sender<R2::Dual>,
+        pub struct $dual_name<R1: mpstthree::role::Role, R2: mpstthree::role::Role> {
+            pub sender1: crossbeam_channel::Sender<R1::Dual>,
+            pub sender2: crossbeam_channel::Sender<R2::Dual>,
         }
 
         ////////////////////////////////////////////
         /// The Role functions
 
-        impl<R1: Role, R2: Role> Role for $role_name<R1, R2> {
+        impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
+            for $role_name<R1, R2>
+        {
             type Dual = $dual_name<R1::Dual, R2::Dual>;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
-                let (sender_normal_1, _) = bounded::<R1>(1);
-                let (sender_normal_2, _) = bounded::<R2>(1);
-                let (sender_dual_1, _) = bounded::<R1::Dual>(1);
-                let (sender_dual_2, _) = bounded::<R2::Dual>(1);
+                let (sender_normal_1, _) = crossbeam_channel::bounded::<R1>(1);
+                let (sender_normal_2, _) = crossbeam_channel::bounded::<R2>(1);
+                let (sender_dual_1, _) = crossbeam_channel::bounded::<R1::Dual>(1);
+                let (sender_dual_2, _) = crossbeam_channel::bounded::<R2::Dual>(1);
 
                 (
                     $role_name {
@@ -203,8 +205,8 @@ macro_rules! create_broadcast_role {
 
         pub fn $role_next<R1, R2>(r: $role_name<R1, R2>) -> (R1, R2)
         where
-            R1: Role,
-            R2: Role,
+            R1: mpstthree::role::Role,
+            R2: mpstthree::role::Role,
         {
             let (here1, there1) = R1::new();
             let (here2, there2) = R2::new();
@@ -216,15 +218,17 @@ macro_rules! create_broadcast_role {
         ////////////////////////////////////////////
         /// The Dual functions
 
-        impl<R1: Role, R2: Role> Role for $dual_name<R1, R2> {
+        impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
+            for $dual_name<R1, R2>
+        {
             type Dual = $role_name<R1::Dual, R2::Dual>;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
-                let (sender_normal_1, _) = bounded::<R1>(1);
-                let (sender_normal_2, _) = bounded::<R2>(1);
-                let (sender_dual_1, _) = bounded::<R1::Dual>(1);
-                let (sender_dual_2, _) = bounded::<R2::Dual>(1);
+                let (sender_normal_1, _) = crossbeam_channel::bounded::<R1>(1);
+                let (sender_normal_2, _) = crossbeam_channel::bounded::<R2>(1);
+                let (sender_dual_1, _) = crossbeam_channel::bounded::<R1::Dual>(1);
+                let (sender_dual_2, _) = crossbeam_channel::bounded::<R2::Dual>(1);
 
                 (
                     $dual_name {
@@ -257,8 +261,8 @@ macro_rules! create_broadcast_role {
 
         pub fn $dual_next<R1, R2>(r: $dual_name<R1, R2>) -> (R1, R2)
         where
-            R1: Role,
-            R2: Role,
+            R1: mpstthree::role::Role,
+            R2: mpstthree::role::Role,
         {
             let (here1, there1) = R1::new();
             let (here2, there2) = R2::new();

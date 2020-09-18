@@ -7,18 +7,23 @@ macro_rules! create_send_mpst_session_1 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
             x: T,
-            s: SessionMpst<Send<T, S1>, S2, $role<R>, $name<RoleEnd>>,
-        ) -> SessionMpst<S1, S2, R, $name<RoleEnd>>
+            s: mpstthree::sessionmpst::SessionMpst<
+                mpstthree::binary::Send<T, S1>,
+                S2,
+                $role<R>,
+                $name<mpstthree::role::end::RoleEnd>,
+            >,
+        ) -> mpstthree::sessionmpst::SessionMpst<S1, S2, R, $name<mpstthree::role::end::RoleEnd>>
         where
-            T: marker::Send,
-            S1: Session,
-            S2: Session,
-            R: Role,
+            T: std::marker::Send,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            R: mpstthree::role::Role,
         {
-            let new_session = send(x, s.session1);
+            let new_session = mpstthree::binary::send(x, s.session1);
             let new_queue = $next(s.stack);
 
-            SessionMpst {
+            mpstthree::sessionmpst::SessionMpst {
                 session1: new_session,
                 session2: s.session2,
                 stack: new_queue,
@@ -34,18 +39,23 @@ macro_rules! create_send_mpst_session_2 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
             x: T,
-            s: SessionMpst<S1, Send<T, S2>, $role<R>, $name<RoleEnd>>,
-        ) -> SessionMpst<S1, S2, R, $name<RoleEnd>>
+            s: mpstthree::sessionmpst::SessionMpst<
+                S1,
+                mpstthree::binary::Send<T, S2>,
+                $role<R>,
+                $name<mpstthree::role::end::RoleEnd>,
+            >,
+        ) -> mpstthree::sessionmpst::SessionMpst<S1, S2, R, $name<mpstthree::role::end::RoleEnd>>
         where
-            T: marker::Send,
-            S1: Session,
-            S2: Session,
-            R: Role,
+            T: std::marker::Send,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            R: mpstthree::role::Role,
         {
-            let new_session = send(x, s.session2);
+            let new_session = mpstthree::binary::send(x, s.session2);
             let new_queue = $next(s.stack);
 
-            SessionMpst {
+            mpstthree::sessionmpst::SessionMpst {
                 session1: s.session1,
                 session2: new_session,
                 stack: new_queue,
@@ -63,17 +73,33 @@ macro_rules! create_send_mpst_session_2 {
 macro_rules! create_recv_mpst_session_1 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<Recv<T, S1>, S2, $role<R>, $name<RoleEnd>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
+            s: mpstthree::sessionmpst::SessionMpst<
+                mpstthree::binary::Recv<T, S1>,
+                S2,
+                $role<R>,
+                $name<mpstthree::role::end::RoleEnd>,
+            >,
+        ) -> Result<
+            (
+                T,
+                mpstthree::sessionmpst::SessionMpst<
+                    S1,
+                    S2,
+                    R,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ),
+            Box<dyn std::error::Error>,
+        >
         where
-            T: marker::Send,
-            S1: Session,
-            S2: Session,
-            R: Role,
+            T: std::marker::Send,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            R: mpstthree::role::Role,
         {
-            let (v, new_session) = recv(s.session1)?;
+            let (v, new_session) = mpstthree::binary::recv(s.session1)?;
             let new_queue = $next(s.stack);
-            let result = SessionMpst {
+            let result = mpstthree::sessionmpst::SessionMpst {
                 session1: new_session,
                 session2: s.session2,
                 stack: new_queue,
@@ -90,17 +116,33 @@ macro_rules! create_recv_mpst_session_1 {
 macro_rules! create_recv_mpst_session_2 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<S1, Recv<T, S2>, $role<R>, $name<RoleEnd>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
+            s: mpstthree::sessionmpst::SessionMpst<
+                S1,
+                mpstthree::binary::Recv<T, S2>,
+                $role<R>,
+                $name<mpstthree::role::end::RoleEnd>,
+            >,
+        ) -> Result<
+            (
+                T,
+                mpstthree::sessionmpst::SessionMpst<
+                    S1,
+                    S2,
+                    R,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ),
+            Box<dyn std::error::Error>,
+        >
         where
-            T: marker::Send,
-            S1: Session,
-            S2: Session,
-            R: Role,
+            T: std::marker::Send,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            R: mpstthree::role::Role,
         {
-            let (v, new_session) = recv(s.session2)?;
+            let (v, new_session) = mpstthree::binary::recv(s.session2)?;
             let new_queue = $next(s.stack);
-            let result = SessionMpst {
+            let result = mpstthree::sessionmpst::SessionMpst {
                 session1: s.session1,
                 session2: new_session,
                 stack: new_queue,
@@ -117,17 +159,33 @@ macro_rules! create_recv_mpst_session_2 {
 macro_rules! create_recv_mpst_all_session_1 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<Recv<T, S1>, S2, $role<R, R>, $name<RoleEnd>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
+            s: mpstthree::sessionmpst::SessionMpst<
+                mpstthree::binary::Recv<T, S1>,
+                S2,
+                $role<R, R>,
+                $name<mpstthree::role::end::RoleEnd>,
+            >,
+        ) -> Result<
+            (
+                T,
+                mpstthree::sessionmpst::SessionMpst<
+                    S1,
+                    S2,
+                    R,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ),
+            Box<dyn std::error::Error>,
+        >
         where
-            T: marker::Send,
-            S1: Session,
-            S2: Session,
-            R: Role,
+            T: std::marker::Send,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            R: mpstthree::role::Role,
         {
-            let (v, new_session) = recv(s.session1)?;
+            let (v, new_session) = mpstthree::binary::recv(s.session1)?;
             let (new_queue, _) = $next(s.stack);
-            let result = SessionMpst {
+            let result = mpstthree::sessionmpst::SessionMpst {
                 session1: new_session,
                 session2: s.session2,
                 stack: new_queue,
@@ -144,17 +202,33 @@ macro_rules! create_recv_mpst_all_session_1 {
 macro_rules! create_recv_mpst_all_session_2 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
         fn $func_name<T, S1, S2, R>(
-            s: SessionMpst<S1, Recv<T, S2>, $role<R, R>, $name<RoleEnd>>,
-        ) -> Result<(T, SessionMpst<S1, S2, R, $name<RoleEnd>>), Box<dyn Error>>
+            s: mpstthree::sessionmpst::SessionMpst<
+                S1,
+                mpstthree::binary::Recv<T, S2>,
+                $role<R, R>,
+                $name<mpstthree::role::end::RoleEnd>,
+            >,
+        ) -> Result<
+            (
+                T,
+                mpstthree::sessionmpst::SessionMpst<
+                    S1,
+                    S2,
+                    R,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ),
+            Box<dyn std::error::Error>,
+        >
         where
-            T: marker::Send,
-            S1: Session,
-            S2: Session,
-            R: Role,
+            T: std::marker::Send,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            R: mpstthree::role::Role,
         {
-            let (v, new_session) = recv(s.session2)?;
+            let (v, new_session) = mpstthree::binary::recv(s.session2)?;
             let (new_queue, _) = $next(s.stack);
-            let result = SessionMpst {
+            let result = mpstthree::sessionmpst::SessionMpst {
                 session1: s.session1,
                 session2: new_session,
                 stack: new_queue,
@@ -174,29 +248,43 @@ macro_rules! create_recv_mpst_all_session_2 {
 macro_rules! create_offer_mpst_session_1 {
     ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
         fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-            s: SessionMpst<
-                OfferMpst<S1, S2, S3, S4, R1, R2, $name<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
                 S5,
                 $role<R3, R3>,
-                $name<RoleEnd>,
+                $name<mpstthree::role::end::RoleEnd>,
             >,
             f: F,
             g: G,
-        ) -> Result<U, Box<dyn Error + 'a>>
+        ) -> Result<U, Box<dyn std::error::Error + 'a>>
         where
-            S1: Session,
-            S2: Session,
-            S3: Session,
-            S4: Session,
-            S5: Session,
-            R1: Role,
-            R2: Role,
-            R3: Role,
-            F: FnOnce(SessionMpst<S1, S2, R1, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-            G: FnOnce(SessionMpst<S3, S4, R2, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            S3: mpstthree::binary::Session,
+            S4: mpstthree::binary::Session,
+            S5: mpstthree::binary::Session,
+            R1: mpstthree::role::Role,
+            R2: mpstthree::role::Role,
+            R3: mpstthree::role::Role,
+            F: FnOnce(
+                mpstthree::sessionmpst::SessionMpst<
+                    S1,
+                    S2,
+                    R1,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+            G: FnOnce(
+                mpstthree::sessionmpst::SessionMpst<
+                    S3,
+                    S4,
+                    R2,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
         {
             let (e, s) = $recv_func(s)?;
-            cancel(s);
+            mpstthree::binary::cancel(s);
             e.either(f, g)
         }
     };
@@ -207,29 +295,43 @@ macro_rules! create_offer_mpst_session_1 {
 macro_rules! create_offer_mpst_session_2 {
     ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
         fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-            s: SessionMpst<
+            s: mpstthree::sessionmpst::SessionMpst<
                 S5,
-                OfferMpst<S1, S2, S3, S4, R1, R2, $name<RoleEnd>>,
+                OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
                 $role<R3, R3>,
-                $name<RoleEnd>,
+                $name<mpstthree::role::end::RoleEnd>,
             >,
             f: F,
             g: G,
-        ) -> Result<U, Box<dyn Error + 'a>>
+        ) -> Result<U, Box<dyn std::error::Error + 'a>>
         where
-            S1: Session,
-            S2: Session,
-            S3: Session,
-            S4: Session,
-            S5: Session,
-            R1: Role,
-            R2: Role,
-            R3: Role,
-            F: FnOnce(SessionMpst<S1, S2, R1, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-            G: FnOnce(SessionMpst<S3, S4, R2, $name<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+            S1: mpstthree::binary::Session,
+            S2: mpstthree::binary::Session,
+            S3: mpstthree::binary::Session,
+            S4: mpstthree::binary::Session,
+            S5: mpstthree::binary::Session,
+            R1: mpstthree::role::Role,
+            R2: mpstthree::role::Role,
+            R3: mpstthree::role::Role,
+            F: FnOnce(
+                mpstthree::sessionmpst::SessionMpst<
+                    S1,
+                    S2,
+                    R1,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+            G: FnOnce(
+                mpstthree::sessionmpst::SessionMpst<
+                    S3,
+                    S4,
+                    R2,
+                    $name<mpstthree::role::end::RoleEnd>,
+                >,
+            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
         {
             let (e, s) = $recv_func(s)?;
-            cancel(s);
+            mpstthree::binary::cancel(s);
             e.either(f, g)
         }
     };
@@ -248,38 +350,40 @@ macro_rules! create_choose_from_1_to_2_3 {
         let (_, role_1) = <$role_1>::new();
         let (_, role_2) = <$role_2>::new();
         let (role_3, _) = <$role_3>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) =
+            <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
+        let (name_2, _) =
+            <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
+        let (name_3, _) = $sender::<mpstthree::role::end::RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = mpstthree::sessionmpst::SessionMpst {
             session1: session_2_1,
             session2: session_2_3,
             stack: role_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = mpstthree::sessionmpst::SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_2,
             name: name_2,
         };
 
-        let new_session_1 = send($pat(choice_1), $session.session1);
-        let new_session_2 = send($pat(choice_2), $session.session2);
+        let new_session_1 = mpstthree::binary::send($pat(choice_1), $session.session1);
+        let new_session_2 = mpstthree::binary::send($pat(choice_2), $session.session2);
         let (_, new_queue) = $next($session.stack);
 
-        let s = SessionMpst {
+        let s = mpstthree::sessionmpst::SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
             stack: new_queue,
             name: $session.name,
         };
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_1_2,
             session2: session_1_3,
             stack: role_3,
@@ -297,38 +401,40 @@ macro_rules! create_choose_from_2_to_1_3 {
         let (_, role_1) = <$role_1>::new();
         let (_, role_2) = <$role_2>::new();
         let (role_3, _) = <$role_3>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) =
+            <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
+        let (name_2, _) =
+            <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
+        let (name_3, _) = $sender::<mpstthree::role::end::RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = mpstthree::sessionmpst::SessionMpst {
             session1: session_1_2,
             session2: session_1_3,
             stack: role_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = mpstthree::sessionmpst::SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_2,
             name: name_2,
         };
 
-        let new_session_1 = send($pat(choice_1), $session.session1);
-        let new_session_2 = send($pat(choice_2), $session.session2);
+        let new_session_1 = mpstthree::binary::send($pat(choice_1), $session.session1);
+        let new_session_2 = mpstthree::binary::send($pat(choice_2), $session.session2);
         let (_, new_queue) = $next($session.stack);
 
-        let s = SessionMpst {
+        let s = mpstthree::sessionmpst::SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
             stack: new_queue,
             name: $session.name,
         };
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_2_1,
             session2: session_2_3,
             stack: role_3,
@@ -346,38 +452,40 @@ macro_rules! create_choose_from_3_to_1_2 {
         let (_, role_1) = <$role_1>::new();
         let (_, role_2) = <$role_2>::new();
         let (role_3, _) = <$role_3>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) =
+            <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
+        let (name_2, _) =
+            <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
+        let (name_3, _) = $sender::<mpstthree::role::end::RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = mpstthree::sessionmpst::SessionMpst {
             session1: session_1_2,
             session2: session_1_3,
             stack: role_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = mpstthree::sessionmpst::SessionMpst {
             session1: session_2_1,
             session2: session_2_3,
             stack: role_2,
             name: name_2,
         };
 
-        let new_session_1 = send($pat(choice_1), $session.session1);
-        let new_session_2 = send($pat(choice_2), $session.session2);
+        let new_session_1 = mpstthree::binary::send($pat(choice_1), $session.session1);
+        let new_session_2 = mpstthree::binary::send($pat(choice_2), $session.session2);
         let (_, new_queue) = $next($session.stack);
 
-        let s = SessionMpst {
+        let s = mpstthree::sessionmpst::SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
             stack: new_queue,
             name: $session.name,
         };
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_3,
@@ -391,8 +499,8 @@ macro_rules! create_choose_from_3_to_1_2 {
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: SessionMpst<
-                ChooseMpst<S0, S2, S1, S4, R0, R1, $dual_1<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                ChooseMpst<S0, S2, S1, S4, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
                 ChooseMpst<
                     <S0 as Session>::Dual,
                     S3,
@@ -400,25 +508,25 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                     S5,
                     R2,
                     R3,
-                    $dual_2<RoleEnd>,
+                    $dual_2<mpstthree::role::end::RoleEnd>,
                 >,
                 $role<R4, R5>,
-                $sender<RoleEnd>,
+                $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> SessionMpst<S4, S5, R5, $sender<RoleEnd>>
+        ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: Session + 'a,
-            S1: Session + 'a,
-            S2: Session + 'a,
-            S3: Session + 'a,
-            S4: Session + 'a,
-            S5: Session + 'a,
-            R0: Role + 'a,
-            R1: Role + 'a,
-            R2: Role + 'a,
-            R3: Role + 'a,
-            R4: Role + 'a,
-            R5: Role + 'a,
+            S0: mpstthree::binary::Session + 'a,
+            S1: mpstthree::binary::Session + 'a,
+            S2: mpstthree::binary::Session + 'a,
+            S3: mpstthree::binary::Session + 'a,
+            S4: mpstthree::binary::Session + 'a,
+            S5: mpstthree::binary::Session + 'a,
+            R0: mpstthree::role::Role + 'a,
+            R1: mpstthree::role::Role + 'a,
+            R2: mpstthree::role::Role + 'a,
+            R3: mpstthree::role::Role + 'a,
+            R4: mpstthree::role::Role + 'a,
+            R5: mpstthree::role::Role + 'a,
         {
             create_choose_from_3_to_1_2!(
                 S4,
@@ -431,7 +539,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                 $dual_2,
                 $sender,
                 s,
-                Either::Right,
+                either::Either::Right,
                 $next
             )
         }
@@ -443,8 +551,8 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: SessionMpst<
-                ChooseMpst<S0, S2, S1, S4, R0, R1, $dual_1<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                ChooseMpst<S0, S2, S1, S4, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
                 ChooseMpst<
                     <S0 as Session>::Dual,
                     S3,
@@ -452,25 +560,25 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                     S5,
                     R2,
                     R3,
-                    $dual_2<RoleEnd>,
+                    $dual_2<mpstthree::role::end::RoleEnd>,
                 >,
                 $role<R4, R5>,
-                $sender<RoleEnd>,
+                $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> SessionMpst<S2, S3, R4, $sender<RoleEnd>>
+        ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: Session + 'a,
-            S1: Session + 'a,
-            S2: Session + 'a,
-            S3: Session + 'a,
-            S4: Session + 'a,
-            S5: Session + 'a,
-            R0: Role + 'a,
-            R1: Role + 'a,
-            R2: Role + 'a,
-            R3: Role + 'a,
-            R4: Role + 'a,
-            R5: Role + 'a,
+            S0: mpstthree::binary::Session + 'a,
+            S1: mpstthree::binary::Session + 'a,
+            S2: mpstthree::binary::Session + 'a,
+            S3: mpstthree::binary::Session + 'a,
+            S4: mpstthree::binary::Session + 'a,
+            S5: mpstthree::binary::Session + 'a,
+            R0: mpstthree::role::Role + 'a,
+            R1: mpstthree::role::Role + 'a,
+            R2: mpstthree::role::Role + 'a,
+            R3: mpstthree::role::Role + 'a,
+            R4: mpstthree::role::Role + 'a,
+            R5: mpstthree::role::Role + 'a,
         {
             create_choose_from_3_to_1_2!(
                 S2,
@@ -483,7 +591,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                 $dual_2,
                 $sender,
                 s,
-                Either::Left,
+                either::Either::Left,
                 $next
             )
         }
@@ -495,8 +603,8 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: SessionMpst<
-                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
                 ChooseMpst<
                     S3,
                     <S0 as Session>::Dual,
@@ -504,25 +612,25 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                     <S1 as Session>::Dual,
                     R2,
                     R3,
-                    $dual_2<RoleEnd>,
+                    $dual_2<mpstthree::role::end::RoleEnd>,
                 >,
                 $role<R4, R5>,
-                $name<RoleEnd>,
+                $name<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> SessionMpst<S2, S3, R4, $name<RoleEnd>>
+        ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $name<mpstthree::role::end::RoleEnd>>
         where
-            S0: Session + 'a,
-            S1: Session + 'a,
-            S2: Session + 'a,
-            S3: Session + 'a,
-            S4: Session + 'a,
-            S5: Session + 'a,
-            R0: Role + 'a,
-            R1: Role + 'a,
-            R2: Role + 'a,
-            R3: Role + 'a,
-            R4: Role + 'a,
-            R5: Role + 'a,
+            S0: mpstthree::binary::Session + 'a,
+            S1: mpstthree::binary::Session + 'a,
+            S2: mpstthree::binary::Session + 'a,
+            S3: mpstthree::binary::Session + 'a,
+            S4: mpstthree::binary::Session + 'a,
+            S5: mpstthree::binary::Session + 'a,
+            R0: mpstthree::role::Role + 'a,
+            R1: mpstthree::role::Role + 'a,
+            R2: mpstthree::role::Role + 'a,
+            R3: mpstthree::role::Role + 'a,
+            R4: mpstthree::role::Role + 'a,
+            R5: mpstthree::role::Role + 'a,
         {
             create_choose_from_1_to_2_3!(
                 S2,
@@ -535,7 +643,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                Either::Left,
+                either::Either::Left,
                 $next
             )
         }
@@ -547,8 +655,8 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: SessionMpst<
-                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
                 ChooseMpst<
                     S3,
                     <S0 as Session>::Dual,
@@ -556,25 +664,25 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                     <S1 as Session>::Dual,
                     R2,
                     R3,
-                    $dual_2<RoleEnd>,
+                    $dual_2<mpstthree::role::end::RoleEnd>,
                 >,
                 $role<R4, R5>,
-                $name<RoleEnd>,
+                $name<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> SessionMpst<S4, S5, R5, $name<RoleEnd>>
+        ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $name<mpstthree::role::end::RoleEnd>>
         where
-            S0: Session + 'a,
-            S1: Session + 'a,
-            S2: Session + 'a,
-            S3: Session + 'a,
-            S4: Session + 'a,
-            S5: Session + 'a,
-            R0: Role + 'a,
-            R1: Role + 'a,
-            R2: Role + 'a,
-            R3: Role + 'a,
-            R4: Role + 'a,
-            R5: Role + 'a,
+            S0: mpstthree::binary::Session + 'a,
+            S1: mpstthree::binary::Session + 'a,
+            S2: mpstthree::binary::Session + 'a,
+            S3: mpstthree::binary::Session + 'a,
+            S4: mpstthree::binary::Session + 'a,
+            S5: mpstthree::binary::Session + 'a,
+            R0: mpstthree::role::Role + 'a,
+            R1: mpstthree::role::Role + 'a,
+            R2: mpstthree::role::Role + 'a,
+            R3: mpstthree::role::Role + 'a,
+            R4: mpstthree::role::Role + 'a,
+            R5: mpstthree::role::Role + 'a,
         {
             create_choose_from_1_to_2_3!(
                 S4,
@@ -587,7 +695,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                Either::Right,
+                either::Either::Right,
                 $next
             )
         }
@@ -599,8 +707,8 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: SessionMpst<
-                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
                 ChooseMpst<
                     S3,
                     <S0 as Session>::Dual,
@@ -608,25 +716,25 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                     <S1 as Session>::Dual,
                     R2,
                     R3,
-                    $dual_2<RoleEnd>,
+                    $dual_2<mpstthree::role::end::RoleEnd>,
                 >,
                 $role<R4, R5>,
-                $name<RoleEnd>,
+                $name<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> SessionMpst<S2, S3, R4, $name<RoleEnd>>
+        ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $name<mpstthree::role::end::RoleEnd>>
         where
-            S0: Session + 'a,
-            S1: Session + 'a,
-            S2: Session + 'a,
-            S3: Session + 'a,
-            S4: Session + 'a,
-            S5: Session + 'a,
-            R0: Role + 'a,
-            R1: Role + 'a,
-            R2: Role + 'a,
-            R3: Role + 'a,
-            R4: Role + 'a,
-            R5: Role + 'a,
+            S0: mpstthree::binary::Session + 'a,
+            S1: mpstthree::binary::Session + 'a,
+            S2: mpstthree::binary::Session + 'a,
+            S3: mpstthree::binary::Session + 'a,
+            S4: mpstthree::binary::Session + 'a,
+            S5: mpstthree::binary::Session + 'a,
+            R0: mpstthree::role::Role + 'a,
+            R1: mpstthree::role::Role + 'a,
+            R2: mpstthree::role::Role + 'a,
+            R3: mpstthree::role::Role + 'a,
+            R4: mpstthree::role::Role + 'a,
+            R5: mpstthree::role::Role + 'a,
         {
             create_choose_from_2_to_1_3!(
                 S2,
@@ -639,7 +747,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                Either::Left,
+                either::Either::Left,
                 $next
             )
         }
@@ -651,8 +759,8 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $name:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: SessionMpst<
-                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<RoleEnd>>,
+            s: mpstthree::sessionmpst::SessionMpst<
+                ChooseMpst<S2, S0, S4, S1, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
                 ChooseMpst<
                     S3,
                     <S0 as Session>::Dual,
@@ -660,25 +768,25 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                     <S1 as Session>::Dual,
                     R2,
                     R3,
-                    $dual_2<RoleEnd>,
+                    $dual_2<mpstthree::role::end::RoleEnd>,
                 >,
                 $role<R4, R5>,
-                $name<RoleEnd>,
+                $name<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> SessionMpst<S4, S5, R5, $name<RoleEnd>>
+        ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $name<mpstthree::role::end::RoleEnd>>
         where
-            S0: Session + 'a,
-            S1: Session + 'a,
-            S2: Session + 'a,
-            S3: Session + 'a,
-            S4: Session + 'a,
-            S5: Session + 'a,
-            R0: Role + 'a,
-            R1: Role + 'a,
-            R2: Role + 'a,
-            R3: Role + 'a,
-            R4: Role + 'a,
-            R5: Role + 'a,
+            S0: mpstthree::binary::Session + 'a,
+            S1: mpstthree::binary::Session + 'a,
+            S2: mpstthree::binary::Session + 'a,
+            S3: mpstthree::binary::Session + 'a,
+            S4: mpstthree::binary::Session + 'a,
+            S5: mpstthree::binary::Session + 'a,
+            R0: mpstthree::role::Role + 'a,
+            R1: mpstthree::role::Role + 'a,
+            R2: mpstthree::role::Role + 'a,
+            R3: mpstthree::role::Role + 'a,
+            R4: mpstthree::role::Role + 'a,
+            R5: mpstthree::role::Role + 'a,
         {
             create_choose_from_2_to_1_3!(
                 S4,
@@ -691,7 +799,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                Either::Right,
+                either::Either::Right,
                 $next
             )
         }
@@ -708,12 +816,12 @@ macro_rules! choose_mpst_to_all {
         let (role_1, _) = <_ as Role>::new();
         let (role_2, _) = <_ as Role>::new();
         let (role_3, _) = <_ as Role>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::new();
-        let (name_3, _) = <$sender<RoleEnd> as Role>::new();
+        let (name_1, _) = <$receiver_1<mpstthree::role::end::RoleEnd> as Role>::new();
+        let (name_2, _) = <$receiver_2<mpstthree::role::end::RoleEnd> as Role>::new();
+        let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as Role>::new();
 
         let s = $fn_send_1(
-            $label_1(SessionMpst {
+            $label_1(mpstthree::sessionmpst::SessionMpst {
                 session1: session_1_2,
                 session2: session_1_3,
                 stack: role_1,
@@ -722,7 +830,7 @@ macro_rules! choose_mpst_to_all {
             $session,
         );
         let s = $fn_send_2(
-            $label_2(SessionMpst {
+            $label_2(mpstthree::sessionmpst::SessionMpst {
                 session1: session_2_1,
                 session2: session_2_3,
                 stack: role_2,
@@ -731,9 +839,9 @@ macro_rules! choose_mpst_to_all {
             s,
         );
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_3,

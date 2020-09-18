@@ -72,7 +72,6 @@ fn match_recv_from_all(
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
 
     match role {
@@ -120,7 +119,6 @@ fn match_headers(
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("head_sessions match_headers: {:?}", &head_sessions);
     // println!("sessionmpst match_headers: {:?}", &sessionmpst);
     // println!("headers match_headers: {:?}", &headers);
@@ -173,7 +171,6 @@ fn match_full_types(
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("sessionmpst match_full_types: {:?}", &sessionmpst);
     // println!("head_session match_full_types: {:?}", &head_session);
 
@@ -234,7 +231,6 @@ fn get_name(head: &str) -> String {
 
 #[doc(hidden)]
 fn get_head(s: &str) -> String {
-
     // println!("get_head: {}", &s);
 
     let mut result: Vec<&str> = s.split('<').collect();
@@ -254,13 +250,12 @@ fn get_head(s: &str) -> String {
         .collect::<Vec<_>>();
 
     // println!("result get_head : {}", &result[0]);
-    
+
     String::from(result[0])
 }
 
 #[doc(hidden)]
 fn get_head_payload(s: &str) -> String {
-
     // println!("get_head_payload: {}", &s);
 
     let payload = &get_two_tails(s)[0];
@@ -276,7 +271,6 @@ fn get_head_payload(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_two_tails(s: &str) -> [String; 2] {
-
     // println!("get_two_tails: {}", &s);
 
     let mut result: [String; 2] = Default::default();
@@ -329,7 +323,6 @@ fn get_two_tails(s: &str) -> [String; 2] {
 
 #[doc(hidden)]
 fn get_fields(s: &str) -> [String; 4] {
-
     // println!("get_fields: {}", &s);
 
     let mut result: [String; 4] = Default::default();
@@ -370,7 +363,6 @@ fn get_fields(s: &str) -> [String; 4] {
 
 #[doc(hidden)]
 fn divide_either(s: &str) -> [String; 8] {
-
     // println!("divide_either: {}", &s);
 
     let mut result: [String; 8] = Default::default();
@@ -418,7 +410,6 @@ fn get_tail(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_dual(s: &str) -> String {
-
     // println!("Dual: {}", &s);
 
     let result = &s.replace("Send<", "Revc<");
@@ -450,7 +441,6 @@ fn send_type(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("sessionmpst send_type: {:?}", &sessionmpst);
     // println!("payload send_type: {:?}", &payload);
 
@@ -478,7 +468,6 @@ fn recv_type(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("sessionmpst recv_type: {:?}", &sessionmpst);
     // println!("payload recv_type: {:?}", &payload);
 
@@ -521,7 +510,6 @@ fn recurs_type(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("payload recurs_type: {}", &payload);
 
     let mut vec_result = Vec::new();
@@ -570,7 +558,6 @@ fn all_type(
     hm: &HashMap<String, &Vec<String>>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-
     // println!("sessionmpst all_type: {:?}", &sessionmpst);
 
     let payload_1 = get_head_payload(&sessionmpst[0]);
@@ -580,7 +567,7 @@ fn all_type(
         let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        // println!("tails: {:?}", &tails);    
+        // println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -611,7 +598,7 @@ fn all_type(
         let branching_1: [String; 8] = divide_either(&payload_1);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        // println!("tails: {:?}", &tails);    
+        // println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -642,7 +629,7 @@ fn all_type(
         let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        // println!("tails: {:?}", &tails);    
+        // println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",

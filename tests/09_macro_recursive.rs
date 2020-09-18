@@ -3,8 +3,7 @@ extern crate crossbeam_channel;
 extern crate mpstthree;
 extern crate rand;
 
-use crossbeam_channel::{bounded, Sender};
-use mpstthree::binary::{cancel, recv, send, End, Recv, Send, Session};
+use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;

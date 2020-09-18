@@ -2,19 +2,16 @@
 extern crate crossbeam_channel;
 extern crate either;
 extern crate mpstthree;
-use crossbeam_channel::{bounded, Sender};
-use mpstthree::binary::{recv, send, End, Recv, Send, Session};
+use mpstthree::binary::{End, Recv, Send};
 use mpstthree::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 use mpstthree::{
     create_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
     create_send_mpst_session_1, create_send_mpst_session_2,
 };
 use std::error::Error;
-use std::marker;
 
 // Create new roles
 create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
