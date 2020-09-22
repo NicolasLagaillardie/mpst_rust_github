@@ -1,74 +1,190 @@
 extern crate mpstthree;
+use mpstthree::checking::checker;
 
 use mpstthree::binary::{End, Recv, Send, Session};
-use mpstthree::checking::checking::checker;
 use mpstthree::sessionmpst::SessionMpst;
 
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
-use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::b_to_c::RoleBtoC;
-use mpstthree::role::c_to_a::RoleCtoA;
-use mpstthree::role::c_to_b::RoleCtoB;
+use std::any::type_name;
+use std::boxed::Box;
+use std::collections::HashMap;
+use std::error::Error;
+use std::fmt;
+use std::marker;
+
+use mpstthree::role::a::RoleA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
-/// A = !B.?C
-/// B = ?A.!C
-/// C = !A.?B
+use mpstthree::role::Role;
 
-/// Creating the binary sessions
-type AtoB<N> = Send<N, End>;
-type AtoC<N> = Recv<N, End>;
+/// Test our usecase from Places 2020
+/// Simple types
+/// Client = C
+/// Authenticator = A
+/// Server = B
 
-type BtoA<N> = <AtoB<N> as Session>::Dual;
-type BtoC<N> = Send<N, End>;
+type AtoCClose = End;
+type AtoBClose = End;
+type AtoBVideo<N> = Send<N, Recv<N, End>>;
 
-type CtoA<N> = <AtoC<N> as Session>::Dual;
-type CtoB<N> = <BtoC<N> as Session>::Dual;
+type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
+
+type BtoAClose = <AtoBClose as Session>::Dual;
+type BtoCClose = End;
+type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+
+type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
+type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
+
+enum CBranchesAtoC<N: marker::Send> {
+    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
+    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo, RoleA<RoleEnd>>),
+}
+enum CBranchesBtoC<N: marker::Send> {
+    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
+}
+type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
+type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
+
+type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
 /// Queues
-type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
-type QueueB = RoleBtoA<RoleBtoC<RoleEnd>>;
-type QueueC = RoleCtoA<RoleCtoB<RoleEnd>>;
+type QueueAEnd = RoleEnd;
+type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
+
+type QueueBEnd = RoleEnd;
+type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type QueueBRecurs = RoleC<RoleEnd>;
+
+type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
+/// For C
+type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull, RoleC<RoleEnd>>;
+
+/// For A
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
+
+/// For B
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleB<RoleEnd>>;
+
+fn type_of<T>(_: T) -> &'static str {
+    type_name::<T>()
+}
+
+impl<N: marker::Send> fmt::Display for CBranchesAtoC<N> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            CBranchesAtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
+            CBranchesAtoC::End(s) => write!(f, "End:{}", type_of(&s)),
+        }
+    }
+}
+
+impl<N: marker::Send> fmt::Display for CBranchesBtoC<N> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            CBranchesBtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
+            CBranchesBtoC::End(s) => write!(f, "End:{}", type_of(&s)),
+        }
+    }
+}
+
+fn hashmap_c_branches_a_to_c() -> Vec<String> {
+    let (channel_1_video, _) = <_ as Session>::new();
+    let (channel_2_video, _) = <_ as Session>::new();
+    let (role_video, _) = <_ as Role>::new();
+    let (name_video, _) = <_ as Role>::new();
+
+    let (channel_1_end, _) = <_ as Session>::new();
+    let (channel_2_end, _) = <_ as Session>::new();
+    let (role_end, _) = <_ as Role>::new();
+    let (name_end, _) = <_ as Role>::new();
+
+    let s_video = SessionMpst {
+        session1: channel_1_video,
+        session2: channel_2_video,
+        stack: role_video,
+        name: name_video,
+    };
+
+    let s_end = SessionMpst {
+        session1: channel_1_end,
+        session2: channel_2_end,
+        stack: role_end,
+        name: name_end,
+    };
+
+    let video = CBranchesAtoC::<i32>::Video(s_video);
+    let end = CBranchesAtoC::<i32>::End(s_end);
+
+    vec![
+        String::from(&video.to_string()),
+        String::from(&end.to_string()),
+    ]
+}
+
+fn hashmap_c_branches_b_to_c() -> Vec<String> {
+    let (channel_1_video, _) = <_ as Session>::new();
+    let (channel_2_video, _) = <_ as Session>::new();
+    let (role_video, _) = <_ as Role>::new();
+    let (name_video, _) = <_ as Role>::new();
+
+    let (channel_1_end, _) = <_ as Session>::new();
+    let (channel_2_end, _) = <_ as Session>::new();
+    let (role_end, _) = <_ as Role>::new();
+    let (name_end, _) = <_ as Role>::new();
+
+    let s_video = SessionMpst {
+        session1: channel_1_video,
+        session2: channel_2_video,
+        stack: role_video,
+        name: name_video,
+    };
+
+    let s_end = SessionMpst {
+        session1: channel_1_end,
+        session2: channel_2_end,
+        stack: role_end,
+        name: name_end,
+    };
+
+    let video = CBranchesBtoC::<i32>::Video(s_video);
+    let end = CBranchesBtoC::<i32>::End(s_end);
+
+    vec![
+        String::from(&video.to_string()),
+        String::from(&end.to_string()),
+    ]
+}
 
 #[test]
 fn test_checker() {
-    let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
-    let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
-    let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
-    // let mut mut_s1: EndpointA<i32> = s1;
-    // let mut mut_s2: EndpointB<i32> = s2;
-    // let mut mut_s3: EndpointC<i32> = s3;
+            let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
+            let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-    // let deref_s1: *mut EndpointA<i32> = &mut mut_s1;
-    // let deref_s2: *mut EndpointB<i32> = &mut mut_s2;
-    // let deref_s3: *mut EndpointC<i32> = &mut mut_s3;
+            hm.insert(String::from("CBranchesAtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("CBranchesBtoC<i32>"), &c_branches_b_to_c);
 
-    // checker(deref_s1, deref_s2, deref_s3);
+            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointBRecurs<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
 
-    let result = checker(s1, s2, s3);
+            let (a, b, c) = checker(s1, s2, s3, &hm)?;
 
-    assert!(result.is_ok());
-
-    // assert!(|| -> Result<(), Box<dyn Error>> {
-    //     {
-    //         let (thread_a, thread_b, thread_c) = run_processes(
-    //             simple_triple_endpoint_a,
-    //             simple_triple_endpoint_b,
-    //             simple_triple_endpoint_c,
-    //         );
-
-    //         assert!(thread_a.is_ok());
-    //         assert!(thread_b.is_ok());
-    //         assert!(thread_c.is_ok());
-    //     }
-    //     Ok(())
-    // }()
-    // .is_ok());
+            assert_eq!(a, "A: A?C.A!C.µX( A?C.A!B.A?B.A!C.X & 0 )");
+            assert_eq!(b, "B: µX( B?A.B!A.X & 0 )");
+            assert_eq!(c, "C: C!A.C?A.µX( A?C.A!B.A?B.A!C.X + 0 )");
+        }
+        Ok(())
+    }()
+    .is_ok());
 }

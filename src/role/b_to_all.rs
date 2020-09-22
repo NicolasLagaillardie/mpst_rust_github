@@ -1,13 +1,12 @@
+use crate::role::all_to_b::RoleAlltoB;
+use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
-use role::all_to_b::RoleAlltoB;
-use role::Role;
-
-use std::fmt;
 
 /// Gives the order to the `SessionMpst` related to B to execute its `session`
 /// fields with every other processes.
 ///
 /// This `struct` is used for branching without `enum`. See test `usecase`.
+#[derive(Debug)]
 pub struct RoleBtoAll<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
@@ -36,14 +35,19 @@ impl<R1: Role, R2: Role> Role for RoleBtoAll<R1, R2> {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("RoleBtoAll")
     }
-}
 
-impl<R1: Role, R2: Role> fmt::Display for RoleBtoAll<R1, R2> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RoleBtoAll")
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        format!(
+            "{}<{}> + {}<{}>",
+            R1::head_str(),
+            R1::tail_str(),
+            R2::head_str(),
+            R2::tail_str()
+        )
     }
 }
 

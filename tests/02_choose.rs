@@ -1,31 +1,32 @@
 extern crate mpstthree;
+use mpstthree::checking::checker;
 
 use std::boxed::Box;
+use std::collections::HashMap;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
 
-use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::binary::{End, Recv, Session};
 use mpstthree::fork_mpst;
-use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
-use mpstthree::role::b_to_a::RoleBtoA;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::a_dual::RoleADual;
+use mpstthree::role::all_to_b::RoleAlltoB;
+use mpstthree::role::b::RoleB;
 use mpstthree::role::b_to_all::RoleBtoAll;
-use mpstthree::role::c_to_a::RoleCtoA;
-use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::c::RoleC;
+use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
+use mpstthree::role::Role;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
-use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
 
-use mpstthree::functionmpst::send::send_mpst_a_to_c;
 use mpstthree::functionmpst::send::send_mpst_b_to_a;
 
-use mpstthree::functionmpst::offer::offer_mpst_session_a_to_b;
-use mpstthree::functionmpst::offer::offer_mpst_session_c_to_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_a_from_b;
+use mpstthree::functionmpst::offer::offer_mpst_session_to_c_from_b;
 
 use mpstthree::functionmpst::choose::choose_left_mpst_session_b_to_all;
 use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
@@ -38,56 +39,56 @@ use mpstthree::functionmpst::OfferMpst;
 type AtoBNeg<N> = Recv<N, End>;
 type AtoBAdd<N> = Recv<N, End>;
 
-type AtoCNeg<N> = Send<N, End>;
-type AtoCAdd<N> = Send<N, End>;
-
+// type BtoANeg<N> = Send<N, End>;
+// type BtoAAdd<N> = Send<N, End>;
 type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
 type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
-type CtoANeg<N> = <AtoCNeg<N> as Session>::Dual;
-type CtoAAdd<N> = <AtoCAdd<N> as Session>::Dual;
-
 /// Queues
-type QueueOfferA = RoleAtoB<RoleAtoC<RoleEnd>>;
-type QueueOfferADual = <QueueOfferA as Role>::Dual;
-type QueueFullA = RoleAtoB<QueueOfferA>;
+type QueueOfferA = RoleB<RoleEnd>;
+type QueueFullA = RoleAlltoB<QueueOfferA, QueueOfferA>;
 
-type QueueChoiceB = RoleBtoA<RoleEnd>;
+type QueueChoiceB = RoleA<RoleEnd>;
 type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;
 
-type QueueOfferC = RoleCtoA<RoleEnd>;
-type QueueOfferCDual = <QueueOfferC as Role>::Dual;
-type QueueFullC = RoleCtoB<QueueOfferC>;
+type QueueOfferC = RoleEnd;
+type QueueFullC = RoleAlltoB<QueueOfferC, QueueOfferC>;
 
 /// Creating the MP sessions
 /// For A
-type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, AtoCAdd<N>, QueueOfferA>;
-type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, AtoCNeg<N>, QueueOfferA>;
+type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA, RoleA<RoleEnd>>;
+type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA, RoleA<RoleEnd>>;
 
-type OfferA<N> =
-    OfferMpst<AtoBAdd<N>, AtoCAdd<N>, AtoBNeg<N>, AtoCNeg<N>, QueueOfferA, QueueOfferA>;
-type EndpointChoiceA<N> = SessionMpst<OfferA<N>, End, QueueFullA>;
+type OfferAfromB<N> =
+    OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, QueueOfferA, QueueOfferA, RoleA<RoleEnd>>;
+type EndpointChoiceA<N> = SessionMpst<OfferAfromB<N>, End, QueueFullA, RoleA<RoleEnd>>;
 
 /// For B
-type ChooseBtoA<N> =
-    ChooseMpst<BtoAAdd<N>, CtoAAdd<N>, BtoANeg<N>, CtoANeg<N>, QueueOfferADual, QueueOfferADual>;
-type ChooseBtoC<N> = ChooseMpst<AtoCAdd<N>, End, AtoCNeg<N>, End, QueueOfferCDual, QueueOfferCDual>;
-type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC<N>, QueueFullB>;
+type ChooseBtoA<N> = ChooseMpst<
+    BtoAAdd<N>,
+    End,
+    BtoANeg<N>,
+    End,
+    <QueueOfferA as Role>::Dual,
+    <QueueOfferA as Role>::Dual,
+    RoleADual<RoleEnd>,
+>;
+type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>>;
+type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, QueueFullB, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCAdd<N> = SessionMpst<CtoAAdd<N>, End, QueueOfferC>;
-type EndpointCNeg<N> = SessionMpst<CtoANeg<N>, End, QueueOfferC>;
+type EndpointCAdd = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
+type EndpointCNeg = SessionMpst<End, End, QueueOfferC, RoleC<RoleEnd>>;
 
-type OfferC<N> = OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, QueueOfferC, QueueOfferC>;
-type EndpointChoiceC<N> = SessionMpst<End, OfferC<N>, QueueFullC>;
+type OfferCfromB = OfferMpst<End, End, End, End, QueueOfferC, QueueOfferC, RoleC<RoleEnd>>;
+type EndpointChoiceC = SessionMpst<End, OfferCfromB, QueueFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_a_to_b(
+    offer_mpst_session_to_a_from_b(
         s,
         |s: EndpointAAdd<i32>| {
             let (x, s) = recv_mpst_a_to_b(s)?;
-            let s = send_mpst_a_to_c(x + 1, s);
             close_mpst(s)?;
 
             assert_eq!(x, 1);
@@ -95,7 +96,6 @@ fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
         },
         |s: EndpointANeg<i32>| {
             let (x, s) = recv_mpst_a_to_b(s)?;
-            let s = send_mpst_a_to_c(x + 1, s);
             close_mpst(s)?;
 
             assert_eq!(x, 2);
@@ -107,16 +107,16 @@ fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
 fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     {
         let s = choose_left_mpst_session_b_to_all::<
-            CtoAAdd<i32>,
-            CtoANeg<i32>,
+            End,
+            End,
             BtoAAdd<i32>,
             End,
             BtoANeg<i32>,
             End,
-            QueueOfferADual,
-            QueueOfferADual,
-            QueueOfferCDual,
-            QueueOfferCDual,
+            <QueueOfferA as Role>::Dual,
+            <QueueOfferA as Role>::Dual,
+            RoleEnd,
+            RoleEnd,
             QueueChoiceB,
             QueueChoiceB,
         >(s);
@@ -129,16 +129,16 @@ fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error
 fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     {
         let s = choose_right_mpst_session_b_to_all::<
-            CtoAAdd<i32>,
-            CtoANeg<i32>,
+            End,
+            End,
             BtoAAdd<i32>,
             End,
             BtoANeg<i32>,
             End,
-            QueueOfferADual,
-            QueueOfferADual,
-            QueueOfferCDual,
-            QueueOfferCDual,
+            <QueueOfferA as Role>::Dual,
+            <QueueOfferA as Role>::Dual,
+            RoleEnd,
+            RoleEnd,
             QueueChoiceB,
             QueueChoiceB,
         >(s);
@@ -148,28 +148,22 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
     Ok(())
 }
 
-fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_c_to_b(
+fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
+    offer_mpst_session_to_c_from_b(
         s,
-        |s: EndpointCAdd<i32>| {
-            let (x, s) = recv_mpst_c_to_a(s)?;
+        |s: EndpointCAdd| {
             close_mpst(s)?;
-
-            assert_eq!(x, 2);
             Ok(())
         },
-        |s: EndpointCNeg<i32>| {
-            let (x, s) = recv_mpst_c_to_a(s)?;
+        |s: EndpointCNeg| {
             close_mpst(s)?;
-
-            assert_eq!(x, 3);
             Ok(())
         },
     )
 }
 
 #[test]
-fn simple_store_2_works() {
+fn simple_choice() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
@@ -197,6 +191,27 @@ fn simple_store_2_works() {
             assert!(thread_c.is_ok());
         }
 
+        Ok(())
+    }()
+    .is_ok());
+}
+
+#[test]
+fn simple_choice_checker() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let hm: HashMap<String, &Vec<String>> = HashMap::new();
+
+            let (s1, _): (EndpointChoiceA<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointChoiceB<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointChoiceC, _) = SessionMpst::new();
+
+            let (a, b, c) = checker(s1, s2, s3, &hm)?;
+
+            assert_eq!(a, "A: ( A?B.0 & A?B.0 )");
+            assert_eq!(b, "B: ( B!A.0 + B!A.0 )");
+            assert_eq!(c, "C: ( 0 & 0 )");
+        }
         Ok(())
     }()
     .is_ok());

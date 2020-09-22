@@ -1,18 +1,17 @@
+use crate::role::a_dual::RoleADual;
+use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
-use role::c_to_a::RoleCtoA;
-use role::Role;
 
-use std::fmt;
-
-/// Gives the order to the `SessionMpst` related to A to execute its `session` field with C.
+/// Gives the order to the `SessionMpst` related to A to execute its `session` field with B.
 ///
 /// This `struct` should only be used in the `queue` field of the `SessionMpst` related to A.
-pub struct RoleAtoC<R: Role> {
+#[derive(Debug)]
+pub struct RoleA<R: Role> {
     pub sender: Sender<R::Dual>,
 }
 
-impl<R: Role> Role for RoleAtoC<R> {
-    type Dual = RoleCtoA<R::Dual>;
+impl<R: Role> Role for RoleA<R> {
+    type Dual = RoleADual<R::Dual>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
@@ -20,30 +19,29 @@ impl<R: Role> Role for RoleAtoC<R> {
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
         (
-            RoleAtoC {
+            RoleA {
                 sender: sender_dual,
             },
-            RoleCtoA {
+            RoleADual {
                 sender: sender_normal,
             },
         )
     }
 
     #[doc(hidden)]
-    fn head() -> String {
-        String::from("RoleAtoC")
+    fn head_str() -> String {
+        String::from("RoleA")
     }
-}
 
-impl<R: Role> fmt::Display for RoleAtoC<R> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RoleAtoC")
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }
 
 /// Send a value of type `Role`. Always succeeds. Returns the continuation of the
 /// queue `R`.
-pub fn next_a_to_c<R>(r: RoleAtoC<R>) -> R
+pub fn next_a<R>(r: RoleA<R>) -> R
 where
     R: Role,
 {

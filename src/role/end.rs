@@ -1,9 +1,8 @@
+use crate::role::Role;
 use crossbeam_channel::{bounded, Receiver, Sender};
-use role::Role;
-
-use std::fmt;
 
 /// End of communication.
+#[derive(Debug)]
 pub struct RoleEnd {
     pub sender: Sender<()>,
     pub receiver: Receiver<()>,
@@ -30,13 +29,12 @@ impl Role for RoleEnd {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("RoleEnd")
     }
-}
 
-impl fmt::Display for RoleEnd {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "RoleEnd")
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        String::from("")
     }
 }

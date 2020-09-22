@@ -31,8 +31,9 @@ pub struct End {
 }
 
 /// Trait for session types. Provides duality.
+// pub trait Session: marker::Sized + marker::Send + Downcast {
 pub trait Session: marker::Sized + marker::Send {
-    /// The session type dual to `Self`.
+    /// The (associated) session type dual to `Self`.
     type Dual: Session<Dual = Self>;
 
     /// Creates two new *dual* channels.
@@ -46,7 +47,10 @@ pub trait Session: marker::Sized + marker::Send {
     fn new() -> (Self, Self::Dual);
 
     #[doc(hidden)]
-    fn head() -> String;
+    fn head_str() -> String;
+
+    #[doc(hidden)]
+    fn tail_str() -> String;
 }
 
 impl Session for End {
@@ -70,8 +74,13 @@ impl Session for End {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("End")
+    }
+
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        String::from("")
     }
 }
 
@@ -85,8 +94,13 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("Send")
+    }
+
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        format!("{}<{}>", S::head_str(), S::tail_str())
     }
 }
 
@@ -100,8 +114,13 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     }
 
     #[doc(hidden)]
-    fn head() -> String {
+    fn head_str() -> String {
         String::from("Recv")
+    }
+
+    #[doc(hidden)]
+    fn tail_str() -> String {
+        format!("{}<{}>", S::head_str(), S::tail_str())
     }
 }
 
