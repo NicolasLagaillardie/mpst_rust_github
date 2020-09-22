@@ -17,12 +17,12 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.0.1"
+mpstthree = "0.0.2"
 ```
 
 ## Example
 
-Here a way to create a simple protocol involving 3 participants, **A**, **B** and **C**. **A** sends a payoad to **B**, then receives an other from **C**. Upon receiving the payload from **A**, **B** sends a payload to **C**. This protocol can be written as **A!B.A?C.B!C**. 
+Here a way to create a simple protocol involving 3 participants, **A**, **B** and **C**. **A** sends a payoad to **B**, then receives an other from **C**. Upon receiving the payload from **A**, **B** sends a payload to **C**. This protocol can be written as **A!B.A?C.B!C.0**. 
 To implement this example, first, get the right components from the library.
 
 ```rust
@@ -37,12 +37,9 @@ use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::functionmpst::close::close_mpst;
 
-use mpstthree::role::a_to_b::RoleAtoB;
-use mpstthree::role::a_to_c::RoleAtoC;
-use mpstthree::role::b_to_a::RoleBtoA;
-use mpstthree::role::b_to_c::RoleBtoC;
-use mpstthree::role::c_to_a::RoleCtoA;
-use mpstthree::role::c_to_b::RoleCtoB;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
@@ -55,6 +52,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
+Note that each created type can be reused as many time as needed. Here, for the example, we create several times the same binary session type.
 
 ```rust
 /// Creating the binary sessions
@@ -72,9 +70,9 @@ Add the **queues**, which give the correct order of the operations for each part
 
 ```rust
 /// Queues
-type QueueA = RoleAtoB<RoleAtoC<RoleEnd>>;
-type QueueB = RoleBtoA<RoleBtoC<RoleEnd>>;
-type QueueC = RoleCtoA<RoleCtoB<RoleEnd>>;
+type QueueA = RoleB<RoleC<RoleEnd>>;
+type QueueB = RoleA<RoleC<RoleEnd>>;
+type QueueC = RoleA<RoleB<RoleEnd>>;
 ```
 
 You can now encapsulate those **binary session types** and **queues** into **SessionMpst** for each participant.
@@ -172,7 +170,7 @@ $ cargo test
 Tests are divided in 4 files:
 
 * [simple](tests/simple.rs) is the basic global protocol shown in [Examples](#Example).
-* [choose](tests/choose.rs) checks that a protocol where a role **B** spreads a choice to the two other roles. For simplifying the test, role **C** is doing nothing. The protocol can be written as **B→A:{B!A, B!A}**.
+* [choose](tests/choose.rs) checks that a protocol where a role **B** spreads a choice to the two other roles. For simplifying the test, role **C** is doing nothing. The protocol can be written as **B→A:{B!A.0, B!A.0}**.
 * [usecase](test/usecase.rs) is implementing the protocol given in [1](.github/pdf/GPS.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 * [usecase-recursive](test/usecase-recursive.rs) is implementing the protocol given in [2](.github/pdf/GPR.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
 
@@ -186,22 +184,22 @@ This part details how to create new roles and how to use them.
 
 #### Creation of new roles
 
-Instead of being limited by roles `RoleAtoB`, `RoleBtoC` and so on, you can now create your own roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleAtoD`. The expected code will be:
+Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your own roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleD`. The expected code will be:
 
 ```rust
-create_normal_role!(RoleAtoD, next_a_to_d, RoleDtoA, next_d_to_a);
+create_normal_role!(RoleA, next_a, RoleD, next_d);
 ```
 
 #### Sending and receiving with those new roles
 
-To create the role `RoleAtoD`, you need the related `next` function, that can be named `next_a_to_d`, to go through a stack which head is `RoleAtoD`, such as `RoleAtoD<RoleEnd>`. The *dual* of `RoleAtoD`is `RoleDtoA`and the related `next` function, that can be named `next_d_to_a`.
+To create the role `RoleD`, you need the related `next` function, that can be named `next_d`, to go through a stack which head is `RoleD`, such as `RoleD<RoleEnd>`. The *dual* of `RoleD`is `RoleDDual`and the related `next` function, that can be named `next_d_dual`.
 
 To *send* and *receive* with those new roles, it is mandatory to define new `send` and `recv` functions. This can easily be done with the macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2`.
 As you may notice, there is a difference made between `session_1` and `session_2`. This is due to the current limitation of the library: this is for making the difference between the binary channels used during the communication. If `A` sends to `B`, it will send on the first channel, and by convention (alphanumerical order), it will be the first binary channel, hence `create_send_mpst_session_1` will be used. If `A` send to `C` and `B` is among the participants, then `create_send_mpst_session_2` will be used.
 The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the names of the role and the related `next`function. To create the `send` function from `A` to `B`, here is the expected line of code: 
 
 ```rust
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleAtoB, next_a_to_b);
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, next_b, RoleA);
 ```
 
 #### Making choice and offer with those new roles
@@ -210,13 +208,25 @@ To add a layer of features, one may expect to implement `choice` and `offer`. Th
 For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the names of the role and the related `next` function. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
 
 ```rust
-create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, next_all_to_c);
+create_offer_mpst_session_2!(
+    offer_mpst_session_b_to_c,
+    RoleAlltoC,
+    recv_mpst_b_all_to_c,
+    RoleB
+);
 ```
 
 On the opposite side, to create a *choice* from role `C` to the other roles, where `C` will choose the left choice, here is the expected code.
 
 ```rust
-create_choose_left_from_3_to_1_and_2!(choose_left_mpst_session_c_to_all, RoleCtoAll, next_c_to_all);
+create_choose_left_from_3_to_1_and_2!(
+    choose_left_mpst_session_c_to_all,
+    RoleCtoAll,
+    RoleADual,
+    RoleBDual,
+    next_c_to_all,
+    RoleC
+);
 ```
 
 To compare the traditional and the more complex methods, you can check the [usecase](tests/usecase.rs) and [macro-choice](tests/macro-choice.rs) files
