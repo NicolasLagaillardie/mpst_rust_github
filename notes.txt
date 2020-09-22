@@ -1,3 +1,0 @@
-https://github.com/dtolnay/syn > proc macro workshop
-https://dev.to/takaakifuruse/rust-macro-101-52dg > proc macro to detect if enum
-https://youtu.be/geovSK3wMB8?t=8830
