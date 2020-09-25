@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
 [![Minimum rustc version](https://img.shields.io/badge/rustc-1.41+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Rust Documentation](https://img.shields.io/badge/api-rustdoc-blue.svg)](https://docs.rs/mpstthree/)
+[![Coverage Status](https://coveralls.io/repos/github/NicolasLagaillardie/mpst_rust_github/badge.svg)](https://coveralls.io/github/NicolasLagaillardie/mpst_rust_github)
 [![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
 
 
