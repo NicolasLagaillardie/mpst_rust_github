@@ -16,3 +16,6 @@ notes.txt
 
 # Remove mpst-seq
 /mpst_seq/
+
+# Remove coveralls
+.coveralls.yml
