@@ -21,7 +21,6 @@ crossbeam-channel = "0.4.2"
 either = "1.5.3"
 rand = "0.7"
 dot = "0.1.4"
-# mpst_seq = { path = "mpst_seq" }
 seq-macro = "0.1.5"
 
 [dev-dependencies]
