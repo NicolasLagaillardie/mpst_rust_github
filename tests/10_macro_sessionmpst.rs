@@ -6,13 +6,14 @@ use mpstthree::binary::{End, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{create_normal_role, create_sessionmpst};
+use seq_macro::seq;
 use std::error::Error;
 
 // Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpstThree, session1, S1, session2, S2,);
+create_sessionmpst!(SessionMpstThree, 3);
 
 // Create new SessionMpst for four participants
-create_sessionmpst!(SessionMpstFour, session1, S1, session2, S2, session3, S3,);
+create_sessionmpst!(SessionMpstFour, 4);
 
 // Create an A pawn
 create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
