@@ -1,0 +1,7 @@
+error[E0425]: cannot find value `Missing0` in this scope
+  --> $DIR/09-ident-span.rs:34:17
+   |
+34 |         let _ = Missing#N;
+   |                 ^^^^^^^ not found in this scope
+
+For more information about this error, try `rustc --explain E0425`.

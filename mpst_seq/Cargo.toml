@@ -1,16 +1,17 @@
 [package]
 name = "mpst-seq"
 version = "0.0.1"
-authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>", "David Tolnay <dtolnay@gmail.com>"]
-license = "MIT OR Apache-2.0"
-description = "Macro to repeat sequentially indexed copies of a fragment of code."
-repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
-documentation = "https://docs.rs/seq-macro"
 edition = "2018"
+autotests = false
+publish = false
 
-[lib]
-proc-macro = true
+[[test]]
+name = "tests"
+path = "tests/progress.rs"
 
-[package.metadata.docs.rs]
-rustdoc-args = ["--cfg", "docs_rs_workaround"]
-targets = ["x86_64-unknown-linux-gnu"]
+[dev-dependencies]
+trybuild = "1.0"
+
+[dependencies]
+proc-macro-hack = "0.5.18"
+mpst-seq-proc = { path = "mpst-seq-proc/" }

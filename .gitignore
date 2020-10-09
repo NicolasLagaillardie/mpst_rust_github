@@ -14,3 +14,6 @@ notes.txt
 
 # Remove coveralls
 .coveralls.yml
+
+.criterion
+/tmp
