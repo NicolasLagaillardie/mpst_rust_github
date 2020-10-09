@@ -6,7 +6,6 @@ use mpstthree::binary::{End, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{create_normal_role, create_sessionmpst};
-use seq_macro::seq;
 use std::error::Error;
 
 // Create new SessionMpst for three participants

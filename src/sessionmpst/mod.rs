@@ -74,7 +74,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
 #[macro_export]
 macro_rules! create_sessionmpst {
     ($struct_name:ident, $nsessions:literal) => {
-        seq!(N in 1..$nsessions {
+        mpst_seq::seq!(N in 1..$nsessions {
             #[must_use]
             #[derive(Debug)]
             pub struct $struct_name<
@@ -97,28 +97,24 @@ macro_rules! create_sessionmpst {
 
                 #[doc(hidden)]
                 fn new() -> (Self, Self::Dual) {
+                    #(
+                        let (sender#N, receiver#N) = S#N::new();
+                    )*
 
                     let (role_one, role_two) = R::new();
                     let (name_one, name_two) = N::new();
 
-                    // Issue with no link between the two new SessionMpst
                     (
                         $struct_name {
                             #(
-                                session#N: {
-                                    let (sender, _) = S#N::new();
-                                    sender
-                                },
+                                session#N: sender#N,
                             )*
                             stack: role_one,
                             name: name_one,
                         },
                         $struct_name {
                             #(
-                                session#N: {
-                                    let (_, receiver) = S#N::new();
-                                    receiver
-                                },
+                                session#N: receiver#N,
                             )*
                             stack: role_two,
                             name: name_two,
