@@ -49,7 +49,7 @@ jobs:
       os: linux
       script:
         - rustup component add clippy-preview
-        - touch ./src/lib.rs && cargo clippy -- -D warnings
+        - touch ./src/lib.rs && cargo clippy
     - name: "Rust: nightly, clippy"
       rust: nightly
       os: linux
