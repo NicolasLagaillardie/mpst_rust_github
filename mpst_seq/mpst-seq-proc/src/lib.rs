@@ -73,25 +73,25 @@ impl SeqMacroInput {
         from..(to + offset)
     }
 
-    fn matrix(&self) -> Vec<(u64, u64)> {
-        let from = (self.from).base10_parse::<u64>().unwrap();
-        let to = (self.to).base10_parse::<u64>().unwrap();
-        let mut result: Vec<(u64, u64)> = Vec::new();
-        let offset = if self.inclusive { 1 } else { 0 };
-        let mut extra = 0;
+    // fn matrix(&self) -> Vec<(u64, u64)> {
+    //     let from = (self.from).base10_parse::<u64>().unwrap();
+    //     let to = (self.to).base10_parse::<u64>().unwrap();
+    //     let mut result: Vec<(u64, u64)> = Vec::new();
+    //     let offset = if self.inclusive { 1 } else { 0 };
+    //     let mut extra = 0;
 
-        for i in from..(to + offset) {
-            for j in (i + 1)..(to + offset) {
-                if (j + extra) % 2 == 0 {
-                    result.append(&mut vec![(i, j)]);
-                } else {
-                    result.append(&mut vec![(j, i)]);
-                }
-            }
-            extra = if extra == 0 { 1 } else { 0 };
-        }
-        result
-    }
+    //     for i in from..(to + offset) {
+    //         for j in (i + 1)..(to + offset) {
+    //             if (j + extra) % 2 == 0 {
+    //                 result.append(&mut vec![(i, j)]);
+    //             } else {
+    //                 result.append(&mut vec![(j, i)]);
+    //             }
+    //         }
+    //         extra = if extra == 0 { 1 } else { 0 };
+    //     }
+    //     result
+    // }
 
     fn expand2(
         &self,
