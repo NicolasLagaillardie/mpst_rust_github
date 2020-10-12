@@ -79,9 +79,9 @@ macro_rules! create_sessionmpst {
             #[derive(Debug)]
             pub struct $struct_name<
                 #(
-                    S#N: Session,
-                )* R: Role,
-                N: Role
+                    S#N: mpstthree::binary::Session,
+                )* R: mpstthree::role::Role,
+                N: mpstthree::role::Role
             > {
                 #(
                     pub session#N: S#N,
@@ -91,9 +91,9 @@ macro_rules! create_sessionmpst {
             }
 
             #[doc(hidden)]
-            impl<#(S#N: Session,)* R: Role, N: Role> Session for $struct_name<#(S#N, )* R, N> {
+            impl<#(S#N: mpstthree::binary::Session,)* R: mpstthree::role::Role, N: mpstthree::role::Role> Session for $struct_name<#(S#N, )* R, N> {
                 type Dual =
-                $struct_name<#(<S#N as Session>::Dual, )* <R as Role>::Dual, <N as Role>::Dual, >;
+                $struct_name<#(<S#N as mpstthree::binary::Session>::Dual, )* <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 
                 #[doc(hidden)]
                 fn new() -> (Self, Self::Dual) {

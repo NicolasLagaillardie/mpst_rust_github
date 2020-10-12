@@ -5,31 +5,7 @@
 #[macro_export]
 macro_rules! create_send_mpst_session_1 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
-        fn $func_name<T, S1, S2, R>(
-            x: T,
-            s: mpstthree::sessionmpst::SessionMpst<
-                mpstthree::binary::Send<T, S1>,
-                S2,
-                $role<R>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S1, S2, R, $name<mpstthree::role::end::RoleEnd>>
-        where
-            T: std::marker::Send,
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            R: mpstthree::role::Role,
-        {
-            let new_session = mpstthree::binary::send(x, s.session1);
-            let new_queue = $next(s.stack);
-
-            mpstthree::sessionmpst::SessionMpst {
-                session1: new_session,
-                session2: s.session2,
-                stack: new_queue,
-                name: s.name,
-            }
-        }
+        mpstthree::create_send_mpst_session!($func_name, $role, $next, $name, SessionMpst, 3, 1);
     };
 }
 
@@ -37,31 +13,7 @@ macro_rules! create_send_mpst_session_1 {
 #[macro_export]
 macro_rules! create_send_mpst_session_2 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
-        fn $func_name<T, S1, S2, R>(
-            x: T,
-            s: mpstthree::sessionmpst::SessionMpst<
-                S1,
-                mpstthree::binary::Send<T, S2>,
-                $role<R>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S1, S2, R, $name<mpstthree::role::end::RoleEnd>>
-        where
-            T: std::marker::Send,
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            R: mpstthree::role::Role,
-        {
-            let new_session = mpstthree::binary::send(x, s.session2);
-            let new_queue = $next(s.stack);
-
-            mpstthree::sessionmpst::SessionMpst {
-                session1: s.session1,
-                session2: new_session,
-                stack: new_queue,
-                name: s.name,
-            }
-        }
+        mpstthree::create_send_mpst_session!($func_name, $role, $next, $name, SessionMpst, 3, 2);
     };
 }
 
@@ -72,42 +24,7 @@ macro_rules! create_send_mpst_session_2 {
 #[macro_export]
 macro_rules! create_recv_mpst_session_1 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
-        fn $func_name<T, S1, S2, R>(
-            s: mpstthree::sessionmpst::SessionMpst<
-                mpstthree::binary::Recv<T, S1>,
-                S2,
-                $role<R>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-        ) -> Result<
-            (
-                T,
-                mpstthree::sessionmpst::SessionMpst<
-                    S1,
-                    S2,
-                    R,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ),
-            Box<dyn std::error::Error>,
-        >
-        where
-            T: std::marker::Send,
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            R: mpstthree::role::Role,
-        {
-            let (v, new_session) = mpstthree::binary::recv(s.session1)?;
-            let new_queue = $next(s.stack);
-            let result = mpstthree::sessionmpst::SessionMpst {
-                session1: new_session,
-                session2: s.session2,
-                stack: new_queue,
-                name: s.name,
-            };
-
-            Ok((v, result))
-        }
+        mpstthree::create_recv_mpst_session!($func_name, $role, $next, $name, SessionMpst, 3, 1);
     };
 }
 
@@ -115,42 +32,7 @@ macro_rules! create_recv_mpst_session_1 {
 #[macro_export]
 macro_rules! create_recv_mpst_session_2 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
-        fn $func_name<T, S1, S2, R>(
-            s: mpstthree::sessionmpst::SessionMpst<
-                S1,
-                mpstthree::binary::Recv<T, S2>,
-                $role<R>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-        ) -> Result<
-            (
-                T,
-                mpstthree::sessionmpst::SessionMpst<
-                    S1,
-                    S2,
-                    R,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ),
-            Box<dyn std::error::Error>,
-        >
-        where
-            T: std::marker::Send,
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            R: mpstthree::role::Role,
-        {
-            let (v, new_session) = mpstthree::binary::recv(s.session2)?;
-            let new_queue = $next(s.stack);
-            let result = mpstthree::sessionmpst::SessionMpst {
-                session1: s.session1,
-                session2: new_session,
-                stack: new_queue,
-                name: s.name,
-            };
-
-            Ok((v, result))
-        }
+        mpstthree::create_recv_mpst_session!($func_name, $role, $next, $name, SessionMpst, 3, 2);
     };
 }
 
@@ -158,42 +40,15 @@ macro_rules! create_recv_mpst_session_2 {
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_1 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
-        fn $func_name<T, S1, S2, R>(
-            s: mpstthree::sessionmpst::SessionMpst<
-                mpstthree::binary::Recv<T, S1>,
-                S2,
-                $role<R, R>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-        ) -> Result<
-            (
-                T,
-                mpstthree::sessionmpst::SessionMpst<
-                    S1,
-                    S2,
-                    R,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ),
-            Box<dyn std::error::Error>,
-        >
-        where
-            T: std::marker::Send,
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            R: mpstthree::role::Role,
-        {
-            let (v, new_session) = mpstthree::binary::recv(s.session1)?;
-            let (new_queue, _) = $next(s.stack);
-            let result = mpstthree::sessionmpst::SessionMpst {
-                session1: new_session,
-                session2: s.session2,
-                stack: new_queue,
-                name: s.name,
-            };
-
-            Ok((v, result))
-        }
+        mpstthree::create_recv_mpst_all_session!(
+            $func_name,
+            $role,
+            $next,
+            $name,
+            SessionMpst,
+            3,
+            1
+        );
     };
 }
 
@@ -201,42 +56,15 @@ macro_rules! create_recv_mpst_all_session_1 {
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_2 {
     ($func_name:ident, $role:ident, $next:ident, $name:ident) => {
-        fn $func_name<T, S1, S2, R>(
-            s: mpstthree::sessionmpst::SessionMpst<
-                S1,
-                mpstthree::binary::Recv<T, S2>,
-                $role<R, R>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-        ) -> Result<
-            (
-                T,
-                mpstthree::sessionmpst::SessionMpst<
-                    S1,
-                    S2,
-                    R,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ),
-            Box<dyn std::error::Error>,
-        >
-        where
-            T: std::marker::Send,
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            R: mpstthree::role::Role,
-        {
-            let (v, new_session) = mpstthree::binary::recv(s.session2)?;
-            let (new_queue, _) = $next(s.stack);
-            let result = mpstthree::sessionmpst::SessionMpst {
-                session1: s.session1,
-                session2: new_session,
-                stack: new_queue,
-                name: s.name,
-            };
-
-            Ok((v, result))
-        }
+        mpstthree::create_recv_mpst_all_session!(
+            $func_name,
+            $role,
+            $next,
+            $name,
+            SessionMpst,
+            3,
+            2
+        );
     };
 }
 

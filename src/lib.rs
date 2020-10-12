@@ -104,3 +104,97 @@ where
 
     (thread_a.join(), thread_b.join(), thread_c.join())
 }
+
+#[macro_export]
+macro_rules! fork_mpst_multi {
+    ($struct_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(K in 1..=$nsessions {
+            fn fork_simple_multi<#(S#K,)* R, N, P>(p: P, s: $struct_name<#(S#K,)* R, N>) -> std::thread::JoinHandle<()>
+            where
+                #(
+                    S#K: mpstthree::binary::Session + 'static,
+                )*
+                R: mpstthree::role::Role + 'static,
+                N: mpstthree::role::Role + 'static,
+                P: FnOnce($struct_name<#(S#K,)* R, N>) -> Result<(), Box<dyn std::error::Error>> + std::marker::Send + 'static,
+            {
+                std::thread::spawn(move || {
+                    panic::set_hook(Box::new(|_info| {
+                        // do nothing
+                    }));
+                    match p(s) {
+                        Ok(()) => (),
+                        Err(e) => panic!("{:?}", e),
+                    }
+                })
+            }
+
+            fn fork_mpst_multi<#(S#K,)* #(R#K,)* #(N#K,)* #(F#K,)*>(
+                #(
+                    f#K: F#K,
+                )*
+            ) -> (
+                #(
+                    Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>
+                )*
+            )
+            where
+                #(
+                    S#K: mpstthree::binary::Session + 'static,
+                )*
+                #(
+                    R#K: mpstthree::binary::Session + 'static,
+                )*
+                #(
+                    N#K: mpstthree::binary::Session + 'static,
+                )*
+
+                F1: FnOnce($struct_name<S1, <S3 as Session>::Dual, R1, N1>) -> Result<(), Box<dyn std::error::Error>>
+                    + std::marker::Send
+                    + 'static,
+                F2: FnOnce($struct_name<<S1 as Session>::Dual, S2, R2, N2>) -> Result<(), Box<dyn std::error::Error>>
+                    + std::marker::Send
+                    + 'static,
+                F3: FnOnce($struct_name<S3, <S2 as Session>::Dual, R3, N3>) -> Result<(), Box<dyn std::error::Error>>
+                    + std::marker::Send
+                    + 'static,
+            {
+                let (channel_ab, channel_ba) = S1::new();
+                let (channel_bc, channel_cb) = S2::new();
+                let (channel_ca, channel_ac) = S3::new();
+
+                #(
+                    let (role_#K, _) = R#K::new();
+                    let (name_#K, _) = N#K::new();
+                )*
+
+                let a = $struct_name {
+                    session1: channel_ab,
+                    session2: channel_ac,
+                    stack: role_a,
+                    name: name_a,
+                };
+                let b = $struct_name {
+                    session1: channel_ba,
+                    session2: channel_bc,
+                    stack: role_b,
+                    name: name_b,
+                };
+                let c = $struct_name {
+                    session1: channel_ca,
+                    session2: channel_cb,
+                    stack: role_c,
+                    name: name_c,
+                };
+
+                #(
+                    let thread_#K = fork_simple_multi(f1, sessionmpst_#K);
+                )*
+
+                #(
+                    thread_#K.join(),
+                )*
+            }
+        });
+    }
+}

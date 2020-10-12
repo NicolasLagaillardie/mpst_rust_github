@@ -18,3 +18,25 @@ where
 
     Ok(())
 }
+
+#[macro_export]
+macro_rules! close_mpst {
+    ($struct_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions {
+            fn close_mpst_multi<R>(s: $struct_name<#(mpstthree::binary::End,)* mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn Error>>
+            where
+                R: mpstthree::role::Role,
+            {
+                #(
+                    s.session#N.sender.send(()).unwrap_or(());
+                )*
+
+                #(
+                    s.session#N.receiver.recv()?;
+                )*
+
+                Ok(())
+            }
+        });
+    }
+}
