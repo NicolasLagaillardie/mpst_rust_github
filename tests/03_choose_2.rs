@@ -2,6 +2,7 @@ extern crate mpstthree;
 use mpstthree::checking::checker;
 
 use std::boxed::Box;
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
@@ -232,7 +233,8 @@ fn double_choice() {
 fn double_choice_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let hm: HashMap<String, &Vec<String>> = HashMap::new();
+            let s = RandomState::new();
+            let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
             let (s1, _): (EndpointChoiceA<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointChoiceB<i32>, _) = SessionMpst::new();

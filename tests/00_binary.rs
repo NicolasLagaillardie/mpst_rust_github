@@ -4,7 +4,9 @@ extern crate rand;
 use mpstthree::binary::*;
 use mpstthree::choose;
 use mpstthree::offer;
+
 use rand::{thread_rng, Rng};
+
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
@@ -28,6 +30,30 @@ fn ping_works() {
         Ok(())
     }()
     .is_ok());
+}
+
+#[test]
+fn head_str() {
+    assert_eq!(End::head_str(), String::from("End"));
+    assert_eq!(Send::<i32, End>::head_str(), String::from("Send"));
+    assert_eq!(Recv::<i32, End>::head_str(), String::from("Recv"));
+}
+
+#[test]
+fn tail_str() {
+    assert_eq!(End::tail_str(), String::from(""));
+    assert_eq!(Send::<i32, End>::tail_str(), String::from("End<>"));
+    assert_eq!(Recv::<i32, End>::tail_str(), String::from("End<>"));
+}
+
+#[test]
+fn new_types() {
+    let (session_end_1, session_end_2) = End::new();
+
+    assert_eq!(session_end_1.sender.send(()), Ok(()));
+    assert_eq!(session_end_2.sender.send(()), Ok(()));
+    assert_eq!(session_end_1.receiver.recv(), Ok(()));
+    assert_eq!(session_end_2.receiver.recv(), Ok(()));
 }
 
 // Test a simple calculator server, implemented using binary choice.

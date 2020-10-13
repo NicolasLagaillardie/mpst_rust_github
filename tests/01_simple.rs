@@ -2,6 +2,7 @@ extern crate mpstthree;
 use mpstthree::checking::checker;
 
 use std::boxed::Box;
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
@@ -102,7 +103,8 @@ fn simple_triple_endpoints() {
 fn simple_triple_endpoints_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let hm: HashMap<String, &Vec<String>> = HashMap::new();
+            let s = RandomState::new();
+            let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
             let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();

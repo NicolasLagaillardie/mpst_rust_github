@@ -66,7 +66,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
             S1::tail_str(),
             S2::tail_str(),
             R::tail_str(),
-            N::head_str()
+            N::tail_str()
         )
     }
 }
@@ -91,7 +91,7 @@ macro_rules! create_sessionmpst {
             }
 
             #[doc(hidden)]
-            impl<#(S#N: mpstthree::binary::Session,)* R: mpstthree::role::Role, N: mpstthree::role::Role> Session for $struct_name<#(S#N, )* R, N> {
+            impl<#(S#N: mpstthree::binary::Session,)* R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::Session for $struct_name<#(S#N, )* R, N> {
                 type Dual =
                 $struct_name<#(<S#N as mpstthree::binary::Session>::Dual, )* <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 

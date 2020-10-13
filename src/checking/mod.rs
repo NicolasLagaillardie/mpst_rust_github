@@ -15,11 +15,11 @@ use std::error::Error;
 /// It is useful for checking whether the implemented local endpoints are the expected ones.
 ///
 /// Returns the 3 strings if everything went right.
-pub fn checker<S0, S1, S2, R1, R2, R3, N1, N2, N3>(
+pub fn checker<S0, S1, S2, R1, R2, R3, N1, N2, N3, S: ::std::hash::BuildHasher>(
     s1: SessionMpst<S0, <S2 as Session>::Dual, R1, N1>,
     s2: SessionMpst<<S0 as Session>::Dual, S1, R2, N2>,
     s3: SessionMpst<S2, <S1 as Session>::Dual, R3, N3>,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
 ) -> Result<(String, String, String), Box<dyn Error>>
 where
     S0: Session + 'static,
@@ -40,7 +40,7 @@ where
             &parse_type_of(&s1.name),
         ],
         "A",
-        &hm,
+        hm,
         &mut vec![],
     )?;
     // println!("result A: {}", &result_1);
@@ -52,7 +52,7 @@ where
             &parse_type_of(&s2.name),
         ],
         "B",
-        &hm,
+        hm,
         &mut vec![],
     )?;
     // println!("result B: {}", &result_2);
@@ -64,7 +64,7 @@ where
             &parse_type_of(&s3.name),
         ],
         "C",
-        &hm,
+        hm,
         &mut vec![],
     )?;
     // println!("result C: {}", &result_3);

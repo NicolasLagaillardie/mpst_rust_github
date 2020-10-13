@@ -10,6 +10,7 @@ use mpstthree::sessionmpst::SessionMpst;
 
 use std::any::type_name;
 use std::boxed::Box;
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
@@ -258,7 +259,8 @@ fn run_usecase_recursive() {
 fn run_usecase_recursive_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
+            let s = RandomState::new();
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
