@@ -141,7 +141,7 @@ impl SeqMacroInput {
                                 Some(proc_macro2::TokenTree::Punct(ref punct))
                                     if punct.as_char() == '#' =>
                                 {
-                                    *rest = peek.clone();
+                                    *rest = peek;
                                 }
                                 _ => {}
                             }
