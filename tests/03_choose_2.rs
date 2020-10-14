@@ -54,14 +54,14 @@ type CtoAAdd<N> = <AtoCAdd<N> as Session>::Dual;
 /// Queues
 type QueueOfferA = RoleB<RoleC<RoleEnd>>;
 type QueueOfferADual = <QueueOfferA as Role>::Dual;
-type QueueFullA = RoleAlltoB<QueueOfferA, QueueOfferA>;
+type QueueFullA = RoleAlltoB<RoleEnd, RoleEnd>;
 
 type QueueChoiceB = RoleA<RoleEnd>;
 type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;
 
 type QueueOfferC = RoleA<RoleEnd>;
 type QueueOfferCDual = <QueueOfferC as Role>::Dual;
-type QueueFullC = RoleAlltoB<QueueOfferC, QueueOfferC>;
+type QueueFullC = RoleAlltoB<RoleEnd, RoleEnd>;
 
 /// Creating the MP sessions
 /// For A

@@ -66,11 +66,28 @@ enum Mode {
 }
 
 impl SeqMacroInput {
-    fn range(&self) -> impl Iterator<Item = u64> {
+    /// from → to + offset
+    fn range_0(&self) -> impl Iterator<Item = u64> {
         let from = (self.from).base10_parse::<u64>().unwrap();
         let to = (self.to).base10_parse::<u64>().unwrap();
         let offset = if self.inclusive { 1 } else { 0 };
         from..(to + offset)
+    }
+
+    /// from → (3 * to - 4 + offset)
+    fn range_1(&self) -> impl Iterator<Item = u64> {
+        let from = (self.from).base10_parse::<u64>().unwrap();
+        let to = (self.to).base10_parse::<u64>().unwrap();
+        let offset = if self.inclusive { 1 } else { 0 };
+        from..(3 * to - 4 + offset)
+    }
+
+    /// from → (2 * to - 2 + offset)
+    fn range_2(&self) -> impl Iterator<Item = u64> {
+        let from = (self.from).base10_parse::<u64>().unwrap();
+        let to = (self.to).base10_parse::<u64>().unwrap();
+        let offset = if self.inclusive { 1 } else { 0 };
+        from..(2 * to - 2 + offset)
     }
 
     // fn matrix(&self) -> Vec<(u64, u64)> {
@@ -167,7 +184,59 @@ impl SeqMacroInput {
                                 *rest = peek;
 
                                 return self
-                                    .range()
+                                    .range_0()
+                                    .map(|i| self.expand_pass(rep.stream(), Mode::ReplaceIdent(i)))
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            _ => {}
+                        }
+                    }
+                    proc_macro2::TokenTree::Punct(p.clone())
+                }
+                proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
+                    if let Mode::ReplaceSequence = mode {
+                        // is this #(...)* ?
+                        let mut peek = rest.clone();
+                        match (peek.next(), peek.next()) {
+                            (
+                                Some(proc_macro2::TokenTree::Group(ref rep)),
+                                Some(proc_macro2::TokenTree::Punct(ref star)),
+                            ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
+                                && star.as_char() == '~' =>
+                            {
+                                // yes! expand ... for each sequence in the range
+                                *mutated = true;
+                                *rest = peek;
+
+                                return self
+                                    .range_1()
+                                    .map(|i| self.expand_pass(rep.stream(), Mode::ReplaceIdent(i)))
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            _ => {}
+                        }
+                    }
+                    proc_macro2::TokenTree::Punct(p.clone())
+                }
+                proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
+                    if let Mode::ReplaceSequence = mode {
+                        // is this #(...)* ?
+                        let mut peek = rest.clone();
+                        match (peek.next(), peek.next()) {
+                            (
+                                Some(proc_macro2::TokenTree::Group(ref rep)),
+                                Some(proc_macro2::TokenTree::Punct(ref star)),
+                            ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
+                                && star.as_char() == '¤' =>
+                            {
+                                // yes! expand ... for each sequence in the range
+                                *mutated = true;
+                                *rest = peek;
+
+                                return self
+                                    .range_2()
                                     .map(|i| self.expand_pass(rep.stream(), Mode::ReplaceIdent(i)))
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -195,7 +264,7 @@ impl SeqMacroInput {
                                 *rest = peek;
 
                                 return self
-                                    .range()
+                                    .range_0()
                                     .filter_map(|i| {
                                         if i == self.exclusion.base10_parse::<u64>().unwrap()
                                             && self.objection
@@ -244,7 +313,7 @@ impl SeqMacroInput {
             return out;
         }
 
-        self.range()
+        self.range_0()
             .map(|i| self.expand_pass(stream.clone(), Mode::ReplaceIdent(i)))
             .map(|(ts, _)| ts)
             .collect()

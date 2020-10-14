@@ -47,7 +47,7 @@ type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
 /// Queues
 type QueueOfferA = RoleB<RoleEnd>;
-type QueueFullA = RoleAlltoB<QueueOfferA, QueueOfferA>;
+type QueueFullA = RoleAlltoB<RoleEnd, RoleEnd>;
 
 type QueueChoiceB = RoleA<RoleEnd>;
 type QueueFullB = RoleBtoAll<QueueChoiceB, QueueChoiceB>;

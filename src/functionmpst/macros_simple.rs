@@ -75,11 +75,11 @@ macro_rules! create_recv_mpst_all_session_2 {
 #[macro_export]
 macro_rules! create_offer_mpst_session_1 {
     ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
-        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
+        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
             s: mpstthree::sessionmpst::SessionMpst<
                 OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
                 S5,
-                $role<R3, R3>,
+                $role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
                 $name<mpstthree::role::end::RoleEnd>,
             >,
             f: F,
@@ -93,7 +93,6 @@ macro_rules! create_offer_mpst_session_1 {
             S5: mpstthree::binary::Session,
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
-            R3: mpstthree::role::Role,
             F: FnOnce(
                 mpstthree::sessionmpst::SessionMpst<
                     S1,
@@ -122,11 +121,11 @@ macro_rules! create_offer_mpst_session_1 {
 #[macro_export]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
-        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
+        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
             s: mpstthree::sessionmpst::SessionMpst<
                 S5,
                 OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
-                $role<R3, R3>,
+                $role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
                 $name<mpstthree::role::end::RoleEnd>,
             >,
             f: F,
@@ -140,7 +139,6 @@ macro_rules! create_offer_mpst_session_2 {
             S5: mpstthree::binary::Session,
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
-            R3: mpstthree::role::Role,
             F: FnOnce(
                 mpstthree::sessionmpst::SessionMpst<
                     S1,
