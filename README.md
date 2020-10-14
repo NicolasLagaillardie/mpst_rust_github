@@ -2,14 +2,14 @@
 
 [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.41+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.47+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Rust Documentation](https://img.shields.io/badge/api-rustdoc-blue.svg)](https://docs.rs/mpstthree/)
 [![Coverage Status](https://coveralls.io/repos/github/NicolasLagaillardie/mpst_rust_github/badge.svg?branch=master)](https://coveralls.io/github/NicolasLagaillardie/mpst_rust_github?branch=master)
 [![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
 
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for three participants. It relies on [sesh](https://github.com/wenkokke/sesh).
-An other library is coming soon to extend to any number of participants.
+Another library is coming soon to extend to any number of participants.
 
 A short video presentation of the library can be found here: [https://youtu.be/ej1FetN31HE](https://youtu.be/ej1FetN31HE).
 
@@ -24,7 +24,7 @@ mpstthree = "0.0.2"
 
 ## Example
 
-Here a way to create a simple protocol involving 3 participants, **A**, **B** and **C**. **A** sends a payoad to **B**, then receives an other from **C**. Upon receiving the payload from **A**, **B** sends a payload to **C**. This protocol can be written as **A!B.A?C.B!C.0**. 
+Here a way to create a simple protocol involving 3 participants, **A**, **B** and **C**. **A** sends a payload to **B**, then receives another from **C**. Upon receiving the payload from **A**, **B** sends a payload to **C**. This protocol can be written as **A!B.A?C.B!C.0**. 
 To implement this example, first, get the right components from the library.
 
 ```rust
@@ -54,7 +54,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
-Note that each created type can be reused as many time as needed. Here, for the example, we create several times the same binary session type.
+Note that each created type can be reused as many time as needed. Here, for this example, we create several times the same binary session type.
 
 ```rust
 /// Creating the binary sessions
@@ -68,7 +68,7 @@ type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 ```
 
-Add the **queues**, which give the correct order of the operations for each participants.
+Add the **queues**, which give the correct order of the operations for each participant.
 
 ```rust
 /// Queues
@@ -169,7 +169,7 @@ For running the tests, run this code.
 $ cargo test
 ```
 
-Tests are divided in 4 files:
+Tests are divided into 4 files:
 
 * [simple](tests/simple.rs) is the basic global protocol shown in [Examples](#Example).
 * [choose](tests/choose.rs) checks that a protocol where a role **B** spreads a choice to the two other roles. For simplifying the test, role **C** is doing nothing. The protocol can be written as **B→A:{B!A.0, B!A.0}**.
@@ -178,7 +178,7 @@ Tests are divided in 4 files:
 
 ## Going further
 
-This subsection explains more complex and diverse features of the library.
+This subsection explains the more complex and diverse features of the library.
 
 ### Parametrisation on the name of the roles
 
@@ -186,7 +186,7 @@ This part details how to create new roles and how to use them.
 
 #### Creation of new roles
 
-Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your own roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next`function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleD`. The expected code will be:
+Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next` function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleD`. The expected code will be:
 
 ```rust
 create_normal_role!(RoleA, next_a, RoleD, next_d);
@@ -233,11 +233,11 @@ create_choose_left_from_3_to_1_and_2!(
 
 To compare the traditional and the more complex methods, you can check the [usecase](tests/usecase.rs) and [macro-choice](tests/macro-choice.rs) files
 
-For the *multipke branching*, instead of creating new functions, the macro `offer_mpst` and `choose_mpst_to_all` can be used directly. The `offer_mpst` macro expects a session, the name of the `recv` function used and the branches for the matching. The `choose_mpst_to_all` macro expects the path to the different choices, the session and the `send` functions used for sending the choice. A comparison can be made between the files [usecase-recursive](tests/usecase-recursive.rs) and [macro-recursive](test/macro-recursive.rs), which are respectively the traditional methode and the more complex method.
+For the *multiple branching*, instead of creating new functions, the macro `offer_mpst` and `choose_mpst_to_all` can be used directly. The `offer_mpst` macro expects a session, the name of the `recv` function used and the branches for the matching. The `choose_mpst_to_all` macro expects the path to the different choices, the session and the `send` functions used for sending the choice. A comparison can be made between the files [usecase-recursive](tests/usecase-recursive.rs) and [macro-recursive](test/macro-recursive.rs), which are respectively the traditional method and the more complex method.
 
 ### Parametrisation on the number of roles
 
-This part details how to create create protocols many multiple roles. This is still a work in progress.
+This part details how to create protocols with many multiple roles. This is still a work in progress.
 
 ## Contributing
 
