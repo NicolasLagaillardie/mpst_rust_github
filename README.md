@@ -237,7 +237,7 @@ For the *multiple branching*, instead of creating new functions, the macro `offe
 
 ### Parametrisation on the number of roles
 
-This part details how to create protocols with many multiple roles. This is still a work in progress.
+This part details how to create protocols with many multiple roles. **This is still a work in progress**.
 
 ## Contributing
 
