@@ -7,7 +7,7 @@ seq!(N in 16..=20 {
     enum E {
         #(
             Variant#N,
-        )*
+        )0*
     }
 });
 

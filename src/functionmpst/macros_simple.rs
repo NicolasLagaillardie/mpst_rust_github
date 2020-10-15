@@ -75,45 +75,16 @@ macro_rules! create_recv_mpst_all_session_2 {
 #[macro_export]
 macro_rules! create_offer_mpst_session_1 {
     ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
-        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
-            s: mpstthree::sessionmpst::SessionMpst<
-                OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
-                S5,
-                $role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-            f: F,
-            g: G,
-        ) -> Result<U, Box<dyn std::error::Error + 'a>>
-        where
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            S3: mpstthree::binary::Session,
-            S4: mpstthree::binary::Session,
-            S5: mpstthree::binary::Session,
-            R1: mpstthree::role::Role,
-            R2: mpstthree::role::Role,
-            F: FnOnce(
-                mpstthree::sessionmpst::SessionMpst<
-                    S1,
-                    S2,
-                    R1,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
-            G: FnOnce(
-                mpstthree::sessionmpst::SessionMpst<
-                    S3,
-                    S4,
-                    R2,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
-        {
-            let (e, s) = $recv_func(s)?;
-            mpstthree::binary::cancel(s);
-            e.either(f, g)
-        }
+        mpstthree::create_offer_mpst_session_multi!(
+            $func_name,
+            OfferMpst,
+            $role,
+            $recv_func,
+            $name,
+            SessionMpst,
+            3,
+            1
+        );
     };
 }
 
@@ -121,45 +92,16 @@ macro_rules! create_offer_mpst_session_1 {
 #[macro_export]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name:ident, $role:ident, $recv_func:ident, $name:ident) => {
-        fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
-            s: mpstthree::sessionmpst::SessionMpst<
-                S5,
-                OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
-                $role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                $name<mpstthree::role::end::RoleEnd>,
-            >,
-            f: F,
-            g: G,
-        ) -> Result<U, Box<dyn std::error::Error + 'a>>
-        where
-            S1: mpstthree::binary::Session,
-            S2: mpstthree::binary::Session,
-            S3: mpstthree::binary::Session,
-            S4: mpstthree::binary::Session,
-            S5: mpstthree::binary::Session,
-            R1: mpstthree::role::Role,
-            R2: mpstthree::role::Role,
-            F: FnOnce(
-                mpstthree::sessionmpst::SessionMpst<
-                    S1,
-                    S2,
-                    R1,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
-            G: FnOnce(
-                mpstthree::sessionmpst::SessionMpst<
-                    S3,
-                    S4,
-                    R2,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
-        {
-            let (e, s) = $recv_func(s)?;
-            mpstthree::binary::cancel(s);
-            e.either(f, g)
-        }
+        mpstthree::create_offer_mpst_session_multi!(
+            $func_name,
+            OfferMpst,
+            $role,
+            $recv_func,
+            $name,
+            SessionMpst,
+            3,
+            2
+        );
     };
 }
 
@@ -326,8 +268,16 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
-                ChooseMpst<S0, S2, S1, S4, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
-                ChooseMpst<
+                mpstthree::functionmpst::ChooseMpst<
+                    S0,
+                    S2,
+                    S1,
+                    S4,
+                    R0,
+                    R1,
+                    $dual_1<mpstthree::role::end::RoleEnd>,
+                >,
+                mpstthree::functionmpst::ChooseMpst<
                     <S0 as Session>::Dual,
                     S3,
                     <S1 as Session>::Dual,
@@ -354,7 +304,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
             R4: mpstthree::role::Role + 'a,
             R5: mpstthree::role::Role + 'a,
         {
-            create_choose_from_3_to_1_2!(
+            mpstthree::create_choose_from_3_to_1_2!(
                 S4,
                 S5,
                 S1,
@@ -378,8 +328,16 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
     ($func_name:ident, $role:ident, $dual_1:ident, $dual_2:ident, $next:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
-                ChooseMpst<S0, S2, S1, S4, R0, R1, $dual_1<mpstthree::role::end::RoleEnd>>,
-                ChooseMpst<
+                mpstthree::functionmpst::ChooseMpst<
+                    S0,
+                    S2,
+                    S1,
+                    S4,
+                    R0,
+                    R1,
+                    $dual_1<mpstthree::role::end::RoleEnd>,
+                >,
+                mpstthree::functionmpst::ChooseMpst<
                     <S0 as Session>::Dual,
                     S3,
                     <S1 as Session>::Dual,
@@ -406,7 +364,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
             R4: mpstthree::role::Role + 'a,
             R5: mpstthree::role::Role + 'a,
         {
-            create_choose_from_3_to_1_2!(
+            mpstthree::create_choose_from_3_to_1_2!(
                 S2,
                 S3,
                 S0,

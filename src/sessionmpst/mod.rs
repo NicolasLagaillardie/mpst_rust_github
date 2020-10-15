@@ -80,26 +80,26 @@ macro_rules! create_sessionmpst {
             pub struct $struct_name<
                 #(
                     S#N: mpstthree::binary::Session,
-                )* R: mpstthree::role::Role,
+                )0* R: mpstthree::role::Role,
                 N: mpstthree::role::Role
             > {
                 #(
                     pub session#N: S#N,
-                )*
+                )0*
                 pub stack: R,
                 pub name: N,
             }
 
             #[doc(hidden)]
-            impl<#(S#N: mpstthree::binary::Session,)* R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::Session for $struct_name<#(S#N, )* R, N> {
+            impl<#(S#N: mpstthree::binary::Session,)0* R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::Session for $struct_name<#(S#N, )0* R, N> {
                 type Dual =
-                $struct_name<#(<S#N as mpstthree::binary::Session>::Dual, )* <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
+                $struct_name<#(<S#N as mpstthree::binary::Session>::Dual, )0* <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 
                 #[doc(hidden)]
                 fn new() -> (Self, Self::Dual) {
                     #(
                         let (sender#N, receiver#N) = S#N::new();
-                    )*
+                    )0*
 
                     let (role_one, role_two) = R::new();
                     let (name_one, name_two) = N::new();
@@ -108,14 +108,14 @@ macro_rules! create_sessionmpst {
                         $struct_name {
                             #(
                                 session#N: sender#N,
-                            )*
+                            )0*
                             stack: role_one,
                             name: name_one,
                         },
                         $struct_name {
                             #(
                                 session#N: receiver#N,
-                            )*
+                            )0*
                             stack: role_two,
                             name: name_two,
                         }

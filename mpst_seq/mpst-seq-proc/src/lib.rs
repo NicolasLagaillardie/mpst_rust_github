@@ -67,48 +67,37 @@ enum Mode {
 
 impl SeqMacroInput {
     /// from → to + offset
-    fn range_0(&self) -> impl Iterator<Item = u64> {
+    fn from_to_offset_exclusion(&self) -> (u64, u64, u64, u64) {
         let from = (self.from).base10_parse::<u64>().unwrap();
         let to = (self.to).base10_parse::<u64>().unwrap();
+        let exclusion = (self.exclusion).base10_parse::<u64>().unwrap();
         let offset = if self.inclusive { 1 } else { 0 };
-        from..(to + offset)
+        (from, to, offset, exclusion)
     }
 
-    /// from → (3 * to - 4 + offset)
-    fn range_1(&self) -> impl Iterator<Item = u64> {
-        let from = (self.from).base10_parse::<u64>().unwrap();
-        let to = (self.to).base10_parse::<u64>().unwrap();
-        let offset = if self.inclusive { 1 } else { 0 };
-        from..(3 * to - 4 + offset)
+    /// from → to + offset
+    fn range_0(&self, extra: u64) -> impl Iterator<Item = u64> {
+        let (from, to, offset, _) = self.from_to_offset_exclusion();
+        (from + extra)..(to + offset + extra)
     }
 
-    /// from → (2 * to - 2 + offset)
-    fn range_2(&self) -> impl Iterator<Item = u64> {
-        let from = (self.from).base10_parse::<u64>().unwrap();
-        let to = (self.to).base10_parse::<u64>().unwrap();
-        let offset = if self.inclusive { 1 } else { 0 };
-        from..(2 * to - 2 + offset)
+    /// from → (3 * (to + offset - 1))
+    fn range_1(&self, extra: u64) -> impl Iterator<Item = u64> {
+        let (from, to, offset, _) = self.from_to_offset_exclusion();
+        (from + extra)..(3 * (to + offset - 1) + extra)
     }
 
-    // fn matrix(&self) -> Vec<(u64, u64)> {
-    //     let from = (self.from).base10_parse::<u64>().unwrap();
-    //     let to = (self.to).base10_parse::<u64>().unwrap();
-    //     let mut result: Vec<(u64, u64)> = Vec::new();
-    //     let offset = if self.inclusive { 1 } else { 0 };
-    //     let mut extra = 0;
+    /// from → (2 * (to + offset) - 1)
+    fn range_2(&self, extra: u64) -> impl Iterator<Item = u64> {
+        let (from, to, offset, _) = self.from_to_offset_exclusion();
+        (from + extra)..(2 * (to + offset) - 1 + extra)
+    }
 
-    //     for i in from..(to + offset) {
-    //         for j in (i + 1)..(to + offset) {
-    //             if (j + extra) % 2 == 0 {
-    //                 result.append(&mut vec![(i, j)]);
-    //             } else {
-    //                 result.append(&mut vec![(j, i)]);
-    //             }
-    //         }
-    //         extra = if extra == 0 { 1 } else { 0 };
-    //     }
-    //     result
-    // }
+    /// to → to + (to - from)
+    fn range_5(&self, extra: u64) -> impl Iterator<Item = u64> {
+        let (from, to, offset, _) = self.from_to_offset_exclusion();
+        (to + extra)..((to - from) + to + offset + extra)
+    }
 
     fn expand2(
         &self,
@@ -116,180 +105,241 @@ impl SeqMacroInput {
         rest: &mut proc_macro2::token_stream::IntoIter,
         mutated: &mut bool,
         mode: Mode,
+        mode_inclusive: Mode,
     ) -> proc_macro2::TokenStream {
-        let tt =
-            match tt {
-                proc_macro2::TokenTree::Group(g) => {
-                    let (expanded, g_mutated) = self.expand_pass(g.stream(), mode);
-                    let mut expanded = proc_macro2::Group::new(g.delimiter(), expanded);
-                    *mutated |= g_mutated;
-                    expanded.set_span(g.span());
-                    proc_macro2::TokenTree::Group(expanded)
+        let tt = match tt {
+            proc_macro2::TokenTree::Group(g) => {
+                let (expanded, g_mutated) = self.expand_pass(g.stream(), mode, mode_inclusive);
+                let mut expanded = proc_macro2::Group::new(g.delimiter(), expanded);
+                *mutated |= g_mutated;
+                expanded.set_span(g.span());
+                proc_macro2::TokenTree::Group(expanded)
+            }
+            proc_macro2::TokenTree::Ident(ref ident) if ident == &self.ident => {
+                if let Mode::ReplaceIdent(i) = mode {
+                    let mut lit = proc_macro2::Literal::u64_unsuffixed(i);
+                    lit.set_span(ident.span());
+                    *mutated = true;
+                    proc_macro2::TokenTree::Literal(lit)
+                } else {
+                    // not allowed to replace idents in first pass
+                    proc_macro2::TokenTree::Ident(ident.clone())
                 }
-                proc_macro2::TokenTree::Ident(ref ident) if ident == &self.ident => {
-                    if let Mode::ReplaceIdent(i) = mode {
-                        let mut lit = proc_macro2::Literal::u64_unsuffixed(i);
-                        lit.set_span(ident.span());
+            }
+            proc_macro2::TokenTree::Ident(mut ident) => {
+                // search for # followed by self.ident at the end of an identifier
+                // OR # self.ident #
+                let mut peek = rest.clone();
+                match (mode, mode_inclusive, peek.next(), peek.next()) {
+                    (
+                        Mode::ReplaceIdent(i),
+                        _,
+                        Some(proc_macro2::TokenTree::Punct(ref punct)),
+                        Some(proc_macro2::TokenTree::Ident(ref ident2)),
+                    ) if punct.as_char() == '#' && ident2 == &self.ident => {
+                        // have seen ident # N
+                        ident = proc_macro2::Ident::new(&format!("{}{}", ident, i), ident.span());
+                        *rest = peek.clone();
                         *mutated = true;
-                        proc_macro2::TokenTree::Literal(lit)
-                    } else {
-                        // not allowed to replace idents in first pass
-                        proc_macro2::TokenTree::Ident(ident.clone())
-                    }
-                }
-                proc_macro2::TokenTree::Ident(mut ident) => {
-                    // search for # followed by self.ident at the end of an identifier
-                    // OR # self.ident #
-                    let mut peek = rest.clone();
-                    match (mode, peek.next(), peek.next()) {
-                        (
-                            Mode::ReplaceIdent(i),
-                            Some(proc_macro2::TokenTree::Punct(ref punct)),
-                            Some(proc_macro2::TokenTree::Ident(ref ident2)),
-                        ) if punct.as_char() == '#' && ident2 == &self.ident => {
-                            // have seen ident # N
-                            ident =
-                                proc_macro2::Ident::new(&format!("{}{}", ident, i), ident.span());
-                            *rest = peek.clone();
-                            *mutated = true;
 
-                            // we may need to also consume another #
-                            match peek.next() {
-                                Some(proc_macro2::TokenTree::Punct(ref punct))
-                                    if punct.as_char() == '#' =>
+                        // we may need to also consume another #
+                        match peek.next() {
+                            Some(proc_macro2::TokenTree::Punct(ref punct))
+                                if punct.as_char() == '#' =>
+                            {
+                                *rest = peek;
+                            }
+                            _ => {}
+                        }
+                    }
+                    (
+                        _,
+                        Mode::ReplaceIdent(j),
+                        Some(proc_macro2::TokenTree::Punct(ref punct)),
+                        Some(proc_macro2::TokenTree::Ident(ref ident2)),
+                    ) if punct.as_char() == '^' && ident2 == &self.ident => {
+                        // have seen ident # N
+                        ident = proc_macro2::Ident::new(&format!("{}{}", ident, j), ident.span());
+                        *rest = peek.clone();
+                        *mutated = true;
+
+                        // we may need to also consume another #
+                        match peek.next() {
+                            Some(proc_macro2::TokenTree::Punct(ref punct))
+                                if punct.as_char() == '^' =>
+                            {
+                                *rest = peek;
+                            }
+                            _ => {}
+                        }
+                    }
+                    _ => {}
+                }
+
+                proc_macro2::TokenTree::Ident(ident)
+            }
+            proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
+                let mut peek = rest.clone();
+                match (peek.next(), peek.next(), peek.next()) {
+                    // is this #(...)n* ?
+                    (
+                        Some(proc_macro2::TokenTree::Group(ref rep)),
+                        Some(proc_macro2::TokenTree::Literal(ref extra)),
+                        Some(proc_macro2::TokenTree::Punct(ref star)),
+                    ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
+                        && star.as_char() == '*' =>
+                    {
+                        // yes! expand ... for each sequence in the range
+                        *mutated = true;
+                        *rest = peek;
+
+                        // TODO
+                        // extra.to_string().parse::<u64>().unwrap() → something better
+
+                        return self
+                            .range_0(extra.to_string().parse::<u64>().unwrap())
+                            .map(|i| {
+                                self.expand_pass(
+                                    rep.stream(),
+                                    Mode::ReplaceIdent(i),
+                                    mode_inclusive,
+                                )
+                            })
+                            .map(|(ts, _)| ts)
+                            .collect();
+                    }
+                    // is this #(...)n~ ?
+                    (
+                        Some(proc_macro2::TokenTree::Group(ref rep)),
+                        Some(proc_macro2::TokenTree::Literal(ref extra)),
+                        Some(proc_macro2::TokenTree::Punct(ref tilde)),
+                    ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
+                        && tilde.as_char() == '~' =>
+                    {
+                        // yes! expand ... for each sequence in the range
+                        *mutated = true;
+                        *rest = peek;
+
+                        // TODO
+                        // extra.to_string().parse::<u64>().unwrap() → something better
+
+                        return self
+                            .range_1(extra.to_string().parse::<u64>().unwrap())
+                            .map(|i| {
+                                self.expand_pass(
+                                    rep.stream(),
+                                    Mode::ReplaceIdent(i),
+                                    mode_inclusive,
+                                )
+                            })
+                            .map(|(ts, _)| ts)
+                            .collect();
+                    }
+                    // is this #(...)n^ ?
+                    (
+                        Some(proc_macro2::TokenTree::Group(ref rep)),
+                        Some(proc_macro2::TokenTree::Literal(ref extra)),
+                        Some(proc_macro2::TokenTree::Punct(ref hat)),
+                    ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
+                        && hat.as_char() == '^' =>
+                    {
+                        // yes! expand ... for each sequence in the range
+                        *mutated = true;
+                        *rest = peek;
+
+                        // TODO
+                        // extra.to_string().parse::<u64>().unwrap() → something better
+
+                        return self
+                            .range_2(extra.to_string().parse::<u64>().unwrap())
+                            .map(|i| {
+                                self.expand_pass(
+                                    rep.stream(),
+                                    Mode::ReplaceIdent(i),
+                                    mode_inclusive,
+                                )
+                            })
+                            .map(|(ts, _)| ts)
+                            .collect();
+                    }
+                    _ => {}
+                }
+                proc_macro2::TokenTree::Punct(p.clone())
+            }
+            proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '~' => {
+                // is this ~(...)* ?
+                let mut peek = rest.clone();
+                match (peek.next(), peek.next(), peek.next()) {
+                    (
+                        Some(proc_macro2::TokenTree::Group(ref rep_if)),
+                        Some(proc_macro2::TokenTree::Group(ref rep_else)),
+                        Some(proc_macro2::TokenTree::Punct(ref star)),
+                    ) if rep_if.delimiter() == proc_macro2::Delimiter::Parenthesis
+                        && rep_else.delimiter() == proc_macro2::Delimiter::Parenthesis
+                        && star.as_char() == '*' =>
+                    {
+                        // yes! expand ... for each sequence in the range
+                        *mutated = true;
+                        *rest = peek;
+
+                        return self
+                            .range_0(0)
+                            .filter_map(|i| {
+                                if i == self.exclusion.base10_parse::<u64>().unwrap()
+                                    && self.objection
                                 {
-                                    *rest = peek;
+                                    std::option::Option::Some(self.expand_pass(
+                                        rep_else.stream(),
+                                        Mode::ReplaceIdent(i),
+                                        mode_inclusive,
+                                    ))
+                                } else {
+                                    std::option::Option::Some(self.expand_pass(
+                                        rep_if.stream(),
+                                        Mode::ReplaceIdent(i),
+                                        mode_inclusive,
+                                    ))
                                 }
-                                _ => {}
-                            }
-                        }
-                        _ => {}
+                            })
+                            .map(|(ts, _)| ts)
+                            .collect();
                     }
-
-                    proc_macro2::TokenTree::Ident(ident)
+                    _ => {}
                 }
-                proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
-                    if let Mode::ReplaceSequence = mode {
-                        // is this #(...)* ?
-                        let mut peek = rest.clone();
-                        match (peek.next(), peek.next()) {
-                            (
-                                Some(proc_macro2::TokenTree::Group(ref rep)),
-                                Some(proc_macro2::TokenTree::Punct(ref star)),
-                            ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
-                                && star.as_char() == '*' =>
-                            {
-                                // yes! expand ... for each sequence in the range
-                                *mutated = true;
-                                *rest = peek;
+                proc_macro2::TokenTree::Punct(p.clone())
+            }
+            proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '^' => {
+                let mut peek = rest.clone();
+                match (peek.next(), peek.next()) {
+                    // is this ^(...)* ?
+                    (
+                        Some(proc_macro2::TokenTree::Group(ref rep)),
+                        Some(proc_macro2::TokenTree::Punct(ref star)),
+                    ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
+                        && star.as_char() == '*' =>
+                    {
+                        // yes! expand ... for each sequence in the range
+                        *mutated = true;
+                        *rest = peek;
 
-                                return self
-                                    .range_0()
-                                    .map(|i| self.expand_pass(rep.stream(), Mode::ReplaceIdent(i)))
-                                    .map(|(ts, _)| ts)
-                                    .collect();
-                            }
-                            _ => {}
-                        }
+                        return self
+                            .range_5(0)
+                            .map(|i| {
+                                self.expand_pass(
+                                    rep.stream(),
+                                    Mode::ReplaceIdent(i),
+                                    mode_inclusive,
+                                )
+                            })
+                            .map(|(ts, _)| ts)
+                            .collect();
                     }
-                    proc_macro2::TokenTree::Punct(p.clone())
+                    _ => {}
                 }
-                proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
-                    if let Mode::ReplaceSequence = mode {
-                        // is this #(...)* ?
-                        let mut peek = rest.clone();
-                        match (peek.next(), peek.next()) {
-                            (
-                                Some(proc_macro2::TokenTree::Group(ref rep)),
-                                Some(proc_macro2::TokenTree::Punct(ref star)),
-                            ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
-                                && star.as_char() == '~' =>
-                            {
-                                // yes! expand ... for each sequence in the range
-                                *mutated = true;
-                                *rest = peek;
-
-                                return self
-                                    .range_1()
-                                    .map(|i| self.expand_pass(rep.stream(), Mode::ReplaceIdent(i)))
-                                    .map(|(ts, _)| ts)
-                                    .collect();
-                            }
-                            _ => {}
-                        }
-                    }
-                    proc_macro2::TokenTree::Punct(p.clone())
-                }
-                proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
-                    if let Mode::ReplaceSequence = mode {
-                        // is this #(...)* ?
-                        let mut peek = rest.clone();
-                        match (peek.next(), peek.next()) {
-                            (
-                                Some(proc_macro2::TokenTree::Group(ref rep)),
-                                Some(proc_macro2::TokenTree::Punct(ref star)),
-                            ) if rep.delimiter() == proc_macro2::Delimiter::Parenthesis
-                                && star.as_char() == '¤' =>
-                            {
-                                // yes! expand ... for each sequence in the range
-                                *mutated = true;
-                                *rest = peek;
-
-                                return self
-                                    .range_2()
-                                    .map(|i| self.expand_pass(rep.stream(), Mode::ReplaceIdent(i)))
-                                    .map(|(ts, _)| ts)
-                                    .collect();
-                            }
-                            _ => {}
-                        }
-                    }
-                    proc_macro2::TokenTree::Punct(p.clone())
-                }
-                proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '~' => {
-                    if let Mode::ReplaceSequence = mode {
-                        // is this ~(...)* ?
-                        let mut peek = rest.clone();
-                        match (peek.next(), peek.next(), peek.next()) {
-                            (
-                                Some(proc_macro2::TokenTree::Group(ref rep_if)),
-                                Some(proc_macro2::TokenTree::Group(ref rep_else)),
-                                Some(proc_macro2::TokenTree::Punct(ref star)),
-                            ) if rep_if.delimiter() == proc_macro2::Delimiter::Parenthesis
-                                && rep_else.delimiter() == proc_macro2::Delimiter::Parenthesis
-                                && star.as_char() == '*' =>
-                            {
-                                // yes! expand ... for each sequence in the range
-                                *mutated = true;
-                                *rest = peek;
-
-                                return self
-                                    .range_0()
-                                    .filter_map(|i| {
-                                        if i == self.exclusion.base10_parse::<u64>().unwrap()
-                                            && self.objection
-                                        {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                Mode::ReplaceIdent(i),
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                Mode::ReplaceIdent(i),
-                                            ))
-                                        }
-                                    })
-                                    .map(|(ts, _)| ts)
-                                    .collect();
-                            }
-                            _ => {}
-                        }
-                    }
-                    proc_macro2::TokenTree::Punct(p.clone())
-                }
-                tt => tt,
-            };
+                proc_macro2::TokenTree::Punct(p.clone())
+            }
+            tt => tt,
+        };
         std::iter::once(tt).collect()
     }
 
@@ -297,24 +347,26 @@ impl SeqMacroInput {
         &self,
         stream: proc_macro2::TokenStream,
         mode: Mode,
+        mode_inclusive: Mode,
     ) -> (proc_macro2::TokenStream, bool) {
         let mut out = proc_macro2::TokenStream::new();
         let mut mutated = false;
         let mut tts = stream.into_iter();
         while let Some(tt) = tts.next() {
-            out.extend(self.expand2(tt, &mut tts, &mut mutated, mode));
+            out.extend(self.expand2(tt, &mut tts, &mut mutated, mode, mode_inclusive));
         }
         (out, mutated)
     }
 
     fn expand(&self, stream: proc_macro2::TokenStream) -> proc_macro2::TokenStream {
-        let (out, mutated) = self.expand_pass(stream.clone(), Mode::ReplaceSequence);
+        let (out, mutated) =
+            self.expand_pass(stream.clone(), Mode::ReplaceSequence, Mode::ReplaceSequence);
         if mutated {
             return out;
         }
 
-        self.range_0()
-            .map(|i| self.expand_pass(stream.clone(), Mode::ReplaceIdent(i)))
+        self.range_0(0)
+            .map(|i| self.expand_pass(stream.clone(), Mode::ReplaceIdent(i), Mode::ReplaceSequence))
             .map(|(ts, _)| ts)
             .collect()
     }

@@ -35,7 +35,7 @@ seq!(N in 0..16 {
     enum Interrupt {
         #(
             Irq#N,
-        )*
+        )0*
     }
 });
 

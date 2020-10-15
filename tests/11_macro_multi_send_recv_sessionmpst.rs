@@ -4,10 +4,10 @@ extern crate either;
 extern crate mpstthree;
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
-// use mpstthree::role::Role;
 use mpstthree::{
-    close_mpst, create_normal_role, create_recv_mpst_session, create_send_mpst_session,
-    create_sessionmpst,
+    close_mpst, create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,
+    create_offer_type_multi, create_recv_mpst_all_session, create_recv_mpst_session,
+    create_send_mpst_session, create_sessionmpst,
 };
 use std::error::Error;
 
@@ -17,15 +17,72 @@ type ResultAnySend = Result<(), Box<(dyn std::any::Any + std::marker::Send + 'st
 create_sessionmpst!(SessionMpst, 3);
 
 // Create new roles
+// normal
 create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+// broadcast
+create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 
+// Create new send functions
 create_send_mpst_session!(send_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_d, RoleD, next_d, RoleD, SessionMpst, 3, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, next_b, RoleD, SessionMpst, 3, 2);
+create_send_mpst_session!(send_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
 
+// Create new recv functions and related types
+// normal
+create_recv_mpst_session!(recv_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 create_recv_mpst_session!(recv_mpst_a_to_d, RoleD, next_d, RoleA, SessionMpst, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
+// broadcast
+create_recv_mpst_all_session!(
+    recv_mpst_b_all_to_d,
+    RoleAlltoD,
+    next_all_to_d,
+    RoleB,
+    SessionMpst,
+    3,
+    2
+);
+create_recv_mpst_all_session!(
+    recv_mpst_a_all_to_d,
+    RoleAlltoD,
+    next_all_to_d,
+    RoleA,
+    SessionMpst,
+    3,
+    2
+);
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
+
+create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3, 2);
+
+create_offer_mpst_session_multi!(
+    offer_mpst_session_a_to_c,
+    OfferMpstMultiThree,
+    RoleAlltoD,
+    recv_mpst_a_all_to_d,
+    RoleA,
+    SessionMpst,
+    3,
+    2
+);
+
+create_offer_mpst_session_multi!(
+    offer_mpst_session_b_to_c,
+    OfferMpstMultiThree,
+    RoleAlltoD,
+    recv_mpst_b_all_to_d,
+    RoleB,
+    SessionMpst,
+    3,
+    2
+);
 
 type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;
@@ -82,6 +139,8 @@ where
         }
     })
 }
+
+// fork_simple_multi!(SessionMpst, 3);
 
 /// Creates and returns three child processes for three `SessionMpst` linked together.
 ///

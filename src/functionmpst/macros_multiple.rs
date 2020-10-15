@@ -5,17 +5,17 @@
 macro_rules! close_mpst {
     ($func_name:ident, $struct_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
-            fn $func_name<R>(s: $struct_name<#(mpstthree::binary::End,)* mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn Error>>
+            fn $func_name<R>(s: $struct_name<#(mpstthree::binary::End,)0* mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn Error>>
             where
                 R: mpstthree::role::Role,
             {
                 #(
                     s.session#N.sender.send(()).unwrap_or(());
-                )*
+                )0*
 
                 #(
                     s.session#N.receiver.recv()?;
-                )*
+                )0*
 
                 Ok(())
             }
@@ -31,7 +31,7 @@ macro_rules! close_mpst {
 macro_rules! create_send_mpst_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N,)* R>(
+            fn $func_name<T, #(S#N,)0* R>(
                 x: T,
                 s: $struct_name<
                     ~(
@@ -42,12 +42,12 @@ macro_rules! create_send_mpst_session {
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-            ) -> $struct_name<#(S#N,)* R, $name<mpstthree::role::end::RoleEnd>>
+            ) -> $struct_name<#(S#N,)0* R, $name<mpstthree::role::end::RoleEnd>>
             where
                 T: std::marker::Send,
                 #(
                     S#N: mpstthree::binary::Session,
-                )*
+                )0*
                 R: mpstthree::role::Role,
             {
                 ~(
@@ -78,7 +78,7 @@ macro_rules! create_send_mpst_session {
 macro_rules! create_recv_mpst_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N,)* R>(
+            fn $func_name<T, #(S#N,)0* R>(
                 s: $struct_name<
                     ~(
                         S#N,
@@ -91,7 +91,7 @@ macro_rules! create_recv_mpst_session {
             ) -> Result<
                 (
                     T,
-                    $struct_name<#(S#N,)* R, $name<mpstthree::role::end::RoleEnd>,
+                    $struct_name<#(S#N,)0* R, $name<mpstthree::role::end::RoleEnd>,
                     >,
                 ),
                 Box<dyn std::error::Error>,
@@ -100,7 +100,7 @@ macro_rules! create_recv_mpst_session {
                 T: std::marker::Send,
                 #(
                     S#N: mpstthree::binary::Session,
-                )*
+                )0*
                 R: mpstthree::role::Role,
             {
                 ~(
@@ -130,7 +130,7 @@ macro_rules! create_recv_mpst_session {
 macro_rules! create_recv_mpst_all_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N,)* R>(
+            fn $func_name<T, #(S#N,)0* R>(
                 s: $struct_name<
                     ~(
                         S#N,
@@ -144,7 +144,7 @@ macro_rules! create_recv_mpst_all_session {
                 (
                     T,
                     $struct_name<
-                        #(S#N,)*
+                        #(S#N,)0*
                         R,
                         $name<mpstthree::role::end::RoleEnd>,
                     >,
@@ -155,7 +155,7 @@ macro_rules! create_recv_mpst_all_session {
                 T: std::marker::Send,
                 #(
                     S#N: mpstthree::binary::Session,
-                )*
+                )0*
                 R: mpstthree::role::Role,
             {
                 ~(
@@ -182,42 +182,47 @@ macro_rules! create_recv_mpst_all_session {
 ////////////////////////////////////////////
 /// OFFER
 
-/// Get an offer on session 1
 #[macro_export]
-macro_rules! create_offer_mpst_session {
-    ($func_name:ident, $role:ident, $recv_func:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..=$nsessions ! $exclusion {
-            fn $func_name<'a, S1, S2, S3, S4, S5, F, G, R1, R2, R3, U>(
-                s: $struct_name<
-                    OfferMpst<S1, S2, S3, S4, R1, R2, $name<mpstthree::role::end::RoleEnd>>,
-                    S5,
-                    $role<R3, R3>,
+macro_rules! create_offer_type_multi {
+    ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
+            type $type_name<#(S#N,)0^ R0, R1, N0> = mpstthree::binary::Recv<either::Either<$sessionmpst_name<#(S#N,)0* R0, N0>, $sessionmpst_name<^(S#N,)* R1, N0>>, End>;
+        });
+    }
+}
+
+/// Get an offer on $eclusion
+#[macro_export]
+macro_rules! create_offer_mpst_session_multi {
+    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion { fn $func_name<'a, #(S#N,)0^ F, G, R1, R2, U>(
+                s: $sessionmpst_name<
+                    ~(
+                        mpstthree::binary::End,
+                    )(
+                        $type_name<#(S#N,)0^ R1, R2, $name<mpstthree::role::end::RoleEnd>>,
+                    )*
+                    $role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
                 f: F,
                 g: G,
             ) -> Result<U, Box<dyn std::error::Error + 'a>>
             where
-                S1: mpstthree::binary::Session,
-                S2: mpstthree::binary::Session,
-                S3: mpstthree::binary::Session,
-                S4: mpstthree::binary::Session,
-                S5: mpstthree::binary::Session,
+                #(S#N: mpstthree::binary::Session,)0^
                 #(
                     R#N: mpstthree::role::Role,
-                )*
+                )0*
                 F: FnOnce(
-                    $struct_name<
-                        S1,
-                        S2,
+                    $sessionmpst_name<
+                        #(S#N,)0*
                         R1,
                         $name<mpstthree::role::end::RoleEnd>,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
-                    $struct_name<
-                        S3,
-                        S4,
+                    $sessionmpst_name<
+                        #(S#N,)2*
                         R2,
                         $name<mpstthree::role::end::RoleEnd>,
                     >,
@@ -234,24 +239,45 @@ macro_rules! create_offer_mpst_session {
 ////////////////////////////////////////////
 /// CHOICE
 
+#[macro_export]
+macro_rules! create_choose_type_multi {
+    ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions {
+            type $type_name<
+                #(S#N,)0^ R0, R1, N0
+            > = mpstthree::binary::Send<
+                either::Either<
+                    <
+                        $sessionmpst_name<#(S#N,)0* R0, N0
+                    > as Session>::Dual,
+                    <
+                        $sessionmpst_name<^(S#N,)* R1, N0
+                    > as Session>::Dual
+                    >,
+                End
+            >;
+        });
+    }
+}
+
 ////////////////////////////////////////////
 /// FORK
 
 #[macro_export]
-macro_rules! fork_mpst_multi {
+macro_rules! fork_simple_multi {
     ($struct_name:ident, $nsessions:literal) => {
-        mpst_seq::seq!(K in 1..=$nsessions {
-            fn fork_simple_multi<#(S#K,)* R, N, P>(p: P, s: $struct_name<#(S#K,)* R, N>) -> std::thread::JoinHandle<()>
+        mpst_seq::seq!(K in 1..$nsessions {
+            fn fork_simple_multi<#(S#K,)0* R, N, P>(p: P, s: $struct_name<#(S#K,)0* R, N>) -> std::thread::JoinHandle<()>
             where
                 #(
                     S#K: mpstthree::binary::Session + 'static,
-                )*
+                )0*
                 R: mpstthree::role::Role + 'static,
                 N: mpstthree::role::Role + 'static,
-                P: FnOnce($struct_name<#(S#K,)* R, N>) -> Result<(), Box<dyn std::error::Error>> + std::marker::Send + 'static,
+                P: FnOnce($struct_name<#(S#K,)0* R, N>) -> Result<(), Box<dyn std::error::Error>> + std::marker::Send + 'static,
             {
                 std::thread::spawn(move || {
-                    panic::set_hook(Box::new(|_info| {
+                    std::panic::set_hook(Box::new(|_info| {
                         // do nothing
                     }));
                     match p(s) {
@@ -260,22 +286,29 @@ macro_rules! fork_mpst_multi {
                     }
                 })
             }
+        });
+    }
+}
 
-            fn fork_mpst_multi<#(S#K,)* #(R#K,)* #(N#K,)* #(F#K,)*>(
+#[macro_export]
+macro_rules! fork_mpst_multi {
+    ($struct_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(K in 1..=$nsessions {
+            fn fork_mpst_multi<#(S#K,)0* #(R#K,)0* #(N#K,)0* #(F#K,)0*>(
                 #(
                     f#K: F#K,
-                )*
+                )0*
             ) -> (
                 #(
                     Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>
-                )*
+                )0*
             )
             where
                 #(
                     S#K: mpstthree::binary::Session + 'static,
                     R#K: mpstthree::binary::Session + 'static,
                     N#K: mpstthree::binary::Session + 'static,
-                )*
+                )0*
 
                 F1: FnOnce($struct_name<S1, <S3 as Session>::Dual, R1, N1>) -> Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
@@ -294,7 +327,7 @@ macro_rules! fork_mpst_multi {
                 #(
                     let (role_#K, _) = R#K::new();
                     let (name_#K, _) = N#K::new();
-                )*
+                )0*
 
                 let sessionmpst_1 = $struct_name {
                     session1: channel_1_2,
@@ -317,11 +350,11 @@ macro_rules! fork_mpst_multi {
 
                 #(
                     let thread_#K = fork_simple_multi(f#K, sessionmpst_#K);
-                )*
+                )0*
 
                 #(
                     thread_#K.join(),
-                )*
+                )0*
             }
         });
     }

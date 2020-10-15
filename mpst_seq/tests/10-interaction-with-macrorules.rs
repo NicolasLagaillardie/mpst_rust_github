@@ -53,7 +53,7 @@ impl Proc {
 
 macro_rules! make_procs_array {
     ($nproc:literal) => {
-        eseq!(N in 0..$nproc { [#(Proc::new(),)*] })
+        eseq!(N in 0..$nproc { [#(Proc::new(),)0*] })
     }
 }
 
