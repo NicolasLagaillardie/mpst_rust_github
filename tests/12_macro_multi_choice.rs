@@ -10,7 +10,7 @@
 //     close_mpst, create_broadcast_role, create_choose_left_from_3_to_1_and_2,
 //     create_choose_right_from_3_to_1_and_2, create_choose_type_multi, create_normal_role,
 //     create_offer_mpst_session_multi, create_offer_type_multi, create_recv_mpst_all_session,
-//     create_recv_mpst_session, create_send_mpst_session, create_sessionmpst,
+//     create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_simple_multi, fork_mpst_multi
 // };
 // use std::error::Error;
 
@@ -304,8 +304,11 @@
 // }
 
 // ////////////////////////////////////////
-// /// To be replaced
-// /// TODO
+// // To be replaced
+// // TODO
+
+// fork_simple_multi!(fork_simple_multi, SessionMpst, 3);
+// fork_mpst_multi!(fork_mpst_multi, fork_simple_multi, SessionMpst, 3);
 
 // #[doc(hidden)]
 // pub fn fork_simple<S1, S2, R, N, P>(

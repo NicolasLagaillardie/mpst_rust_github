@@ -10,20 +10,21 @@ pub mod functionmpst;
 pub mod role;
 pub mod sessionmpst;
 
-use binary::Session;
-use role::Role;
-use sessionmpst::SessionMpst;
-
 type ResultAnySend = Result<(), Box<(dyn Any + marker::Send + 'static)>>;
 
 #[doc(hidden)]
-pub fn fork_simple<S1, S2, R, N, P>(p: P, s: SessionMpst<S1, S2, R, N>) -> JoinHandle<()>
+pub fn fork_simple<S1, S2, R, N, P>(
+    p: P,
+    s: sessionmpst::SessionMpst<S1, S2, R, N>,
+) -> JoinHandle<()>
 where
-    S1: Session + 'static,
-    S2: Session + 'static,
-    R: Role + 'static,
-    N: Role + 'static,
-    P: FnOnce(SessionMpst<S1, S2, R, N>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+    S1: binary::Session + 'static,
+    S2: binary::Session + 'static,
+    R: role::Role + 'static,
+    N: role::Role + 'static,
+    P: FnOnce(sessionmpst::SessionMpst<S1, S2, R, N>) -> Result<(), Box<dyn Error>>
+        + marker::Send
+        + 'static,
 {
     spawn(move || {
         panic::set_hook(Box::new(|_info| {
@@ -42,65 +43,74 @@ where
 /// Creates 3 `Role` for each queue.
 /// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes from `fork_simple`.
 /// Returns the tuple of the 3 child processes.
-pub fn fork_mpst<S1, S2, S3, R1, R2, R3, N1, N2, N3, F1, F2, F3>(
+pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
+    f0: F0,
     f1: F1,
     f2: F2,
-    f3: F3,
 ) -> (ResultAnySend, ResultAnySend, ResultAnySend)
 where
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
-    N3: Role + 'static,
-    F1: FnOnce(SessionMpst<S1, <S3 as Session>::Dual, R1, N1>) -> Result<(), Box<dyn Error>>
+    S0: binary::Session + 'static,
+    S1: binary::Session + 'static,
+    S2: binary::Session + 'static,
+    R1: role::Role + 'static,
+    R2: role::Role + 'static,
+    R0: role::Role + 'static,
+    N1: role::Role + 'static,
+    N2: role::Role + 'static,
+    N0: role::Role + 'static,
+    F0: FnOnce(sessionmpst::SessionMpst<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
-    F2: FnOnce(SessionMpst<<S1 as Session>::Dual, S2, R2, N2>) -> Result<(), Box<dyn Error>>
+    F1: FnOnce(
+            sessionmpst::SessionMpst<<S0 as binary::Session>::Dual, S2, R1, N1>,
+        ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
-    F3: FnOnce(SessionMpst<S3, <S2 as Session>::Dual, R3, N3>) -> Result<(), Box<dyn Error>>
+    F2: FnOnce(
+            sessionmpst::SessionMpst<
+                <S1 as binary::Session>::Dual,
+                <S2 as binary::Session>::Dual,
+                R2,
+                N2,
+            >,
+        ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
 {
-    let (channel_ab, channel_ba) = S1::new();
-    let (channel_ca, channel_ac) = S3::new();
+    let (channel_ab, channel_ba) = S0::new();
+    let (channel_ac, channel_ca) = S1::new();
     let (channel_bc, channel_cb) = S2::new();
 
-    let (role_a, _) = R1::new();
-    let (role_b, _) = R2::new();
-    let (role_c, _) = R3::new();
+    let (role_a, _) = R0::new();
+    let (role_b, _) = R1::new();
+    let (role_c, _) = R2::new();
 
-    let (name_a, _) = N1::new();
-    let (name_b, _) = N2::new();
-    let (name_c, _) = N3::new();
+    let (name_a, _) = N0::new();
+    let (name_b, _) = N1::new();
+    let (name_c, _) = N2::new();
 
-    let a = SessionMpst {
+    let a = sessionmpst::SessionMpst {
         session1: channel_ab,
         session2: channel_ac,
         stack: role_a,
         name: name_a,
     };
-    let b = SessionMpst {
+    let b = sessionmpst::SessionMpst {
         session1: channel_ba,
         session2: channel_bc,
         stack: role_b,
         name: name_b,
     };
-    let c = SessionMpst {
+    let c = sessionmpst::SessionMpst {
         session1: channel_ca,
         session2: channel_cb,
         stack: role_c,
         name: name_c,
     };
 
-    let thread_a = fork_simple(f1, a);
-    let thread_b = fork_simple(f2, b);
-    let thread_c = fork_simple(f3, c);
+    let thread_a = fork_simple(f0, a);
+    let thread_b = fork_simple(f1, b);
+    let thread_c = fork_simple(f2, c);
 
     (thread_a.join(), thread_b.join(), thread_c.join())
 }
