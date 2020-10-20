@@ -13,7 +13,7 @@ const PROCS: [Proc; 256] = {
         [
             #(
                 Proc::new(N),
-            )0*
+            )0:0
         ]
     })
 };

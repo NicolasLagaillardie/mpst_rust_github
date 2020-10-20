@@ -10,11 +10,10 @@
 //     close_mpst, create_broadcast_role, create_choose_left_from_3_to_1_and_2,
 //     create_choose_right_from_3_to_1_and_2, create_choose_type_multi, create_normal_role,
 //     create_offer_mpst_session_multi, create_offer_type_multi, create_recv_mpst_all_session,
-//     create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_simple_multi, fork_mpst_multi
+//     create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_mpst_multi,
+//     fork_simple_multi,
 // };
 // use std::error::Error;
-
-// type ResultAnySend = Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>;
 
 // // Create new SessionMpst for three participants
 // create_sessionmpst!(SessionMpst, 3);
@@ -347,7 +346,11 @@
 //     f1: F1,
 //     f2: F2,
 //     f3: F3,
-// ) -> (ResultAnySend, ResultAnySend, ResultAnySend)
+// ) -> (
+//     Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>,
+//     Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>,
+//     Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>,
+// )
 // where
 //     S1: mpstthree::binary::Session + 'static,
 //     S2: mpstthree::binary::Session + 'static,

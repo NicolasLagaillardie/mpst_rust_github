@@ -62,7 +62,7 @@ fn main() {
     eseq!(N in 0..4 {{
         #(
             sum += tuple.N as u64;
-        )0*
+        )0:0
     }});
 
     assert_eq!(sum, 9999);

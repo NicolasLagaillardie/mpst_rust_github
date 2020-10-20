@@ -12,5 +12,4 @@ fn tests() {
     t.compile_fail("tests/09-ident-span.rs");
     t.pass("tests/10-interaction-with-macrorules.rs");
     t.pass("tests/11-repeat-section-condition.rs");
-    t.pass("tests/12-repeat-section-alternate.rs");
 }
