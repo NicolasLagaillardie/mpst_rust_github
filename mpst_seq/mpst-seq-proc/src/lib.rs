@@ -94,7 +94,7 @@ impl SeqMacroInput {
         (from + extra)..(2 * to - 1 + extra)
     }
 
-    /// to → (2 * to - from + offset + extra)
+    /// to → (2 * (to + offset) - from + extra)
     fn range_3(&self, extra: u64) -> impl Iterator<Item = u64> {
         let (from, to, _) = self.from_to_offset_exclusion();
         (to + extra)..(2 * to - from + extra)
@@ -106,15 +106,21 @@ impl SeqMacroInput {
         (from + extra)..((to - from) * (to - from + 1) + extra)
     }
 
-    /// from → 2 * ( to + 1 )
+    /// from → 2 * (to + 1)
     fn range_5(&self, extra: u64) -> impl Iterator<Item = u64> {
         let (from, to, _) = self.from_to_offset_exclusion();
         (from + extra)..(2 * (to + 1) + extra)
     }
 
-    /// 1 → upper_limit
+    /// lower_limit → upper_limit
     fn range_6(&self, lower_limit: u64, upper_limit: u64) -> impl Iterator<Item = u64> {
         lower_limit..upper_limit
+    }
+
+    /// from → 3 * to - 1
+    fn range_7(&self, extra: u64) -> impl Iterator<Item = u64> {
+        let (from, to, _) = self.from_to_offset_exclusion();
+        (from + extra)..(3 * to - 1 + extra)
     }
 
     // Create the whole matrix of index according to line and column
@@ -192,12 +198,18 @@ impl SeqMacroInput {
         }
     }
 
+    // TODO
+    //i.to_string().parse::<u64>().unwrap() → something better
+    fn unwrap_literal(&self, i: &proc_macro2::Literal) -> u64 {
+        i.to_string().parse::<u64>().unwrap()
+    }
+
     fn expand2(
         &self,
         tt: proc_macro2::TokenTree,
         rest: &mut proc_macro2::token_stream::IntoIter,
         mutated: &mut bool,
-        modes: (Mode, Mode),
+        modes: (Mode, Mode, Mode),
         diag: &[(u64, u64, u64)],
         matrix: &[Vec<(u64, u64, u64)>],
     ) -> proc_macro2::TokenStream {
@@ -224,15 +236,51 @@ impl SeqMacroInput {
                 // search for # followed by self.ident at the end of an identifier
                 // OR # self.ident #
                 let mut peek = rest.clone();
-                match (modes.0, modes.1, peek.next(), peek.next()) {
+                match (
+                    modes.0,
+                    modes.1,
+                    modes.2,
+                    peek.next(),
+                    peek.next(),
+                    peek.next(),
+                    peek.next(),
+                ) {
                     (
                         Mode::ReplaceIdent(i),
                         _,
+                        _,
                         Some(proc_macro2::TokenTree::Punct(ref punct)),
                         Some(proc_macro2::TokenTree::Ident(ref ident2)),
-                    ) if punct.as_char() == '#' && ident2 == &self.ident => {
-                        // have seen ident # N
-                        ident = proc_macro2::Ident::new(&format!("{}{}", ident, i), ident.span());
+                        Some(proc_macro2::TokenTree::Punct(ref sign)),
+                        Some(proc_macro2::TokenTree::Literal(ref select_mode)),
+                    ) if punct.as_char() == '#'
+                        && ident2 == &self.ident
+                        && sign.as_char() == ':' =>
+                    {
+                        // have seen ident # N : n
+                        ident = match self.unwrap_literal(select_mode) {
+                            0 => proc_macro2::Ident::new(&format!("{}{}", ident, i), ident.span()),
+                            1 => {
+                                let mode = if let Mode::ReplaceIdent(j) = modes.1 {
+                                    j
+                                } else {
+                                    0
+                                };
+
+                                proc_macro2::Ident::new(&format!("{}{}", ident, mode), ident.span())
+                            }
+                            2 => {
+                                let mode = if let Mode::ReplaceIdent(j) = modes.2 {
+                                    j
+                                } else {
+                                    0
+                                };
+
+                                proc_macro2::Ident::new(&format!("{}{}", ident, mode), ident.span())
+                            }
+                            _ => ident,
+                        };
+
                         *rest = peek.clone();
                         *mutated = true;
 
@@ -249,14 +297,47 @@ impl SeqMacroInput {
                     (
                         Mode::ReplaceIdent(i),
                         Mode::ReplaceIdent(j),
+                        _,
                         Some(proc_macro2::TokenTree::Punct(ref punct)),
                         Some(proc_macro2::TokenTree::Ident(ref ident2)),
-                    ) if punct.as_char() == '~' && ident2 == &self.ident => {
-                        // have seen ident ~ N
-                        let (k, l, _) = self.get_tuple_matrix(matrix, i, j);
-
-                        ident =
-                            proc_macro2::Ident::new(&format!("{}{}_{}", ident, k, l), ident.span());
+                        Some(proc_macro2::TokenTree::Punct(ref sign)),
+                        Some(proc_macro2::TokenTree::Literal(ref select_mode)),
+                    ) if punct.as_char() == '~'
+                        && ident2 == &self.ident
+                        && sign.as_char() == ':' =>
+                    {
+                        // have seen ident ~ N : n
+                        ident = match self.unwrap_literal(select_mode) {
+                            0 => {
+                                let (k, l, _) = self.get_tuple_matrix(matrix, i, j);
+                                proc_macro2::Ident::new(
+                                    &format!("{}{}_{}", ident, k, l),
+                                    ident.span(),
+                                )
+                            }
+                            1 => {
+                                let (k, l, _) = self.get_tuple_matrix(matrix, i, j);
+                                proc_macro2::Ident::new(
+                                    &format!("{}{}_{}", ident, l, k),
+                                    ident.span(),
+                                )
+                            }
+                            2 => {
+                                let (k, l, _) = self.get_tuple_diag(diag, i);
+                                proc_macro2::Ident::new(
+                                    &format!("{}{}_{}", ident, k, l),
+                                    ident.span(),
+                                )
+                            }
+                            3 => {
+                                let (k, l, _) = self.get_tuple_diag(diag, i);
+                                proc_macro2::Ident::new(
+                                    &format!("{}{}_{}", ident, k, l),
+                                    ident.span(),
+                                )
+                            }
+                            _ => ident,
+                        };
 
                         *rest = peek.clone();
                         *mutated = true;
@@ -271,81 +352,7 @@ impl SeqMacroInput {
                             _ => {}
                         }
                     }
-                    (
-                        Mode::ReplaceIdent(i),
-                        Mode::ReplaceIdent(j),
-                        Some(proc_macro2::TokenTree::Punct(ref punct)),
-                        Some(proc_macro2::TokenTree::Ident(ref ident2)),
-                    ) if punct.as_char() == '^' && ident2 == &self.ident => {
-                        // have seen ident ^ N
-                        let (k, l, _) = self.get_tuple_matrix(matrix, i, j);
-
-                        ident =
-                            proc_macro2::Ident::new(&format!("{}{}_{}", ident, l, k), ident.span());
-
-                        *rest = peek.clone();
-                        *mutated = true;
-
-                        // we may need to also consume another ^
-                        match peek.next() {
-                            Some(proc_macro2::TokenTree::Punct(ref punct))
-                                if punct.as_char() == '^' =>
-                            {
-                                *rest = peek;
-                            }
-                            _ => {}
-                        }
-                    }
-                    (
-                        Mode::ReplaceIdent(i),
-                        _,
-                        Some(proc_macro2::TokenTree::Punct(ref punct)),
-                        Some(proc_macro2::TokenTree::Ident(ref ident2)),
-                    ) if punct.as_char() == '%' && ident2 == &self.ident => {
-                        // have seen ident % N
-                        let (k, l, _) = self.get_tuple_diag(diag, i);
-
-                        ident =
-                            proc_macro2::Ident::new(&format!("{}{}_{}", ident, k, l), ident.span());
-
-                        *rest = peek.clone();
-                        *mutated = true;
-
-                        // we may need to also consume another ^
-                        match peek.next() {
-                            Some(proc_macro2::TokenTree::Punct(ref punct))
-                                if punct.as_char() == '%' =>
-                            {
-                                *rest = peek;
-                            }
-                            _ => {}
-                        }
-                    }
-                    (
-                        Mode::ReplaceIdent(i),
-                        _,
-                        Some(proc_macro2::TokenTree::Punct(ref punct)),
-                        Some(proc_macro2::TokenTree::Ident(ref ident2)),
-                    ) if punct.as_char() == '|' && ident2 == &self.ident => {
-                        // have seen ident | N
-                        let (k, l, _) = self.get_tuple_diag(diag, i);
-
-                        ident =
-                            proc_macro2::Ident::new(&format!("{}{}_{}", ident, k, l), ident.span());
-
-                        *rest = peek.clone();
-                        *mutated = true;
-
-                        // we may need to also consume another ^
-                        match peek.next() {
-                            Some(proc_macro2::TokenTree::Punct(ref punct))
-                                if punct.as_char() == '|' =>
-                            {
-                                *rest = peek;
-                            }
-                            _ => {}
-                        }
-                    }
+                    // ^ % |
                     _ => {}
                 }
 
@@ -367,17 +374,14 @@ impl SeqMacroInput {
                         *mutated = true;
                         *rest = peek;
 
-                        // TODO
-                        // extra.to_string().parse::<u64>().unwrap() → something better
-
-                        match range.to_string().parse::<u64>().unwrap() {
+                        match self.unwrap_literal(range) {
                             0 => {
                                 return self
-                                    .range_0(extra.to_string().parse::<u64>().unwrap(), 0)
+                                    .range_0(self.unwrap_literal(extra), 0)
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -387,11 +391,11 @@ impl SeqMacroInput {
                             }
                             1 => {
                                 return self
-                                    .range_1(extra.to_string().parse::<u64>().unwrap())
+                                    .range_1(self.unwrap_literal(extra))
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -401,11 +405,11 @@ impl SeqMacroInput {
                             }
                             2 => {
                                 return self
-                                    .range_2(extra.to_string().parse::<u64>().unwrap())
+                                    .range_2(self.unwrap_literal(extra))
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -415,11 +419,11 @@ impl SeqMacroInput {
                             }
                             3 => {
                                 return self
-                                    .range_3(extra.to_string().parse::<u64>().unwrap())
+                                    .range_3(self.unwrap_literal(extra))
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -429,11 +433,11 @@ impl SeqMacroInput {
                             }
                             4 => {
                                 return self
-                                    .range_4(extra.to_string().parse::<u64>().unwrap())
+                                    .range_4(self.unwrap_literal(extra))
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -443,11 +447,11 @@ impl SeqMacroInput {
                             }
                             5 => {
                                 return self
-                                    .range_5(extra.to_string().parse::<u64>().unwrap())
+                                    .range_5(self.unwrap_literal(extra))
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -457,9 +461,9 @@ impl SeqMacroInput {
                             }
                             6 => {
                                 let mode = if let Mode::ReplaceIdent(i) = modes.0 {
-                                    i
+                                    i + self.unwrap_literal(extra)
                                 } else {
-                                    0
+                                    self.unwrap_literal(extra)
                                 };
 
                                 return self
@@ -467,7 +471,7 @@ impl SeqMacroInput {
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -477,9 +481,9 @@ impl SeqMacroInput {
                             }
                             7 => {
                                 let mode = if let Mode::ReplaceIdent(i) = modes.0 {
-                                    i
+                                    i + self.unwrap_literal(extra)
                                 } else {
-                                    0
+                                    self.unwrap_literal(extra)
                                 };
 
                                 return self
@@ -487,7 +491,42 @@ impl SeqMacroInput {
                                     .map(|i| {
                                         self.expand_pass(
                                             rep.stream(),
-                                            (Mode::ReplaceIdent(i), modes.1),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            diag,
+                                            matrix,
+                                        )
+                                    })
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            8 => {
+                                let (from, to, _) = self.from_to_offset_exclusion();
+                                let mode = if let Mode::ReplaceIdent(i) = modes.0 {
+                                    3 * (to - from) + i + self.unwrap_literal(extra)
+                                } else {
+                                    3 * (to - from) + self.unwrap_literal(extra)
+                                };
+
+                                return self
+                                    .range_6(mode, mode + 2)
+                                    .map(|i| {
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            diag,
+                                            matrix,
+                                        )
+                                    })
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            9 => {
+                                return self
+                                    .range_7(self.unwrap_literal(extra))
+                                    .map(|i| {
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
                                             diag,
                                             matrix,
                                         )
@@ -503,12 +542,13 @@ impl SeqMacroInput {
                 proc_macro2::TokenTree::Punct(p.clone())
             }
             proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '~' => {
-                // is this ~(...)* ?
+                // is this ~(...)(...)n* ?
                 let mut peek = rest.clone();
-                match (peek.next(), peek.next(), peek.next()) {
+                match (peek.next(), peek.next(), peek.next(), peek.next()) {
                     (
                         Some(proc_macro2::TokenTree::Group(ref rep_if)),
                         Some(proc_macro2::TokenTree::Group(ref rep_else)),
+                        Some(proc_macro2::TokenTree::Literal(ref select_mode)),
                         Some(proc_macro2::TokenTree::Punct(ref star)),
                     ) if rep_if.delimiter() == proc_macro2::Delimiter::Parenthesis
                         && rep_else.delimiter() == proc_macro2::Delimiter::Parenthesis
@@ -518,105 +558,79 @@ impl SeqMacroInput {
                         *mutated = true;
                         *rest = peek;
 
-                        return self
-                            .range_0(0, 0)
-                            .filter_map(|i| {
-                                if i == self.exclusion.base10_parse::<u64>().unwrap()
-                                    && self.objection
-                                {
-                                    std::option::Option::Some(self.expand_pass(
-                                        rep_else.stream(),
-                                        (Mode::ReplaceIdent(i), modes.1),
-                                        diag,
-                                        matrix,
-                                    ))
+                        match self.unwrap_literal(select_mode) {
+                            0 => {
+                                return self
+                                    .range_0(0, 0)
+                                    .filter_map(|i| {
+                                        if i == self.exclusion.base10_parse::<u64>().unwrap()
+                                            && self.objection
+                                        {
+                                            std::option::Option::Some(self.expand_pass(
+                                                rep_else.stream(),
+                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                                diag,
+                                                matrix,
+                                            ))
+                                        } else {
+                                            std::option::Option::Some(self.expand_pass(
+                                                rep_if.stream(),
+                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                                diag,
+                                                matrix,
+                                            ))
+                                        }
+                                    })
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            1 => {
+                                let i = if let Mode::ReplaceIdent(i) = modes.0 {
+                                    i
                                 } else {
-                                    std::option::Option::Some(self.expand_pass(
-                                        rep_if.stream(),
-                                        (Mode::ReplaceIdent(i), modes.1),
-                                        diag,
-                                        matrix,
-                                    ))
-                                }
-                            })
-                            .map(|(ts, _)| ts)
-                            .collect();
-                    }
-                    _ => {}
-                }
-                proc_macro2::TokenTree::Punct(p.clone())
-            }
-            proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '^' => {
-                let mut peek = rest.clone();
-                match (peek.next(), peek.next(), peek.next()) {
-                    // is this ^(...)(...)* ?
-                    (
-                        Some(proc_macro2::TokenTree::Group(ref rep_if)),
-                        Some(proc_macro2::TokenTree::Group(ref rep_else)),
-                        Some(proc_macro2::TokenTree::Punct(ref star)),
-                    ) if rep_if.delimiter() == proc_macro2::Delimiter::Parenthesis
-                        && rep_else.delimiter() == proc_macro2::Delimiter::Parenthesis
-                        && star.as_char() == '*' =>
-                    {
-                        // yes! expand ... for each sequence in the range
-                        *mutated = true;
-                        *rest = peek;
+                                    0
+                                };
 
-                        let i = if let Mode::ReplaceIdent(i) = modes.0 {
-                            i
-                        } else {
-                            0
-                        };
+                                return self
+                                    .range_0(0, 0)
+                                    .filter_map(|j| {
+                                        let (k, _, _) = self.get_tuple_matrix(matrix, i, j);
 
-                        return self
-                            .range_0(0, 0)
-                            .filter_map(|j| {
-                                let (k, _, _) = self.get_tuple_matrix(matrix, i, j);
-
-                                if k != i {
-                                    std::option::Option::Some(self.expand_pass(
-                                        rep_else.stream(),
-                                        (modes.0, Mode::ReplaceIdent(j)),
-                                        diag,
-                                        matrix,
-                                    ))
-                                } else {
-                                    std::option::Option::Some(self.expand_pass(
-                                        rep_if.stream(),
-                                        (modes.0, Mode::ReplaceIdent(j)),
-                                        diag,
-                                        matrix,
-                                    ))
-                                }
-                            })
-                            .map(|(ts, _)| ts)
-                            .collect();
-                    }
-                    // is this ^(...)(...)~ ?
-                    (
-                        Some(proc_macro2::TokenTree::Group(ref rep_if)),
-                        Some(proc_macro2::TokenTree::Group(ref rep_else)),
-                        Some(proc_macro2::TokenTree::Punct(ref star)),
-                    ) if rep_if.delimiter() == proc_macro2::Delimiter::Parenthesis
-                        && rep_else.delimiter() == proc_macro2::Delimiter::Parenthesis
-                        && star.as_char() == '~' =>
-                    {
-                        // yes! expand ... for each sequence in the range
-                        *mutated = true;
-                        *rest = peek;
-
-                        return self
-                            .range_0(0, 1)
-                            .map(|i| {
-                                self.expand_pass(
-                                    rep_if.stream(),
-                                    (Mode::ReplaceIdent(i), modes.1),
-                                    diag,
-                                    matrix,
-                                )
-                            })
-                            .map(|(ts, _)| ts)
-                            .collect();
+                                        if k != i {
+                                            std::option::Option::Some(self.expand_pass(
+                                                rep_else.stream(),
+                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                                diag,
+                                                matrix,
+                                            ))
+                                        } else {
+                                            std::option::Option::Some(self.expand_pass(
+                                                rep_if.stream(),
+                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                                diag,
+                                                matrix,
+                                            ))
+                                        }
+                                    })
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            2 => {
+                                return self
+                                    .range_0(0, 1)
+                                    .map(|i| {
+                                        self.expand_pass(
+                                            rep_if.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            diag,
+                                            matrix,
+                                        )
+                                    })
+                                    .map(|(ts, _)| ts)
+                                    .collect();
+                            }
+                            _ => {}
+                        }
                     }
                     _ => {}
                 }
@@ -630,7 +644,7 @@ impl SeqMacroInput {
     fn expand_pass(
         &self,
         stream: proc_macro2::TokenStream,
-        modes: (Mode, Mode),
+        modes: (Mode, Mode, Mode),
         diag: &[(u64, u64, u64)],
         matrix: &[Vec<(u64, u64, u64)>],
     ) -> (proc_macro2::TokenStream, bool) {
@@ -651,7 +665,11 @@ impl SeqMacroInput {
     ) -> proc_macro2::TokenStream {
         let (out, mutated) = self.expand_pass(
             stream.clone(),
-            (Mode::ReplaceSequence, Mode::ReplaceSequence),
+            (
+                Mode::ReplaceSequence,
+                Mode::ReplaceSequence,
+                Mode::ReplaceSequence,
+            ),
             diag,
             matrix,
         );
@@ -663,7 +681,11 @@ impl SeqMacroInput {
             .map(|i| {
                 self.expand_pass(
                     stream.clone(),
-                    (Mode::ReplaceIdent(i), Mode::ReplaceSequence),
+                    (
+                        Mode::ReplaceIdent(i),
+                        Mode::ReplaceSequence,
+                        Mode::ReplaceSequence,
+                    ),
                     diag,
                     matrix,
                 )

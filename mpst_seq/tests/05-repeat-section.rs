@@ -34,7 +34,7 @@ seq!(N in 0..16 {
     #[derive(Copy, Clone, PartialEq, Debug)]
     enum Interrupt {
         #(
-            Irq#N,
+            Irq#N:0,
         )0:0
     }
 });
