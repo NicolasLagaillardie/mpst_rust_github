@@ -1,6 +1,4 @@
 // Test for parametrisation on the number of roles
-extern crate crossbeam_channel;
-extern crate either;
 extern crate mpstthree;
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;

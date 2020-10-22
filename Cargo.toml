@@ -32,3 +32,4 @@ harness = false
 
 [badges]
 travis-ci = { repository = "NicolasLagaillardie/mpst_rust_github", branch = "master" }
+coveralls = { repository = "NicolasLagaillardie/mpst_rust_github", branch = "master", service = "github" }

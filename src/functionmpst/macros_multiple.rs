@@ -266,10 +266,10 @@ macro_rules! create_choose_type_multi {
                 either::Either<
                     <
                         $sessionmpst_name<#(S#N:0,)0:0 R0, N0
-                    > as Session>::Dual,
+                    > as mpstthree::binary::Session>::Dual,
                     <
                         $sessionmpst_name<#(S#N:0,)3:0 R1, N0
-                    > as Session>::Dual
+                    > as mpstthree::binary::Session>::Dual
                     >,
                 End
             >;
@@ -300,7 +300,7 @@ macro_rules! create_choose_mpst_session_multi {
                             ~( // j in 0..K
                                 S~N:3, // S(diff * (diff + 1) / 2 + K + i + j) (with Dual if needed) Done
                             )(
-                                <S~N:3 as Session>::Dual, Done
+                                <S~N:3 as mpstthree::binary::Session>::Dual, Done
                             )1*
                             ~( // j in  0..3 Done
                                 R~N:4, // R(3 * (i - 1) + 1 + j) Done
