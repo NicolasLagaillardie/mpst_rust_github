@@ -3,7 +3,7 @@ use mpst_seq::seq;
 seq!(N in 0..6 ! 3 {
     #[derive(Copy, Clone, PartialEq, Debug)]
     enum Interrupt {
-        ~(
+        %(
             Ira#N:0,
         )(
             Irb#N:0,
@@ -47,21 +47,21 @@ seq!(N in 0..6 ! 3 {
 seq!(N in 1..5 {
     #[derive(Copy, Clone, PartialEq, Debug)]
     enum Interrupt2 {
-        ~(
+        %(
             Ir2a#N:0,
             ~(
                 Ir2b~N:0,
             )(
                 Ir2c~N:1,
-            )1*
+            )0*
         )(
             Ir2d#N:0,
             ~(
                 Ir2e~N:0,
             )(
                 Ir2f~N:1,
-            )1*
-        )2*
+            )0*
+        )1*
     }
 });
 

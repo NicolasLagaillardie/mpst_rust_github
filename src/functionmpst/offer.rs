@@ -287,19 +287,3 @@ macro_rules! offer_mpst_c_to_a {
         })()
     };
 }
-
-/// Get a mpst offer
-#[macro_export]
-macro_rules! offer_mpst {
-    ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:block, )* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = $recv_mpst($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
-}
