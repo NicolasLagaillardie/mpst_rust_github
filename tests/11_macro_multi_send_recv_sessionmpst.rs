@@ -1,5 +1,6 @@
 // Test for parametrisation on the number of roles
 extern crate mpstthree;
+
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
