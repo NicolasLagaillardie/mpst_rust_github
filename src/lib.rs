@@ -7,6 +7,7 @@ use std::thread::{spawn, JoinHandle};
 pub mod binary;
 pub mod checking;
 pub mod functionmpst;
+pub mod macros;
 pub mod role;
 pub mod sessionmpst;
 
