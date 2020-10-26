@@ -22,7 +22,7 @@ crossbeam-channel = "0.4.2"
 either = "1.5.3"
 rand = "0.7"
 dot = "0.1.4"
-mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main", version = "0.0.1" }
+mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main"}
 # mpst-seq = {path = "../mpst-seq"}
 
 [dev-dependencies]
