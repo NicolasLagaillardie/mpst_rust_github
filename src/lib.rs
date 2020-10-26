@@ -53,12 +53,12 @@ where
     S0: binary::Session + 'static,
     S1: binary::Session + 'static,
     S2: binary::Session + 'static,
+    R0: role::Role + 'static,
     R1: role::Role + 'static,
     R2: role::Role + 'static,
-    R0: role::Role + 'static,
+    N0: role::Role + 'static,
     N1: role::Role + 'static,
     N2: role::Role + 'static,
-    N0: role::Role + 'static,
     F0: FnOnce(sessionmpst::SessionMpst<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,

@@ -44,11 +44,14 @@ macro_rules! fork_mpst_multi {
             )
             where
                 #(
-                    S#K:0: mpstthree::binary::Session + 'static,
                     R#K:0: mpstthree::role::Role + 'static,
+                )0:0
+                #(
                     N#K:0: mpstthree::role::Role + 'static,
                 )0:0
-
+                #(
+                    S#K:0: mpstthree::binary::Session + 'static,
+                )14:0
                 #( // i in 1..K
                     F#K:0: FnOnce($struct_name<
                         ~( // j in 0..K
@@ -67,6 +70,9 @@ macro_rules! fork_mpst_multi {
 
                 #(
                     let (role_#K:0, _) = R#K:0::new();
+                )0:0
+
+                #(
                     let (name_#K:0, _) = N#K:0::new();
                 )0:0
 

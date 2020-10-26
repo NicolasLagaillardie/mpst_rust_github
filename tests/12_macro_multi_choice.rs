@@ -452,11 +452,11 @@ fn test_new_choice_close() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {
-            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
+            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
 
             assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
+            assert!(thread_pawn.is_ok());
+            assert!(thread_d.is_ok());
         }
 
         Ok(())
