@@ -5,7 +5,7 @@
 macro_rules! fork_simple_multi {
     ($func_name: ident, $struct_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(K in 1..$nsessions {
-            fn fork_simple_multi<#(S#K:0,)0:0 R, N, P>(p: P, s: $struct_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
+            fn $func_name<#(S#K:0,)0:0 R, N, P>(p: P, s: $struct_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
             where
                 #(
                     S#K:0: mpstthree::binary::Session + 'static,
@@ -33,7 +33,7 @@ macro_rules! fork_simple_multi {
 macro_rules! fork_mpst_multi {
     ($func_name: ident, $fork_function: ident, $struct_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(K in 1..=$nsessions {
-            fn $func_name<#(S#K:0,)0:0 #(R#K:0,)0:0 #(N#K:0,)0:0 #(F#K:0,)0:0>(
+            fn $func_name<#(S#K:0,)14:0 #(R#K:0,)0:0 #(N#K:0,)0:0 #(F#K:0,)0:0>(
                 #(
                     f#K:0: F#K:0,
                 )0:0
@@ -49,58 +49,38 @@ macro_rules! fork_mpst_multi {
                     N#K:0: mpstthree::role::Role + 'static,
                 )0:0
 
-                // ^(
-                //     F#N:0: FnOnce($struct_name<^(S+N)(<S+N as mpstthree::binary::Session>::Dual)* R1, N1>) -> Result<(), Box<dyn std::error::Error>>
-                //     + std::marker::Send
-                //     + 'static,
-                // )(
-                //     F#N:0: FnOnce($struct_name<^(S+N)(<S+N as mpstthree::binary::Session>::Dual)* R1, N1>) -> Result<(), Box<dyn std::error::Error>>
-                //     + std::marker::Send
-                //     + 'static,
-                // )~
-
-                F1: FnOnce($struct_name<S1, S2, R1, N1>) -> Result<(), Box<dyn std::error::Error>>
+                #( // i in 1..K
+                    F#K:0: FnOnce($struct_name<
+                        ~( // j in 0..K
+                            S~K:6, // S(i + j) (with Dual if needed)
+                        )(
+                            <S~K:6 as mpstthree::binary::Session>::Dual,
+                        )4*
+                        R#K:0, N#K:0>) -> Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
                     + 'static,
-                F2: FnOnce($struct_name<<S1 as mpstthree::binary::Session>::Dual, S3, R2, N2>) -> Result<(), Box<dyn std::error::Error>>
-                    + std::marker::Send
-                    + 'static,
-                F3: FnOnce($struct_name<<S2 as mpstthree::binary::Session>::Dual, <S3 as mpstthree::binary::Session>::Dual, R3, N3>) -> Result<(), Box<dyn std::error::Error>>
-                    + std::marker::Send
-                    + 'static,
+                )0:0
             {
-
-                // #(
-                //     let ( channel|N, channel%N ) = S#N:0::new();
-                // )0:0
-
-                let (channel1_2, channel2_1) = S1::new();
-                let (channel1_3, channel3_1) = S2::new();
-                let (channel2_3, channel3_2) = S3::new();
+                #( // i in 1..(diff * (diff + 1))
+                    let (channel_#K:12, channel_#K:13) = S#K:0::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
+                )14:0
 
                 #(
                     let (role_#K:0, _) = R#K:0::new();
                     let (name_#K:0, _) = N#K:0::new();
                 )0:0
 
-                let sessionmpst_1 = $struct_name {
-                    session1: channel1_2,
-                    session2: channel1_3,
-                    stack: role_1,
-                    name: name_1,
-                };
-                let sessionmpst_2 = $struct_name {
-                    session1: channel2_1,
-                    session2: channel2_3,
-                    stack: role_2,
-                    name: name_2,
-                };
-                let sessionmpst_3 = $struct_name {
-                    session1: channel3_1,
-                    session2: channel3_2,
-                    stack: role_3,
-                    name: name_3,
-                };
+                #(
+                    let sessionmpst_#K:0 = $struct_name {
+                        ~(
+                            session#K:1 : channel_~K:5,
+                        )(
+                            session#K:1 : channel_~K:5,
+                        )4*
+                        stack: role_#K:0,
+                        name: name_#K:0,
+                    };
+                )0:0
 
                 #(
                     let thread_#K:0 = $fork_function(f#K:0, sessionmpst_#K:0);
