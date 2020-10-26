@@ -93,8 +93,7 @@ create_choose_mpst_session_multi_left!(
     next_d_to_all,
     RoleD,
     SessionMpst,
-    3,
-    2
+    3
 );
 
 create_choose_mpst_session_multi_right!(
@@ -104,8 +103,7 @@ create_choose_mpst_session_multi_right!(
     next_d_to_all,
     RoleD,
     SessionMpst,
-    3,
-    2
+    3
 );
 
 fork_simple_multi!(fork_simple, SessionMpst, 3);

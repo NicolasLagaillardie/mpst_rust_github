@@ -24,8 +24,8 @@ macro_rules! create_choose_type_multi {
 
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_left {
-    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
+    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions {
             fn $func_name<'a, #(S#N:0,)10:0 #(R#N:0,)11:0>(
                 s: $sessionmpst_name<
                     #( // i in 1..K
@@ -76,9 +76,9 @@ macro_rules! create_choose_mpst_session_multi_left {
                 )4:0
 
                 #( // i in 1..K
-                    let (_, role_#N:0) = R#N:5::new();
+                    let (_, stack_#N:0) = R#N:5::new();
                 )0:0
-                let (role_^N:2, _) = R^N:0::new();
+                let (stack_^N:2, _) = R^N:0::new();
 
                 #( // i in 1..K
                     let (name_#N:0, _) = <R#N:6 as mpstthree::role::Role>::Dual::new();
@@ -92,7 +92,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                             )(
                                 session#N:1 : channel_~N:5,
                             )0*
-                            stack: role_#N:0,
+                            stack: stack_#N:0,
                             name: name_#N:0,
                         };
                 )0:0
@@ -116,7 +116,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                     #(
                         session#N:0: channel_#N:7 ,
                     )0:0
-                    stack: role_^N:2,
+                    stack: stack_^N:2,
                     name: name_^N:2,
                 }
             }
@@ -125,8 +125,8 @@ macro_rules! create_choose_mpst_session_multi_left {
 }
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_right {
-    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
+    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions {
             fn $func_name<'a, #(S#N:0,)10:0 #(R#N:0,)11:0>(
                 s: $sessionmpst_name<
                     #( // i in 1..K
@@ -177,9 +177,9 @@ macro_rules! create_choose_mpst_session_multi_right {
                 )4:0
 
                 #( // i in 1..K
-                    let (_, role_#N:0) = R#N:11::new();
+                    let (_, stack_#N:0) = R#N:11::new();
                 )0:0
-                let (role_^N:2, _) = R^N:1::new();
+                let (stack_^N:2, _) = R^N:1::new();
 
                 #( // i in 1..K
                     let (name_#N:0, _) = <R#N:6 as mpstthree::role::Role>::Dual::new();
@@ -193,7 +193,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                             )(
                                 session#N:1 : channel_~N:5,
                             )0*
-                            stack: role_#N:0,
+                            stack: stack_#N:0,
                             name: name_#N:0,
                         };
                 )0:0
@@ -217,7 +217,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                     #(
                         session#N:0: channel_#N:7 ,
                     )0:0
-                    stack: role_^N:2,
+                    stack: stack_^N:2,
                     name: name_^N:2,
                 }
             }
@@ -225,47 +225,13 @@ macro_rules! create_choose_mpst_session_multi_right {
     }
 }
 
-/// Choose, for C, between many different sessions wrapped in an `enum`
+/// Choose between many different sessions wrapped in an `enum`
 /// TODO
 #[macro_export]
 macro_rules! choose_mpst_X_to_all {
-    ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as Session>::new();
-        let (session_bc, session_cb) = <_ as Session>::new();
-        let (session_ab, session_ba) = <_ as Session>::new();
-        let (queue_a, _) = <_ as Role>::new();
-        let (queue_b, _) = <_ as Role>::new();
-        let (queue_c, _) = <_ as Role>::new();
-        let (name_a, _) = RoleA::<RoleEnd>::new();
-        let (name_b, _) = RoleB::<RoleEnd>::new();
-        let (name_c, _) = RoleC::<RoleEnd>::new();
+    ($session:expr, $($label:path,)* $($fn_send:ident,)* $($receiver:ident,)* $sender:ident) => {
+        mpst_seq::seq!(N in 1..$nsessions : $($label:path,)* : $($fn_send:ident,)* : $($receiver:ident,)*{
 
-        let s = send_mpst_c_to_a(
-            $labelone(SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                stack: queue_a,
-                name: name_a,
-            }),
-            $session,
-        );
-        let s = send_mpst_c_to_b(
-            $labeltwo(SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                stack: queue_b,
-                name: name_b,
-            }),
-            s,
-        );
-
-        cancel(s);
-
-        SessionMpst {
-            session1: session_ca,
-            session2: session_cb,
-            stack: queue_c,
-            name: name_c,
-        }
-    }};
+        });
+    }
 }
