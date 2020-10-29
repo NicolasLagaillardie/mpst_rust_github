@@ -230,52 +230,51 @@ macro_rules! create_choose_mpst_session_multi_right {
 #[macro_export]
 macro_rules! choose_mpst_X_to_all {
     ($session:expr, $($fn_send:ident$args:tt,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal) => {
-        // ($session:expr, $sessionmpst_name:ident, $nsessions:literal, $($label:path,)+) => {
-        mpst_seq::seq!(N in 1..$nsessions : ($($fn_send,)+) : ($($label,)+) : ($($receiver,)+) {{
-
-            // let (session_1_3, session_3_1) = <_ as Session>::new();
-            // let (session_2_3, session_3_2) = <_ as Session>::new();
-            // let (session_1_2, session_2_1) = <_ as Session>::new();
+        mpst_seq::seq!(N in 1..$nsessions ! 1 : ($($fn_send,)+) : ($($label,)+) : ($($receiver,)+) {{
 
             #( // i in 1..(diff * (diff + 1))
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
             )4:0
 
-            // let (role_1, _) = <_ as Role>::new();
-            // let (role_2, _) = <_ as Role>::new();
-            // let (role_3, _) = <_ as Role>::new();
-
             #( // i in 1..K
                 let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
             )15:0
 
-            // let (name_1, _) = <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-            // let (name_2, _) = <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-            
             #( // i in 1..K
-                let (name_#N:0, _) = <_ as mpstthree::role::Role>::new();
+                let (name_#N:0, _) = useless#N:16::<mpstthree::role::end::RoleEnd>::new();
             )0:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-            // let s = $fn_send_1(
-            //     $label_1(mpstthree::sessionmpst::SessionMpst {
-            //         session1: session_1_2,
-            //         session2: session_1_3,
-            //         stack: role_1,
-            //         name: name_1,
-            //     }),
-            //     $session,
-            // );
-            // let s = $fn_send_2(
-            //     $label_2(mpstthree::sessionmpst::SessionMpst {
-            //         session1: session_2_1,
-            //         session2: session_2_3,
-            //         stack: role_2,
-            //         name: name_2,
-            //     }),
-            //     s,
-            // );
+
+
+            %( // i in 1..K
+                let s = useless#N:14(
+                    useless#N:15(mpstthree::sessionmpst::SessionMpst {
+                        ~(
+                            session#N:1 : channel_~N:5,
+                        )(
+                            session#N:1 : channel_~N:5,
+                        )0*
+                        stack: stack_#N:0,
+                        name: name_#N:0,
+                    }),
+                    s,
+                );
+            )( // i in 1..K
+                let s = useless#N:14(
+                    useless#N:15(mpstthree::sessionmpst::SessionMpst {
+                        ~(
+                            session#N:1 : channel_~N:5,
+                        )(
+                            session#N:1 : channel_~N:5,
+                        )0*
+                        stack: stack_#N:0,
+                        name: name_#N:0,
+                    }),
+                    $session,
+                );
+            )0*
 
             mpstthree::binary::cancel(s);
 
