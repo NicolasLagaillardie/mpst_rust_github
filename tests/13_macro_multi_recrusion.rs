@@ -164,8 +164,7 @@ type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 /// Creating the MP sessions
 /// For C
 
-type EndpointCRecurs<N> =
-    SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs, NameD>;
+type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs, NameD>;
 type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull, NameD>;
 
 /// For A
