@@ -65,7 +65,7 @@ create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3, 2);
 create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3, 2);
 
 create_offer_mpst_session_multi!(
-    offer_mpst_session_a_to_c,
+    offer_mpst_session_a_to_d,
     OfferMpstMultiThree,
     RoleAlltoD,
     recv_mpst_a_all_to_d,
@@ -76,7 +76,7 @@ create_offer_mpst_session_multi!(
 );
 
 create_offer_mpst_session_multi!(
-    offer_mpst_session_b_to_c,
+    offer_mpst_session_b_to_d,
     OfferMpstMultiThree,
     RoleAlltoD,
     recv_mpst_b_all_to_d,
@@ -202,7 +202,7 @@ type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_b_to_c(
+    offer_mpst_session_b_to_d(
         s,
         |s: EndpointBVideo<i32>| {
             let (request, s) = recv_mpst_b_to_a(s)?;
@@ -224,7 +224,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_a_to_d(s)?;
     let s = send_mpst_a_to_d(id + 1, s);
 
-    offer_mpst_session_a_to_c(
+    offer_mpst_session_a_to_d(
         s,
         |s: EndpointAVideo<i32>| {
             let (request, s) = recv_mpst_a_to_d(s)?;

@@ -229,28 +229,26 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// TODO
 #[macro_export]
 macro_rules! choose_mpst_X_to_all {
-    ($session:expr, $($fn_send:ident$args:tt,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! 1 : ($($fn_send,)+) : ($($label,)+) : ($($receiver,)+) {{
+    ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! 1 : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
 
-            #( // i in 1..(diff * (diff + 1))
-                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
+            #(
+                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
             )4:0
 
-            #( // i in 1..K
+            #(
                 let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
             )15:0
 
-            #( // i in 1..K
+            #(
                 let (name_#N:0, _) = useless#N:16::<mpstthree::role::end::RoleEnd>::new();
             )0:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-
-
-            %( // i in 1..K
+            %(
                 let s = useless#N:14(
-                    useless#N:15(mpstthree::sessionmpst::SessionMpst {
+                    useless#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:5,
                         )(
@@ -261,9 +259,9 @@ macro_rules! choose_mpst_X_to_all {
                     }),
                     s,
                 );
-            )( // i in 1..K
+            )(
                 let s = useless#N:14(
-                    useless#N:15(mpstthree::sessionmpst::SessionMpst {
+                    useless#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:5,
                         )(
