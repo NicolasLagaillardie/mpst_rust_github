@@ -54,13 +54,13 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
 >;
 
 macro_rules! choose_mpst_a {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+    ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
         let (session_1_2, session_2_1) = <$session_1>::new();
         let (session_1_3, session_3_1) = <$session_2>::new();
         let (session_3_2, session_2_3) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
+        let (_, stack_1) = <$stack_1>::new();
+        let (_, stack_2) = <$stack_2>::new();
+        let (stack_3, _) = <$stack_3>::new();
         let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
@@ -68,14 +68,14 @@ macro_rules! choose_mpst_a {
         let choice_1 = SessionMpst {
             session1: session_2_1,
             session2: session_2_3,
-            stack: role_1,
+            stack: stack_1,
             name: name_1,
         };
 
         let choice_2 = SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
-            stack: role_2,
+            stack: stack_2,
             name: name_2,
         };
 
@@ -95,20 +95,20 @@ macro_rules! choose_mpst_a {
         SessionMpst {
             session1: session_1_2,
             session2: session_1_3,
-            stack: role_3,
+            stack: stack_3,
             name: name_3,
         }
     }};
 }
 
 macro_rules! choose_mpst_b {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+    ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
         let (session_2_1, session_1_2) = <$session_1>::new();
         let (session_2_3, session_3_2) = <$session_2>::new();
         let (session_3_1, session_1_3) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
+        let (_, stack_1) = <$stack_1>::new();
+        let (_, stack_2) = <$stack_2>::new();
+        let (stack_3, _) = <$stack_3>::new();
         let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
@@ -116,14 +116,14 @@ macro_rules! choose_mpst_b {
         let choice_1 = SessionMpst {
             session1: session_1_2,
             session2: session_1_3,
-            stack: role_1,
+            stack: stack_1,
             name: name_1,
         };
 
         let choice_2 = SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
-            stack: role_2,
+            stack: stack_2,
             name: name_2,
         };
 
@@ -143,20 +143,20 @@ macro_rules! choose_mpst_b {
         SessionMpst {
             session1: session_2_1,
             session2: session_2_3,
-            stack: role_3,
+            stack: stack_3,
             name: name_3,
         }
     }};
 }
 
 macro_rules! choose_mpst_c {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $role_1:ty, $role_2:ty, $role_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+    ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
         let (session_3_1, session_1_3) = <$session_1>::new();
         let (session_3_2, session_2_3) = <$session_2>::new();
         let (session_2_1, session_1_2) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
+        let (_, stack_1) = <$stack_1>::new();
+        let (_, stack_2) = <$stack_2>::new();
+        let (stack_3, _) = <$stack_3>::new();
         let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
@@ -164,14 +164,14 @@ macro_rules! choose_mpst_c {
         let choice_1 = SessionMpst {
             session1: session_1_2,
             session2: session_1_3,
-            stack: role_1,
+            stack: stack_1,
             name: name_1,
         };
 
         let choice_2 = SessionMpst {
             session1: session_2_1,
             session2: session_2_3,
-            stack: role_2,
+            stack: stack_2,
             name: name_2,
         };
 
@@ -191,7 +191,7 @@ macro_rules! choose_mpst_c {
         SessionMpst {
             session1: session_3_1,
             session2: session_3_2,
-            stack: role_3,
+            stack: stack_3,
             name: name_3,
         }
     }};
@@ -514,41 +514,41 @@ where
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as Session>::new();
-        let (session_bc, session_cb) = <_ as Session>::new();
-        let (session_ab, session_ba) = <_ as Session>::new();
-        let (queue_a, _) = <_ as Role>::new();
-        let (queue_b, _) = <_ as Role>::new();
-        let (queue_c, _) = <_ as Role>::new();
-        let (name_a, _) = RoleA::<RoleEnd>::new();
-        let (name_b, _) = RoleB::<RoleEnd>::new();
-        let (name_c, _) = RoleC::<RoleEnd>::new();
+        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
+        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
+        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
+        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
+        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
+        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
+        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
+        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
+        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
 
-        let s = send_mpst_a_to_b(
-            $labelone(SessionMpst {
+        let s = mpstthree::functionmpst::send::send_mpst_a_to_b(
+            $labelone(mpstthree::sessionmpst::SessionMpst {
                 session1: session_ba,
                 session2: session_bc,
-                stack: queue_b,
+                stack: stack_b,
                 name: name_b,
             }),
             $session,
         );
-        let s = send_mpst_a_to_c(
-            $labeltwo(SessionMpst {
+        let s = mpstthree::functionmpst::send::send_mpst_a_to_c(
+            $labeltwo(mpstthree::sessionmpst::SessionMpst {
                 session1: session_ca,
                 session2: session_cb,
-                stack: queue_c,
+                stack: stack_c,
                 name: name_c,
             }),
             s,
         );
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_ab,
             session2: session_ac,
-            stack: queue_a,
+            stack: stack_a,
             name: name_a,
         }
     }};
@@ -558,41 +558,41 @@ macro_rules! choose_mpst_a_to_all {
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as Session>::new();
-        let (session_bc, session_cb) = <_ as Session>::new();
-        let (session_ab, session_ba) = <_ as Session>::new();
-        let (queue_a, _) = <_ as Role>::new();
-        let (queue_b, _) = <_ as Role>::new();
-        let (queue_c, _) = <_ as Role>::new();
-        let (name_a, _) = RoleA::<RoleEnd>::new();
-        let (name_b, _) = RoleB::<RoleEnd>::new();
-        let (name_c, _) = RoleC::<RoleEnd>::new();
+        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
+        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
+        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
+        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
+        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
+        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
+        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
+        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
+        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
 
-        let s = send_mpst_b_to_a(
-            $labelone(SessionMpst {
+        let s = mpstthree::functionmpst::send::send_mpst_b_to_a(
+            $labelone(mpstthree::sessionmpst::SessionMpst {
                 session1: session_ab,
                 session2: session_ac,
-                stack: queue_a,
+                stack: stack_a,
                 name: name_a,
             }),
             $session,
         );
-        let s = send_mpst_b_to_c(
-            $labeltwo(SessionMpst {
+        let s = mpstthree::functionmpst::send::send_mpst_b_to_c(
+            $labeltwo(mpstthree::sessionmpst::SessionMpst {
                 session1: session_ca,
                 session2: session_cb,
-                stack: queue_c,
+                stack: stack_c,
                 name: name_c,
             }),
             s,
         );
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_ba,
             session2: session_bc,
-            stack: queue_b,
+            stack: stack_b,
             name: name_b,
         }
     }};
@@ -602,41 +602,41 @@ macro_rules! choose_mpst_b_to_all {
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as Session>::new();
-        let (session_bc, session_cb) = <_ as Session>::new();
-        let (session_ab, session_ba) = <_ as Session>::new();
-        let (queue_a, _) = <_ as Role>::new();
-        let (queue_b, _) = <_ as Role>::new();
-        let (queue_c, _) = <_ as Role>::new();
-        let (name_a, _) = RoleA::<RoleEnd>::new();
-        let (name_b, _) = RoleB::<RoleEnd>::new();
-        let (name_c, _) = RoleC::<RoleEnd>::new();
+        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
+        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
+        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
+        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
+        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
+        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
+        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
+        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
+        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
 
-        let s = send_mpst_c_to_a(
-            $labelone(SessionMpst {
+        let s = mpstthree::functionmpst::send::send_mpst_c_to_a(
+            $labelone(mpstthree::sessionmpst::SessionMpst {
                 session1: session_ab,
                 session2: session_ac,
-                stack: queue_a,
+                stack: stack_a,
                 name: name_a,
             }),
             $session,
         );
-        let s = send_mpst_c_to_b(
-            $labeltwo(SessionMpst {
+        let s = mpstthree::functionmpst::send::send_mpst_c_to_b(
+            $labeltwo(mpstthree::sessionmpst::SessionMpst {
                 session1: session_ba,
                 session2: session_bc,
-                stack: queue_b,
+                stack: stack_b,
                 name: name_b,
             }),
             s,
         );
 
-        cancel(s);
+        mpstthree::binary::cancel(s);
 
-        SessionMpst {
+        mpstthree::sessionmpst::SessionMpst {
             session1: session_ca,
             session2: session_cb,
-            stack: queue_c,
+            stack: stack_c,
             name: name_c,
         }
     }};

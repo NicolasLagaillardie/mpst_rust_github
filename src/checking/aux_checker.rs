@@ -3,10 +3,10 @@ use std::collections::HashMap;
 use std::error::Error;
 
 #[doc(hidden)]
-pub fn checker_aux(
+pub fn checker_aux<S: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     let head_session1 = get_head(&sessionmpst[0]);
@@ -64,12 +64,12 @@ pub fn checker_aux(
 }
 
 #[doc(hidden)]
-fn match_recv_from_all(
+fn match_recv_from_all<S: ::std::hash::BuildHasher>(
     sender: &str,
     receivers: [&str; 2],
     sessionmpst: [&str; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
@@ -110,13 +110,13 @@ fn match_recv_from_all(
 }
 
 #[doc(hidden)]
-fn match_headers(
+fn match_headers<S: ::std::hash::BuildHasher>(
     roles_and_sessions: [&str; 4], // role 1, session 1, role 2, session 2
     sessionmpst: [&str; 4],
     involved: [String; 2],
     index: [usize; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     // println!("head_sessions match_headers: {:?}", &head_sessions);
@@ -162,13 +162,13 @@ fn match_headers(
 }
 
 #[doc(hidden)]
-fn match_full_types(
+fn match_full_types<S: ::std::hash::BuildHasher>(
     head_session: &str,
     sessionmpst: [&str; 4],
     involved: [String; 2],
     payload: &str,
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst match_full_types: {:?}", &sessionmpst);
@@ -432,12 +432,12 @@ fn switch_role(s: &str, a: &str, b: &str) -> String {
 }
 
 #[doc(hidden)]
-fn send_type(
+fn send_type<S: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     involved: [String; 2],
     payload: &str,
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
@@ -459,12 +459,12 @@ fn send_type(
 }
 
 #[doc(hidden)]
-fn recv_type(
+fn recv_type<S: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     involved: [String; 2],
     payload: &str,
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
@@ -503,10 +503,10 @@ fn recv_type(
 }
 
 #[doc(hidden)]
-fn recurs_type(
+fn recurs_type<S: ::std::hash::BuildHasher>(
     payload: &str,
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
@@ -551,11 +551,11 @@ fn recurs_type(
 }
 
 #[doc(hidden)]
-fn all_type(
+fn all_type<S: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     index: [usize; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>>,
+    hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst all_type: {:?}", &sessionmpst);

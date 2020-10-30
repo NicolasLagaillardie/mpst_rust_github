@@ -1,3 +1,5 @@
+extern crate mpst_seq;
+
 use crate::binary::Session;
 use crate::role::Role;
 
@@ -66,87 +68,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
             S1::tail_str(),
             S2::tail_str(),
             R::tail_str(),
-            N::head_str()
+            N::tail_str()
         )
     }
-}
-
-#[macro_export]
-macro_rules! create_sessionmpst {
-    ($struct_name:ident, $($session_name: ident, $session_type: ident, )*) => {
-        ////////////////////////////////////////////
-        /// The SessionMpst
-
-        #[must_use]
-        #[derive(Debug)]
-        struct $struct_name<$($session_type: Session, )* R: mpstthree::role::Role, N: mpstthree::role::Role> {
-            $(
-                pub $session_name: $session_type,
-            )*
-            pub stack: R,
-            pub name: N,
-        }
-
-        ////////////////////////////////////////////
-        /// The SessionMpst functions
-
-        #[doc(hidden)]
-        impl<$($session_type: Session, )* R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::Session for $struct_name<$($session_type, )* R, N> {
-            type Dual =
-                $struct_name<$(<$session_type as Session>::Dual, )* <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual>;
-
-            #[doc(hidden)]
-            fn new() -> (Self, Self::Dual) {
-
-                let (role_one, role_two) = R::new();
-                let (name_one, name_two) = N::new();
-
-                // Issue with no link between the two new SessionMpst
-                (
-                    $struct_name {
-                        $(
-                            $session_name: {
-                                let (sender, _) = $session_type::new();
-                                sender
-                            },
-                        )*
-                        stack: role_one,
-                        name: name_one,
-                    },
-                    $struct_name {
-                        $(
-                            $session_name: {
-                                let (_, receiver) = $session_type::new();
-                                receiver
-                            },
-                        )*
-                        stack: role_two,
-                        name: name_two,
-                    }
-                )
-            }
-
-            #[doc(hidden)]
-            fn head_str() -> String {
-                format!(
-                    "{} + {} + {} + {}",
-                    S1::head_str(),
-                    S2::head_str(),
-                    R::head_str(),
-                    N::head_str()
-                )
-            }
-
-            #[doc(hidden)]
-            fn tail_str() -> String {
-                format!(
-                    "{} + {} + {} + {}",
-                    S1::tail_str(),
-                    S2::tail_str(),
-                    R::tail_str(),
-                    N::head_str()
-                )
-            }
-        }
-    };
 }

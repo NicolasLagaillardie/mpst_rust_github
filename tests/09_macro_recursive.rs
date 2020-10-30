@@ -1,5 +1,4 @@
 // Test for Macro, exact same as usecase-recursive
-extern crate crossbeam_channel;
 extern crate mpstthree;
 extern crate rand;
 

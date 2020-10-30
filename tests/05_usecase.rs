@@ -11,6 +11,7 @@ use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
@@ -284,7 +285,8 @@ fn run_usecase_left() {
 fn run_usecase_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let hm: HashMap<String, &Vec<String>> = HashMap::new();
+            let s = RandomState::new();
+            let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();

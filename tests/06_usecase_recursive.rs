@@ -3,19 +3,19 @@ extern crate rand;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::binary::{cancel, End, Recv, Send, Session};
+use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::fork_mpst;
 use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::any::type_name;
 use std::boxed::Box;
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
 use std::marker;
 
-// use mpstthree::checker_hashmaps;
 use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -30,7 +30,6 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
 use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
 use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
-use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
 use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
 
 // Get send functions
@@ -38,7 +37,6 @@ use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_a_to_c;
 use mpstthree::functionmpst::send::send_mpst_b_to_a;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
-use mpstthree::functionmpst::send::send_mpst_c_to_b;
 
 use mpstthree::choose_mpst_c_to_all;
 use mpstthree::offer_mpst_a_to_c;
@@ -258,7 +256,8 @@ fn run_usecase_recursive() {
 fn run_usecase_recursive_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
+            let s = RandomState::new();
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();

@@ -1,6 +1,4 @@
 // Test for Macro, exact same as usecase
-extern crate crossbeam_channel;
-extern crate either;
 extern crate mpstthree;
 extern crate rand;
 
@@ -17,7 +15,6 @@ use mpstthree::functionmpst::OfferMpst;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::create_choose_from_3_to_1_2;
 use mpstthree::{
     create_broadcast_role, create_choose_left_from_3_to_1_and_2,
     create_choose_right_from_3_to_1_and_2, create_normal_role, create_offer_mpst_session_2,

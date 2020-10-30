@@ -6,6 +6,7 @@ license = "MIT"
 description = "A library implementing Multiparty Session Types for 3 participants"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+keywords = ["multiparty", "session"]
 categories = ["concurrency", "development-tools::cargo-plugins"]
 exclude = [".travis.yml", ".gitignore"]
 edition = "2018"
@@ -20,9 +21,9 @@ path = "main.rs"
 crossbeam-channel = "0.4.2"
 either = "1.5.3"
 rand = "0.7"
-downcast-rs = "1.1.1"
 dot = "0.1.4"
-mpst_seq = { path = "mpst_seq" }
+mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main"}
+# mpst-seq = {path = "../mpst-seq"}
 
 [dev-dependencies]
 criterion = "0.3"
@@ -33,3 +34,4 @@ harness = false
 
 [badges]
 travis-ci = { repository = "NicolasLagaillardie/mpst_rust_github", branch = "master" }
+coveralls = { repository = "NicolasLagaillardie/mpst_rust_github", branch = "master", service = "github" }
