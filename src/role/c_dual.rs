@@ -2,9 +2,10 @@ use crate::role::c::RoleC;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// Gives the order to the `SessionMpst` related to C to execute its `session` field with A.
+/// Gives the order to the `SessionMpst` related to the `Dual` of C.
 ///
-/// This `struct` should only be used in the `queue` field of the `SessionMpst` related to C.
+/// This `struct` should only be used in the `stack` field of the [`sessionmpst::SessionMpst`]
+/// related to the `Dual` of C.
 #[derive(Debug)]
 pub struct RoleCDual<R: Role> {
     pub sender: Sender<R::Dual>,
@@ -39,8 +40,7 @@ impl<R: Role> Role for RoleCDual<R> {
     }
 }
 
-/// Send a value of type `Role`. Always succeeds. Returns the continuation of the
-/// queue `R`.
+#[doc(hidden)]
 pub fn next_c_dual<R>(r: RoleCDual<R>) -> R
 where
     R: Role,

@@ -226,7 +226,6 @@ macro_rules! create_choose_mpst_session_multi_right {
 }
 
 /// Choose between many different sessions wrapped in an `enum`
-/// TODO
 #[macro_export]
 macro_rules! choose_mpst_X_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal) => {

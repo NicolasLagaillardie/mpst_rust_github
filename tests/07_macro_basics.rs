@@ -2,7 +2,7 @@
 extern crate either;
 extern crate mpstthree;
 use mpstthree::binary::{End, Recv, Send};
-use mpstthree::fork_mpst;
+use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::sessionmpst::SessionMpst;

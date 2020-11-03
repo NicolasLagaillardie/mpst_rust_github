@@ -1,13 +1,45 @@
+//! The main structure used for representing a participant, also named a party,
+//! within a protocol.
+//!
+//! It contains 4 fields:
+//! - **session1**: contains the first binary session type, which links the participant
+//!   to the first participant in the alphanumerical order. It contains [`binary::Session`].
+//! - **session2**: contains the second binary session type, which links the participant
+//!   to the second participant in the alphanumerical order. It contains [`binary::Session`].
+//! - **stack**: contains the ordering of the interactions between the participant and
+//!   the others. It contains [`role::Role`].
+//! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>`
+//!   or `RoleB<RoleEnd>`.
+
 extern crate mpst_seq;
 
 use crate::binary::Session;
 use crate::role::Role;
 
-/// A `struct` which encapsulates two binary session types and a stack.
+/// The structure which encapsulates two binary session types, a stack and a name.
 ///
-/// This `struct` is the main one used in this library.
-/// Each process is linked to the others with one `Session`,
-/// and the order of the operations is given by the stack composed of `Role`.
+/// # Example
+///
+/// ```
+/// use mpstthree::binary::{End, Recv, Send, Session};
+///
+/// use mpstthree::sessionmpst::SessionMpst;
+///
+/// use mpstthree::role::a::RoleA;
+/// use mpstthree::role::b::RoleB;
+/// use mpstthree::role::c::RoleC;
+/// use mpstthree::role::end::RoleEnd;
+///
+/// // Creating the binary sessions
+/// type AtoB<N> = Send<N, End>;
+/// type AtoC<N> = Recv<N, End>;
+///
+/// // Queues
+/// type QueueA = RoleB<RoleC<RoleEnd>>;
+///
+/// // Creating the MP sessions
+/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
+/// ```
 #[must_use]
 #[derive(Debug)]
 pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role> {

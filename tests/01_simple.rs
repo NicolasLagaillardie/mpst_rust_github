@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::error::Error;
 
 use mpstthree::binary::{End, Recv, Send, Session};
-use mpstthree::fork_mpst;
+use mpstthree::fork::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::functionmpst::close::close_mpst;
