@@ -1,3 +1,11 @@
+//! The main trait used for representing an ordering or the name of a participant.
+//!
+//! Every structure that relies on this trait, such as [`role::a::RoleA`] and
+//! [`role::b::RoleB`], contains at least a parameter, which is a [`role::Role`]
+//! itself.
+//! The only exception is [`role::end::RoleEnd`], which represents the end of
+//! any ordering.
+
 pub mod a;
 pub mod a_dual;
 pub mod a_to_all;
@@ -12,10 +20,8 @@ pub mod c_dual;
 pub mod c_to_all;
 pub mod end;
 use std::marker;
-// use downcast_rs::Downcast;
 
 /// Trait for session types. Provides duality.
-// pub trait Role: marker::Sized + marker::Send + Downcast {
 pub trait Role: marker::Sized + marker::Send {
     /// The Role type dual to `Self`.
     type Dual: Role<Dual = Self>;
@@ -23,7 +29,7 @@ pub trait Role: marker::Sized + marker::Send {
     /// Creates two new *dual* roles.
     ///
     /// The `new` function is used internally in this library to define
-    /// functions such as `fork_simple`. The `Dual` is often unused,
+    /// functions such as [`fork::fork_simple`]. The `Dual` is often unused,
     /// but may be necessary for specific cases, such as closing a connection.
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual);

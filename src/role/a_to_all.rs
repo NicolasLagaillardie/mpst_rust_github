@@ -2,10 +2,10 @@ use crate::role::all_to_a::RoleAlltoA;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// Gives the order to the `SessionMpst` related to A to execute its `session`
-/// fields with every other processes.
+/// Gives the order to the [`sessionmpst::SessionMpst`] related to A to execute its
+/// [`binary::Session`] fields with every other processes.
 ///
-/// This `struct` is used for branching without `enum`. See test `usecase`.
+/// This `struct` is used for branching without `enum`. See the test `05_usecase.rs`.
 #[derive(Debug)]
 pub struct RoleAtoAll<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,
@@ -51,8 +51,7 @@ impl<R1: Role, R2: Role> Role for RoleAtoAll<R1, R2> {
     }
 }
 
-/// Send two values of type `Role` from A, which may be different. Always succeeds. Returns the continuation of the
-/// queue `(R1, R2)`.
+#[doc(hidden)]
 pub fn next_a_to_all<R1, R2>(r: RoleAtoAll<R1, R2>) -> (R1, R2)
 where
     R1: Role,

@@ -2,9 +2,10 @@ use crate::role::b_to_all::RoleBtoAll;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// The required `Dual` of `RoleBtoAll`.
+/// This structure is used by any participant other than B to receive
+/// a choice given by B.
 ///
-/// It is never used in our current functions, but may be in the future.
+/// This `struct` is used for branching without `enum`. See the test `05_usecase.rs`.
 #[derive(Debug)]
 pub struct RoleAlltoB<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,
@@ -50,8 +51,7 @@ impl<R1: Role, R2: Role> Role for RoleAlltoB<R1, R2> {
     }
 }
 
-/// Send two values of type `Role`, which may be different. Always succeeds. Returns the continuation of the
-/// queue `(R1, R2)`.
+#[doc(hidden)]
 pub fn next_all_to_b<R1, R2>(r: RoleAlltoB<R1, R2>) -> (R1, R2)
 where
     R1: Role,

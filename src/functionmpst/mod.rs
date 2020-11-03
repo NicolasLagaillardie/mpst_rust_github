@@ -1,3 +1,10 @@
+//! This module contains all the functions that are used
+//! for consuming [`sessionmpst::SessionMpst`].
+//!
+//! They are required to check the protocols, as they check
+//! the concordance between the different fields of
+//! [`sessionmpst::Sessionmpst`].
+
 pub mod choose;
 pub mod close;
 pub mod offer;

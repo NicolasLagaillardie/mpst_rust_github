@@ -6,7 +6,7 @@ use rand::{thread_rng, Rng};
 use mpstthree::checking::checker;
 
 use mpstthree::binary::{End, Recv, Send, Session};
-use mpstthree::fork_mpst;
+use mpstthree::fork::fork_mpst;
 use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
