@@ -1,3 +1,5 @@
+//! This module contains all the *receive* functions
+
 use crate::binary::{recv, Recv, Session};
 use crate::role::a::{next_a, RoleA};
 use crate::role::all_to_a::{next_all_to_a, RoleAlltoA};
@@ -41,7 +43,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<AtoB<N>, AtoC, QueueA, NameA>;
+/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC, QueueA, NameA>;
 ///
 /// // From this point...
 /// let (channel_ab, _) = AtoB::<i32>::new();
@@ -57,7 +59,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 ///    stack: role_a,
 ///    name: name_a,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`].
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = recv_mpst_a_to_b(sess);
 /// ```
@@ -110,7 +112,7 @@ where
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<BtoA<N>, BtoC, QueueB, NameB>;
+/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC, QueueB, NameB>;
 ///
 /// // From this point...
 /// let (channel_ba, _) = BtoA::<i32>::new();
@@ -126,7 +128,7 @@ where
 ///    stack: role_b,
 ///    name: name_b,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`].
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = recv_mpst_b_to_a(sess);
 /// ```
@@ -195,7 +197,7 @@ where
 ///    stack: role_c,
 ///    name: name_c,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`].
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = recv_mpst_c_to_a(sess);
 /// ```
@@ -248,7 +250,7 @@ where
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<AtoB, AtoC<N>, QueueA, NameA>;
+/// type EndpointA<N> = SessionMpst<AtoB, AtoC<N>, QueueA, NameA>;
 ///
 /// // From this point...
 /// let (channel_ab, _) = AtoB::new();
@@ -264,7 +266,7 @@ where
 ///    stack: role_a,
 ///    name: name_a,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`].
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = recv_mpst_a_to_c(sess);
 /// ```
@@ -317,7 +319,7 @@ where
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<BtoA, BtoC<N>, QueueB, NameB>;
+/// type EndpointB<N> = SessionMpst<BtoA, BtoC<N>, QueueB, NameB>;
 ///
 /// // From this point...
 /// let (channel_ba, _) = BtoA::new();
@@ -333,7 +335,7 @@ where
 ///    stack: role_b,
 ///    name: name_b,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`].
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = recv_mpst_b_to_c(sess);
 /// ```
@@ -402,7 +404,7 @@ where
 ///    stack: role_c,
 ///    name: name_c,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`].
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = recv_mpst_c_to_b(sess);
 /// ```
@@ -427,8 +429,9 @@ where
     Ok((v, result))
 }
 
-// Receive a broadcasted value of type `T` on B from A. Can fail. Returns either a pair of the received
-// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a broadcasted value of type `T` on B from A. Can fail. Returns either a pair of the received
+/// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
 #[doc(hidden)]
 pub fn recv_mpst_a_all_to_b<T, S1, S2, R, N>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<R, R>, N>,
@@ -452,8 +455,9 @@ where
     Ok((v, result))
 }
 
-// Receive a broadcasted value of type `T` on C from A. Can fail. Returns either a pair of the received
-// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a broadcasted value of type `T` on C from A. Can fail. Returns either a pair of the received
+/// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
 #[doc(hidden)]
 pub fn recv_mpst_a_all_to_c<T, S1, S2, R, N>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, N>,
@@ -477,8 +481,9 @@ where
     Ok((v, result))
 }
 
-// Receive a broadcasted value of type `T` on A from B. Can fail. Returns either a pair of the received
-// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a broadcasted value of type `T` on A from B. Can fail. Returns either a pair of the received
+/// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
 #[doc(hidden)]
 pub fn recv_mpst_b_all_to_a<T, S1, S2, R, N>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, N>,
@@ -502,8 +507,9 @@ where
     Ok((v, result))
 }
 
-// Receive a broadcasted value of type `T` on C from A. Can fail. Returns either a pair of the received
-// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a broadcasted value of type `T` on C from A. Can fail. Returns either a pair of the received
+/// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
 #[doc(hidden)]
 pub fn recv_mpst_b_all_to_c<T, S1, S2, R, N>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, N>,
@@ -527,8 +533,9 @@ where
     Ok((v, result))
 }
 
-// Receive a broadcasted value of type `T` on A from B. Can fail. Returns either a pair of the received
-// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a broadcasted value of type `T` on A from B. Can fail. Returns either a pair of the received
+/// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
 #[doc(hidden)]
 pub fn recv_mpst_c_all_to_a<T, S1, S2, R, N>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, N>,
@@ -552,8 +559,9 @@ where
     Ok((v, result))
 }
 
-// Receive a broadcasted value of type `T` on B from C. Can fail. Returns either a pair of the received
-// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a broadcasted value of type `T` on B from C. Can fail. Returns either a pair of the received
+/// value and the continuation of the SessionMpst<S1, S2, R, N>` or an error.
+/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
 #[doc(hidden)]
 pub fn recv_mpst_c_all_to_b<T, S1, S2, R, N>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<R, R>, N>,

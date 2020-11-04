@@ -3,13 +3,16 @@
 //!
 //! It contains 4 fields:
 //! - **session1**: contains the first binary session type, which links the participant
-//!   to the first participant in the alphanumerical order. It contains [`binary::Session`].
+//!   to the first participant in the alphanumerical order. It contains [`mpstthree::binary::Session`].
 //! - **session2**: contains the second binary session type, which links the participant
-//!   to the second participant in the alphanumerical order. It contains [`binary::Session`].
+//!   to the second participant in the alphanumerical order. It contains [`mpstthree::binary::Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and
-//!   the others. It contains [`role::Role`].
+//!   the others. It contains [`mpstthree::role::Role`].
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>`
 //!   or `RoleB<RoleEnd>`.
+//!
+//! [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+//! [`mpstthree::role::Role`]: ../role/trait.Role.html
 
 extern crate mpst_seq;
 

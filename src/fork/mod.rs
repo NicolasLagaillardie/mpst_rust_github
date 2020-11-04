@@ -1,3 +1,5 @@
+//! This module contains the functions for forking the different endpoints.
+
 use std::any::Any;
 use std::error::Error;
 use std::marker;
@@ -35,11 +37,8 @@ where
     })
 }
 
-/// Creates and returns a tuple of three child processes for three `SessionMpst` linked together.
-///
-/// # Arguments
-///
-///  Three `SessionMpst`
+/// Creates and returns a tuple of three child processes for three
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html) linked together.
 ///
 ///  # Example
 ///
@@ -117,7 +116,7 @@ where
 ///
 /// Creates 3 pairs of endpoints, each pair of type `S` and `S::Dual`.
 /// Creates 3 `Role` for each queue.
-/// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes from `fork_simple`.
+/// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes.
 pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f0: F0,
     f1: F1,

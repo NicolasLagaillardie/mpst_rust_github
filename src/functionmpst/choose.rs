@@ -1,3 +1,5 @@
+//! This module contains all the *choose* functions
+
 use crate::binary::{cancel, send, Session};
 use crate::functionmpst::ChooseMpst;
 use crate::role::a::RoleA;
@@ -53,6 +55,7 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
     RoleC<RoleEnd>,
 >;
 
+#[doc(hidden)]
 macro_rules! choose_mpst_a {
     ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
         let (session_1_2, session_2_1) = <$session_1>::new();
@@ -101,6 +104,7 @@ macro_rules! choose_mpst_a {
     }};
 }
 
+#[doc(hidden)]
 macro_rules! choose_mpst_b {
     ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
         let (session_2_1, session_1_2) = <$session_1>::new();
@@ -149,6 +153,7 @@ macro_rules! choose_mpst_b {
     }};
 }
 
+#[doc(hidden)]
 macro_rules! choose_mpst_c {
     ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
         let (session_3_1, session_1_3) = <$session_1>::new();
@@ -197,10 +202,11 @@ macro_rules! choose_mpst_c {
     }};
 }
 
-/// Given a choice from A, to other processes, between two `SessionMpst`, choose the first option for each.
+/// Given a choice from A, to other processes, between two [`mpstthree::sessionmpst::SessionMpst`], choose the first option for each.
 ///
-/// A has to encapsulate all possible `SessionMpst` for each other role.
-/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
+/// A has to encapsulate all possible [`mpstthree::sessionmpst::SessionMpst`] for each other role.
+/// This function creates the 6 new binary [`mpstthree::binary::Session`], the 3 new [`mpstthree::role::Role`] related to each
+/// first option then the related [`mpstthree::sessionmpst::SessionMpst`].
 /// It then sends those options to the related processes.
 ///
 /// * S0: dual session from B to C on left branch
@@ -216,6 +222,10 @@ macro_rules! choose_mpst_c {
 /// * R3: dual stack of C on right branch
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
+///
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4, RoleA<RoleEnd>>
@@ -249,10 +259,10 @@ where
     )
 }
 
-/// Given a choice from A, to other processes, between two `SessionMpst`, choose the second option for each.
+/// Given a choice from A, to other processes, between two [`mpstthree::sessionmpst::SessionMpst`], choose the second option for each.
 ///
-/// A has to encapsulate all possible `SessionMpst` for each other role.
-/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
+/// A has to encapsulate all possible [`mpstthree::sessionmpst::SessionMpst`] for each other role.
+/// This function creates the 6 new binary [`mpstthree::binary::Session`], the 3 new [`mpstthree::role::Role`] related to each second option then the related [`mpstthree::sessionmpst::SessionMpst`].
 /// It then sends those options to the related processes.
 ///
 /// * S0: dual session from B to C on left branch
@@ -268,6 +278,10 @@ where
 /// * R3: dual stack of C on right branch
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
+///
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5, RoleA<RoleEnd>>
@@ -302,10 +316,10 @@ where
     )
 }
 
-/// Given a choice from B, to other processes, between two `SessionMpst`, choose the first option for each.
+/// Given a choice from B, to other processes, between two [`mpstthree::sessionmpst::SessionMpst`], choose the first option for each.
 ///
-/// B has to encapsulate all possible `SessionMpst` for each other role.
-/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
+/// B has to encapsulate all possible [`mpstthree::sessionmpst::SessionMpst`] for each other role.
+/// This function creates the 6 new binary [`mpstthree::binary::Session`], the 3 new [`mpstthree::role::Role`] related to each first option then the related [`mpstthree::sessionmpst::SessionMpst`].
 /// It then sends those options to the related processes.
 ///
 /// * S0: dual session from A to C on left branch
@@ -321,6 +335,10 @@ where
 /// * R3: dual stack of C on right branch
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
+///
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4, RoleB<RoleEnd>>
@@ -354,10 +372,10 @@ where
     )
 }
 
-/// Given a choice from B, to other processes, between two `SessionMpst`, choose the second option for each.
+/// Given a choice from B, to other processes, between two [`mpstthree::sessionmpst::SessionMpst`], choose the second option for each.
 ///
-/// B has to encapsulate all possible `SessionMpst` for each other role.
-/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
+/// B has to encapsulate all possible [`mpstthree::sessionmpst::SessionMpst`] for each other role.
+/// This function creates the 6 new binary [`mpstthree::binary::Session`], the 3 new [`mpstthree::role::Role`] related to each second option then the related [`mpstthree::sessionmpst::SessionMpst`].
 /// It then sends those options to the related processes.
 ///
 /// * S0: dual session from A to C on left branch
@@ -373,6 +391,10 @@ where
 /// * R3: dual stack of C on right branch
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
+///
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5, RoleB<RoleEnd>>
@@ -406,10 +428,10 @@ where
     )
 }
 
-/// Given a choice from C, to other processes, between two `SessionMpst`, choose the first option for each.
+/// Given a choice from C, to other processes, between two [`mpstthree::sessionmpst::SessionMpst`], choose the first option for each.
 ///
-/// C has to encapsulate all possible `SessionMpst` for each other role.
-/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each first option then the related `SessionMpst`.
+/// C has to encapsulate all possible [`mpstthree::sessionmpst::SessionMpst`] for each other role.
+/// This function creates the 6 new binary [`mpstthree::binary::Session`], the 3 new [`mpstthree::role::Role`] related to each first option then the related [`mpstthree::sessionmpst::SessionMpst`].
 /// It then sends those options to the related processes.
 ///
 /// * S0: dual session from A to B on left branch
@@ -425,6 +447,10 @@ where
 /// * R3: dual stack of B on right branch
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
+///
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4, RoleC<RoleEnd>>
@@ -458,10 +484,10 @@ where
     )
 }
 
-/// Given a choice from C, to other processes, between two `SessionMpst`, choose the second option for each.
+/// Given a choice from C, to other processes, between two [`mpstthree::sessionmpst::SessionMpst`], choose the second option for each.
 ///
-/// C has to encapsulate all possible `SessionMpst` for each other role.
-/// This function creates the 6 new binary `Session`, the 3 new `Role` related to each second option then the related `SessionMpst`.
+/// C has to encapsulate all possible [`mpstthree::sessionmpst::SessionMpst`] for each other role.
+/// This function creates the 6 new binary [`mpstthree::binary::Session`], the 3 new [`mpstthree::role::Role`] related to each second option then the related [`mpstthree::sessionmpst::SessionMpst`].
 /// It then sends those options to the related processes.
 ///
 /// * S0: dual session from A to B on left branch
@@ -477,6 +503,10 @@ where
 /// * R3: dual stack of B on right branch
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
+///
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5, RoleC<RoleEnd>>
@@ -508,136 +538,4 @@ where
         Either::Right,
         next_c_to_all
     )
-}
-
-/// Choose, for A, between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! choose_mpst_a_to_all {
-    ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
-        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
-        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
-        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
-        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
-        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
-        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
-
-        let s = mpstthree::functionmpst::send::send_mpst_a_to_b(
-            $labelone(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                stack: stack_b,
-                name: name_b,
-            }),
-            $session,
-        );
-        let s = mpstthree::functionmpst::send::send_mpst_a_to_c(
-            $labeltwo(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ca,
-                session2: session_cb,
-                stack: stack_c,
-                name: name_c,
-            }),
-            s,
-        );
-
-        mpstthree::binary::cancel(s);
-
-        mpstthree::sessionmpst::SessionMpst {
-            session1: session_ab,
-            session2: session_ac,
-            stack: stack_a,
-            name: name_a,
-        }
-    }};
-}
-
-/// Choose, for B, between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! choose_mpst_b_to_all {
-    ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
-        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
-        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
-        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
-        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
-        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
-        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
-
-        let s = mpstthree::functionmpst::send::send_mpst_b_to_a(
-            $labelone(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                stack: stack_a,
-                name: name_a,
-            }),
-            $session,
-        );
-        let s = mpstthree::functionmpst::send::send_mpst_b_to_c(
-            $labeltwo(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ca,
-                session2: session_cb,
-                stack: stack_c,
-                name: name_c,
-            }),
-            s,
-        );
-
-        mpstthree::binary::cancel(s);
-
-        mpstthree::sessionmpst::SessionMpst {
-            session1: session_ba,
-            session2: session_bc,
-            stack: stack_b,
-            name: name_b,
-        }
-    }};
-}
-
-/// Choose, for C, between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! choose_mpst_c_to_all {
-    ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
-        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
-        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
-        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
-        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
-        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
-        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
-
-        let s = mpstthree::functionmpst::send::send_mpst_c_to_a(
-            $labelone(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                stack: stack_a,
-                name: name_a,
-            }),
-            $session,
-        );
-        let s = mpstthree::functionmpst::send::send_mpst_c_to_b(
-            $labeltwo(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                stack: stack_b,
-                name: name_b,
-            }),
-            s,
-        );
-
-        mpstthree::binary::cancel(s);
-
-        mpstthree::sessionmpst::SessionMpst {
-            session1: session_ca,
-            session2: session_cb,
-            stack: stack_c,
-            name: name_c,
-        }
-    }};
 }

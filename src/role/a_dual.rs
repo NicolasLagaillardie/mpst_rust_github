@@ -2,10 +2,12 @@ use crate::role::a::RoleA;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// Gives the order to the `SessionMpst` related to the `Dual` of A.
+/// Gives the order to the [`mpstthree::sessionmpst::SessionMpst`] related to the `Dual` of A.
 ///
-/// This `struct` should only be used in the `stack` field of the [`sessionmpst::SessionMpst`]
+/// This `struct` should only be used in the `stack` field of the [`mpstthree::sessionmpst::SessionMpst`]
 /// related to the `Dual` of A.
+///
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
 #[derive(Debug)]
 pub struct RoleADual<R: Role> {
     pub sender: Sender<R::Dual>,

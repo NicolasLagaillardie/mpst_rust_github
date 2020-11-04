@@ -1,3 +1,7 @@
+// TODO
+/// Client = C → B
+/// Authenticator = A → C
+/// Server = B → A
 extern crate mpstthree;
 extern crate rand;
 
@@ -45,7 +49,7 @@ use mpstthree::functionmpst::choose::choose_right_mpst_session_c_to_all;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
-/// Test our usecase from Places 2020
+/// Test our usecase
 /// Simple types
 /// Client = C
 /// Authenticator = A

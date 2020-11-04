@@ -2,10 +2,13 @@ use crate::role::all_to_c::RoleAlltoC;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// Gives the order to the [`sessionmpst::SessionMpst`] related to C to execute its
-/// [`binary::Session`] fields with every other processes.
+/// Gives the order to the [`mpstthree::sessionmpst::SessionMpst`] related to C to execute its
+/// [`mpstthree::binary::Session`] fields with every other processes.
 ///
 /// This `struct` is used for branching without `enum`. See the test `05_usecase.rs`.
+///
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::Session`]: ../binary/trait.Session.html
 #[derive(Debug)]
 pub struct RoleCtoAll<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,

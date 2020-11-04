@@ -1,3 +1,5 @@
+//! This module contains all the *send* functions
+
 use crate::binary::{send, Send, Session};
 use crate::role::a::{next_a, RoleA};
 use crate::role::b::{next_b, RoleB};
@@ -51,7 +53,7 @@ use std::marker;
 ///    stack: role_a,
 ///    name: name_a,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`]
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_a_to_b(1, sess);
 /// ```
@@ -120,7 +122,7 @@ where
 ///    stack: role_b,
 ///    name: name_b,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`]
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_b_to_a(1, sess);
 /// ```
@@ -189,7 +191,7 @@ where
 ///    stack: role_c,
 ///    name: name_c,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`]
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_c_to_a(1, sess);
 /// ```
@@ -258,7 +260,7 @@ where
 ///    stack: role_a,
 ///    name: name_a,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`]
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_a_to_c(1, sess);
 /// ```
@@ -327,7 +329,7 @@ where
 ///    stack: role_b,
 ///    name: name_b,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`]
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_b_to_c(1, sess);
 /// ```
@@ -396,7 +398,7 @@ where
 ///    stack: role_c,
 ///    name: name_c,
 /// };
-/// // ...to this point, should not be written in general. Please look at [`fork`]
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_c_to_b(1, sess);
 /// ```

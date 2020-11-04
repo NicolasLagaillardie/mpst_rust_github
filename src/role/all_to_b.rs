@@ -2,8 +2,7 @@ use crate::role::b_to_all::RoleBtoAll;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// This structure is used by any participant other than B to receive
-/// a choice given by B.
+/// This structure is used by any participant other than B to receive a choice given by B.
 ///
 /// This `struct` is used for branching without `enum`. See the test `05_usecase.rs`.
 #[derive(Debug)]
