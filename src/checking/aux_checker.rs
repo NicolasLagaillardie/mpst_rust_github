@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::error::Error;
 
 #[doc(hidden)]
-pub fn checker_aux<S: ::std::hash::BuildHasher>(
+pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     role: &str,
     hm: &HashMap<String, &Vec<String>, S>,
@@ -669,4 +669,86 @@ fn all_type<S: ::std::hash::BuildHasher>(
             &sessionmpst[2]
         );
     }
+}
+
+//////////////////////////////////
+
+#[test]
+#[should_panic]
+fn get_head_panic() {
+    get_name("");
+}
+
+#[test]
+#[should_panic]
+fn match_full_types_panic() {
+    let _ = match_full_types(
+        "",
+        ["", "", "", ""],
+        [String::from(""), String::from("")],
+        "",
+        "",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn match_headers_panic() {
+    let _ = match_headers(
+        ["", "", "", ""],
+        ["", "", "", ""],
+        [String::from(""), String::from("")],
+        [0, 0, 0, 0],
+        "",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+fn get_head_either() {
+    let test = "Either<Left, Right>";
+    assert_eq!(get_head(test), String::from(test));
+}
+
+#[test]
+fn send_type_x() {
+    let test = send_type(
+        ["", "", "", ""],
+        [String::from(""), String::from("")],
+        "A",
+        "",
+        &HashMap::new(),
+        &mut vec![String::from("A")],
+        "",
+    ).unwrap();
+
+    assert_eq!(test, String::from("X"));
+}
+
+#[test]
+#[should_panic]
+fn recurs_type_panic() {
+    let _ = recurs_type(
+        "",
+        "",
+        &HashMap::new(),
+        &mut vec![],
+        "",
+    );
+}
+
+#[test]
+#[should_panic]
+fn match_recv_from_all_panic() {
+    let _ = match_recv_from_all(
+        "",
+        ["", ""],
+        ["", "", "", ""],
+        "",
+        &HashMap::new(),
+        &mut vec![]
+    );
 }
