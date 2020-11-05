@@ -723,7 +723,8 @@ fn send_type_x() {
         &HashMap::new(),
         &mut vec![String::from("A")],
         "",
-    ).unwrap();
+    )
+    .unwrap();
 
     assert_eq!(test, String::from("X"));
 }
@@ -731,13 +732,7 @@ fn send_type_x() {
 #[test]
 #[should_panic]
 fn recurs_type_panic() {
-    let _ = recurs_type(
-        "",
-        "",
-        &HashMap::new(),
-        &mut vec![],
-        "",
-    );
+    let _ = recurs_type("", "", &HashMap::new(), &mut vec![], "");
 }
 
 #[test]
@@ -749,6 +744,6 @@ fn match_recv_from_all_panic() {
         ["", "", "", ""],
         "",
         &HashMap::new(),
-        &mut vec![]
+        &mut vec![],
     );
 }
