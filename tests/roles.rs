@@ -42,105 +42,115 @@ fn role_a_to_all_fields() {
 fn role_all_to_a_fields() {
     let (role_sender_1, role_sender_2) = RoleAlltoA::<RoleEnd, RoleEnd>::new();
 
-    if let Err(err) = role_sender_1.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_1
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_1.sender1.send(there1).unwrap_or(());
+    role_sender_1.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_1.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 
-    if let Err(err) = role_sender_2.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_2
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_2.sender1.send(there1).unwrap_or(());
+    role_sender_2.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_2.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
 #[test]
 fn role_b_to_all_fields() {
     let (role_sender_1, role_sender_2) = RoleBtoAll::<RoleEnd, RoleEnd>::new();
 
-    if let Err(err) = role_sender_1.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_1
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_1.sender1.send(there1).unwrap_or(());
+    role_sender_1.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_1.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 
-    if let Err(err) = role_sender_2.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_2
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_2.sender1.send(there1).unwrap_or(());
+    role_sender_2.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_2.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
 #[test]
 fn role_all_to_b_fields() {
     let (role_sender_1, role_sender_2) = RoleAlltoB::<RoleEnd, RoleEnd>::new();
 
-    if let Err(err) = role_sender_1.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_1
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_1.sender1.send(there1).unwrap_or(());
+    role_sender_1.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_1.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 
-    if let Err(err) = role_sender_2.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_2
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_2.sender1.send(there1).unwrap_or(());
+    role_sender_2.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_2.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
 #[test]
 fn role_c_to_all_fields() {
     let (role_sender_1, role_sender_2) = RoleCtoAll::<RoleEnd, RoleEnd>::new();
 
-    if let Err(err) = role_sender_1.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_1
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_1.sender1.send(there1).unwrap_or(());
+    role_sender_1.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_1.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 
-    if let Err(err) = role_sender_2.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_2
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_2.sender1.send(there1).unwrap_or(());
+    role_sender_2.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_2.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
 #[test]
 fn role_all_to_c_fields() {
     let (role_sender_1, role_sender_2) = RoleAlltoC::<RoleEnd, RoleEnd>::new();
 
-    if let Err(err) = role_sender_1.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_1
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_1.sender1.send(there1).unwrap_or(());
+    role_sender_1.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_1.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 
-    if let Err(err) = role_sender_2.sender1.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // role_sender_2
+    let (here1, there1) = RoleEnd::new();
+    let (here2, there2) = RoleEnd::new();
+    role_sender_2.sender1.send(there1).unwrap_or(());
+    role_sender_2.sender2.send(there2).unwrap_or(());
 
-    if let Err(err) = role_sender_2.sender2.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
+    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
 #[test]

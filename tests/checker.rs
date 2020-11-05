@@ -188,3 +188,55 @@ fn test_checker() {
     }()
     .is_ok());
 }
+
+type EndpointBRecursPanicStack<N> = SessionMpst<End, RecursBtoC<N>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+
+#[test]
+#[should_panic]
+fn test_checker_panic_stack() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
+
+            let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
+            let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
+
+            hm.insert(String::from("CBranchesAtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("CBranchesBtoC<i32>"), &c_branches_b_to_c);
+
+            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointBRecursPanicStack<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+
+            checker(s1, s2, s3, &hm)?;
+        }
+        Ok(())
+    }()
+    .is_ok());
+}
+
+type EndpointBRecursPanicName<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleC<RoleEnd>>;
+
+#[test]
+#[should_panic]
+fn test_checker_panic_name() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
+
+            let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
+            let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
+
+            hm.insert(String::from("CBranchesAtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("CBranchesBtoC<i32>"), &c_branches_b_to_c);
+
+            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointBRecursPanicName<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+
+            checker(s1, s2, s3, &hm)?;
+        }
+        Ok(())
+    }()
+    .is_ok());
+}

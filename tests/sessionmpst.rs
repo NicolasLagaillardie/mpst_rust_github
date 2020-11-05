@@ -23,13 +23,17 @@ type Endpoint<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
 fn sessionmpst_fields() {
     let (sessionmpst_1, sessionmpst_2) = Endpoint::<i32>::new();
 
-    if let Err(err) = sessionmpst_1.name.sender.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    // sessionmpst_1
+    let (here1, there1) = RoleC::new();
+    sessionmpst_1.stack.sender.send(there1).unwrap_or(());
 
-    if let Err(err) = sessionmpst_2.name.sender.send(RoleEnd::new().1) {
-        assert_eq!(err.into_inner().sender.send(()), Ok(()));
-    }
+    assert_eq!(here1.sender.send(RoleEnd::new().1).unwrap_or(()), ());
+
+    // sessionmpst_2
+    let (here2, there2) = RoleC::new();
+    sessionmpst_2.stack.sender.send(here2).unwrap_or(());
+
+    assert_eq!(there2.sender.send(RoleEnd::new().1).unwrap_or(()), ());
 }
 
 #[test]
