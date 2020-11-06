@@ -2,7 +2,7 @@
 #[macro_export]
 macro_rules! offer_mpst_a_to_c {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
+        (move || -> Result<_, Box<dyn std::error::Error>> {
             let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_c($session)?;
             mpstthree::binary::cancel(s);
             match l {
@@ -18,7 +18,7 @@ macro_rules! offer_mpst_a_to_c {
 #[macro_export]
 macro_rules! offer_mpst_b_to_c {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
+        (move || -> Result<_, Box<dyn std::error::Error>> {
             let (l, s) = mpstthree::functionmpst::recv::recv_mpst_b_to_c($session)?;
             mpstthree::binary::cancel(s);
             match l {
@@ -34,7 +34,7 @@ macro_rules! offer_mpst_b_to_c {
 #[macro_export]
 macro_rules! offer_mpst_a_to_b {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
+        (move || -> Result<_, Box<dyn std::error::Error>> {
             let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_b($session)?;
             mpstthree::binary::cancel(s);
             match l {
@@ -50,7 +50,7 @@ macro_rules! offer_mpst_a_to_b {
 #[macro_export]
 macro_rules! offer_mpst_b_to_a {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
+        (move || -> Result<_, Box<dyn std::error::Error>> {
             let (l, s) = mpstthree::functionmpst::recv::recv_mpst_b_to_a($session)?;
             mpstthree::binary::cancel(s);
             match l {
@@ -66,7 +66,7 @@ macro_rules! offer_mpst_b_to_a {
 #[macro_export]
 macro_rules! offer_mpst_c_to_b {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
+        (move || -> Result<_, Box<dyn std::error::Error>> {
             let (l, s) = mpstthree::functionmpst::recv::recv_mpst_c_to_b($session)?;
             mpstthree::binary::cancel(s);
             match l {
@@ -82,7 +82,7 @@ macro_rules! offer_mpst_c_to_b {
 #[macro_export]
 macro_rules! offer_mpst_c_to_a {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
+        (move || -> Result<_, Box<dyn std::error::Error>> {
             let (l, s) = mpstthree::functionmpst::recv::recv_mpst_c_to_a($session)?;
             mpstthree::binary::cancel(s);
             match l {
