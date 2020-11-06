@@ -793,7 +793,7 @@ fn checker_aux_panic() {
         [
             "End",
             "End",
-            "RoleAllto<RoleEnd, RoleEnd>",
+            "RoleAlltoA<RoleEnd, RoleEnd>",
             "RoleA<RoleEnd>",
         ],
         "A",

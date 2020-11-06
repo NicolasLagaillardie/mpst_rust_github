@@ -16,13 +16,23 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
 #[test]
-fn role_end_fields() {
+fn role_end_fields_1() {
     let (role_end_1, role_end_2) = RoleEnd::new();
 
     assert_eq!(role_end_1.sender.send(()), Ok(()));
     assert_eq!(role_end_2.sender.send(()), Ok(()));
     assert_eq!(role_end_1.receiver.recv(), Ok(()));
     assert_eq!(role_end_2.receiver.recv(), Ok(()));
+}
+
+#[test]
+fn role_end_fields_2() {
+    let (role_end_1, role_end_2) = RoleEnd::new();
+
+    assert_eq!(role_end_2.sender.send(()), Ok(()));
+    assert_eq!(role_end_1.sender.send(()), Ok(()));
+    assert_eq!(role_end_2.receiver.recv(), Ok(()));
+    assert_eq!(role_end_1.receiver.recv(), Ok(()));
 }
 
 #[test]
