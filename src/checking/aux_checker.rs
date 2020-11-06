@@ -737,12 +737,94 @@ fn recurs_type_panic() {
 
 #[test]
 #[should_panic]
-fn match_recv_from_all_panic() {
+fn match_recv_from_all_panic_at_checker_aux_0() {
     let _ = match_recv_from_all(
         "",
         ["", ""],
         ["", "", "", ""],
         "",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn match_recv_from_all_panic_at_checker_aux_1() {
+    let _ = match_recv_from_all(
+        "",
+        ["", ""],
+        ["A", "", "", ""],
+        "",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn match_recv_from_all_panic() {
+    let _ = match_recv_from_all(
+        "",
+        ["", ""],
+        ["", "", "", ""],
+        "A",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn all_type_panic() {
+    let _ = all_type(
+        ["", "", "", ""],
+        [0, 0, 0, 0],
+        "",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn checker_aux_panic() {
+    let _ = checker_aux(
+        ["End", "End", "RoleAllto<RoleEnd, RoleEnd>", "RoleA<RoleEnd>"],
+        "A",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn checker_aux_panic_a() {
+    let _ = checker_aux(
+        ["End", "End", "RoleAlltoA<RoleEnd, RoleEnd>", "RoleA<RoleEnd>"],
+        "A",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn checker_aux_panic_b() {
+    let _ = checker_aux(
+        ["End", "End", "RoleAlltoB<RoleEnd, RoleEnd>", "RoleB<RoleEnd>"],
+        "B",
+        &HashMap::new(),
+        &mut vec![],
+    );
+}
+
+#[test]
+#[should_panic]
+fn checker_aux_panic_c() {
+    let _ = checker_aux(
+        ["End", "End", "RoleAlltoC<RoleEnd, RoleEnd>", "RoleC<RoleEnd>"],
+        "C",
         &HashMap::new(),
         &mut vec![],
     );

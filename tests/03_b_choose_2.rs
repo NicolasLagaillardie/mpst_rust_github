@@ -104,9 +104,9 @@ type EndpointChoiceC<N> = SessionMpst<ChooseCtoA<N>, ChooseCtoB<N>, QueueFullC, 
 type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, QueueOfferA, RoleA<RoleEnd>>;
 type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, QueueOfferA, RoleA<RoleEnd>>;
 
-type OfferC<N> =
+type OfferA<N> =
     OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, QueueOfferA, QueueOfferA, RoleA<RoleEnd>>;
-type EndpointChoiceA<N> = SessionMpst<End, OfferC<N>, QueueFullA, RoleA<RoleEnd>>;
+type EndpointChoiceA<N> = SessionMpst<End, OfferA<N>, QueueFullA, RoleA<RoleEnd>>;
 
 /// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
