@@ -790,7 +790,12 @@ fn all_type_panic() {
 #[should_panic]
 fn checker_aux_panic() {
     let _ = checker_aux(
-        ["End", "End", "RoleAllto<RoleEnd, RoleEnd>", "RoleA<RoleEnd>"],
+        [
+            "End",
+            "End",
+            "RoleAllto<RoleEnd, RoleEnd>",
+            "RoleA<RoleEnd>",
+        ],
         "A",
         &HashMap::new(),
         &mut vec![],
@@ -801,7 +806,12 @@ fn checker_aux_panic() {
 #[should_panic]
 fn checker_aux_panic_a() {
     let _ = checker_aux(
-        ["End", "End", "RoleAlltoA<RoleEnd, RoleEnd>", "RoleA<RoleEnd>"],
+        [
+            "End",
+            "End",
+            "RoleAlltoA<RoleEnd, RoleEnd>",
+            "RoleA<RoleEnd>",
+        ],
         "A",
         &HashMap::new(),
         &mut vec![],
@@ -812,7 +822,12 @@ fn checker_aux_panic_a() {
 #[should_panic]
 fn checker_aux_panic_b() {
     let _ = checker_aux(
-        ["End", "End", "RoleAlltoB<RoleEnd, RoleEnd>", "RoleB<RoleEnd>"],
+        [
+            "End",
+            "End",
+            "RoleAlltoB<RoleEnd, RoleEnd>",
+            "RoleB<RoleEnd>",
+        ],
         "B",
         &HashMap::new(),
         &mut vec![],
@@ -823,7 +838,12 @@ fn checker_aux_panic_b() {
 #[should_panic]
 fn checker_aux_panic_c() {
     let _ = checker_aux(
-        ["End", "End", "RoleAlltoC<RoleEnd, RoleEnd>", "RoleC<RoleEnd>"],
+        [
+            "End",
+            "End",
+            "RoleAlltoC<RoleEnd, RoleEnd>",
+            "RoleC<RoleEnd>",
+        ],
         "C",
         &HashMap::new(),
         &mut vec![],
