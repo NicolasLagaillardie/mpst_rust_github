@@ -42,11 +42,11 @@ use mpstthree::offer_mpst_b_to_c;
 type ADDAtoB<N> = Recv<N, End>;
 
 type OrderingA0 = RoleB<RoleEnd>;
-type EndpointA1<N> = SessionMpst<ADDAtoB<N>, End, OrderingA0, RoleA<RoleEnd>>;
+// type EndpointA1<N> = SessionMpst<ADDAtoB<N>, End, OrderingA0, RoleA<RoleEnd>>;
 type BYEAtoB<N> = Recv<N, End>;
 
 type OrderingA2 = RoleB<RoleEnd>;
-type EndpointA3<N> = SessionMpst<BYEAtoB<N>, End, OrderingA2, RoleA<RoleEnd>>;
+// type EndpointA3<N> = SessionMpst<BYEAtoB<N>, End, OrderingA2, RoleA<RoleEnd>>;
 
 enum CBranchesAtoC<N: marker::Send> {
     ADD(SessionMpst<ADDAtoB<N>, End, OrderingA0, RoleA<RoleEnd>>),
@@ -54,9 +54,9 @@ enum CBranchesAtoC<N: marker::Send> {
 }
 type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
 
-type TestAtoC<N> = Recv<N, End>;
+// type TestAtoC<N> = Recv<N, End>;
 
-type OrderingA4 = RoleC<RoleEnd>;
+// type OrderingA4 = RoleC<RoleEnd>;
 type OrderingA5Full = RoleC<RoleC<RoleEnd>>;
 type EndpointA6<N> =
     SessionMpst<End, Recv<N, Recv<CBranchesAtoC<N>, End>>, OrderingA5Full, RoleA<RoleEnd>>;
@@ -65,12 +65,12 @@ type ADDBtoA<N> = Send<N, End>;
 type ADDBtoC<N> = Recv<N, End>;
 
 type OrderingB0 = RoleC<RoleA<RoleEnd>>;
-type EndpointB1<N> = SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB0, RoleB<RoleEnd>>;
+// type EndpointB1<N> = SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB0, RoleB<RoleEnd>>;
 type BYEBtoA<N> = Send<N, End>;
 type BYEBtoC<N> = Recv<N, End>;
 
 type OrderingB2 = RoleC<RoleA<RoleEnd>>;
-type EndpointB3<N> = SessionMpst<BYEBtoA<N>, BYEBtoC<N>, OrderingB2, RoleB<RoleEnd>>;
+// type EndpointB3<N> = SessionMpst<BYEBtoA<N>, BYEBtoC<N>, OrderingB2, RoleB<RoleEnd>>;
 
 enum CBranchesBtoC<N: marker::Send> {
     ADD(SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB0, RoleB<RoleEnd>>),
@@ -78,7 +78,7 @@ enum CBranchesBtoC<N: marker::Send> {
 }
 type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
 
-type OrderingB4 = RoleEnd;
+// type OrderingB4 = RoleEnd;
 type OrderingB5Full = RoleC<RoleEnd>;
 type EndpointB6<N> = SessionMpst<End, Recv<CBranchesBtoC<N>, End>, OrderingB5Full, RoleB<RoleEnd>>;
 
