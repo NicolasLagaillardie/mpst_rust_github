@@ -107,9 +107,8 @@ type EndpointC1<N> = SessionMpst<TestCtoA<N>, ChooseCforBtoC<N>, OrderingC0, Rol
 // type TestAtoC<N> = Recv<N, End>;
 
 // type OrderingA4 = RoleC<RoleEnd>;
-// type OrderingA5Full = RoleC<RoleEnd>;
-// // type EndpointA6<N> = SessionMpst<TestAtoC<N>, Recv<CBranchesAtoC<N>, End>, OrderingA5Full, RoleA<RoleEnd>>;
-// type EndpointA6<N> = SessionMpst<TestAtoC<N>, Recv<CBranchesAtoC<N>, End>, OrderingA5Full, RoleA<RoleEnd>>;
+// type OrderingA5Full = RoleB<RoleEnd>;
+// type EndpointA6<N> = SessionMpst<CBranchesAtoC<N>, TestAtoC<N>, OrderingA5Full, RoleA<RoleEnd>>;
 
 // type ADDBtoA<N> = Send<N, End>;
 // type ADDBtoC<N> = Recv<N, End>;
@@ -130,109 +129,86 @@ type EndpointC1<N> = SessionMpst<TestCtoA<N>, ChooseCforBtoC<N>, OrderingC0, Rol
 
 // type OrderingB4 = RoleEnd;
 // type OrderingB5Full = RoleC<RoleEnd>;
-// type EndpointB6<N> = SessionMpst<End, Recv<CBranchesBtoC<N>, End>, OrderingB5Full, RoleB<RoleEnd>>;
+// type EndpointB6<N> = SessionMpst<End, CBranchesBtoC<N>, OrderingB5Full, RoleB<RoleEnd>>;
 
-// // type TestCtoA<N> = Send<N, ChooseCforAtoC<N>>;
+// type TestCtoA<N> = Send<N, ChooseCforAtoC<N>>;
 
 // type OrderingC0 = RoleA<RoleEnd>;
-// // type EndpointC1<N> = SessionMpst<TestCtoA<N>, ChooseCforBtoC<N>, OrderingC0, RoleC<RoleEnd>>;
-// type EndpointC1<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, OrderingC0, RoleC<RoleEnd>>;
+// type EndpointC1<N> = SessionMpst<TestCtoA<N>, ChooseCforBtoC<N>, OrderingC0, RoleC<RoleEnd>>;
 
-// /// Functions related to endpoints
-// fn server(s: EndpointB6<i32>) -> Result<(), Box<dyn Error>> {
-//     offer_mpst_b_to_c!(s, {
-//         CBranchesBtoC::BYE(s) => {
-//             let (id, s) = recv_mpst_b_to_c(s)?;
-//             let s = send_mpst_b_to_a(id + 1, s);
-//             close_mpst(s)?;
-//             Ok(())
-//         },
-//         CBranchesBtoC::ADD(s) => {
-//             let (id, s) = recv_mpst_b_to_c(s)?;
-//             let s = send_mpst_b_to_a(id + 1, s);
-//             close_mpst(s)?;
-//             Ok(())
-//         },
-//     })?;
-//     Ok(())
-// }
+/////////////////////////////////////////
 
-// // fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-// //     let (id, s) = recv_mpst_a_to_c(s)?;
-// //     let s = send_mpst_a_to_c(id + 1, s);
+/// Functions related to endpoints
+fn server(s: EndpointB6<i32>) -> Result<(), Box<dyn Error>> {
+    offer_mpst_b_to_c!(s, {
+        CBranchesBtoC::BYE(s) => {
+            let (id, s) = recv_mpst_b_to_c(s)?;
+            let s = send_mpst_b_to_a(id + 1, s);
+            close_mpst(s)?;
+            Ok(())
+        },
+        CBranchesBtoC::ADD(s) => {
+            let (id, s) = recv_mpst_b_to_c(s)?;
+            let s = send_mpst_b_to_a(id + 1, s);
+            close_mpst(s)?;
+            Ok(())
+        },
+    })?;
 
-// //     let result = authenticator_recurs(s)?;
+    Ok(())
+}
 
-// //     Ok(result)
-// // }
+fn authenticator(s: EndpointA6<i32>) -> Result<(), Box<dyn Error>> {
+    let (_, s) = recv_mpst_a_to_c(s)?;
 
-// fn authenticator_recurs(s: EndpointA6<i32>) -> Result<(), Box<dyn Error>> {
-//     offer_mpst_a_to_c!(s, {
-//         CBranchesAtoC::BYE(s) => {
-//             let (id, s) = recv_mpst_a_to_b(s)?;
-//             close_mpst(s)?;
-//             Ok(())
-//         },
-//         CBranchesAtoC::ADD(s) => {
-//             let (id, s) = recv_mpst_a_to_b(s)?;
-//             close_mpst(s)?;
-//             Ok(())
-//         },
-//     })?;
-//     Ok(())
-// }
+    offer_mpst_a_to_c!(s, {
+        CBranchesAtoC::BYE(s) => {
+            let (_, s) = recv_mpst_a_to_b(s)?;
+            close_mpst(s)?;
+            Ok(())
+        },
+        CBranchesAtoC::ADD(s) => {
+            let (_, s) = recv_mpst_a_to_b(s)?;
+            close_mpst(s)?;
+            Ok(())
+        },
+    })?;
 
-// fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
-//     let mut rng = thread_rng();
-//     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
+    Ok(())
+}
 
-//     let s = send_mpst_c_to_a(0, s);
-//     let (_, s) = recv_mpst_c_to_a(s)?;
+fn client(s: EndpointC1<i32>) -> Result<(), Box<dyn Error>> {
+    let mut rng = thread_rng();
+    let x: u32 = rng.gen_range(0, 2);
 
-//     let result = client_recurs(s, xs, 1)?;
+    let s = send_mpst_c_to_a(0, s);
 
-//     Ok(result)
-// }
+    if x == 1 {
+        let s = choose_mpst_c_to_all!(s, CBranchesAtoC::ADD, CBranchesBtoC::ADD);
+        let s = send_mpst_c_to_b(1, s);
+        close_mpst(s)
+    } else {
+        let s = choose_mpst_c_to_all!(s, CBranchesAtoC::BYE, CBranchesBtoC::BYE);
+        let s = send_mpst_c_to_b(1, s);
+        close_mpst(s)
+    }
+}
 
-// fn client_recurs(
-//     s: EndpointCRecurs<i32>,
-//     mut xs: Vec<i32>,
-//     index: i32,
-// ) -> Result<(), Box<dyn Error>> {
-//     match xs.pop() {
-//         Option::Some(_) => {
-//             let s = choose_mpst_c_to_all!(s, CBranchesAtoC::ADD, CBranchesBtoC::ADD);
+/////////////////////////////////////////
 
-//             let s = send_mpst_c_to_a(1, s);
-//             let (_, s) = recv_mpst_c_to_a(s)?;
+#[test]
+fn top_down_approach() {
+    for _i in 0..200 {
+        assert!(|| -> Result<(), Box<dyn Error>> {
+            {
+                let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
-//             client_recurs(s, xs, index + 1)
-//         }
-//         Option::None => {
-//             let s = choose_mpst_c_to_all!(s, CBranchesAtoC::BYE, CBranchesBtoC::BYE);
-
-//             close_mpst(s)?;
-
-//             assert_eq!(index, 100);
-
-//             Ok(())
-//         }
-//     }
-// }
-
-// /////////////////////////////////////////
-
-// #[test]
-// fn run_usecase_recursive() {
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         {
-//             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
-
-//             assert!(thread_a.is_ok());
-//             assert!(thread_b.is_ok());
-//             assert!(thread_c.is_ok());
-//         }
-//         Ok(())
-//     }()
-//     .is_ok());
-// }
+                assert!(thread_a.is_ok());
+                assert!(thread_b.is_ok());
+                assert!(thread_c.is_ok());
+            }
+            Ok(())
+        }()
+        .is_ok());
+    }
+}
