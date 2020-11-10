@@ -1,42 +1,93 @@
-// extern crate mpstthree;
+extern crate mpstthree;
 
-// use mpstthree::binary::{End, Recv, Send, Session};
-// use mpstthree::role::end::RoleEnd;
-// use mpstthree::sessionmpst::SessionMpst;
-// use std::marker;
+use mpstthree::binary::{End, Recv, Send};
+use mpstthree::role::end::RoleEnd;
+use mpstthree::sessionmpst::SessionMpst;
+use std::marker;
 
-// use mpstthree::role::a::RoleA;
-// use mpstthree::role::b::RoleB;
-// use mpstthree::role::c::RoleC;
+use mpstthree::role::a::RoleA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::c::RoleC;
 
-// /////////////////////////////////////////
+/////////////////////////////////////////
 
-// extern crate rand;
+extern crate rand;
 
-// use rand::{thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
-// use std::boxed::Box;
-// use std::error::Error;
+use std::boxed::Box;
+use std::error::Error;
 
-// use mpstthree::functionmpst::close::close_mpst;
-// use mpstthree::fork::fork_mpst;
+use mpstthree::fork::fork_mpst;
+use mpstthree::functionmpst::close::close_mpst;
 
-// use mpstthree::role::Role;
+use mpstthree::role::Role;
 
-// // Get recv functions
-// use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
-// use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
-// use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+// Get recv functions
+use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
 
-// // Get send functions
-// use mpstthree::functionmpst::send::send_mpst_b_to_a;
-// use mpstthree::functionmpst::send::send_mpst_c_to_a;
+// Get send functions
+use mpstthree::functionmpst::send::send_mpst_b_to_a;
+use mpstthree::functionmpst::send::send_mpst_c_to_a;
+use mpstthree::functionmpst::send::send_mpst_c_to_b;
 
-// use mpstthree::choose_mpst_c_to_all;
-// use mpstthree::offer_mpst_a_to_c;
-// use mpstthree::offer_mpst_b_to_c;
+use mpstthree::choose_mpst_c_to_all;
+use mpstthree::offer_mpst_a_to_c;
+use mpstthree::offer_mpst_b_to_c;
 
-// /////////////////////////////////////////
+/////////////////////////////////////////
+
+type ADDAtoB<N> = Recv<N, End>;
+
+type OrderingA0 = RoleB<RoleEnd>;
+type EndpointA1<N> = SessionMpst<ADDAtoB<N>, End, OrderingA0, RoleA<RoleEnd>>;
+type BYEAtoB<N> = Recv<N, End>;
+
+type OrderingA2 = RoleB<RoleEnd>;
+type EndpointA3<N> = SessionMpst<BYEAtoB<N>, End, OrderingA2, RoleA<RoleEnd>>;
+
+enum CBranchesAtoC<N: marker::Send> {
+    ADD(SessionMpst<ADDAtoB<N>, End, OrderingA0, RoleA<RoleEnd>>),
+    BYE(SessionMpst<BYEAtoB<N>, End, OrderingA2, RoleA<RoleEnd>>),
+}
+type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
+
+type TestAtoC<N> = Recv<N, End>;
+
+type OrderingA4 = RoleC<RoleEnd>;
+type OrderingA5Full = RoleC<RoleC<RoleEnd>>;
+type EndpointA6<N> =
+    SessionMpst<End, Recv<N, Recv<CBranchesAtoC<N>, End>>, OrderingA5Full, RoleA<RoleEnd>>;
+
+type ADDBtoA<N> = Send<N, End>;
+type ADDBtoC<N> = Recv<N, End>;
+
+type OrderingB0 = RoleC<RoleA<RoleEnd>>;
+type EndpointB1<N> = SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB0, RoleB<RoleEnd>>;
+type BYEBtoA<N> = Send<N, End>;
+type BYEBtoC<N> = Recv<N, End>;
+
+type OrderingB2 = RoleC<RoleA<RoleEnd>>;
+type EndpointB3<N> = SessionMpst<BYEBtoA<N>, BYEBtoC<N>, OrderingB2, RoleB<RoleEnd>>;
+
+enum CBranchesBtoC<N: marker::Send> {
+    ADD(SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB0, RoleB<RoleEnd>>),
+    BYE(SessionMpst<BYEBtoA<N>, BYEBtoC<N>, OrderingB2, RoleB<RoleEnd>>),
+}
+type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
+
+type OrderingB4 = RoleEnd;
+type OrderingB5Full = RoleC<RoleEnd>;
+type EndpointB6<N> = SessionMpst<End, Recv<CBranchesBtoC<N>, End>, OrderingB5Full, RoleB<RoleEnd>>;
+
+type TestCtoA<N> = Send<N, ChooseCforAtoC<N>>;
+
+type OrderingC0 = RoleA<RoleA<RoleB<RoleEnd>>>;
+type EndpointC1<N> = SessionMpst<TestCtoA<N>, ChooseCforBtoC<N>, OrderingC0, RoleC<RoleEnd>>;
+
+/////////////////////////////////////////
 
 // type ADDAtoB<N> = Recv<N, End>;
 
