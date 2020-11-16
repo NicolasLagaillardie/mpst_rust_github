@@ -78,6 +78,7 @@ where
 
 /// macro to create hashmap function, necessary for recursion. Need to sort out the path
 #[macro_export]
+#[doc(hidden)]
 macro_rules! checker_hashmaps {
     // ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:path, )* }, )*) => {
         ({ $($branch:path, $func:ident, { $($pat:path, )* }, )* }) => {

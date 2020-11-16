@@ -1,4 +1,28 @@
-/// Choose, for A, between many different sessions wrapped in an `enum`
+///  Choose, for A, among two different sessions
+///  
+///  # Arguments
+///  
+///   * The session to be used
+///   * The first path to be used
+///   * The second path to be used
+///  
+///  # Examples
+///  
+///  ```ignore
+///  match xs.pop() {
+///      Option::Some(_) => {
+///          let s = choose_mpst_a_to_all!(s, CBranchesBtoA::Video, CBranchesCtoA::Video);
+///          let s = send_mpst_a_to_b(1, s);
+///          let (_, s) = recv_mpst_a_to_b(s)?;
+///          client_recurs(s, xs, index + 1)
+///      }
+///      Option::None => {
+///          let s = choose_mpst_a_to_all!(s, CBranchesBtoA::End, CBranchesCtoA::End);
+///          close_mpst(s)?;
+///          Ok(())
+///      }
+///  }
+///  ```
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
@@ -42,7 +66,31 @@ macro_rules! choose_mpst_a_to_all {
     }};
 }
 
-/// Choose, for B, between many different sessions wrapped in an `enum`
+///  Choose, for B, among two different sessions
+///  
+///  # Arguments
+///  
+///   * The session to be used
+///   * The first path to be used
+///   * The second path to be used
+///  
+///  # Examples
+///  
+///  ```ignore
+///  match xs.pop() {
+///      Option::Some(_) => {
+///          let s = choose_mpst_b_to_all!(s, CBranchesAtoB::Video, CBranchesCtoB::Video);
+///          let s = send_mpst_b_to_a(1, s);
+///          let (_, s) = recv_mpst_b_to_a(s)?;
+///          client_recurs(s, xs, index + 1)
+///      }
+///      Option::None => {
+///          let s = choose_mpst_b_to_all!(s, CBranchesAtoB::End, CBranchesCtoB::End);
+///          close_mpst(s)?;
+///          Ok(())
+///      }
+///  }
+///  ```
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
@@ -86,7 +134,31 @@ macro_rules! choose_mpst_b_to_all {
     }};
 }
 
-/// Choose, for C, between many different sessions wrapped in an `enum`
+///  Choose, for C, among two different sessions
+///  
+///  # Arguments
+///  
+///   * The session to be used
+///   * The first path to be used
+///   * The second path to be used
+///  
+///  # Examples
+///  
+///  ```ignore
+///  match xs.pop() {
+///      Option::Some(_) => {
+///          let s = choose_mpst_c_to_all!(s, CBranchesAtoC::Video, CBranchesBtoC::Video);
+///          let s = send_mpst_c_to_a(1, s);
+///          let (_, s) = recv_mpst_c_to_a(s)?;
+///          client_recurs(s, xs, index + 1)
+///      }
+///      Option::None => {
+///          let s = choose_mpst_c_to_all!(s, CBranchesAtoC::End, CBranchesBtoC::End);
+///          close_mpst(s)?;
+///          Ok(())
+///      }
+///  }
+///  ```
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{

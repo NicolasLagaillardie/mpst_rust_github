@@ -3,8 +3,8 @@
 
 #[macro_export]
 macro_rules! create_offer_type_multi {
-    ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
+    ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions {
             type $type_name<#(S#N:0,)2:0 R0, R1, N0> = mpstthree::binary::Recv<either::Either<$sessionmpst_name<#(S#N:0,)0:0 R0, N0>, $sessionmpst_name<#(S#N:0,)3:0 R1, N0>>, End>;
         });
     }

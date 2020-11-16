@@ -1,9 +1,25 @@
 ////////////////////////////////////////////
 /// CHOICE
 
+///  Create the *ChooseMpst* type to be used with more than 3 participants.
+///  
+///  # Arguments
+///  
+///  * The name of the new *ChooseMpst* type
+///  * The *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Examples
+///  
+///  ```
+///  use mpstthree::{create_sessionmpst, create_choose_type_multi};
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///  create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+///  ```
 #[macro_export]
 macro_rules! create_choose_type_multi {
-    ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
             type $type_name<
                 #(S#N:0,)2:0 R0, R1, N0
@@ -16,15 +32,49 @@ macro_rules! create_choose_type_multi {
                         $sessionmpst_name<#(S#N:0,)3:0 R1, N0
                     > as mpstthree::binary::Session>::Dual
                     >,
-                End
+                mpstthree::binary::End
             >;
         });
     }
 }
 
+///  Create the *ChooseMpst* function to send a *Choose* *left* to be used with more than 3 participants.
+///  
+///  # Arguments
+///  
+///  * The name of the new *ChooseMpst* function
+///  * The name of the *ChooseMpst* type that is used
+///  * The name of the dual of the broadcasting sender. This one should contain *toAll* according to the convention
+///  * The name of the *next* function that is related
+///  * The name of the sender
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Examples
+///  
+///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_type_multi, create_choose_mpst_session_multi_left};
+///
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+///  create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///  create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+///
+/// create_choose_mpst_session_multi_left!(
+///     choose_left_mpst_session_d_to_all,
+///     ChooseMpstThree,
+///     RoleDtoAll,
+///     next_d_to_all,
+///     RoleD,
+///     SessionMpst,
+///     3
+/// );
+///  ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_left {
-    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $type_name: ident, $role_dual:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
             fn $func_name<'a, #(S#N:0,)10:0 #(R#N:0,)11:0>(
                 s: $sessionmpst_name<
@@ -47,7 +97,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                         >,
                     )0:0
 
-                    $role<
+                    $role_dual<
                         #(
                             R#N:0,
                         )13:0
@@ -123,9 +173,44 @@ macro_rules! create_choose_mpst_session_multi_left {
         });
     }
 }
+
+///  Create the *ChooseMpst* function to send a *Choose* *right* to be used with more than 3 participants.
+///  
+///  # Arguments
+///  
+///  * The name of the new *ChooseMpst* function
+///  * The name of the *ChooseMpst* type that is used
+///  * The name of the dual of the broadcasting sender. This one should contain *toAll* according to the convention
+///  * The name of the *next* function that is related
+///  * The name of the sender
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Examples
+///  
+///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_type_multi, create_choose_mpst_session_multi_right};
+///
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+///  create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///  create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+///
+/// create_choose_mpst_session_multi_right!(
+///     choose_right_mpst_session_d_to_all,
+///     ChooseMpstThree,
+///     RoleDtoAll,
+///     next_d_to_all,
+///     RoleD,
+///     SessionMpst,
+///     3
+/// );
+///  ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_right {
-    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $type_name: ident, $role_dual:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
             fn $func_name<'a, #(S#N:0,)10:0 #(R#N:0,)11:0>(
                 s: $sessionmpst_name<
@@ -148,7 +233,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                         >,
                     )0:0
 
-                    $role<
+                    $role_dual<
                         #(
                             R#N:0,
                         )13:0
@@ -225,7 +310,120 @@ macro_rules! create_choose_mpst_session_multi_right {
     }
 }
 
-/// Choose between many different sessions wrapped in an `enum`
+///  Create the two *ChooseMpst* functions to send a *Choose* on each branch to be used with more than 3 participants.
+///  
+///  # Arguments
+///  
+///  * The name of the new *ChooseMpst* function for the left branch
+///  * The name of the new *ChooseMpst* function for the right branch
+///  * The name of the *ChooseMpst* type that is used
+///  * The name of the dual of the broadcasting sender. This one should contain *toAll* according to the convention
+///  * The name of the *next* function that is related
+///  * The name of the sender
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Examples
+///  
+///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_type_multi, create_choose_mpst_session_multi_both};
+///
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+///  create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///  create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+///
+/// create_choose_mpst_session_multi_both!(
+///     choose_left_mpst_session_d_to_all,
+///     choose_right_mpst_session_d_to_all,
+///     ChooseMpstThree,
+///     RoleDtoAll,
+///     next_d_to_all,
+///     RoleD,
+///     SessionMpst,
+///     3
+/// );
+///  ```
+#[macro_export]
+macro_rules! create_choose_mpst_session_multi_both {
+    ($func_name_left:ident, $func_name_right:ident, $type_name: ident, $role_dual:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+        mpstthree::create_choose_mpst_session_multi_left!(
+            $func_name_left,
+            $type_name,
+            $role_dual,
+            $recv_func,
+            $name,
+            $sessionmpst_name,
+            $nsessions
+        );
+
+        mpstthree::create_choose_mpst_session_multi_right!(
+            $func_name_right,
+            $type_name,
+            $role_dual,
+            $recv_func,
+            $name,
+            $sessionmpst_name,
+            $nsessions
+        );
+    };
+}
+
+///  Choose among different sessions that are provided, for protocols with more than 3 participants
+///  
+///  # Arguments
+///  
+///   * The session to be used
+///   * The different send functions to broadcast the choice
+///   * The different `enum` variants which represent the different branches to be sent to each passive role
+///   * The different passive roles
+///   * The name of the sender
+///   * The name of the *SessionMpst* type that will be used
+///   * The number of participants (all together)
+///  
+///  # Examples
+///
+/// Available on the *13_macro_multi_recursion* test.
+///  
+///  ```ignore
+/// match xs.pop() {
+///     Option::Some(_) => {
+///         let s = choose_mpst_X_to_all!(
+///             s,
+///             send_mpst_d_to_a,
+///             send_mpst_d_to_b, =>
+///             CBranchesAtoC::Video,
+///             CBranchesBtoC::Video, =>
+///             RoleA,
+///             RoleB, =>
+///             RoleD,
+///             SessionMpst,
+///             3
+///         );
+///         let s = send_mpst_d_to_a(1, s);
+///         let (_, s) = recv_mpst_d_to_a(s)?;
+///         client_recurs(s, xs, index + 1)
+///     }
+///     Option::None => {
+///         let s = choose_mpst_X_to_all!(
+///             s,
+///             send_mpst_d_to_a,
+///             send_mpst_d_to_b, =>
+///             CBranchesAtoC::End,
+///             CBranchesBtoC::End, =>
+///             RoleA,
+///             RoleB, =>
+///             RoleD,
+///             SessionMpst,
+///             3
+///         );
+///         close_mpst_multi(s)?;
+///         Ok(())
+///     }
+/// }
+/// ```
 #[macro_export]
 macro_rules! choose_mpst_X_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal) => {

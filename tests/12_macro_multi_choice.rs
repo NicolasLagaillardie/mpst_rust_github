@@ -6,11 +6,10 @@ use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    close_mpst, create_broadcast_role, create_choose_mpst_session_multi_left,
-    create_choose_mpst_session_multi_right, create_choose_type_multi, create_normal_role,
-    create_offer_mpst_session_multi, create_offer_type_multi, create_recv_mpst_all_session,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_mpst_multi,
-    fork_simple_multi,
+    close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
+    create_choose_type_multi, create_normal_role, create_offer_mpst_session_multi,
+    create_offer_type_multi, create_recv_mpst_all_session, create_recv_mpst_session,
+    create_send_mpst_session, create_sessionmpst, fork_mpst_multi, fork_simple_multi,
 };
 use std::error::Error;
 
@@ -61,8 +60,8 @@ create_recv_mpst_all_session!(
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
 
-create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3, 2);
-create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3, 2);
+create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3);
+create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
 
 create_offer_mpst_session_multi!(
     offer_mpst_session_a_to_d,
@@ -86,17 +85,8 @@ create_offer_mpst_session_multi!(
     2
 );
 
-create_choose_mpst_session_multi_left!(
+create_choose_mpst_session_multi_both!(
     choose_left_mpst_session_d_to_all,
-    ChooseMpstThree,
-    RoleDtoAll,
-    next_d_to_all,
-    RoleD,
-    SessionMpst,
-    3
-);
-
-create_choose_mpst_session_multi_right!(
     choose_right_mpst_session_d_to_all,
     ChooseMpstThree,
     RoleDtoAll,

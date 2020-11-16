@@ -62,8 +62,8 @@ create_recv_mpst_all_session!(
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
 
-create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3, 2);
-create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3, 2);
+create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3);
+create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
 
 create_offer_mpst_session_multi!(
     offer_mpst_session_a_to_d,

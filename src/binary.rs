@@ -249,6 +249,28 @@ where
 }
 
 /// Offer a choice between many different sessions wrapped in an `enum`
+///
+/// # Arguments
+///
+///  * The session to be used
+///  * Each path, which are each variant of the enum which contains the new branches
+///  * The block of code to process each new session
+///
+/// # Examples
+///
+/// ```ignore
+/// offer!(s, {
+/// SumOp::More(s) => {
+///     let (y, s) = recv(s)?;
+///     nice_sum_server_accum(s, x.wrapping_add(y))
+/// },
+/// SumOp::Done(s) => {
+///     let s = send(x, s);
+///     close(s)?;
+///     Ok(())
+/// },
+/// })?;
+/// ```
 #[macro_export]
 macro_rules! offer {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
@@ -264,7 +286,30 @@ macro_rules! offer {
     };
 }
 
-/// Choose between many different sessions wrapped in an `enum`
+/// Choose a choice between many different sessions wrapped in an `enum`
+///
+/// # Arguments
+///
+///  * The path to be used
+///  * The session to be used
+///
+/// # Examples
+///
+/// ```ignore
+/// match xs.pop() {
+///     Option::Some(x) => {
+///         let s = choose!(SumOp::More, s);
+///         let s = send(x, s);
+///         nice_sum_client_accum(s, xs)
+///     }
+///     Option::None => {
+///         let s = choose!(SumOp::Done, s);
+///         let (sum, s) = recv(s)?;
+///         close(s)?;
+///         Ok(sum)
+///     }
+/// }
+/// ```
 #[macro_export]
 macro_rules! choose {
     ($label:path, $session:expr) => {{

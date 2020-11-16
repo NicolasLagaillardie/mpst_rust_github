@@ -1,3 +1,21 @@
+/// Create a new [`mpstthree::role::Role`], its dual and the related *next* function to process stacks start with them.
+///
+/// # Arguments
+///
+///  * The name of the new [`mpstthree::role::Role`]
+///  * The name of the *next* function that is related
+///  * The name of the *dual* of the new [`mpstthree::role::Role`]
+///  * The name of the *next* function that is related
+///
+/// # Examples
+///
+/// ```
+/// use mpstthree::create_normal_role;
+///
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// ```
+///
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_normal_role {
     ($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
@@ -101,6 +119,25 @@ macro_rules! create_normal_role {
     };
 }
 
+/// Create a new broadcast [`mpstthree::role::Role`], its dual and the related *next* function to process stacks start with them.
+/// A broadcast [`mpstthree::role::Role`] is used for sending a choice. Its dual is used for receving this choice.
+///
+/// # Arguments
+///
+///  * The name of the new [`mpstthree::role::Role`]
+///  * The name of the *next* function that is related
+///  * The name of the *dual* of the new [`mpstthree::role::Role`]
+///  * The name of the *next* function that is related
+///
+/// # Examples
+///
+/// ```
+/// use mpstthree::create_broadcast_role;
+///
+/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// ```
+///
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_broadcast_role {
     ($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
