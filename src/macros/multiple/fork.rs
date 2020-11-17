@@ -9,7 +9,7 @@
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
-///  # Examples
+///  # Example
 ///  
 ///  ```
 ///  use mpstthree::{fork_simple_multi, create_sessionmpst};
@@ -53,7 +53,7 @@ macro_rules! fork_simple_multi {
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
-///  # Examples
+///  # Example
 ///  
 ///  ```
 ///  use mpstthree::{fork_simple_multi, fork_mpst_multi, create_sessionmpst};

@@ -7,7 +7,7 @@
 ///  * The name of the *dual* of the new [`mpstthree::role::Role`]
 ///  * The name of the *next* function that is related
 ///
-/// # Examples
+/// # Example
 ///
 /// ```
 /// use mpstthree::create_normal_role;
@@ -129,7 +129,7 @@ macro_rules! create_normal_role {
 ///  * The name of the *dual* of the new [`mpstthree::role::Role`]
 ///  * The name of the *next* function that is related
 ///
-/// # Examples
+/// # Example
 ///
 /// ```
 /// use mpstthree::create_broadcast_role;

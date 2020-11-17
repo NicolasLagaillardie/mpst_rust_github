@@ -256,7 +256,7 @@ where
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer!(s, {
@@ -293,7 +293,7 @@ macro_rules! offer {
 ///  * The path to be used
 ///  * The session to be used
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// match xs.pop() {

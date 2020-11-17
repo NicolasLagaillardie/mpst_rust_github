@@ -9,7 +9,7 @@
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
-///  # Examples
+///  # Example
 ///  
 ///  ```
 ///  use mpstthree::{close_mpst, create_sessionmpst};

@@ -1,7 +1,31 @@
 ////////////////////////////////////////////
 /// SEND
 
-// create a function send_mpst for the excluded session
+/// Creates a *send* function to send from a given binary session type of a SessionMpst with more than 3 participants.
+///
+///  # Arguments
+///  
+///  * The name of the new *send* function
+///  * The name of the receiver
+///  * The name of the related *next* function
+///  * The name of the sender
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  * The index of the binary session type that will receive in the SessionMpst for this specific role. Index starts at 1.
+///  
+///  # Example
+///  
+///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_mpst_session};
+///
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///
+///  create_send_mpst_session!(send_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+///  ```
 #[macro_export]
 macro_rules! create_send_mpst_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {

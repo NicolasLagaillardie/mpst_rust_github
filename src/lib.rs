@@ -6,7 +6,7 @@
 //!
 //! <br>
 //!
-//! Mpstthree is a library to write and check communication protocols based on
+//! Mpstthree (also called Multi-Crusty) is a library to write and check communication protocols based on
 //! [Multiparty Session Types](https://mrg.doc.ic.ac.uk/publications/a-very-gentle-introduction-to-multiparty-session-types/).
 //!
 //! Currently this library is geared toward use with [Scribble](https://www.scribble.org/)

@@ -1,6 +1,21 @@
 ////////////////////////////////////////////
 /// SESSIONMPST
 
+/// Creates a SessionMpst for more than 3 participants.
+///
+///  # Arguments
+///  
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Example
+///  
+///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_sessionmpst};
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///  ```
 #[macro_export]
 macro_rules! create_sessionmpst {
     ($struct_name:ident, $nsessions:literal) => {

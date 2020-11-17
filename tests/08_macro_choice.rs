@@ -65,17 +65,17 @@ create_offer_mpst_session_2!(
 // Create the choose functions
 create_choose_right_from_3_to_1_and_2!(
     choose_right_mpst_session_c_to_all,
-    RoleCtoAll,
     RoleADual,
     RoleBDual,
+    RoleCtoAll,
     next_c_to_all,
     RoleC
 );
 create_choose_left_from_3_to_1_and_2!(
     choose_left_mpst_session_c_to_all,
-    RoleCtoAll,
     RoleADual,
     RoleBDual,
+    RoleCtoAll,
     next_c_to_all,
     RoleC
 );

@@ -6,7 +6,7 @@
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer_mpst_a_to_c!(s, {
@@ -25,17 +25,12 @@
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_a_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_c($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
+    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+
+        use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+
+        mpstthree::offer_mpst!($session, recv_mpst_a_to_c, { $($pat => $result,)* })
+    }};
 }
 
 /// Offer a choice to B from C between many different sessions wrapped in an `enum`
@@ -46,7 +41,7 @@ macro_rules! offer_mpst_a_to_c {
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer_mpst_b_to_c!(s, {
@@ -65,17 +60,12 @@ macro_rules! offer_mpst_a_to_c {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_b_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_b_to_c($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
+    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+
+        use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
+
+        mpstthree::offer_mpst!($session, recv_mpst_b_to_c, { $($pat => $result,)* })
+    }};
 }
 
 /// Offer a choice to A from B between many different sessions wrapped in an `enum`
@@ -86,7 +76,7 @@ macro_rules! offer_mpst_b_to_c {
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer_mpst_a_to_b!(s, {
@@ -105,17 +95,22 @@ macro_rules! offer_mpst_b_to_c {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_a_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_b($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
+    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+
+        use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+
+        mpstthree::offer_mpst!($session, recv_mpst_a_to_b, { $($pat => $result,)* })
+
+        // (move || -> Result<_, Box<dyn std::error::Error>> {
+        //     let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_b($session)?;
+        //     mpstthree::binary::cancel(s);
+        //     match l {
+        //         $(
+        //             $pat => { $result },
+        //         )*
+        //     }
+        // })()
+    }};
 }
 
 /// Offer a choice to B from A between many different sessions wrapped in an `enum`
@@ -126,7 +121,7 @@ macro_rules! offer_mpst_a_to_b {
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer_mpst_b_to_a!(s, {
@@ -145,17 +140,12 @@ macro_rules! offer_mpst_a_to_b {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_b_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_b_to_a($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
+    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+
+        use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+
+        mpstthree::offer_mpst!($session, recv_mpst_b_to_a, { $($pat => $result,)* })
+    }};
 }
 
 /// Offer a choice to C from B between many different sessions wrapped in an `enum`
@@ -166,7 +156,7 @@ macro_rules! offer_mpst_b_to_a {
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer_mpst_c_to_b!(s, {
@@ -185,17 +175,12 @@ macro_rules! offer_mpst_b_to_a {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_c_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_c_to_b($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
+    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+
+        use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+
+        mpstthree::offer_mpst!($session, recv_mpst_c_to_b, { $($pat => $result,)* })
+    }};
 }
 
 /// Offer a choice to C from A between many different sessions wrapped in an `enum`
@@ -206,7 +191,7 @@ macro_rules! offer_mpst_c_to_b {
 ///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
-/// # Examples
+/// # Example
 ///
 /// ```ignore
 /// offer_mpst_c_to_a!(s, {
@@ -225,15 +210,10 @@ macro_rules! offer_mpst_c_to_b {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_c_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_c_to_a($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
+    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+
+        use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+
+        mpstthree::offer_mpst!($session, recv_mpst_c_to_a, { $($pat => $result,)* })
+    }};
 }

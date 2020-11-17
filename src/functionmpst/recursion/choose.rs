@@ -6,7 +6,7 @@
 ///   * The first path to be used
 ///   * The second path to be used
 ///  
-///  # Examples
+///  # Example
 ///  
 ///  ```ignore
 ///  match xs.pop() {
@@ -23,46 +23,64 @@
 ///      }
 ///  }
 ///  ```
+///
+/// TO TEST
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
-        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
-        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
-        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
-        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
-        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
-        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
+        use mpstthree::functionmpst::send::{send_mpst_a_to_b, send_mpst_a_to_c};
+        use mpstthree::role::a::RoleA;
+        use mpstthree::role::b::RoleB;
+        use mpstthree::role::c::RoleC;
 
-        let s = mpstthree::functionmpst::send::send_mpst_a_to_b(
-            $labelone(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                stack: stack_b,
-                name: name_b,
-            }),
+        mpstthree::choose_mpst_to_all!(
             $session,
-        );
-        let s = mpstthree::functionmpst::send::send_mpst_a_to_c(
-            $labeltwo(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ca,
-                session2: session_cb,
-                stack: stack_c,
-                name: name_c,
-            }),
-            s,
-        );
+            $labelone,
+            $labeltwo,
+            send_mpst_a_to_b,
+            send_mpst_a_to_c,
+            RoleB,
+            RoleC,
+            RoleA
+        )
 
-        mpstthree::binary::cancel(s);
+        // let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
+        // let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
+        // let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
+        // let (stack_a, _) = <_ as mpstthree::role::Role>::new();
+        // let (stack_b, _) = <_ as mpstthree::role::Role>::new();
+        // let (stack_c, _) = <_ as mpstthree::role::Role>::new();
+        // let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
+        // let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
+        // let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
 
-        mpstthree::sessionmpst::SessionMpst {
-            session1: session_ab,
-            session2: session_ac,
-            stack: stack_a,
-            name: name_a,
-        }
+        // let s = mpstthree::functionmpst::send::send_mpst_a_to_b(
+        //     $labelone(mpstthree::sessionmpst::SessionMpst {
+        //         session1: session_ba,
+        //         session2: session_bc,
+        //         stack: stack_b,
+        //         name: name_b,
+        //     }),
+        //     $session,
+        // );
+        // let s = mpstthree::functionmpst::send::send_mpst_a_to_c(
+        //     $labeltwo(mpstthree::sessionmpst::SessionMpst {
+        //         session1: session_ca,
+        //         session2: session_cb,
+        //         stack: stack_c,
+        //         name: name_c,
+        //     }),
+        //     s,
+        // );
+
+        // mpstthree::binary::cancel(s);
+
+        // mpstthree::sessionmpst::SessionMpst {
+        //     session1: session_ab,
+        //     session2: session_ac,
+        //     stack: stack_a,
+        //     name: name_a,
+        // }
     }};
 }
 
@@ -74,7 +92,7 @@ macro_rules! choose_mpst_a_to_all {
 ///   * The first path to be used
 ///   * The second path to be used
 ///  
-///  # Examples
+///  # Example
 ///  
 ///  ```ignore
 ///  match xs.pop() {
@@ -91,46 +109,64 @@ macro_rules! choose_mpst_a_to_all {
 ///      }
 ///  }
 ///  ```
+///
+/// TO TEST
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
-        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
-        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
-        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
-        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
-        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
-        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
+        use mpstthree::functionmpst::send::{send_mpst_b_to_a, send_mpst_b_to_c};
+        use mpstthree::role::a::RoleA;
+        use mpstthree::role::b::RoleB;
+        use mpstthree::role::c::RoleC;
 
-        let s = mpstthree::functionmpst::send::send_mpst_b_to_a(
-            $labelone(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                stack: stack_a,
-                name: name_a,
-            }),
+        mpstthree::choose_mpst_to_all!(
             $session,
-        );
-        let s = mpstthree::functionmpst::send::send_mpst_b_to_c(
-            $labeltwo(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ca,
-                session2: session_cb,
-                stack: stack_c,
-                name: name_c,
-            }),
-            s,
-        );
+            $labelone,
+            $labeltwo,
+            send_mpst_b_to_a,
+            send_mpst_b_to_c,
+            RoleA,
+            RoleC,
+            RoleB
+        )
 
-        mpstthree::binary::cancel(s);
+        // let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
+        // let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
+        // let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
+        // let (stack_a, _) = <_ as mpstthree::role::Role>::new();
+        // let (stack_b, _) = <_ as mpstthree::role::Role>::new();
+        // let (stack_c, _) = <_ as mpstthree::role::Role>::new();
+        // let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
+        // let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
+        // let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
 
-        mpstthree::sessionmpst::SessionMpst {
-            session1: session_ba,
-            session2: session_bc,
-            stack: stack_b,
-            name: name_b,
-        }
+        // let s = mpstthree::functionmpst::send::send_mpst_b_to_a(
+        //     $labelone(mpstthree::sessionmpst::SessionMpst {
+        //         session1: session_ab,
+        //         session2: session_ac,
+        //         stack: stack_a,
+        //         name: name_a,
+        //     }),
+        //     $session,
+        // );
+        // let s = mpstthree::functionmpst::send::send_mpst_b_to_c(
+        //     $labeltwo(mpstthree::sessionmpst::SessionMpst {
+        //         session1: session_ca,
+        //         session2: session_cb,
+        //         stack: stack_c,
+        //         name: name_c,
+        //     }),
+        //     s,
+        // );
+
+        // mpstthree::binary::cancel(s);
+
+        // mpstthree::sessionmpst::SessionMpst {
+        //     session1: session_ba,
+        //     session2: session_bc,
+        //     stack: stack_b,
+        //     name: name_b,
+        // }
     }};
 }
 
@@ -142,7 +178,7 @@ macro_rules! choose_mpst_b_to_all {
 ///   * The first path to be used
 ///   * The second path to be used
 ///  
-///  # Examples
+///  # Example
 ///  
 ///  ```ignore
 ///  match xs.pop() {
@@ -162,42 +198,58 @@ macro_rules! choose_mpst_b_to_all {
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
-        let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
-        let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
-        let (stack_a, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_b, _) = <_ as mpstthree::role::Role>::new();
-        let (stack_c, _) = <_ as mpstthree::role::Role>::new();
-        let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
-        let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
-        let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
+        use mpstthree::functionmpst::send::{send_mpst_c_to_a, send_mpst_c_to_b};
+        use mpstthree::role::a::RoleA;
+        use mpstthree::role::b::RoleB;
+        use mpstthree::role::c::RoleC;
 
-        let s = mpstthree::functionmpst::send::send_mpst_c_to_a(
-            $labelone(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ab,
-                session2: session_ac,
-                stack: stack_a,
-                name: name_a,
-            }),
+        mpstthree::choose_mpst_to_all!(
             $session,
-        );
-        let s = mpstthree::functionmpst::send::send_mpst_c_to_b(
-            $labeltwo(mpstthree::sessionmpst::SessionMpst {
-                session1: session_ba,
-                session2: session_bc,
-                stack: stack_b,
-                name: name_b,
-            }),
-            s,
-        );
+            $labelone,
+            $labeltwo,
+            send_mpst_c_to_a,
+            send_mpst_c_to_b,
+            RoleA,
+            RoleB,
+            RoleC
+        )
 
-        mpstthree::binary::cancel(s);
+        // let (session_ac, session_ca) = <_ as mpstthree::binary::Session>::new();
+        // let (session_bc, session_cb) = <_ as mpstthree::binary::Session>::new();
+        // let (session_ab, session_ba) = <_ as mpstthree::binary::Session>::new();
+        // let (stack_a, _) = <_ as mpstthree::role::Role>::new();
+        // let (stack_b, _) = <_ as mpstthree::role::Role>::new();
+        // let (stack_c, _) = <_ as mpstthree::role::Role>::new();
+        // let (name_a, _) = mpstthree::role::a::RoleA::<mpstthree::role::end::RoleEnd>::new();
+        // let (name_b, _) = mpstthree::role::b::RoleB::<mpstthree::role::end::RoleEnd>::new();
+        // let (name_c, _) = mpstthree::role::c::RoleC::<mpstthree::role::end::RoleEnd>::new();
 
-        mpstthree::sessionmpst::SessionMpst {
-            session1: session_ca,
-            session2: session_cb,
-            stack: stack_c,
-            name: name_c,
-        }
+        // let s = mpstthree::functionmpst::send::send_mpst_c_to_a(
+        //     $labelone(mpstthree::sessionmpst::SessionMpst {
+        //         session1: session_ab,
+        //         session2: session_ac,
+        //         stack: stack_a,
+        //         name: name_a,
+        //     }),
+        //     $session,
+        // );
+        // let s = mpstthree::functionmpst::send::send_mpst_c_to_b(
+        //     $labeltwo(mpstthree::sessionmpst::SessionMpst {
+        //         session1: session_ba,
+        //         session2: session_bc,
+        //         stack: stack_b,
+        //         name: name_b,
+        //     }),
+        //     s,
+        // );
+
+        // mpstthree::binary::cancel(s);
+
+        // mpstthree::sessionmpst::SessionMpst {
+        //     session1: session_ca,
+        //     session2: session_cb,
+        //     stack: stack_c,
+        //     name: name_c,
+        // }
     }};
 }
