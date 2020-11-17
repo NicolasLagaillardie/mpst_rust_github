@@ -1,11 +1,27 @@
 ////////////////////////////////////////////
 /// OFFER
 
+///  Create the *OfferMpst* type to be used with more than 3 participants.
+///  
+///  # Arguments
+///  
+///  * The name of the new *OfferMpst* type
+///  * The *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Examples
+///  
+///  ```
+///  use mpstthree::{create_sessionmpst, create_offer_type_multi};
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///  create_offer_type_multi!(OfferMpstThree, SessionMpst, 3);
+///  ```
 #[macro_export]
 macro_rules! create_offer_type_multi {
     ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
-            type $type_name<#(S#N:0,)2:0 R0, R1, N0> = mpstthree::binary::Recv<either::Either<$sessionmpst_name<#(S#N:0,)0:0 R0, N0>, $sessionmpst_name<#(S#N:0,)3:0 R1, N0>>, End>;
+            type $type_name<#(S#N:0,)2:0 R0, R1, N0> = mpstthree::binary::Recv<either::Either<$sessionmpst_name<#(S#N:0,)0:0 R0, N0>, $sessionmpst_name<#(S#N:0,)3:0 R1, N0>>, mpstthree::binary::End>;
         });
     }
 }
