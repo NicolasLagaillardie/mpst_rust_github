@@ -248,7 +248,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn run_usecase_left() {
+fn run_c_usecase_left() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test video branch.
         {
@@ -265,7 +265,7 @@ fn run_usecase_left() {
 }
 
 #[test]
-fn run_usecase_right() {
+fn run_c_usecase_right() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {
@@ -282,7 +282,7 @@ fn run_usecase_right() {
 }
 
 #[test]
-fn run_usecase_checker() {
+fn run_c_usecase_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();

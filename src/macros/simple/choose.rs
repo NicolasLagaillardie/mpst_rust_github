@@ -790,9 +790,9 @@ macro_rules! choose_mpst_to_all {
         let (session_1_3, session_3_1) = <_ as mpstthree::binary::Session>::new();
         let (session_2_3, session_3_2) = <_ as mpstthree::binary::Session>::new();
         let (session_1_2, session_2_1) = <_ as mpstthree::binary::Session>::new();
-        let (role_1, _) = <_ as Role>::new();
-        let (role_2, _) = <_ as Role>::new();
-        let (role_3, _) = <_ as Role>::new();
+        let (role_1, _) = <_ as mpstthree::role::Role>::new();
+        let (role_2, _) = <_ as mpstthree::role::Role>::new();
+        let (role_3, _) = <_ as mpstthree::role::Role>::new();
         let (name_1, _) = <$receiver_1<mpstthree::role::end::RoleEnd> as Role>::new();
         let (name_2, _) = <$receiver_2<mpstthree::role::end::RoleEnd> as Role>::new();
         let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as Role>::new();

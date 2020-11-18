@@ -34,19 +34,19 @@ type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = End;
 type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 
-type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
-type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
+type RecursAtoC<N> = Recv<Branche0AtoC<N>, End>;
+type RecursBtoC<N> = Recv<Branche0BtoC<N>, End>;
 
-enum CBranchesAtoC<N: marker::Send> {
+enum Branche0AtoC<N: marker::Send> {
     End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
     Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo, RoleA<RoleEnd>>),
 }
-enum CBranchesBtoC<N: marker::Send> {
+enum Branche0BtoC<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
-type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
-type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
+type ChooseCforAtoC<N> = Send<Branche0AtoC<N>, End>;
+type ChooseCforBtoC<N> = Send<Branche0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
@@ -76,20 +76,20 @@ fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
 }
 
-impl<N: marker::Send> fmt::Display for CBranchesAtoC<N> {
+impl<N: marker::Send> fmt::Display for Branche0AtoC<N> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CBranchesAtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
-            CBranchesAtoC::End(s) => write!(f, "End:{}", type_of(&s)),
+            Branche0AtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
+            Branche0AtoC::End(s) => write!(f, "End:{}", type_of(&s)),
         }
     }
 }
 
-impl<N: marker::Send> fmt::Display for CBranchesBtoC<N> {
+impl<N: marker::Send> fmt::Display for Branche0BtoC<N> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CBranchesBtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
-            CBranchesBtoC::End(s) => write!(f, "End:{}", type_of(&s)),
+            Branche0BtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
+            Branche0BtoC::End(s) => write!(f, "End:{}", type_of(&s)),
         }
     }
 }
@@ -119,8 +119,8 @@ fn hashmap_c_branches_a_to_c() -> Vec<String> {
         name: name_end,
     };
 
-    let video = CBranchesAtoC::<i32>::Video(s_video);
-    let end = CBranchesAtoC::<i32>::End(s_end);
+    let video = Branche0AtoC::<i32>::Video(s_video);
+    let end = Branche0AtoC::<i32>::End(s_end);
 
     vec![
         String::from(&video.to_string()),
@@ -153,8 +153,8 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
         name: name_end,
     };
 
-    let video = CBranchesBtoC::<i32>::Video(s_video);
-    let end = CBranchesBtoC::<i32>::End(s_end);
+    let video = Branche0BtoC::<i32>::Video(s_video);
+    let end = Branche0BtoC::<i32>::End(s_end);
 
     vec![
         String::from(&video.to_string()),
@@ -171,8 +171,8 @@ fn test_checker() {
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            hm.insert(String::from("CBranchesAtoC<i32>"), &c_branches_a_to_c);
-            hm.insert(String::from("CBranchesBtoC<i32>"), &c_branches_b_to_c);
+            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointBRecurs<i32>, _) = SessionMpst::new();
@@ -180,9 +180,13 @@ fn test_checker() {
 
             let (a, b, c) = checker(s1, s2, s3, &hm)?;
 
+            println!("A: {}", a);
+            println!("B: {}", b);
+            println!("C: {}", c);
+
             assert_eq!(a, "A: A?C.A!C.µX( A?C.A!B.A?B.A!C.X & 0 )");
             assert_eq!(b, "B: µX( B?A.B!A.X & 0 )");
-            assert_eq!(c, "C: C!A.C?A.µX( A?C.A!B.A?B.A!C.X + 0 )");
+            assert_eq!(c, "C: C!A.C?A.µX( C!A.C?A.X + 0 )");
         }
         Ok(())
     }()
@@ -201,8 +205,8 @@ fn test_checker_panic_stack() {
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            hm.insert(String::from("CBranchesAtoC<i32>"), &c_branches_a_to_c);
-            hm.insert(String::from("CBranchesBtoC<i32>"), &c_branches_b_to_c);
+            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointBRecursPanicStack<i32>, _) = SessionMpst::new();
@@ -227,8 +231,8 @@ fn test_checker_panic_name() {
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            hm.insert(String::from("CBranchesAtoC<i32>"), &c_branches_a_to_c);
-            hm.insert(String::from("CBranchesBtoC<i32>"), &c_branches_b_to_c);
+            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointBRecursPanicName<i32>, _) = SessionMpst::new();

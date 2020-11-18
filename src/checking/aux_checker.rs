@@ -1,4 +1,5 @@
 use std::any::type_name;
+use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::error::Error;
 
@@ -14,9 +15,14 @@ pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
     let head_stack = get_head(&sessionmpst[2]);
     let sender = get_name(&get_head(&sessionmpst[3]));
 
-    // println!("sender checker_aux: {:?}", &sender);
-    // println!("sessionmpst checker_aux: {:?}", &sessionmpst);
-    // println!("head_stack checker_aux: {:?}", &head_stack);
+    println!();
+    println!("sender checker_aux: {:?}", &sender);
+    println!("sessionmpst checker_aux: {:?}", &sessionmpst);
+    println!("head_stack checker_aux: {:?}", &head_stack);
+
+    for (key, value) in &*hm {
+        println!("Values: {} / {:?}", key, value);
+    }
 
     if !head_stack.contains("RoleEnd") {
         let receiver = get_name(&head_stack);
@@ -72,7 +78,7 @@ fn match_recv_from_all<S: ::std::hash::BuildHasher>(
     hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
+    println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
 
     match role {
         receiver if receiver == receivers[0] => checker_aux(
@@ -119,13 +125,19 @@ fn match_headers<S: ::std::hash::BuildHasher>(
     hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("head_sessions match_headers: {:?}", &head_sessions);
-    // println!("sessionmpst match_headers: {:?}", &sessionmpst);
-    // println!("headers match_headers: {:?}", &headers);
-    // println!("involved match_headers: {:?}", &involved);
-    // println!("index match_headers: {:?}", &index);
-    // println!("seen match_headers: {:?}", &seen);
-    // println!("role match_headers: {:?}", &role);
+    println!(
+        "roles_and_sessions match_headers: {:?}",
+        &roles_and_sessions
+    );
+    println!("sessionmpst match_headers: {:?}", &sessionmpst);
+    println!("involved match_headers: {:?}", &involved);
+    println!("index match_headers: {:?}", &index);
+    println!("seen match_headers: {:?}", &seen);
+    println!("role match_headers: {:?}", &role);
+    println!(
+        "roles_and_sessions match_headers: {:?}",
+        &roles_and_sessions
+    );
 
     match involved[1].as_str() {
         h if h == roles_and_sessions[0] => match_full_types(
@@ -137,7 +149,10 @@ fn match_headers<S: ::std::hash::BuildHasher>(
                 sessionmpst[3],
             ],
             involved,
-            &get_head_payload(&sessionmpst[0]),
+            [
+                &get_head_payload(&sessionmpst[0]),
+                &get_head_payload(&sessionmpst[1]),
+            ],
             role,
             hm,
             seen,
@@ -151,7 +166,10 @@ fn match_headers<S: ::std::hash::BuildHasher>(
                 sessionmpst[3],
             ],
             involved,
-            &get_head_payload(&sessionmpst[1]),
+            [
+                &get_head_payload(&sessionmpst[1]),
+                &get_head_payload(&sessionmpst[0]),
+            ],
             role,
             hm,
             seen,
@@ -166,17 +184,17 @@ fn match_full_types<S: ::std::hash::BuildHasher>(
     head_session: &str,
     sessionmpst: [&str; 4],
     involved: [String; 2],
-    payload: &str,
+    payloads: [&str; 2],
     role: &str,
     hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst match_full_types: {:?}", &sessionmpst);
-    // println!("head_session match_full_types: {:?}", &head_session);
+    println!("sessionmpst match_full_types: {:?}", &sessionmpst);
+    println!("head_session match_full_types: {:?}", &head_session);
 
     match head_session {
-        "Send" => send_type(sessionmpst, involved, payload, role, hm, seen, " + "),
-        "Recv" => recv_type(sessionmpst, involved, payload, role, hm, seen, " & "),
+        "Send" => send_type(sessionmpst, involved, payloads, role, hm, seen, " + "),
+        "Recv" => recv_type(sessionmpst, involved, payloads[0], role, hm, seen, " & "),
         _ => panic!("Wrong session type, not recognized: {}", head_session),
     }
 }
@@ -189,26 +207,61 @@ pub fn parse_type_of<T>(_: T) -> String {
 #[doc(hidden)]
 fn parse_type(s: &str) -> String {
     let mut result = s;
-    if s.contains(":&") {
-        result = &result.split(":&").collect::<Vec<_>>()[1];
+
+    println!("Start result: {:?}", &result);
+
+    let mut to_remove: Vec<String> = Vec::new();
+
+    let mut temp_str = String::from("");
+
+    let mut previous_char = '$';
+
+    for c in result.chars() {
+        match c {
+            ':' if previous_char == ':' => {
+                temp_str.push(':');
+                if !to_remove.contains(&temp_str) {
+                    to_remove.push(temp_str);
+                }
+                temp_str = String::from("");
+            }
+            ':' => {
+                temp_str.push(c);
+                previous_char = c;
+            }
+            '_' => {
+                temp_str.push(c);
+                previous_char = c;
+            }
+            '&' => {
+                temp_str.push(c);
+                previous_char = c;
+            }
+            c if c.is_alphanumeric() => {
+                temp_str.push(c);
+                previous_char = c;
+            }
+            _ => {
+                temp_str = String::from("");
+                previous_char = '$';
+            }
+        }
     }
-    let result = &result
-        .replace("&", "")
-        .replace("mpstthree::", "")
-        .replace("sessionmpst::", "")
-        .replace("binary::", "")
-        .replace("role::a::", "")
-        .replace("role::b::", "")
-        .replace("role::c::", "")
-        .replace("role::a_to_all::", "")
-        .replace("role::b_to_all::", "")
-        .replace("role::c_to_all::", "")
-        .replace("role::all_to_a::", "")
-        .replace("role::all_to_b::", "")
-        .replace("role::all_to_c::", "")
-        .replace("role::end::", "")
-        .replace("either::", "")
-        .replace("checker::", "");
+
+    to_remove.sort_by_key(|b| Reverse(b.chars().count()));
+
+    println!("to_remove: {:?}", &to_remove);
+
+    let mut temp = String::from(result);
+
+    for elt in to_remove.iter() {
+        temp = temp.replace(elt, "");
+    }
+
+    result = &temp;
+
+    println!("End result: {:?}", &result);
+
     result.chars().filter(|c| !c.is_whitespace()).collect()
 }
 
@@ -231,7 +284,7 @@ fn get_name(head: &str) -> String {
 
 #[doc(hidden)]
 fn get_head(s: &str) -> String {
-    // println!("get_head: {}", &s);
+    println!("get_head: {}", &s);
 
     let mut result: Vec<&str> = s.split('<').collect();
     if result[0] == "Either" {
@@ -249,18 +302,18 @@ fn get_head(s: &str) -> String {
         })
         .collect::<Vec<_>>();
 
-    // println!("result get_head : {}", &result[0]);
+    println!("result get_head : {}", &result[0]);
 
     String::from(result[0])
 }
 
 #[doc(hidden)]
 fn get_head_payload(s: &str) -> String {
-    // println!("get_head_payload: {}", &s);
+    println!("get_head_payload: {}", &s);
 
     let payload = &get_two_tails(s)[0];
 
-    // println!("payload get_head_payload: {}", &payload);
+    println!("payload get_head_payload: {}", &payload);
 
     if payload.contains("::") {
         String::from(payload.split("::").collect::<Vec<_>>()[1])
@@ -271,7 +324,7 @@ fn get_head_payload(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_two_tails(s: &str) -> [String; 2] {
-    // println!("get_two_tails: {}", &s);
+    println!("get_two_tails: {}", &s);
 
     let mut result: [String; 2] = Default::default();
     if s == "End" {
@@ -309,7 +362,7 @@ fn get_two_tails(s: &str) -> [String; 2] {
         }
     }
 
-    // println!("result get_two_tails: {}", &s);
+    println!("result get_two_tails: {}", &s);
 
     if result[1] == "" {
         let mut temp: [String; 2] = Default::default();
@@ -323,7 +376,7 @@ fn get_two_tails(s: &str) -> [String; 2] {
 
 #[doc(hidden)]
 fn get_fields(s: &str) -> [String; 4] {
-    // println!("get_fields: {}", &s);
+    println!("get_fields: {}", &s);
 
     let mut result: [String; 4] = Default::default();
     let mut index = -1;
@@ -356,14 +409,14 @@ fn get_fields(s: &str) -> [String; 4] {
         }
     }
 
-    // println!("result get_fields: {}", &s);
+    println!("result get_fields: {}", &s);
 
     result
 }
 
 #[doc(hidden)]
 fn divide_either(s: &str) -> [String; 8] {
-    // println!("divide_either: {}", &s);
+    println!("divide_either: {}", &s);
 
     let mut result: [String; 8] = Default::default();
     let mut index = -2;
@@ -397,7 +450,7 @@ fn divide_either(s: &str) -> [String; 8] {
         }
     }
 
-    // println!("result divide_either: {:?}", &result);
+    println!("result divide_either: {:?}", &result);
 
     result
 }
@@ -410,7 +463,7 @@ fn get_tail(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_dual(s: &str) -> String {
-    // println!("Dual: {}", &s);
+    println!("Dual: {}", &s);
 
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
@@ -435,20 +488,25 @@ fn switch_role(s: &str, a: &str, b: &str) -> String {
 fn send_type<S: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     involved: [String; 2],
-    payload: &str,
+    payloads: [&str; 2],
     role: &str,
     hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst send_type: {:?}", &sessionmpst);
-    // println!("payload send_type: {:?}", &payload);
+    println!("sessionmpst send_type: {:?}", &sessionmpst);
+    println!("payload send_type: {:?}", &payloads);
 
-    if seen.contains(&String::from(payload)) {
+    if seen.contains(&String::from(payloads[0])) {
         Ok(String::from("X"))
-    } else if hm.contains_key(payload) {
-        recurs_type(payload, role, hm, seen, symbol)
+    } else if hm.contains_key(payloads[0]) && hm.contains_key(payloads[1]) {
+        recurs_type(payloads, role, hm, seen, symbol)
     } else {
+        println!(
+            "payload send_type: {:?} / {:?} / {:?} / {:?}",
+            involved[0], involved[1], &payloads, role
+        );
+
         Ok(format!(
             "{}!{}.{}",
             involved[0],
@@ -468,8 +526,8 @@ fn recv_type<S: ::std::hash::BuildHasher>(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst recv_type: {:?}", &sessionmpst);
-    // println!("payload recv_type: {:?}", &payload);
+    println!("sessionmpst recv_type: {:?}", &sessionmpst);
+    println!("payload recv_type: {:?}", &payload);
 
     if payload.contains("Either") {
         let branching: [String; 8] = divide_either(payload);
@@ -491,8 +549,13 @@ fn recv_type<S: ::std::hash::BuildHasher>(
     } else if seen.contains(&String::from(payload)) {
         Ok(String::from("X"))
     } else if hm.contains_key(payload) {
-        recurs_type(payload, role, hm, seen, symbol)
+        recurs_type([payload, ""], role, hm, seen, symbol)
     } else {
+        println!(
+            "payload recv_type: {:?} / {:?} / {:?} / {:?}",
+            involved[0], involved[1], &payload, role
+        );
+
         Ok(format!(
             "{}?{}.{}",
             involved[0],
@@ -503,45 +566,289 @@ fn recv_type<S: ::std::hash::BuildHasher>(
 }
 
 #[doc(hidden)]
+fn reverse_stack(stack: &str, previous_role: &str, role: &str) -> String {
+    println!("reverse_stack: {} / {}", stack, role);
+
+    // pprintln!("previous_role: {:?}", previous_role);
+
+    let test = stack.split('<').collect::<Vec<_>>();
+
+    println!("test: {:?}", test);
+
+    let mut mapping = test
+        .iter()
+        .map(|&x| {
+            if x == format!("Role{}", role) {
+                previous_role
+            } else {
+                ""
+            }
+        })
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>();
+
+    // pprintln!("mapping: {:?}", mapping);
+
+    mapping.push("RoleEnd");
+
+    println!("mapping 2: {:?}", mapping);
+
+    format!("{}{}", mapping.join("<"), vec![">"; mapping.len()].join(""))
+}
+
+#[doc(hidden)]
+fn change_order(
+    sessions_and_stack: &[String; 4],
+    full_role: &str,
+    previous_role: &str,
+) -> (String, String) {
+    match full_role {
+        "RoleA" => match previous_role {
+            "RoleB" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            "RoleC" => (
+                get_dual(&sessions_and_stack[1]),
+                get_dual(&sessions_and_stack[0]),
+            ),
+            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+        },
+        "RoleB" => match previous_role {
+            "RoleA" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            "RoleC" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+        },
+        "RoleC" => match previous_role {
+            "RoleA" => (
+                get_dual(&sessions_and_stack[1]),
+                get_dual(&sessions_and_stack[0]),
+            ),
+            "RoleB" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+        },
+        _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+    }
+}
+
+#[doc(hidden)]
+fn get_branches_result<S: ::std::hash::BuildHasher>(
+    branches: &[String],
+    role: &str,
+    hm: &HashMap<String, &Vec<String>, S>,
+    seen: &mut Vec<String>,
+    symbol: &str,
+    mut vec_result: Vec<String>,
+    mut recurs: bool,
+) -> Result<(Vec<String>, bool), Box<dyn Error>> {
+    for branch in branches.iter() {
+        let sessions_and_stack = get_fields(&parse_type(branch));
+
+        if symbol != " + " {
+            let result_branch = checker_aux(
+                [
+                    &sessions_and_stack[0],
+                    &sessions_and_stack[1],
+                    &sessions_and_stack[2],
+                    &sessions_and_stack[3],
+                ],
+                role,
+                &hm,
+                seen,
+            )?;
+            recurs = result_branch.contains(&String::from(".X")) || recurs;
+            vec_result.push(result_branch);
+        } else {
+            let previous_role: &str = sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
+
+            let full_role: &str = &format!("Role{}", role);
+
+            let new_order = change_order(&sessions_and_stack, full_role, previous_role);
+
+            println!(
+                "Coco: {} / {} / {} / {}",
+                &new_order.0,
+                &new_order.1,
+                &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                &format!("Role{}<RoleEnd>", role),
+            );
+
+            let result_branch = checker_aux(
+                [
+                    &new_order.0,
+                    &new_order.1,
+                    &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                    &format!("Role{}<RoleEnd>", role),
+                ],
+                role,
+                &hm,
+                seen,
+            )?;
+
+            recurs = result_branch.contains(&String::from(".X"))
+                || result_branch.contains(&String::from(" X "))
+                || recurs;
+            vec_result.push(result_branch);
+        }
+    }
+
+    Ok((vec_result, recurs))
+}
+
+#[doc(hidden)]
 fn recurs_type<S: ::std::hash::BuildHasher>(
-    payload: &str,
+    payloads: [&str; 2],
     role: &str,
     hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("payload recurs_type: {}", &payload);
+    println!("payload recurs_type: {:?}", &payloads);
+    println!("hm recurs_type 1: {:?}", hm.get(payloads[0]));
+    println!("hm recurs_type 2: {:?}", hm.get(payloads[1]));
 
     let mut vec_result = Vec::new();
     let mut recurs = false;
 
-    seen.push(String::from(payload));
+    seen.push(String::from(payloads[0]));
+    seen.push(String::from(payloads[1]));
 
-    match hm.get(payload) {
-        Some(&branches) => {
-            for branch in branches.iter() {
+    match (hm.get(payloads[0]), hm.get(payloads[1])) {
+        (Some(&branches0), Some(&branches1)) => {
+            println!(
+                "branches0 recurs_type: {:?}",
+                get_branches_result(branches0, role, hm, seen, symbol, Vec::new(), false)
+            );
+            println!(
+                "branches1 recurs_type: {:?}",
+                get_branches_result(branches1, role, hm, seen, symbol, Vec::new(), false)
+            );
+
+            for branch in branches0.iter() {
                 let sessions_and_stack = get_fields(&parse_type(branch));
-                let result_branch = checker_aux(
-                    [
-                        &sessions_and_stack[0],
-                        &sessions_and_stack[1],
-                        &sessions_and_stack[2],
-                        &sessions_and_stack[3],
-                    ],
-                    role,
-                    &hm,
-                    seen,
-                )?;
-                recurs = result_branch.contains(&String::from(".X")) || recurs;
-                vec_result.push(result_branch);
+
+                if symbol != " + " {
+                    let result_branch = checker_aux(
+                        [
+                            &sessions_and_stack[0],
+                            &sessions_and_stack[1],
+                            &sessions_and_stack[2],
+                            &sessions_and_stack[3],
+                        ],
+                        role,
+                        &hm,
+                        seen,
+                    )?;
+                    recurs = result_branch.contains(&String::from(".X")) || recurs;
+                    vec_result.push(result_branch);
+                } else {
+                    let previous_role: &str =
+                        sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
+
+                    let full_role: &str = &format!("Role{}", role);
+
+                    let new_order = change_order(&sessions_and_stack, full_role, previous_role);
+
+                    println!(
+                        "Coco: {} / {} / {} / {}",
+                        &new_order.0,
+                        &new_order.1,
+                        &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                        &format!("Role{}<RoleEnd>", role),
+                    );
+
+                    let result_branch = checker_aux(
+                        [
+                            &new_order.0,
+                            &new_order.1,
+                            &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                            &format!("Role{}<RoleEnd>", role),
+                        ],
+                        role,
+                        &hm,
+                        seen,
+                    )?;
+
+                    recurs = result_branch.contains(&String::from(".X"))
+                        || result_branch.contains(&String::from(" X "))
+                        || recurs;
+                    vec_result.push(result_branch);
+                }
             }
         }
-        _ => panic!("Error with hashmap and payload: {:?} and {}", hm, payload),
+        (Some(&branches0), None) => {
+            for branch in branches0.iter() {
+                let sessions_and_stack = get_fields(&parse_type(branch));
+
+                if symbol != " + " {
+                    let result_branch = checker_aux(
+                        [
+                            &sessions_and_stack[0],
+                            &sessions_and_stack[1],
+                            &sessions_and_stack[2],
+                            &sessions_and_stack[3],
+                        ],
+                        role,
+                        &hm,
+                        seen,
+                    )?;
+                    recurs = result_branch.contains(&String::from(".X")) || recurs;
+                    vec_result.push(result_branch);
+                } else {
+                    let previous_role: &str =
+                        sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
+
+                    let full_role: &str = &format!("Role{}", role);
+
+                    let new_order = change_order(&sessions_and_stack, full_role, previous_role);
+
+                    println!(
+                        "Coco: {} / {} / {} / {}",
+                        &new_order.0,
+                        &new_order.1,
+                        &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                        &format!("Role{}<RoleEnd>", role),
+                    );
+
+                    let result_branch = checker_aux(
+                        [
+                            &new_order.0,
+                            &new_order.1,
+                            &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                            &format!("Role{}<RoleEnd>", role),
+                        ],
+                        role,
+                        &hm,
+                        seen,
+                    )?;
+
+                    recurs = result_branch.contains(&String::from(".X"))
+                        || result_branch.contains(&String::from(" X "))
+                        || recurs;
+                    vec_result.push(result_branch);
+                }
+            }
+        }
+        _ => panic!(
+            "Error with hashmap and payload: {:?} and {:?}",
+            hm, payloads
+        ),
     }
 
     let result = vec_result.join(symbol);
 
-    // println!("result recurs_type: {}", &result);
+    println!("result recurs_type: {}", &result);
+    println!();
+    println!();
 
     if recurs {
         Ok(format!("µX( {} )", result))
@@ -558,7 +865,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
     hm: &HashMap<String, &Vec<String>, S>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst all_type: {:?}", &sessionmpst);
+    println!("sessionmpst all_type: {:?}", &sessionmpst);
 
     let payload_1 = get_head_payload(&sessionmpst[0]);
     let payload_2 = get_head_payload(&sessionmpst[1]);
@@ -567,7 +874,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
         let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        // println!("tails: {:?}", &tails);
+        println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -598,7 +905,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
         let branching_1: [String; 8] = divide_either(&payload_1);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        // println!("tails: {:?}", &tails);
+        println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -629,7 +936,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
         let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        // println!("tails: {:?}", &tails);
+        println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -673,179 +980,359 @@ fn all_type<S: ::std::hash::BuildHasher>(
 
 //////////////////////////////////
 
-#[test]
-#[should_panic]
-fn get_head_panic() {
-    get_name("");
-}
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
 
-#[test]
-#[should_panic]
-fn match_full_types_panic() {
-    let _ = match_full_types(
-        "",
-        ["", "", "", ""],
-        [String::from(""), String::from("")],
-        "",
-        "",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn get_head_panic() {
+        get_name("");
+    }
 
-#[test]
-#[should_panic]
-fn match_headers_panic() {
-    let _ = match_headers(
-        ["", "", "", ""],
-        ["", "", "", ""],
-        [String::from(""), String::from("")],
-        [0, 0, 0, 0],
-        "",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn match_full_types_panic() {
+        let _ = match_full_types(
+            "",
+            ["", "", "", ""],
+            [String::from(""), String::from("")],
+            ["", ""],
+            "",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-fn get_head_either() {
-    let test = "Either<Left, Right>";
-    assert_eq!(get_head(test), String::from(test));
-}
+    #[test]
+    #[should_panic]
+    fn match_headers_panic() {
+        let _ = match_headers(
+            ["", "", "", ""],
+            ["", "", "", ""],
+            [String::from(""), String::from("")],
+            [0, 0, 0, 0],
+            "",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-fn send_type_x() {
-    let test = send_type(
-        ["", "", "", ""],
-        [String::from(""), String::from("")],
-        "A",
-        "",
-        &HashMap::new(),
-        &mut vec![String::from("A")],
-        "",
-    )
-    .unwrap();
+    #[test]
+    fn get_head_either() {
+        let test = "Either<Left, Right>";
+        assert_eq!(get_head(test), String::from(test));
+    }
 
-    assert_eq!(test, String::from("X"));
-}
+    #[test]
+    fn send_type_x() {
+        let test = send_type(
+            ["", "", "", ""],
+            [String::from(""), String::from("")],
+            ["A", ""],
+            "",
+            &HashMap::new(),
+            &mut vec![String::from("A")],
+            "",
+        )
+        .unwrap();
 
-#[test]
-#[should_panic]
-fn recurs_type_panic() {
-    let _ = recurs_type("", "", &HashMap::new(), &mut vec![], "");
-}
+        assert_eq!(test, String::from("X"));
+    }
 
-#[test]
-#[should_panic]
-fn match_recv_from_all_panic_at_checker_aux_0() {
-    let _ = match_recv_from_all(
-        "",
-        ["", ""],
-        ["", "", "", ""],
-        "",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn recurs_type_panic() {
+        let _ = recurs_type(["", ""], "", &HashMap::new(), &mut vec![], "");
+    }
 
-#[test]
-#[should_panic]
-fn match_recv_from_all_panic_at_checker_aux_1() {
-    let _ = match_recv_from_all(
-        "",
-        ["", ""],
-        ["A", "", "", ""],
-        "",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn match_recv_from_all_panic_at_checker_aux_0() {
+        let _ = match_recv_from_all(
+            "",
+            ["", ""],
+            ["", "", "", ""],
+            "",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-#[should_panic]
-fn match_recv_from_all_panic() {
-    let _ = match_recv_from_all(
-        "",
-        ["", ""],
-        ["", "", "", ""],
-        "A",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn match_recv_from_all_panic_at_checker_aux_1() {
+        let _ = match_recv_from_all(
+            "",
+            ["", ""],
+            ["A", "", "", ""],
+            "",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-#[should_panic]
-fn all_type_panic() {
-    let _ = all_type(
-        ["", "", "", ""],
-        [0, 0, 0, 0],
-        "",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn match_recv_from_all_panic() {
+        let _ = match_recv_from_all(
+            "",
+            ["", ""],
+            ["", "", "", ""],
+            "A",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-#[should_panic]
-fn checker_aux_panic() {
-    let _ = checker_aux(
-        [
-            "End",
-            "End",
-            "RoleAlltoA<RoleEnd, RoleEnd>",
-            "RoleA<RoleEnd>",
-        ],
-        "A",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn all_type_panic() {
+        let _ = all_type(
+            ["", "", "", ""],
+            [0, 0, 0, 0],
+            "",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-#[should_panic]
-fn checker_aux_panic_a() {
-    let _ = checker_aux(
-        [
-            "End",
-            "End",
-            "RoleAlltoA<RoleEnd, RoleEnd>",
-            "RoleA<RoleEnd>",
-        ],
-        "A",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn checker_aux_panic() {
+        let _ = checker_aux(
+            [
+                "End",
+                "End",
+                "RoleAlltoA<RoleEnd, RoleEnd>",
+                "RoleA<RoleEnd>",
+            ],
+            "A",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-#[should_panic]
-fn checker_aux_panic_b() {
-    let _ = checker_aux(
-        [
-            "End",
-            "End",
-            "RoleAlltoB<RoleEnd, RoleEnd>",
-            "RoleB<RoleEnd>",
-        ],
-        "B",
-        &HashMap::new(),
-        &mut vec![],
-    );
-}
+    #[test]
+    #[should_panic]
+    fn checker_aux_panic_a() {
+        let _ = checker_aux(
+            [
+                "End",
+                "End",
+                "RoleAlltoA<RoleEnd, RoleEnd>",
+                "RoleA<RoleEnd>",
+            ],
+            "A",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
 
-#[test]
-#[should_panic]
-fn checker_aux_panic_c() {
-    let _ = checker_aux(
-        [
-            "End",
-            "End",
-            "RoleAlltoC<RoleEnd, RoleEnd>",
-            "RoleC<RoleEnd>",
-        ],
-        "C",
-        &HashMap::new(),
-        &mut vec![],
-    );
+    #[test]
+    #[should_panic]
+    fn checker_aux_panic_b() {
+        let _ = checker_aux(
+            [
+                "End",
+                "End",
+                "RoleAlltoB<RoleEnd, RoleEnd>",
+                "RoleB<RoleEnd>",
+            ],
+            "B",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn checker_aux_panic_c() {
+        let _ = checker_aux(
+            [
+                "End",
+                "End",
+                "RoleAlltoC<RoleEnd, RoleEnd>",
+                "RoleC<RoleEnd>",
+            ],
+            "C",
+            &HashMap::new(),
+            &mut vec![],
+        );
+    }
+
+    #[test]
+    fn reverse_stack_test() {
+        let test = reverse_stack("RoleB<RoleEnd>", "RoleA>", "C");
+
+        assert_eq!(test, String::from("RoleEnd>"));
+    }
+
+    #[test]
+    fn parse_type_test() {
+        let test = parse_type("&mpstthree::binary::Recv<i32, mpstthree::binary::Send<i32, mpstthree::binary::Recv<06_a_usecase_recursive::Branche0CtoB<i32>, mpstthree::binary::End>>>");
+
+        assert_eq!(
+            test,
+            String::from("Recv<i32,Send<i32,Recv<Branche0CtoB<i32>,End>>>")
+        );
+    }
+
+    #[test]
+    fn change_order_test() {
+        let test = change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleB<RoleEnd>>"),
+            ],
+            "RoleA",
+            "RoleB",
+        );
+
+        assert_eq!(test.0, "Recv<End>");
+        assert_eq!(test.1, "Send<End>");
+
+        ////////////////////////////////////////////
+
+        let test = change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleA<RoleEnd>>"),
+            ],
+            "RoleB",
+            "RoleA",
+        );
+
+        assert_eq!(test.0, "Recv<End>");
+        assert_eq!(test.1, "Send<End>");
+
+        ////////////////////////////////////////////
+
+        let test = change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleC<RoleEnd>>"),
+            ],
+            "RoleA",
+            "RoleC",
+        );
+
+        assert_eq!(test.0, "Send<End>");
+        assert_eq!(test.1, "Recv<End>");
+
+        ////////////////////////////////////////////
+
+        let test = change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleA<RoleEnd>>"),
+            ],
+            "RoleC",
+            "RoleA",
+        );
+
+        assert_eq!(test.0, "Send<End>");
+        assert_eq!(test.1, "Recv<End>");
+
+        ////////////////////////////////////////////
+
+        let test = change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleC<RoleEnd>>"),
+            ],
+            "RoleB",
+            "RoleC",
+        );
+
+        assert_eq!(test.0, "Recv<End>");
+        assert_eq!(test.1, "Send<End>");
+
+        ////////////////////////////////////////////
+
+        let test = change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleB<RoleEnd>>"),
+            ],
+            "RoleC",
+            "RoleB",
+        );
+
+        assert_eq!(test.0, "Recv<End>");
+        assert_eq!(test.1, "Send<End>");
+    }
+
+    #[test]
+    #[should_panic]
+    fn change_order_panic_a_none() {
+        change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleB<RoleEnd>>"),
+            ],
+            "RoleA",
+            "Role",
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn change_order_panic_b_none() {
+        change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleB<RoleEnd>>"),
+            ],
+            "RoleB",
+            "Role",
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn change_order_panic_c_none() {
+        change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleB<RoleEnd>>"),
+            ],
+            "RoleC",
+            "Role",
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn change_order_panic_none_a() {
+        change_order(
+            &[
+                String::from("Send<End>"),
+                String::from("Recv<End>"),
+                String::from("RoleEnd"),
+                String::from("RoleB<RoleEnd>>"),
+            ],
+            "Role",
+            "RoleA",
+        );
+    }
 }
