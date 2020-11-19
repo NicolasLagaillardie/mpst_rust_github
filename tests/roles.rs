@@ -1,5 +1,3 @@
-extern crate mpstthree;
-
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::a_to_all::RoleAtoAll;

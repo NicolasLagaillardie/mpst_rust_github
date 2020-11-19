@@ -1,5 +1,4 @@
 // Test for parametrisation on the number of roles
-extern crate mpstthree;
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{End, Recv, Send, Session};

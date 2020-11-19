@@ -1,6 +1,3 @@
-extern crate mpstthree;
-extern crate rand;
-
 use mpstthree::binary::*;
 use mpstthree::choose;
 use mpstthree::offer;

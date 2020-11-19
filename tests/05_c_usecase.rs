@@ -1,4 +1,3 @@
-extern crate mpstthree;
 extern crate rand;
 
 use rand::{thread_rng, Rng};

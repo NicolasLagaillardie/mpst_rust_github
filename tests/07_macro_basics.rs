@@ -1,6 +1,5 @@
 // Test for parametrisation on the name of the roles
 extern crate either;
-extern crate mpstthree;
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;

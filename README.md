@@ -28,33 +28,39 @@ Here a way to create a simple protocol involving 3 participants, **A**, **B** an
 To implement this example, first, get the right components from the library.
 
 ```rust
-extern crate mpstthree;
-
+// Used for the functions that will process the protocol
 use std::boxed::Box;
 use std::error::Error;
 
+// Used for creating the types
 use mpstthree::binary::{End, Recv, Send};
-use mpstthree::run_processes;
 use mpstthree::sessionmpst::SessionMpst;
 
-use mpstthree::functionmpst::close::close_mpst;
+// Used for connecting all the roles, represented as SessionMpst, together
+use mpstthree::fork_mpst;
 
+// Used for create the stack and the name of each role
 use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
+// Used inside the function which process the protocol for receiving one payload
 use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
 use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
 use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
 
+// Used inside the function which process the protocol for sending one payload
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
+
+// Used inside the function which process the protocol for closing the connexion
+use mpstthree::functionmpst::close::close_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
-Note that each created type can be reused as many time as needed. Here, for this example, we create several times the same binary session type.
+Note that each created type can be reused as many time as needed. Here, for this example, we create several times the same binary session type for clarity, but we could use only two of those types for the whole protocol instead.
 
 ```rust
 /// Creating the binary sessions
@@ -81,15 +87,15 @@ You can now encapsulate those **binary session types** and **queues** into **Ses
 
 ```rust
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC>;
+type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
+type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
+type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
 ```
 
 To check to the protocol is *correct*, it is mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.
 
 ```rust
-/// Endpoint for A
+/// Function to process Endpoint of A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_to_c(s)?;
@@ -99,7 +105,7 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Endpoint for B
+/// Function to process Endpoint of B
 fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = recv_mpst_b_to_a(s)?;
     let s = send_mpst_b_to_c(2, s);
@@ -109,7 +115,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Endpoint for C
+/// Function to process Endpoint of C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_to_b(s)?;
@@ -120,12 +126,12 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-In the end, you have to link the threads, related to the functions above, together with **run_processes()**. Do not forget to **unwrap()** the returned threads.
+In the end, you have to link the threads, related to the functions above, together with **fork_mpst()**. Do not forget to **unwrap()** the returned threads.
 
 ```rust
 /// Fork all endpoints
 fn simple_triple_endpoints() {
-    let (thread_a, thread_b, thread_c) = run_processes(
+    let (thread_a, thread_b, thread_c) = fork_mpst(
         simple_triple_endpoint_a,
         simple_triple_endpoint_b,
         simple_triple_endpoint_c,
@@ -223,9 +229,9 @@ On the opposite side, to create a *choice* from role `C` to the other roles, whe
 ```rust
 create_choose_left_from_3_to_1_and_2!(
     choose_left_mpst_session_c_to_all,
-    RoleCtoAll,
     RoleADual,
     RoleBDual,
+    RoleCtoAll,
     next_c_to_all,
     RoleC
 );

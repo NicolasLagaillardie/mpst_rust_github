@@ -1,4 +1,3 @@
-extern crate mpstthree;
 extern crate rand;
 
 use rand::{thread_rng, Rng};
@@ -91,13 +90,6 @@ type QueueBFull = RoleC<RoleC<QueueBRecurs>>;
 /// Creating the MP sessions
 
 /// For B
-type EndpointBEnd = SessionMpst<End, End, RoleEnd, RoleB<RoleEnd>>;
-type EndpointBVideo<N> = SessionMpst<
-    Send<Branche0AtoB<N>, End>,
-    Send<N, Recv<N, Send<Branche0CtoB<N>, End>>>,
-    RoleC<RoleC<RoleA<RoleC<RoleEnd>>>>,
-    RoleB<RoleEnd>,
->;
 type EndpointBRecurs<N> =
     SessionMpst<ChooseBforAtoB<N>, ChooseBforCtoB<N>, QueueBRecurs, RoleB<RoleEnd>>;
 type EndpointBFull<N> = SessionMpst<ChooseBforAtoB<N>, InitB<N>, QueueBFull, RoleB<RoleEnd>>;
@@ -261,6 +253,14 @@ fn run_a_usecase_recursive() {
     }()
     .is_ok());
 }
+
+type EndpointBEnd = SessionMpst<End, End, RoleEnd, RoleB<RoleEnd>>;
+type EndpointBVideo<N> = SessionMpst<
+    Send<Branche0AtoB<N>, End>,
+    Send<N, Recv<N, Send<Branche0CtoB<N>, End>>>,
+    RoleC<RoleC<RoleA<RoleC<RoleEnd>>>>,
+    RoleB<RoleEnd>,
+>;
 
 #[test]
 fn run_a_usecase_recursive_checker() {

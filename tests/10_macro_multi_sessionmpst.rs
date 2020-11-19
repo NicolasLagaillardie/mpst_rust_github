@@ -1,5 +1,4 @@
 // Test for parametrisation on the number of roles
-extern crate mpstthree;
 use mpstthree::binary::{End, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;

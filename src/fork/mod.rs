@@ -43,7 +43,6 @@ where
 ///  # Example
 ///
 ///  ```
-/// extern crate mpstthree;
 /// use std::boxed::Box;
 /// use std::collections::hash_map::RandomState;
 /// use std::collections::HashMap;

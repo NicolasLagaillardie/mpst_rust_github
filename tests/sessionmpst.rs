@@ -1,5 +1,3 @@
-extern crate mpstthree;
-
 use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::sessionmpst::SessionMpst;
 

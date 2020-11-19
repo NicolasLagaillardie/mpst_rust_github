@@ -2,7 +2,6 @@
 // B → Y → C
 // C → Z → A
 
-extern crate mpstthree;
 use mpstthree::checking::checker;
 
 use std::boxed::Box;

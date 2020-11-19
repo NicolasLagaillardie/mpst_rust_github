@@ -1,3 +1,6 @@
+//! This module is a beta feature that only works with RoleA, RoleB and RoleC.
+//! It also has various prerequisites that are shown in tests 06.
+
 mod aux_checker;
 mod aux_dot;
 

@@ -1,4 +1,3 @@
-extern crate mpstthree;
 use mpstthree::checking::checker;
 
 use mpstthree::binary::{End, Recv, Send, Session};

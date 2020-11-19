@@ -1,5 +1,4 @@
 // Test for Macro, exact same as usecase
-extern crate mpstthree;
 extern crate rand;
 
 use mpstthree::binary::{End, Recv, Send, Session};
