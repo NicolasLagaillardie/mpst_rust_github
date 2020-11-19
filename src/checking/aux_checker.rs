@@ -349,7 +349,7 @@ fn get_two_tails(s: &str) -> [String; 2] {
     for c in s.chars() {
         match c {
             ',' => {
-                if index <= 0 && result[index_session] != "" {
+                if index <= 0 && !result[index_session].is_empty() {
                     index_session += 1;
                 } else if index >= 0 {
                     result[index_session].push(c);
@@ -377,7 +377,7 @@ fn get_two_tails(s: &str) -> [String; 2] {
 
     // println!("result get_two_tails: {}", &s);
 
-    if result[1] == "" {
+    if result[1].is_empty() {
         let mut temp: [String; 2] = Default::default();
         temp[0].push_str(&result[0]);
         temp[1].push_str(&result[0]);
@@ -398,7 +398,7 @@ fn get_fields(s: &str) -> [String; 4] {
     for c in new_s.chars() {
         match c {
             ',' => {
-                if index <= 0 && result[index_session] != "" {
+                if index <= 0 && !result[index_session].is_empty() {
                     index_session += 1;
                 } else {
                     result[index_session].push(c);
@@ -439,7 +439,7 @@ fn divide_either(s: &str) -> [String; 8] {
     for c in new_s.chars() {
         match c {
             ',' => {
-                if index <= 0 && result[index_session] != "" {
+                if index <= 0 && !result[index_session].is_empty() {
                     index_session += 1;
                 } else {
                     result[index_session].push(c);
