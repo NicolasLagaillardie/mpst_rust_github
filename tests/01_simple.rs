@@ -110,7 +110,7 @@ fn simple_triple_endpoints_checker() {
             let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
             let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
 
-            let (a, b, c) = checker(s1, s2, s3, &hm)?;
+            let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 
             assert_eq!(a, "A: A!B.A?C.0");
             assert_eq!(b, "B: B?A.B!C.0");

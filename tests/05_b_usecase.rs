@@ -292,7 +292,7 @@ fn run_b_usecase_checker() {
             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
             let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
 
-            let (a, b, c) = checker(s1, s2, s3, &hm)?;
+            let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 
             assert_eq!(a, "A: ( A?C.A!C.0 & 0 )");
             assert_eq!(b, "B: B!C.B?C.( B!C.B?C.0 + 0 )");

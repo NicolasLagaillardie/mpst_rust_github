@@ -3,11 +3,16 @@ use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::error::Error;
 
+type TupleHashmaps<'a, BH1, BH2> = (
+    &'a HashMap<String, &'a Vec<String>, BH1>,
+    &'a HashMap<String, &'a Vec<String>, BH2>,
+);
+
 #[doc(hidden)]
-pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
+pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>, // branches_receivers, branches_sender
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
     let head_session1 = get_head(&sessionmpst[0]);
@@ -15,14 +20,14 @@ pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
     let head_stack = get_head(&sessionmpst[2]);
     let sender = get_name(&get_head(&sessionmpst[3]));
 
-    println!();
-    println!("sender checker_aux: {:?}", &sender);
-    println!("sessionmpst checker_aux: {:?}", &sessionmpst);
-    println!("head_stack checker_aux: {:?}", &head_stack);
+    // println!();
+    // println!("sender checker_aux: {:?}", &sender);
+    // println!("sessionmpst checker_aux: {:?}", &sessionmpst);
+    // println!("head_stack checker_aux: {:?}", &head_stack);
 
-    for (key, value) in &*hm {
-        println!("Values: {} / {:?}", key, value);
-    }
+    // for (key, value) in &*branches.0 {
+    // println!("Values: {} / {:?}", key, value);
+    // }
 
     if !head_stack.contains("RoleEnd") {
         let receiver = get_name(&head_stack);
@@ -34,7 +39,7 @@ pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
                 [sender, receiver],
                 [0, 0, 4, 4],
                 role,
-                hm,
+                branches,
                 seen,
             )?,
             "B" => match_headers(
@@ -43,7 +48,7 @@ pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
                 [sender, receiver],
                 [0, 1, 4, 5],
                 role,
-                hm,
+                branches,
                 seen,
             )?,
             "C" => match_headers(
@@ -52,13 +57,13 @@ pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
                 [sender, receiver],
                 [1, 1, 5, 5],
                 role,
-                hm,
+                branches,
                 seen,
             )?,
             "All" => match receiver.as_str() {
-                "A" => match_recv_from_all("A", ["B", "C"], sessionmpst, role, hm, seen)?,
-                "B" => match_recv_from_all("B", ["A", "C"], sessionmpst, role, hm, seen)?,
-                "C" => match_recv_from_all("C", ["A", "B"], sessionmpst, role, hm, seen)?,
+                "A" => match_recv_from_all("A", ["B", "C"], sessionmpst, role, branches, seen)?,
+                "B" => match_recv_from_all("B", ["A", "C"], sessionmpst, role, branches, seen)?,
+                "C" => match_recv_from_all("C", ["A", "B"], sessionmpst, role, branches, seen)?,
                 _ => panic!("Wrong receiver on All, not recognized: {}", receiver),
             },
             _ => panic!("Wrong sender, not recognized: {}", sender),
@@ -70,15 +75,15 @@ pub(crate) fn checker_aux<S: ::std::hash::BuildHasher>(
 }
 
 #[doc(hidden)]
-fn match_recv_from_all<S: ::std::hash::BuildHasher>(
+fn match_recv_from_all<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     sender: &str,
     receivers: [&str; 2],
     sessionmpst: [&str; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
+    // println!("sessionmpst match_recv_from_all: {:?}", &sessionmpst);
 
     match role {
         receiver if receiver == receivers[0] => checker_aux(
@@ -93,7 +98,7 @@ fn match_recv_from_all<S: ::std::hash::BuildHasher>(
                 sessionmpst[3],
             ],
             role,
-            hm,
+            branches,
             seen,
         ),
         receiver if receiver == receivers[1] => checker_aux(
@@ -108,7 +113,7 @@ fn match_recv_from_all<S: ::std::hash::BuildHasher>(
                 sessionmpst[3],
             ],
             role,
-            hm,
+            branches,
             seen,
         ),
         _ => panic!("Wrong role, not recognized: {}", role),
@@ -116,28 +121,28 @@ fn match_recv_from_all<S: ::std::hash::BuildHasher>(
 }
 
 #[doc(hidden)]
-fn match_headers<S: ::std::hash::BuildHasher>(
+fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     roles_and_sessions: [&str; 4], // role 1, session 1, role 2, session 2
     sessionmpst: [&str; 4],
     involved: [String; 2],
     index: [usize; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    println!(
-        "roles_and_sessions match_headers: {:?}",
-        &roles_and_sessions
-    );
-    println!("sessionmpst match_headers: {:?}", &sessionmpst);
-    println!("involved match_headers: {:?}", &involved);
-    println!("index match_headers: {:?}", &index);
-    println!("seen match_headers: {:?}", &seen);
-    println!("role match_headers: {:?}", &role);
-    println!(
-        "roles_and_sessions match_headers: {:?}",
-        &roles_and_sessions
-    );
+    // println!(
+    //     "roles_and_sessions match_headers: {:?}",
+    //     &roles_and_sessions
+    // );
+    // println!("sessionmpst match_headers: {:?}", &sessionmpst);
+    // println!("involved match_headers: {:?}", &involved);
+    // println!("index match_headers: {:?}", &index);
+    // println!("seen match_headers: {:?}", &seen);
+    // println!("role match_headers: {:?}", &role);
+    // println!(
+    //     "roles_and_sessions match_headers: {:?}",
+    //     &roles_and_sessions
+    // );
 
     match involved[1].as_str() {
         h if h == roles_and_sessions[0] => match_full_types(
@@ -154,7 +159,7 @@ fn match_headers<S: ::std::hash::BuildHasher>(
                 &get_head_payload(&sessionmpst[1]),
             ],
             role,
-            hm,
+            branches,
             seen,
         ),
         h if h == roles_and_sessions[2] => match_full_types(
@@ -171,30 +176,38 @@ fn match_headers<S: ::std::hash::BuildHasher>(
                 &get_head_payload(&sessionmpst[0]),
             ],
             role,
-            hm,
+            branches,
             seen,
         ),
-        h if h == "All" => all_type(sessionmpst, index, role, hm, seen),
+        h if h == "All" => all_type(sessionmpst, index, role, branches, seen),
         _ => panic!("Wrong receiver, not recognized: {}", involved[1]),
     }
 }
 
 #[doc(hidden)]
-fn match_full_types<S: ::std::hash::BuildHasher>(
+fn match_full_types<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     head_session: &str,
     sessionmpst: [&str; 4],
     involved: [String; 2],
     payloads: [&str; 2],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    println!("sessionmpst match_full_types: {:?}", &sessionmpst);
-    println!("head_session match_full_types: {:?}", &head_session);
+    // println!("sessionmpst match_full_types: {:?}", &sessionmpst);
+    // println!("head_session match_full_types: {:?}", &head_session);
 
     match head_session {
-        "Send" => send_type(sessionmpst, involved, payloads, role, hm, seen, " + "),
-        "Recv" => recv_type(sessionmpst, involved, payloads[0], role, hm, seen, " & "),
+        "Send" => send_type(sessionmpst, involved, payloads, role, branches, seen, " + "),
+        "Recv" => recv_type(
+            sessionmpst,
+            involved,
+            payloads[0],
+            role,
+            branches,
+            seen,
+            " & ",
+        ),
         _ => panic!("Wrong session type, not recognized: {}", head_session),
     }
 }
@@ -208,7 +221,7 @@ pub fn parse_type_of<T>(_: T) -> String {
 fn parse_type(s: &str) -> String {
     let mut result = s;
 
-    println!("Start result: {:?}", &result);
+    // println!("Start result: {:?}", &result);
 
     let mut to_remove: Vec<String> = Vec::new();
 
@@ -250,7 +263,7 @@ fn parse_type(s: &str) -> String {
 
     to_remove.sort_by_key(|b| Reverse(b.chars().count()));
 
-    println!("to_remove: {:?}", &to_remove);
+    // println!("to_remove: {:?}", &to_remove);
 
     let mut temp = String::from(result);
 
@@ -260,7 +273,7 @@ fn parse_type(s: &str) -> String {
 
     result = &temp;
 
-    println!("End result: {:?}", &result);
+    // println!("End result: {:?}", &result);
 
     result.chars().filter(|c| !c.is_whitespace()).collect()
 }
@@ -284,7 +297,7 @@ fn get_name(head: &str) -> String {
 
 #[doc(hidden)]
 fn get_head(s: &str) -> String {
-    println!("get_head: {}", &s);
+    // println!("get_head: {}", &s);
 
     let mut result: Vec<&str> = s.split('<').collect();
     if result[0] == "Either" {
@@ -302,18 +315,18 @@ fn get_head(s: &str) -> String {
         })
         .collect::<Vec<_>>();
 
-    println!("result get_head : {}", &result[0]);
+    // println!("result get_head : {}", &result[0]);
 
     String::from(result[0])
 }
 
 #[doc(hidden)]
 fn get_head_payload(s: &str) -> String {
-    println!("get_head_payload: {}", &s);
+    // println!("get_head_payload: {}", &s);
 
     let payload = &get_two_tails(s)[0];
 
-    println!("payload get_head_payload: {}", &payload);
+    // println!("payload get_head_payload: {}", &payload);
 
     if payload.contains("::") {
         String::from(payload.split("::").collect::<Vec<_>>()[1])
@@ -324,7 +337,7 @@ fn get_head_payload(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_two_tails(s: &str) -> [String; 2] {
-    println!("get_two_tails: {}", &s);
+    // println!("get_two_tails: {}", &s);
 
     let mut result: [String; 2] = Default::default();
     if s == "End" {
@@ -362,7 +375,7 @@ fn get_two_tails(s: &str) -> [String; 2] {
         }
     }
 
-    println!("result get_two_tails: {}", &s);
+    // println!("result get_two_tails: {}", &s);
 
     if result[1] == "" {
         let mut temp: [String; 2] = Default::default();
@@ -376,7 +389,7 @@ fn get_two_tails(s: &str) -> [String; 2] {
 
 #[doc(hidden)]
 fn get_fields(s: &str) -> [String; 4] {
-    println!("get_fields: {}", &s);
+    // println!("get_fields: {}", &s);
 
     let mut result: [String; 4] = Default::default();
     let mut index = -1;
@@ -409,14 +422,14 @@ fn get_fields(s: &str) -> [String; 4] {
         }
     }
 
-    println!("result get_fields: {}", &s);
+    // println!("result get_fields: {}", &s);
 
     result
 }
 
 #[doc(hidden)]
 fn divide_either(s: &str) -> [String; 8] {
-    println!("divide_either: {}", &s);
+    // println!("divide_either: {}", &s);
 
     let mut result: [String; 8] = Default::default();
     let mut index = -2;
@@ -450,7 +463,7 @@ fn divide_either(s: &str) -> [String; 8] {
         }
     }
 
-    println!("result divide_either: {:?}", &result);
+    // println!("result divide_either: {:?}", &result);
 
     result
 }
@@ -463,7 +476,7 @@ fn get_tail(s: &str) -> String {
 
 #[doc(hidden)]
 fn get_dual(s: &str) -> String {
-    println!("Dual: {}", &s);
+    // println!("Dual: {}", &s);
 
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
@@ -485,49 +498,50 @@ fn switch_role(s: &str, a: &str, b: &str) -> String {
 }
 
 #[doc(hidden)]
-fn send_type<S: ::std::hash::BuildHasher>(
+fn send_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     involved: [String; 2],
     payloads: [&str; 2],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    println!("sessionmpst send_type: {:?}", &sessionmpst);
-    println!("payload send_type: {:?}", &payloads);
+    // println!("sessionmpst send_type: {:?}", &sessionmpst);
+    // println!("payload send_type: {:?}", &payloads);
 
     if seen.contains(&String::from(payloads[0])) {
         Ok(String::from("X"))
-    } else if hm.contains_key(payloads[0]) && hm.contains_key(payloads[1]) {
-        recurs_type(payloads, role, hm, seen, symbol)
+    } else if branches.0.contains_key(payloads[0]) && branches.0.contains_key(payloads[1]) {
+        // println!("possible new stack: {:?}", &sessionmpst);
+        recurs_type(payloads, role, branches, seen, symbol)
     } else {
-        println!(
-            "payload send_type: {:?} / {:?} / {:?} / {:?}",
-            involved[0], involved[1], &payloads, role
-        );
+        // println!(
+        //     "payload send_type: {:?} / {:?} / {:?} / {:?}",
+        //     involved[0], involved[1], &payloads, role
+        // );
 
         Ok(format!(
             "{}!{}.{}",
             involved[0],
             involved[1],
-            checker_aux(sessionmpst, role, &hm, seen)?
+            checker_aux(sessionmpst, role, branches, seen)?
         ))
     }
 }
 
 #[doc(hidden)]
-fn recv_type<S: ::std::hash::BuildHasher>(
+fn recv_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     involved: [String; 2],
     payload: &str,
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    println!("sessionmpst recv_type: {:?}", &sessionmpst);
-    println!("payload recv_type: {:?}", &payload);
+    // println!("sessionmpst recv_type: {:?}", &sessionmpst);
+    // println!("payload recv_type: {:?}", &payload);
 
     if payload.contains("Either") {
         let branching: [String; 8] = divide_either(payload);
@@ -536,64 +550,33 @@ fn recv_type<S: ::std::hash::BuildHasher>(
             checker_aux(
                 [&branching[0], &branching[1], &branching[2], &branching[3]],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
             checker_aux(
                 [&branching[4], &branching[5], &branching[6], &branching[7]],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
         ))
     } else if seen.contains(&String::from(payload)) {
         Ok(String::from("X"))
-    } else if hm.contains_key(payload) {
-        recurs_type([payload, ""], role, hm, seen, symbol)
+    } else if branches.0.contains_key(payload) {
+        recurs_type([payload, ""], role, branches, seen, symbol)
     } else {
-        println!(
-            "payload recv_type: {:?} / {:?} / {:?} / {:?}",
-            involved[0], involved[1], &payload, role
-        );
+        // println!(
+        //     "payload recv_type: {:?} / {:?} / {:?} / {:?}",
+        //     involved[0], involved[1], &payload, role
+        // );
 
         Ok(format!(
             "{}?{}.{}",
             involved[0],
             involved[1],
-            checker_aux(sessionmpst, role, &hm, seen)?
+            checker_aux(sessionmpst, role, branches, seen)?
         ))
     }
-}
-
-#[doc(hidden)]
-fn reverse_stack(stack: &str, previous_role: &str, role: &str) -> String {
-    println!("reverse_stack: {} / {}", stack, role);
-
-    // pprintln!("previous_role: {:?}", previous_role);
-
-    let test = stack.split('<').collect::<Vec<_>>();
-
-    println!("test: {:?}", test);
-
-    let mut mapping = test
-        .iter()
-        .map(|&x| {
-            if x == format!("Role{}", role) {
-                previous_role
-            } else {
-                ""
-            }
-        })
-        .filter(|s| !s.is_empty())
-        .collect::<Vec<_>>();
-
-    // pprintln!("mapping: {:?}", mapping);
-
-    mapping.push("RoleEnd");
-
-    println!("mapping 2: {:?}", mapping);
-
-    format!("{}{}", mapping.join("<"), vec![">"; mapping.len()].join(""))
 }
 
 #[doc(hidden)]
@@ -627,8 +610,8 @@ fn change_order(
         },
         "RoleC" => match previous_role {
             "RoleA" => (
-                get_dual(&sessions_and_stack[1]),
                 get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
             ),
             "RoleB" => (
                 get_dual(&sessions_and_stack[0]),
@@ -641,80 +624,22 @@ fn change_order(
 }
 
 #[doc(hidden)]
-fn get_branches_result<S: ::std::hash::BuildHasher>(
-    branches: &[String],
-    role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
-    seen: &mut Vec<String>,
-    symbol: &str,
-    mut vec_result: Vec<String>,
-    mut recurs: bool,
-) -> Result<(Vec<String>, bool), Box<dyn Error>> {
-    for branch in branches.iter() {
-        let sessions_and_stack = get_fields(&parse_type(branch));
-
-        if symbol != " + " {
-            let result_branch = checker_aux(
-                [
-                    &sessions_and_stack[0],
-                    &sessions_and_stack[1],
-                    &sessions_and_stack[2],
-                    &sessions_and_stack[3],
-                ],
-                role,
-                &hm,
-                seen,
-            )?;
-            recurs = result_branch.contains(&String::from(".X")) || recurs;
-            vec_result.push(result_branch);
-        } else {
-            let previous_role: &str = sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
-
-            let full_role: &str = &format!("Role{}", role);
-
-            let new_order = change_order(&sessions_and_stack, full_role, previous_role);
-
-            println!(
-                "Coco: {} / {} / {} / {}",
-                &new_order.0,
-                &new_order.1,
-                &reverse_stack(&sessions_and_stack[2], previous_role, role),
-                &format!("Role{}<RoleEnd>", role),
-            );
-
-            let result_branch = checker_aux(
-                [
-                    &new_order.0,
-                    &new_order.1,
-                    &reverse_stack(&sessions_and_stack[2], previous_role, role),
-                    &format!("Role{}<RoleEnd>", role),
-                ],
-                role,
-                &hm,
-                seen,
-            )?;
-
-            recurs = result_branch.contains(&String::from(".X"))
-                || result_branch.contains(&String::from(" X "))
-                || recurs;
-            vec_result.push(result_branch);
-        }
-    }
-
-    Ok((vec_result, recurs))
-}
-
-#[doc(hidden)]
-fn recurs_type<S: ::std::hash::BuildHasher>(
+fn recurs_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     payloads: [&str; 2],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    println!("payload recurs_type: {:?}", &payloads);
-    println!("hm recurs_type 1: {:?}", hm.get(payloads[0]));
-    println!("hm recurs_type 2: {:?}", hm.get(payloads[1]));
+    // println!("payload recurs_type: {:?}", &payloads);
+    // println!(
+    //     "branches_receivers recurs_type 1: {:?}",
+    //     branches.0.get(payloads[0])
+    // );
+    // println!(
+    //     "branches_receivers recurs_type 2: {:?}",
+    //     branches.0.get(payloads[1])
+    // );
 
     let mut vec_result = Vec::new();
     let mut recurs = false;
@@ -722,133 +647,114 @@ fn recurs_type<S: ::std::hash::BuildHasher>(
     seen.push(String::from(payloads[0]));
     seen.push(String::from(payloads[1]));
 
-    match (hm.get(payloads[0]), hm.get(payloads[1])) {
-        (Some(&branches0), Some(&branches1)) => {
-            println!(
-                "branches0 recurs_type: {:?}",
-                get_branches_result(branches0, role, hm, seen, symbol, Vec::new(), false)
-            );
-            println!(
-                "branches1 recurs_type: {:?}",
-                get_branches_result(branches1, role, hm, seen, symbol, Vec::new(), false)
-            );
+    match (
+        branches.0.get(payloads[0]),
+        branches.0.get(payloads[1]),
+        branches.1.get(payloads[0]),
+    ) {
+        (Some(branches0), Some(branches1), Some(&stack)) => {
+            for (i, _) in branches0.iter().enumerate() {
+                let full_role: &str = &format!("Role{}", role);
 
-            for branch in branches0.iter() {
-                let sessions_and_stack = get_fields(&parse_type(branch));
+                let sessions_and_stack_0 = get_fields(&parse_type(&branches0[i]));
+                let sessions_and_stack_1 = get_fields(&parse_type(&branches1[i]));
 
-                if symbol != " + " {
-                    let result_branch = checker_aux(
-                        [
-                            &sessions_and_stack[0],
-                            &sessions_and_stack[1],
-                            &sessions_and_stack[2],
-                            &sessions_and_stack[3],
-                        ],
-                        role,
-                        &hm,
-                        seen,
-                    )?;
-                    recurs = result_branch.contains(&String::from(".X")) || recurs;
-                    vec_result.push(result_branch);
-                } else {
-                    let previous_role: &str =
-                        sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
+                let new_sessions_and_stack = match role {
+                    "A" => [
+                        sessions_and_stack_0[0].clone(),
+                        sessions_and_stack_1[0].clone(),
+                        sessions_and_stack_0[2].clone(),
+                        sessions_and_stack_0[3].clone(),
+                    ],
+                    "B" => [
+                        sessions_and_stack_0[0].clone(),
+                        sessions_and_stack_1[1].clone(),
+                        sessions_and_stack_0[2].clone(),
+                        sessions_and_stack_0[3].clone(),
+                    ],
+                    "C" => [
+                        sessions_and_stack_0[1].clone(),
+                        sessions_and_stack_1[1].clone(),
+                        sessions_and_stack_0[2].clone(),
+                        sessions_and_stack_0[3].clone(),
+                    ],
+                    _ => panic!("Wrong role: {}", role),
+                };
 
-                    let full_role: &str = &format!("Role{}", role);
+                // println!("new_sessions_and_stack: {:?}", new_sessions_and_stack);
 
-                    let new_order = change_order(&sessions_and_stack, full_role, previous_role);
+                let previous_role: &str =
+                    new_sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
 
-                    println!(
-                        "Coco: {} / {} / {} / {}",
+                // println!("previous_role: {:?}", previous_role);
+
+                // println!("full_role: {:?}", full_role);
+
+                let new_order = change_order(&new_sessions_and_stack, full_role, previous_role);
+
+                let new_stack = &parse_type(&stack[i]);
+
+                // println!("new_stack: {:?}", new_stack);
+
+                // println!(
+                //     "Coco: {} / {} / {} / {}",
+                //     &new_order.0,
+                //     &new_order.1,
+                //     new_stack,
+                //     &format!("Role{}<RoleEnd>", role),
+                // );
+
+                let result_branch = checker_aux(
+                    [
                         &new_order.0,
                         &new_order.1,
-                        &reverse_stack(&sessions_and_stack[2], previous_role, role),
+                        new_stack,
                         &format!("Role{}<RoleEnd>", role),
-                    );
+                    ],
+                    role,
+                    branches,
+                    seen,
+                )?;
 
-                    let result_branch = checker_aux(
-                        [
-                            &new_order.0,
-                            &new_order.1,
-                            &reverse_stack(&sessions_and_stack[2], previous_role, role),
-                            &format!("Role{}<RoleEnd>", role),
-                        ],
-                        role,
-                        &hm,
-                        seen,
-                    )?;
+                recurs = result_branch.contains(&String::from(".X"))
+                    || result_branch.contains(&String::from(" X "))
+                    || recurs;
+                vec_result.push(result_branch);
 
-                    recurs = result_branch.contains(&String::from(".X"))
-                        || result_branch.contains(&String::from(" X "))
-                        || recurs;
-                    vec_result.push(result_branch);
-                }
+                // println!("partial vec_result: {:?}", vec_result);
             }
         }
-        (Some(&branches0), None) => {
+        (Some(branches0), None, _) => {
             for branch in branches0.iter() {
                 let sessions_and_stack = get_fields(&parse_type(branch));
 
-                if symbol != " + " {
-                    let result_branch = checker_aux(
-                        [
-                            &sessions_and_stack[0],
-                            &sessions_and_stack[1],
-                            &sessions_and_stack[2],
-                            &sessions_and_stack[3],
-                        ],
-                        role,
-                        &hm,
-                        seen,
-                    )?;
-                    recurs = result_branch.contains(&String::from(".X")) || recurs;
-                    vec_result.push(result_branch);
-                } else {
-                    let previous_role: &str =
-                        sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
-
-                    let full_role: &str = &format!("Role{}", role);
-
-                    let new_order = change_order(&sessions_and_stack, full_role, previous_role);
-
-                    println!(
-                        "Coco: {} / {} / {} / {}",
-                        &new_order.0,
-                        &new_order.1,
-                        &reverse_stack(&sessions_and_stack[2], previous_role, role),
-                        &format!("Role{}<RoleEnd>", role),
-                    );
-
-                    let result_branch = checker_aux(
-                        [
-                            &new_order.0,
-                            &new_order.1,
-                            &reverse_stack(&sessions_and_stack[2], previous_role, role),
-                            &format!("Role{}<RoleEnd>", role),
-                        ],
-                        role,
-                        &hm,
-                        seen,
-                    )?;
-
-                    recurs = result_branch.contains(&String::from(".X"))
-                        || result_branch.contains(&String::from(" X "))
-                        || recurs;
-                    vec_result.push(result_branch);
-                }
+                // if symbol != " + " {
+                let result_branch = checker_aux(
+                    [
+                        &sessions_and_stack[0],
+                        &sessions_and_stack[1],
+                        &sessions_and_stack[2],
+                        &sessions_and_stack[3],
+                    ],
+                    role,
+                    branches,
+                    seen,
+                )?;
+                recurs = result_branch.contains(&String::from(".X")) || recurs;
+                vec_result.push(result_branch);
             }
         }
         _ => panic!(
-            "Error with hashmap and payload: {:?} and {:?}",
-            hm, payloads
+            "Error with hashmap and payload: {:?} / {:?} / {:?}",
+            branches.0, branches.1, payloads
         ),
     }
 
     let result = vec_result.join(symbol);
 
-    println!("result recurs_type: {}", &result);
-    println!();
-    println!();
+    // println!("result recurs_type: {}", &result);
+    // println!();
+    // println!();
 
     if recurs {
         Ok(format!("µX( {} )", result))
@@ -858,14 +764,14 @@ fn recurs_type<S: ::std::hash::BuildHasher>(
 }
 
 #[doc(hidden)]
-fn all_type<S: ::std::hash::BuildHasher>(
+fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     sessionmpst: [&str; 4],
     index: [usize; 4],
     role: &str,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    println!("sessionmpst all_type: {:?}", &sessionmpst);
+    // println!("sessionmpst all_type: {:?}", &sessionmpst);
 
     let payload_1 = get_head_payload(&sessionmpst[0]);
     let payload_2 = get_head_payload(&sessionmpst[1]);
@@ -874,7 +780,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
         let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        println!("tails: {:?}", &tails);
+        // println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -886,7 +792,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
                     sessionmpst[3]
                 ],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
             checker_aux(
@@ -897,7 +803,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
                     sessionmpst[3]
                 ],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
         ))
@@ -905,7 +811,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
         let branching_1: [String; 8] = divide_either(&payload_1);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        println!("tails: {:?}", &tails);
+        // println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -917,7 +823,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
                     sessionmpst[3]
                 ],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
             checker_aux(
@@ -928,7 +834,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
                     sessionmpst[3]
                 ],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
         ))
@@ -936,7 +842,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
         let branching_2: [String; 8] = divide_either(&payload_2);
         let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
 
-        println!("tails: {:?}", &tails);
+        // println!("tails: {:?}", &tails);
 
         Ok(format!(
             "( {} + {} )",
@@ -948,7 +854,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
                     sessionmpst[3]
                 ],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
             checker_aux(
@@ -959,7 +865,7 @@ fn all_type<S: ::std::hash::BuildHasher>(
                     sessionmpst[3]
                 ],
                 role,
-                &hm,
+                branches,
                 seen
             )?,
         ))
@@ -1000,7 +906,7 @@ mod tests {
             [String::from(""), String::from("")],
             ["", ""],
             "",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1014,7 +920,7 @@ mod tests {
             [String::from(""), String::from("")],
             [0, 0, 0, 0],
             "",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1032,7 +938,7 @@ mod tests {
             [String::from(""), String::from("")],
             ["A", ""],
             "",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![String::from("A")],
             "",
         )
@@ -1044,7 +950,13 @@ mod tests {
     #[test]
     #[should_panic]
     fn recurs_type_panic() {
-        let _ = recurs_type(["", ""], "", &HashMap::new(), &mut vec![], "");
+        let _ = recurs_type(
+            ["", ""],
+            "",
+            (&HashMap::new(), &HashMap::new()),
+            &mut vec![],
+            "",
+        );
     }
 
     #[test]
@@ -1055,7 +967,7 @@ mod tests {
             ["", ""],
             ["", "", "", ""],
             "",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1068,7 +980,7 @@ mod tests {
             ["", ""],
             ["A", "", "", ""],
             "",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1081,7 +993,7 @@ mod tests {
             ["", ""],
             ["", "", "", ""],
             "A",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1093,7 +1005,7 @@ mod tests {
             ["", "", "", ""],
             [0, 0, 0, 0],
             "",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1109,7 +1021,7 @@ mod tests {
                 "RoleA<RoleEnd>",
             ],
             "A",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1125,7 +1037,7 @@ mod tests {
                 "RoleA<RoleEnd>",
             ],
             "A",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1141,7 +1053,7 @@ mod tests {
                 "RoleB<RoleEnd>",
             ],
             "B",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
     }
@@ -1157,16 +1069,9 @@ mod tests {
                 "RoleC<RoleEnd>",
             ],
             "C",
-            &HashMap::new(),
+            (&HashMap::new(), &HashMap::new()),
             &mut vec![],
         );
-    }
-
-    #[test]
-    fn reverse_stack_test() {
-        let test = reverse_stack("RoleB<RoleEnd>", "RoleA>", "C");
-
-        assert_eq!(test, String::from("RoleEnd>"));
     }
 
     #[test]
@@ -1240,8 +1145,8 @@ mod tests {
             "RoleA",
         );
 
-        assert_eq!(test.0, "Send<End>");
-        assert_eq!(test.1, "Recv<End>");
+        assert_eq!(test.0, "Recv<End>");
+        assert_eq!(test.1, "Send<End>");
 
         ////////////////////////////////////////////
 

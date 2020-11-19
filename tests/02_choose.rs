@@ -208,7 +208,7 @@ fn simple_choice_checker() {
             let (s2, _): (EndpointChoiceB<i32>, _) = SessionMpst::new();
             let (s3, _): (EndpointChoiceC, _) = SessionMpst::new();
 
-            let (a, b, c) = checker(s1, s2, s3, &hm)?;
+            let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 
             assert_eq!(a, "A: ( A?B.0 & A?B.0 )");
             assert_eq!(b, "B: ( B!A.0 + B!A.0 )");
