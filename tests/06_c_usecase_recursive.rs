@@ -1,5 +1,3 @@
-extern crate rand;
-
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{End, Recv, Send, Session};
@@ -226,8 +224,6 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
 
     let end = Branche0BtoC::End::<i32>(s_end);
 
-    println!("Type of end {}", type_of(&end));
-
     vec![(&video).to_string(), (&end).to_string()]
 }
 
@@ -248,13 +244,8 @@ fn run_c_usecase_recursive() {
     .is_ok());
 }
 
-type EndpointCEnd = SessionMpst<End, End, RoleEnd, RoleC<RoleEnd>>;
-type EndpointCVideo<N> = mpstthree::sessionmpst::SessionMpst<
-    Send<N, Recv<N, Send<Branche0AtoC<N>, End>>>,
-    Send<Branche0BtoC<N>, End>,
-    RoleA<RoleA<RoleA<RoleB<RoleEnd>>>>,
-    RoleC<RoleEnd>,
->;
+type QueueCEnd = RoleEnd;
+type QueueCVideo = RoleA<RoleA<RoleA<RoleB<RoleEnd>>>>;
 
 #[test]
 fn run_c_usecase_recursive_checker() {
@@ -280,16 +271,12 @@ fn run_c_usecase_recursive_checker() {
             let mut branches_sender: HashMap<String, &Vec<String>> =
                 HashMap::with_hasher(state_branches_sender);
 
-            let (s_video, _): (EndpointCRecurs<i32>, _) = SessionMpst::new();
-            let s_video: EndpointCVideo<i32> =
-                choose_mpst_c_to_all!(s_video, Branche0AtoC::Video, Branche0BtoC::Video);
-            let (s_end, _): (EndpointCRecurs<i32>, _) = SessionMpst::new();
-            let s_end: EndpointCEnd =
-                choose_mpst_c_to_all!(s_end, Branche0AtoC::End, Branche0BtoC::End);
+            let (stack_video, _): (QueueCVideo, _) = Role::new();
+            let (stack_end, _): (QueueCEnd, _) = Role::new();
 
             let mut stacks: Vec<String> = Vec::new();
-            stacks.push(type_of(&s_video.stack).to_string());
-            stacks.push(type_of(&s_end.stack).to_string());
+            stacks.push(type_of(&stack_video).to_string());
+            stacks.push(type_of(&stack_end).to_string());
 
             branches_sender.insert(String::from("Branche0AtoC<i32>"), &stacks);
             branches_sender.insert(String::from("Branche0BtoC<i32>"), &stacks);

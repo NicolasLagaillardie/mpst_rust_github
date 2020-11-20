@@ -14,8 +14,6 @@
 //! [`mpstthree::binary::Session`]: ../binary/trait.Session.html
 //! [`mpstthree::role::Role`]: ../role/trait.Role.html
 
-extern crate mpst_seq;
-
 use crate::binary::Session;
 use crate::role::Role;
 

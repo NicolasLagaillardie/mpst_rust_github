@@ -1,7 +1,5 @@
 // Issue with protocol functions, need to work on it asap
 
-// // extern crate rand;
-
 // use rand::{thread_rng, Rng};
 
 // use mpstthree::checking::checker;

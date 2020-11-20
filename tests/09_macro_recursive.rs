@@ -1,6 +1,4 @@
 // Test for Macro, exact same as usecase-recursive
-extern crate rand;
-
 use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;

@@ -1,5 +1,3 @@
-extern crate rand;
-
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::{End, Recv, Send, Session};
@@ -201,13 +199,9 @@ fn hashmap_branche_0_b_to_a() -> Vec<String> {
 
     let video = Branche0BtoA::Video::<i32>(s_video);
 
-    println!("Type of video for C {}", type_of(&video));
-
     let (s_end, _) = <_ as Session>::new();
 
     let end = Branche0BtoA::End::<i32>(s_end);
-
-    println!("Type of end for C {}", type_of(&end));
 
     vec![(&video).to_string(), (&end).to_string()]
 }
@@ -226,13 +220,9 @@ fn hashmap_branche_0_c_to_a() -> Vec<String> {
 
     let video = Branche0CtoA::Video::<i32>(s_video);
 
-    println!("Type of video for A {}", type_of(&video));
-
     let (s_end, _) = <_ as Session>::new();
 
     let end = Branche0CtoA::End::<i32>(s_end);
-
-    println!("Type of end for A {}", type_of(&end));
 
     vec![(&video).to_string(), (&end).to_string()]
 }
@@ -254,13 +244,8 @@ fn run_b_usecase_recursive() {
     .is_ok());
 }
 
-type EndpointAEnd = SessionMpst<End, End, RoleEnd, RoleA<RoleEnd>>;
-type EndpointAVideo<N> = SessionMpst<
-    Send<N, Recv<N, Send<Branche0BtoA<N>, End>>>,
-    Send<Branche0CtoA<N>, End>,
-    RoleB<RoleB<RoleB<RoleC<RoleEnd>>>>,
-    RoleA<RoleEnd>,
->;
+type QueueAEnd = RoleEnd;
+type QueueAVideo = RoleB<RoleB<RoleB<RoleC<RoleEnd>>>>;
 
 #[test]
 fn run_b_usecase_recursive_checker() {
@@ -286,16 +271,12 @@ fn run_b_usecase_recursive_checker() {
             let mut branches_sender: HashMap<String, &Vec<String>> =
                 HashMap::with_hasher(state_branches_sender);
 
-            let (s_video, _): (EndpointARecurs<i32>, _) = SessionMpst::new();
-            let s_video: EndpointAVideo<i32> =
-                choose_mpst_a_to_all!(s_video, Branche0BtoA::Video, Branche0CtoA::Video);
-            let (s_end, _): (EndpointARecurs<i32>, _) = SessionMpst::new();
-            let s_end: EndpointAEnd =
-                choose_mpst_a_to_all!(s_end, Branche0BtoA::End, Branche0CtoA::End);
+            let (stack_video, _): (QueueAVideo, _) = Role::new();
+            let (stack_end, _): (QueueAEnd, _) = Role::new();
 
             let mut stacks: Vec<String> = Vec::new();
-            stacks.push(type_of(&s_video.stack).to_string());
-            stacks.push(type_of(&s_end.stack).to_string());
+            stacks.push(type_of(&stack_video).to_string());
+            stacks.push(type_of(&stack_end).to_string());
 
             branches_sender.insert(String::from("Branche0CtoA<i32>"), &stacks);
             branches_sender.insert(String::from("Branche0BtoA<i32>"), &stacks);
