@@ -89,76 +89,64 @@ fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
         s,
         |s: EndpointAAdd<i32>| {
             let (x, s) = recv_mpst_a_to_b(s)?;
-            close_mpst(s)?;
 
             assert_eq!(x, 1);
-            Ok(())
+
+            close_mpst(s)
         },
         |s: EndpointANeg<i32>| {
             let (x, s) = recv_mpst_a_to_b(s)?;
-            close_mpst(s)?;
 
             assert_eq!(x, 2);
-            Ok(())
+
+            close_mpst(s)
         },
     )
 }
 
 fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let s = choose_left_mpst_session_b_to_all::<
-            End,
-            End,
-            BtoAAdd<i32>,
-            End,
-            BtoANeg<i32>,
-            End,
-            <QueueOfferA as Role>::Dual,
-            <QueueOfferA as Role>::Dual,
-            RoleEnd,
-            RoleEnd,
-            QueueChoiceB,
-            QueueChoiceB,
-        >(s);
-        let s = send_mpst_b_to_a(1, s);
-        close_mpst(s)?;
-    }
-    Ok(())
+    let s = choose_left_mpst_session_b_to_all::<
+        End,
+        End,
+        BtoAAdd<i32>,
+        End,
+        BtoANeg<i32>,
+        End,
+        <QueueOfferA as Role>::Dual,
+        <QueueOfferA as Role>::Dual,
+        RoleEnd,
+        RoleEnd,
+        QueueChoiceB,
+        QueueChoiceB,
+    >(s);
+    let s = send_mpst_b_to_a(1, s);
+    close_mpst(s)
 }
 
 fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let s = choose_right_mpst_session_b_to_all::<
-            End,
-            End,
-            BtoAAdd<i32>,
-            End,
-            BtoANeg<i32>,
-            End,
-            <QueueOfferA as Role>::Dual,
-            <QueueOfferA as Role>::Dual,
-            RoleEnd,
-            RoleEnd,
-            QueueChoiceB,
-            QueueChoiceB,
-        >(s);
-        let s = send_mpst_b_to_a(2, s);
-        close_mpst(s)?;
-    }
-    Ok(())
+    let s = choose_right_mpst_session_b_to_all::<
+        End,
+        End,
+        BtoAAdd<i32>,
+        End,
+        BtoANeg<i32>,
+        End,
+        <QueueOfferA as Role>::Dual,
+        <QueueOfferA as Role>::Dual,
+        RoleEnd,
+        RoleEnd,
+        QueueChoiceB,
+        QueueChoiceB,
+    >(s);
+    let s = send_mpst_b_to_a(2, s);
+    close_mpst(s)
 }
 
 fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_c_from_b(
         s,
-        |s: EndpointCAdd| {
-            close_mpst(s)?;
-            Ok(())
-        },
-        |s: EndpointCNeg| {
-            close_mpst(s)?;
-            Ok(())
-        },
+        |s: EndpointCAdd| close_mpst(s),
+        |s: EndpointCNeg| close_mpst(s),
     )
 }
 

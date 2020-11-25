@@ -51,9 +51,7 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 
     assert_eq!(x, 3);
 
-    close_mpst(s)?;
-
-    Ok(())
+    close_mpst(s)
 }
 
 /// Single test for B
@@ -63,9 +61,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 
     assert_eq!(x, 1);
 
-    close_mpst(s)?;
-
-    Ok(())
+    close_mpst(s)
 }
 
 /// Single test for C
@@ -75,9 +71,7 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 
     assert_eq!(x, 2);
 
-    close_mpst(s)?;
-
-    Ok(())
+    close_mpst(s)
 }
 
 #[test]

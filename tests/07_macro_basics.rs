@@ -41,31 +41,26 @@ create_recv_mpst_session_2!(recv_mpst_a_to_d, RoleD, next_d, RoleA);
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_d(0, s);
-    close_mpst(s)?;
-    Ok(())
+    close_mpst(s)
 }
 
 fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_d_to_a(0, s);
-    close_mpst(s)?;
-    Ok(())
+    close_mpst(s)
 }
 
 fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_d(s)?;
-    close_mpst(s)?;
-    Ok(())
+    close_mpst(s)
 }
 
 fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_to_a(s)?;
-    close_mpst(s)?;
-    Ok(())
+    close_mpst(s)
 }
 
 fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
-    close_mpst(s)?;
-    Ok(())
+    close_mpst(s)
 }
 
 #[test]

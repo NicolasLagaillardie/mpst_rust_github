@@ -92,19 +92,16 @@ type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
 
 fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_d_to_a(0, s);
-    close_mpst_multi(s)?;
-    Ok(())
+    close_mpst_multi(s)
 }
 
 fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_d(s)?;
-    close_mpst_multi(s)?;
-    Ok(())
+    close_mpst_multi(s)
 }
 
 fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
-    close_mpst_multi(s)?;
-    Ok(())
+    close_mpst_multi(s)
 }
 
 fork_simple_multi!(fork_simple, SessionMpst, 3);

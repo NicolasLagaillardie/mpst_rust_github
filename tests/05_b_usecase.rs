@@ -141,15 +141,9 @@ fn server(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
             let (request, s) = recv_mpst_a_to_c(s)?;
             let s = send_mpst_a_to_c(request + 1, s);
 
-            close_mpst(s)?;
-
-            Ok(())
+            close_mpst(s)
         },
-        |s: EndpointAEnd| {
-            close_mpst(s)?;
-
-            Ok(())
-        },
+        |s: EndpointAEnd| close_mpst(s),
     )
 }
 
@@ -168,80 +162,69 @@ fn authenticator(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
             assert_eq!(request, id + 1);
             assert_eq!(video, id + 3);
 
-            close_mpst(s)?;
-            Ok(())
+            close_mpst(s)
         },
-        |s: EndpointCEnd| {
-            close_mpst(s)?;
-
-            Ok(())
-        },
+        |s: EndpointCEnd| close_mpst(s),
     )
 }
 
 fn client_video(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let mut rng = thread_rng();
-        let id: i32 = rng.gen();
+    let mut rng = thread_rng();
+    let id: i32 = rng.gen();
 
-        let s = send_mpst_b_to_c(id, s);
-        let (accept, s) = recv_mpst_b_to_c(s)?;
+    let s = send_mpst_b_to_c(id, s);
+    let (accept, s) = recv_mpst_b_to_c(s)?;
 
-        assert_eq!(accept, id + 1);
+    assert_eq!(accept, id + 1);
 
-        let s = choose_left_mpst_session_b_to_all::<
-            CtoAVideo<i32>,
-            CtoAClose,
-            BtoAClose,
-            BtoCVideo<i32>,
-            BtoAClose,
-            CtoBClose,
-            QueueAVideoDual,
-            QueueAEndDual,
-            QueueCVideoDual,
-            QueueCEndDual,
-            QueueBVideo,
-            QueueBEnd,
-        >(s);
+    let s = choose_left_mpst_session_b_to_all::<
+        CtoAVideo<i32>,
+        CtoAClose,
+        BtoAClose,
+        BtoCVideo<i32>,
+        BtoAClose,
+        CtoBClose,
+        QueueAVideoDual,
+        QueueAEndDual,
+        QueueCVideoDual,
+        QueueCEndDual,
+        QueueBVideo,
+        QueueBEnd,
+    >(s);
 
-        let s = send_mpst_b_to_c(accept, s);
-        let (result, s) = recv_mpst_b_to_c(s)?;
+    let s = send_mpst_b_to_c(accept, s);
+    let (result, s) = recv_mpst_b_to_c(s)?;
 
-        assert_eq!(result, accept + 3);
+    assert_eq!(result, accept + 3);
 
-        close_mpst(s)?;
-    }
-    Ok(())
+    close_mpst(s)
 }
 
 fn client_close(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let mut rng = thread_rng();
-        let id: i32 = rng.gen();
+    let mut rng = thread_rng();
+    let id: i32 = rng.gen();
 
-        let s = send_mpst_b_to_c(id, s);
-        let (accept, s) = recv_mpst_b_to_c(s)?;
+    let s = send_mpst_b_to_c(id, s);
+    let (accept, s) = recv_mpst_b_to_c(s)?;
 
-        assert_eq!(accept, id + 1);
+    assert_eq!(accept, id + 1);
 
-        let s = choose_right_mpst_session_b_to_all::<
-            CtoAVideo<i32>,
-            CtoAClose,
-            BtoAClose,
-            BtoCVideo<i32>,
-            BtoAClose,
-            CtoBClose,
-            QueueAVideoDual,
-            QueueAEndDual,
-            QueueCVideoDual,
-            QueueCEndDual,
-            QueueBVideo,
-            QueueBEnd,
-        >(s);
+    let s = choose_right_mpst_session_b_to_all::<
+        CtoAVideo<i32>,
+        CtoAClose,
+        BtoAClose,
+        BtoCVideo<i32>,
+        BtoAClose,
+        CtoBClose,
+        QueueAVideoDual,
+        QueueAEndDual,
+        QueueCVideoDual,
+        QueueCEndDual,
+        QueueBVideo,
+        QueueBEnd,
+    >(s);
 
-        close_mpst(s)?;
-    }
-    Ok(())
+    close_mpst(s)
 }
 
 #[test]

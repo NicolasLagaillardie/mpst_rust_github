@@ -118,64 +118,58 @@ fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
         |s: EndpointCAdd<i32>| {
             let (x, s) = recv_mpst_c_to_a(s)?;
             let s = send_mpst_c_to_b(x + 1, s);
-            close_mpst(s)?;
 
             assert_eq!(x, 1);
-            Ok(())
+
+            close_mpst(s)
         },
         |s: EndpointCNeg<i32>| {
             let (x, s) = recv_mpst_c_to_a(s)?;
             let s = send_mpst_c_to_b(x + 1, s);
-            close_mpst(s)?;
 
             assert_eq!(x, 2);
-            Ok(())
+
+            close_mpst(s)
         },
     )
 }
 
 fn simple_store_client_left(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let s = choose_left_mpst_session_a_to_all::<
-            CtoBAdd<i32>,
-            CtoBNeg<i32>,
-            End,
-            AtoCAdd<i32>,
-            End,
-            AtoCNeg<i32>,
-            QueueOfferBDual,
-            QueueOfferBDual,
-            QueueOfferCDual,
-            QueueOfferCDual,
-            QueueChoiceA,
-            QueueChoiceA,
-        >(s);
-        let s = send_mpst_a_to_c(1, s);
-        close_mpst(s)?;
-    }
-    Ok(())
+    let s = choose_left_mpst_session_a_to_all::<
+        CtoBAdd<i32>,
+        CtoBNeg<i32>,
+        End,
+        AtoCAdd<i32>,
+        End,
+        AtoCNeg<i32>,
+        QueueOfferBDual,
+        QueueOfferBDual,
+        QueueOfferCDual,
+        QueueOfferCDual,
+        QueueChoiceA,
+        QueueChoiceA,
+    >(s);
+    let s = send_mpst_a_to_c(1, s);
+    close_mpst(s)
 }
 
 fn simple_store_client_right(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    {
-        let s = choose_right_mpst_session_a_to_all::<
-            CtoBAdd<i32>,
-            CtoBNeg<i32>,
-            End,
-            AtoCAdd<i32>,
-            End,
-            AtoCNeg<i32>,
-            QueueOfferBDual,
-            QueueOfferBDual,
-            QueueOfferCDual,
-            QueueOfferCDual,
-            QueueChoiceA,
-            QueueChoiceA,
-        >(s);
-        let s = send_mpst_a_to_c(2, s);
-        close_mpst(s)?;
-    }
-    Ok(())
+    let s = choose_right_mpst_session_a_to_all::<
+        CtoBAdd<i32>,
+        CtoBNeg<i32>,
+        End,
+        AtoCAdd<i32>,
+        End,
+        AtoCNeg<i32>,
+        QueueOfferBDual,
+        QueueOfferBDual,
+        QueueOfferCDual,
+        QueueOfferCDual,
+        QueueChoiceA,
+        QueueChoiceA,
+    >(s);
+    let s = send_mpst_a_to_c(2, s);
+    close_mpst(s)
 }
 
 fn simple_store_pawn(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
@@ -183,17 +177,17 @@ fn simple_store_pawn(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
         s,
         |s: EndpointBAdd<i32>| {
             let (x, s) = recv_mpst_b_to_c(s)?;
-            close_mpst(s)?;
 
             assert_eq!(x, 2);
-            Ok(())
+
+            close_mpst(s)
         },
         |s: EndpointBNeg<i32>| {
             let (x, s) = recv_mpst_b_to_c(s)?;
-            close_mpst(s)?;
 
             assert_eq!(x, 3);
-            Ok(())
+
+            close_mpst(s)
         },
     )
 }

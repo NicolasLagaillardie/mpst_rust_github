@@ -111,24 +111,20 @@ fn server(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_c(request + 1, s);
             server(s)
         },
-    })?;
-    Ok(())
+    })
 }
 
 fn authenticator(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_c_to_b(s)?;
     let s = send_mpst_c_to_b(id + 1, s);
 
-    let result = authenticator_recurs(s)?;
-
-    Ok(result)
+    authenticator_recurs(s)
 }
 
 fn authenticator_recurs(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_c_to_b!(s, {
         Branche0CtoB::End(s) => {
-            close_mpst(s)?;
-            Ok(())
+            close_mpst(s)
         },
         Branche0CtoB::Video(s) => {
             let (request, s) = recv_mpst_c_to_b(s)?;
@@ -137,8 +133,7 @@ fn authenticator_recurs(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_c_to_b(video + 1, s);
             authenticator_recurs(s)
         },
-    })?;
-    Ok(())
+    })
 }
 
 fn client(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -148,9 +143,7 @@ fn client(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_b_to_c(0, s);
     let (_, s) = recv_mpst_b_to_c(s)?;
 
-    let result = client_recurs(s, xs, 1)?;
-
-    Ok(result)
+    client_recurs(s, xs, 1)
 }
 
 fn client_recurs(
@@ -170,11 +163,9 @@ fn client_recurs(
         Option::None => {
             let s = choose_mpst_b_to_all!(s, Branche0AtoB::End, Branche0CtoB::End);
 
-            close_mpst(s)?;
-
             assert_eq!(index, 100);
 
-            Ok(())
+            close_mpst(s)
         }
     }
 }
