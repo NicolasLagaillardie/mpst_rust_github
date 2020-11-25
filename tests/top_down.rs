@@ -88,16 +88,17 @@ type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full,
 fn server(s: EndpointB15<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {
-            let (_, s) = recv_mpst_b_to_c(s)?;
+            let (x, s) = recv_mpst_b_to_c(s)?;
+
+            assert_eq!(x, ());
+
             let s = send_mpst_b_to_a((), s);
-            close_mpst(s)?;
-            Ok(())
+            close_mpst(s)
         },
         Branches0BtoC::ADD(s) => {
             let (id, s) = recv_mpst_b_to_c(s)?;
             let s = send_mpst_b_to_a(id + 1, s);
-            close_mpst(s)?;
-            Ok(())
+            close_mpst(s)
         },
     })
 }
@@ -107,14 +108,15 @@ fn authenticator(s: EndpointA13<i32>) -> Result<(), Box<dyn Error>> {
 
     offer_mpst_a_to_c!(s, {
         Branches0AtoC::BYE(s) => {
-            let (_, s) = recv_mpst_a_to_b(s)?;
-            close_mpst(s)?;
-            Ok(())
+            let (x, s) = recv_mpst_a_to_b(s)?;
+
+            assert_eq!(x, ());
+
+            close_mpst(s)
         },
         Branches0AtoC::ADD(s) => {
             let (_, s) = recv_mpst_a_to_b(s)?;
-            close_mpst(s)?;
-            Ok(())
+            close_mpst(s)
         },
     })
 }
