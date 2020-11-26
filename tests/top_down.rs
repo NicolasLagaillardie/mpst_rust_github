@@ -51,9 +51,9 @@ type Choose0forAtoC<N> = Send<Branches0AtoC<N>, End>;
 
 type TestAtoC<N> = Recv<N, Recv<Branches0AtoC<N>, End>>;
 
-type OrderingA11 = RoleC<RoleEnd>;
-type OrderingA12Full = RoleC<OrderingA11>;
-type EndpointA13<N> = SessionMpst<End, TestAtoC<N>, OrderingA12Full, RoleA<RoleEnd>>;
+type OrderingA10 = RoleC<RoleEnd>;
+type OrderingA11Full = RoleC<OrderingA10>;
+type EndpointA12<N> = SessionMpst<End, TestAtoC<N>, OrderingA11Full, RoleA<RoleEnd>>;
 
 type ADDBtoA<N> = Send<N, End>;
 type ADDBtoC<N> = Recv<N, End>;
@@ -72,10 +72,10 @@ enum Branches0BtoC<N: marker::Send> {
 }
 type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
-type OrderingB13 = RoleC<RoleEnd>;
-type OrderingB14Full = OrderingB13;
-type EndpointB15<N> =
-    SessionMpst<End, Recv<Branches0BtoC<N>, End>, OrderingB14Full, RoleB<RoleEnd>>;
+type OrderingB12 = RoleC<RoleEnd>;
+type OrderingB13Full = OrderingB12;
+type EndpointB14<N> =
+    SessionMpst<End, Recv<Branches0BtoC<N>, End>, OrderingB13Full, RoleB<RoleEnd>>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
@@ -85,7 +85,7 @@ type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full,
 ///////////////////////////////////////// END
 
 /// Functions related to endpoints
-fn server(s: EndpointB15<i32>) -> Result<(), Box<dyn Error>> {
+fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {
             let (x, s) = recv_mpst_b_to_c(s)?;
@@ -103,7 +103,7 @@ fn server(s: EndpointB15<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn authenticator(s: EndpointA13<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_c(s)?;
 
     offer_mpst_a_to_c!(s, {

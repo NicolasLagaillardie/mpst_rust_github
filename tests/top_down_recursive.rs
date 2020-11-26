@@ -36,49 +36,49 @@ use mpstthree::offer_mpst_b_to_c;
 
 type ADDAtoB<N> = Recv<N, End>;
 
-type OrderingA13 = RoleC<RoleEnd>;
-type OrderingA14Full = RoleB<OrderingA13>;
-type EndpointA15<N> =
-    SessionMpst<ADDAtoB<N>, Recv<Branches0AtoC<N>, End>, OrderingA14Full, RoleA<RoleEnd>>;
+type OrderingA11 = RoleC<RoleEnd>;
+type OrderingA12Full = RoleB<OrderingA11>;
+type EndpointA13<N> =
+    SessionMpst<ADDAtoB<N>, Recv<Branches0AtoC<N>, End>, OrderingA12Full, RoleA<RoleEnd>>;
 type BYEAtoB = Recv<(), End>;
 
-type OrderingA16Full = RoleB<RoleEnd>;
-type EndpointA17 = SessionMpst<BYEAtoB, End, OrderingA16Full, RoleA<RoleEnd>>;
+type OrderingA14Full = RoleB<RoleEnd>;
+type EndpointA15 = SessionMpst<BYEAtoB, End, OrderingA14Full, RoleA<RoleEnd>>;
 
 enum Branches0AtoC<N: marker::Send> {
-    ADD(EndpointA15<N>),
-    BYE(EndpointA17),
+    ADD(EndpointA13<N>),
+    BYE(EndpointA15),
 }
 type Choose0forAtoC<N> = Send<Branches0AtoC<N>, End>;
 
 type TestAtoC<N> = Recv<N, Recv<Branches0AtoC<N>, End>>;
 
-type OrderingA19 = RoleC<RoleEnd>;
-type OrderingA20Full = RoleC<OrderingA19>;
-type EndpointA21<N> = SessionMpst<End, TestAtoC<N>, OrderingA20Full, RoleA<RoleEnd>>;
+type OrderingA16 = RoleC<RoleEnd>;
+type OrderingA17Full = RoleC<OrderingA16>;
+type EndpointA18<N> = SessionMpst<End, TestAtoC<N>, OrderingA17Full, RoleA<RoleEnd>>;
 
 type ADDBtoA<N> = Send<N, End>;
 type ADDBtoC<N> = Recv<N, Recv<Branches0BtoC<N>, End>>;
 
-type OrderingB15 = RoleC<RoleEnd>;
-type OrderingB16Full = RoleC<RoleA<OrderingB15>>;
-type EndpointB17<N> = SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB16Full, RoleB<RoleEnd>>;
+type OrderingB13 = RoleC<RoleEnd>;
+type OrderingB14Full = RoleC<RoleA<OrderingB13>>;
+type EndpointB15<N> = SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB14Full, RoleB<RoleEnd>>;
 type BYEBtoA = Send<(), End>;
 type BYEBtoC = Recv<(), End>;
 
-type OrderingB18Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB19 = SessionMpst<BYEBtoA, BYEBtoC, OrderingB18Full, RoleB<RoleEnd>>;
+type OrderingB16Full = RoleC<RoleA<RoleEnd>>;
+type EndpointB17 = SessionMpst<BYEBtoA, BYEBtoC, OrderingB16Full, RoleB<RoleEnd>>;
 
 enum Branches0BtoC<N: marker::Send> {
-    ADD(EndpointB17<N>),
-    BYE(EndpointB19),
+    ADD(EndpointB15<N>),
+    BYE(EndpointB17),
 }
 type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
-type OrderingB21 = RoleC<RoleEnd>;
-type OrderingB22Full = OrderingB21;
-type EndpointB23<N> =
-    SessionMpst<End, Recv<Branches0BtoC<N>, End>, OrderingB22Full, RoleB<RoleEnd>>;
+type OrderingB18 = RoleC<RoleEnd>;
+type OrderingB19Full = OrderingB18;
+type EndpointB20<N> =
+    SessionMpst<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, RoleB<RoleEnd>>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
@@ -89,7 +89,7 @@ type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full,
 
 ///////////////////////////////////////// For verification with functions
 
-type EndpointA20<N> = SessionMpst<End, Recv<Branches0AtoC<N>, End>, OrderingA19, RoleA<RoleEnd>>;
+type EndpointA19<N> = SessionMpst<End, Recv<Branches0AtoC<N>, End>, OrderingA16, RoleA<RoleEnd>>;
 
 type EndpointC2<N> =
     SessionMpst<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleA<RoleB<RoleEnd>>, RoleC<RoleEnd>>;
@@ -97,7 +97,7 @@ type EndpointC2<N> =
 ///////////////////////////////////////// END
 
 /// Functions related to endpoints
-fn server(s: EndpointB23<i32>) -> Result<(), Box<dyn Error>> {
+fn server(s: EndpointB20<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {
             let (_, s) = recv_mpst_b_to_c(s)?;
@@ -112,13 +112,13 @@ fn server(s: EndpointB23<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn authenticator(s: EndpointA21<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator(s: EndpointA18<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_c(s)?;
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointA20<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator_recurs(s: EndpointA19<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_c!(s, {
         Branches0AtoC::BYE(s) => {
             let (_, s) = recv_mpst_a_to_b(s)?;
