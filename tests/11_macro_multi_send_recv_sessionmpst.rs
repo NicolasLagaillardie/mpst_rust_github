@@ -3,8 +3,7 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,
-    create_offer_type_multi, create_recv_mpst_all_session, create_recv_mpst_session,
+    close_mpst, create_broadcast_role, create_normal_role, create_recv_mpst_session,
     create_send_mpst_session, create_sessionmpst, fork_mpst_multi, fork_simple_multi,
 };
 use std::error::Error;
@@ -34,51 +33,8 @@ create_recv_mpst_session!(recv_mpst_a_to_d, RoleD, next_d, RoleA, SessionMpst, 3
 create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 3, 2);
 create_recv_mpst_session!(recv_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
 create_recv_mpst_session!(recv_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
-// broadcast
-create_recv_mpst_all_session!(
-    recv_mpst_b_all_to_d,
-    RoleAlltoD,
-    next_all_to_d,
-    RoleB,
-    SessionMpst,
-    3,
-    2
-);
-create_recv_mpst_all_session!(
-    recv_mpst_a_all_to_d,
-    RoleAlltoD,
-    next_all_to_d,
-    RoleA,
-    SessionMpst,
-    3,
-    2
-);
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
-
-create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3);
-
-create_offer_mpst_session_multi!(
-    offer_mpst_session_a_to_c,
-    OfferMpstMultiThree,
-    RoleAlltoD,
-    recv_mpst_a_all_to_d,
-    RoleA,
-    SessionMpst,
-    3,
-    2
-);
-
-create_offer_mpst_session_multi!(
-    offer_mpst_session_b_to_c,
-    OfferMpstMultiThree,
-    RoleAlltoD,
-    recv_mpst_b_all_to_d,
-    RoleB,
-    SessionMpst,
-    3,
-    2
-);
 
 type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;
