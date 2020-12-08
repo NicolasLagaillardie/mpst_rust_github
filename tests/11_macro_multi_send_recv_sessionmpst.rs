@@ -3,65 +3,67 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_broadcast_role, create_normal_role, create_recv_mpst_session,
-    create_send_mpst_session, create_sessionmpst, fork_mpst_multi, fork_simple_multi,
+    close_mpst, create_normal_role, create_recv_mpst_session, create_send_mpst_session,
+    create_sessionmpst, fork_mpst_multi, fork_simple_multi,
 };
 use std::error::Error;
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpst, 3);
+// Create new SessionMpst for five participants
+create_sessionmpst!(SessionMpst, 5);
 
 // Create new roles
-// normal
 create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
-// broadcast
-create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+create_normal_role!(RoleE, next_e, RoleEDual, next_e_dual);
 
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_d, RoleD, next_d, RoleD, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, next_b, RoleD, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, next_b, RoleD, SessionMpst, 5, 2);
 
 // Create new recv functions and related types
-// normal
-create_recv_mpst_session!(recv_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_to_d, RoleD, next_d, RoleA, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 5, 3);
 
-close_mpst!(close_mpst_multi, SessionMpst, 3);
+close_mpst!(close_mpst_multi, SessionMpst, 5);
 
-type TestA = RoleA<RoleEnd>;
-type TestB = RoleB<RoleEnd>;
-type TestD = RoleD<RoleEnd>;
+type NameA = RoleA<RoleEnd>;
+type NameB = RoleB<RoleEnd>;
+type NameC = RoleC<RoleEnd>;
+type NameD = RoleD<RoleEnd>;
+type NameE = RoleE<RoleEnd>;
 
-type SendSessionMPSTD<N> = SessionMpst<Send<N, End>, End, TestA, TestD>;
+type SendSessionMPSTD<N> = SessionMpst<End, Send<N, End>, End, End, NameB, NameD>;
 
-type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
+type RecvSessionMPSTB<N> = SessionMpst<End, End, Recv<N, End>, End, NameD, NameB>;
 
-type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
+type PawnA = SessionMpst<End, End, End, End, RoleEnd, NameA>;
+type PawnC = SessionMpst<End, End, End, End, RoleEnd, NameC>;
+type PawnE = SessionMpst<End, End, End, End, RoleEnd, NameE>;
 
-fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_d_to_a(0, s);
+fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
+    let s = send_mpst_d_to_b(0, s);
     close_mpst_multi(s)
 }
 
-fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_a_to_d(s)?;
+fn recv_b_to_d(s: RecvSessionMPSTB<i32>) -> Result<(), Box<dyn Error>> {
+    let (_, s) = recv_mpst_b_to_d(s)?;
     close_mpst_multi(s)
 }
 
-fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
+fn pawn_a(s: PawnA) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fork_simple_multi!(fork_simple, SessionMpst, 3);
-fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst, 3);
+fn pawn_c(s: PawnC) -> Result<(), Box<dyn Error>> {
+    close_mpst_multi(s)
+}
+
+fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
+    close_mpst_multi(s)
+}
+
+fork_simple_multi!(fork_simple, SessionMpst, 5);
+fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst, 5);
 
 ////////////////////////////////////////
 
@@ -69,11 +71,14 @@ fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst, 3);
 fn test_new_send() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(recv_a_to_d, pawn, send_d_to_a);
+            let (thread_a, thread_b, thread_c, thread_d, thread_e) =
+                fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
 
             assert!(thread_a.is_ok());
-            assert!(thread_pawn.is_ok());
+            assert!(thread_b.is_ok());
+            assert!(thread_c.is_ok());
             assert!(thread_d.is_ok());
+            assert!(thread_e.is_ok());
         }
         Ok(())
     }()
