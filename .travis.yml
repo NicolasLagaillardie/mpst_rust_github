@@ -58,7 +58,7 @@ jobs:
         - touch ./src/lib.rs && cargo clippy -- -D warnings
     - os: linux
       stage: coverage
-      sudo: required
+      # sudo: required
       dist: trusty
       cache: false
       services:
