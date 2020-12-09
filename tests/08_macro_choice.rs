@@ -13,10 +13,9 @@ use mpstthree::functionmpst::OfferMpst;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    create_broadcast_role, create_choose_left_from_3_to_1_and_2,
-    create_choose_right_from_3_to_1_and_2, create_normal_role, create_offer_mpst_session_2,
-    create_recv_mpst_all_session_2, create_recv_mpst_session_1, create_recv_mpst_session_2,
-    create_send_mpst_session_1, create_send_mpst_session_2,
+    create_broadcast_role, create_choose_both_from_3_to_1_and_2, create_normal_role,
+    create_offer_mpst_session_2, create_recv_mpst_all_session_2, create_recv_mpst_session_1,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
 };
 
 // Create new roles
@@ -60,15 +59,8 @@ create_offer_mpst_session_2!(
 );
 
 // Create the choose functions
-create_choose_right_from_3_to_1_and_2!(
+create_choose_both_from_3_to_1_and_2!(
     choose_right_mpst_session_c_to_all,
-    RoleADual,
-    RoleBDual,
-    RoleCtoAll,
-    next_c_to_all,
-    RoleC
-);
-create_choose_left_from_3_to_1_and_2!(
     choose_left_mpst_session_c_to_all,
     RoleADual,
     RoleBDual,

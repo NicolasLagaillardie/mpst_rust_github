@@ -390,7 +390,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///  ```ignore
 /// match xs.pop() {
 ///     Option::Some(_) => {
-///         let s = choose_mpst_X_to_all!(
+///         let s = choose_mpst_multi_to_all!(
 ///             s,
 ///             send_mpst_d_to_a,
 ///             send_mpst_d_to_b, =>
@@ -407,7 +407,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///         client_recurs(s, xs, index + 1)
 ///     }
 ///     Option::None => {
-///         let s = choose_mpst_X_to_all!(
+///         let s = choose_mpst_multi_to_all!(
 ///             s,
 ///             send_mpst_d_to_a,
 ///             send_mpst_d_to_b, =>
@@ -425,7 +425,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// }
 /// ```
 #[macro_export]
-macro_rules! choose_mpst_X_to_all {
+macro_rules! choose_mpst_multi_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! 1 : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
 

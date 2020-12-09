@@ -42,19 +42,19 @@ type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
 
 type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 
-type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
-type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
+type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
+type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
-enum CBranchesAtoC<N: marker::Send> {
+enum Branches0AtoC<N: marker::Send> {
     End(SessionMpst<End, End, RoleEnd, RoleA<RoleEnd>>),
     Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>),
 }
-enum CBranchesBtoC<N: marker::Send> {
+enum Branches0BtoC<N: marker::Send> {
     End(SessionMpst<End, End, RoleEnd, RoleB<RoleEnd>>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
-type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
-type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
+type ChooseCforAtoC<N> = Send<Branches0AtoC<N>, End>;
+type ChooseCforBtoC<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
 
@@ -84,10 +84,10 @@ type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_c, {
-        CBranchesBtoC::End(s) => {
+        Branches0BtoC::End(s) => {
             close_mpst(s)
         },
-        CBranchesBtoC::Video(s) => {
+        Branches0BtoC::Video(s) => {
             let (request, s) = recv_mpst_b_to_a(s)?;
             let s = send_mpst_b_to_a(request + 1, s);
             server(s)
@@ -104,10 +104,10 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_c, {
-        CBranchesAtoC::End(s) => {
+        Branches0AtoC::End(s) => {
             close_mpst(s)
         },
-        CBranchesAtoC::Video(s) => {
+        Branches0AtoC::Video(s) => {
             let (request, s) = recv_mpst_a_to_c(s)?;
             let s = send_mpst_a_to_b(request + 1, s);
             let (video, s) = recv_mpst_a_to_b(s)?;
@@ -136,8 +136,8 @@ fn client_recurs(
         Option::Some(_) => {
             let s = choose_mpst_to_all!(
                 s,
-                CBranchesAtoC::Video,
-                CBranchesBtoC::Video,
+                Branches0AtoC::Video,
+                Branches0BtoC::Video,
                 send_mpst_c_to_a,
                 send_mpst_c_to_b,
                 RoleA,
@@ -153,8 +153,8 @@ fn client_recurs(
         Option::None => {
             let s = choose_mpst_to_all!(
                 s,
-                CBranchesAtoC::End,
-                CBranchesBtoC::End,
+                Branches0AtoC::End,
+                Branches0BtoC::End,
                 send_mpst_c_to_a,
                 send_mpst_c_to_b,
                 RoleA,

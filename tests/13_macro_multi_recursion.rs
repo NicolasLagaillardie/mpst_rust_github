@@ -5,11 +5,9 @@ use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    choose_mpst_X_to_all, close_mpst, create_broadcast_role, create_choose_mpst_session_multi_left,
-    create_choose_mpst_session_multi_right, create_choose_type_multi, create_normal_role,
-    create_offer_mpst_session_multi, create_offer_type_multi, create_recv_mpst_all_session,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_mpst_multi,
-    fork_simple_multi, offer_mpst,
+    bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_broadcast_role,
+    create_normal_role, create_recv_mpst_session, create_send_mpst_session, create_sessionmpst,
+    offer_mpst,
 };
 use std::error::Error;
 use std::marker;
@@ -39,75 +37,10 @@ create_recv_mpst_session!(recv_mpst_a_to_d, RoleD, next_d, RoleA, SessionMpst, 3
 create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 3, 2);
 create_recv_mpst_session!(recv_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
 create_recv_mpst_session!(recv_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
-// broadcast
-create_recv_mpst_all_session!(
-    recv_mpst_b_all_to_d,
-    RoleAlltoD,
-    next_all_to_d,
-    RoleB,
-    SessionMpst,
-    3,
-    2
-);
-create_recv_mpst_all_session!(
-    recv_mpst_a_all_to_d,
-    RoleAlltoD,
-    next_all_to_d,
-    RoleA,
-    SessionMpst,
-    3,
-    2
-);
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
 
-create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3);
-create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
-
-create_offer_mpst_session_multi!(
-    offer_mpst_session_a_to_d,
-    OfferMpstMultiThree,
-    RoleAlltoD,
-    recv_mpst_a_all_to_d,
-    RoleA,
-    SessionMpst,
-    3,
-    2
-);
-
-create_offer_mpst_session_multi!(
-    offer_mpst_session_b_to_d,
-    OfferMpstMultiThree,
-    RoleAlltoD,
-    recv_mpst_b_all_to_d,
-    RoleB,
-    SessionMpst,
-    3,
-    2
-);
-
-create_choose_mpst_session_multi_left!(
-    choose_left_mpst_session_d_to_all,
-    ChooseMpstThree,
-    RoleDtoAll,
-    next_d_to_all,
-    RoleD,
-    SessionMpst,
-    3
-);
-
-create_choose_mpst_session_multi_right!(
-    choose_right_mpst_session_d_to_all,
-    ChooseMpstThree,
-    RoleDtoAll,
-    next_d_to_all,
-    RoleD,
-    SessionMpst,
-    3
-);
-
-fork_simple_multi!(fork_simple, SessionMpst, 3);
-fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst, 3);
+bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -120,32 +53,32 @@ type NameD = RoleD<RoleEnd>;
 /// Authenticator = A
 /// Server = B
 
-type AtoCClose = End;
+type AtoDClose = End;
 type AtoBClose = End;
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
-type AtoCVideo<N> = Recv<N, Send<N, RecursAtoC<N>>>;
+type AtoDVideo<N> = Recv<N, Send<N, RecursAtoD<N>>>;
 
-type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
+type InitA<N> = Recv<N, Send<N, RecursAtoD<N>>>;
 
 type BtoAClose = <AtoBClose as Session>::Dual;
-type BtoCClose = End;
+type BtoDClose = End;
 type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 
-type RecursAtoC<N> = Recv<CBranchesAtoC<N>, End>;
-type RecursBtoC<N> = Recv<CBranchesBtoC<N>, End>;
+type RecursAtoD<N> = Recv<Branches0AtoD<N>, End>;
+type RecursBtoD<N> = Recv<Branches0BtoD<N>, End>;
 
-enum CBranchesAtoC<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, NameA>),
-    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, NameA>),
+enum Branches0AtoD<N: marker::Send> {
+    End(SessionMpst<AtoBClose, AtoDClose, QueueAEnd, NameA>),
+    Video(SessionMpst<AtoBVideo<N>, AtoDVideo<N>, QueueAVideo, NameA>),
 }
-enum CBranchesBtoC<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, NameB>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, NameB>),
+enum Branches0BtoD<N: marker::Send> {
+    End(SessionMpst<BtoAClose, BtoDClose, QueueBEnd, NameB>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, QueueBVideo, NameB>),
 }
-type ChooseCforAtoC<N> = Send<CBranchesAtoC<N>, End>;
-type ChooseCforBtoC<N> = Send<CBranchesBtoC<N>, End>;
+type ChooseCforAtoD<N> = Send<Branches0AtoD<N>, End>;
+type ChooseCforBtoD<N> = Send<Branches0BtoD<N>, End>;
 
-type InitC<N> = Send<N, Recv<N, ChooseCforAtoC<N>>>;
+type InitD<N> = Send<N, Recv<N, ChooseCforAtoD<N>>>;
 
 /// Queues
 type QueueAEnd = RoleEnd;
@@ -157,29 +90,29 @@ type QueueBEnd = RoleEnd;
 type QueueBVideo = RoleA<RoleA<RoleD<RoleEnd>>>;
 type QueueBRecurs = RoleD<RoleEnd>;
 
-type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
-type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
+type QueueDRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueDFull = RoleA<RoleA<QueueDRecurs>>;
 
 /// Creating the MP sessions
 /// For C
 
-type EndpointCRecurs<N> = SessionMpst<ChooseCforAtoC<N>, ChooseCforBtoC<N>, QueueCRecurs, NameD>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull, NameD>;
+type EndpointDRecurs<N> = SessionMpst<ChooseCforAtoD<N>, ChooseCforBtoD<N>, QueueDRecurs, NameD>;
+type EndpointDFull<N> = SessionMpst<InitD<N>, ChooseCforBtoD<N>, QueueDFull, NameD>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, QueueARecurs, NameA>;
+type EndpointARecurs<N> = SessionMpst<End, RecursAtoD<N>, QueueARecurs, NameA>;
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, NameA>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, NameB>;
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, QueueBRecurs, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_d, {
-        CBranchesBtoC::End(s) => {
+        Branches0BtoD::End(s) => {
             close_mpst_multi(s)
         },
-        CBranchesBtoC::Video(s) => {
+        Branches0BtoD::Video(s) => {
             let (request, s) = recv_mpst_b_to_a(s)?;
             let s = send_mpst_b_to_a(request + 1, s);
             server(s)
@@ -196,10 +129,10 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_d, {
-        CBranchesAtoC::End(s) => {
+        Branches0AtoD::End(s) => {
             close_mpst_multi(s)
         },
-        CBranchesAtoC::Video(s) => {
+        Branches0AtoD::Video(s) => {
             let (request, s) = recv_mpst_a_to_d(s)?;
             let s = send_mpst_a_to_b(request + 1, s);
             let (video, s) = recv_mpst_a_to_b(s)?;
@@ -209,7 +142,7 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+fn client(s: EndpointDFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
@@ -220,18 +153,18 @@ fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn client_recurs(
-    s: EndpointCRecurs<i32>,
+    s: EndpointDRecurs<i32>,
     mut xs: Vec<i32>,
     index: i32,
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s = choose_mpst_X_to_all!(
+            let s = choose_mpst_multi_to_all!(
                 s,
                 send_mpst_d_to_a,
                 send_mpst_d_to_b, =>
-                CBranchesAtoC::Video,
-                CBranchesBtoC::Video, =>
+                Branches0AtoD::Video,
+                Branches0BtoD::Video, =>
                 RoleA,
                 RoleB, =>
                 RoleD,
@@ -245,12 +178,12 @@ fn client_recurs(
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_X_to_all!(
+            let s = choose_mpst_multi_to_all!(
                 s,
                 send_mpst_d_to_a,
                 send_mpst_d_to_b, =>
-                CBranchesAtoC::End,
-                CBranchesBtoC::End, =>
+                Branches0AtoD::End,
+                Branches0BtoD::End, =>
                 RoleA,
                 RoleB, =>
                 RoleD,

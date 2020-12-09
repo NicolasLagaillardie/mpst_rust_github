@@ -56,19 +56,19 @@ type CtoBClose = <BtoCClose as Session>::Dual;
 type CtoAClose = End;
 type CtoBVideo<N> = <BtoCVideo<N> as Session>::Dual;
 
-type RecursBtoA<N> = Recv<Branche0BtoA<N>, End>;
-type RecursCtoA<N> = Recv<Branche0CtoA<N>, End>;
+type RecursBtoA<N> = Recv<Branches0BtoA<N>, End>;
+type RecursCtoA<N> = Recv<Branches0CtoA<N>, End>;
 
-enum Branche0BtoA<N: marker::Send> {
+enum Branches0BtoA<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
     Video(SessionMpst<BtoAVideo<N>, BtoCVideo<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
-enum Branche0CtoA<N: marker::Send> {
+enum Branches0CtoA<N: marker::Send> {
     End(SessionMpst<CtoAClose, CtoBClose, QueueCEnd, RoleC<RoleEnd>>),
     Video(SessionMpst<RecursCtoA<N>, CtoBVideo<N>, QueueCVideo, RoleC<RoleEnd>>),
 }
-type ChooseAforBtoA<N> = Send<Branche0BtoA<N>, End>;
-type ChooseAforCtoA<N> = Send<Branche0CtoA<N>, End>;
+type ChooseAforBtoA<N> = Send<Branches0BtoA<N>, End>;
+type ChooseAforCtoA<N> = Send<Branches0CtoA<N>, End>;
 
 type InitA<N> = Send<N, Recv<N, ChooseAforBtoA<N>>>;
 
@@ -102,10 +102,10 @@ type EndpointCRecurs<N> = SessionMpst<RecursCtoA<N>, End, QueueCRecurs, RoleC<Ro
 /// Functions related to endpoints
 fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_c_to_a!(s, {
-        Branche0CtoA::End(s) => {
+        Branches0CtoA::End(s) => {
             close_mpst(s)
         },
-        Branche0CtoA::Video(s) => {
+        Branches0CtoA::Video(s) => {
             let (request, s) = recv_mpst_c_to_b(s)?;
             let s = send_mpst_c_to_b(request + 1, s);
             server(s)
@@ -122,10 +122,10 @@ fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
 fn authenticator_recurs(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_a!(s, {
-        Branche0BtoA::End(s) => {
+        Branches0BtoA::End(s) => {
             close_mpst(s)
         },
-        Branche0BtoA::Video(s) => {
+        Branches0BtoA::Video(s) => {
             let (request, s) = recv_mpst_b_to_a(s)?;
             let s = send_mpst_b_to_c(request + 1, s);
             let (video, s) = recv_mpst_b_to_c(s)?;
@@ -152,7 +152,7 @@ fn client_recurs(
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s = choose_mpst_a_to_all!(s, Branche0BtoA::Video, Branche0CtoA::Video);
+            let s = choose_mpst_a_to_all!(s, Branches0BtoA::Video, Branches0CtoA::Video);
 
             let s = send_mpst_a_to_b(1, s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -160,7 +160,7 @@ fn client_recurs(
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_a_to_all!(s, Branche0BtoA::End, Branche0CtoA::End);
+            let s = choose_mpst_a_to_all!(s, Branches0BtoA::End, Branches0CtoA::End);
 
             assert_eq!(index, 100);
 
@@ -175,11 +175,11 @@ fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
 }
 
-impl<N: marker::Send> fmt::Display for Branche0BtoA<N> {
+impl<N: marker::Send> fmt::Display for Branches0BtoA<N> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Branche0BtoA::Video(s) => write!(f, "Video:{}", type_of(&s)),
-            Branche0BtoA::End(s) => write!(f, "End:{}", type_of(&s)),
+            Branches0BtoA::Video(s) => write!(f, "Video:{}", type_of(&s)),
+            Branches0BtoA::End(s) => write!(f, "End:{}", type_of(&s)),
         }
     }
 }
@@ -187,20 +187,20 @@ impl<N: marker::Send> fmt::Display for Branche0BtoA<N> {
 fn hashmap_branche_0_b_to_a() -> Vec<String> {
     let (s_video, _) = <_ as Session>::new();
 
-    let video = Branche0BtoA::Video::<i32>(s_video);
+    let video = Branches0BtoA::Video::<i32>(s_video);
 
     let (s_end, _) = <_ as Session>::new();
 
-    let end = Branche0BtoA::End::<i32>(s_end);
+    let end = Branches0BtoA::End::<i32>(s_end);
 
     vec![(&video).to_string(), (&end).to_string()]
 }
 
-impl<N: marker::Send> fmt::Display for Branche0CtoA<N> {
+impl<N: marker::Send> fmt::Display for Branches0CtoA<N> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Branche0CtoA::Video(s) => write!(f, "Video:{}", type_of(&s)),
-            Branche0CtoA::End(s) => write!(f, "End:{}", type_of(&s)),
+            Branches0CtoA::Video(s) => write!(f, "Video:{}", type_of(&s)),
+            Branches0CtoA::End(s) => write!(f, "End:{}", type_of(&s)),
         }
     }
 }
@@ -208,11 +208,11 @@ impl<N: marker::Send> fmt::Display for Branche0CtoA<N> {
 fn hashmap_branche_0_c_to_a() -> Vec<String> {
     let (s_video, _) = <_ as Session>::new();
 
-    let video = Branche0CtoA::Video::<i32>(s_video);
+    let video = Branches0CtoA::Video::<i32>(s_video);
 
     let (s_end, _) = <_ as Session>::new();
 
-    let end = Branche0CtoA::End::<i32>(s_end);
+    let end = Branches0CtoA::End::<i32>(s_end);
 
     vec![(&video).to_string(), (&end).to_string()]
 }
@@ -249,8 +249,8 @@ fn run_b_usecase_recursive_checker() {
             let branche_0_c_to_a: Vec<String> = hashmap_branche_0_c_to_a();
             let branche_0_b_to_a: Vec<String> = hashmap_branche_0_b_to_a();
 
-            branches_receivers.insert(String::from("Branche0CtoA<i32>"), &branche_0_c_to_a);
-            branches_receivers.insert(String::from("Branche0BtoA<i32>"), &branche_0_b_to_a);
+            branches_receivers.insert(String::from("Branches0CtoA<i32>"), &branche_0_c_to_a);
+            branches_receivers.insert(String::from("Branches0BtoA<i32>"), &branche_0_b_to_a);
 
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
@@ -268,8 +268,8 @@ fn run_b_usecase_recursive_checker() {
             stacks.push(type_of(&stack_video).to_string());
             stacks.push(type_of(&stack_end).to_string());
 
-            branches_sender.insert(String::from("Branche0CtoA<i32>"), &stacks);
-            branches_sender.insert(String::from("Branche0BtoA<i32>"), &stacks);
+            branches_sender.insert(String::from("Branches0CtoA<i32>"), &stacks);
+            branches_sender.insert(String::from("Branches0BtoA<i32>"), &stacks);
 
             let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
 
