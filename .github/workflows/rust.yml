@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build:
+    name: Build, test and benchmarks all
 
     runs-on: ${{ matrix.os }}
     strategy:
