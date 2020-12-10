@@ -329,7 +329,7 @@ fn selection_works() {
 
     for i in 0..10 {
         let (other_thread, s) = fork_with_thread_id(move |s: Send<u64, End>| {
-            sleep(Duration::from_millis(i * 100));
+            sleep(Duration::from_millis(i * 200));
             let s = send(9 - i, s);
             close(s)
         });
@@ -346,11 +346,7 @@ fn selection_works() {
                 } else {
                     let (i, r) = select_mut(&mut rs)?;
                     close(r)?;
-
-                    println!("Test selection_works: {} / {}", current_index, i);
-                    println!("Messages were received out of order.");
-
-                    assert_eq!(current_index, i);
+                    assert_eq!(current_index, i, "Messages were received out of order.");
                     current_index = current_index.overflowing_sub(1).0; // decrement
                 }
             }
