@@ -346,7 +346,11 @@ fn selection_works() {
                 } else {
                     let (i, r) = select_mut(&mut rs)?;
                     close(r)?;
-                    assert_eq!(current_index, i, "Messages were received out of order.");
+
+                    println!("Test selection_works: {} / {}", current_index, i);
+                    println!("Messages were received out of order.");
+
+                    assert_eq!(current_index, i);
                     current_index = current_index.overflowing_sub(1).0; // decrement
                 }
             }
