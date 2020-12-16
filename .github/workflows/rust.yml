@@ -28,5 +28,5 @@ jobs:
       run: cargo test --verbose --no-default-features --no-run
     - name: Run benchmarks
       run: cargo bench --verbose --all
-    - name: Run benchdocmarks
+    - name: Run doc
       run: cargo doc --verbose --all
