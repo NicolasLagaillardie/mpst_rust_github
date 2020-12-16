@@ -27,41 +27,56 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+/// use mpstthree::functionmpst::send::send_mpst_b_to_a;
 ///
 /// // Creating the binary sessions
-/// type AtoB<N> = Recv<N, End>;
-/// type AtoC = End;
+/// type AtoB = Recv<(), End>;
+/// type BtoA = <AtoB as Session>::Dual;
 ///
 /// // Queue
 /// type QueueA = RoleB<RoleEnd>;
+/// type QueueB = RoleA<RoleEnd>;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
+/// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC, QueueA, NameA>;
+/// type EndpointA = SessionMpst<AtoB, End, QueueA, NameA>;
+/// type EndpointB = SessionMpst<BtoA, End, QueueB, NameB>;
 ///
 /// // From this point...
-/// let (channel_ab, _) = AtoB::<i32>::new();
-/// let (channel_ac, _) = AtoC::new();
+///
+/// let (channel_ab, channel_ba) = AtoB::new();
+/// let (channel_ac, _) = End::new();
+/// let (channel_bc, _) = End::new();
 ///
 /// let (role_a, _) = QueueA::new();
+/// let (role_b, _) = QueueB::new();
 ///
 /// let (name_a, _) = NameA::new();
+/// let (name_b, _) = NameB::new();
 ///
-/// let sess = SessionMpst {
+/// let sess_a = SessionMpst {
 ///    session1: channel_ab,
 ///    session2: channel_ac,
 ///    stack: role_a,
 ///    name: name_a,
 /// };
+///
+/// let sess_b = SessionMpst {
+///    session1: channel_ba,
+///    session2: channel_bc,
+///    stack: role_b,
+///    name: name_b,
+/// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
-/// let s = recv_mpst_a_to_b(sess);
+/// send_mpst_b_to_a((), sess_b);
+/// recv_mpst_a_to_b(sess_a);
 /// ```
 pub fn recv_mpst_a_to_b<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
@@ -96,41 +111,55 @@ where
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+/// use mpstthree::functionmpst::send::send_mpst_a_to_b;
 ///
 /// // Creating the binary sessions
-/// type BtoA<N> = Recv<N, End>;
-/// type BtoC = End;
+/// type BtoA = Recv<(), End>;
+/// type AtoB = <BtoA as Session>::Dual;
 ///
 /// // Queue
 /// type QueueB = RoleA<RoleEnd>;
+/// type QueueA = RoleB<RoleEnd>;
 ///
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
+/// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC, QueueB, NameB>;
+/// type EndpointB = SessionMpst<BtoA, End, QueueB, NameB>;
+/// type EndpointA = SessionMpst<AtoB, End, QueueA, NameA>;
 ///
 /// // From this point...
-/// let (channel_ba, _) = BtoA::<i32>::new();
-/// let (channel_bc, _) = BtoC::new();
+/// let (channel_ba, channel_ab) = BtoA::new();
+/// let (channel_ac, _) = BtoA::new();
+/// let (channel_bc, _) = End::new();
 ///
 /// let (role_b, _) = QueueB::new();
+/// let (role_a, _) = QueueA::new();
 ///
 /// let (name_b, _) = NameB::new();
+/// let (name_a, _) = NameA::new();
 ///
-/// let sess = SessionMpst {
+/// let sess_b = SessionMpst {
 ///    session1: channel_ba,
 ///    session2: channel_bc,
 ///    stack: role_b,
 ///    name: name_b,
 /// };
+///
+/// let sess_a = SessionMpst {
+///    session1: channel_ab,
+///    session2: channel_ac,
+///    stack: role_a,
+///    name: name_a,
+/// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
-/// let s = recv_mpst_b_to_a(sess);
+/// send_mpst_a_to_b((), sess_a);
+/// recv_mpst_b_to_a(sess_b);
 /// ```
 pub fn recv_mpst_b_to_a<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
@@ -164,42 +193,56 @@ where
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+/// use mpstthree::functionmpst::send::send_mpst_a_to_c;
 ///
 /// // Creating the binary sessions
-/// type CtoA<N> = Recv<N, End>;
-/// type CtoB = End;
+/// type CtoA = Recv<(), End>;
+/// type AtoC = <CtoA as Session>::Dual;
 ///
 /// // Queue
 /// type QueueC = RoleA<RoleEnd>;
+/// type QueueA = RoleC<RoleEnd>;
 ///
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
+/// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB, QueueC, NameC>;
+/// type EndpointC = SessionMpst<CtoA, End, QueueC, NameC>;
+/// type EndpointA = SessionMpst<End, AtoC, QueueA, NameA>;
 ///
 /// // From this point...
-/// let (channel_ca, _) = CtoA::<i32>::new();
-/// let (channel_cb, _) = CtoB::new();
+/// let (channel_ca, channel_ac) = CtoA::new();
+/// let (channel_cb, _) = End::new();
+/// let (channel_ab, _) = End::new();
 ///
 /// let (role_c, _) = QueueC::new();
+/// let (role_a, _) = QueueA::new();
 ///
 /// let (name_c, _) = NameC::new();
+/// let (name_a, _) = NameA::new();
 ///
-/// let sess = SessionMpst {
+/// let sess_c = SessionMpst {
 ///    session1: channel_ca,
 ///    session2: channel_cb,
 ///    stack: role_c,
 ///    name: name_c,
 /// };
+///
+/// let sess_a = SessionMpst {
+///    session1: channel_ab,
+///    session2: channel_ac,
+///    stack: role_a,
+///    name: name_a,
+/// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
-/// let s = recv_mpst_c_to_a(sess);
+/// send_mpst_a_to_c((), sess_a);
+/// recv_mpst_c_to_a(sess_c);
 /// ```
 pub fn recv_mpst_c_to_a<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
@@ -233,42 +276,56 @@ where
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+/// use mpstthree::functionmpst::send::send_mpst_c_to_a;
 ///
 /// // Creating the binary sessions
-/// type AtoB = End;
-/// type AtoC<N> = Recv<N, End>;
+/// type AtoC = Recv<(), End>;
+/// type CtoA = <AtoC as Session>::Dual;
 ///
 /// // Queue
 /// type QueueA = RoleC<RoleEnd>;
+/// type QueueC = RoleA<RoleEnd>;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
+/// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = SessionMpst<AtoB, AtoC<N>, QueueA, NameA>;
+/// type EndpointA = SessionMpst<End, AtoC, QueueA, NameA>;
+/// type EndpointC = SessionMpst<CtoA, End, QueueC, NameC>;
 ///
 /// // From this point...
-/// let (channel_ab, _) = AtoB::new();
-/// let (channel_ac, _) = AtoC::<i32>::new();
+/// let (channel_ab, _) = End::new();
+/// let (channel_cb, _) = End::new();
+/// let (channel_ac, channel_ca) = AtoC::new();
 ///
 /// let (role_a, _) = QueueA::new();
+/// let (role_c, _) = QueueC::new();
 ///
 /// let (name_a, _) = NameA::new();
+/// let (name_c, _) = NameC::new();
 ///
-/// let sess = SessionMpst {
+/// let sess_a = SessionMpst {
 ///    session1: channel_ab,
 ///    session2: channel_ac,
 ///    stack: role_a,
 ///    name: name_a,
 /// };
+///
+/// let sess_c = SessionMpst {
+///    session1: channel_ca,
+///    session2: channel_cb,
+///    stack: role_c,
+///    name: name_c,
+/// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
-/// let s = recv_mpst_a_to_c(sess);
+/// send_mpst_c_to_a((), sess_c);
+/// recv_mpst_a_to_c(sess_a);
 /// ```
 pub fn recv_mpst_a_to_c<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
@@ -301,43 +358,57 @@ where
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
+/// use mpstthree::functionmpst::send::send_mpst_c_to_b;
 ///
 /// // Creating the binary sessions
-/// type BtoA = End;
-/// type BtoC<N> = Recv<N, End>;
+/// type BtoC = Recv<(), End>;
+/// type CtoB = <BtoC as Session>::Dual;
 ///
 /// // Queue
 /// type QueueB = RoleC<RoleEnd>;
+/// type QueueC = RoleB<RoleEnd>;
 ///
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
+/// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB<N> = SessionMpst<BtoA, BtoC<N>, QueueB, NameB>;
+/// type EndpointB = SessionMpst<End, BtoC, QueueB, NameB>;
+/// type EndpointC = SessionMpst<End, CtoB, QueueC, NameC>;
 ///
 /// // From this point...
-/// let (channel_ba, _) = BtoA::new();
-/// let (channel_bc, _) = BtoC::<i32>::new();
+/// let (channel_ba, _) = End::new();
+/// let (channel_ca, _) = End::new();
+/// let (channel_bc, channel_cb) = BtoC::new();
 ///
 /// let (role_b, _) = QueueB::new();
+/// let (role_c, _) = QueueC::new();
 ///
 /// let (name_b, _) = NameB::new();
+/// let (name_c, _) = NameC::new();
 ///
-/// let sess = SessionMpst {
+/// let sess_b = SessionMpst {
 ///    session1: channel_ba,
 ///    session2: channel_bc,
 ///    stack: role_b,
 ///    name: name_b,
 /// };
+///
+/// let sess_c = SessionMpst {
+///    session1: channel_ca,
+///    session2: channel_cb,
+///    stack: role_c,
+///    name: name_c,
+/// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
-/// let s = recv_mpst_b_to_c(sess);
+/// send_mpst_c_to_b((), sess_c);
+/// recv_mpst_b_to_c(sess_b);
 /// ```
 pub fn recv_mpst_b_to_c<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
@@ -370,43 +441,57 @@ where
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+/// use mpstthree::functionmpst::send::send_mpst_b_to_c;
 ///
 /// // Creating the binary sessions
-/// type CtoA = End;
-/// type CtoB<N> = Recv<N, End>;
+/// type CtoB = Recv<(), End>;
+/// type BtoC = <CtoB as Session>::Dual;
 ///
 /// // Queue
 /// type QueueC = RoleB<RoleEnd>;
+/// type QueueB = RoleC<RoleEnd>;
 ///
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
+/// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<CtoA, CtoB<N>, QueueC, NameC>;
+/// type EndpointC = SessionMpst<End, CtoB, QueueC, NameC>;
+/// type EndpointB = SessionMpst<End, BtoC, QueueB, NameB>;
 ///
 /// // From this point...
-/// let (channel_ca, _) = CtoA::new();
-/// let (channel_cb, _) = CtoB::<i32>::new();
+/// let (channel_ba, _) = End::new();
+/// let (channel_ca, _) = End::new();
+/// let (channel_cb, channel_bc) = CtoB::new();
 ///
 /// let (role_c, _) = QueueC::new();
+/// let (role_b, _) = QueueB::new();
 ///
 /// let (name_c, _) = NameC::new();
+/// let (name_b, _) = NameB::new();
 ///
-/// let sess = SessionMpst {
+/// let sess_c = SessionMpst {
 ///    session1: channel_ca,
 ///    session2: channel_cb,
 ///    stack: role_c,
 ///    name: name_c,
 /// };
+///
+/// let sess_b = SessionMpst {
+///    session1: channel_ba,
+///    session2: channel_bc,
+///    stack: role_b,
+///    name: name_b,
+/// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
-/// let s = recv_mpst_c_to_b(sess);
+/// send_mpst_b_to_c((), sess_b);
+/// recv_mpst_c_to_b(sess_c);
 /// ```
 pub fn recv_mpst_c_to_b<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleB<R>, RoleC<RoleEnd>>,

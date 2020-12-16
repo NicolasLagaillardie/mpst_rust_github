@@ -17,8 +17,16 @@ jobs:
     - name: Format
       run: cargo fmt --verbose 
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --verbose --all
     - name: Run tests
+      run: cargo test --verbose
+    - name: Run tests all
+      run: cargo test --verbose --all
+    - name: Run tests no capture
       run: cargo test --verbose -- --nocapture
+    - name: Run tests no features
+      run: cargo test --verbose --no-default-features --no-run
     - name: Run benchmarks
-      run: cargo bench --verbose
+      run: cargo bench --verbose --all
+    - name: Run benchdocmarks
+      run: cargo doc --verbose --all
