@@ -151,13 +151,17 @@ where
     T: marker::Send,
     S: Session,
 {
-    match s.channel.recv() {
-        Ok((v, s)) => Ok((v, s)),
-        Err(error) => {
-            cancel(s);
-            panic!("Recv not completed: {:?}", error)
-        }
-    }
+    let (v, s) = s.channel.recv()?;
+
+    Ok((v, s))
+
+    // match s.channel.recv() {
+    //     Ok((v, s)) => Ok((v, s)),
+    //     Err(error) => {
+    //         cancel(s);
+    //         panic!("Recv not completed: {:?}", error)
+    //     }
+    // }
 }
 
 /// Cancels a session. Always succeeds. If the partner calls `recv` or `close`
