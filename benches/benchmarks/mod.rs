@@ -1,2 +1,2 @@
 pub mod choose_five;
-pub mod fib;
+pub mod long_five;

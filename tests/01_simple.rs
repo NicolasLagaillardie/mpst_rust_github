@@ -92,6 +92,7 @@ fn simple_triple_endpoints() {
     }()
     .is_ok());
 }
+
 #[test]
 fn simple_triple_endpoints_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
