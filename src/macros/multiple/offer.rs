@@ -94,9 +94,8 @@ macro_rules! create_offer_mpst_session_multi {
                 #(
                     S#N:0: mpstthree::binary::Session,
                 )2:0
-                #(
-                    R#N:0: mpstthree::role::Role,
-                )0:0
+                R1: mpstthree::role::Role,
+                R2: mpstthree::role::Role,
                 F: FnOnce(
                     $sessionmpst_name<
                         #(S#N:0,)0:0
@@ -106,7 +105,7 @@ macro_rules! create_offer_mpst_session_multi {
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
                     $sessionmpst_name<
-                        #(S#N:0,)0:2
+                        #(S#N:0,)3:0
                         R2,
                         $name<mpstthree::role::end::RoleEnd>,
                     >,

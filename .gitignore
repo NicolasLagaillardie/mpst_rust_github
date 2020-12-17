@@ -17,8 +17,13 @@ notes.txt
 
 .criterion
 /tmp
-.github/workflows/cross_compile.yml
 
+# Remove useless workflows
+.github/workflows/cross_compile.yml
 .github/workflows/grcov.yml
 
+# Removed until finding fix
 .travis.yml
+
+# Remove expanding test
+/tests/expand.rs

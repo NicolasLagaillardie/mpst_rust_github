@@ -591,9 +591,6 @@ create_recv_mpst_all_session!(
     4
 );
 
-// Create close function
-close_mpst!(close_mpst_multi, SessionMpstFive, 5);
-
 // Create Offer and Choose types
 create_offer_type_multi!(OfferMpstMultiFive, SessionMpstFive, 5);
 create_choose_type_multi!(ChooseMpstFive, SessionMpstFive, 5);
@@ -804,3 +801,67 @@ create_offer_mpst_session_multi!(
     5,
     4
 );
+
+// // Create choose functions
+// // A
+// create_choose_mpst_session_multi_both!(
+//     choose_left_mpst_session_a_to_all,
+//     choose_right_mpst_session_a_to_all,
+//     ChooseMpstFive,
+//     RoleAtoAll,
+//     next_a_to_all,
+//     RoleA,
+//     SessionMpstFive,
+//     5
+// );
+// // B
+// create_choose_mpst_session_multi_both!(
+//     choose_left_mpst_session_b_to_all,
+//     choose_right_mpst_session_b_to_all,
+//     ChooseMpstFive,
+//     RoleBtoAll,
+//     next_b_to_all,
+//     RoleB,
+//     SessionMpstFive,
+//     5
+// );
+// // C
+// create_choose_mpst_session_multi_both!(
+//     choose_left_mpst_session_c_to_all,
+//     choose_right_mpst_session_c_to_all,
+//     ChooseMpstFive,
+//     RoleCtoAll,
+//     next_c_to_all,
+//     RoleC,
+//     SessionMpstFive,
+//     5
+// );
+// // D
+// create_choose_mpst_session_multi_both!(
+//     choose_left_mpst_session_d_to_all,
+//     choose_right_mpst_session_d_to_all,
+//     ChooseMpstFive,
+//     RoleDtoAll,
+//     next_d_to_all,
+//     RoleD,
+//     SessionMpstFive,
+//     5
+// );
+// // E
+// create_choose_mpst_session_multi_both!(
+//     choose_left_mpst_session_e_to_all,
+//     choose_right_mpst_session_e_to_all,
+//     ChooseMpstFive,
+//     RoleEtoAll,
+//     next_e_to_all,
+//     RoleE,
+//     SessionMpstFive,
+//     5
+// );
+
+
+// Create close function
+close_mpst!(close_mpst_multi, SessionMpstFive, 5);
+
+// Create fork function
+bundle_fork_multi!(fork_mpst, fork_simple, SessionMpstFive, 5);
