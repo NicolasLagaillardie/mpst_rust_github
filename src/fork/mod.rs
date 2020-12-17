@@ -135,18 +135,18 @@ where
         + marker::Send
         + 'static,
     F1: FnOnce(
-        sessionmpst::SessionMpst<<S0 as binary::Session>::Dual, S2, R1, N1>,
-    ) -> Result<(), Box<dyn Error>>
+            sessionmpst::SessionMpst<<S0 as binary::Session>::Dual, S2, R1, N1>,
+        ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
     F2: FnOnce(
-        sessionmpst::SessionMpst<
-            <S1 as binary::Session>::Dual,
-            <S2 as binary::Session>::Dual,
-            R2,
-            N2,
-        >,
-    ) -> Result<(), Box<dyn Error>>
+            sessionmpst::SessionMpst<
+                <S1 as binary::Session>::Dual,
+                <S2 as binary::Session>::Dual,
+                R2,
+                N2,
+            >,
+        ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
 {
