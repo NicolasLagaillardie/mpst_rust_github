@@ -91,7 +91,9 @@ macro_rules! create_offer_mpst_session_multi {
                 g: G,
             ) -> Result<U, Box<dyn std::error::Error + 'a>>
             where
-                #(S#N:0: mpstthree::binary::Session,)2:0
+                #(
+                    S#N:0: mpstthree::binary::Session,
+                )2:0
                 #(
                     R#N:0: mpstthree::role::Role,
                 )0:0
