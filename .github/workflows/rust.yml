@@ -18,6 +18,8 @@ jobs:
       run: cargo fmt --verbose 
     - name: Build
       run: cargo build --verbose --all
+    - name: Check
+      run: cargo check --verbose --all
     - name: Run tests
       run: cargo test --verbose
     - name: Run tests all

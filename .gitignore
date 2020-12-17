@@ -17,3 +17,8 @@ notes.txt
 
 .criterion
 /tmp
+.github/workflows/cross_compile.yml
+
+.github/workflows/grcov.yml
+
+.travis.yml
