@@ -74,7 +74,7 @@ macro_rules! fork_mpst_multi {
                 )0:0
             ) -> (
                 #(
-                    Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>,
+                    std::thread::JoinHandle<()>,
                 )0:0
             )
             where
@@ -123,13 +123,9 @@ macro_rules! fork_mpst_multi {
                     };
                 )0:0
 
-                #(
-                    let thread_#K:0 = $fork_function(f#K:0, sessionmpst_#K:0);
-                )0:0
-
                 (
                     #(
-                        thread_#K:0.join(),
+                        $fork_function(f#K:0, sessionmpst_#K:0),
                     )0:0
                 )
             }

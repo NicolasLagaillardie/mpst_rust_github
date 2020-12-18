@@ -234,9 +234,9 @@ fn run_c_usecase_left() {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
 
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
         }
 
         Ok(())
@@ -251,9 +251,9 @@ fn run_c_usecase_right() {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
 
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
         }
 
         Ok(())

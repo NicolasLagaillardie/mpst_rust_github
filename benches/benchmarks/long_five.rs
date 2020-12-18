@@ -1,6 +1,6 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::{close, fork, recv, send, End, Recv, Send};
+use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_fork_multi, close_mpst, create_broadcast_role, create_normal_role,
@@ -8,6 +8,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
+use std::thread::JoinHandle;
 use std::time::Duration;
 
 // Create new SessionMpst for three participants
@@ -522,6 +523,24 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
+fn all_mpst() -> Result<(), Box<dyn Error>> {
+    let (thread_a, thread_b, thread_c, thread_d, thread_e) = fork_mpst(
+        black_box(simple_five_endpoint_a),
+        black_box(simple_five_endpoint_b),
+        black_box(simple_five_endpoint_c),
+        black_box(simple_five_endpoint_d),
+        black_box(simple_five_endpoint_e),
+    );
+
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
+    thread_e.join().unwrap();
+
+    Ok(())
+}
+
 /////////////////////////
 // A
 fn binary_a_to_b(s: AtoB) -> Result<(), Box<dyn Error>> {
@@ -655,29 +674,57 @@ fn binary_e_to_d(s: EtoD) -> Result<(), Box<dyn Error>> {
 
 fn all_binaries() -> Result<(), Box<dyn Error>> {
     // A
-    let s: BtoA = fork(black_box(binary_a_to_b));
-    binary_b_to_a(black_box(s))?;
-    let s: CtoA = fork(black_box(binary_a_to_c));
-    binary_c_to_a(black_box(s))?;
-    let s: DtoA = fork(black_box(binary_a_to_d));
-    binary_d_to_a(black_box(s))?;
-    let s: EtoA = fork(black_box(binary_a_to_e));
-    binary_e_to_a(black_box(s))?;
+    let (thread_a_to_b, s_a_to_b): (JoinHandle<()>, BtoA) =
+        fork_with_thread_id(black_box(binary_a_to_b));
+    let (thread_a_to_c, s_a_to_c): (JoinHandle<()>, CtoA) =
+        fork_with_thread_id(black_box(binary_a_to_c));
+    let (thread_a_to_d, s_a_to_d): (JoinHandle<()>, DtoA) =
+        fork_with_thread_id(black_box(binary_a_to_d));
+    let (thread_a_to_e, s_a_to_e): (JoinHandle<()>, EtoA) =
+        fork_with_thread_id(black_box(binary_a_to_e));
     // B
-    let s: CtoB = fork(black_box(binary_b_to_c));
-    binary_c_to_b(black_box(s))?;
-    let s: DtoB = fork(black_box(binary_b_to_d));
-    binary_d_to_b(black_box(s))?;
-    let s: EtoB = fork(black_box(binary_b_to_e));
-    binary_e_to_b(black_box(s))?;
+    let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, CtoB) =
+        fork_with_thread_id(black_box(binary_b_to_c));
+    let (thread_b_to_d, s_b_to_d): (JoinHandle<()>, DtoB) =
+        fork_with_thread_id(black_box(binary_b_to_d));
+    let (thread_b_to_e, s_b_to_e): (JoinHandle<()>, EtoB) =
+        fork_with_thread_id(black_box(binary_b_to_e));
     // C
-    let s: CtoD = fork(black_box(binary_d_to_c));
-    binary_c_to_d(black_box(s))?;
-    let s: CtoE = fork(black_box(binary_e_to_c));
-    binary_c_to_e(black_box(s))?;
+    let (thread_c_to_d, s_c_to_d): (JoinHandle<()>, CtoD) =
+        fork_with_thread_id(black_box(binary_d_to_c));
+    let (thread_c_to_e, s_c_to_e): (JoinHandle<()>, CtoE) =
+        fork_with_thread_id(black_box(binary_e_to_c));
     // D
-    let s: DtoE = fork(black_box(binary_e_to_d));
-    binary_d_to_e(black_box(s))?;
+    let (thread_d_to_e, s_d_to_e): (JoinHandle<()>, DtoE) =
+        fork_with_thread_id(black_box(binary_e_to_d));
+
+    binary_b_to_a(black_box(s_a_to_b)).unwrap();
+    binary_c_to_a(black_box(s_a_to_c)).unwrap();
+    binary_d_to_a(black_box(s_a_to_d)).unwrap();
+    binary_e_to_a(black_box(s_a_to_e)).unwrap();
+
+    binary_c_to_b(black_box(s_b_to_c)).unwrap();
+    binary_d_to_b(black_box(s_b_to_d)).unwrap();
+    binary_e_to_b(black_box(s_b_to_e)).unwrap();
+
+    binary_c_to_d(black_box(s_c_to_d)).unwrap();
+    binary_c_to_e(black_box(s_c_to_e)).unwrap();
+
+    binary_d_to_e(black_box(s_d_to_e)).unwrap();
+
+    thread_a_to_b.join().unwrap();
+    thread_a_to_c.join().unwrap();
+    thread_a_to_d.join().unwrap();
+    thread_a_to_e.join().unwrap();
+
+    thread_b_to_c.join().unwrap();
+    thread_b_to_d.join().unwrap();
+    thread_b_to_e.join().unwrap();
+
+    thread_c_to_d.join().unwrap();
+    thread_c_to_e.join().unwrap();
+
+    thread_d_to_e.join().unwrap();
 
     Ok(())
 }
@@ -685,17 +732,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 fn long_protocol_mpst(c: &mut Criterion) {
-    c.bench_function("long protocol MPST", |b| {
-        b.iter(|| {
-            fork_mpst(
-                black_box(simple_five_endpoint_a),
-                black_box(simple_five_endpoint_b),
-                black_box(simple_five_endpoint_c),
-                black_box(simple_five_endpoint_d),
-                black_box(simple_five_endpoint_e),
-            )
-        })
-    });
+    c.bench_function("long protocol MPST", |b| b.iter(|| all_mpst()));
 }
 
 fn long_protocol_binary(c: &mut Criterion) {
@@ -703,7 +740,7 @@ fn long_protocol_binary(c: &mut Criterion) {
 }
 
 fn short_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(20, 0))
+    Criterion::default().measurement_time(Duration::new(35, 0))
 }
 
 criterion_group! {

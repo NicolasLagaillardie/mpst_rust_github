@@ -69,9 +69,9 @@ fn basic_macros_send() {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(send_a_to_d, pawn, recv_d_to_a);
 
-            assert!(thread_a.is_ok());
-            assert!(thread_pawn.is_ok());
-            assert!(thread_d.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_pawn.join().is_ok());
+            assert!(thread_d.join().is_ok());
         }
         Ok(())
     }()
@@ -84,9 +84,9 @@ fn basic_macros_recv() {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(recv_a_to_d, pawn, send_d_to_a);
 
-            assert!(thread_a.is_ok());
-            assert!(thread_pawn.is_ok());
-            assert!(thread_d.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_pawn.join().is_ok());
+            assert!(thread_d.join().is_ok());
         }
         Ok(())
     }()

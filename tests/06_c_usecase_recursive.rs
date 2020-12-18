@@ -225,9 +225,9 @@ fn run_c_usecase_recursive() {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
         }
         Ok(())
     }()

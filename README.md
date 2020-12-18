@@ -138,9 +138,9 @@ fn simple_triple_endpoints() {
         simple_triple_endpoint_c,
     );
 
-    thread_a.unwrap();
-    thread_b.unwrap();
-    thread_c.unwrap();
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
 }
 ```
 

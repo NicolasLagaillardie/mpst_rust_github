@@ -161,9 +161,9 @@ fn simple_choice() {
                 simple_store_pawn,
             );
 
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
         }
 
         // Test the right branch.
@@ -174,9 +174,9 @@ fn simple_choice() {
                 simple_store_pawn,
             );
 
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
         }
 
         Ok(())

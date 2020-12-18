@@ -1,6 +1,5 @@
 //! This module contains the functions for forking the different endpoints.
 
-use std::any::Any;
 use std::error::Error;
 use std::marker;
 use std::panic;
@@ -9,8 +8,6 @@ use std::thread::{spawn, JoinHandle};
 use crate::binary;
 use crate::role;
 use crate::sessionmpst;
-
-type ResultAnySend = Result<(), Box<(dyn Any + marker::Send + 'static)>>;
 
 #[doc(hidden)]
 pub fn fork_simple<S1, S2, R, N, P>(
@@ -111,6 +108,10 @@ where
 ///                 simple_triple_endpoint_b,
 ///                 simple_triple_endpoint_c,
 /// );
+///
+/// thread_a.join().unwrap();
+/// thread_b.join().unwrap();
+/// thread_c.join().unwrap();
 ///  ```
 ///
 /// Creates 3 pairs of endpoints, each pair of type `S` and `S::Dual`.
@@ -120,7 +121,8 @@ pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f0: F0,
     f1: F1,
     f2: F2,
-) -> (ResultAnySend, ResultAnySend, ResultAnySend)
+) -> (JoinHandle<()>, JoinHandle<()>, JoinHandle<()>)
+// (ResultAnySend, ResultAnySend, ResultAnySend)
 where
     S0: binary::Session + 'static,
     S1: binary::Session + 'static,
@@ -181,9 +183,5 @@ where
         name: name_c,
     };
 
-    let thread_a = fork_simple(f0, a);
-    let thread_b = fork_simple(f1, b);
-    let thread_c = fork_simple(f2, c);
-
-    (thread_a.join(), thread_b.join(), thread_c.join())
+    (fork_simple(f0, a), fork_simple(f1, b), fork_simple(f2, c))
 }

@@ -73,11 +73,11 @@ fn test_new_send() {
             let (thread_a, thread_b, thread_c, thread_d, thread_e) =
                 fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
 
-            assert!(thread_a.is_ok());
-            assert!(thread_b.is_ok());
-            assert!(thread_c.is_ok());
-            assert!(thread_d.is_ok());
-            assert!(thread_e.is_ok());
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
+            assert!(thread_d.join().is_ok());
+            assert!(thread_e.join().is_ok());
         }
         Ok(())
     }()
