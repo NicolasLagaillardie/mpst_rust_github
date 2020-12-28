@@ -19,8 +19,6 @@ create_sessionmpst!(SessionMpstThree, 3);
 create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
-create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
-create_normal_role!(RoleE, next_e, RoleEDual, next_e_dual);
 
 // Create new send functions
 create_send_mpst_session!(
@@ -139,6 +137,16 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
     thread_a.join().unwrap();
     thread_b.join().unwrap();
 
+    ////////////////////
+    let (thread_a, thread_b, _) = fork_mpst(
+        black_box(simple_five_endpoint_a),
+        black_box(simple_five_endpoint_b),
+        black_box(simple_five_endpoint_c),
+    );
+
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+
     Ok(())
 }
 
@@ -187,8 +195,16 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
         fork_with_thread_id(black_box(binary_a_to_b));
 
     binary_b_to_a(black_box(s_a_to_b)).unwrap();
-
     thread_a_to_b.join().unwrap();
+
+    /////////////////////////
+    let _ = fork_with_thread_id(black_box(binary_c));
+
+    let (thread_b_to_a, s_b_to_a): (JoinHandle<()>, AtoB) =
+        fork_with_thread_id(black_box(binary_b_to_a));
+
+    binary_a_to_b(black_box(s_b_to_a)).unwrap();
+    thread_b_to_a.join().unwrap();
 
     Ok(())
 }
@@ -203,13 +219,13 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
     c.bench_function("long simple protocol binary", |b| b.iter(|| all_binaries()));
 }
 
-fn short_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(20, 0))
+fn long_warmup() -> Criterion {
+    Criterion::default().measurement_time(Duration::new(30, 0))
 }
 
 criterion_group! {
-    name = long_simple_protocols;
-    config = short_warmup();
+    name = long_three_simple_protocols;
+    config = long_warmup();
     targets = long_simple_protocol_mpst, long_simple_protocol_binary
 }
-criterion_main!(long_simple_protocols);
+criterion_main!(long_three_simple_protocols);

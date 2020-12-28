@@ -744,8 +744,8 @@ fn short_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = long_protocols;
+    name = long_five_protocols;
     config = short_warmup();
     targets = long_protocol_mpst, long_protocol_binary
 }
-criterion_main!(long_protocols);
+criterion_main!(long_five_protocols);
