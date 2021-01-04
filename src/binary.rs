@@ -285,7 +285,7 @@ macro_rules! offer {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
             let (l, s) = recv($session)?;
-            cancel(s);
+            mpstthree::binary::cancel(s);
             match l {
                 $(
                     $pat => $result,
@@ -324,7 +324,7 @@ macro_rules! choose {
     ($label:path, $session:expr) => {{
         let (here, there) = <_ as Session>::new();
         let s = send($label(there), $session);
-        cancel(s);
+        mpstthree::binary::cancel(s);
         here
     }};
 }
