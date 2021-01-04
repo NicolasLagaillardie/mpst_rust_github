@@ -22,6 +22,35 @@ create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 
 // Create new send functions
+// A
+create_send_mpst_session!(
+    send_mpst_a_to_b,
+    RoleB,
+    next_b,
+    RoleA,
+    SessionMpstThree,
+    3,
+    1
+);
+create_send_mpst_session!(
+    send_mpst_a_to_c,
+    RoleC,
+    next_c,
+    RoleA,
+    SessionMpstThree,
+    3,
+    2
+);
+// B
+create_send_mpst_session!(
+    send_mpst_b_to_a,
+    RoleA,
+    next_a,
+    RoleB,
+    SessionMpstThree,
+    3,
+    1
+);
 create_send_mpst_session!(
     send_mpst_b_to_c,
     RoleC,
@@ -30,6 +59,16 @@ create_send_mpst_session!(
     SessionMpstThree,
     3,
     2
+);
+// C
+create_send_mpst_session!(
+    send_mpst_c_to_a,
+    RoleA,
+    next_a,
+    RoleC,
+    SessionMpstThree,
+    3,
+    1
 );
 create_send_mpst_session!(
     send_mpst_c_to_b,
@@ -40,25 +79,17 @@ create_send_mpst_session!(
     3,
     2
 );
-create_send_mpst_session!(
-    send_mpst_c_to_a,
+
+// Create new recv functions and related types
+// A
+create_recv_mpst_session!(
+    recv_mpst_a_to_b,
+    RoleB,
+    next_b,
     RoleA,
-    next_a,
-    RoleC,
     SessionMpstThree,
     3,
     1
-);
-
-// Create new recv functions and related types
-create_recv_mpst_session!(
-    recv_mpst_b_to_c,
-    RoleC,
-    next_c,
-    RoleB,
-    SessionMpstThree,
-    3,
-    2
 );
 create_recv_mpst_session!(
     recv_mpst_a_to_c,
@@ -68,6 +99,35 @@ create_recv_mpst_session!(
     SessionMpstThree,
     3,
     2
+);
+// B
+create_recv_mpst_session!(
+    recv_mpst_b_to_a,
+    RoleA,
+    next_a,
+    RoleB,
+    SessionMpstThree,
+    3,
+    1
+);
+create_recv_mpst_session!(
+    recv_mpst_b_to_c,
+    RoleC,
+    next_c,
+    RoleB,
+    SessionMpstThree,
+    3,
+    2
+);
+// C
+create_recv_mpst_session!(
+    recv_mpst_c_to_a,
+    RoleA,
+    next_a,
+    RoleC,
+    SessionMpstThree,
+    3,
+    1
 );
 create_recv_mpst_session!(
     recv_mpst_c_to_b,
@@ -94,14 +154,26 @@ type NameC = RoleC<RoleEnd>;
 // Binary
 // A
 enum BranchingCforA {
-    More(SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>),
+    More(
+        SessionMpstThree<
+            Recv<(), Send<(), End>>,
+            Recv<(), Send<(), RecursAtoC>>,
+            RoleC<RoleC<RoleB<RoleB<RoleC<RoleEnd>>>>>,
+            NameA,
+        >,
+    ),
     Done(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<BranchingCforA, End>;
 // B
 enum BranchingCforB {
     More(
-        SessionMpstThree<End, Recv<(), Send<(), RecursBtoC>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameB>,
+        SessionMpstThree<
+            Send<(), Recv<(), End>>,
+            Recv<(), Send<(), RecursBtoC>>,
+            RoleC<RoleC<RoleA<RoleA<RoleC<RoleEnd>>>>>,
+            NameB,
+        >,
     ),
     Done(SessionMpstThree<End, End, RoleEnd, NameB>),
 }
@@ -121,6 +193,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         BranchingCforA::More(s) => {
+            let (_, s) = recv_mpst_a_to_c(s)?;
+            let s = send_mpst_a_to_c((), s);
+            let (_, s) = recv_mpst_a_to_b(s)?;
+            let s = send_mpst_a_to_b((), s);
             simple_five_endpoint_a(s)
         },
     })
@@ -134,6 +210,8 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         BranchingCforB::More(s) => {
             let (_, s) = recv_mpst_b_to_c(s)?;
             let s = send_mpst_b_to_c((), s);
+            let s = send_mpst_b_to_a((), s);
+            let (_, s) = recv_mpst_b_to_a(s)?;
             simple_five_endpoint_b(s)
         },
     })
@@ -178,19 +256,22 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_c_to_b((), s);
             let (_, s) = recv_mpst_c_to_b(s)?;
 
+            let s = send_mpst_c_to_a((), s);
+            let (_, s) = recv_mpst_c_to_a(s)?;
+
             recurs_c(s, i - 1)
         }
     }
 }
 
 fn all_mpst() -> Result<(), Box<dyn Error>> {
-
-    let (_, thread_b, thread_c) = fork_mpst(
+    let (thread_a, thread_b, thread_c) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_b),
         black_box(simple_five_endpoint_c),
     );
 
+    thread_a.join().unwrap();
     thread_b.join().unwrap();
     thread_c.join().unwrap();
 
@@ -235,19 +316,29 @@ fn binary_c_to_b(s: RecursC, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
-    let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursC) =
+    let (thread_b_to_c_0, s_b_to_c_0): (JoinHandle<()>, RecursC) =
         fork_with_thread_id(black_box(binary_b_to_c));
-
-    binary_c_to_b(black_box(s_b_to_c), index).unwrap();
-    thread_b_to_c.join().unwrap();
 
     ////////////////////
 
-    let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursC) =
+    let (thread_b_to_c_1, s_b_to_c_1): (JoinHandle<()>, RecursC) =
         fork_with_thread_id(black_box(binary_b_to_c));
 
-    binary_c_to_b(black_box(s_b_to_c), index).unwrap();
-    thread_b_to_c.join().unwrap();
+    ////////////////////
+
+    let (thread_b_to_c_2, s_b_to_c_2): (JoinHandle<()>, RecursC) =
+        fork_with_thread_id(black_box(binary_b_to_c));
+
+    ////////////////////
+
+    binary_c_to_b(black_box(s_b_to_c_0), index).unwrap();
+    thread_b_to_c_0.join().unwrap();
+
+    binary_c_to_b(black_box(s_b_to_c_1), index).unwrap();
+    thread_b_to_c_1.join().unwrap();
+
+    binary_c_to_b(black_box(s_b_to_c_2), index).unwrap();
+    thread_b_to_c_2.join().unwrap();
 
     Ok(())
 }
@@ -257,17 +348,20 @@ fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 1000;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function("long simple protocol MPST", |b| b.iter(|| all_mpst()));
-}
-
-fn long_simple_protocol_binary(c: &mut Criterion) {
-    c.bench_function("long simple protocol binary", |b| {
-        b.iter(|| all_binaries(SIZE))
+    c.bench_function(&format!("long three simple protocol MPST {}", SIZE), |b| {
+        b.iter(|| all_mpst())
     });
 }
 
+fn long_simple_protocol_binary(c: &mut Criterion) {
+    c.bench_function(
+        &format!("long three simple protocol binary {}", SIZE),
+        |b| b.iter(|| all_binaries(SIZE)),
+    );
+}
+
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(180, 0))
+    Criterion::default().measurement_time(Duration::new(300, 0))
 }
 
 criterion_group! {
