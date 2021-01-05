@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send};

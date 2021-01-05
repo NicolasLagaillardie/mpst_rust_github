@@ -280,34 +280,34 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 // B
-enum BinaryB {
-    More(Recv<(), Send<(), RecursB>>),
+enum BinaryA {
+    More(Recv<(), Send<(), RecursA>>),
     Done(End),
 }
-type RecursB = Recv<BinaryB, End>;
-fn binary_b_to_c(s: RecursB) -> Result<(), Box<dyn Error>> {
+type RecursA = Recv<BinaryA, End>;
+fn binary_b_to_c(s: RecursA) -> Result<(), Box<dyn Error>> {
     offer!(s, {
-        BinaryB::More(s) => {
+        BinaryA::More(s) => {
             let (_, s) = recv(s)?;
             let s = send((), s);
             binary_b_to_c(s)
         },
-        BinaryB::Done(s) => {
+        BinaryA::Done(s) => {
             close(s)
         },
     })
 }
 
 // C
-type RecursC = <RecursB as Session>::Dual;
-fn binary_c_to_b(s: RecursC, index: i64) -> Result<(), Box<dyn Error>> {
+type RecursB = <RecursA as Session>::Dual;
+fn binary_c_to_b(s: RecursB, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose!(BinaryB::Done, s);
+            let s = choose!(BinaryA::Done, s);
             close(s)
         }
         i => {
-            let s = choose!(BinaryB::More, s);
+            let s = choose!(BinaryA::More, s);
             let s = send((), s);
             let (_, s) = recv(s)?;
             binary_c_to_b(s, i - 1)
@@ -316,36 +316,31 @@ fn binary_c_to_b(s: RecursC, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
-    let (thread_b_to_c_0, s_b_to_c_0): (JoinHandle<()>, RecursC) =
-        fork_with_thread_id(black_box(binary_b_to_c));
+    let mut duals = Vec::new();
+    let mut threads = Vec::new();
 
-    ////////////////////
+    for _ in 0..3 {
+        let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursB) =
+            fork_with_thread_id(black_box(binary_b_to_c));
 
-    let (thread_b_to_c_1, s_b_to_c_1): (JoinHandle<()>, RecursC) =
-        fork_with_thread_id(black_box(binary_b_to_c));
+        duals.push(s_b_to_c);
+        threads.push(thread_b_to_c);
+    }
 
-    ////////////////////
+    for elt in duals {
+        binary_c_to_b(black_box(elt), index).unwrap();
+    }
 
-    let (thread_b_to_c_2, s_b_to_c_2): (JoinHandle<()>, RecursC) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    binary_c_to_b(black_box(s_b_to_c_0), index).unwrap();
-    thread_b_to_c_0.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_1), index).unwrap();
-    thread_b_to_c_1.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_2), index).unwrap();
-    thread_b_to_c_2.join().unwrap();
+    for elt in threads {
+        elt.join().unwrap();
+    }
 
     Ok(())
 }
 
 /////////////////////////
 
-static SIZE: i64 = 1000;
+static SIZE: i64 = 500;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("long three simple protocol MPST {}", SIZE), |b| {

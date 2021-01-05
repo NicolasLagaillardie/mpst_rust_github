@@ -569,10 +569,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
-    recurs_d(s, SIZE)
+    recurs_e(s, SIZE)
 }
 
-fn recurs_d(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -625,7 +625,7 @@ fn recurs_d(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_e_to_d((), s);
             let (_, s) = recv_mpst_e_to_d(s)?;
 
-            recurs_d(s, i - 1)
+            recurs_e(s, i - 1)
         }
     }
 }
@@ -686,100 +686,40 @@ fn binary_c_to_b(s: RecursB, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
-    let (thread_b_to_c_0, s_b_to_c_0): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
+    let mut duals = Vec::new();
+    let mut threads = Vec::new();
 
-    ////////////////////
+    for _ in 0..10 {
+        let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursB) =
+            fork_with_thread_id(black_box(binary_b_to_c));
 
-    let (thread_b_to_c_1, s_b_to_c_1): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
+        duals.push(s_b_to_c);
+        threads.push(thread_b_to_c);
+    }
 
-    ////////////////////
+    for elt in duals {
+        binary_c_to_b(black_box(elt), index).unwrap();
+    }
 
-    let (thread_b_to_c_2, s_b_to_c_2): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    let (thread_b_to_c_3, s_b_to_c_3): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    let (thread_b_to_c_4, s_b_to_c_4): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    let (thread_b_to_c_5, s_b_to_c_5): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-    let (thread_b_to_c_6, s_b_to_c_6): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    let (thread_b_to_c_7, s_b_to_c_7): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    let (thread_b_to_c_8, s_b_to_c_8): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    let (thread_b_to_c_9, s_b_to_c_9): (JoinHandle<()>, RecursB) =
-        fork_with_thread_id(black_box(binary_b_to_c));
-
-    ////////////////////
-
-    binary_c_to_b(black_box(s_b_to_c_0), index).unwrap();
-    thread_b_to_c_0.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_1), index).unwrap();
-    thread_b_to_c_1.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_2), index).unwrap();
-    thread_b_to_c_2.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_3), index).unwrap();
-    thread_b_to_c_3.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_4), index).unwrap();
-    thread_b_to_c_4.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_5), index).unwrap();
-    thread_b_to_c_5.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_6), index).unwrap();
-    thread_b_to_c_6.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_7), index).unwrap();
-    thread_b_to_c_7.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_8), index).unwrap();
-    thread_b_to_c_8.join().unwrap();
-
-    binary_c_to_b(black_box(s_b_to_c_9), index).unwrap();
-    thread_b_to_c_9.join().unwrap();
+    for elt in threads {
+        elt.join().unwrap();
+    }
 
     Ok(())
 }
 
 /////////////////////////
 
-static SIZE: i64 = 1000;
+static SIZE: i64 = 500;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("long four simple protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("long five simple protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn long_simple_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("long four simple protocol binary {}", SIZE), |b| {
+    c.bench_function(&format!("long five simple protocol binary {}", SIZE), |b| {
         b.iter(|| all_binaries(SIZE))
     });
 }
