@@ -1385,7 +1385,15 @@ enum BranchingIforA {
                                     RoleD<
                                         RoleD<
                                             RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleE<
+                                                    RoleF<
+                                                        RoleF<
+                                                            RoleG<
+                                                                RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1422,7 +1430,15 @@ enum BranchingIforB {
                                     RoleD<
                                         RoleD<
                                             RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleE<
+                                                    RoleF<
+                                                        RoleF<
+                                                            RoleG<
+                                                                RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1459,7 +1475,15 @@ enum BranchingIforC {
                                     RoleD<
                                         RoleD<
                                             RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleE<
+                                                    RoleF<
+                                                        RoleF<
+                                                            RoleG<
+                                                                RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1496,7 +1520,15 @@ enum BranchingIforD {
                                     RoleC<
                                         RoleC<
                                             RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleE<
+                                                    RoleF<
+                                                        RoleF<
+                                                            RoleG<
+                                                                RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1533,7 +1565,15 @@ enum BranchingIforE {
                                     RoleC<
                                         RoleC<
                                             RoleD<
-                                                RoleD<RoleF<RoleF<RoleG<RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleD<
+                                                    RoleF<
+                                                        RoleF<
+                                                            RoleG<
+                                                                RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1570,7 +1610,15 @@ enum BranchingIforF {
                                     RoleC<
                                         RoleC<
                                             RoleD<
-                                                RoleD<RoleE<RoleE<RoleG<RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleD<
+                                                    RoleE<
+                                                        RoleE<
+                                                            RoleG<
+                                                                RoleG<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1607,7 +1655,15 @@ enum BranchingIforG {
                                     RoleC<
                                         RoleC<
                                             RoleD<
-                                                RoleD<RoleE<RoleE<RoleF<RoleF<RoleH<RoleH<RoleI<RoleEnd>>>>>>>>,
+                                                RoleD<
+                                                    RoleE<
+                                                        RoleE<
+                                                            RoleF<
+                                                                RoleF<RoleH<RoleH<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1644,7 +1700,15 @@ enum BranchingIforH {
                                     RoleC<
                                         RoleC<
                                             RoleD<
-                                                RoleD<RoleE<RoleE<RoleF<RoleF<RoleG<RoleG<RoleI<RoleEnd>>>>>>>>,
+                                                RoleD<
+                                                    RoleE<
+                                                        RoleE<
+                                                            RoleF<
+                                                                RoleF<RoleG<RoleG<RoleI<RoleEnd>>>>,
+                                                            >,
+                                                        >,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -1671,14 +1735,22 @@ type ChooseIforGtoI = Send<BranchingIforG, End>;
 type ChooseIforHtoI = Send<BranchingIforH, End>;
 
 // Creating the MP sessions
-type EndpointA = SessionMpstNine<End, End, End, End, End, End, End, RecursAtoI, RoleI<RoleEnd>, NameA>;
-type EndpointB = SessionMpstNine<End, End, End, End, End, End, End, RecursBtoI, RoleI<RoleEnd>, NameB>;
-type EndpointC = SessionMpstNine<End, End, End, End, End, End, End, RecursCtoI, RoleI<RoleEnd>, NameC>;
-type EndpointD = SessionMpstNine<End, End, End, End, End, End, End, RecursDtoI, RoleI<RoleEnd>, NameD>;
-type EndpointE = SessionMpstNine<End, End, End, End, End, End, End, RecursEtoI, RoleI<RoleEnd>, NameE>;
-type EndpointF = SessionMpstNine<End, End, End, End, End, End, End, RecursFtoI, RoleI<RoleEnd>, NameF>;
-type EndpointG = SessionMpstNine<End, End, End, End, End, End, End, RecursGtoI, RoleI<RoleEnd>, NameG>;
-type EndpointH = SessionMpstNine<End, End, End, End, End, End, End, RecursHtoI, RoleI<RoleEnd>, NameH>;
+type EndpointA =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursAtoI, RoleI<RoleEnd>, NameA>;
+type EndpointB =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursBtoI, RoleI<RoleEnd>, NameB>;
+type EndpointC =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursCtoI, RoleI<RoleEnd>, NameC>;
+type EndpointD =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursDtoI, RoleI<RoleEnd>, NameD>;
+type EndpointE =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursEtoI, RoleI<RoleEnd>, NameE>;
+type EndpointF =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursFtoI, RoleI<RoleEnd>, NameF>;
+type EndpointG =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursGtoI, RoleI<RoleEnd>, NameG>;
+type EndpointH =
+    SessionMpstNine<End, End, End, End, End, End, End, RecursHtoI, RoleI<RoleEnd>, NameH>;
 type EndpointI = SessionMpstNine<
     ChooseIforAtoI,
     ChooseIforBtoI,
@@ -2100,10 +2172,9 @@ fn long_simple_protocol_mpst(c: &mut Criterion) {
 }
 
 fn long_simple_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("long nine simple protocol binary {}", SIZE),
-        |b| b.iter(|| all_binaries()),
-    );
+    c.bench_function(&format!("long nine simple protocol binary {}", SIZE), |b| {
+        b.iter(|| all_binaries())
+    });
 }
 
 fn long_warmup() -> Criterion {
