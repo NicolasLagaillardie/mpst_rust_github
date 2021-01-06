@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
@@ -1677,23 +1679,18 @@ fn binary_c_to_b(s: RecursB, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_binaries() -> Result<(), Box<dyn Error>> {
-    let mut duals = Vec::new();
     let mut threads = Vec::new();
 
-    for _ in 0..28 {
+    for _ in 0..28 { // 56
         let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursB) =
             fork_with_thread_id(black_box(binary_b_to_c));
 
-        duals.push(s_b_to_c);
-        threads.push(thread_b_to_c);
-    }
-
-    for elt in duals {
-        binary_c_to_b(black_box(elt), SIZE).unwrap();
+        threads.push((s_b_to_c, thread_b_to_c));
     }
 
     for elt in threads {
-        elt.join().unwrap();
+        binary_c_to_b(black_box(elt.0), SIZE).unwrap();
+        elt.1.join().unwrap();
     }
 
     Ok(())
@@ -1717,7 +1714,7 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(120, 0))
+    Criterion::default().measurement_time(Duration::new(400, 0))
 }
 
 criterion_group! {
