@@ -315,7 +315,7 @@ fn binary_c_to_b(s: RecursB, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn Error>> {
     let mut duals = Vec::new();
     let mut threads = Vec::new();
 
@@ -328,7 +328,7 @@ fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
     }
 
     for elt in duals {
-        binary_c_to_b(black_box(elt), index).unwrap();
+        binary_c_to_b(black_box(elt), SIZE).unwrap();
     }
 
     for elt in threads {
@@ -340,7 +340,7 @@ fn all_binaries(index: i64) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 500;
+static SIZE: i64 = 100;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("long three simple protocol MPST {}", SIZE), |b| {
@@ -351,12 +351,12 @@ fn long_simple_protocol_mpst(c: &mut Criterion) {
 fn long_simple_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("long three simple protocol binary {}", SIZE),
-        |b| b.iter(|| all_binaries(SIZE)),
+        |b| b.iter(|| all_binaries()),
     );
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(300, 0))
+    Criterion::default().measurement_time(Duration::new(100, 0))
 }
 
 criterion_group! {
