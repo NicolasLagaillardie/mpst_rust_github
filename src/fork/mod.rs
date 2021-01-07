@@ -122,7 +122,6 @@ pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f1: F1,
     f2: F2,
 ) -> (JoinHandle<()>, JoinHandle<()>, JoinHandle<()>)
-// (ResultAnySend, ResultAnySend, ResultAnySend)
 where
     S0: binary::Session + 'static,
     S1: binary::Session + 'static,

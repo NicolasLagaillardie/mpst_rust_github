@@ -11,7 +11,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
-use std::thread::JoinHandle;
+use std::thread::{spawn, JoinHandle};
 use std::time::Duration;
 
 // Create new SessionMpst for three participants
@@ -286,50 +286,63 @@ enum BinaryA {
     Done(End),
 }
 type RecursA = Recv<BinaryA, End>;
-fn binary_b_to_c(s: RecursA) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>> {
     offer!(s, {
+        BinaryA::Done(s) => {
+            close(s)
+        },
         BinaryA::More(s) => {
             let (_, s) = recv(s)?;
             let s = send((), s);
-            binary_b_to_c(s)
-        },
-        BinaryA::Done(s) => {
-            close(s)
+            binary_a_to_b(s)
         },
     })
 }
 
 // B
 type RecursB = <RecursA as Session>::Dual;
-fn binary_c_to_b(s: RecursB, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose!(BinaryA::Done, s);
-            close(s)
-        }
-        i => {
-            let s = choose!(BinaryA::More, s);
-            let s = send((), s);
-            let (_, s) = recv(s)?;
-            binary_c_to_b(s, i - 1)
-        }
-    }
+fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Error>> {
+    let s = send((), s);
+    let (_, s) = recv(s)?;
+    Ok(s)
 }
 
 fn all_binaries() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    for _ in 0..3 { // 6
+    for _ in 0..3 {
         let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursB) =
-            fork_with_thread_id(black_box(binary_b_to_c));
+            fork_with_thread_id(black_box(binary_a_to_b));
 
-        threads.push((s_b_to_c, thread_b_to_c));
+        threads.push(thread_b_to_c);
+        sessions.push(s_b_to_c)
     }
 
-    for elt in threads {
-        binary_c_to_b(black_box(elt.0), SIZE).unwrap();
-        elt.1.join().unwrap();
-    }
+    let t = spawn(move || {
+        for _ in 0..SIZE {
+            let mut temp_vec = Vec::new();
+
+            for elt in sessions {
+                let s = choose!(BinaryA::More, elt);
+                let tmp = binary_b_to_a(s).unwrap();
+                temp_vec.push(tmp);
+            }
+
+            sessions = temp_vec;
+        }
+
+        for s in sessions {
+            let s = choose!(BinaryA::Done, s);
+            close(s).unwrap();
+        }
+
+        for elt in threads {
+            elt.join().unwrap();
+        }
+    });
+
+    t.join().unwrap();
 
     Ok(())
 }
@@ -352,7 +365,7 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(150, 0))
+    Criterion::default().measurement_time(Duration::new(100, 0))
 }
 
 criterion_group! {
