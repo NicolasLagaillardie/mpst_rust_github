@@ -1674,37 +1674,28 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
     let mut sessions = Vec::new();
 
     for _ in 0..28 {
-        let (thread_b_to_c, s_b_to_c): (JoinHandle<()>, RecursB) =
-            fork_with_thread_id(black_box(binary_a_to_b));
+        let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(black_box(binary_a_to_b));
 
-        threads.push(thread_b_to_c);
-        sessions.push(s_b_to_c)
+        threads.push(thread);
+        sessions.push(s)
     }
 
-    let t = spawn(move || {
+    let main = spawn(move || {
         for _ in 0..SIZE {
-            let mut temp_vec = Vec::new();
-
-            for elt in sessions {
-                let s = choose!(BinaryA::More, elt);
-                let tmp = binary_b_to_a(s).unwrap();
-                temp_vec.push(tmp);
-            }
-
-            sessions = temp_vec;
+            sessions = sessions
+                .into_iter()
+                .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
+                .collect::<Vec<_>>();
         }
 
-        for s in sessions {
-            let s = choose!(BinaryA::Done, s);
-            close(s).unwrap();
-        }
+        sessions
+            .into_iter()
+            .for_each(|s| close(choose!(BinaryA::Done, s)).unwrap());
 
-        for elt in threads {
-            elt.join().unwrap();
-        }
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
-    t.join().unwrap();
+    main.join().unwrap();
 
     Ok(())
 }
@@ -1727,7 +1718,7 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(400, 0))
+    Criterion::default().measurement_time(Duration::new(700, 0))
 }
 
 criterion_group! {

@@ -711,7 +711,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static SIZE: i64 = 0;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("long five simple protocol MPST {}", SIZE), |b| {
@@ -726,12 +726,12 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(200, 0))
+    Criterion::default().measurement_time(Duration::new(10, 0))
 }
 
 criterion_group! {
-    name = long_five_simple_protocols;
+    name = long_five_empty_simple_protocols;
     config = long_warmup();
     targets = long_simple_protocol_mpst, long_simple_protocol_binary
 }
-criterion_main!(long_five_simple_protocols);
+criterion_main!(long_five_empty_simple_protocols);

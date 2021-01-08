@@ -319,9 +319,8 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
     }
 
     let main = spawn(move || {
-        // Creation of the thread slightly slows down the process
         for _ in 0..SIZE {
-            sessions = sessions // Assignation may slow the process
+            sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
                 .collect::<Vec<_>>();
@@ -341,28 +340,29 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static SIZE: i64 = 0;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("long three simple protocol MPST {}", SIZE), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(
+        &format!("long three empty simple protocol MPST {}", SIZE),
+        |b| b.iter(|| all_mpst()),
+    );
 }
 
 fn long_simple_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("long three simple protocol binary {}", SIZE),
+        &format!("long three empty simple protocol binary {}", SIZE),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(100, 0))
+    Criterion::default().measurement_time(Duration::new(10, 0))
 }
 
 criterion_group! {
-    name = long_three_simple_protocols;
+    name = long_three_empty_simple_protocols;
     config = long_warmup();
     targets = long_simple_protocol_mpst, long_simple_protocol_binary
 }
-criterion_main!(long_three_simple_protocols);
+criterion_main!(long_three_empty_simple_protocols);
