@@ -20,4 +20,6 @@ criterion_main! {
     benchmarks::long_simple_nine::long_nine_simple_protocols,
     benchmarks::long_simple_ten_empty::long_ten_empty_simple_protocols,
     benchmarks::long_simple_ten::long_ten_simple_protocols,
+    benchmarks::long_simple_eleven_empty::long_eleven_empty_simple_protocols,
+    benchmarks::long_simple_eleven::long_eleven_simple_protocols,
 }

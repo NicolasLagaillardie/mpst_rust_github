@@ -482,7 +482,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
         let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(black_box(binary_a_to_b));
 
         threads.push(thread);
-        sessions.push(s)
+        sessions.push(s);
     }
 
     let main = spawn(move || {

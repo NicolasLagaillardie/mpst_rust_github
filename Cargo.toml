@@ -17,6 +17,9 @@ edition = "2018"
 name = "mpst"
 path = "main.rs"
 
+[profile.release]
+debug = true
+
 [dependencies]
 crossbeam-channel = "0.5.0"
 either = "1.6.1"

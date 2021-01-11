@@ -2,6 +2,8 @@ pub mod choose_five;
 pub mod long_five;
 pub mod long_simple_eight;
 pub mod long_simple_eight_empty;
+pub mod long_simple_eleven;
+pub mod long_simple_eleven_empty;
 pub mod long_simple_five;
 pub mod long_simple_five_empty;
 pub mod long_simple_four;

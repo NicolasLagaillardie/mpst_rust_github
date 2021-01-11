@@ -27,3 +27,8 @@ notes.txt
 
 # Remove expanding test
 /tests/expand.rs
+
+# Flamegraph
+flamegraph.svg
+perf.data
+perf.data.old
