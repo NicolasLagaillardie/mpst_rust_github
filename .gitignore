@@ -35,3 +35,6 @@ perf.data.old
 
 # Valgrind
 /cachegrind/*
+
+# Graphs
+/graphs

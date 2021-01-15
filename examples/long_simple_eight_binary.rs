@@ -1,10 +1,5 @@
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
-use mpstthree::role::end::RoleEnd;
-use mpstthree::role::Role;
-use mpstthree::{
-    bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_normal_role,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, offer, offer_mpst,
-};
+use mpstthree::{choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
