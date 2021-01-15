@@ -32,7 +32,7 @@ mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "
 criterion = "0.3.3"
 
 [[bench]]
-name = "simple"
+name = "main"
 harness = false
 
 [badges]

@@ -29,6 +29,9 @@ notes.txt
 /tests/expand.rs
 
 # Flamegraph
-flamegraph.svg
+/flamegraphs/*
 perf.data
 perf.data.old
+
+# Valgrind
+/cachegrind/*

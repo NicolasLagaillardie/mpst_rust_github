@@ -502,7 +502,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 5;
+static SIZE: i64 = 15;
 
 fn main() {
     all_binaries().unwrap();

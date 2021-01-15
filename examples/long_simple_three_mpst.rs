@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
@@ -12,7 +8,6 @@ use mpstthree::{
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
-use std::time::Duration;
 
 // Create new SessionMpst for three participants
 create_sessionmpst!(SessionMpstThree, 3);
@@ -267,9 +262,9 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn Error>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        black_box(simple_five_endpoint_a),
-        black_box(simple_five_endpoint_b),
-        black_box(simple_five_endpoint_c),
+        simple_five_endpoint_a,
+        simple_five_endpoint_b,
+        simple_five_endpoint_c,
     );
 
     thread_a.join().unwrap();
@@ -312,7 +307,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
     let mut sessions = Vec::new();
 
     for _ in 0..3 {
-        let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(black_box(binary_a_to_b));
+        let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(binary_a_to_b);
 
         threads.push(thread);
         sessions.push(s);
@@ -341,28 +336,9 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 10;
+static SIZE: i64 = 15;
 
-fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("long three simple protocol MPST {}", SIZE), |b| {
-        b.iter(|| all_mpst())
-    });
+fn main() {
+    all_binaries().unwrap();
+    all_mpst().unwrap();
 }
-
-fn long_simple_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("long three simple protocol binary {}", SIZE),
-        |b| b.iter(|| all_binaries()),
-    );
-}
-
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(10, 0))
-}
-
-criterion_group! {
-    name = long_three_simple_protocols;
-    config = long_warmup();
-    targets = long_simple_protocol_mpst, long_simple_protocol_binary
-}
-criterion_main!(long_three_simple_protocols);
