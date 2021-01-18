@@ -22,13 +22,14 @@ nb_participants_mpst = []
 nb_participants_binary = []
 
 # Number of loops in the recursion
-number_of_loops = '10'
+number_of_loops = '100'
 
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
         data = json.load(json_file)
+        print(data['mean']['point_estimate'])
         return data['mean']['point_estimate']
 
 
@@ -75,4 +76,4 @@ plt.legend()
 plt.savefig('./graphs/graph_'+number_of_loops+'.pdf')
 
 # function to show the plot
-plt.show()
+# plt.show()

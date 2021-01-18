@@ -2705,7 +2705,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 10;
+static SIZE: i64 = 100;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("long ten simple protocol MPST {}", SIZE), |b| {
@@ -2720,7 +2720,7 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(150, 0))
+    Criterion::default().measurement_time(Duration::new(1800, 0))
 }
 
 criterion_group! {
