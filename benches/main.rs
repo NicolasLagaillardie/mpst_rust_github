@@ -3,9 +3,9 @@ use criterion::criterion_main;
 mod benchmarks;
 
 criterion_main! {
-    benchmarks::long_five::long_five_protocols,
-    // benchmarks::long_simple_three_empty::long_three_empty_simple_protocols,
-    // benchmarks::long_simple_three::long_three_simple_protocols,
+    // benchmarks::long_five::long_five_protocols,
+    benchmarks::long_simple_three_empty::long_three_empty_simple_protocols,
+    benchmarks::long_simple_three::long_three_simple_protocols,
     // benchmarks::long_simple_four_empty::long_four_empty_simple_protocols,
     // benchmarks::long_simple_four::long_four_simple_protocols,
     // benchmarks::long_simple_five_empty::long_five_empty_simple_protocols,
