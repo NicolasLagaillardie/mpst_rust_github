@@ -38,3 +38,7 @@ perf.data.old
 
 # Graphs
 /graphs
+
+# Results
+compile_time.txt
+cg_diff.txt
