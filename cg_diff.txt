@@ -1,0 +1,4 @@
+cachegrind/cachegrind.long_simple_three_binary.e8baecd-dirty-1611061195
+summary: 7505 19 4 2325 -18 2 1231 3 -9
+cachegrind/cachegrind.long_simple_four_binary.e8baecd-dirty-1611061204
+summary: -2949 -96 -1 -592 -10 0 -363 11 -3

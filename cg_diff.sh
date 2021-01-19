@@ -34,5 +34,6 @@ echo "--------------------------------------------------------------------------
 # Command to get the last cachegrind file
 LAST=`ls -t cachegrind/cachegrind.$NAME.* | sed -n 2p`
 
-# Run cg_diff
-cg_diff $LAST $OUTFILE | tail -1
+# Run cg_diff and save file
+TEST=$(cg_diff $LAST $OUTFILE | tail -1)
+printf "$OUTFILE\n$TEST\n" >> cg_diff.txt
