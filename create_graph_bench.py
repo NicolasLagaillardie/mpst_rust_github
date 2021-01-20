@@ -22,21 +22,20 @@ nb_participants_mpst = []
 nb_participants_binary = []
 
 # Number of loops in the recursion
-number_of_loops = '100'
+number_of_loops = '0'
 
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
         data = json.load(json_file)
-        print(data['mean']['point_estimate'])
         return data['mean']['point_estimate']
 
 
 # For each folder in main_path
 for d in directories:
     # If name looks like the one from what we want
-    if ('MPST' in d or 'binary' in d) and number_of_loops in d:
+    if ('MPST' in d or 'binary' in d) and ' ' + number_of_loops in d:
         # Split the name
         splitted = d.split(' ')
 
@@ -48,12 +47,25 @@ for d in directories:
             binary.append(test(d))
             nb_participants_binary.append(str_to_int[splitted[1]])
 
+print(mpst)
+print(binary)
+print(nb_participants_mpst)
+print(nb_participants_binary)
+
 # Sort the lists in pair
 nb_participants_mpst, mpst = (list(t) for t in zip(
     *sorted(zip(nb_participants_mpst, mpst))))
 
 nb_participants_binary, binary = (list(t)
                                   for t in zip(*sorted(zip(nb_participants_binary, binary))))
+
+print(mpst)
+print(binary)
+print(nb_participants_mpst)
+print(nb_participants_binary)
+
+# Change size
+plt.figure(figsize=(20, 20))
 
 # Plot the MPST graph
 plt.plot(nb_participants_mpst, mpst, label='MPST')
@@ -70,10 +82,10 @@ plt.title('MPST vs binary along number of participants for ' +
           number_of_loops + ' loops')
 
 # show a legend on the plot
-plt.legend()
+plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
 
 # Save fig
-plt.savefig('./graphs/graph_'+number_of_loops+'.pdf')
+plt.savefig('./graphs_bench/graph_'+number_of_loops+'.pdf')
 
-# function to show the plot
+# # function to show the plot
 # plt.show()

@@ -7,7 +7,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_normal_role,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, offer, offer_mpst,
+    create_recv_mpst_session, create_recv_mpst_session_bundle, create_send_mpst_session,
+    create_send_mpst_session_bundle, create_sessionmpst, offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -25,120 +26,90 @@ create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 
 // Create new send functions
 // A
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_a_to_b,
     RoleB,
     next_b,
-    RoleA,
-    SessionMpstThree,
-    3,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_a_to_c,
     RoleC,
     next_c,
+    2, | =>
     RoleA,
     SessionMpstThree,
-    3,
-    2
+    3
 );
 // B
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_b_to_a,
     RoleA,
     next_a,
-    RoleB,
-    SessionMpstThree,
-    3,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_b_to_c,
     RoleC,
     next_c,
+    2, | =>
     RoleB,
     SessionMpstThree,
-    3,
-    2
+    3
 );
 // C
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_c_to_a,
     RoleA,
     next_a,
-    RoleC,
-    SessionMpstThree,
-    3,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_c_to_b,
     RoleB,
     next_b,
+    2, | =>
     RoleC,
     SessionMpstThree,
-    3,
-    2
+    3
 );
 
 // Create new recv functions and related types
 // A
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_a_to_b,
     RoleB,
     next_b,
-    RoleA,
-    SessionMpstThree,
-    3,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_a_to_c,
     RoleC,
     next_c,
+    2, | =>
     RoleA,
     SessionMpstThree,
-    3,
-    2
+    3
 );
 // B
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_b_to_a,
     RoleA,
     next_a,
-    RoleB,
-    SessionMpstThree,
-    3,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_b_to_c,
     RoleC,
     next_c,
+    2, | =>
     RoleB,
     SessionMpstThree,
-    3,
-    2
+    3
 );
 // C
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_c_to_a,
     RoleA,
     next_a,
-    RoleC,
-    SessionMpstThree,
-    3,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_c_to_b,
     RoleB,
     next_b,
+    2, | =>
     RoleC,
     SessionMpstThree,
-    3,
-    2
+    3
 );
 
 // Create close function
@@ -153,30 +124,23 @@ type NameB = RoleB<RoleEnd>;
 type NameC = RoleC<RoleEnd>;
 
 // Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
 // Binary
 // A
 enum BranchingCforA {
-    More(
-        SessionMpstThree<
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), RecursAtoC>>,
-            RoleC<RoleC<RoleB<RoleB<RoleC<RoleEnd>>>>>,
-            NameA,
-        >,
-    ),
+    More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
     Done(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<BranchingCforA, End>;
 // B
 enum BranchingCforB {
-    More(
-        SessionMpstThree<
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), RecursBtoC>>,
-            RoleC<RoleC<RoleA<RoleA<RoleC<RoleEnd>>>>>,
-            NameB,
-        >,
-    ),
+    More(SessionMpstThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
     Done(SessionMpstThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = Recv<BranchingCforB, End>;

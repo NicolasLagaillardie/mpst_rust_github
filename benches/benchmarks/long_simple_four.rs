@@ -7,7 +7,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_normal_role,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, offer, offer_mpst,
+    create_recv_mpst_session, create_recv_mpst_session_bundle, create_send_mpst_session,
+    create_send_mpst_session_bundle, create_sessionmpst, offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -26,230 +27,150 @@ create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 
 // Create new send functions
 // A
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_a_to_b,
     RoleB,
     next_b,
-    RoleA,
-    SessionMpstFour,
-    4,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_a_to_c,
     RoleC,
     next_c,
-    RoleA,
-    SessionMpstFour,
-    4,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_a_to_d,
     RoleD,
     next_d,
+    3, | =>
     RoleA,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 // B
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_b_to_a,
     RoleA,
     next_a,
-    RoleB,
-    SessionMpstFour,
-    4,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_b_to_c,
     RoleC,
     next_c,
-    RoleB,
-    SessionMpstFour,
-    4,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_b_to_d,
     RoleD,
     next_d,
+    3, | =>
     RoleB,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 // C
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_c_to_a,
     RoleA,
     next_a,
-    RoleC,
-    SessionMpstFour,
-    4,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_c_to_b,
     RoleB,
     next_b,
-    RoleC,
-    SessionMpstFour,
-    4,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_c_to_d,
     RoleD,
     next_d,
+    3, | =>
     RoleC,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 // D
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_d_to_a,
     RoleA,
     next_a,
-    RoleD,
-    SessionMpstFour,
-    4,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_d_to_b,
     RoleB,
     next_b,
-    RoleD,
-    SessionMpstFour,
-    4,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_d_to_c,
     RoleC,
     next_c,
+    3, | =>
     RoleD,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 
 // Create new recv functions and related types
 // A
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_a_to_b,
     RoleB,
     next_b,
-    RoleA,
-    SessionMpstFour,
-    4,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_a_to_c,
     RoleC,
     next_c,
-    RoleA,
-    SessionMpstFour,
-    4,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_a_to_d,
     RoleD,
     next_d,
+    3, | =>
     RoleA,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 // B
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_b_to_a,
     RoleA,
     next_a,
-    RoleB,
-    SessionMpstFour,
-    4,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_b_to_c,
     RoleC,
     next_c,
-    RoleB,
-    SessionMpstFour,
-    4,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_b_to_d,
     RoleD,
     next_d,
+    3, | =>
     RoleB,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 // C
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_c_to_a,
     RoleA,
     next_a,
-    RoleC,
-    SessionMpstFour,
-    4,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_c_to_b,
     RoleB,
     next_b,
-    RoleC,
-    SessionMpstFour,
-    4,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_c_to_d,
     RoleD,
     next_d,
+    3, | =>
     RoleC,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 // D
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_d_to_a,
     RoleA,
     next_a,
-    RoleD,
-    SessionMpstFour,
-    4,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_d_to_b,
     RoleB,
     next_b,
-    RoleD,
-    SessionMpstFour,
-    4,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_d_to_c,
     RoleC,
     next_c,
+    3, | =>
     RoleD,
     SessionMpstFour,
-    4,
-    3
+    4
 );
 
 // Create close function
@@ -265,15 +186,23 @@ type NameC = RoleC<RoleEnd>;
 type NameD = RoleD<RoleEnd>;
 
 // Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+type R2D<R> = RoleD<RoleD<R>>;
 // Binary
 // A
 enum BranchingDforA {
     More(
         SessionMpstFour<
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
+            RS,
+            RS,
             Recv<(), Send<(), RecursAtoD>>,
-            RoleD<RoleD<RoleB<RoleB<RoleC<RoleC<RoleD<RoleEnd>>>>>>>,
+            R2D<R2B<R2C<RoleD<RoleEnd>>>>,
             NameA,
         >,
     ),
@@ -284,10 +213,10 @@ type RecursAtoD = Recv<BranchingDforA, End>;
 enum BranchingDforB {
     More(
         SessionMpstFour<
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), End>>,
+            SR,
+            RS,
             Recv<(), Send<(), RecursBtoD>>,
-            RoleD<RoleD<RoleA<RoleA<RoleC<RoleC<RoleD<RoleEnd>>>>>>>,
+            R2D<R2A<R2C<RoleD<RoleEnd>>>>,
             NameB,
         >,
     ),
@@ -298,10 +227,10 @@ type RecursBtoD = Recv<BranchingDforB, End>;
 enum BranchingDforC {
     More(
         SessionMpstFour<
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
+            SR,
+            SR,
             Recv<(), Send<(), RecursCtoD>>,
-            RoleD<RoleD<RoleA<RoleA<RoleB<RoleB<RoleD<RoleEnd>>>>>>>,
+            R2D<R2A<R2B<RoleD<RoleEnd>>>>,
             NameC,
         >,
     ),

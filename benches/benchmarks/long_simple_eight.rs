@@ -7,7 +7,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_normal_role,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, offer, offer_mpst,
+    create_recv_mpst_session, create_recv_mpst_session_bundle, create_send_mpst_session,
+    create_send_mpst_session_bundle, create_sessionmpst, offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -30,1030 +31,550 @@ create_normal_role!(RoleH, next_h, RoleHDual, next_h_dual);
 
 // Create new send functions
 // A
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_a_to_b,
     RoleB,
     next_b,
-    RoleA,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_a_to_c,
     RoleC,
     next_c,
-    RoleA,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_a_to_d,
     RoleD,
     next_d,
-    RoleA,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_a_to_e,
     RoleE,
     next_e,
-    RoleA,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_a_to_f,
     RoleF,
     next_f,
-    RoleA,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_a_to_g,
     RoleG,
     next_g,
-    RoleA,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_a_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleA,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // B
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_b_to_a,
     RoleA,
     next_a,
-    RoleB,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_b_to_c,
     RoleC,
     next_c,
-    RoleB,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_b_to_d,
     RoleD,
     next_d,
-    RoleB,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_b_to_e,
     RoleE,
     next_e,
-    RoleB,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_b_to_f,
     RoleF,
     next_f,
-    RoleB,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_b_to_g,
     RoleG,
     next_g,
-    RoleB,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_b_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleB,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // C
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_c_to_a,
     RoleA,
     next_a,
-    RoleC,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_c_to_b,
     RoleB,
     next_b,
-    RoleC,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_c_to_d,
     RoleD,
     next_d,
-    RoleC,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_c_to_e,
     RoleE,
     next_e,
-    RoleC,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_c_to_f,
     RoleF,
     next_f,
-    RoleC,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_c_to_g,
     RoleG,
     next_g,
-    RoleC,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_c_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleC,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // D
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_d_to_a,
     RoleA,
     next_a,
-    RoleD,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_d_to_b,
     RoleB,
     next_b,
-    RoleD,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_d_to_c,
     RoleC,
     next_c,
-    RoleD,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_d_to_e,
     RoleE,
     next_e,
-    RoleD,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_d_to_f,
     RoleF,
     next_f,
-    RoleD,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_d_to_g,
     RoleG,
     next_g,
-    RoleD,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_d_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleD,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // E
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_e_to_a,
     RoleA,
     next_a,
-    RoleE,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_e_to_b,
     RoleB,
     next_b,
-    RoleE,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_e_to_c,
     RoleC,
     next_c,
-    RoleE,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_e_to_d,
     RoleD,
     next_d,
-    RoleE,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_e_to_f,
     RoleF,
     next_f,
-    RoleE,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_e_to_g,
     RoleG,
     next_g,
-    RoleE,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_e_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleE,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // F
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_f_to_a,
     RoleA,
     next_a,
-    RoleF,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_f_to_b,
     RoleB,
     next_b,
-    RoleF,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_f_to_c,
     RoleC,
     next_c,
-    RoleF,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_f_to_d,
     RoleD,
     next_d,
-    RoleF,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_f_to_e,
     RoleE,
     next_e,
-    RoleF,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_f_to_g,
     RoleG,
     next_g,
-    RoleF,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_f_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleF,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // G
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_g_to_a,
     RoleA,
     next_a,
-    RoleG,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_g_to_b,
     RoleB,
     next_b,
-    RoleG,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_g_to_c,
     RoleC,
     next_c,
-    RoleG,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_g_to_d,
     RoleD,
     next_d,
-    RoleG,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_g_to_e,
     RoleE,
     next_e,
-    RoleG,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_g_to_f,
     RoleF,
     next_f,
-    RoleG,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_g_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleG,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // H
-create_send_mpst_session!(
+create_send_mpst_session_bundle!(
     send_mpst_h_to_a,
     RoleA,
     next_a,
-    RoleH,
-    SessionMpstEight,
-    8,
-    1
-);
-create_send_mpst_session!(
+    1, |
     send_mpst_h_to_b,
     RoleB,
     next_b,
-    RoleH,
-    SessionMpstEight,
-    8,
-    2
-);
-create_send_mpst_session!(
+    2, |
     send_mpst_h_to_c,
     RoleC,
     next_c,
-    RoleH,
-    SessionMpstEight,
-    8,
-    3
-);
-create_send_mpst_session!(
+    3, |
     send_mpst_h_to_d,
     RoleD,
     next_d,
-    RoleH,
-    SessionMpstEight,
-    8,
-    4
-);
-create_send_mpst_session!(
+    4, |
     send_mpst_h_to_e,
     RoleE,
     next_e,
-    RoleH,
-    SessionMpstEight,
-    8,
-    5
-);
-create_send_mpst_session!(
+    5, |
     send_mpst_h_to_f,
     RoleF,
     next_f,
-    RoleH,
-    SessionMpstEight,
-    8,
-    6
-);
-create_send_mpst_session!(
+    6, |
     send_mpst_h_to_g,
     RoleG,
     next_g,
+    7, | =>
     RoleH,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 
 // Create new recv functions and related types
 // A
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_a_to_b,
     RoleB,
     next_b,
-    RoleA,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_a_to_c,
     RoleC,
     next_c,
-    RoleA,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_a_to_d,
     RoleD,
     next_d,
-    RoleA,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_a_to_e,
     RoleE,
     next_e,
-    RoleA,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_a_to_f,
     RoleF,
     next_f,
-    RoleA,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_a_to_g,
     RoleG,
     next_g,
-    RoleA,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_a_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleA,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // B
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_b_to_a,
     RoleA,
     next_a,
-    RoleB,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_b_to_c,
     RoleC,
     next_c,
-    RoleB,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_b_to_d,
     RoleD,
     next_d,
-    RoleB,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_b_to_e,
     RoleE,
     next_e,
-    RoleB,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_b_to_f,
     RoleF,
     next_f,
-    RoleB,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_b_to_g,
     RoleG,
     next_g,
-    RoleB,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_b_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleB,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // C
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_c_to_a,
     RoleA,
     next_a,
-    RoleC,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_c_to_b,
     RoleB,
     next_b,
-    RoleC,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_c_to_d,
     RoleD,
     next_d,
-    RoleC,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_c_to_e,
     RoleE,
     next_e,
-    RoleC,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_c_to_f,
     RoleF,
     next_f,
-    RoleC,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_c_to_g,
     RoleG,
     next_g,
-    RoleC,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_c_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleC,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // D
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_d_to_a,
     RoleA,
     next_a,
-    RoleD,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_d_to_b,
     RoleB,
     next_b,
-    RoleD,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_d_to_c,
     RoleC,
     next_c,
-    RoleD,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_d_to_e,
     RoleE,
     next_e,
-    RoleD,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_d_to_f,
     RoleF,
     next_f,
-    RoleD,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_d_to_g,
     RoleG,
     next_g,
-    RoleD,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_d_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleD,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // E
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_e_to_a,
     RoleA,
     next_a,
-    RoleE,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_e_to_b,
     RoleB,
     next_b,
-    RoleE,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_e_to_c,
     RoleC,
     next_c,
-    RoleE,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_e_to_d,
     RoleD,
     next_d,
-    RoleE,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_e_to_f,
     RoleF,
     next_f,
-    RoleE,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_e_to_g,
     RoleG,
     next_g,
-    RoleE,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_e_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleE,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // F
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_f_to_a,
     RoleA,
     next_a,
-    RoleF,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_f_to_b,
     RoleB,
     next_b,
-    RoleF,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_f_to_c,
     RoleC,
     next_c,
-    RoleF,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_f_to_d,
     RoleD,
     next_d,
-    RoleF,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_f_to_e,
     RoleE,
     next_e,
-    RoleF,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_f_to_g,
     RoleG,
     next_g,
-    RoleF,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_f_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleF,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // G
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_g_to_a,
     RoleA,
     next_a,
-    RoleG,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_g_to_b,
     RoleB,
     next_b,
-    RoleG,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_g_to_c,
     RoleC,
     next_c,
-    RoleG,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_g_to_d,
     RoleD,
     next_d,
-    RoleG,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_g_to_e,
     RoleE,
     next_e,
-    RoleG,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_g_to_f,
     RoleF,
     next_f,
-    RoleG,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_g_to_h,
     RoleH,
     next_h,
+    7, | =>
     RoleG,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 // H
-create_recv_mpst_session!(
+create_recv_mpst_session_bundle!(
     recv_mpst_h_to_a,
     RoleA,
     next_a,
-    RoleH,
-    SessionMpstEight,
-    8,
-    1
-);
-create_recv_mpst_session!(
+    1, |
     recv_mpst_h_to_b,
     RoleB,
     next_b,
-    RoleH,
-    SessionMpstEight,
-    8,
-    2
-);
-create_recv_mpst_session!(
+    2, |
     recv_mpst_h_to_c,
     RoleC,
     next_c,
-    RoleH,
-    SessionMpstEight,
-    8,
-    3
-);
-create_recv_mpst_session!(
+    3, |
     recv_mpst_h_to_d,
     RoleD,
     next_d,
-    RoleH,
-    SessionMpstEight,
-    8,
-    4
-);
-create_recv_mpst_session!(
+    4, |
     recv_mpst_h_to_e,
     RoleE,
     next_e,
-    RoleH,
-    SessionMpstEight,
-    8,
-    5
-);
-create_recv_mpst_session!(
+    5, |
     recv_mpst_h_to_f,
     RoleF,
     next_f,
-    RoleH,
-    SessionMpstEight,
-    8,
-    6
-);
-create_recv_mpst_session!(
+    6, |
     recv_mpst_h_to_g,
     RoleG,
     next_g,
+    7, | =>
     RoleH,
     SessionMpstEight,
-    8,
-    7
+    8
 );
 
 // Create close function
@@ -1073,37 +594,31 @@ type NameG = RoleG<RoleEnd>;
 type NameH = RoleH<RoleEnd>;
 
 // Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+type R2D<R> = RoleD<RoleD<R>>;
+type R2E<R> = RoleE<RoleE<R>>;
+type R2F<R> = RoleF<RoleF<R>>;
+type R2G<R> = RoleG<RoleG<R>>;
+type R2H<R> = RoleH<RoleH<R>>;
 // Binary
 // A
 enum BranchingHforA {
     More(
         SessionMpstEight<
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
+            RS,
+            RS,
+            RS,
+            RS,
+            RS,
+            RS,
             Recv<(), Send<(), RecursAtoH>>,
-            RoleH<
-                RoleH<
-                    RoleB<
-                        RoleB<
-                            RoleC<
-                                RoleC<
-                                    RoleD<
-                                        RoleD<
-                                            RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2B<R2C<R2D<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
             NameA,
         >,
     ),
@@ -1114,32 +629,14 @@ type RecursAtoH = Recv<BranchingHforA, End>;
 enum BranchingHforB {
     More(
         SessionMpstEight<
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
+            SR,
+            RS,
+            RS,
+            RS,
+            RS,
+            RS,
             Recv<(), Send<(), RecursBtoH>>,
-            RoleH<
-                RoleH<
-                    RoleA<
-                        RoleA<
-                            RoleC<
-                                RoleC<
-                                    RoleD<
-                                        RoleD<
-                                            RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2A<R2C<R2D<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
             NameB,
         >,
     ),
@@ -1150,32 +647,14 @@ type RecursBtoH = Recv<BranchingHforB, End>;
 enum BranchingHforC {
     More(
         SessionMpstEight<
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
+            SR,
+            SR,
+            RS,
+            RS,
+            RS,
+            RS,
             Recv<(), Send<(), RecursCtoH>>,
-            RoleH<
-                RoleH<
-                    RoleA<
-                        RoleA<
-                            RoleB<
-                                RoleB<
-                                    RoleD<
-                                        RoleD<
-                                            RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2A<R2B<R2D<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
             NameC,
         >,
     ),
@@ -1186,32 +665,14 @@ type RecursCtoH = Recv<BranchingHforC, End>;
 enum BranchingHforD {
     More(
         SessionMpstEight<
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
+            SR,
+            SR,
+            SR,
+            RS,
+            RS,
+            RS,
             Recv<(), Send<(), RecursDtoH>>,
-            RoleH<
-                RoleH<
-                    RoleA<
-                        RoleA<
-                            RoleB<
-                                RoleB<
-                                    RoleC<
-                                        RoleC<
-                                            RoleE<
-                                                RoleE<RoleF<RoleF<RoleG<RoleG<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2A<R2B<R2C<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
             NameD,
         >,
     ),
@@ -1222,32 +683,14 @@ type RecursDtoH = Recv<BranchingHforD, End>;
 enum BranchingHforE {
     More(
         SessionMpstEight<
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), End>>,
-            Recv<(), Send<(), End>>,
+            SR,
+            SR,
+            SR,
+            SR,
+            RS,
+            RS,
             Recv<(), Send<(), RecursEtoH>>,
-            RoleH<
-                RoleH<
-                    RoleA<
-                        RoleA<
-                            RoleB<
-                                RoleB<
-                                    RoleC<
-                                        RoleC<
-                                            RoleD<
-                                                RoleD<RoleF<RoleF<RoleG<RoleG<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2A<R2B<R2C<R2D<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
             NameE,
         >,
     ),
@@ -1258,32 +701,14 @@ type RecursEtoH = Recv<BranchingHforE, End>;
 enum BranchingHforF {
     More(
         SessionMpstEight<
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Recv<(), Send<(), End>>,
+            SR,
+            SR,
+            SR,
+            SR,
+            SR,
+            RS,
             Recv<(), Send<(), RecursFtoH>>,
-            RoleH<
-                RoleH<
-                    RoleA<
-                        RoleA<
-                            RoleB<
-                                RoleB<
-                                    RoleC<
-                                        RoleC<
-                                            RoleD<
-                                                RoleD<RoleE<RoleE<RoleG<RoleG<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2A<R2B<R2C<R2D<R2E<R2G<RoleH<RoleEnd>>>>>>>>,
             NameF,
         >,
     ),
@@ -1294,32 +719,14 @@ type RecursFtoH = Recv<BranchingHforF, End>;
 enum BranchingHforG {
     More(
         SessionMpstEight<
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
-            Send<(), Recv<(), End>>,
+            SR,
+            SR,
+            SR,
+            SR,
+            SR,
+            SR,
             Recv<(), Send<(), RecursGtoH>>,
-            RoleH<
-                RoleH<
-                    RoleA<
-                        RoleA<
-                            RoleB<
-                                RoleB<
-                                    RoleC<
-                                        RoleC<
-                                            RoleD<
-                                                RoleD<RoleE<RoleE<RoleF<RoleF<RoleH<RoleEnd>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
+            R2H<R2A<R2B<R2C<R2D<R2E<R2F<RoleH<RoleEnd>>>>>>>>,
             NameG,
         >,
     ),

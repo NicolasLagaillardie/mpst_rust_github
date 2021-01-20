@@ -29,7 +29,7 @@ notes.txt
 /tests/expand.rs
 
 # Flamegraph
-/flamegraphs/*
+/flamegraphs
 perf.data
 perf.data.old
 
@@ -37,8 +37,8 @@ perf.data.old
 /cachegrind/*
 
 # Graphs
-/graphs
+/graphs_bench
 
 # Results
-compile_time.txt
+/compile_time
 cg_diff.txt
