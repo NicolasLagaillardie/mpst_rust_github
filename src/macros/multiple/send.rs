@@ -101,7 +101,7 @@ macro_rules! create_send_mpst_session {
 ///     send_mpst_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, |
+///     2, | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3

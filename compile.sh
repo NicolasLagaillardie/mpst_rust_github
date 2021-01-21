@@ -6,7 +6,7 @@ set -e
 rm -rf compile_time/$1*.txt
 
 # Run over 70 times
-for i in {1..70}
+for i in {1..100}
 do
 # Remove previous build
 rm -rf target/release/

@@ -34,7 +34,7 @@ perf.data
 perf.data.old
 
 # Valgrind
-/cachegrind/*
+/cachegrind
 
 # Graphs
 /graphs_bench

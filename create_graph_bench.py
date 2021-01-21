@@ -59,11 +59,6 @@ nb_participants_mpst, mpst = (list(t) for t in zip(
 nb_participants_binary, binary = (list(t)
                                   for t in zip(*sorted(zip(nb_participants_binary, binary))))
 
-print(mpst)
-print(binary)
-print(nb_participants_mpst)
-print(nb_participants_binary)
-
 # Change size
 plt.figure(figsize=(20, 20))
 

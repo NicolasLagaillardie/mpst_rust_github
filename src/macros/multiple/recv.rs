@@ -110,7 +110,7 @@ macro_rules! create_recv_mpst_session {
 ///     recv_mpst_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, |
+///     2, | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -241,10 +241,10 @@ macro_rules! create_recv_mpst_all_session {
 ///     recv_mpst_a_all_to_b,
 ///     RoleAlltoB,
 ///     next_all_to_b,
-///     1, |
+///     1, | =>
 ///     RoleA,
 ///     SessionMpst,
-///     3,
+///     3
 /// );
 ///  ```
 #[macro_export]
