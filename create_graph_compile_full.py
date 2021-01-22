@@ -32,14 +32,14 @@ for d in directories:
 plt.xlabel('Number of iterations')
 plt.ylabel('Time (µs)')
 
-# giving a title to my graph
-plt.title('Compile time needed')
+# # giving a title to my graph
+# plt.title('Compile time needed')
 
 # show a legend on the plot
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
+plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 15})
 
 # # Save fig
-plt.savefig('./compile_time/graph.pdf')
+plt.savefig(main_path + '/graph_full_compile.pdf')
 
 # # function to show the plot
 # plt.show()

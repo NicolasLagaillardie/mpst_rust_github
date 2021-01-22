@@ -42,5 +42,6 @@ cargo flamegraph --example long_simple_eleven_mpst -o flamegraphs/flamegraph_lon
 ./compile.sh long_simple_eleven_binary 
 ./compile.sh long_simple_eleven_mpst 
 
+python create_graph_compile.py 
 
 python create_graph_bench.py

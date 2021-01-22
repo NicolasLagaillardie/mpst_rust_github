@@ -42,3 +42,6 @@ perf.data.old
 # Results
 /compile_time
 cg_diff.txt
+
+# Expand
+/expand

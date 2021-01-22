@@ -47,11 +47,6 @@ for d in directories:
             binary.append(test(d))
             nb_participants_binary.append(str_to_int[splitted[1]])
 
-print(mpst)
-print(binary)
-print(nb_participants_mpst)
-print(nb_participants_binary)
-
 # Sort the lists in pair
 nb_participants_mpst, mpst = (list(t) for t in zip(
     *sorted(zip(nb_participants_mpst, mpst))))
@@ -60,24 +55,24 @@ nb_participants_binary, binary = (list(t)
                                   for t in zip(*sorted(zip(nb_participants_binary, binary))))
 
 # Change size
-plt.figure(figsize=(20, 20))
+plt.figure(figsize=(20, 10))
 
 # Plot the MPST graph
-plt.plot(nb_participants_mpst, mpst, label='MPST')
+plt.plot(nb_participants_mpst, mpst, label='MPST',linestyle = 'solid')
 
 # Plot the binary graph
-plt.plot(nb_participants_binary, binary, label='binary')
+plt.plot(nb_participants_binary, binary, label='binary', linestyle = 'dashed')
 
 # Label X and Y axis
 plt.xlabel('Number of participants')
 plt.ylabel('Time (ns)')
 
-# giving a title to my graph
-plt.title('MPST vs binary along number of participants for ' +
-          number_of_loops + ' loops')
+# # giving a title to my graph
+# plt.title('MPST vs binary along number of participants for ' +
+#           number_of_loops + ' loops')
 
 # show a legend on the plot
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
+plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 15})
 
 # Save fig
 plt.savefig('./graphs_bench/graph_'+number_of_loops+'.pdf')
