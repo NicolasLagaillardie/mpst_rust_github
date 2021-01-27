@@ -742,7 +742,7 @@ fn long_protocol_binary(c: &mut Criterion) {
 }
 
 fn short_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(1800, 0))
+    Criterion::default().measurement_time(Duration::new(180, 0))
 }
 
 criterion_group! {

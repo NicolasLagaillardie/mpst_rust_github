@@ -1,6 +1,8 @@
 import os
-import matplotlib.pyplot as plt
 import statistics
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
+import matplotlib.pyplot as plt
 
 # Path for criterion
 main_path = './compile_time'
@@ -33,11 +35,11 @@ for d in directories:
         # If MPST of binary, append to related lists
         if 'mpst' in d:
             average_mpst.append(statistics.mean([
-            int(line) for line in file]))
+                int(line) for line in file]))
             nb_participants_mpst.append(str_to_int[name])
         else:
             average_binary.append(statistics.mean([
-            int(line) for line in file]))
+                int(line) for line in file]))
             nb_participants_binary.append(str_to_int[name])
 
         file.close()
@@ -47,21 +49,28 @@ nb_participants_mpst, average_mpst = (list(t) for t in zip(
     *sorted(zip(nb_participants_mpst, average_mpst))))
 
 nb_participants_binary, average_binary = (list(t)
-                                  for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
+                                          for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
 
 # Plot the graph
-plt.plot(nb_participants_mpst, average_mpst, label="MPST", linestyle = 'solid')
-plt.plot(nb_participants_binary, average_binary, label="binary", linestyle = 'dashed')
+plt.plot(nb_participants_mpst, average_mpst,
+         label="MPST", linestyle='solid', linewidth=5)
+plt.plot(nb_participants_binary, average_binary,
+         label="Binary", linestyle='dashed', linewidth=5)
 
 # Label X and Y axis
-plt.xlabel('Number of participants')
-plt.ylabel('Time (µs)')
+plt.xlabel('Number of participants', fontsize=30)
+plt.ylabel('Time (µs)', fontsize=30)
+plt.xticks(fontsize=30)
+plt.yticks(fontsize=30)
+
+# Add grid
+plt.grid(True)
 
 # # giving a title to my graph
 # plt.title('Compile time needed')
 
 # show a legend on the plot
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 15})
+plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # Save fig
 plt.savefig(main_path + '/graph_average_compile.pdf')

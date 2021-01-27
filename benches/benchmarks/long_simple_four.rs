@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+use crossbeam_channel::bounded;
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
@@ -436,6 +438,42 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
+fn all_crossbeam() -> Result<(), Box<dyn Error>> {
+    let mut threads = Vec::new();
+
+    for _ in 0..6 {
+        let main = spawn(move || {
+            for _ in 0..SIZE {
+                let (sender_1, receiver_1) = bounded::<()>(1);
+                sender_1.send(()).unwrap_or(());
+                receiver_1.recv().unwrap_or(());
+
+                let (sender_2, receiver_2) = bounded::<()>(1);
+                sender_2.send(()).unwrap_or(());
+                receiver_2.recv().unwrap_or(());
+            }
+
+            // "Close" connection
+            let (sender_close_1, receiver_close_1) = bounded::<()>(1);
+            sender_close_1.send(()).unwrap_or(());
+
+            let (sender_close_2, receiver_close_2) = bounded::<()>(1);
+            sender_close_2.send(()).unwrap_or(());
+
+            receiver_close_1.recv().unwrap_or(());
+            receiver_close_2.recv().unwrap_or(());
+        });
+
+        threads.push(main);
+    }
+
+    threads.into_iter().for_each(|elt| elt.join().unwrap());
+
+    Ok(())
+}
+
+/////////////////////////
+
 static SIZE: i64 = 100;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
@@ -450,6 +488,13 @@ fn long_simple_protocol_binary(c: &mut Criterion) {
     });
 }
 
+fn long_simple_protocol_crossbeam(c: &mut Criterion) {
+    c.bench_function(
+        &format!("long four simple protocol crossbeam {}", SIZE),
+        |b| b.iter(|| all_crossbeam()),
+    );
+}
+
 fn long_warmup() -> Criterion {
     Criterion::default().measurement_time(Duration::new(1800, 0))
 }
@@ -457,6 +502,6 @@ fn long_warmup() -> Criterion {
 criterion_group! {
     name = long_four_simple_protocols;
     config = long_warmup();
-    targets = long_simple_protocol_mpst, long_simple_protocol_binary
+    targets = long_simple_protocol_mpst, long_simple_protocol_binary, long_simple_protocol_crossbeam
 }
 criterion_main!(long_four_simple_protocols);

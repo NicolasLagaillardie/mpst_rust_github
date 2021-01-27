@@ -1,5 +1,7 @@
 import json
 import os
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 
 # Path for criterion
@@ -58,21 +60,28 @@ nb_participants_binary, binary = (list(t)
 plt.figure(figsize=(20, 10))
 
 # Plot the MPST graph
-plt.plot(nb_participants_mpst, mpst, label='MPST',linestyle = 'solid')
+plt.plot(nb_participants_mpst, mpst, label='MPST',
+         linestyle='solid', linewidth=5)
 
 # Plot the binary graph
-plt.plot(nb_participants_binary, binary, label='binary', linestyle = 'dashed')
+plt.plot(nb_participants_binary, binary, label='Binary',
+         linestyle='dashed', linewidth=5)
 
 # Label X and Y axis
-plt.xlabel('Number of participants')
-plt.ylabel('Time (ns)')
+plt.xlabel('Number of participants', fontsize=30)
+plt.ylabel('Time (ns)', fontsize=30)
+plt.xticks(fontsize=30)
+plt.yticks(fontsize=30)
+
+# Add grid
+plt.grid(True)
 
 # # giving a title to my graph
 # plt.title('MPST vs binary along number of participants for ' +
 #           number_of_loops + ' loops')
 
 # show a legend on the plot
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 15})
+plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # Save fig
 plt.savefig('./graphs_bench/graph_'+number_of_loops+'.pdf')

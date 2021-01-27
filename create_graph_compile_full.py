@@ -1,4 +1,6 @@
 import os
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 
 # Path for criterion
@@ -24,19 +26,24 @@ for d in directories:
 
         # Plot the graph
         plt.plot(nb_participants_iterations, [
-                 int(line) for line in file], label=name)
+                 int(line) for line in file], label=name, linewidth=5)
 
         file.close()
 
 # Label X and Y axis
-plt.xlabel('Number of iterations')
-plt.ylabel('Time (µs)')
+plt.xlabel('Number of iterations', fontsize=30)
+plt.ylabel('Time (µs)', fontsize=30)
+plt.xticks(fontsize=30)
+plt.yticks(fontsize=30)
+
+# Add grid
+plt.grid(True)
 
 # # giving a title to my graph
 # plt.title('Compile time needed')
 
 # show a legend on the plot
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 15})
+plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # # Save fig
 plt.savefig(main_path + '/graph_full_compile.pdf')
