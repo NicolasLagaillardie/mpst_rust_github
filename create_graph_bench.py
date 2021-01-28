@@ -20,8 +20,10 @@ str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6,
 # Lists for plots
 binary = []
 mpst = []
+crossbeam = []
 nb_participants_mpst = []
 nb_participants_binary = []
+nb_participants_crossbeam = []
 
 # Number of loops in the recursion
 number_of_loops = '0'
@@ -37,7 +39,7 @@ def test(path):
 # For each folder in main_path
 for d in directories:
     # If name looks like the one from what we want
-    if ('MPST' in d or 'binary' in d) and ' ' + number_of_loops in d:
+    if ('MPST' in d or 'binary' in d or 'crossbeam' in d) and ' ' + number_of_loops in d:
         # Split the name
         splitted = d.split(' ')
 
@@ -45,9 +47,12 @@ for d in directories:
         if 'MPST' in d:
             mpst.append(test(d))
             nb_participants_mpst.append(str_to_int[splitted[1]])
-        else:
+        elif 'binary' in d:
             binary.append(test(d))
             nb_participants_binary.append(str_to_int[splitted[1]])
+        elif 'crossbeam' in d:
+            crossbeam.append(test(d))
+            nb_participants_crossbeam.append(str_to_int[splitted[1]])
 
 # Sort the lists in pair
 nb_participants_mpst, mpst = (list(t) for t in zip(
@@ -55,6 +60,9 @@ nb_participants_mpst, mpst = (list(t) for t in zip(
 
 nb_participants_binary, binary = (list(t)
                                   for t in zip(*sorted(zip(nb_participants_binary, binary))))
+
+nb_participants_crossbeam, crossbeam = (list(t)
+                                  for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
 # Change size
 plt.figure(figsize=(20, 10))
@@ -66,6 +74,10 @@ plt.plot(nb_participants_mpst, mpst, label='MPST',
 # Plot the binary graph
 plt.plot(nb_participants_binary, binary, label='Binary',
          linestyle='dashed', linewidth=5)
+
+# Plot the crossbeam graph
+plt.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
+         linestyle='-.', linewidth=5)
 
 # Label X and Y axis
 plt.xlabel('Number of participants', fontsize=30)
