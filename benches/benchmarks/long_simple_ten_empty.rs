@@ -1603,7 +1603,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
-    for _ in 0..3 {
+    for _ in 0..45 {
         let main = spawn(move || {
             for _ in 0..SIZE {
                 let (sender_1, receiver_1) = bounded::<()>(1);

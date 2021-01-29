@@ -1,7 +1,7 @@
+import matplotlib.pyplot as plt
 import os
 import matplotlib
 matplotlib.rcParams['text.usetex'] = True
-import matplotlib.pyplot as plt
 
 # Path for criterion
 main_path = './compile_time'
@@ -13,7 +13,7 @@ directories = os.listdir(main_path)
 nb_participants_iterations = [i for i in range(100)]
 
 # Change size
-plt.figure(figsize=(20, 10))
+ax = plt.figure(figsize=(20, 10)).gca()
 
 # For each folder in main_path
 for d in directories:
@@ -25,25 +25,25 @@ for d in directories:
         name = d.split('.txt')[0].split('long_simple_')[1].replace('_', ' ')
 
         # Plot the graph
-        plt.plot(nb_participants_iterations, [
-                 int(line) for line in file], label=name, linewidth=5)
+        ax.plot(nb_participants_iterations, [
+            int(line) for line in file], label=name, linewidth=5)
 
         file.close()
 
 # Label X and Y axis
-plt.xlabel('Number of iterations', fontsize=30)
-plt.ylabel('Time (µs)', fontsize=30)
-plt.xticks(fontsize=30)
-plt.yticks(fontsize=30)
+ax.set_xlabel('Number of iterations', fontsize=30)
+ax.set_ylabel('Time (µs)', fontsize=30)
+ax.tick_params(axis='both', which='major', labelsize=30)
+ax.tick_params(axis='both', which='minor', labelsize=30)
 
 # Add grid
-plt.grid(True)
+ax.grid(True)
 
 # # giving a title to my graph
 # plt.title('Compile time needed')
 
 # show a legend on the plot
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
+ax.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # # Save fig
 plt.savefig(main_path + '/graph_full_compile.pdf')
