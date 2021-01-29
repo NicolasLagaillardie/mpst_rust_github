@@ -440,47 +440,47 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_e_to_a,
-                           send_mpst_e_to_b,
-                           send_mpst_e_to_c,
-                           send_mpst_e_to_d, =>
-                            BranchingEforA::Done,
-                            BranchingEforB::Done,
-                            BranchingEforC::Done,
-                            BranchingEforD::Done, =>
-                           RoleA,
-                           RoleB,
-                           RoleC,
-                           RoleD, =>
-                           RoleE,
-                            SessionMpstFive,
-                           5,
-            5
-                       );
+                s,
+                send_mpst_e_to_a,
+                send_mpst_e_to_b,
+                send_mpst_e_to_c,
+                send_mpst_e_to_d, =>
+                BranchingEforA::Done,
+                BranchingEforB::Done,
+                BranchingEforC::Done,
+                BranchingEforD::Done, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD, =>
+                RoleE,
+                SessionMpstFive,
+                5,
+                5
+            );
 
             close_mpst_multi(s)
         }
         i => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_e_to_a,
-                           send_mpst_e_to_b,
-                           send_mpst_e_to_c,
-                           send_mpst_e_to_d, =>
-                            BranchingEforA::More,
-                            BranchingEforB::More,
-                            BranchingEforC::More,
-                            BranchingEforD::More, =>
-                           RoleA,
-                           RoleB,
-                           RoleC,
-                           RoleD, =>
-                           RoleE,
-                            SessionMpstFive,
-                           5,
-            5
-                       );
+                s,
+                send_mpst_e_to_a,
+                send_mpst_e_to_b,
+                send_mpst_e_to_c,
+                send_mpst_e_to_d, =>
+                BranchingEforA::More,
+                BranchingEforB::More,
+                BranchingEforC::More,
+                BranchingEforD::More, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD, =>
+                RoleE,
+                SessionMpstFive,
+                5,
+                5
+            );
 
             let s = send_mpst_e_to_a((), s);
             let (_, s) = recv_mpst_e_to_a(s)?;

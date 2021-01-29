@@ -27,7 +27,7 @@ nb_participants_binary = []
 nb_participants_crossbeam = []
 
 # Number of loops in the recursion
-number_of_loops = '100'
+number_of_loops = '0'
 
 
 def test(path):
@@ -66,19 +66,22 @@ nb_participants_crossbeam, crossbeam = (list(t)
                                         for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
 # Change size
-ax = plt.figure(figsize=(20, 10)).gca()
+ax = plt.figure(figsize=(30, 15)).gca()
+
+ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
 ax.plot(nb_participants_mpst, mpst, label='MPST',
-         linestyle='solid', linewidth=5)
+        linestyle='solid', linewidth=5)
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary',
-         linestyle='dashed', linewidth=5)
+        linestyle='dashed', linewidth=5)
 
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-         linestyle='-.', linewidth=5)
+        linestyle='-.', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
@@ -97,7 +100,7 @@ ax.grid(True)
 ax.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # Save fig
-plt.savefig('./graphs_bench/graph_'+number_of_loops+'.pdf')
+plt.savefig('./graphs_bench/graph'+number_of_loops+'.pdf')
 
 # # function to show the plot
 # plt.show()

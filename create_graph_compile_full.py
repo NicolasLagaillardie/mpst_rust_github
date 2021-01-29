@@ -1,3 +1,4 @@
+from matplotlib.ticker import MaxNLocator
 import matplotlib.pyplot as plt
 import os
 import matplotlib
@@ -13,7 +14,10 @@ directories = os.listdir(main_path)
 nb_participants_iterations = [i for i in range(100)]
 
 # Change size
-ax = plt.figure(figsize=(20, 10)).gca()
+ax = plt.figure(figsize=(30, 15)).gca()
+
+ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # For each folder in main_path
 for d in directories:
@@ -46,7 +50,7 @@ ax.grid(True)
 ax.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # # Save fig
-plt.savefig(main_path + '/graph_full_compile.pdf')
+plt.savefig(main_path + '/graphFullCompile.pdf')
 
 # # function to show the plot
 # plt.show()

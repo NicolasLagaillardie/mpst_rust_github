@@ -11,7 +11,7 @@ use std::error::Error;
 // Create new SessionMpst for seven participants
 create_sessionmpst!(SessionMpstSeven, 7);
 
-// Clients needed???
+// Clients needed?
 //
 // Simple protocol: logging service
 // G = Logs?Controller[start].µX.(choice at Logs) {

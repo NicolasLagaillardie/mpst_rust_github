@@ -193,35 +193,35 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_c_to_a,
-                           send_mpst_c_to_b, =>
-                           BranchingCforA::Done,
-                           BranchingCforB::Done, =>
-                           RoleA,
-                           RoleB, =>
-                           RoleC,
-                           SessionMpstThree,
-                           3,
-            3
-                       );
+                s,
+                send_mpst_c_to_a,
+                send_mpst_c_to_b, =>
+                BranchingCforA::Done,
+                BranchingCforB::Done, =>
+                RoleA,
+                RoleB, =>
+                RoleC,
+                SessionMpstThree,
+                3,
+                3
+            );
 
             close_mpst_multi(s)
         }
         i => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_c_to_a,
-                           send_mpst_c_to_b, =>
-                           BranchingCforA::More,
-                           BranchingCforB::More, =>
-                           RoleA,
-                           RoleB, =>
-                           RoleC,
-                           SessionMpstThree,
-                           3,
-            3
-                       );
+                s,
+                send_mpst_c_to_a,
+                send_mpst_c_to_b, =>
+                BranchingCforA::More,
+                BranchingCforB::More, =>
+                RoleA,
+                RoleB, =>
+                RoleC,
+                SessionMpstThree,
+                3,
+                3
+            );
 
             let s = send_mpst_c_to_a((), s);
             let (_, s) = recv_mpst_c_to_a(s)?;

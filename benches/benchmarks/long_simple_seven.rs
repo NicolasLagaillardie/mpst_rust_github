@@ -805,7 +805,7 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleE,
                 RoleF, =>
                 RoleG,
-                 SessionMpstSeven,
+                    SessionMpstSeven,
                 7,
                 7
             );

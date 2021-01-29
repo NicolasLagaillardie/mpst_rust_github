@@ -947,65 +947,65 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_h_to_a,
-                           send_mpst_h_to_b,
-                           send_mpst_h_to_c,
-                           send_mpst_h_to_d,
-                           send_mpst_h_to_e,
-                           send_mpst_h_to_f,
-                           send_mpst_h_to_g, =>
-                             BranchingHforA::Done,
-                             BranchingHforB::Done,
-                             BranchingHforC::Done,
-                             BranchingHforD::Done,
-                             BranchingHforE::Done,
-                             BranchingHforF::Done,
-                             BranchingHforG::Done, =>
-                           RoleA,
-                           RoleB,
-                           RoleC,
-                           RoleD,
-                           RoleE,
-                           RoleF,
-                           RoleG, =>
-                           RoleH,
-                            SessionMpstEight,
-                           8,
-            8
-                       );
+                s,
+                send_mpst_h_to_a,
+                send_mpst_h_to_b,
+                send_mpst_h_to_c,
+                send_mpst_h_to_d,
+                send_mpst_h_to_e,
+                send_mpst_h_to_f,
+                send_mpst_h_to_g, =>
+                BranchingHforA::Done,
+                BranchingHforB::Done,
+                BranchingHforC::Done,
+                BranchingHforD::Done,
+                BranchingHforE::Done,
+                BranchingHforF::Done,
+                BranchingHforG::Done, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF,
+                RoleG, =>
+                RoleH,
+                SessionMpstEight,
+                8,
+                8
+            );
 
             close_mpst_multi(s)
         }
         i => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_h_to_a,
-                           send_mpst_h_to_b,
-                           send_mpst_h_to_c,
-                           send_mpst_h_to_d,
-                           send_mpst_h_to_e,
-                           send_mpst_h_to_f,
-                           send_mpst_h_to_g, =>
-                             BranchingHforA::More,
-                             BranchingHforB::More,
-                             BranchingHforC::More,
-                             BranchingHforD::More,
-                             BranchingHforE::More,
-                             BranchingHforF::More,
-                             BranchingHforG::More, =>
-                             RoleA,
-                             RoleB,
-                             RoleC,
-                             RoleD,
-                             RoleE,
-                             RoleF,
-                             RoleG, =>
-                             RoleH,
-                            SessionMpstEight,
-                           8,
-            8
-                       );
+                s,
+                send_mpst_h_to_a,
+                send_mpst_h_to_b,
+                send_mpst_h_to_c,
+                send_mpst_h_to_d,
+                send_mpst_h_to_e,
+                send_mpst_h_to_f,
+                send_mpst_h_to_g, =>
+                BranchingHforA::More,
+                BranchingHforB::More,
+                BranchingHforC::More,
+                BranchingHforD::More,
+                BranchingHforE::More,
+                BranchingHforF::More,
+                BranchingHforG::More, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF,
+                RoleG, =>
+                RoleH,
+                SessionMpstEight,
+                8,
+                8
+            );
 
             let s = send_mpst_h_to_a((), s);
             let (_, s) = recv_mpst_h_to_a(s)?;

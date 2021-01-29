@@ -1782,83 +1782,83 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_k_to_a,
-                           send_mpst_k_to_b,
-                           send_mpst_k_to_c,
-                           send_mpst_k_to_d,
-                           send_mpst_k_to_e,
-                           send_mpst_k_to_f,
-                           send_mpst_k_to_g,
-                           send_mpst_k_to_h,
-                           send_mpst_k_to_i,
-                           send_mpst_k_to_j, =>
-                             BranchingKforA::Done,
-                             BranchingKforB::Done,
-                             BranchingKforC::Done,
-                             BranchingKforD::Done,
-                             BranchingKforE::Done,
-                             BranchingKforF::Done,
-                             BranchingKforG::Done,
-                             BranchingKforH::Done,
-                             BranchingKforI::Done,
-                             BranchingKforJ::Done, =>
-                           RoleA,
-                           RoleB,
-                           RoleC,
-                           RoleD,
-                           RoleE,
-                           RoleF,
-                           RoleG,
-                           RoleH,
-                           RoleI,
-                           RoleJ, =>
-                           RoleK,
-                            SessionMpstEleven,
-                           11,
-            11
-                       );
+                s,
+                send_mpst_k_to_a,
+                send_mpst_k_to_b,
+                send_mpst_k_to_c,
+                send_mpst_k_to_d,
+                send_mpst_k_to_e,
+                send_mpst_k_to_f,
+                send_mpst_k_to_g,
+                send_mpst_k_to_h,
+                send_mpst_k_to_i,
+                send_mpst_k_to_j, =>
+                BranchingKforA::Done,
+                BranchingKforB::Done,
+                BranchingKforC::Done,
+                BranchingKforD::Done,
+                BranchingKforE::Done,
+                BranchingKforF::Done,
+                BranchingKforG::Done,
+                BranchingKforH::Done,
+                BranchingKforI::Done,
+                BranchingKforJ::Done, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF,
+                RoleG,
+                RoleH,
+                RoleI,
+                RoleJ, =>
+                RoleK,
+                SessionMpstEleven,
+                11,
+                11
+            );
 
             close_mpst_multi(s)
         }
         i => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_k_to_a,
-                           send_mpst_k_to_b,
-                           send_mpst_k_to_c,
-                           send_mpst_k_to_d,
-                           send_mpst_k_to_e,
-                           send_mpst_k_to_f,
-                           send_mpst_k_to_g,
-                           send_mpst_k_to_h,
-                           send_mpst_k_to_i,
-                           send_mpst_k_to_j, =>
-                             BranchingKforA::More,
-                             BranchingKforB::More,
-                             BranchingKforC::More,
-                             BranchingKforD::More,
-                             BranchingKforE::More,
-                             BranchingKforF::More,
-                             BranchingKforG::More,
-                             BranchingKforH::More,
-                             BranchingKforI::More,
-                             BranchingKforJ::More, =>
-                             RoleA,
-                             RoleB,
-                             RoleC,
-                             RoleD,
-                             RoleE,
-                             RoleF,
-                             RoleG,
-                             RoleH,
-                             RoleI,
-                             RoleJ, =>
-                             RoleK,
-                            SessionMpstEleven,
-                           11,
-            11
-                       );
+                s,
+                send_mpst_k_to_a,
+                send_mpst_k_to_b,
+                send_mpst_k_to_c,
+                send_mpst_k_to_d,
+                send_mpst_k_to_e,
+                send_mpst_k_to_f,
+                send_mpst_k_to_g,
+                send_mpst_k_to_h,
+                send_mpst_k_to_i,
+                send_mpst_k_to_j, =>
+                BranchingKforA::More,
+                BranchingKforB::More,
+                BranchingKforC::More,
+                BranchingKforD::More,
+                BranchingKforE::More,
+                BranchingKforF::More,
+                BranchingKforG::More,
+                BranchingKforH::More,
+                BranchingKforI::More,
+                BranchingKforJ::More, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF,
+                RoleG,
+                RoleH,
+                RoleI,
+                RoleJ, =>
+                RoleK,
+                SessionMpstEleven,
+                11,
+                11
+            );
 
             let s = send_mpst_k_to_a((), s);
             let (_, s) = recv_mpst_k_to_a(s)?;

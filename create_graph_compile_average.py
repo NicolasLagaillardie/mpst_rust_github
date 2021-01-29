@@ -50,7 +50,7 @@ nb_participants_binary, average_binary = (list(t)
                                           for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
 
 # Change size
-ax = plt.figure(figsize=(20, 10)).gca()
+ax = plt.figure(figsize=(30, 15)).gca()
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -77,7 +77,7 @@ ax.grid(True)
 ax.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # Save fig
-plt.savefig(main_path + '/graph_average_compile.pdf')
+plt.savefig(main_path + '/graphAverageCompile.pdf')
 
 # # function to show the plot
 # plt.show()

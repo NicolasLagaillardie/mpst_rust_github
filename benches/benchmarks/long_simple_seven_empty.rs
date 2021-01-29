@@ -756,59 +756,59 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_g_to_a,
-                           send_mpst_g_to_b,
-                           send_mpst_g_to_c,
-                           send_mpst_g_to_d,
-                           send_mpst_g_to_e,
-                           send_mpst_g_to_f, =>
-                             BranchingGforA::Done,
-                             BranchingGforB::Done,
-                             BranchingGforC::Done,
-                             BranchingGforD::Done,
-                             BranchingGforE::Done,
-                             BranchingGforF::Done, =>
-                           RoleA,
-                           RoleB,
-                           RoleC,
-                           RoleD,
-                           RoleE,
-                           RoleF, =>
-                           RoleG,
-                            SessionMpstSeven,
-                           7,
-            7
-                       );
+                s,
+                send_mpst_g_to_a,
+                send_mpst_g_to_b,
+                send_mpst_g_to_c,
+                send_mpst_g_to_d,
+                send_mpst_g_to_e,
+                send_mpst_g_to_f, =>
+                BranchingGforA::Done,
+                BranchingGforB::Done,
+                BranchingGforC::Done,
+                BranchingGforD::Done,
+                BranchingGforE::Done,
+                BranchingGforF::Done, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF, =>
+                RoleG,
+                SessionMpstSeven,
+                7,
+                7
+            );
 
             close_mpst_multi(s)
         }
         i => {
             let s = choose_mpst_multi_to_all!(
-                           s,
-                           send_mpst_g_to_a,
-                           send_mpst_g_to_b,
-                           send_mpst_g_to_c,
-                           send_mpst_g_to_d,
-                           send_mpst_g_to_e,
-                           send_mpst_g_to_f,=>
-                             BranchingGforA::More,
-                             BranchingGforB::More,
-                             BranchingGforC::More,
-                             BranchingGforD::More,
-                             BranchingGforE::More,
-                             BranchingGforF::More, =>
-                             RoleA,
-                             RoleB,
-                             RoleC,
-                             RoleD,
-                             RoleE,
-                             RoleF, =>
-                             RoleG,
-                            SessionMpstSeven,
-                           7,
-            7
-                       );
+                s,
+                send_mpst_g_to_a,
+                send_mpst_g_to_b,
+                send_mpst_g_to_c,
+                send_mpst_g_to_d,
+                send_mpst_g_to_e,
+                send_mpst_g_to_f,=>
+                BranchingGforA::More,
+                BranchingGforB::More,
+                BranchingGforC::More,
+                BranchingGforD::More,
+                BranchingGforE::More,
+                BranchingGforF::More, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF, =>
+                RoleG,
+                SessionMpstSeven,
+                7,
+                7
+            );
 
             let s = send_mpst_g_to_a((), s);
             let (_, s) = recv_mpst_g_to_a(s)?;
