@@ -1160,69 +1160,71 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_i_to_a,
-                send_mpst_i_to_b,
-                send_mpst_i_to_c,
-                send_mpst_i_to_d,
-                send_mpst_i_to_e,
-                send_mpst_i_to_f,
-                send_mpst_i_to_g,
-                send_mpst_i_to_h, =>
-                  BranchingIforA::Done,
-                  BranchingIforB::Done,
-                  BranchingIforC::Done,
-                  BranchingIforD::Done,
-                  BranchingIforE::Done,
-                  BranchingIforF::Done,
-                  BranchingIforG::Done,
-                  BranchingIforH::Done, =>
-                RoleA,
-                RoleB,
-                RoleC,
-                RoleD,
-                RoleE,
-                RoleF,
-                RoleG,
-                RoleH, =>
-                RoleI,
-                 SessionMpstNine,
-                9
-            );
+                           s,
+                           send_mpst_i_to_a,
+                           send_mpst_i_to_b,
+                           send_mpst_i_to_c,
+                           send_mpst_i_to_d,
+                           send_mpst_i_to_e,
+                           send_mpst_i_to_f,
+                           send_mpst_i_to_g,
+                           send_mpst_i_to_h, =>
+                             BranchingIforA::Done,
+                             BranchingIforB::Done,
+                             BranchingIforC::Done,
+                             BranchingIforD::Done,
+                             BranchingIforE::Done,
+                             BranchingIforF::Done,
+                             BranchingIforG::Done,
+                             BranchingIforH::Done, =>
+                           RoleA,
+                           RoleB,
+                           RoleC,
+                           RoleD,
+                           RoleE,
+                           RoleF,
+                           RoleG,
+                           RoleH, =>
+                           RoleI,
+                            SessionMpstNine,
+                           9,
+            9
+                       );
 
             close_mpst_multi(s)
         }
         i => {
             let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_i_to_a,
-                send_mpst_i_to_b,
-                send_mpst_i_to_c,
-                send_mpst_i_to_d,
-                send_mpst_i_to_e,
-                send_mpst_i_to_f,
-                send_mpst_i_to_g,
-                send_mpst_i_to_h,=>
-                  BranchingIforA::More,
-                  BranchingIforB::More,
-                  BranchingIforC::More,
-                  BranchingIforD::More,
-                  BranchingIforE::More,
-                  BranchingIforF::More,
-                  BranchingIforG::More,
-                  BranchingIforH::More, =>
-                  RoleA,
-                  RoleB,
-                  RoleC,
-                  RoleD,
-                  RoleE,
-                  RoleF,
-                  RoleG,
-                  RoleH, =>
-                  RoleI,
-                 SessionMpstNine,
-                9
-            );
+                           s,
+                           send_mpst_i_to_a,
+                           send_mpst_i_to_b,
+                           send_mpst_i_to_c,
+                           send_mpst_i_to_d,
+                           send_mpst_i_to_e,
+                           send_mpst_i_to_f,
+                           send_mpst_i_to_g,
+                           send_mpst_i_to_h,=>
+                             BranchingIforA::More,
+                             BranchingIforB::More,
+                             BranchingIforC::More,
+                             BranchingIforD::More,
+                             BranchingIforE::More,
+                             BranchingIforF::More,
+                             BranchingIforG::More,
+                             BranchingIforH::More, =>
+                             RoleA,
+                             RoleB,
+                             RoleC,
+                             RoleD,
+                             RoleE,
+                             RoleF,
+                             RoleG,
+                             RoleH, =>
+                             RoleI,
+                            SessionMpstNine,
+                           9,
+            9
+                       );
 
             let s = send_mpst_i_to_a((), s);
             let (_, s) = recv_mpst_i_to_a(s)?;

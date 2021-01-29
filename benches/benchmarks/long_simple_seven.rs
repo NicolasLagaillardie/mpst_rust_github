@@ -763,12 +763,12 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_g_to_d,
                 send_mpst_g_to_e,
                 send_mpst_g_to_f, =>
-                  BranchingGforA::Done,
-                  BranchingGforB::Done,
-                  BranchingGforC::Done,
-                  BranchingGforD::Done,
-                  BranchingGforE::Done,
-                  BranchingGforF::Done, =>
+                BranchingGforA::Done,
+                BranchingGforB::Done,
+                BranchingGforC::Done,
+                BranchingGforD::Done,
+                BranchingGforE::Done,
+                BranchingGforF::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -776,7 +776,8 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleE,
                 RoleF, =>
                 RoleG,
-                 SessionMpstSeven,
+                SessionMpstSeven,
+                7,
                 7
             );
 
@@ -791,20 +792,21 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_g_to_d,
                 send_mpst_g_to_e,
                 send_mpst_g_to_f,=>
-                  BranchingGforA::More,
-                  BranchingGforB::More,
-                  BranchingGforC::More,
-                  BranchingGforD::More,
-                  BranchingGforE::More,
-                  BranchingGforF::More, =>
-                  RoleA,
-                  RoleB,
-                  RoleC,
-                  RoleD,
-                  RoleE,
-                  RoleF, =>
-                  RoleG,
+                BranchingGforA::More,
+                BranchingGforB::More,
+                BranchingGforC::More,
+                BranchingGforD::More,
+                BranchingGforE::More,
+                BranchingGforF::More, =>
+                RoleA,
+                RoleB,
+                RoleC,
+                RoleD,
+                RoleE,
+                RoleF, =>
+                RoleG,
                  SessionMpstSeven,
+                7,
                 7
             );
 
