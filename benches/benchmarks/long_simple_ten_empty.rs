@@ -910,7 +910,6 @@ type R2G<R> = RoleG<RoleG<R>>;
 type R2H<R> = RoleH<RoleH<R>>;
 type R2I<R> = RoleI<RoleI<R>>;
 type R2J<R> = RoleJ<RoleJ<R>>;
-// Binary
 // A
 enum BranchingJforA {
     More(

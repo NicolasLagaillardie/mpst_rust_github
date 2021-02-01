@@ -267,7 +267,6 @@ type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
-// Binary
 // A
 enum BranchingEforA {
     More(

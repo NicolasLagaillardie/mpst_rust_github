@@ -362,7 +362,6 @@ type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
-// Binary
 // A
 enum BranchingFforA {
     More(

@@ -133,7 +133,6 @@ type SR = Send<(), Recv<(), End>>;
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
-// Binary
 // A
 enum BranchingCforA {
     More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),

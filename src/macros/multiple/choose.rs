@@ -440,14 +440,14 @@ macro_rules! choose_mpst_multi_to_all {
             )15:0
 
             #(
-                let (name_#N:0, _) = useless#N:16::<mpstthree::role::end::RoleEnd>::new();
+                let (name_#N:0, _) = unused#N:16::<mpstthree::role::end::RoleEnd>::new();
             )0:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
             %(
-                let s = useless#N:14(
-                    useless#N:15($sessionmpst_name {
+                let s = unused#N:14(
+                    unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:5,
                         )(
@@ -459,8 +459,8 @@ macro_rules! choose_mpst_multi_to_all {
                     s,
                 );
             )(
-                let s = useless#N:14(
-                    useless#N:15($sessionmpst_name {
+                let s = unused#N:14(
+                    unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:5,
                         )(
@@ -482,7 +482,6 @@ macro_rules! choose_mpst_multi_to_all {
                 stack: stack_^N:2,
                 name: name_^N:2,
             }
-            }
-        });
+        }});
     }
 }
