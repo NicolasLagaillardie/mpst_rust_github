@@ -47,4 +47,6 @@ cg_diff.txt
 /expand
 test.txt
 tests/fail.rs
-tests/works.rs
+tests/work.rs
+tests/fail_2.rs
+examples/test.rs

@@ -123,7 +123,7 @@ fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
-    let x: u32 = rng.gen_range(0, 2);
+    let x: u32 = rng.gen_range(0..2);
 
     let s = send_mpst_c_to_a(0, s);
 

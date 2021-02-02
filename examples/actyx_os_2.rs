@@ -1,5 +1,6 @@
-use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
+use mpstthree::role::Role;
 use mpstthree::{
     bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_normal_role,
     create_recv_mpst_session, create_recv_mpst_session_bundle, create_send_mpst_session,
@@ -159,7 +160,7 @@ create_recv_mpst_session_bundle!(
     Api,
     next_api,
     1, |
-    recv_storage_from_controller,
+    recv_start_storage_from_controller,
     Controller,
     next_controller,
     2, |
@@ -192,18 +193,11 @@ enum BranchingSforA<N: marker::Send> {
     Starting(
         SessionMpstFour<Recv<N, End>, End, RecursAtoS<N>, Controller<RecvStorageChoice>, NameApi>,
     ),
-    Up(
-        SessionMpstFour<
-            End,
-            End,
-            Send<N, Recv<N, RecursAtoS<N>>>,
-            Storage<Storage<RecvStorageChoice>>,
-            NameApi,
-        >,
-    ),
+    Up(SessionMpstFour<End, End, Recv<N, RecursAtoS<N>>, Storage<RecvStorageChoice>, NameApi>),
     Down(SessionMpstFour<Recv<N, End>, End, RecursAtoS<N>, Controller<RecvStorageChoice>, NameApi>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
+type Trick<N> = Recv<N, RecursAtoS<N>>;
 type RecursAtoS<N> = Recv<BranchingSforA<N>, End>;
 // Controller
 enum BranchingSforC<N: marker::Send> {
@@ -263,7 +257,7 @@ type EndpointStorageInit<N> = SessionMpstFour<
 >;
 
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_logs_from_storage, {
+    offer_mpst!(s, recv_response_api_from_storage, {
         BranchingSforA::Starting(s) => {
 
             let (start, s) = recv_start_api_from_controller(s)?;
@@ -273,7 +267,11 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
             endpoint_api(s)
         },
         BranchingSforA::Up(s) => {
-            let s = send_request_storage(random::<i64>(), s);
+            let request = random::<i32>();
+
+            println!("Request from Storage: {}", request);
+
+            let s = send_request_storage(request, s);
 
             let (response, s) = recv_response_api_from_storage(s)?;
 
@@ -306,7 +304,7 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
 fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_start_controller_from_storage, {
         BranchingSforC::Starting(s) => {
-            let start = random::<i64>();
+            let start = random::<i32>();
 
             println!("Send start to API: {}", start);
 
@@ -325,7 +323,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Send stop to API: {}", failure);
 
-            let stop = random::<i64>();
+            let stop = random::<i32>();
 
             let s = send_start_controller_to_api(stop, s);
 
@@ -358,7 +356,7 @@ fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>> {
-    let (status, s) = recv_storage_from_controller(s)?;
+    let (status, s) = recv_start_storage_from_controller(s)?;
     recurs_storage(s, status, 10)
 }
 
@@ -374,11 +372,12 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 BranchingSforC::Starting,
                 BranchingSforL::Starting, =>
                 Api,
-                Controller, =>
-                Logs,
+                Controller,
+                Logs, =>
+                Storage,
                 SessionMpstFour,
-                3,
-                3
+                4,
+                4
             );
 
             recurs_storage(s, 1, loops - 1)
@@ -393,11 +392,12 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 BranchingSforC::Up,
                 BranchingSforL::Up, =>
                 Api,
-                Controller, =>
-                Logs,
+                Controller,
+                Logs, =>
+                Storage,
                 SessionMpstFour,
-                3,
-                3
+                4,
+                4
             );
 
             let (request, s) = recv_request_storage_from_api(s)?;
@@ -407,7 +407,7 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 recurs_storage(s, 3, loops - 1)
             } else {
                 let mut rng = thread_rng();
-                let failure = rng.gen_range(1..=3);
+                let failure: i32 = rng.gen_range(1..=3);
 
                 if failure == 1 {
                     recurs_storage(s, 2, loops - 1)
@@ -426,18 +426,23 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 BranchingSforC::Down,
                 BranchingSforL::Down, =>
                 Api,
-                Controller, =>
-                Logs,
+                Controller,
+                Logs, =>
+                Storage,
                 SessionMpstFour,
-                3,
-                3
+                4,
+                4
             );
 
-            let failure = random::<i64>();
+            let failure = random::<i32>();
 
             println!("Failure from Storage: {}", failure);
 
             let s = send_failure_storage_to_controller(failure, s);
+
+            let (start, s) = recv_start_storage_from_controller(s)?;
+
+            println!("Receive restart from controller: {}", start);
 
             recurs_storage(s, 0, loops - 1)
         }
@@ -451,11 +456,12 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 BranchingSforC::Close,
                 BranchingSforL::Close, =>
                 Api,
-                Controller, =>
-                Logs,
+                Controller,
+                Logs, =>
+                Storage,
                 SessionMpstFour,
-                3,
-                3
+                4,
+                4
             );
 
             close_mpst_multi(s)

@@ -139,7 +139,7 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
 
 fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
-    let x: u32 = rng.gen_range(0, 2);
+    let x: u32 = rng.gen_range(0..2);
 
     if x == 1 {
         let s = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
