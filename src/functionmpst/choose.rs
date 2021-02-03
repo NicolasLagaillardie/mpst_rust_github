@@ -57,10 +57,11 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
 
 #[doc(hidden)]
 macro_rules! choose_mpst_a {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
-        let (session_1_2, session_2_1) = <$session_1>::new();
-        let (session_1_3, session_3_1) = <$session_2>::new();
-        let (session_3_2, session_2_3) = <$session_3>::new();
+    ($stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+        let (session_1_2, session_2_1) = <_ as Session>::new();
+        let (session_1_3, session_3_1) = <_ as Session>::new();
+        let (session_3_2, session_2_3) = <_ as Session>::new();
+
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
@@ -106,10 +107,11 @@ macro_rules! choose_mpst_a {
 
 #[doc(hidden)]
 macro_rules! choose_mpst_b {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
-        let (session_2_1, session_1_2) = <$session_1>::new();
-        let (session_2_3, session_3_2) = <$session_2>::new();
-        let (session_3_1, session_1_3) = <$session_3>::new();
+    ($stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+        let (session_1_2, session_2_1) = <_ as Session>::new();
+        let (session_1_3, session_3_1) = <_ as Session>::new();
+        let (session_3_2, session_2_3) = <_ as Session>::new();
+
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
@@ -155,10 +157,11 @@ macro_rules! choose_mpst_b {
 
 #[doc(hidden)]
 macro_rules! choose_mpst_c {
-    ($session_1:ty, $session_2:ty, $session_3:ty, $stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
-        let (session_3_1, session_1_3) = <$session_1>::new();
-        let (session_3_2, session_2_3) = <$session_2>::new();
-        let (session_2_1, session_1_2) = <$session_3>::new();
+    ($stack_1:ty, $stack_2:ty, $stack_3:ty, $receiver_1:ident, $receiver_2:ident, $sender:ident, $session:expr, $pat:path, $next:ident) => {{
+        let (session_1_2, session_2_1) = <_ as Session>::new();
+        let (session_1_3, session_3_1) = <_ as Session>::new();
+        let (session_3_2, session_2_3) = <_ as Session>::new();
+
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
@@ -244,9 +247,6 @@ where
     R5: Role + 'a,
 {
     choose_mpst_a!(
-        S2,
-        S3,
-        S0,
         R0,
         R2,
         R4,
@@ -301,9 +301,6 @@ where
     R5: Role + 'a,
 {
     choose_mpst_a!(
-        S4,
-        S5,
-        S1,
         R1,
         R3,
         R5,
@@ -357,9 +354,6 @@ where
     R5: Role + 'a,
 {
     choose_mpst_b!(
-        S2,
-        S3,
-        S0,
         R0,
         R2,
         R4,
@@ -413,9 +407,6 @@ where
     R5: Role + 'a,
 {
     choose_mpst_b!(
-        S4,
-        S5,
-        S1,
         R1,
         R3,
         R5,
@@ -469,9 +460,6 @@ where
     R5: Role + 'a,
 {
     choose_mpst_c!(
-        S2,
-        S3,
-        S0,
         R0,
         R2,
         R4,
@@ -525,9 +513,6 @@ where
     R5: Role + 'a,
 {
     choose_mpst_c!(
-        S4,
-        S5,
-        S1,
         R1,
         R3,
         R5,

@@ -429,7 +429,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 #[macro_export]
 macro_rules! choose_mpst_multi_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! 1 : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{ // Need to change 1 to $exclusion
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{ // Need to change 1 to $exclusion
 
             #(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
@@ -449,9 +449,9 @@ macro_rules! choose_mpst_multi_to_all {
                 let s = unused#N:14(
                     unused#N:15($sessionmpst_name {
                         ~(
-                            session#N:1 : channel_~N:5,
+                            session#N:1 : channel_~N:7,
                         )(
-                            session#N:1 : channel_~N:5,
+                            session#N:1 : channel_~N:7,
                         )0*
                         stack: stack_#N:0,
                         name: name_#N:0,
@@ -462,22 +462,22 @@ macro_rules! choose_mpst_multi_to_all {
                 let s = unused#N:14(
                     unused#N:15($sessionmpst_name {
                         ~(
-                            session#N:1 : channel_~N:5,
+                            session#N:1 : channel_~N:7,
                         )(
-                            session#N:1 : channel_~N:5,
+                            session#N:1 : channel_~N:7,
                         )0*
                         stack: stack_#N:0,
                         name: name_#N:0,
                     }),
                     $session,
                 );
-            )0*
+            )2*
 
             mpstthree::binary::cancel(s);
 
             $sessionmpst_name {
                 #(
-                    session#N:0: channel_#N:7 ,
+                    session#N:0: channel_#N:17 ,
                 )0:0
                 stack: stack_^N:2,
                 name: name_^N:2,

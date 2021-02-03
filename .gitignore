@@ -45,7 +45,7 @@ cg_diff.txt
 
 # Expand
 /expand
-test.txt
+test.rs
 tests/fail.rs
 tests/work.rs
 tests/fail_2.rs

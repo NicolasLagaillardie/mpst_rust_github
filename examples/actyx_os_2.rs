@@ -82,7 +82,7 @@ create_send_mpst_session_bundle!(
     Api,
     next_api,
     1, |
-    send_logs_to_controller,
+    send_failure_logs_to_controller,
     Controller,
     next_controller,
     2, |
@@ -152,7 +152,7 @@ create_recv_mpst_session_bundle!(
     Api,
     next_api,
     1, |
-    recv_logs_from_controller,
+    recv_start_logs_from_controller,
     Controller,
     next_controller,
     2, |
@@ -411,7 +411,14 @@ fn recurs_storage(
                 4
             );
 
-            recurs_storage(s, 1, loops - 1, payload)
+            let mut rng = thread_rng();
+            let failure: i32 = rng.gen_range(1..=6);
+
+            if failure == 1 {
+                recurs_storage(s, 3, loops - 1, 0)
+            } else {
+                recurs_storage(s, 1, loops - 1, payload)
+            }
         }
         1 => {
             let s = choose_mpst_multi_to_all!(
@@ -433,17 +440,13 @@ fn recurs_storage(
 
             let (request, s) = recv_request_storage_from_api(s)?;
 
-            if loops <= 0 {
-                recurs_storage(s, 4, loops - 1, request)
-            } else {
-                let mut rng = thread_rng();
-                let failure: i32 = rng.gen_range(1..=6);
+            let mut rng = thread_rng();
+            let failure: i32 = rng.gen_range(1..=6);
 
-                if failure == 1 {
-                    recurs_storage(s, 3, loops - 1, request)
-                } else {
-                    recurs_storage(s, 2, loops - 1, request)
-                }
+            if failure == 1 {
+                recurs_storage(s, 3, loops - 1, 0)
+            } else {
+                recurs_storage(s, 2, loops - 1, request)
             }
         }
         2 => {
@@ -473,7 +476,7 @@ fn recurs_storage(
                 let failure: i32 = rng.gen_range(1..=6);
 
                 if failure == 1 {
-                    recurs_storage(s, 3, loops - 1, payload)
+                    recurs_storage(s, 3, loops - 1, 0)
                 } else {
                     recurs_storage(s, 1, loops - 1, payload)
                 }
@@ -505,7 +508,7 @@ fn recurs_storage(
 
             let (start, s) = recv_start_storage_from_controller(s)?;
 
-            println!("Receive restart from controller: {}", start);
+            println!("Receive restart Storage from controller: {}", start);
 
             recurs_storage(s, start, loops - 1, payload)
         }
