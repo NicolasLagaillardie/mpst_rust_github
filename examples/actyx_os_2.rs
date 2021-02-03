@@ -22,6 +22,15 @@ create_sessionmpst!(SessionMpstFour, 4);
 //     close: 0 // Needed for overflow
 // }
 
+// Workaround for the Send<Recv<X>> bug
+// G = Storage?Controller[start].µX.(choice at Storage) {
+//     starting: API?Controller[start].X // start and check new state
+//     up_request: API!Storage[request].X // do stuff
+//     up_response: .API?Storage[response].X // do stuff
+//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting
+//     close: 0 // Needed for overflow
+// }
+
 // Create Roles
 create_normal_role!(Api, next_api, DualAPI, next_dual_api); // #1
 create_normal_role!(
@@ -193,18 +202,23 @@ enum BranchingSforA<N: marker::Send> {
     Starting(
         SessionMpstFour<Recv<N, End>, End, RecursAtoS<N>, Controller<RecvStorageChoice>, NameApi>,
     ),
-    Up(SessionMpstFour<End, End, Recv<N, RecursAtoS<N>>, Storage<RecvStorageChoice>, NameApi>),
+    UpRequest(
+        SessionMpstFour<End, End, Send<N, RecursAtoS<N>>, Storage<RecvStorageChoice>, NameApi>,
+    ),
+    UpResponse(
+        SessionMpstFour<End, End, Recv<N, RecursAtoS<N>>, Storage<RecvStorageChoice>, NameApi>,
+    ),
     Down(SessionMpstFour<Recv<N, End>, End, RecursAtoS<N>, Controller<RecvStorageChoice>, NameApi>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
-type Trick<N> = Recv<N, RecursAtoS<N>>;
 type RecursAtoS<N> = Recv<BranchingSforA<N>, End>;
 // Controller
 enum BranchingSforC<N: marker::Send> {
     Starting(
         SessionMpstFour<Send<N, End>, End, RecursCtoS<N>, Api<RecvStorageChoice>, NameController>,
     ),
-    Up(SessionMpstFour<End, End, RecursCtoS<N>, RecvStorageChoice, NameController>),
+    UpRequest(SessionMpstFour<End, End, RecursCtoS<N>, RecvStorageChoice, NameController>),
+    UpResponse(SessionMpstFour<End, End, RecursCtoS<N>, RecvStorageChoice, NameController>),
     Down(
         SessionMpstFour<
             Send<N, End>,
@@ -220,7 +234,8 @@ type RecursCtoS<N> = Recv<BranchingSforC<N>, End>;
 // Logs
 enum BranchingSforL<N: marker::Send> {
     Starting(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
-    Up(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
+    UpRequest(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
+    UpResponse(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
     Down(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameLogs>),
 }
@@ -266,12 +281,17 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 
             endpoint_api(s)
         },
-        BranchingSforA::Up(s) => {
+        BranchingSforA::UpRequest(s) => {
+
             let request = random::<i32>();
 
-            println!("Request from Storage: {}", request);
+            println!("Request to Storage: {}", request);
 
             let s = send_request_storage(request, s);
+
+            endpoint_api(s)
+        },
+        BranchingSforA::UpResponse(s) => {
 
             let (response, s) = recv_response_api_from_storage(s)?;
 
@@ -312,7 +332,10 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             recurs_controller(s)
         },
-        BranchingSforC::Up(s) => {
+        BranchingSforC::UpRequest(s) => {
+            recurs_controller(s)
+        },
+        BranchingSforC::UpResponse(s) => {
             recurs_controller(s)
         },
         BranchingSforC::Down(s) => {
@@ -321,9 +344,9 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Failure from Storage: {}", failure);
 
-            println!("Send stop to API: {}", failure);
-
             let stop = random::<i32>();
+
+            println!("Send stop to API: {}", stop);
 
             let s = send_start_controller_to_api(stop, s);
 
@@ -343,7 +366,10 @@ fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>> {
         BranchingSforL::Starting(s) => {
             endpoint_logs(s)
         },
-        BranchingSforL::Up(s) => {
+        BranchingSforL::UpRequest(s) => {
+            endpoint_logs(s)
+        },
+        BranchingSforL::UpResponse(s) => {
             endpoint_logs(s)
         },
         BranchingSforL::Down(s) => {
@@ -357,10 +383,15 @@ fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>> {
     let (status, s) = recv_start_storage_from_controller(s)?;
-    recurs_storage(s, status, 10)
+    recurs_storage(s, status, 20, 0)
 }
 
-fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<(), Box<dyn Error>> {
+fn recurs_storage(
+    s: EndpointStorage<i32>,
+    status: i32,
+    loops: i32,
+    payload: i32,
+) -> Result<(), Box<dyn Error>> {
     match status {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -380,7 +411,7 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 4
             );
 
-            recurs_storage(s, 1, loops - 1)
+            recurs_storage(s, 1, loops - 1, payload)
         }
         1 => {
             let s = choose_mpst_multi_to_all!(
@@ -388,9 +419,9 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 send_response_storage_to_api,
                 send_failure_storage_to_controller,
                 send_storage_to_logs, =>
-                BranchingSforA::Up,
-                BranchingSforC::Up,
-                BranchingSforL::Up, =>
+                BranchingSforA::UpRequest,
+                BranchingSforC::UpRequest,
+                BranchingSforL::UpRequest, =>
                 Api,
                 Controller,
                 Logs, =>
@@ -401,22 +432,54 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
             );
 
             let (request, s) = recv_request_storage_from_api(s)?;
-            let s = send_response_storage_to_api(-request, s);
 
             if loops <= 0 {
-                recurs_storage(s, 3, loops - 1)
+                recurs_storage(s, 4, loops - 1, request)
             } else {
                 let mut rng = thread_rng();
-                let failure: i32 = rng.gen_range(1..=3);
+                let failure: i32 = rng.gen_range(1..=6);
 
                 if failure == 1 {
-                    recurs_storage(s, 2, loops - 1)
+                    recurs_storage(s, 3, loops - 1, request)
                 } else {
-                    recurs_storage(s, 1, loops - 1)
+                    recurs_storage(s, 2, loops - 1, request)
                 }
             }
         }
         2 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                send_response_storage_to_api,
+                send_failure_storage_to_controller,
+                send_storage_to_logs, =>
+                BranchingSforA::UpResponse,
+                BranchingSforC::UpResponse,
+                BranchingSforL::UpResponse, =>
+                Api,
+                Controller,
+                Logs, =>
+                Storage,
+                SessionMpstFour,
+                4,
+                4
+            );
+
+            let s = send_response_storage_to_api(-payload, s);
+
+            if loops <= 0 {
+                recurs_storage(s, 4, loops - 1, payload)
+            } else {
+                let mut rng = thread_rng();
+                let failure: i32 = rng.gen_range(1..=6);
+
+                if failure == 1 {
+                    recurs_storage(s, 3, loops - 1, payload)
+                } else {
+                    recurs_storage(s, 1, loops - 1, payload)
+                }
+            }
+        }
+        3 => {
             let s = choose_mpst_multi_to_all!(
                 s,
                 send_response_storage_to_api,
@@ -436,7 +499,7 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
 
             let failure = random::<i32>();
 
-            println!("Failure from Storage: {}", failure);
+            println!("Failure of Storage: {}", failure);
 
             let s = send_failure_storage_to_controller(failure, s);
 
@@ -444,7 +507,7 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
 
             println!("Receive restart from controller: {}", start);
 
-            recurs_storage(s, 0, loops - 1)
+            recurs_storage(s, start, loops - 1, payload)
         }
         _ => {
             let s = choose_mpst_multi_to_all!(
@@ -463,6 +526,8 @@ fn recurs_storage(s: EndpointStorage<i32>, status: i32, loops: i32) -> Result<()
                 4,
                 4
             );
+
+            println!("Finish protocol");
 
             close_mpst_multi(s)
         }
