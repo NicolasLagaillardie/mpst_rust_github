@@ -1,7 +1,7 @@
 mod unit;
 
 #[test]
-fn tests(){
+fn tests() {
     let t = trybuild::TestCases::new();
     // Unit tests
     t.pass("tests/unit/checker.rs");
@@ -34,7 +34,6 @@ fn tests(){
     t.pass("tests/infinite_type/work.rs");
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
-
 }
 
 #[test]
