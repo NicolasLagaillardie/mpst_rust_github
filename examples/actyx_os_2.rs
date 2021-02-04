@@ -24,7 +24,7 @@ create_sessionmpst!(SessionMpstFour, 4);
 
 // Workaround for the Send<Recv<X>>² bug
 // G = Storage?Controller[start].µX.(choice at Storage) {
-//     starting: API?Controller[start].X // start and check new state
+//     starting: Storage!Controller[started].API?Controller[start].X // start and check new state
 //     up_request: API!Storage[request].X // do stuff
 //     up_response: API?Storage[response].X // do stuff
 //     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting. Should get success message
