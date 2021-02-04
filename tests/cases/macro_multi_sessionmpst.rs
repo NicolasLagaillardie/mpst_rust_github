@@ -14,8 +14,9 @@ create_sessionmpst!(SessionMpstFour, 4);
 // Create an A pawn
 create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 
-#[test]
-pub fn basic_macros() {
+/////////////////////////////////////////
+
+fn basic_macros() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (sender1, _) = End::new();
@@ -57,4 +58,10 @@ pub fn basic_macros() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    basic_macros();
 }

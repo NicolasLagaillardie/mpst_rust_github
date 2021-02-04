@@ -10,12 +10,21 @@ keywords = ["multiparty", "session"]
 categories = ["concurrency", "development-tools::cargo-plugins"]
 exclude = [".travis.yml", ".gitignore"]
 edition = "2018"
+autotests = false
 
 [workspace]
 
 [[bin]]
 name = "mpst"
 path = "main.rs"
+
+[[test]]
+name = "tests"
+path = "tests/main.rs"
+
+[[bench]]
+name = "main"
+harness = false
 
 [profile.release]
 debug = true
@@ -30,10 +39,7 @@ mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "
 
 [dev-dependencies]
 criterion = "0.3.4"
-
-[[bench]]
-name = "main"
-harness = false
+trybuild = "1.0.40"
 
 [badges]
 maintenance = { status = "actively-developed" }

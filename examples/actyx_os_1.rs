@@ -33,35 +33,10 @@ create_normal_role!(Storage, next_storage, DualStorage, next_dual_storage); // #
 
 // Create send
 create_send_mpst_session_bundle!(
-    send_failed_api,
-    Controller,
-    next_controller,
-    1, |
-    send_api_to_logs,
-    Logs,
-    next_logs,
-    2, |
-    send_request_storage,
-    Storage,
-    next_storage,
-    3, | =>
-    Api,
-    SessionMpstFour,
-    4
-);
-create_send_mpst_session_bundle!(
-    send_start_controller_to_api,
-    Api,
-    next_api,
-    1, |
     send_start_controller_to_logs,
     Logs,
     next_logs,
-    2, |
-    send_start_controller_to_storage,
-    Storage,
-    next_storage,
-    3, | =>
+    2, | =>
     Controller,
     SessionMpstFour,
     4
@@ -83,85 +58,36 @@ create_send_mpst_session_bundle!(
     SessionMpstFour,
     4
 );
-create_send_mpst_session_bundle!(
-    send_response_storage_to_api,
-    Api,
-    next_api,
-    1, |
-    send_failure_storage_to_controller,
-    Controller,
-    next_controller,
-    2, |
-    send_storage_to_logs,
-    Logs,
-    next_logs,
-    3, | =>
-    Storage,
-    SessionMpstFour,
-    4
-);
 
 // Create recv
 create_recv_mpst_session_bundle!(
-    recv_start_api_from_controller,
-    Controller,
-    next_controller,
-    1, |
     recv_api_from_logs,
     Logs,
     next_logs,
-    2, |
-    recv_response_api_from_storage,
-    Storage,
-    next_storage,
-    3, | =>
+    2, | =>
     Api,
     SessionMpstFour,
     4
 );
 create_recv_mpst_session_bundle!(
-    recv_start_controller_from_api,
-    Api,
-    next_api,
-    1, |
     recv_start_controller_from_logs,
     Logs,
     next_logs,
-    2, |
-    recv_start_controller_from_storage,
-    Storage,
-    next_storage,
-    3, | =>
+    2, | =>
     Controller,
     SessionMpstFour,
     4
 );
 create_recv_mpst_session_bundle!(
-    recv_logs_from_api,
-    Api,
-    next_api,
-    1, |
     recv_start_logs_from_controller,
     Controller,
     next_controller,
-    2, |
-    recv_logs_from_storage,
-    Storage,
-    next_storage,
-    3, | =>
+    2, | =>
     Logs,
     SessionMpstFour,
     4
 );
 create_recv_mpst_session_bundle!(
-    recv_request_storage_from_api,
-    Api,
-    next_api,
-    1, |
-    recv_start_storage_from_controller,
-    Controller,
-    next_controller,
-    2, |
     recv_storage_from_logs,
     Logs,
     next_logs,

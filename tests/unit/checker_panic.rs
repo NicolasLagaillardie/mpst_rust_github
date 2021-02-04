@@ -5,7 +5,6 @@ use mpstthree::sessionmpst::SessionMpst;
 
 use std::any::type_name;
 use std::boxed::Box;
-use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
@@ -59,8 +58,6 @@ type QueueBEnd = RoleEnd;
 type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 type QueueBRecurs = RoleC<RoleEnd>;
 
-type QueueCEnd = RoleEnd;
-type QueueCVideo = RoleA<RoleA<RoleA<RoleB<RoleEnd>>>>;
 type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
 type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 
@@ -70,9 +67,6 @@ type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCforBtoC<N>, QueueCFull, Rol
 
 /// For A
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
-
-/// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleB<RoleEnd>>;
 
 fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
@@ -166,44 +160,48 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
 
 /////////////////////////////////////////
 
-fn main() {
+type EndpointBRecursPanicStack<N> = SessionMpst<End, RecursBtoC<N>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+
+pub fn test_checker_panic_stack() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            // Get the new sessionmpst of the passive roles
-            let state_branches_receivers = RandomState::new();
-            let mut branches_receivers: HashMap<String, &Vec<String>> =
-                HashMap::with_hasher(state_branches_receivers);
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            branches_receivers.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
-            branches_receivers.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
+            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBRecurs<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointBRecursPanicStack<i32>, _) = SessionMpst::new();
             let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
 
-            // Get the new stack of the active role
-            let state_branches_sender = RandomState::new();
-            let mut branches_sender: HashMap<String, &Vec<String>> =
-                HashMap::with_hasher(state_branches_sender);
+            checker(s1, s2, s3, &hm, &HashMap::new())?;
+        }
+        Ok(())
+    }()
+    .is_ok());
+}
 
-            let (s_video, _): (QueueCVideo, _) = Role::new();
-            let (s_end, _): (QueueCEnd, _) = Role::new();
+type EndpointBRecursPanicName<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleC<RoleEnd>>;
 
-            let mut stacks: Vec<String> = Vec::new();
-            stacks.push(type_of(&s_video).to_string());
-            stacks.push(type_of(&s_end).to_string());
+pub fn test_checker_panic_name() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        {
+            let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
-            branches_sender.insert(String::from("Branche0AtoC<i32>"), &stacks);
-            branches_sender.insert(String::from("Branche0BtoC<i32>"), &stacks);
+            let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
+            let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
+            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
+            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
-            assert_eq!(a, "A: A?C.A!C.µX( A?C.A!B.A?B.A!C.X & 0 )");
-            assert_eq!(b, "B: µX( B?A.B!A.X & 0 )");
-            assert_eq!(c, "C: C!A.C?A.µX( C!A.C?A.X + 0 )");
+            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
+            let (s2, _): (EndpointBRecursPanicName<i32>, _) = SessionMpst::new();
+            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+
+            checker(s1, s2, s3, &hm, &HashMap::new())?;
         }
         Ok(())
     }()

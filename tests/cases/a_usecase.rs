@@ -227,8 +227,9 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
-#[test]
-pub fn run_a_usecase_left() {
+/////////////////////////////////////////
+
+fn run_a_usecase_left() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test video branch.
         {
@@ -244,8 +245,7 @@ pub fn run_a_usecase_left() {
     .is_ok());
 }
 
-#[test]
-pub fn run_a_usecase_right() {
+fn run_a_usecase_right() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {
@@ -261,8 +261,7 @@ pub fn run_a_usecase_right() {
     .is_ok());
 }
 
-#[test]
-pub fn run_a_usecase_checker() {
+fn run_a_usecase_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();
@@ -281,4 +280,12 @@ pub fn run_a_usecase_checker() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    run_a_usecase_left();
+    run_a_usecase_right();
+    run_a_usecase_checker();
 }

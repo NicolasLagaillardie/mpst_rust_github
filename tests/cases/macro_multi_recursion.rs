@@ -202,8 +202,7 @@ fn client_recurs(
 
 ////////////////////////////////////////
 
-#[test]
-pub fn new_run_usecase_recursive() {
+fn new_run_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
@@ -215,4 +214,10 @@ pub fn new_run_usecase_recursive() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    new_run_usecase_recursive();
 }

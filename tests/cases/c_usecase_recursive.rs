@@ -219,8 +219,7 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
 
 /////////////////////////////////////////
 
-#[test]
-pub fn run_c_usecase_recursive() {
+fn run_c_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
@@ -237,8 +236,7 @@ pub fn run_c_usecase_recursive() {
 type QueueCEnd = RoleEnd;
 type QueueCVideo = RoleA<RoleA<RoleA<RoleB<RoleEnd>>>>;
 
-#[test]
-pub fn run_c_usecase_recursive_checker() {
+fn run_c_usecase_recursive_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             // Get the new sessionmpst of the passive roles
@@ -280,4 +278,11 @@ pub fn run_c_usecase_recursive_checker() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    run_c_usecase_recursive();
+    run_c_usecase_recursive_checker();
 }

@@ -150,8 +150,9 @@ fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
     )
 }
 
-#[test]
-pub fn simple_choice() {
+/////////////////////////////////////////
+
+fn simple_choice() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
@@ -184,8 +185,7 @@ pub fn simple_choice() {
     .is_ok());
 }
 
-#[test]
-pub fn simple_choice_checker() {
+fn simple_choice_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();
@@ -204,4 +204,11 @@ pub fn simple_choice_checker() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    simple_choice();
+    simple_choice_checker();
 }

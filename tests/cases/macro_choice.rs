@@ -249,8 +249,9 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
-#[test]
-pub fn run_usecase_right() {
+/////////////////////////////////////////
+
+fn run_usecase_right() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {
@@ -266,8 +267,7 @@ pub fn run_usecase_right() {
     .is_ok());
 }
 
-#[test]
-pub fn run_usecase_left() {
+fn run_usecase_left() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test video branch.
         {
@@ -281,4 +281,11 @@ pub fn run_usecase_left() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    run_usecase_right();
+    run_usecase_left();
 }

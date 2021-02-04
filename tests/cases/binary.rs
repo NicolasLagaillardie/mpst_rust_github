@@ -14,8 +14,7 @@ use std::time::Duration;
 
 // Test sending a ping across threads.
 
-#[test]
-pub fn ping_works() {
+fn ping_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         let s = fork(move |s: Send<(), End>| {
             let s = send((), s);
@@ -29,22 +28,19 @@ pub fn ping_works() {
     .is_ok());
 }
 
-#[test]
-pub fn head_str() {
+fn head_str() {
     assert_eq!(End::head_str(), String::from("End"));
     assert_eq!(Send::<i32, End>::head_str(), String::from("Send"));
     assert_eq!(Recv::<i32, End>::head_str(), String::from("Recv"));
 }
 
-#[test]
-pub fn tail_str() {
+fn tail_str() {
     assert_eq!(End::tail_str(), String::from(""));
     assert_eq!(Send::<i32, End>::tail_str(), String::from("End<>"));
     assert_eq!(Recv::<i32, End>::tail_str(), String::from("End<>"));
 }
 
-#[test]
-pub fn new_types() {
+fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 
     assert_eq!(session_end_1.sender.send(()), Ok(()));
@@ -83,8 +79,7 @@ fn simple_calc_server(s: SimpleCalcServer<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
-#[test]
-pub fn simple_calc_works() {
+fn simple_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         let mut rng = thread_rng();
 
@@ -144,8 +139,7 @@ fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[test]
-pub fn nice_calc_works() {
+fn nice_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Pick some random numbers.
         let mut rng = thread_rng();
@@ -181,8 +175,7 @@ pub fn nice_calc_works() {
 
 // Test cancellation.
 
-#[test]
-pub fn cancel_recv_works() {
+fn cancel_recv_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
     assert!(|| -> Result<(), Box<dyn Error>> {
@@ -194,8 +187,7 @@ pub fn cancel_recv_works() {
     assert!(other_thread.join().is_err());
 }
 
-#[test]
-pub fn cancel_send_works() {
+fn cancel_send_works() {
     let (other_thread, s) = fork_with_thread_id(move |s: Recv<(), End>| {
         cancel(s);
         Ok(())
@@ -213,8 +205,7 @@ pub fn cancel_send_works() {
 
 // Test cancellation of delegation.
 
-#[test]
-pub fn delegation_works() {
+fn delegation_works() {
     let (other_thread1, s) = fork_with_thread_id(nice_calc_server);
     let (other_thread2, u) = fork_with_thread_id(move |u: Recv<NiceCalcClient<i32>, End>| {
         cancel(u);
@@ -234,8 +225,7 @@ pub fn delegation_works() {
 
 // Test cancellation of closures.
 
-#[test]
-pub fn closure_works() {
+fn closure_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
     assert!(|| -> Result<i32, Box<dyn Error>> {
@@ -301,8 +291,7 @@ fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32,
     }
 }
 
-#[test]
-pub fn recursion_works() {
+fn recursion_works() {
     // Pick some random numbers.
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
@@ -322,8 +311,7 @@ pub fn recursion_works() {
 
 // Test selection.
 
-#[test]
-pub fn selection_works() {
+fn selection_works() {
     let mut other_threads = Vec::new();
     let mut rs = Vec::new();
 
@@ -417,4 +405,21 @@ fn deadlock_new() {
         Ok(())
     }()
     .unwrap();
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    ping_works();
+    head_str();
+    tail_str();
+    new_types();
+    simple_calc_works();
+    nice_calc_works();
+    cancel_recv_works();
+    cancel_send_works();
+    delegation_works();
+    closure_works();
+    recursion_works();
+    selection_works();
 }

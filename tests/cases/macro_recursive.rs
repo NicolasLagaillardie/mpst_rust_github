@@ -169,8 +169,9 @@ fn client_recurs(
     }
 }
 
-#[test]
-pub fn run_macro_recursive() {
+/////////////////////////////////////////
+
+fn run_macro_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
@@ -182,4 +183,10 @@ pub fn run_macro_recursive() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    run_macro_recursive();
 }

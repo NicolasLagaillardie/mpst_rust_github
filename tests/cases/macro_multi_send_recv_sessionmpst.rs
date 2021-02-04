@@ -66,8 +66,7 @@ bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst, 5);
 
 ////////////////////////////////////////
 
-#[test]
-pub fn test_new_send() {
+fn test_new_send() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c, thread_d, thread_e) =
@@ -82,4 +81,10 @@ pub fn test_new_send() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    test_new_send();
 }

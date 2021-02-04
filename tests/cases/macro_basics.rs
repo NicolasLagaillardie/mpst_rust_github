@@ -63,8 +63,9 @@ fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
-#[test]
-pub fn basic_macros_send() {
+/////////////////////////////////////////
+
+fn basic_macros_send() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(send_a_to_d, pawn, recv_d_to_a);
@@ -78,8 +79,7 @@ pub fn basic_macros_send() {
     .is_ok());
 }
 
-#[test]
-pub fn basic_macros_recv() {
+fn basic_macros_recv() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(recv_a_to_d, pawn, send_d_to_a);
@@ -91,4 +91,11 @@ pub fn basic_macros_recv() {
         Ok(())
     }()
     .is_ok());
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    basic_macros_send();
+    basic_macros_recv();
 }

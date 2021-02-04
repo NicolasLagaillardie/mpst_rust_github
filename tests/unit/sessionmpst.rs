@@ -17,8 +17,7 @@ type QueueA = RoleB<RoleC<RoleEnd>>;
 /// Creating the MP sessions
 type Endpoint<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
 
-#[test]
-pub fn sessionmpst_fields() {
+fn sessionmpst_fields() {
     let (sessionmpst_1, sessionmpst_2) = Endpoint::<i32>::new();
 
     // sessionmpst_1
@@ -40,8 +39,7 @@ pub fn sessionmpst_fields() {
     assert_eq!(there2_name.sender.send(()).unwrap_or(()), ());
 }
 
-#[test]
-pub fn sessionmpst_methods() {
+fn sessionmpst_methods() {
     assert_eq!(
         Endpoint::<i32>::head_str(),
         format!(
@@ -63,4 +61,11 @@ pub fn sessionmpst_methods() {
             RoleA::<RoleEnd>::tail_str()
         )
     );
+}
+
+/////////////////////////////////////////
+
+fn main() {
+    sessionmpst_fields();
+    sessionmpst_methods();
 }

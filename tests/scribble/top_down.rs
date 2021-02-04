@@ -140,8 +140,7 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-#[test]
-pub fn top_down_approach() {
+fn main() {
     for _i in 0..200 {
         assert!(|| -> Result<(), Box<dyn Error>> {
             {

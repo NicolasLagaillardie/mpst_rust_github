@@ -18,16 +18,16 @@ create_sessionmpst!(SessionMpstFour, 4);
 // G = Storage?Controller[start].µX.(choice at Storage) {
 //     starting: API?Controller[start].X // start and check new state
 //     up: API!Storage[request].API?Storage[response].X // do stuff
-//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting
+//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting. Should get success message
 //     close: 0 // Needed for overflow
 // }
 
-// Workaround for the Send<Recv<X>> bug
+// Workaround for the Send<Recv<X>>² bug
 // G = Storage?Controller[start].µX.(choice at Storage) {
 //     starting: API?Controller[start].X // start and check new state
 //     up_request: API!Storage[request].X // do stuff
-//     up_response: .API?Storage[response].X // do stuff
-//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting
+//     up_response: API?Storage[response].X // do stuff
+//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting. Should get success message
 //     close: 0 // Needed for overflow
 // }
 
@@ -44,14 +44,6 @@ create_normal_role!(Storage, next_storage, DualStorage, next_dual_storage); // #
 
 // Create send
 create_send_mpst_session_bundle!(
-    send_failed_api,
-    Controller,
-    next_controller,
-    1, |
-    send_api_to_logs,
-    Logs,
-    next_logs,
-    2, |
     send_request_storage,
     Storage,
     next_storage,
@@ -65,32 +57,11 @@ create_send_mpst_session_bundle!(
     Api,
     next_api,
     1, |
-    send_start_controller_to_logs,
-    Logs,
-    next_logs,
-    2, |
     send_start_controller_to_storage,
     Storage,
     next_storage,
     3, | =>
     Controller,
-    SessionMpstFour,
-    4
-);
-create_send_mpst_session_bundle!(
-    send_logs_to_api,
-    Api,
-    next_api,
-    1, |
-    send_failure_logs_to_controller,
-    Controller,
-    next_controller,
-    2, |
-    send_logs_to_storage,
-    Storage,
-    next_storage,
-    3, | =>
-    Logs,
     SessionMpstFour,
     4
 );
@@ -118,10 +89,6 @@ create_recv_mpst_session_bundle!(
     Controller,
     next_controller,
     1, |
-    recv_api_from_logs,
-    Logs,
-    next_logs,
-    2, |
     recv_response_api_from_storage,
     Storage,
     next_storage,
@@ -131,15 +98,7 @@ create_recv_mpst_session_bundle!(
     4
 );
 create_recv_mpst_session_bundle!(
-    recv_start_controller_from_api,
-    Api,
-    next_api,
-    1, |
-    recv_start_controller_from_logs,
-    Logs,
-    next_logs,
-    2, |
-    recv_start_controller_from_storage,
+    recv_fail_controller_from_storage,
     Storage,
     next_storage,
     3, | =>
@@ -148,14 +107,6 @@ create_recv_mpst_session_bundle!(
     4
 );
 create_recv_mpst_session_bundle!(
-    recv_logs_from_api,
-    Api,
-    next_api,
-    1, |
-    recv_start_logs_from_controller,
-    Controller,
-    next_controller,
-    2, |
     recv_logs_from_storage,
     Storage,
     next_storage,
@@ -172,11 +123,7 @@ create_recv_mpst_session_bundle!(
     recv_start_storage_from_controller,
     Controller,
     next_controller,
-    2, |
-    recv_storage_from_logs,
-    Logs,
-    next_logs,
-    3, | =>
+    2, | =>
     Storage,
     SessionMpstFour,
     4
@@ -322,7 +269,7 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
 }
 
 fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_start_controller_from_storage, {
+    offer_mpst!(s, recv_fail_controller_from_storage, {
         BranchingSforC::Starting(s) => {
             let start = random::<i32>();
 
@@ -340,7 +287,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
         },
         BranchingSforC::Down(s) => {
 
-            let (failure, s) = recv_start_controller_from_storage(s)?;
+            let (failure, s) = recv_fail_controller_from_storage(s)?;
 
             println!("Failure from Storage: {}", failure);
 
