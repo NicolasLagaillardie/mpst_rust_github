@@ -190,7 +190,7 @@ fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-fn double_choice() {
+pub fn double_choice() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
@@ -223,7 +223,7 @@ fn double_choice() {
     .is_ok());
 }
 
-fn double_choice_checker() {
+pub fn double_choice_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();
@@ -242,11 +242,4 @@ fn double_choice_checker() {
         Ok(())
     }()
     .is_ok());
-}
-
-/////////////////////////////////////////
-
-fn main() {
-    double_choice();
-    double_choice_checker();
 }

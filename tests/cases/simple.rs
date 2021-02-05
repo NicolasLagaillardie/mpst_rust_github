@@ -76,7 +76,7 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-fn simple_triple_endpoints() {
+pub fn simple_triple_endpoints() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(
@@ -94,7 +94,7 @@ fn simple_triple_endpoints() {
     .is_ok());
 }
 
-fn simple_triple_endpoints_checker() {
+pub fn simple_triple_endpoints_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();
@@ -113,11 +113,4 @@ fn simple_triple_endpoints_checker() {
         Ok(())
     }()
     .is_ok());
-}
-
-/////////////////////////////////////////
-
-fn main() {
-    simple_triple_endpoints();
-    simple_triple_endpoints_checker();
 }

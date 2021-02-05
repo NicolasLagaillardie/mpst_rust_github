@@ -166,7 +166,7 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
 
 /////////////////////////////////////////
 
-fn main() {
+pub fn test_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             // Get the new sessionmpst of the passive roles

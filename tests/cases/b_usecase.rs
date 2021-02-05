@@ -229,7 +229,7 @@ fn client_close(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-fn run_b_usecase_left() {
+pub fn run_b_usecase_left() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test video branch.
         {
@@ -245,7 +245,7 @@ fn run_b_usecase_left() {
     .is_ok());
 }
 
-fn run_b_usecase_right() {
+pub fn run_b_usecase_right() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {
@@ -261,7 +261,7 @@ fn run_b_usecase_right() {
     .is_ok());
 }
 
-fn run_b_usecase_checker() {
+pub fn run_b_usecase_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();
@@ -280,12 +280,4 @@ fn run_b_usecase_checker() {
         Ok(())
     }()
     .is_ok());
-}
-
-/////////////////////////////////////////
-
-fn main() {
-    run_b_usecase_left();
-    run_b_usecase_right();
-    run_b_usecase_checker();
 }
