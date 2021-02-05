@@ -133,7 +133,6 @@ fn scribble_tests() {
     scribble::top_down_recursive::top_down_approach();
 }
 
-
 #[test]
 fn tests() {
     let t = trybuild::TestCases::new();
