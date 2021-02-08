@@ -1083,15 +1083,15 @@ enum Branching0fromJtoI {
 }
 type RecursItoJ = Recv<Branching0fromJtoI, End>;
 // J
-type ChooseJforAtoJ = Send<Branching0fromJtoA, End>;
-type ChooseJforBtoJ = Send<Branching0fromJtoB, End>;
-type ChooseJforCtoJ = Send<Branching0fromJtoC, End>;
-type ChooseJforDtoJ = Send<Branching0fromJtoD, End>;
-type ChooseJforEtoJ = Send<Branching0fromJtoE, End>;
-type ChooseJforFtoJ = Send<Branching0fromJtoF, End>;
-type ChooseJforGtoJ = Send<Branching0fromJtoG, End>;
-type ChooseJforHtoJ = Send<Branching0fromJtoH, End>;
-type ChooseJforItoJ = Send<Branching0fromJtoI, End>;
+type Choose0fromJtoA = Send<Branching0fromJtoA, End>;
+type Choose0fromJtoB = Send<Branching0fromJtoB, End>;
+type Choose0fromJtoC = Send<Branching0fromJtoC, End>;
+type Choose0fromJtoD = Send<Branching0fromJtoD, End>;
+type Choose0fromJtoE = Send<Branching0fromJtoE, End>;
+type Choose0fromJtoF = Send<Branching0fromJtoF, End>;
+type Choose0fromJtoG = Send<Branching0fromJtoG, End>;
+type Choose0fromJtoH = Send<Branching0fromJtoH, End>;
+type Choose0fromJtoI = Send<Branching0fromJtoI, End>;
 
 // Creating the MP sessions
 type EndpointA =
@@ -1113,15 +1113,15 @@ type EndpointH =
 type EndpointI =
     SessionMpstTen<End, End, End, End, End, End, End, End, RecursItoJ, RoleJ<RoleEnd>, NameI>;
 type EndpointJ = SessionMpstTen<
-    ChooseJforAtoJ,
-    ChooseJforBtoJ,
-    ChooseJforCtoJ,
-    ChooseJforDtoJ,
-    ChooseJforEtoJ,
-    ChooseJforFtoJ,
-    ChooseJforGtoJ,
-    ChooseJforHtoJ,
-    ChooseJforItoJ,
+    Choose0fromJtoA,
+    Choose0fromJtoB,
+    Choose0fromJtoC,
+    Choose0fromJtoD,
+    Choose0fromJtoE,
+    Choose0fromJtoF,
+    Choose0fromJtoG,
+    Choose0fromJtoH,
+    Choose0fromJtoI,
     RoleA<RoleB<RoleC<RoleD<RoleE<RoleF<RoleG<RoleH<RoleI<RoleEnd>>>>>>>>>,
     NameJ,
 >;

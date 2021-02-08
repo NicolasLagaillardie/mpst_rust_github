@@ -75,10 +75,10 @@ enum Branches0BtoD<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoDClose, QueueBEnd, NameB>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, QueueBVideo, NameB>),
 }
-type ChooseCforAtoD<N> = Send<Branches0AtoD<N>, End>;
-type ChooseCforBtoD<N> = Send<Branches0BtoD<N>, End>;
+type Choose0fromCtoA<N> = Send<Branches0AtoD<N>, End>;
+type Choose0fromCtoB<N> = Send<Branches0BtoD<N>, End>;
 
-type InitD<N> = Send<N, Recv<N, ChooseCforAtoD<N>>>;
+type InitD<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
 /// Queues
 type QueueAEnd = RoleEnd;
@@ -96,8 +96,8 @@ type QueueDFull = RoleA<RoleA<QueueDRecurs>>;
 /// Creating the MP sessions
 /// For C
 
-type EndpointDRecurs<N> = SessionMpst<ChooseCforAtoD<N>, ChooseCforBtoD<N>, QueueDRecurs, NameD>;
-type EndpointDFull<N> = SessionMpst<InitD<N>, ChooseCforBtoD<N>, QueueDFull, NameD>;
+type EndpointDRecurs<N> = SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, QueueDRecurs, NameD>;
+type EndpointDFull<N> = SessionMpst<InitD<N>, Choose0fromCtoB<N>, QueueDFull, NameD>;
 
 /// For A
 type EndpointARecurs<N> = SessionMpst<End, RecursAtoD<N>, QueueARecurs, NameA>;

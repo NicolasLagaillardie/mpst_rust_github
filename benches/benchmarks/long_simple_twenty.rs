@@ -5167,25 +5167,25 @@ enum Branching0fromTtoS {
 }
 type RecursStoT = Recv<Branching0fromTtoS, End>;
 // T
-type ChooseTforAtoT = Send<Branching0fromTtoA, End>;
-type ChooseTforBtoT = Send<Branching0fromTtoB, End>;
-type ChooseTforCtoT = Send<Branching0fromTtoC, End>;
-type ChooseTforDtoT = Send<Branching0fromTtoD, End>;
-type ChooseTforEtoT = Send<Branching0fromTtoE, End>;
-type ChooseTforFtoT = Send<Branching0fromTtoF, End>;
-type ChooseTforGtoT = Send<Branching0fromTtoG, End>;
-type ChooseTforHtoT = Send<Branching0fromTtoH, End>;
-type ChooseTforItoT = Send<Branching0fromTtoI, End>;
-type ChooseTforJtoT = Send<Branching0fromTtoJ, End>;
-type ChooseTforKtoT = Send<Branching0fromTtoK, End>;
-type ChooseTforLtoT = Send<Branching0fromTtoL, End>;
-type ChooseTforMtoT = Send<Branching0fromTtoM, End>;
-type ChooseTforNtoT = Send<Branching0fromTtoN, End>;
-type ChooseTforOtoT = Send<Branching0fromTtoO, End>;
-type ChooseTforPtoT = Send<Branching0fromTtoP, End>;
-type ChooseTforQtoT = Send<Branching0fromTtoQ, End>;
-type ChooseTforRtoT = Send<Branching0fromTtoR, End>;
-type ChooseTforStoT = Send<Branching0fromTtoS, End>;
+type Choose0fromTtoA = Send<Branching0fromTtoA, End>;
+type Choose0fromTtoB = Send<Branching0fromTtoB, End>;
+type Choose0fromTtoC = Send<Branching0fromTtoC, End>;
+type Choose0fromTtoD = Send<Branching0fromTtoD, End>;
+type Choose0fromTtoE = Send<Branching0fromTtoE, End>;
+type Choose0fromTtoF = Send<Branching0fromTtoF, End>;
+type Choose0fromTtoG = Send<Branching0fromTtoG, End>;
+type Choose0fromTtoH = Send<Branching0fromTtoH, End>;
+type Choose0fromTtoI = Send<Branching0fromTtoI, End>;
+type Choose0fromTtoJ = Send<Branching0fromTtoJ, End>;
+type Choose0fromTtoK = Send<Branching0fromTtoK, End>;
+type Choose0fromTtoL = Send<Branching0fromTtoL, End>;
+type Choose0fromTtoM = Send<Branching0fromTtoM, End>;
+type Choose0fromTtoN = Send<Branching0fromTtoN, End>;
+type Choose0fromTtoO = Send<Branching0fromTtoO, End>;
+type Choose0fromTtoP = Send<Branching0fromTtoP, End>;
+type Choose0fromTtoQ = Send<Branching0fromTtoQ, End>;
+type Choose0fromTtoR = Send<Branching0fromTtoR, End>;
+type Choose0fromTtoS = Send<Branching0fromTtoS, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstTwenty<
@@ -5626,25 +5626,25 @@ type EndpointS = SessionMpstTwenty<
     NameS,
 >;
 type EndpointT = SessionMpstTwenty<
-    ChooseTforAtoT,
-    ChooseTforBtoT,
-    ChooseTforCtoT,
-    ChooseTforDtoT,
-    ChooseTforEtoT,
-    ChooseTforFtoT,
-    ChooseTforGtoT,
-    ChooseTforHtoT,
-    ChooseTforItoT,
-    ChooseTforJtoT,
-    ChooseTforKtoT,
-    ChooseTforLtoT,
-    ChooseTforMtoT,
-    ChooseTforNtoT,
-    ChooseTforOtoT,
-    ChooseTforPtoT,
-    ChooseTforQtoT,
-    ChooseTforRtoT,
-    ChooseTforStoT,
+    Choose0fromTtoA,
+    Choose0fromTtoB,
+    Choose0fromTtoC,
+    Choose0fromTtoD,
+    Choose0fromTtoE,
+    Choose0fromTtoF,
+    Choose0fromTtoG,
+    Choose0fromTtoH,
+    Choose0fromTtoI,
+    Choose0fromTtoJ,
+    Choose0fromTtoK,
+    Choose0fromTtoL,
+    Choose0fromTtoM,
+    Choose0fromTtoN,
+    Choose0fromTtoO,
+    Choose0fromTtoP,
+    Choose0fromTtoQ,
+    Choose0fromTtoR,
+    Choose0fromTtoS,
     RoleA<
         RoleB<
             RoleC<

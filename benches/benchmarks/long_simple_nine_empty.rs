@@ -904,14 +904,14 @@ enum Branching0fromItoH {
 }
 type RecursHtoI = Recv<Branching0fromItoH, End>;
 // I
-type ChooseIforAtoI = Send<Branching0fromItoA, End>;
-type ChooseIforBtoI = Send<Branching0fromItoB, End>;
-type ChooseIforCtoI = Send<Branching0fromItoC, End>;
-type ChooseIforDtoI = Send<Branching0fromItoD, End>;
-type ChooseIforEtoI = Send<Branching0fromItoE, End>;
-type ChooseIforFtoI = Send<Branching0fromItoF, End>;
-type ChooseIforGtoI = Send<Branching0fromItoG, End>;
-type ChooseIforHtoI = Send<Branching0fromItoH, End>;
+type Choose0fromItoA = Send<Branching0fromItoA, End>;
+type Choose0fromItoB = Send<Branching0fromItoB, End>;
+type Choose0fromItoC = Send<Branching0fromItoC, End>;
+type Choose0fromItoD = Send<Branching0fromItoD, End>;
+type Choose0fromItoE = Send<Branching0fromItoE, End>;
+type Choose0fromItoF = Send<Branching0fromItoF, End>;
+type Choose0fromItoG = Send<Branching0fromItoG, End>;
+type Choose0fromItoH = Send<Branching0fromItoH, End>;
 
 // Creating the MP sessions
 type EndpointA =
@@ -931,14 +931,14 @@ type EndpointG =
 type EndpointH =
     SessionMpstNine<End, End, End, End, End, End, End, RecursHtoI, RoleI<RoleEnd>, NameH>;
 type EndpointI = SessionMpstNine<
-    ChooseIforAtoI,
-    ChooseIforBtoI,
-    ChooseIforCtoI,
-    ChooseIforDtoI,
-    ChooseIforEtoI,
-    ChooseIforFtoI,
-    ChooseIforGtoI,
-    ChooseIforHtoI,
+    Choose0fromItoA,
+    Choose0fromItoB,
+    Choose0fromItoC,
+    Choose0fromItoD,
+    Choose0fromItoE,
+    Choose0fromItoF,
+    Choose0fromItoG,
+    Choose0fromItoH,
     RoleA<RoleB<RoleC<RoleD<RoleE<RoleF<RoleG<RoleH<RoleEnd>>>>>>>>,
     NameI,
 >;

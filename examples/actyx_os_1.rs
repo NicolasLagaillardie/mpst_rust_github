@@ -152,9 +152,9 @@ enum Branching0fromLtoS<N: marker::Send> {
 }
 type RecursStoL<N> = Recv<Branching0fromLtoS<N>, End>;
 // Storage
-type ChooseLforAtoL<N> = Send<Branching0fromLtoA<N>, End>;
-type ChooseLforCtoL<N> = Send<Branching0fromLtoC<N>, End>;
-type ChooseLforStoL<N> = Send<Branching0fromLtoS<N>, End>;
+type Choose0fromLtoA<N> = Send<Branching0fromLtoA<N>, End>;
+type Choose0fromLtoC<N> = Send<Branching0fromLtoC<N>, End>;
+type Choose0fromLtoS<N> = Send<Branching0fromLtoS<N>, End>;
 
 // Creating the MP sessions
 // Api
@@ -168,16 +168,16 @@ type EndpointControllerInit<N> =
 type EndpointStorage<N> = SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>;
 // Storage
 type EndpointLogs<N> = SessionMpstFour<
-    ChooseLforAtoL<N>,
-    ChooseLforCtoL<N>,
-    ChooseLforStoL<N>,
+    Choose0fromLtoA<N>,
+    Choose0fromLtoC<N>,
+    Choose0fromLtoS<N>,
     Api<Controller<Storage<RoleEnd>>>,
     NameLogs,
 >;
 type EndpointLogsInit<N> = SessionMpstFour<
-    ChooseLforAtoL<N>,
-    Recv<N, ChooseLforCtoL<N>>,
-    ChooseLforStoL<N>,
+    Choose0fromLtoA<N>,
+    Recv<N, Choose0fromLtoC<N>>,
+    Choose0fromLtoS<N>,
     Controller<Api<Controller<Storage<RoleEnd>>>>,
     NameLogs,
 >;

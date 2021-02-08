@@ -443,11 +443,11 @@ enum Branching0fromFtoE {
 }
 type RecursEtoF = Recv<Branching0fromFtoE, End>;
 // F
-type ChooseFforAtoF = Send<Branching0fromFtoA, End>;
-type ChooseFforBtoF = Send<Branching0fromFtoB, End>;
-type ChooseFforCtoF = Send<Branching0fromFtoC, End>;
-type ChooseFforDtoF = Send<Branching0fromFtoD, End>;
-type ChooseFforEtoF = Send<Branching0fromFtoE, End>;
+type Choose0fromFtoA = Send<Branching0fromFtoA, End>;
+type Choose0fromFtoB = Send<Branching0fromFtoB, End>;
+type Choose0fromFtoC = Send<Branching0fromFtoC, End>;
+type Choose0fromFtoD = Send<Branching0fromFtoD, End>;
+type Choose0fromFtoE = Send<Branching0fromFtoE, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstSix<End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
@@ -456,11 +456,11 @@ type EndpointC = SessionMpstSix<End, End, End, End, RecursCtoF, RoleF<RoleEnd>, 
 type EndpointD = SessionMpstSix<End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
 type EndpointE = SessionMpstSix<End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
 type EndpointF = SessionMpstSix<
-    ChooseFforAtoF,
-    ChooseFforBtoF,
-    ChooseFforCtoF,
-    ChooseFforDtoF,
-    ChooseFforEtoF,
+    Choose0fromFtoA,
+    Choose0fromFtoB,
+    Choose0fromFtoC,
+    Choose0fromFtoD,
+    Choose0fromFtoE,
     RoleA<RoleB<RoleC<RoleD<RoleE<RoleEnd>>>>>,
     NameF,
 >;

@@ -239,18 +239,18 @@ enum Branching0fromDtoC {
 }
 type RecursCtoD = Recv<Branching0fromDtoC, End>;
 // D
-type ChooseDforAtoD = Send<Branching0fromDtoA, End>;
-type ChooseDforBtoD = Send<Branching0fromDtoB, End>;
-type ChooseDforCtoD = Send<Branching0fromDtoC, End>;
+type Choose0fromDtoA = Send<Branching0fromDtoA, End>;
+type Choose0fromDtoB = Send<Branching0fromDtoB, End>;
+type Choose0fromDtoC = Send<Branching0fromDtoC, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstFour<End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
 type EndpointB = SessionMpstFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = SessionMpstFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
 type EndpointD = SessionMpstFour<
-    ChooseDforAtoD,
-    ChooseDforBtoD,
-    ChooseDforCtoD,
+    Choose0fromDtoA,
+    Choose0fromDtoB,
+    Choose0fromDtoC,
     RoleA<RoleB<RoleC<RoleEnd>>>,
     NameD,
 >;

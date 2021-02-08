@@ -146,13 +146,13 @@ enum Branching0fromCtoB {
 }
 type RecursBtoC = Recv<Branching0fromCtoB, End>;
 // C
-type ChooseCforAtoC = Send<Branching0fromCtoA, End>;
-type ChooseCforBtoC = Send<Branching0fromCtoB, End>;
+type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
+type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstThree<ChooseCforAtoC, ChooseCforBtoC, RoleA<RoleB<RoleEnd>>, NameC>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleA<RoleB<RoleEnd>>, NameC>;
 
 // Functions
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

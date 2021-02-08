@@ -113,8 +113,8 @@ type NameC = RoleC<RoleEnd>;
 
 // Types
 // A
-type ChooseAforBtoA<N> = Send<Branching0fromAtoB<N>, End>;
-type ChooseAforCtoA = Send<Branching0fromAtoC, End>;
+type Choose0fromAtoB<N> = Send<Branching0fromAtoB<N>, End>;
+type Choose0fromAtoC = Send<Branching0fromAtoC, End>;
 // B
 enum Branching0fromAtoB<N: marker::Send> {
     More(
@@ -132,7 +132,7 @@ type RecursCtoA = Recv<Branching0fromAtoC, End>;
 
 // Creating the MP sessions
 type EndpointA<N> =
-    SessionMpstThree<ChooseAforBtoA<N>, ChooseAforCtoA, RoleB<RoleC<RoleEnd>>, NameA>;
+    SessionMpstThree<Choose0fromAtoB<N>, Choose0fromAtoC, RoleB<RoleC<RoleEnd>>, NameA>;
 type EndpointB<N> = SessionMpstThree<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
