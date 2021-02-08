@@ -25,5 +25,5 @@ criterion_main! {
     // benchmarks::long_simple_twenty_empty::long_twenty_empty_simple_protocols,
     // benchmarks::long_simple_twenty::long_twenty_simple_protocols,
     // benchmarks::fib::fibo,
-    benchmarks::oAuth::o_auth,
+    benchmarks::o_auth::o_auth,
 }

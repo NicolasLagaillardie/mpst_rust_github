@@ -2,19 +2,18 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
+use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_normal_role,
+    bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_normal_role,
     create_recv_mpst_session, create_recv_mpst_session_bundle, create_send_mpst_session,
-    create_send_mpst_session_bundle, create_sessionmpst, offer, offer_mpst,
+    create_send_mpst_session_bundle, create_sessionmpst, offer_mpst,
 };
 
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
-use std::thread::{spawn, JoinHandle};
 use std::time::Duration;
 
 // global protocol Proto(role A, role C, role S)
@@ -40,7 +39,6 @@ use std::time::Duration;
 //         quit(Int) from C to A;
 //     }
 // }
-
 // Create new SessionMpst for three participants
 create_sessionmpst!(SessionMpstThree, 3);
 
@@ -183,7 +181,14 @@ enum Branching0fromStoC<N: marker::Send> {
 }
 enum Branching1fromAtoC<N: marker::Send> {
     Auth(SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameC>),
-    Again(SessionMpstThree<Recurs1fromCtoA<N>, Recv<N, End>, RoleS<RoleA<RoleEnd>>, NameC>),
+    Again(
+        SessionMpstThree<
+            Send<N, Recurs1fromCtoA<N>>,
+            Recv<N, End>,
+            RoleS<RoleA<RoleA<RoleEnd>>>,
+            NameC,
+        >,
+    ),
 }
 type Recurs1fromCtoA<N> = Recv<Branching1fromAtoC<N>, End>;
 // S
@@ -210,7 +215,7 @@ type RecursA<N> = SessionMpstThree<
 >;
 type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
 // C
-type RecursC<N> = SessionMpstThree<Recurs1fromCtoA<N>, End, RoleA<RoleEnd>, NameC>;
+type RecursC<N> = SessionMpstThree<Send<N, Recurs1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, RoleS<RoleEnd>, NameC>;
 // S
 type RecursS<N> = SessionMpstThree<Recurs1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
@@ -221,9 +226,7 @@ type EndpointS<N> =
 fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_s, {
         Branching0fromStoA::Done(s) => {
-            let (close, s) = recv_mpst_a_to_c(s)?;
-
-            println!("Closing: {}", close);
+            let (_, s) = recv_mpst_a_to_c(s)?;
 
             close_mpst_multi(s)
         },
@@ -236,7 +239,9 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 fn recurs_a(s: RecursA<i32>) -> Result<(), Box<dyn Error>> {
     let (pwd, s) = recv_mpst_a_to_c(s)?;
 
-    if pwd == PASSWORD {
+    let expected = thread_rng().gen_range(1..=3);
+
+    if pwd == expected {
         let s = choose_mpst_multi_to_all!(
             s,
             send_mpst_a_to_c,
@@ -250,6 +255,8 @@ fn recurs_a(s: RecursA<i32>) -> Result<(), Box<dyn Error>> {
             3,
             1
         );
+
+        let s = send_mpst_a_to_s(0, s);
 
         close_mpst_multi(s)
     } else {
@@ -267,9 +274,7 @@ fn recurs_a(s: RecursA<i32>) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        println!("Wrong password: expected {}, found {}", PASSWORD, pwd);
-
-        let s = send_mpst_a_to_c(1, s);
+        let s = send_mpst_a_to_s(1, s);
 
         recurs_a(s)
     }
@@ -283,29 +288,24 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromStoC::<i32>::Login(s) => {
-            let (login, s) = recv_mpst_c_to_s(s)?;
+            let (_, s) = recv_mpst_c_to_s(s)?;
 
-            println!("Login: {}", login);
-
-            let s = send_mpst_c_to_a(thread_rng().gen_range(1..=3), s);
             recurs_c(s)
         },
     })
 }
 
 fn recurs_c(s: RecursC<i32>) -> Result<(), Box<dyn Error>> {
+    let s = send_mpst_c_to_a(thread_rng().gen_range(1..=3), s);
+
     offer_mpst!(s, recv_mpst_c_to_a, {
         Branching1fromAtoC::<i32>::Auth(s) => {
-            let (success, s) = recv_mpst_c_to_s(s)?;
-
-            println!("Success: {}", success);
+            let (_, s) = recv_mpst_c_to_s(s)?;
 
             close_mpst_multi(s)
         },
         Branching1fromAtoC::<i32>::Again(s) => {
-            let (fail, s) = recv_mpst_c_to_s(s)?;
-
-            println!("Failed paswword: {}", fail);
+            let (_, s) = recv_mpst_c_to_s(s)?;
 
             recurs_c(s)
         },
@@ -331,8 +331,6 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
         );
 
         let s = send_mpst_s_to_c(0, s);
-
-        println!("Close connection");
 
         close_mpst_multi(s)
     } else {
@@ -375,7 +373,7 @@ fn recurs_s(s: RecursS<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn main() {
+fn all_mpst() -> Result<(), Box<dyn Error>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_c),
@@ -385,4 +383,24 @@ fn main() {
     thread_a.join().unwrap();
     thread_c.join().unwrap();
     thread_s.join().unwrap();
+
+    Ok(())
 }
+
+/////////////////////////
+
+fn o_auth_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("oAuth MPST"), |b| b.iter(|| all_mpst()));
+}
+
+fn long_warmup() -> Criterion {
+    Criterion::default().measurement_time(Duration::new(30, 0))
+}
+
+criterion_group! {
+    name = o_auth;
+    config = long_warmup();
+    targets = o_auth_mpst
+}
+
+criterion_main!(o_auth);
