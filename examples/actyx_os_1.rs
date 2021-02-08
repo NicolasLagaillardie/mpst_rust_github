@@ -14,10 +14,20 @@ use std::marker;
 // Create new SessionMpst for seven participants
 create_sessionmpst!(SessionMpstFour, 4);
 
-// Simple protocol: logging service
-// G = Logs?Controller[start].µX.(choice at Logs) {
-//     up: X // do stuff
-//     down: Logs!Controller[failed].Logs?Controller[start].X // Logging service waits before starting again
+// global protocol ActyxOS1(role Controller, role Logs)
+// {
+// 	Start(Int) from Controller to Logs;
+// 	rec Loop {
+// 		choice at Logs
+// 		{
+// 			Success(int) from Logs to Controller; // Logs is up
+// 		}
+// 		or
+// 		{
+// 			Failure(Int) from Logs to Controller;
+// 			Restart(Int) from Controller to Logs;
+// 		}
+// 	}
 // }
 
 // Create Roles
@@ -113,15 +123,15 @@ type NameStorage = Storage<RoleEnd>;
 type RecvLogsChoice = Logs<RoleEnd>;
 
 // Api
-enum BranchingLforA<N: marker::Send> {
+enum Branching0fromLtoA<N: marker::Send> {
     Up(SessionMpstFour<End, RecursAtoL<N>, End, RecvLogsChoice, NameApi>),
     Down(SessionMpstFour<End, RecursAtoL<N>, End, RecvLogsChoice, NameApi>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
-type RecursAtoL<N> = Recv<BranchingLforA<N>, End>;
+type RecursAtoL<N> = Recv<Branching0fromLtoA<N>, End>;
 // Controller
-enum BranchingLforC<N: marker::Send> {
-    Up(SessionMpstFour<End, RecursCtoL<N>, End, RecvLogsChoice, NameController>),
+enum Branching0fromLtoC<N: marker::Send> {
+    Up(SessionMpstFour<End, Recv<N, RecursCtoL<N>>, End, Logs<RecvLogsChoice>, NameController>),
     Down(
         SessionMpstFour<
             End,
@@ -133,18 +143,18 @@ enum BranchingLforC<N: marker::Send> {
     ),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameController>),
 }
-type RecursCtoL<N> = Recv<BranchingLforC<N>, End>;
+type RecursCtoL<N> = Recv<Branching0fromLtoC<N>, End>;
 // Storage
-enum BranchingLforS<N: marker::Send> {
+enum Branching0fromLtoS<N: marker::Send> {
     Up(SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>),
     Down(SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameStorage>),
 }
-type RecursStoL<N> = Recv<BranchingLforS<N>, End>;
+type RecursStoL<N> = Recv<Branching0fromLtoS<N>, End>;
 // Storage
-type ChooseLforAtoL<N> = Send<BranchingLforA<N>, End>;
-type ChooseLforCtoL<N> = Send<BranchingLforC<N>, End>;
-type ChooseLforStoL<N> = Send<BranchingLforS<N>, End>;
+type ChooseLforAtoL<N> = Send<Branching0fromLtoA<N>, End>;
+type ChooseLforCtoL<N> = Send<Branching0fromLtoC<N>, End>;
+type ChooseLforStoL<N> = Send<Branching0fromLtoS<N>, End>;
 
 // Creating the MP sessions
 // Api
@@ -174,13 +184,13 @@ type EndpointLogsInit<N> = SessionMpstFour<
 
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_api_from_logs, {
-        BranchingLforA::Up(s) => {
+        Branching0fromLtoA::Up(s) => {
             endpoint_api(s)
         },
-        BranchingLforA::Down(s) => {
+        Branching0fromLtoA::Down(s) => {
             endpoint_api(s)
         },
-        BranchingLforA::Close(s) => {
+        Branching0fromLtoA::Close(s) => {
             close_mpst_multi(s)
         },
     })
@@ -196,10 +206,15 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
 
 fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_start_controller_from_logs, {
-        BranchingLforC::Up(s) => {
+        Branching0fromLtoC::Up(s) => {
+
+            let (success, s) = recv_start_controller_from_logs(s)?;
+
+            println!("Success from Logs: {}", success);
+
             recurs_controller(s)
         },
-        BranchingLforC::Down(s) => {
+        Branching0fromLtoC::Down(s) => {
 
             let (failure, s) = recv_start_controller_from_logs(s)?;
 
@@ -211,7 +226,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             recurs_controller(s)
         },
-        BranchingLforC::Close(s) => {
+        Branching0fromLtoC::Close(s) => {
             close_mpst_multi(s)
         },
     })
@@ -219,13 +234,13 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_storage(s: EndpointStorage<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_storage_from_logs, {
-        BranchingLforS::Up(s) => {
+        Branching0fromLtoS::Up(s) => {
             endpoint_storage(s)
         },
-        BranchingLforS::Down(s) => {
+        Branching0fromLtoS::Down(s) => {
             endpoint_storage(s)
         },
-        BranchingLforS::Close(s) => {
+        Branching0fromLtoS::Close(s) => {
             close_mpst_multi(s)
         },
     })
@@ -245,9 +260,9 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 send_logs_to_api,
                 send_failure_logs_to_controller,
                 send_logs_to_storage, =>
-                BranchingLforA::Up,
-                BranchingLforC::Up,
-                BranchingLforS::Up, =>
+                Branching0fromLtoA::Up,
+                Branching0fromLtoC::Up,
+                Branching0fromLtoS::Up, =>
                 Api,
                 Controller,
                 Storage, =>
@@ -257,7 +272,11 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 3
             );
 
-            println!("Logs is up: {}", random::<i32>());
+            let success = random::<i32>();
+
+            println!("Logs is up: {}", success);
+
+            let s = send_failure_logs_to_controller(success, s);
 
             if loops < 0 {
                 recurs_logs(s, 2, loops - 1)
@@ -279,9 +298,9 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 send_logs_to_api,
                 send_failure_logs_to_controller,
                 send_logs_to_storage, =>
-                BranchingLforA::Down,
-                BranchingLforC::Down,
-                BranchingLforS::Down, =>
+                Branching0fromLtoA::Down,
+                Branching0fromLtoC::Down,
+                Branching0fromLtoS::Down, =>
                 Api,
                 Controller,
                 Storage, =>
@@ -314,9 +333,9 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 send_logs_to_api,
                 send_failure_logs_to_controller,
                 send_logs_to_storage, =>
-                BranchingLforA::Close,
-                BranchingLforC::Close,
-                BranchingLforS::Close, =>
+                Branching0fromLtoA::Close,
+                Branching0fromLtoC::Close,
+                Branching0fromLtoS::Close, =>
                 Api,
                 Controller,
                 Storage, =>

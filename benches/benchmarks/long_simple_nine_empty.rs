@@ -752,7 +752,7 @@ type R2G<R> = RoleG<RoleG<R>>;
 type R2H<R> = RoleH<RoleH<R>>;
 type R2I<R> = RoleI<RoleI<R>>;
 // A
-enum BranchingIforA {
+enum Branching0fromItoA {
     More(
         SessionMpstNine<
             RS,
@@ -769,9 +769,9 @@ enum BranchingIforA {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoI = Recv<BranchingIforA, End>;
+type RecursAtoI = Recv<Branching0fromItoA, End>;
 // B
-enum BranchingIforB {
+enum Branching0fromItoB {
     More(
         SessionMpstNine<
             SR,
@@ -788,9 +788,9 @@ enum BranchingIforB {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoI = Recv<BranchingIforB, End>;
+type RecursBtoI = Recv<Branching0fromItoB, End>;
 // C
-enum BranchingIforC {
+enum Branching0fromItoC {
     More(
         SessionMpstNine<
             SR,
@@ -807,9 +807,9 @@ enum BranchingIforC {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoI = Recv<BranchingIforC, End>;
+type RecursCtoI = Recv<Branching0fromItoC, End>;
 // D
-enum BranchingIforD {
+enum Branching0fromItoD {
     More(
         SessionMpstNine<
             SR,
@@ -826,9 +826,9 @@ enum BranchingIforD {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoI = Recv<BranchingIforD, End>;
+type RecursDtoI = Recv<Branching0fromItoD, End>;
 // E
-enum BranchingIforE {
+enum Branching0fromItoE {
     More(
         SessionMpstNine<
             SR,
@@ -845,9 +845,9 @@ enum BranchingIforE {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoI = Recv<BranchingIforE, End>;
+type RecursEtoI = Recv<Branching0fromItoE, End>;
 // F
-enum BranchingIforF {
+enum Branching0fromItoF {
     More(
         SessionMpstNine<
             SR,
@@ -864,9 +864,9 @@ enum BranchingIforF {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoI = Recv<BranchingIforF, End>;
+type RecursFtoI = Recv<Branching0fromItoF, End>;
 // G
-enum BranchingIforG {
+enum Branching0fromItoG {
     More(
         SessionMpstNine<
             SR,
@@ -883,9 +883,9 @@ enum BranchingIforG {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoI = Recv<BranchingIforG, End>;
+type RecursGtoI = Recv<Branching0fromItoG, End>;
 // H
-enum BranchingIforH {
+enum Branching0fromItoH {
     More(
         SessionMpstNine<
             SR,
@@ -902,16 +902,16 @@ enum BranchingIforH {
     ),
     Done(SessionMpstNine<End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
-type RecursHtoI = Recv<BranchingIforH, End>;
+type RecursHtoI = Recv<Branching0fromItoH, End>;
 // I
-type ChooseIforAtoI = Send<BranchingIforA, End>;
-type ChooseIforBtoI = Send<BranchingIforB, End>;
-type ChooseIforCtoI = Send<BranchingIforC, End>;
-type ChooseIforDtoI = Send<BranchingIforD, End>;
-type ChooseIforEtoI = Send<BranchingIforE, End>;
-type ChooseIforFtoI = Send<BranchingIforF, End>;
-type ChooseIforGtoI = Send<BranchingIforG, End>;
-type ChooseIforHtoI = Send<BranchingIforH, End>;
+type ChooseIforAtoI = Send<Branching0fromItoA, End>;
+type ChooseIforBtoI = Send<Branching0fromItoB, End>;
+type ChooseIforCtoI = Send<Branching0fromItoC, End>;
+type ChooseIforDtoI = Send<Branching0fromItoD, End>;
+type ChooseIforEtoI = Send<Branching0fromItoE, End>;
+type ChooseIforFtoI = Send<Branching0fromItoF, End>;
+type ChooseIforGtoI = Send<Branching0fromItoG, End>;
+type ChooseIforHtoI = Send<Branching0fromItoH, End>;
 
 // Creating the MP sessions
 type EndpointA =
@@ -943,12 +943,13 @@ type EndpointI = SessionMpstNine<
     NameI,
 >;
 
+// Functions
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_i, {
-          BranchingIforA::Done(s) => {
+          Branching0fromItoA::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforA::More(s) => {
+          Branching0fromItoA::More(s) => {
             let (_, s) = recv_mpst_a_to_i(s)?;
             let s = send_mpst_a_to_i((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -972,10 +973,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_i, {
-          BranchingIforB::Done(s) => {
+          Branching0fromItoB::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforB::More(s) => {
+          Branching0fromItoB::More(s) => {
             let (_, s) = recv_mpst_b_to_i(s)?;
             let s = send_mpst_b_to_i((), s);
             let s = send_mpst_b_to_a((), s);
@@ -999,10 +1000,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_i, {
-          BranchingIforC::Done(s) => {
+          Branching0fromItoC::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforC::More(s) => {
+          Branching0fromItoC::More(s) => {
             let (_, s) = recv_mpst_c_to_i(s)?;
             let s = send_mpst_c_to_i((), s);
             let s = send_mpst_c_to_a((), s);
@@ -1026,10 +1027,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_i, {
-          BranchingIforD::Done(s) => {
+          Branching0fromItoD::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforD::More(s) => {
+          Branching0fromItoD::More(s) => {
             let (_, s) = recv_mpst_d_to_i(s)?;
             let s = send_mpst_d_to_i((), s);
             let s = send_mpst_d_to_a((), s);
@@ -1053,10 +1054,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_i, {
-          BranchingIforE::Done(s) => {
+          Branching0fromItoE::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforE::More(s) => {
+          Branching0fromItoE::More(s) => {
             let (_, s) = recv_mpst_e_to_i(s)?;
             let s = send_mpst_e_to_i((), s);
             let s = send_mpst_e_to_a((), s);
@@ -1080,10 +1081,10 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_i, {
-          BranchingIforF::Done(s) => {
+          Branching0fromItoF::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforF::More(s) => {
+          Branching0fromItoF::More(s) => {
             let (_, s) = recv_mpst_f_to_i(s)?;
             let s = send_mpst_f_to_i((), s);
             let s = send_mpst_f_to_a((), s);
@@ -1107,10 +1108,10 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_to_i, {
-          BranchingIforG::Done(s) => {
+          Branching0fromItoG::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforG::More(s) => {
+          Branching0fromItoG::More(s) => {
             let (_, s) = recv_mpst_g_to_i(s)?;
             let s = send_mpst_g_to_i((), s);
             let s = send_mpst_g_to_a((), s);
@@ -1134,10 +1135,10 @@ fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_to_i, {
-          BranchingIforH::Done(s) => {
+          Branching0fromItoH::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingIforH::More(s) => {
+          Branching0fromItoH::More(s) => {
             let (_, s) = recv_mpst_h_to_i(s)?;
             let s = send_mpst_h_to_i((), s);
             let s = send_mpst_h_to_a((), s);
@@ -1176,14 +1177,14 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_i_to_f,
                 send_mpst_i_to_g,
                 send_mpst_i_to_h, =>
-                BranchingIforA::Done,
-                BranchingIforB::Done,
-                BranchingIforC::Done,
-                BranchingIforD::Done,
-                BranchingIforE::Done,
-                BranchingIforF::Done,
-                BranchingIforG::Done,
-                BranchingIforH::Done, =>
+                Branching0fromItoA::Done,
+                Branching0fromItoB::Done,
+                Branching0fromItoC::Done,
+                Branching0fromItoD::Done,
+                Branching0fromItoE::Done,
+                Branching0fromItoF::Done,
+                Branching0fromItoG::Done,
+                Branching0fromItoH::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -1211,14 +1212,14 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_i_to_f,
                 send_mpst_i_to_g,
                 send_mpst_i_to_h,=>
-                BranchingIforA::More,
-                BranchingIforB::More,
-                BranchingIforC::More,
-                BranchingIforD::More,
-                BranchingIforE::More,
-                BranchingIforF::More,
-                BranchingIforG::More,
-                BranchingIforH::More, =>
+                Branching0fromItoA::More,
+                Branching0fromItoB::More,
+                Branching0fromItoC::More,
+                Branching0fromItoD::More,
+                Branching0fromItoE::More,
+                Branching0fromItoF::More,
+                Branching0fromItoG::More,
+                Branching0fromItoH::More, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -1343,26 +1344,63 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
+type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
+type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
+
+type SendingReceiving = crossbeam_channel::Sender<Receiving>;
+type ReceivingSending = crossbeam_channel::Receiver<Sending>;
+
+type Receiving = crossbeam_channel::Receiver<()>;
+type Sending = crossbeam_channel::Sender<()>;
+
 fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
     for _ in 0..36 {
         let main = spawn(move || {
             for _ in 0..SIZE {
-                let (sender_1, receiver_1) = bounded::<()>(1);
-                sender_1.send(()).unwrap_or(());
-                receiver_1.recv().unwrap_or(());
+                let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
+                let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
-                let (sender_2, receiver_2) = bounded::<()>(1);
-                sender_2.send(()).unwrap_or(());
-                receiver_2.recv().unwrap_or(());
+                let (sender_1, receiver_1) = bounded::<SendingReceiving>(1);
+                let (sender_5, receiver_5) = bounded::<ReceivingSending>(1);
+
+                let (sender_2, receiver_2) = bounded::<Receiving>(1);
+                let (sender_6, receiver_6) = bounded::<Sending>(1);
+
+                let (sender_3, receiver_3) = bounded::<()>(1);
+                let (sender_7, receiver_7) = bounded::<()>(1);
+
+                sender_0.send(receiver_1).unwrap();
+                sender_4.send(sender_5).unwrap();
+
+                let receiver_1_bis = receiver_0.recv().unwrap();
+                let sender_5_bis = receiver_4.recv().unwrap();
+
+                sender_1.send(sender_2).unwrap();
+                sender_5_bis.send(receiver_6).unwrap();
+
+                let sender_2_bis = receiver_1_bis.recv().unwrap();
+                let receiver_6_bis = receiver_5.recv().unwrap();
+
+                sender_2_bis.send(receiver_3).unwrap();
+                sender_6.send(sender_7).unwrap();
+
+                let receiver_2_bis = receiver_2.recv().unwrap();
+                let sender_7_bis = receiver_6_bis.recv().unwrap();
+
+                sender_3.send(()).unwrap();
+                sender_7_bis.send(()).unwrap();
+
+                receiver_2_bis.recv().unwrap();
+                receiver_7.recv().unwrap();
             }
 
             // "Close" connection
             let (sender_close_1, receiver_close_1) = bounded::<()>(1);
-            sender_close_1.send(()).unwrap_or(());
-
             let (sender_close_2, receiver_close_2) = bounded::<()>(1);
+
+            sender_close_1.send(()).unwrap_or(());
             sender_close_2.send(()).unwrap_or(());
 
             receiver_close_1.recv().unwrap_or(());

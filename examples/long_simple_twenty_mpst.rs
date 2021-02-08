@@ -3373,7 +3373,7 @@ type R2R<R> = RoleR<RoleR<R>>;
 type R2S<R> = RoleS<RoleS<R>>;
 type R2T<R> = RoleT<RoleT<R>>;
 // A
-enum BranchingTforA {
+enum Branching0fromTtoA {
     More(
         SessionMpstTwenty<
             RS,
@@ -3465,9 +3465,9 @@ enum BranchingTforA {
         >,
     ),
 }
-type RecursAtoT = Recv<BranchingTforA, End>;
+type RecursAtoT = Recv<Branching0fromTtoA, End>;
 // B
-enum BranchingTforB {
+enum Branching0fromTtoB {
     More(
         SessionMpstTwenty<
             SR,
@@ -3559,9 +3559,9 @@ enum BranchingTforB {
         >,
     ),
 }
-type RecursBtoT = Recv<BranchingTforB, End>;
+type RecursBtoT = Recv<Branching0fromTtoB, End>;
 // C
-enum BranchingTforC {
+enum Branching0fromTtoC {
     More(
         SessionMpstTwenty<
             SR,
@@ -3653,9 +3653,9 @@ enum BranchingTforC {
         >,
     ),
 }
-type RecursCtoT = Recv<BranchingTforC, End>;
+type RecursCtoT = Recv<Branching0fromTtoC, End>;
 // D
-enum BranchingTforD {
+enum Branching0fromTtoD {
     More(
         SessionMpstTwenty<
             SR,
@@ -3747,9 +3747,9 @@ enum BranchingTforD {
         >,
     ),
 }
-type RecursDtoT = Recv<BranchingTforD, End>;
+type RecursDtoT = Recv<Branching0fromTtoD, End>;
 // E
-enum BranchingTforE {
+enum Branching0fromTtoE {
     More(
         SessionMpstTwenty<
             SR,
@@ -3841,9 +3841,9 @@ enum BranchingTforE {
         >,
     ),
 }
-type RecursEtoT = Recv<BranchingTforE, End>;
+type RecursEtoT = Recv<Branching0fromTtoE, End>;
 // F
-enum BranchingTforF {
+enum Branching0fromTtoF {
     More(
         SessionMpstTwenty<
             SR,
@@ -3935,9 +3935,9 @@ enum BranchingTforF {
         >,
     ),
 }
-type RecursFtoT = Recv<BranchingTforF, End>;
+type RecursFtoT = Recv<Branching0fromTtoF, End>;
 // G
-enum BranchingTforG {
+enum Branching0fromTtoG {
     More(
         SessionMpstTwenty<
             SR,
@@ -4029,9 +4029,9 @@ enum BranchingTforG {
         >,
     ),
 }
-type RecursGtoT = Recv<BranchingTforG, End>;
+type RecursGtoT = Recv<Branching0fromTtoG, End>;
 // H
-enum BranchingTforH {
+enum Branching0fromTtoH {
     More(
         SessionMpstTwenty<
             SR,
@@ -4123,9 +4123,9 @@ enum BranchingTforH {
         >,
     ),
 }
-type RecursHtoT = Recv<BranchingTforH, End>;
+type RecursHtoT = Recv<Branching0fromTtoH, End>;
 // I
-enum BranchingTforI {
+enum Branching0fromTtoI {
     More(
         SessionMpstTwenty<
             SR,
@@ -4217,9 +4217,9 @@ enum BranchingTforI {
         >,
     ),
 }
-type RecursItoT = Recv<BranchingTforI, End>;
+type RecursItoT = Recv<Branching0fromTtoI, End>;
 // J
-enum BranchingTforJ {
+enum Branching0fromTtoJ {
     More(
         SessionMpstTwenty<
             SR,
@@ -4311,9 +4311,9 @@ enum BranchingTforJ {
         >,
     ),
 }
-type RecursJtoT = Recv<BranchingTforJ, End>;
+type RecursJtoT = Recv<Branching0fromTtoJ, End>;
 // K
-enum BranchingTforK {
+enum Branching0fromTtoK {
     More(
         SessionMpstTwenty<
             SR,
@@ -4405,9 +4405,9 @@ enum BranchingTforK {
         >,
     ),
 }
-type RecursKtoT = Recv<BranchingTforK, End>;
+type RecursKtoT = Recv<Branching0fromTtoK, End>;
 // L
-enum BranchingTforL {
+enum Branching0fromTtoL {
     More(
         SessionMpstTwenty<
             SR,
@@ -4499,9 +4499,9 @@ enum BranchingTforL {
         >,
     ),
 }
-type RecursLtoT = Recv<BranchingTforL, End>;
+type RecursLtoT = Recv<Branching0fromTtoL, End>;
 // M
-enum BranchingTforM {
+enum Branching0fromTtoM {
     More(
         SessionMpstTwenty<
             SR,
@@ -4593,9 +4593,9 @@ enum BranchingTforM {
         >,
     ),
 }
-type RecursMtoT = Recv<BranchingTforM, End>;
+type RecursMtoT = Recv<Branching0fromTtoM, End>;
 // N
-enum BranchingTforN {
+enum Branching0fromTtoN {
     More(
         SessionMpstTwenty<
             SR,
@@ -4687,9 +4687,9 @@ enum BranchingTforN {
         >,
     ),
 }
-type RecursNtoT = Recv<BranchingTforN, End>;
+type RecursNtoT = Recv<Branching0fromTtoN, End>;
 // O
-enum BranchingTforO {
+enum Branching0fromTtoO {
     More(
         SessionMpstTwenty<
             SR,
@@ -4781,9 +4781,9 @@ enum BranchingTforO {
         >,
     ),
 }
-type RecursOtoT = Recv<BranchingTforO, End>;
+type RecursOtoT = Recv<Branching0fromTtoO, End>;
 // P
-enum BranchingTforP {
+enum Branching0fromTtoP {
     More(
         SessionMpstTwenty<
             SR,
@@ -4875,9 +4875,9 @@ enum BranchingTforP {
         >,
     ),
 }
-type RecursPtoT = Recv<BranchingTforP, End>;
+type RecursPtoT = Recv<Branching0fromTtoP, End>;
 // Q
-enum BranchingTforQ {
+enum Branching0fromTtoQ {
     More(
         SessionMpstTwenty<
             SR,
@@ -4969,9 +4969,9 @@ enum BranchingTforQ {
         >,
     ),
 }
-type RecursQtoT = Recv<BranchingTforQ, End>;
+type RecursQtoT = Recv<Branching0fromTtoQ, End>;
 // R
-enum BranchingTforR {
+enum Branching0fromTtoR {
     More(
         SessionMpstTwenty<
             SR,
@@ -5063,9 +5063,9 @@ enum BranchingTforR {
         >,
     ),
 }
-type RecursRtoT = Recv<BranchingTforR, End>;
+type RecursRtoT = Recv<Branching0fromTtoR, End>;
 // S
-enum BranchingTforS {
+enum Branching0fromTtoS {
     More(
         SessionMpstTwenty<
             SR,
@@ -5157,27 +5157,27 @@ enum BranchingTforS {
         >,
     ),
 }
-type RecursStoT = Recv<BranchingTforS, End>;
+type RecursStoT = Recv<Branching0fromTtoS, End>;
 // T
-type ChooseTforAtoT = Send<BranchingTforA, End>;
-type ChooseTforBtoT = Send<BranchingTforB, End>;
-type ChooseTforCtoT = Send<BranchingTforC, End>;
-type ChooseTforDtoT = Send<BranchingTforD, End>;
-type ChooseTforEtoT = Send<BranchingTforE, End>;
-type ChooseTforFtoT = Send<BranchingTforF, End>;
-type ChooseTforGtoT = Send<BranchingTforG, End>;
-type ChooseTforHtoT = Send<BranchingTforH, End>;
-type ChooseTforItoT = Send<BranchingTforI, End>;
-type ChooseTforJtoT = Send<BranchingTforJ, End>;
-type ChooseTforKtoT = Send<BranchingTforK, End>;
-type ChooseTforLtoT = Send<BranchingTforL, End>;
-type ChooseTforMtoT = Send<BranchingTforM, End>;
-type ChooseTforNtoT = Send<BranchingTforN, End>;
-type ChooseTforOtoT = Send<BranchingTforO, End>;
-type ChooseTforPtoT = Send<BranchingTforP, End>;
-type ChooseTforQtoT = Send<BranchingTforQ, End>;
-type ChooseTforRtoT = Send<BranchingTforR, End>;
-type ChooseTforStoT = Send<BranchingTforS, End>;
+type ChooseTforAtoT = Send<Branching0fromTtoA, End>;
+type ChooseTforBtoT = Send<Branching0fromTtoB, End>;
+type ChooseTforCtoT = Send<Branching0fromTtoC, End>;
+type ChooseTforDtoT = Send<Branching0fromTtoD, End>;
+type ChooseTforEtoT = Send<Branching0fromTtoE, End>;
+type ChooseTforFtoT = Send<Branching0fromTtoF, End>;
+type ChooseTforGtoT = Send<Branching0fromTtoG, End>;
+type ChooseTforHtoT = Send<Branching0fromTtoH, End>;
+type ChooseTforItoT = Send<Branching0fromTtoI, End>;
+type ChooseTforJtoT = Send<Branching0fromTtoJ, End>;
+type ChooseTforKtoT = Send<Branching0fromTtoK, End>;
+type ChooseTforLtoT = Send<Branching0fromTtoL, End>;
+type ChooseTforMtoT = Send<Branching0fromTtoM, End>;
+type ChooseTforNtoT = Send<Branching0fromTtoN, End>;
+type ChooseTforOtoT = Send<Branching0fromTtoO, End>;
+type ChooseTforPtoT = Send<Branching0fromTtoP, End>;
+type ChooseTforQtoT = Send<Branching0fromTtoQ, End>;
+type ChooseTforRtoT = Send<Branching0fromTtoR, End>;
+type ChooseTforStoT = Send<Branching0fromTtoS, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstTwenty<
@@ -5673,10 +5673,10 @@ type EndpointT = SessionMpstTwenty<
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_t, {
-          BranchingTforA::Done(s) => {
+          Branching0fromTtoA::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforA::More(s) => {
+          Branching0fromTtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_t(s)?;
             let s = send_mpst_a_to_t((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -5722,10 +5722,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_t, {
-          BranchingTforB::Done(s) => {
+          Branching0fromTtoB::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforB::More(s) => {
+          Branching0fromTtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_t(s)?;
             let s = send_mpst_b_to_t((), s);
             let s = send_mpst_b_to_a((), s);
@@ -5771,10 +5771,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_t, {
-          BranchingTforC::Done(s) => {
+          Branching0fromTtoC::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforC::More(s) => {
+          Branching0fromTtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_t(s)?;
             let s = send_mpst_c_to_t((), s);
             let s = send_mpst_c_to_a((), s);
@@ -5820,10 +5820,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_t, {
-          BranchingTforD::Done(s) => {
+          Branching0fromTtoD::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforD::More(s) => {
+          Branching0fromTtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_t(s)?;
             let s = send_mpst_d_to_t((), s);
             let s = send_mpst_d_to_a((), s);
@@ -5869,10 +5869,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_t, {
-          BranchingTforE::Done(s) => {
+          Branching0fromTtoE::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforE::More(s) => {
+          Branching0fromTtoE::More(s) => {
             let (_, s) = recv_mpst_e_to_t(s)?;
             let s = send_mpst_e_to_t((), s);
             let s = send_mpst_e_to_a((), s);
@@ -5918,10 +5918,10 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_t, {
-          BranchingTforF::Done(s) => {
+          Branching0fromTtoF::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforF::More(s) => {
+          Branching0fromTtoF::More(s) => {
             let (_, s) = recv_mpst_f_to_t(s)?;
             let s = send_mpst_f_to_t((), s);
             let s = send_mpst_f_to_a((), s);
@@ -5967,10 +5967,10 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_to_t, {
-          BranchingTforG::Done(s) => {
+          Branching0fromTtoG::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforG::More(s) => {
+          Branching0fromTtoG::More(s) => {
             let (_, s) = recv_mpst_g_to_t(s)?;
             let s = send_mpst_g_to_t((), s);
             let s = send_mpst_g_to_a((), s);
@@ -6016,10 +6016,10 @@ fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_to_t, {
-          BranchingTforH::Done(s) => {
+          Branching0fromTtoH::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingTforH::More(s) => {
+          Branching0fromTtoH::More(s) => {
             let (_, s) = recv_mpst_h_to_t(s)?;
             let s = send_mpst_h_to_t((), s);
             let s = send_mpst_h_to_a((), s);
@@ -6065,10 +6065,10 @@ fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_to_t, {
-          BranchingTforI::Done(s) => {
+          Branching0fromTtoI::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforI::More(s) => {
+        Branching0fromTtoI::More(s) => {
             let (_, s) = recv_mpst_i_to_t(s)?;
             let s = send_mpst_i_to_t((), s);
             let s = send_mpst_i_to_a((), s);
@@ -6114,10 +6114,10 @@ fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_j_to_t, {
-          BranchingTforJ::Done(s) => {
+          Branching0fromTtoJ::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforJ::More(s) => {
+        Branching0fromTtoJ::More(s) => {
             let (_, s) = recv_mpst_j_to_t(s)?;
             let s = send_mpst_j_to_t((), s);
             let s = send_mpst_j_to_a((), s);
@@ -6163,10 +6163,10 @@ fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_k_to_t, {
-          BranchingTforK::Done(s) => {
+          Branching0fromTtoK::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforK::More(s) => {
+        Branching0fromTtoK::More(s) => {
             let (_, s) = recv_mpst_k_to_t(s)?;
             let s = send_mpst_k_to_t((), s);
             let s = send_mpst_k_to_a((), s);
@@ -6212,10 +6212,10 @@ fn simple_five_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_l_to_t, {
-          BranchingTforL::Done(s) => {
+          Branching0fromTtoL::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforL::More(s) => {
+        Branching0fromTtoL::More(s) => {
             let (_, s) = recv_mpst_l_to_t(s)?;
             let s = send_mpst_l_to_t((), s);
             let s = send_mpst_l_to_a((), s);
@@ -6261,10 +6261,10 @@ fn simple_five_endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_m_to_t, {
-          BranchingTforM::Done(s) => {
+          Branching0fromTtoM::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforM::More(s) => {
+        Branching0fromTtoM::More(s) => {
             let (_, s) = recv_mpst_m_to_t(s)?;
             let s = send_mpst_m_to_t((), s);
             let s = send_mpst_m_to_a((), s);
@@ -6310,10 +6310,10 @@ fn simple_five_endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_n_to_t, {
-          BranchingTforN::Done(s) => {
+          Branching0fromTtoN::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforN::More(s) => {
+        Branching0fromTtoN::More(s) => {
             let (_, s) = recv_mpst_n_to_t(s)?;
             let s = send_mpst_n_to_t((), s);
             let s = send_mpst_n_to_a((), s);
@@ -6359,10 +6359,10 @@ fn simple_five_endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_o_to_t, {
-          BranchingTforO::Done(s) => {
+          Branching0fromTtoO::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforO::More(s) => {
+        Branching0fromTtoO::More(s) => {
             let (_, s) = recv_mpst_o_to_t(s)?;
             let s = send_mpst_o_to_t((), s);
             let s = send_mpst_o_to_a((), s);
@@ -6408,10 +6408,10 @@ fn simple_five_endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_p_to_t, {
-          BranchingTforP::Done(s) => {
+          Branching0fromTtoP::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforP::More(s) => {
+        Branching0fromTtoP::More(s) => {
             let (_, s) = recv_mpst_p_to_t(s)?;
             let s = send_mpst_p_to_t((), s);
             let s = send_mpst_p_to_a((), s);
@@ -6457,10 +6457,10 @@ fn simple_five_endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_q_to_t, {
-          BranchingTforQ::Done(s) => {
+          Branching0fromTtoQ::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforQ::More(s) => {
+        Branching0fromTtoQ::More(s) => {
             let (_, s) = recv_mpst_q_to_t(s)?;
             let s = send_mpst_q_to_t((), s);
             let s = send_mpst_q_to_a((), s);
@@ -6506,10 +6506,10 @@ fn simple_five_endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_r_to_t, {
-          BranchingTforR::Done(s) => {
+          Branching0fromTtoR::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforR::More(s) => {
+        Branching0fromTtoR::More(s) => {
             let (_, s) = recv_mpst_r_to_t(s)?;
             let s = send_mpst_r_to_t((), s);
             let s = send_mpst_r_to_a((), s);
@@ -6555,10 +6555,10 @@ fn simple_five_endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_to_t, {
-          BranchingTforS::Done(s) => {
+          Branching0fromTtoS::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingTforS::More(s) => {
+        Branching0fromTtoS::More(s) => {
             let (_, s) = recv_mpst_s_to_t(s)?;
             let s = send_mpst_s_to_t((), s);
             let s = send_mpst_s_to_a((), s);
@@ -6630,25 +6630,25 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_t_to_q,
                 send_mpst_t_to_r,
                 send_mpst_t_to_s, =>
-                BranchingTforA::Done,
-                BranchingTforB::Done,
-                BranchingTforC::Done,
-                BranchingTforD::Done,
-                BranchingTforE::Done,
-                BranchingTforF::Done,
-                BranchingTforG::Done,
-                BranchingTforH::Done,
-                BranchingTforI::Done,
-                BranchingTforJ::Done,
-                BranchingTforK::Done,
-                BranchingTforL::Done,
-                BranchingTforM::Done,
-                BranchingTforN::Done,
-                BranchingTforO::Done,
-                BranchingTforP::Done,
-                BranchingTforQ::Done,
-                BranchingTforR::Done,
-                BranchingTforS::Done, =>
+                Branching0fromTtoA::Done,
+                Branching0fromTtoB::Done,
+                Branching0fromTtoC::Done,
+                Branching0fromTtoD::Done,
+                Branching0fromTtoE::Done,
+                Branching0fromTtoF::Done,
+                Branching0fromTtoG::Done,
+                Branching0fromTtoH::Done,
+                Branching0fromTtoI::Done,
+                Branching0fromTtoJ::Done,
+                Branching0fromTtoK::Done,
+                Branching0fromTtoL::Done,
+                Branching0fromTtoM::Done,
+                Branching0fromTtoN::Done,
+                Branching0fromTtoO::Done,
+                Branching0fromTtoP::Done,
+                Branching0fromTtoQ::Done,
+                Branching0fromTtoR::Done,
+                Branching0fromTtoS::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -6698,25 +6698,25 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_t_to_q,
                 send_mpst_t_to_r,
                 send_mpst_t_to_s, =>
-                BranchingTforA::More,
-                BranchingTforB::More,
-                BranchingTforC::More,
-                BranchingTforD::More,
-                BranchingTforE::More,
-                BranchingTforF::More,
-                BranchingTforG::More,
-                BranchingTforH::More,
-                BranchingTforI::More,
-                BranchingTforJ::More,
-                BranchingTforK::More,
-                BranchingTforL::More,
-                BranchingTforM::More,
-                BranchingTforN::More,
-                BranchingTforO::More,
-                BranchingTforP::More,
-                BranchingTforQ::More,
-                BranchingTforR::More,
-                BranchingTforS::More, =>
+                Branching0fromTtoA::More,
+                Branching0fromTtoB::More,
+                Branching0fromTtoC::More,
+                Branching0fromTtoD::More,
+                Branching0fromTtoE::More,
+                Branching0fromTtoF::More,
+                Branching0fromTtoG::More,
+                Branching0fromTtoH::More,
+                Branching0fromTtoI::More,
+                Branching0fromTtoJ::More,
+                Branching0fromTtoK::More,
+                Branching0fromTtoL::More,
+                Branching0fromTtoM::More,
+                Branching0fromTtoN::More,
+                Branching0fromTtoO::More,
+                Branching0fromTtoP::More,
+                Branching0fromTtoQ::More,
+                Branching0fromTtoR::More,
+                Branching0fromTtoS::More, =>
                 RoleA,
                 RoleB,
                 RoleC,

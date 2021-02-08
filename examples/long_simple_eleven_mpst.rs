@@ -1078,7 +1078,7 @@ type R2I<R> = RoleI<RoleI<R>>;
 type R2J<R> = RoleJ<RoleJ<R>>;
 type R2K<R> = RoleK<RoleK<R>>;
 // A
-enum BranchingKforA {
+enum Branching0fromKtoA {
     More(
         SessionMpstEleven<
             RS,
@@ -1097,9 +1097,9 @@ enum BranchingKforA {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoK = Recv<BranchingKforA, End>;
+type RecursAtoK = Recv<Branching0fromKtoA, End>;
 // B
-enum BranchingKforB {
+enum Branching0fromKtoB {
     More(
         SessionMpstEleven<
             SR,
@@ -1118,9 +1118,9 @@ enum BranchingKforB {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoK = Recv<BranchingKforB, End>;
+type RecursBtoK = Recv<Branching0fromKtoB, End>;
 // C
-enum BranchingKforC {
+enum Branching0fromKtoC {
     More(
         SessionMpstEleven<
             SR,
@@ -1139,9 +1139,9 @@ enum BranchingKforC {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoK = Recv<BranchingKforC, End>;
+type RecursCtoK = Recv<Branching0fromKtoC, End>;
 // D
-enum BranchingKforD {
+enum Branching0fromKtoD {
     More(
         SessionMpstEleven<
             SR,
@@ -1160,9 +1160,9 @@ enum BranchingKforD {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoK = Recv<BranchingKforD, End>;
+type RecursDtoK = Recv<Branching0fromKtoD, End>;
 // E
-enum BranchingKforE {
+enum Branching0fromKtoE {
     More(
         SessionMpstEleven<
             SR,
@@ -1181,9 +1181,9 @@ enum BranchingKforE {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoK = Recv<BranchingKforE, End>;
+type RecursEtoK = Recv<Branching0fromKtoE, End>;
 // F
-enum BranchingKforF {
+enum Branching0fromKtoF {
     More(
         SessionMpstEleven<
             SR,
@@ -1202,9 +1202,9 @@ enum BranchingKforF {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoK = Recv<BranchingKforF, End>;
+type RecursFtoK = Recv<Branching0fromKtoF, End>;
 // G
-enum BranchingKforG {
+enum Branching0fromKtoG {
     More(
         SessionMpstEleven<
             SR,
@@ -1223,9 +1223,9 @@ enum BranchingKforG {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoK = Recv<BranchingKforG, End>;
+type RecursGtoK = Recv<Branching0fromKtoG, End>;
 // H
-enum BranchingKforH {
+enum Branching0fromKtoH {
     More(
         SessionMpstEleven<
             SR,
@@ -1244,9 +1244,9 @@ enum BranchingKforH {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
-type RecursHtoK = Recv<BranchingKforH, End>;
+type RecursHtoK = Recv<Branching0fromKtoH, End>;
 // I
-enum BranchingKforI {
+enum Branching0fromKtoI {
     More(
         SessionMpstEleven<
             SR,
@@ -1265,9 +1265,9 @@ enum BranchingKforI {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
-type RecursItoK = Recv<BranchingKforI, End>;
+type RecursItoK = Recv<Branching0fromKtoI, End>;
 // J
-enum BranchingKforJ {
+enum Branching0fromKtoJ {
     More(
         SessionMpstEleven<
             SR,
@@ -1286,18 +1286,18 @@ enum BranchingKforJ {
     ),
     Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
-type RecursJtoK = Recv<BranchingKforJ, End>;
+type RecursJtoK = Recv<Branching0fromKtoJ, End>;
 // K
-type ChooseKforAtoK = Send<BranchingKforA, End>;
-type ChooseKforBtoK = Send<BranchingKforB, End>;
-type ChooseKforCtoK = Send<BranchingKforC, End>;
-type ChooseKforDtoK = Send<BranchingKforD, End>;
-type ChooseKforEtoK = Send<BranchingKforE, End>;
-type ChooseKforFtoK = Send<BranchingKforF, End>;
-type ChooseKforGtoK = Send<BranchingKforG, End>;
-type ChooseKforHtoK = Send<BranchingKforH, End>;
-type ChooseKforItoK = Send<BranchingKforI, End>;
-type ChooseKforJtoK = Send<BranchingKforJ, End>;
+type ChooseKforAtoK = Send<Branching0fromKtoA, End>;
+type ChooseKforBtoK = Send<Branching0fromKtoB, End>;
+type ChooseKforCtoK = Send<Branching0fromKtoC, End>;
+type ChooseKforDtoK = Send<Branching0fromKtoD, End>;
+type ChooseKforEtoK = Send<Branching0fromKtoE, End>;
+type ChooseKforFtoK = Send<Branching0fromKtoF, End>;
+type ChooseKforGtoK = Send<Branching0fromKtoG, End>;
+type ChooseKforHtoK = Send<Branching0fromKtoH, End>;
+type ChooseKforItoK = Send<Branching0fromKtoI, End>;
+type ChooseKforJtoK = Send<Branching0fromKtoJ, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstEleven<
@@ -1457,10 +1457,10 @@ type EndpointK = SessionMpstEleven<
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_k, {
-          BranchingKforA::Done(s) => {
+          Branching0fromKtoA::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforA::More(s) => {
+          Branching0fromKtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_k(s)?;
             let s = send_mpst_a_to_k((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -1488,10 +1488,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_k, {
-          BranchingKforB::Done(s) => {
+          Branching0fromKtoB::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforB::More(s) => {
+          Branching0fromKtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_k(s)?;
             let s = send_mpst_b_to_k((), s);
             let s = send_mpst_b_to_a((), s);
@@ -1519,10 +1519,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_k, {
-          BranchingKforC::Done(s) => {
+          Branching0fromKtoC::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforC::More(s) => {
+          Branching0fromKtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_k(s)?;
             let s = send_mpst_c_to_k((), s);
             let s = send_mpst_c_to_a((), s);
@@ -1550,10 +1550,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_k, {
-          BranchingKforD::Done(s) => {
+          Branching0fromKtoD::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforD::More(s) => {
+          Branching0fromKtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_k(s)?;
             let s = send_mpst_d_to_k((), s);
             let s = send_mpst_d_to_a((), s);
@@ -1581,10 +1581,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_k, {
-          BranchingKforE::Done(s) => {
+          Branching0fromKtoE::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforE::More(s) => {
+          Branching0fromKtoE::More(s) => {
             let (_, s) = recv_mpst_e_to_k(s)?;
             let s = send_mpst_e_to_k((), s);
             let s = send_mpst_e_to_a((), s);
@@ -1612,10 +1612,10 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_k, {
-          BranchingKforF::Done(s) => {
+          Branching0fromKtoF::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforF::More(s) => {
+          Branching0fromKtoF::More(s) => {
             let (_, s) = recv_mpst_f_to_k(s)?;
             let s = send_mpst_f_to_k((), s);
             let s = send_mpst_f_to_a((), s);
@@ -1643,10 +1643,10 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_to_k, {
-          BranchingKforG::Done(s) => {
+          Branching0fromKtoG::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforG::More(s) => {
+          Branching0fromKtoG::More(s) => {
             let (_, s) = recv_mpst_g_to_k(s)?;
             let s = send_mpst_g_to_k((), s);
             let s = send_mpst_g_to_a((), s);
@@ -1674,10 +1674,10 @@ fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_to_k, {
-          BranchingKforH::Done(s) => {
+          Branching0fromKtoH::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingKforH::More(s) => {
+          Branching0fromKtoH::More(s) => {
             let (_, s) = recv_mpst_h_to_k(s)?;
             let s = send_mpst_h_to_k((), s);
             let s = send_mpst_h_to_a((), s);
@@ -1705,10 +1705,10 @@ fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_to_k, {
-          BranchingKforI::Done(s) => {
+          Branching0fromKtoI::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingKforI::More(s) => {
+        Branching0fromKtoI::More(s) => {
             let (_, s) = recv_mpst_i_to_k(s)?;
             let s = send_mpst_i_to_k((), s);
             let s = send_mpst_i_to_a((), s);
@@ -1736,10 +1736,10 @@ fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_j_to_k, {
-          BranchingKforJ::Done(s) => {
+          Branching0fromKtoJ::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingKforJ::More(s) => {
+        Branching0fromKtoJ::More(s) => {
             let (_, s) = recv_mpst_j_to_k(s)?;
             let s = send_mpst_j_to_k((), s);
             let s = send_mpst_j_to_a((), s);
@@ -1784,16 +1784,16 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_k_to_h,
                 send_mpst_k_to_i,
                 send_mpst_k_to_j, =>
-                BranchingKforA::Done,
-                BranchingKforB::Done,
-                BranchingKforC::Done,
-                BranchingKforD::Done,
-                BranchingKforE::Done,
-                BranchingKforF::Done,
-                BranchingKforG::Done,
-                BranchingKforH::Done,
-                BranchingKforI::Done,
-                BranchingKforJ::Done, =>
+                Branching0fromKtoA::Done,
+                Branching0fromKtoB::Done,
+                Branching0fromKtoC::Done,
+                Branching0fromKtoD::Done,
+                Branching0fromKtoE::Done,
+                Branching0fromKtoF::Done,
+                Branching0fromKtoG::Done,
+                Branching0fromKtoH::Done,
+                Branching0fromKtoI::Done,
+                Branching0fromKtoJ::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -1825,16 +1825,16 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_k_to_h,
                 send_mpst_k_to_i,
                 send_mpst_k_to_j, =>
-                BranchingKforA::More,
-                BranchingKforB::More,
-                BranchingKforC::More,
-                BranchingKforD::More,
-                BranchingKforE::More,
-                BranchingKforF::More,
-                BranchingKforG::More,
-                BranchingKforH::More,
-                BranchingKforI::More,
-                BranchingKforJ::More, =>
+                Branching0fromKtoA::More,
+                Branching0fromKtoB::More,
+                Branching0fromKtoC::More,
+                Branching0fromKtoD::More,
+                Branching0fromKtoE::More,
+                Branching0fromKtoF::More,
+                Branching0fromKtoG::More,
+                Branching0fromKtoH::More,
+                Branching0fromKtoI::More,
+                Branching0fromKtoJ::More, =>
                 RoleA,
                 RoleB,
                 RoleC,

@@ -911,7 +911,7 @@ type R2H<R> = RoleH<RoleH<R>>;
 type R2I<R> = RoleI<RoleI<R>>;
 type R2J<R> = RoleJ<RoleJ<R>>;
 // A
-enum BranchingJforA {
+enum Branching0fromJtoA {
     More(
         SessionMpstTen<
             RS,
@@ -929,9 +929,9 @@ enum BranchingJforA {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoJ = Recv<BranchingJforA, End>;
+type RecursAtoJ = Recv<Branching0fromJtoA, End>;
 // B
-enum BranchingJforB {
+enum Branching0fromJtoB {
     More(
         SessionMpstTen<
             SR,
@@ -949,9 +949,9 @@ enum BranchingJforB {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoJ = Recv<BranchingJforB, End>;
+type RecursBtoJ = Recv<Branching0fromJtoB, End>;
 // C
-enum BranchingJforC {
+enum Branching0fromJtoC {
     More(
         SessionMpstTen<
             SR,
@@ -969,9 +969,9 @@ enum BranchingJforC {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoJ = Recv<BranchingJforC, End>;
+type RecursCtoJ = Recv<Branching0fromJtoC, End>;
 // D
-enum BranchingJforD {
+enum Branching0fromJtoD {
     More(
         SessionMpstTen<
             SR,
@@ -989,9 +989,9 @@ enum BranchingJforD {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoJ = Recv<BranchingJforD, End>;
+type RecursDtoJ = Recv<Branching0fromJtoD, End>;
 // E
-enum BranchingJforE {
+enum Branching0fromJtoE {
     More(
         SessionMpstTen<
             SR,
@@ -1009,9 +1009,9 @@ enum BranchingJforE {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoJ = Recv<BranchingJforE, End>;
+type RecursEtoJ = Recv<Branching0fromJtoE, End>;
 // F
-enum BranchingJforF {
+enum Branching0fromJtoF {
     More(
         SessionMpstTen<
             SR,
@@ -1029,9 +1029,9 @@ enum BranchingJforF {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoJ = Recv<BranchingJforF, End>;
+type RecursFtoJ = Recv<Branching0fromJtoF, End>;
 // G
-enum BranchingJforG {
+enum Branching0fromJtoG {
     More(
         SessionMpstTen<
             SR,
@@ -1049,9 +1049,9 @@ enum BranchingJforG {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoJ = Recv<BranchingJforG, End>;
+type RecursGtoJ = Recv<Branching0fromJtoG, End>;
 // H
-enum BranchingJforH {
+enum Branching0fromJtoH {
     More(
         SessionMpstTen<
             SR,
@@ -1069,9 +1069,9 @@ enum BranchingJforH {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
-type RecursHtoJ = Recv<BranchingJforH, End>;
+type RecursHtoJ = Recv<Branching0fromJtoH, End>;
 // I
-enum BranchingJforI {
+enum Branching0fromJtoI {
     More(
         SessionMpstTen<
             SR,
@@ -1089,17 +1089,17 @@ enum BranchingJforI {
     ),
     Done(SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
-type RecursItoJ = Recv<BranchingJforI, End>;
+type RecursItoJ = Recv<Branching0fromJtoI, End>;
 // J
-type ChooseJforAtoJ = Send<BranchingJforA, End>;
-type ChooseJforBtoJ = Send<BranchingJforB, End>;
-type ChooseJforCtoJ = Send<BranchingJforC, End>;
-type ChooseJforDtoJ = Send<BranchingJforD, End>;
-type ChooseJforEtoJ = Send<BranchingJforE, End>;
-type ChooseJforFtoJ = Send<BranchingJforF, End>;
-type ChooseJforGtoJ = Send<BranchingJforG, End>;
-type ChooseJforHtoJ = Send<BranchingJforH, End>;
-type ChooseJforItoJ = Send<BranchingJforI, End>;
+type ChooseJforAtoJ = Send<Branching0fromJtoA, End>;
+type ChooseJforBtoJ = Send<Branching0fromJtoB, End>;
+type ChooseJforCtoJ = Send<Branching0fromJtoC, End>;
+type ChooseJforDtoJ = Send<Branching0fromJtoD, End>;
+type ChooseJforEtoJ = Send<Branching0fromJtoE, End>;
+type ChooseJforFtoJ = Send<Branching0fromJtoF, End>;
+type ChooseJforGtoJ = Send<Branching0fromJtoG, End>;
+type ChooseJforHtoJ = Send<Branching0fromJtoH, End>;
+type ChooseJforItoJ = Send<Branching0fromJtoI, End>;
 
 // Creating the MP sessions
 type EndpointA =
@@ -1134,12 +1134,13 @@ type EndpointJ = SessionMpstTen<
     NameJ,
 >;
 
+// Functions
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_j, {
-          BranchingJforA::Done(s) => {
+          Branching0fromJtoA::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforA::More(s) => {
+          Branching0fromJtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_j(s)?;
             let s = send_mpst_a_to_j((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -1165,10 +1166,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_j, {
-          BranchingJforB::Done(s) => {
+          Branching0fromJtoB::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforB::More(s) => {
+          Branching0fromJtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_j(s)?;
             let s = send_mpst_b_to_j((), s);
             let s = send_mpst_b_to_a((), s);
@@ -1194,10 +1195,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_j, {
-          BranchingJforC::Done(s) => {
+          Branching0fromJtoC::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforC::More(s) => {
+          Branching0fromJtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_j(s)?;
             let s = send_mpst_c_to_j((), s);
             let s = send_mpst_c_to_a((), s);
@@ -1223,10 +1224,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_j, {
-          BranchingJforD::Done(s) => {
+          Branching0fromJtoD::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforD::More(s) => {
+          Branching0fromJtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_j(s)?;
             let s = send_mpst_d_to_j((), s);
             let s = send_mpst_d_to_a((), s);
@@ -1252,10 +1253,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_j, {
-          BranchingJforE::Done(s) => {
+          Branching0fromJtoE::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforE::More(s) => {
+          Branching0fromJtoE::More(s) => {
             let (_, s) = recv_mpst_e_to_j(s)?;
             let s = send_mpst_e_to_j((), s);
             let s = send_mpst_e_to_a((), s);
@@ -1281,10 +1282,10 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_j, {
-          BranchingJforF::Done(s) => {
+          Branching0fromJtoF::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforF::More(s) => {
+          Branching0fromJtoF::More(s) => {
             let (_, s) = recv_mpst_f_to_j(s)?;
             let s = send_mpst_f_to_j((), s);
             let s = send_mpst_f_to_a((), s);
@@ -1310,10 +1311,10 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_to_j, {
-          BranchingJforG::Done(s) => {
+          Branching0fromJtoG::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforG::More(s) => {
+          Branching0fromJtoG::More(s) => {
             let (_, s) = recv_mpst_g_to_j(s)?;
             let s = send_mpst_g_to_j((), s);
             let s = send_mpst_g_to_a((), s);
@@ -1339,10 +1340,10 @@ fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_to_j, {
-          BranchingJforH::Done(s) => {
+          Branching0fromJtoH::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingJforH::More(s) => {
+          Branching0fromJtoH::More(s) => {
             let (_, s) = recv_mpst_h_to_j(s)?;
             let s = send_mpst_h_to_j((), s);
             let s = send_mpst_h_to_a((), s);
@@ -1368,10 +1369,10 @@ fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_to_j, {
-          BranchingJforI::Done(s) => {
+          Branching0fromJtoI::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingJforI::More(s) => {
+        Branching0fromJtoI::More(s) => {
             let (_, s) = recv_mpst_i_to_j(s)?;
             let s = send_mpst_i_to_j((), s);
             let s = send_mpst_i_to_a((), s);
@@ -1413,15 +1414,15 @@ fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_j_to_g,
                 send_mpst_j_to_h,
                 send_mpst_j_to_i, =>
-                BranchingJforA::Done,
-                BranchingJforB::Done,
-                BranchingJforC::Done,
-                BranchingJforD::Done,
-                BranchingJforE::Done,
-                BranchingJforF::Done,
-                BranchingJforG::Done,
-                BranchingJforH::Done,
-                BranchingJforI::Done, =>
+                Branching0fromJtoA::Done,
+                Branching0fromJtoB::Done,
+                Branching0fromJtoC::Done,
+                Branching0fromJtoD::Done,
+                Branching0fromJtoE::Done,
+                Branching0fromJtoF::Done,
+                Branching0fromJtoG::Done,
+                Branching0fromJtoH::Done,
+                Branching0fromJtoI::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -1451,15 +1452,15 @@ fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_j_to_g,
                 send_mpst_j_to_h,
                 send_mpst_j_to_i, =>
-                BranchingJforA::More,
-                BranchingJforB::More,
-                BranchingJforC::More,
-                BranchingJforD::More,
-                BranchingJforE::More,
-                BranchingJforF::More,
-                BranchingJforG::More,
-                BranchingJforH::More,
-                BranchingJforI::More, =>
+                Branching0fromJtoA::More,
+                Branching0fromJtoB::More,
+                Branching0fromJtoC::More,
+                Branching0fromJtoD::More,
+                Branching0fromJtoE::More,
+                Branching0fromJtoF::More,
+                Branching0fromJtoG::More,
+                Branching0fromJtoH::More,
+                Branching0fromJtoI::More, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -1599,26 +1600,63 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
+type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
+type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
+
+type SendingReceiving = crossbeam_channel::Sender<Receiving>;
+type ReceivingSending = crossbeam_channel::Receiver<Sending>;
+
+type Receiving = crossbeam_channel::Receiver<()>;
+type Sending = crossbeam_channel::Sender<()>;
+
 fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
     for _ in 0..45 {
         let main = spawn(move || {
             for _ in 0..SIZE {
-                let (sender_1, receiver_1) = bounded::<()>(1);
-                sender_1.send(()).unwrap_or(());
-                receiver_1.recv().unwrap_or(());
+                let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
+                let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
-                let (sender_2, receiver_2) = bounded::<()>(1);
-                sender_2.send(()).unwrap_or(());
-                receiver_2.recv().unwrap_or(());
+                let (sender_1, receiver_1) = bounded::<SendingReceiving>(1);
+                let (sender_5, receiver_5) = bounded::<ReceivingSending>(1);
+
+                let (sender_2, receiver_2) = bounded::<Receiving>(1);
+                let (sender_6, receiver_6) = bounded::<Sending>(1);
+
+                let (sender_3, receiver_3) = bounded::<()>(1);
+                let (sender_7, receiver_7) = bounded::<()>(1);
+
+                sender_0.send(receiver_1).unwrap();
+                sender_4.send(sender_5).unwrap();
+
+                let receiver_1_bis = receiver_0.recv().unwrap();
+                let sender_5_bis = receiver_4.recv().unwrap();
+
+                sender_1.send(sender_2).unwrap();
+                sender_5_bis.send(receiver_6).unwrap();
+
+                let sender_2_bis = receiver_1_bis.recv().unwrap();
+                let receiver_6_bis = receiver_5.recv().unwrap();
+
+                sender_2_bis.send(receiver_3).unwrap();
+                sender_6.send(sender_7).unwrap();
+
+                let receiver_2_bis = receiver_2.recv().unwrap();
+                let sender_7_bis = receiver_6_bis.recv().unwrap();
+
+                sender_3.send(()).unwrap();
+                sender_7_bis.send(()).unwrap();
+
+                receiver_2_bis.recv().unwrap();
+                receiver_7.recv().unwrap();
             }
 
             // "Close" connection
             let (sender_close_1, receiver_close_1) = bounded::<()>(1);
-            sender_close_1.send(()).unwrap_or(());
-
             let (sender_close_2, receiver_close_2) = bounded::<()>(1);
+
+            sender_close_1.send(()).unwrap_or(());
             sender_close_2.send(()).unwrap_or(());
 
             receiver_close_1.recv().unwrap_or(());

@@ -474,7 +474,7 @@ type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 type R2G<R> = RoleG<RoleG<R>>;
 // A
-enum BranchingGforA {
+enum Branching0fromGtoA {
     More(
         SessionMpstSeven<
             RS,
@@ -489,9 +489,9 @@ enum BranchingGforA {
     ),
     Done(SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoG = Recv<BranchingGforA, End>;
+type RecursAtoG = Recv<Branching0fromGtoA, End>;
 // B
-enum BranchingGforB {
+enum Branching0fromGtoB {
     More(
         SessionMpstSeven<
             SR,
@@ -506,9 +506,9 @@ enum BranchingGforB {
     ),
     Done(SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoG = Recv<BranchingGforB, End>;
+type RecursBtoG = Recv<Branching0fromGtoB, End>;
 // C
-enum BranchingGforC {
+enum Branching0fromGtoC {
     More(
         SessionMpstSeven<
             SR,
@@ -523,9 +523,9 @@ enum BranchingGforC {
     ),
     Done(SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoG = Recv<BranchingGforC, End>;
+type RecursCtoG = Recv<Branching0fromGtoC, End>;
 // D
-enum BranchingGforD {
+enum Branching0fromGtoD {
     More(
         SessionMpstSeven<
             SR,
@@ -540,9 +540,9 @@ enum BranchingGforD {
     ),
     Done(SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoG = Recv<BranchingGforD, End>;
+type RecursDtoG = Recv<Branching0fromGtoD, End>;
 // E
-enum BranchingGforE {
+enum Branching0fromGtoE {
     More(
         SessionMpstSeven<
             SR,
@@ -557,9 +557,9 @@ enum BranchingGforE {
     ),
     Done(SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoG = Recv<BranchingGforE, End>;
+type RecursEtoG = Recv<Branching0fromGtoE, End>;
 // F
-enum BranchingGforF {
+enum Branching0fromGtoF {
     More(
         SessionMpstSeven<
             SR,
@@ -574,14 +574,14 @@ enum BranchingGforF {
     ),
     Done(SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoG = Recv<BranchingGforF, End>;
+type RecursFtoG = Recv<Branching0fromGtoF, End>;
 // F
-type ChooseGforAtoG = Send<BranchingGforA, End>;
-type ChooseGforBtoG = Send<BranchingGforB, End>;
-type ChooseGforCtoG = Send<BranchingGforC, End>;
-type ChooseGforDtoG = Send<BranchingGforD, End>;
-type ChooseGforEtoG = Send<BranchingGforE, End>;
-type ChooseGforFtoG = Send<BranchingGforF, End>;
+type ChooseGforAtoG = Send<Branching0fromGtoA, End>;
+type ChooseGforBtoG = Send<Branching0fromGtoB, End>;
+type ChooseGforCtoG = Send<Branching0fromGtoC, End>;
+type ChooseGforDtoG = Send<Branching0fromGtoD, End>;
+type ChooseGforEtoG = Send<Branching0fromGtoE, End>;
+type ChooseGforFtoG = Send<Branching0fromGtoF, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstSeven<End, End, End, End, End, RecursAtoG, RoleG<RoleEnd>, NameA>;
@@ -603,10 +603,10 @@ type EndpointG = SessionMpstSeven<
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_g, {
-          BranchingGforA::Done(s) => {
+          Branching0fromGtoA::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingGforA::More(s) => {
+          Branching0fromGtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_g(s)?;
             let s = send_mpst_a_to_g((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -626,10 +626,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_g, {
-          BranchingGforB::Done(s) => {
+          Branching0fromGtoB::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingGforB::More(s) => {
+          Branching0fromGtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_g(s)?;
             let s = send_mpst_b_to_g((), s);
             let s = send_mpst_b_to_a((), s);
@@ -649,10 +649,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_g, {
-          BranchingGforC::Done(s) => {
+          Branching0fromGtoC::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingGforC::More(s) => {
+          Branching0fromGtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_g(s)?;
             let s = send_mpst_c_to_g((), s);
             let s = send_mpst_c_to_a((), s);
@@ -672,10 +672,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_g, {
-          BranchingGforD::Done(s) => {
+          Branching0fromGtoD::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingGforD::More(s) => {
+          Branching0fromGtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_g(s)?;
             let s = send_mpst_d_to_g((), s);
             let s = send_mpst_d_to_a((), s);
@@ -695,10 +695,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_g, {
-          BranchingGforE::Done(s) => {
+          Branching0fromGtoE::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingGforE::More(s) => {
+          Branching0fromGtoE::More(s) => {
             let (_, s) = recv_mpst_e_to_g(s)?;
             let s = send_mpst_e_to_g((), s);
             let s = send_mpst_e_to_a((), s);
@@ -718,10 +718,10 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_g, {
-          BranchingGforF::Done(s) => {
+          Branching0fromGtoF::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingGforF::More(s) => {
+          Branching0fromGtoF::More(s) => {
             let (_, s) = recv_mpst_f_to_g(s)?;
             let s = send_mpst_f_to_g((), s);
             let s = send_mpst_f_to_a((), s);
@@ -754,12 +754,12 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_g_to_d,
                 send_mpst_g_to_e,
                 send_mpst_g_to_f, =>
-                BranchingGforA::Done,
-                BranchingGforB::Done,
-                BranchingGforC::Done,
-                BranchingGforD::Done,
-                BranchingGforE::Done,
-                BranchingGforF::Done, =>
+                Branching0fromGtoA::Done,
+                Branching0fromGtoB::Done,
+                Branching0fromGtoC::Done,
+                Branching0fromGtoD::Done,
+                Branching0fromGtoE::Done,
+                Branching0fromGtoF::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -783,12 +783,12 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_g_to_d,
                 send_mpst_g_to_e,
                 send_mpst_g_to_f,=>
-                BranchingGforA::More,
-                BranchingGforB::More,
-                BranchingGforC::More,
-                BranchingGforD::More,
-                BranchingGforE::More,
-                BranchingGforF::More, =>
+                Branching0fromGtoA::More,
+                Branching0fromGtoB::More,
+                Branching0fromGtoC::More,
+                Branching0fromGtoD::More,
+                Branching0fromGtoE::More,
+                Branching0fromGtoF::More, =>
                 RoleA,
                 RoleB,
                 RoleC,

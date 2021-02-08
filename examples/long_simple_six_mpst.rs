@@ -363,7 +363,7 @@ type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 // A
-enum BranchingFforA {
+enum Branching0fromFtoA {
     More(
         SessionMpstSix<
             RS,
@@ -377,9 +377,9 @@ enum BranchingFforA {
     ),
     Done(SessionMpstSix<End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoF = Recv<BranchingFforA, End>;
+type RecursAtoF = Recv<Branching0fromFtoA, End>;
 // B
-enum BranchingFforB {
+enum Branching0fromFtoB {
     More(
         SessionMpstSix<
             SR,
@@ -393,9 +393,9 @@ enum BranchingFforB {
     ),
     Done(SessionMpstSix<End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoF = Recv<BranchingFforB, End>;
+type RecursBtoF = Recv<Branching0fromFtoB, End>;
 // C
-enum BranchingFforC {
+enum Branching0fromFtoC {
     More(
         SessionMpstSix<
             SR,
@@ -409,9 +409,9 @@ enum BranchingFforC {
     ),
     Done(SessionMpstSix<End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoF = Recv<BranchingFforC, End>;
+type RecursCtoF = Recv<Branching0fromFtoC, End>;
 // D
-enum BranchingFforD {
+enum Branching0fromFtoD {
     More(
         SessionMpstSix<
             SR,
@@ -425,9 +425,9 @@ enum BranchingFforD {
     ),
     Done(SessionMpstSix<End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoF = Recv<BranchingFforD, End>;
+type RecursDtoF = Recv<Branching0fromFtoD, End>;
 // E
-enum BranchingFforE {
+enum Branching0fromFtoE {
     More(
         SessionMpstSix<
             SR,
@@ -441,13 +441,13 @@ enum BranchingFforE {
     ),
     Done(SessionMpstSix<End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoF = Recv<BranchingFforE, End>;
+type RecursEtoF = Recv<Branching0fromFtoE, End>;
 // F
-type ChooseFforAtoF = Send<BranchingFforA, End>;
-type ChooseFforBtoF = Send<BranchingFforB, End>;
-type ChooseFforCtoF = Send<BranchingFforC, End>;
-type ChooseFforDtoF = Send<BranchingFforD, End>;
-type ChooseFforEtoF = Send<BranchingFforE, End>;
+type ChooseFforAtoF = Send<Branching0fromFtoA, End>;
+type ChooseFforBtoF = Send<Branching0fromFtoB, End>;
+type ChooseFforCtoF = Send<Branching0fromFtoC, End>;
+type ChooseFforDtoF = Send<Branching0fromFtoD, End>;
+type ChooseFforEtoF = Send<Branching0fromFtoE, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstSix<End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
@@ -467,10 +467,10 @@ type EndpointF = SessionMpstSix<
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_f, {
-          BranchingFforA::Done(s) => {
+          Branching0fromFtoA::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingFforA::More(s) => {
+          Branching0fromFtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_f(s)?;
             let s = send_mpst_a_to_f((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -488,10 +488,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_f, {
-          BranchingFforB::Done(s) => {
+          Branching0fromFtoB::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingFforB::More(s) => {
+          Branching0fromFtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_f(s)?;
             let s = send_mpst_b_to_f((), s);
             let s = send_mpst_b_to_a((), s);
@@ -509,10 +509,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_f, {
-          BranchingFforC::Done(s) => {
+          Branching0fromFtoC::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingFforC::More(s) => {
+          Branching0fromFtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_f(s)?;
             let s = send_mpst_c_to_f((), s);
             let s = send_mpst_c_to_a((), s);
@@ -530,10 +530,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_f, {
-          BranchingFforD::Done(s) => {
+          Branching0fromFtoD::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingFforD::More(s) => {
+          Branching0fromFtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_f(s)?;
             let s = send_mpst_d_to_f((), s);
             let s = send_mpst_d_to_a((), s);
@@ -551,10 +551,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_f, {
-          BranchingFforE::Done(s) => {
+          Branching0fromFtoE::Done(s) => {
             close_mpst_multi(s)
         },
-          BranchingFforE::More(s) => {
+          Branching0fromFtoE::More(s) => {
             let (_, s) = recv_mpst_e_to_f(s)?;
             let s = send_mpst_e_to_f((), s);
             let s = send_mpst_e_to_a((), s);
@@ -584,11 +584,11 @@ fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_f_to_c,
                 send_mpst_f_to_d,
                 send_mpst_f_to_e, =>
-                BranchingFforA::Done,
-                BranchingFforB::Done,
-                BranchingFforC::Done,
-                BranchingFforD::Done,
-                BranchingFforE::Done, =>
+                Branching0fromFtoA::Done,
+                Branching0fromFtoB::Done,
+                Branching0fromFtoC::Done,
+                Branching0fromFtoD::Done,
+                Branching0fromFtoE::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -610,11 +610,11 @@ fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_f_to_c,
                 send_mpst_f_to_d,
                 send_mpst_f_to_e, =>
-                BranchingFforA::More,
-                BranchingFforB::More,
-                BranchingFforC::More,
-                BranchingFforD::More,
-                BranchingFforE::More, =>
+                Branching0fromFtoA::More,
+                Branching0fromFtoB::More,
+                Branching0fromFtoC::More,
+                Branching0fromFtoD::More,
+                Branching0fromFtoE::More, =>
                 RoleA,
                 RoleB,
                 RoleC,

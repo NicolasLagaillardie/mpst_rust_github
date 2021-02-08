@@ -276,7 +276,7 @@ type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
 // A
-enum BranchingEforA {
+enum Branching0fromEtoA {
     More(
         SessionMpstFive<
             RS,
@@ -289,9 +289,9 @@ enum BranchingEforA {
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoE = Recv<BranchingEforA, End>;
+type RecursAtoE = Recv<Branching0fromEtoA, End>;
 // B
-enum BranchingEforB {
+enum Branching0fromEtoB {
     More(
         SessionMpstFive<
             SR,
@@ -304,9 +304,9 @@ enum BranchingEforB {
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoE = Recv<BranchingEforB, End>;
+type RecursBtoE = Recv<Branching0fromEtoB, End>;
 // C
-enum BranchingEforC {
+enum Branching0fromEtoC {
     More(
         SessionMpstFive<
             SR,
@@ -319,9 +319,9 @@ enum BranchingEforC {
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoE = Recv<BranchingEforC, End>;
+type RecursCtoE = Recv<Branching0fromEtoC, End>;
 // D
-enum BranchingEforD {
+enum Branching0fromEtoD {
     More(
         SessionMpstFive<
             SR,
@@ -334,12 +334,12 @@ enum BranchingEforD {
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoE = Recv<BranchingEforD, End>;
+type RecursDtoE = Recv<Branching0fromEtoD, End>;
 // E
-type ChooseEforAtoE = Send<BranchingEforA, End>;
-type ChooseEforBtoE = Send<BranchingEforB, End>;
-type ChooseEforCtoE = Send<BranchingEforC, End>;
-type ChooseEforDtoE = Send<BranchingEforD, End>;
+type ChooseEforAtoE = Send<Branching0fromEtoA, End>;
+type ChooseEforBtoE = Send<Branching0fromEtoB, End>;
+type ChooseEforCtoE = Send<Branching0fromEtoC, End>;
+type ChooseEforDtoE = Send<Branching0fromEtoD, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstFive<End, End, End, RecursAtoE, RoleE<RoleEnd>, NameA>;
@@ -355,12 +355,13 @@ type EndpointE = SessionMpstFive<
     NameE,
 >;
 
+// Functions
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_e, {
-         BranchingEforA::Done(s) => {
+         Branching0fromEtoA::Done(s) => {
             close_mpst_multi(s)
         },
-         BranchingEforA::More(s) => {
+         Branching0fromEtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_e(s)?;
             let s = send_mpst_a_to_e((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -376,10 +377,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_e, {
-         BranchingEforB::Done(s) => {
+         Branching0fromEtoB::Done(s) => {
             close_mpst_multi(s)
         },
-         BranchingEforB::More(s) => {
+         Branching0fromEtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_e(s)?;
             let s = send_mpst_b_to_e((), s);
             let s = send_mpst_b_to_a((), s);
@@ -395,10 +396,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_e, {
-         BranchingEforC::Done(s) => {
+         Branching0fromEtoC::Done(s) => {
             close_mpst_multi(s)
         },
-         BranchingEforC::More(s) => {
+         Branching0fromEtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_e(s)?;
             let s = send_mpst_c_to_e((), s);
             let s = send_mpst_c_to_a((), s);
@@ -414,10 +415,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_e, {
-         BranchingEforD::Done(s) => {
+         Branching0fromEtoD::Done(s) => {
             close_mpst_multi(s)
         },
-         BranchingEforD::More(s) => {
+         Branching0fromEtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_e(s)?;
             let s = send_mpst_d_to_e((), s);
             let s = send_mpst_d_to_a((), s);
@@ -444,10 +445,10 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_e_to_b,
                 send_mpst_e_to_c,
                 send_mpst_e_to_d, =>
-                BranchingEforA::Done,
-                BranchingEforB::Done,
-                BranchingEforC::Done,
-                BranchingEforD::Done, =>
+                Branching0fromEtoA::Done,
+                Branching0fromEtoB::Done,
+                Branching0fromEtoC::Done,
+                Branching0fromEtoD::Done, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -467,10 +468,10 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
                 send_mpst_e_to_b,
                 send_mpst_e_to_c,
                 send_mpst_e_to_d, =>
-                BranchingEforA::More,
-                BranchingEforB::More,
-                BranchingEforC::More,
-                BranchingEforD::More, =>
+                Branching0fromEtoA::More,
+                Branching0fromEtoB::More,
+                Branching0fromEtoC::More,
+                Branching0fromEtoD::More, =>
                 RoleA,
                 RoleB,
                 RoleC,
@@ -574,26 +575,63 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
+type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
+type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
+
+type SendingReceiving = crossbeam_channel::Sender<Receiving>;
+type ReceivingSending = crossbeam_channel::Receiver<Sending>;
+
+type Receiving = crossbeam_channel::Receiver<()>;
+type Sending = crossbeam_channel::Sender<()>;
+
 fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
     for _ in 0..10 {
         let main = spawn(move || {
             for _ in 0..SIZE {
-                let (sender_1, receiver_1) = bounded::<()>(1);
-                sender_1.send(()).unwrap_or(());
-                receiver_1.recv().unwrap_or(());
+                let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
+                let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
-                let (sender_2, receiver_2) = bounded::<()>(1);
-                sender_2.send(()).unwrap_or(());
-                receiver_2.recv().unwrap_or(());
+                let (sender_1, receiver_1) = bounded::<SendingReceiving>(1);
+                let (sender_5, receiver_5) = bounded::<ReceivingSending>(1);
+
+                let (sender_2, receiver_2) = bounded::<Receiving>(1);
+                let (sender_6, receiver_6) = bounded::<Sending>(1);
+
+                let (sender_3, receiver_3) = bounded::<()>(1);
+                let (sender_7, receiver_7) = bounded::<()>(1);
+
+                sender_0.send(receiver_1).unwrap();
+                sender_4.send(sender_5).unwrap();
+
+                let receiver_1_bis = receiver_0.recv().unwrap();
+                let sender_5_bis = receiver_4.recv().unwrap();
+
+                sender_1.send(sender_2).unwrap();
+                sender_5_bis.send(receiver_6).unwrap();
+
+                let sender_2_bis = receiver_1_bis.recv().unwrap();
+                let receiver_6_bis = receiver_5.recv().unwrap();
+
+                sender_2_bis.send(receiver_3).unwrap();
+                sender_6.send(sender_7).unwrap();
+
+                let receiver_2_bis = receiver_2.recv().unwrap();
+                let sender_7_bis = receiver_6_bis.recv().unwrap();
+
+                sender_3.send(()).unwrap();
+                sender_7_bis.send(()).unwrap();
+
+                receiver_2_bis.recv().unwrap();
+                receiver_7.recv().unwrap();
             }
 
             // "Close" connection
             let (sender_close_1, receiver_close_1) = bounded::<()>(1);
-            sender_close_1.send(()).unwrap_or(());
-
             let (sender_close_2, receiver_close_2) = bounded::<()>(1);
+
+            sender_close_1.send(()).unwrap_or(());
             sender_close_2.send(()).unwrap_or(());
 
             receiver_close_1.recv().unwrap_or(());

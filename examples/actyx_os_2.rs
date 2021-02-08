@@ -14,21 +14,36 @@ use std::marker;
 // Create new SessionMpst for seven participants
 create_sessionmpst!(SessionMpstFour, 4);
 
-// Complex protocol: supervising API
-// G = Storage?Controller[start].µX.(choice at Storage) {
-//     starting: Storage!Controller[started].API?Controller[start].X // start and check new state
-//     up: API!Storage[request].API?Storage[response].X // do stuff
-//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting. Should get success message
-//     close: 0 // Needed for overflow
-// }
-
-// Workaround for the Send<Recv<X>>² bug
-// G = Storage?Controller[start].µX.(choice at Storage) {
-//     starting: Storage!Controller[started].API?Controller[start].X // start and check new state
-//     up_request: API!Storage[request].X // do stuff
-//     up_response: API?Storage[response].X // do stuff
-//     down: Storage!Controller[failed].API?Controller[stop].Storage?Controller[start].X // Controller tries to start storage, new state = starting. Should get success message
-//     close: 0 // Needed for overflow
+// global protocol ActyxOS2(role Api, role Controller, role Storage)
+// {
+// 	Start(Int) from Controller to Storage;
+//
+// 	rec Loop {
+// 		choice at Storage
+// 		{
+// 			Up(Int) from Storage to Controller;
+// 			Start(Int) from Controller to Api;
+//
+// 			Resquest(Int) from Api to Storage;
+//
+// 			choice at Storage
+// 			{
+// 				HardPing(Int) from Storage to Controller;
+// 				Response(Int) from Storage to Api;
+// 			}
+// 			or
+// 			{
+// 				Failure(Int) from Storage to Controller;
+// 				Stop(Int) from Controller to Api;
+// 			}
+// 		}
+// 		or
+// 		{
+// 			Failure(Int) from Storage to Controller;
+// 			Stop(Int) from Controller to Api;
+// 			Restart(Int) from Controller to Storage;
+// 		}
+// 	}
 // }
 
 // Create Roles
@@ -145,7 +160,7 @@ type NameStorage = Storage<RoleEnd>;
 type RecvStorageChoice = Storage<RoleEnd>;
 
 // Api
-enum BranchingSforA<N: marker::Send> {
+enum Branching0fromStoA<N: marker::Send> {
     Starting(
         SessionMpstFour<Recv<N, End>, End, RecursAtoS<N>, Controller<RecvStorageChoice>, NameApi>,
     ),
@@ -158,9 +173,9 @@ enum BranchingSforA<N: marker::Send> {
     Down(SessionMpstFour<Recv<N, End>, End, RecursAtoS<N>, Controller<RecvStorageChoice>, NameApi>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
-type RecursAtoS<N> = Recv<BranchingSforA<N>, End>;
+type RecursAtoS<N> = Recv<Branching0fromStoA<N>, End>;
 // Controller
-enum BranchingSforC<N: marker::Send> {
+enum Branching0fromStoC<N: marker::Send> {
     Starting(
         SessionMpstFour<
             Send<N, End>,
@@ -183,20 +198,20 @@ enum BranchingSforC<N: marker::Send> {
     ),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameController>),
 }
-type RecursCtoS<N> = Recv<BranchingSforC<N>, End>;
+type RecursCtoS<N> = Recv<Branching0fromStoC<N>, End>;
 // Logs
-enum BranchingSforL<N: marker::Send> {
+enum Branching0fromStoL<N: marker::Send> {
     Starting(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
     UpRequest(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
     UpResponse(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
     Down(SessionMpstFour<End, End, RecursLtoS<N>, RecvStorageChoice, NameLogs>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameLogs>),
 }
-type RecursLtoS<N> = Recv<BranchingSforL<N>, End>;
+type RecursLtoS<N> = Recv<Branching0fromStoL<N>, End>;
 // Storage
-type ChooseSforAtoS<N> = Send<BranchingSforA<N>, End>;
-type ChooseSforCtoS<N> = Send<BranchingSforC<N>, End>;
-type ChooseSforLtoS<N> = Send<BranchingSforL<N>, End>;
+type ChooseSforAtoS<N> = Send<Branching0fromStoA<N>, End>;
+type ChooseSforCtoS<N> = Send<Branching0fromStoC<N>, End>;
+type ChooseSforLtoS<N> = Send<Branching0fromStoL<N>, End>;
 
 // Creating the MP sessions
 // Api
@@ -226,7 +241,7 @@ type EndpointStorageInit<N> = SessionMpstFour<
 
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_response_api_from_storage, {
-        BranchingSforA::Starting(s) => {
+        Branching0fromStoA::Starting(s) => {
 
             let (start, s) = recv_start_api_from_controller(s)?;
 
@@ -234,7 +249,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 
             endpoint_api(s)
         },
-        BranchingSforA::UpRequest(s) => {
+        Branching0fromStoA::UpRequest(s) => {
 
             let request = random::<i32>();
 
@@ -244,7 +259,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 
             endpoint_api(s)
         },
-        BranchingSforA::UpResponse(s) => {
+        Branching0fromStoA::UpResponse(s) => {
 
             let (response, s) = recv_response_api_from_storage(s)?;
 
@@ -252,7 +267,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 
             endpoint_api(s)
         },
-        BranchingSforA::Down(s) => {
+        Branching0fromStoA::Down(s) => {
 
             let (stop, s) = recv_start_api_from_controller(s)?;
 
@@ -260,7 +275,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 
             endpoint_api(s)
         },
-        BranchingSforA::Close(s) => {
+        Branching0fromStoA::Close(s) => {
             close_mpst_multi(s)
         },
     })
@@ -276,7 +291,7 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
 
 fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_new_status_controller_from_storage, {
-        BranchingSforC::Starting(s) => {
+        Branching0fromStoC::Starting(s) => {
 
             let (success, s) = recv_new_status_controller_from_storage(s)?;
 
@@ -290,13 +305,13 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             recurs_controller(s)
         },
-        BranchingSforC::UpRequest(s) => {
+        Branching0fromStoC::UpRequest(s) => {
             recurs_controller(s)
         },
-        BranchingSforC::UpResponse(s) => {
+        Branching0fromStoC::UpResponse(s) => {
             recurs_controller(s)
         },
-        BranchingSforC::Down(s) => {
+        Branching0fromStoC::Down(s) => {
 
             let (failure, s) = recv_new_status_controller_from_storage(s)?;
 
@@ -313,7 +328,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
             let s = send_start_controller_to_storage(0, s);
             recurs_controller(s)
         },
-        BranchingSforC::Close(s) => {
+        Branching0fromStoC::Close(s) => {
             close_mpst_multi(s)
         },
     })
@@ -321,19 +336,19 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_logs_from_storage, {
-        BranchingSforL::Starting(s) => {
+        Branching0fromStoL::Starting(s) => {
             endpoint_logs(s)
         },
-        BranchingSforL::UpRequest(s) => {
+        Branching0fromStoL::UpRequest(s) => {
             endpoint_logs(s)
         },
-        BranchingSforL::UpResponse(s) => {
+        Branching0fromStoL::UpResponse(s) => {
             endpoint_logs(s)
         },
-        BranchingSforL::Down(s) => {
+        Branching0fromStoL::Down(s) => {
             endpoint_logs(s)
         },
-        BranchingSforL::Close(s) => {
+        Branching0fromStoL::Close(s) => {
             close_mpst_multi(s)
         },
     })
@@ -357,9 +372,9 @@ fn recurs_storage(
                 send_response_storage_to_api,
                 send_new_status_storage_to_controller,
                 send_storage_to_logs, =>
-                BranchingSforA::Starting,
-                BranchingSforC::Starting,
-                BranchingSforL::Starting, =>
+                Branching0fromStoA::Starting,
+                Branching0fromStoC::Starting,
+                Branching0fromStoL::Starting, =>
                 Api,
                 Controller,
                 Logs, =>
@@ -390,9 +405,9 @@ fn recurs_storage(
                 send_response_storage_to_api,
                 send_new_status_storage_to_controller,
                 send_storage_to_logs, =>
-                BranchingSforA::UpRequest,
-                BranchingSforC::UpRequest,
-                BranchingSforL::UpRequest, =>
+                Branching0fromStoA::UpRequest,
+                Branching0fromStoC::UpRequest,
+                Branching0fromStoL::UpRequest, =>
                 Api,
                 Controller,
                 Logs, =>
@@ -419,9 +434,9 @@ fn recurs_storage(
                 send_response_storage_to_api,
                 send_new_status_storage_to_controller,
                 send_storage_to_logs, =>
-                BranchingSforA::UpResponse,
-                BranchingSforC::UpResponse,
-                BranchingSforL::UpResponse, =>
+                Branching0fromStoA::UpResponse,
+                Branching0fromStoC::UpResponse,
+                Branching0fromStoL::UpResponse, =>
                 Api,
                 Controller,
                 Logs, =>
@@ -452,9 +467,9 @@ fn recurs_storage(
                 send_response_storage_to_api,
                 send_new_status_storage_to_controller,
                 send_storage_to_logs, =>
-                BranchingSforA::Down,
-                BranchingSforC::Down,
-                BranchingSforL::Down, =>
+                Branching0fromStoA::Down,
+                Branching0fromStoC::Down,
+                Branching0fromStoL::Down, =>
                 Api,
                 Controller,
                 Logs, =>
@@ -482,9 +497,9 @@ fn recurs_storage(
                 send_response_storage_to_api,
                 send_new_status_storage_to_controller,
                 send_storage_to_logs, =>
-                BranchingSforA::Close,
-                BranchingSforC::Close,
-                BranchingSforL::Close, =>
+                Branching0fromStoA::Close,
+                Branching0fromStoC::Close,
+                Branching0fromStoL::Close, =>
                 Api,
                 Controller,
                 Logs, =>

@@ -2,7 +2,9 @@
 
 set -e
 
-# cargo bench --bench main -- --verbose
+cargo bench --bench main -- --verbose
+
+# cargo criterion --message-format=json
 
 # cargo flamegraph --example long_simple_three_binary -o flamegraphs/flamegraph_long_simple_three_binary.svg
 # cargo flamegraph --example long_simple_three_mpst -o flamegraphs/flamegraph_long_simple_three_mpst.svg
@@ -23,7 +25,7 @@ set -e
 # cargo flamegraph --example long_simple_eleven_binary -o flamegraphs/flamegraph_long_simple_eleven_binary.svg
 # cargo flamegraph --example long_simple_eleven_mpst -o flamegraphs/flamegraph_long_simple_eleven_mpst.svg
 
-./scripts/compile.sh long_simple_three_binary 
+# ./scripts/compile.sh long_simple_three_binary 
 # ./scripts/compile.sh long_simple_three_mpst
 # ./scripts/compile.sh long_simple_four_binary
 # ./scripts/compile.sh long_simple_four_mpst 

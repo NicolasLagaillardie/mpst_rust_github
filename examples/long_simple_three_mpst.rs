@@ -126,20 +126,20 @@ type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 // A
-enum BranchingCforA {
+enum Branching0fromCtoA {
     More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
     Done(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
-type RecursAtoC = Recv<BranchingCforA, End>;
+type RecursAtoC = Recv<Branching0fromCtoA, End>;
 // B
-enum BranchingCforB {
+enum Branching0fromCtoB {
     More(SessionMpstThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
     Done(SessionMpstThree<End, End, RoleEnd, NameB>),
 }
-type RecursBtoC = Recv<BranchingCforB, End>;
+type RecursBtoC = Recv<Branching0fromCtoB, End>;
 // C
-type ChooseCforAtoC = Send<BranchingCforA, End>;
-type ChooseCforBtoC = Send<BranchingCforB, End>;
+type ChooseCforAtoC = Send<Branching0fromCtoA, End>;
+type ChooseCforBtoC = Send<Branching0fromCtoB, End>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
@@ -148,10 +148,10 @@ type EndpointC = SessionMpstThree<ChooseCforAtoC, ChooseCforBtoC, RoleA<RoleB<Ro
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_c, {
-        BranchingCforA::Done(s) => {
+        Branching0fromCtoA::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingCforA::More(s) => {
+        Branching0fromCtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_c(s)?;
             let s = send_mpst_a_to_c((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -163,10 +163,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_c, {
-        BranchingCforB::Done(s) => {
+        Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },
-        BranchingCforB::More(s) => {
+        Branching0fromCtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_c(s)?;
             let s = send_mpst_b_to_c((), s);
             let s = send_mpst_b_to_a((), s);
@@ -187,8 +187,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 s,
                 send_mpst_c_to_a,
                 send_mpst_c_to_b, =>
-                BranchingCforA::Done,
-                BranchingCforB::Done, =>
+                Branching0fromCtoA::Done,
+                Branching0fromCtoB::Done, =>
                 RoleA,
                 RoleB, =>
                 RoleC,
@@ -204,8 +204,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 s,
                 send_mpst_c_to_a,
                 send_mpst_c_to_b, =>
-                BranchingCforA::More,
-                BranchingCforB::More, =>
+                Branching0fromCtoA::More,
+                Branching0fromCtoB::More, =>
                 RoleA,
                 RoleB, =>
                 RoleC,
