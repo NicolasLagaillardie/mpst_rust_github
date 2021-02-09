@@ -20,3 +20,4 @@ pub mod long_simple_ten_empty;
 pub mod long_simple_three;
 pub mod long_simple_three_empty;
 pub mod o_auth;
+pub mod simple_voting_three;

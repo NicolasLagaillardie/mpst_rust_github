@@ -39,6 +39,7 @@ use std::time::Duration;
 //         quit(Int) from C to A;
 //     }
 // }
+
 // Create new SessionMpst for three participants
 create_sessionmpst!(SessionMpstThree, 3);
 
