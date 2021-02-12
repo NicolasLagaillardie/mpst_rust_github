@@ -16,35 +16,35 @@ create_sessionmpst!(SessionMpstFour, 4);
 
 // global protocol ActyxOS2(role Api, role Controller, role Storage)
 // {
-// 	Start(Int) from Controller to Storage;
+//     Start(Int) from Controller to Storage;
+
+//     rec Loop {
+//         choice at Storage
+//         {
+//             Up(Int) from Storage to Controller;
+//             Start(Int) from Controller to Api; // If Api already started, useless
 //
-// 	rec Loop {
-// 		choice at Storage
-// 		{
-// 			Up(Int) from Storage to Controller;
-// 			Start(Int) from Controller to Api; // If Api already started, useless
+//             Resquest(Int) from Api to Storage;
 //
-// 			Resquest(Int) from Api to Storage;
-//
-// 			choice at Storage
-// 			{
-// 				HardPing(Int) from Storage to Controller;
-// 				Response(Int) from Storage to Api;
-// 			}
-// 			or
-// 			{
-// 				Failure(Int) from Storage to Controller;
-// 				Stop(Int) from Controller to Api;
-// 			    Restart(Int) from Controller to Storage;
-// 			}
-// 		}
-// 		or
-// 		{
-// 			Failure(Int) from Storage to Controller;
-// 			Stop(Int) from Controller to Api;
-// 			Restart(Int) from Controller to Storage;
-// 		}
-// 	}
+//             choice at Storage
+//             {
+//                 HardPing(Int) from Storage to Controller;
+//                 Response(Int) from Storage to Api;
+//             }
+//             or
+//             {
+//                 Failure(Int) from Storage to Controller;
+//                 Stop(Int) from Controller to Api;
+//                 Restart(Int) from Controller to Storage;
+//             }
+//         }
+//         or
+//         {
+//             Failure(Int) from Storage to Controller;
+//             Stop(Int) from Controller to Api;
+//             Restart(Int) from Controller to Storage;
+//         }
+//     }
 // }
 
 // Create Roles

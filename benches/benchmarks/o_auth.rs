@@ -172,7 +172,7 @@ enum Branching0fromStoA<N: marker::Send> {
 enum Branching0fromStoC<N: marker::Send> {
     Login(
         SessionMpstThree<
-            Send<N, Recurs1fromCtoA<N>>,
+            Send<N, Choice1fromCtoA<N>>,
             Recv<N, End>,
             RoleS<RoleA<RoleA<RoleEnd>>>,
             NameC,
@@ -184,31 +184,31 @@ enum Branching1fromAtoC<N: marker::Send> {
     Auth(SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameC>),
     Again(
         SessionMpstThree<
-            Send<N, Recurs1fromCtoA<N>>,
+            Send<N, Choice1fromCtoA<N>>,
             Recv<N, End>,
             RoleS<RoleA<RoleA<RoleEnd>>>,
             NameC,
         >,
     ),
 }
-type Recurs1fromCtoA<N> = Recv<Branching1fromAtoC<N>, End>;
+type Choice1fromCtoA<N> = Recv<Branching1fromAtoC<N>, End>;
 // S
 enum Branching1fromAtoS<N: marker::Send> {
     Auth(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleA<RoleC<RoleEnd>>, NameS>),
     Again(
         SessionMpstThree<
-            Recv<N, Recurs1fromStoA<N>>,
+            Recv<N, Choice1fromStoA<N>>,
             Send<N, End>,
             RoleA<RoleC<RoleA<RoleEnd>>>,
             NameS,
         >,
     ),
 }
-type Recurs1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
+type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
 
 // Creating the MP sessions
 // A
-type RecursA<N> = SessionMpstThree<
+type ChoiceA<N> = SessionMpstThree<
     Recv<N, Choose1fromAtoC<N>>,
     Choose1fromAtoS<N>,
     RoleC<RoleC<RoleS<RoleEnd>>>,
@@ -216,10 +216,10 @@ type RecursA<N> = SessionMpstThree<
 >;
 type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
 // C
-type RecursC<N> = SessionMpstThree<Send<N, Recurs1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+type ChoiceC<N> = SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, RoleS<RoleEnd>, NameC>;
 // S
-type RecursS<N> = SessionMpstThree<Recurs1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
+type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
 type EndpointS<N> =
     SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleA<RoleC<RoleEnd>>, NameS>;
 
@@ -232,12 +232,12 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromStoA::Login(s) => {
-            recurs_a(s)
+            choice_a(s)
         },
     })
 }
 
-fn recurs_a(s: RecursA<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     let (pwd, s) = recv_mpst_a_to_c(s)?;
 
     let expected = thread_rng().gen_range(1..=3);
@@ -277,7 +277,7 @@ fn recurs_a(s: RecursA<i32>) -> Result<(), Box<dyn Error>> {
 
         let s = send_mpst_a_to_s(1, s);
 
-        recurs_a(s)
+        choice_a(s)
     }
 }
 
@@ -291,12 +291,12 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
         Branching0fromStoC::<i32>::Login(s) => {
             let (_, s) = recv_mpst_c_to_s(s)?;
 
-            recurs_c(s)
+            choice_c(s)
         },
     })
 }
 
-fn recurs_c(s: RecursC<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(thread_rng().gen_range(1..=3), s);
 
     offer_mpst!(s, recv_mpst_c_to_a, {
@@ -308,7 +308,7 @@ fn recurs_c(s: RecursC<i32>) -> Result<(), Box<dyn Error>> {
         Branching1fromAtoC::<i32>::Again(s) => {
             let (_, s) = recv_mpst_c_to_s(s)?;
 
-            recurs_c(s)
+            choice_c(s)
         },
     })
 }
@@ -351,11 +351,11 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 
         let s = send_mpst_s_to_c(1, s);
 
-        recurs_s(s)
+        choice_s(s)
     }
 }
 
-fn recurs_s(s: RecursS<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_to_a, {
         Branching1fromAtoS::<i32>::Auth(s) => {
             let (success, s) = recv_mpst_s_to_a(s)?;
@@ -369,7 +369,7 @@ fn recurs_s(s: RecursS<i32>) -> Result<(), Box<dyn Error>> {
 
             let s = send_mpst_s_to_c(fail, s);
 
-            recurs_s(s)
+            choice_s(s)
         },
     })
 }

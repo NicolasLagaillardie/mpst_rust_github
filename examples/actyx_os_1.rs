@@ -16,18 +16,18 @@ create_sessionmpst!(SessionMpstFour, 4);
 
 // global protocol ActyxOS1(role Controller, role Logs)
 // {
-// 	Start(Int) from Controller to Logs;
-// 	rec Loop {
-// 		choice at Logs
-// 		{
-// 			Success(int) from Logs to Controller; // Logs is up
-// 		}
-// 		or
-// 		{
-// 			Failure(Int) from Logs to Controller;
-// 			Restart(Int) from Controller to Logs;
-// 		}
-// 	}
+//     Start(Int) from Controller to Logs;
+//     rec Loop {
+//         choice at Logs
+//         {
+//             Success(int) from Logs to Controller; // Logs is up
+//         }
+//         or
+//         {
+//             Failure(Int) from Logs to Controller;
+//             Restart(Int) from Controller to Logs;
+//         }
+//     }
 // }
 
 // Create Roles

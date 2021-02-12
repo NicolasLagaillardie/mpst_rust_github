@@ -16,7 +16,7 @@ use std::error::Error;
 use std::marker;
 use std::time::Duration;
 
-// global protopol EVoting(role VOTER, role SERVER){
+// global protopol SimpleVoting(role VOTER, role SERVER){
 //     Authenticate(String) from VOTER to SERVER;
 //     choice at SERVER {
 //         Ok(String) from SERVER to VOTER;
@@ -147,24 +147,24 @@ enum Branching0fromStoV<N: marker::Send> {
 }
 // PAWN
 enum Branching0fromStoP {
-    Auth(SessionMpstThree<End, Recurs1fromPtoV, RoleVoter<RoleEnd>, NamePawn>),
+    Auth(SessionMpstThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>),
     Reject(SessionMpstThree<End, End, RoleEnd, NamePawn>),
 }
 enum Branching1fromVtoP {
     Yes(SessionMpstThree<End, End, RoleEnd, NamePawn>),
     No(SessionMpstThree<End, End, RoleEnd, NamePawn>),
 }
-type Recurs1fromPtoV = Recv<Branching1fromVtoP, End>;
+type Choice1fromPtoV = Recv<Branching1fromVtoP, End>;
 // SERVER
 enum Branching1fromVtoS<N: marker::Send> {
     Yes(SessionMpstThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
     No(SessionMpstThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
 }
-type Recurs1fromStoV<N> = Recv<Branching1fromVtoS<N>, End>;
+type Choice1fromStoV<N> = Recv<Branching1fromVtoS<N>, End>;
 
 // Creating the MP sessions
 // VOTER
-type RecursVoter<N> = SessionMpstThree<
+type ChoiceVoter<N> = SessionMpstThree<
     Choose1fromVtoP,
     Recv<N, Choose1fromVtoS<N>>,
     RoleServer<RolePawn<RoleServer<RoleEnd>>>,
@@ -177,11 +177,11 @@ type EndpointVoter<N> = SessionMpstThree<
     NameVoter,
 >;
 // PAWN
-type RecursPawn = SessionMpstThree<End, Recurs1fromPtoV, RoleVoter<RoleEnd>, NamePawn>;
+type ChoicePawn = SessionMpstThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>;
 type EndpointPawn =
     SessionMpstThree<Recv<Branching0fromStoP, End>, End, RoleServer<RoleEnd>, NamePawn>;
 // SERVER
-type RecursServer<N> = SessionMpstThree<End, Recurs1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
+type ChoiceServer<N> = SessionMpstThree<End, Choice1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
 type EndpointServer<N> = SessionMpstThree<
     Choose0fromStoP,
     Recv<N, Choose0fromStoV<N>>,
@@ -203,12 +203,12 @@ fn simple_five_endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error
             close_mpst_multi(s)
         },
         Branching0fromStoV::Auth(s) => {
-            recurs_voter(s)
+            choice_voter(s)
         },
     })
 }
 
-fn recurs_voter(s: RecursVoter<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     let (ok, s) = recv_mpst_voter_to_server(s)?;
 
     let expected = thread_rng().gen_range(1..=3);
@@ -258,12 +258,12 @@ fn simple_five_endpoint_pawn(s: EndpointPawn) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromStoP::Auth(s) => {
-            recurs_pawn(s)
+            choice_pawn(s)
         },
     })
 }
 
-fn recurs_pawn(s: RecursPawn) -> Result<(), Box<dyn Error>> {
+fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_pawn_to_voter, {
         Branching1fromVtoP::Yes(s) => {
             close_mpst_multi(s)
@@ -314,11 +314,11 @@ fn simple_five_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Err
 
         let s = send_mpst_server_to_voter(1, s);
 
-        recurs_server(s)
+        choice_server(s)
     }
 }
 
-fn recurs_server(s: RecursServer<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_server_to_voter, {
         Branching1fromVtoS::<i32>::Yes(s) => {
 

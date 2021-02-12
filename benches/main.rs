@@ -26,5 +26,8 @@ criterion_main! {
     // benchmarks::long_simple_twenty::long_twenty_simple_protocols,
     // benchmarks::fib::fibo,
     // benchmarks::o_auth::o_auth,
-    benchmarks::simple_voting_three::simple_voting,
+    // benchmarks::simple_voting_three::simple_voting,
+    // benchmarks::travel_three::travel,
+    benchmarks::three_buyer::three_buyer,
+    benchmarks::smtp::smtp,
 }

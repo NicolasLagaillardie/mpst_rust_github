@@ -21,3 +21,6 @@ pub mod long_simple_three;
 pub mod long_simple_three_empty;
 pub mod o_auth;
 pub mod simple_voting_three;
+pub mod smtp;
+pub mod three_buyer;
+pub mod travel_three;
