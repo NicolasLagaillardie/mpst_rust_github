@@ -6679,7 +6679,7 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleS, =>
                 RoleT,
                 SessionMpstTwenty,
-                20, 
+                20,
                 20
             );
 
@@ -6747,7 +6747,7 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleS, =>
                 RoleT,
                 SessionMpstTwenty,
-                20, 
+                20,
                 20
             );
 
@@ -6996,15 +6996,15 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-
 /////////////////////////
 
 static SIZE: i64 = 0;
 
 fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("long twenty empty simple protocol MPST {}", SIZE), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(
+        &format!("long twenty empty simple protocol MPST {}", SIZE),
+        |b| b.iter(|| all_mpst()),
+    );
 }
 
 fn long_simple_protocol_binary(c: &mut Criterion) {
@@ -7022,8 +7022,7 @@ fn long_simple_protocol_crossbeam(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(1800, 
- 0))
+    Criterion::default().measurement_time(Duration::new(20, 0))
 }
 
 criterion_group! {

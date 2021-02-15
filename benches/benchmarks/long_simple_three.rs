@@ -404,7 +404,7 @@ fn long_simple_protocol_crossbeam(c: &mut Criterion) {
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
+    Criterion::default().measurement_time(Duration::new(1800, 0))
 }
 
 criterion_group! {

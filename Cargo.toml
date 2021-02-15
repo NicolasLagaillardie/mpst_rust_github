@@ -26,6 +26,14 @@ path = "tests/main.rs"
 name = "main"
 harness = false
 
+[[example]]
+name = "tcp_server"
+path = "examples/tcp/server.rs"
+
+[[example]]
+name = "tcp_client"
+path = "examples/tcp/client.rs"
+
 [profile.release]
 debug = true
 
