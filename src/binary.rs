@@ -5,7 +5,6 @@
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //! [crates-io]: https://img.shields.io/badge/crates.io-fc8d62?style=for-the-badge&labelColor=555555&logo=rust
 //! [docs-rs]: https://img.shields.io/badge/docs.rs-66c2a5?style=for-the-badge&labelColor=555555&logoColor=white&logo=data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUxMiA1MTIiPjxwYXRoIGZpbGw9IiNmNWY1ZjUiIGQ9Ik00ODguNiAyNTAuMkwzOTIgMjE0VjEwNS41YzAtMTUtOS4zLTI4LjQtMjMuNC0zMy43bC0xMDAtMzcuNWMtOC4xLTMuMS0xNy4xLTMuMS0yNS4zIDBsLTEwMCAzNy41Yy0xNC4xIDUuMy0yMy40IDE4LjctMjMuNCAzMy43VjIxNGwtOTYuNiAzNi4yQzkuMyAyNTUuNSAwIDI2OC45IDAgMjgzLjlWMzk0YzAgMTMuNiA3LjcgMjYuMSAxOS45IDMyLjJsMTAwIDUwYzEwLjEgNS4xIDIyLjEgNS4xIDMyLjIgMGwxMDMuOS01MiAxMDMuOSA1MmMxMC4xIDUuMSAyMi4xIDUuMSAzMi4yIDBsMTAwLTUwYzEyLjItNi4xIDE5LjktMTguNiAxOS45LTMyLjJWMjgzLjljMC0xNS05LjMtMjguNC0yMy40LTMzLjd6TTM1OCAyMTQuOGwtODUgMzEuOXYtNjguMmw4NS0zN3Y3My4zek0xNTQgMTA0LjFsMTAyLTM4LjIgMTAyIDM4LjJ2LjZsLTEwMiA0MS40LTEwMi00MS40di0uNnptODQgMjkxLjFsLTg1IDQyLjV2LTc5LjFsODUtMzguOHY3NS40em0wLTExMmwtMTAyIDQxLjQtMTAyLTQxLjR2LS42bDEwMi0zOC4yIDEwMiAzOC4ydi42em0yNDAgMTEybC04NSA0Mi41di03OS4xbDg1LTM4Ljh2NzUuNHptMC0xMTJsLTEwMiA0MS40LTEwMi00MS40di0uNmwxMDItMzguMiAxMDIgMzguMnYuNnoiPjwvcGF0aD48L3N2Zz4K
-
 use crossbeam_channel::{bounded, Receiver, Select, Sender};
 use either::Either;
 use std::boxed::Box;
@@ -16,18 +15,27 @@ use std::mem;
 use std::panic;
 use std::thread::{spawn, JoinHandle};
 
-/// Send `T`, then continue as `S`.    
+/// Send `T`, then continue as `S`.
 #[must_use]
 #[derive(Debug)]
-pub struct Send<T, S: Session> {
-    pub channel: Sender<(T, S::Dual)>,
+pub struct Send<T, S>
+where
+    T: marker::Send,
+    S: Session,
+    S::Dual: Session,
+{
+    channel: Sender<(T, S::Dual)>,
 }
 
 /// Receive `T`, then continue as `S`.
 #[must_use]
 #[derive(Debug)]
-pub struct Recv<T, S: Session> {
-    pub channel: Receiver<(T, S)>,
+pub struct Recv<T, S>
+where
+    T: marker::Send,
+    S: Session,
+{
+    channel: Receiver<(T, S)>,
 }
 
 /// End of communication.
@@ -39,9 +47,8 @@ pub struct End {
 }
 
 /// Trait for session types. Provides duality.
-// pub trait Session: marker::Sized + marker::Send + Downcast {
 pub trait Session: marker::Sized + marker::Send {
-    /// The (associated) session type dual to `Self`.
+    /// The session type dual to `Self`.
     type Dual: Session<Dual = Self>;
 
     /// Creates two new *dual* channels.
@@ -152,7 +159,6 @@ where
     S: Session,
 {
     let (v, s) = s.channel.recv()?;
-
     Ok((v, s))
 }
 
@@ -183,7 +189,7 @@ where
         }));
         match p(there) {
             Ok(()) => (),
-            Err(e) => panic!("{:?}", e),
+            Err(e) => panic!("{}", e.to_string()),
         }
     });
     (other_thread, here)
@@ -200,7 +206,7 @@ where
     fork_with_thread_id(p).1
 }
 
-/// Offer a choice between two sessions `S1` and `S2`. Implemented using `Recv`
+/// Offer a choice between two sessions `S1` and `S1`. Implemented using `Recv`
 /// and `Either`.
 pub type Offer<S1, S2> = Recv<Either<S1, S2>, End>;
 
@@ -225,7 +231,7 @@ where
     e.either(f, g)
 }
 
-/// Given a choice between sessions `S1` and `S2`, choose the first option.
+/// Given a choice between sessions `S1` and `S1`, choose the first option.
 pub fn choose_left<'a, S1, S2>(s: Choose<S1, S2>) -> S1
 where
     S1: Session + 'a,
@@ -237,7 +243,7 @@ where
     here
 }
 
-/// Given a choice between sessions `S1` and `S2`, choose the second option.
+/// Given a choice between sessions `S1` and `S1`, choose the second option.
 pub fn choose_right<'a, S1, S2>(s: Choose<S1, S2>) -> S2
 where
     S1: Session + 'a,
@@ -250,28 +256,6 @@ where
 }
 
 /// Offer a choice between many different sessions wrapped in an `enum`
-///
-/// # Arguments
-///
-///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
-///  * The block of code to process each new session
-///
-/// # Example
-///
-/// ```ignore
-/// offer!(s, {
-/// SumOp::More(s) => {
-///     let (y, s) = recv(s)?;
-///     nice_sum_server_accum(s, x.wrapping_add(y))
-/// },
-/// SumOp::Done(s) => {
-///     let s = send(x, s);
-///     close(s)?;
-///     Ok(())
-/// },
-/// })?;
-/// ```
 #[macro_export]
 macro_rules! offer {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
@@ -287,30 +271,7 @@ macro_rules! offer {
     };
 }
 
-/// Choose a choice between many different sessions wrapped in an `enum`
-///
-/// # Arguments
-///
-///  * The path to be used
-///  * The session to be used
-///
-/// # Example
-///
-/// ```ignore
-/// match xs.pop() {
-///     Option::Some(x) => {
-///         let s = choose!(SumOp::More, s);
-///         let s = send(x, s);
-///         nice_sum_client_accum(s, xs)
-///     }
-///     Option::None => {
-///         let s = choose!(SumOp::Done, s);
-///         let (sum, s) = recv(s)?;
-///         close(s)?;
-///         Ok(sum)
-///     }
-/// }
-/// ```
+/// Choose between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose {
     ($label:path, $session:expr) => {{
@@ -388,13 +349,12 @@ where
     }
 }
 
-type BoxError<T, S> = Result<(T, S), Box<dyn Error>>;
-type VecRecv<T, S> = Vec<Recv<T, S>>;
+type SelectType<T, S> = Result<(T, S), Box<dyn Error>>;
 
 /// Selects the first active session. Receives from the selected session.
 /// Returns the received value, the continuation of the selected session, and a
 /// copy of the input vector without the selected session.
-pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (BoxError<T, S>, VecRecv<T, S>)
+pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (SelectType<T, S>, Vec<Recv<T, S>>)
 where
     T: marker::Send,
     S: Session,

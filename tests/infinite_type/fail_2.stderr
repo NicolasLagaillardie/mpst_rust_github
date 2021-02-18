@@ -1,16 +1,28 @@
-error[E0275]: overflow evaluating the requirement `mpstthree::binary::Send<N, mpstthree::binary::Recv<N, mpstthree::binary::Recv<SumOp<N>, mpstthree::binary::End>>>: std::marker::Send`
-  --> $DIR/fail_2.rs:12:10
+error[E0275]: overflow evaluating the requirement `mpstthree::binary::Send<i32, mpstthree::binary::Recv<i32, mpstthree::binary::Recv<SumOp<i32>, mpstthree::binary::End>>>: std::marker::Send`
+  --> $DIR/fail_2.rs:19:23
    |
-12 |     More(Send<N, Recv<N, NiceSumServer<N>>>),
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+19 | fn nice_sum_server(s: NiceSumServer<i32>) -> Result<(), Box<dyn Error>> {
+   |                       ^^^^^^^^^^^^^^^^^^
    |
   ::: $WORKSPACE/src/binary.rs
    |
-   | pub struct Recv<T, S: Session> {
-   |                       ------- required by this bound in `mpstthree::binary::Recv`
+   |     T: marker::Send,
+   |        ------------ required by this bound in `mpstthree::binary::Recv`
    |
-   = note: required because it appears within the type `SumOp<N>`
-   = note: required because of the requirements on the impl of `mpstthree::binary::Session` for `mpstthree::binary::Recv<SumOp<N>, mpstthree::binary::End>`
+   = note: required because it appears within the type `SumOp<i32>`
+
+error[E0275]: overflow evaluating the requirement `mpstthree::binary::Send<i32, mpstthree::binary::Recv<i32, mpstthree::binary::Recv<SumOp<i32>, mpstthree::binary::End>>>: std::marker::Send`
+  --> $DIR/fail_2.rs:23:29
+   |
+23 | fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Error>> {
+   |                             ^^^^^^^^^^^^^^^^^^
+   |
+  ::: $WORKSPACE/src/binary.rs
+   |
+   |     T: marker::Send,
+   |        ------------ required by this bound in `mpstthree::binary::Recv`
+   |
+   = note: required because it appears within the type `SumOp<i32>`
 
 error[E0275]: overflow evaluating the requirement `mpstthree::binary::Recv<SumOp<i32>, mpstthree::binary::End>: mpstthree::binary::Session`
   --> $DIR/fail_2.rs:44:1

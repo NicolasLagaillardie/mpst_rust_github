@@ -42,12 +42,13 @@ crossbeam-channel = "0.5.0"
 either = "1.6.1"
 rand = "0.8.3"
 # dot = "0.1.4"
+# sesh = "0.1.1"
 mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main"}
-# mpst-seq = {path = "../mpst-seq"}
+# mpst-seq = { path = "../mpst-seq" }
 
 [dev-dependencies]
 criterion = "0.3.4"
-trybuild = "1.0.40"
+trybuild = "1.0.41"
 
 [badges]
 maintenance = { status = "actively-developed" }

@@ -3,7 +3,6 @@ use mpstthree::choose;
 use mpstthree::offer;
 
 use rand::{thread_rng, Rng};
-
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
@@ -11,22 +10,6 @@ use std::mem;
 use std::sync::mpsc;
 use std::thread::sleep;
 use std::time::Duration;
-
-// Test sending a ping across threads.
-
-pub fn ping_works() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        let s = fork(move |s: Send<(), End>| {
-            let s = send((), s);
-            close(s)?;
-            Ok(())
-        });
-        let ((), s) = recv(s)?;
-        close(s)?;
-        Ok(())
-    }()
-    .is_ok());
-}
 
 pub fn head_str() {
     assert_eq!(End::head_str(), String::from("End"));
@@ -48,6 +31,42 @@ pub fn new_types() {
     assert_eq!(session_end_1.receiver.recv(), Ok(()));
     assert_eq!(session_end_2.receiver.recv(), Ok(()));
 }
+
+// Test sending a ping across threads.
+
+#[test]
+pub fn ping_works() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        let s = fork(move |s: Send<(), End>| {
+            let s = send((), s);
+            close(s)?;
+            Ok(())
+        });
+        let ((), s) = recv(s)?;
+        close(s)?;
+        Ok(())
+    }()
+    .is_ok());
+}
+
+/// Test writing a program which duplicates a session.
+///
+/// ```compile_fail
+/// assert!(|| -> Result<(), Box<dyn Error>> {
+///
+///     let r1 = fork(move |s1: Send<(), End>| {
+///         let s2 = send((), s1);
+///         close(s2)?;
+///         let s3 = send((), s1);
+///         close(s3)?;
+///         Ok(())
+///     });
+///     let ((), r2) = recv(r1)?;
+///     close(r2)?;
+///     Ok(())
+///
+/// }().is_ok());
+/// ```
 
 // Test a simple calculator server, implemented using binary choice.
 
@@ -79,6 +98,7 @@ fn simple_calc_server(s: SimpleCalcServer<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
+#[test]
 pub fn simple_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         let mut rng = thread_rng();
@@ -114,7 +134,7 @@ pub fn simple_calc_works() {
 
 // Test a nice calculator server, implemented using variant types.
 
-enum CalcOp<N: marker::Send + 'static> {
+enum CalcOp<N: marker::Send> {
     Neg(NegServer<N>),
     Add(AddServer<N>),
 }
@@ -139,6 +159,7 @@ fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[test]
 pub fn nice_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Pick some random numbers.
@@ -175,6 +196,7 @@ pub fn nice_calc_works() {
 
 // Test cancellation.
 
+#[test]
 pub fn cancel_recv_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
@@ -187,6 +209,7 @@ pub fn cancel_recv_works() {
     assert!(other_thread.join().is_err());
 }
 
+#[test]
 pub fn cancel_send_works() {
     let (other_thread, s) = fork_with_thread_id(move |s: Recv<(), End>| {
         cancel(s);
@@ -205,6 +228,7 @@ pub fn cancel_send_works() {
 
 // Test cancellation of delegation.
 
+#[test]
 pub fn delegation_works() {
     let (other_thread1, s) = fork_with_thread_id(nice_calc_server);
     let (other_thread2, u) = fork_with_thread_id(move |u: Recv<NiceCalcClient<i32>, End>| {
@@ -225,6 +249,7 @@ pub fn delegation_works() {
 
 // Test cancellation of closures.
 
+#[test]
 pub fn closure_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
@@ -249,7 +274,7 @@ pub fn closure_works() {
 
 // Test recursive sessions.
 
-enum SumOp<N: marker::Send + 'static> {
+enum SumOp<N: marker::Send> {
     More(Recv<N, NiceSumServer<N>>),
     Done(Send<N, End>),
 }
@@ -291,6 +316,7 @@ fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32,
     }
 }
 
+#[test]
 pub fn recursion_works() {
     // Pick some random numbers.
     let mut rng = thread_rng();
@@ -311,13 +337,14 @@ pub fn recursion_works() {
 
 // Test selection.
 
+#[test]
 pub fn selection_works() {
     let mut other_threads = Vec::new();
     let mut rs = Vec::new();
 
     for i in 0..10 {
         let (other_thread, s) = fork_with_thread_id(move |s: Send<u64, End>| {
-            sleep(Duration::from_millis(i * 200));
+            sleep(Duration::from_millis(i * 100));
             let s = send(9 - i, s);
             close(s)
         });
@@ -406,3 +433,12 @@ fn deadlock_new() {
     }()
     .unwrap();
 }
+
+// Bug with the constraint checker.
+#[allow(dead_code)]
+enum CalcOp2<N: marker::Send> {
+    More(Send<i64, Recv<i64, NiceCalcServer2<N>>>),
+    Stop(Send<i64, End>),
+}
+#[allow(dead_code)]
+type NiceCalcServer2<N> = Recv<CalcOp2<N>, End>;
