@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 // // Test for parametrisation on the number of roles
 // use rand::{thread_rng, Rng};
 

@@ -146,6 +146,9 @@ where
     T: marker::Send,
     S: Session,
 {
+    // For TCP client
+    // stream.write(&data[0..size]).unwrap();
+    // Need to force next type: stream.shutdown(Shutdown::Write).unwrap(); but no way to do it twice 
     let (here, there) = S::new();
     s.channel.send((x, there)).unwrap_or(());
     here
@@ -158,6 +161,12 @@ where
     T: marker::Send,
     S: Session,
 {
+    // For TCP client
+    // let mut data = [0 as u8; 50]; // using 50 byte buffer
+    // match stream.read(&mut data) { // or stream.read_exact(&mut data)
+    // Ok(size) =>
+    // Err(e) =>
+    // Need to force next type: stream.shutdown(Shutdown::Read).unwrap(); but no way to do it twice 
     let (v, s) = s.channel.recv()?;
     Ok((v, s))
 }
@@ -171,6 +180,8 @@ pub fn cancel<T>(x: T) {
 /// Closes a session. Synchronises with the partner, and fails if the partner
 /// has crashed.
 pub fn close(s: End) -> Result<(), Box<dyn Error>> {
+    // For TCP client
+    // Need to force closing type: stream.shutdown(Shutdown::Both).unwrap();
     s.sender.send(()).unwrap_or(());
     s.receiver.recv()?;
     Ok(())
@@ -182,6 +193,10 @@ where
     S: Session + 'static,
     P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
+    // For TCP client
+    // match TcpStream::connect("localhost:3333") {
+    // Ok(result) =>
+    // Err(e) =>
     let (there, here) = Session::new();
     let other_thread = spawn(move || {
         panic::set_hook(Box::new(|_info| {
