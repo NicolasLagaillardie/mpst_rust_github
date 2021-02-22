@@ -335,6 +335,24 @@ pub fn recursion_works() {
     assert!(other_thread.join().is_ok());
 }
 
+#[test]
+pub fn cancel_recursion() {
+    // Pick some random numbers.
+    let mut rng = thread_rng();
+    let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
+    let _sum1: i32 = xs.iter().fold(0, |sum, &x| sum.wrapping_add(x));
+
+    let (other_thread, s) = fork_with_thread_id(nice_sum_server);
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        cancel(s);
+        Ok(())
+    }()
+    .is_ok());
+
+    assert!(other_thread.join().is_err());
+}
+
 // Test selection.
 
 #[test]

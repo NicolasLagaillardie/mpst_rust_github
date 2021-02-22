@@ -2,8 +2,8 @@ use mpstthree::binary::{cancel, End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_fork_multi, close_mpst, create_normal_role, create_recv_mpst_session,
-    create_recv_mpst_session_bundle, create_send_mpst_session, create_send_mpst_session_bundle,
-    create_sessionmpst,
+    create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session,
+    create_send_mpst_session_bundle, create_sessionmpst,
 };
 
 use rand::random;
@@ -24,10 +24,6 @@ create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
-    send_mpst_a_to_b,
-    RoleB,
-    next_b,
-    1, |
     send_mpst_a_to_c,
     RoleC,
     next_c,
@@ -35,6 +31,15 @@ create_send_mpst_session_bundle!(
     RoleA,
     SessionMpstThree,
     3
+);
+create_send_mpst_cancel!(
+    send_cancel_a_to_b,
+    RoleB,
+    next_b,
+    RoleA,
+    SessionMpstThree,
+    3,
+    1
 );
 
 // Create new recv functions and related types
@@ -76,18 +81,18 @@ type EndpointB = SessionMpstThree<Recv<i32, End>, End, RoleA<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Recv<i32, End>, End, RoleA<RoleEnd>, NameC>;
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    cancel(s.session1);
-
-    let s = send_mpst_a_to_b(random(), s);
+    let s = send_cancel_a_to_b(random(), s)?;
     let s = send_mpst_a_to_c(random(), s);
     close_mpst_multi(s)
 }
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    cancel(s.session1);
+    cancel(s);
 
-    let (_, s) = recv_mpst_b_to_a(s)?;
-    close_mpst_multi(s)
+    // let (_, s) = recv_mpst_b_to_a(s)?;
+    // close_mpst_multi(s)
+
+    Ok(())
 }
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
@@ -95,14 +100,14 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn main() {
+pub fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         simple_five_endpoint_a,
         simple_five_endpoint_b,
         simple_five_endpoint_c,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
+    assert!(thread_a.join().is_err());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_err());
 }

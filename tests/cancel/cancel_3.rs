@@ -2,8 +2,8 @@ use mpstthree::binary::{cancel, End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_fork_multi, close_mpst, create_normal_role, create_recv_mpst_session,
-    create_recv_mpst_session_bundle, create_send_mpst_session, create_send_mpst_session_bundle,
-    create_sessionmpst,
+    create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session,
+    create_send_mpst_session_bundle, create_sessionmpst,
 };
 
 use rand::random;
@@ -24,14 +24,14 @@ create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 
 // Create new send functions
 // A
-create_send_mpst_session_bundle!(
-    send_mpst_a_to_b,
+create_send_mpst_cancel!(
+    send_cancel_a_to_b,
     RoleB,
     next_b,
-    1, | =>
     RoleA,
     SessionMpstFour,
-    4
+    4,
+    1
 );
 // C
 create_send_mpst_session_bundle!(
@@ -84,40 +84,36 @@ type EndpointB = SessionMpstFour<Recv<i32, End>, End, End, RoleA<RoleEnd>, NameB
 type EndpointC = SessionMpstFour<End, End, Send<i32, End>, RoleD<RoleEnd>, NameC>;
 type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    cancel(s.session1);
-
-    let s = send_mpst_a_to_b(random(), s);
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    let s = send_cancel_a_to_b(random(), s)?;
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    cancel(s.session1);
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    cancel(s);
 
-    let (_, s) = recv_mpst_b_to_a(s)?;
-    close_mpst_multi(s)
+    // let (_, s) = recv_mpst_b_to_a(s)?;
+    // close_mpst_multi(s)
+
+    Ok(())
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_d(random(), s);
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_to_c(s)?;
     close_mpst_multi(s)
 }
 
-fn main() {
-    let (thread_a, thread_b, thread_c, thread_d) = fork_mpst(
-        simple_five_endpoint_a,
-        simple_five_endpoint_b,
-        simple_five_endpoint_c,
-        simple_five_endpoint_d,
-    );
+pub fn main() {
+    let (thread_a, thread_b, thread_c, thread_d) =
+        fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
+    assert!(thread_a.join().is_err());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_err());
+    assert!(thread_d.join().is_err());
 }

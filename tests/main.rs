@@ -1,3 +1,4 @@
+mod cancel;
 mod cases;
 mod scribble;
 mod unit;
@@ -51,6 +52,7 @@ fn cases_tests() {
     cases::binary::closure_works();
     cases::binary::recursion_works();
     cases::binary::selection_works();
+    cases::binary::cancel_recursion();
 
     // Simple
     cases::simple::simple_triple_endpoints();
@@ -134,16 +136,20 @@ fn scribble_tests() {
 }
 
 #[test]
+fn cancel() {
+    cancel::cancel_1::main();
+    cancel::cancel_2::main();
+    cancel::cancel_3::main();
+    cancel::cancel_4::main();
+    cancel::cancel_5::main();
+    cancel::cancel_6::main();
+}
+
+#[test]
 fn tests() {
     let t = trybuild::TestCases::new();
     // Infinite types
     t.pass("tests/infinite_type/work.rs");
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
-    // Cancel
-    t.compile_fail("tests/cancel/cancel_1.rs");
-    t.compile_fail("tests/cancel/cancel_2.rs");
-    t.compile_fail("tests/cancel/cancel_3.rs");
-    t.compile_fail("tests/cancel/cancel_4.rs");
-    t.compile_fail("tests/cancel/cancel_5.rs");
 }

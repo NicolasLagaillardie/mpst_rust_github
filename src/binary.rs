@@ -10,8 +10,10 @@ use either::Either;
 use std::boxed::Box;
 use std::error::Error;
 use std::fmt;
+use std::io::{Read, Write};
 use std::marker;
 use std::mem;
+use std::net::TcpStream;
 use std::panic;
 use std::thread::{spawn, JoinHandle};
 
@@ -146,12 +148,44 @@ where
     T: marker::Send,
     S: Session,
 {
-    // For TCP client
-    // stream.write(&data[0..size]).unwrap();
-    // Need to force next type: stream.shutdown(Shutdown::Write).unwrap(); but no way to do it twice 
     let (here, there) = S::new();
     s.channel.send((x, there)).unwrap_or(());
     here
+}
+
+/// Send a value of type `T` over tcp. Returns the continuation of the
+/// session `S`. May fail.
+pub fn send_tcp<T, S>(
+    x: T, // Need to force x and data to be of the same type but for choice/offer
+    data: &[u8; 65535],
+    s: Send<(T, [u8; 65535]), S>,
+    mut stream: &TcpStream,
+) -> Result<S, Box<dyn Error>>
+where
+    T: marker::Send,
+    S: Session,
+{
+    // For TCP client
+    // stream.write(&data[0..size]).unwrap();
+    // May need to force next type: stream.shutdown(Shutdown::Write).unwrap(); but no way to do it twice
+    let (here, there) = S::new();
+    s.channel.send(((x, *data), there)).unwrap();
+    stream.write(data)?;
+    Ok(here)
+}
+
+/// Send a value of type `T`. Always succeeds. Returns the continuation of the
+/// session `S`.
+pub fn send_canceled<T, S>(x: T, s: Send<T, S>) -> Result<S, Box<dyn Error>>
+where
+    T: marker::Send,
+    S: Session,
+{
+    let (here, there) = S::new();
+    match s.channel.send((x, there)) {
+        Ok(_) => Ok(here),
+        Err(e) => panic!("{}", e.to_string()),
+    }
 }
 
 /// Receive a value of type `T`. Can fail. Returns either a pair of the received
@@ -161,14 +195,30 @@ where
     T: marker::Send,
     S: Session,
 {
+    let (v, s) = s.channel.recv()?;
+    Ok((v, s))
+}
+
+/// Receive a value of type `T`. Can fail. Returns either a pair of the received
+/// value and the continuation of the session `S` or an error.
+pub fn recv_tcp<T, S>(
+    s: Recv<(T, [u8; 65535]), S>,
+    mut stream: &TcpStream,
+) -> Result<(T, S, [u8; 65535], usize), Box<dyn Error>>
+where
+    T: marker::Send,
+    S: Session,
+{
     // For TCP client
     // let mut data = [0 as u8; 50]; // using 50 byte buffer
     // match stream.read(&mut data) { // or stream.read_exact(&mut data)
     // Ok(size) =>
     // Err(e) =>
-    // Need to force next type: stream.shutdown(Shutdown::Read).unwrap(); but no way to do it twice 
+    // May need to force next type: stream.shutdown(Shutdown::Read).unwrap(); but no way to do it twice
     let (v, s) = s.channel.recv()?;
-    Ok((v, s))
+    let mut data = [0 as u8; 65535];
+    let r = stream.read(&mut data)?;
+    Ok((v.0, s, data, r))
 }
 
 /// Cancels a session. Always succeeds. If the partner calls `recv` or `close`
@@ -180,10 +230,30 @@ pub fn cancel<T>(x: T) {
 /// Closes a session. Synchronises with the partner, and fails if the partner
 /// has crashed.
 pub fn close(s: End) -> Result<(), Box<dyn Error>> {
-    // For TCP client
-    // Need to force closing type: stream.shutdown(Shutdown::Both).unwrap();
     s.sender.send(()).unwrap_or(());
     s.receiver.recv()?;
+    Ok(())
+}
+
+/// Closes a TCP session. Synchronises with the partner, and fails if the partner
+/// has crashed.
+pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>> {
+    // For TCP client
+    // Need to force closing type: stream.shutdown(Shutdown::Both).unwrap();
+
+    println!("Closing");
+
+    s.sender.send(()).unwrap_or(());
+
+    println!("Closing sent");
+
+    s.receiver.recv()?;
+
+    println!("Closing received");
+
+    // stream.shutdown(Shutdown::Both)?;
+    // mem::drop(stream);
+
     Ok(())
 }
 
@@ -193,10 +263,6 @@ where
     S: Session + 'static,
     P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    // For TCP client
-    // match TcpStream::connect("localhost:3333") {
-    // Ok(result) =>
-    // Err(e) =>
     let (there, here) = Session::new();
     let other_thread = spawn(move || {
         panic::set_hook(Box::new(|_info| {
@@ -219,6 +285,36 @@ where
     P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
     fork_with_thread_id(p).1
+}
+
+/// Creates a child process, and a session with two dual endpoints of type `S`
+/// and `S::Dual`. The first endpoint is given to the child process. Returns the
+/// second endpoint.
+pub fn fork_tcp<S, P>(
+    p: P,
+    address: &str,
+) -> Result<(JoinHandle<()>, S::Dual, TcpStream), Box<dyn Error>>
+where
+    S: Session + 'static,
+    P: FnOnce(S, &TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+{
+    // For TCP client
+    // match TcpStream::connect("localhost:3333") {
+    // Ok(result) =>
+    // Err(e) =>
+    let stream = TcpStream::connect(address)?;
+    let copy = stream.try_clone()?;
+    let (there, here) = Session::new();
+    let other_thread = spawn(move || {
+        panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match p(there, &copy) {
+            Ok(()) => (),
+            Err(e) => panic!("{}", e.to_string()),
+        }
+    });
+    Ok((other_thread, here, stream))
 }
 
 /// Offer a choice between two sessions `S1` and `S1`. Implemented using `Recv`
@@ -286,6 +382,28 @@ macro_rules! offer {
     };
 }
 
+/// Offer a choice between many different sessions wrapped in an `enum`
+#[macro_export]
+macro_rules! offer_tcp {
+    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+        (move || -> Result<_, _> {
+
+            println!("Receiving new label");
+
+            let (l, s) = recv($session)?;
+
+            println!("Receive label: {:?}", &l.0);
+
+            mpstthree::binary::cancel(s);
+            match l.0 {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
 /// Choose between many different sessions wrapped in an `enum`
 #[macro_export]
 macro_rules! choose {
@@ -293,6 +411,26 @@ macro_rules! choose {
         let (here, there) = <_ as Session>::new();
         let s = send($label(there), $session);
         mpstthree::binary::cancel(s);
+        here
+    }};
+}
+
+/// Choose between many different sessions wrapped in an `enum`
+#[macro_export]
+macro_rules! choose_tcp {
+    ($label:path, $session:expr, $data:expr) => {{
+        let (here, there) = <_ as Session>::new();
+
+        println!("Create new session for choose");
+
+        let s = send(($label(there), $data), $session);
+
+        println!("Send label");
+
+        mpstthree::binary::cancel(s);
+
+        println!("Cancel");
+
         here
     }};
 }
