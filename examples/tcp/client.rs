@@ -14,7 +14,7 @@ fn main() {
             stream.write(msg).unwrap();
             println!("Sent Hello, awaiting reply...");
 
-            let mut data = [0 as u8; 65535]; // using 65535 byte buffer
+            let mut data = [0_u8; 65535]; // using 65535 byte buffer
             match stream.read_exact(&mut data) {
                 Ok(_) => {
                     if &data == msg {

@@ -30,7 +30,7 @@ fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
         },
         BinaryA::More(s) => {
             let (_payload, s, _data, _r) = recv_tcp(s, stream)?;
-            let s = send_tcp((), &[0 as u8; 65535], s, stream)?;
+            let s = send_tcp((), &[0_u8; 65535], s, stream)?;
             binary_a_to_b(s, stream)
         },
     })
@@ -42,7 +42,7 @@ fn binary_b_to_a(
     s: Send<Data, Recv<Data, RecursB>>,
     stream: &TcpStream,
 ) -> Result<RecursB, Box<dyn Error>> {
-    let s = send_tcp((), &[0 as u8; 65535], s, stream)?;
+    let s = send_tcp((), &[0_u8; 65535], s, stream)?;
 
     println!("Sending tcp");
 
@@ -79,7 +79,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
             for s in sessions {
                 temp.push(
                     binary_b_to_a(
-                        choose_tcp!(BinaryA::More, s, [0 as u8; 65535]),
+                        choose_tcp!(BinaryA::More, s, [0_u8; 65535]),
                         &streams[index],
                     )
                     .unwrap(),
@@ -97,7 +97,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
         for s in sessions {
             println!("About to choose close : {}", &index);
 
-            temp.push(choose_tcp!(BinaryA::Done, s, [0 as u8; 65535]));
+            temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 65535]));
 
             index += 1;
         }
