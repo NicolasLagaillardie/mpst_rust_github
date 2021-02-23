@@ -352,7 +352,7 @@ pub fn selection_works() {
 
     for i in 0..10 {
         let (other_thread, s) = fork_with_thread_id(move |s: Send<u64, End>| {
-            sleep(Duration::from_millis(i * 100));
+            sleep(Duration::from_millis(i * 1000));
             let s = send(9 - i, s);
             close(s)
         });
