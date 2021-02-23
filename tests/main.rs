@@ -38,7 +38,7 @@ fn unit_tests_panic_test_checker_panic_name() {
 }
 
 #[test]
-fn cases_tests() {
+fn cases_tests_binary() {
     // Binary
     cases::binary::ping_works();
     cases::binary::head_str();
@@ -53,7 +53,10 @@ fn cases_tests() {
     cases::binary::recursion_works();
     cases::binary::selection_works();
     cases::binary::cancel_recursion();
+}
 
+#[test]
+fn cases_tests_mpst_simple() {
     // Simple
     cases::simple::simple_triple_endpoints();
     cases::simple::simple_triple_endpoints_checker();
@@ -103,7 +106,10 @@ fn cases_tests() {
     // Usecase recursive C
     cases::c_usecase_recursive::run_c_usecase_recursive();
     cases::c_usecase_recursive::run_c_usecase_recursive_checker();
+}
 
+#[test]
+fn cases_tests_mpst_macro() {
     // Macro basics
     cases::macro_basics::basic_macros_send();
     cases::macro_basics::basic_macros_recv();
