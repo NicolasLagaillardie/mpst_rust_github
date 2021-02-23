@@ -44,6 +44,7 @@ fn cases_tests_binary() {
     cases::binary::head_str();
     cases::binary::tail_str();
     cases::binary::new_types();
+    cases::binary::new_types_cancel();
     cases::binary::simple_calc_works();
     cases::binary::nice_calc_works();
     cases::binary::cancel_recv_works();
@@ -149,6 +150,7 @@ fn canceling() {
     cancel::cancel_4::main();
     cancel::cancel_5::main();
     cancel::cancel_6::main();
+    cancel::cancel_7::main();
 }
 
 #[test]

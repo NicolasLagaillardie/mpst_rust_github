@@ -1,6 +1,7 @@
 //! This module contains the *close* function
 
 use crate::binary::End;
+use crate::binary::Signal;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
@@ -58,8 +59,8 @@ pub fn close_mpst<R>(s: SessionMpst<End, End, RoleEnd, R>) -> Result<(), Box<dyn
 where
     R: Role,
 {
-    s.session1.sender.send(()).unwrap_or(());
-    s.session2.sender.send(()).unwrap_or(());
+    s.session1.sender.send(Signal::Stop).unwrap_or(());
+    s.session2.sender.send(Signal::Stop).unwrap_or(());
 
     s.session1.receiver.recv()?;
     s.session2.receiver.recv()?;

@@ -119,7 +119,7 @@ macro_rules! create_recv_mpst_session {
 #[macro_export]
 macro_rules! create_recv_mpst_session_bundle {
     ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(create_recv_mpst_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
+       $(mpstthree::create_recv_mpst_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }
 
@@ -250,6 +250,6 @@ macro_rules! create_recv_mpst_all_session {
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_bundle {
     ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(create_recv_mpst_all_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
+       $(mpstthree::create_recv_mpst_all_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }

@@ -9,8 +9,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_normal_role,
-    create_recv_mpst_session, create_recv_mpst_session_bundle, create_send_mpst_session,
-    create_send_mpst_session_bundle, create_sessionmpst, offer, offer_mpst,
+    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst, offer,
+    offer_mpst,
 };
 
 use std::error::Error;

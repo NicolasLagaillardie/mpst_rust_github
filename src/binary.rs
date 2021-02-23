@@ -43,12 +43,18 @@ where
     channel: Receiver<(T, S)>,
 }
 
+#[derive(Debug)]
+pub enum Signal {
+    Stop,
+    Cancel,
+}
+
 /// End of communication.
 #[must_use]
 #[derive(Debug)]
 pub struct End {
-    pub sender: Sender<()>,
-    pub receiver: Receiver<()>,
+    pub sender: Sender<Signal>,
+    pub receiver: Receiver<Signal>,
 }
 
 /// Trait for session types. Provides duality.
@@ -78,8 +84,8 @@ impl Session for End {
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
-        let (sender1, receiver1) = bounded::<()>(1);
-        let (sender2, receiver2) = bounded::<()>(1);
+        let (sender1, receiver1) = bounded::<Signal>(1);
+        let (sender2, receiver2) = bounded::<Signal>(1);
 
         (
             End {
@@ -233,7 +239,7 @@ pub fn cancel<T>(x: T) {
 /// Closes a session. Synchronises with the partner, and fails if the partner
 /// has crashed.
 pub fn close(s: End) -> Result<(), Box<dyn Error>> {
-    s.sender.send(()).unwrap_or(());
+    s.sender.send(Signal::Stop).unwrap_or(());
     s.receiver.recv()?;
     Ok(())
 }
@@ -246,7 +252,7 @@ pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>> {
 
     println!("Closing");
 
-    s.sender.send(()).unwrap_or(());
+    s.sender.send(Signal::Stop).unwrap_or(());
 
     println!("Closing sent");
 
