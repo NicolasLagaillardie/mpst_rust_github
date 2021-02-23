@@ -34,7 +34,6 @@ pub fn new_types() {
 
 // Test sending a ping across threads.
 
-#[test]
 pub fn ping_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         let s = fork(move |s: Send<(), End>| {
@@ -98,7 +97,6 @@ fn simple_calc_server(s: SimpleCalcServer<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
-#[test]
 pub fn simple_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         let mut rng = thread_rng();
@@ -159,7 +157,6 @@ fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[test]
 pub fn nice_calc_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Pick some random numbers.
@@ -196,7 +193,6 @@ pub fn nice_calc_works() {
 
 // Test cancellation.
 
-#[test]
 pub fn cancel_recv_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
@@ -209,7 +205,6 @@ pub fn cancel_recv_works() {
     assert!(other_thread.join().is_err());
 }
 
-#[test]
 pub fn cancel_send_works() {
     let (other_thread, s) = fork_with_thread_id(move |s: Recv<(), End>| {
         cancel(s);
@@ -228,7 +223,6 @@ pub fn cancel_send_works() {
 
 // Test cancellation of delegation.
 
-#[test]
 pub fn delegation_works() {
     let (other_thread1, s) = fork_with_thread_id(nice_calc_server);
     let (other_thread2, u) = fork_with_thread_id(move |u: Recv<NiceCalcClient<i32>, End>| {
@@ -249,7 +243,6 @@ pub fn delegation_works() {
 
 // Test cancellation of closures.
 
-#[test]
 pub fn closure_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
@@ -316,7 +309,6 @@ fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32,
     }
 }
 
-#[test]
 pub fn recursion_works() {
     // Pick some random numbers.
     let mut rng = thread_rng();
@@ -335,7 +327,6 @@ pub fn recursion_works() {
     assert!(other_thread.join().is_ok());
 }
 
-#[test]
 pub fn cancel_recursion() {
     // Pick some random numbers.
     let mut rng = thread_rng();
@@ -355,7 +346,6 @@ pub fn cancel_recursion() {
 
 // Test selection.
 
-#[test]
 pub fn selection_works() {
     let mut other_threads = Vec::new();
     let mut rs = Vec::new();
