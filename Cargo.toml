@@ -49,6 +49,7 @@ rand = "0.8.3"
 # sesh = "0.1.1"
 mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main"}
 # mpst-seq = { path = "../mpst-seq" }
+anyhow = "1"
 
 [dev-dependencies]
 criterion = "0.3.4"
