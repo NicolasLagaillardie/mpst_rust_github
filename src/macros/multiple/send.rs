@@ -166,29 +166,40 @@ macro_rules! create_send_mpst_cancel {
 macro_rules! create_send_check_cancel {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)0:0 R>(
+            fn $func_name<T, #(S#N:0,)16:0 R>(
                 x: T,
                 s: $struct_name<
+                    mpstthree::binary::End,
                     %(
                         S#N:0,
                     )(
                         mpstthree::binary::Send<T, S#N:0>,
-                    )0*
+                    )3*
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-            ) -> Result<$struct_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>, std::boxed::Box<dyn std::error::Error>>
+            ) -> Result<$struct_name<
+                mpstthree::binary::End,
+                #(S#N:0,)16:0
+                R,
+                $name<mpstthree::role::end::RoleEnd>
+            >, std::boxed::Box<dyn std::error::Error>>
             where
                 T: std::marker::Send,
                 #(
                     S#N:0: mpstthree::binary::Session,
-                )0:0
+                )16:0
                 R: mpstthree::role::Role,
             {
+                match s.session1.receiver.try_recv() {
+                    Ok(_) => panic!("Error"),
+                    _ => {}
+                };
                 %(
                 )(
                     let new_session = mpstthree::binary::send_canceled(x, s.session#N:0)?;
-                )0*
+                )3*
+
                 let new_queue = $next(s.stack);
 
                 Ok($struct_name {

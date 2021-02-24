@@ -80,48 +80,57 @@ type EndpointC = SessionMpstFour<End, Send<i32, End>, Send<i32, End>, RoleB<Role
 type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    let mut stop = true;
-    while stop {
+    let mut session1 = true;
+    let mut session2 = true;
+    let mut session3 = true;
+
+    while session1 || session2 || session3 {
         match s.session1.receiver.try_recv() {
             Ok(Signal::Cancel) => {
-                s.session2.sender.send(Signal::Cancel).unwrap();
-                s.session3.sender.send(Signal::Cancel).unwrap();
+                s.session2.sender.send(Signal::Cancel)?;
+                s.session3.sender.send(Signal::Cancel)?;
                 panic!("Error");
             }
-            Ok(Signal::Stop) => {
-                s.session2.sender.send(Signal::Stop).unwrap();
-                s.session3.sender.send(Signal::Stop).unwrap();
-                stop = false;
-            }
+            Ok(Signal::Stop) => match session1 {
+                true => {
+                    s.session1.sender.send(Signal::Stop)?;
+                    session1 = false;
+                }
+                false => panic!("Close already sent on session1"),
+            },
             _ => {}
         };
         match s.session2.receiver.try_recv() {
             Ok(Signal::Cancel) => {
-                s.session1.sender.send(Signal::Cancel).unwrap();
-                s.session3.sender.send(Signal::Cancel).unwrap();
+                s.session1.sender.send(Signal::Cancel)?;
+                s.session3.sender.send(Signal::Cancel)?;
                 panic!("Error");
             }
-            Ok(Signal::Stop) => {
-                s.session1.sender.send(Signal::Stop).unwrap();
-                s.session3.sender.send(Signal::Stop).unwrap();
-                stop = false;
-            }
+            Ok(Signal::Stop) => match session2 {
+                true => {
+                    s.session2.sender.send(Signal::Stop)?;
+                    session2 = false;
+                }
+                false => panic!("Close already sent on session2"),
+            },
             _ => {}
         };
         match s.session3.receiver.try_recv() {
             Ok(Signal::Cancel) => {
-                s.session1.sender.send(Signal::Cancel).unwrap();
-                s.session2.sender.send(Signal::Cancel).unwrap();
+                s.session1.sender.send(Signal::Cancel)?;
+                s.session2.sender.send(Signal::Cancel)?;
                 panic!("Error");
             }
-            Ok(Signal::Stop) => {
-                s.session1.sender.send(Signal::Stop).unwrap();
-                s.session2.sender.send(Signal::Stop).unwrap();
-                stop = false;
-            }
+            Ok(Signal::Stop) => match session3 {
+                true => {
+                    s.session3.sender.send(Signal::Stop)?;
+                    session3 = false;
+                }
+                false => panic!("Close already sent on session3"),
+            },
             _ => {}
         };
-    };
+    }
 
     Ok(())
 }
@@ -132,7 +141,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     // let (_, s) = recv_mpst_b_to_a(s)?;
     // close_mpst_multi(s)
 
-    Ok(())
+    panic!("Session dropped");
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
@@ -171,7 +180,7 @@ pub fn main() {
         fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
 
     assert!(thread_a.join().is_err());
-    assert!(thread_b.join().is_ok());
+    assert!(thread_b.join().is_err());
     assert!(thread_c.join().is_err());
     assert!(thread_d.join().is_err());
 }

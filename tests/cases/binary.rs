@@ -26,34 +26,10 @@ pub fn tail_str() {
 pub fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 
-    let result_sender_end_1 = session_end_1.sender.send(Signal::Stop);
-    let result_sender_end_2 = session_end_2.sender.send(Signal::Stop);
-
-    let result_receiver_end_1 = session_end_1.receiver.recv();
-    let result_receiver_end_2 = session_end_2.receiver.recv();
-
-    println!("result_sender_end_1: {:?}", result_sender_end_1);
-    println!("result_sender_end_2: {:?}", result_sender_end_2);
-    println!("result_receiver_end_1: {:?}", result_receiver_end_1);
-    println!("result_receiver_end_2: {:?}", result_receiver_end_2);
-
-    // assert_eq!(session_end_1.sender.send(Signal::Stop), Ok(()));
-    // assert_eq!(session_end_2.sender.send(Signal::Stop), Ok(()));
-    // assert_eq!(session_end_1.receiver.recv(), Ok(Signal::Stop));
-    // assert_eq!(session_end_2.receiver.recv(), Ok(Signal::Stop));
-
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_1.sender.send(Signal::Stop) {
             Ok(()) => Ok(()),
             Err(e) => panic!("{}", e.to_string()),
-        }
-    }()
-    .is_ok());
-
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        match session_end_2.sender.send(Signal::Stop) {
-            Ok(()) => Ok(()),
-            _ => panic!("Error"),
         }
     }()
     .is_ok());
@@ -81,31 +57,42 @@ pub fn new_types() {
         }
     }()
     .is_ok());
-
-    println!("result_sender_end_1: {:?}", result_sender_end_1);
-    println!("result_sender_end_2: {:?}", result_sender_end_2);
-    println!("result_receiver_end_1: {:?}", result_receiver_end_1);
-    println!("result_receiver_end_2: {:?}", result_receiver_end_2);
 }
 
 pub fn new_types_cancel() {
     let (session_end_1, session_end_2) = End::new();
 
-    let result_sender_end_1 = session_end_1.sender.send(Signal::Cancel);
-    let result_sender_end_2 = session_end_2.sender.send(Signal::Cancel);
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_1.sender.send(Signal::Cancel) {
+            Ok(()) => Ok(()),
+            Err(e) => panic!("{}", e.to_string()),
+        }
+    }()
+    .is_ok());
 
-    let result_receiver_end_1 = session_end_1.receiver.recv();
-    let result_receiver_end_2 = session_end_2.receiver.recv();
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_2.sender.send(Signal::Cancel) {
+            Ok(()) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
 
-    println!("result_sender_end_1: {:?}", result_sender_end_1);
-    println!("result_sender_end_2: {:?}", result_sender_end_2);
-    println!("result_receiver_end_1: {:?}", result_receiver_end_1);
-    println!("result_receiver_end_2: {:?}", result_receiver_end_2);
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_1.receiver.recv() {
+            Ok(Signal::Cancel) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
 
-    // assert_eq!(session_end_1.sender.send(Signal::Cancel), Ok(()));
-    // assert_eq!(session_end_2.sender.send(Signal::Cancel), Ok(()));
-    // assert_eq!(session_end_1.receiver.recv(), Ok(Signal::Cancel));
-    // assert_eq!(session_end_2.receiver.recv(), Ok(Signal::Cancel));
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_2.receiver.recv() {
+            Ok(Signal::Cancel) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
 }
 
 // Test sending a ping across threads.
