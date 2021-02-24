@@ -162,7 +162,7 @@ macro_rules! create_send_mpst_cancel {
 ///
 ///  create_send_check_cancel!(send_cancel_d_to_b, RoleB, next_b, RoleD, SessionMpst, 3, 2);
 ///  ```
-/// 
+///
 /// # Compile fail
 ///  
 ///  ```compile_fail
