@@ -35,6 +35,32 @@ struct Rx<Role, Cont> {
 }
 struct End;
 
+impl<Role, Cont> Tx<Role, Cont> {
+    pub fn send(self, channel: &Channel<Role>, value: u32) -> Result<Cont> {
+        channel.tx.send(value)?;
+        Ok(self.cont)
+    }
+}
+fn tx<R, C>(_role: R, cont: C) -> Tx<R, C> {
+    Tx {
+        cont,
+        _ph: PhantomData,
+    }
+}
+
+impl<Role, Cont> Rx<Role, Cont> {
+    pub fn recv(self, channel: &Channel<Role>) -> Result<(u32, Cont)> {
+        let ret = channel.rx.recv()?;
+        Ok((ret, self.cont))
+    }
+}
+fn rx<R, C>(_role: R, cont: C) -> Rx<R, C> {
+    Rx {
+        cont,
+        _ph: PhantomData,
+    }
+}
+
 /// The local code can use either left or right, which will in any case consume the Choice.
 struct MyChoice<C1, C2> {
     left: C1,
@@ -60,29 +86,53 @@ impl<R1, C1, R2, C2> TheirChoice<R1, C1, R2, C2> {
     }
 }
 
-impl<Role, Cont> Tx<Role, Cont> {
-    pub fn send(self, channel: Channel<Role>, value: u32) -> Result<Cont> {
-        channel.tx.send(value)?;
-        Ok(self.cont)
-    }
-}
-fn tx<R, C>(_role: R, cont: C) -> Tx<R, C> {
-    Tx {
-        cont,
-        _ph: PhantomData,
-    }
+macro_rules! rec {
+    (@@1 Tx[$r:ident, $($t:tt)*]) => {
+        Tx<$r, rec!(@@1 $($t)*)>
+    };
+    (@@1 Rx[$r:ident, $($t:tt)*]) => {
+        Rx<$r, rec!(@@1 $($t)*)>
+    };
+    (@@1 rec) => { fn() -> Rec };
+    (@@2 Tx[$r:ident, $($t:tt)*]) => {
+        tx($r, rec!(@@2 $($t)*))
+    };
+    (@@2 Rx[$r:ident, $($t:tt)*]) => {
+        rx($r, rec!(@@2 $($t)*))
+    };
+    (@@2 rec) => { new };
+    ($op:ident$t:tt) => {{
+        struct Rec {
+            pub rec: rec!(@@1 $op$t),
+        }
+        fn new() -> Rec {
+            Rec {
+                rec: rec!(@@2 $op$t),
+            }
+        }
+        new()
+    }};
 }
 
-impl<Role, Cont> Rx<Role, Cont> {
-    pub fn recv(self, channel: Channel<Role>) -> Result<(u32, Cont)> {
-        let ret = channel.rx.recv()?;
-        Ok((ret, self.cont))
-    }
-}
-fn rx<R, C>(_role: R, cont: C) -> Rx<R, C> {
-    Rx {
-        cont,
-        _ph: PhantomData,
+fn rec_test(ch_a: Channel<RoleA>, ch_b: Channel<RoleB>) -> Result<()> {
+    let _p = rec!(Tx[RoleA, Rx[RoleB, rec]]);
+    // the above produces the same code as below, but rust-analyzer cannot use the resulting types, so it is useless
+    let mut p = {
+        struct Rec {
+            pub rec: Tx<RoleA, Rx<RoleB, fn() -> Rec>>,
+        }
+        fn new() -> Rec {
+            Rec {
+                rec: tx(RoleA, rx(RoleB, new)),
+            }
+        }
+        new().rec
+    };
+    loop {
+        let p2 = p.send(&ch_a, 42)?;
+        let (v, p2) = p2.recv(&ch_b)?;
+        println!("received {}", v);
+        p = p2().rec;
     }
 }
 
@@ -91,8 +141,8 @@ struct RoleB;
 struct RoleC;
 
 fn fancy_building_block<Cont>(
-    to_a: Channel<RoleA>,
-    to_b: Channel<RoleB>,
+    to_a: &Channel<RoleA>,
+    to_b: &Channel<RoleB>,
     p: Tx<RoleA, Rx<RoleB, Cont>>,
 ) -> Result<Cont> {
     Ok(p.send(to_a, 55)?.recv(to_b)?.1)
@@ -107,14 +157,14 @@ fn main() -> Result<()> {
     let (ch_ac, ch_ca) = mk_chan::<RoleA, RoleC>();
     let (ch_bc, ch_cb) = mk_chan::<RoleB, RoleC>();
 
-    let thread_a = spawn(move || prot_a.send(ch_ab, 42)?.recv(ch_ac));
+    let thread_a = spawn(move || prot_a.send(&ch_ab, 42)?.recv(&ch_ac));
     let thread_b = spawn(move || {
-        let (value, p) = prot_b.recv(ch_ba)?;
-        p.send(ch_bc, value)
+        let (value, p) = prot_b.recv(&ch_ba)?;
+        p.send(&ch_bc, value)
     });
     let thread_c = spawn(move || {
-        let (value, p) = prot_c.recv(ch_cb)?;
-        p.send(ch_ca, value)
+        let (value, p) = prot_c.recv(&ch_cb)?;
+        p.send(&ch_ca, value)
     });
 
     let (x, _end): (u32, End) = thread_a.join().map_err(|x| anyhow!("{:?}", x))??;
