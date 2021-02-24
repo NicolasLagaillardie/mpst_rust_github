@@ -29,10 +29,27 @@ struct Tx<Role, Cont> {
     cont: Cont,
     _ph: PhantomData<Role>,
 }
+impl<Role, Cont: Default> Default for Tx<Role, Cont> {
+    fn default() -> Self {
+        Self {
+            cont: Cont::default(),
+            _ph: PhantomData,
+        }
+    }
+}
 struct Rx<Role, Cont> {
     cont: Cont,
     _ph: PhantomData<Role>,
 }
+impl<Role, Cont: Default> Default for Rx<Role, Cont> {
+    fn default() -> Self {
+        Self {
+            cont: Cont::default(),
+            _ph: PhantomData,
+        }
+    }
+}
+#[derive(Default)]
 struct End;
 
 impl<Role, Cont> Tx<Role, Cont> {
@@ -87,37 +104,22 @@ impl<R1, C1, R2, C2> TheirChoice<R1, C1, R2, C2> {
 }
 
 macro_rules! rec {
-    (@@1 Tx[$r:ident, $($t:tt)*]) => {
-        Tx<$r, rec!(@@1 $($t)*)>
-    };
-    (@@1 Rx[$r:ident, $($t:tt)*]) => {
-        Rx<$r, rec!(@@1 $($t)*)>
-    };
-    (@@1 rec) => { fn() -> Rec };
-    (@@2 Tx[$r:ident, $($t:tt)*]) => {
-        tx($r, rec!(@@2 $($t)*))
-    };
-    (@@2 Rx[$r:ident, $($t:tt)*]) => {
-        rx($r, rec!(@@2 $($t)*))
-    };
-    (@@2 rec) => { new };
-    ($op:ident$t:tt) => {{
-        struct Rec {
-            pub rec: rec!(@@1 $op$t),
-        }
-        fn new() -> Rec {
-            Rec {
-                rec: rec!(@@2 $op$t),
+    ($x:ident, $t:ty) => {{
+        #[derive(Default)]
+        struct $x;
+        impl $x {
+            pub fn rec(self) -> $t {
+                Default::default()
             }
         }
-        new()
+        $x::default().rec()
     }};
 }
 
 fn rec_test(ch_a: Channel<RoleA>, ch_b: Channel<RoleB>) -> Result<()> {
-    let _p = rec!(Tx[RoleA, Rx[RoleB, rec]]);
+    let mut p = rec!(X, Tx<RoleA, Rx<RoleB, X>>);
     // the above produces the same code as below, but rust-analyzer cannot use the resulting types, so it is useless
-    let mut p = {
+    let mut _p = {
         struct Rec {
             pub rec: Tx<RoleA, Rx<RoleB, fn() -> Rec>>,
         }
@@ -132,7 +134,7 @@ fn rec_test(ch_a: Channel<RoleA>, ch_b: Channel<RoleB>) -> Result<()> {
         let p2 = p.send(&ch_a, 42)?;
         let (v, p2) = p2.recv(&ch_b)?;
         println!("received {}", v);
-        p = p2().rec;
+        p = p2.rec();
     }
 }
 
