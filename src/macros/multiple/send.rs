@@ -147,11 +147,25 @@ macro_rules! create_send_mpst_cancel {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst for this specific role. Index starts at 1.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific role. Index starts at 2 as 1 is an End.
 ///  
 ///  # Example
 ///  
 ///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel};
+///
+///  create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///
+///  create_send_check_cancel!(send_cancel_d_to_b, RoleB, next_b, RoleD, SessionMpst, 3, 2);
+///  ```
+/// 
+/// # Compile fail
+///  
+///  ```compile_fail
 ///  use mpstthree::role::Role;
 ///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel};
 ///
@@ -160,7 +174,7 @@ macro_rules! create_send_mpst_cancel {
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_send_check_cancel!(send_cancel_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+///  create_send_check_cancel!(send_cancel_d_to_b, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 ///  ```
 #[macro_export]
 macro_rules! create_send_check_cancel {
@@ -195,10 +209,11 @@ macro_rules! create_send_check_cancel {
                     Ok(_) => panic!("Error"),
                     _ => {}
                 };
+
                 %(
                 )(
                     let new_session = mpstthree::binary::send_canceled(x, s.session#N:0)?;
-                )3*
+                )0*
 
                 let new_queue = $next(s.stack);
 
@@ -314,13 +329,36 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///  * The name of the receivers
 ///  * The name of the related *next* functions
 ///  * The name of the senders
-///  * The index of the binary session types that will receive in the SessionMpst for this specific role. Index starts at 1.
+///  * The index of the binary session types that will receive in the SessionMpst for this specific role. Index starts at 2 as 1 is an End.
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
 ///  # Example
 ///  
 ///  ```
+///  use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel, create_send_check_cancel_bundle};
+///
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+///  create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///
+///  create_send_check_cancel_bundle!(
+///     send_cancel_d_to_b,
+///     RoleB,
+///     next_b,
+///     2, | =>
+///     RoleD,
+///     SessionMpst,
+///     3
+/// );
+///  ```
+///  
+///  # Compile fail
+///  
+///  ```compile_fail
 ///  use mpstthree::role::Role;
 ///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel, create_send_check_cancel_bundle};
 ///

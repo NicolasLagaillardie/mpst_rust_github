@@ -1,8 +1,9 @@
-use mpstthree::binary::{End, Recv, Send, Signal};
+use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_fork_multi, close_mpst_check_cancel, create_normal_role,
     create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
+    send_cancel,
 };
 
 use rand::random;
@@ -58,7 +59,7 @@ create_recv_mpst_session_bundle!(
     4
 );
 
-broadcast_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
+send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
 
 // Create close function
 close_mpst_check_cancel!(close_check_cancel, SessionMpstFour, 4);
@@ -79,58 +80,7 @@ type EndpointC = SessionMpstFour<End, Send<i32, End>, Send<i32, End>, RoleB<Role
 type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    let mut session1 = true;
-    let mut session2 = true;
-    let mut session3 = true;
-
-    while session1 || session2 || session3 {
-        match s.session1.receiver.try_recv() {
-            Ok(Signal::Cancel) => {
-                s.session2.sender.send(Signal::Cancel)?;
-                s.session3.sender.send(Signal::Cancel)?;
-                panic!("Error");
-            }
-            Ok(Signal::Stop) => match session1 {
-                true => {
-                    s.session1.sender.send(Signal::Stop)?;
-                    session1 = false;
-                }
-                false => panic!("Close already sent on session1"),
-            },
-            _ => {}
-        };
-        match s.session2.receiver.try_recv() {
-            Ok(Signal::Cancel) => {
-                s.session1.sender.send(Signal::Cancel)?;
-                s.session3.sender.send(Signal::Cancel)?;
-                panic!("Error");
-            }
-            Ok(Signal::Stop) => match session2 {
-                true => {
-                    s.session2.sender.send(Signal::Stop)?;
-                    session2 = false;
-                }
-                false => panic!("Close already sent on session2"),
-            },
-            _ => {}
-        };
-        match s.session3.receiver.try_recv() {
-            Ok(Signal::Cancel) => {
-                s.session1.sender.send(Signal::Cancel)?;
-                s.session2.sender.send(Signal::Cancel)?;
-                panic!("Error");
-            }
-            Ok(Signal::Stop) => match session3 {
-                true => {
-                    s.session3.sender.send(Signal::Stop)?;
-                    session3 = false;
-                }
-                false => panic!("Close already sent on session3"),
-            },
-            _ => {}
-        };
-    }
-
+    broadcast_cancel!(s, 4);
     Ok(())
 }
 
