@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use anyhow::{anyhow, Result};
 use crossbeam_channel::{select, unbounded, Receiver, Sender};
 use std::{marker::PhantomData, thread::spawn};
@@ -29,10 +31,12 @@ struct Tx<Role, Cont> {
     cont: Cont,
     _ph: PhantomData<Role>,
 }
+
 struct Rx<Role, Cont> {
     cont: Cont,
     _ph: PhantomData<Role>,
 }
+
 struct End;
 
 /// The local code can use either left or right, which will in any case consume the Choice.
@@ -40,12 +44,14 @@ struct MyChoice<C1, C2> {
     left: C1,
     right: C2,
 }
+
 /// This node allows receiving from either R1 or R2, depending on an external choice
 struct TheirChoice<R1, C1, R2, C2> {
     left: C1,
     right: C2,
     _ph: PhantomData<(R1, R2)>,
 }
+
 enum ChoiceResult<C1, C2> {
     Left(u32, C1),
     Right(u32, C2),
