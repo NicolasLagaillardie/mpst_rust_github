@@ -1,7 +1,7 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, bundle_fork_multi, close_mpst, create_normal_role,
+    broadcast_cancel, bundle_fork_multi, close_mpst_check_cancel, create_normal_role,
     create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
     send_cancel,
 };
@@ -9,7 +9,6 @@ use mpstthree::{
 use rand::random;
 use std::error::Error;
 
-// B --> C canceled
 // C-->B.C-->D
 
 // Create new SessionMpst for three participants
@@ -63,7 +62,7 @@ create_recv_mpst_session_bundle!(
 send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
 
 // Create close function
-close_mpst!(close_mpst_multi, SessionMpstFour, 4);
+close_mpst_check_cancel!(close_check_cancel, SessionMpstFour, 4);
 
 // Create fork function
 bundle_fork_multi!(fork_mpst, fork_simple, SessionMpstFour, 4);
@@ -86,31 +85,27 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    cancel_mpst(s);
-
-    // let (_, s) = recv_mpst_b_to_a(s)?;
-    // close_mpst_multi(s)
-
-    panic!("Session dropped");
+    let (_, s) = recv_mpst_b_to_c(s)?;
+    close_check_cancel(s)
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let s = send_check_c_to_b(random(), s)?;
     let s = send_check_c_to_d(random(), s)?;
-    close_mpst_multi(s)
+    close_check_cancel(s)
 }
 
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_to_c(s)?;
-    close_mpst_multi(s)
+    close_check_cancel(s)
 }
 
 pub fn main() {
     let (thread_a, thread_b, thread_c, thread_d) =
         fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
 
-    assert!(thread_a.join().is_err());
-    assert!(thread_b.join().is_err());
-    assert!(thread_c.join().is_err());
-    assert!(thread_d.join().is_err());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }

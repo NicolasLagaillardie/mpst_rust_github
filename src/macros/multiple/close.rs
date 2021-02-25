@@ -27,11 +27,54 @@ macro_rules! close_mpst {
                 R: mpstthree::role::Role,
             {
                 #(
-                    s.session#N:0.sender.send(()).unwrap_or(());
+                    s.session#N:0.sender.send(mpstthree::binary::Signal::Stop).unwrap_or(());
                 )0:0
 
                 #(
                     s.session#N:0.receiver.recv()?;
+                )0:0
+
+                Ok(())
+            }
+        });
+    }
+}
+
+///  Create the close function to be used with more than 3 participants.
+///  
+///  # Arguments
+///  
+///  * The name of the new *close* function
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  
+///  # Example
+///  
+///  ```
+///  use mpstthree::{close_mpst, create_sessionmpst};
+///
+///  create_sessionmpst!(SessionMpst, 3);
+///
+///  close_mpst!(close_mpst_multi, SessionMpst, 3);
+///  ```
+#[macro_export]
+macro_rules! close_mpst_check_cancel {
+    ($func_name:ident, $struct_name:ident, $nsessions:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! 1 {
+            fn $func_name<R>(s: $struct_name<#(mpstthree::binary::End,)0:0 mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn std::error::Error>>
+            where
+                R: mpstthree::role::Role,
+            {
+                #(
+                    s.session#N:0.sender.send(mpstthree::binary::Signal::Stop).unwrap_or(());
+                )0:0
+
+                #(
+                    match s.session#N:0.receiver.recv() {
+                        Ok(mpstthree::binary::Signal::Stop) => {},
+                        Ok(mpstthree::binary::Signal::Cancel) => panic!("Received a cancel signal"),
+                        Err(e) => panic!("{}", e.to_string()),
+                    };
                 )0:0
 
                 Ok(())

@@ -26,10 +26,73 @@ pub fn tail_str() {
 pub fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 
-    assert_eq!(session_end_1.sender.send(()), Ok(()));
-    assert_eq!(session_end_2.sender.send(()), Ok(()));
-    assert_eq!(session_end_1.receiver.recv(), Ok(()));
-    assert_eq!(session_end_2.receiver.recv(), Ok(()));
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_1.sender.send(Signal::Stop) {
+            Ok(()) => Ok(()),
+            Err(e) => panic!("{}", e.to_string()),
+        }
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_2.sender.send(Signal::Stop) {
+            Ok(()) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_1.receiver.recv() {
+            Ok(Signal::Stop) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_2.receiver.recv() {
+            Ok(Signal::Stop) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
+}
+
+pub fn new_types_cancel() {
+    let (session_end_1, session_end_2) = End::new();
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_1.sender.send(Signal::Cancel) {
+            Ok(()) => Ok(()),
+            Err(e) => panic!("{}", e.to_string()),
+        }
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_2.sender.send(Signal::Cancel) {
+            Ok(()) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_1.receiver.recv() {
+            Ok(Signal::Cancel) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
+
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        match session_end_2.receiver.recv() {
+            Ok(Signal::Cancel) => Ok(()),
+            _ => panic!("Error"),
+        }
+    }()
+    .is_ok());
 }
 
 // Test sending a ping across threads.

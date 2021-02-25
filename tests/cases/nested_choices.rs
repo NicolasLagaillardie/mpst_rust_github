@@ -1,4 +1,4 @@
-// Issue with protocol functions, need to work on it asap
+// Unfinished
 
 // use rand::{thread_rng, Rng};
 
