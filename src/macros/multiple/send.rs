@@ -1,6 +1,45 @@
 ////////////////////////////////////////////
 /// SEND
 
+/// Shorter way to call the code within the send function instead of having to create the function itself.
+///
+/// # Example
+///
+/// ```ignore
+/// use mpstthree::{create_normal_role, create_sessionmpst, send_mpst};
+///
+/// create_sessionmpst!(SessionMpstThree, 3);
+///
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+///
+/// fn main(s: Endpoint) {
+///     let _s = send_mpst!(s, (), next_b, SessionMpstThree, 3, 1);
+/// }
+/// ```
+#[macro_export]
+macro_rules! send_mpst {
+    ($session:expr, $payload:expr, $next:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
+            %(
+            )(
+                let new_session = mpstthree::binary::send($payload, $session.session#N:0);
+            )0*
+            let new_queue = $next($session.stack);
+
+            $struct_name {
+                %(
+                    session#N:0: $session.session#N:0,
+                )(
+                    session#N:0: new_session,
+                )0*
+                stack: new_queue,
+                name: $session.name,
+            }
+        }});
+    }
+}
+
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more than 3 participants.
 ///
 ///  # Arguments
@@ -49,21 +88,8 @@ macro_rules! create_send_mpst_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                %(
-                )(
-                    let new_session = mpstthree::binary::send(x, s.session#N:0);
-                )0*
-                let new_queue = $next(s.stack);
 
-                $struct_name {
-                    %(
-                        session#N:0: s.session#N:0,
-                    )(
-                        session#N:0: new_session,
-                    )0*
-                    stack: new_queue,
-                    name: s.name,
-                }
+                mpstthree::send_mpst!(s, x, $next, $struct_name, $nsessions, $exclusion)
             }
         });
     }

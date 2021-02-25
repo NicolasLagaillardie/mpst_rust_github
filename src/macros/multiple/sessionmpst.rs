@@ -69,7 +69,7 @@ macro_rules! create_sessionmpst {
                 }
 
                 #[doc(hidden)]
-                fn head_str() -> String {
+                fn head_str() -> String { // Need to modify to adapt with the number of participants
                     format!(
                         "{} + {} + {} + {}",
                         S1::head_str(),
@@ -80,7 +80,7 @@ macro_rules! create_sessionmpst {
                 }
 
                 #[doc(hidden)]
-                fn tail_str() -> String {
+                fn tail_str() -> String { // Need to modify to adapt with the number of participants
                     format!(
                         "{} + {} + {} + {}",
                         S1::tail_str(),

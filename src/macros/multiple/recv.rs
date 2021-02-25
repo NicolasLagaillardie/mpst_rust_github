@@ -1,6 +1,47 @@
 ////////////////////////////////////////////
 /// RECV
 
+/// Shorter way to call the code within the recv function instead of having to create the function itself.
+///
+/// # Example
+///
+/// ```ignore
+/// use mpstthree::{create_normal_role, create_sessionmpst, recv_mpst};
+///
+/// create_sessionmpst!(SessionMpstThree, 3);
+///
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+///
+/// fn main(s: Endpoint) -> Result<(), Box<dyn std::error::Error>> {
+///     let (_payload, _s) = recv_mpst!(s, next_b, SessionMpstThree, 3, 1)()?;
+/// }
+/// ```
+#[macro_export]
+macro_rules! recv_mpst {
+    ($session:expr, $next:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
+            %(
+            )(
+                let (v, new_session) = mpstthree::binary::recv($session.session#N:0)?;
+            )0*
+            let new_queue = $next($session.stack);
+
+            let result = $struct_name {
+                %(
+                    session#N:0: $session.session#N:0,
+                )(
+                    session#N:0: new_session,
+                )0*
+                stack: new_queue,
+                name: $session.name,
+            };
+
+            Ok((v, result))
+        }});
+    }
+}
+
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
 ///
 ///  # Arguments
@@ -55,23 +96,7 @@ macro_rules! create_recv_mpst_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                %(
-                )(
-                    let (v, new_session) = mpstthree::binary::recv(s.session#N:0)?;
-                )0*
-                let new_queue = $next(s.stack);
-
-                let result = $struct_name {
-                    %(
-                        session#N:0: s.session#N:0,
-                    )(
-                        session#N:0: new_session,
-                    )0*
-                    stack: new_queue,
-                    name: s.name,
-                };
-
-                Ok((v, result))
+                mpstthree::recv_mpst!(s, $next, $struct_name, $nsessions, $exclusion)()
             }
         });
     }

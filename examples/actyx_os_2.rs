@@ -17,7 +17,7 @@ create_sessionmpst!(SessionMpstFour, 4);
 // global protocol ActyxOS2(role Api, role Controller, role Storage)
 // {
 //     Start(Int) from Controller to Storage;
-
+//
 //     rec Loop {
 //         choice at Storage
 //         {
