@@ -50,10 +50,7 @@ create_sessionmpst!(SessionMpstFour, 4);
 // Create Roles
 create_multiple_normal_role!(
     Api, next_api, DualAPI, next_dual_api |
-    Controller,
-    next_controller,
-    DualController,
-    next_dual_controller |
+    Controller, next_controller, DualController, next_dual_controller |
     Logs, next_logs, DualLogs, next_dual_logs |
     Storage, next_storage, DualStorage, next_dual_storage |
 );
@@ -63,7 +60,7 @@ create_send_mpst_session_bundle!(
     send_request_storage,
     Storage,
     next_storage,
-    3, | =>
+    3 | =>
     Api,
     SessionMpstFour,
     4
@@ -72,11 +69,11 @@ create_send_mpst_session_bundle!(
     send_start_controller_to_api,
     Api,
     next_api,
-    1, |
+    1 |
     send_start_controller_to_storage,
     Storage,
     next_storage,
-    3, | =>
+    3 | =>
     Controller,
     SessionMpstFour,
     4
@@ -85,15 +82,15 @@ create_send_mpst_session_bundle!(
     send_response_storage_to_api,
     Api,
     next_api,
-    1, |
+    1 |
     send_new_status_storage_to_controller,
     Controller,
     next_controller,
-    2, |
+    2 |
     send_storage_to_logs,
     Logs,
     next_logs,
-    3, | =>
+    3 | =>
     Storage,
     SessionMpstFour,
     4
@@ -104,11 +101,11 @@ create_recv_mpst_session_bundle!(
     recv_start_api_from_controller,
     Controller,
     next_controller,
-    1, |
+    1 |
     recv_response_api_from_storage,
     Storage,
     next_storage,
-    3, | =>
+    3 | =>
     Api,
     SessionMpstFour,
     4
@@ -117,7 +114,7 @@ create_recv_mpst_session_bundle!(
     recv_new_status_controller_from_storage,
     Storage,
     next_storage,
-    3, | =>
+    3 | =>
     Controller,
     SessionMpstFour,
     4
@@ -126,7 +123,7 @@ create_recv_mpst_session_bundle!(
     recv_logs_from_storage,
     Storage,
     next_storage,
-    3, | =>
+    3 | =>
     Logs,
     SessionMpstFour,
     4
@@ -135,11 +132,11 @@ create_recv_mpst_session_bundle!(
     recv_request_storage_from_api,
     Api,
     next_api,
-    1, |
+    1 |
     recv_start_storage_from_controller,
     Controller,
     next_controller,
-    2, | =>
+    2 | =>
     Storage,
     SessionMpstFour,
     4

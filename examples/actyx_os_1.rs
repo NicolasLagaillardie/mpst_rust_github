@@ -33,10 +33,7 @@ create_sessionmpst!(SessionMpstFour, 4);
 // Create Roles
 create_multiple_normal_role!(
     Api, next_api, DualAPI, next_dual_api |
-    Controller,
-    next_controller,
-    DualController,
-    next_dual_controller |
+    Controller, next_controller, DualController, next_dual_controller |
     Logs, next_logs, DualLogs, next_dual_logs |
     Storage, next_storage, DualStorage, next_dual_storage |
 );
@@ -46,7 +43,7 @@ create_send_mpst_session_bundle!(
     send_start_controller_to_logs,
     Logs,
     next_logs,
-    2, | =>
+    2 | =>
     Controller,
     SessionMpstFour,
     4
@@ -55,15 +52,15 @@ create_send_mpst_session_bundle!(
     send_logs_to_api,
     Api,
     next_api,
-    1, |
+    1 |
     send_failure_logs_to_controller,
     Controller,
     next_controller,
-    2, |
+    2 |
     send_logs_to_storage,
     Storage,
     next_storage,
-    3, | =>
+    3 | =>
     Logs,
     SessionMpstFour,
     4
@@ -74,7 +71,7 @@ create_recv_mpst_session_bundle!(
     recv_api_from_logs,
     Logs,
     next_logs,
-    2, | =>
+    2 | =>
     Api,
     SessionMpstFour,
     4
@@ -83,7 +80,7 @@ create_recv_mpst_session_bundle!(
     recv_start_controller_from_logs,
     Logs,
     next_logs,
-    2, | =>
+    2 | =>
     Controller,
     SessionMpstFour,
     4
@@ -92,7 +89,7 @@ create_recv_mpst_session_bundle!(
     recv_start_logs_from_controller,
     Controller,
     next_controller,
-    2, | =>
+    2 | =>
     Logs,
     SessionMpstFour,
     4
@@ -101,7 +98,7 @@ create_recv_mpst_session_bundle!(
     recv_storage_from_logs,
     Logs,
     next_logs,
-    3, | =>
+    3 | =>
     Storage,
     SessionMpstFour,
     4

@@ -43,79 +43,79 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_b,
     RoleB,
     next_b,
-    1, |
+    1 |
     send_mpst_a_to_c,
     RoleC,
     next_c,
-    2, |
+    2 |
     send_mpst_a_to_d,
     RoleD,
     next_d,
-    3, |
+    3 |
     send_mpst_a_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     send_mpst_a_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     send_mpst_a_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     send_mpst_a_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_a_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_a_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_a_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_a_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_a_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_a_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_a_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_a_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_a_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_a_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_a_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_a_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleA,
     SessionMpstTwenty,
     20
@@ -125,79 +125,79 @@ create_send_mpst_session_bundle!(
     send_mpst_b_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_b_to_c,
     RoleC,
     next_c,
-    2, |
+    2 |
     send_mpst_b_to_d,
     RoleD,
     next_d,
-    3, |
+    3 |
     send_mpst_b_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     send_mpst_b_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     send_mpst_b_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     send_mpst_b_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_b_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_b_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_b_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_b_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_b_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_b_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_b_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_b_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_b_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_b_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_b_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_b_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleB,
     SessionMpstTwenty,
     20
@@ -207,79 +207,79 @@ create_send_mpst_session_bundle!(
     send_mpst_c_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_c_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_c_to_d,
     RoleD,
     next_d,
-    3, |
+    3 |
     send_mpst_c_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     send_mpst_c_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     send_mpst_c_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     send_mpst_c_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_c_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_c_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_c_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_c_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_c_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_c_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_c_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_c_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_c_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_c_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_c_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_c_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleC,
     SessionMpstTwenty,
     20
@@ -289,79 +289,79 @@ create_send_mpst_session_bundle!(
     send_mpst_d_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_d_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_d_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_d_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     send_mpst_d_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     send_mpst_d_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     send_mpst_d_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_d_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_d_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_d_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_d_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_d_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_d_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_d_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_d_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_d_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_d_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_d_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_d_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleD,
     SessionMpstTwenty,
     20
@@ -371,79 +371,79 @@ create_send_mpst_session_bundle!(
     send_mpst_e_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_e_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_e_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_e_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_e_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     send_mpst_e_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     send_mpst_e_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_e_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_e_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_e_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_e_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_e_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_e_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_e_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_e_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_e_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_e_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_e_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_e_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleE,
     SessionMpstTwenty,
     20
@@ -453,79 +453,79 @@ create_send_mpst_session_bundle!(
     send_mpst_f_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_f_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_f_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_f_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_f_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_f_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     send_mpst_f_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_f_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_f_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_f_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_f_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_f_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_f_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_f_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_f_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_f_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_f_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_f_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_f_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleF,
     SessionMpstTwenty,
     20
@@ -535,79 +535,79 @@ create_send_mpst_session_bundle!(
     send_mpst_g_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_g_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_g_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_g_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_g_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_g_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_g_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     send_mpst_g_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_g_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_g_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_g_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_g_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_g_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_g_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_g_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_g_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_g_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_g_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_g_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleG,
     SessionMpstTwenty,
     20
@@ -617,79 +617,79 @@ create_send_mpst_session_bundle!(
     send_mpst_h_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_h_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_h_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_h_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_h_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_h_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_h_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_h_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     send_mpst_h_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_h_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_h_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_h_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_h_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_h_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_h_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_h_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_h_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_h_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_h_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleH,
     SessionMpstTwenty,
     20
@@ -699,79 +699,79 @@ create_send_mpst_session_bundle!(
     send_mpst_i_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_i_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_i_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_i_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_i_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_i_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_i_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_i_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_i_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     send_mpst_i_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_i_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_i_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_i_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_i_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_i_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_i_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_i_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_i_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_i_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleI,
     SessionMpstTwenty,
     20
@@ -781,79 +781,79 @@ create_send_mpst_session_bundle!(
     send_mpst_j_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_j_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_j_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_j_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_j_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_j_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_j_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_j_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_j_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_j_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     send_mpst_j_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_j_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_j_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_j_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_j_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_j_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_j_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_j_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_j_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleJ,
     SessionMpstTwenty,
     20
@@ -863,79 +863,79 @@ create_send_mpst_session_bundle!(
     send_mpst_k_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_k_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_k_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_k_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_k_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_k_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_k_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_k_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_k_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_k_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_k_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     send_mpst_k_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_k_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_k_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_k_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_k_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_k_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_k_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_k_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleK,
     SessionMpstTwenty,
     20
@@ -945,79 +945,79 @@ create_send_mpst_session_bundle!(
     send_mpst_l_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_l_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_l_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_l_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_l_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_l_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_l_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_l_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_l_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_l_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_l_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_l_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     send_mpst_l_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_l_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_l_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_l_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_l_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_l_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_l_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleL,
     SessionMpstTwenty,
     20
@@ -1027,79 +1027,79 @@ create_send_mpst_session_bundle!(
     send_mpst_m_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_m_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_m_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_m_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_m_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_m_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_m_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_m_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_m_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_m_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_m_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_m_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_m_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     send_mpst_m_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_m_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_m_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_m_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_m_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_m_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleM,
     SessionMpstTwenty,
     20
@@ -1109,79 +1109,79 @@ create_send_mpst_session_bundle!(
     send_mpst_n_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_n_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_n_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_n_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_n_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_n_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_n_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_n_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_n_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_n_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_n_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_n_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_n_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_n_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     send_mpst_n_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_n_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_n_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_n_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_n_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleN,
     SessionMpstTwenty,
     20
@@ -1191,79 +1191,79 @@ create_send_mpst_session_bundle!(
     send_mpst_o_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_o_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_o_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_o_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_o_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_o_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_o_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_o_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_o_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_o_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_o_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_o_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_o_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_o_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     send_mpst_o_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     send_mpst_o_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_o_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_o_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_o_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleO,
     SessionMpstTwenty,
     20
@@ -1273,79 +1273,79 @@ create_send_mpst_session_bundle!(
     send_mpst_p_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_p_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_p_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_p_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_p_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_p_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_p_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_p_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_p_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_p_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_p_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_p_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_p_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_p_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     send_mpst_p_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     send_mpst_p_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     send_mpst_p_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_p_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_p_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleP,
     SessionMpstTwenty,
     20
@@ -1355,79 +1355,79 @@ create_send_mpst_session_bundle!(
     send_mpst_q_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_q_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_q_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_q_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_q_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_q_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_q_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_q_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_q_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_q_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_q_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_q_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_q_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_q_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     send_mpst_q_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     send_mpst_q_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     send_mpst_q_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     send_mpst_q_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_q_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleQ,
     SessionMpstTwenty,
     20
@@ -1437,79 +1437,79 @@ create_send_mpst_session_bundle!(
     send_mpst_r_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_r_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_r_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_r_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_r_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_r_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_r_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_r_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_r_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_r_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_r_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_r_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_r_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_r_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     send_mpst_r_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     send_mpst_r_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     send_mpst_r_to_q,
     RoleQ,
     next_q,
-    17, |
+    17 |
     send_mpst_r_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     send_mpst_r_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleR,
     SessionMpstTwenty,
     20
@@ -1519,79 +1519,79 @@ create_send_mpst_session_bundle!(
     send_mpst_s_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_s_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_s_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_s_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_s_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_s_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_s_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_s_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_s_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_s_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_s_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_s_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_s_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_s_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     send_mpst_s_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     send_mpst_s_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     send_mpst_s_to_q,
     RoleQ,
     next_q,
-    17, |
+    17 |
     send_mpst_s_to_r,
     RoleR,
     next_r,
-    18, |
+    18 |
     send_mpst_s_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleS,
     SessionMpstTwenty,
     20
@@ -1601,79 +1601,79 @@ create_send_mpst_session_bundle!(
     send_mpst_t_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     send_mpst_t_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_mpst_t_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     send_mpst_t_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     send_mpst_t_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     send_mpst_t_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     send_mpst_t_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     send_mpst_t_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     send_mpst_t_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     send_mpst_t_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     send_mpst_t_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     send_mpst_t_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     send_mpst_t_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     send_mpst_t_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     send_mpst_t_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     send_mpst_t_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     send_mpst_t_to_q,
     RoleQ,
     next_q,
-    17, |
+    17 |
     send_mpst_t_to_r,
     RoleR,
     next_r,
-    18, |
+    18 |
     send_mpst_t_to_s,
     RoleS,
     next_s,
-    19, | =>
+    19 | =>
     RoleT,
     SessionMpstTwenty,
     20
@@ -1685,79 +1685,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_to_b,
     RoleB,
     next_b,
-    1, |
+    1 |
     recv_mpst_a_to_c,
     RoleC,
     next_c,
-    2, |
+    2 |
     recv_mpst_a_to_d,
     RoleD,
     next_d,
-    3, |
+    3 |
     recv_mpst_a_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     recv_mpst_a_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     recv_mpst_a_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     recv_mpst_a_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_a_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_a_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_a_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_a_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_a_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_a_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_a_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_a_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_a_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_a_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_a_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_a_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleA,
     SessionMpstTwenty,
     20
@@ -1767,79 +1767,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_b_to_c,
     RoleC,
     next_c,
-    2, |
+    2 |
     recv_mpst_b_to_d,
     RoleD,
     next_d,
-    3, |
+    3 |
     recv_mpst_b_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     recv_mpst_b_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     recv_mpst_b_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     recv_mpst_b_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_b_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_b_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_b_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_b_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_b_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_b_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_b_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_b_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_b_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_b_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_b_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_b_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleB,
     SessionMpstTwenty,
     20
@@ -1849,79 +1849,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_c_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_c_to_d,
     RoleD,
     next_d,
-    3, |
+    3 |
     recv_mpst_c_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     recv_mpst_c_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     recv_mpst_c_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     recv_mpst_c_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_c_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_c_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_c_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_c_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_c_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_c_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_c_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_c_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_c_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_c_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_c_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_c_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleC,
     SessionMpstTwenty,
     20
@@ -1931,79 +1931,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_d_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_d_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_d_to_e,
     RoleE,
     next_e,
-    4, |
+    4 |
     recv_mpst_d_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     recv_mpst_d_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     recv_mpst_d_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_d_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_d_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_d_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_d_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_d_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_d_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_d_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_d_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_d_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_d_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_d_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_d_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleD,
     SessionMpstTwenty,
     20
@@ -2013,79 +2013,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_e_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_e_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_e_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_e_to_f,
     RoleF,
     next_f,
-    5, |
+    5 |
     recv_mpst_e_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     recv_mpst_e_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_e_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_e_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_e_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_e_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_e_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_e_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_e_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_e_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_e_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_e_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_e_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_e_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleE,
     SessionMpstTwenty,
     20
@@ -2095,79 +2095,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_f_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_f_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_f_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_f_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_f_to_g,
     RoleG,
     next_g,
-    6, |
+    6 |
     recv_mpst_f_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_f_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_f_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_f_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_f_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_f_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_f_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_f_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_f_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_f_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_f_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_f_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_f_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleF,
     SessionMpstTwenty,
     20
@@ -2177,79 +2177,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_g_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_g_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_g_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_g_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_g_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_g_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_g_to_h,
     RoleH,
     next_h,
-    7, |
+    7 |
     recv_mpst_g_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_g_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_g_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_g_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_g_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_g_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_g_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_g_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_g_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_g_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_g_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_g_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleG,
     SessionMpstTwenty,
     20
@@ -2259,79 +2259,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_h_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_h_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_h_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_h_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_h_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_h_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_h_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_h_to_i,
     RoleI,
     next_i,
-    8, |
+    8 |
     recv_mpst_h_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_h_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_h_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_h_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_h_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_h_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_h_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_h_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_h_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_h_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_h_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleH,
     SessionMpstTwenty,
     20
@@ -2341,79 +2341,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_i_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_i_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_i_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_i_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_i_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_i_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_i_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_i_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_i_to_j,
     RoleJ,
     next_j,
-    9, |
+    9 |
     recv_mpst_i_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_i_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_i_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_i_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_i_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_i_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_i_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_i_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_i_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_i_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleI,
     SessionMpstTwenty,
     20
@@ -2423,79 +2423,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_j_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_j_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_j_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_j_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_j_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_j_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_j_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_j_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_j_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_j_to_k,
     RoleK,
     next_k,
-    10, |
+    10 |
     recv_mpst_j_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_j_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_j_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_j_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_j_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_j_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_j_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_j_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_j_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleJ,
     SessionMpstTwenty,
     20
@@ -2505,79 +2505,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_k_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_k_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_k_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_k_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_k_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_k_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_k_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_k_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_k_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_k_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_k_to_l,
     RoleL,
     next_l,
-    11, |
+    11 |
     recv_mpst_k_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_k_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_k_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_k_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_k_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_k_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_k_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_k_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleK,
     SessionMpstTwenty,
     20
@@ -2587,79 +2587,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_l_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_l_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_l_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_l_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_l_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_l_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_l_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_l_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_l_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_l_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_l_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_l_to_m,
     RoleM,
     next_m,
-    12, |
+    12 |
     recv_mpst_l_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_l_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_l_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_l_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_l_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_l_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_l_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleL,
     SessionMpstTwenty,
     20
@@ -2669,79 +2669,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_m_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_m_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_m_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_m_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_m_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_m_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_m_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_m_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_m_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_m_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_m_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_m_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_m_to_n,
     RoleN,
     next_n,
-    13, |
+    13 |
     recv_mpst_m_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_m_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_m_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_m_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_m_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_m_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleM,
     SessionMpstTwenty,
     20
@@ -2751,79 +2751,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_n_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_n_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_n_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_n_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_n_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_n_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_n_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_n_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_n_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_n_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_n_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_n_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_n_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_n_to_o,
     RoleO,
     next_o,
-    14, |
+    14 |
     recv_mpst_n_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_n_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_n_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_n_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_n_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleN,
     SessionMpstTwenty,
     20
@@ -2833,79 +2833,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_o_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_o_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_o_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_o_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_o_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_o_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_o_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_o_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_o_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_o_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_o_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_o_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_o_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_o_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     recv_mpst_o_to_p,
     RoleP,
     next_p,
-    15, |
+    15 |
     recv_mpst_o_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_o_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_o_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_o_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleO,
     SessionMpstTwenty,
     20
@@ -2915,79 +2915,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_p_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_p_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_p_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_p_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_p_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_p_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_p_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_p_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_p_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_p_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_p_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_p_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_p_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_p_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     recv_mpst_p_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     recv_mpst_p_to_q,
     RoleQ,
     next_q,
-    16, |
+    16 |
     recv_mpst_p_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_p_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_p_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleP,
     SessionMpstTwenty,
     20
@@ -2997,79 +2997,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_q_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_q_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_q_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_q_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_q_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_q_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_q_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_q_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_q_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_q_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_q_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_q_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_q_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_q_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     recv_mpst_q_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     recv_mpst_q_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     recv_mpst_q_to_r,
     RoleR,
     next_r,
-    17, |
+    17 |
     recv_mpst_q_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_q_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleQ,
     SessionMpstTwenty,
     20
@@ -3079,79 +3079,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_r_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_r_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_r_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_r_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_r_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_r_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_r_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_r_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_r_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_r_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_r_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_r_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_r_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_r_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     recv_mpst_r_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     recv_mpst_r_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     recv_mpst_r_to_q,
     RoleQ,
     next_q,
-    17, |
+    17 |
     recv_mpst_r_to_s,
     RoleS,
     next_s,
-    18, |
+    18 |
     recv_mpst_r_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleR,
     SessionMpstTwenty,
     20
@@ -3161,79 +3161,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_s_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_s_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_s_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_s_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_s_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_s_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_s_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_s_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_s_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_s_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_s_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_s_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_s_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_s_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     recv_mpst_s_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     recv_mpst_s_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     recv_mpst_s_to_q,
     RoleQ,
     next_q,
-    17, |
+    17 |
     recv_mpst_s_to_r,
     RoleR,
     next_r,
-    18, |
+    18 |
     recv_mpst_s_to_t,
     RoleT,
     next_t,
-    19, | =>
+    19 | =>
     RoleS,
     SessionMpstTwenty,
     20
@@ -3243,79 +3243,79 @@ create_recv_mpst_session_bundle!(
     recv_mpst_t_to_a,
     RoleA,
     next_a,
-    1, |
+    1 |
     recv_mpst_t_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     recv_mpst_t_to_c,
     RoleC,
     next_c,
-    3, |
+    3 |
     recv_mpst_t_to_d,
     RoleD,
     next_d,
-    4, |
+    4 |
     recv_mpst_t_to_e,
     RoleE,
     next_e,
-    5, |
+    5 |
     recv_mpst_t_to_f,
     RoleF,
     next_f,
-    6, |
+    6 |
     recv_mpst_t_to_g,
     RoleG,
     next_g,
-    7, |
+    7 |
     recv_mpst_t_to_h,
     RoleH,
     next_h,
-    8, |
+    8 |
     recv_mpst_t_to_i,
     RoleI,
     next_i,
-    9, |
+    9 |
     recv_mpst_t_to_j,
     RoleJ,
     next_j,
-    10, |
+    10 |
     recv_mpst_t_to_k,
     RoleK,
     next_k,
-    11, |
+    11 |
     recv_mpst_t_to_l,
     RoleL,
     next_l,
-    12, |
+    12 |
     recv_mpst_t_to_m,
     RoleM,
     next_m,
-    13, |
+    13 |
     recv_mpst_t_to_n,
     RoleN,
     next_n,
-    14, |
+    14 |
     recv_mpst_t_to_o,
     RoleO,
     next_o,
-    15, |
+    15 |
     recv_mpst_t_to_p,
     RoleP,
     next_p,
-    16, |
+    16 |
     recv_mpst_t_to_q,
     RoleQ,
     next_q,
-    17, |
+    17 |
     recv_mpst_t_to_r,
     RoleR,
     next_r,
-    18, |
+    18 |
     recv_mpst_t_to_s,
     RoleS,
     next_s,
-    19, | =>
+    19 | =>
     RoleT,
     SessionMpstTwenty,
     20

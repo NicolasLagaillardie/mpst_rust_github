@@ -30,11 +30,11 @@ create_send_check_cancel_bundle!(
     send_check_c_to_b,
     RoleB,
     next_b,
-    2, |
+    2 |
     send_check_c_to_d,
     RoleD,
     next_d,
-    3, | =>
+    3 | =>
     RoleC,
     SessionMpstFour,
     4
@@ -46,7 +46,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_to_c,
     RoleC,
     next_c,
-    2, | =>
+    2 | =>
     RoleB,
     SessionMpstFour,
     4
@@ -56,7 +56,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_to_c,
     RoleC,
     next_c,
-    3, | =>
+    3 | =>
     RoleD,
     SessionMpstFour,
     4

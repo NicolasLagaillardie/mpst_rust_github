@@ -288,11 +288,11 @@ macro_rules! create_send_check_cancel {
 ///     send_mpst_d_to_a,
 ///     RoleA,
 ///     next_a,
-///     1, |
+///     1 |
 ///     send_mpst_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, | =>
+///     2 | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -300,7 +300,7 @@ macro_rules! create_send_check_cancel {
 ///  ```
 #[macro_export]
 macro_rules! create_send_mpst_session_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
        $(mpstthree::create_send_mpst_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }
@@ -333,11 +333,11 @@ macro_rules! create_send_mpst_session_bundle {
 ///     send_cancel_d_to_a,
 ///     RoleA,
 ///     next_a,
-///     1, |
+///     1 |
 ///     send_cancel_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, | =>
+///     2 | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -345,7 +345,7 @@ macro_rules! create_send_mpst_session_bundle {
 ///  ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
        $(mpstthree::create_send_mpst_cancel!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }
@@ -378,7 +378,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///     send_cancel_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, | =>
+///     2 | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -401,11 +401,11 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///     send_cancel_d_to_a,
 ///     RoleA,
 ///     next_a,
-///     1, |
+///     1 |
 ///     send_cancel_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, | =>
+///     2 | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -413,7 +413,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///  ```
 #[macro_export]
 macro_rules! create_send_check_cancel_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
        $(mpstthree::create_send_check_cancel!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }

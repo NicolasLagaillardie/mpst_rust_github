@@ -48,11 +48,11 @@ create_send_mpst_session_bundle!(
     send_mpst_server_to_pawn,
     RolePawn,
     next_pawn,
-    1, |
+    1 |
     send_mpst_server_to_voter,
     RoleVoter,
     next_voter,
-    2, | =>
+    2 | =>
     RoleServer,
     SessionMpstThree,
     3
@@ -62,11 +62,11 @@ create_send_mpst_session_bundle!(
     send_mpst_voter_to_pawn,
     RolePawn,
     next_pawn,
-    1, |
+    1 |
     send_mpst_voter_to_server,
     RoleServer,
     next_server,
-    2, | =>
+    2 | =>
     RoleVoter,
     SessionMpstThree,
     3
@@ -78,11 +78,11 @@ create_recv_mpst_session_bundle!(
     recv_mpst_pawn_to_server,
     RoleServer,
     next_server,
-    1, |
+    1 |
     recv_mpst_pawn_to_voter,
     RoleVoter,
     next_voter,
-    2, | =>
+    2 | =>
     RolePawn,
     SessionMpstThree,
     3
@@ -92,11 +92,11 @@ create_recv_mpst_session_bundle!(
     recv_mpst_server_to_pawn,
     RolePawn,
     next_pawn,
-    1, |
+    1 |
     recv_mpst_server_to_voter,
     RoleVoter,
     next_voter,
-    2, | =>
+    2 | =>
     RoleServer,
     SessionMpstThree,
     3
@@ -106,11 +106,11 @@ create_recv_mpst_session_bundle!(
     recv_mpst_voter_to_pawn,
     RolePawn,
     next_pawn,
-    1, |
+    1 |
     recv_mpst_voter_to_server,
     RoleServer,
     next_server,
-    2, | =>
+    2 | =>
     RoleVoter,
     SessionMpstThree,
     3

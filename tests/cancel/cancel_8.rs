@@ -25,15 +25,15 @@
 //     send_check_b_to_a,
 //     RoleA,
 //     next_a,
-//     1, |
+//     1 |
 //     send_check_b_to_c,
 //     RoleC,
 //     next_c,
-//     2, |
+//     2 |
 //     send_check_b_to_d,
 //     RoleD,
 //     next_d,
-//     3, | =>
+//     3 | =>
 //     RoleB,
 //     SessionMpstFour,
 //     4
@@ -43,15 +43,15 @@
 //     send_check_c_to_a,
 //     RoleA,
 //     next_a,
-//     1, |
+//     1 |
 //     send_check_c_to_b,
 //     RoleB,
 //     next_b,
-//     2, |
+//     2 |
 //     send_check_c_to_d,
 //     RoleD,
 //     next_d,
-//     3, | =>
+//     3 | =>
 //     RoleC,
 //     SessionMpstFour,
 //     4
@@ -61,15 +61,15 @@
 //     send_check_d_to_a,
 //     RoleA,
 //     next_a,
-//     1, |
+//     1 |
 //     send_check_d_to_b,
 //     RoleB,
 //     next_b,
-//     2, |
+//     2 |
 //     send_check_d_to_c,
 //     RoleC,
 //     next_c,
-//     3, | =>
+//     3 | =>
 //     RoleD,
 //     SessionMpstFour,
 //     4
@@ -81,15 +81,15 @@
 //     recv_mpst_a_to_b,
 //     RoleB,
 //     next_b,
-//     1, |
+//     1 |
 //     recv_mpst_a_to_c,
 //     RoleC,
 //     next_c,
-//     2, |
+//     2 |
 //     recv_mpst_a_to_d,
 //     RoleD,
 //     next_d,
-//     3, | =>
+//     3 | =>
 //     RoleA,
 //     SessionMpstFour,
 //     4
@@ -99,15 +99,15 @@
 //     recv_mpst_b_to_a,
 //     RoleA,
 //     next_a,
-//     1, |
+//     1 |
 //     recv_mpst_b_to_c,
 //     RoleC,
 //     next_c,
-//     2, |
+//     2 |
 //     recv_mpst_b_to_d,
 //     RoleD,
 //     next_d,
-//     3, | =>
+//     3 | =>
 //     RoleB,
 //     SessionMpstFour,
 //     4
@@ -117,15 +117,15 @@
 //     recv_mpst_c_to_a,
 //     RoleA,
 //     next_a,
-//     1, |
+//     1 |
 //     recv_mpst_c_to_b,
 //     RoleB,
 //     next_b,
-//     2, |
+//     2 |
 //     recv_mpst_c_to_d,
 //     RoleD,
 //     next_d,
-//     3, | =>
+//     3 | =>
 //     RoleC,
 //     SessionMpstFour,
 //     4
@@ -135,15 +135,15 @@
 //     recv_mpst_d_to_a,
 //     RoleA,
 //     next_a,
-//     1, |
+//     1 |
 //     recv_mpst_d_to_b,
 //     RoleB,
 //     next_b,
-//     2, |
+//     2 |
 //     recv_mpst_d_to_c,
 //     RoleC,
 //     next_c,
-//     3, | =>
+//     3 | =>
 //     RoleD,
 //     SessionMpstFour,
 //     4

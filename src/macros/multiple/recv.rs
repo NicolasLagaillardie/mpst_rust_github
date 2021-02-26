@@ -131,11 +131,11 @@ macro_rules! create_recv_mpst_session {
 ///     recv_mpst_d_to_a,
 ///     RoleA,
 ///     next_a,
-///     1, |
+///     1 |
 ///     recv_mpst_d_to_b,
 ///     RoleB,
 ///     next_b,
-///     2, | =>
+///     2 | =>
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -143,7 +143,7 @@ macro_rules! create_recv_mpst_session {
 ///  ```
 #[macro_export]
 macro_rules! create_recv_mpst_session_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
        $(mpstthree::create_recv_mpst_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }
@@ -259,14 +259,14 @@ macro_rules! create_recv_mpst_all_session {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  create_recv_mpst_all_session_bundle!(
-///     recv_mpst_a_all_to_d,
-///     RoleAlltoD,
-///     next_all_to_d,
-///     2, |
 ///     recv_mpst_a_all_to_b,
 ///     RoleAlltoB,
 ///     next_all_to_b,
-///     1, | =>
+///     1 |
+///     recv_mpst_a_all_to_d,
+///     RoleAlltoD,
+///     next_all_to_d,
+///     2 | =>
 ///     RoleA,
 ///     SessionMpst,
 ///     3
@@ -274,7 +274,7 @@ macro_rules! create_recv_mpst_all_session {
 ///  ```
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal, | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
        $(mpstthree::create_recv_mpst_all_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }

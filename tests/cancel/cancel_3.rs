@@ -39,7 +39,7 @@ create_send_mpst_session_bundle!(
     send_mpst_c_to_d,
     RoleD,
     next_d,
-    3, | =>
+    3 | =>
     RoleC,
     SessionMpstFour,
     4
@@ -51,7 +51,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_to_a,
     RoleA,
     next_a,
-    1, | =>
+    1 | =>
     RoleB,
     SessionMpstFour,
     4
@@ -61,7 +61,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_to_c,
     RoleC,
     next_c,
-    3, | =>
+    3 | =>
     RoleD,
     SessionMpstFour,
     4
