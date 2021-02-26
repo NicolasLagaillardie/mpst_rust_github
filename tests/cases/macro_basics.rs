@@ -5,15 +5,17 @@ use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::sessionmpst::SessionMpst;
 use mpstthree::{
-    create_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
+    create_multiple_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
     create_send_mpst_session_1, create_send_mpst_session_2,
 };
 use std::error::Error;
 
 // Create new roles
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+create_multiple_normal_role!(
+    RoleA, next_a, RoleADual, next_a_dual |
+    RoleB, next_b, RoleBDual, next_b_dual |
+    RoleD, next_d, RoleDDual, next_d_dual |
+);
 
 type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;

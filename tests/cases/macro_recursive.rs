@@ -11,14 +11,16 @@ use std::marker;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    choose_mpst_to_all, create_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
-    create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
+    choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
 };
 
 // Create new roles
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
+create_multiple_normal_role!(
+    RoleA, next_a, RoleADual, next_a_dual |
+    RoleB, next_b, RoleBDual, next_b_dual |
+    RoleC, next_c, RoleCDual, next_c_dual |
+);
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, next_a, RoleC);

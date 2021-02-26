@@ -6,8 +6,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_broadcast_role,
-    create_normal_role, create_recv_mpst_session, create_send_mpst_session, create_sessionmpst,
-    offer_mpst,
+    create_multiple_normal_role, create_recv_mpst_session, create_send_mpst_session,
+    create_sessionmpst, offer_mpst,
 };
 use std::error::Error;
 use std::marker;
@@ -17,9 +17,11 @@ create_sessionmpst!(SessionMpst, 3);
 
 // Create new roles
 // normal
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+create_multiple_normal_role!(
+    RoleA, next_a, RoleADual, next_a_dual |
+    RoleB, next_b, RoleBDual, next_b_dual |
+    RoleD, next_d, RoleDDual, next_d_dual |
+);
 // broadcast
 create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 

@@ -96,6 +96,7 @@ macro_rules! create_send_mpst_session {
 }
 
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more than 3 participants.
+/// The send function will try to send and panic if not possible (canceled session).
 ///
 ///  # Arguments
 ///  
@@ -164,6 +165,8 @@ macro_rules! create_send_mpst_cancel {
 }
 
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more than 3 participants.
+/// Checks if the first binary session has a "cancel" signal and panic if yes.
+/// The send function will try to send and panic if not possible (canceled session).
 ///
 ///  # Arguments
 ///  

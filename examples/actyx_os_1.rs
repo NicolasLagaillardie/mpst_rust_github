@@ -2,7 +2,7 @@ use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_normal_role,
+    bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
     offer_mpst,
 };
@@ -31,15 +31,15 @@ create_sessionmpst!(SessionMpstFour, 4);
 // }
 
 // Create Roles
-create_normal_role!(Api, next_api, DualAPI, next_dual_api); // #1
-create_normal_role!(
+create_multiple_normal_role!(
+    Api, next_api, DualAPI, next_dual_api |
     Controller,
     next_controller,
     DualController,
-    next_dual_controller
-); // #2
-create_normal_role!(Logs, next_logs, DualLogs, next_dual_logs); // #3
-create_normal_role!(Storage, next_storage, DualStorage, next_dual_storage); // #4
+    next_dual_controller |
+    Logs, next_logs, DualLogs, next_dual_logs |
+    Storage, next_storage, DualStorage, next_dual_storage |
+);
 
 // Create send
 create_send_mpst_session_bundle!(

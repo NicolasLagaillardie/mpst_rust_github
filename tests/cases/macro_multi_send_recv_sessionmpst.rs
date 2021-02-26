@@ -3,7 +3,7 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_fork_multi, close_mpst, create_normal_role, create_recv_mpst_session,
+    bundle_fork_multi, close_mpst, create_multiple_normal_role, create_recv_mpst_session,
     create_send_mpst_session, create_sessionmpst,
 };
 use std::error::Error;
@@ -12,11 +12,13 @@ use std::error::Error;
 create_sessionmpst!(SessionMpst, 5);
 
 // Create new roles
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
-create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
-create_normal_role!(RoleE, next_e, RoleEDual, next_e_dual);
+create_multiple_normal_role!(
+    RoleA, next_a, RoleADual, next_a_dual |
+    RoleB, next_b, RoleBDual, next_b_dual |
+    RoleC, next_c, RoleCDual, next_c_dual |
+    RoleD, next_d, RoleDDual, next_d_dual |
+    RoleE, next_e, RoleEDual, next_e_dual |
+);
 
 // Create new send functions
 create_send_mpst_session!(send_mpst_d_to_b, RoleB, next_b, RoleD, SessionMpst, 5, 2);

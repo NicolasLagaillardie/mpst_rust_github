@@ -1,7 +1,7 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, bundle_fork_multi, close_mpst_check_cancel, create_normal_role,
+    broadcast_cancel, bundle_fork_multi, close_mpst_check_cancel, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
     send_cancel,
 };
@@ -16,10 +16,12 @@ create_sessionmpst!(SessionMpstFour, 4);
 
 // Create new roles
 // normal
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
-create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+create_multiple_normal_role!(
+    RoleA, next_a, RoleADual, next_a_dual |
+    RoleB, next_b, RoleBDual, next_b_dual |
+    RoleC, next_c, RoleCDual, next_c_dual |
+    RoleD, next_d, RoleDDual, next_d_dual |
+);
 
 // Create new send functions
 // C

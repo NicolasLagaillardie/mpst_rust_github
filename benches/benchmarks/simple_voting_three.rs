@@ -6,7 +6,7 @@ use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_normal_role,
+    bundle_fork_multi, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
     offer_mpst,
 };
@@ -36,9 +36,11 @@ create_sessionmpst!(SessionMpstThree, 3);
 
 // Create new Roles
 // normal
-create_normal_role!(RoleVoter, next_voter, RoleVoterDual, next_voter_dual);
-create_normal_role!(RolePawn, next_pawn, RolePawnDual, next_pawn_dual);
-create_normal_role!(RoleServer, next_server, RoleServerDual, next_server_dual);
+create_multiple_normal_role!(
+    RoleVoter, next_voter, RoleVoterDual, next_voter_dual |
+    RolePawn, next_pawn, RolePawnDual, next_pawn_dual |
+    RoleServer, next_server, RoleServerDual, next_server_dual |
+);
 
 // Create new send functions
 // SERVER

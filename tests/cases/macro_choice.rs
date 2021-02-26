@@ -13,16 +13,18 @@ use mpstthree::functionmpst::OfferMpst;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    create_broadcast_role, create_choose_both_from_3_to_1_and_2, create_normal_role,
+    create_broadcast_role, create_choose_both_from_3_to_1_and_2, create_multiple_normal_role,
     create_offer_mpst_session_2, create_recv_mpst_all_session_2, create_recv_mpst_session_1,
     create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
 };
 
 // Create new roles
 // normal
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
+create_multiple_normal_role!(
+    RoleA, next_a, RoleADual, next_a_dual |
+    RoleB, next_b, RoleBDual, next_b_dual |
+    RoleC, next_c, RoleCDual, next_c_dual |
+);
 // broadcast
 create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 
