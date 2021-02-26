@@ -56,14 +56,14 @@ macro_rules! create_choose_type_multi {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
+/// use mpstthree::{create_normal_role,
 /// create_broadcast_role, create_sessionmpst,
 /// create_choose_type_multi,
 /// create_choose_mpst_session_multi_left};
 ///
-///  create_normal_role!(RoleD, next_d, RoleDDual,
-/// next_d_dual);  create_broadcast_role!(RoleAlltoD,
+/// create_normal_role!(RoleD, next_d, RoleDDual,
+/// next_d_dual);
+/// create_broadcast_role!(RoleAlltoD,
 /// next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
@@ -139,7 +139,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                 let (stack_^N:2, _) = R^N:0::new();
 
                 #( // i in 1..K
-                    let (name_#N:0, _) = <R#N:6 as mpstthree::role::Role>::Dual::new();
+                    let (name_#N:0, _) = <<R#N:6 as mpstthree::role::Role>::Dual as mpstthree::role::Role>::new();
                 )0:0
                 let (name_^N:2, _) = <$name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
@@ -198,18 +198,18 @@ macro_rules! create_choose_mpst_session_multi_left {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
+/// use mpstthree::{create_normal_role,
 /// create_broadcast_role, create_sessionmpst,
 /// create_choose_type_multi,
 /// create_choose_mpst_session_multi_right};
 ///
-///  create_normal_role!(RoleD, next_d, RoleDDual,
-/// next_d_dual);  create_broadcast_role!(RoleAlltoD,
+/// create_normal_role!(RoleD, next_d, RoleDDual,
+/// next_d_dual);
+/// create_broadcast_role!(RoleAlltoD,
 /// next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
-///  create_choose_type_multi!(ChooseMpstThree, SessionMpst,
+/// create_sessionmpst!(SessionMpst, 3);
+/// create_choose_type_multi!(ChooseMpstThree, SessionMpst,
 /// 3);
 ///
 /// create_choose_mpst_session_multi_right!(
@@ -281,7 +281,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                 let (stack_^N:2, _) = R^N:1::new();
 
                 #( // i in 1..K
-                    let (name_#N:0, _) = <R#N:6 as mpstthree::role::Role>::Dual::new();
+                    let (name_#N:0, _) = <<R#N:6 as mpstthree::role::Role>::Dual as mpstthree::role::Role>::new();
                 )0:0
                 let (name_^N:2, _) = <$name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
