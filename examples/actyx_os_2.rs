@@ -58,89 +58,39 @@ create_multiple_normal_role!(
 
 // Create send
 create_send_mpst_session_bundle!(
-    send_request_storage,
-    Storage,
-    next_storage,
-    3 | =>
-    Api,
-    SessionMpstFour,
-    4
+    send_request_storage, Storage, next_storage, 3 | =>
+    Api, SessionMpstFour, 4
 );
 create_send_mpst_session_bundle!(
-    send_start_controller_to_api,
-    Api,
-    next_api,
-    1 |
-    send_start_controller_to_storage,
-    Storage,
-    next_storage,
-    3 | =>
-    Controller,
-    SessionMpstFour,
-    4
+    send_start_controller_to_api, Api, next_api, 1 |
+    send_start_controller_to_storage, Storage, next_storage, 3 | =>
+    Controller, SessionMpstFour, 4
 );
 create_send_mpst_session_bundle!(
-    send_response_storage_to_api,
-    Api,
-    next_api,
-    1 |
-    send_new_status_storage_to_controller,
-    Controller,
-    next_controller,
-    2 |
-    send_storage_to_logs,
-    Logs,
-    next_logs,
-    3 | =>
-    Storage,
-    SessionMpstFour,
-    4
+    send_response_storage_to_api, Api, next_api, 1 |
+    send_new_status_storage_to_controller, Controller, next_controller, 2 |
+    send_storage_to_logs, Logs, next_logs, 3 | =>
+    Storage, SessionMpstFour, 4
 );
 
 // Create recv
 create_recv_mpst_session_bundle!(
-    recv_start_api_from_controller,
-    Controller,
-    next_controller,
-    1 |
-    recv_response_api_from_storage,
-    Storage,
-    next_storage,
-    3 | =>
-    Api,
-    SessionMpstFour,
-    4
+    recv_start_api_from_controller, Controller, next_controller, 1 |
+    recv_response_api_from_storage, Storage, next_storage, 3 | =>
+    Api, SessionMpstFour, 4
 );
 create_recv_mpst_session_bundle!(
-    recv_new_status_controller_from_storage,
-    Storage,
-    next_storage,
-    3 | =>
-    Controller,
-    SessionMpstFour,
-    4
+    recv_new_status_controller_from_storage, Storage, next_storage, 3 | =>
+    Controller, SessionMpstFour, 4
 );
 create_recv_mpst_session_bundle!(
-    recv_logs_from_storage,
-    Storage,
-    next_storage,
-    3 | =>
-    Logs,
-    SessionMpstFour,
-    4
+    recv_logs_from_storage, Storage, next_storage, 3 | =>
+    Logs, SessionMpstFour, 4
 );
 create_recv_mpst_session_bundle!(
-    recv_request_storage_from_api,
-    Api,
-    next_api,
-    1 |
-    recv_start_storage_from_controller,
-    Controller,
-    next_controller,
-    2 | =>
-    Storage,
-    SessionMpstFour,
-    4
+    recv_request_storage_from_api, Api, next_api, 1 |
+    recv_start_storage_from_controller, Controller, next_controller, 2 | =>
+    Storage, SessionMpstFour, 4
 );
 
 // Create close function

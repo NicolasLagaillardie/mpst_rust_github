@@ -35,425 +35,145 @@ create_multiple_normal_role!(
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
-    send_mpst_a_to_b,
-    RoleB,
-    next_b,
-    1 |
-    send_mpst_a_to_c,
-    RoleC,
-    next_c,
-    2 |
-    send_mpst_a_to_d,
-    RoleD,
-    next_d,
-    3 |
-    send_mpst_a_to_e,
-    RoleE,
-    next_e,
-    4 |
-    send_mpst_a_to_f,
-    RoleF,
-    next_f,
-    5 |
-    send_mpst_a_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleA,
-    SessionMpstSeven,
-    7
+    send_mpst_a_to_b, RoleB, next_b, 1 |
+    send_mpst_a_to_c, RoleC, next_c, 2 |
+    send_mpst_a_to_d, RoleD, next_d, 3 |
+    send_mpst_a_to_e, RoleE, next_e, 4 |
+    send_mpst_a_to_f, RoleF, next_f, 5 |
+    send_mpst_a_to_g, RoleG, next_g, 6 | =>
+    RoleA, SessionMpstSeven, 7
 );
 // B
 create_send_mpst_session_bundle!(
-    send_mpst_b_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_b_to_c,
-    RoleC,
-    next_c,
-    2 |
-    send_mpst_b_to_d,
-    RoleD,
-    next_d,
-    3 |
-    send_mpst_b_to_e,
-    RoleE,
-    next_e,
-    4 |
-    send_mpst_b_to_f,
-    RoleF,
-    next_f,
-    5 |
-    send_mpst_b_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleB,
-    SessionMpstSeven,
-    7
+    send_mpst_b_to_a, RoleA, next_a, 1 |
+    send_mpst_b_to_c, RoleC, next_c, 2 |
+    send_mpst_b_to_d, RoleD, next_d, 3 |
+    send_mpst_b_to_e, RoleE, next_e, 4 |
+    send_mpst_b_to_f, RoleF, next_f, 5 |
+    send_mpst_b_to_g, RoleG, next_g, 6 | =>
+    RoleB, SessionMpstSeven, 7
 );
 // C
 create_send_mpst_session_bundle!(
-    send_mpst_c_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_c_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_c_to_d,
-    RoleD,
-    next_d,
-    3 |
-    send_mpst_c_to_e,
-    RoleE,
-    next_e,
-    4 |
-    send_mpst_c_to_f,
-    RoleF,
-    next_f,
-    5 |
-    send_mpst_c_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleC,
-    SessionMpstSeven,
-    7
+    send_mpst_c_to_a, RoleA, next_a, 1 |
+    send_mpst_c_to_b, RoleB, next_b, 2 |
+    send_mpst_c_to_d, RoleD, next_d, 3 |
+    send_mpst_c_to_e, RoleE, next_e, 4 |
+    send_mpst_c_to_f, RoleF, next_f, 5 |
+    send_mpst_c_to_g, RoleG, next_g, 6 | =>
+    RoleC, SessionMpstSeven, 7
 );
 // D
 create_send_mpst_session_bundle!(
-    send_mpst_d_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_d_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_d_to_c,
-    RoleC,
-    next_c,
-    3 |
-    send_mpst_d_to_e,
-    RoleE,
-    next_e,
-    4 |
-    send_mpst_d_to_f,
-    RoleF,
-    next_f,
-    5 |
-    send_mpst_d_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleD,
-    SessionMpstSeven,
-    7
+    send_mpst_d_to_a, RoleA, next_a, 1 |
+    send_mpst_d_to_b, RoleB, next_b, 2 |
+    send_mpst_d_to_c, RoleC, next_c, 3 |
+    send_mpst_d_to_e, RoleE, next_e, 4 |
+    send_mpst_d_to_f, RoleF, next_f, 5 |
+    send_mpst_d_to_g, RoleG, next_g, 6 | =>
+    RoleD, SessionMpstSeven, 7
 );
 // E
 create_send_mpst_session_bundle!(
-    send_mpst_e_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_e_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_e_to_c,
-    RoleC,
-    next_c,
-    3 |
-    send_mpst_e_to_d,
-    RoleD,
-    next_d,
-    4 |
-    send_mpst_e_to_f,
-    RoleF,
-    next_f,
-    5 |
-    send_mpst_e_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleE,
-    SessionMpstSeven,
-    7
+    send_mpst_e_to_a, RoleA, next_a, 1 |
+    send_mpst_e_to_b, RoleB, next_b, 2 |
+    send_mpst_e_to_c, RoleC, next_c, 3 |
+    send_mpst_e_to_d, RoleD, next_d, 4 |
+    send_mpst_e_to_f, RoleF, next_f, 5 |
+    send_mpst_e_to_g, RoleG, next_g, 6 | =>
+    RoleE, SessionMpstSeven, 7
 );
 // F
 create_send_mpst_session_bundle!(
-    send_mpst_f_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_f_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_f_to_c,
-    RoleC,
-    next_c,
-    3 |
-    send_mpst_f_to_d,
-    RoleD,
-    next_d,
-    4 |
-    send_mpst_f_to_e,
-    RoleE,
-    next_e,
-    5 |
-    send_mpst_f_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleF,
-    SessionMpstSeven,
-    7
+    send_mpst_f_to_a, RoleA, next_a, 1 |
+    send_mpst_f_to_b, RoleB, next_b, 2 |
+    send_mpst_f_to_c, RoleC, next_c, 3 |
+    send_mpst_f_to_d, RoleD, next_d, 4 |
+    send_mpst_f_to_e, RoleE, next_e, 5 |
+    send_mpst_f_to_g, RoleG, next_g, 6 | =>
+    RoleF, SessionMpstSeven, 7
 );
 // G
 create_send_mpst_session_bundle!(
-    send_mpst_g_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_g_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_g_to_c,
-    RoleC,
-    next_c,
-    3 |
-    send_mpst_g_to_d,
-    RoleD,
-    next_d,
-    4 |
-    send_mpst_g_to_e,
-    RoleE,
-    next_e,
-    5 |
-    send_mpst_g_to_f,
-    RoleF,
-    next_f,
-    6 | =>
-    RoleG,
-    SessionMpstSeven,
-    7
+    send_mpst_g_to_a, RoleA, next_a, 1 |
+    send_mpst_g_to_b, RoleB, next_b, 2 |
+    send_mpst_g_to_c, RoleC, next_c, 3 |
+    send_mpst_g_to_d, RoleD, next_d, 4 |
+    send_mpst_g_to_e, RoleE, next_e, 5 |
+    send_mpst_g_to_f, RoleF, next_f, 6 | =>
+    RoleG, SessionMpstSeven, 7
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_b,
-    RoleB,
-    next_b,
-    1 |
-    recv_mpst_a_to_c,
-    RoleC,
-    next_c,
-    2 |
-    recv_mpst_a_to_d,
-    RoleD,
-    next_d,
-    3 |
-    recv_mpst_a_to_e,
-    RoleE,
-    next_e,
-    4 |
-    recv_mpst_a_to_f,
-    RoleF,
-    next_f,
-    5 |
-    recv_mpst_a_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleA,
-    SessionMpstSeven,
-    7
+    recv_mpst_a_to_b, RoleB, next_b, 1 |
+    recv_mpst_a_to_c, RoleC, next_c, 2 |
+    recv_mpst_a_to_d, RoleD, next_d, 3 |
+    recv_mpst_a_to_e, RoleE, next_e, 4 |
+    recv_mpst_a_to_f, RoleF, next_f, 5 |
+    recv_mpst_a_to_g, RoleG, next_g, 6 | =>
+    RoleA, SessionMpstSeven, 7
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_b_to_c,
-    RoleC,
-    next_c,
-    2 |
-    recv_mpst_b_to_d,
-    RoleD,
-    next_d,
-    3 |
-    recv_mpst_b_to_e,
-    RoleE,
-    next_e,
-    4 |
-    recv_mpst_b_to_f,
-    RoleF,
-    next_f,
-    5 |
-    recv_mpst_b_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleB,
-    SessionMpstSeven,
-    7
+    recv_mpst_b_to_a, RoleA, next_a, 1 |
+    recv_mpst_b_to_c, RoleC, next_c, 2 |
+    recv_mpst_b_to_d, RoleD, next_d, 3 |
+    recv_mpst_b_to_e, RoleE, next_e, 4 |
+    recv_mpst_b_to_f, RoleF, next_f, 5 |
+    recv_mpst_b_to_g, RoleG, next_g, 6 | =>
+    RoleB, SessionMpstSeven, 7
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_c_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_c_to_d,
-    RoleD,
-    next_d,
-    3 |
-    recv_mpst_c_to_e,
-    RoleE,
-    next_e,
-    4 |
-    recv_mpst_c_to_f,
-    RoleF,
-    next_f,
-    5 |
-    recv_mpst_c_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleC,
-    SessionMpstSeven,
-    7
+    recv_mpst_c_to_a, RoleA, next_a, 1 |
+    recv_mpst_c_to_b, RoleB, next_b, 2 |
+    recv_mpst_c_to_d, RoleD, next_d, 3 |
+    recv_mpst_c_to_e, RoleE, next_e, 4 |
+    recv_mpst_c_to_f, RoleF, next_f, 5 |
+    recv_mpst_c_to_g, RoleG, next_g, 6 | =>
+    RoleC, SessionMpstSeven, 7
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_d_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_d_to_c,
-    RoleC,
-    next_c,
-    3 |
-    recv_mpst_d_to_e,
-    RoleE,
-    next_e,
-    4 |
-    recv_mpst_d_to_f,
-    RoleF,
-    next_f,
-    5 |
-    recv_mpst_d_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleD,
-    SessionMpstSeven,
-    7
+    recv_mpst_d_to_a, RoleA, next_a, 1 |
+    recv_mpst_d_to_b, RoleB, next_b, 2 |
+    recv_mpst_d_to_c, RoleC, next_c, 3 |
+    recv_mpst_d_to_e, RoleE, next_e, 4 |
+    recv_mpst_d_to_f, RoleF, next_f, 5 |
+    recv_mpst_d_to_g, RoleG, next_g, 6 | =>
+    RoleD, SessionMpstSeven, 7
 );
 // E
 create_recv_mpst_session_bundle!(
-    recv_mpst_e_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_e_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_e_to_c,
-    RoleC,
-    next_c,
-    3 |
-    recv_mpst_e_to_d,
-    RoleD,
-    next_d,
-    4 |
-    recv_mpst_e_to_f,
-    RoleF,
-    next_f,
-    5 |
-    recv_mpst_e_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleE,
-    SessionMpstSeven,
-    7
+    recv_mpst_e_to_a, RoleA, next_a, 1 |
+    recv_mpst_e_to_b, RoleB, next_b, 2 |
+    recv_mpst_e_to_c, RoleC, next_c, 3 |
+    recv_mpst_e_to_d, RoleD, next_d, 4 |
+    recv_mpst_e_to_f, RoleF, next_f, 5 |
+    recv_mpst_e_to_g, RoleG, next_g, 6 | =>
+    RoleE, SessionMpstSeven, 7
 );
 // F
 create_recv_mpst_session_bundle!(
-    recv_mpst_f_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_f_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_f_to_c,
-    RoleC,
-    next_c,
-    3 |
-    recv_mpst_f_to_d,
-    RoleD,
-    next_d,
-    4 |
-    recv_mpst_f_to_e,
-    RoleE,
-    next_e,
-    5 |
-    recv_mpst_f_to_g,
-    RoleG,
-    next_g,
-    6 | =>
-    RoleF,
-    SessionMpstSeven,
-    7
+    recv_mpst_f_to_a, RoleA, next_a, 1 |
+    recv_mpst_f_to_b, RoleB, next_b, 2 |
+    recv_mpst_f_to_c, RoleC, next_c, 3 |
+    recv_mpst_f_to_d, RoleD, next_d, 4 |
+    recv_mpst_f_to_e, RoleE, next_e, 5 |
+    recv_mpst_f_to_g, RoleG, next_g, 6 | =>
+    RoleF, SessionMpstSeven, 7
 );
 // G
 create_recv_mpst_session_bundle!(
-    recv_mpst_g_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_g_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_g_to_c,
-    RoleC,
-    next_c,
-    3 |
-    recv_mpst_g_to_d,
-    RoleD,
-    next_d,
-    4 |
-    recv_mpst_g_to_e,
-    RoleE,
-    next_e,
-    5 |
-    recv_mpst_g_to_f,
-    RoleF,
-    next_f,
-    6 | =>
-    RoleG,
-    SessionMpstSeven,
-    7
+    recv_mpst_g_to_a, RoleA, next_a, 1 |
+    recv_mpst_g_to_b, RoleB, next_b, 2 |
+    recv_mpst_g_to_c, RoleC, next_c, 3 |
+    recv_mpst_g_to_d, RoleD, next_d, 4 |
+    recv_mpst_g_to_e, RoleE, next_e, 5 |
+    recv_mpst_g_to_f, RoleF, next_f, 6 | =>
+    RoleG, SessionMpstSeven, 7
 );
 
 // Create close function
@@ -621,10 +341,10 @@ type EndpointG = SessionMpstSeven<
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
 {
     offer_mpst!(s, recv_mpst_a_to_g, {
-          Branching0fromGtoA::Done(s) => {
+        Branching0fromGtoA::Done(s) => {
             close_mpst_multi(s)
         },
-          Branching0fromGtoA::More(s) => {
+        Branching0fromGtoA::More(s) => {
             let (_, s) = recv_mpst_a_to_g(s)?;
             let s = send_mpst_a_to_g((), s);
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -645,10 +365,10 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
 {
     offer_mpst!(s, recv_mpst_b_to_g, {
-          Branching0fromGtoB::Done(s) => {
+        Branching0fromGtoB::Done(s) => {
             close_mpst_multi(s)
         },
-          Branching0fromGtoB::More(s) => {
+        Branching0fromGtoB::More(s) => {
             let (_, s) = recv_mpst_b_to_g(s)?;
             let s = send_mpst_b_to_g((), s);
             let s = send_mpst_b_to_a((), s);
@@ -669,10 +389,10 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
 {
     offer_mpst!(s, recv_mpst_c_to_g, {
-          Branching0fromGtoC::Done(s) => {
+        Branching0fromGtoC::Done(s) => {
             close_mpst_multi(s)
         },
-          Branching0fromGtoC::More(s) => {
+        Branching0fromGtoC::More(s) => {
             let (_, s) = recv_mpst_c_to_g(s)?;
             let s = send_mpst_c_to_g((), s);
             let s = send_mpst_c_to_a((), s);
@@ -693,10 +413,10 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
 {
     offer_mpst!(s, recv_mpst_d_to_g, {
-          Branching0fromGtoD::Done(s) => {
+        Branching0fromGtoD::Done(s) => {
             close_mpst_multi(s)
         },
-          Branching0fromGtoD::More(s) => {
+        Branching0fromGtoD::More(s) => {
             let (_, s) = recv_mpst_d_to_g(s)?;
             let s = send_mpst_d_to_g((), s);
             let s = send_mpst_d_to_a((), s);
@@ -717,10 +437,10 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
 {
     offer_mpst!(s, recv_mpst_e_to_g, {
-          Branching0fromGtoE::Done(s) => {
+        Branching0fromGtoE::Done(s) => {
             close_mpst_multi(s)
         },
-          Branching0fromGtoE::More(s) => {
+        Branching0fromGtoE::More(s) => {
             let (_, s) = recv_mpst_e_to_g(s)?;
             let s = send_mpst_e_to_g((), s);
             let s = send_mpst_e_to_a((), s);
@@ -741,10 +461,10 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>>
 {
     offer_mpst!(s, recv_mpst_f_to_g, {
-          Branching0fromGtoF::Done(s) => {
+        Branching0fromGtoF::Done(s) => {
             close_mpst_multi(s)
         },
-          Branching0fromGtoF::More(s) => {
+        Branching0fromGtoF::More(s) => {
             let (_, s) = recv_mpst_f_to_g(s)?;
             let s = send_mpst_f_to_g((), s);
             let s = send_mpst_f_to_a((), s);

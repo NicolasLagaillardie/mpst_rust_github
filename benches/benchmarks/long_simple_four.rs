@@ -32,149 +32,61 @@ create_multiple_normal_role!(
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
-    send_mpst_a_to_b,
-    RoleB,
-    next_b,
-    1 |
-    send_mpst_a_to_c,
-    RoleC,
-    next_c,
-    2 |
-    send_mpst_a_to_d,
-    RoleD,
-    next_d,
-    3 | =>
-    RoleA,
-    SessionMpstFour,
-    4
+    send_mpst_a_to_b, RoleB, next_b, 1 |
+    send_mpst_a_to_c, RoleC, next_c, 2 |
+    send_mpst_a_to_d, RoleD, next_d, 3 | =>
+    RoleA, SessionMpstFour, 4
 );
 // B
 create_send_mpst_session_bundle!(
-    send_mpst_b_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_b_to_c,
-    RoleC,
-    next_c,
-    2 |
-    send_mpst_b_to_d,
-    RoleD,
-    next_d,
-    3 | =>
-    RoleB,
-    SessionMpstFour,
-    4
+    send_mpst_b_to_a, RoleA, next_a, 1 |
+    send_mpst_b_to_c, RoleC, next_c, 2 |
+    send_mpst_b_to_d, RoleD, next_d, 3 | =>
+    RoleB, SessionMpstFour, 4
 );
 // C
 create_send_mpst_session_bundle!(
-    send_mpst_c_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_c_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_c_to_d,
-    RoleD,
-    next_d,
-    3 | =>
-    RoleC,
-    SessionMpstFour,
-    4
+    send_mpst_c_to_a, RoleA, next_a, 1 |
+    send_mpst_c_to_b, RoleB, next_b, 2 |
+    send_mpst_c_to_d, RoleD, next_d, 3 | =>
+    RoleC, SessionMpstFour, 4
 );
 // D
 create_send_mpst_session_bundle!(
-    send_mpst_d_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_d_to_b,
-    RoleB,
-    next_b,
-    2 |
-    send_mpst_d_to_c,
-    RoleC,
-    next_c,
-    3 | =>
-    RoleD,
-    SessionMpstFour,
-    4
+    send_mpst_d_to_a, RoleA, next_a, 1 |
+    send_mpst_d_to_b, RoleB, next_b, 2 |
+    send_mpst_d_to_c, RoleC, next_c, 3 | =>
+    RoleD, SessionMpstFour, 4
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_b,
-    RoleB,
-    next_b,
-    1 |
-    recv_mpst_a_to_c,
-    RoleC,
-    next_c,
-    2 |
-    recv_mpst_a_to_d,
-    RoleD,
-    next_d,
-    3 | =>
-    RoleA,
-    SessionMpstFour,
-    4
+    recv_mpst_a_to_b, RoleB, next_b, 1 |
+    recv_mpst_a_to_c, RoleC, next_c, 2 |
+    recv_mpst_a_to_d, RoleD, next_d, 3 | =>
+    RoleA, SessionMpstFour, 4
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_b_to_c,
-    RoleC,
-    next_c,
-    2 |
-    recv_mpst_b_to_d,
-    RoleD,
-    next_d,
-    3 | =>
-    RoleB,
-    SessionMpstFour,
-    4
+    recv_mpst_b_to_a, RoleA, next_a, 1 |
+    recv_mpst_b_to_c, RoleC, next_c, 2 |
+    recv_mpst_b_to_d, RoleD, next_d, 3 | =>
+    RoleB, SessionMpstFour, 4
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_c_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_c_to_d,
-    RoleD,
-    next_d,
-    3 | =>
-    RoleC,
-    SessionMpstFour,
-    4
+    recv_mpst_c_to_a, RoleA, next_a, 1 |
+    recv_mpst_c_to_b, RoleB, next_b, 2 |
+    recv_mpst_c_to_d, RoleD, next_d, 3 | =>
+    RoleC, SessionMpstFour, 4
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_to_a,
-    RoleA,
-    next_a,
-    1 |
-    recv_mpst_d_to_b,
-    RoleB,
-    next_b,
-    2 |
-    recv_mpst_d_to_c,
-    RoleC,
-    next_c,
-    3 | =>
-    RoleD,
-    SessionMpstFour,
-    4
+    recv_mpst_d_to_a, RoleA, next_a, 1 |
+    recv_mpst_d_to_b, RoleB, next_b, 2 |
+    recv_mpst_d_to_c, RoleC, next_c, 3 | =>
+    RoleD, SessionMpstFour, 4
 );
 
 // Create close function
