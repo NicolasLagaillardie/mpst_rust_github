@@ -7,7 +7,7 @@
 // use mpstthree::role::end::RoleEnd;
 // use mpstthree::role::Role;
 // use mpstthree::{
-//     bundle_fork_multi, close_mpst, create_broadcast_role,
+//     fork_mpst_multi, close_mpst, create_broadcast_role,
 // create_choose_mpst_session_multi_both,
 // create_choose_type_multi, create_normal_role,
 // create_offer_mpst_session_multi,
@@ -872,7 +872,7 @@
 // close_mpst!(close_mpst_multi, SessionMpstFive, 5);
 
 // // Create fork function
-// bundle_fork_multi!(fork_mpst, fork_simple,
+// fork_mpst_multi!(fork_mpst, 
 // SessionMpstFive, 5);
 
 // // Names

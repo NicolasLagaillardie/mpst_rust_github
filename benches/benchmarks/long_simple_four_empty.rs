@@ -7,7 +7,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_fork_multi, choose, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
+    fork_mpst_multi, choose, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst, offer,
     offer_mpst,
 };
@@ -92,7 +92,7 @@ create_recv_mpst_session_bundle!(
 close_mpst!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
-bundle_fork_multi!(fork_mpst, fork_simple, SessionMpstFour, 4);
+fork_mpst_multi!(fork_mpst,  SessionMpstFour, 4);
 
 // Names
 type NameA = RoleA<RoleEnd>;

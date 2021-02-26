@@ -1,7 +1,7 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, bundle_fork_multi, close_mpst, create_multiple_normal_role,
+    broadcast_cancel, fork_mpst_multi, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
     send_cancel,
 };
@@ -68,7 +68,7 @@ send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
 close_mpst!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
-bundle_fork_multi!(fork_mpst, fork_simple, SessionMpstFour, 4);
+fork_mpst_multi!(fork_mpst,  SessionMpstFour, 4);
 
 // Names
 type NameA = RoleA<RoleEnd>;

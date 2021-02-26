@@ -5,7 +5,7 @@ use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    bundle_fork_multi, close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
+    fork_mpst_multi, close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
     create_choose_type_multi, create_multiple_normal_role, create_offer_mpst_session_multi,
     create_offer_type_multi, create_recv_mpst_all_session, create_recv_mpst_session,
     create_send_mpst_session, create_sessionmpst,
@@ -97,7 +97,7 @@ create_choose_mpst_session_multi_both!(
     3
 );
 
-bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst, 3);
+fork_mpst_multi!(fork_mpst,  SessionMpst, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;

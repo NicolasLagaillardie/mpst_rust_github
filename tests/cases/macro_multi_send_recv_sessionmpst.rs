@@ -3,7 +3,7 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_fork_multi, close_mpst, create_multiple_normal_role, create_recv_mpst_session,
+    fork_mpst_multi, close_mpst, create_multiple_normal_role, create_recv_mpst_session,
     create_send_mpst_session, create_sessionmpst,
 };
 use std::error::Error;
@@ -69,7 +69,7 @@ fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>>
     close_mpst_multi(s)
 }
 
-bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst, 5);
+fork_mpst_multi!(fork_mpst,  SessionMpst, 5);
 
 ////////////////////////////////////////
 
