@@ -58,7 +58,7 @@ macro_rules! fork_simple_multi {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::fork_mpst_multi, create_sessionmpst};
+///  use mpstthree::{fork_mpst_multi, create_sessionmpst};
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
