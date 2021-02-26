@@ -55,8 +55,8 @@ macro_rules! recv_mpst {
 ///  * The name of the receiver
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst
-///    for this specific role. Index starts at 1.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  
 ///  # Example
 ///  
@@ -72,7 +72,8 @@ macro_rules! recv_mpst {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  create_recv_mpst_session!(recv_mpst_d_to_a, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);  ```
+/// next_a, RoleD, SessionMpst, 3, 1);
+/// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
@@ -118,8 +119,8 @@ macro_rules! create_recv_mpst_session {
 ///  * The name of the senders
 ///  * The name of the related *next* functions
 ///  * The name of the receiver
-///  * The index of the binary session types that will receive in the
-///    SessionMpst for each specific role. Index starts at 1.
+///  * The index of the binary session types that will receive in the SessionMpst for each specific
+///    role. Index starts at 1.
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
@@ -172,8 +173,8 @@ macro_rules! create_recv_mpst_session_bundle {
 ///  * The name of the receiver
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst
-///    for this specific role. Index starts at 1.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  
 ///  # Example
 ///  
@@ -261,8 +262,8 @@ macro_rules! create_recv_mpst_all_session {
 ///  * The name of the new *recv* functions
 ///  * The name of the broadcasting senders
 ///  * The name of the related *next* functions
-///  * The index of the binary session types that will receive in the
-///    SessionMpst for this specific role. Index starts at 1.
+///  * The index of the binary session types that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  * The name of the receiver
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)

@@ -17,7 +17,8 @@
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_choose_type_multi!(ChooseMpstThree, SessionMpst,
-/// 3);  ```
+/// 3);
+/// ```
 #[macro_export]
 macro_rules! create_choose_type_multi {
     ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
@@ -45,8 +46,8 @@ macro_rules! create_choose_type_multi {
 ///  
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the *ChooseMpst* type that is used
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of the *next* function that is related
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
@@ -187,8 +188,8 @@ macro_rules! create_choose_mpst_session_multi_left {
 ///  
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the *ChooseMpst* type that is used
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of the *next* function that is related
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
@@ -330,8 +331,8 @@ macro_rules! create_choose_mpst_session_multi_right {
 ///  * The name of the new *ChooseMpst* function for the left branch
 ///  * The name of the new *ChooseMpst* function for the right branch
 ///  * The name of the *ChooseMpst* type that is used
-///  * The name of the dual of the broadcasting sender. This one should contain
-///    *toAll* according to the convention
+///  * The name of the dual of the broadcasting sender. This one should contain *toAll* according to
+///    the convention
 ///  * The name of the *next* function that is related
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
@@ -405,8 +406,8 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///  
 ///   * The session to be used
 ///   * The different send functions to broadcast the choice
-///   * The different `enum` variants which represent the different branches to
-///     be sent to each passive role
+///   * The different `enum` variants which represent the different branches to be sent to each
+///     passive role
 ///   * The different passive roles
 ///   * The name of the sender
 ///   * The name of the *SessionMpst* type that will be used
@@ -522,8 +523,8 @@ macro_rules! choose_mpst_multi_to_all {
 ///  
 ///   * The session to be used
 ///   * The different send functions to broadcast the choice
-///   * The different `enum` variants which represent the different branches to
-///     be sent to each passive role
+///   * The different `enum` variants which represent the different branches to be sent to each
+///     passive role
 ///   * The different passive roles
 ///   * The name of the sender
 ///   * The name of the *SessionMpst* type that will be used

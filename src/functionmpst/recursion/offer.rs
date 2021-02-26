@@ -4,8 +4,7 @@
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -41,8 +40,7 @@ macro_rules! offer_mpst_a_to_c {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -78,8 +76,7 @@ macro_rules! offer_mpst_b_to_c {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -125,8 +122,7 @@ macro_rules! offer_mpst_a_to_b {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -162,8 +158,7 @@ macro_rules! offer_mpst_b_to_a {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -199,8 +194,7 @@ macro_rules! offer_mpst_c_to_b {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example

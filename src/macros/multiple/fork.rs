@@ -65,7 +65,8 @@ macro_rules! fork_simple_multi {
 ///
 ///  fork_simple_multi!(fork_simple, SessionMpst, 3);
 ///  fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst,
-/// 3);  ```
+/// 3);
+/// ```
 #[macro_export]
 macro_rules! fork_mpst_multi {
     ($func_name: ident, $fork_function: ident, $struct_name:ident, $nsessions:literal) => {
@@ -154,7 +155,8 @@ macro_rules! fork_mpst_multi {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst,
-/// 3);  ```
+/// 3);
+/// ```
 #[macro_export]
 macro_rules! bundle_fork_multi {
     ($func_name:ident, $fork_function:ident, $struct_name:ident, $nsessions:literal) => {

@@ -53,8 +53,8 @@ macro_rules! send_mpst {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst
-///    for this specific role. Index starts at 1.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  
 ///  # Example
 ///  
@@ -70,7 +70,8 @@ macro_rules! send_mpst {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  create_send_mpst_session!(send_mpst_d_to_a, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);  ```
+/// next_a, RoleD, SessionMpst, 3, 1);
+/// ```
 #[macro_export]
 macro_rules! create_send_mpst_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
@@ -114,8 +115,8 @@ macro_rules! create_send_mpst_session {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst
-///    for this specific role. Index starts at 1.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  
 ///  # Example
 ///  
@@ -131,7 +132,8 @@ macro_rules! create_send_mpst_session {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  create_send_mpst_cancel!(send_cancel_d_to_a, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);  ```
+/// next_a, RoleD, SessionMpst, 3, 1);
+/// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
@@ -190,8 +192,8 @@ macro_rules! create_send_mpst_cancel {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst
-///    for this specific role. Index starts at 2 as 1 is an End.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific
+///    role. Index starts at 2 as 1 is an End.
 ///  
 ///  # Example
 ///  
@@ -207,7 +209,8 @@ macro_rules! create_send_mpst_cancel {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  create_send_check_cancel!(send_cancel_d_to_b, RoleB,
-/// next_b, RoleD, SessionMpst, 3, 2);  ```
+/// next_b, RoleD, SessionMpst, 3, 2);
+/// ```
 ///
 /// # Compile fail
 ///  
@@ -223,7 +226,8 @@ macro_rules! create_send_mpst_cancel {
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  create_send_check_cancel!(send_cancel_d_to_b, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);  ```
+/// next_a, RoleD, SessionMpst, 3, 1);
+/// ```
 #[macro_export]
 macro_rules! create_send_check_cancel {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
@@ -289,8 +293,8 @@ macro_rules! create_send_check_cancel {
 ///  * The name of the receivers
 ///  * The name of the related *next* functions
 ///  * The name of the senders
-///  * The index of the binary session types that will receive in the
-///    SessionMpst for this specific role. Index starts at 1.
+///  * The index of the binary session types that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
@@ -340,8 +344,8 @@ macro_rules! create_send_mpst_session_bundle {
 ///  * The name of the receivers
 ///  * The name of the related *next* functions
 ///  * The name of the senders
-///  * The index of the binary session types that will receive in the
-///    SessionMpst for this specific role. Index starts at 1.
+///  * The index of the binary session types that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  
@@ -391,8 +395,8 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///  * The name of the receivers
 ///  * The name of the related *next* functions
 ///  * The name of the senders
-///  * The index of the binary session types that will receive in the
-///    SessionMpst for this specific role. Index starts at 2 as 1 is an End.
+///  * The index of the binary session types that will receive in the SessionMpst for this specific
+///    role. Index starts at 2 as 1 is an End.
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
 ///  

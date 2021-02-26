@@ -208,8 +208,8 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -318,8 +318,8 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -428,8 +428,8 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -538,8 +538,8 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -648,8 +648,8 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -758,8 +758,8 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///  * The name of the new *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -872,8 +872,8 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///  * The name of the new left *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -951,8 +951,8 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///  * The name of the new left *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  
@@ -1030,8 +1030,8 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///  * The name of the new left *ChooseMpst* function
 ///  * The name of the dual of the first receiver
 ///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll*
-///    according to the convention
+///  * The name of the broadcasting sender. This one should contain *toAll* according to the
+///    convention
 ///  * The name of related *next* function
 ///  * The name of the sender
 ///  

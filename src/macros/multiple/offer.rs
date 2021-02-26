@@ -17,7 +17,8 @@
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_offer_type_multi!(OfferMpstThree, SessionMpst,
-/// 3);  ```
+/// 3);
+/// ```
 #[macro_export]
 macro_rules! create_offer_type_multi {
     ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
@@ -33,14 +34,14 @@ macro_rules! create_offer_type_multi {
 ///  
 ///  * The name of the new *OfferMpst* function
 ///  * The name of the *OfferMpst* type that will be used
-///  * The name of the dual of the broadcasting sender. This one should contain
-///    *toAll* according to the convention
+///  * The name of the dual of the broadcasting sender. This one should contain *toAll* according to
+///    the convention
 ///  * The name of the *recv* function that is related
 ///  * The name of the receiver
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-///  * The index of the binary session type that will receive in the SessionMpst
-///    for this specific role. Index starts at 1.
+///  * The index of the binary session type that will receive in the SessionMpst for this specific
+///    role. Index starts at 1.
 ///  
 ///  # Example
 ///  
@@ -133,8 +134,7 @@ macro_rules! create_offer_mpst_session_multi {
 ///
 ///  * The session to be used
 ///  * The *recv* function that will be used
-///  * Each path, which are each variant of the enum which contains the new
-///    branches
+///  * Each path, which are each variant of the enum which contains the new branches
 ///  * The block of code to process each new session
 ///
 /// # Example
