@@ -47,11 +47,13 @@ type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
-enum Branches0AtoC<N: marker::Send> {
+enum Branches0AtoC<N: marker::Send>
+{
     End(SessionMpst<End, End, RoleEnd, RoleA<RoleEnd>>),
     Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>),
 }
-enum Branches0BtoC<N: marker::Send> {
+enum Branches0BtoC<N: marker::Send>
+{
     End(SessionMpst<End, End, RoleEnd, RoleB<RoleEnd>>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
@@ -84,7 +86,8 @@ type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
 type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
-fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
+fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_b_to_c, {
         Branches0BtoC::End(s) => {
             close_mpst(s)
@@ -97,14 +100,16 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>>
+{
     let (id, s) = recv_mpst_a_to_c(s)?;
     let s = send_mpst_a_to_c(id + 1, s);
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_a_to_c, {
         Branches0AtoC::End(s) => {
             close_mpst(s)
@@ -119,7 +124,8 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
+{
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
@@ -133,7 +139,8 @@ fn client_recurs(
     s: EndpointCRecurs<i32>,
     mut xs: Vec<i32>,
     index: i32,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<(), Box<dyn Error>>
+{
     match xs.pop() {
         Option::Some(_) => {
             let s = choose_mpst_to_all!(
@@ -173,7 +180,8 @@ fn client_recurs(
 
 /////////////////////////////////////////
 
-pub fn run_macro_recursive() {
+pub fn run_macro_recursive()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);

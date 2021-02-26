@@ -9,8 +9,8 @@ use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use std::marker;
 
-/// Send a value of type `T` from A to B. Always succeeds. Returns the continuation
-/// `SessionMpst<S1, S2, R, N>`.
+/// Send a value of type `T` from A to B. Always succeeds.
+/// Returns the continuation `SessionMpst<S1, S2, R, N>`.
 ///
 /// # Example
 ///
@@ -78,8 +78,9 @@ where
     }
 }
 
-/// Send a value of type `T` from B to A. Always succeeds. Returns the continuation of the
-/// `SessionMpst<S1, S2, R, N>`.
+/// Send a value of type `T` from B to A. Always succeeds.
+/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// N>`.
 ///
 /// # Example
 ///
@@ -147,8 +148,9 @@ where
     }
 }
 
-/// Send a value of type `T` from C to A. Always succeeds. Returns the continuation of the
-/// `SessionMpst<S1, S2, R, N>`.
+/// Send a value of type `T` from C to A. Always succeeds.
+/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// N>`.
 ///
 /// # Example
 ///
@@ -216,8 +218,9 @@ where
     }
 }
 
-/// Send a value of type `T` from A to C. Always succeeds. Returns the continuation of the
-/// `SessionMpst<S1, S2, R, N>`.
+/// Send a value of type `T` from A to C. Always succeeds.
+/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// N>`.
 ///
 /// # Example
 ///
@@ -285,8 +288,9 @@ where
     }
 }
 
-/// Send a value of type `T` from B to C. Always succeeds. Returns the continuation of the
-/// `SessionMpst<S1, S2, R, N>`.
+/// Send a value of type `T` from B to C. Always succeeds.
+/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// N>`.
 ///
 /// # Example
 ///
@@ -354,8 +358,9 @@ where
     }
 }
 
-/// Send a value of type `T` from C to B. Always succeeds. Returns the continuation of the
-/// `SessionMpst<S1, S2, R, N>`.
+/// Send a value of type `T` from C to B. Always succeeds.
+/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// N>`.
 ///
 /// # Example
 ///

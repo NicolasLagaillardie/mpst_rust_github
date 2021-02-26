@@ -81,28 +81,33 @@ type EndpointB = SessionMpstFour<End, Recv<i32, End>, End, RoleC<RoleEnd>, NameB
 type EndpointC = SessionMpstFour<End, Send<i32, End>, Send<i32, End>, RoleB<RoleD<RoleEnd>>, NameC>;
 type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
+{
     broadcast_cancel!(s, 4);
     Ok(())
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_b_to_c(s)?;
     close_check_cancel(s)
 }
 
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
+{
     let s = send_check_c_to_b(random(), s)?;
     let s = send_check_c_to_d(random(), s)?;
     close_check_cancel(s)
 }
 
-fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_d_to_c(s)?;
     close_check_cancel(s)
 }
 
-pub fn main() {
+pub fn main()
+{
     let (thread_a, thread_b, thread_c, thread_d) =
         fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
 

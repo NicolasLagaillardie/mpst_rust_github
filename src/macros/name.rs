@@ -1,4 +1,6 @@
-/// Create a new [`mpstthree::role::Role`], its dual and the related *next* function to process stacks start with them.
+/// Create a new [`mpstthree::role::Role`], its dual and the
+/// related *next* function to process stacks start with
+/// them.
 ///
 /// # Arguments
 ///
@@ -23,7 +25,8 @@ macro_rules! create_normal_role {
         /// The Role
 
         #[derive(Debug)]
-        pub struct $role_name<R: mpstthree::role::Role> {
+        pub struct $role_name<R: mpstthree::role::Role>
+        {
             pub sender: crossbeam_channel::Sender<R::Dual>,
         }
 
@@ -31,18 +34,21 @@ macro_rules! create_normal_role {
         /// The Dual
 
         #[derive(Debug)]
-        pub struct $dual_name<R: mpstthree::role::Role> {
+        pub struct $dual_name<R: mpstthree::role::Role>
+        {
             pub sender: crossbeam_channel::Sender<R::Dual>,
         }
 
         ////////////////////////////////////////////
         /// The Role functions
 
-        impl<R: mpstthree::role::Role> mpstthree::role::Role for $dual_name<R> {
+        impl<R: mpstthree::role::Role> mpstthree::role::Role for $dual_name<R>
+        {
             type Dual = $role_name<R::Dual>;
 
             #[doc(hidden)]
-            fn new() -> (Self, Self::Dual) {
+            fn new() -> (Self, Self::Dual)
+            {
                 let (sender_normal, _) = crossbeam_channel::bounded::<R>(1);
                 let (sender_dual, _) = crossbeam_channel::bounded::<R::Dual>(1);
 
@@ -57,12 +63,14 @@ macro_rules! create_normal_role {
             }
 
             #[doc(hidden)]
-            fn head_str() -> String {
+            fn head_str() -> String
+            {
                 String::from(stringify!($role_name))
             }
 
             #[doc(hidden)]
-            fn tail_str() -> String {
+            fn tail_str() -> String
+            {
                 format!("{}<{}>", R::head_str(), R::tail_str())
             }
         }
@@ -79,11 +87,13 @@ macro_rules! create_normal_role {
         ////////////////////////////////////////////
         /// The Dual functions
 
-        impl<R: mpstthree::role::Role> mpstthree::role::Role for $role_name<R> {
+        impl<R: mpstthree::role::Role> mpstthree::role::Role for $role_name<R>
+        {
             type Dual = $dual_name<R::Dual>;
 
             #[doc(hidden)]
-            fn new() -> (Self, Self::Dual) {
+            fn new() -> (Self, Self::Dual)
+            {
                 let (sender_normal, _) = crossbeam_channel::bounded::<R>(1);
                 let (sender_dual, _) = crossbeam_channel::bounded::<R::Dual>(1);
 
@@ -98,12 +108,14 @@ macro_rules! create_normal_role {
             }
 
             #[doc(hidden)]
-            fn head_str() -> String {
+            fn head_str() -> String
+            {
                 String::from(stringify!($dual_name))
             }
 
             #[doc(hidden)]
-            fn tail_str() -> String {
+            fn tail_str() -> String
+            {
                 format!("{}<{}>", R::head_str(), R::tail_str())
             }
         }
@@ -119,7 +131,9 @@ macro_rules! create_normal_role {
     };
 }
 
-/// Create multiple new [`mpstthree::role::Role`], its dual and the related *next* function to process stacks start with them.
+/// Create multiple new [`mpstthree::role::Role`], its dual
+/// and the related *next* function to process stacks start
+/// with them.
 ///
 /// # Arguments
 ///
@@ -153,8 +167,11 @@ macro_rules! create_multiple_normal_role {
      }
 }
 
-/// Create a new broadcast [`mpstthree::role::Role`], its dual and the related *next* function to process stacks start with them.
-/// A broadcast [`mpstthree::role::Role`] is used for sending a choice. Its dual is used for receving this choice.
+/// Create a new broadcast [`mpstthree::role::Role`], its
+/// dual and the related *next* function to process stacks
+/// start with them. A broadcast [`mpstthree::role::Role`]
+/// is used for sending a choice. Its dual is used for
+/// receving this choice.
 ///
 /// # Arguments
 ///
@@ -179,7 +196,8 @@ macro_rules! create_broadcast_role {
         /// The Role
 
         #[derive(Debug)]
-        pub struct $role_name<R1: mpstthree::role::Role, R2: mpstthree::role::Role> {
+        pub struct $role_name<R1: mpstthree::role::Role, R2: mpstthree::role::Role>
+        {
             pub sender1: crossbeam_channel::Sender<R1::Dual>,
             pub sender2: crossbeam_channel::Sender<R2::Dual>,
         }
@@ -188,7 +206,8 @@ macro_rules! create_broadcast_role {
         /// The Dual
 
         #[derive(Debug)]
-        pub struct $dual_name<R1: mpstthree::role::Role, R2: mpstthree::role::Role> {
+        pub struct $dual_name<R1: mpstthree::role::Role, R2: mpstthree::role::Role>
+        {
             pub sender1: crossbeam_channel::Sender<R1::Dual>,
             pub sender2: crossbeam_channel::Sender<R2::Dual>,
         }
@@ -202,7 +221,8 @@ macro_rules! create_broadcast_role {
             type Dual = $dual_name<R1::Dual, R2::Dual>;
 
             #[doc(hidden)]
-            fn new() -> (Self, Self::Dual) {
+            fn new() -> (Self, Self::Dual)
+            {
                 let (sender_normal_1, _) = crossbeam_channel::bounded::<R1>(1);
                 let (sender_normal_2, _) = crossbeam_channel::bounded::<R2>(1);
                 let (sender_dual_1, _) = crossbeam_channel::bounded::<R1::Dual>(1);
@@ -221,12 +241,14 @@ macro_rules! create_broadcast_role {
             }
 
             #[doc(hidden)]
-            fn head_str() -> String {
+            fn head_str() -> String
+            {
                 String::from(stringify!($role_name))
             }
 
             #[doc(hidden)]
-            fn tail_str() -> String {
+            fn tail_str() -> String
+            {
                 format!(
                     "{}<{}> + {}<{}>",
                     R1::head_str(),
@@ -258,7 +280,8 @@ macro_rules! create_broadcast_role {
             type Dual = $role_name<R1::Dual, R2::Dual>;
 
             #[doc(hidden)]
-            fn new() -> (Self, Self::Dual) {
+            fn new() -> (Self, Self::Dual)
+            {
                 let (sender_normal_1, _) = crossbeam_channel::bounded::<R1>(1);
                 let (sender_normal_2, _) = crossbeam_channel::bounded::<R2>(1);
                 let (sender_dual_1, _) = crossbeam_channel::bounded::<R1::Dual>(1);
@@ -277,12 +300,14 @@ macro_rules! create_broadcast_role {
             }
 
             #[doc(hidden)]
-            fn head_str() -> String {
+            fn head_str() -> String
+            {
                 String::from(stringify!($dual_name))
             }
 
             #[doc(hidden)]
-            fn tail_str() -> String {
+            fn tail_str() -> String
+            {
                 format!(
                     "{}<{}> + {}<{}>",
                     R1::head_str(),
@@ -307,8 +332,11 @@ macro_rules! create_broadcast_role {
     };
 }
 
-/// Create multiple new broadcast [`mpstthree::role::Role`], its dual and the related *next* function to process stacks start with them.
-/// A broadcast [`mpstthree::role::Role`] is used for sending a choice. Its dual is used for receving this choice.
+/// Create multiple new broadcast [`mpstthree::role::Role`],
+/// its dual and the related *next* function to process
+/// stacks start with them. A broadcast [`mpstthree::role::
+/// Role`] is used for sending a choice. Its dual is used
+/// for receving this choice.
 ///
 /// # Arguments
 ///

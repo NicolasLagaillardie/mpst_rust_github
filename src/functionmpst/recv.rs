@@ -15,8 +15,10 @@ use std::marker;
 
 type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Box<dyn Error>>;
 
-/// Receive a value of type `T` on A from B. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a value of type `T` on A from B. Can fail.
+/// Returns either a pair of the received value and the
+/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// or an error.
 ///
 /// # Example
 ///
@@ -99,8 +101,10 @@ where
     Ok((v, result))
 }
 
-/// Receive a value of type `T` on B from A. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a value of type `T` on B from A. Can fail.
+/// Returns either a pair of the received value and the
+/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// or an error.
 ///
 /// # Example
 ///
@@ -182,8 +186,10 @@ where
     Ok((v, result))
 }
 
-/// Receive a value of type `T` on C from A. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a value of type `T` on C from A. Can fail.
+/// Returns either a pair of the received value and the
+/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// or an error.
 ///
 /// # Example
 ///
@@ -265,8 +271,10 @@ where
     Ok((v, result))
 }
 
-/// Receive a value of type `T` on A from C. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a value of type `T` on A from C. Can fail.
+/// Returns either a pair of the received value and the
+/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// or an error.
 ///
 /// # Example
 ///
@@ -348,8 +356,10 @@ where
     Ok((v, result))
 }
 
-/// Receive a value of type `T` on B from C. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a value of type `T` on B from C. Can fail.
+/// Returns either a pair of the received value and the
+/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// or an error.
 ///
 /// # Example
 ///
@@ -431,8 +441,10 @@ where
     Ok((v, result))
 }
 
-/// Receive a value of type `T` on C from B. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
+/// Receive a value of type `T` on C from B. Can fail.
+/// Returns either a pair of the received value and the
+/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// or an error.
 ///
 /// # Example
 ///
@@ -514,9 +526,12 @@ where
     Ok((v, result))
 }
 
-/// Receive a broadcasted value of type `T` on B from A. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
-/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
+/// Receive a broadcasted value of type `T` on B from A. Can
+/// fail. Returns either a pair of the received value and
+/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// an error. Should not be used as a standalone, but rather
+/// with [`mpstthree::offer::
+/// offer_mpst_session_to_a_from_b`].
 #[doc(hidden)]
 pub fn recv_mpst_a_all_to_b<T, S1, S2, R, N>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<R, R>, N>,
@@ -540,9 +555,12 @@ where
     Ok((v, result))
 }
 
-/// Receive a broadcasted value of type `T` on C from A. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
-/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
+/// Receive a broadcasted value of type `T` on C from A. Can
+/// fail. Returns either a pair of the received value and
+/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// an error. Should not be used as a standalone, but rather
+/// with [`mpstthree::offer::
+/// offer_mpst_session_to_a_from_c`].
 #[doc(hidden)]
 pub fn recv_mpst_a_all_to_c<T, S1, S2, R, N>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, N>,
@@ -566,9 +584,12 @@ where
     Ok((v, result))
 }
 
-/// Receive a broadcasted value of type `T` on A from B. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
-/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
+/// Receive a broadcasted value of type `T` on A from B. Can
+/// fail. Returns either a pair of the received value and
+/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// an error. Should not be used as a standalone, but rather
+/// with [`mpstthree::offer::
+/// offer_mpst_session_to_b_from_a`].
 #[doc(hidden)]
 pub fn recv_mpst_b_all_to_a<T, S1, S2, R, N>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, N>,
@@ -592,9 +613,12 @@ where
     Ok((v, result))
 }
 
-/// Receive a broadcasted value of type `T` on C from A. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
-/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
+/// Receive a broadcasted value of type `T` on C from A. Can
+/// fail. Returns either a pair of the received value and
+/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// an error. Should not be used as a standalone, but rather
+/// with [`mpstthree::offer::
+/// offer_mpst_session_to_b_from_c`].
 #[doc(hidden)]
 pub fn recv_mpst_b_all_to_c<T, S1, S2, R, N>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, N>,
@@ -618,9 +642,12 @@ where
     Ok((v, result))
 }
 
-/// Receive a broadcasted value of type `T` on A from B. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
-/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
+/// Receive a broadcasted value of type `T` on A from B. Can
+/// fail. Returns either a pair of the received value and
+/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// an error. Should not be used as a standalone, but rather
+/// with [`mpstthree::offer::
+/// offer_mpst_session_to_c_from_a`].
 #[doc(hidden)]
 pub fn recv_mpst_c_all_to_a<T, S1, S2, R, N>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, N>,
@@ -644,9 +671,12 @@ where
     Ok((v, result))
 }
 
-/// Receive a broadcasted value of type `T` on B from C. Can fail. Returns either a pair of the received
-/// value and the continuation of the `SessionMpst<S1, S2, R, N>` or an error.
-/// Should not be used as a standalone, but rather with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
+/// Receive a broadcasted value of type `T` on B from C. Can
+/// fail. Returns either a pair of the received value and
+/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// an error. Should not be used as a standalone, but rather
+/// with [`mpstthree::offer::
+/// offer_mpst_session_to_c_from_b`].
 #[doc(hidden)]
 pub fn recv_mpst_c_all_to_b<T, S1, S2, R, N>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<R, R>, N>,

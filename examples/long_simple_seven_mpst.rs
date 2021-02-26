@@ -476,7 +476,8 @@ type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 type R2G<R> = RoleG<RoleG<R>>;
 // A
-enum Branching0fromGtoA {
+enum Branching0fromGtoA
+{
     More(
         SessionMpstSeven<
             RS,
@@ -493,7 +494,8 @@ enum Branching0fromGtoA {
 }
 type RecursAtoG = Recv<Branching0fromGtoA, End>;
 // B
-enum Branching0fromGtoB {
+enum Branching0fromGtoB
+{
     More(
         SessionMpstSeven<
             SR,
@@ -510,7 +512,8 @@ enum Branching0fromGtoB {
 }
 type RecursBtoG = Recv<Branching0fromGtoB, End>;
 // C
-enum Branching0fromGtoC {
+enum Branching0fromGtoC
+{
     More(
         SessionMpstSeven<
             SR,
@@ -527,7 +530,8 @@ enum Branching0fromGtoC {
 }
 type RecursCtoG = Recv<Branching0fromGtoC, End>;
 // D
-enum Branching0fromGtoD {
+enum Branching0fromGtoD
+{
     More(
         SessionMpstSeven<
             SR,
@@ -544,7 +548,8 @@ enum Branching0fromGtoD {
 }
 type RecursDtoG = Recv<Branching0fromGtoD, End>;
 // E
-enum Branching0fromGtoE {
+enum Branching0fromGtoE
+{
     More(
         SessionMpstSeven<
             SR,
@@ -561,7 +566,8 @@ enum Branching0fromGtoE {
 }
 type RecursEtoG = Recv<Branching0fromGtoE, End>;
 // F
-enum Branching0fromGtoF {
+enum Branching0fromGtoF
+{
     More(
         SessionMpstSeven<
             SR,
@@ -603,7 +609,8 @@ type EndpointG = SessionMpstSeven<
     NameG,
 >;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_a_to_g, {
           Branching0fromGtoA::Done(s) => {
             close_mpst_multi(s)
@@ -626,7 +633,8 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_b_to_g, {
           Branching0fromGtoB::Done(s) => {
             close_mpst_multi(s)
@@ -649,7 +657,8 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_c_to_g, {
           Branching0fromGtoC::Done(s) => {
             close_mpst_multi(s)
@@ -672,7 +681,8 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_d_to_g, {
           Branching0fromGtoD::Done(s) => {
             close_mpst_multi(s)
@@ -695,7 +705,8 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_e_to_g, {
           Branching0fromGtoE::Done(s) => {
             close_mpst_multi(s)
@@ -718,7 +729,8 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_f_to_g, {
           Branching0fromGtoF::Done(s) => {
             close_mpst_multi(s)
@@ -741,11 +753,13 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>>
+{
     recurs_g(s, SIZE)
 }
 
-fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>>
+{
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -821,7 +835,8 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn Error>>
+{
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g) = fork_mpst(
         simple_five_endpoint_a,
         simple_five_endpoint_b,
@@ -847,6 +862,7 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 
 static SIZE: i64 = 15;
 
-fn main() {
+fn main()
+{
     all_mpst().unwrap();
 }

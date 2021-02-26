@@ -20,8 +20,8 @@ create_sessionmpst!(SessionMpstFour, 4);
 //     rec Loop {
 //         choice at Logs
 //         {
-//             Success(int) from Logs to Controller; // Logs is up
-//         }
+//             Success(int) from Logs to Controller; // Logs
+// is up         }
 //         or
 //         {
 //             Failure(Int) from Logs to Controller;
@@ -120,14 +120,16 @@ type NameStorage = Storage<RoleEnd>;
 type RecvLogsChoice = Logs<RoleEnd>;
 
 // Api
-enum Branching0fromLtoA<N: marker::Send> {
+enum Branching0fromLtoA<N: marker::Send>
+{
     Up(SessionMpstFour<End, RecursAtoL<N>, End, RecvLogsChoice, NameApi>),
     Down(SessionMpstFour<End, RecursAtoL<N>, End, RecvLogsChoice, NameApi>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
 type RecursAtoL<N> = Recv<Branching0fromLtoA<N>, End>;
 // Controller
-enum Branching0fromLtoC<N: marker::Send> {
+enum Branching0fromLtoC<N: marker::Send>
+{
     Up(SessionMpstFour<End, Recv<N, RecursCtoL<N>>, End, Logs<RecvLogsChoice>, NameController>),
     Down(
         SessionMpstFour<
@@ -142,7 +144,8 @@ enum Branching0fromLtoC<N: marker::Send> {
 }
 type RecursCtoL<N> = Recv<Branching0fromLtoC<N>, End>;
 // Storage
-enum Branching0fromLtoS<N: marker::Send> {
+enum Branching0fromLtoS<N: marker::Send>
+{
     Up(SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>),
     Down(SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameStorage>),
@@ -179,7 +182,8 @@ type EndpointLogsInit<N> = SessionMpstFour<
     NameLogs,
 >;
 
-fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_api_from_logs, {
         Branching0fromLtoA::Up(s) => {
             endpoint_api(s)
@@ -193,7 +197,8 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>>
+{
     println!("Send start to Logs: {}", 0);
 
     let s = send_start_controller_to_logs(0, s);
@@ -201,7 +206,8 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
     recurs_controller(s)
 }
 
-fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
+fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_start_controller_from_logs, {
         Branching0fromLtoC::Up(s) => {
 
@@ -229,7 +235,8 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_storage(s: EndpointStorage<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_storage(s: EndpointStorage<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_storage_from_logs, {
         Branching0fromLtoS::Up(s) => {
             endpoint_storage(s)
@@ -243,12 +250,14 @@ fn endpoint_storage(s: EndpointStorage<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>>
+{
     let (status, s) = recv_start_logs_from_controller(s)?;
     recurs_logs(s, status, 20)
 }
 
-fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<dyn Error>> {
+fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<dyn Error>>
+{
     match status {
         0 => {
             // Up
@@ -349,7 +358,8 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
     }
 }
 
-fn main() {
+fn main()
+{
     println!("Starting protocol");
 
     let (thread_api, thread_controller, thread_logs, thread_storage) = fork_mpst(

@@ -16,7 +16,8 @@ create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 
 /////////////////////////////////////////
 
-pub fn basic_macros() {
+pub fn basic_macros()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (sender1, _) = End::new();

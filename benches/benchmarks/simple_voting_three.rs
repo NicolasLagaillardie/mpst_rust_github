@@ -136,7 +136,8 @@ type Choose1fromVtoP = Send<Branching1fromVtoP, End>;
 type Choose1fromVtoS<N> = Send<Branching1fromVtoS<N>, End>;
 
 // VOTER
-enum Branching0fromStoV<N: marker::Send> {
+enum Branching0fromStoV<N: marker::Send>
+{
     Auth(
         SessionMpstThree<
             Choose1fromVtoP,
@@ -148,17 +149,20 @@ enum Branching0fromStoV<N: marker::Send> {
     Reject(SessionMpstThree<End, Recv<N, End>, RoleServer<RoleEnd>, NameVoter>),
 }
 // PAWN
-enum Branching0fromStoP {
+enum Branching0fromStoP
+{
     Auth(SessionMpstThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>),
     Reject(SessionMpstThree<End, End, RoleEnd, NamePawn>),
 }
-enum Branching1fromVtoP {
+enum Branching1fromVtoP
+{
     Yes(SessionMpstThree<End, End, RoleEnd, NamePawn>),
     No(SessionMpstThree<End, End, RoleEnd, NamePawn>),
 }
 type Choice1fromPtoV = Recv<Branching1fromVtoP, End>;
 // SERVER
-enum Branching1fromVtoS<N: marker::Send> {
+enum Branching1fromVtoS<N: marker::Send>
+{
     Yes(SessionMpstThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
     No(SessionMpstThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
 }
@@ -192,7 +196,8 @@ type EndpointServer<N> = SessionMpstThree<
 >;
 
 // Functions
-fn simple_five_endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>>
+{
     let auth = thread_rng().gen_range(1..=3);
 
     let s = send_mpst_voter_to_server(auth, s);
@@ -210,7 +215,8 @@ fn simple_five_endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error
     })
 }
 
-fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>>
+{
     let (ok, s) = recv_mpst_voter_to_server(s)?;
 
     let expected = thread_rng().gen_range(1..=3);
@@ -254,7 +260,8 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_five_endpoint_pawn(s: EndpointPawn) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_pawn(s: EndpointPawn) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_pawn_to_server, {
         Branching0fromStoP::Reject(s) => {
             close_mpst_multi(s)
@@ -265,7 +272,8 @@ fn simple_five_endpoint_pawn(s: EndpointPawn) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>> {
+fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_pawn_to_voter, {
         Branching1fromVtoP::Yes(s) => {
             close_mpst_multi(s)
@@ -276,7 +284,8 @@ fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>>
+{
     let choice = thread_rng().gen_range(1..=3);
 
     let (auth, s) = recv_mpst_server_to_voter(s)?;
@@ -320,7 +329,8 @@ fn simple_five_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Err
     }
 }
 
-fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_server_to_voter, {
         Branching1fromVtoS::<i32>::Yes(s) => {
 
@@ -341,7 +351,8 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn Error>>
+{
     let (thread_pawn, thread_server, thread_voter) = fork_mpst(
         black_box(simple_five_endpoint_pawn),
         black_box(simple_five_endpoint_server),
@@ -357,11 +368,13 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn simple_voting_mpst(c: &mut Criterion) {
+fn simple_voting_mpst(c: &mut Criterion)
+{
     c.bench_function(&format!("Simple voting MPST"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
+fn long_warmup() -> Criterion
+{
     Criterion::default().measurement_time(Duration::new(30, 0))
 }
 

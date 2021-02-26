@@ -2,7 +2,8 @@ use std::io::{Read, Write};
 use std::net::{Shutdown, TcpListener, TcpStream};
 use std::thread;
 
-fn handle_client(mut stream: TcpStream) {
+fn handle_client(mut stream: TcpStream)
+{
     let mut data = [0_u8; 65535]; // using 50 byte buffer
     while match stream.read(&mut data) {
         Ok(size) => {
@@ -21,9 +22,11 @@ fn handle_client(mut stream: TcpStream) {
     } {}
 }
 
-fn main() {
+fn main()
+{
     let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-    // accept connections and process them, spawning a new thread for each one
+    // accept connections and process them, spawning a new
+    // thread for each one
     println!("Server listening on port 3333");
     for stream in listener.incoming() {
         match stream {

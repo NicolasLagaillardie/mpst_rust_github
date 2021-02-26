@@ -42,25 +42,30 @@ type PawnA = SessionMpst<End, End, End, End, RoleEnd, NameA>;
 type PawnC = SessionMpst<End, End, End, End, RoleEnd, NameC>;
 type PawnE = SessionMpst<End, End, End, End, RoleEnd, NameE>;
 
-fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
+fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>>
+{
     let s = send_mpst_d_to_b(0, s);
     close_mpst_multi(s)
 }
 
-fn recv_b_to_d(s: RecvSessionMPSTB<i32>) -> Result<(), Box<dyn Error>> {
+fn recv_b_to_d(s: RecvSessionMPSTB<i32>) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_b_to_d(s)?;
     close_mpst_multi(s)
 }
 
-fn pawn_a(s: PawnA) -> Result<(), Box<dyn Error>> {
+fn pawn_a(s: PawnA) -> Result<(), Box<dyn Error>>
+{
     close_mpst_multi(s)
 }
 
-fn pawn_c(s: PawnC) -> Result<(), Box<dyn Error>> {
+fn pawn_c(s: PawnC) -> Result<(), Box<dyn Error>>
+{
     close_mpst_multi(s)
 }
 
-fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
+fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>>
+{
     close_mpst_multi(s)
 }
 
@@ -68,7 +73,8 @@ bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst, 5);
 
 ////////////////////////////////////////
 
-pub fn test_new_send() {
+pub fn test_new_send()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c, thread_d, thread_e) =

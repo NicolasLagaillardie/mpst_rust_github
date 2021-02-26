@@ -2,22 +2,29 @@ use crate::role::c::RoleC;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// Gives the order to the [`mpstthree::sessionmpst::SessionMpst`] related to the `Dual` of C.
+/// Gives the order to the
+/// [`mpstthree::sessionmpst::SessionMpst`] related to
+/// the `Dual` of C.
 ///
-/// This `struct` should only be used in the `stack` field of the [`mpstthree::sessionmpst::SessionMpst`]
-/// related to the `Dual` of C.
+/// This `struct` should only be used in the `stack` field
+/// of the [`mpstthree::sessionmpst::SessionMpst`] related
+/// to the `Dual` of C.
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::sessionmpst::SessionMpst`]:
+/// ../sessionmpst/struct.SessionMpst.html
 #[derive(Debug)]
-pub struct RoleCDual<R: Role> {
+pub struct RoleCDual<R: Role>
+{
     pub sender: Sender<R::Dual>,
 }
 
-impl<R: Role> Role for RoleCDual<R> {
+impl<R: Role> Role for RoleCDual<R>
+{
     type Dual = RoleC<R::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
+    fn new() -> (Self, Self::Dual)
+    {
         let (sender_normal, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
@@ -32,12 +39,14 @@ impl<R: Role> Role for RoleCDual<R> {
     }
 
     #[doc(hidden)]
-    fn head_str() -> String {
+    fn head_str() -> String
+    {
         String::from("RoleCDual")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String {
+    fn tail_str() -> String
+    {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }

@@ -154,7 +154,8 @@ type Choose1fromCtoA<N> = Send<Branching1fromCtoA<N>, End>;
 type Choose1fromCtoS<N> = Send<Branching1fromCtoS<N>, End>;
 
 // A
-enum Branching0fromCtoA<N: marker::Send> {
+enum Branching0fromCtoA<N: marker::Send>
+{
     Select(SessionMpstThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
     Loop(
         SessionMpstThree<
@@ -166,18 +167,21 @@ enum Branching0fromCtoA<N: marker::Send> {
     ),
 }
 type Choice0fromCtoA<N> = Recv<Branching0fromCtoA<N>, End>;
-enum Branching1fromCtoA<N: marker::Send> {
+enum Branching1fromCtoA<N: marker::Send>
+{
     Yes(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleC<RoleS<RoleEnd>>, NameA>),
     No(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleC<RoleS<RoleEnd>>, NameA>),
 }
 type Choice1fromCtoA<N> = Recv<Branching1fromCtoA<N>, End>;
 // S
-enum Branching0fromCtoS<N: marker::Send> {
+enum Branching0fromCtoS<N: marker::Send>
+{
     Select(SessionMpstThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>),
     Loop(SessionMpstThree<Recv<N, End>, Choice0fromCtoS<N>, RoleA<RoleC<RoleEnd>>, NameS>),
 }
 type Choice0fromCtoS<N> = Recv<Branching0fromCtoS<N>, End>;
-enum Branching1fromCtoS<N: marker::Send> {
+enum Branching1fromCtoS<N: marker::Send>
+{
     Yes(SessionMpstThree<Recv<N, End>, Recv<N, Send<N, End>>, RoleA<RoleC<RoleC<RoleEnd>>>, NameS>),
     No(SessionMpstThree<Recv<N, End>, End, RoleA<RoleEnd>, NameS>),
 }
@@ -198,7 +202,8 @@ type EndpointS<N> = SessionMpstThree<End, Choice0fromCtoS<N>, RoleC<RoleEnd>, Na
 
 // Functions
 // A
-fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_a_to_c, {
         Branching0fromCtoA::Select(s) => {
             choice_a(s)
@@ -212,7 +217,8 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_a_to_c, {
         Branching1fromCtoA::Yes(s) => {
             let (yes, s) = recv_mpst_a_to_c(s)?;
@@ -227,7 +233,8 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
+{
     let choice = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
@@ -266,7 +273,8 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>>
+{
     let choice = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
@@ -308,7 +316,8 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_s_to_c, {
         Branching0fromCtoS::Select(s) => {
             choice_s(s)
@@ -320,7 +329,8 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
+fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_s_to_c, {
         Branching1fromCtoS::Yes(s) => {
             let (_yes, s) = recv_mpst_s_to_a(s)?;
@@ -335,7 +345,8 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn Error>>
+{
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_c),
@@ -351,11 +362,13 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn travel_mpst(c: &mut Criterion) {
+fn travel_mpst(c: &mut Criterion)
+{
     c.bench_function(&format!("Travel MPST"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
+fn long_warmup() -> Criterion
+{
     Criterion::default().measurement_time(Duration::new(30, 0))
 }
 

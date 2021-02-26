@@ -7,11 +7,13 @@
 // use mpstthree::role::end::RoleEnd;
 // use mpstthree::role::Role;
 // use mpstthree::{
-//     bundle_fork_multi, close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
-//     create_choose_type_multi, create_normal_role, create_offer_mpst_session_multi,
-//     create_offer_type_multi, create_recv_mpst_all_session, create_recv_mpst_session,
-//     create_send_mpst_session, create_sessionmpst,
-// };
+//     bundle_fork_multi, close_mpst, create_broadcast_role,
+// create_choose_mpst_session_multi_both,
+// create_choose_type_multi, create_normal_role,
+// create_offer_mpst_session_multi,
+//     create_offer_type_multi,
+// create_recv_mpst_all_session, create_recv_mpst_session,
+// create_send_mpst_session, create_sessionmpst, };
 // use std::error::Error;
 
 // // Create new SessionMpst for three participants
@@ -19,17 +21,21 @@
 
 // // Create new roles
 // // normal
-// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
-// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
-// create_normal_role!(RoleE, next_e, RoleEDual, next_e_dual);
-// // broadcast
-// create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
-// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
-// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
-// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
-// create_broadcast_role!(RoleAlltoE, next_all_to_e, RoleEtoAll, next_e_to_all);
+// create_normal_role!(RoleA, next_a, RoleADual,
+// next_a_dual); create_normal_role!(RoleB, next_b,
+// RoleBDual, next_b_dual); create_normal_role!(RoleC,
+// next_c, RoleCDual, next_c_dual); create_normal_role!
+// (RoleD, next_d, RoleDDual, next_d_dual);
+// create_normal_role!(RoleE, next_e, RoleEDual,
+// next_e_dual); // broadcast
+// create_broadcast_role!(RoleAlltoA, next_all_to_a,
+// RoleAtoAll, next_a_to_all); create_broadcast_role!
+// (RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+// create_broadcast_role!(RoleAlltoC, next_all_to_c,
+// RoleCtoAll, next_c_to_all); create_broadcast_role!
+// (RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+// create_broadcast_role!(RoleAlltoE, next_all_to_e,
+// RoleEtoAll, next_e_to_all);
 
 // // Create new send functions
 // // A
@@ -594,8 +600,9 @@
 // );
 
 // // Create Offer and Choose types
-// create_offer_type_multi!(OfferMpstMultiFive, SessionMpstFive, 5);
-// create_choose_type_multi!(ChooseMpstFive, SessionMpstFive, 5);
+// create_offer_type_multi!(OfferMpstMultiFive,
+// SessionMpstFive, 5); create_choose_type_multi!
+// (ChooseMpstFive, SessionMpstFive, 5);
 
 // // Create offer functions
 // // A
@@ -865,7 +872,8 @@
 // close_mpst!(close_mpst_multi, SessionMpstFive, 5);
 
 // // Create fork function
-// bundle_fork_multi!(fork_mpst, fork_simple, SessionMpstFive, 5);
+// bundle_fork_multi!(fork_mpst, fork_simple,
+// SessionMpstFive, 5);
 
 // // Names
 // type NameA = RoleA<RoleEnd>;
@@ -876,28 +884,36 @@
 
 // // Queues
 // type QueueAinE = RoleE<RoleEnd>;
-// type QueueAinD = RoleD<RoleAlltoE<RoleE<RoleEnd>, RoleE<RoleEnd>>>;
-// type QueueAinC = RoleC<RoleAlltoD<QueueAinD, QueueAinD>>;
-// type QueueAinB = RoleB<RoleAlltoC<QueueAinC, QueueAinC>>;
-// type QueueA = RoleB<RoleC<RoleD<RoleE<RoleAlltoB<QueueAinB, QueueAinB>>>>>;
+// type QueueAinD = RoleD<RoleAlltoE<RoleE<RoleEnd>,
+// RoleE<RoleEnd>>>; type QueueAinC =
+// RoleC<RoleAlltoD<QueueAinD, QueueAinD>>; type QueueAinB =
+// RoleB<RoleAlltoC<QueueAinC, QueueAinC>>; type QueueA =
+// RoleB<RoleC<RoleD<RoleE<RoleAlltoB<QueueAinB,
+// QueueAinB>>>>>;
 
 // type QueueBinE = RoleE<RoleEnd>;
 // type QueueBinD = RoleD<RoleAlltoE<QueueBinE, QueueBinE>>;
 // type QueueBinC = RoleC<RoleAlltoD<QueueBinD, QueueBinD>>;
-// type QueueBinA = RoleA<RoleC<RoleD<RoleE<RoleAlltoC<QueueBinC, QueueBinC>>>>>;
-// type QueueB = RoleA<RoleAlltoA<QueueBinA, QueueBinA>>;
+// type QueueBinA =
+// RoleA<RoleC<RoleD<RoleE<RoleAlltoC<QueueBinC,
+// QueueBinC>>>>>; type QueueB = RoleA<RoleAlltoA<QueueBinA,
+// QueueBinA>>;
 
 // type QueueCinE = RoleE<RoleEnd>;
 // type QueueCinD = RoleD<RoleAlltoE<QueueCinE, QueueCinE>>;
-// type QueueCinB = RoleA<RoleB<RoleD<RoleE<RoleAlltoD<QueueCinD, QueueCinD>>>>>;
-// type QueueCinA = RoleB<RoleAlltoB<QueueCinB, QueueCinB>>;
-// type QueueC = RoleA<RoleAlltoA<QueueCinA, QueueCinA>>;
+// type QueueCinB =
+// RoleA<RoleB<RoleD<RoleE<RoleAlltoD<QueueCinD,
+// QueueCinD>>>>>; type QueueCinA =
+// RoleB<RoleAlltoB<QueueCinB, QueueCinB>>; type QueueC =
+// RoleA<RoleAlltoA<QueueCinA, QueueCinA>>;
 
 // type QueueDinE = RoleE<RoleEnd>;
-// type QueueDinC = RoleA<RoleB<RoleC<RoleE<RoleAlltoE<QueueDinE, QueueDinE>>>>>;
-// type QueueDinB = RoleC<RoleAlltoC<QueueDinC, QueueDinC>>;
-// type QueueDinA = RoleB<RoleAlltoB<QueueDinB, QueueDinB>>;
-// type QueueD = RoleA<RoleAlltoA<QueueDinA, QueueDinA>>;
+// type QueueDinC =
+// RoleA<RoleB<RoleC<RoleE<RoleAlltoE<QueueDinE,
+// QueueDinE>>>>>; type QueueDinB =
+// RoleC<RoleAlltoC<QueueDinC, QueueDinC>>; type QueueDinA =
+// RoleB<RoleAlltoB<QueueDinB, QueueDinB>>; type QueueD =
+// RoleA<RoleAlltoA<QueueDinA, QueueDinA>>;
 
 // type QueueEinD = RoleA<RoleB<RoleC<RoleD<RoleEnd>>>>;
 // type QueueEinC = RoleD<RoleAlltoD<QueueEinD, QueueEinD>>;

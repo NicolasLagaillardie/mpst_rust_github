@@ -54,9 +54,11 @@ type SessionMpstToCFromB<S1, S2, S3, S4, S5, R1, R2> = SessionMpst<
     RoleC<RoleEnd>,
 >;
 
-/// Offer a choice to A from B (on its session field related to B)
-/// between two [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html),
-/// `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to A from B (on its session field related
+/// to B) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
 ///
 /// # Example
 ///
@@ -97,9 +99,11 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to B from C (on its session field related to A)
-/// between two [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html),
-/// `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to B from C (on its session field related
+/// to A) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
 ///
 /// # Example
 ///
@@ -140,9 +144,11 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from B (on its session field related to B)
-/// between two [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html),
-/// `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to A from B (on its session field related
+/// to B) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
 ///
 /// # Example
 ///
@@ -183,9 +189,11 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from B (on its session field related to B)
-/// between two [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html),
-/// `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to A from B (on its session field related
+/// to B) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
 ///
 /// # Example
 ///
@@ -226,9 +234,11 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from C (on its session field related to C)
-/// between two [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html),
-/// `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to A from C (on its session field related
+/// to C) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
 ///
 /// # Example
 ///
@@ -269,9 +279,11 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from C (on its session field related to C)
-/// between two [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html),
-/// `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to A from C (on its session field related
+/// to C) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
 ///
 /// # Example
 ///

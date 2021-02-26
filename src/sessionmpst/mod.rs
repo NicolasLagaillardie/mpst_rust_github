@@ -1,23 +1,27 @@
-//! The main structure used for representing a participant, also named a party,
-//! within a protocol.
+//! The main structure used for representing a participant,
+//! also named a party, within a protocol.
 //!
 //! It contains 4 fields:
-//! - **session1**: contains the first binary session type, which links the participant
-//!   to the first participant in the alphanumerical order. It contains [`mpstthree::binary::Session`].
-//! - **session2**: contains the second binary session type, which links the participant
-//!   to the second participant in the alphanumerical order. It contains [`mpstthree::binary::Session`].
-//! - **stack**: contains the ordering of the interactions between the participant and
-//!   the others. It contains [`mpstthree::role::Role`].
-//! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>`
-//!   or `RoleB<RoleEnd>`.
+//! - **session1**: contains the first binary session type, which links the
+//!   participant to the first participant in the alphanumerical order. It
+//!   contains [`mpstthree::binary::Session`].
+//! - **session2**: contains the second binary session type, which links the
+//!   participant to the second participant in the alphanumerical order. It
+//!   contains [`mpstthree::binary::Session`].
+//! - **stack**: contains the ordering of the interactions between the
+//!   participant and the others. It contains [`mpstthree::role::Role`].
+//! - **name**: contains the name of the participant. It should look like
+//!   `RoleA<RoleEnd>` or `RoleB<RoleEnd>`.
 //!
-//! [`mpstthree::binary::Session`]: ../binary/trait.Session.html
-//! [`mpstthree::role::Role`]: ../role/trait.Role.html
+//! [`mpstthree::binary::Session`]:
+//! ../binary/trait.Session.html [`mpstthree::role::Role`]:
+//! ../role/trait.Role.html
 
 use crate::binary::Session;
 use crate::role::Role;
 
-/// The structure which encapsulates two binary session types, a stack and a name.
+/// The structure which encapsulates two binary session
+/// types, a stack and a name.
 ///
 /// # Example
 ///
@@ -43,7 +47,8 @@ use crate::role::Role;
 /// ```
 #[must_use]
 #[derive(Debug)]
-pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role> {
+pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role>
+{
     pub session1: S1,
     pub session2: S2,
     pub stack: R,
@@ -51,7 +56,8 @@ pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role> {
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N> {
+impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N>
+{
     type Dual = SessionMpst<
         <S1 as Session>::Dual,
         <S2 as Session>::Dual,
@@ -60,7 +66,8 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
     >;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
+    fn new() -> (Self, Self::Dual)
+    {
         let (sender_one, receiver_one) = S1::new();
         let (sender_two, receiver_two) = S2::new();
 
@@ -84,7 +91,8 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
     }
 
     #[doc(hidden)]
-    fn head_str() -> String {
+    fn head_str() -> String
+    {
         format!(
             "{} + {} + {} + {}",
             S1::head_str(),
@@ -95,7 +103,8 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String {
+    fn tail_str() -> String
+    {
         format!(
             "{} + {} + {} + {}",
             S1::tail_str(),

@@ -118,7 +118,8 @@ type NameC = RoleC<RoleEnd>;
 type Choose0fromAtoB<N> = Send<Branching0fromAtoB<N>, End>;
 type Choose0fromAtoC = Send<Branching0fromAtoC, End>;
 // B
-enum Branching0fromAtoB<N: marker::Send> {
+enum Branching0fromAtoB<N: marker::Send>
+{
     More(
         SessionMpstThree<Recv<N, Send<N, RecursBtoA<N>>>, End, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>,
     ),
@@ -126,7 +127,8 @@ enum Branching0fromAtoB<N: marker::Send> {
 }
 type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
 // C
-enum Branching0fromAtoC {
+enum Branching0fromAtoC
+{
     More(SessionMpstThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
     Done(SessionMpstThree<End, End, RoleEnd, NameC>),
 }
@@ -139,11 +141,13 @@ type EndpointB<N> = SessionMpstThree<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
 // Functions
-fn simple_five_endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>>
+{
     recurs_a(s, SIZE, 1)
 }
 
-fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>>
+{
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -185,11 +189,13 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
     }
 }
 
-fn simple_five_endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>>
+{
     recurs_b(s, 0)
 }
 
-fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_b_to_a, {
         Branching0fromAtoB::Done(s) => {
             close_mpst_multi(s)
@@ -202,7 +208,8 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
+{
     offer_mpst!(s, recv_mpst_c_to_a, {
         Branching0fromAtoC::Done(s) => {
             close_mpst_multi(s)
@@ -213,7 +220,8 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn Error>>
+{
     let (thread_a, thread_b, thread_c) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_b),
@@ -229,16 +237,19 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 // A
-enum BinaryA<N: marker::Send> {
+enum BinaryA<N: marker::Send>
+{
     More(Recv<N, Send<N, RecursA<N>>>),
     Done(End),
 }
 type RecursA<N> = Recv<BinaryA<N>, End>;
 
-fn binary_a_to_b(s: RecursA<i64>) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_b(s: RecursA<i64>) -> Result<(), Box<dyn Error>>
+{
     recurs_a_binary(s, 1)
 }
-fn recurs_a_binary(s: RecursA<i64>, old: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_a_binary(s: RecursA<i64>, old: i64) -> Result<(), Box<dyn Error>>
+{
     offer!(s, {
         BinaryA::Done(s) => {
             close(s)
@@ -253,19 +264,22 @@ fn recurs_a_binary(s: RecursA<i64>, old: i64) -> Result<(), Box<dyn Error>> {
 
 // B
 type RecursB<N> = <RecursA<N> as Session>::Dual;
-fn binary_b_to_a(s: Send<i64, Recv<i64, RecursB<i64>>>) -> Result<RecursB<i64>, Box<dyn Error>> {
+fn binary_b_to_a(s: Send<i64, Recv<i64, RecursB<i64>>>) -> Result<RecursB<i64>, Box<dyn Error>>
+{
     recurs_b_binary(s, 0)
 }
 fn recurs_b_binary(
     s: Send<i64, Recv<i64, RecursB<i64>>>,
     old: i64,
-) -> Result<RecursB<i64>, Box<dyn Error>> {
+) -> Result<RecursB<i64>, Box<dyn Error>>
+{
     let s = send(old, s);
     let (_, s) = recv(s)?;
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn Error>>
+{
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -301,17 +315,20 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 static SIZE: i64 = 10;
 
-fn fibo_mpst(c: &mut Criterion) {
+fn fibo_mpst(c: &mut Criterion)
+{
     c.bench_function(&format!("Fibo MPST {}", SIZE), |b| b.iter(|| all_mpst()));
 }
 
-fn fibo_binary(c: &mut Criterion) {
+fn fibo_binary(c: &mut Criterion)
+{
     c.bench_function(&format!("Fibo binary {}", SIZE), |b| {
         b.iter(|| all_binaries())
     });
 }
 
-fn long_warmup() -> Criterion {
+fn long_warmup() -> Criterion
+{
     Criterion::default().measurement_time(Duration::new(30, 0))
 }
 

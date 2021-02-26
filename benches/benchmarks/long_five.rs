@@ -464,7 +464,8 @@ type EndpointC = SessionMpstFive<CtoA, CtoB, CtoD, CtoE, QueueC, NameC>;
 type EndpointD = SessionMpstFive<DtoA, DtoB, DtoC, DtoE, QueueD, NameD>;
 type EndpointE = SessionMpstFive<EtoA, EtoB, EtoC, EtoD, QueueE, NameE>;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
+{
     let s = send_mpst_a_to_b((), s);
     let s = send_mpst_a_to_c((), s);
     let s = send_mpst_a_to_d((), s);
@@ -477,7 +478,8 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_b_to_a(s)?;
     let s = send_mpst_b_to_c((), s);
     let s = send_mpst_b_to_d((), s);
@@ -490,7 +492,8 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_c_to_a(s)?;
     let (_, s) = recv_mpst_c_to_b(s)?;
     let s = send_mpst_c_to_d((), s);
@@ -503,7 +506,8 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_d_to_a(s)?;
     let (_, s) = recv_mpst_d_to_b(s)?;
     let (_, s) = recv_mpst_d_to_c(s)?;
@@ -516,7 +520,8 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_e_to_a(s)?;
     let (_, s) = recv_mpst_e_to_b(s)?;
     let (_, s) = recv_mpst_e_to_c(s)?;
@@ -529,7 +534,8 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn Error>>
+{
     let (thread_a, thread_b, thread_c, thread_d, thread_e) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_b),
@@ -549,25 +555,29 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 // A
-fn binary_a_to_b(s: AtoB) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_b(s: AtoB) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
     close(s)
 }
-fn binary_a_to_c(s: AtoC) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_c(s: AtoC) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
     close(s)
 }
-fn binary_a_to_d(s: AtoD) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_d(s: AtoD) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
     close(s)
 }
-fn binary_a_to_e(s: AtoE) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_e(s: AtoE) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
@@ -575,25 +585,29 @@ fn binary_a_to_e(s: AtoE) -> Result<(), Box<dyn Error>> {
 }
 
 // B
-fn binary_b_to_a(s: BtoA) -> Result<(), Box<dyn Error>> {
+fn binary_b_to_a(s: BtoA) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_b_to_c(s: BtoC) -> Result<(), Box<dyn Error>> {
+fn binary_b_to_c(s: BtoC) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
     close(s)
 }
-fn binary_b_to_d(s: BtoD) -> Result<(), Box<dyn Error>> {
+fn binary_b_to_d(s: BtoD) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
     close(s)
 }
-fn binary_b_to_e(s: BtoE) -> Result<(), Box<dyn Error>> {
+fn binary_b_to_e(s: BtoE) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
@@ -601,25 +615,29 @@ fn binary_b_to_e(s: BtoE) -> Result<(), Box<dyn Error>> {
 }
 
 // C
-fn binary_c_to_a(s: CtoA) -> Result<(), Box<dyn Error>> {
+fn binary_c_to_a(s: CtoA) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_c_to_b(s: CtoB) -> Result<(), Box<dyn Error>> {
+fn binary_c_to_b(s: CtoB) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_c_to_d(s: CtoD) -> Result<(), Box<dyn Error>> {
+fn binary_c_to_d(s: CtoD) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
     close(s)
 }
-fn binary_c_to_e(s: CtoE) -> Result<(), Box<dyn Error>> {
+fn binary_c_to_e(s: CtoE) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
@@ -627,25 +645,29 @@ fn binary_c_to_e(s: CtoE) -> Result<(), Box<dyn Error>> {
 }
 
 // D
-fn binary_d_to_a(s: DtoA) -> Result<(), Box<dyn Error>> {
+fn binary_d_to_a(s: DtoA) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_d_to_b(s: DtoB) -> Result<(), Box<dyn Error>> {
+fn binary_d_to_b(s: DtoB) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_d_to_c(s: DtoC) -> Result<(), Box<dyn Error>> {
+fn binary_d_to_c(s: DtoC) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_d_to_e(s: DtoE) -> Result<(), Box<dyn Error>> {
+fn binary_d_to_e(s: DtoE) -> Result<(), Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
 
@@ -653,32 +675,37 @@ fn binary_d_to_e(s: DtoE) -> Result<(), Box<dyn Error>> {
 }
 
 // E
-fn binary_e_to_a(s: EtoA) -> Result<(), Box<dyn Error>> {
+fn binary_e_to_a(s: EtoA) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_e_to_b(s: EtoB) -> Result<(), Box<dyn Error>> {
+fn binary_e_to_b(s: EtoB) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_e_to_c(s: EtoC) -> Result<(), Box<dyn Error>> {
+fn binary_e_to_c(s: EtoC) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
-fn binary_e_to_d(s: EtoD) -> Result<(), Box<dyn Error>> {
+fn binary_e_to_d(s: EtoD) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv(s)?;
     let s = send((), s);
 
     close(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn Error>>
+{
     // A
     let (thread_a_to_b, s_a_to_b): (JoinHandle<()>, BtoA) =
         fork_with_thread_id(black_box(binary_a_to_b));
@@ -737,15 +764,18 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn long_protocol_mpst(c: &mut Criterion) {
+fn long_protocol_mpst(c: &mut Criterion)
+{
     c.bench_function("long protocol MPST", |b| b.iter(|| all_mpst()));
 }
 
-fn long_protocol_binary(c: &mut Criterion) {
+fn long_protocol_binary(c: &mut Criterion)
+{
     c.bench_function("long protocol binary", |b| b.iter(|| all_binaries()));
 }
 
-fn short_warmup() -> Criterion {
+fn short_warmup() -> Criterion
+{
     Criterion::default().measurement_time(Duration::new(180, 0))
 }
 

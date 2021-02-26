@@ -40,8 +40,8 @@ use mpstthree::functionmpst::choose::choose_right_mpst_session_a_to_all;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
-/// Test a simple storage server, implemented using binary choice.
-/// Simple types
+/// Test a simple storage server, implemented using binary
+/// choice. Simple types
 type CtoANeg<N> = Recv<N, End>;
 type CtoAAdd<N> = Recv<N, End>;
 
@@ -112,7 +112,8 @@ type OfferA<N> =
 type EndpointChoiceB<N> = SessionMpst<OfferA<N>, End, QueueFullB, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
-fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst_session_to_c_from_a(
         s,
         |s: EndpointCAdd<i32>| {
@@ -134,7 +135,8 @@ fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
-fn simple_store_client_left(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_client_left(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>>
+{
     let s = choose_left_mpst_session_a_to_all::<
         CtoBAdd<i32>,
         CtoBNeg<i32>,
@@ -153,7 +155,8 @@ fn simple_store_client_left(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error
     close_mpst(s)
 }
 
-fn simple_store_client_right(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_client_right(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>>
+{
     let s = choose_right_mpst_session_a_to_all::<
         CtoBAdd<i32>,
         CtoBNeg<i32>,
@@ -172,7 +175,8 @@ fn simple_store_client_right(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Erro
     close_mpst(s)
 }
 
-fn simple_store_pawn(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_store_pawn(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst_session_to_b_from_a(
         s,
         |s: EndpointBAdd<i32>| {
@@ -194,7 +198,8 @@ fn simple_store_pawn(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-pub fn double_choice() {
+pub fn double_choice()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
@@ -227,7 +232,8 @@ pub fn double_choice() {
     .is_ok());
 }
 
-pub fn double_choice_checker() {
+pub fn double_choice_checker()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();

@@ -1,4 +1,5 @@
-//! This module contains the functions for forking the different endpoints.
+//! This module contains the functions for forking the
+//! different endpoints.
 
 use std::error::Error;
 use std::marker;
@@ -34,8 +35,9 @@ where
     })
 }
 
-/// Creates and returns a tuple of three child processes for three
-/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html) linked together.
+/// Creates and returns a tuple of three child processes for
+/// three [`mpstthree::sessionmpst::SessionMpst`](../
+/// sessionmpst/struct.SessionMpst. html) linked together.
 ///
 ///  # Example
 ///
@@ -77,30 +79,32 @@ where
 /// type QueueB = RoleA<RoleC<RoleEnd>>;
 /// type QueueC = RoleA<RoleB<RoleEnd>>;
 ///
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
-/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
-/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
+/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>,
+/// QueueA, RoleA<RoleEnd>>; type EndpointB<N> =
+/// SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
+/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>,
+/// QueueC, RoleC<RoleEnd>>;
 ///
-/// fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-///     let s = send_mpst_a_to_b(1, s);
-///     let (x, s) = recv_mpst_a_to_c(s)?;
-///     close_mpst(s)?;
+/// fn simple_triple_endpoint_a(s: EndpointA<i32>) ->
+/// Result<(), Box<dyn Error>> {     let s =
+/// send_mpst_a_to_b(1, s);     let (x, s) =
+/// recv_mpst_a_to_c(s)?;     close_mpst(s)?;
 ///     Ok(())
 /// }
 ///
 /// /// Single test for B
-/// fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-///     let (x, s) = recv_mpst_b_to_a(s)?;
-///     let s = send_mpst_b_to_c(2, s);
-///     close_mpst(s)?;
+/// fn simple_triple_endpoint_b(s: EndpointB<i32>) ->
+/// Result<(), Box<dyn Error>> {     let (x, s) =
+/// recv_mpst_b_to_a(s)?;     let s = send_mpst_b_to_c(2,
+/// s);     close_mpst(s)?;
 ///     Ok(())
 /// }
 ///
 /// /// Single test for C
-/// fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-///     let s = send_mpst_c_to_a(3, s);
-///     let (x, s) = recv_mpst_c_to_b(s)?;
-///     close_mpst(s)?;
+/// fn simple_triple_endpoint_c(s: EndpointC<i32>) ->
+/// Result<(), Box<dyn Error>> {     let s =
+/// send_mpst_c_to_a(3, s);     let (x, s) =
+/// recv_mpst_c_to_b(s)?;     close_mpst(s)?;
 ///     Ok(())
 /// }
 /// let (thread_a, thread_b, thread_c) = fork_mpst(
@@ -114,9 +118,10 @@ where
 /// thread_c.join().unwrap();
 ///  ```
 ///
-/// Creates 3 pairs of endpoints, each pair of type `S` and `S::Dual`.
-/// Creates 3 `Role` for each queue.
-/// Creates 3 `SessionMpst`, linked together with the pairs of endpoints, and get the related child processes.
+/// Creates 3 pairs of endpoints, each pair of type `S` and
+/// `S::Dual`. Creates 3 `Role` for each queue.
+/// Creates 3 `SessionMpst`, linked together with the pairs
+/// of endpoints, and get the related child processes.
 pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f0: F0,
     f1: F1,

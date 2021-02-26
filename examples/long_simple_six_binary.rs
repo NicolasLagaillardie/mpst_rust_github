@@ -6,12 +6,14 @@ use std::thread::{spawn, JoinHandle};
 
 /////////////////////////
 // A
-enum BinaryA {
+enum BinaryA
+{
     More(Recv<(), Send<(), RecursA>>),
     Done(End),
 }
 type RecursA = Recv<BinaryA, End>;
-fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>>
+{
     offer!(s, {
         BinaryA::Done(s) => {
             close(s)
@@ -26,13 +28,15 @@ fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>> {
 
 // B
 type RecursB = <RecursA as Session>::Dual;
-fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Error>> {
+fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Error>>
+{
     let s = send((), s);
     let (_, s) = recv(s)?;
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn Error>>
+{
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -67,6 +71,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 static SIZE: i64 = 15;
 
-fn main() {
+fn main()
+{
     all_binaries().unwrap();
 }

@@ -44,7 +44,8 @@ where
 }
 
 #[derive(Debug)]
-pub enum Signal {
+pub enum Signal
+{
     Stop,
     Cancel,
 }
@@ -52,13 +53,15 @@ pub enum Signal {
 /// End of communication.
 #[must_use]
 #[derive(Debug)]
-pub struct End {
+pub struct End
+{
     pub sender: Sender<Signal>,
     pub receiver: Receiver<Signal>,
 }
 
 /// Trait for session types. Provides duality.
-pub trait Session: marker::Sized + marker::Send {
+pub trait Session: marker::Sized + marker::Send
+{
     /// The session type dual to `Self`.
     type Dual: Session<Dual = Self>;
 
@@ -66,8 +69,9 @@ pub trait Session: marker::Sized + marker::Send {
     ///
     /// *Here be dragons!*
     ///
-    /// The `new` function is used internally in this library to define
-    /// functions such as `send` and `fork`. When combined with `thread::spawn`,
+    /// The `new` function is used internally in this
+    /// library to define functions such as `send` and
+    /// `fork`. When combined with `thread::spawn`,
     /// it can be used to construct deadlocks.
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual);
@@ -79,11 +83,13 @@ pub trait Session: marker::Sized + marker::Send {
     fn tail_str() -> String;
 }
 
-impl Session for End {
+impl Session for End
+{
     type Dual = End;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
+    fn new() -> (Self, Self::Dual)
+    {
         let (sender1, receiver1) = bounded::<Signal>(1);
         let (sender2, receiver2) = bounded::<Signal>(1);
 
@@ -100,58 +106,68 @@ impl Session for End {
     }
 
     #[doc(hidden)]
-    fn head_str() -> String {
+    fn head_str() -> String
+    {
         String::from("End")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String {
+    fn tail_str() -> String
+    {
         String::from("")
     }
 }
 
-impl<T: marker::Send, S: Session> Session for Send<T, S> {
+impl<T: marker::Send, S: Session> Session for Send<T, S>
+{
     type Dual = Recv<T, S::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
+    fn new() -> (Self, Self::Dual)
+    {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
         (Send { channel: sender }, Recv { channel: receiver })
     }
 
     #[doc(hidden)]
-    fn head_str() -> String {
+    fn head_str() -> String
+    {
         String::from("Send")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String {
+    fn tail_str() -> String
+    {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 }
 
-impl<T: marker::Send, S: Session> Session for Recv<T, S> {
+impl<T: marker::Send, S: Session> Session for Recv<T, S>
+{
     type Dual = Send<T, S::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
+    fn new() -> (Self, Self::Dual)
+    {
         let (there, here) = Self::Dual::new();
         (here, there)
     }
 
     #[doc(hidden)]
-    fn head_str() -> String {
+    fn head_str() -> String
+    {
         String::from("Recv")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String {
+    fn tail_str() -> String
+    {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 }
 
-/// Send a value of type `T`. Always succeeds. Returns the continuation of the
-/// session `S`.
+/// Send a value of type `T`. Always succeeds. Returns the
+/// continuation of the session `S`.
 pub fn send<T, S>(x: T, s: Send<T, S>) -> S
 where
     T: marker::Send,
@@ -162,8 +178,8 @@ where
     here
 }
 
-/// Send a value of type `T` over tcp. Returns the continuation of the
-/// session `S`. May fail.
+/// Send a value of type `T` over tcp. Returns the
+/// continuation of the session `S`. May fail.
 pub fn send_tcp<T, S>(
     x: T, // Need to force x and data to be of the same type but for choice/offer
     data: &TCPData,
@@ -176,15 +192,17 @@ where
 {
     // For TCP client
     // stream.write(&data[0..size]).unwrap();
-    // May need to force next type: stream.shutdown(Shutdown::Write).unwrap(); but no way to do it twice
+    // May need to force next type:
+    // stream.shutdown(Shutdown::Write).unwrap(); but no way
+    // to do it twice
     let (here, there) = S::new();
     s.channel.send(((x, *data), there)).unwrap();
     stream.write_all(data)?;
     Ok(here)
 }
 
-/// Send a value of type `T`. Always succeeds. Returns the continuation of the
-/// session `S`.
+/// Send a value of type `T`. Always succeeds. Returns the
+/// continuation of the session `S`.
 pub fn send_canceled<T, S>(x: T, s: Send<T, S>) -> Result<S, Box<dyn Error>>
 where
     T: marker::Send,
@@ -197,8 +215,9 @@ where
     }
 }
 
-/// Receive a value of type `T`. Can fail. Returns either a pair of the received
-/// value and the continuation of the session `S` or an error.
+/// Receive a value of type `T`. Can fail. Returns either a
+/// pair of the received value and the continuation of the
+/// session `S` or an error.
 pub fn recv<T, S>(s: Recv<T, S>) -> Result<(T, S), Box<dyn Error>>
 where
     T: marker::Send,
@@ -208,8 +227,9 @@ where
     Ok((v, s))
 }
 
-/// Receive a value of type `T`. Can fail. Returns either a pair of the received
-/// value and the continuation of the session `S` or an error.
+/// Receive a value of type `T`. Can fail. Returns either a
+/// pair of the received value and the continuation of the
+/// session `S` or an error.
 pub fn recv_tcp<T, S>(
     s: Recv<(T, TCPData), S>,
     mut stream: &TcpStream,
@@ -220,35 +240,41 @@ where
 {
     // For TCP client
     // let mut data = [0_u8; 50]; // using 50 byte buffer
-    // match stream.read(&mut data) { // or stream.read_exact(&mut data)
-    // Ok(size) =>
+    // match stream.read(&mut data) { // or
+    // stream.read_exact(&mut data) Ok(size) =>
     // Err(e) =>
-    // May need to force next type: stream.shutdown(Shutdown::Read).unwrap(); but no way to do it twice
+    // May need to force next type:
+    // stream.shutdown(Shutdown::Read).unwrap(); but no
+    // way to do it twice
     let (v, s) = s.channel.recv()?;
     let mut data = [0_u8; 65535];
     let r = stream.read(&mut data)?;
     Ok((v.0, s, data, r))
 }
 
-/// Cancels a session. Always succeeds. If the partner calls `recv` or `close`
-/// after cancellation, those calls fail.
-pub fn cancel<T>(x: T) {
+/// Cancels a session. Always succeeds. If the partner calls
+/// `recv` or `close` after cancellation, those calls fail.
+pub fn cancel<T>(x: T)
+{
     mem::drop(x);
 }
 
-/// Closes a session. Synchronises with the partner, and fails if the partner
-/// has crashed.
-pub fn close(s: End) -> Result<(), Box<dyn Error>> {
+/// Closes a session. Synchronises with the partner, and
+/// fails if the partner has crashed.
+pub fn close(s: End) -> Result<(), Box<dyn Error>>
+{
     s.sender.send(Signal::Stop).unwrap_or(());
     s.receiver.recv()?;
     Ok(())
 }
 
-/// Closes a TCP session. Synchronises with the partner, and fails if the partner
-/// has crashed.
-pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>> {
+/// Closes a TCP session. Synchronises with the partner, and
+/// fails if the partner has crashed.
+pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>>
+{
     // For TCP client
-    // Need to force closing type: stream.shutdown(Shutdown::Both).unwrap();
+    // Need to force closing type:
+    // stream.shutdown(Shutdown::Both).unwrap();
 
     println!("Closing");
 
@@ -285,8 +311,9 @@ where
     (other_thread, here)
 }
 
-/// Creates a child process, and a session with two dual endpoints of type `S`
-/// and `S::Dual`. The first endpoint is given to the child process. Returns the
+/// Creates a child process, and a session with two dual
+/// endpoints of type `S` and `S::Dual`. The first endpoint
+/// is given to the child process. Returns the
 /// second endpoint.
 pub fn fork<S, P>(p: P) -> S::Dual
 where
@@ -296,8 +323,9 @@ where
     fork_with_thread_id(p).1
 }
 
-/// Creates a child process, and a session with two dual endpoints of type `S`
-/// and `S::Dual`. The first endpoint is given to the child process. Returns the
+/// Creates a child process, and a session with two dual
+/// endpoints of type `S` and `S::Dual`. The first endpoint
+/// is given to the child process. Returns the
 /// second endpoint.
 pub fn fork_tcp<S, P>(p: P, address: &str) -> TCPFork<S::Dual>
 where
@@ -323,12 +351,12 @@ where
     Ok((other_thread, here, stream))
 }
 
-/// Offer a choice between two sessions `S1` and `S1`. Implemented using `Recv`
-/// and `Either`.
+/// Offer a choice between two sessions `S1` and `S1`.
+/// Implemented using `Recv` and `Either`.
 pub type Offer<S1, S2> = Recv<Either<S1, S2>, End>;
 
-/// Choose between two sessions `S1` and `S2`. Implemented using `Send` and
-/// `Either`.
+/// Choose between two sessions `S1` and `S2`. Implemented
+/// using `Send` and `Either`.
 pub type Choose<S1, S2> = Send<Either<<S1 as Session>::Dual, <S2 as Session>::Dual>, End>;
 
 /// Offer a choice between two sessions `S1` and `S2`.
@@ -348,7 +376,8 @@ where
     e.either(f, g)
 }
 
-/// Given a choice between sessions `S1` and `S1`, choose the first option.
+/// Given a choice between sessions `S1` and `S1`, choose
+/// the first option.
 pub fn choose_left<'a, S1, S2>(s: Choose<S1, S2>) -> S1
 where
     S1: Session + 'a,
@@ -360,7 +389,8 @@ where
     here
 }
 
-/// Given a choice between sessions `S1` and `S1`, choose the second option.
+/// Given a choice between sessions `S1` and `S1`, choose
+/// the second option.
 pub fn choose_right<'a, S1, S2>(s: Choose<S1, S2>) -> S2
 where
     S1: Session + 'a,
@@ -372,7 +402,8 @@ where
     here
 }
 
-/// Offer a choice between many different sessions wrapped in an `enum`
+/// Offer a choice between many different sessions wrapped
+/// in an `enum`
 #[macro_export]
 macro_rules! offer {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
@@ -388,7 +419,8 @@ macro_rules! offer {
     };
 }
 
-/// Offer a choice between many different sessions wrapped in an `enum`
+/// Offer a choice between many different sessions wrapped
+/// in an `enum`
 #[macro_export]
 macro_rules! offer_tcp {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
@@ -410,7 +442,8 @@ macro_rules! offer_tcp {
     };
 }
 
-/// Choose between many different sessions wrapped in an `enum`
+/// Choose between many different sessions wrapped in an
+/// `enum`
 #[macro_export]
 macro_rules! choose {
     ($label:path, $session:expr) => {{
@@ -421,7 +454,8 @@ macro_rules! choose {
     }};
 }
 
-/// Choose between many different sessions wrapped in an `enum`
+/// Choose between many different sessions wrapped in an
+/// `enum`
 #[macro_export]
 macro_rules! choose_tcp {
     ($label:path, $session:expr, $data:expr) => {{
@@ -441,36 +475,46 @@ macro_rules! choose_tcp {
     }};
 }
 
-/// Error returned when `select` or `select_mut` are called with an empty vector.
+/// Error returned when `select` or `select_mut` are called
+/// with an empty vector.
 #[derive(Debug)]
-enum SelectError {
+enum SelectError
+{
     EmptyVec,
 }
 
-impl fmt::Display for SelectError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl fmt::Display for SelectError
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
+    {
         match *self {
-            SelectError::EmptyVec => write!(f, "please use a vector with at least one element"),
+            SelectError::EmptyVec => {
+                write!(f, "please use a vector with at least one element")
+            }
         }
     }
 }
 
-impl Error for SelectError {
-    fn description(&self) -> &str {
+impl Error for SelectError
+{
+    fn description(&self) -> &str
+    {
         match *self {
             SelectError::EmptyVec => "empty vectors not allowed",
         }
     }
 
-    fn cause(&self) -> Option<&dyn Error> {
+    fn cause(&self) -> Option<&dyn Error>
+    {
         match *self {
             SelectError::EmptyVec => None,
         }
     }
 }
 
-/// Selects the first active session. Receives from the selected session, and
-/// removes the endpoint from the input vector. Returns the received value and
+/// Selects the first active session. Receives from the
+/// selected session, and removes the endpoint from the
+/// input vector. Returns the received value and
 /// the continuation of the selected session.
 pub fn select_mut<T, S>(rs: &mut Vec<Recv<T, S>>) -> Result<(T, S), Box<dyn Error>>
 where
@@ -510,9 +554,10 @@ where
 
 type SelectType<T, S> = Result<(T, S), Box<dyn Error>>;
 
-/// Selects the first active session. Receives from the selected session.
-/// Returns the received value, the continuation of the selected session, and a
-/// copy of the input vector without the selected session.
+/// Selects the first active session. Receives from the
+/// selected session. Returns the received value, the
+/// continuation of the selected session, and a copy of the
+/// input vector without the selected session.
 pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (SelectType<T, S>, Vec<Recv<T, S>>)
 where
     T: marker::Send,

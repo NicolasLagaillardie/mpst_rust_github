@@ -1,5 +1,6 @@
-//! This module is a beta feature that only works with RoleA, RoleB and RoleC.
-//! It also has various prerequisites that are shown in tests 06.
+//! This module is a beta feature that only works with
+//! RoleA, RoleB and RoleC. It also has various
+//! prerequisites that are shown in tests 06.
 
 mod aux_checker;
 mod aux_dot;
@@ -14,8 +15,10 @@ use std::collections::HashMap;
 use std::error::Error;
 
 /// Displays the local endpoints of each roles.
-/// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
-/// It is useful for checking whether the implemented local endpoints are the expected ones.
+/// It is required that the `SessionMpst` are the root ones,
+/// and not a partial part included in a bigger one. It is
+/// useful for checking whether the implemented local
+/// endpoints are the expected ones.
 ///
 /// Returns the 3 strings if everything went right.
 pub fn checker<
@@ -92,7 +95,8 @@ where
     ))
 }
 
-/// macro to create hashmap function, necessary for recursion. Need to sort out the path
+/// macro to create hashmap function, necessary for
+/// recursion. Need to sort out the path
 #[macro_export]
 #[doc(hidden)]
 macro_rules! checker_hashmaps {

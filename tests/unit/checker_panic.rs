@@ -36,11 +36,13 @@ type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 type RecursAtoC<N> = Recv<Branche0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branche0BtoC<N>, End>;
 
-enum Branche0AtoC<N: marker::Send> {
+enum Branche0AtoC<N: marker::Send>
+{
     End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
     Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo, RoleA<RoleEnd>>),
 }
-enum Branche0BtoC<N: marker::Send> {
+enum Branche0BtoC<N: marker::Send>
+{
     End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
@@ -68,29 +70,43 @@ type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, QueueCFull, Ro
 /// For A
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
 
-fn type_of<T>(_: T) -> &'static str {
+fn type_of<T>(_: T) -> &'static str
+{
     type_name::<T>()
 }
 
-impl<N: marker::Send> fmt::Display for Branche0AtoC<N> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl<N: marker::Send> fmt::Display for Branche0AtoC<N>
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
+    {
         match self {
-            Branche0AtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
-            Branche0AtoC::End(s) => write!(f, "End:{}", type_of(&s)),
+            Branche0AtoC::Video(s) => {
+                write!(f, "Video:{}", type_of(&s))
+            }
+            Branche0AtoC::End(s) => {
+                write!(f, "End:{}", type_of(&s))
+            }
         }
     }
 }
 
-impl<N: marker::Send> fmt::Display for Branche0BtoC<N> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl<N: marker::Send> fmt::Display for Branche0BtoC<N>
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
+    {
         match self {
-            Branche0BtoC::Video(s) => write!(f, "Video:{}", type_of(&s)),
-            Branche0BtoC::End(s) => write!(f, "End:{}", type_of(&s)),
+            Branche0BtoC::Video(s) => {
+                write!(f, "Video:{}", type_of(&s))
+            }
+            Branche0BtoC::End(s) => {
+                write!(f, "End:{}", type_of(&s))
+            }
         }
     }
 }
 
-fn hashmap_c_branches_a_to_c() -> Vec<String> {
+fn hashmap_c_branches_a_to_c() -> Vec<String>
+{
     let (channel_1_video, _) = <_ as Session>::new();
     let (channel_2_video, _) = <_ as Session>::new();
     let (role_video, _) = <_ as Role>::new();
@@ -124,7 +140,8 @@ fn hashmap_c_branches_a_to_c() -> Vec<String> {
     ]
 }
 
-fn hashmap_c_branches_b_to_c() -> Vec<String> {
+fn hashmap_c_branches_b_to_c() -> Vec<String>
+{
     let (channel_1_video, _) = <_ as Session>::new();
     let (channel_2_video, _) = <_ as Session>::new();
     let (role_video, _) = <_ as Role>::new();
@@ -162,7 +179,8 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
 
 type EndpointBRecursPanicStack<N> = SessionMpst<End, RecursBtoC<N>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
 
-pub fn test_checker_panic_stack() {
+pub fn test_checker_panic_stack()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
@@ -186,7 +204,8 @@ pub fn test_checker_panic_stack() {
 
 type EndpointBRecursPanicName<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleC<RoleEnd>>;
 
-pub fn test_checker_panic_name() {
+pub fn test_checker_panic_name()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let mut hm: HashMap<String, &Vec<String>> = HashMap::new();

@@ -13,7 +13,8 @@ use mpstthree::role::c_to_all::RoleCtoAll;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
-pub fn role_end_fields_1() {
+pub fn role_end_fields_1()
+{
     let (role_end_1, role_end_2) = RoleEnd::new();
 
     assert_eq!(role_end_1.sender.send(()), Ok(()));
@@ -22,7 +23,8 @@ pub fn role_end_fields_1() {
     assert_eq!(role_end_2.receiver.recv(), Ok(()));
 }
 
-pub fn role_end_fields_2() {
+pub fn role_end_fields_2()
+{
     let (role_end_1, role_end_2) = RoleEnd::new();
 
     assert_eq!(role_end_2.sender.send(()), Ok(()));
@@ -31,7 +33,8 @@ pub fn role_end_fields_2() {
     assert_eq!(role_end_1.receiver.recv(), Ok(()));
 }
 
-pub fn role_a_to_all_fields() {
+pub fn role_a_to_all_fields()
+{
     let (role_sender_1, role_sender_2) = RoleAtoAll::<RoleEnd, RoleEnd>::new();
 
     // role_sender_1
@@ -53,7 +56,8 @@ pub fn role_a_to_all_fields() {
     assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
-pub fn role_all_to_a_fields() {
+pub fn role_all_to_a_fields()
+{
     let (role_sender_1, role_sender_2) = RoleAlltoA::<RoleEnd, RoleEnd>::new();
 
     // role_sender_1
@@ -75,7 +79,8 @@ pub fn role_all_to_a_fields() {
     assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
-pub fn role_b_to_all_fields() {
+pub fn role_b_to_all_fields()
+{
     let (role_sender_1, role_sender_2) = RoleBtoAll::<RoleEnd, RoleEnd>::new();
 
     // role_sender_1
@@ -97,7 +102,8 @@ pub fn role_b_to_all_fields() {
     assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
-pub fn role_all_to_b_fields() {
+pub fn role_all_to_b_fields()
+{
     let (role_sender_1, role_sender_2) = RoleAlltoB::<RoleEnd, RoleEnd>::new();
 
     // role_sender_1
@@ -119,7 +125,8 @@ pub fn role_all_to_b_fields() {
     assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
-pub fn role_c_to_all_fields() {
+pub fn role_c_to_all_fields()
+{
     let (role_sender_1, role_sender_2) = RoleCtoAll::<RoleEnd, RoleEnd>::new();
 
     // role_sender_1
@@ -141,7 +148,8 @@ pub fn role_c_to_all_fields() {
     assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
-pub fn role_all_to_c_fields() {
+pub fn role_all_to_c_fields()
+{
     let (role_sender_1, role_sender_2) = RoleAlltoC::<RoleEnd, RoleEnd>::new();
 
     // role_sender_1
@@ -163,7 +171,8 @@ pub fn role_all_to_c_fields() {
     assert_eq!(here2.sender.send(()).unwrap_or(()), ());
 }
 
-pub fn role_head_str() {
+pub fn role_head_str()
+{
     assert_eq!(RoleEnd::head_str(), String::from("RoleEnd"));
     assert_eq!(RoleA::<RoleEnd>::head_str(), String::from("RoleA"));
     assert_eq!(RoleB::<RoleEnd>::head_str(), String::from("RoleB"));
@@ -197,7 +206,8 @@ pub fn role_head_str() {
     );
 }
 
-pub fn role_tail_str() {
+pub fn role_tail_str()
+{
     assert_eq!(RoleEnd::tail_str(), String::from(""));
     assert_eq!(RoleA::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
     assert_eq!(RoleB::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));

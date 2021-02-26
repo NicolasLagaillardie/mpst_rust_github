@@ -27,12 +27,12 @@
 //     fn node_id(&'a self, n: &Nd) -> dot::Id<'a> {
 //         dot::Id::new(format!("N{}", n)).unwrap()
 //     }
-//     fn node_label<'b>(&'b self, n: &Nd) -> dot::LabelText<'b> {
-//         dot::LabelText::LabelStr(self.nodes[*n].into())
-//     }
-//     fn edge_label<'b>(&'b self, _: &Ed) -> dot::LabelText<'b> {
-//         dot::LabelText::LabelStr("&sube;".into())
-//     }
+//     fn node_label<'b>(&'b self, n: &Nd) ->
+// dot::LabelText<'b> {         dot::LabelText::
+// LabelStr(self.nodes[*n].into())     }
+//     fn edge_label<'b>(&'b self, _: &Ed) ->
+// dot::LabelText<'b> {         dot::LabelText::LabelStr("&
+// sube;".into())     }
 // }
 
 // impl<'a> dot::GraphWalk<'a, Nd, Ed<'a>> for Graph {

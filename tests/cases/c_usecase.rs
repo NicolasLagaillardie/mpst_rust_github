@@ -134,7 +134,8 @@ type OfferB<N> = OfferMpst<
 type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
-fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
+fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>>
+{
     offer_mpst_session_to_b_from_c(
         s,
         |s: EndpointBVideo<i32>| {
@@ -147,7 +148,8 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
-fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>>
+{
     let (id, s) = recv_mpst_a_to_c(s)?;
     let s = send_mpst_a_to_c(id + 1, s);
 
@@ -168,7 +170,8 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     )
 }
 
-fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
+{
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
@@ -200,7 +203,8 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
-fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
+{
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
@@ -229,7 +233,8 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-pub fn run_c_usecase_left() {
+pub fn run_c_usecase_left()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test video branch.
         {
@@ -245,7 +250,8 @@ pub fn run_c_usecase_left() {
     .is_ok());
 }
 
-pub fn run_c_usecase_right() {
+pub fn run_c_usecase_right()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {
@@ -261,7 +267,8 @@ pub fn run_c_usecase_right() {
     .is_ok());
 }
 
-pub fn run_c_usecase_checker() {
+pub fn run_c_usecase_checker()
+{
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();

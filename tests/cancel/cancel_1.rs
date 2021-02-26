@@ -82,12 +82,14 @@ type EndpointA = SessionMpstThree<Send<i32, End>, End, RoleB<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<Recv<i32, End>, Send<i32, End>, RoleA<RoleC<RoleEnd>>, NameB>;
 type EndpointC = SessionMpstThree<End, Recv<i32, End>, RoleB<RoleEnd>, NameC>;
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
+{
     let s = send_cancel_a_to_b(random(), s)?;
     close_mpst_multi(s)
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
+{
     cancel(s);
 
     // let (_, s) = recv_mpst_b_to_a(s)?;
@@ -97,12 +99,14 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
+{
     let (_, s) = recv_mpst_c_to_b(s)?;
     close_mpst_multi(s)
 }
 
-pub fn main() {
+pub fn main()
+{
     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     assert!(thread_a.join().is_err());

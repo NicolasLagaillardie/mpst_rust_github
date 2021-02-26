@@ -1,9 +1,11 @@
-/// Offer a choice to A from C between many different sessions wrapped in an `enum`
+/// Offer a choice to A from C between many different
+/// sessions wrapped in an `enum`
 ///
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
+///  * Each path, which are each variant of the enum which contains the new
+///    branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -33,12 +35,14 @@ macro_rules! offer_mpst_a_to_c {
     }};
 }
 
-/// Offer a choice to B from C between many different sessions wrapped in an `enum`
+/// Offer a choice to B from C between many different
+/// sessions wrapped in an `enum`
 ///
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
+///  * Each path, which are each variant of the enum which contains the new
+///    branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -68,12 +72,14 @@ macro_rules! offer_mpst_b_to_c {
     }};
 }
 
-/// Offer a choice to A from B between many different sessions wrapped in an `enum`
+/// Offer a choice to A from B between many different
+/// sessions wrapped in an `enum`
 ///
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
+///  * Each path, which are each variant of the enum which contains the new
+///    branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -113,12 +119,14 @@ macro_rules! offer_mpst_a_to_b {
     }};
 }
 
-/// Offer a choice to B from A between many different sessions wrapped in an `enum`
+/// Offer a choice to B from A between many different
+/// sessions wrapped in an `enum`
 ///
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
+///  * Each path, which are each variant of the enum which contains the new
+///    branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -148,12 +156,14 @@ macro_rules! offer_mpst_b_to_a {
     }};
 }
 
-/// Offer a choice to C from B between many different sessions wrapped in an `enum`
+/// Offer a choice to C from B between many different
+/// sessions wrapped in an `enum`
 ///
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
+///  * Each path, which are each variant of the enum which contains the new
+///    branches
 ///  * The block of code to process each new session
 ///
 /// # Example
@@ -183,12 +193,14 @@ macro_rules! offer_mpst_c_to_b {
     }};
 }
 
-/// Offer a choice to C from A between many different sessions wrapped in an `enum`
+/// Offer a choice to C from A between many different
+/// sessions wrapped in an `enum`
 ///
 /// # Arguments
 ///
 ///  * The session to be used
-///  * Each path, which are each variant of the enum which contains the new branches
+///  * Each path, which are each variant of the enum which contains the new
+///    branches
 ///  * The block of code to process each new session
 ///
 /// # Example

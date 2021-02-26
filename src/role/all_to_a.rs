@@ -2,20 +2,25 @@ use crate::role::a_to_all::RoleAtoAll;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
-/// This structure is used by any participant other than A to receive a choice given by A.
+/// This structure is used by any participant other than A
+/// to receive a choice given by A.
 ///
-/// This `struct` is used for branching without `enum`. See the test `05_usecase.rs`.
+/// This `struct` is used for branching without `enum`. See
+/// the test `05_usecase.rs`.
 #[derive(Debug)]
-pub struct RoleAlltoA<R1: Role, R2: Role> {
+pub struct RoleAlltoA<R1: Role, R2: Role>
+{
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
 }
 
-impl<R1: Role, R2: Role> Role for RoleAlltoA<R1, R2> {
+impl<R1: Role, R2: Role> Role for RoleAlltoA<R1, R2>
+{
     type Dual = RoleAtoAll<R1::Dual, R2::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
+    fn new() -> (Self, Self::Dual)
+    {
         let (sender_normal_1, _) = bounded::<R1>(1);
         let (sender_normal_2, _) = bounded::<R2>(1);
         let (sender_dual_1, _) = bounded::<R1::Dual>(1);
@@ -34,12 +39,14 @@ impl<R1: Role, R2: Role> Role for RoleAlltoA<R1, R2> {
     }
 
     #[doc(hidden)]
-    fn head_str() -> String {
+    fn head_str() -> String
+    {
         String::from("RoleAlltoA")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String {
+    fn tail_str() -> String
+    {
         format!(
             "{}<{}> + {}<{}>",
             R1::head_str(),

@@ -1,9 +1,10 @@
 ////////////////////////////////////////////
 /// FORK
 
-///  Creates the _simple fork_ function to be used with more than 3 participants. It should be used with [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
-///  
-///  # Arguments
+///  Creates the _simple fork_ function to be used with more
+/// than 3 participants. It should be used with
+/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.
+/// html)  # Arguments
 ///  
 ///  * The name of the new simple *fork* function
 ///  * The name of the *SessionMpst* type that will be used
@@ -45,10 +46,10 @@ macro_rules! fork_simple_multi {
     }
 }
 
-///  Creates the _fork_ function to be used with more than 3 participants. It must be used with [`mpstthree::fork_simple`](../macro.fork_simple.html)
-///  
-///  # Arguments
-///  
+///  Creates the _fork_ function to be used with more than 3
+/// participants. It must be used with
+/// [`mpstthree::fork_simple`](../macro.fork_simple.html)  #
+/// Arguments  
 ///  * The name of the new *fork* function
 ///  * The name of the *simple fork* function
 ///  * The name of the *SessionMpst* type that will be used
@@ -57,13 +58,14 @@ macro_rules! fork_simple_multi {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::{fork_simple_multi, fork_mpst_multi, create_sessionmpst};
+///  use mpstthree::{fork_simple_multi, fork_mpst_multi,
+/// create_sessionmpst};
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
 ///  fork_simple_multi!(fork_simple, SessionMpst, 3);
-///  fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst, 3);
-///  ```
+///  fork_mpst_multi!(fork_mpst, fork_simple, SessionMpst,
+/// 3);  ```
 #[macro_export]
 macro_rules! fork_mpst_multi {
     ($func_name: ident, $fork_function: ident, $struct_name:ident, $nsessions:literal) => {
@@ -133,10 +135,11 @@ macro_rules! fork_mpst_multi {
     }
 }
 
-///  Creates both the [`mpstthree::fork_simple`](../macro.fork_simple.html) and
-///  [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
-///  functions to be used with more than 3 participants.
-///  
+///  Creates both the
+/// [`mpstthree::fork_simple`](../macro.fork_simple.html)
+/// and  [`mpstthree::fork_mpst_multi`](../macro.
+/// fork_mpst_multi.html)  functions to be used with more
+/// than 3 participants.  
 ///  # Arguments
 ///  
 ///  * The name of the new *fork* function
@@ -150,11 +153,11 @@ macro_rules! fork_mpst_multi {
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst, 3);
-///  ```
+///  bundle_fork_multi!(fork_mpst, fork_simple, SessionMpst,
+/// 3);  ```
 #[macro_export]
 macro_rules! bundle_fork_multi {
-    ($func_name: ident, $fork_function: ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $fork_function:ident, $struct_name:ident, $nsessions:literal) => {
         mpstthree::fork_simple_multi!($fork_function, $struct_name, $nsessions);
         mpstthree::fork_mpst_multi!($func_name, $fork_function, $struct_name, $nsessions);
     };
