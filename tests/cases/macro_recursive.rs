@@ -3,7 +3,6 @@ use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 use std::error::Error;
 use std::marker;

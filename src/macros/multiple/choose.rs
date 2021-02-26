@@ -141,7 +141,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                 #( // i in 1..K
                     let (name_#N:0, _) = <R#N:6 as mpstthree::role::Role>::Dual::new();
                 )0:0
-                let (name_^N:2, _) = $name::<mpstthree::role::end::RoleEnd>::new();
+                let (name_^N:2, _) = <$name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                 #( // i in 1..K
                     let choice_#N:0 = $sessionmpst_name {
@@ -283,7 +283,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                 #( // i in 1..K
                     let (name_#N:0, _) = <R#N:6 as mpstthree::role::Role>::Dual::new();
                 )0:0
-                let (name_^N:2, _) = $name::<mpstthree::role::end::RoleEnd>::new();
+                let (name_^N:2, _) = <$name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                 #( // i in 1..K
                     let choice_#N:0 = $sessionmpst_name {
@@ -459,7 +459,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 #[macro_export]
 macro_rules! choose_mpst_multi_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{ // Need to change 1 to $exclusion
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
 
             #(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
@@ -470,7 +470,7 @@ macro_rules! choose_mpst_multi_to_all {
             )15:0
 
             #(
-                let (name_#N:0, _) = unused#N:16::<mpstthree::role::end::RoleEnd>::new();
+                let (name_#N:0, _) = <unused#N:16::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
             )0:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
@@ -576,7 +576,7 @@ macro_rules! choose_mpst_multi_to_all {
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{ // Need to change 1 to $exclusion
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
 
             #(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
@@ -587,7 +587,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             )15:0
 
             #(
-                let (name_#N:0, _) = unused#N:16::<mpstthree::role::end::RoleEnd>::new();
+                let (name_#N:0, _) = <unused#N:16::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
             )0:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();

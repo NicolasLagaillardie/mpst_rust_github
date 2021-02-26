@@ -17,8 +17,6 @@ use std::error::Error;
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 
-use mpstthree::role::Role;
-
 // Get recv functions
 use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
 use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
