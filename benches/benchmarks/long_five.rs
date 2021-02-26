@@ -5,7 +5,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_fork_multi, close_mpst, create_broadcast_role, create_multiple_normal_role,
+    bundle_fork_multi, close_mpst, create_multiple_broadcast_role, create_multiple_normal_role,
     create_recv_mpst_session, create_send_mpst_session, create_sessionmpst,
 };
 
@@ -26,11 +26,13 @@ create_multiple_normal_role!(
     RoleE, next_e, RoleEDual, next_e_dual |
 );
 // broadcast
-create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
-create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
-create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
-create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
-create_broadcast_role!(RoleAlltoE, next_all_to_e, RoleEtoAll, next_e_to_all);
+create_multiple_broadcast_role!(
+    RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all |
+    RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all |
+    RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all |
+    RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all |
+    RoleAlltoE, next_all_to_e, RoleEtoAll, next_e_to_all |
+);
 
 // Create new send functions
 // A
