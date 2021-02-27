@@ -17,8 +17,8 @@ use std::net::TcpStream;
 use std::panic;
 use std::thread::{spawn, JoinHandle};
 
-type TCPData = [u8; 65535];
-type TCPFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
+type TcpData = [u8; 65535];
+type TcpFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
 
 /// Send `T`, then continue as `S`.
 #[must_use]
@@ -182,15 +182,15 @@ where
 /// continuation of the session `S`. May fail.
 pub fn send_tcp<T, S>(
     x: T, // Need to force x and data to be of the same type but for choice/offer
-    data: &TCPData,
-    s: Send<(T, TCPData), S>,
+    data: &TcpData,
+    s: Send<(T, TcpData), S>,
     mut stream: &TcpStream,
 ) -> Result<S, Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
 {
-    // For TCP client
+    // For Tcp client
     // stream.write(&data[0..size]).unwrap();
     // May need to force next type:
     // stream.shutdown(Shutdown::Write).unwrap(); but no way
@@ -231,14 +231,14 @@ where
 /// pair of the received value and the continuation of the
 /// session `S` or an error.
 pub fn recv_tcp<T, S>(
-    s: Recv<(T, TCPData), S>,
+    s: Recv<(T, TcpData), S>,
     mut stream: &TcpStream,
-) -> Result<(T, S, TCPData, usize), Box<dyn Error>>
+) -> Result<(T, S, TcpData, usize), Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
 {
-    // For TCP client
+    // For Tcp client
     // let mut data = [0_u8; 50]; // using 50 byte buffer
     // match stream.read(&mut data) { // or
     // stream.read_exact(&mut data) Ok(size) =>
@@ -268,11 +268,11 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>>
     Ok(())
 }
 
-/// Closes a TCP session. Synchronises with the partner, and
+/// Closes a Tcp session. Synchronises with the partner, and
 /// fails if the partner has crashed.
 pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>>
 {
-    // For TCP client
+    // For Tcp client
     // Need to force closing type:
     // stream.shutdown(Shutdown::Both).unwrap();
 
@@ -327,12 +327,12 @@ where
 /// endpoints of type `S` and `S::Dual`. The first endpoint
 /// is given to the child process. Returns the
 /// second endpoint.
-pub fn fork_tcp<S, P>(p: P, address: &str) -> TCPFork<S::Dual>
+pub fn fork_tcp<S, P>(p: P, address: &str) -> TcpFork<S::Dual>
 where
     S: Session + 'static,
     P: FnOnce(S, &TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    // For TCP client
+    // For Tcp client
     // match TcpStream::connect("localhost:3333") {
     // Ok(result) =>
     // Err(e) =>

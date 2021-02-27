@@ -57,7 +57,8 @@ jobs:
     strategy:
       matrix:
         rust:
-          - stable
+          # - stable
+          - nightly
           - 1.31.0
     steps:
       - name: Checkout sources
