@@ -31,8 +31,7 @@ pub mod end;
 use std::marker;
 
 /// Trait for session types. Provides duality.
-pub trait Role: marker::Sized + marker::Send
-{
+pub trait Role: marker::Sized + marker::Send {
     /// The Role type dual to `Self`.
     type Dual: Role<Dual = Self>;
 

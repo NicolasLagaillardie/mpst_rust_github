@@ -59,13 +59,11 @@ type CtoBVideo<N> = <BtoCVideo<N> as Session>::Dual;
 type RecursBtoA<N> = Recv<Branches0BtoA<N>, End>;
 type RecursCtoA<N> = Recv<Branches0CtoA<N>, End>;
 
-enum Branches0BtoA<N: marker::Send>
-{
+enum Branches0BtoA<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
     Video(SessionMpst<BtoAVideo<N>, BtoCVideo<N>, QueueBVideo, RoleB<RoleEnd>>),
 }
-enum Branches0CtoA<N: marker::Send>
-{
+enum Branches0CtoA<N: marker::Send> {
     End(SessionMpst<CtoAClose, CtoBClose, QueueCEnd, RoleC<RoleEnd>>),
     Video(SessionMpst<RecursCtoA<N>, CtoBVideo<N>, QueueCVideo, RoleC<RoleEnd>>),
 }
@@ -102,8 +100,7 @@ type EndpointBFull<N> = SessionMpst<InitB<N>, End, QueueBInit, RoleB<RoleEnd>>;
 type EndpointCRecurs<N> = SessionMpst<RecursCtoA<N>, End, QueueCRecurs, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
-fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>>
-{
+fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_c_to_a!(s, {
         Branches0CtoA::End(s) => {
             close_mpst(s)
@@ -116,16 +113,14 @@ fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_b_to_a(s)?;
     let s = send_mpst_b_to_a(id + 1, s);
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator_recurs(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_a!(s, {
         Branches0BtoA::End(s) => {
             close_mpst(s)
@@ -140,8 +135,7 @@ fn authenticator_recurs(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn client(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
@@ -155,8 +149,7 @@ fn client_recurs(
     s: EndpointARecurs<i32>,
     mut xs: Vec<i32>,
     index: i32,
-) -> Result<(), Box<dyn Error>>
-{
+) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
             let s = choose_mpst_a_to_all!(s, Branches0BtoA::Video, Branches0CtoA::Video);
@@ -180,15 +173,12 @@ fn client_recurs(
 ///////////////////////////////////////// to be included in
 ///////////////////////////////////////// macro
 
-fn type_of<T>(_: T) -> &'static str
-{
+fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
 }
 
-impl<N: marker::Send> fmt::Display for Branches0BtoA<N>
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
-    {
+impl<N: marker::Send> fmt::Display for Branches0BtoA<N> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Branches0BtoA::Video(s) => {
                 write!(f, "Video:{}", type_of(&s))
@@ -200,8 +190,7 @@ impl<N: marker::Send> fmt::Display for Branches0BtoA<N>
     }
 }
 
-fn hashmap_branche_0_b_to_a() -> Vec<String>
-{
+fn hashmap_branche_0_b_to_a() -> Vec<String> {
     let (s_video, _) = <_ as Session>::new();
 
     let video = Branches0BtoA::Video::<i32>(s_video);
@@ -213,10 +202,8 @@ fn hashmap_branche_0_b_to_a() -> Vec<String>
     vec![(&video).to_string(), (&end).to_string()]
 }
 
-impl<N: marker::Send> fmt::Display for Branches0CtoA<N>
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
-    {
+impl<N: marker::Send> fmt::Display for Branches0CtoA<N> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Branches0CtoA::Video(s) => {
                 write!(f, "Video:{}", type_of(&s))
@@ -228,8 +215,7 @@ impl<N: marker::Send> fmt::Display for Branches0CtoA<N>
     }
 }
 
-fn hashmap_branche_0_c_to_a() -> Vec<String>
-{
+fn hashmap_branche_0_c_to_a() -> Vec<String> {
     let (s_video, _) = <_ as Session>::new();
 
     let video = Branches0CtoA::Video::<i32>(s_video);
@@ -243,8 +229,7 @@ fn hashmap_branche_0_c_to_a() -> Vec<String>
 
 /////////////////////////////////////////
 
-pub fn run_b_usecase_recursive()
-{
+pub fn run_b_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(client, authenticator, server);
@@ -261,8 +246,7 @@ pub fn run_b_usecase_recursive()
 type QueueAEnd = RoleEnd;
 type QueueAVideo = RoleB<RoleB<RoleB<RoleC<RoleEnd>>>>;
 
-pub fn run_b_usecase_recursive_checker()
-{
+pub fn run_b_usecase_recursive_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             // Get the new sessionmpst of the passive roles

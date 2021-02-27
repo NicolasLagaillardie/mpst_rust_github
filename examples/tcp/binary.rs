@@ -11,14 +11,12 @@ type Data = ((), [u8; 65535]);
 /////////////////////////
 // A
 #[derive(Debug)]
-enum BinaryA
-{
+enum BinaryA {
     More(Recv<Data, Send<Data, RecursA>>),
     Done(End),
 }
 type RecursA = Recv<(BinaryA, [u8; 65535]), End>;
-fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>>
-{
+fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
     offer_tcp!(s, {
         BinaryA::Done(s) => {
 
@@ -43,8 +41,7 @@ type RecursB = <RecursA as Session>::Dual;
 fn binary_b_to_a(
     s: Send<Data, Recv<Data, RecursB>>,
     stream: &TcpStream,
-) -> Result<RecursB, Box<dyn Error>>
-{
+) -> Result<RecursB, Box<dyn Error>> {
     let s = send_tcp((), &[0_u8; 65535], s, stream)?;
 
     println!("Sending tcp");
@@ -56,8 +53,7 @@ fn binary_b_to_a(
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>>
-{
+fn all_binaries() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
     let mut streams = Vec::new();
@@ -129,7 +125,6 @@ fn all_binaries() -> Result<(), Box<dyn Error>>
 
 static SIZE: i64 = 1;
 
-fn main()
-{
+fn main() {
     all_binaries().unwrap();
 }

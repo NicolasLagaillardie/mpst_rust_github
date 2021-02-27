@@ -14,8 +14,7 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
     role: &str,
     branches: TupleHashmaps<BH1, BH2>, // branches_receivers, branches_sender
     seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     let head_session1 = get_head(&sessionmpst[0]);
     let head_session2 = get_head(&sessionmpst[1]);
     let head_stack = get_head(&sessionmpst[2]);
@@ -34,47 +33,39 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
         let receiver = get_name(&head_stack);
 
         let result = match sender.as_str() {
-            "A" => {
-                match_headers(
-                    ["B", head_session1.as_str(), "C", head_session2.as_str()],
-                    sessionmpst,
-                    [sender, receiver],
-                    [0, 0, 4, 4],
-                    role,
-                    branches,
-                    seen,
-                )?
-            }
-            "B" => {
-                match_headers(
-                    ["A", head_session1.as_str(), "C", head_session2.as_str()],
-                    sessionmpst,
-                    [sender, receiver],
-                    [0, 1, 4, 5],
-                    role,
-                    branches,
-                    seen,
-                )?
-            }
-            "C" => {
-                match_headers(
-                    ["A", head_session1.as_str(), "B", head_session2.as_str()],
-                    sessionmpst,
-                    [sender, receiver],
-                    [1, 1, 5, 5],
-                    role,
-                    branches,
-                    seen,
-                )?
-            }
-            "All" => {
-                match receiver.as_str() {
-                    "A" => match_recv_from_all("A", ["B", "C"], sessionmpst, role, branches, seen)?,
-                    "B" => match_recv_from_all("B", ["A", "C"], sessionmpst, role, branches, seen)?,
-                    "C" => match_recv_from_all("C", ["A", "B"], sessionmpst, role, branches, seen)?,
-                    _ => panic!("Wrong receiver on All, not recognized: {}", receiver),
-                }
-            }
+            "A" => match_headers(
+                ["B", head_session1.as_str(), "C", head_session2.as_str()],
+                sessionmpst,
+                [sender, receiver],
+                [0, 0, 4, 4],
+                role,
+                branches,
+                seen,
+            )?,
+            "B" => match_headers(
+                ["A", head_session1.as_str(), "C", head_session2.as_str()],
+                sessionmpst,
+                [sender, receiver],
+                [0, 1, 4, 5],
+                role,
+                branches,
+                seen,
+            )?,
+            "C" => match_headers(
+                ["A", head_session1.as_str(), "B", head_session2.as_str()],
+                sessionmpst,
+                [sender, receiver],
+                [1, 1, 5, 5],
+                role,
+                branches,
+                seen,
+            )?,
+            "All" => match receiver.as_str() {
+                "A" => match_recv_from_all("A", ["B", "C"], sessionmpst, role, branches, seen)?,
+                "B" => match_recv_from_all("B", ["A", "C"], sessionmpst, role, branches, seen)?,
+                "C" => match_recv_from_all("C", ["A", "B"], sessionmpst, role, branches, seen)?,
+                _ => panic!("Wrong receiver on All, not recognized: {}", receiver),
+            },
             _ => panic!("Wrong sender, not recognized: {}", sender),
         };
         Ok(result)
@@ -91,46 +82,41 @@ fn match_recv_from_all<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHas
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst match_recv_from_all: {:?}",
     // &sessionmpst);
 
     match role {
-        receiver if receiver == receivers[0] => {
-            checker_aux(
-                [
-                    sessionmpst[0],
-                    sessionmpst[1],
-                    &sessionmpst[2].replacen(
-                        &format!("RoleAllto{}", sender),
-                        &format!("Role{}", receiver),
-                        1,
-                    ),
-                    sessionmpst[3],
-                ],
-                role,
-                branches,
-                seen,
-            )
-        }
-        receiver if receiver == receivers[1] => {
-            checker_aux(
-                [
-                    sessionmpst[0],
-                    sessionmpst[1],
-                    &sessionmpst[2].replacen(
-                        &format!("RoleAllto{}", sender),
-                        &format!("Role{}", receiver),
-                        1,
-                    ),
-                    sessionmpst[3],
-                ],
-                role,
-                branches,
-                seen,
-            )
-        }
+        receiver if receiver == receivers[0] => checker_aux(
+            [
+                sessionmpst[0],
+                sessionmpst[1],
+                &sessionmpst[2].replacen(
+                    &format!("RoleAllto{}", sender),
+                    &format!("Role{}", receiver),
+                    1,
+                ),
+                sessionmpst[3],
+            ],
+            role,
+            branches,
+            seen,
+        ),
+        receiver if receiver == receivers[1] => checker_aux(
+            [
+                sessionmpst[0],
+                sessionmpst[1],
+                &sessionmpst[2].replacen(
+                    &format!("RoleAllto{}", sender),
+                    &format!("Role{}", receiver),
+                    1,
+                ),
+                sessionmpst[3],
+            ],
+            role,
+            branches,
+            seen,
+        ),
         _ => panic!("Wrong role, not recognized: {}", role),
     }
 }
@@ -144,8 +130,7 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!(
     //     "roles_and_sessions match_headers: {:?}",
     //     &roles_and_sessions
@@ -161,44 +146,40 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     // );
 
     match involved[1].as_str() {
-        h if h == roles_and_sessions[0] => {
-            match_full_types(
-                roles_and_sessions[1],
-                [
-                    &get_tail(&sessionmpst[0]),
-                    sessionmpst[1],
-                    &get_tail(&sessionmpst[2]),
-                    sessionmpst[3],
-                ],
-                involved,
-                [
-                    &get_head_payload(&sessionmpst[0]),
-                    &get_head_payload(&sessionmpst[1]),
-                ],
-                role,
-                branches,
-                seen,
-            )
-        }
-        h if h == roles_and_sessions[2] => {
-            match_full_types(
-                roles_and_sessions[3],
-                [
-                    sessionmpst[0],
-                    &get_tail(&sessionmpst[1]),
-                    &get_tail(&sessionmpst[2]),
-                    sessionmpst[3],
-                ],
-                involved,
-                [
-                    &get_head_payload(&sessionmpst[1]),
-                    &get_head_payload(&sessionmpst[0]),
-                ],
-                role,
-                branches,
-                seen,
-            )
-        }
+        h if h == roles_and_sessions[0] => match_full_types(
+            roles_and_sessions[1],
+            [
+                &get_tail(&sessionmpst[0]),
+                sessionmpst[1],
+                &get_tail(&sessionmpst[2]),
+                sessionmpst[3],
+            ],
+            involved,
+            [
+                &get_head_payload(&sessionmpst[0]),
+                &get_head_payload(&sessionmpst[1]),
+            ],
+            role,
+            branches,
+            seen,
+        ),
+        h if h == roles_and_sessions[2] => match_full_types(
+            roles_and_sessions[3],
+            [
+                sessionmpst[0],
+                &get_tail(&sessionmpst[1]),
+                &get_tail(&sessionmpst[2]),
+                sessionmpst[3],
+            ],
+            involved,
+            [
+                &get_head_payload(&sessionmpst[1]),
+                &get_head_payload(&sessionmpst[0]),
+            ],
+            role,
+            branches,
+            seen,
+        ),
         h if h == "All" => all_type(sessionmpst, index, role, branches, seen),
         _ => panic!("Wrong receiver, not recognized: {}", involved[1]),
     }
@@ -213,38 +194,33 @@ fn match_full_types<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst match_full_types: {:?}",
     // &sessionmpst); println!("head_session
     // match_full_types: {:?}", &head_session);
 
     match head_session {
         "Send" => send_type(sessionmpst, involved, payloads, role, branches, seen, " + "),
-        "Recv" => {
-            recv_type(
-                sessionmpst,
-                involved,
-                payloads[0],
-                role,
-                branches,
-                seen,
-                " & ",
-            )
-        }
+        "Recv" => recv_type(
+            sessionmpst,
+            involved,
+            payloads[0],
+            role,
+            branches,
+            seen,
+            " & ",
+        ),
         _ => panic!("Wrong session type, not recognized: {}", head_session),
     }
 }
 
 #[doc(hidden)]
-pub fn parse_type_of<T>(_: T) -> String
-{
+pub fn parse_type_of<T>(_: T) -> String {
     parse_type(type_name::<T>())
 }
 
 #[doc(hidden)]
-fn parse_type(s: &str) -> String
-{
+fn parse_type(s: &str) -> String {
     let mut result = s;
 
     // println!("Start result: {:?}", &result);
@@ -305,8 +281,7 @@ fn parse_type(s: &str) -> String
 }
 
 #[doc(hidden)]
-fn get_name(head: &str) -> String
-{
+fn get_name(head: &str) -> String {
     match head {
         "RoleAtoAll" => String::from("All"),
         "RoleBtoAll" => String::from("All"),
@@ -323,8 +298,7 @@ fn get_name(head: &str) -> String
 }
 
 #[doc(hidden)]
-fn get_head(s: &str) -> String
-{
+fn get_head(s: &str) -> String {
     // println!("get_head: {}", &s);
 
     let mut result: Vec<&str> = s.split('<').collect();
@@ -349,8 +323,7 @@ fn get_head(s: &str) -> String
 }
 
 #[doc(hidden)]
-fn get_head_payload(s: &str) -> String
-{
+fn get_head_payload(s: &str) -> String {
     // println!("get_head_payload: {}", &s);
 
     let payload = &get_two_tails(s)[0];
@@ -365,8 +338,7 @@ fn get_head_payload(s: &str) -> String
 }
 
 #[doc(hidden)]
-fn get_two_tails(s: &str) -> [String; 2]
-{
+fn get_two_tails(s: &str) -> [String; 2] {
     // println!("get_two_tails: {}", &s);
 
     let mut result: [String; 2] = Default::default();
@@ -418,8 +390,7 @@ fn get_two_tails(s: &str) -> [String; 2]
 }
 
 #[doc(hidden)]
-fn get_fields(s: &str) -> [String; 4]
-{
+fn get_fields(s: &str) -> [String; 4] {
     // println!("get_fields: {}", &s);
 
     let mut result: [String; 4] = Default::default();
@@ -459,8 +430,7 @@ fn get_fields(s: &str) -> [String; 4]
 }
 
 #[doc(hidden)]
-fn divide_either(s: &str) -> [String; 8]
-{
+fn divide_either(s: &str) -> [String; 8] {
     // println!("divide_either: {}", &s);
 
     let mut result: [String; 8] = Default::default();
@@ -501,15 +471,13 @@ fn divide_either(s: &str) -> [String; 8]
 }
 
 #[doc(hidden)]
-fn get_tail(s: &str) -> String
-{
+fn get_tail(s: &str) -> String {
     let result: Vec<&str> = s.split('<').collect();
     result[1..].join("<")
 }
 
 #[doc(hidden)]
-fn get_dual(s: &str) -> String
-{
+fn get_dual(s: &str) -> String {
     // println!("Dual: {}", &s);
 
     let result = &s.replace("Send<", "Revc<");
@@ -524,8 +492,7 @@ fn get_dual(s: &str) -> String
 }
 
 #[doc(hidden)]
-fn switch_role(s: &str, a: &str, b: &str) -> String
-{
+fn switch_role(s: &str, a: &str, b: &str) -> String {
     let result = &s.replace(&format!("Role{}<", a), &format!("Role{}<", "XxX"));
     let result = &result.replace(&format!("Role{}<", b), &format!("Role{}<", a));
     let result = &result.replace(&format!("Role{}<", "XxX"), &format!("Role{}<", a));
@@ -541,8 +508,7 @@ fn send_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
     symbol: &str,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst send_type: {:?}", &sessionmpst);
     // println!("payload send_type: {:?}", &payloads);
 
@@ -575,8 +541,7 @@ fn recv_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
     symbol: &str,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst recv_type: {:?}", &sessionmpst);
     // println!("payload recv_type: {:?}", &payload);
 
@@ -621,60 +586,41 @@ fn change_order(
     sessions_and_stack: &[String; 4],
     full_role: &str,
     previous_role: &str,
-) -> (String, String)
-{
+) -> (String, String) {
     match full_role {
-        "RoleA" => {
-            match previous_role {
-                "RoleB" => {
-                    (
-                        get_dual(&sessions_and_stack[0]),
-                        get_dual(&sessions_and_stack[1]),
-                    )
-                }
-                "RoleC" => {
-                    (
-                        get_dual(&sessions_and_stack[1]),
-                        get_dual(&sessions_and_stack[0]),
-                    )
-                }
-                _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-            }
-        }
-        "RoleB" => {
-            match previous_role {
-                "RoleA" => {
-                    (
-                        get_dual(&sessions_and_stack[0]),
-                        get_dual(&sessions_and_stack[1]),
-                    )
-                }
-                "RoleC" => {
-                    (
-                        get_dual(&sessions_and_stack[0]),
-                        get_dual(&sessions_and_stack[1]),
-                    )
-                }
-                _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-            }
-        }
-        "RoleC" => {
-            match previous_role {
-                "RoleA" => {
-                    (
-                        get_dual(&sessions_and_stack[0]),
-                        get_dual(&sessions_and_stack[1]),
-                    )
-                }
-                "RoleB" => {
-                    (
-                        get_dual(&sessions_and_stack[0]),
-                        get_dual(&sessions_and_stack[1]),
-                    )
-                }
-                _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-            }
-        }
+        "RoleA" => match previous_role {
+            "RoleB" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            "RoleC" => (
+                get_dual(&sessions_and_stack[1]),
+                get_dual(&sessions_and_stack[0]),
+            ),
+            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+        },
+        "RoleB" => match previous_role {
+            "RoleA" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            "RoleC" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+        },
+        "RoleC" => match previous_role {
+            "RoleA" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            "RoleB" => (
+                get_dual(&sessions_and_stack[0]),
+                get_dual(&sessions_and_stack[1]),
+            ),
+            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
+        },
         _ => panic!("Wrong roles {} / {}", previous_role, full_role),
     }
 }
@@ -686,8 +632,7 @@ fn recurs_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
     symbol: &str,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!("payload recurs_type: {:?}", &payloads);
     // println!(
     //     "branches_receivers recurs_type 1: {:?}",
@@ -717,30 +662,24 @@ fn recurs_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
                 let sessions_and_stack_1 = get_fields(&parse_type(&branches1[i]));
 
                 let new_sessions_and_stack = match role {
-                    "A" => {
-                        [
-                            sessions_and_stack_0[0].clone(),
-                            sessions_and_stack_1[0].clone(),
-                            sessions_and_stack_0[2].clone(),
-                            sessions_and_stack_0[3].clone(),
-                        ]
-                    }
-                    "B" => {
-                        [
-                            sessions_and_stack_0[0].clone(),
-                            sessions_and_stack_1[1].clone(),
-                            sessions_and_stack_0[2].clone(),
-                            sessions_and_stack_0[3].clone(),
-                        ]
-                    }
-                    "C" => {
-                        [
-                            sessions_and_stack_0[1].clone(),
-                            sessions_and_stack_1[1].clone(),
-                            sessions_and_stack_0[2].clone(),
-                            sessions_and_stack_0[3].clone(),
-                        ]
-                    }
+                    "A" => [
+                        sessions_and_stack_0[0].clone(),
+                        sessions_and_stack_1[0].clone(),
+                        sessions_and_stack_0[2].clone(),
+                        sessions_and_stack_0[3].clone(),
+                    ],
+                    "B" => [
+                        sessions_and_stack_0[0].clone(),
+                        sessions_and_stack_1[1].clone(),
+                        sessions_and_stack_0[2].clone(),
+                        sessions_and_stack_0[3].clone(),
+                    ],
+                    "C" => [
+                        sessions_and_stack_0[1].clone(),
+                        sessions_and_stack_1[1].clone(),
+                        sessions_and_stack_0[2].clone(),
+                        sessions_and_stack_0[3].clone(),
+                    ],
                     _ => panic!("Wrong role: {}", role),
                 };
 
@@ -837,8 +776,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>>
-{
+) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst all_type: {:?}", &sessionmpst);
 
     let payload_1 = get_head_payload(&sessionmpst[0]);
@@ -955,23 +893,20 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
 //////////////////////////////////
 
 #[cfg(test)]
-mod tests
-{
+mod tests {
     // Note this useful idiom: importing names from outer (for
     // mod tests) scope.
     use super::*;
 
     #[test]
     #[should_panic]
-    fn get_head_panic()
-    {
+    fn get_head_panic() {
         get_name("");
     }
 
     #[test]
     #[should_panic]
-    fn match_full_types_panic()
-    {
+    fn match_full_types_panic() {
         let _ = match_full_types(
             "",
             ["", "", "", ""],
@@ -985,8 +920,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn match_headers_panic()
-    {
+    fn match_headers_panic() {
         let _ = match_headers(
             ["", "", "", ""],
             ["", "", "", ""],
@@ -999,15 +933,13 @@ mod tests
     }
 
     #[test]
-    fn get_head_either()
-    {
+    fn get_head_either() {
         let test = "Either<Left, Right>";
         assert_eq!(get_head(test), String::from(test));
     }
 
     #[test]
-    fn send_type_x()
-    {
+    fn send_type_x() {
         let test = send_type(
             ["", "", "", ""],
             [String::from(""), String::from("")],
@@ -1024,8 +956,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn recurs_type_panic()
-    {
+    fn recurs_type_panic() {
         let _ = recurs_type(
             ["", ""],
             "",
@@ -1037,8 +968,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn match_recv_from_all_panic_at_checker_aux_0()
-    {
+    fn match_recv_from_all_panic_at_checker_aux_0() {
         let _ = match_recv_from_all(
             "",
             ["", ""],
@@ -1051,8 +981,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn match_recv_from_all_panic_at_checker_aux_1()
-    {
+    fn match_recv_from_all_panic_at_checker_aux_1() {
         let _ = match_recv_from_all(
             "",
             ["", ""],
@@ -1065,8 +994,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn match_recv_from_all_panic()
-    {
+    fn match_recv_from_all_panic() {
         let _ = match_recv_from_all(
             "",
             ["", ""],
@@ -1079,8 +1007,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn all_type_panic()
-    {
+    fn all_type_panic() {
         let _ = all_type(
             ["", "", "", ""],
             [0, 0, 0, 0],
@@ -1092,8 +1019,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn checker_aux_panic()
-    {
+    fn checker_aux_panic() {
         let _ = checker_aux(
             [
                 "End",
@@ -1109,8 +1035,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn checker_aux_panic_a()
-    {
+    fn checker_aux_panic_a() {
         let _ = checker_aux(
             [
                 "End",
@@ -1126,8 +1051,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn checker_aux_panic_b()
-    {
+    fn checker_aux_panic_b() {
         let _ = checker_aux(
             [
                 "End",
@@ -1143,8 +1067,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn checker_aux_panic_c()
-    {
+    fn checker_aux_panic_c() {
         let _ = checker_aux(
             [
                 "End",
@@ -1159,8 +1082,7 @@ mod tests
     }
 
     #[test]
-    fn parse_type_test()
-    {
+    fn parse_type_test() {
         let test = parse_type("&mpstthree::binary::Recv<i32, mpstthree::binary::Send<i32, mpstthree::binary::Recv<06_a_usecase_recursive::Branche0CtoB<i32>, mpstthree::binary::End>>>");
 
         assert_eq!(
@@ -1170,8 +1092,7 @@ mod tests
     }
 
     #[test]
-    fn change_order_test()
-    {
+    fn change_order_test() {
         let test = change_order(
             &[
                 String::from("Send<End>"),
@@ -1269,8 +1190,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn change_order_panic_a_none()
-    {
+    fn change_order_panic_a_none() {
         change_order(
             &[
                 String::from("Send<End>"),
@@ -1285,8 +1205,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn change_order_panic_b_none()
-    {
+    fn change_order_panic_b_none() {
         change_order(
             &[
                 String::from("Send<End>"),
@@ -1301,8 +1220,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn change_order_panic_c_none()
-    {
+    fn change_order_panic_c_none() {
         change_order(
             &[
                 String::from("Send<End>"),
@@ -1317,8 +1235,7 @@ mod tests
 
     #[test]
     #[should_panic]
-    fn change_order_panic_none_a()
-    {
+    fn change_order_panic_none_a() {
         change_order(
             &[
                 String::from("Send<End>"),

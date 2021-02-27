@@ -1,9 +1,9 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    fork_mpst_multi, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
+    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
-    offer_mpst,
+    fork_mpst_multi, offer_mpst,
 };
 
 use rand::{random, thread_rng, Rng};
@@ -95,7 +95,7 @@ create_recv_mpst_session_bundle!(
 close_mpst!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst,  SessionMpstFour, 4);
+fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);
 
 // Names
 type NameApi = Api<RoleEnd>;
@@ -107,8 +107,7 @@ type NameStorage = Storage<RoleEnd>;
 type RecvStorageChoice = Storage<RoleEnd>;
 
 // Api
-enum Branching0fromStoA<N: marker::Send>
-{
+enum Branching0fromStoA<N: marker::Send> {
     Up(
         SessionMpstFour<
             Recv<N, End>,
@@ -130,8 +129,7 @@ enum Branching0fromStoA<N: marker::Send>
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
 type Recurs0fromAtoS<N> = Recv<Branching0fromStoA<N>, End>;
-enum Branching1fromStoA<N: marker::Send>
-{
+enum Branching1fromStoA<N: marker::Send> {
     Request(
         SessionMpstFour<End, End, Recv<N, Recurs0fromAtoS<N>>, Storage<RecvStorageChoice>, NameApi>,
     ),
@@ -147,8 +145,7 @@ enum Branching1fromStoA<N: marker::Send>
 }
 type Recurs1fromAtoS<N> = Recv<Branching1fromStoA<N>, End>;
 // Controller
-enum Branching0fromStoC<N: marker::Send>
-{
+enum Branching0fromStoC<N: marker::Send> {
     Up(
         SessionMpstFour<
             Send<N, End>,
@@ -170,8 +167,7 @@ enum Branching0fromStoC<N: marker::Send>
     Close(SessionMpstFour<End, End, End, RoleEnd, NameController>),
 }
 type Recurs0fromCtoS<N> = Recv<Branching0fromStoC<N>, End>;
-enum Branching1fromStoC<N: marker::Send>
-{
+enum Branching1fromStoC<N: marker::Send> {
     Up(
         SessionMpstFour<
             End,
@@ -193,15 +189,13 @@ enum Branching1fromStoC<N: marker::Send>
 }
 type Recurs1fromCtoS<N> = Recv<Branching1fromStoC<N>, End>;
 // Logs
-enum Branching0fromStoL<N: marker::Send>
-{
+enum Branching0fromStoL<N: marker::Send> {
     Up(SessionMpstFour<End, End, Recurs1fromLtoS<N>, RecvStorageChoice, NameLogs>),
     Down(SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameLogs>),
 }
 type Recurs0fromLtoS<N> = Recv<Branching0fromStoL<N>, End>;
-enum Branching1fromStoL<N: marker::Send>
-{
+enum Branching1fromStoL<N: marker::Send> {
     Up(SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>),
     Down(SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>),
 }
@@ -258,8 +252,7 @@ type EndpointStorageInit<N> = SessionMpstFour<
 
 /////////////////////////
 
-fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_response_api_from_storage, {
         Branching0fromStoA::Up(s) => {
 
@@ -289,8 +282,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn nested_api(s: NestedApi<i32>) -> Result<(), Box<dyn Error>>
-{
+fn nested_api(s: NestedApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_response_api_from_storage, {
         Branching1fromStoA::Request(s) => {
 
@@ -311,8 +303,7 @@ fn nested_api(s: NestedApi<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
     println!("Send start to Storage: {}", 0);
 
     let s = send_start_controller_to_storage(0, s);
@@ -320,8 +311,7 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
     recurs_controller(s)
 }
 
-fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>>
-{
+fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_new_status_controller_from_storage, {
         Branching0fromStoC::Up(s) => {
 
@@ -360,8 +350,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn nested_controller(s: NestedController<i32>) -> Result<(), Box<dyn Error>>
-{
+fn nested_controller(s: NestedController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_new_status_controller_from_storage, {
         Branching1fromStoC::Up(s) => {
 
@@ -392,8 +381,7 @@ fn nested_controller(s: NestedController<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_logs_from_storage, {
         Branching0fromStoL::Up(s) => {
             nested_logs(s)
@@ -407,8 +395,7 @@ fn endpoint_logs(s: EndpointLogs<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn nested_logs(s: NestedLogs<i32>) -> Result<(), Box<dyn Error>>
-{
+fn nested_logs(s: NestedLogs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_logs_from_storage, {
         Branching1fromStoL::Up(s) => {
             endpoint_logs(s)
@@ -419,8 +406,7 @@ fn nested_logs(s: NestedLogs<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>> {
     let (status, s) = recv_start_storage_from_controller(s)?;
     recurs_storage(s, status, 5, 0)
 }
@@ -430,8 +416,7 @@ fn recurs_storage(
     status: i32,
     loops: i32,
     payload: i32,
-) -> Result<(), Box<dyn Error>>
-{
+) -> Result<(), Box<dyn Error>> {
     match status {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -543,8 +528,7 @@ fn nested_storage(
     status: i32,
     loops: i32,
     payload: i32,
-) -> Result<(), Box<dyn Error>>
-{
+) -> Result<(), Box<dyn Error>> {
     match status {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -620,8 +604,7 @@ fn nested_storage(
 
 /////////////////////////
 
-fn main()
-{
+fn main() {
     println!("Starting protocol");
 
     let (thread_api, thread_controller, thread_logs, thread_storage) = fork_mpst(

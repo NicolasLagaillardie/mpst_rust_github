@@ -5,10 +5,10 @@ use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
-    fork_mpst_multi, close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
+    close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
     create_choose_type_multi, create_multiple_normal_role, create_offer_mpst_session_multi,
     create_offer_type_multi, create_recv_mpst_all_session, create_recv_mpst_session,
-    create_send_mpst_session, create_sessionmpst,
+    create_send_mpst_session, create_sessionmpst, fork_mpst_multi,
 };
 use std::error::Error;
 
@@ -97,7 +97,7 @@ create_choose_mpst_session_multi_both!(
     3
 );
 
-fork_mpst_multi!(fork_mpst,  SessionMpst, 3);
+fork_mpst_multi!(fork_mpst, SessionMpst, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -191,8 +191,7 @@ type OfferB<N> = OfferMpstMultiThree<
 type EndpointBFull<N> = SessionMpst<End, OfferB<N>, QueueBFull, NameB>;
 
 /// Functions related to endpoints
-fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_b_to_d(
         s,
         |s: EndpointBVideo<i32>| {
@@ -205,8 +204,7 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>>
     )
 }
 
-fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_a_to_d(s)?;
     let s = send_mpst_a_to_d(id + 1, s);
 
@@ -227,8 +225,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>>
     )
 }
 
-fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
@@ -262,8 +259,7 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
     close_mpst_multi(s)
 }
 
-fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
@@ -294,8 +290,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>>
 
 ////////////////////////////////////////
 
-pub fn test_new_choice_full()
-{
+pub fn test_new_choice_full() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
@@ -309,8 +304,7 @@ pub fn test_new_choice_full()
     .is_ok());
 }
 
-pub fn test_new_choice_close()
-{
+pub fn test_new_choice_close() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test end branch.
         {

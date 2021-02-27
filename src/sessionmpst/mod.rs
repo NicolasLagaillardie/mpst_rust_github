@@ -45,8 +45,7 @@ use crate::role::Role;
 /// ```
 #[must_use]
 #[derive(Debug)]
-pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role>
-{
+pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role> {
     pub session1: S1,
     pub session2: S2,
     pub stack: R,
@@ -54,8 +53,7 @@ pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role>
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N>
-{
+impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N> {
     type Dual = SessionMpst<
         <S1 as Session>::Dual,
         <S2 as Session>::Dual,
@@ -64,8 +62,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
     >;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (sender_one, receiver_one) = S1::new();
         let (sender_two, receiver_two) = S2::new();
 
@@ -89,8 +86,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         format!(
             "{} + {} + {} + {}",
             S1::head_str(),
@@ -101,8 +97,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         format!(
             "{} + {} + {} + {}",
             S1::tail_str(),

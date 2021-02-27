@@ -15,19 +15,16 @@ use crossbeam_channel::{bounded, Sender};
 /// [`mpstthree::binary::Session`]: ../binary/trait.Session.
 /// html
 #[derive(Debug)]
-pub struct RoleBtoAll<R1: Role, R2: Role>
-{
+pub struct RoleBtoAll<R1: Role, R2: Role> {
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
 }
 
-impl<R1: Role, R2: Role> Role for RoleBtoAll<R1, R2>
-{
+impl<R1: Role, R2: Role> Role for RoleBtoAll<R1, R2> {
     type Dual = RoleAlltoB<R1::Dual, R2::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (sender_normal_1, _) = bounded::<R1>(1);
         let (sender_normal_2, _) = bounded::<R2>(1);
         let (sender_dual_1, _) = bounded::<R1::Dual>(1);
@@ -46,14 +43,12 @@ impl<R1: Role, R2: Role> Role for RoleBtoAll<R1, R2>
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         String::from("RoleBtoAll")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         format!(
             "{}<{}> + {}<{}>",
             R1::head_str(),

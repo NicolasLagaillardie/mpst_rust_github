@@ -12,7 +12,7 @@ pub mod sessionmpst;
 /// and [`mpstthree::fork_mpst_multi`](../macro. fork_mpst_multi.html)
 /// functions to be used with more
 /// than 3 participants.  
-/// 
+///
 ///  # Arguments
 ///  
 ///  * The name of the new *close* function

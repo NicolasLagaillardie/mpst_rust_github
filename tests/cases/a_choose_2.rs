@@ -108,8 +108,7 @@ type OfferC<N> =
 type EndpointChoiceC<N> = SessionMpst<End, OfferC<N>, QueueFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
-fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_a_from_b(
         s,
         |s: EndpointAAdd<i32>| {
@@ -131,8 +130,7 @@ fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>>
     )
 }
 
-fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     let s = choose_left_mpst_session_b_to_all::<
         CtoAAdd<i32>,
         CtoANeg<i32>,
@@ -151,8 +149,7 @@ fn simple_store_client_left(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error
     close_mpst(s)
 }
 
-fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     let s = choose_right_mpst_session_b_to_all::<
         CtoAAdd<i32>,
         CtoANeg<i32>,
@@ -171,8 +168,7 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
     close_mpst(s)
 }
 
-fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_c_from_b(
         s,
         |s: EndpointCAdd<i32>| {
@@ -194,8 +190,7 @@ fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>>
 
 /////////////////////////////////////////
 
-pub fn double_choice()
-{
+pub fn double_choice() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Test the left branch.
         {
@@ -228,8 +223,7 @@ pub fn double_choice()
     .is_ok());
 }
 
-pub fn double_choice_checker()
-{
+pub fn double_choice_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();

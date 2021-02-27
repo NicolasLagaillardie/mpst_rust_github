@@ -7,9 +7,9 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    fork_mpst_multi, choose, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst, offer,
-    offer_mpst,
+    choose, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
+    fork_mpst_multi, offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -179,7 +179,7 @@ create_recv_mpst_session_bundle!(
 close_mpst!(close_mpst_multi, SessionMpstSeven, 7);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst,  SessionMpstSeven, 7);
+fork_mpst_multi!(fork_mpst, SessionMpstSeven, 7);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -203,8 +203,7 @@ type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 type R2G<R> = RoleG<RoleG<R>>;
 // A
-enum Branching0fromGtoA
-{
+enum Branching0fromGtoA {
     More(
         SessionMpstSeven<
             RS,
@@ -221,8 +220,7 @@ enum Branching0fromGtoA
 }
 type RecursAtoG = Recv<Branching0fromGtoA, End>;
 // B
-enum Branching0fromGtoB
-{
+enum Branching0fromGtoB {
     More(
         SessionMpstSeven<
             SR,
@@ -239,8 +237,7 @@ enum Branching0fromGtoB
 }
 type RecursBtoG = Recv<Branching0fromGtoB, End>;
 // C
-enum Branching0fromGtoC
-{
+enum Branching0fromGtoC {
     More(
         SessionMpstSeven<
             SR,
@@ -257,8 +254,7 @@ enum Branching0fromGtoC
 }
 type RecursCtoG = Recv<Branching0fromGtoC, End>;
 // D
-enum Branching0fromGtoD
-{
+enum Branching0fromGtoD {
     More(
         SessionMpstSeven<
             SR,
@@ -275,8 +271,7 @@ enum Branching0fromGtoD
 }
 type RecursDtoG = Recv<Branching0fromGtoD, End>;
 // E
-enum Branching0fromGtoE
-{
+enum Branching0fromGtoE {
     More(
         SessionMpstSeven<
             SR,
@@ -293,8 +288,7 @@ enum Branching0fromGtoE
 }
 type RecursEtoG = Recv<Branching0fromGtoE, End>;
 // F
-enum Branching0fromGtoF
-{
+enum Branching0fromGtoF {
     More(
         SessionMpstSeven<
             SR,
@@ -337,8 +331,7 @@ type EndpointG = SessionMpstSeven<
 >;
 
 // Functions
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_g, {
         Branching0fromGtoA::Done(s) => {
             close_mpst_multi(s)
@@ -361,8 +354,7 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_g, {
         Branching0fromGtoB::Done(s) => {
             close_mpst_multi(s)
@@ -385,8 +377,7 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_g, {
         Branching0fromGtoC::Done(s) => {
             close_mpst_multi(s)
@@ -409,8 +400,7 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_g, {
         Branching0fromGtoD::Done(s) => {
             close_mpst_multi(s)
@@ -433,8 +423,7 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_g, {
         Branching0fromGtoE::Done(s) => {
             close_mpst_multi(s)
@@ -457,8 +446,7 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_g, {
         Branching0fromGtoF::Done(s) => {
             close_mpst_multi(s)
@@ -481,13 +469,11 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     recurs_g(s, SIZE)
 }
 
-fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>>
-{
+fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -563,8 +549,7 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>>
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>>
-{
+fn all_mpst() -> Result<(), Box<dyn Error>> {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_b),
@@ -588,14 +573,12 @@ fn all_mpst() -> Result<(), Box<dyn Error>>
 
 /////////////////////////
 // A
-enum BinaryA
-{
+enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),
     Done(End),
 }
 type RecursA = Recv<BinaryA, End>;
-fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>>
-{
+fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>> {
     offer!(s, {
         BinaryA::Done(s) => {
             close(s)
@@ -610,15 +593,13 @@ fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>>
 
 // B
 type RecursB = <RecursA as Session>::Dual;
-fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Error>>
-{
+fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Error>> {
     let s = send((), s);
     let (_, s) = recv(s)?;
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>>
-{
+fn all_binaries() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -660,8 +641,7 @@ type ReceivingSending = crossbeam_channel::Receiver<Sending>;
 type Receiving = crossbeam_channel::Receiver<()>;
 type Sending = crossbeam_channel::Sender<()>;
 
-fn all_crossbeam() -> Result<(), Box<dyn Error>>
-{
+fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
     for _ in 0..21 {
@@ -727,32 +707,28 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>>
 
 static SIZE: i64 = 0;
 
-fn long_simple_protocol_mpst(c: &mut Criterion)
-{
+fn long_simple_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("long seven empty simple protocol MPST {}", SIZE),
         |b| b.iter(|| all_mpst()),
     );
 }
 
-fn long_simple_protocol_binary(c: &mut Criterion)
-{
+fn long_simple_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("long seven empty simple protocol binary {}", SIZE),
         |b| b.iter(|| all_binaries()),
     );
 }
 
-fn long_simple_protocol_crossbeam(c: &mut Criterion)
-{
+fn long_simple_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("long seven empty simple protocol crossbeam {}", SIZE),
         |b| b.iter(|| all_crossbeam()),
     );
 }
 
-fn long_warmup() -> Criterion
-{
+fn long_warmup() -> Criterion {
     Criterion::default().measurement_time(Duration::new(20, 0))
 }
 

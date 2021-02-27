@@ -43,8 +43,7 @@ type BYEAtoB = Recv<(), End>;
 type OrderingA14Full = RoleB<RoleEnd>;
 type EndpointA15 = SessionMpst<BYEAtoB, End, OrderingA14Full, RoleA<RoleEnd>>;
 
-enum Branches0AtoC<N: marker::Send>
-{
+enum Branches0AtoC<N: marker::Send> {
     ADD(EndpointA13<N>),
     BYE(EndpointA15),
 }
@@ -68,8 +67,7 @@ type BYEBtoC = Recv<(), End>;
 type OrderingB16Full = RoleC<RoleA<RoleEnd>>;
 type EndpointB17 = SessionMpst<BYEBtoA, BYEBtoC, OrderingB16Full, RoleB<RoleEnd>>;
 
-enum Branches0BtoC<N: marker::Send>
-{
+enum Branches0BtoC<N: marker::Send> {
     ADD(EndpointB15<N>),
     BYE(EndpointB17),
 }
@@ -98,8 +96,7 @@ type EndpointC2<N> =
 ///////////////////////////////////////// END
 
 /// Functions related to endpoints
-fn server(s: EndpointB20<i32>) -> Result<(), Box<dyn Error>>
-{
+fn server(s: EndpointB20<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {
             let (_, s) = recv_mpst_b_to_c(s)?;
@@ -114,15 +111,13 @@ fn server(s: EndpointB20<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn authenticator(s: EndpointA18<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator(s: EndpointA18<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_c(s)?;
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointA19<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator_recurs(s: EndpointA19<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_c!(s, {
         Branches0AtoC::BYE(s) => {
             let (_, s) = recv_mpst_a_to_b(s)?;
@@ -135,15 +130,13 @@ fn authenticator_recurs(s: EndpointA19<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(0, s);
 
     client_recurs(s)
 }
 
-fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let x: u32 = rng.gen_range(0..2);
 
@@ -160,8 +153,7 @@ fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>>
 
 /////////////////////////////////////////
 
-pub fn top_down_approach()
-{
+pub fn top_down_approach() {
     for _i in 0..200 {
         assert!(|| -> Result<(), Box<dyn Error>> {
             {

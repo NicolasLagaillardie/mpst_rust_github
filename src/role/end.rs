@@ -12,19 +12,16 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// type Close = End;
 /// ```
 #[derive(Debug)]
-pub struct RoleEnd
-{
+pub struct RoleEnd {
     pub sender: Sender<()>,
     pub receiver: Receiver<()>,
 }
 
-impl crate::role::Role for RoleEnd
-{
+impl crate::role::Role for RoleEnd {
     type Dual = RoleEnd;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
 
@@ -41,14 +38,12 @@ impl crate::role::Role for RoleEnd
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         String::from("RoleEnd")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         String::from("")
     }
 }

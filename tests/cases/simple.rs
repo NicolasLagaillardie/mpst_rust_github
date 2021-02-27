@@ -45,8 +45,7 @@ type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
 type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
 
 /// Single test for A
-fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_to_c(s)?;
 
@@ -56,8 +55,7 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
 }
 
 /// Single test for B
-fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = recv_mpst_b_to_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
@@ -67,8 +65,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>>
 }
 
 /// Single test for C
-fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_to_b(s)?;
 
@@ -79,8 +76,7 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
 
 /////////////////////////////////////////
 
-pub fn simple_triple_endpoints()
-{
+pub fn simple_triple_endpoints() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(
@@ -98,8 +94,7 @@ pub fn simple_triple_endpoints()
     .is_ok());
 }
 
-pub fn simple_triple_endpoints_checker()
-{
+pub fn simple_triple_endpoints_checker() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let s = RandomState::new();

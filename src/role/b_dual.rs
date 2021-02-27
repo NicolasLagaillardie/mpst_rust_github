@@ -13,18 +13,15 @@ use crossbeam_channel::{bounded, Sender};
 /// [`mpstthree::sessionmpst::SessionMpst`]:
 /// ../sessionmpst/struct.SessionMpst.html
 #[derive(Debug)]
-pub struct RoleBDual<R: Role>
-{
+pub struct RoleBDual<R: Role> {
     pub sender: Sender<R::Dual>,
 }
 
-impl<R: Role> Role for RoleBDual<R>
-{
+impl<R: Role> Role for RoleBDual<R> {
     type Dual = RoleB<R::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (sender_normal, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
 
@@ -39,14 +36,12 @@ impl<R: Role> Role for RoleBDual<R>
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         String::from("RoleBDual")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }

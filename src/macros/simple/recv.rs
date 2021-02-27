@@ -27,7 +27,7 @@
 /// create_recv_mpst_session_1!(recv_mpst_c_to_a, RoleA,
 /// next_a, RoleC);
 /// ```
-/// 
+///
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_recv_mpst_session_1 {
@@ -62,7 +62,7 @@ macro_rules! create_recv_mpst_session_1 {
 ///  create_recv_mpst_session_2!(recv_mpst_a_to_c, RoleC,
 /// next_c, RoleA);
 /// ```
-/// 
+///
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_recv_mpst_session_2 {
@@ -101,7 +101,7 @@ macro_rules! create_recv_mpst_session_2 {
 ///  create_recv_mpst_all_session_1!(recv_mpst_c_all_to_a,
 /// RoleAlltoA, next_all_to_a, RoleC);
 /// ```
-/// 
+///
 ///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_1 {
@@ -146,7 +146,7 @@ macro_rules! create_recv_mpst_all_session_1 {
 ///  create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c,
 /// RoleAlltoC, next_all_to_c, RoleA);
 /// ```
-/// 
+///
 ///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_2 {

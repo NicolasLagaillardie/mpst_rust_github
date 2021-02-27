@@ -4,8 +4,7 @@ mod scribble;
 mod unit;
 
 #[test]
-fn unit_tests()
-{
+fn unit_tests() {
     // Checker
     unit::checker::test_checker();
 
@@ -28,21 +27,18 @@ fn unit_tests()
 
 #[test]
 #[should_panic]
-fn unit_tests_panic_test_checker_panic_stack()
-{
+fn unit_tests_panic_test_checker_panic_stack() {
     unit::checker_panic::test_checker_panic_stack();
 }
 
 #[test]
 #[should_panic]
-fn unit_tests_panic_test_checker_panic_name()
-{
+fn unit_tests_panic_test_checker_panic_name() {
     unit::checker_panic::test_checker_panic_name();
 }
 
 #[test]
-fn cases_tests_binary()
-{
+fn cases_tests_binary() {
     // Binary
     cases::binary::ping_works();
     cases::binary::head_str();
@@ -61,8 +57,7 @@ fn cases_tests_binary()
 }
 
 #[test]
-fn cases_tests_mpst_simple()
-{
+fn cases_tests_mpst_simple() {
     // Simple
     cases::simple::simple_triple_endpoints();
     cases::simple::simple_triple_endpoints_checker();
@@ -115,8 +110,7 @@ fn cases_tests_mpst_simple()
 }
 
 #[test]
-fn cases_tests_mpst_macro()
-{
+fn cases_tests_mpst_macro() {
     // Macro basics
     cases::macro_basics::basic_macros_send();
     cases::macro_basics::basic_macros_recv();
@@ -143,15 +137,13 @@ fn cases_tests_mpst_macro()
 }
 
 #[test]
-fn scribble_tests()
-{
+fn scribble_tests() {
     scribble::top_down::top_down_approach();
     scribble::top_down_recursive::top_down_approach();
 }
 
 #[test]
-fn canceling()
-{
+fn canceling() {
     cancel::cancel_1::main();
     cancel::cancel_2::main();
     cancel::cancel_3::main();
@@ -163,8 +155,7 @@ fn canceling()
 }
 
 #[test]
-fn tests()
-{
+fn tests() {
     let t = trybuild::TestCases::new();
     // Infinite types
     t.pass("tests/infinite_type/work.rs");

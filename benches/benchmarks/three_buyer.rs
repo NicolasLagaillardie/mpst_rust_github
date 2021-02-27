@@ -5,9 +5,9 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    fork_mpst_multi, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
+    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
-    offer_mpst,
+    fork_mpst_multi, offer_mpst,
 };
 
 use rand::{random, thread_rng, Rng};
@@ -138,7 +138,7 @@ create_recv_mpst_session_bundle!(
 close_mpst!(close_mpst_multi, SessionMpstThree, 3);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst,  SessionMpstThree, 3);
+fork_mpst_multi!(fork_mpst, SessionMpstThree, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -151,14 +151,12 @@ type Choose0fromCtoA<N> = Send<Branching0fromCtoA<N>, End>;
 type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
 
 // A
-enum Branching0fromCtoA<N: marker::Send>
-{
+enum Branching0fromCtoA<N: marker::Send> {
     Accept(SessionMpstThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
     Quit(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
 // S
-enum Branching0fromCtoS<N: marker::Send>
-{
+enum Branching0fromCtoS<N: marker::Send> {
     Accept(SessionMpstThree<End, Recv<N, Send<N, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
     Quit(SessionMpstThree<End, End, RoleEnd, NameS>),
 }
@@ -187,8 +185,7 @@ type EndpointS<N> = SessionMpstThree<
 >;
 
 // Functions
-fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_s(random(), s);
     let (_empty2, s) = recv_mpst_a_to_s(s)?;
     let s = send_mpst_a_to_c(random(), s);
@@ -203,8 +200,7 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let (_empty3, s) = recv_mpst_c_to_s(s)?;
     let (_empty4, s) = recv_mpst_c_to_a(s)?;
 
@@ -248,8 +244,7 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
     }
 }
 
-fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let (_empty1, s) = recv_mpst_s_to_a(s)?;
     let s = send_mpst_s_to_a(random(), s);
     let s = send_mpst_s_to_c(random(), s);
@@ -265,8 +260,7 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>>
-{
+fn all_mpst() -> Result<(), Box<dyn Error>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_c),
@@ -282,13 +276,11 @@ fn all_mpst() -> Result<(), Box<dyn Error>>
 
 /////////////////////////
 
-fn three_buyer_mpst(c: &mut Criterion)
-{
+fn three_buyer_mpst(c: &mut Criterion) {
     c.bench_function(&format!("Three buyer MPST"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion
-{
+fn long_warmup() -> Criterion {
     Criterion::default().measurement_time(Duration::new(30, 0))
 }
 

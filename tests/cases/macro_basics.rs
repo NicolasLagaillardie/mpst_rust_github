@@ -41,39 +41,33 @@ create_recv_mpst_session_1!(recv_mpst_d_to_a, RoleA, next_a, RoleD);
 create_recv_mpst_session_2!(recv_mpst_a_to_d, RoleD, next_d, RoleA);
 
 // The functions for the basic exchanges
-fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>>
-{
+fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_d(0, s);
     close_mpst(s)
 }
 
-fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>>
-{
+fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_d_to_a(0, s);
     close_mpst(s)
 }
 
-fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>>
-{
+fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_d(s)?;
     close_mpst(s)
 }
 
-fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>>
-{
+fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_to_a(s)?;
     close_mpst(s)
 }
 
-fn pawn(s: Pawn) -> Result<(), Box<dyn Error>>
-{
+fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
 /////////////////////////////////////////
 
-pub fn basic_macros_send()
-{
+pub fn basic_macros_send() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(send_a_to_d, pawn, recv_d_to_a);
@@ -87,8 +81,7 @@ pub fn basic_macros_send()
     .is_ok());
 }
 
-pub fn basic_macros_recv()
-{
+pub fn basic_macros_recv() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(recv_a_to_d, pawn, send_d_to_a);

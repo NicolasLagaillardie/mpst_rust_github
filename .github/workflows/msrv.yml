@@ -57,8 +57,7 @@ jobs:
     strategy:
       matrix:
         rust:
-          # - stable
-          - nightly
+          - stable
           - 1.31.0
     steps:
       - name: Checkout sources
@@ -67,8 +66,7 @@ jobs:
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
-          # toolchain: ${{ matrix.rust }}
+          toolchain: ${{ matrix.rust }}
           override: true
 
       - name: Install rustfmt

@@ -41,8 +41,7 @@ type BYEAtoB = Recv<(), End>;
 type OrderingA8Full = RoleB<RoleEnd>;
 type EndpointA9 = SessionMpst<BYEAtoB, End, OrderingA8Full, RoleA<RoleEnd>>;
 
-enum Branches0AtoC<N: marker::Send>
-{
+enum Branches0AtoC<N: marker::Send> {
     ADD(EndpointA7<N>),
     BYE(EndpointA9),
 }
@@ -65,8 +64,7 @@ type BYEBtoC = Recv<(), End>;
 type OrderingB10Full = RoleC<RoleA<RoleEnd>>;
 type EndpointB11 = SessionMpst<BYEBtoA, BYEBtoC, OrderingB10Full, RoleB<RoleEnd>>;
 
-enum Branches0BtoC<N: marker::Send>
-{
+enum Branches0BtoC<N: marker::Send> {
     ADD(EndpointB9<N>),
     BYE(EndpointB11),
 }
@@ -85,8 +83,7 @@ type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full,
 ///////////////////////////////////////// END
 
 /// Functions related to endpoints
-fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>>
-{
+fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {
             let (x, s) = recv_mpst_b_to_c(s)?;
@@ -104,8 +101,7 @@ fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_to_c(s)?;
 
     offer_mpst_a_to_c!(s, {
@@ -123,8 +119,7 @@ fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let x: u32 = rng.gen_range(0..2);
 
@@ -143,8 +138,7 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>>
 
 /////////////////////////////////////////
 
-pub fn top_down_approach()
-{
+pub fn top_down_approach() {
     for _i in 0..200 {
         assert!(|| -> Result<(), Box<dyn Error>> {
             {

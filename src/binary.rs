@@ -44,8 +44,7 @@ where
 }
 
 #[derive(Debug)]
-pub enum Signal
-{
+pub enum Signal {
     Stop,
     Cancel,
 }
@@ -53,15 +52,13 @@ pub enum Signal
 /// End of communication.
 #[must_use]
 #[derive(Debug)]
-pub struct End
-{
+pub struct End {
     pub sender: Sender<Signal>,
     pub receiver: Receiver<Signal>,
 }
 
 /// Trait for session types. Provides duality.
-pub trait Session: marker::Sized + marker::Send
-{
+pub trait Session: marker::Sized + marker::Send {
     /// The session type dual to `Self`.
     type Dual: Session<Dual = Self>;
 
@@ -83,13 +80,11 @@ pub trait Session: marker::Sized + marker::Send
     fn tail_str() -> String;
 }
 
-impl Session for End
-{
+impl Session for End {
     type Dual = End;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<Signal>(1);
         let (sender2, receiver2) = bounded::<Signal>(1);
 
@@ -106,62 +101,52 @@ impl Session for End
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         String::from("End")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         String::from("")
     }
 }
 
-impl<T: marker::Send, S: Session> Session for Send<T, S>
-{
+impl<T: marker::Send, S: Session> Session for Send<T, S> {
     type Dual = Recv<T, S::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
         (Send { channel: sender }, Recv { channel: receiver })
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         String::from("Send")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 }
 
-impl<T: marker::Send, S: Session> Session for Recv<T, S>
-{
+impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     type Dual = Send<T, S::Dual>;
 
     #[doc(hidden)]
-    fn new() -> (Self, Self::Dual)
-    {
+    fn new() -> (Self, Self::Dual) {
         let (there, here) = Self::Dual::new();
         (here, there)
     }
 
     #[doc(hidden)]
-    fn head_str() -> String
-    {
+    fn head_str() -> String {
         String::from("Recv")
     }
 
     #[doc(hidden)]
-    fn tail_str() -> String
-    {
+    fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 }
@@ -254,15 +239,13 @@ where
 
 /// Cancels a session. Always succeeds. If the partner calls
 /// `recv` or `close` after cancellation, those calls fail.
-pub fn cancel<T>(x: T)
-{
+pub fn cancel<T>(x: T) {
     mem::drop(x);
 }
 
 /// Closes a session. Synchronises with the partner, and
 /// fails if the partner has crashed.
-pub fn close(s: End) -> Result<(), Box<dyn Error>>
-{
+pub fn close(s: End) -> Result<(), Box<dyn Error>> {
     s.sender.send(Signal::Stop).unwrap_or(());
     s.receiver.recv()?;
     Ok(())
@@ -270,8 +253,7 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>>
 
 /// Closes a Tcp session. Synchronises with the partner, and
 /// fails if the partner has crashed.
-pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>>
-{
+pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>> {
     // For Tcp client
     // Need to force closing type:
     // stream.shutdown(Shutdown::Both).unwrap();
@@ -478,15 +460,12 @@ macro_rules! choose_tcp {
 /// Error returned when `select` or `select_mut` are called
 /// with an empty vector.
 #[derive(Debug)]
-enum SelectError
-{
+enum SelectError {
     EmptyVec,
 }
 
-impl fmt::Display for SelectError
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
-    {
+impl fmt::Display for SelectError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SelectError::EmptyVec => {
                 write!(f, "please use a vector with at least one element")
@@ -495,17 +474,14 @@ impl fmt::Display for SelectError
     }
 }
 
-impl Error for SelectError
-{
-    fn description(&self) -> &str
-    {
+impl Error for SelectError {
+    fn description(&self) -> &str {
         match *self {
             SelectError::EmptyVec => "empty vectors not allowed",
         }
     }
 
-    fn cause(&self) -> Option<&dyn Error>
-    {
+    fn cause(&self) -> Option<&dyn Error> {
         match *self {
             SelectError::EmptyVec => None,
         }

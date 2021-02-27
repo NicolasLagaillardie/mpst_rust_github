@@ -1,9 +1,8 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, fork_mpst_multi, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
-    send_cancel,
+    broadcast_cancel, close_mpst, create_multiple_normal_role, create_recv_mpst_session_bundle,
+    create_send_check_cancel_bundle, create_sessionmpst, fork_mpst_multi, send_cancel,
 };
 
 use rand::random;
@@ -68,7 +67,7 @@ send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
 close_mpst!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst,  SessionMpstFour, 4);
+fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -82,14 +81,12 @@ type EndpointB = SessionMpstFour<End, Recv<i32, End>, End, RoleC<RoleEnd>, NameB
 type EndpointC = SessionMpstFour<End, Send<i32, End>, Send<i32, End>, RoleB<RoleD<RoleEnd>>, NameC>;
 type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, 4);
     Ok(())
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     cancel_mpst(s);
 
     // let (_, s) = recv_mpst_b_to_a(s)?;
@@ -98,21 +95,18 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
     panic!("Session dropped");
 }
 
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let s = send_check_c_to_b(random(), s)?;
     let s = send_check_c_to_d(random(), s)?;
     close_mpst_multi(s)
 }
 
-fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
-{
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_to_c(s)?;
     close_mpst_multi(s)
 }
 
-pub fn main()
-{
+pub fn main() {
     let (thread_a, thread_b, thread_c, thread_d) =
         fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
 

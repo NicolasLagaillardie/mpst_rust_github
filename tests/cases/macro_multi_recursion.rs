@@ -4,9 +4,9 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    fork_mpst_multi, choose_mpst_multi_to_all, close_mpst, create_broadcast_role,
-    create_multiple_normal_role, create_recv_mpst_session, create_send_mpst_session,
-    create_sessionmpst, offer_mpst,
+    choose_mpst_multi_to_all, close_mpst, create_broadcast_role, create_multiple_normal_role,
+    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_mpst_multi,
+    offer_mpst,
 };
 use std::error::Error;
 use std::marker;
@@ -41,7 +41,7 @@ create_recv_mpst_session!(recv_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
 
-fork_mpst_multi!(fork_mpst,  SessionMpst, 3);
+fork_mpst_multi!(fork_mpst, SessionMpst, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -68,13 +68,11 @@ type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
 type RecursAtoD<N> = Recv<Branches0AtoD<N>, End>;
 type RecursBtoD<N> = Recv<Branches0BtoD<N>, End>;
 
-enum Branches0AtoD<N: marker::Send>
-{
+enum Branches0AtoD<N: marker::Send> {
     End(SessionMpst<AtoBClose, AtoDClose, QueueAEnd, NameA>),
     Video(SessionMpst<AtoBVideo<N>, AtoDVideo<N>, QueueAVideo, NameA>),
 }
-enum Branches0BtoD<N: marker::Send>
-{
+enum Branches0BtoD<N: marker::Send> {
     End(SessionMpst<BtoAClose, BtoDClose, QueueBEnd, NameB>),
     Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, QueueBVideo, NameB>),
 }
@@ -110,8 +108,7 @@ type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, NameA>;
 type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, QueueBRecurs, NameB>;
 
 /// Functions related to endpoints
-fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>>
-{
+fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_d, {
         Branches0BtoD::End(s) => {
             close_mpst_multi(s)
@@ -124,16 +121,14 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let (id, s) = recv_mpst_a_to_d(s)?;
     let s = send_mpst_a_to_d(id + 1, s);
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>>
-{
+fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_d, {
         Branches0AtoD::End(s) => {
             close_mpst_multi(s)
@@ -148,8 +143,7 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn client(s: EndpointDFull<i32>) -> Result<(), Box<dyn Error>>
-{
+fn client(s: EndpointDFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
@@ -163,8 +157,7 @@ fn client_recurs(
     s: EndpointDRecurs<i32>,
     mut xs: Vec<i32>,
     index: i32,
-) -> Result<(), Box<dyn Error>>
-{
+) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
             let s = choose_mpst_multi_to_all!(
@@ -210,8 +203,7 @@ fn client_recurs(
 
 ////////////////////////////////////////
 
-pub fn new_run_usecase_recursive()
-{
+pub fn new_run_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);

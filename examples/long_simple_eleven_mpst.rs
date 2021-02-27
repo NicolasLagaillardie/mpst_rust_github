@@ -1,9 +1,9 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    fork_mpst_multi, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
+    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
-    offer_mpst,
+    fork_mpst_multi, offer_mpst,
 };
 
 use std::error::Error;
@@ -343,7 +343,7 @@ create_recv_mpst_session_bundle!(
 close_mpst!(close_mpst_multi, SessionMpstEleven, 11);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst,  SessionMpstEleven, 11);
+fork_mpst_multi!(fork_mpst, SessionMpstEleven, 11);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -375,8 +375,7 @@ type R2I<R> = RoleI<RoleI<R>>;
 type R2J<R> = RoleJ<RoleJ<R>>;
 type R2K<R> = RoleK<RoleK<R>>;
 // A
-enum Branching0fromKtoA
-{
+enum Branching0fromKtoA {
     More(
         SessionMpstEleven<
             RS,
@@ -397,8 +396,7 @@ enum Branching0fromKtoA
 }
 type RecursAtoK = Recv<Branching0fromKtoA, End>;
 // B
-enum Branching0fromKtoB
-{
+enum Branching0fromKtoB {
     More(
         SessionMpstEleven<
             SR,
@@ -419,8 +417,7 @@ enum Branching0fromKtoB
 }
 type RecursBtoK = Recv<Branching0fromKtoB, End>;
 // C
-enum Branching0fromKtoC
-{
+enum Branching0fromKtoC {
     More(
         SessionMpstEleven<
             SR,
@@ -441,8 +438,7 @@ enum Branching0fromKtoC
 }
 type RecursCtoK = Recv<Branching0fromKtoC, End>;
 // D
-enum Branching0fromKtoD
-{
+enum Branching0fromKtoD {
     More(
         SessionMpstEleven<
             SR,
@@ -463,8 +459,7 @@ enum Branching0fromKtoD
 }
 type RecursDtoK = Recv<Branching0fromKtoD, End>;
 // E
-enum Branching0fromKtoE
-{
+enum Branching0fromKtoE {
     More(
         SessionMpstEleven<
             SR,
@@ -485,8 +480,7 @@ enum Branching0fromKtoE
 }
 type RecursEtoK = Recv<Branching0fromKtoE, End>;
 // F
-enum Branching0fromKtoF
-{
+enum Branching0fromKtoF {
     More(
         SessionMpstEleven<
             SR,
@@ -507,8 +501,7 @@ enum Branching0fromKtoF
 }
 type RecursFtoK = Recv<Branching0fromKtoF, End>;
 // G
-enum Branching0fromKtoG
-{
+enum Branching0fromKtoG {
     More(
         SessionMpstEleven<
             SR,
@@ -529,8 +522,7 @@ enum Branching0fromKtoG
 }
 type RecursGtoK = Recv<Branching0fromKtoG, End>;
 // H
-enum Branching0fromKtoH
-{
+enum Branching0fromKtoH {
     More(
         SessionMpstEleven<
             SR,
@@ -551,8 +543,7 @@ enum Branching0fromKtoH
 }
 type RecursHtoK = Recv<Branching0fromKtoH, End>;
 // I
-enum Branching0fromKtoI
-{
+enum Branching0fromKtoI {
     More(
         SessionMpstEleven<
             SR,
@@ -573,8 +564,7 @@ enum Branching0fromKtoI
 }
 type RecursItoK = Recv<Branching0fromKtoI, End>;
 // J
-enum Branching0fromKtoJ
-{
+enum Branching0fromKtoJ {
     More(
         SessionMpstEleven<
             SR,
@@ -762,8 +752,7 @@ type EndpointK = SessionMpstEleven<
     NameK,
 >;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_to_k, {
         Branching0fromKtoA::Done(s) => {
             close_mpst_multi(s)
@@ -794,8 +783,7 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_to_k, {
         Branching0fromKtoB::Done(s) => {
             close_mpst_multi(s)
@@ -826,8 +814,7 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_to_k, {
         Branching0fromKtoC::Done(s) => {
             close_mpst_multi(s)
@@ -858,8 +845,7 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_to_k, {
         Branching0fromKtoD::Done(s) => {
             close_mpst_multi(s)
@@ -890,8 +876,7 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_to_k, {
         Branching0fromKtoE::Done(s) => {
             close_mpst_multi(s)
@@ -922,8 +907,7 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_to_k, {
         Branching0fromKtoF::Done(s) => {
             close_mpst_multi(s)
@@ -954,8 +938,7 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_to_k, {
         Branching0fromKtoG::Done(s) => {
             close_mpst_multi(s)
@@ -986,8 +969,7 @@ fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_to_k, {
         Branching0fromKtoH::Done(s) => {
             close_mpst_multi(s)
@@ -1018,8 +1000,7 @@ fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_to_k, {
         Branching0fromKtoI::Done(s) => {
             close_mpst_multi(s)
@@ -1050,8 +1031,7 @@ fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_j_to_k, {
         Branching0fromKtoJ::Done(s) => {
             close_mpst_multi(s)
@@ -1082,13 +1062,11 @@ fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>>
     })
 }
 
-fn simple_five_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>>
-{
+fn simple_five_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     recurs_k(s, SIZE)
 }
 
-fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>>
-{
+fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
@@ -1196,8 +1174,7 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>>
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>>
-{
+fn all_mpst() -> Result<(), Box<dyn Error>> {
     let (
         thread_a,
         thread_b,
@@ -1243,7 +1220,6 @@ fn all_mpst() -> Result<(), Box<dyn Error>>
 
 static SIZE: i64 = 15;
 
-fn main()
-{
+fn main() {
     all_mpst().unwrap();
 }
