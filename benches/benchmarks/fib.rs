@@ -6,7 +6,7 @@ use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send,
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst, offer
 };
 
 use std::error::Error;
