@@ -39,8 +39,8 @@
 // offer::offer_mpst_session_b_to_c;
 
 // use mpstthree::functionmpst::choose::
-// choose_left_mpst_session_c_to_all; use mpstthree::
-// functionmpst::choose::choose_right_mpst_session_c_to_all;
+// choose_left_mpst_session_c_to_all; use
+// mpstthree::functionmpst::choose::choose_right_mpst_session_c_to_all;
 
 // use mpstthree::functionmpst::ChooseMpst;
 // use mpstthree::functionmpst::OfferMpst;

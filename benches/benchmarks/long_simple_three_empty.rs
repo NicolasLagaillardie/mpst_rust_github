@@ -7,17 +7,16 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose, choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
-    fork_mpst_multi, offer, offer_mpst,
+    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
 };
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 use std::time::Duration;
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpstThree, 3);
+// Create the new SessionMpst for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
 // Create new roles
 // normal
@@ -66,12 +65,6 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_to_b, RoleB, next_b, 2 | =>
     RoleC, SessionMpstThree, 3
 );
-
-// Create close function
-close_mpst!(close_mpst_multi, SessionMpstThree, 3);
-
-// Create fork function
-fork_mpst_multi!(fork_mpst, SessionMpstThree, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;

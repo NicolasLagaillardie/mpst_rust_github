@@ -1,15 +1,14 @@
 use mpstthree::binary::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
-    fork_mpst_multi, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
 use std::error::Error;
 
-// Create new SessionMpst for four participants
-create_sessionmpst!(SessionMpstEleven, 11);
+// Create the new SessionMpst for eleven participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstEleven, 11);
 
 // Create new roles
 // normal
@@ -338,12 +337,6 @@ create_recv_mpst_session_bundle!(
     recv_mpst_k_to_j, RoleJ, next_j, 10 | =>
     RoleK, SessionMpstEleven, 11
 );
-
-// Create close function
-close_mpst!(close_mpst_multi, SessionMpstEleven, 11);
-
-// Create fork function
-fork_mpst_multi!(fork_mpst, SessionMpstEleven, 11);
 
 // Names
 type NameA = RoleA<RoleEnd>;

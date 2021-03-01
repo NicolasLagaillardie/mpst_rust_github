@@ -861,9 +861,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 
 ///  Call both
 /// [`mpstthree::create_choose_right_from_2_to_1_and_3`](../
-/// macro. create_choose_right_from_2_to_1_and_3.html)  and
+/// macro.create_choose_right_from_2_to_1_and_3.html)  and
 /// [`mpstthree:: create_choose_left_from_2_to_1_and_3`](../
-/// macro. create_choose_left_from_2_to_1_and_3.html).  Must
+/// macro.create_choose_left_from_2_to_1_and_3.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 ///  # Arguments
@@ -940,9 +940,9 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 
 ///  Call both
 /// [`mpstthree::create_choose_right_from_1_to_2_and_3`](../
-/// macro. create_choose_right_from_1_to_2_and_3.html)  and
+/// macro.create_choose_right_from_1_to_2_and_3.html)  and
 /// [`mpstthree:: create_choose_left_from_1_to_2_and_3`](../
-/// macro. create_choose_left_from_1_to_2_and_3.html).  Must
+/// macro.create_choose_left_from_1_to_2_and_3.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 ///  # Arguments
@@ -1019,9 +1019,9 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 
 ///  Call both
 /// [`mpstthree::create_choose_right_from_3_to_1_and_2`](../
-/// macro. create_choose_right_from_3_to_1_and_2.html)  and
+/// macro.create_choose_right_from_3_to_1_and_2.html)  and
 /// [`mpstthree:: create_choose_left_from_3_to_1_and_2`](../
-/// macro. create_choose_left_from_3_to_1_and_2.html).  Must
+/// macro.create_choose_left_from_3_to_1_and_2.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 ///  # Arguments
