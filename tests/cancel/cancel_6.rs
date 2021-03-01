@@ -82,7 +82,7 @@ type EndpointC = SessionMpstFour<End, Send<i32, End>, Send<i32, End>, RoleB<Role
 type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, 4);
+    broadcast_cancel!(s, RoleA, SessionMpstFour, 4);
     Ok(())
 }
 

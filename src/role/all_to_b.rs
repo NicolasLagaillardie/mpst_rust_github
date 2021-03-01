@@ -8,7 +8,11 @@ use crossbeam_channel::{bounded, Sender};
 /// This `struct` is used for branching without `enum`. See
 /// the test `05_usecase.rs`.
 #[derive(Debug)]
-pub struct RoleAlltoB<R1: Role, R2: Role> {
+pub struct RoleAlltoB<R1, R2>
+where
+    R1: Role,
+    R2: Role,
+{
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
 }

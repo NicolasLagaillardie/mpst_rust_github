@@ -24,11 +24,18 @@ macro_rules! create_sessionmpst {
             #[derive(Debug)]
             pub struct $struct_name<
                 #(
+                    S#N:0,
+                )0:0
+                R,
+                N
+            >
+            where
+                #(
                     S#N:0: mpstthree::binary::Session,
                 )0:0
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > {
+            {
                 #(
                     pub session#N:0: S#N:0,
                 )0:0

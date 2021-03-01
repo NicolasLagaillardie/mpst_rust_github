@@ -12,7 +12,10 @@ use crossbeam_channel::{bounded, Sender};
 /// [`mpstthree::sessionmpst::SessionMpst`]:
 /// ../sessionmpst/struct.SessionMpst.html
 #[derive(Debug)]
-pub struct RoleA<R: Role> {
+pub struct RoleA<R>
+where
+    R: Role,
+{
     pub sender: Sender<R::Dual>,
 }
 

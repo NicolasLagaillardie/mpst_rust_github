@@ -45,7 +45,13 @@ use crate::role::Role;
 /// ```
 #[must_use]
 #[derive(Debug)]
-pub struct SessionMpst<S1: Session, S2: Session, R: Role, N: Role> {
+pub struct SessionMpst<S1, S2, R, N>
+where
+    S1: Session,
+    S2: Session,
+    R: Role,
+    N: Role,
+{
     pub session1: S1,
     pub session2: S2,
     pub stack: R,

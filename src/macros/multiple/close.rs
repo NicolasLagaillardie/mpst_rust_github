@@ -73,6 +73,7 @@ macro_rules! close_mpst_check_cancel {
                     match s.session#N:0.receiver.recv() {
                         Ok(mpstthree::binary::Signal::Stop) => {},
                         Ok(mpstthree::binary::Signal::Cancel) => panic!("Received a cancel signal"),
+                        Ok(mpstthree::binary::Signal::Offer(_)) => {},
                         Err(e) => panic!("{}", e.to_string()),
                     };
                 )0:0

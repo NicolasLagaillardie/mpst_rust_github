@@ -168,3 +168,28 @@ macro_rules! offer_mpst {
         })()
     };
 }
+
+/// Offer a choice and send the session to the pawn
+///
+/// # Arguments
+///
+///  * The session to be used
+///  * The *recv* function that will be used
+///  * Each path, which are each variant of the enum which contains the new branches
+///  * The block of code to process each new session
+#[macro_export]
+macro_rules! offer_cancel_mpst {
+    ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
+        (move || -> Result<_, _> {
+            let (new_session, s) = $recv_mpst($session)?;
+            let s = s.session1.sender.send(mpstthree::binary::Signal::Offer(new_session)).unwrap();
+            let (l, s) = $recv_mpst(s)?;
+            mpstthree::binary::cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}

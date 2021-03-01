@@ -616,24 +616,48 @@ macro_rules! choose_mpst_multi_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
-    ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $pawn: ident, $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
+
+            let mut temp = Vec::<End>::new();
 
             %(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
             )(
                 let (channel_#N:3, channel_#N:4) = <mpstthree::binary::End as mpstthree::binary::Session>::new();
+
+                temp.push(channel_#N:3);
             )5*
+
+            let (stack_1, _) = <mpstthree::binary::End as mpstthree::binary::Session>::new();
 
             #(
                 let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
             )18:0
+
+            let (name_1, _) = <$pawn<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
             #(
                 let (name_#N:0, _) = <unused#N:22::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
             )19:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+
+            let s = $session;
+
+            %(
+                let elt = match temp.pop() {
+                    Some(e) => e,
+                    _ => panic!("Error type"),
+                };
+                let s = unused#N:20(elt, s);
+            )(
+                let elt = match temp.pop() {
+                    Some(e) => e,
+                    _ => panic!("Error type"),
+                };
+                let s = unused#N:20(elt, s);
+            )4*
 
             %(
                 let s = unused#N:20(
@@ -659,9 +683,15 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                         stack: stack_#N:0,
                         name: name_#N:0,
                     }),
-                    $session,
+                    s,
                 )?;
             )4*
+
+            let elt = match temp.pop() {
+                Some(e) => e,
+                _ => panic!("Error type"),
+            };
+            let s = s.session1.sender.send(elt, s).unwrap();
 
             mpstthree::binary::cancel(s);
 

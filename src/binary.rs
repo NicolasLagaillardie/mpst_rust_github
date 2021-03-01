@@ -43,18 +43,19 @@ where
     channel: Receiver<(T, S)>,
 }
 
-#[derive(Debug)]
-pub enum Signal {
-    Stop,
-    Cancel,
-}
-
 /// End of communication.
 #[must_use]
 #[derive(Debug)]
 pub struct End {
     pub sender: Sender<Signal>,
     pub receiver: Receiver<Signal>,
+}
+
+#[derive(Debug)]
+pub enum Signal {
+    Offer(End),
+    Stop,
+    Cancel,
 }
 
 /// Trait for session types. Provides duality.

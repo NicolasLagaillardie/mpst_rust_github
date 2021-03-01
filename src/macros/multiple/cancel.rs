@@ -35,28 +35,33 @@ macro_rules! send_cancel {
 /// others. Creates the function that will be direcly sent
 #[macro_export]
 macro_rules! broadcast_cancel {
-    ($session:expr, $nsessions:literal) => {
+    ($session:expr, $name:ident, $struct_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
                 #(
-                    let mut session#N:0 = true;
+                    let mut bool_session#N:0 = true;
                 )0:0
 
-                while #(session#N:0 ||)0:0 false {
+                let mut s = $session;
+
+                while #(bool_session#N:0 ||)0:0 false {
                     #(
-                        match $session.session#N:0.receiver.try_recv() {
+                        match s.session#N:0.receiver.try_recv() {
                             Ok(mpstthree::binary::Signal::Cancel) => {
                                 #(
-                                    $session.session#N:0.sender.send(mpstthree::binary::Signal::Cancel).unwrap_or(());
+                                    s.session#N:0.sender.send(mpstthree::binary::Signal::Cancel).unwrap_or(());
                                 )0:0
                                 panic!("Error");
                             }
-                            Ok(mpstthree::binary::Signal::Stop) => match session#N:0 {
+                            Ok(mpstthree::binary::Signal::Stop) => match bool_session#N:0 {
                                 true => {
-                                    $session.session#N:0.sender.send(mpstthree::binary::Signal::Stop).unwrap_or(());
-                                    session#N:0 = false;
+                                    s.session#N:0.sender.send(mpstthree::binary::Signal::Stop).unwrap_or(());
+                                    bool_session#N:0 = false;
                                 }
                                 false => panic!("Close already sent"),
-                            },
+                            }
+                            Ok(mpstthree::binary::Signal::Offer(channel)) => {
+                                s.session#N:0 = channel;
+                            }
                             _ => {}
                         };
                     )0:0

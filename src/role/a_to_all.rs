@@ -15,7 +15,11 @@ use crossbeam_channel::{bounded, Sender};
 /// [`mpstthree::binary::Session`]: ../binary/trait.Session.
 /// html
 #[derive(Debug)]
-pub struct RoleAtoAll<R1: Role, R2: Role> {
+pub struct RoleAtoAll<R1, R2>
+where
+    R1: Role,
+    R2: Role,
+{
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,
 }
