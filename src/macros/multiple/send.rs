@@ -258,7 +258,10 @@ macro_rules! create_send_check_cancel {
                 R: mpstthree::role::Role,
             {
                 match s.session1.receiver.try_recv() {
-                    Ok(_) => panic!("Error"),
+                    Ok(_) => {
+                        mpstthree::binary::cancel(s);
+                        panic!("Error")
+                    },
                     _ => {}
                 };
 

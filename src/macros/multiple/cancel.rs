@@ -25,7 +25,7 @@ macro_rules! send_cancel {
                 R: mpstthree::role::Role,
             {
                 s.session1.sender.send(mpstthree::binary::Signal::Cancel).unwrap();;
-                std::mem::drop(s);
+                mpstthree::binary::cancel(s);
             }
         });
     }

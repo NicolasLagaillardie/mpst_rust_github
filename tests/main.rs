@@ -162,3 +162,5 @@ fn tests() {
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
 }
+
+pub fn main() {}

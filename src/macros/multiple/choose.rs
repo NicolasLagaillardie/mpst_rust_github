@@ -518,7 +518,8 @@ macro_rules! choose_mpst_multi_to_all {
 
 /// Choose among different sessions that are provided, for
 /// protocols with more than 3 participants, may fail
-/// because of a canceled session  
+/// because of a canceled session. Need to exclude the first participant
+///
 ///  # Arguments
 ///  
 ///   * The session to be used
@@ -535,6 +536,46 @@ macro_rules! choose_mpst_multi_to_all {
 /// Available on the *13_macro_multi_recursion* test.
 ///  
 ///  ```ignore
+/// match xs.pop() {
+///     Option::Some(_) => {
+///         let s = choose_mpst_multi_cancel_to_all!(
+///             s,
+///             send_mpst_d_to_b, =>
+///             CBranchesBtoC::Video, =>
+///             RoleA,
+///             RoleB, =>
+///             RoleD,
+///             SessionMpst,
+///             3,
+///             3
+///         );
+///         let s = send_mpst_d_to_a(1, s);
+///         let (_, s) = recv_mpst_d_to_a(s)?;
+///         client_recurs(s, xs, index + 1)
+///     }
+///     Option::None => {
+///         let s = choose_mpst_multi_cancel_to_all!(
+///             s,
+///             send_mpst_d_to_b, =>
+///             CBranchesBtoC::End, =>
+///             RoleA,
+///             RoleB, =>
+///             RoleD,
+///             SessionMpst,
+///             3,
+///             3
+///         );
+///         close_mpst_multi(s)?;
+///         Ok(())
+///     }
+/// }
+/// ```
+///  
+///  # Compile fail
+///
+/// Available on the *cancel/cancel_8* test.
+///  
+///  ```compile_fail
 /// match xs.pop() {
 ///     Option::Some(_) => {
 ///         let s = choose_mpst_multi_cancel_to_all!(
@@ -578,23 +619,25 @@ macro_rules! choose_mpst_multi_cancel_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
 
-            #(
+            %(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
-            )4:0
+            )(
+                let (channel_#N:3, channel_#N:4) = <mpstthree::binary::End as mpstthree::binary::Session>::new();
+            )5*
 
             #(
                 let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
-            )15:0
+            )18:0
 
             #(
-                let (name_#N:0, _) = <unused#N:16::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-            )0:0
+                let (name_#N:0, _) = <unused#N:22::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+            )19:0
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
             %(
-                let s = unused#N:14(
-                    unused#N:15($sessionmpst_name {
+                let s = unused#N:20(
+                    unused#N:21($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
                         )(
@@ -606,8 +649,8 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                     s,
                 )?;
             )(
-                let s = unused#N:14(
-                    unused#N:15($sessionmpst_name {
+                let s = unused#N:20(
+                    unused#N:21($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
                         )(
@@ -618,7 +661,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                     }),
                     $session,
                 )?;
-            )2*
+            )4*
 
             mpstthree::binary::cancel(s);
 

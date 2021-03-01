@@ -156,13 +156,13 @@ macro_rules! create_offer_mpst_session_multi {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst {
-    ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:block, )* }) => {
-        (move || -> Result<_, Box<dyn std::error::Error>> {
+    ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
+        (move || -> Result<_, _> {
             let (l, s) = $recv_mpst($session)?;
             mpstthree::binary::cancel(s);
             match l {
                 $(
-                    $pat => { $result },
+                    $pat => $result,
                 )*
             }
         })()
