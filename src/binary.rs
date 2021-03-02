@@ -13,7 +13,7 @@ use std::fmt;
 use std::io::{Read, Write};
 use std::marker;
 use std::mem;
-use std::net::TcpStream;
+use std::net::{Shutdown, TcpStream};
 use std::panic;
 use std::thread::{spawn, JoinHandle};
 
@@ -177,18 +177,18 @@ where
     T: marker::Send,
     S: Session,
 {
-    // For Tcp client
-    // stream.write(&data[0..size]).unwrap();
-    // May need to force next type:
-    // stream.shutdown(Shutdown::Write).unwrap(); but no way
-    // to do it twice
     let (here, there) = S::new();
-    s.channel.send(((x, *data), there)).unwrap();
-    match tcp {
-        true => stream.write_all(data)?,
-        false => {}
-    };
-    Ok(here)
+    match s.channel.send(((x, *data), there)) {
+        Ok(_) => match tcp {
+            true => {
+                // stream.shutdown(Shutdown::Read)?; // Force stream to be write only. Needed?
+                stream.write_all(data)?;
+                Ok(here)
+            }
+            false => Ok(here),
+        },
+        Err(e) => panic!("{}", e.to_string()),
+    }
 }
 
 /// Send a value of type `T`. Always succeeds. Returns the
@@ -229,18 +229,13 @@ where
     T: marker::Send,
     S: Session,
 {
-    // For Tcp client
-    // let mut data = [0_u8; 50]; // using 50 byte buffer
-    // match stream.read(&mut data) { // or
-    // stream.read_exact(&mut data) Ok(size) =>
-    // Err(e) =>
-    // May need to force next type:
-    // stream.shutdown(Shutdown::Read).unwrap(); but no
-    // way to do it twice
     let (v, s) = s.channel.recv()?;
     let mut data = [0_u8; 128];
     let r = match tcp {
-        true => stream.read(&mut data)?,
+        true => {
+            // stream.shutdown(Shutdown::Write)?; // Force stream to be read only. Needed?
+            stream.read(&mut data)?
+        }
         false => 0_usize,
     };
     Ok((v.0, s, data, r))
@@ -263,12 +258,10 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>> {
 /// Closes a Tcp session. Synchronises with the partner, and
 /// fails if the partner has crashed.
 pub fn close_tcp(s: End, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
-    // For Tcp client
-    // Need to force closing type:
-    // stream.shutdown(Shutdown::Both).unwrap();
-    s.sender.send(Signal::Stop).unwrap_or(());
+    s.sender.send(Signal::Stop)?;
     s.receiver.recv()?;
-    cancel(stream);
+    stream.shutdown(Shutdown::Both)?; // Stop any operation on stream
+    cancel(stream); // close stream
 
     Ok(())
 }
@@ -406,7 +399,7 @@ macro_rules! offer {
 macro_rules! offer_tcp {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
-            let ((cont, data), s) = mpstthree::binary::recv($session)?;
+            let ((data, cont), s) = mpstthree::binary::recv($session)?;
             mpstthree::binary::cancel(s);
             mpstthree::binary::cancel(data);
 
@@ -437,8 +430,9 @@ macro_rules! choose {
 macro_rules! choose_tcp {
     ($label:path, $session:expr, $data:expr) => {{
         let (here, there) = <_ as Session>::new();
-        let s = mpstthree::binary::send(($label(there), $data), $session);
+        let s = mpstthree::binary::send(($data, $label(there)), $session);
         mpstthree::binary::cancel(s);
+        mpstthree::binary::cancel($data);
         here
     }};
 }

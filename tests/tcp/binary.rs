@@ -2,10 +2,12 @@ use mpstthree::binary::{close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;
-use std::net::TcpStream;
+use std::io::{Read, Write};
+use std::net::{Shutdown, TcpListener, TcpStream};
 use std::thread::{spawn, JoinHandle};
 
 type Data = ((), [u8; 128]);
+
 /////////////////////////
 // A
 #[derive(Debug)]
@@ -59,7 +61,7 @@ fn binary_b_to_a(
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn tcp_client() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
     let mut streams = Vec::new();
@@ -121,13 +123,95 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
     main.join().unwrap();
 
+    println!("Client ok");
+
+    Ok(())
+}
+
+static SIZE: i64 = 5;
+
+/////////////////////////
+
+fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
+    let mut data = [0_u8; 65535]; // using 50 byte buffer
+    let mut index = 0;
+    while match stream.read(&mut data) {
+        Ok(size) => {
+            // echo everything!
+            stream.write(&data[0..size])?;
+            match index {
+                i if i >= SIZE => {
+                    stream.shutdown(Shutdown::Both)?;
+                    false
+                }
+                _ => {
+                    index += 1;
+                    true
+                }
+            }
+        }
+        Err(_) => {
+            stream.shutdown(Shutdown::Both)?;
+            panic!(
+                "An error occurred, terminating connection with {}",
+                stream.peer_addr().unwrap()
+            );
+        }
+    } {}
+
+    println!("Handle client ok");
+
+    Ok(())
+}
+
+fn tcp_server() -> Result<(), Box<dyn Error>> {
+    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
+    // accept connections and process them, spawning a new
+    // thread for each one
+    println!("Server listening on port 3333");
+    'outer: for stream in listener.incoming() {
+        match stream {
+            Ok(stream) => {
+                println!("New connection: {}", stream.peer_addr().unwrap());
+                handle_client(stream)?;
+                break 'outer;
+            }
+            Err(e) => {
+                panic!("Error: {}", e);
+                /* connection failed */
+            }
+        }
+    }
+    // close the socket server
+    drop(listener);
+
+    println!("Server ok");
+
     Ok(())
 }
 
 /////////////////////////
 
-static SIZE: i64 = 5;
+pub fn main() {
+    let server = spawn(move || {
+        std::panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match tcp_server() {
+            Ok(()) => (),
+            Err(e) => panic!("{:?}", e),
+        }
+    });
+    let client = spawn(move || {
+        std::panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match tcp_client() {
+            Ok(()) => (),
+            Err(e) => panic!("{:?}", e),
+        }
+    });
 
-fn main() {
-    all_binaries().unwrap();
+    assert!(client.join().is_ok());
+    assert!(server.join().is_ok());
 }

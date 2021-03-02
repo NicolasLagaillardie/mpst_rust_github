@@ -1,6 +1,7 @@
 mod cancel;
 mod cases;
 mod scribble;
+mod tcp;
 mod unit;
 
 #[test]
@@ -163,6 +164,11 @@ fn tests() {
     t.pass("tests/infinite_type/work.rs");
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
+}
+
+#[test]
+fn tcp() {
+    tcp::binary::main();
 }
 
 pub fn main() {}
