@@ -181,10 +181,10 @@ macro_rules! offer_mpst {
 macro_rules! offer_cancel_mpst {
     ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
         (move || -> Result<_, _> {
-            let (l, s) = $recv_mpst($session)?;
-            let s = s.session1.sender.send(mpstthree::binary::Signal::Offer(l.0)).unwrap();
+            let ((session1, cont), s) = $recv_mpst($session)?;
+            let s = s.session1.sender.send(mpstthree::binary::Signal::Offer(session1)).unwrap();
             mpstthree::binary::cancel(s);
-            match l.1 {
+            match cont {
                 $(
                     $pat => $result,
                 )*

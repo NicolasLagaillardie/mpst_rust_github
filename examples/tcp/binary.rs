@@ -1,13 +1,11 @@
-use mpstthree::binary::{
-    close_tcp, fork_tcp, recv, recv_tcp, send, send_tcp, End, Recv, Send, Session,
-};
+use mpstthree::binary::{close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send, Session};
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;
 use std::net::TcpStream;
 use std::thread::{spawn, JoinHandle};
 
-type Data = ((), [u8; 65535]);
+type Data = ((), [u8; 128]);
 /////////////////////////
 // A
 #[derive(Debug)]
@@ -15,7 +13,7 @@ enum BinaryA {
     More(Recv<Data, Send<Data, RecursA>>),
     Done(End),
 }
-type RecursA = Recv<(BinaryA, [u8; 65535]), End>;
+type RecursA = Recv<(BinaryA, [u8; 128]), End>;
 fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
     offer_tcp!(s, {
         BinaryA::Done(s) => {
@@ -29,8 +27,14 @@ fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
             Ok(())
         },
         BinaryA::More(s) => {
-            let (_payload, s, _data, _r) = recv_tcp(s, stream)?;
-            let s = send_tcp((), &[0_u8; 65535], s, stream)?;
+
+            println!("A Receiving tcp");
+
+            let (_payload, s, _data, _r) = recv_tcp(s, stream, false)?;
+            println!("A Sending tcp");
+            let s = send_tcp((), &[0_u8; 128], s, stream, false)?;
+            println!("A Received tcp");
+
             binary_a_to_b(s, stream)
         },
     })
@@ -42,13 +46,15 @@ fn binary_b_to_a(
     s: Send<Data, Recv<Data, RecursB>>,
     stream: &TcpStream,
 ) -> Result<RecursB, Box<dyn Error>> {
-    let s = send_tcp((), &[0_u8; 65535], s, stream)?;
+    println!("B Sending tcp");
 
-    println!("Sending tcp");
+    let s = send_tcp((), &[0_u8; 128], s, stream, true)?;
 
-    let (_payload, s, _data, _r) = recv_tcp(s, stream)?;
+    println!("B Receiving tcp");
 
-    println!("Receiving tcp");
+    let (_payload, s, _data, _r) = recv_tcp(s, stream, true)?;
+
+    println!("B Received tcp");
 
     Ok(s)
 }
@@ -78,11 +84,8 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
             for s in sessions {
                 temp.push(
-                    binary_b_to_a(
-                        choose_tcp!(BinaryA::More, s, [0_u8; 65535]),
-                        &streams[index],
-                    )
-                    .unwrap(),
+                    binary_b_to_a(choose_tcp!(BinaryA::More, s, [0_u8; 128]), &streams[index])
+                        .unwrap(),
                 );
 
                 index += 1;
@@ -97,7 +100,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
         for s in sessions {
             println!("About to choose close : {}", &index);
 
-            temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 65535]));
+            temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 128]));
 
             index += 1;
         }
@@ -123,7 +126,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static SIZE: i64 = 5;
 
 fn main() {
     all_binaries().unwrap();

@@ -88,8 +88,8 @@ enum Branching0fromDtoC {
 type RecursCtoD = Recv<(End, Branching0fromDtoC), End>;
 // D
 type Choose0fromDtoA = End;
-type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>;
-type Choose0fromDtoC = Send<(End, Branching0fromDtoC), End>;
+type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>; // TODO: Remove the need of tuple with a
+type Choose0fromDtoC = Send<(End, Branching0fromDtoC), End>; // End which is forwaded to A
 
 // Creating the MP sessions
 type EndpointA = SessionMpstFour<End, End, End, RoleEnd, NameA>;

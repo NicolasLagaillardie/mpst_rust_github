@@ -17,7 +17,7 @@ use std::net::TcpStream;
 use std::panic;
 use std::thread::{spawn, JoinHandle};
 
-type TcpData = [u8; 65535];
+type TcpData = [u8; 128];
 type TcpFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
 
 /// Send `T`, then continue as `S`.
@@ -171,6 +171,7 @@ pub fn send_tcp<T, S>(
     data: &TcpData,
     s: Send<(T, TcpData), S>,
     mut stream: &TcpStream,
+    tcp: bool,
 ) -> Result<S, Box<dyn Error>>
 where
     T: marker::Send,
@@ -183,7 +184,10 @@ where
     // to do it twice
     let (here, there) = S::new();
     s.channel.send(((x, *data), there)).unwrap();
-    stream.write_all(data)?;
+    match tcp {
+        true => stream.write_all(data)?,
+        false => {}
+    };
     Ok(here)
 }
 
@@ -219,6 +223,7 @@ where
 pub fn recv_tcp<T, S>(
     s: Recv<(T, TcpData), S>,
     mut stream: &TcpStream,
+    tcp: bool,
 ) -> Result<(T, S, TcpData, usize), Box<dyn Error>>
 where
     T: marker::Send,
@@ -233,8 +238,11 @@ where
     // stream.shutdown(Shutdown::Read).unwrap(); but no
     // way to do it twice
     let (v, s) = s.channel.recv()?;
-    let mut data = [0_u8; 65535];
-    let r = stream.read(&mut data)?;
+    let mut data = [0_u8; 128];
+    let r = match tcp {
+        true => stream.read(&mut data)?,
+        false => 0 as usize,
+    };
     Ok((v.0, s, data, r))
 }
 
@@ -254,23 +262,13 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>> {
 
 /// Closes a Tcp session. Synchronises with the partner, and
 /// fails if the partner has crashed.
-pub fn close_tcp(s: End, _stream: &TcpStream) -> Result<(), Box<dyn Error>> {
+pub fn close_tcp(s: End, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
     // For Tcp client
     // Need to force closing type:
     // stream.shutdown(Shutdown::Both).unwrap();
-
-    println!("Closing");
-
     s.sender.send(Signal::Stop).unwrap_or(());
-
-    println!("Closing sent");
-
     s.receiver.recv()?;
-
-    println!("Closing received");
-
-    // stream.shutdown(Shutdown::Both)?;
-    // mem::drop(stream);
+    cancel(stream);
 
     Ok(())
 }
@@ -408,15 +406,11 @@ macro_rules! offer {
 macro_rules! offer_tcp {
     ($session:expr, { $($pat:pat => $result:expr,)* }) => {
         (move || -> Result<_, _> {
-
-            println!("Receiving new label");
-
-            let (l, s) = recv($session)?;
-
-            println!("Receive label: {:?}", &l.0);
-
+            let ((cont, data), s) = mpstthree::binary::recv($session)?;
             mpstthree::binary::cancel(s);
-            match l.0 {
+            mpstthree::binary::cancel(data);
+
+            match cont {
                 $(
                     $pat => $result,
                 )*
@@ -443,17 +437,8 @@ macro_rules! choose {
 macro_rules! choose_tcp {
     ($label:path, $session:expr, $data:expr) => {{
         let (here, there) = <_ as Session>::new();
-
-        println!("Create new session for choose");
-
-        let s = send(($label(there), $data), $session);
-
-        println!("Send label");
-
+        let s = mpstthree::binary::send(($label(there), $data), $session);
         mpstthree::binary::cancel(s);
-
-        println!("Cancel");
-
         here
     }};
 }

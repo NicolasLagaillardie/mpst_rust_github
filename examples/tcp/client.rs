@@ -9,12 +9,12 @@ fn main() {
             println!("Successfully connected to server in port 3333");
 
             // let msg = b"Hello!";
-            let msg = &[random::<u8>() as u8; 65535];
+            let msg = &[random::<u8>() as u8; 128];
 
             stream.write(msg).unwrap();
             println!("Sent Hello, awaiting reply...");
 
-            let mut data = [0_u8; 65535]; // using 65535 byte buffer
+            let mut data = [0_u8; 128]; // using 128 byte buffer
             match stream.read_exact(&mut data) {
                 Ok(_) => {
                     if &data == msg {
