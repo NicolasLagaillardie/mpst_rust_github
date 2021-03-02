@@ -241,7 +241,7 @@ where
     let mut data = [0_u8; 128];
     let r = match tcp {
         true => stream.read(&mut data)?,
-        false => 0 as usize,
+        false => 0_usize,
     };
     Ok((v.0, s, data, r))
 }
