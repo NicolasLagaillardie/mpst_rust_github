@@ -19,6 +19,8 @@ pub struct RoleCtoAll<R1, R2>
 where
     R1: Role,
     R2: Role,
+    R1::Dual: Role,
+    R2::Dual: Role,
 {
     pub sender1: Sender<R1::Dual>,
     pub sender2: Sender<R2::Dual>,

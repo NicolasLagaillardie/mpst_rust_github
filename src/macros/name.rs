@@ -28,6 +28,7 @@ macro_rules! create_normal_role {
         pub struct $role_name<R>
         where
             R: mpstthree::role::Role,
+            R::Dual: mpstthree::role::Role,
         {
             pub sender: crossbeam_channel::Sender<R::Dual>,
         }
@@ -39,6 +40,7 @@ macro_rules! create_normal_role {
         pub struct $dual_name<R>
         where
             R: mpstthree::role::Role,
+            R::Dual: mpstthree::role::Role,
         {
             pub sender: crossbeam_channel::Sender<R::Dual>,
         }
@@ -196,6 +198,8 @@ macro_rules! create_broadcast_role {
         where
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
+            R1::Dual: mpstthree::role::Role,
+            R2::Dual: mpstthree::role::Role,
         {
             pub sender1: crossbeam_channel::Sender<R1::Dual>,
             pub sender2: crossbeam_channel::Sender<R2::Dual>,
@@ -209,6 +213,8 @@ macro_rules! create_broadcast_role {
         where
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
+            R1::Dual: mpstthree::role::Role,
+            R2::Dual: mpstthree::role::Role,
         {
             pub sender1: crossbeam_channel::Sender<R1::Dual>,
             pub sender2: crossbeam_channel::Sender<R2::Dual>,

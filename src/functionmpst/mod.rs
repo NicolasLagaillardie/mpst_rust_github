@@ -20,17 +20,14 @@ use crate::sessionmpst::SessionMpst;
 use either::Either;
 
 /// Offer a choice between two sessions `S1` and `S1`. Those
-/// sessions should be [`mpstthree::sessionmpst::
-/// SessionMpst`], as requested by functions
-/// such as [`mpstthree::offer::
-/// offer_mpst_session_to_b_from_a`]. Implemented
-/// using [`mpstthree::binary::Recv`] and
+/// sessions should be [`mpstthree::sessionmpst::SessionMpst`],
+/// as requested by functions such as
+/// [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
+/// Implemented using [`mpstthree::binary::Recv`] and
 /// [`either::Either`].
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]:
-/// ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::offer:: offer_mpst_session_to_b_from_a`]:
-/// ../offer/fn.offer_mpst_session_to_b_from_a.html
+/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::offer:: offer_mpst_session_to_b_from_a`]: ../offer/fn.offer_mpst_session_to_b_from_a.html
 /// [`mpstthree::binary::Recv`]: ../binary/struct.Recv.html
 /// [`either::Either`]: ../either/enum.Either.html
 pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =

@@ -16,6 +16,7 @@ use crossbeam_channel::{bounded, Sender};
 pub struct RoleBDual<R>
 where
     R: Role,
+    R::Dual: Role,
 {
     pub sender: Sender<R::Dual>,
 }
