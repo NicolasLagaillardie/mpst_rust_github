@@ -4,7 +4,8 @@ use mpstthree::{choose_tcp, offer_tcp};
 use std::error::Error;
 use std::io::{Read, Write};
 use std::net::{Shutdown, TcpListener, TcpStream};
-use std::thread::{spawn, JoinHandle};
+use std::thread::{sleep, spawn, JoinHandle};
+use std::time::Duration;
 
 type Data = ((), [u8; 128]);
 
@@ -62,70 +63,49 @@ fn binary_b_to_a(
 }
 
 fn tcp_client() -> Result<(), Box<dyn Error>> {
-    let mut threads = Vec::new();
-    let mut sessions = Vec::new();
-    let mut streams = Vec::new();
-
     println!("About to start");
+    let mut sessions = Vec::new();
 
-    for _ in 0..1 {
-        let (thread, s, stream): (JoinHandle<()>, RecursB, TcpStream) =
-            fork_tcp(binary_a_to_b, "localhost:3333")?;
+    let (thread, s, stream): (JoinHandle<()>, RecursB, TcpStream) =
+        fork_tcp(binary_a_to_b, "localhost:3333")?;
 
-        threads.push(thread);
-        sessions.push(s);
-        streams.push(stream);
-    }
+    sessions.push(s);
 
-    let main = spawn(move || {
-        for _ in 0..SIZE {
-            let mut temp = Vec::new();
-            let mut index = 0;
+    for _ in 0..SIZE {
+        println!("About to send/recv");
 
-            println!("About to send/recv");
-
-            for s in sessions {
-                temp.push(
-                    binary_b_to_a(choose_tcp!(BinaryA::More, s, [0_u8; 128]), &streams[index])
-                        .unwrap(),
-                );
-
-                index += 1;
-            }
-
-            sessions = temp;
-        }
-
-        let mut temp = Vec::<mpstthree::binary::End>::new();
-        let mut index = 0;
+        let mut temp = Vec::new();
 
         for s in sessions {
-            println!("About to choose close : {}", &index);
-
-            temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 128]));
-
-            index += 1;
+            temp.push(binary_b_to_a(choose_tcp!(BinaryA::More, s, [0_u8; 128]), &stream).unwrap());
         }
 
-        index = 0;
+        sessions = temp;
+    }
 
-        for s in temp {
-            println!("About to close : {}", &index);
+    let mut temp = Vec::<mpstthree::binary::End>::new();
 
-            close_tcp(s, &streams[index]).unwrap();
-            index += 1;
+    for s in sessions {
+        temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 128]));
+    }
+
+    for s in temp {
+        close_tcp(s, &stream).unwrap();
+    }
+
+    println!("Closed");
+
+    match thread.join() {
+        Ok(_) => {
+            sleep(Duration::from_millis(1000));
+            println!("Client ok");
+            Ok(())
         }
-
-        println!("Closed");
-
-        threads.into_iter().for_each(|elt| elt.join().unwrap());
-    });
-
-    main.join().unwrap();
-
-    println!("Client ok");
-
-    Ok(())
+        Err(e) => {
+            println!("Error client: {:?}", e);
+            panic!("Error client: {:?}", e)
+        }
+    }
 }
 
 static SIZE: i64 = 5;
@@ -145,6 +125,7 @@ fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
                     false
                 }
                 _ => {
+                    sleep(Duration::from_millis(1000));
                     index += 1;
                     true
                 }
@@ -152,10 +133,14 @@ fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
         }
         Err(_) => {
             stream.shutdown(Shutdown::Both)?;
-            panic!(
+            println!(
                 "An error occurred, terminating connection with {}",
                 stream.peer_addr().unwrap()
             );
+            panic!(
+                "An error occurred, terminating connection with {}",
+                stream.peer_addr().unwrap()
+            )
         }
     } {}
 
@@ -169,19 +154,21 @@ fn tcp_server() -> Result<(), Box<dyn Error>> {
     // accept connections and process them, spawning a new
     // thread for each one
     println!("Server listening on port 3333");
-    'outer: for stream in listener.incoming() {
+    for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
                 println!("New connection: {}", stream.peer_addr().unwrap());
                 handle_client(stream)?;
-                break 'outer;
             }
             Err(e) => {
-                panic!("Error: {}", e);
+                println!("Error server: {}", e);
+                panic!("Error server: {}", e);
                 /* connection failed */
             }
         }
+        break;
     }
+
     // close the socket server
     drop(listener);
 
