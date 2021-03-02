@@ -160,7 +160,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 4,
                 4
             );
-            
+
             close_mpst_multi(s)
         }
         i => {

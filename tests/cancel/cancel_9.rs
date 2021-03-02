@@ -3,7 +3,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
     create_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
-    offer_cancel_mpst, send_cancel
+    offer_cancel_mpst, send_cancel,
 };
 
 use std::error::Error;

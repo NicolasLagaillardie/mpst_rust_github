@@ -3,7 +3,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
     create_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
-    offer_cancel_mpst, send_cancel
+    offer_cancel_mpst, send_cancel,
 };
 
 use std::error::Error;
@@ -187,7 +187,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_d_to_b(s)?;
             let s = send_check_d_to_c((), s)?;
             let (_, s) = recv_mpst_d_to_c(s)?;
-            
+
             recurs_d(s, i - 1)
         }
     }
