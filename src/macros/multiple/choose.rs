@@ -643,25 +643,16 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-            let s = $session;
-
             %(
                 let elt = match temp.pop() {
                     Some(e) => e,
                     _ => panic!("Error type"),
                 };
-                let s = unused#N:20(elt, s);
-            )(
-                let elt = match temp.pop() {
-                    Some(e) => e,
-                    _ => panic!("Error type"),
-                };
-                let s = unused#N:20(elt, s);
-            )4*
 
-            %(
                 let s = unused#N:20(
-                    unused#N:21($sessionmpst_name {
+                    (
+                        elt,
+                        unused#N:21($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
                         )(
@@ -669,12 +660,20 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                         )0*
                         stack: stack_#N:0,
                         name: name_#N:0,
-                    }),
+                        }
+                    )),
                     s,
                 )?;
             )(
+                let elt = match temp.pop() {
+                    Some(e) => e,
+                    _ => panic!("Error type"),
+                };
+
                 let s = unused#N:20(
-                    unused#N:21($sessionmpst_name {
+                    (
+                        elt,
+                        unused#N:21($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
                         )(
@@ -682,8 +681,9 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                         )0*
                         stack: stack_#N:0,
                         name: name_#N:0,
-                    }),
-                    s,
+                        }
+                    )),
+                    $session,
                 )?;
             )4*
 
@@ -691,7 +691,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                 Some(e) => e,
                 _ => panic!("Error type"),
             };
-            let s = s.session1.sender.send(elt, s).unwrap();
+            let s = s.session1.sender.send(mpstthree::binary::Signal::Offer(elt)).unwrap();
 
             mpstthree::binary::cancel(s);
 

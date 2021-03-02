@@ -3,7 +3,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
     create_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
-    offer_cancel_mpst,
+    offer_cancel_mpst, send_cancel
 };
 
 use std::error::Error;
@@ -57,6 +57,8 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_to_c, RoleC, next_c, 3 | =>
     RoleD, SessionMpstFour, 4
 );
+
+send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -115,11 +117,15 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromDtoB::More(s) => {
-            let (_, s) = recv_mpst_b_to_d(s)?;
-            let s = send_check_b_to_d((), s)?;
-            let s = send_check_b_to_c((), s)?;
-            let (_, s) = recv_mpst_b_to_c(s)?;
-            simple_five_endpoint_b(s)
+            // let (_, s) = recv_mpst_b_to_d(s)?;
+            // let s = send_check_b_to_d((), s)?;
+            // let s = send_check_b_to_c((), s)?;
+            // let (_, s) = recv_mpst_b_to_c(s)?;
+            // simple_five_endpoint_b(s)
+
+            cancel_mpst(s);
+
+            panic!("Session dropped");
         },
     })
 }
@@ -160,7 +166,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 4,
                 4
             );
-            
+
             close_mpst_multi(s)
         }
         i => {
@@ -197,10 +203,10 @@ pub fn main() {
         simple_five_endpoint_d,
     );
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
-    assert!(thread_d.join().is_ok());
+    assert!(thread_a.join().is_err());
+    assert!(thread_b.join().is_err());
+    assert!(thread_c.join().is_err());
+    assert!(thread_d.join().is_err());
 }
 
 /////////////////////////
