@@ -34,10 +34,6 @@ path = "examples/tcp/server.rs"
 name = "tcp_client"
 path = "examples/tcp/client.rs"
 
-[[example]]
-name = "tcp_binary"
-path = "examples/tcp/binary.rs"
-
 [profile.release]
 debug = true
 

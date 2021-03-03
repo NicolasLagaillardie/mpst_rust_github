@@ -105,9 +105,6 @@ type EndpointD = SessionMpstFour<
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleA, SessionMpstFour, 4);
-
-    println!("A Closing");
-
     Ok(())
 }
 

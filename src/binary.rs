@@ -170,9 +170,9 @@ pub fn send_tcp<T, S>(
     x: T, // Need to force x and data to be of the same type but for choice/offer
     data: &TcpData,
     s: Send<(T, TcpData), S>,
-    mut stream: &TcpStream,
+    mut stream: TcpStream,
     tcp: bool,
-) -> Result<S, Box<dyn Error>>
+) -> Result<(S, TcpStream), Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
@@ -183,9 +183,9 @@ where
             true => {
                 // stream.shutdown(Shutdown::Read)?; // Force stream to be write only. Needed?
                 stream.write_all(data)?;
-                Ok(here)
+                Ok((here, stream))
             }
-            false => Ok(here),
+            false => Ok((here, stream)),
         },
         Err(e) => panic!("{}", e.to_string()),
     }
@@ -217,14 +217,16 @@ where
     Ok((v, s))
 }
 
+type TupleRecv<T, S> = (T, S, TcpData, usize, TcpStream);
+
 /// Receive a value of type `T`. Can fail. Returns either a
 /// pair of the received value and the continuation of the
 /// session `S` or an error.
 pub fn recv_tcp<T, S>(
     s: Recv<(T, TcpData), S>,
-    mut stream: &TcpStream,
+    mut stream: TcpStream,
     tcp: bool,
-) -> Result<(T, S, TcpData, usize), Box<dyn Error>>
+) -> Result<TupleRecv<T, S>, Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
@@ -238,13 +240,21 @@ where
         }
         false => 0_usize,
     };
-    Ok((v.0, s, data, r))
+    Ok((v.0, s, data, r, stream))
 }
 
 /// Cancels a session. Always succeeds. If the partner calls
 /// `recv` or `close` after cancellation, those calls fail.
 pub fn cancel<T>(x: T) {
     mem::drop(x);
+}
+
+/// Cancels a session. Always succeeds. If the partner calls
+/// `recv` or `close` after cancellation, those calls fail.
+pub fn cancel_tcp<T>(x: T, stream: TcpStream) {
+    mem::drop(x);
+    stream.shutdown(Shutdown::Both).unwrap();
+    mem::drop(stream);
 }
 
 /// Closes a session. Synchronises with the partner, and
@@ -257,13 +267,17 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>> {
 
 /// Closes a Tcp session. Synchronises with the partner, and
 /// fails if the partner has crashed.
-pub fn close_tcp(s: End, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
+pub fn close_tcp(s: End, stream: TcpStream, tcp: bool) -> Result<(), Box<dyn Error>> {
     s.sender.send(Signal::Stop)?;
     s.receiver.recv()?;
-    stream.shutdown(Shutdown::Both).unwrap_or(()); // Stop any operation on stream. Cannot fail as stream may already been stopped.
-    cancel(stream); // close stream
-
-    Ok(())
+    match tcp {
+        true => {
+            stream.shutdown(Shutdown::Both).unwrap_or(()); // Stop any operation on stream. Cannot fail as stream may already been stopped.
+            mem::drop(stream); // close stream
+            Ok(())
+        }
+        false => Ok(()),
+    }
 }
 
 #[doc(hidden)]
@@ -304,20 +318,16 @@ where
 pub fn fork_tcp<S, P>(p: P, address: &str) -> TcpFork<S::Dual>
 where
     S: Session + 'static,
-    P: FnOnce(S, &TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
+    P: FnOnce(S, TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    // For Tcp client
-    // match TcpStream::connect("localhost:3333") {
-    // Ok(result) =>
-    // Err(e) =>
     let stream = TcpStream::connect(address)?;
-    let copy = stream.try_clone()?;
+    let copy_stream = stream.try_clone()?;
     let (there, here) = Session::new();
     let other_thread = spawn(move || {
         panic::set_hook(Box::new(|_info| {
             // do nothing
         }));
-        match p(there, &copy) {
+        match p(there, copy_stream) {
             Ok(()) => (),
             Err(e) => panic!("{}", e.to_string()),
         }

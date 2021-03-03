@@ -1,5 +1,5 @@
 use mpstthree::binary::{
-    cancel, close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send, Session,
+    cancel_tcp, close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send, Session,
 };
 use mpstthree::{choose_tcp, offer_tcp};
 
@@ -18,20 +18,15 @@ enum BinaryA {
     Done(End),
 }
 type RecursA = Recv<([u8; 128], BinaryA), End>;
-fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
+fn binary_a_to_b(s: RecursA, stream: TcpStream) -> Result<(), Box<dyn Error>> {
     offer_tcp!(s, {
         BinaryA::Done(s) => {
-            close_tcp(s, stream)
+            close_tcp(s, stream, false)
         },
         BinaryA::More(s) => {
-            let (_payload, s, data, _r) = recv_tcp(s, stream, false)?;
-            if data[0] == 3 {
-                let s = send_tcp((), &data, s, stream, false)?;
-                binary_a_to_b(s, stream)
-            } else {
-                cancel(s);
-                panic!("Cancelling A");
-            }
+            let (_payload, s, data, _r, stream) = recv_tcp(s, stream, false)?;
+            let (s, stream) = send_tcp((), &data, s, stream, false)?;
+            binary_a_to_b(s, stream)
         },
     })
 }
@@ -40,28 +35,27 @@ fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
 type RecursB = <RecursA as Session>::Dual;
 fn binary_b_to_a(
     s: Send<Data, Recv<Data, RecursB>>,
-    stream: &TcpStream,
+    stream: TcpStream,
+    index: i64,
 ) -> Result<RecursB, Box<dyn Error>> {
-    let s = send_tcp((), &[0_u8; 128], s, stream, true)?;
-    let (_payload, s, _data, _r) = recv_tcp(s, stream, true)?;
+    let (s, stream) = send_tcp((), &[0_u8; 128], s, stream, true)?;
+    let (_payload, s, _data, _r, stream) = recv_tcp(s, stream, true)?;
+    if index >= 2 {
+        cancel_tcp(s, stream);
+        panic!("Cancelling B");
+    }
+
     Ok(s)
 }
 
-fn tcp_client() -> Result<(), Box<dyn Error>> {
-    let mut sessions = Vec::new();
-
-    let (thread, s, stream): (JoinHandle<()>, RecursB, TcpStream) =
-        fork_tcp(binary_a_to_b, "localhost:3333")?;
-
-    sessions.push(s);
-
+fn tcp_client_aux(mut sessions: Vec<RecursB>, stream: TcpStream) -> Result<(), Box<dyn Error>> {
     for i in 0..SIZE {
         let mut temp = Vec::new();
 
         for s in sessions {
-            temp.push(
-                binary_b_to_a(choose_tcp!(BinaryA::More, s, [i as u8; 128]), &stream).unwrap(),
-            );
+            let copy_stream = stream.try_clone()?;
+            let elt = binary_b_to_a(choose_tcp!(BinaryA::More, s, [0_u8; 128]), copy_stream, i)?;
+            temp.push(elt);
         }
 
         sessions = temp;
@@ -74,11 +68,38 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     }
 
     for s in temp {
-        close_tcp(s, &stream).unwrap();
+        let copy_stream = stream.try_clone()?;
+        close_tcp(s, copy_stream, true)?;
     }
 
+    Ok(())
+}
+
+fn tcp_client() -> Result<(), Box<dyn Error>> {
+    let mut sessions = Vec::new();
+
+    let (thread, s, stream): (JoinHandle<()>, RecursB, TcpStream) =
+        fork_tcp(binary_a_to_b, "localhost:3333")?;
+
+    sessions.push(s);
+
+    let aux = spawn(move || {
+        std::panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match tcp_client_aux(sessions, stream) {
+            Ok(()) => (),
+            Err(e) => panic!("{:?}", e),
+        }
+    });
+
     match thread.join() {
-        Ok(_) => Ok(()),
+        Ok(_) => match aux.join() {
+            Ok(_) => Ok(()),
+            Err(e) => {
+                panic!("Error aux: {:?}", e)
+            }
+        },
         Err(e) => {
             panic!("Error client: {:?}", e)
         }
@@ -93,33 +114,42 @@ fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
     let mut data = [0_u8; 65535]; // using 50 byte buffer
     let mut index = 0;
     while match stream.read(&mut data) {
+        Ok(0) => {
+            stream.shutdown(Shutdown::Both).unwrap_or(());
+            panic!("Buffer size: 0")
+        }
         Ok(size) => {
             // echo everything!
-            stream.write(&data[0..size])?;
-            match index {
-                i if i >= SIZE => {
+            match stream.write(&data[0..size]) {
+                Ok(0) => {
                     stream.shutdown(Shutdown::Both).unwrap_or(());
-                    false
+                    panic!("An error occurred during write")
                 }
-                _ => {
-                    index += 1;
-                    true
-                }
+                _ => match index {
+                    i if i + 1 >= SIZE => {
+                        stream.shutdown(Shutdown::Both).unwrap_or(());
+                        index += 1;
+                        false
+                    }
+                    _ => {
+                        index += 1;
+                        true
+                    }
+                },
             }
         }
         Err(_) => {
             stream.shutdown(Shutdown::Both).unwrap_or(());
-            panic!(
-                "An error occurred, terminating connection with {:?}",
-                stream.peer_addr().unwrap()
-            )
+            panic!("An error occurred during read")
         }
     } {}
+
     Ok(())
 }
 
-fn tcp_server() -> Result<(), Box<dyn Error>> {
-    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
+/////////////////////////
+
+fn tcp_server(listener: TcpListener) -> Result<(), Box<dyn Error>> {
     'outer: for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
@@ -141,11 +171,12 @@ fn tcp_server() -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 pub fn main() {
+    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
     let server = spawn(move || {
         std::panic::set_hook(Box::new(|_info| {
             // do nothing
         }));
-        match tcp_server() {
+        match tcp_server(listener) {
             Ok(()) => (),
             Err(e) => panic!("{:?}", e),
         }
