@@ -1,4 +1,6 @@
-use mpstthree::binary::{close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send, Session};
+use mpstthree::binary::{
+    cancel, close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send, Session,
+};
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;
@@ -22,9 +24,14 @@ fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
             close_tcp(s, stream)
         },
         BinaryA::More(s) => {
-            let (_payload, s, _data, _r) = recv_tcp(s, stream, false)?;
-            let s = send_tcp((), &[0_u8; 128], s, stream, false)?;
-            binary_a_to_b(s, stream)
+            let (_payload, s, data, _r) = recv_tcp(s, stream, false)?;
+            if data[0] == 3 {
+                let s = send_tcp((), &data, s, stream, false)?;
+                binary_a_to_b(s, stream)
+            } else {
+                cancel(s);
+                panic!("Cancelling A");
+            }
         },
     })
 }
@@ -48,11 +55,13 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
 
     sessions.push(s);
 
-    for _ in 0..SIZE {
+    for i in 0..SIZE {
         let mut temp = Vec::new();
 
         for s in sessions {
-            temp.push(binary_b_to_a(choose_tcp!(BinaryA::More, s, [0_u8; 128]), &stream).unwrap());
+            temp.push(
+                binary_b_to_a(choose_tcp!(BinaryA::More, s, [i as u8; 128]), &stream).unwrap(),
+            );
         }
 
         sessions = temp;
@@ -125,6 +134,7 @@ fn tcp_server() -> Result<(), Box<dyn Error>> {
             }
         }
     }
+
     // close the socket server
     drop(listener);
     Ok(())
@@ -152,6 +162,6 @@ pub fn main() {
         }
     });
 
-    assert!(client.join().is_ok());
-    assert!(server.join().is_ok());
+    assert!(client.join().is_err());
+    assert!(server.join().is_err());
 }

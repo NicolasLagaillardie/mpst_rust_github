@@ -169,6 +169,7 @@ fn tests() {
 #[test]
 fn tcp() {
     tcp::binary::main();
+    tcp::binary_fail::main();
 }
 
 pub fn main() {}

@@ -260,7 +260,7 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>> {
 pub fn close_tcp(s: End, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
     s.sender.send(Signal::Stop)?;
     s.receiver.recv()?;
-    stream.shutdown(Shutdown::Both)?; // Stop any operation on stream
+    stream.shutdown(Shutdown::Both).unwrap_or(()); // Stop any operation on stream. Cannot fail as stream may already been stopped.
     cancel(stream); // close stream
 
     Ok(())
