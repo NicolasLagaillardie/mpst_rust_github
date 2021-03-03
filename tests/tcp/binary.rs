@@ -22,8 +22,8 @@ fn binary_a_to_b(s: RecursA, stream: &TcpStream) -> Result<(), Box<dyn Error>> {
             close_tcp(s, stream)
         },
         BinaryA::More(s) => {
-            let (_payload, s, _data, _r) = recv_tcp(s, stream, false)?;
-            let s = send_tcp((), &[0_u8; 128], s, stream, false)?;
+            let (_payload, s, data, _r) = recv_tcp(s, stream, false)?;
+            let s = send_tcp((), &data, s, stream, false)?;
             binary_a_to_b(s, stream)
         },
     })
@@ -69,9 +69,7 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     }
 
     match thread.join() {
-        Ok(_) => {
-            Ok(())
-        }
+        Ok(_) => Ok(()),
         Err(e) => {
             panic!("Error client: {:?}", e)
         }

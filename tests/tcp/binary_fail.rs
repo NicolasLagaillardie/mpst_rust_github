@@ -78,9 +78,7 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     }
 
     match thread.join() {
-        Ok(_) => {
-            Ok(())
-        }
+        Ok(_) => Ok(()),
         Err(e) => {
             panic!("Error client: {:?}", e)
         }
