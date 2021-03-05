@@ -49,7 +49,7 @@ macro_rules! create_normal_role {
         /// The Role functions
 
         impl<R: mpstthree::role::Role> mpstthree::role::Role for $dual_name<R> {
-            type Dual = $role_name<R::Dual>;
+            type Dual = $role_name<<R as mpstthree::role::Role>::Dual>;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
@@ -73,7 +73,11 @@ macro_rules! create_normal_role {
 
             #[doc(hidden)]
             fn tail_str() -> String {
-                format!("{}<{}>", R::head_str(), R::tail_str())
+                format!(
+                    "{}<{}>",
+                    <R as mpstthree::role::Role>::head_str(),
+                    <R as mpstthree::role::Role>::tail_str()
+                )
             }
         }
 
@@ -81,7 +85,7 @@ macro_rules! create_normal_role {
         where
             R: mpstthree::role::Role,
         {
-            let (here, there) = R::new();
+            let (here, there) = <R as mpstthree::role::Role>::new();
             r.sender.send(there).unwrap_or(());
             here
         }
@@ -90,7 +94,7 @@ macro_rules! create_normal_role {
         /// The Dual functions
 
         impl<R: mpstthree::role::Role> mpstthree::role::Role for $role_name<R> {
-            type Dual = $dual_name<R::Dual>;
+            type Dual = $dual_name<<R as mpstthree::role::Role>::Dual>;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
@@ -114,7 +118,11 @@ macro_rules! create_normal_role {
 
             #[doc(hidden)]
             fn tail_str() -> String {
-                format!("{}<{}>", R::head_str(), R::tail_str())
+                format!(
+                    "{}<{}>",
+                    <R as mpstthree::role::Role>::head_str(),
+                    <R as mpstthree::role::Role>::tail_str()
+                )
             }
         }
 
@@ -122,7 +130,7 @@ macro_rules! create_normal_role {
         where
             R: mpstthree::role::Role,
         {
-            let (here, there) = R::new();
+            let (here, there) = <R as mpstthree::role::Role>::new();
             r.sender.send(there).unwrap_or(());
             here
         }
@@ -146,14 +154,8 @@ macro_rules! create_normal_role {
 /// use mpstthree::create_multiple_normal_role;
 ///
 /// create_multiple_normal_role!(
-///    RoleA,
-///    next_a,
-///    RoleADual,
-///    next_a_dual |
-///    RoleB,
-///    next_b,
-///    RoleBDual,
-///    next_b_dual |
+///    RoleA, next_a, RoleADual, next_a_dual |
+///    RoleB, next_b, RoleBDual, next_b_dual |
 /// );
 /// ```
 ///
@@ -226,7 +228,10 @@ macro_rules! create_broadcast_role {
         impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
             for $role_name<R1, R2>
         {
-            type Dual = $dual_name<R1::Dual, R2::Dual>;
+            type Dual = $dual_name<
+                <R1 as mpstthree::role::Role>::Dual,
+                <R2 as mpstthree::role::Role>::Dual,
+            >;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
@@ -256,10 +261,10 @@ macro_rules! create_broadcast_role {
             fn tail_str() -> String {
                 format!(
                     "{}<{}> + {}<{}>",
-                    R1::head_str(),
-                    R1::tail_str(),
-                    R2::head_str(),
-                    R2::tail_str()
+                    <R1 as mpstthree::role::Role>::head_str(),
+                    <R1 as mpstthree::role::Role>::tail_str(),
+                    <R2 as mpstthree::role::Role>::head_str(),
+                    <R2 as mpstthree::role::Role>::tail_str()
                 )
             }
         }
@@ -269,8 +274,8 @@ macro_rules! create_broadcast_role {
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
         {
-            let (here1, there1) = R1::new();
-            let (here2, there2) = R2::new();
+            let (here1, there1) = <R1 as mpstthree::role::Role>::new();
+            let (here2, there2) = <R2 as mpstthree::role::Role>::new();
             r.sender1.send(there1).unwrap_or(());
             r.sender2.send(there2).unwrap_or(());
             (here1, here2)
@@ -282,7 +287,10 @@ macro_rules! create_broadcast_role {
         impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
             for $dual_name<R1, R2>
         {
-            type Dual = $role_name<R1::Dual, R2::Dual>;
+            type Dual = $role_name<
+                <R1 as mpstthree::role::Role>::Dual,
+                <R2 as mpstthree::role::Role>::Dual,
+            >;
 
             #[doc(hidden)]
             fn new() -> (Self, Self::Dual) {
@@ -312,10 +320,10 @@ macro_rules! create_broadcast_role {
             fn tail_str() -> String {
                 format!(
                     "{}<{}> + {}<{}>",
-                    R1::head_str(),
-                    R1::tail_str(),
-                    R2::head_str(),
-                    R2::tail_str()
+                    <R1 as mpstthree::role::Role>::head_str(),
+                    <R1 as mpstthree::role::Role>::tail_str(),
+                    <R2 as mpstthree::role::Role>::head_str(),
+                    <R2 as mpstthree::role::Role>::tail_str()
                 )
             }
         }
@@ -325,8 +333,8 @@ macro_rules! create_broadcast_role {
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
         {
-            let (here1, there1) = R1::new();
-            let (here2, there2) = R2::new();
+            let (here1, there1) = <R1 as mpstthree::role::Role>::new();
+            let (here2, there2) = <R2 as mpstthree::role::Role>::new();
             r.sender1.send(there1).unwrap_or(());
             r.sender2.send(there2).unwrap_or(());
             (here1, here2)

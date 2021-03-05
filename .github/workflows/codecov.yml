@@ -16,5 +16,5 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         cargo install cargo-tarpaulin
-        cargo tarpaulin --out Xml --timeout 300
+        cargo tarpaulin --out Xml --timeout 900
         bash <(curl -s https://codecov.io/bash) -X gcov -t $CODECOV_TOKEN
