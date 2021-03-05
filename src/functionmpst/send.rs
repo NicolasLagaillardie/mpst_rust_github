@@ -49,10 +49,10 @@ use std::marker;
 /// let (name_a, _) = NameA::new();
 ///
 /// let sess = SessionMpst {
-///    session1: channel_ab,
-///    session2: channel_ac,
-///    stack: role_a,
-///    name: name_a,
+///   session1: channel_ab,
+///   session2: channel_ac,
+///   stack: role_a,
+///   name: name_a,
 /// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
@@ -119,10 +119,10 @@ where
 /// let (name_b, _) = NameB::new();
 ///
 /// let sess = SessionMpst {
-///    session1: channel_ba,
-///    session2: channel_bc,
-///    stack: role_b,
-///    name: name_b,
+///   session1: channel_ba,
+///   session2: channel_bc,
+///   stack: role_b,
+///   name: name_b,
 /// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
@@ -189,10 +189,10 @@ where
 /// let (name_c, _) = NameC::new();
 ///
 /// let sess = SessionMpst {
-///    session1: channel_ca,
-///    session2: channel_cb,
-///    stack: role_c,
-///    name: name_c,
+///   session1: channel_ca,
+///   session2: channel_cb,
+///   stack: role_c,
+///   name: name_c,
 /// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
@@ -259,10 +259,10 @@ where
 /// let (name_a, _) = NameA::new();
 ///
 /// let sess = SessionMpst {
-///    session1: channel_ab,
-///    session2: channel_ac,
-///    stack: role_a,
-///    name: name_a,
+///   session1: channel_ab,
+///   session2: channel_ac,
+///   stack: role_a,
+///   name: name_a,
 /// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
@@ -329,10 +329,10 @@ where
 /// let (name_b, _) = NameB::new();
 ///
 /// let sess = SessionMpst {
-///    session1: channel_ba,
-///    session2: channel_bc,
-///    stack: role_b,
-///    name: name_b,
+///   session1: channel_ba,
+///   session2: channel_bc,
+///   stack: role_b,
+///   name: name_b,
 /// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
@@ -399,10 +399,10 @@ where
 /// let (name_c, _) = NameC::new();
 ///
 /// let sess = SessionMpst {
-///    session1: channel_ca,
-///    session2: channel_cb,
-///    stack: role_c,
-///    name: name_c,
+///   session1: channel_ca,
+///   session2: channel_cb,
+///   stack: role_c,
+///   name: name_c,
 /// };
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///

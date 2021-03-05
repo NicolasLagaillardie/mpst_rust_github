@@ -1,23 +1,23 @@
 ////////////////////////////////////////////
 /// CLOSE
 
-///  Create the close function to be used with more than 3
+/// Create the close function to be used with more than 3
 /// participants.  
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *close* function
-///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
+/// * The name of the new *close* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
-///  use mpstthree::{close_mpst, create_sessionmpst};
+/// ```
+/// use mpstthree::{close_mpst, create_sessionmpst};
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  close_mpst!(close_mpst_multi, SessionMpst, 3);
-///  ```
+/// close_mpst!(close_mpst_multi, SessionMpst, 3);
+/// ```
 #[macro_export]
 macro_rules! close_mpst {
     ($func_name:ident, $struct_name:ident, $nsessions:literal) => {
@@ -40,23 +40,23 @@ macro_rules! close_mpst {
     }
 }
 
-///  Create the close function to be used with more than 3
+/// Create the close function to be used with more than 3
 /// participants.  
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *close* function
-///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
+/// * The name of the new *close* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
-///  use mpstthree::{close_mpst, create_sessionmpst};
+/// ```
+/// use mpstthree::{close_mpst, create_sessionmpst};
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  close_mpst!(close_mpst_multi, SessionMpst, 3);
-///  ```
+/// close_mpst!(close_mpst_multi, SessionMpst, 3);
+/// ```
 #[macro_export]
 macro_rules! close_mpst_check_cancel {
     ($func_name:ident, $struct_name:ident, $nsessions:literal) => {

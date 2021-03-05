@@ -1,24 +1,24 @@
 ////////////////////////////////////////////
 /// FORK
 
-///  Creates the _simple fork_ function to be used with more
+/// Creates the _simple fork_ function to be used with more
 /// than 3 participants. It should be used with
 /// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.
 /// html)  # Arguments
 ///  
-///  * The name of the new simple *fork* function
-///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
+/// * The name of the new simple *fork* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
-///  use mpstthree::{fork_simple_multi, create_sessionmpst};
+/// ```
+/// use mpstthree::{fork_simple_multi, create_sessionmpst};
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  fork_simple_multi!(fork_simple, SessionMpst, 3);
-///  ```
+/// fork_simple_multi!(fork_simple, SessionMpst, 3);
+/// ```
 #[macro_export]
 macro_rules! fork_simple_multi {
     ($func_name: ident, $struct_name:ident, $nsessions:literal) => {
@@ -46,23 +46,23 @@ macro_rules! fork_simple_multi {
     }
 }
 
-///  Creates the _fork_ function to be used with more than 3
+/// Creates the _fork_ function to be used with more than 3
 /// participants. It must be used with
 /// [`mpstthree::fork_simple`](../macro.fork_simple.html)  #
 /// Arguments  
-///  * The name of the new *fork* function
-///  * The name of the *simple fork* function
-///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
+/// * The name of the new *fork* function
+/// * The name of the *simple fork* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
-///  use mpstthree::{fork_mpst_multi, create_sessionmpst};
+/// ```
+/// use mpstthree::{fork_mpst_multi, create_sessionmpst};
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+/// fork_mpst_multi!(fork_mpst, SessionMpst, 3);
 /// ```
 #[macro_export]
 macro_rules! fork_mpst_multi {

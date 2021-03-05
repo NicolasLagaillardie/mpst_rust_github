@@ -38,9 +38,9 @@ where
 /// Creates and returns a tuple of three child processes for
 /// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst. html) linked together.
 ///
-///  # Example
+/// # Example
 ///
-///  ```
+/// ```
 /// use std::boxed::Box;
 /// use std::collections::hash_map::RandomState;
 /// use std::collections::HashMap;
@@ -88,7 +88,7 @@ where
 /// Result<(), Box<dyn Error>> {     let s =
 /// send_mpst_a_to_b(1, s);     let (x, s) =
 /// recv_mpst_a_to_c(s)?;     close_mpst(s)?;
-///     Ok(())
+///    Ok(())
 /// }
 ///
 /// /// Single test for B
@@ -96,7 +96,7 @@ where
 /// Result<(), Box<dyn Error>> {     let (x, s) =
 /// recv_mpst_b_to_a(s)?;     let s = send_mpst_b_to_c(2,
 /// s);     close_mpst(s)?;
-///     Ok(())
+///    Ok(())
 /// }
 ///
 /// /// Single test for C
@@ -104,18 +104,18 @@ where
 /// Result<(), Box<dyn Error>> {     let s =
 /// send_mpst_c_to_a(3, s);     let (x, s) =
 /// recv_mpst_c_to_b(s)?;     close_mpst(s)?;
-///     Ok(())
+///    Ok(())
 /// }
 /// let (thread_a, thread_b, thread_c) = fork_mpst(
-///                 simple_triple_endpoint_a,
-///                 simple_triple_endpoint_b,
-///                 simple_triple_endpoint_c,
+///                simple_triple_endpoint_a,
+///                simple_triple_endpoint_b,
+///                simple_triple_endpoint_c,
 /// );
 ///
 /// thread_a.join().unwrap();
 /// thread_b.join().unwrap();
 /// thread_c.join().unwrap();
-///  ```
+/// ```
 ///
 /// Creates 3 pairs of endpoints, each pair of type `S` and
 /// `S::Dual`. Creates 3 `Role` for each queue.

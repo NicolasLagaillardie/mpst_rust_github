@@ -199,45 +199,45 @@ macro_rules! create_choose_from_3_to_1_2 {
 
 ////////////////////////////////////////////
 
-///  Create the *ChooseMpst* function to send a *Choose*
+/// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the third role to the others.  Must be
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_3_to_1_and_2};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_3_to_1_and_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_right_from_3_to_1_and_2!(
-///      choose_right_mpst_session_c_to_all,
-///      RoleADual,
-///      RoleBDual,
-///      RoleCtoAll,
-///      next_c_to_all,
-///      RoleC
-///  );
-///  ```
+/// create_choose_right_from_3_to_1_and_2!(
+///     choose_right_mpst_session_c_to_all,
+///     RoleADual,
+///     RoleBDual,
+///     RoleCtoAll,
+///     next_c_to_all,
+///     RoleC
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     (
@@ -304,45 +304,45 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
     };
 }
 
-///  Create the *ChooseMpst* function to send a *Choose*
+/// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the third role to the others.  Must be
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_3_to_1_and_2};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_3_to_1_and_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_left_from_3_to_1_and_2!(
-///      choose_right_mpst_session_c_to_all,
-///      RoleADual,
-///      RoleBDual,
-///      RoleCtoAll,
-///      next_c_to_all,
-///      RoleC
-///  );
-///  ```
+/// create_choose_left_from_3_to_1_and_2!(
+///     choose_right_mpst_session_c_to_all,
+///     RoleADual,
+///     RoleBDual,
+///     RoleCtoAll,
+///     next_c_to_all,
+///     RoleC
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     (
@@ -409,45 +409,45 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
     };
 }
 
-///  Create the *ChooseMpst* function to send a *Choose*
+/// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the first role to the others.  Must be
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_1_to_2_and_3};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_1_to_2_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
+/// create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_left_from_1_to_2_and_3!(
-///      choose_right_mpst_session_a_to_all,
-///      RoleBDual,
-///      RoleCDual,
-///      RoleAtoAll,
-///      next_a_to_all,
-///      RoleA
-///  );
-///  ```
+/// create_choose_left_from_1_to_2_and_3!(
+///     choose_right_mpst_session_a_to_all,
+///     RoleBDual,
+///     RoleCDual,
+///     RoleAtoAll,
+///     next_a_to_all,
+///     RoleA
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     (
@@ -514,45 +514,45 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
     };
 }
 
-///  Create the *ChooseMpst* function to send a *Choose*
+/// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the first role to the others.  Must be
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_1_to_2_and_3};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_1_to_2_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
+/// create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_right_from_1_to_2_and_3!(
-///      choose_right_mpst_session_a_to_all,
-///      RoleBDual,
-///      RoleCDual,
-///      RoleAtoAll,
-///      next_a_to_all,
-///      RoleA
-///  );
-///  ```
+/// create_choose_right_from_1_to_2_and_3!(
+///     choose_right_mpst_session_a_to_all,
+///     RoleBDual,
+///     RoleCDual,
+///     RoleAtoAll,
+///     next_a_to_all,
+///     RoleA
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     (
@@ -619,45 +619,45 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
     };
 }
 
-///  Create the *ChooseMpst* function to send a *Choose*
+/// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the second role to the others.  Must be
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_2_to_1_and_3};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_2_to_1_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_left_from_2_to_1_and_3!(
-///      choose_right_mpst_session_b_to_all,
-///      RoleADual,
-///      RoleCDual,
-///      RoleBtoAll,
-///      next_b_to_all,
-///      RoleB
-///  );
-///  ```
+/// create_choose_left_from_2_to_1_and_3!(
+///     choose_right_mpst_session_b_to_all,
+///     RoleADual,
+///     RoleCDual,
+///     RoleBtoAll,
+///     next_b_to_all,
+///     RoleB
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     (
@@ -724,45 +724,45 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
     };
 }
 
-///  Create the *ChooseMpst* function to send a *Choose*
+/// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the second role to the others.  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_2_to_1_and_3};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_2_to_1_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_right_from_2_to_1_and_3!(
-///      choose_right_mpst_session_b_to_all,
-///      RoleADual,
-///      RoleCDual,
-///      RoleBtoAll,
-///      next_b_to_all,
-///      RoleB
-///  );
-///  ```
+/// create_choose_right_from_2_to_1_and_3!(
+///     choose_right_mpst_session_b_to_all,
+///     RoleADual,
+///     RoleCDual,
+///     RoleBtoAll,
+///     next_b_to_all,
+///     RoleB
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     (
@@ -829,48 +829,48 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
     };
 }
 
-///  Call both
+/// Call both
 /// [`mpstthree::create_choose_right_from_2_to_1_and_3`](../macro.create_choose_right_from_2_to_1_and_3.html)  and
 /// [`mpstthree:: create_choose_left_from_2_to_1_and_3`](../macro.create_choose_left_from_2_to_1_and_3.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new right *ChooseMpst* function
-///  * The name of the new left *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new right *ChooseMpst* function
+/// * The name of the new left *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_2_to_1_and_3};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_2_to_1_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_both_from_2_to_1_and_3!(
-///      choose_right_mpst_session_b_to_all,
-///      choose_left_mpst_session_b_to_all,
-///      RoleADual,
-///      RoleCDual,
-///      RoleBtoAll,
-///      next_b_to_all,
-///      RoleB
-///  );
-///  ```
+/// create_choose_both_from_2_to_1_and_3!(
+///     choose_right_mpst_session_b_to_all,
+///     choose_left_mpst_session_b_to_all,
+///     RoleADual,
+///     RoleCDual,
+///     RoleBtoAll,
+///     next_b_to_all,
+///     RoleB
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
@@ -901,48 +901,48 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
     };
 }
 
-///  Call both
+/// Call both
 /// [`mpstthree::create_choose_right_from_1_to_2_and_3`](../macro.create_choose_right_from_1_to_2_and_3.html)  and
 /// [`mpstthree:: create_choose_left_from_1_to_2_and_3`](../macro.create_choose_left_from_1_to_2_and_3.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new right *ChooseMpst* function
-///  * The name of the new left *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new right *ChooseMpst* function
+/// * The name of the new left *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the
+///   convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_1_to_2_and_3};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_1_to_2_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_both_from_1_to_2_and_3!(
-///      choose_right_mpst_session_b_to_all,
-///      choose_left_mpst_session_b_to_all,
-///      RoleADual,
-///      RoleCDual,
-///      RoleBtoAll,
-///      next_b_to_all,
-///      RoleB
-///  );
-///  ```
+/// create_choose_both_from_1_to_2_and_3!(
+///     choose_right_mpst_session_b_to_all,
+///     choose_left_mpst_session_b_to_all,
+///     RoleADual,
+///     RoleCDual,
+///     RoleBtoAll,
+///     next_b_to_all,
+///     RoleB
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
@@ -973,48 +973,47 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
     };
 }
 
-///  Call both
+/// Call both
 /// [`mpstthree::create_choose_right_from_3_to_1_and_2`](../macro.create_choose_right_from_3_to_1_and_2.html)  and
 /// [`mpstthree:: create_choose_left_from_3_to_1_and_2`](../macro.create_choose_left_from_3_to_1_and_2.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
-///  # Arguments
+/// # Arguments
 ///  
-///  * The name of the new right *ChooseMpst* function
-///  * The name of the new left *ChooseMpst* function
-///  * The name of the dual of the first receiver
-///  * The name of the dual of the second receiver
-///  * The name of the broadcasting sender. This one should contain *toAll* according to the
-///    convention
-///  * The name of related *next* function
-///  * The name of the sender
+/// * The name of the new right *ChooseMpst* function
+/// * The name of the new left *ChooseMpst* function
+/// * The name of the dual of the first receiver
+/// * The name of the dual of the second receiver
+/// * The name of the broadcasting sender. This one should contain *toAll* according to the convention
+/// * The name of related *next* function
+/// * The name of the sender
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```
+/// ```
 /// use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_3_to_1_and_2};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_3_to_1_and_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
-///  create_sessionmpst!(SessionMpst, 3);
+/// create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_choose_both_from_3_to_1_and_2!(
-///      choose_right_mpst_session_b_to_all,
-///      choose_left_mpst_session_b_to_all,
-///      RoleADual,
-///      RoleCDual,
-///      RoleBtoAll,
-///      next_b_to_all,
-///      RoleB
-///  );
-///  ```
+/// create_choose_both_from_3_to_1_and_2!(
+///     choose_right_mpst_session_b_to_all,
+///     choose_left_mpst_session_b_to_all,
+///     RoleADual,
+///     RoleCDual,
+///     RoleBtoAll,
+///     next_b_to_all,
+///     RoleB
+/// );
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
@@ -1045,57 +1044,57 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
     };
 }
 
-///  Choose among two different sessions.
-///  Must be used with
+/// Choose among two different sessions.
+/// Must be used with
 /// [`mpstthree::sessionmpst::SessionMpst`].  
-///  # Arguments
+/// # Arguments
 ///  
-///   * The session to be used
-///   * The first path to be sent
-///   * The second path to be sent
-///   * The *send* function to be used for the first path
-///   * The *send* function to be used for the second path
-///   * The first passive role
-///   * The second passive role
-///   * The active role
+///  * The session to be used
+///  * The first path to be sent
+///  * The second path to be sent
+///  * The *send* function to be used for the first path
+///  * The *send* function to be used for the second path
+///  * The first passive role
+///  * The second passive role
+///  * The active role
 ///  
-///  # Example
+/// # Example
 ///  
-///  ```ignore
-///  match xs.pop() {
-///      Option::Some(_) => {
-///          let s = choose_mpst_to_all!(
-///              s,
-///              CBranchesAtoC::Video,
-///              CBranchesBtoC::Video,
-///              send_mpst_c_to_a,
-///              send_mpst_c_to_b,
-///              RoleA,
-///              RoleB,
-///              RoleC
-///          );
-///          let s = send_mpst_c_to_a(1, s);
-///          let (_, s) = recv_mpst_c_to_a(s)?;
-///          client_recurs(s, xs, index + 1)
-///      }
-///      Option::None => {
-///          let s = choose_mpst_to_all!(
-///              s,
-///              CBranchesAtoC::End,
-///              CBranchesBtoC::End,
-///              send_mpst_c_to_a,
-///              send_mpst_c_to_b,
-///              RoleA,
-///              RoleB,
-///              RoleC
-///          );
-///          close_mpst(s)?;
-///          Ok(())
-///      }
-///  }
-///  ```
+/// ```ignore
+/// match xs.pop() {
+///     Option::Some(_) => {
+///         let s = choose_mpst_to_all!(
+///             s,
+///             CBranchesAtoC::Video,
+///             CBranchesBtoC::Video,
+///             send_mpst_c_to_a,
+///             send_mpst_c_to_b,
+///             RoleA,
+///             RoleB,
+///             RoleC
+///         );
+///         let s = send_mpst_c_to_a(1, s);
+///         let (_, s) = recv_mpst_c_to_a(s)?;
+///         client_recurs(s, xs, index + 1)
+///     }
+///     Option::None => {
+///         let s = choose_mpst_to_all!(
+///             s,
+///             CBranchesAtoC::End,
+///             CBranchesBtoC::End,
+///             send_mpst_c_to_a,
+///             send_mpst_c_to_b,
+///             RoleA,
+///             RoleB,
+///             RoleC
+///         );
+///         close_mpst(s)?;
+///         Ok(())
+///     }
+/// }
+/// ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! choose_mpst_to_all {
     ($session:expr, $label_1:path, $label_2:path, $fn_send_1:ident, $fn_send_2:ident, $receiver_1:ident, $receiver_2:ident, $sender:ident) => {{

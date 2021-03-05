@@ -4,10 +4,10 @@
 ///
 /// # Arguments
 ///
-///  * The name of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
-///  * The name of the *dual* of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
+/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
+/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -135,10 +135,10 @@ macro_rules! create_normal_role {
 ///
 /// # Arguments
 ///
-///  * The name of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
-///  * The name of the *dual* of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
+/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
+/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -146,14 +146,14 @@ macro_rules! create_normal_role {
 /// use mpstthree::create_multiple_normal_role;
 ///
 /// create_multiple_normal_role!(
-///     RoleA,
-///     next_a,
-///     RoleADual,
-///     next_a_dual |
-///     RoleB,
-///     next_b,
-///     RoleBDual,
-///     next_b_dual |
+///    RoleA,
+///    next_a,
+///    RoleADual,
+///    next_a_dual |
+///    RoleB,
+///    next_b,
+///    RoleBDual,
+///    next_b_dual |
 /// );
 /// ```
 ///
@@ -173,10 +173,10 @@ macro_rules! create_multiple_normal_role {
 ///
 /// # Arguments
 ///
-///  * The name of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
-///  * The name of the *dual* of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
+/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
+/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -342,10 +342,10 @@ macro_rules! create_broadcast_role {
 ///
 /// # Arguments
 ///
-///  * The name of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
-///  * The name of the *dual* of the new [`mpstthree::role::Role`]
-///  * The name of the *next* function that is related
+/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
+/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -353,14 +353,14 @@ macro_rules! create_broadcast_role {
 /// use mpstthree::create_multiple_broadcast_role;
 ///
 /// create_multiple_broadcast_role!(
-///     RoleAlltoC,
-///     next_all_to_c,
-///     RoleCtoAll,
-///     next_c_to_all |
-///     RoleAlltoD,
-///     next_all_to_D,
-///     RoleDtoAll,
-///     next_d_to_all |
+///    RoleAlltoC,
+///    next_all_to_c,
+///    RoleCtoAll,
+///    next_c_to_all |
+///    RoleAlltoD,
+///    next_all_to_D,
+///    RoleDtoAll,
+///    next_d_to_all |
 /// );
 /// ```
 ///
