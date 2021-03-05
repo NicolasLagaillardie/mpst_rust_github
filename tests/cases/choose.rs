@@ -7,7 +7,7 @@ use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
 
-use mpstthree::binary::{End, Recv, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 

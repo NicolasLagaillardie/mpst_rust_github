@@ -12,8 +12,7 @@
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::{create_sessionmpst,
-/// create_offer_type_multi};
+///  use mpstthree::{create_sessionmpst, create_offer_type_multi};
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_offer_type_multi!(OfferMpstThree, SessionMpst,
@@ -23,7 +22,7 @@
 macro_rules! create_offer_type_multi {
     ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
-            type $type_name<#(S#N:0,)2:0 R0, R1, N0> = mpstthree::binary::Recv<either::Either<$sessionmpst_name<#(S#N:0,)0:0 R0, N0>, $sessionmpst_name<#(S#N:0,)3:0 R1, N0>>, mpstthree::binary::End>;
+            type $type_name<#(S#N:0,)2:0 R0, R1, N0> = mpstthree::binary::struct_trait::Recv<either::Either<$sessionmpst_name<#(S#N:0,)0:0 R0, N0>, $sessionmpst_name<#(S#N:0,)3:0 R1, N0>>, mpstthree::binary::struct_trait::End>;
         });
     }
 }
@@ -46,15 +45,10 @@ macro_rules! create_offer_type_multi {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_recv_mpst_all_session,  create_offer_type_multi,
-/// create_offer_mpst_session_multi};
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_recv_mpst_all_session,  create_offer_type_multi, create_offer_mpst_session_multi};
 ///
-///  create_normal_role!(RoleB, next_b, RoleBDual,
-/// next_b_dual);  create_broadcast_role!(RoleAlltoD,
-/// next_all_to_d, RoleDtoAll, next_d_to_all);
+///  create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_offer_type_multi!(OfferMpstThree, SessionMpst,
@@ -88,7 +82,7 @@ macro_rules! create_offer_mpst_session_multi {
             fn $func_name<'a, #(S#N:0,)2:0 F, G, R1, R2, U>(
                 s: $sessionmpst_name<
                     %(
-                        mpstthree::binary::End,
+                        mpstthree::binary::struct_trait::End,
                     )(
                         $type_name<#(S#N:0,)2:0 R1, R2, $name<mpstthree::role::end::RoleEnd>>,
                     )0*
@@ -100,7 +94,7 @@ macro_rules! create_offer_mpst_session_multi {
             ) -> Result<U, Box<dyn std::error::Error + 'a>>
             where
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )2:0
                 R1: mpstthree::role::Role,
                 R2: mpstthree::role::Role,
@@ -120,7 +114,7 @@ macro_rules! create_offer_mpst_session_multi {
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {
                 let (e, s) = $recv_func(s)?;
-                mpstthree::binary::cancel(s);
+                mpstthree::binary::cancel::cancel(s);
                 e.either(f, g)
             }
         });
@@ -159,7 +153,7 @@ macro_rules! offer_mpst {
     ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
         (move || -> Result<_, _> {
             let (l, s) = $recv_mpst($session)?;
-            mpstthree::binary::cancel(s);
+            mpstthree::binary::cancel::cancel(s);
             match l {
                 $(
                     $pat => $result,
@@ -182,8 +176,8 @@ macro_rules! offer_cancel_mpst {
     ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
         (move || -> Result<_, _> {
             let ((session1, cont), s) = $recv_mpst($session)?;
-            let s = s.session1.sender.send(mpstthree::binary::Signal::Offer(session1)).unwrap();
-            mpstthree::binary::cancel(s);
+            let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(session1)).unwrap();
+            mpstthree::binary::cancel::cancel(s);
             match cont {
                 $(
                     $pat => $result,

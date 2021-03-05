@@ -1,6 +1,7 @@
 //! This module contains all the *receive* functions
 
-use crate::binary::{recv, Recv, Session};
+use crate::binary::recv::recv;
+use crate::binary::struct_trait::{Recv, Session};
 use crate::role::a::{next_a, RoleA};
 use crate::role::all_to_a::{next_all_to_a, RoleAlltoA};
 use crate::role::all_to_b::{next_all_to_b, RoleAlltoB};
@@ -23,7 +24,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -109,7 +110,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -194,7 +195,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -279,7 +280,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -364,7 +365,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -449,7 +450,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///

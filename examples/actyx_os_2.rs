@@ -1,4 +1,4 @@
-use mpstthree::binary::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
@@ -255,7 +255,6 @@ type EndpointStorageInit<N> = SessionMpstFour<
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_response_api_from_storage, {
         Branching0fromStoA::Up(s) => {
-
             let (start, s) = recv_start_api_from_controller(s)?;
 
             println!("Start API: {}", start);

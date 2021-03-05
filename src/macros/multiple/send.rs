@@ -24,7 +24,7 @@ macro_rules! send_mpst {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
             %(
             )(
-                let new_session = mpstthree::binary::send($payload, $session.session#N:0);
+                let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
             )0*
             let new_queue = $next($session.stack);
 
@@ -60,17 +60,14 @@ macro_rules! send_mpst {
 ///  
 ///  ```
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_mpst_session};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_mpst_session};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleD, next_d,
-/// RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_send_mpst_session!(send_mpst_d_to_a, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);
+///  create_send_mpst_session!(send_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session {
@@ -82,7 +79,7 @@ macro_rules! create_send_mpst_session {
                     %(
                         S#N:0,
                     )(
-                        mpstthree::binary::Send<T, S#N:0>,
+                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
                     )0*
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
@@ -91,7 +88,7 @@ macro_rules! create_send_mpst_session {
             where
                 T: std::marker::Send,
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
             {
@@ -122,17 +119,14 @@ macro_rules! create_send_mpst_session {
 ///  
 ///  ```
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_mpst_cancel};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_mpst_cancel};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleD, next_d,
-/// RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_send_mpst_cancel!(send_cancel_d_to_a, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);
+///  create_send_mpst_cancel!(send_cancel_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel {
@@ -144,7 +138,7 @@ macro_rules! create_send_mpst_cancel {
                     %(
                         S#N:0,
                     )(
-                        mpstthree::binary::Send<T, S#N:0>,
+                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
                     )0*
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
@@ -153,13 +147,13 @@ macro_rules! create_send_mpst_cancel {
             where
                 T: std::marker::Send,
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
             {
                 %(
                 )(
-                    let new_session = mpstthree::binary::send_canceled(x, s.session#N:0)?;
+                    let new_session = mpstthree::binary::send::send_canceled(x, s.session#N:0)?;
                 )0*
                 let new_queue = $next(s.stack);
 
@@ -199,34 +193,28 @@ macro_rules! create_send_mpst_cancel {
 ///  
 ///  ```
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_check_cancel};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel};
 ///
-///  create_normal_role!(RoleB, next_b, RoleBDual,
-/// next_b_dual);  create_normal_role!(RoleD, next_d,
-/// RoleDDual, next_d_dual);
+///  create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_send_check_cancel!(send_cancel_d_to_b, RoleB,
-/// next_b, RoleD, SessionMpst, 3, 2);
+///  create_send_check_cancel!(send_cancel_d_to_b, RoleB, next_b, RoleD, SessionMpst, 3, 2);
 /// ```
 ///
 /// # Compile fail
 ///  
 ///  ```compile_fail
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_check_cancel};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleD, next_d,
-/// RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_send_check_cancel!(send_cancel_d_to_b, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);
+///  create_send_check_cancel!(send_cancel_d_to_b, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel {
@@ -235,17 +223,17 @@ macro_rules! create_send_check_cancel {
             fn $func_name<T, #(S#N:0,)16:0 R>(
                 x: T,
                 s: $struct_name<
-                    mpstthree::binary::End,
+                    mpstthree::binary::struct_trait::End,
                     %(
                         S#N:0,
                     )(
-                        mpstthree::binary::Send<T, S#N:0>,
+                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
                     )3*
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
             ) -> Result<$struct_name<
-                mpstthree::binary::End,
+                mpstthree::binary::struct_trait::End,
                 #(S#N:0,)16:0
                 R,
                 $name<mpstthree::role::end::RoleEnd>
@@ -253,13 +241,13 @@ macro_rules! create_send_check_cancel {
             where
                 T: std::marker::Send,
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )16:0
                 R: mpstthree::role::Role,
             {
                 match s.session1.receiver.try_recv() {
-                    Ok(_) => {
-                        mpstthree::binary::cancel(s);
+                    Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
+                        mpstthree::binary::cancel::cancel(s);
                         panic!("Error")
                     },
                     _ => {}
@@ -267,7 +255,7 @@ macro_rules! create_send_check_cancel {
 
                 %(
                 )(
-                    let new_session = mpstthree::binary::send_canceled(x, s.session#N:0)?;
+                    let new_session = mpstthree::binary::send::send_canceled(x, s.session#N:0)?;
                 )0*
 
                 let new_queue = $next(s.stack);
@@ -305,14 +293,11 @@ macro_rules! create_send_check_cancel {
 ///  
 ///  ```
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_mpst_session,
-/// create_send_mpst_session_bundle};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_mpst_session, create_send_mpst_session_bundle};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleD,
-/// next_d, RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -356,14 +341,11 @@ macro_rules! create_send_mpst_session_bundle {
 ///  
 ///  ```
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_mpst_cancel,
-/// create_send_mpst_cancel_bundle};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_mpst_cancel, create_send_mpst_cancel_bundle};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleD,
-/// next_d, RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -407,14 +389,11 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///  
 ///  ```
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_check_cancel,
-/// create_send_check_cancel_bundle};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel, create_send_check_cancel_bundle};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleD,
-/// next_d, RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -433,14 +412,11 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///  
 ///  ```compile_fail
 ///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_send_check_cancel,
-/// create_send_check_cancel_bundle};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel, create_send_check_cancel_bundle};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleD,
-/// next_d, RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///

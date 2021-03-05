@@ -1,21 +1,20 @@
 //! This module contains the *close* function
 
-use crate::binary::End;
-use crate::binary::Signal;
+use crate::binary::struct_trait::End;
+use crate::binary::struct_trait::Signal;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use std::error::Error;
 
-/// Closes a [`mpstthree::sessionmpst::Sessionmpst`](../
-/// sessionmpst/struct. SessionMpst.html). Synchronises with
+/// Closes a [`mpstthree::sessionmpst::Sessionmpst`](../sessionmpst/struct. SessionMpst.html). Synchronises with
 /// all partners, and fails if one of the partners has
 /// crashed.
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Session};
+/// use mpstthree::binary::struct_trait::{End, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///

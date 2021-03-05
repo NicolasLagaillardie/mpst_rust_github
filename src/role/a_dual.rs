@@ -10,8 +10,7 @@ use crossbeam_channel::{bounded, Sender};
 /// of the [`mpstthree::sessionmpst::SessionMpst`] related
 /// to the `Dual` of A.
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
 #[derive(Debug)]
 pub struct RoleADual<R>
 where

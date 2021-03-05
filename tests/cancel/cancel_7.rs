@@ -1,4 +1,4 @@
-use mpstthree::binary::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, close_mpst_check_cancel, create_multiple_normal_role,

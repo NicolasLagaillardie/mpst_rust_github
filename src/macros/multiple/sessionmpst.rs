@@ -31,7 +31,7 @@ macro_rules! create_sessionmpst {
             >
             where
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
@@ -44,9 +44,9 @@ macro_rules! create_sessionmpst {
             }
 
             #[doc(hidden)]
-            impl<#(S#N:0: mpstthree::binary::Session,)0:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::Session for $struct_name<#(S#N:0, )0:0 R, N> {
+            impl<#(S#N:0: mpstthree::binary::struct_trait::Session,)0:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::struct_trait::Session for $struct_name<#(S#N:0, )0:0 R, N> {
                 type Dual =
-                $struct_name<#(<S#N:0 as mpstthree::binary::Session>::Dual, )0:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
+                $struct_name<#(<S#N:0 as mpstthree::binary::struct_trait::Session>::Dual, )0:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 
                 #[doc(hidden)]
                 fn new() -> (Self, Self::Dual) {

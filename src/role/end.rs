@@ -1,4 +1,4 @@
-// use crate::role::Role;
+use crate::role::Role;
 use crossbeam_channel::{bounded, Receiver, Sender};
 
 /// This structure is used to close an ordering or a name.
@@ -6,7 +6,7 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::End;
+/// use mpstthree::binary::struct_trait::End;
 ///
 /// // Creating the binary sessions
 /// type Close = End;
@@ -17,7 +17,7 @@ pub struct RoleEnd {
     pub receiver: Receiver<()>,
 }
 
-impl crate::role::Role for RoleEnd {
+impl Role for RoleEnd {
     type Dual = RoleEnd;
 
     #[doc(hidden)]

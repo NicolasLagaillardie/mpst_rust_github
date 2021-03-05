@@ -12,8 +12,7 @@
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::{create_sessionmpst,
-/// create_choose_type_multi};
+///  use mpstthree::{create_sessionmpst, create_choose_type_multi};
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_choose_type_multi!(ChooseMpstThree, SessionMpst,
@@ -25,16 +24,16 @@ macro_rules! create_choose_type_multi {
         mpst_seq::seq!(N in 1..$nsessions {
             type $type_name<
                 #(S#N:0,)2:0 R0, R1, N0
-            > = mpstthree::binary::Send<
+            > = mpstthree::binary::struct_trait::Send<
                 either::Either<
                     <
                         $sessionmpst_name<#(S#N:0,)0:0 R0, N0
-                    > as mpstthree::binary::Session>::Dual,
+                    > as mpstthree::binary::struct_trait::Session>::Dual,
                     <
                         $sessionmpst_name<#(S#N:0,)3:0 R1, N0
-                    > as mpstthree::binary::Session>::Dual
+                    > as mpstthree::binary::struct_trait::Session>::Dual
                     >,
-                mpstthree::binary::End
+                mpstthree::binary::struct_trait::End
             >;
         });
     }
@@ -56,15 +55,10 @@ macro_rules! create_choose_type_multi {
 ///  # Example
 ///  
 ///  ```
-/// use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_type_multi,
-/// create_choose_mpst_session_multi_left};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_type_multi, create_choose_mpst_session_multi_left};
 ///
-/// create_normal_role!(RoleD, next_d, RoleDDual,
-/// next_d_dual);
-/// create_broadcast_role!(RoleAlltoD,
-/// next_all_to_d, RoleDtoAll, next_d_to_all);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_choose_type_multi!(ChooseMpstThree, SessionMpst,
@@ -89,12 +83,12 @@ macro_rules! create_choose_mpst_session_multi_left {
                     #( // i in 1..K
                         $type_name<
                             ~( // j in 0..K
-                                <S~N:2 as mpstthree::binary::Session>::Dual,
+                                <S~N:2 as mpstthree::binary::struct_trait::Session>::Dual,
                             )(
                                 S~N:2, // S(i + j) (with Dual if needed)
                             )0*
                             ~( // j in 0..K
-                                <S~N:3 as mpstthree::binary::Session>::Dual,
+                                <S~N:3 as mpstthree::binary::struct_trait::Session>::Dual,
                             )(
                                 S~N:3, // S(diff * (diff + 1) / 2 + K + i + j) (with Dual if needed)
                             )0*
@@ -116,14 +110,14 @@ macro_rules! create_choose_mpst_session_multi_left {
             )
             -> $sessionmpst_name<
                 #( // K-1 + i in (K-1..0)
-                    <S#N:8 as mpstthree::binary::Session>::Dual, // S(i) or  S(i + diff * (diff + 1))
+                    <S#N:8 as mpstthree::binary::struct_trait::Session>::Dual, // S(i) or  S(i + diff * (diff + 1))
                 )0:0
                 R^N:0, // R(3K-2) or R(3K-1)
                 $name<mpstthree::role::end::RoleEnd>
             >
             where
                 #( // i in 1..(diff * (diff + 1) + 1)
-                    S#N:0: mpstthree::binary::Session + 'a, // S(i)
+                    S#N:0: mpstthree::binary::struct_trait::Session + 'a, // S(i)
                 )10:0
                 #( // i in 1..(3 * K)
                     R#N:0: mpstthree::role::Role + 'a, // R(i)
@@ -156,7 +150,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                 )0:0
 
                 #( // i in 1..K
-                    let new_session_#N:0 = mpstthree::binary::send(either::Either::Left(choice_#N:0), s.session#N:0);
+                    let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Left(choice_#N:0), s.session#N:0);
                 )0:0
                 let (_, new_queue) = $recv_func(s.stack);
 
@@ -168,7 +162,7 @@ macro_rules! create_choose_mpst_session_multi_left {
                     name: s.name,
                 };
 
-                mpstthree::binary::cancel(s);
+                mpstthree::binary::cancel::cancel(s);
 
                 $sessionmpst_name {
                     #(
@@ -198,15 +192,10 @@ macro_rules! create_choose_mpst_session_multi_left {
 ///  # Example
 ///  
 ///  ```
-/// use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_type_multi,
-/// create_choose_mpst_session_multi_right};
+/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_type_multi, create_choose_mpst_session_multi_right};
 ///
-/// create_normal_role!(RoleD, next_d, RoleDDual,
-/// next_d_dual);
-/// create_broadcast_role!(RoleAlltoD,
-/// next_all_to_d, RoleDtoAll, next_d_to_all);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 /// create_choose_type_multi!(ChooseMpstThree, SessionMpst,
@@ -231,12 +220,12 @@ macro_rules! create_choose_mpst_session_multi_right {
                     #( // i in 1..K
                         $type_name<
                             ~( // j in 0..K
-                                <S~N:2 as mpstthree::binary::Session>::Dual,
+                                <S~N:2 as mpstthree::binary::struct_trait::Session>::Dual,
                             )(
                                 S~N:2, // S(i + j) (with Dual if needed)
                             )0*
                             ~( // j in 0..K
-                                <S~N:3 as mpstthree::binary::Session>::Dual,
+                                <S~N:3 as mpstthree::binary::struct_trait::Session>::Dual,
                             )(
                                 S~N:3, // S(diff * (diff + 1) / 2 + K + i + j) (with Dual if needed)
                             )0*
@@ -258,14 +247,14 @@ macro_rules! create_choose_mpst_session_multi_right {
             )
             -> $sessionmpst_name<
                 #( // K-1 + i in (K-1..0)
-                    <S#N:9 as mpstthree::binary::Session>::Dual, // S(i) or  S(i + diff * (diff + 1))
+                    <S#N:9 as mpstthree::binary::struct_trait::Session>::Dual, // S(i) or  S(i + diff * (diff + 1))
                 )0:0
                 R^N:1, // R(3K-2) or R(3K-1)
                 $name<mpstthree::role::end::RoleEnd>
             >
             where
                 #( // i in 1..(diff * (diff + 1) + 1)
-                    S#N:0: mpstthree::binary::Session + 'a, // S(i)
+                    S#N:0: mpstthree::binary::struct_trait::Session + 'a, // S(i)
                 )10:0
                 #( // i in 1..(3 * K)
                     R#N:0: mpstthree::role::Role + 'a, // R(i)
@@ -298,7 +287,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                 )0:0
 
                 #( // i in 1..K
-                    let new_session_#N:0 = mpstthree::binary::send(either::Either::Right(choice_#N:0), s.session#N:0);
+                    let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Right(choice_#N:0), s.session#N:0);
                 )0:0
                 let (_, new_queue) = $recv_func(s.stack);
 
@@ -310,7 +299,7 @@ macro_rules! create_choose_mpst_session_multi_right {
                     name: s.name,
                 };
 
-                mpstthree::binary::cancel(s);
+                mpstthree::binary::cancel::cancel(s);
 
                 $sessionmpst_name {
                     #(
@@ -341,15 +330,10 @@ macro_rules! create_choose_mpst_session_multi_right {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_type_multi,
-/// create_choose_mpst_session_multi_both};
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_type_multi, create_choose_mpst_session_multi_both};
 ///
-///  create_normal_role!(RoleD, next_d, RoleDDual,
-/// next_d_dual);  create_broadcast_role!(RoleAlltoD,
-/// next_all_to_d, RoleDtoAll, next_d_to_all);
+///  create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
+/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///  create_choose_type_multi!(ChooseMpstThree, SessionMpst,
@@ -460,9 +444,8 @@ macro_rules! create_choose_mpst_session_multi_both {
 macro_rules! choose_mpst_multi_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
-
             #(
-                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
+                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
             )4:0
 
             #(
@@ -503,7 +486,7 @@ macro_rules! choose_mpst_multi_to_all {
                 );
             )2*
 
-            mpstthree::binary::cancel(s);
+            mpstthree::binary::cancel::cancel(s);
 
             $sessionmpst_name {
                 #(
@@ -622,14 +605,14 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             let mut temp = Vec::<End>::new();
 
             %(
-                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::Session>::new();
+                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
             )(
-                let (channel_#N:3, channel_#N:4) = <mpstthree::binary::End as mpstthree::binary::Session>::new();
+                let (channel_#N:3, channel_#N:4) = <mpstthree::binary::struct_trait::End as mpstthree::binary::struct_trait::Session>::new();
 
                 temp.push(channel_#N:3);
             )5*
 
-            let (stack_1, _) = <mpstthree::binary::End as mpstthree::binary::Session>::new();
+            let (stack_1, _) = <mpstthree::binary::struct_trait::End as mpstthree::binary::struct_trait::Session>::new();
 
             #(
                 let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
@@ -691,9 +674,9 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                 Some(e) => e,
                 _ => panic!("Error type"),
             };
-            let s = s.session1.sender.send(mpstthree::binary::Signal::Offer(elt)).unwrap();
+            let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(elt)).unwrap();
 
-            mpstthree::binary::cancel(s);
+            mpstthree::binary::cancel::cancel(s);
 
             $sessionmpst_name {
                 #(

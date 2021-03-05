@@ -1,6 +1,6 @@
 use mpstthree::checking::checker;
 
-use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::sessionmpst::SessionMpst;
 
 use std::any::type_name;

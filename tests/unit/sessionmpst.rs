@@ -1,4 +1,4 @@
-use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::sessionmpst::SessionMpst;
 
 use mpstthree::role::a::RoleA;

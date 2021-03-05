@@ -4,15 +4,14 @@ use crossbeam_channel::{bounded, Sender};
 
 /// Gives the order to the
 /// [`mpstthree::sessionmpst::SessionMpst`] related to B
-/// to execute its [`mpstthree::binary::Session`] fields
+/// to execute its [`mpstthree::binary::struct_trait::Session`] fields
 /// with every other processes.
 ///
 /// This `struct` is used for branching without `enum`. See
 /// the test `05_usecase.rs`.
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::Session`]: ../binary/trait.Session.
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
 /// html
 #[derive(Debug)]
 pub struct RoleBtoAll<R1, R2>

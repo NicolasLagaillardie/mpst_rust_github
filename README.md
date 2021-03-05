@@ -34,7 +34,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 // Used for creating the types
-use mpstthree::binary::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::sessionmpst::SessionMpst;
 
 // Used for connecting all the roles, represented as SessionMpst, together

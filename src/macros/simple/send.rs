@@ -15,17 +15,13 @@
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::sessionmpst::SessionMpst;
-///  use mpstthree::{create_normal_role,
-/// create_send_mpst_session_1};
+/// use mpstthree::sessionmpst::SessionMpst;
+///  use mpstthree::{create_normal_role, create_send_mpst_session_1};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleC, next_c,
-/// RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_send_mpst_session_1!(send_mpst_c_to_a, RoleA,
-/// next_a, RoleC);
+///  create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, next_a, RoleC);
 /// ```
 ///
 ///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
@@ -50,17 +46,13 @@ macro_rules! create_send_mpst_session_1 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::sessionmpst::SessionMpst;
-///  use mpstthree::{create_normal_role,
-/// create_send_mpst_session_2};
+/// use mpstthree::sessionmpst::SessionMpst;
+///  use mpstthree::{create_normal_role, create_send_mpst_session_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleC, next_c,
-/// RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_send_mpst_session_2!(send_mpst_a_to_c, RoleC,
-/// next_c, RoleA);
+///  create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, next_c, RoleA);
 /// ```
 ///
 ///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.

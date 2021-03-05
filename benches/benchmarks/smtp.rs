@@ -6,7 +6,7 @@
 // use criterion::{black_box, criterion_group,
 // criterion_main, Criterion};
 
-// use mpstthree::binary::{End, Recv, Send};
+// use mpstthree::binary::struct_trait::{End, Recv, Send};
 // use mpstthree::role::end::RoleEnd;
 // use mpstthree::role::Role;
 // use mpstthree::{

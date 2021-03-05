@@ -1,4 +1,4 @@
-use mpstthree::binary::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::sessionmpst::SessionMpst;
 use std::marker;

@@ -22,9 +22,9 @@ macro_rules! create_choose_from_1_to_2_3 {
         let (session_1_2, session_2_1) = <$session_1>::new();
         let (session_1_3, session_3_1) = <$session_2>::new();
         let (session_3_2, session_2_3) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
+        let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
+        let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
+        let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
         let (name_1, _) =
             <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
         let (name_2, _) =
@@ -45,8 +45,8 @@ macro_rules! create_choose_from_1_to_2_3 {
             name: name_2,
         };
 
-        let new_session_1 = mpstthree::binary::send($pat(choice_1), $session.session1);
-        let new_session_2 = mpstthree::binary::send($pat(choice_2), $session.session2);
+        let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
+        let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
         let (_, new_queue) = $next($session.stack);
 
         let s = mpstthree::sessionmpst::SessionMpst {
@@ -56,7 +56,7 @@ macro_rules! create_choose_from_1_to_2_3 {
             name: $session.name,
         };
 
-        mpstthree::binary::cancel(s);
+        mpstthree::binary::cancel::cancel(s);
 
         mpstthree::sessionmpst::SessionMpst {
             session1: session_1_2,
@@ -87,9 +87,9 @@ macro_rules! create_choose_from_2_to_1_3 {
         let (session_2_1, session_1_2) = <$session_1>::new();
         let (session_2_3, session_3_2) = <$session_2>::new();
         let (session_3_1, session_1_3) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
+        let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
+        let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
+        let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
         let (name_1, _) =
             <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
         let (name_2, _) =
@@ -110,8 +110,8 @@ macro_rules! create_choose_from_2_to_1_3 {
             name: name_2,
         };
 
-        let new_session_1 = mpstthree::binary::send($pat(choice_1), $session.session1);
-        let new_session_2 = mpstthree::binary::send($pat(choice_2), $session.session2);
+        let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
+        let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
         let (_, new_queue) = $next($session.stack);
 
         let s = mpstthree::sessionmpst::SessionMpst {
@@ -121,7 +121,7 @@ macro_rules! create_choose_from_2_to_1_3 {
             name: $session.name,
         };
 
-        mpstthree::binary::cancel(s);
+        mpstthree::binary::cancel::cancel(s);
 
         mpstthree::sessionmpst::SessionMpst {
             session1: session_2_1,
@@ -152,9 +152,9 @@ macro_rules! create_choose_from_3_to_1_2 {
         let (session_3_1, session_1_3) = <$session_1>::new();
         let (session_3_2, session_2_3) = <$session_2>::new();
         let (session_2_1, session_1_2) = <$session_3>::new();
-        let (_, role_1) = <$role_1>::new();
-        let (_, role_2) = <$role_2>::new();
-        let (role_3, _) = <$role_3>::new();
+        let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
+        let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
+        let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
         let (name_1, _) =
             <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
         let (name_2, _) =
@@ -175,8 +175,8 @@ macro_rules! create_choose_from_3_to_1_2 {
             name: name_2,
         };
 
-        let new_session_1 = mpstthree::binary::send($pat(choice_1), $session.session1);
-        let new_session_2 = mpstthree::binary::send($pat(choice_2), $session.session2);
+        let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
+        let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
         let (_, new_queue) = $next($session.stack);
 
         let s = mpstthree::sessionmpst::SessionMpst {
@@ -186,7 +186,7 @@ macro_rules! create_choose_from_3_to_1_2 {
             name: $session.name,
         };
 
-        mpstthree::binary::cancel(s);
+        mpstthree::binary::cancel::cancel(s);
 
         mpstthree::sessionmpst::SessionMpst {
             session1: session_3_1,
@@ -216,18 +216,14 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_right_from_3_to_1_and_2};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_3_to_1_and_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoC, next_all_to_c,
-/// RoleCtoAll, next_c_to_all);
+///  create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -241,8 +237,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     (
@@ -265,9 +260,9 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -278,12 +273,12 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
             >,
         ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: mpstthree::binary::Session + 'a,
-            S1: mpstthree::binary::Session + 'a,
-            S2: mpstthree::binary::Session + 'a,
-            S3: mpstthree::binary::Session + 'a,
-            S4: mpstthree::binary::Session + 'a,
-            S5: mpstthree::binary::Session + 'a,
+            S0: mpstthree::binary::struct_trait::Session + 'a,
+            S1: mpstthree::binary::struct_trait::Session + 'a,
+            S2: mpstthree::binary::struct_trait::Session + 'a,
+            S3: mpstthree::binary::struct_trait::Session + 'a,
+            S4: mpstthree::binary::struct_trait::Session + 'a,
+            S5: mpstthree::binary::struct_trait::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -326,18 +321,14 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_left_from_3_to_1_and_2};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_3_to_1_and_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoC, next_all_to_c,
-/// RoleCtoAll, next_c_to_all);
+///  create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -351,8 +342,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     (
@@ -375,9 +365,9 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -388,12 +378,12 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
             >,
         ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: mpstthree::binary::Session + 'a,
-            S1: mpstthree::binary::Session + 'a,
-            S2: mpstthree::binary::Session + 'a,
-            S3: mpstthree::binary::Session + 'a,
-            S4: mpstthree::binary::Session + 'a,
-            S5: mpstthree::binary::Session + 'a,
+            S0: mpstthree::binary::struct_trait::Session + 'a,
+            S1: mpstthree::binary::struct_trait::Session + 'a,
+            S2: mpstthree::binary::struct_trait::Session + 'a,
+            S3: mpstthree::binary::struct_trait::Session + 'a,
+            S4: mpstthree::binary::struct_trait::Session + 'a,
+            S5: mpstthree::binary::struct_trait::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -436,18 +426,14 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_left_from_1_to_2_and_3};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_1_to_2_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoA, next_all_to_a,
-/// RoleAtoAll, next_a_to_all);
+///  create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -461,8 +447,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     (
@@ -486,9 +471,9 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 >,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
-                    <S0 as mpstthree::binary::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
                     S5,
-                    <S1 as mpstthree::binary::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
                     R2,
                     R3,
                     $dual_2<mpstthree::role::end::RoleEnd>,
@@ -498,12 +483,12 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
             >,
         ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: mpstthree::binary::Session + 'a,
-            S1: mpstthree::binary::Session + 'a,
-            S2: mpstthree::binary::Session + 'a,
-            S3: mpstthree::binary::Session + 'a,
-            S4: mpstthree::binary::Session + 'a,
-            S5: mpstthree::binary::Session + 'a,
+            S0: mpstthree::binary::struct_trait::Session + 'a,
+            S1: mpstthree::binary::struct_trait::Session + 'a,
+            S2: mpstthree::binary::struct_trait::Session + 'a,
+            S3: mpstthree::binary::struct_trait::Session + 'a,
+            S4: mpstthree::binary::struct_trait::Session + 'a,
+            S5: mpstthree::binary::struct_trait::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -546,18 +531,14 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_right_from_1_to_2_and_3};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_1_to_2_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoA, next_all_to_a,
-/// RoleAtoAll, next_a_to_all);
+///  create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -571,8 +552,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     (
@@ -596,9 +576,9 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 >,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
-                    <S0 as mpstthree::binary::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
                     S5,
-                    <S1 as mpstthree::binary::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
                     R2,
                     R3,
                     $dual_2<mpstthree::role::end::RoleEnd>,
@@ -608,12 +588,12 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
             >,
         ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: mpstthree::binary::Session + 'a,
-            S1: mpstthree::binary::Session + 'a,
-            S2: mpstthree::binary::Session + 'a,
-            S3: mpstthree::binary::Session + 'a,
-            S4: mpstthree::binary::Session + 'a,
-            S5: mpstthree::binary::Session + 'a,
+            S0: mpstthree::binary::struct_trait::Session + 'a,
+            S1: mpstthree::binary::struct_trait::Session + 'a,
+            S2: mpstthree::binary::struct_trait::Session + 'a,
+            S3: mpstthree::binary::struct_trait::Session + 'a,
+            S4: mpstthree::binary::struct_trait::Session + 'a,
+            S5: mpstthree::binary::struct_trait::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -656,18 +636,14 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_left_from_2_to_1_and_3};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_2_to_1_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b,
-/// RoleBtoAll, next_b_to_all);
+///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -681,8 +657,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     (
@@ -705,9 +680,9 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -718,12 +693,12 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
             >,
         ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: mpstthree::binary::Session + 'a,
-            S1: mpstthree::binary::Session + 'a,
-            S2: mpstthree::binary::Session + 'a,
-            S3: mpstthree::binary::Session + 'a,
-            S4: mpstthree::binary::Session + 'a,
-            S5: mpstthree::binary::Session + 'a,
+            S0: mpstthree::binary::struct_trait::Session + 'a,
+            S1: mpstthree::binary::struct_trait::Session + 'a,
+            S2: mpstthree::binary::struct_trait::Session + 'a,
+            S3: mpstthree::binary::struct_trait::Session + 'a,
+            S4: mpstthree::binary::struct_trait::Session + 'a,
+            S5: mpstthree::binary::struct_trait::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -766,18 +741,14 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_right_from_2_to_1_and_3};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_2_to_1_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b,
-/// RoleBtoAll, next_b_to_all);
+///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -791,8 +762,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     (
@@ -815,9 +785,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -828,12 +798,12 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
             >,
         ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
         where
-            S0: mpstthree::binary::Session + 'a,
-            S1: mpstthree::binary::Session + 'a,
-            S2: mpstthree::binary::Session + 'a,
-            S3: mpstthree::binary::Session + 'a,
-            S4: mpstthree::binary::Session + 'a,
-            S5: mpstthree::binary::Session + 'a,
+            S0: mpstthree::binary::struct_trait::Session + 'a,
+            S1: mpstthree::binary::struct_trait::Session + 'a,
+            S2: mpstthree::binary::struct_trait::Session + 'a,
+            S3: mpstthree::binary::struct_trait::Session + 'a,
+            S4: mpstthree::binary::struct_trait::Session + 'a,
+            S5: mpstthree::binary::struct_trait::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -860,10 +830,8 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 }
 
 ///  Call both
-/// [`mpstthree::create_choose_right_from_2_to_1_and_3`](../
-/// macro.create_choose_right_from_2_to_1_and_3.html)  and
-/// [`mpstthree:: create_choose_left_from_2_to_1_and_3`](../
-/// macro.create_choose_left_from_2_to_1_and_3.html).  Must
+/// [`mpstthree::create_choose_right_from_2_to_1_and_3`](../macro.create_choose_right_from_2_to_1_and_3.html)  and
+/// [`mpstthree:: create_choose_left_from_2_to_1_and_3`](../macro.create_choose_left_from_2_to_1_and_3.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 ///  # Arguments
@@ -880,18 +848,14 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_both_from_2_to_1_and_3};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_2_to_1_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b,
-/// RoleBtoAll, next_b_to_all);
+///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -906,8 +870,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
@@ -939,10 +902,8 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 }
 
 ///  Call both
-/// [`mpstthree::create_choose_right_from_1_to_2_and_3`](../
-/// macro.create_choose_right_from_1_to_2_and_3.html)  and
-/// [`mpstthree:: create_choose_left_from_1_to_2_and_3`](../
-/// macro.create_choose_left_from_1_to_2_and_3.html).  Must
+/// [`mpstthree::create_choose_right_from_1_to_2_and_3`](../macro.create_choose_right_from_1_to_2_and_3.html)  and
+/// [`mpstthree:: create_choose_left_from_1_to_2_and_3`](../macro.create_choose_left_from_1_to_2_and_3.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 ///  # Arguments
@@ -959,18 +920,14 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_both_from_1_to_2_and_3};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_1_to_2_and_3};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b,
-/// RoleBtoAll, next_b_to_all);
+///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -985,8 +942,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
@@ -1018,10 +974,8 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 }
 
 ///  Call both
-/// [`mpstthree::create_choose_right_from_3_to_1_and_2`](../
-/// macro.create_choose_right_from_3_to_1_and_2.html)  and
-/// [`mpstthree:: create_choose_left_from_3_to_1_and_2`](../
-/// macro.create_choose_left_from_3_to_1_and_2.html).  Must
+/// [`mpstthree::create_choose_right_from_3_to_1_and_2`](../macro.create_choose_right_from_3_to_1_and_2.html)  and
+/// [`mpstthree:: create_choose_left_from_3_to_1_and_2`](../macro.create_choose_left_from_3_to_1_and_2.html).  Must
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 ///  # Arguments
@@ -1038,18 +992,14 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_choose_both_from_3_to_1_and_2};
+/// use mpstthree::role::Role;
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_3_to_1_and_2};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleC,
-/// next_c, RoleCDual, next_c_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-///  create_broadcast_role!(RoleAlltoB, next_all_to_b,
-/// RoleBtoAll, next_b_to_all);
+///  create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -1064,8 +1014,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///  );
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
@@ -1146,11 +1095,12 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///  }
 ///  ```
 ///
-///  [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html.
+///  [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! choose_mpst_to_all {
-    ($session:expr, $label_1:path, $label_2:path, $fn_send_1:ident, $fn_send_2:ident, $receiver_1:ident, $receiver_2:ident, $sender:ident) => {
+    ($session:expr, $label_1:path, $label_2:path, $fn_send_1:ident, $fn_send_2:ident, $receiver_1:ident, $receiver_2:ident, $sender:ident) => {{
+        use mpstthree::sessionmpst::SessionMpst;
+
         mpstthree::choose_mpst_multi_to_all!(
             $session,
             $fn_send_1,
@@ -1163,6 +1113,6 @@ macro_rules! choose_mpst_to_all {
             SessionMpst,
             3,
             3
-        );
-    };
+        )
+    }};
 }

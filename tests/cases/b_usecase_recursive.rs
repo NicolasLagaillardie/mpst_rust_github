@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 
-use mpstthree::binary::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;

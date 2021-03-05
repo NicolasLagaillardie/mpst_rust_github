@@ -1,4 +1,5 @@
-use mpstthree::binary::{cancel, End, Recv, Send};
+use mpstthree::binary::cancel::cancel;
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     close_mpst, create_multiple_normal_role, create_recv_mpst_session_bundle,

@@ -19,13 +19,13 @@ macro_rules! send_cancel {
             )
             where
                 %(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )(
                 )0*
                 R: mpstthree::role::Role,
             {
-                s.session1.sender.send(mpstthree::binary::Signal::Cancel).unwrap();;
-                mpstthree::binary::cancel(s);
+                s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap();;
+                mpstthree::binary::cancel::cancel(s);
             }
         });
     }
@@ -46,20 +46,20 @@ macro_rules! broadcast_cancel {
                 while #(bool_session#N:0 ||)0:0 false {
                     #(
                         match s.session#N:0.receiver.try_recv() {
-                            Ok(mpstthree::binary::Signal::Cancel) => {
+                            Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
                                 #(
-                                    s.session#N:0.sender.send(mpstthree::binary::Signal::Cancel).unwrap_or(());
+                                    s.session#N:0.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap_or(());
                                 )0:0
                                 panic!("Error");
                             }
-                            Ok(mpstthree::binary::Signal::Stop) => match bool_session#N:0 {
+                            Ok(mpstthree::binary::struct_trait::Signal::Stop) => match bool_session#N:0 {
                                 true => {
-                                    s.session#N:0.sender.send(mpstthree::binary::Signal::Stop).unwrap_or(());
+                                    s.session#N:0.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
                                     bool_session#N:0 = false;
                                 }
                                 false => panic!("Close already sent"),
                             }
-                            Ok(mpstthree::binary::Signal::Offer(channel)) => {
+                            Ok(mpstthree::binary::struct_trait::Signal::Offer(channel)) => {
                                 s.session#N:0 = channel;
                             }
                             _ => {}

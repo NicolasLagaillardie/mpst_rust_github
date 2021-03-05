@@ -26,7 +26,7 @@ macro_rules! fork_simple_multi {
             fn $func_name<#(S#K:0,)0:0 R, N, P>(p: P, s: $struct_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
             where
                 #(
-                    S#K:0: mpstthree::binary::Session + 'static,
+                    S#K:0: mpstthree::binary::struct_trait::Session + 'static,
                 )0:0
                 R: mpstthree::role::Role + 'static,
                 N: mpstthree::role::Role + 'static,
@@ -85,14 +85,14 @@ macro_rules! fork_mpst_multi {
                     N#K:0: mpstthree::role::Role + 'static,
                 )0:0
                 #(
-                    S#K:0: mpstthree::binary::Session + 'static,
+                    S#K:0: mpstthree::binary::struct_trait::Session + 'static,
                 )14:0
                 #( // i in 1..K
                     F#K:0: FnOnce($struct_name<
                         ~( // j in 0..K
                             S~K:6, // S(i + j) (with Dual if needed)
                         )(
-                            <S~K:6 as mpstthree::binary::Session>::Dual,
+                            <S~K:6 as mpstthree::binary::struct_trait::Session>::Dual,
                         )4*
                         R#K:0, N#K:0>) -> Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
@@ -100,7 +100,7 @@ macro_rules! fork_mpst_multi {
                 )0:0
             {
                 #( // i in 1..(diff * (diff + 1))
-                    let (channel_#K:12, channel_#K:13) = <S#K:0 as mpstthree::binary::Session>::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
+                    let (channel_#K:12, channel_#K:13) = <S#K:0 as mpstthree::binary::struct_trait::Session>::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
                 )14:0
 
                 #(

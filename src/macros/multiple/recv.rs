@@ -24,7 +24,7 @@ macro_rules! recv_mpst {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
             %(
             )(
-                let (v, new_session) = mpstthree::binary::recv($session.session#N:0)?;
+                let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
             )0*
             let new_queue = $next($session.stack);
 
@@ -61,18 +61,14 @@ macro_rules! recv_mpst {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_recv_mpst_session};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_recv_mpst_session};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleD, next_d,
-/// RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
-///  create_recv_mpst_session!(recv_mpst_d_to_a, RoleA,
-/// next_a, RoleD, SessionMpst, 3, 1);
+///  create_recv_mpst_session!(recv_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session {
@@ -83,7 +79,7 @@ macro_rules! create_recv_mpst_session {
                     %(
                         S#N:0,
                     )(
-                        mpstthree::binary::Recv<T, S#N:0>,
+                        mpstthree::binary::struct_trait::Recv<T, S#N:0>,
                     )0*
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
@@ -99,7 +95,7 @@ macro_rules! create_recv_mpst_session {
             where
                 T: std::marker::Send,
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
             {
@@ -127,15 +123,11 @@ macro_rules! create_recv_mpst_session {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role, create_sessionmpst,
-/// create_recv_mpst_session,
-/// create_recv_mpst_session_bundle};
+///  use mpstthree::{create_normal_role, create_sessionmpst, create_recv_mpst_session, create_recv_mpst_session_bundle};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_normal_role!(RoleB, next_b,
-/// RoleBDual, next_b_dual);  create_normal_role!(RoleD,
-/// next_d, RoleDDual, next_d_dual);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
+/// create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -179,14 +171,10 @@ macro_rules! create_recv_mpst_session_bundle {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_recv_mpst_all_session};
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_recv_mpst_all_session};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_broadcast_role!(RoleAlltoD,
-/// next_all_to_d, RoleDtoAll, next_d_to_all);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///
@@ -209,7 +197,7 @@ macro_rules! create_recv_mpst_all_session {
                     %(
                         S#N:0,
                     )(
-                        mpstthree::binary::Recv<T, S#N:0>,
+                        mpstthree::binary::struct_trait::Recv<T, S#N:0>,
                     )0*
                     $role<R, R>,
                     $name<mpstthree::role::end::RoleEnd>,
@@ -228,13 +216,13 @@ macro_rules! create_recv_mpst_all_session {
             where
                 T: std::marker::Send,
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
             {
                 %(
                 )(
-                    let (v, new_session) = mpstthree::binary::recv(s.session#N:0)?;
+                    let (v, new_session) = mpstthree::binary::recv::recv(s.session#N:0)?;
                 )0*
                 let (new_queue, _) = $next(s.stack);
                 let result = $struct_name {
@@ -271,17 +259,11 @@ macro_rules! create_recv_mpst_all_session {
 ///  # Example
 ///  
 ///  ```
-///  use mpstthree::role::Role;
-///  use mpstthree::{create_normal_role,
-/// create_broadcast_role, create_sessionmpst,
-/// create_recv_mpst_all_session,
-/// create_recv_mpst_all_session_bundle};
+///  use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_recv_mpst_all_session, create_recv_mpst_all_session_bundle};
 ///
-///  create_normal_role!(RoleA, next_a, RoleADual,
-/// next_a_dual);  create_broadcast_role!(RoleAlltoB,
-/// next_all_to_b, RoleBtoAll, next_b_to_all);
-/// create_broadcast_role!(RoleAlltoD, next_all_to_d,
-/// RoleDtoAll, next_d_to_all);
+///  create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
 ///
 ///  create_sessionmpst!(SessionMpst, 3);
 ///

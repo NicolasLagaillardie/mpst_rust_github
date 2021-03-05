@@ -1,6 +1,7 @@
 //! This module contains all the *offer* functions
 
-use crate::binary::{cancel, Session};
+use crate::binary::cancel::cancel;
+use crate::binary::struct_trait::Session;
 use crate::functionmpst::recv::{
     recv_mpst_a_all_to_b, recv_mpst_a_all_to_c, recv_mpst_b_all_to_a, recv_mpst_b_all_to_c,
     recv_mpst_c_all_to_a, recv_mpst_c_all_to_b,

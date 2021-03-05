@@ -4,7 +4,11 @@ use crossbeam_channel::bounded;
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::{close, fork_with_thread_id, recv, send, End, Recv, Send, Session};
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,

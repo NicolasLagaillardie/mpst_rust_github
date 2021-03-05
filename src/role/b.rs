@@ -9,8 +9,7 @@ use crossbeam_channel::{bounded, Sender};
 /// of the [`mpstthree::sessionmpst::SessionMpst`] related
 /// to B.
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]:
-/// ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
 pub struct RoleB<R>
 where
     R: Role,

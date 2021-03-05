@@ -7,7 +7,7 @@ mod aux_dot;
 
 use self::aux_checker::{checker_aux, parse_type_of};
 
-use crate::binary::Session;
+use crate::binary::struct_trait::Session;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 

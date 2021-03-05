@@ -1,4 +1,8 @@
-use mpstthree::binary::{close_tcp, fork_tcp, recv_tcp, send_tcp, End, Recv, Send, Session};
+use mpstthree::binary::close::close_tcp;
+use mpstthree::binary::fork::fork_tcp;
+use mpstthree::binary::recv::recv_tcp;
+use mpstthree::binary::send::send_tcp;
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;
@@ -54,7 +58,7 @@ fn tcp_client_aux(mut sessions: Vec<RecursB>, stream: TcpStream) -> Result<(), B
         sessions = temp;
     }
 
-    let mut temp = Vec::<mpstthree::binary::End>::new();
+    let mut temp = Vec::<mpstthree::binary::struct_trait::End>::new();
 
     for s in sessions {
         temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 128]));

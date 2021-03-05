@@ -4,7 +4,7 @@
 
 // use mpstthree::checking::checker;
 
-// use mpstthree::binary::{End, Recv, Send, Session};
+// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 // use mpstthree::fork_mpst;
 // use mpstthree::role::Role;
 // use mpstthree::sessionmpst::SessionMpst;
@@ -258,24 +258,24 @@
 // //     RoleCtoA<RoleCtoA<RoleCtoAll<RoleCtoAll<RoleCtoA<RoleCtoA<RoleEnd>>,
 // RoleEnd>, RoleEnd>>>, // >;
 
-// type resultExpected = mpstthree::binary::Recv<
+// type resultExpected = mpstthree::binary::struct_trait::Recv<
 //     _,
-//     mpstthree::binary::Send<
+//     mpstthree::binary::struct_trait::Send<
 //         _,
-//         mpstthree::binary::Recv<
+//         mpstthree::binary::struct_trait::Recv<
 //             either::Either<
 //                 _,
 //                 mpstthree::sessionmpst::SessionMpst<
 //                     _,
-//                     mpstthree::binary::Recv<
+//                     mpstthree::binary::struct_trait::Recv<
 //                         either::Either<
 //
 // mpstthree::sessionmpst::SessionMpst<
-// mpstthree::binary::Recv<
+// mpstthree::binary::struct_trait::Recv<
 // i32,
-// mpstthree::binary::Send<i32, mpstthree::binary::End>,
+// mpstthree::binary::struct_trait::Send<i32, mpstthree::binary::struct_trait::End>,
 // >,
-// mpstthree::binary::End,
+// mpstthree::binary::struct_trait::End,
 // mpstthree::role::b_to_a::RoleBtoA<
 // mpstthree::role::b_to_a::RoleBtoA<
 // mpstthree::role::end::RoleEnd,
@@ -283,11 +283,11 @@
 //                             >,
 //
 // mpstthree::sessionmpst::SessionMpst<
-// mpstthree::binary::End,
-// mpstthree::binary::End,
+// mpstthree::binary::struct_trait::End,
+// mpstthree::binary::struct_trait::End,
 // mpstthree::role::end::RoleEnd,
 // >,                         >,
-//                         mpstthree::binary::End,
+//                         mpstthree::binary::struct_trait::End,
 //                     >,
 //                     _,
 //                 >,
@@ -297,11 +297,11 @@
 //     >,
 // >;
 
-// type resultFound = mpstthree::binary::Recv<
+// type resultFound = mpstthree::binary::struct_trait::Recv<
 //     _,
-//     mpstthree::binary::Send<
+//     mpstthree::binary::struct_trait::Send<
 //         _,
-//         mpstthree::binary::Recv<
+//         mpstthree::binary::struct_trait::Recv<
 //             either::Either<_,
 // mpstthree::sessionmpst::SessionMpst<_, mpstthree::binary:
 // :End, _>>,             _,         >,

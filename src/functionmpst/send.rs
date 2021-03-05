@@ -1,6 +1,7 @@
 //! This module contains all the *send* functions
 
-use crate::binary::{send, Send, Session};
+use crate::binary::send::send;
+use crate::binary::struct_trait::{Send, Session};
 use crate::role::a::{next_a, RoleA};
 use crate::role::b::{next_b, RoleB};
 use crate::role::c::{next_c, RoleC};
@@ -15,7 +16,7 @@ use std::marker;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Send, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -85,7 +86,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Send, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -155,7 +156,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Send, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -225,7 +226,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Send, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -295,7 +296,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Send, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///
@@ -365,7 +366,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Send, Session};
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::role::Role;
 ///

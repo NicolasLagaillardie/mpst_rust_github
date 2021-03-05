@@ -16,8 +16,8 @@ pub fn fork_simple<S1, S2, R, N, P>(
     s: sessionmpst::SessionMpst<S1, S2, R, N>,
 ) -> JoinHandle<()>
 where
-    S1: binary::Session + 'static,
-    S2: binary::Session + 'static,
+    S1: binary::struct_trait::Session + 'static,
+    S2: binary::struct_trait::Session + 'static,
     R: role::Role + 'static,
     N: role::Role + 'static,
     P: FnOnce(sessionmpst::SessionMpst<S1, S2, R, N>) -> Result<(), Box<dyn Error>>
@@ -36,8 +36,7 @@ where
 }
 
 /// Creates and returns a tuple of three child processes for
-/// three [`mpstthree::sessionmpst::SessionMpst`](../
-/// sessionmpst/struct.SessionMpst. html) linked together.
+/// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst. html) linked together.
 ///
 ///  # Example
 ///
@@ -47,7 +46,7 @@ where
 /// use std::collections::HashMap;
 /// use std::error::Error;
 ///
-/// use mpstthree::binary::{End, Recv, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 /// use mpstthree::fork::fork_mpst;
 /// use mpstthree::sessionmpst::SessionMpst;
 ///
@@ -128,9 +127,9 @@ pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f2: F2,
 ) -> (JoinHandle<()>, JoinHandle<()>, JoinHandle<()>)
 where
-    S0: binary::Session + 'static,
-    S1: binary::Session + 'static,
-    S2: binary::Session + 'static,
+    S0: binary::struct_trait::Session + 'static,
+    S1: binary::struct_trait::Session + 'static,
+    S2: binary::struct_trait::Session + 'static,
     R0: role::Role + 'static,
     R1: role::Role + 'static,
     R2: role::Role + 'static,
@@ -141,14 +140,14 @@ where
         + marker::Send
         + 'static,
     F1: FnOnce(
-            sessionmpst::SessionMpst<<S0 as binary::Session>::Dual, S2, R1, N1>,
+            sessionmpst::SessionMpst<<S0 as binary::struct_trait::Session>::Dual, S2, R1, N1>,
         ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
     F2: FnOnce(
             sessionmpst::SessionMpst<
-                <S1 as binary::Session>::Dual,
-                <S2 as binary::Session>::Dual,
+                <S1 as binary::struct_trait::Session>::Dual,
+                <S2 as binary::struct_trait::Session>::Dual,
                 R2,
                 N2,
             >,

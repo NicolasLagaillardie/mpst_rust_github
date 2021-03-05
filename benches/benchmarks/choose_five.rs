@@ -3,7 +3,7 @@
 // // Test for parametrisation on the number of roles
 // use rand::{thread_rng, Rng};
 
-// use mpstthree::binary::{End, Recv, Send, Session};
+// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 // use mpstthree::role::end::RoleEnd;
 // use mpstthree::role::Role;
 // use mpstthree::{

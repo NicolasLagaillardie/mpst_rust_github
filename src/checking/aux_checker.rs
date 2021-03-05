@@ -1083,7 +1083,7 @@ mod tests {
 
     #[test]
     fn parse_type_test() {
-        let test = parse_type("&mpstthree::binary::Recv<i32, mpstthree::binary::Send<i32, mpstthree::binary::Recv<06_a_usecase_recursive::Branche0CtoB<i32>, mpstthree::binary::End>>>");
+        let test = parse_type("&mpstthree::binary::struct_trait::Recv<i32, mpstthree::binary::struct_trait::Send<i32, mpstthree::binary::struct_trait::Recv<06_a_usecase_recursive::Branche0CtoB<i32>, mpstthree::binary::struct_trait::End>>>");
 
         assert_eq!(
             test,

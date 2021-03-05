@@ -3,20 +3,19 @@
 //!
 //! It contains 4 fields:
 //! - **session1**: contains the first binary session type, which links the participant to the first
-//!   participant in the alphanumerical order. It contains [`mpstthree::binary::Session`].
+//!   participant in the alphanumerical order. It contains
+//!   [`mpstthree::binary::struct_trait::Session`].
 //! - **session2**: contains the second binary session type, which links the participant to the
-//!   second participant in the alphanumerical order. It contains [`mpstthree::binary::Session`].
+//!   second participant in the alphanumerical order. It contains
+//!   [`mpstthree::binary::struct_trait::Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and the others.
 //!   It contains [`mpstthree::role::Role`].
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
 //!   `RoleB<RoleEnd>`.
 //!
-//! [`mpstthree::binary::Session`]:
+//! [`mpstthree::binary::struct_trait::Session`]:
 //! ../binary/trait.Session.html [`mpstthree::role::Role`]:
 //! ../role/trait.Role.html
-
-use crate::binary::Session;
-use crate::role::Role;
 
 /// The structure which encapsulates two binary session
 /// types, a stack and a name.
@@ -24,7 +23,7 @@ use crate::role::Role;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::{End, Recv, Send, Session};
+/// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 ///
 /// use mpstthree::sessionmpst::SessionMpst;
 ///
@@ -47,10 +46,10 @@ use crate::role::Role;
 #[derive(Debug)]
 pub struct SessionMpst<S1, S2, R, N>
 where
-    S1: Session,
-    S2: Session,
-    R: Role,
-    N: Role,
+    S1: crate::binary::struct_trait::Session,
+    S2: crate::binary::struct_trait::Session,
+    R: crate::role::Role,
+    N: crate::role::Role,
 {
     pub session1: S1,
     pub session2: S2,
@@ -59,12 +58,18 @@ where
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N> {
+impl<
+        S1: crate::binary::struct_trait::Session,
+        S2: crate::binary::struct_trait::Session,
+        R: crate::role::Role,
+        N: crate::role::Role,
+    > crate::binary::struct_trait::Session for SessionMpst<S1, S2, R, N>
+{
     type Dual = SessionMpst<
-        <S1 as Session>::Dual,
-        <S2 as Session>::Dual,
-        <R as Role>::Dual,
-        <N as Role>::Dual,
+        <S1 as crate::binary::struct_trait::Session>::Dual,
+        <S2 as crate::binary::struct_trait::Session>::Dual,
+        <R as crate::role::Role>::Dual,
+        <N as crate::role::Role>::Dual,
     >;
 
     #[doc(hidden)]

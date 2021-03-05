@@ -4,7 +4,7 @@
 /// create_send_mpst_session_bundle and the short way to
 /// call the code within those functions with
 /// recv_mpst/send_mpst
-use mpstthree::binary::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
