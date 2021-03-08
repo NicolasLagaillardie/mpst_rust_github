@@ -3,6 +3,7 @@ mod cases;
 mod scribble;
 mod tcp;
 mod unit;
+mod http;
 
 #[test]
 fn unit_tests() {

@@ -116,16 +116,16 @@ pub fn ping_works() {
 ///
 /// ```compile_fail
 /// assert!(|| -> Result<(), Box<dyn Error>> {
-///    let r1 = fork::fork(move |s1: Send<(), End>| {
-///        let s2 = send::send((), s1);
-///        close::close(s2)?;
-///        let s3 = send::send((), s1);
-///        close::close(s3)?;
-///        Ok(())
-///    });
-///    let ((), r2) = recv::recv(r1)?;
-///    close::close(r2)?;
-///    Ok(())
+///     let r1 = fork::fork(move |s1: Send<(), End>| {
+///         let s2 = send::send((), s1);
+///         close::close(s2)?;
+///         let s3 = send::send((), s1);
+///         close::close(s3)?;
+///         Ok(())
+///     });
+///     let ((), r2) = recv::recv(r1)?;
+///     close::close(r2)?;
+///     Ok(())
 /// }()
 /// .is_ok());
 /// ```

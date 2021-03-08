@@ -6,14 +6,14 @@
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *send* function
 /// * The name of the receiver
 /// * The name of related *next* function
 /// * The name of the sender
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::{create_normal_role, create_send_mpst_session_1};
@@ -37,14 +37,14 @@ macro_rules! create_send_mpst_session_1 {
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *send* function
 /// * The name of the receiver
 /// * The name of related *next* function
 /// * The name of the sender
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::{create_normal_role, create_send_mpst_session_2};

@@ -6,18 +6,21 @@
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *offer* function
 /// * The name of the dual of the broadcasting sender
 /// * The name of related *next* function
 /// * The name of the receiver
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
-/// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::functionmpst::OfferMpst;
-/// use mpstthree::{create_normal_role, create_broadcast_role, create_recv_mpst_all_session_1, create_offer_mpst_session_1};
+/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::{
+///     create_broadcast_role, create_normal_role, create_offer_mpst_session_1,
+///     create_recv_mpst_all_session_1,
+/// };
 ///
 /// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
@@ -55,18 +58,21 @@ macro_rules! create_offer_mpst_session_1 {
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *offer* function
 /// * The name of the dual of the broadcasting sender
 /// * The name of related *next* function
 /// * The name of the receiver
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
-/// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::functionmpst::OfferMpst;
-/// use mpstthree::{create_normal_role, create_broadcast_role, create_recv_mpst_all_session_2, create_offer_mpst_session_2};
+/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::{
+///     create_broadcast_role, create_normal_role, create_offer_mpst_session_2,
+///     create_recv_mpst_all_session_2,
+/// };
 ///
 /// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);

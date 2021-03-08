@@ -36,7 +36,8 @@ where
 }
 
 /// Creates and returns a tuple of three child processes for
-/// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst. html) linked together.
+/// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst. html) linked
+/// together.
 ///
 /// # Example
 ///
@@ -78,38 +79,39 @@ where
 /// type QueueB = RoleA<RoleC<RoleEnd>>;
 /// type QueueC = RoleA<RoleB<RoleEnd>>;
 ///
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>,
-/// QueueA, RoleA<RoleEnd>>; type EndpointB<N> =
-/// SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
-/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>,
-/// QueueC, RoleC<RoleEnd>>;
+/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
+/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
+/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
 ///
-/// fn simple_triple_endpoint_a(s: EndpointA<i32>) ->
-/// Result<(), Box<dyn Error>> {     let s =
-/// send_mpst_a_to_b(1, s);     let (x, s) =
-/// recv_mpst_a_to_c(s)?;     close_mpst(s)?;
-///    Ok(())
+/// fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
+/// {
+///     let s = send_mpst_a_to_b(1, s);
+///     let (x, s) = recv_mpst_a_to_c(s)?;
+///     close_mpst(s)?;
+///     Ok(())
 /// }
 ///
 /// /// Single test for B
-/// fn simple_triple_endpoint_b(s: EndpointB<i32>) ->
-/// Result<(), Box<dyn Error>> {     let (x, s) =
-/// recv_mpst_b_to_a(s)?;     let s = send_mpst_b_to_c(2,
-/// s);     close_mpst(s)?;
-///    Ok(())
+/// fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>>
+/// {
+///     let (x, s) = recv_mpst_b_to_a(s)?;
+///     let s = send_mpst_b_to_c(2, s);
+///     close_mpst(s)?;
+///     Ok(())
 /// }
 ///
 /// /// Single test for C
-/// fn simple_triple_endpoint_c(s: EndpointC<i32>) ->
-/// Result<(), Box<dyn Error>> {     let s =
-/// send_mpst_c_to_a(3, s);     let (x, s) =
-/// recv_mpst_c_to_b(s)?;     close_mpst(s)?;
-///    Ok(())
+/// fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
+/// {
+///     let s = send_mpst_c_to_a(3, s);
+///     let (x, s) = recv_mpst_c_to_b(s)?;
+///     close_mpst(s)?;
+///     Ok(())
 /// }
 /// let (thread_a, thread_b, thread_c) = fork_mpst(
-///                simple_triple_endpoint_a,
-///                simple_triple_endpoint_b,
-///                simple_triple_endpoint_c,
+///     simple_triple_endpoint_a,
+///     simple_triple_endpoint_b,
+///     simple_triple_endpoint_c,
 /// );
 ///
 /// thread_a.join().unwrap();

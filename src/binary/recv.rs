@@ -1,4 +1,5 @@
 use crate::binary::struct_trait::{Recv, Session};
+use hyper::{Body, Client, Request, Response};
 use std::boxed::Box;
 use std::error::Error;
 use std::io::Read;
@@ -43,4 +44,31 @@ where
         false => 0_usize,
     };
     Ok((v.0, s, data, r, stream))
+}
+
+/// Send a value of type `T` over http. Returns the
+/// continuation of the session `S`. May fail.
+#[tokio::main]
+pub async fn recv_http<T, S>(
+    s: Recv<T, S>,
+    http: bool,
+    req: Request<Body>,
+) -> Result<(T, S, Response<Body>), Box<dyn Error + marker::Send + Sync>>
+where
+    T: marker::Send,
+    S: Session,
+{
+    // Create the client for HTTP
+    let client = Client::new();
+
+    // Await the response
+    let resp = match http {
+        true => client.request(req).await?,
+        false => Response::default(),
+    };
+
+    ////////////////
+
+    let (v, s) = s.channel.recv()?;
+    Ok((v, s, resp))
 }

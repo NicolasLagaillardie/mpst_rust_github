@@ -1,13 +1,11 @@
 use crate::binary::struct_trait::{Send, Session};
-use hyper::body::HttpBody as _;
-use hyper::Client;
+use hyper::{Body, Method, Request};
 use std::boxed::Box;
 use std::error::Error;
 use std::io::Write;
 use std::marker;
 use std::net::TcpStream;
 use std::panic;
-use tokio::io::{stdout, AsyncWriteExt as _};
 
 type TcpData = [u8; 128];
 
@@ -52,43 +50,36 @@ where
     }
 }
 
-/// Send a value of type `T` over tcp. Returns the
+/// Send a value of type `T` over http. Returns the
 /// continuation of the session `S`. May fail.
+#[tokio::main]
 pub async fn send_http<T, S>(
     x: T,
     s: Send<T, S>,
-    _http: bool,
-) -> Result<S, Box<dyn Error + marker::Send + Sync>>
+    http: bool,
+    uri: &str,
+    header: (&str, &str),
+    body: &'static str,
+) -> Result<(S, Request<Body>), Box<dyn Error + marker::Send + Sync>>
 where
     T: marker::Send,
     S: Session,
 {
     let (here, there) = S::new();
 
-    // Still inside `async fn main`...
-    let client = Client::new();
-
-    // Parse an `http::Uri`...
-    let uri = "http://httpbin.org/ip".parse()?;
-
-    // Await the response...
-    let resp = client.get(uri).await?;
-
-    println!("Response: {}", resp.status());
+    let req = match http {
+        true => Request::builder()
+            .method(Method::POST)
+            .uri(uri)
+            .header(header.0, header.1)
+            .body(Body::from(body))?,
+        false => Request::default(),
+    };
 
     ////////////////
 
-    let uri = "http://httpbin.org/ip".parse()?;
-    let mut resp = client.get(uri).await?;
-    println!("Response: {}", resp.status());
-
-    // And now...
-    while let Some(chunk) = resp.body_mut().data().await {
-        stdout().write_all(&chunk?).await?;
-    }
-
     match s.channel.send((x, there)) {
-        Ok(_) => Ok(here),
+        Ok(_) => Ok((here, req)),
         Err(e) => panic!("{}", e.to_string()),
     }
 }

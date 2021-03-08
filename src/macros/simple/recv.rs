@@ -6,14 +6,14 @@
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *recv* function
 /// * The name of the sender
 /// * The name of related *next* function
 /// * The name of the receiver
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::{create_normal_role, create_recv_mpst_session_1};
@@ -37,14 +37,14 @@ macro_rules! create_recv_mpst_session_1 {
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *recv* function
 /// * The name of the sender
 /// * The name of related *next* function
 /// * The name of the receiver
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
 /// use mpstthree::sessionmpst::SessionMpst;
 /// use mpstthree::{create_normal_role, create_recv_mpst_session_2};
@@ -71,17 +71,17 @@ macro_rules! create_recv_mpst_session_2 {
 /// SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *recv* function
 /// * The name of the sender
 /// * The name of related *next* function
 /// * The name of the receiver
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
 /// use mpstthree::sessionmpst::SessionMpst;
-/// use mpstthree::{create_normal_role, create_broadcast_role, create_recv_mpst_all_session_1};
+/// use mpstthree::{create_broadcast_role, create_normal_role, create_recv_mpst_all_session_1};
 ///
 /// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
@@ -112,17 +112,17 @@ macro_rules! create_recv_mpst_all_session_1 {
 /// SessionMpst`].
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *recv* function
 /// * The name of the sender
 /// * The name of related *next* function
 /// * The name of the receiver
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
 /// use mpstthree::sessionmpst::SessionMpst;
-/// use mpstthree::{create_normal_role, create_broadcast_role, create_recv_mpst_all_session_2};
+/// use mpstthree::{create_broadcast_role, create_normal_role, create_recv_mpst_all_session_2};
 ///
 /// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);

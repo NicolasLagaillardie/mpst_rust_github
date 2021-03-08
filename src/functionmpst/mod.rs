@@ -27,7 +27,9 @@ use either::Either;
 /// [`either::Either`].
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::offer:: offer_mpst_session_to_b_from_a`]: ../offer/fn.offer_mpst_session_to_b_from_a.html [`mpstthree::binary::struct_trait::Recv`]: ../binary/struct.Recv.html [`either::Either`]: ../either/enum.Either.html
+/// [`mpstthree::offer:: offer_mpst_session_to_b_from_a`]:
+/// ../offer/fn.offer_mpst_session_to_b_from_a.html [`mpstthree::binary::struct_trait::Recv`]:
+/// ../binary/struct.Recv.html [`either::Either`]: ../either/enum.Either.html
 pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
     Recv<Either<SessionMpst<S0, S1, R0, N0>, SessionMpst<S2, S3, R1, N0>>, End>;
 

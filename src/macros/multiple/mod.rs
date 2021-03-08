@@ -11,19 +11,19 @@ pub mod sessionmpst;
 /// [`mpstthree::create_sessionmpst`](../macro.create_sessionmpst.html),
 /// the [`mpstthree::close_mpst`](../macro.close_mpst.html) and
 /// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
-/// functions to be used with more than 3 participants.  
+/// functions to be used with more than 3 participants. 
 ///
 /// # Arguments
-///  
+/// 
 /// * The name of the new *close* function
 /// * The name of the new *fork* function
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-///  
+/// 
 /// # Example
-///  
+/// 
 /// ```
-/// use mpstthree::{bundle_struct_fork_close_multi};
+/// use mpstthree::bundle_struct_fork_close_multi;
 ///
 /// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, SessionMpst, 3);
 /// ```

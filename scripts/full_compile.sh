@@ -46,9 +46,9 @@ cargo bench --bench main -- --verbose
 # ./scripts/compile.sh long_simple_twenty_binary 
 # ./scripts/compile.sh long_simple_twenty_mpst 
 
-# python /scripts/create_graph_compile.py 
+# python scripts/create_graph_compile.py 
 
-# python /scripts/create_graph_bench.py
+# python scripts/create_graph_bench.py
 
 # cargo expand --example long_simple_three_mpst > expand/long_simple_three_mpst_expand.txt
 # cargo expand --example long_simple_four_mpst > expand/long_simple_four_mpst_expand.txt
