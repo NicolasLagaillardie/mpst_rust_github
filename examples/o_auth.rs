@@ -2,13 +2,14 @@ use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_http_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
+    create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
 };
 
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
+
+use hyper::Request;
 
 // global protocol Proto(role A, role C, role S)
 // {
@@ -67,21 +68,21 @@ create_send_mpst_http_bundle!(
 
 // Create new recv functions and related types
 // A
-create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_c, RoleC, next_c, 1 |
-    recv_mpst_a_to_s, RoleS, next_s, 2 | =>
+create_recv_http_session_bundle!(
+    recv_http_a_to_c, RoleC, next_c, 1 |
+    recv_http_a_to_s, RoleS, next_s, 2 | =>
     RoleA, SessionMpstThree, 3
 );
 // C
-create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a, RoleA, next_a, 1 |
-    recv_mpst_c_to_s, RoleS, next_s, 2 | =>
+create_recv_http_session_bundle!(
+    recv_http_c_to_a, RoleA, next_a, 1 |
+    recv_http_c_to_s, RoleS, next_s, 2 | =>
     RoleC, SessionMpstThree, 3
 );
 // S
-create_recv_mpst_session_bundle!(
-    recv_mpst_s_to_a, RoleA, next_a, 1 |
-    recv_mpst_s_to_c, RoleC, next_c, 2 | =>
+create_recv_http_session_bundle!(
+    recv_http_s_to_a, RoleA, next_a, 1 |
+    recv_http_s_to_c, RoleC, next_c, 2 | =>
     RoleS, SessionMpstThree, 3
 );
 
@@ -167,9 +168,9 @@ type EndpointS<N> =
 
 // Functions
 fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_http_mpst!(s, recv_mpst_a_to_s, {
+    offer_http_mpst!(s, recv_http_a_to_s, {
         Branching0fromStoA::Done(s) => {
-            let (_, s) = recv_mpst_a_to_c(s)?;
+            let (_, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
 
             close_mpst_multi(s)
         },
@@ -180,7 +181,7 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    let (pwd, s) = recv_mpst_a_to_c(s)?;
+    let (pwd, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
 
     let expected = thread_rng().gen_range(1..=3);
 
@@ -199,7 +200,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        let s = send_http_a_to_s(0, s);
+        let (s, _req) = send_http_a_to_s(0, s, false, "", ("", ""), "");
 
         close_mpst_multi(s)
     } else {
@@ -217,21 +218,21 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        let s = send_http_a_to_s(1, s);
+        let (s, _req) = send_http_a_to_s(1, s, false, "", ("", ""), "");
 
         choice_a(s)
     }
 }
 
 fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    offer_http_mpst!(s, recv_mpst_c_to_s, {
+    offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
-            let (quit, s) = recv_mpst_c_to_s(s)?;
-            let s = send_http_c_to_a(quit, s);
+            let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+            let (s, _req) = send_http_c_to_a(quit, s, false, "", ("", ""), "");
             close_mpst_multi(s)
         },
         Branching0fromStoC::<i32>::Login(s) => {
-            let (_, s) = recv_mpst_c_to_s(s)?;
+            let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
 
             choice_c(s)
         },
@@ -239,16 +240,16 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_http_c_to_a(thread_rng().gen_range(1..=3), s);
+    let (s, _req) = send_http_c_to_a(thread_rng().gen_range(1..=3), s, false, "", ("", ""), "");
 
-    offer_http_mpst!(s, recv_mpst_c_to_a, {
+    offer_http_mpst!(s, recv_http_c_to_a, {
         Branching1fromAtoC::<i32>::Auth(s) => {
-            let (_, s) = recv_mpst_c_to_s(s)?;
+            let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
 
             close_mpst_multi(s)
         },
         Branching1fromAtoC::<i32>::Again(s) => {
-            let (_, s) = recv_mpst_c_to_s(s)?;
+            let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
 
             choice_c(s)
         },
@@ -273,7 +274,7 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             3
         );
 
-        let s = send_http_s_to_c(0, s);
+        let (s, _req) = send_http_s_to_c(0, s, false, "", ("", ""), "");
 
         close_mpst_multi(s)
     } else {
@@ -291,25 +292,25 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             3
         );
 
-        let s = send_http_s_to_c(1, s);
+        let (s, _req) = send_http_s_to_c(1, s, false, "", ("", ""), "");
 
         choice_s(s)
     }
 }
 
 fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
-    offer_http_mpst!(s, recv_mpst_s_to_a, {
+    offer_http_mpst!(s, recv_http_s_to_a, {
         Branching1fromAtoS::<i32>::Auth(s) => {
-            let (success, s) = recv_mpst_s_to_a(s)?;
+            let (success, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
 
-            let s = send_http_s_to_c(success, s);
+            let (s, _req) = send_http_s_to_c(success, s, false, "", ("", ""), "");
 
             close_mpst_multi(s)
         },
         Branching1fromAtoS::<i32>::Again(s) => {
-            let (fail, s) = recv_mpst_s_to_a(s)?;
+            let (fail, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
 
-            let s = send_http_s_to_c(fail, s);
+            let (s, _req) = send_http_s_to_c(fail, s, false, "", ("", ""), "");
 
             choice_s(s)
         },

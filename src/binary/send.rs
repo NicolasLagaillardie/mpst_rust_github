@@ -60,7 +60,7 @@ pub async fn send_http<T, S>(
     uri: &str,
     header: (&str, &str),
     body: &'static str,
-) -> Result<(S, Request<Body>), Box<dyn Error + marker::Send + Sync>>
+) -> Result<(S, Request<Body>), Box<dyn Error + marker::Send + std::marker::Sync>>
 where
     T: marker::Send,
     S: Session,

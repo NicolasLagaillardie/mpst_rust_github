@@ -1,13 +1,13 @@
 /// Choose, for A, among two different sessions
-/// 
+///
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The first path to be used
 ///  * The second path to be used
-/// 
+///
 /// # Example
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///     Option::Some(_) => {
@@ -52,15 +52,15 @@ macro_rules! choose_mpst_a_to_all {
 }
 
 /// Choose, for B, among two different sessions
-/// 
+///
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The first path to be used
 ///  * The second path to be used
-/// 
+///
 /// # Example
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///     Option::Some(_) => {
@@ -103,15 +103,15 @@ macro_rules! choose_mpst_b_to_all {
 }
 
 /// Choose, for C, among two different sessions
-/// 
+///
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The first path to be used
 ///  * The second path to be used
-/// 
+///
 /// # Example
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///     Option::Some(_) => {

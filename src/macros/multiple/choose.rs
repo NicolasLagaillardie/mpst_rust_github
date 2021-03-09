@@ -1,16 +1,16 @@
 ////////////////////////////////////////////
 /// CHOICE
 
-/// Create the *ChooseMpst* type to be used with more than 3 participants. 
-/// 
+/// Create the *ChooseMpst* type to be used with more than 3 participants.
+///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* type
 /// * The *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_choose_type_multi, create_sessionmpst};
 ///
@@ -38,10 +38,10 @@ macro_rules! create_choose_type_multi {
     }
 }
 
-/// Create the *ChooseMpst* function to send a *Choose* left branch to be used with more than 3 participants. 
-/// 
+/// Create the *ChooseMpst* function to send a *Choose* left branch to be used with more than 3 participants.
+///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the *ChooseMpst* type that is used
 /// * The name of the broadcasting sender. This one should contain *toAll* according to the
@@ -50,9 +50,9 @@ macro_rules! create_choose_type_multi {
 /// * The name of the sender
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_left, create_choose_type_multi,
@@ -178,9 +178,9 @@ macro_rules! create_choose_mpst_session_multi_left {
 }
 
 /// Create the *ChooseMpst* function to send a *Choose* right branch to be used with more than 3 participants.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the *ChooseMpst* type that is used
 /// * The name of the broadcasting sender. This one should contain *toAll* according to the
@@ -189,9 +189,9 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// * The name of the sender
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_right, create_choose_type_multi,
@@ -317,7 +317,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 }
 
 /// Create the two *ChooseMpst* functions to send a *Choose* on each branch to be used with more than 3 participants.  # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function for the left branch
 /// * The name of the new *ChooseMpst* function for the right branch
 /// * The name of the *ChooseMpst* type that is used
@@ -327,9 +327,9 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// * The name of the sender
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_both, create_choose_type_multi,
@@ -387,10 +387,10 @@ macro_rules! create_choose_mpst_session_multi_both {
     };
 }
 
-/// Choose among different sessions that are provided, for protocols with more than 3 participants 
-/// 
+/// Choose among different sessions that are provided, for protocols with more than 3 participants
+///
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The different send functions to broadcast the choice
 ///  * The different `enum` variants which represent the different branches to be sent to each
@@ -399,11 +399,11 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-/// 
+///
 /// # Example
 ///
 /// Available on the *cases/13_macro_multi_recursion* test.
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///    Option::Some(_) => {
@@ -505,7 +505,7 @@ macro_rules! choose_mpst_multi_to_all {
 /// Choose among different sessions that are provided, for protocols with more than 3 participants, may fail because of a canceled session. Need to exclude the first participant
 ///
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The different send functions to broadcast the choice
 ///  * The different `enum` variants which represent the different branches to be sent to each
@@ -514,11 +514,11 @@ macro_rules! choose_mpst_multi_to_all {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-/// 
+///
 /// # Example
 ///
 /// Available on the *cancel/cancel_10* test.
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///    Option::Some(_) => {
@@ -554,11 +554,11 @@ macro_rules! choose_mpst_multi_to_all {
 ///    }
 /// }
 /// ```
-/// 
+///
 /// # Compile fail
 ///
 /// Available on the *cancel/cancel_8* test.
-/// 
+///
 /// ```compile_fail
 /// match xs.pop() {
 ///    Option::Some(_) => {
@@ -690,20 +690,10 @@ macro_rules! choose_mpst_multi_cancel_to_all {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-/// Choose among different sessions that are provided, for protocols with more than 3 participants 
-/// 
+/// Choose among different sessions that are provided, for protocols with more than 3 participants
+///
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The different send functions to broadcast the choice
 ///  * The different `enum` variants which represent the different branches to be sent to each
@@ -712,9 +702,9 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///    Option::Some(_) => {
@@ -772,7 +762,7 @@ macro_rules! choose_mpst_multi_http_to_all {
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
             %(
-                let s = unused#N:14(
+                let (s, _) = unused#N:14(
                     unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
@@ -789,7 +779,7 @@ macro_rules! choose_mpst_multi_http_to_all {
                     "",
                 );
             )(
-                let s = unused#N:14(
+                let (s, _) = unused#N:14(
                     unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,

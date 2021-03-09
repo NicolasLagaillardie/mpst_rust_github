@@ -5,13 +5,13 @@
 /// than 3 participants. It should be used with
 /// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.
 /// html)  # Arguments
-/// 
+///
 /// * The name of the new simple *fork* function
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_sessionmpst, fork_simple_multi};
 ///
@@ -49,14 +49,14 @@ macro_rules! fork_simple_multi {
 /// Creates the _fork_ function to be used with more than 3
 /// participants. It must be used with
 /// [`mpstthree::fork_simple`](../macro.fork_simple.html)  #
-/// Arguments 
+/// Arguments
 /// * The name of the new *fork* function
 /// * The name of the *simple fork* function
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_sessionmpst, fork_mpst_multi};
 ///

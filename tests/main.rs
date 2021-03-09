@@ -1,9 +1,9 @@
 mod cancel;
 mod cases;
+mod http;
 mod scribble;
 mod tcp;
 mod unit;
-mod http;
 
 #[test]
 fn unit_tests() {

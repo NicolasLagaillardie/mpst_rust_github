@@ -213,7 +213,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the dual of the first receiver
 /// * The name of the dual of the second receiver
@@ -221,9 +221,9 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_3_to_1_and_2};
@@ -320,7 +320,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the dual of the first receiver
 /// * The name of the dual of the second receiver
@@ -328,9 +328,9 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_3_to_1_and_2};
@@ -427,7 +427,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the dual of the first receiver
 /// * The name of the dual of the second receiver
@@ -435,9 +435,9 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_1_to_2_and_3};
@@ -534,7 +534,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the dual of the first receiver
 /// * The name of the dual of the second receiver
@@ -542,9 +542,9 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_1_to_2_and_3};
@@ -641,7 +641,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the dual of the first receiver
 /// * The name of the dual of the second receiver
@@ -649,9 +649,9 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_2_to_1_and_3};
@@ -748,7 +748,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *ChooseMpst* function
 /// * The name of the dual of the first receiver
 /// * The name of the dual of the second receiver
@@ -756,9 +756,9 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_2_to_1_and_3};
@@ -857,7 +857,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new right *ChooseMpst* function
 /// * The name of the new left *ChooseMpst* function
 /// * The name of the dual of the first receiver
@@ -866,9 +866,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_2_to_1_and_3};
@@ -932,7 +932,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new right *ChooseMpst* function
 /// * The name of the new left *ChooseMpst* function
 /// * The name of the dual of the first receiver
@@ -941,9 +941,9 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_1_to_2_and_3};
@@ -1007,7 +1007,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new right *ChooseMpst* function
 /// * The name of the new left *ChooseMpst* function
 /// * The name of the dual of the first receiver
@@ -1016,9 +1016,9 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///   convention
 /// * The name of related *next* function
 /// * The name of the sender
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_3_to_1_and_2};
@@ -1077,9 +1077,9 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 
 /// Choose among two different sessions.
 /// Must be used with
-/// [`mpstthree::sessionmpst::SessionMpst`]. 
+/// [`mpstthree::sessionmpst::SessionMpst`].
 /// # Arguments
-/// 
+///
 ///  * The session to be used
 ///  * The first path to be sent
 ///  * The second path to be sent
@@ -1088,9 +1088,9 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///  * The first passive role
 ///  * The second passive role
 ///  * The active role
-/// 
+///
 /// # Example
-/// 
+///
 /// ```ignore
 /// match xs.pop() {
 ///     Option::Some(_) => {

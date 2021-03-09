@@ -2,15 +2,15 @@
 /// OFFER
 
 /// Create the *OfferMpst* type to be used with more than 3 participants.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * The name of the new *OfferMpst* type
 /// * The *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_offer_type_multi, create_sessionmpst};
 ///
@@ -27,9 +27,9 @@ macro_rules! create_offer_type_multi {
 }
 
 /// Creates an *OfferMpst* function to receive an offer on a given binary session type of a SessionMpst with more than 3 participants.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * The name of the new *OfferMpst* function
 /// * The name of the *OfferMpst* type that will be used
 /// * The name of the dual of the broadcasting sender. This one should contain *toAll* according to
@@ -40,9 +40,9 @@ macro_rules! create_offer_type_multi {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,

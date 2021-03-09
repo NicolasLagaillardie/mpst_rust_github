@@ -6,14 +6,14 @@
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *offer* function
 /// * The name of the dual of the broadcasting sender
 /// * The name of related *next* function
 /// * The name of the receiver
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::sessionmpst::SessionMpst;
@@ -58,14 +58,14 @@ macro_rules! create_offer_mpst_session_1 {
 /// [`mpstthree::sessionmpst::SessionMpst`].
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *offer* function
 /// * The name of the dual of the broadcasting sender
 /// * The name of related *next* function
 /// * The name of the receiver
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::sessionmpst::SessionMpst;

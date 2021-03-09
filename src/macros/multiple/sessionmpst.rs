@@ -4,12 +4,12 @@
 /// Creates a SessionMpst for more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::create_sessionmpst;
 /// use mpstthree::role::Role;

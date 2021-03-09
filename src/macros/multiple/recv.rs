@@ -11,8 +11,8 @@
 /// create_sessionmpst!(SessionMpstThree, 3);
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -48,7 +48,7 @@ macro_rules! recv_mpst {
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *recv* function
 /// * The name of the sender
 /// * The name of the related *next* function
@@ -57,15 +57,15 @@ macro_rules! recv_mpst {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_multiple_normal_role, create_recv_mpst_session, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -111,7 +111,7 @@ macro_rules! create_recv_mpst_session {
 /// Creates multiple *recv* functions to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *recv* functions
 /// * The name of the senders
 /// * The name of the related *next* functions
@@ -120,15 +120,15 @@ macro_rules! create_recv_mpst_session {
 ///   role. Index starts at 1.
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_recv_mpst_session_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -159,7 +159,7 @@ macro_rules! create_recv_mpst_session_bundle {
 /// Creates a *recv* function to receive from a broadcasting role on a given binary session type of a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *recv* function
 /// * The name of the broadcasting sender
 /// * The name of the related *next* function
@@ -168,9 +168,9 @@ macro_rules! create_recv_mpst_session_bundle {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_normal_role, create_recv_mpst_all_session, create_sessionmpst,
@@ -247,7 +247,7 @@ macro_rules! create_recv_mpst_all_session {
 /// Creates a *recv* function to receive from a broadcasting role on a given binary session type of a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *recv* functions
 /// * The name of the broadcasting senders
 /// * The name of the related *next* functions
@@ -256,9 +256,9 @@ macro_rules! create_recv_mpst_all_session {
 /// * The name of the receiver
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_recv_mpst_all_session_bundle};
 ///
@@ -292,7 +292,7 @@ macro_rules! create_recv_mpst_all_session_bundle {
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *recv* function
 /// * The name of the sender
 /// * The name of the related *next* function
@@ -301,15 +301,15 @@ macro_rules! create_recv_mpst_all_session_bundle {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_multiple_normal_role, create_recv_http_session, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -321,7 +321,7 @@ macro_rules! create_recv_mpst_all_session_bundle {
 macro_rules! create_recv_http_session {
     ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            async fn $func_name<T, #(S#N:0,)0:0 R>(
+            fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $struct_name<
                     %(
                         S#N:0,
@@ -348,11 +348,11 @@ macro_rules! create_recv_http_session {
                     S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
-            {   
+            {
                 let client = hyper::Client::new();
 
                 let resp = match http {
-                    true => client.request(req).await?,
+                    true => futures::executor::block_on(client.request(req))?,
                     false => hyper::Response::default(),
                 };
 
@@ -369,7 +369,7 @@ macro_rules! create_recv_http_session {
 /// SessionMpst with more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *recv* functions
 /// * The name of the senders
 /// * The name of the related *next* functions
@@ -378,15 +378,15 @@ macro_rules! create_recv_http_session {
 ///   role. Index starts at 1.
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_recv_http_session_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///

@@ -12,8 +12,8 @@
 /// create_sessionmpst!(SessionMpstThree, 3);
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -48,7 +48,7 @@ macro_rules! send_mpst {
 /// than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* function
 /// * The name of the receiver
 /// * The name of the related *next* function
@@ -57,16 +57,16 @@ macro_rules! send_mpst {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_send_mpst_session, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -109,7 +109,7 @@ macro_rules! create_send_mpst_session {
 /// session).
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* function
 /// * The name of the receiver
 /// * The name of the related *next* function
@@ -118,16 +118,16 @@ macro_rules! create_send_mpst_session {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_send_mpst_cancel, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -183,7 +183,7 @@ macro_rules! create_send_mpst_cancel {
 /// The send function will try to send and panic if not possible (canceled session).
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* function
 /// * The name of the receiver
 /// * The name of the related *next* function
@@ -192,9 +192,9 @@ macro_rules! create_send_mpst_cancel {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 2 as 1 is an End.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_normal_role, create_send_check_cancel, create_sessionmpst};
@@ -208,7 +208,7 @@ macro_rules! create_send_mpst_cancel {
 /// ```
 ///
 /// # Compile fail
-/// 
+///
 /// ```compile_fail
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_normal_role, create_send_check_cancel, create_sessionmpst};
@@ -282,7 +282,7 @@ macro_rules! create_send_check_cancel {
 /// than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* function
 /// * The name of the receiver
 /// * The name of the related *next* function
@@ -291,16 +291,16 @@ macro_rules! create_send_check_cancel {
 /// * The number of participants (all together)
 /// * The index of the binary session type that will receive in the SessionMpst for this specific
 ///   role. Index starts at 1.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_send_http_session, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -324,14 +324,14 @@ macro_rules! create_send_http_session {
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
                 http: bool,
-                data: (&str, (&str, &str), &'static str),
-            ) -> Result<
-                    (
-                        $struct_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
-                        hyper::Request<hyper::Body>
-                    ),
-                    Box<dyn std::error::Error + std::marker::Send + Sync>
-                >
+                uri: &str,
+                header: (&str, &str),
+                body: &'static str,
+            ) ->
+            (
+                $struct_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
+                hyper::Request<hyper::Body>
+            )
             where
                 T: std::marker::Send,
                 #(
@@ -339,22 +339,19 @@ macro_rules! create_send_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                let header = data.1;
-
                 let req = match http {
                     true => hyper::Request::builder()
                         .method(hyper::Method::POST)
-                        .uri(data.0)
+                        .uri(uri)
                         .header(header.0, header.1)
-                        .body(hyper::Body::from(data.2))?,
+                        .body(hyper::Body::from(body))
+                        .unwrap_or(hyper::Request::default()),
                     false => hyper::Request::default(),
                 };
 
-                Ok(
-                    (
-                        mpstthree::send_mpst!(s, x, $next, $struct_name, $nsessions, $exclusion),
-                        req
-                    )
+                (
+                    mpstthree::send_mpst!(s, x, $next, $struct_name, $nsessions, $exclusion),
+                    req
                 )
             }
         });
@@ -365,7 +362,7 @@ macro_rules! create_send_http_session {
 /// more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the related *next* functions
@@ -374,16 +371,16 @@ macro_rules! create_send_http_session {
 ///   role. Index starts at 1.
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_send_mpst_session, create_send_mpst_session_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -414,7 +411,7 @@ macro_rules! create_send_mpst_session_bundle {
 /// more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the related *next* functions
@@ -423,16 +420,16 @@ macro_rules! create_send_mpst_session_bundle {
 ///   role. Index starts at 1.
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_send_mpst_cancel, create_send_mpst_cancel_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -463,7 +460,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the related *next* functions
@@ -472,9 +469,9 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///   role. Index starts at 2 as 1 is an End.
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_normal_role, create_sessionmpst, create_send_check_cancel, create_send_check_cancel_bundle};
@@ -495,16 +492,16 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///    3
 /// );
 /// ```
-/// 
+///
 /// # Compile fail
-/// 
+///
 /// ```compile_fail
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_send_check_cancel, create_send_check_cancel_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
@@ -535,7 +532,7 @@ macro_rules! create_send_check_cancel_bundle {
 /// more than 3 participants.
 ///
 /// # Arguments
-/// 
+///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the related *next* functions
@@ -544,16 +541,16 @@ macro_rules! create_send_check_cancel_bundle {
 ///   role. Index starts at 1.
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_send_mpst_cancel, create_send_mpst_http_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual | 
-///     RoleB, next_b, RoleBDual, next_b_dual | 
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
 ///     RoleD, next_d, RoleDDual, next_d_dual |
 /// );
 ///
