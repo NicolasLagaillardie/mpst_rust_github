@@ -173,4 +173,9 @@ fn tcp() {
     tcp::binary_fail::main();
 }
 
+#[test]
+fn http() {
+    http::basic::main();
+}
+
 pub fn main() {}

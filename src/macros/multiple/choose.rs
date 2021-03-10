@@ -438,8 +438,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            3,
 ///            3
 ///        );
-///        close_mpst_multi(s)?;
-///        Ok(())
+///        close_mpst_multi(s)
 ///    }
 /// }
 /// ```
@@ -549,8 +548,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///            3,
 ///            3
 ///        );
-///        close_mpst_multi(s)?;
-///        Ok(())
+///        close_mpst_multi(s)
 ///    }
 /// }
 /// ```
@@ -560,6 +558,17 @@ macro_rules! choose_mpst_multi_to_all {
 /// Available on the *cancel/cancel_8* test.
 ///
 /// ```compile_fail
+/// use mpstthree::role::Role;
+/// use mpstthree::{create_multiple_normal_role, create_sessionmpst, choose_mpst_multi_cancel_to_all};
+///
+/// create_multiple_normal_role!(
+///     RoleA, next_a, RoleADual, next_a_dual |
+///     RoleB, next_b, RoleBDual, next_b_dual |
+///     RoleD, next_d, RoleDDual, next_d_dual |
+/// );
+///
+/// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, SessionMpst, 3);
+/// 
 /// match xs.pop() {
 ///    Option::Some(_) => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
@@ -575,8 +584,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///            3,
 ///            3
 ///        );
-///        let s = send_mpst_d_to_a(1, s);
-///        let (_, s) = recv_mpst_d_to_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
 ///    Option::None => {
@@ -593,8 +600,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///            3,
 ///            3
 ///        );
-///        close_mpst_multi(s)?;
-///        Ok(())
+///        close_mpst_multi(s)
 ///    }
 /// }
 /// ```

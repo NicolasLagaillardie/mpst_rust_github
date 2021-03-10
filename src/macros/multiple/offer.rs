@@ -136,8 +136,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// ```ignore
 /// offer_mpst!(s, recv_mpst_a_to_d, {
 ///    CBranchesAtoC::End(s) => {
-///        close_mpst_multi(s)?;
-///        Ok(())
+///        close_mpst_multi(s)
 ///    },
 ///    CBranchesAtoC::Video(s) => {
 ///        let (request, s) = recv_mpst_a_to_d(s)?;
@@ -201,8 +200,7 @@ macro_rules! offer_cancel_mpst {
 /// ```ignore
 /// offer_http_mpst!(s, recv_mpst_a_to_d, {
 ///    CBranchesAtoC::End(s) => {
-///        close_mpst_multi(s)?;
-///        Ok(())
+///        close_mpst_multi(s)
 ///    },
 ///    CBranchesAtoC::Video(s) => {
 ///        let (request, s) = recv_mpst_a_to_d(s)?;

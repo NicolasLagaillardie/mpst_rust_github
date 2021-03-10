@@ -5,11 +5,10 @@ use mpstthree::{
     create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
 };
 
+use hyper::Request;
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
-
-use hyper::Request;
 
 // global protocol Proto(role A, role C, role S)
 // {
@@ -182,7 +181,6 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 
 fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     let (pwd, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
-
     let expected = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
@@ -225,6 +223,8 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    println!("C");
+
     offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
             let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
@@ -232,6 +232,13 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromStoC::<i32>::Login(s) => {
+
+            // let _req_test = Request::builder()
+            //     .method(Method::GET)
+            //     .uri("https://graph.facebook.com/v10.0/")
+            //     .body(Body::from(r#"{"id":"139608884711552"}"#))?;
+
+            // let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
             let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
 
             choice_c(s)
@@ -257,9 +264,11 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=3);
+    let choice = thread_rng().gen_range(1..=5);
 
-    if choice != 1 {
+    println!("choice: {:?}", choice);
+
+    if choice == 1 {
         let s = choose_mpst_multi_http_to_all!(
             s,
             send_http_s_to_a,
@@ -302,14 +311,12 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_s_to_a, {
         Branching1fromAtoS::<i32>::Auth(s) => {
             let (success, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
-
             let (s, _req) = send_http_s_to_c(success, s, false, "", ("", ""), "");
 
             close_mpst_multi(s)
         },
         Branching1fromAtoS::<i32>::Again(s) => {
             let (fail, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
-
             let (s, _req) = send_http_s_to_c(fail, s, false, "", ("", ""), "");
 
             choice_s(s)
@@ -326,7 +333,7 @@ fn main() {
         simple_five_endpoint_s,
     );
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    println!("A: {:?}", thread_a.join());
+    println!("C: {:?}", thread_c.join());
+    println!("S: {:?}", thread_s.join());
 }
