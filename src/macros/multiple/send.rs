@@ -324,8 +324,9 @@ macro_rules! create_send_http_session {
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
                 http: bool,
+                method: hyper::Method,
                 uri: &str,
-                header: (&str, &str),
+                header: Vec<(&str, &str)>,
                 body: &'static str,
             ) ->
             (
@@ -340,12 +341,17 @@ macro_rules! create_send_http_session {
                 R: mpstthree::role::Role,
             {
                 let req = match http {
-                    true => hyper::Request::builder()
-                        .method(hyper::Method::POST)
-                        .uri(uri)
-                        .header(header.0, header.1)
-                        .body(hyper::Body::from(body))
-                        .unwrap_or(hyper::Request::default()),
+                    true => {
+                        let mut temp = hyper::Request::builder()
+                            .method(method)
+                            .uri(uri);
+
+                        for elt in header {
+                            temp = temp.header(elt.0, elt.1);
+                        }
+
+                        temp.body(hyper::Body::from(body)).unwrap_or(hyper::Request::default())
+                    },
                     false => hyper::Request::default(),
                 };
 

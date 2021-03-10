@@ -780,8 +780,9 @@ macro_rules! choose_mpst_multi_http_to_all {
                     }),
                     s,
                     false,
+                    hyper::Method::GET,
                     "",
-                    ("", ""),
+                    vec![("", "")],
                     "",
                 );
             )(
@@ -797,8 +798,9 @@ macro_rules! choose_mpst_multi_http_to_all {
                     }),
                     $session,
                     false,
+                    hyper::Method::GET,
                     "",
-                    ("", ""),
+                    vec![("", "")],
                     "",
                 );
             )2*

@@ -5,9 +5,12 @@ use mpstthree::{
     create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
 };
 
-use hyper::Request;
+use hyper::{Body, Method, Request};
 use rand::{thread_rng, Rng};
+use std::collections::hash_map::RandomState;
+use std::collections::HashMap;
 use std::error::Error;
+use std::fs;
 use std::marker;
 
 // global protocol Proto(role A, role C, role S)
@@ -198,7 +201,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        let (s, _req) = send_http_a_to_s(0, s, false, "", ("", ""), "");
+        let (s, _req) = send_http_a_to_s(0, s, false, Method::GET, "", vec![("", "")], "");
 
         close_mpst_multi(s)
     } else {
@@ -216,7 +219,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        let (s, _req) = send_http_a_to_s(1, s, false, "", ("", ""), "");
+        let (s, _req) = send_http_a_to_s(1, s, false, Method::GET, "", vec![("", "")], "");
 
         choice_a(s)
     }
@@ -228,18 +231,42 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
             let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
-            let (s, _req) = send_http_c_to_a(quit, s, false, "", ("", ""), "");
+            let (s, _req) = send_http_c_to_a(quit, s, false, Method::GET, "", vec![("", "")], "");
             close_mpst_multi(s)
         },
         Branching0fromStoC::<i32>::Login(s) => {
 
-            // let _req_test = Request::builder()
-            //     .method(Method::GET)
-            //     .uri("https://graph.facebook.com/v10.0/")
-            //     .body(Body::from(r#"{"id":"139608884711552"}"#))?;
+            /////////////
+            // Get the tokens
 
-            // let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
-            let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+            let contents = fs::read_to_string("imgur.env")?;
+            let lines: Vec<&str> = contents.split("\n").collect();
+            let hasher = RandomState::new();
+            let mut ids: HashMap<&str, &str> = HashMap::with_hasher(hasher);
+            for line in lines {
+                let temp: Vec<&str> = line.split("=").collect();
+                ids.insert(temp[0], temp[1]);
+            }
+
+            let req = Request::builder()
+                .method(Method::GET)
+                .uri(ids["CREDITS_URL"])
+                .header("content-type", ids["CONTENT_TYPE"])
+                .header(
+                    "Authorization",
+                    format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
+                )
+                .header("User-Agent", ids["USER_AGENT"])
+                .header("Accept-Encoding", ids["ACCEPT_ENCODING"])
+                .header("Accept", ids["ACCEPT"])
+                .header("Connection", ids["CONNECTION"])
+                .body(Body::default())?;
+
+            /////////////
+            // let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+            let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
+
+            println!("Resp: {:?}", resp);
 
             choice_c(s)
         },
@@ -247,7 +274,15 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    let (s, _req) = send_http_c_to_a(thread_rng().gen_range(1..=3), s, false, "", ("", ""), "");
+    let (s, _req) = send_http_c_to_a(
+        thread_rng().gen_range(1..=3),
+        s,
+        false,
+        Method::GET,
+        "",
+        vec![("", "")],
+        "",
+    );
 
     offer_http_mpst!(s, recv_http_c_to_a, {
         Branching1fromAtoC::<i32>::Auth(s) => {
@@ -264,7 +299,7 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=5);
+    let choice = thread_rng().gen_range(1..=6);
 
     println!("choice: {:?}", choice);
 
@@ -283,7 +318,7 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             3
         );
 
-        let (s, _req) = send_http_s_to_c(0, s, false, "", ("", ""), "");
+        let (s, _req) = send_http_s_to_c(0, s, false, Method::GET, "", vec![("", "")], "");
 
         close_mpst_multi(s)
     } else {
@@ -301,7 +336,7 @@ fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             3
         );
 
-        let (s, _req) = send_http_s_to_c(1, s, false, "", ("", ""), "");
+        let (s, _req) = send_http_s_to_c(1, s, false, Method::GET, "", vec![("", "")], "");
 
         choice_s(s)
     }
@@ -311,13 +346,13 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_s_to_a, {
         Branching1fromAtoS::<i32>::Auth(s) => {
             let (success, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
-            let (s, _req) = send_http_s_to_c(success, s, false, "", ("", ""), "");
+            let (s, _req) = send_http_s_to_c(success, s, false, Method::GET, "", vec![("", "")], "");
 
             close_mpst_multi(s)
         },
         Branching1fromAtoS::<i32>::Again(s) => {
             let (fail, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
-            let (s, _req) = send_http_s_to_c(fail, s, false, "", ("", ""), "");
+            let (s, _req) = send_http_s_to_c(fail, s, false, Method::GET, "", vec![("", "")], "");
 
             choice_s(s)
         },

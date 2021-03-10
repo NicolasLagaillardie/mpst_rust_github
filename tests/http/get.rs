@@ -1,3 +1,4 @@
+use futures::executor::block_on;
 use hyper::body::HttpBody as _;
 use hyper::{Body, Client, Method, Request, Response};
 use hyper_tls::HttpsConnector;
@@ -23,23 +24,22 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
     let req = Request::builder()
         .method(Method::GET)
         .uri(ids["CREDITS_URL"])
-        .header("content-type", "application/json")
+        .header("content-type", ids["CONTENT_TYPE"])
         .header(
             "Authorization",
             format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
         )
-        .header("Accept", "*/*")
-        .header("User-Agent", "PostmanRuntime/7.26.10")
-        .header("Accept-Encoding", "*/*")
-        .header("Accept", "gzip, deflate, br")
-        .header("Connection", "keep-alive")
+        .header("User-Agent", ids["USER_AGENT"])
+        .header("Accept-Encoding", ids["ACCEPT_ENCODING"])
+        .header("Accept", ids["ACCEPT"])
+        .header("Connection", ids["CONNECTION"])
         .body(Body::default())?;
 
     println!("Req: {:?}", &req);
 
     let https = HttpsConnector::new();
 
-    let client = Client::builder().build::<_, hyper::Body>(https);
+    let client = Client::builder().build::<_, Body>(https);
 
     // Await the response...
     let mut resp = client.request(req).await?;

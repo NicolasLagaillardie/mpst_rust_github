@@ -349,12 +349,18 @@ macro_rules! create_recv_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                let client = hyper::Client::new();
+                let https = hyper_tls::HttpsConnector::new();
+
+                let client = hyper::Client::builder().build::<_, hyper::Body>(https);
+
+                println!("Client created for req: {:?}", &req);
 
                 let resp = match http {
-                    true => futures::executor::block_on(client.request(req))?,
+                    true => tokio::spawn(async { client.request(req).await }),
                     false => hyper::Response::default(),
                 };
+
+                println!("Resp retrieved: {:?}", &resp);
 
                 let (v, s) = mpstthree::recv_mpst!(s, $next, $struct_name, $nsessions, $exclusion)()?;
 
