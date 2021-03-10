@@ -568,7 +568,7 @@ macro_rules! choose_mpst_multi_to_all {
 /// );
 ///
 /// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, SessionMpst, 3);
-/// 
+///
 /// match xs.pop() {
 ///    Option::Some(_) => {
 ///        let s = choose_mpst_multi_cancel_to_all!(

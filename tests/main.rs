@@ -175,7 +175,9 @@ fn tcp() {
 
 #[test]
 fn http() {
-    http::basic::main();
+    http::http_get::main();
+    http::https_get::main();
+    http::get::main();
 }
 
 pub fn main() {}
