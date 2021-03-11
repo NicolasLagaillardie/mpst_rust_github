@@ -66,9 +66,7 @@ where
             rt.block_on(async move {
                 let https = HttpsConnector::new();
                 let client = Client::builder().build::<_, Body>(https);
-                println!("Req sent: {:?}", &req);
-                let resp = client.request(req).await;
-                resp
+                client.request(req).await
             })?
         }
         false => Response::default(),

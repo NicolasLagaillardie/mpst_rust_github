@@ -156,6 +156,7 @@ fn canceling() {
     cancel::cancel_8::main();
     cancel::cancel_9::main();
     cancel::cancel_10::main();
+    cancel::cancel_11::main();
 }
 
 #[test]
@@ -176,6 +177,7 @@ fn tcp() {
 #[test]
 fn http() {
     http::simple_http_get::main();
+    http::simple_http_post::main();
     http::simple_https_get::main();
     http::complex_https_get::main();
     http::binary_http_get::main();

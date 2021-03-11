@@ -1,9 +1,7 @@
-use hyper::body::HttpBody as _;
 use hyper::{Body, Client, Method, Request, Response};
 use hyper_tls::HttpsConnector;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
-use tokio::io::{stdout, AsyncWriteExt as _};
 
 use std::fs;
 
@@ -38,14 +36,16 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
     let client = Client::builder().build::<_, Body>(https);
 
     // Await the response...
-    let mut resp = client.request(req).await?;
+    // let mut resp = client.request(req).await?;
 
     // And now...
-    while let Some(chunk) = resp.body_mut().data().await {
-        stdout().write_all(&chunk?).await?;
-    }
+    // while let Some(chunk) = resp.body_mut().data().await {
+    //     stdout().write_all(&chunk?).await?;
+    // }
 
-    Ok(resp)
+    // Ok(resp)
+
+    Ok(client.request(req).await?)
 }
 
 fn result() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {

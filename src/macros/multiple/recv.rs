@@ -361,15 +361,12 @@ macro_rules! create_recv_http_session {
                         rt.block_on(async move {
                             let https = hyper_tls::HttpsConnector::new();
                             let client = hyper::Client::builder().build::<_, hyper::Body>(https);
-                            println!("Req sent: {:?}", &req);
                             let resp = client.request(req).await;
                             resp
                         })?
                     },
                     false => hyper::Response::default(),
                 };
-
-                println!("Resp retrieved: {:?}", &resp);
 
                 let (v, s) = mpstthree::recv_mpst!(s, $next, $struct_name, $nsessions, $exclusion)()?;
 

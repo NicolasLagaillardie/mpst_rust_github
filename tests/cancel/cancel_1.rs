@@ -95,7 +95,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     // let s = send_mpst_b_to_c(random(), s);
     // close_mpst_multi(s)
 
-    Ok(())
+    panic!("Session dropped");
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
@@ -107,6 +107,6 @@ pub fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     assert!(thread_a.join().is_err());
-    assert!(thread_b.join().is_ok());
+    assert!(thread_b.join().is_err());
     assert!(thread_c.join().is_err());
 }
