@@ -1,4 +1,3 @@
-use futures::executor::block_on;
 use hyper::body::HttpBody as _;
 use hyper::{Body, Client, Method, Request, Response};
 use hyper_tls::HttpsConnector;
@@ -30,7 +29,6 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
             format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
         )
         .header("User-Agent", ids["USER_AGENT"])
-        .header("Accept-Encoding", ids["ACCEPT_ENCODING"])
         .header("Accept", ids["ACCEPT"])
         .header("Connection", ids["CONNECTION"])
         .body(Body::default())?;
@@ -44,7 +42,9 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
     // Await the response...
     let mut resp = client.request(req).await?;
 
-    println!("Response: {}", resp.status());
+    println!("Response status: {}", &resp.status());
+
+    println!("Response: {:?}", &resp);
 
     // And now...
     while let Some(chunk) = resp.body_mut().data().await {

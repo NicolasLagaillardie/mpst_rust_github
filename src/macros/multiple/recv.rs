@@ -1,7 +1,8 @@
 ////////////////////////////////////////////
 /// RECV
 
-/// Shorter way to call the code within the recv function instead of having to create the function itself.
+/// Shorter way to call the code within the recv function instead of having to create the function
+/// itself.
 ///
 /// # Example
 ///
@@ -45,7 +46,8 @@ macro_rules! recv_mpst {
     }
 }
 
-/// Creates a *recv* function to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
+/// Creates a *recv* function to receive from a simple role on a given binary session type of a
+/// SessionMpst with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -108,7 +110,8 @@ macro_rules! create_recv_mpst_session {
     }
 }
 
-/// Creates multiple *recv* functions to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
+/// Creates multiple *recv* functions to receive from a simple role on a given binary session type
+/// of a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -156,7 +159,8 @@ macro_rules! create_recv_mpst_session_bundle {
     }
 }
 
-/// Creates a *recv* function to receive from a broadcasting role on a given binary session type of a SessionMpst with more than 3 participants.
+/// Creates a *recv* function to receive from a broadcasting role on a given binary session type of
+/// a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -244,7 +248,8 @@ macro_rules! create_recv_mpst_all_session {
     }
 }
 
-/// Creates a *recv* function to receive from a broadcasting role on a given binary session type of a SessionMpst with more than 3 participants.
+/// Creates a *recv* function to receive from a broadcasting role on a given binary session type of
+/// a SessionMpst with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -289,7 +294,8 @@ macro_rules! create_recv_mpst_all_session_bundle {
     }
 }
 
-/// Creates a *recv* function to receive from a simple role on a given binary session type of a SessionMpst with more than 3 participants.
+/// Creates a *recv* function to receive from a simple role on a given binary session type of a
+/// SessionMpst with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -349,14 +355,17 @@ macro_rules! create_recv_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                let https = hyper_tls::HttpsConnector::new();
-
-                let client = hyper::Client::builder().build::<_, hyper::Body>(https);
-
-                println!("Client created for req: {:?}", &req);
-
                 let resp = match http {
-                    true => tokio::spawn(async { client.request(req).await }),
+                    true => {
+                        let rt = tokio::runtime::Runtime::new()?;
+                        rt.block_on(async move {
+                            let https = hyper_tls::HttpsConnector::new();
+                            let client = hyper::Client::builder().build::<_, hyper::Body>(https);
+                            println!("Req sent: {:?}", &req);
+                            let resp = client.request(req).await;
+                            resp
+                        })?
+                    },
                     false => hyper::Response::default(),
                 };
 

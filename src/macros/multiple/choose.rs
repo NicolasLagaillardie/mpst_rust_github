@@ -38,7 +38,8 @@ macro_rules! create_choose_type_multi {
     }
 }
 
-/// Create the *ChooseMpst* function to send a *Choose* left branch to be used with more than 3 participants.
+/// Create the *ChooseMpst* function to send a *Choose* left branch to be used with more than 3
+/// participants.
 ///
 /// # Arguments
 ///
@@ -177,7 +178,8 @@ macro_rules! create_choose_mpst_session_multi_left {
     }
 }
 
-/// Create the *ChooseMpst* function to send a *Choose* right branch to be used with more than 3 participants.
+/// Create the *ChooseMpst* function to send a *Choose* right branch to be used with more than 3
+/// participants.
 ///
 /// # Arguments
 ///
@@ -316,7 +318,8 @@ macro_rules! create_choose_mpst_session_multi_right {
     }
 }
 
-/// Create the two *ChooseMpst* functions to send a *Choose* on each branch to be used with more than 3 participants.  # Arguments
+/// Create the two *ChooseMpst* functions to send a *Choose* on each branch to be used with more
+/// than 3 participants.  # Arguments
 ///
 /// * The name of the new *ChooseMpst* function for the left branch
 /// * The name of the new *ChooseMpst* function for the right branch
@@ -501,7 +504,8 @@ macro_rules! choose_mpst_multi_to_all {
     }
 }
 
-/// Choose among different sessions that are provided, for protocols with more than 3 participants, may fail because of a canceled session. Need to exclude the first participant
+/// Choose among different sessions that are provided, for protocols with more than 3 participants,
+/// may fail because of a canceled session. Need to exclude the first participant
 ///
 /// # Arguments
 ///

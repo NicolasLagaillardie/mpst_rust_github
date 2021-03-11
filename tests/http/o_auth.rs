@@ -5,7 +5,7 @@ use mpstthree::{
     create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
 };
 
-use hyper::{Body, Method, Request};
+use hyper::{Body, Method, Request, StatusCode};
 use rand::{thread_rng, Rng};
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
@@ -262,7 +262,9 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
                 .body(Body::default())?;
 
             /////////////
-            let (_, s, _resp) = recv_http_c_to_s(s, true, req)?;
+            let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
+
+            assert_eq!(resp.status(), StatusCode::from_u16(200).unwrap());
 
             choice_c(s)
         },
@@ -357,14 +359,14 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn main() {
+pub fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         simple_five_endpoint_a,
         simple_five_endpoint_c,
         simple_five_endpoint_s,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
 }

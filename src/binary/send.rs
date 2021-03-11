@@ -52,15 +52,15 @@ where
 
 /// Send a value of type `T` over http. Returns the
 /// continuation of the session `S`. May fail.
-#[tokio::main]
-pub async fn send_http<T, S>(
+pub fn send_http<T, S>(
     x: T,
     s: Send<T, S>,
     http: bool,
+    method: Method,
     uri: &str,
-    header: (&str, &str),
+    header: Vec<(&str, &str)>,
     body: &'static str,
-) -> Result<(S, Request<Body>), Box<dyn Error + marker::Send + std::marker::Sync>>
+) -> Result<(S, Request<Body>), Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
@@ -68,11 +68,15 @@ where
     let (here, there) = S::new();
 
     let req = match http {
-        true => Request::builder()
-            .method(Method::POST)
-            .uri(uri)
-            .header(header.0, header.1)
-            .body(Body::from(body))?,
+        true => {
+            let mut temp = Request::builder().method(method).uri(uri);
+
+            for elt in header {
+                temp = temp.header(elt.0, elt.1);
+            }
+
+            temp.body(Body::from(body))?
+        }
         false => Request::default(),
     };
 
