@@ -14,8 +14,6 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
     // Await the response...
     let mut resp = client.get(uri).await?;
 
-    println!("Response: {}", resp.status());
-
     // And now...
     while let Some(chunk) = resp.body_mut().data().await {
         stdout().write_all(&chunk?).await?;

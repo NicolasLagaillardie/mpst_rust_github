@@ -350,7 +350,7 @@ macro_rules! create_send_http_session {
                             temp = temp.header(elt.0, elt.1);
                         }
 
-                        temp.body(hyper::Body::from(body))?
+                        temp.body(hyper::Body::from(body)).unwrap_or(hyper::Request::default())
                     },
                     false => hyper::Request::default(),
                 };

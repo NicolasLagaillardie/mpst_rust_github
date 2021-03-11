@@ -226,8 +226,6 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    println!("C");
-
     offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
             let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
@@ -298,8 +296,6 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 
 fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=6);
-
-    println!("choice: {:?}", choice);
 
     if choice == 1 {
         let s = choose_mpst_multi_http_to_all!(

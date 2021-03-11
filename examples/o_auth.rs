@@ -365,6 +365,6 @@ fn main() {
     );
 
     thread_a.join().unwrap();
-    thread_b.join().unwrap();
     thread_c.join().unwrap();
+    thread_s.join().unwrap();
 }

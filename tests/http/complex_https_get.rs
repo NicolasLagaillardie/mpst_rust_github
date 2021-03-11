@@ -33,18 +33,12 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
         .header("Connection", ids["CONNECTION"])
         .body(Body::default())?;
 
-    println!("Req: {:?}", &req);
-
     let https = HttpsConnector::new();
 
     let client = Client::builder().build::<_, Body>(https);
 
     // Await the response...
     let mut resp = client.request(req).await?;
-
-    println!("Response status: {}", &resp.status());
-
-    println!("Response: {:?}", &resp);
 
     // And now...
     while let Some(chunk) = resp.body_mut().data().await {
