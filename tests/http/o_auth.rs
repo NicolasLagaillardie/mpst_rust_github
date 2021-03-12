@@ -237,34 +237,41 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             /////////////
             // Get the tokens
 
-            let contents = fs::read_to_string("imgur.env")?;
-            let lines: Vec<&str> = contents.split("\n").collect();
-            let hasher = RandomState::new();
-            let mut ids: HashMap<&str, &str> = HashMap::with_hasher(hasher);
-            for line in lines {
-                let temp: Vec<&str> = line.split("=").collect();
-                ids.insert(temp[0], temp[1]);
+            match fs::read_to_string("imgur.env") {
+                Ok(contents) => {
+                    let lines: Vec<&str> = contents.split("\n").collect();
+                    let hasher = RandomState::new();
+                    let mut ids: HashMap<&str, &str> = HashMap::with_hasher(hasher);
+                    for line in lines {
+                        let temp: Vec<&str> = line.split("=").collect();
+                        ids.insert(temp[0], temp[1]);
+                    }
+
+                    let req = Request::builder()
+                        .method(Method::GET)
+                        .uri(ids["CREDITS_URL"])
+                        .header("content-type", ids["CONTENT_TYPE"])
+                        .header(
+                            "Authorization",
+                            format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
+                        )
+                        .header("User-Agent", ids["USER_AGENT"])
+                        .header("Accept", ids["ACCEPT"])
+                        .header("Connection", ids["CONNECTION"])
+                        .body(Body::default())?;
+
+                    /////////////
+                    let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
+
+                    assert_eq!(resp.status(), StatusCode::from_u16(200).unwrap());
+
+                    choice_c(s)
+                    },
+                Err(_) => {
+                    let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+                    choice_c(s)
+                }
             }
-
-            let req = Request::builder()
-                .method(Method::GET)
-                .uri(ids["CREDITS_URL"])
-                .header("content-type", ids["CONTENT_TYPE"])
-                .header(
-                    "Authorization",
-                    format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
-                )
-                .header("User-Agent", ids["USER_AGENT"])
-                .header("Accept", ids["ACCEPT"])
-                .header("Connection", ids["CONNECTION"])
-                .body(Body::default())?;
-
-            /////////////
-            let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
-
-            assert_eq!(resp.status(), StatusCode::from_u16(200).unwrap());
-
-            choice_c(s)
         },
     })
 }
