@@ -32,7 +32,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
 ///
-/// use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+/// use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 /// use mpstthree::functionmpst::send::send_mpst_b_to_a;
 ///
 /// // Creating the binary sessions
@@ -79,9 +79,9 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_b_to_a((), sess_b);
-/// recv_mpst_a_to_b(sess_a);
+/// recv_mpst_a_from_b(sess_a);
 /// ```
-pub fn recv_mpst_a_to_b<T, S1, S2, R>(
+pub fn recv_mpst_a_from_b<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
 where
@@ -118,7 +118,7 @@ where
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
 ///
-/// use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+/// use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 /// use mpstthree::functionmpst::send::send_mpst_a_to_b;
 ///
 /// // Creating the binary sessions
@@ -164,9 +164,9 @@ where
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_a_to_b((), sess_a);
-/// recv_mpst_b_to_a(sess_b);
+/// recv_mpst_b_from_a(sess_b);
 /// ```
-pub fn recv_mpst_b_to_a<T, S1, S2, R>(
+pub fn recv_mpst_b_from_a<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
 where
@@ -203,7 +203,7 @@ where
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
-/// use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+/// use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 /// use mpstthree::functionmpst::send::send_mpst_a_to_c;
 ///
 /// // Creating the binary sessions
@@ -249,9 +249,9 @@ where
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_a_to_c((), sess_a);
-/// recv_mpst_c_to_a(sess_c);
+/// recv_mpst_c_from_a(sess_c);
 /// ```
-pub fn recv_mpst_c_to_a<T, S1, S2, R>(
+pub fn recv_mpst_c_from_a<T, S1, S2, R>(
     s: SessionMpst<Recv<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
 where
@@ -288,7 +288,7 @@ where
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
-/// use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+/// use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 /// use mpstthree::functionmpst::send::send_mpst_c_to_a;
 ///
 /// // Creating the binary sessions
@@ -334,9 +334,9 @@ where
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_c_to_a((), sess_c);
-/// recv_mpst_a_to_c(sess_a);
+/// recv_mpst_a_from_c(sess_a);
 /// ```
-pub fn recv_mpst_a_to_c<T, S1, S2, R>(
+pub fn recv_mpst_a_from_c<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
 where
@@ -373,7 +373,7 @@ where
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
-/// use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
+/// use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
 /// use mpstthree::functionmpst::send::send_mpst_c_to_b;
 ///
 /// // Creating the binary sessions
@@ -419,9 +419,9 @@ where
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_c_to_b((), sess_c);
-/// recv_mpst_b_to_c(sess_b);
+/// recv_mpst_b_from_c(sess_b);
 /// ```
-pub fn recv_mpst_b_to_c<T, S1, S2, R>(
+pub fn recv_mpst_b_from_c<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
 where
@@ -458,7 +458,7 @@ where
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
-/// use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+/// use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 /// use mpstthree::functionmpst::send::send_mpst_b_to_c;
 ///
 /// // Creating the binary sessions
@@ -504,9 +504,9 @@ where
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_b_to_c((), sess_b);
-/// recv_mpst_c_to_b(sess_c);
+/// recv_mpst_c_from_b(sess_c);
 /// ```
-pub fn recv_mpst_c_to_b<T, S1, S2, R>(
+pub fn recv_mpst_c_from_b<T, S1, S2, R>(
     s: SessionMpst<S1, Recv<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
 where

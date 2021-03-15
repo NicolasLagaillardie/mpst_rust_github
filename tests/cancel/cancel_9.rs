@@ -41,20 +41,20 @@ create_send_check_cancel_bundle!(
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_c, RoleC, next_c, 2 |
-    recv_mpst_b_to_d, RoleD, next_d, 3 | =>
+    recv_mpst_b_from_c, RoleC, next_c, 2 |
+    recv_mpst_b_from_d, RoleD, next_d, 3 | =>
     RoleB, SessionMpstFour, 4
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_b, RoleB, next_b, 2 |
-    recv_mpst_c_to_d, RoleD, next_d, 3 | =>
+    recv_mpst_c_from_b, RoleB, next_b, 2 |
+    recv_mpst_c_from_d, RoleD, next_d, 3 | =>
     RoleC, SessionMpstFour, 4
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_to_b, RoleB, next_b, 2 |
-    recv_mpst_d_to_c, RoleC, next_c, 3 | =>
+    recv_mpst_d_from_b, RoleB, next_b, 2 |
+    recv_mpst_d_from_c, RoleC, next_c, 3 | =>
     RoleD, SessionMpstFour, 4
 );
 
@@ -109,15 +109,15 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_b_to_d, {
+    offer_cancel_mpst!(s, recv_mpst_b_from_d, {
         Branching0fromDtoB::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromDtoB::More(s) => {
-            // let (_, s) = recv_mpst_b_to_d(s)?;
+            // let (_, s) = recv_mpst_b_from_d(s)?;
             // let s = send_check_b_to_d((), s)?;
             // let s = send_check_b_to_c((), s)?;
-            // let (_, s) = recv_mpst_b_to_c(s)?;
+            // let (_, s) = recv_mpst_b_from_c(s)?;
             // simple_five_endpoint_b(s)
 
             cancel_mpst(s);
@@ -128,14 +128,14 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_c_to_d, {
+    offer_cancel_mpst!(s, recv_mpst_c_from_d, {
         Branching0fromDtoC::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromDtoC::More(s) => {
-            let (_, s) = recv_mpst_c_to_d(s)?;
+            let (_, s) = recv_mpst_c_from_d(s)?;
             let s = send_check_c_to_d((), s)?;
-            let (_, s) = recv_mpst_c_to_b(s)?;
+            let (_, s) = recv_mpst_c_from_b(s)?;
             let s = send_check_c_to_b((), s)?;
             simple_five_endpoint_c(s)
         },
@@ -183,9 +183,9 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
             );
 
             let s = send_check_d_to_b((), s)?;
-            let (_, s) = recv_mpst_d_to_b(s)?;
+            let (_, s) = recv_mpst_d_from_b(s)?;
             let s = send_check_d_to_c((), s)?;
-            let (_, s) = recv_mpst_d_to_c(s)?;
+            let (_, s) = recv_mpst_d_from_c(s)?;
 
             recurs_d(s, i - 1)
         }

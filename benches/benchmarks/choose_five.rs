@@ -228,7 +228,7 @@
 // // normal
 // // A
 // create_recv_mpst_session!(
-//     recv_mpst_b_to_a,
+//     recv_mpst_b_from_a,
 //     RoleA,
 //     next_a,
 //     RoleB,
@@ -237,7 +237,7 @@
 //     1
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_c_to_a,
+//     recv_mpst_c_from_a,
 //     RoleA,
 //     next_a,
 //     RoleC,
@@ -246,7 +246,7 @@
 //     1
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_d_to_a,
+//     recv_mpst_d_from_a,
 //     RoleA,
 //     next_a,
 //     RoleD,
@@ -255,7 +255,7 @@
 //     1
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_e_to_a,
+//     recv_mpst_e_from_a,
 //     RoleA,
 //     next_a,
 //     RoleE,
@@ -265,7 +265,7 @@
 // );
 // // B
 // create_recv_mpst_session!(
-//     recv_mpst_a_to_b,
+//     recv_mpst_a_from_b,
 //     RoleB,
 //     next_b,
 //     RoleA,
@@ -274,7 +274,7 @@
 //     1
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_c_to_b,
+//     recv_mpst_c_from_b,
 //     RoleB,
 //     next_b,
 //     RoleC,
@@ -283,7 +283,7 @@
 //     2
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_d_to_b,
+//     recv_mpst_d_from_b,
 //     RoleB,
 //     next_b,
 //     RoleD,
@@ -292,7 +292,7 @@
 //     2
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_e_to_b,
+//     recv_mpst_e_from_b,
 //     RoleB,
 //     next_b,
 //     RoleE,
@@ -302,7 +302,7 @@
 // );
 // // C
 // create_recv_mpst_session!(
-//     recv_mpst_a_to_c,
+//     recv_mpst_a_from_c,
 //     RoleC,
 //     next_c,
 //     RoleA,
@@ -311,7 +311,7 @@
 //     2
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_b_to_c,
+//     recv_mpst_b_from_c,
 //     RoleC,
 //     next_c,
 //     RoleB,
@@ -320,7 +320,7 @@
 //     2
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_d_to_c,
+//     recv_mpst_d_from_c,
 //     RoleC,
 //     next_c,
 //     RoleD,
@@ -329,7 +329,7 @@
 //     3
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_e_to_c,
+//     recv_mpst_e_from_c,
 //     RoleC,
 //     next_c,
 //     RoleE,
@@ -339,7 +339,7 @@
 // );
 // // D
 // create_recv_mpst_session!(
-//     recv_mpst_a_to_d,
+//     recv_mpst_a_from_d,
 //     RoleD,
 //     next_d,
 //     RoleA,
@@ -348,7 +348,7 @@
 //     3
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_b_to_d,
+//     recv_mpst_b_from_d,
 //     RoleD,
 //     next_d,
 //     RoleB,
@@ -357,7 +357,7 @@
 //     3
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_c_to_d,
+//     recv_mpst_c_from_d,
 //     RoleD,
 //     next_d,
 //     RoleC,
@@ -366,7 +366,7 @@
 //     3
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_e_to_d,
+//     recv_mpst_e_from_d,
 //     RoleD,
 //     next_d,
 //     RoleE,
@@ -376,7 +376,7 @@
 // );
 // // E
 // create_recv_mpst_session!(
-//     recv_mpst_a_to_e,
+//     recv_mpst_a_from_e,
 //     RoleE,
 //     next_e,
 //     RoleA,
@@ -385,7 +385,7 @@
 //     4
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_b_to_e,
+//     recv_mpst_b_from_e,
 //     RoleE,
 //     next_e,
 //     RoleB,
@@ -394,7 +394,7 @@
 //     4
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_c_to_e,
+//     recv_mpst_c_from_e,
 //     RoleE,
 //     next_e,
 //     RoleC,
@@ -403,7 +403,7 @@
 //     4
 // );
 // create_recv_mpst_session!(
-//     recv_mpst_d_to_e,
+//     recv_mpst_d_from_e,
 //     RoleE,
 //     next_e,
 //     RoleD,

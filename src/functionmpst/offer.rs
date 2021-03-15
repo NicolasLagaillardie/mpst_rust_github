@@ -69,7 +69,7 @@ type SessionMpstToCFromB<S1, S2, S3, S4, S5, R1, R2> = SessionMpst<
 /// offer_mpst_session_to_a_from_b(
 ///    s,
 ///    |s: EndpointARecv<i32>| {
-///        let (request, s) = recv_mpst_a_to_b(s)?;
+///        let (request, s) = recv_mpst_a_from_b(s)?;
 ///        close_mpst(s)?;
 ///        Ok(())
 ///    },
@@ -114,7 +114,7 @@ where
 /// offer_mpst_session_to_a_from_c(
 ///    s,
 ///    |s: EndpointARecv<i32>| {
-///        let (request, s) = recv_mpst_a_to_c(s)?;
+///        let (request, s) = recv_mpst_a_from_c(s)?;
 ///        close_mpst(s)?;
 ///        Ok(())
 ///    },
@@ -159,7 +159,7 @@ where
 /// offer_mpst_session_to_b_from_a(
 ///    s,
 ///    |s: EndpointBRecv<i32>| {
-///        let (request, s) = recv_mpst_b_to_a(s)?;
+///        let (request, s) = recv_mpst_b_from_a(s)?;
 ///        close_mpst(s)?;
 ///        Ok(())
 ///    },
@@ -204,7 +204,7 @@ where
 /// offer_mpst_session_to_b_from_c(
 ///    s,
 ///    |s: EndpointBRecv<i32>| {
-///        let (request, s) = recv_mpst_b_to_c(s)?;
+///        let (request, s) = recv_mpst_b_from_c(s)?;
 ///        close_mpst(s)?;
 ///        Ok(())
 ///    },
@@ -249,7 +249,7 @@ where
 /// offer_mpst_session_to_c_from_a(
 ///    s,
 ///    |s: EndpointCRecv<i32>| {
-///        let (request, s) = recv_mpst_c_to_a(s)?;
+///        let (request, s) = recv_mpst_c_from_a(s)?;
 ///        close_mpst(s)?;
 ///        Ok(())
 ///    },
@@ -294,7 +294,7 @@ where
 /// offer_mpst_session_to_c_from_b(
 ///    s,
 ///    |s: EndpointCRecv<i32>| {
-///        let (request, s) = recv_mpst_c_to_b(s)?;
+///        let (request, s) = recv_mpst_c_from_b(s)?;
 ///        close_mpst(s)?;
 ///        Ok(())
 ///    },

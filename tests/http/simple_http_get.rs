@@ -1,5 +1,5 @@
 // use hyper::body::HttpBody as _;
-use hyper::{Body, Client, Response};
+use hyper::{Body, Client, Response, StatusCode};
 // use tokio::io::{stdout, AsyncWriteExt as _};
 
 #[tokio::main]
@@ -18,7 +18,11 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
 
     // Ok(resp)
 
-    Ok(client.get(uri).await?)
+    let resp = client.get(uri).await?;
+
+    assert_eq!(resp.status(), StatusCode::from_u16(200).unwrap());
+
+    Ok(resp)
 }
 
 fn result() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {

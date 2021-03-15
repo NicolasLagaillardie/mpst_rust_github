@@ -424,7 +424,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            3
 ///        );
 ///        let s = send_mpst_d_to_a(1, s);
-///        let (_, s) = recv_mpst_d_to_a(s)?;
+///        let (_, s) = recv_mpst_d_from_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
 ///    Option::None => {
@@ -537,7 +537,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///            3
 ///        );
 ///        let s = send_mpst_d_to_a(1, s);
-///        let (_, s) = recv_mpst_d_to_a(s)?;
+///        let (_, s) = recv_mpst_d_from_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
 ///    Option::None => {

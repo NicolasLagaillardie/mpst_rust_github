@@ -74,19 +74,19 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_c, RoleC, next_c, 1 | =>
+    recv_mpst_a_from_c, RoleC, next_c, 1 | =>
     RoleA, SessionMpstThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a, RoleA, next_a, 1 |
-    recv_mpst_c_to_s, RoleS, next_s, 2 | =>
+    recv_mpst_c_from_a, RoleA, next_a, 1 |
+    recv_mpst_c_from_s, RoleS, next_s, 2 | =>
     RoleC, SessionMpstThree, 3
 );
 // S
 create_recv_mpst_session_bundle!(
-    recv_mpst_s_to_a, RoleA, next_a, 1 |
-    recv_mpst_s_to_c, RoleC, next_c, 2 | =>
+    recv_mpst_s_from_a, RoleA, next_a, 1 |
+    recv_mpst_s_from_c, RoleC, next_c, 2 | =>
     RoleS, SessionMpstThree, 3
 );
 
@@ -149,12 +149,12 @@ type EndpointS<N> = SessionMpstThree<End, Choice0fromCtoS<N>, RoleC<RoleEnd>, Na
 // Functions
 // A
 fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_to_c, {
+    offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Select(s) => {
             choice_a(s)
         },
         Branching0fromCtoA::Loop(s) => {
-            let (query, s) = recv_mpst_a_to_c(s)?;
+            let (query, s) = recv_mpst_a_from_c(s)?;
             let s = send_mpst_a_to_c(query, s);
             let s = send_mpst_a_to_s(random(), s);
             simple_five_endpoint_a(s)
@@ -163,14 +163,14 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_to_c, {
+    offer_mpst!(s, recv_mpst_a_from_c, {
         Branching1fromCtoA::Yes(s) => {
-            let (yes, s) = recv_mpst_a_to_c(s)?;
+            let (yes, s) = recv_mpst_a_from_c(s)?;
             let s = send_mpst_a_to_s(yes, s);
             close_mpst_multi(s)
         },
         Branching1fromCtoA::No(s) => {
-            let (no, s) = recv_mpst_a_to_c(s)?;
+            let (no, s) = recv_mpst_a_from_c(s)?;
             let s = send_mpst_a_to_s(no, s);
             close_mpst_multi(s)
         },
@@ -211,7 +211,7 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
         );
 
         let s = send_mpst_c_to_a(random(), s);
-        let (_quote, s) = recv_mpst_c_to_a(s)?;
+        let (_quote, s) = recv_mpst_c_from_a(s)?;
         simple_five_endpoint_c(s)
     }
 }
@@ -236,7 +236,7 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 
         let s = send_mpst_c_to_a(random(), s);
         let s = send_mpst_c_to_s(random(), s);
-        let (_ack, s) = recv_mpst_c_to_s(s)?;
+        let (_ack, s) = recv_mpst_c_from_s(s)?;
         close_mpst_multi(s)
     } else {
         let s = choose_mpst_multi_to_all!(
@@ -259,27 +259,27 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_s_to_c, {
+    offer_mpst!(s, recv_mpst_s_from_c, {
         Branching0fromCtoS::Select(s) => {
             choice_s(s)
         },
         Branching0fromCtoS::Loop(s) => {
-            let (_dummy, s) = recv_mpst_s_to_a(s)?;
+            let (_dummy, s) = recv_mpst_s_from_a(s)?;
             simple_five_endpoint_s(s)
         },
     })
 }
 
 fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_s_to_c, {
+    offer_mpst!(s, recv_mpst_s_from_c, {
         Branching1fromCtoS::Yes(s) => {
-            let (_yes, s) = recv_mpst_s_to_a(s)?;
-            let (payment, s) = recv_mpst_s_to_c(s)?;
+            let (_yes, s) = recv_mpst_s_from_a(s)?;
+            let (payment, s) = recv_mpst_s_from_c(s)?;
             let s = send_mpst_s_to_c(payment, s);
             close_mpst_multi(s)
         },
         Branching1fromCtoS::No(s) => {
-            let (_no, s) = recv_mpst_s_to_a(s)?;
+            let (_no, s) = recv_mpst_s_from_a(s)?;
             close_mpst_multi(s)
         },
     })

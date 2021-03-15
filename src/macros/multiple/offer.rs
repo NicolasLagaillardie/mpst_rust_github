@@ -135,14 +135,14 @@ macro_rules! create_offer_mpst_session_multi {
 /// # Example
 ///
 /// ```ignore
-/// offer_mpst!(s, recv_mpst_a_to_d, {
+/// offer_mpst!(s, recv_mpst_a_from_d, {
 ///    CBranchesAtoC::End(s) => {
 ///        close_mpst_multi(s)
 ///    },
 ///    CBranchesAtoC::Video(s) => {
-///        let (request, s) = recv_mpst_a_to_d(s)?;
+///        let (request, s) = recv_mpst_a_from_d(s)?;
 ///        let s = send_mpst_a_to_b(request + 1, s);
-///        let (video, s) = recv_mpst_a_to_b(s)?;
+///        let (video, s) = recv_mpst_a_from_b(s)?;
 ///        let s = send_mpst_a_to_d(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -199,14 +199,14 @@ macro_rules! offer_cancel_mpst {
 /// # Example
 ///
 /// ```ignore
-/// offer_http_mpst!(s, recv_mpst_a_to_d, {
+/// offer_http_mpst!(s, recv_mpst_a_from_d, {
 ///    CBranchesAtoC::End(s) => {
 ///        close_mpst_multi(s)
 ///    },
 ///    CBranchesAtoC::Video(s) => {
-///        let (request, s) = recv_mpst_a_to_d(s)?;
+///        let (request, s) = recv_mpst_a_from_d(s)?;
 ///        let s = send_mpst_a_to_b(request + 1, s);
-///        let (video, s) = recv_mpst_a_to_b(s)?;
+///        let (video, s) = recv_mpst_a_from_b(s)?;
 ///        let s = send_mpst_a_to_d(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },

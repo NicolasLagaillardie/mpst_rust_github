@@ -25,8 +25,8 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
-use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
+use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
 use mpstthree::functionmpst::send::send_mpst_a_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_b;
@@ -116,7 +116,7 @@ fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_c_from_a(
         s,
         |s: EndpointCAdd<i32>| {
-            let (x, s) = recv_mpst_c_to_a(s)?;
+            let (x, s) = recv_mpst_c_from_a(s)?;
             let s = send_mpst_c_to_b(x + 1, s);
 
             assert_eq!(x, 1);
@@ -124,7 +124,7 @@ fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst(s)
         },
         |s: EndpointCNeg<i32>| {
-            let (x, s) = recv_mpst_c_to_a(s)?;
+            let (x, s) = recv_mpst_c_from_a(s)?;
             let s = send_mpst_c_to_b(x + 1, s);
 
             assert_eq!(x, 2);
@@ -176,14 +176,14 @@ fn simple_store_pawn(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_b_from_a(
         s,
         |s: EndpointBAdd<i32>| {
-            let (x, s) = recv_mpst_b_to_c(s)?;
+            let (x, s) = recv_mpst_b_from_c(s)?;
 
             assert_eq!(x, 2);
 
             close_mpst(s)
         },
         |s: EndpointBNeg<i32>| {
-            let (x, s) = recv_mpst_b_to_c(s)?;
+            let (x, s) = recv_mpst_b_from_c(s)?;
 
             assert_eq!(x, 3);
 

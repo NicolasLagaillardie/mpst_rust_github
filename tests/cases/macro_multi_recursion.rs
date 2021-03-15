@@ -33,11 +33,11 @@ create_send_mpst_session!(send_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session!(recv_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_to_d, RoleD, next_d, RoleA, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_to_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_to_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, next_d, RoleA, SessionMpst, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, next_d, RoleB, SessionMpst, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, next_a, RoleB, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, next_b, RoleA, SessionMpst, 3, 1);
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
 
@@ -109,12 +109,12 @@ type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, QueueBRecurs, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_to_d, {
+    offer_mpst!(s, recv_mpst_b_from_d, {
         Branches0BtoD::End(s) => {
             close_mpst_multi(s)
         },
         Branches0BtoD::Video(s) => {
-            let (request, s) = recv_mpst_b_to_a(s)?;
+            let (request, s) = recv_mpst_b_from_a(s)?;
             let s = send_mpst_b_to_a(request + 1, s);
             server(s)
         },
@@ -122,21 +122,21 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_a_to_d(s)?;
+    let (id, s) = recv_mpst_a_from_d(s)?;
     let s = send_mpst_a_to_d(id + 1, s);
 
     authenticator_recurs(s)
 }
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_to_d, {
+    offer_mpst!(s, recv_mpst_a_from_d, {
         Branches0AtoD::End(s) => {
             close_mpst_multi(s)
         },
         Branches0AtoD::Video(s) => {
-            let (request, s) = recv_mpst_a_to_d(s)?;
+            let (request, s) = recv_mpst_a_from_d(s)?;
             let s = send_mpst_a_to_b(request + 1, s);
-            let (video, s) = recv_mpst_a_to_b(s)?;
+            let (video, s) = recv_mpst_a_from_b(s)?;
             let s = send_mpst_a_to_d(video + 1, s);
             authenticator_recurs(s)
         },
@@ -148,7 +148,7 @@ fn client(s: EndpointDFull<i32>) -> Result<(), Box<dyn Error>> {
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
     let s = send_mpst_d_to_a(0, s);
-    let (_, s) = recv_mpst_d_to_a(s)?;
+    let (_, s) = recv_mpst_d_from_a(s)?;
 
     client_recurs(s, xs, 1)
 }
@@ -175,7 +175,7 @@ fn client_recurs(
             );
 
             let s = send_mpst_d_to_a(1, s);
-            let (_, s) = recv_mpst_d_to_a(s)?;
+            let (_, s) = recv_mpst_d_from_a(s)?;
 
             client_recurs(s, xs, index + 1)
         }

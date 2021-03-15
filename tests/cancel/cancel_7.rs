@@ -36,14 +36,14 @@ create_send_check_cancel_bundle!(
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_c, RoleC, next_c, 2 | =>
+    recv_mpst_b_from_c, RoleC, next_c, 2 | =>
     RoleB,
     SessionMpstFour,
     4
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_to_c, RoleC, next_c, 3 | =>
+    recv_mpst_d_from_c, RoleC, next_c, 3 | =>
     RoleD,
     SessionMpstFour,
     4
@@ -75,7 +75,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_b_to_c(s)?;
+    let (_, s) = recv_mpst_b_from_c(s)?;
     close_check_cancel(s)
 }
 
@@ -86,7 +86,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_d_to_c(s)?;
+    let (_, s) = recv_mpst_d_from_c(s)?;
     close_check_cancel(s)
 }
 

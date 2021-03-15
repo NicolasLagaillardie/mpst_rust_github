@@ -1105,7 +1105,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///             RoleC
 ///         );
 ///         let s = send_mpst_c_to_a(1, s);
-///         let (_, s) = recv_mpst_c_to_a(s)?;
+///         let (_, s) = recv_mpst_c_from_a(s)?;
 ///         client_recurs(s, xs, index + 1)
 ///     }
 ///     Option::None => {

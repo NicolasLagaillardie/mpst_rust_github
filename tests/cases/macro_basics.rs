@@ -37,8 +37,8 @@ create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, next_a, RoleD);
 create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, next_d, RoleA);
 
 // Create new recv functions
-create_recv_mpst_session_1!(recv_mpst_d_to_a, RoleA, next_a, RoleD);
-create_recv_mpst_session_2!(recv_mpst_a_to_d, RoleD, next_d, RoleA);
+create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, next_a, RoleD);
+create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, next_d, RoleA);
 
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
@@ -52,12 +52,12 @@ fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_a_to_d(s)?;
+    let (_, s) = recv_mpst_a_from_d(s)?;
     close_mpst(s)
 }
 
 fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_d_to_a(s)?;
+    let (_, s) = recv_mpst_d_from_a(s)?;
     close_mpst(s)
 }
 

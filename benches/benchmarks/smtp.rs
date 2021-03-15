@@ -213,7 +213,7 @@
 // // Create new recv functions and related types
 // // A
 // create_recv_mpst_session_bundle!(
-//     recv_mpst_a_to_c,
+//     recv_mpst_a_from_c,
 //     RoleC,
 //     next_c,
 //     1 | =>
@@ -223,11 +223,11 @@
 // );
 // // C
 // create_recv_mpst_session_bundle!(
-//     recv_mpst_c_to_a,
+//     recv_mpst_c_from_a,
 //     RoleA,
 //     next_a,
 //     1 |
-//     recv_mpst_c_to_s,
+//     recv_mpst_c_from_s,
 //     RoleS,
 //     next_s,
 //     2 | =>
@@ -237,11 +237,11 @@
 // );
 // // S
 // create_recv_mpst_session_bundle!(
-//     recv_mpst_s_to_a,
+//     recv_mpst_s_from_a,
 //     RoleA,
 //     next_a,
 //     1 |
-//     recv_mpst_s_to_c,
+//     recv_mpst_s_from_c,
 //     RoleC,
 //     next_c,
 //     2 | =>

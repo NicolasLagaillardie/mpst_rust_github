@@ -512,462 +512,462 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_b, RoleB, next_b, 1 |
-    recv_mpst_a_to_c, RoleC, next_c, 2 |
-    recv_mpst_a_to_d, RoleD, next_d, 3 |
-    recv_mpst_a_to_e, RoleE, next_e, 4 |
-    recv_mpst_a_to_f, RoleF, next_f, 5 |
-    recv_mpst_a_to_g, RoleG, next_g, 6 |
-    recv_mpst_a_to_h, RoleH, next_h, 7 |
-    recv_mpst_a_to_i, RoleI, next_i, 8 |
-    recv_mpst_a_to_j, RoleJ, next_j, 9 |
-    recv_mpst_a_to_k, RoleK, next_k, 10 |
-    recv_mpst_a_to_l, RoleL, next_l, 11 |
-    recv_mpst_a_to_m, RoleM, next_m, 12 |
-    recv_mpst_a_to_n, RoleN, next_n, 13 |
-    recv_mpst_a_to_o, RoleO, next_o, 14 |
-    recv_mpst_a_to_p, RoleP, next_p, 15 |
-    recv_mpst_a_to_q, RoleQ, next_q, 16 |
-    recv_mpst_a_to_r, RoleR, next_r, 17 |
-    recv_mpst_a_to_s, RoleS, next_s, 18 |
-    recv_mpst_a_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_a_from_b, RoleB, next_b, 1 |
+    recv_mpst_a_from_c, RoleC, next_c, 2 |
+    recv_mpst_a_from_d, RoleD, next_d, 3 |
+    recv_mpst_a_from_e, RoleE, next_e, 4 |
+    recv_mpst_a_from_f, RoleF, next_f, 5 |
+    recv_mpst_a_from_g, RoleG, next_g, 6 |
+    recv_mpst_a_from_h, RoleH, next_h, 7 |
+    recv_mpst_a_from_i, RoleI, next_i, 8 |
+    recv_mpst_a_from_j, RoleJ, next_j, 9 |
+    recv_mpst_a_from_k, RoleK, next_k, 10 |
+    recv_mpst_a_from_l, RoleL, next_l, 11 |
+    recv_mpst_a_from_m, RoleM, next_m, 12 |
+    recv_mpst_a_from_n, RoleN, next_n, 13 |
+    recv_mpst_a_from_o, RoleO, next_o, 14 |
+    recv_mpst_a_from_p, RoleP, next_p, 15 |
+    recv_mpst_a_from_q, RoleQ, next_q, 16 |
+    recv_mpst_a_from_r, RoleR, next_r, 17 |
+    recv_mpst_a_from_s, RoleS, next_s, 18 |
+    recv_mpst_a_from_t, RoleT, next_t, 19 | =>
     RoleA, SessionMpstTwenty, 20
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a, RoleA, next_a, 1 |
-    recv_mpst_b_to_c, RoleC, next_c, 2 |
-    recv_mpst_b_to_d, RoleD, next_d, 3 |
-    recv_mpst_b_to_e, RoleE, next_e, 4 |
-    recv_mpst_b_to_f, RoleF, next_f, 5 |
-    recv_mpst_b_to_g, RoleG, next_g, 6 |
-    recv_mpst_b_to_h, RoleH, next_h, 7 |
-    recv_mpst_b_to_i, RoleI, next_i, 8 |
-    recv_mpst_b_to_j, RoleJ, next_j, 9 |
-    recv_mpst_b_to_k, RoleK, next_k, 10 |
-    recv_mpst_b_to_l, RoleL, next_l, 11 |
-    recv_mpst_b_to_m, RoleM, next_m, 12 |
-    recv_mpst_b_to_n, RoleN, next_n, 13 |
-    recv_mpst_b_to_o, RoleO, next_o, 14 |
-    recv_mpst_b_to_p, RoleP, next_p, 15 |
-    recv_mpst_b_to_q, RoleQ, next_q, 16 |
-    recv_mpst_b_to_r, RoleR, next_r, 17 |
-    recv_mpst_b_to_s, RoleS, next_s, 18 |
-    recv_mpst_b_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_b_from_a, RoleA, next_a, 1 |
+    recv_mpst_b_from_c, RoleC, next_c, 2 |
+    recv_mpst_b_from_d, RoleD, next_d, 3 |
+    recv_mpst_b_from_e, RoleE, next_e, 4 |
+    recv_mpst_b_from_f, RoleF, next_f, 5 |
+    recv_mpst_b_from_g, RoleG, next_g, 6 |
+    recv_mpst_b_from_h, RoleH, next_h, 7 |
+    recv_mpst_b_from_i, RoleI, next_i, 8 |
+    recv_mpst_b_from_j, RoleJ, next_j, 9 |
+    recv_mpst_b_from_k, RoleK, next_k, 10 |
+    recv_mpst_b_from_l, RoleL, next_l, 11 |
+    recv_mpst_b_from_m, RoleM, next_m, 12 |
+    recv_mpst_b_from_n, RoleN, next_n, 13 |
+    recv_mpst_b_from_o, RoleO, next_o, 14 |
+    recv_mpst_b_from_p, RoleP, next_p, 15 |
+    recv_mpst_b_from_q, RoleQ, next_q, 16 |
+    recv_mpst_b_from_r, RoleR, next_r, 17 |
+    recv_mpst_b_from_s, RoleS, next_s, 18 |
+    recv_mpst_b_from_t, RoleT, next_t, 19 | =>
     RoleB, SessionMpstTwenty, 20
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a, RoleA, next_a, 1 |
-    recv_mpst_c_to_b, RoleB, next_b, 2 |
-    recv_mpst_c_to_d, RoleD, next_d, 3 |
-    recv_mpst_c_to_e, RoleE, next_e, 4 |
-    recv_mpst_c_to_f, RoleF, next_f, 5 |
-    recv_mpst_c_to_g, RoleG, next_g, 6 |
-    recv_mpst_c_to_h, RoleH, next_h, 7 |
-    recv_mpst_c_to_i, RoleI, next_i, 8 |
-    recv_mpst_c_to_j, RoleJ, next_j, 9 |
-    recv_mpst_c_to_k, RoleK, next_k, 10 |
-    recv_mpst_c_to_l, RoleL, next_l, 11 |
-    recv_mpst_c_to_m, RoleM, next_m, 12 |
-    recv_mpst_c_to_n, RoleN, next_n, 13 |
-    recv_mpst_c_to_o, RoleO, next_o, 14 |
-    recv_mpst_c_to_p, RoleP, next_p, 15 |
-    recv_mpst_c_to_q, RoleQ, next_q, 16 |
-    recv_mpst_c_to_r, RoleR, next_r, 17 |
-    recv_mpst_c_to_s, RoleS, next_s, 18 |
-    recv_mpst_c_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_c_from_a, RoleA, next_a, 1 |
+    recv_mpst_c_from_b, RoleB, next_b, 2 |
+    recv_mpst_c_from_d, RoleD, next_d, 3 |
+    recv_mpst_c_from_e, RoleE, next_e, 4 |
+    recv_mpst_c_from_f, RoleF, next_f, 5 |
+    recv_mpst_c_from_g, RoleG, next_g, 6 |
+    recv_mpst_c_from_h, RoleH, next_h, 7 |
+    recv_mpst_c_from_i, RoleI, next_i, 8 |
+    recv_mpst_c_from_j, RoleJ, next_j, 9 |
+    recv_mpst_c_from_k, RoleK, next_k, 10 |
+    recv_mpst_c_from_l, RoleL, next_l, 11 |
+    recv_mpst_c_from_m, RoleM, next_m, 12 |
+    recv_mpst_c_from_n, RoleN, next_n, 13 |
+    recv_mpst_c_from_o, RoleO, next_o, 14 |
+    recv_mpst_c_from_p, RoleP, next_p, 15 |
+    recv_mpst_c_from_q, RoleQ, next_q, 16 |
+    recv_mpst_c_from_r, RoleR, next_r, 17 |
+    recv_mpst_c_from_s, RoleS, next_s, 18 |
+    recv_mpst_c_from_t, RoleT, next_t, 19 | =>
     RoleC, SessionMpstTwenty, 20
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_to_a, RoleA, next_a, 1 |
-    recv_mpst_d_to_b, RoleB, next_b, 2 |
-    recv_mpst_d_to_c, RoleC, next_c, 3 |
-    recv_mpst_d_to_e, RoleE, next_e, 4 |
-    recv_mpst_d_to_f, RoleF, next_f, 5 |
-    recv_mpst_d_to_g, RoleG, next_g, 6 |
-    recv_mpst_d_to_h, RoleH, next_h, 7 |
-    recv_mpst_d_to_i, RoleI, next_i, 8 |
-    recv_mpst_d_to_j, RoleJ, next_j, 9 |
-    recv_mpst_d_to_k, RoleK, next_k, 10 |
-    recv_mpst_d_to_l, RoleL, next_l, 11 |
-    recv_mpst_d_to_m, RoleM, next_m, 12 |
-    recv_mpst_d_to_n, RoleN, next_n, 13 |
-    recv_mpst_d_to_o, RoleO, next_o, 14 |
-    recv_mpst_d_to_p, RoleP, next_p, 15 |
-    recv_mpst_d_to_q, RoleQ, next_q, 16 |
-    recv_mpst_d_to_r, RoleR, next_r, 17 |
-    recv_mpst_d_to_s, RoleS, next_s, 18 |
-    recv_mpst_d_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_d_from_a, RoleA, next_a, 1 |
+    recv_mpst_d_from_b, RoleB, next_b, 2 |
+    recv_mpst_d_from_c, RoleC, next_c, 3 |
+    recv_mpst_d_from_e, RoleE, next_e, 4 |
+    recv_mpst_d_from_f, RoleF, next_f, 5 |
+    recv_mpst_d_from_g, RoleG, next_g, 6 |
+    recv_mpst_d_from_h, RoleH, next_h, 7 |
+    recv_mpst_d_from_i, RoleI, next_i, 8 |
+    recv_mpst_d_from_j, RoleJ, next_j, 9 |
+    recv_mpst_d_from_k, RoleK, next_k, 10 |
+    recv_mpst_d_from_l, RoleL, next_l, 11 |
+    recv_mpst_d_from_m, RoleM, next_m, 12 |
+    recv_mpst_d_from_n, RoleN, next_n, 13 |
+    recv_mpst_d_from_o, RoleO, next_o, 14 |
+    recv_mpst_d_from_p, RoleP, next_p, 15 |
+    recv_mpst_d_from_q, RoleQ, next_q, 16 |
+    recv_mpst_d_from_r, RoleR, next_r, 17 |
+    recv_mpst_d_from_s, RoleS, next_s, 18 |
+    recv_mpst_d_from_t, RoleT, next_t, 19 | =>
     RoleD, SessionMpstTwenty, 20
 );
 // E
 create_recv_mpst_session_bundle!(
-    recv_mpst_e_to_a, RoleA, next_a, 1 |
-    recv_mpst_e_to_b, RoleB, next_b, 2 |
-    recv_mpst_e_to_c, RoleC, next_c, 3 |
-    recv_mpst_e_to_d, RoleD, next_d, 4 |
-    recv_mpst_e_to_f, RoleF, next_f, 5 |
-    recv_mpst_e_to_g, RoleG, next_g, 6 |
-    recv_mpst_e_to_h, RoleH, next_h, 7 |
-    recv_mpst_e_to_i, RoleI, next_i, 8 |
-    recv_mpst_e_to_j, RoleJ, next_j, 9 |
-    recv_mpst_e_to_k, RoleK, next_k, 10 |
-    recv_mpst_e_to_l, RoleL, next_l, 11 |
-    recv_mpst_e_to_m, RoleM, next_m, 12 |
-    recv_mpst_e_to_n, RoleN, next_n, 13 |
-    recv_mpst_e_to_o, RoleO, next_o, 14 |
-    recv_mpst_e_to_p, RoleP, next_p, 15 |
-    recv_mpst_e_to_q, RoleQ, next_q, 16 |
-    recv_mpst_e_to_r, RoleR, next_r, 17 |
-    recv_mpst_e_to_s, RoleS, next_s, 18 |
-    recv_mpst_e_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_e_from_a, RoleA, next_a, 1 |
+    recv_mpst_e_from_b, RoleB, next_b, 2 |
+    recv_mpst_e_from_c, RoleC, next_c, 3 |
+    recv_mpst_e_from_d, RoleD, next_d, 4 |
+    recv_mpst_e_from_f, RoleF, next_f, 5 |
+    recv_mpst_e_from_g, RoleG, next_g, 6 |
+    recv_mpst_e_from_h, RoleH, next_h, 7 |
+    recv_mpst_e_from_i, RoleI, next_i, 8 |
+    recv_mpst_e_from_j, RoleJ, next_j, 9 |
+    recv_mpst_e_from_k, RoleK, next_k, 10 |
+    recv_mpst_e_from_l, RoleL, next_l, 11 |
+    recv_mpst_e_from_m, RoleM, next_m, 12 |
+    recv_mpst_e_from_n, RoleN, next_n, 13 |
+    recv_mpst_e_from_o, RoleO, next_o, 14 |
+    recv_mpst_e_from_p, RoleP, next_p, 15 |
+    recv_mpst_e_from_q, RoleQ, next_q, 16 |
+    recv_mpst_e_from_r, RoleR, next_r, 17 |
+    recv_mpst_e_from_s, RoleS, next_s, 18 |
+    recv_mpst_e_from_t, RoleT, next_t, 19 | =>
     RoleE, SessionMpstTwenty, 20
 );
 // F
 create_recv_mpst_session_bundle!(
-    recv_mpst_f_to_a, RoleA, next_a, 1 |
-    recv_mpst_f_to_b, RoleB, next_b, 2 |
-    recv_mpst_f_to_c, RoleC, next_c, 3 |
-    recv_mpst_f_to_d, RoleD, next_d, 4 |
-    recv_mpst_f_to_e, RoleE, next_e, 5 |
-    recv_mpst_f_to_g, RoleG, next_g, 6 |
-    recv_mpst_f_to_h, RoleH, next_h, 7 |
-    recv_mpst_f_to_i, RoleI, next_i, 8 |
-    recv_mpst_f_to_j, RoleJ, next_j, 9 |
-    recv_mpst_f_to_k, RoleK, next_k, 10 |
-    recv_mpst_f_to_l, RoleL, next_l, 11 |
-    recv_mpst_f_to_m, RoleM, next_m, 12 |
-    recv_mpst_f_to_n, RoleN, next_n, 13 |
-    recv_mpst_f_to_o, RoleO, next_o, 14 |
-    recv_mpst_f_to_p, RoleP, next_p, 15 |
-    recv_mpst_f_to_q, RoleQ, next_q, 16 |
-    recv_mpst_f_to_r, RoleR, next_r, 17 |
-    recv_mpst_f_to_s, RoleS, next_s, 18 |
-    recv_mpst_f_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_f_from_a, RoleA, next_a, 1 |
+    recv_mpst_f_from_b, RoleB, next_b, 2 |
+    recv_mpst_f_from_c, RoleC, next_c, 3 |
+    recv_mpst_f_from_d, RoleD, next_d, 4 |
+    recv_mpst_f_from_e, RoleE, next_e, 5 |
+    recv_mpst_f_from_g, RoleG, next_g, 6 |
+    recv_mpst_f_from_h, RoleH, next_h, 7 |
+    recv_mpst_f_from_i, RoleI, next_i, 8 |
+    recv_mpst_f_from_j, RoleJ, next_j, 9 |
+    recv_mpst_f_from_k, RoleK, next_k, 10 |
+    recv_mpst_f_from_l, RoleL, next_l, 11 |
+    recv_mpst_f_from_m, RoleM, next_m, 12 |
+    recv_mpst_f_from_n, RoleN, next_n, 13 |
+    recv_mpst_f_from_o, RoleO, next_o, 14 |
+    recv_mpst_f_from_p, RoleP, next_p, 15 |
+    recv_mpst_f_from_q, RoleQ, next_q, 16 |
+    recv_mpst_f_from_r, RoleR, next_r, 17 |
+    recv_mpst_f_from_s, RoleS, next_s, 18 |
+    recv_mpst_f_from_t, RoleT, next_t, 19 | =>
     RoleF, SessionMpstTwenty, 20
 );
 // G
 create_recv_mpst_session_bundle!(
-    recv_mpst_g_to_a, RoleA, next_a, 1 |
-    recv_mpst_g_to_b, RoleB, next_b, 2 |
-    recv_mpst_g_to_c, RoleC, next_c, 3 |
-    recv_mpst_g_to_d, RoleD, next_d, 4 |
-    recv_mpst_g_to_e, RoleE, next_e, 5 |
-    recv_mpst_g_to_f, RoleF, next_f, 6 |
-    recv_mpst_g_to_h, RoleH, next_h, 7 |
-    recv_mpst_g_to_i, RoleI, next_i, 8 |
-    recv_mpst_g_to_j, RoleJ, next_j, 9 |
-    recv_mpst_g_to_k, RoleK, next_k, 10 |
-    recv_mpst_g_to_l, RoleL, next_l, 11 |
-    recv_mpst_g_to_m, RoleM, next_m, 12 |
-    recv_mpst_g_to_n, RoleN, next_n, 13 |
-    recv_mpst_g_to_o, RoleO, next_o, 14 |
-    recv_mpst_g_to_p, RoleP, next_p, 15 |
-    recv_mpst_g_to_q, RoleQ, next_q, 16 |
-    recv_mpst_g_to_r, RoleR, next_r, 17 |
-    recv_mpst_g_to_s, RoleS, next_s, 18 |
-    recv_mpst_g_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_g_from_a, RoleA, next_a, 1 |
+    recv_mpst_g_from_b, RoleB, next_b, 2 |
+    recv_mpst_g_from_c, RoleC, next_c, 3 |
+    recv_mpst_g_from_d, RoleD, next_d, 4 |
+    recv_mpst_g_from_e, RoleE, next_e, 5 |
+    recv_mpst_g_from_f, RoleF, next_f, 6 |
+    recv_mpst_g_from_h, RoleH, next_h, 7 |
+    recv_mpst_g_from_i, RoleI, next_i, 8 |
+    recv_mpst_g_from_j, RoleJ, next_j, 9 |
+    recv_mpst_g_from_k, RoleK, next_k, 10 |
+    recv_mpst_g_from_l, RoleL, next_l, 11 |
+    recv_mpst_g_from_m, RoleM, next_m, 12 |
+    recv_mpst_g_from_n, RoleN, next_n, 13 |
+    recv_mpst_g_from_o, RoleO, next_o, 14 |
+    recv_mpst_g_from_p, RoleP, next_p, 15 |
+    recv_mpst_g_from_q, RoleQ, next_q, 16 |
+    recv_mpst_g_from_r, RoleR, next_r, 17 |
+    recv_mpst_g_from_s, RoleS, next_s, 18 |
+    recv_mpst_g_from_t, RoleT, next_t, 19 | =>
     RoleG, SessionMpstTwenty, 20
 );
 // H
 create_recv_mpst_session_bundle!(
-    recv_mpst_h_to_a, RoleA, next_a, 1 |
-    recv_mpst_h_to_b, RoleB, next_b, 2 |
-    recv_mpst_h_to_c, RoleC, next_c, 3 |
-    recv_mpst_h_to_d, RoleD, next_d, 4 |
-    recv_mpst_h_to_e, RoleE, next_e, 5 |
-    recv_mpst_h_to_f, RoleF, next_f, 6 |
-    recv_mpst_h_to_g, RoleG, next_g, 7 |
-    recv_mpst_h_to_i, RoleI, next_i, 8 |
-    recv_mpst_h_to_j, RoleJ, next_j, 9 |
-    recv_mpst_h_to_k, RoleK, next_k, 10 |
-    recv_mpst_h_to_l, RoleL, next_l, 11 |
-    recv_mpst_h_to_m, RoleM, next_m, 12 |
-    recv_mpst_h_to_n, RoleN, next_n, 13 |
-    recv_mpst_h_to_o, RoleO, next_o, 14 |
-    recv_mpst_h_to_p, RoleP, next_p, 15 |
-    recv_mpst_h_to_q, RoleQ, next_q, 16 |
-    recv_mpst_h_to_r, RoleR, next_r, 17 |
-    recv_mpst_h_to_s, RoleS, next_s, 18 |
-    recv_mpst_h_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_h_from_a, RoleA, next_a, 1 |
+    recv_mpst_h_from_b, RoleB, next_b, 2 |
+    recv_mpst_h_from_c, RoleC, next_c, 3 |
+    recv_mpst_h_from_d, RoleD, next_d, 4 |
+    recv_mpst_h_from_e, RoleE, next_e, 5 |
+    recv_mpst_h_from_f, RoleF, next_f, 6 |
+    recv_mpst_h_from_g, RoleG, next_g, 7 |
+    recv_mpst_h_from_i, RoleI, next_i, 8 |
+    recv_mpst_h_from_j, RoleJ, next_j, 9 |
+    recv_mpst_h_from_k, RoleK, next_k, 10 |
+    recv_mpst_h_from_l, RoleL, next_l, 11 |
+    recv_mpst_h_from_m, RoleM, next_m, 12 |
+    recv_mpst_h_from_n, RoleN, next_n, 13 |
+    recv_mpst_h_from_o, RoleO, next_o, 14 |
+    recv_mpst_h_from_p, RoleP, next_p, 15 |
+    recv_mpst_h_from_q, RoleQ, next_q, 16 |
+    recv_mpst_h_from_r, RoleR, next_r, 17 |
+    recv_mpst_h_from_s, RoleS, next_s, 18 |
+    recv_mpst_h_from_t, RoleT, next_t, 19 | =>
     RoleH, SessionMpstTwenty, 20
 );
 // I
 create_recv_mpst_session_bundle!(
-    recv_mpst_i_to_a, RoleA, next_a, 1 |
-    recv_mpst_i_to_b, RoleB, next_b, 2 |
-    recv_mpst_i_to_c, RoleC, next_c, 3 |
-    recv_mpst_i_to_d, RoleD, next_d, 4 |
-    recv_mpst_i_to_e, RoleE, next_e, 5 |
-    recv_mpst_i_to_f, RoleF, next_f, 6 |
-    recv_mpst_i_to_g, RoleG, next_g, 7 |
-    recv_mpst_i_to_h, RoleH, next_h, 8 |
-    recv_mpst_i_to_j, RoleJ, next_j, 9 |
-    recv_mpst_i_to_k, RoleK, next_k, 10 |
-    recv_mpst_i_to_l, RoleL, next_l, 11 |
-    recv_mpst_i_to_m, RoleM, next_m, 12 |
-    recv_mpst_i_to_n, RoleN, next_n, 13 |
-    recv_mpst_i_to_o, RoleO, next_o, 14 |
-    recv_mpst_i_to_p, RoleP, next_p, 15 |
-    recv_mpst_i_to_q, RoleQ, next_q, 16 |
-    recv_mpst_i_to_r, RoleR, next_r, 17 |
-    recv_mpst_i_to_s, RoleS, next_s, 18 |
-    recv_mpst_i_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_i_from_a, RoleA, next_a, 1 |
+    recv_mpst_i_from_b, RoleB, next_b, 2 |
+    recv_mpst_i_from_c, RoleC, next_c, 3 |
+    recv_mpst_i_from_d, RoleD, next_d, 4 |
+    recv_mpst_i_from_e, RoleE, next_e, 5 |
+    recv_mpst_i_from_f, RoleF, next_f, 6 |
+    recv_mpst_i_from_g, RoleG, next_g, 7 |
+    recv_mpst_i_from_h, RoleH, next_h, 8 |
+    recv_mpst_i_from_j, RoleJ, next_j, 9 |
+    recv_mpst_i_from_k, RoleK, next_k, 10 |
+    recv_mpst_i_from_l, RoleL, next_l, 11 |
+    recv_mpst_i_from_m, RoleM, next_m, 12 |
+    recv_mpst_i_from_n, RoleN, next_n, 13 |
+    recv_mpst_i_from_o, RoleO, next_o, 14 |
+    recv_mpst_i_from_p, RoleP, next_p, 15 |
+    recv_mpst_i_from_q, RoleQ, next_q, 16 |
+    recv_mpst_i_from_r, RoleR, next_r, 17 |
+    recv_mpst_i_from_s, RoleS, next_s, 18 |
+    recv_mpst_i_from_t, RoleT, next_t, 19 | =>
     RoleI, SessionMpstTwenty, 20
 );
 // J
 create_recv_mpst_session_bundle!(
-    recv_mpst_j_to_a, RoleA, next_a, 1 |
-    recv_mpst_j_to_b, RoleB, next_b, 2 |
-    recv_mpst_j_to_c, RoleC, next_c, 3 |
-    recv_mpst_j_to_d, RoleD, next_d, 4 |
-    recv_mpst_j_to_e, RoleE, next_e, 5 |
-    recv_mpst_j_to_f, RoleF, next_f, 6 |
-    recv_mpst_j_to_g, RoleG, next_g, 7 |
-    recv_mpst_j_to_h, RoleH, next_h, 8 |
-    recv_mpst_j_to_i, RoleI, next_i, 9 |
-    recv_mpst_j_to_k, RoleK, next_k, 10 |
-    recv_mpst_j_to_l, RoleL, next_l, 11 |
-    recv_mpst_j_to_m, RoleM, next_m, 12 |
-    recv_mpst_j_to_n, RoleN, next_n, 13 |
-    recv_mpst_j_to_o, RoleO, next_o, 14 |
-    recv_mpst_j_to_p, RoleP, next_p, 15 |
-    recv_mpst_j_to_q, RoleQ, next_q, 16 |
-    recv_mpst_j_to_r, RoleR, next_r, 17 |
-    recv_mpst_j_to_s, RoleS, next_s, 18 |
-    recv_mpst_j_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_j_from_a, RoleA, next_a, 1 |
+    recv_mpst_j_from_b, RoleB, next_b, 2 |
+    recv_mpst_j_from_c, RoleC, next_c, 3 |
+    recv_mpst_j_from_d, RoleD, next_d, 4 |
+    recv_mpst_j_from_e, RoleE, next_e, 5 |
+    recv_mpst_j_from_f, RoleF, next_f, 6 |
+    recv_mpst_j_from_g, RoleG, next_g, 7 |
+    recv_mpst_j_from_h, RoleH, next_h, 8 |
+    recv_mpst_j_from_i, RoleI, next_i, 9 |
+    recv_mpst_j_from_k, RoleK, next_k, 10 |
+    recv_mpst_j_from_l, RoleL, next_l, 11 |
+    recv_mpst_j_from_m, RoleM, next_m, 12 |
+    recv_mpst_j_from_n, RoleN, next_n, 13 |
+    recv_mpst_j_from_o, RoleO, next_o, 14 |
+    recv_mpst_j_from_p, RoleP, next_p, 15 |
+    recv_mpst_j_from_q, RoleQ, next_q, 16 |
+    recv_mpst_j_from_r, RoleR, next_r, 17 |
+    recv_mpst_j_from_s, RoleS, next_s, 18 |
+    recv_mpst_j_from_t, RoleT, next_t, 19 | =>
     RoleJ, SessionMpstTwenty, 20
 );
 // K
 create_recv_mpst_session_bundle!(
-    recv_mpst_k_to_a, RoleA, next_a, 1 |
-    recv_mpst_k_to_b, RoleB, next_b, 2 |
-    recv_mpst_k_to_c, RoleC, next_c, 3 |
-    recv_mpst_k_to_d, RoleD, next_d, 4 |
-    recv_mpst_k_to_e, RoleE, next_e, 5 |
-    recv_mpst_k_to_f, RoleF, next_f, 6 |
-    recv_mpst_k_to_g, RoleG, next_g, 7 |
-    recv_mpst_k_to_h, RoleH, next_h, 8 |
-    recv_mpst_k_to_i, RoleI, next_i, 9 |
-    recv_mpst_k_to_j, RoleJ, next_j, 10 |
-    recv_mpst_k_to_l, RoleL, next_l, 11 |
-    recv_mpst_k_to_m, RoleM, next_m, 12 |
-    recv_mpst_k_to_n, RoleN, next_n, 13 |
-    recv_mpst_k_to_o, RoleO, next_o, 14 |
-    recv_mpst_k_to_p, RoleP, next_p, 15 |
-    recv_mpst_k_to_q, RoleQ, next_q, 16 |
-    recv_mpst_k_to_r, RoleR, next_r, 17 |
-    recv_mpst_k_to_s, RoleS, next_s, 18 |
-    recv_mpst_k_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_k_from_a, RoleA, next_a, 1 |
+    recv_mpst_k_from_b, RoleB, next_b, 2 |
+    recv_mpst_k_from_c, RoleC, next_c, 3 |
+    recv_mpst_k_from_d, RoleD, next_d, 4 |
+    recv_mpst_k_from_e, RoleE, next_e, 5 |
+    recv_mpst_k_from_f, RoleF, next_f, 6 |
+    recv_mpst_k_from_g, RoleG, next_g, 7 |
+    recv_mpst_k_from_h, RoleH, next_h, 8 |
+    recv_mpst_k_from_i, RoleI, next_i, 9 |
+    recv_mpst_k_from_j, RoleJ, next_j, 10 |
+    recv_mpst_k_from_l, RoleL, next_l, 11 |
+    recv_mpst_k_from_m, RoleM, next_m, 12 |
+    recv_mpst_k_from_n, RoleN, next_n, 13 |
+    recv_mpst_k_from_o, RoleO, next_o, 14 |
+    recv_mpst_k_from_p, RoleP, next_p, 15 |
+    recv_mpst_k_from_q, RoleQ, next_q, 16 |
+    recv_mpst_k_from_r, RoleR, next_r, 17 |
+    recv_mpst_k_from_s, RoleS, next_s, 18 |
+    recv_mpst_k_from_t, RoleT, next_t, 19 | =>
     RoleK, SessionMpstTwenty, 20
 );
 // L
 create_recv_mpst_session_bundle!(
-    recv_mpst_l_to_a, RoleA, next_a, 1 |
-    recv_mpst_l_to_b, RoleB, next_b, 2 |
-    recv_mpst_l_to_c, RoleC, next_c, 3 |
-    recv_mpst_l_to_d, RoleD, next_d, 4 |
-    recv_mpst_l_to_e, RoleE, next_e, 5 |
-    recv_mpst_l_to_f, RoleF, next_f, 6 |
-    recv_mpst_l_to_g, RoleG, next_g, 7 |
-    recv_mpst_l_to_h, RoleH, next_h, 8 |
-    recv_mpst_l_to_i, RoleI, next_i, 9 |
-    recv_mpst_l_to_j, RoleJ, next_j, 10 |
-    recv_mpst_l_to_k, RoleK, next_k, 11 |
-    recv_mpst_l_to_m, RoleM, next_m, 12 |
-    recv_mpst_l_to_n, RoleN, next_n, 13 |
-    recv_mpst_l_to_o, RoleO, next_o, 14 |
-    recv_mpst_l_to_p, RoleP, next_p, 15 |
-    recv_mpst_l_to_q, RoleQ, next_q, 16 |
-    recv_mpst_l_to_r, RoleR, next_r, 17 |
-    recv_mpst_l_to_s, RoleS, next_s, 18 |
-    recv_mpst_l_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_l_from_a, RoleA, next_a, 1 |
+    recv_mpst_l_from_b, RoleB, next_b, 2 |
+    recv_mpst_l_from_c, RoleC, next_c, 3 |
+    recv_mpst_l_from_d, RoleD, next_d, 4 |
+    recv_mpst_l_from_e, RoleE, next_e, 5 |
+    recv_mpst_l_from_f, RoleF, next_f, 6 |
+    recv_mpst_l_from_g, RoleG, next_g, 7 |
+    recv_mpst_l_from_h, RoleH, next_h, 8 |
+    recv_mpst_l_from_i, RoleI, next_i, 9 |
+    recv_mpst_l_from_j, RoleJ, next_j, 10 |
+    recv_mpst_l_from_k, RoleK, next_k, 11 |
+    recv_mpst_l_from_m, RoleM, next_m, 12 |
+    recv_mpst_l_from_n, RoleN, next_n, 13 |
+    recv_mpst_l_from_o, RoleO, next_o, 14 |
+    recv_mpst_l_from_p, RoleP, next_p, 15 |
+    recv_mpst_l_from_q, RoleQ, next_q, 16 |
+    recv_mpst_l_from_r, RoleR, next_r, 17 |
+    recv_mpst_l_from_s, RoleS, next_s, 18 |
+    recv_mpst_l_from_t, RoleT, next_t, 19 | =>
     RoleL, SessionMpstTwenty, 20
 );
 // M
 create_recv_mpst_session_bundle!(
-    recv_mpst_m_to_a, RoleA, next_a, 1 |
-    recv_mpst_m_to_b, RoleB, next_b, 2 |
-    recv_mpst_m_to_c, RoleC, next_c, 3 |
-    recv_mpst_m_to_d, RoleD, next_d, 4 |
-    recv_mpst_m_to_e, RoleE, next_e, 5 |
-    recv_mpst_m_to_f, RoleF, next_f, 6 |
-    recv_mpst_m_to_g, RoleG, next_g, 7 |
-    recv_mpst_m_to_h, RoleH, next_h, 8 |
-    recv_mpst_m_to_i, RoleI, next_i, 9 |
-    recv_mpst_m_to_j, RoleJ, next_j, 10 |
-    recv_mpst_m_to_k, RoleK, next_k, 11 |
-    recv_mpst_m_to_l, RoleL, next_l, 12 |
-    recv_mpst_m_to_n, RoleN, next_n, 13 |
-    recv_mpst_m_to_o, RoleO, next_o, 14 |
-    recv_mpst_m_to_p, RoleP, next_p, 15 |
-    recv_mpst_m_to_q, RoleQ, next_q, 16 |
-    recv_mpst_m_to_r, RoleR, next_r, 17 |
-    recv_mpst_m_to_s, RoleS, next_s, 18 |
-    recv_mpst_m_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_m_from_a, RoleA, next_a, 1 |
+    recv_mpst_m_from_b, RoleB, next_b, 2 |
+    recv_mpst_m_from_c, RoleC, next_c, 3 |
+    recv_mpst_m_from_d, RoleD, next_d, 4 |
+    recv_mpst_m_from_e, RoleE, next_e, 5 |
+    recv_mpst_m_from_f, RoleF, next_f, 6 |
+    recv_mpst_m_from_g, RoleG, next_g, 7 |
+    recv_mpst_m_from_h, RoleH, next_h, 8 |
+    recv_mpst_m_from_i, RoleI, next_i, 9 |
+    recv_mpst_m_from_j, RoleJ, next_j, 10 |
+    recv_mpst_m_from_k, RoleK, next_k, 11 |
+    recv_mpst_m_from_l, RoleL, next_l, 12 |
+    recv_mpst_m_from_n, RoleN, next_n, 13 |
+    recv_mpst_m_from_o, RoleO, next_o, 14 |
+    recv_mpst_m_from_p, RoleP, next_p, 15 |
+    recv_mpst_m_from_q, RoleQ, next_q, 16 |
+    recv_mpst_m_from_r, RoleR, next_r, 17 |
+    recv_mpst_m_from_s, RoleS, next_s, 18 |
+    recv_mpst_m_from_t, RoleT, next_t, 19 | =>
     RoleM, SessionMpstTwenty, 20
 );
 // N
 create_recv_mpst_session_bundle!(
-    recv_mpst_n_to_a, RoleA, next_a, 1 |
-    recv_mpst_n_to_b, RoleB, next_b, 2 |
-    recv_mpst_n_to_c, RoleC, next_c, 3 |
-    recv_mpst_n_to_d, RoleD, next_d, 4 |
-    recv_mpst_n_to_e, RoleE, next_e, 5 |
-    recv_mpst_n_to_f, RoleF, next_f, 6 |
-    recv_mpst_n_to_g, RoleG, next_g, 7 |
-    recv_mpst_n_to_h, RoleH, next_h, 8 |
-    recv_mpst_n_to_i, RoleI, next_i, 9 |
-    recv_mpst_n_to_j, RoleJ, next_j, 10 |
-    recv_mpst_n_to_k, RoleK, next_k, 11 |
-    recv_mpst_n_to_l, RoleL, next_l, 12 |
-    recv_mpst_n_to_m, RoleM, next_m, 13 |
-    recv_mpst_n_to_o, RoleO, next_o, 14 |
-    recv_mpst_n_to_p, RoleP, next_p, 15 |
-    recv_mpst_n_to_q, RoleQ, next_q, 16 |
-    recv_mpst_n_to_r, RoleR, next_r, 17 |
-    recv_mpst_n_to_s, RoleS, next_s, 18 |
-    recv_mpst_n_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_n_from_a, RoleA, next_a, 1 |
+    recv_mpst_n_from_b, RoleB, next_b, 2 |
+    recv_mpst_n_from_c, RoleC, next_c, 3 |
+    recv_mpst_n_from_d, RoleD, next_d, 4 |
+    recv_mpst_n_from_e, RoleE, next_e, 5 |
+    recv_mpst_n_from_f, RoleF, next_f, 6 |
+    recv_mpst_n_from_g, RoleG, next_g, 7 |
+    recv_mpst_n_from_h, RoleH, next_h, 8 |
+    recv_mpst_n_from_i, RoleI, next_i, 9 |
+    recv_mpst_n_from_j, RoleJ, next_j, 10 |
+    recv_mpst_n_from_k, RoleK, next_k, 11 |
+    recv_mpst_n_from_l, RoleL, next_l, 12 |
+    recv_mpst_n_from_m, RoleM, next_m, 13 |
+    recv_mpst_n_from_o, RoleO, next_o, 14 |
+    recv_mpst_n_from_p, RoleP, next_p, 15 |
+    recv_mpst_n_from_q, RoleQ, next_q, 16 |
+    recv_mpst_n_from_r, RoleR, next_r, 17 |
+    recv_mpst_n_from_s, RoleS, next_s, 18 |
+    recv_mpst_n_from_t, RoleT, next_t, 19 | =>
     RoleN, SessionMpstTwenty, 20
 );
 // O
 create_recv_mpst_session_bundle!(
-    recv_mpst_o_to_a, RoleA, next_a, 1 |
-    recv_mpst_o_to_b, RoleB, next_b, 2 |
-    recv_mpst_o_to_c, RoleC, next_c, 3 |
-    recv_mpst_o_to_d, RoleD, next_d, 4 |
-    recv_mpst_o_to_e, RoleE, next_e, 5 |
-    recv_mpst_o_to_f, RoleF, next_f, 6 |
-    recv_mpst_o_to_g, RoleG, next_g, 7 |
-    recv_mpst_o_to_h, RoleH, next_h, 8 |
-    recv_mpst_o_to_i, RoleI, next_i, 9 |
-    recv_mpst_o_to_j, RoleJ, next_j, 10 |
-    recv_mpst_o_to_k, RoleK, next_k, 11 |
-    recv_mpst_o_to_l, RoleL, next_l, 12 |
-    recv_mpst_o_to_m, RoleM, next_m, 13 |
-    recv_mpst_o_to_n, RoleN, next_n, 14 |
-    recv_mpst_o_to_p, RoleP, next_p, 15 |
-    recv_mpst_o_to_q, RoleQ, next_q, 16 |
-    recv_mpst_o_to_r, RoleR, next_r, 17 |
-    recv_mpst_o_to_s, RoleS, next_s, 18 |
-    recv_mpst_o_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_o_from_a, RoleA, next_a, 1 |
+    recv_mpst_o_from_b, RoleB, next_b, 2 |
+    recv_mpst_o_from_c, RoleC, next_c, 3 |
+    recv_mpst_o_from_d, RoleD, next_d, 4 |
+    recv_mpst_o_from_e, RoleE, next_e, 5 |
+    recv_mpst_o_from_f, RoleF, next_f, 6 |
+    recv_mpst_o_from_g, RoleG, next_g, 7 |
+    recv_mpst_o_from_h, RoleH, next_h, 8 |
+    recv_mpst_o_from_i, RoleI, next_i, 9 |
+    recv_mpst_o_from_j, RoleJ, next_j, 10 |
+    recv_mpst_o_from_k, RoleK, next_k, 11 |
+    recv_mpst_o_from_l, RoleL, next_l, 12 |
+    recv_mpst_o_from_m, RoleM, next_m, 13 |
+    recv_mpst_o_from_n, RoleN, next_n, 14 |
+    recv_mpst_o_from_p, RoleP, next_p, 15 |
+    recv_mpst_o_from_q, RoleQ, next_q, 16 |
+    recv_mpst_o_from_r, RoleR, next_r, 17 |
+    recv_mpst_o_from_s, RoleS, next_s, 18 |
+    recv_mpst_o_from_t, RoleT, next_t, 19 | =>
     RoleO, SessionMpstTwenty, 20
 );
 // P
 create_recv_mpst_session_bundle!(
-    recv_mpst_p_to_a, RoleA, next_a, 1 |
-    recv_mpst_p_to_b, RoleB, next_b, 2 |
-    recv_mpst_p_to_c, RoleC, next_c, 3 |
-    recv_mpst_p_to_d, RoleD, next_d, 4 |
-    recv_mpst_p_to_e, RoleE, next_e, 5 |
-    recv_mpst_p_to_f, RoleF, next_f, 6 |
-    recv_mpst_p_to_g, RoleG, next_g, 7 |
-    recv_mpst_p_to_h, RoleH, next_h, 8 |
-    recv_mpst_p_to_i, RoleI, next_i, 9 |
-    recv_mpst_p_to_j, RoleJ, next_j, 10 |
-    recv_mpst_p_to_k, RoleK, next_k, 11 |
-    recv_mpst_p_to_l, RoleL, next_l, 12 |
-    recv_mpst_p_to_m, RoleM, next_m, 13 |
-    recv_mpst_p_to_n, RoleN, next_n, 14 |
-    recv_mpst_p_to_o, RoleO, next_o, 15 |
-    recv_mpst_p_to_q, RoleQ, next_q, 16 |
-    recv_mpst_p_to_r, RoleR, next_r, 17 |
-    recv_mpst_p_to_s, RoleS, next_s, 18 |
-    recv_mpst_p_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_p_from_a, RoleA, next_a, 1 |
+    recv_mpst_p_from_b, RoleB, next_b, 2 |
+    recv_mpst_p_from_c, RoleC, next_c, 3 |
+    recv_mpst_p_from_d, RoleD, next_d, 4 |
+    recv_mpst_p_from_e, RoleE, next_e, 5 |
+    recv_mpst_p_from_f, RoleF, next_f, 6 |
+    recv_mpst_p_from_g, RoleG, next_g, 7 |
+    recv_mpst_p_from_h, RoleH, next_h, 8 |
+    recv_mpst_p_from_i, RoleI, next_i, 9 |
+    recv_mpst_p_from_j, RoleJ, next_j, 10 |
+    recv_mpst_p_from_k, RoleK, next_k, 11 |
+    recv_mpst_p_from_l, RoleL, next_l, 12 |
+    recv_mpst_p_from_m, RoleM, next_m, 13 |
+    recv_mpst_p_from_n, RoleN, next_n, 14 |
+    recv_mpst_p_from_o, RoleO, next_o, 15 |
+    recv_mpst_p_from_q, RoleQ, next_q, 16 |
+    recv_mpst_p_from_r, RoleR, next_r, 17 |
+    recv_mpst_p_from_s, RoleS, next_s, 18 |
+    recv_mpst_p_from_t, RoleT, next_t, 19 | =>
     RoleP, SessionMpstTwenty, 20
 );
 // Q
 create_recv_mpst_session_bundle!(
-    recv_mpst_q_to_a, RoleA, next_a, 1 |
-    recv_mpst_q_to_b, RoleB, next_b, 2 |
-    recv_mpst_q_to_c, RoleC, next_c, 3 |
-    recv_mpst_q_to_d, RoleD, next_d, 4 |
-    recv_mpst_q_to_e, RoleE, next_e, 5 |
-    recv_mpst_q_to_f, RoleF, next_f, 6 |
-    recv_mpst_q_to_g, RoleG, next_g, 7 |
-    recv_mpst_q_to_h, RoleH, next_h, 8 |
-    recv_mpst_q_to_i, RoleI, next_i, 9 |
-    recv_mpst_q_to_j, RoleJ, next_j, 10 |
-    recv_mpst_q_to_k, RoleK, next_k, 11 |
-    recv_mpst_q_to_l, RoleL, next_l, 12 |
-    recv_mpst_q_to_m, RoleM, next_m, 13 |
-    recv_mpst_q_to_n, RoleN, next_n, 14 |
-    recv_mpst_q_to_o, RoleO, next_o, 15 |
-    recv_mpst_q_to_p, RoleP, next_p, 16 |
-    recv_mpst_q_to_r, RoleR, next_r, 17 |
-    recv_mpst_q_to_s, RoleS, next_s, 18 |
-    recv_mpst_q_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_q_from_a, RoleA, next_a, 1 |
+    recv_mpst_q_from_b, RoleB, next_b, 2 |
+    recv_mpst_q_from_c, RoleC, next_c, 3 |
+    recv_mpst_q_from_d, RoleD, next_d, 4 |
+    recv_mpst_q_from_e, RoleE, next_e, 5 |
+    recv_mpst_q_from_f, RoleF, next_f, 6 |
+    recv_mpst_q_from_g, RoleG, next_g, 7 |
+    recv_mpst_q_from_h, RoleH, next_h, 8 |
+    recv_mpst_q_from_i, RoleI, next_i, 9 |
+    recv_mpst_q_from_j, RoleJ, next_j, 10 |
+    recv_mpst_q_from_k, RoleK, next_k, 11 |
+    recv_mpst_q_from_l, RoleL, next_l, 12 |
+    recv_mpst_q_from_m, RoleM, next_m, 13 |
+    recv_mpst_q_from_n, RoleN, next_n, 14 |
+    recv_mpst_q_from_o, RoleO, next_o, 15 |
+    recv_mpst_q_from_p, RoleP, next_p, 16 |
+    recv_mpst_q_from_r, RoleR, next_r, 17 |
+    recv_mpst_q_from_s, RoleS, next_s, 18 |
+    recv_mpst_q_from_t, RoleT, next_t, 19 | =>
     RoleQ, SessionMpstTwenty, 20
 );
 // R
 create_recv_mpst_session_bundle!(
-    recv_mpst_r_to_a, RoleA, next_a, 1 |
-    recv_mpst_r_to_b, RoleB, next_b, 2 |
-    recv_mpst_r_to_c, RoleC, next_c, 3 |
-    recv_mpst_r_to_d, RoleD, next_d, 4 |
-    recv_mpst_r_to_e, RoleE, next_e, 5 |
-    recv_mpst_r_to_f, RoleF, next_f, 6 |
-    recv_mpst_r_to_g, RoleG, next_g, 7 |
-    recv_mpst_r_to_h, RoleH, next_h, 8 |
-    recv_mpst_r_to_i, RoleI, next_i, 9 |
-    recv_mpst_r_to_j, RoleJ, next_j, 10 |
-    recv_mpst_r_to_k, RoleK, next_k, 11 |
-    recv_mpst_r_to_l, RoleL, next_l, 12 |
-    recv_mpst_r_to_m, RoleM, next_m, 13 |
-    recv_mpst_r_to_n, RoleN, next_n, 14 |
-    recv_mpst_r_to_o, RoleO, next_o, 15 |
-    recv_mpst_r_to_p, RoleP, next_p, 16 |
-    recv_mpst_r_to_q, RoleQ, next_q, 17 |
-    recv_mpst_r_to_s, RoleS, next_s, 18 |
-    recv_mpst_r_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_r_from_a, RoleA, next_a, 1 |
+    recv_mpst_r_from_b, RoleB, next_b, 2 |
+    recv_mpst_r_from_c, RoleC, next_c, 3 |
+    recv_mpst_r_from_d, RoleD, next_d, 4 |
+    recv_mpst_r_from_e, RoleE, next_e, 5 |
+    recv_mpst_r_from_f, RoleF, next_f, 6 |
+    recv_mpst_r_from_g, RoleG, next_g, 7 |
+    recv_mpst_r_from_h, RoleH, next_h, 8 |
+    recv_mpst_r_from_i, RoleI, next_i, 9 |
+    recv_mpst_r_from_j, RoleJ, next_j, 10 |
+    recv_mpst_r_from_k, RoleK, next_k, 11 |
+    recv_mpst_r_from_l, RoleL, next_l, 12 |
+    recv_mpst_r_from_m, RoleM, next_m, 13 |
+    recv_mpst_r_from_n, RoleN, next_n, 14 |
+    recv_mpst_r_from_o, RoleO, next_o, 15 |
+    recv_mpst_r_from_p, RoleP, next_p, 16 |
+    recv_mpst_r_from_q, RoleQ, next_q, 17 |
+    recv_mpst_r_from_s, RoleS, next_s, 18 |
+    recv_mpst_r_from_t, RoleT, next_t, 19 | =>
     RoleR, SessionMpstTwenty, 20
 );
 // S
 create_recv_mpst_session_bundle!(
-    recv_mpst_s_to_a, RoleA, next_a, 1 |
-    recv_mpst_s_to_b, RoleB, next_b, 2 |
-    recv_mpst_s_to_c, RoleC, next_c, 3 |
-    recv_mpst_s_to_d, RoleD, next_d, 4 |
-    recv_mpst_s_to_e, RoleE, next_e, 5 |
-    recv_mpst_s_to_f, RoleF, next_f, 6 |
-    recv_mpst_s_to_g, RoleG, next_g, 7 |
-    recv_mpst_s_to_h, RoleH, next_h, 8 |
-    recv_mpst_s_to_i, RoleI, next_i, 9 |
-    recv_mpst_s_to_j, RoleJ, next_j, 10 |
-    recv_mpst_s_to_k, RoleK, next_k, 11 |
-    recv_mpst_s_to_l, RoleL, next_l, 12 |
-    recv_mpst_s_to_m, RoleM, next_m, 13 |
-    recv_mpst_s_to_n, RoleN, next_n, 14 |
-    recv_mpst_s_to_o, RoleO, next_o, 15 |
-    recv_mpst_s_to_p, RoleP, next_p, 16 |
-    recv_mpst_s_to_q, RoleQ, next_q, 17 |
-    recv_mpst_s_to_r, RoleR, next_r, 18 |
-    recv_mpst_s_to_t, RoleT, next_t, 19 | =>
+    recv_mpst_s_from_a, RoleA, next_a, 1 |
+    recv_mpst_s_from_b, RoleB, next_b, 2 |
+    recv_mpst_s_from_c, RoleC, next_c, 3 |
+    recv_mpst_s_from_d, RoleD, next_d, 4 |
+    recv_mpst_s_from_e, RoleE, next_e, 5 |
+    recv_mpst_s_from_f, RoleF, next_f, 6 |
+    recv_mpst_s_from_g, RoleG, next_g, 7 |
+    recv_mpst_s_from_h, RoleH, next_h, 8 |
+    recv_mpst_s_from_i, RoleI, next_i, 9 |
+    recv_mpst_s_from_j, RoleJ, next_j, 10 |
+    recv_mpst_s_from_k, RoleK, next_k, 11 |
+    recv_mpst_s_from_l, RoleL, next_l, 12 |
+    recv_mpst_s_from_m, RoleM, next_m, 13 |
+    recv_mpst_s_from_n, RoleN, next_n, 14 |
+    recv_mpst_s_from_o, RoleO, next_o, 15 |
+    recv_mpst_s_from_p, RoleP, next_p, 16 |
+    recv_mpst_s_from_q, RoleQ, next_q, 17 |
+    recv_mpst_s_from_r, RoleR, next_r, 18 |
+    recv_mpst_s_from_t, RoleT, next_t, 19 | =>
     RoleS, SessionMpstTwenty, 20
 );
 // T
 create_recv_mpst_session_bundle!(
-    recv_mpst_t_to_a, RoleA, next_a, 1 |
-    recv_mpst_t_to_b, RoleB, next_b, 2 |
-    recv_mpst_t_to_c, RoleC, next_c, 3 |
-    recv_mpst_t_to_d, RoleD, next_d, 4 |
-    recv_mpst_t_to_e, RoleE, next_e, 5 |
-    recv_mpst_t_to_f, RoleF, next_f, 6 |
-    recv_mpst_t_to_g, RoleG, next_g, 7 |
-    recv_mpst_t_to_h, RoleH, next_h, 8 |
-    recv_mpst_t_to_i, RoleI, next_i, 9 |
-    recv_mpst_t_to_j, RoleJ, next_j, 10 |
-    recv_mpst_t_to_k, RoleK, next_k, 11 |
-    recv_mpst_t_to_l, RoleL, next_l, 12 |
-    recv_mpst_t_to_m, RoleM, next_m, 13 |
-    recv_mpst_t_to_n, RoleN, next_n, 14 |
-    recv_mpst_t_to_o, RoleO, next_o, 15 |
-    recv_mpst_t_to_p, RoleP, next_p, 16 |
-    recv_mpst_t_to_q, RoleQ, next_q, 17 |
-    recv_mpst_t_to_r, RoleR, next_r, 18 |
-    recv_mpst_t_to_s, RoleS, next_s, 19 | =>
+    recv_mpst_t_from_a, RoleA, next_a, 1 |
+    recv_mpst_t_from_b, RoleB, next_b, 2 |
+    recv_mpst_t_from_c, RoleC, next_c, 3 |
+    recv_mpst_t_from_d, RoleD, next_d, 4 |
+    recv_mpst_t_from_e, RoleE, next_e, 5 |
+    recv_mpst_t_from_f, RoleF, next_f, 6 |
+    recv_mpst_t_from_g, RoleG, next_g, 7 |
+    recv_mpst_t_from_h, RoleH, next_h, 8 |
+    recv_mpst_t_from_i, RoleI, next_i, 9 |
+    recv_mpst_t_from_j, RoleJ, next_j, 10 |
+    recv_mpst_t_from_k, RoleK, next_k, 11 |
+    recv_mpst_t_from_l, RoleL, next_l, 12 |
+    recv_mpst_t_from_m, RoleM, next_m, 13 |
+    recv_mpst_t_from_n, RoleN, next_n, 14 |
+    recv_mpst_t_from_o, RoleO, next_o, 15 |
+    recv_mpst_t_from_p, RoleP, next_p, 16 |
+    recv_mpst_t_from_q, RoleQ, next_q, 17 |
+    recv_mpst_t_from_r, RoleR, next_r, 18 |
+    recv_mpst_t_from_s, RoleS, next_s, 19 | =>
     RoleT, SessionMpstTwenty, 20
 );
 
@@ -3319,48 +3319,48 @@ type EndpointT = SessionMpstTwenty<
 
 // Functions
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_to_t, {
+    offer_mpst!(s, recv_mpst_a_from_t, {
         Branching0fromTtoA::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoA::More(s) => {
-            let (_, s) = recv_mpst_a_to_t(s)?;
+            let (_, s) = recv_mpst_a_from_t(s)?;
             let s = send_mpst_a_to_t((), s);
-            let (_, s) = recv_mpst_a_to_b(s)?;
+            let (_, s) = recv_mpst_a_from_b(s)?;
             let s = send_mpst_a_to_b((), s);
-            let (_, s) = recv_mpst_a_to_c(s)?;
+            let (_, s) = recv_mpst_a_from_c(s)?;
             let s = send_mpst_a_to_c((), s);
-            let (_, s) = recv_mpst_a_to_d(s)?;
+            let (_, s) = recv_mpst_a_from_d(s)?;
             let s = send_mpst_a_to_d((), s);
-            let (_, s) = recv_mpst_a_to_e(s)?;
+            let (_, s) = recv_mpst_a_from_e(s)?;
             let s = send_mpst_a_to_e((), s);
-            let (_, s) = recv_mpst_a_to_f(s)?;
+            let (_, s) = recv_mpst_a_from_f(s)?;
             let s = send_mpst_a_to_f((), s);
-            let (_, s) = recv_mpst_a_to_g(s)?;
+            let (_, s) = recv_mpst_a_from_g(s)?;
             let s = send_mpst_a_to_g((), s);
-            let (_, s) = recv_mpst_a_to_h(s)?;
+            let (_, s) = recv_mpst_a_from_h(s)?;
             let s = send_mpst_a_to_h((), s);
-            let (_, s) = recv_mpst_a_to_i(s)?;
+            let (_, s) = recv_mpst_a_from_i(s)?;
             let s = send_mpst_a_to_i((), s);
-            let (_, s) = recv_mpst_a_to_j(s)?;
+            let (_, s) = recv_mpst_a_from_j(s)?;
             let s = send_mpst_a_to_j((), s);
-            let (_, s) = recv_mpst_a_to_k(s)?;
+            let (_, s) = recv_mpst_a_from_k(s)?;
             let s = send_mpst_a_to_k((), s);
-            let (_, s) = recv_mpst_a_to_l(s)?;
+            let (_, s) = recv_mpst_a_from_l(s)?;
             let s = send_mpst_a_to_l((), s);
-            let (_, s) = recv_mpst_a_to_m(s)?;
+            let (_, s) = recv_mpst_a_from_m(s)?;
             let s = send_mpst_a_to_m((), s);
-            let (_, s) = recv_mpst_a_to_n(s)?;
+            let (_, s) = recv_mpst_a_from_n(s)?;
             let s = send_mpst_a_to_n((), s);
-            let (_, s) = recv_mpst_a_to_o(s)?;
+            let (_, s) = recv_mpst_a_from_o(s)?;
             let s = send_mpst_a_to_o((), s);
-            let (_, s) = recv_mpst_a_to_p(s)?;
+            let (_, s) = recv_mpst_a_from_p(s)?;
             let s = send_mpst_a_to_p((), s);
-            let (_, s) = recv_mpst_a_to_q(s)?;
+            let (_, s) = recv_mpst_a_from_q(s)?;
             let s = send_mpst_a_to_q((), s);
-            let (_, s) = recv_mpst_a_to_r(s)?;
+            let (_, s) = recv_mpst_a_from_r(s)?;
             let s = send_mpst_a_to_r((), s);
-            let (_, s) = recv_mpst_a_to_s(s)?;
+            let (_, s) = recv_mpst_a_from_s(s)?;
             let s = send_mpst_a_to_s((), s);
             simple_five_endpoint_a(s)
         },
@@ -3368,48 +3368,48 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_to_t, {
+    offer_mpst!(s, recv_mpst_b_from_t, {
         Branching0fromTtoB::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoB::More(s) => {
-            let (_, s) = recv_mpst_b_to_t(s)?;
+            let (_, s) = recv_mpst_b_from_t(s)?;
             let s = send_mpst_b_to_t((), s);
             let s = send_mpst_b_to_a((), s);
-            let (_, s) = recv_mpst_b_to_a(s)?;
-            let (_, s) = recv_mpst_b_to_c(s)?;
+            let (_, s) = recv_mpst_b_from_a(s)?;
+            let (_, s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_c((), s);
-            let (_, s) = recv_mpst_b_to_d(s)?;
+            let (_, s) = recv_mpst_b_from_d(s)?;
             let s = send_mpst_b_to_d((), s);
-            let (_, s) = recv_mpst_b_to_e(s)?;
+            let (_, s) = recv_mpst_b_from_e(s)?;
             let s = send_mpst_b_to_e((), s);
-            let (_, s) = recv_mpst_b_to_f(s)?;
+            let (_, s) = recv_mpst_b_from_f(s)?;
             let s = send_mpst_b_to_f((), s);
-            let (_, s) = recv_mpst_b_to_g(s)?;
+            let (_, s) = recv_mpst_b_from_g(s)?;
             let s = send_mpst_b_to_g((), s);
-            let (_, s) = recv_mpst_b_to_h(s)?;
+            let (_, s) = recv_mpst_b_from_h(s)?;
             let s = send_mpst_b_to_h((), s);
-            let (_, s) = recv_mpst_b_to_i(s)?;
+            let (_, s) = recv_mpst_b_from_i(s)?;
             let s = send_mpst_b_to_i((), s);
-            let (_, s) = recv_mpst_b_to_j(s)?;
+            let (_, s) = recv_mpst_b_from_j(s)?;
             let s = send_mpst_b_to_j((), s);
-            let (_, s) = recv_mpst_b_to_k(s)?;
+            let (_, s) = recv_mpst_b_from_k(s)?;
             let s = send_mpst_b_to_k((), s);
-            let (_, s) = recv_mpst_b_to_l(s)?;
+            let (_, s) = recv_mpst_b_from_l(s)?;
             let s = send_mpst_b_to_l((), s);
-            let (_, s) = recv_mpst_b_to_m(s)?;
+            let (_, s) = recv_mpst_b_from_m(s)?;
             let s = send_mpst_b_to_m((), s);
-            let (_, s) = recv_mpst_b_to_n(s)?;
+            let (_, s) = recv_mpst_b_from_n(s)?;
             let s = send_mpst_b_to_n((), s);
-            let (_, s) = recv_mpst_b_to_o(s)?;
+            let (_, s) = recv_mpst_b_from_o(s)?;
             let s = send_mpst_b_to_o((), s);
-            let (_, s) = recv_mpst_b_to_p(s)?;
+            let (_, s) = recv_mpst_b_from_p(s)?;
             let s = send_mpst_b_to_p((), s);
-            let (_, s) = recv_mpst_b_to_q(s)?;
+            let (_, s) = recv_mpst_b_from_q(s)?;
             let s = send_mpst_b_to_q((), s);
-            let (_, s) = recv_mpst_b_to_r(s)?;
+            let (_, s) = recv_mpst_b_from_r(s)?;
             let s = send_mpst_b_to_r((), s);
-            let (_, s) = recv_mpst_b_to_s(s)?;
+            let (_, s) = recv_mpst_b_from_s(s)?;
             let s = send_mpst_b_to_s((), s);
             simple_five_endpoint_b(s)
         },
@@ -3417,48 +3417,48 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_c_to_t, {
+    offer_mpst!(s, recv_mpst_c_from_t, {
         Branching0fromTtoC::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoC::More(s) => {
-            let (_, s) = recv_mpst_c_to_t(s)?;
+            let (_, s) = recv_mpst_c_from_t(s)?;
             let s = send_mpst_c_to_t((), s);
             let s = send_mpst_c_to_a((), s);
-            let (_, s) = recv_mpst_c_to_a(s)?;
+            let (_, s) = recv_mpst_c_from_a(s)?;
             let s = send_mpst_c_to_b((), s);
-            let (_, s) = recv_mpst_c_to_b(s)?;
-            let (_, s) = recv_mpst_c_to_d(s)?;
+            let (_, s) = recv_mpst_c_from_b(s)?;
+            let (_, s) = recv_mpst_c_from_d(s)?;
             let s = send_mpst_c_to_d((), s);
-            let (_, s) = recv_mpst_c_to_e(s)?;
+            let (_, s) = recv_mpst_c_from_e(s)?;
             let s = send_mpst_c_to_e((), s);
-            let (_, s) = recv_mpst_c_to_f(s)?;
+            let (_, s) = recv_mpst_c_from_f(s)?;
             let s = send_mpst_c_to_f((), s);
-            let (_, s) = recv_mpst_c_to_g(s)?;
+            let (_, s) = recv_mpst_c_from_g(s)?;
             let s = send_mpst_c_to_g((), s);
-            let (_, s) = recv_mpst_c_to_h(s)?;
+            let (_, s) = recv_mpst_c_from_h(s)?;
             let s = send_mpst_c_to_h((), s);
-            let (_, s) = recv_mpst_c_to_i(s)?;
+            let (_, s) = recv_mpst_c_from_i(s)?;
             let s = send_mpst_c_to_i((), s);
-            let (_, s) = recv_mpst_c_to_j(s)?;
+            let (_, s) = recv_mpst_c_from_j(s)?;
             let s = send_mpst_c_to_j((), s);
-            let (_, s) = recv_mpst_c_to_k(s)?;
+            let (_, s) = recv_mpst_c_from_k(s)?;
             let s = send_mpst_c_to_k((), s);
-            let (_, s) = recv_mpst_c_to_l(s)?;
+            let (_, s) = recv_mpst_c_from_l(s)?;
             let s = send_mpst_c_to_l((), s);
-            let (_, s) = recv_mpst_c_to_m(s)?;
+            let (_, s) = recv_mpst_c_from_m(s)?;
             let s = send_mpst_c_to_m((), s);
-            let (_, s) = recv_mpst_c_to_n(s)?;
+            let (_, s) = recv_mpst_c_from_n(s)?;
             let s = send_mpst_c_to_n((), s);
-            let (_, s) = recv_mpst_c_to_o(s)?;
+            let (_, s) = recv_mpst_c_from_o(s)?;
             let s = send_mpst_c_to_o((), s);
-            let (_, s) = recv_mpst_c_to_p(s)?;
+            let (_, s) = recv_mpst_c_from_p(s)?;
             let s = send_mpst_c_to_p((), s);
-            let (_, s) = recv_mpst_c_to_q(s)?;
+            let (_, s) = recv_mpst_c_from_q(s)?;
             let s = send_mpst_c_to_q((), s);
-            let (_, s) = recv_mpst_c_to_r(s)?;
+            let (_, s) = recv_mpst_c_from_r(s)?;
             let s = send_mpst_c_to_r((), s);
-            let (_, s) = recv_mpst_c_to_s(s)?;
+            let (_, s) = recv_mpst_c_from_s(s)?;
             let s = send_mpst_c_to_s((), s);
             simple_five_endpoint_c(s)
         },
@@ -3466,48 +3466,48 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_d_to_t, {
+    offer_mpst!(s, recv_mpst_d_from_t, {
         Branching0fromTtoD::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoD::More(s) => {
-            let (_, s) = recv_mpst_d_to_t(s)?;
+            let (_, s) = recv_mpst_d_from_t(s)?;
             let s = send_mpst_d_to_t((), s);
             let s = send_mpst_d_to_a((), s);
-            let (_, s) = recv_mpst_d_to_a(s)?;
+            let (_, s) = recv_mpst_d_from_a(s)?;
             let s = send_mpst_d_to_b((), s);
-            let (_, s) = recv_mpst_d_to_b(s)?;
+            let (_, s) = recv_mpst_d_from_b(s)?;
             let s = send_mpst_d_to_c((), s);
-            let (_, s) = recv_mpst_d_to_c(s)?;
-            let (_, s) = recv_mpst_d_to_e(s)?;
+            let (_, s) = recv_mpst_d_from_c(s)?;
+            let (_, s) = recv_mpst_d_from_e(s)?;
             let s = send_mpst_d_to_e((), s);
-            let (_, s) = recv_mpst_d_to_f(s)?;
+            let (_, s) = recv_mpst_d_from_f(s)?;
             let s = send_mpst_d_to_f((), s);
-            let (_, s) = recv_mpst_d_to_g(s)?;
+            let (_, s) = recv_mpst_d_from_g(s)?;
             let s = send_mpst_d_to_g((), s);
-            let (_, s) = recv_mpst_d_to_h(s)?;
+            let (_, s) = recv_mpst_d_from_h(s)?;
             let s = send_mpst_d_to_h((), s);
-            let (_, s) = recv_mpst_d_to_i(s)?;
+            let (_, s) = recv_mpst_d_from_i(s)?;
             let s = send_mpst_d_to_i((), s);
-            let (_, s) = recv_mpst_d_to_j(s)?;
+            let (_, s) = recv_mpst_d_from_j(s)?;
             let s = send_mpst_d_to_j((), s);
-            let (_, s) = recv_mpst_d_to_k(s)?;
+            let (_, s) = recv_mpst_d_from_k(s)?;
             let s = send_mpst_d_to_k((), s);
-            let (_, s) = recv_mpst_d_to_l(s)?;
+            let (_, s) = recv_mpst_d_from_l(s)?;
             let s = send_mpst_d_to_l((), s);
-            let (_, s) = recv_mpst_d_to_m(s)?;
+            let (_, s) = recv_mpst_d_from_m(s)?;
             let s = send_mpst_d_to_m((), s);
-            let (_, s) = recv_mpst_d_to_n(s)?;
+            let (_, s) = recv_mpst_d_from_n(s)?;
             let s = send_mpst_d_to_n((), s);
-            let (_, s) = recv_mpst_d_to_o(s)?;
+            let (_, s) = recv_mpst_d_from_o(s)?;
             let s = send_mpst_d_to_o((), s);
-            let (_, s) = recv_mpst_d_to_p(s)?;
+            let (_, s) = recv_mpst_d_from_p(s)?;
             let s = send_mpst_d_to_p((), s);
-            let (_, s) = recv_mpst_d_to_q(s)?;
+            let (_, s) = recv_mpst_d_from_q(s)?;
             let s = send_mpst_d_to_q((), s);
-            let (_, s) = recv_mpst_d_to_r(s)?;
+            let (_, s) = recv_mpst_d_from_r(s)?;
             let s = send_mpst_d_to_r((), s);
-            let (_, s) = recv_mpst_d_to_s(s)?;
+            let (_, s) = recv_mpst_d_from_s(s)?;
             let s = send_mpst_d_to_s((), s);
             simple_five_endpoint_d(s)
         },
@@ -3515,48 +3515,48 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_e_to_t, {
+    offer_mpst!(s, recv_mpst_e_from_t, {
         Branching0fromTtoE::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoE::More(s) => {
-            let (_, s) = recv_mpst_e_to_t(s)?;
+            let (_, s) = recv_mpst_e_from_t(s)?;
             let s = send_mpst_e_to_t((), s);
             let s = send_mpst_e_to_a((), s);
-            let (_, s) = recv_mpst_e_to_a(s)?;
+            let (_, s) = recv_mpst_e_from_a(s)?;
             let s = send_mpst_e_to_b((), s);
-            let (_, s) = recv_mpst_e_to_b(s)?;
+            let (_, s) = recv_mpst_e_from_b(s)?;
             let s = send_mpst_e_to_c((), s);
-            let (_, s) = recv_mpst_e_to_c(s)?;
+            let (_, s) = recv_mpst_e_from_c(s)?;
             let s = send_mpst_e_to_d((), s);
-            let (_, s) = recv_mpst_e_to_d(s)?;
-            let (_, s) = recv_mpst_e_to_f(s)?;
+            let (_, s) = recv_mpst_e_from_d(s)?;
+            let (_, s) = recv_mpst_e_from_f(s)?;
             let s = send_mpst_e_to_f((), s);
-            let (_, s) = recv_mpst_e_to_g(s)?;
+            let (_, s) = recv_mpst_e_from_g(s)?;
             let s = send_mpst_e_to_g((), s);
-            let (_, s) = recv_mpst_e_to_h(s)?;
+            let (_, s) = recv_mpst_e_from_h(s)?;
             let s = send_mpst_e_to_h((), s);
-            let (_, s) = recv_mpst_e_to_i(s)?;
+            let (_, s) = recv_mpst_e_from_i(s)?;
             let s = send_mpst_e_to_i((), s);
-            let (_, s) = recv_mpst_e_to_j(s)?;
+            let (_, s) = recv_mpst_e_from_j(s)?;
             let s = send_mpst_e_to_j((), s);
-            let (_, s) = recv_mpst_e_to_k(s)?;
+            let (_, s) = recv_mpst_e_from_k(s)?;
             let s = send_mpst_e_to_k((), s);
-            let (_, s) = recv_mpst_e_to_l(s)?;
+            let (_, s) = recv_mpst_e_from_l(s)?;
             let s = send_mpst_e_to_l((), s);
-            let (_, s) = recv_mpst_e_to_m(s)?;
+            let (_, s) = recv_mpst_e_from_m(s)?;
             let s = send_mpst_e_to_m((), s);
-            let (_, s) = recv_mpst_e_to_n(s)?;
+            let (_, s) = recv_mpst_e_from_n(s)?;
             let s = send_mpst_e_to_n((), s);
-            let (_, s) = recv_mpst_e_to_o(s)?;
+            let (_, s) = recv_mpst_e_from_o(s)?;
             let s = send_mpst_e_to_o((), s);
-            let (_, s) = recv_mpst_e_to_p(s)?;
+            let (_, s) = recv_mpst_e_from_p(s)?;
             let s = send_mpst_e_to_p((), s);
-            let (_, s) = recv_mpst_e_to_q(s)?;
+            let (_, s) = recv_mpst_e_from_q(s)?;
             let s = send_mpst_e_to_q((), s);
-            let (_, s) = recv_mpst_e_to_r(s)?;
+            let (_, s) = recv_mpst_e_from_r(s)?;
             let s = send_mpst_e_to_r((), s);
-            let (_, s) = recv_mpst_e_to_s(s)?;
+            let (_, s) = recv_mpst_e_from_s(s)?;
             let s = send_mpst_e_to_s((), s);
             simple_five_endpoint_e(s)
         },
@@ -3564,48 +3564,48 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_f_to_t, {
+    offer_mpst!(s, recv_mpst_f_from_t, {
         Branching0fromTtoF::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoF::More(s) => {
-            let (_, s) = recv_mpst_f_to_t(s)?;
+            let (_, s) = recv_mpst_f_from_t(s)?;
             let s = send_mpst_f_to_t((), s);
             let s = send_mpst_f_to_a((), s);
-            let (_, s) = recv_mpst_f_to_a(s)?;
+            let (_, s) = recv_mpst_f_from_a(s)?;
             let s = send_mpst_f_to_b((), s);
-            let (_, s) = recv_mpst_f_to_b(s)?;
+            let (_, s) = recv_mpst_f_from_b(s)?;
             let s = send_mpst_f_to_c((), s);
-            let (_, s) = recv_mpst_f_to_c(s)?;
+            let (_, s) = recv_mpst_f_from_c(s)?;
             let s = send_mpst_f_to_d((), s);
-            let (_, s) = recv_mpst_f_to_d(s)?;
+            let (_, s) = recv_mpst_f_from_d(s)?;
             let s = send_mpst_f_to_e((), s);
-            let (_, s) = recv_mpst_f_to_e(s)?;
-            let (_, s) = recv_mpst_f_to_g(s)?;
+            let (_, s) = recv_mpst_f_from_e(s)?;
+            let (_, s) = recv_mpst_f_from_g(s)?;
             let s = send_mpst_f_to_g((), s);
-            let (_, s) = recv_mpst_f_to_h(s)?;
+            let (_, s) = recv_mpst_f_from_h(s)?;
             let s = send_mpst_f_to_h((), s);
-            let (_, s) = recv_mpst_f_to_i(s)?;
+            let (_, s) = recv_mpst_f_from_i(s)?;
             let s = send_mpst_f_to_i((), s);
-            let (_, s) = recv_mpst_f_to_j(s)?;
+            let (_, s) = recv_mpst_f_from_j(s)?;
             let s = send_mpst_f_to_j((), s);
-            let (_, s) = recv_mpst_f_to_k(s)?;
+            let (_, s) = recv_mpst_f_from_k(s)?;
             let s = send_mpst_f_to_k((), s);
-            let (_, s) = recv_mpst_f_to_l(s)?;
+            let (_, s) = recv_mpst_f_from_l(s)?;
             let s = send_mpst_f_to_l((), s);
-            let (_, s) = recv_mpst_f_to_m(s)?;
+            let (_, s) = recv_mpst_f_from_m(s)?;
             let s = send_mpst_f_to_m((), s);
-            let (_, s) = recv_mpst_f_to_n(s)?;
+            let (_, s) = recv_mpst_f_from_n(s)?;
             let s = send_mpst_f_to_n((), s);
-            let (_, s) = recv_mpst_f_to_o(s)?;
+            let (_, s) = recv_mpst_f_from_o(s)?;
             let s = send_mpst_f_to_o((), s);
-            let (_, s) = recv_mpst_f_to_p(s)?;
+            let (_, s) = recv_mpst_f_from_p(s)?;
             let s = send_mpst_f_to_p((), s);
-            let (_, s) = recv_mpst_f_to_q(s)?;
+            let (_, s) = recv_mpst_f_from_q(s)?;
             let s = send_mpst_f_to_q((), s);
-            let (_, s) = recv_mpst_f_to_r(s)?;
+            let (_, s) = recv_mpst_f_from_r(s)?;
             let s = send_mpst_f_to_r((), s);
-            let (_, s) = recv_mpst_f_to_s(s)?;
+            let (_, s) = recv_mpst_f_from_s(s)?;
             let s = send_mpst_f_to_s((), s);
             simple_five_endpoint_f(s)
         },
@@ -3613,48 +3613,48 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_g_to_t, {
+    offer_mpst!(s, recv_mpst_g_from_t, {
         Branching0fromTtoG::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoG::More(s) => {
-            let (_, s) = recv_mpst_g_to_t(s)?;
+            let (_, s) = recv_mpst_g_from_t(s)?;
             let s = send_mpst_g_to_t((), s);
             let s = send_mpst_g_to_a((), s);
-            let (_, s) = recv_mpst_g_to_a(s)?;
+            let (_, s) = recv_mpst_g_from_a(s)?;
             let s = send_mpst_g_to_b((), s);
-            let (_, s) = recv_mpst_g_to_b(s)?;
+            let (_, s) = recv_mpst_g_from_b(s)?;
             let s = send_mpst_g_to_c((), s);
-            let (_, s) = recv_mpst_g_to_c(s)?;
+            let (_, s) = recv_mpst_g_from_c(s)?;
             let s = send_mpst_g_to_d((), s);
-            let (_, s) = recv_mpst_g_to_d(s)?;
+            let (_, s) = recv_mpst_g_from_d(s)?;
             let s = send_mpst_g_to_e((), s);
-            let (_, s) = recv_mpst_g_to_e(s)?;
+            let (_, s) = recv_mpst_g_from_e(s)?;
             let s = send_mpst_g_to_f((), s);
-            let (_, s) = recv_mpst_g_to_f(s)?;
-            let (_, s) = recv_mpst_g_to_h(s)?;
+            let (_, s) = recv_mpst_g_from_f(s)?;
+            let (_, s) = recv_mpst_g_from_h(s)?;
             let s = send_mpst_g_to_h((), s);
-            let (_, s) = recv_mpst_g_to_i(s)?;
+            let (_, s) = recv_mpst_g_from_i(s)?;
             let s = send_mpst_g_to_i((), s);
-            let (_, s) = recv_mpst_g_to_j(s)?;
+            let (_, s) = recv_mpst_g_from_j(s)?;
             let s = send_mpst_g_to_j((), s);
-            let (_, s) = recv_mpst_g_to_k(s)?;
+            let (_, s) = recv_mpst_g_from_k(s)?;
             let s = send_mpst_g_to_k((), s);
-            let (_, s) = recv_mpst_g_to_l(s)?;
+            let (_, s) = recv_mpst_g_from_l(s)?;
             let s = send_mpst_g_to_l((), s);
-            let (_, s) = recv_mpst_g_to_m(s)?;
+            let (_, s) = recv_mpst_g_from_m(s)?;
             let s = send_mpst_g_to_m((), s);
-            let (_, s) = recv_mpst_g_to_n(s)?;
+            let (_, s) = recv_mpst_g_from_n(s)?;
             let s = send_mpst_g_to_n((), s);
-            let (_, s) = recv_mpst_g_to_o(s)?;
+            let (_, s) = recv_mpst_g_from_o(s)?;
             let s = send_mpst_g_to_o((), s);
-            let (_, s) = recv_mpst_g_to_p(s)?;
+            let (_, s) = recv_mpst_g_from_p(s)?;
             let s = send_mpst_g_to_p((), s);
-            let (_, s) = recv_mpst_g_to_q(s)?;
+            let (_, s) = recv_mpst_g_from_q(s)?;
             let s = send_mpst_g_to_q((), s);
-            let (_, s) = recv_mpst_g_to_r(s)?;
+            let (_, s) = recv_mpst_g_from_r(s)?;
             let s = send_mpst_g_to_r((), s);
-            let (_, s) = recv_mpst_g_to_s(s)?;
+            let (_, s) = recv_mpst_g_from_s(s)?;
             let s = send_mpst_g_to_s((), s);
             simple_five_endpoint_g(s)
         },
@@ -3662,48 +3662,48 @@ fn simple_five_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_h_to_t, {
+    offer_mpst!(s, recv_mpst_h_from_t, {
         Branching0fromTtoH::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoH::More(s) => {
-            let (_, s) = recv_mpst_h_to_t(s)?;
+            let (_, s) = recv_mpst_h_from_t(s)?;
             let s = send_mpst_h_to_t((), s);
             let s = send_mpst_h_to_a((), s);
-            let (_, s) = recv_mpst_h_to_a(s)?;
+            let (_, s) = recv_mpst_h_from_a(s)?;
             let s = send_mpst_h_to_b((), s);
-            let (_, s) = recv_mpst_h_to_b(s)?;
+            let (_, s) = recv_mpst_h_from_b(s)?;
             let s = send_mpst_h_to_c((), s);
-            let (_, s) = recv_mpst_h_to_c(s)?;
+            let (_, s) = recv_mpst_h_from_c(s)?;
             let s = send_mpst_h_to_d((), s);
-            let (_, s) = recv_mpst_h_to_d(s)?;
+            let (_, s) = recv_mpst_h_from_d(s)?;
             let s = send_mpst_h_to_e((), s);
-            let (_, s) = recv_mpst_h_to_e(s)?;
+            let (_, s) = recv_mpst_h_from_e(s)?;
             let s = send_mpst_h_to_f((), s);
-            let (_, s) = recv_mpst_h_to_f(s)?;
+            let (_, s) = recv_mpst_h_from_f(s)?;
             let s = send_mpst_h_to_g((), s);
-            let (_, s) = recv_mpst_h_to_g(s)?;
-            let (_, s) = recv_mpst_h_to_i(s)?;
+            let (_, s) = recv_mpst_h_from_g(s)?;
+            let (_, s) = recv_mpst_h_from_i(s)?;
             let s = send_mpst_h_to_i((), s);
-            let (_, s) = recv_mpst_h_to_j(s)?;
+            let (_, s) = recv_mpst_h_from_j(s)?;
             let s = send_mpst_h_to_j((), s);
-            let (_, s) = recv_mpst_h_to_k(s)?;
+            let (_, s) = recv_mpst_h_from_k(s)?;
             let s = send_mpst_h_to_k((), s);
-            let (_, s) = recv_mpst_h_to_l(s)?;
+            let (_, s) = recv_mpst_h_from_l(s)?;
             let s = send_mpst_h_to_l((), s);
-            let (_, s) = recv_mpst_h_to_m(s)?;
+            let (_, s) = recv_mpst_h_from_m(s)?;
             let s = send_mpst_h_to_m((), s);
-            let (_, s) = recv_mpst_h_to_n(s)?;
+            let (_, s) = recv_mpst_h_from_n(s)?;
             let s = send_mpst_h_to_n((), s);
-            let (_, s) = recv_mpst_h_to_o(s)?;
+            let (_, s) = recv_mpst_h_from_o(s)?;
             let s = send_mpst_h_to_o((), s);
-            let (_, s) = recv_mpst_h_to_p(s)?;
+            let (_, s) = recv_mpst_h_from_p(s)?;
             let s = send_mpst_h_to_p((), s);
-            let (_, s) = recv_mpst_h_to_q(s)?;
+            let (_, s) = recv_mpst_h_from_q(s)?;
             let s = send_mpst_h_to_q((), s);
-            let (_, s) = recv_mpst_h_to_r(s)?;
+            let (_, s) = recv_mpst_h_from_r(s)?;
             let s = send_mpst_h_to_r((), s);
-            let (_, s) = recv_mpst_h_to_s(s)?;
+            let (_, s) = recv_mpst_h_from_s(s)?;
             let s = send_mpst_h_to_s((), s);
             simple_five_endpoint_h(s)
         },
@@ -3711,48 +3711,48 @@ fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_i_to_t, {
+    offer_mpst!(s, recv_mpst_i_from_t, {
         Branching0fromTtoI::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoI::More(s) => {
-            let (_, s) = recv_mpst_i_to_t(s)?;
+            let (_, s) = recv_mpst_i_from_t(s)?;
             let s = send_mpst_i_to_t((), s);
             let s = send_mpst_i_to_a((), s);
-            let (_, s) = recv_mpst_i_to_a(s)?;
+            let (_, s) = recv_mpst_i_from_a(s)?;
             let s = send_mpst_i_to_b((), s);
-            let (_, s) = recv_mpst_i_to_b(s)?;
+            let (_, s) = recv_mpst_i_from_b(s)?;
             let s = send_mpst_i_to_c((), s);
-            let (_, s) = recv_mpst_i_to_c(s)?;
+            let (_, s) = recv_mpst_i_from_c(s)?;
             let s = send_mpst_i_to_d((), s);
-            let (_, s) = recv_mpst_i_to_d(s)?;
+            let (_, s) = recv_mpst_i_from_d(s)?;
             let s = send_mpst_i_to_e((), s);
-            let (_, s) = recv_mpst_i_to_e(s)?;
+            let (_, s) = recv_mpst_i_from_e(s)?;
             let s = send_mpst_i_to_f((), s);
-            let (_, s) = recv_mpst_i_to_f(s)?;
+            let (_, s) = recv_mpst_i_from_f(s)?;
             let s = send_mpst_i_to_g((), s);
-            let (_, s) = recv_mpst_i_to_g(s)?;
+            let (_, s) = recv_mpst_i_from_g(s)?;
             let s = send_mpst_i_to_h((), s);
-            let (_, s) = recv_mpst_i_to_h(s)?;
-            let (_, s) = recv_mpst_i_to_j(s)?;
+            let (_, s) = recv_mpst_i_from_h(s)?;
+            let (_, s) = recv_mpst_i_from_j(s)?;
             let s = send_mpst_i_to_j((), s);
-            let (_, s) = recv_mpst_i_to_k(s)?;
+            let (_, s) = recv_mpst_i_from_k(s)?;
             let s = send_mpst_i_to_k((), s);
-            let (_, s) = recv_mpst_i_to_l(s)?;
+            let (_, s) = recv_mpst_i_from_l(s)?;
             let s = send_mpst_i_to_l((), s);
-            let (_, s) = recv_mpst_i_to_m(s)?;
+            let (_, s) = recv_mpst_i_from_m(s)?;
             let s = send_mpst_i_to_m((), s);
-            let (_, s) = recv_mpst_i_to_n(s)?;
+            let (_, s) = recv_mpst_i_from_n(s)?;
             let s = send_mpst_i_to_n((), s);
-            let (_, s) = recv_mpst_i_to_o(s)?;
+            let (_, s) = recv_mpst_i_from_o(s)?;
             let s = send_mpst_i_to_o((), s);
-            let (_, s) = recv_mpst_i_to_p(s)?;
+            let (_, s) = recv_mpst_i_from_p(s)?;
             let s = send_mpst_i_to_p((), s);
-            let (_, s) = recv_mpst_i_to_q(s)?;
+            let (_, s) = recv_mpst_i_from_q(s)?;
             let s = send_mpst_i_to_q((), s);
-            let (_, s) = recv_mpst_i_to_r(s)?;
+            let (_, s) = recv_mpst_i_from_r(s)?;
             let s = send_mpst_i_to_r((), s);
-            let (_, s) = recv_mpst_i_to_s(s)?;
+            let (_, s) = recv_mpst_i_from_s(s)?;
             let s = send_mpst_i_to_s((), s);
             simple_five_endpoint_i(s)
         },
@@ -3760,48 +3760,48 @@ fn simple_five_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_j_to_t, {
+    offer_mpst!(s, recv_mpst_j_from_t, {
         Branching0fromTtoJ::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoJ::More(s) => {
-            let (_, s) = recv_mpst_j_to_t(s)?;
+            let (_, s) = recv_mpst_j_from_t(s)?;
             let s = send_mpst_j_to_t((), s);
             let s = send_mpst_j_to_a((), s);
-            let (_, s) = recv_mpst_j_to_a(s)?;
+            let (_, s) = recv_mpst_j_from_a(s)?;
             let s = send_mpst_j_to_b((), s);
-            let (_, s) = recv_mpst_j_to_b(s)?;
+            let (_, s) = recv_mpst_j_from_b(s)?;
             let s = send_mpst_j_to_c((), s);
-            let (_, s) = recv_mpst_j_to_c(s)?;
+            let (_, s) = recv_mpst_j_from_c(s)?;
             let s = send_mpst_j_to_d((), s);
-            let (_, s) = recv_mpst_j_to_d(s)?;
+            let (_, s) = recv_mpst_j_from_d(s)?;
             let s = send_mpst_j_to_e((), s);
-            let (_, s) = recv_mpst_j_to_e(s)?;
+            let (_, s) = recv_mpst_j_from_e(s)?;
             let s = send_mpst_j_to_f((), s);
-            let (_, s) = recv_mpst_j_to_f(s)?;
+            let (_, s) = recv_mpst_j_from_f(s)?;
             let s = send_mpst_j_to_g((), s);
-            let (_, s) = recv_mpst_j_to_g(s)?;
+            let (_, s) = recv_mpst_j_from_g(s)?;
             let s = send_mpst_j_to_h((), s);
-            let (_, s) = recv_mpst_j_to_h(s)?;
+            let (_, s) = recv_mpst_j_from_h(s)?;
             let s = send_mpst_j_to_i((), s);
-            let (_, s) = recv_mpst_j_to_i(s)?;
-            let (_, s) = recv_mpst_j_to_k(s)?;
+            let (_, s) = recv_mpst_j_from_i(s)?;
+            let (_, s) = recv_mpst_j_from_k(s)?;
             let s = send_mpst_j_to_k((), s);
-            let (_, s) = recv_mpst_j_to_l(s)?;
+            let (_, s) = recv_mpst_j_from_l(s)?;
             let s = send_mpst_j_to_l((), s);
-            let (_, s) = recv_mpst_j_to_m(s)?;
+            let (_, s) = recv_mpst_j_from_m(s)?;
             let s = send_mpst_j_to_m((), s);
-            let (_, s) = recv_mpst_j_to_n(s)?;
+            let (_, s) = recv_mpst_j_from_n(s)?;
             let s = send_mpst_j_to_n((), s);
-            let (_, s) = recv_mpst_j_to_o(s)?;
+            let (_, s) = recv_mpst_j_from_o(s)?;
             let s = send_mpst_j_to_o((), s);
-            let (_, s) = recv_mpst_j_to_p(s)?;
+            let (_, s) = recv_mpst_j_from_p(s)?;
             let s = send_mpst_j_to_p((), s);
-            let (_, s) = recv_mpst_j_to_q(s)?;
+            let (_, s) = recv_mpst_j_from_q(s)?;
             let s = send_mpst_j_to_q((), s);
-            let (_, s) = recv_mpst_j_to_r(s)?;
+            let (_, s) = recv_mpst_j_from_r(s)?;
             let s = send_mpst_j_to_r((), s);
-            let (_, s) = recv_mpst_j_to_s(s)?;
+            let (_, s) = recv_mpst_j_from_s(s)?;
             let s = send_mpst_j_to_s((), s);
             simple_five_endpoint_j(s)
         },
@@ -3809,48 +3809,48 @@ fn simple_five_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_k_to_t, {
+    offer_mpst!(s, recv_mpst_k_from_t, {
         Branching0fromTtoK::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoK::More(s) => {
-            let (_, s) = recv_mpst_k_to_t(s)?;
+            let (_, s) = recv_mpst_k_from_t(s)?;
             let s = send_mpst_k_to_t((), s);
             let s = send_mpst_k_to_a((), s);
-            let (_, s) = recv_mpst_k_to_a(s)?;
+            let (_, s) = recv_mpst_k_from_a(s)?;
             let s = send_mpst_k_to_b((), s);
-            let (_, s) = recv_mpst_k_to_b(s)?;
+            let (_, s) = recv_mpst_k_from_b(s)?;
             let s = send_mpst_k_to_c((), s);
-            let (_, s) = recv_mpst_k_to_c(s)?;
+            let (_, s) = recv_mpst_k_from_c(s)?;
             let s = send_mpst_k_to_d((), s);
-            let (_, s) = recv_mpst_k_to_d(s)?;
+            let (_, s) = recv_mpst_k_from_d(s)?;
             let s = send_mpst_k_to_e((), s);
-            let (_, s) = recv_mpst_k_to_e(s)?;
+            let (_, s) = recv_mpst_k_from_e(s)?;
             let s = send_mpst_k_to_f((), s);
-            let (_, s) = recv_mpst_k_to_f(s)?;
+            let (_, s) = recv_mpst_k_from_f(s)?;
             let s = send_mpst_k_to_g((), s);
-            let (_, s) = recv_mpst_k_to_g(s)?;
+            let (_, s) = recv_mpst_k_from_g(s)?;
             let s = send_mpst_k_to_h((), s);
-            let (_, s) = recv_mpst_k_to_h(s)?;
+            let (_, s) = recv_mpst_k_from_h(s)?;
             let s = send_mpst_k_to_i((), s);
-            let (_, s) = recv_mpst_k_to_i(s)?;
+            let (_, s) = recv_mpst_k_from_i(s)?;
             let s = send_mpst_k_to_j((), s);
-            let (_, s) = recv_mpst_k_to_j(s)?;
-            let (_, s) = recv_mpst_k_to_l(s)?;
+            let (_, s) = recv_mpst_k_from_j(s)?;
+            let (_, s) = recv_mpst_k_from_l(s)?;
             let s = send_mpst_k_to_l((), s);
-            let (_, s) = recv_mpst_k_to_m(s)?;
+            let (_, s) = recv_mpst_k_from_m(s)?;
             let s = send_mpst_k_to_m((), s);
-            let (_, s) = recv_mpst_k_to_n(s)?;
+            let (_, s) = recv_mpst_k_from_n(s)?;
             let s = send_mpst_k_to_n((), s);
-            let (_, s) = recv_mpst_k_to_o(s)?;
+            let (_, s) = recv_mpst_k_from_o(s)?;
             let s = send_mpst_k_to_o((), s);
-            let (_, s) = recv_mpst_k_to_p(s)?;
+            let (_, s) = recv_mpst_k_from_p(s)?;
             let s = send_mpst_k_to_p((), s);
-            let (_, s) = recv_mpst_k_to_q(s)?;
+            let (_, s) = recv_mpst_k_from_q(s)?;
             let s = send_mpst_k_to_q((), s);
-            let (_, s) = recv_mpst_k_to_r(s)?;
+            let (_, s) = recv_mpst_k_from_r(s)?;
             let s = send_mpst_k_to_r((), s);
-            let (_, s) = recv_mpst_k_to_s(s)?;
+            let (_, s) = recv_mpst_k_from_s(s)?;
             let s = send_mpst_k_to_s((), s);
             simple_five_endpoint_k(s)
         },
@@ -3858,48 +3858,48 @@ fn simple_five_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_l_to_t, {
+    offer_mpst!(s, recv_mpst_l_from_t, {
         Branching0fromTtoL::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoL::More(s) => {
-            let (_, s) = recv_mpst_l_to_t(s)?;
+            let (_, s) = recv_mpst_l_from_t(s)?;
             let s = send_mpst_l_to_t((), s);
             let s = send_mpst_l_to_a((), s);
-            let (_, s) = recv_mpst_l_to_a(s)?;
+            let (_, s) = recv_mpst_l_from_a(s)?;
             let s = send_mpst_l_to_b((), s);
-            let (_, s) = recv_mpst_l_to_b(s)?;
+            let (_, s) = recv_mpst_l_from_b(s)?;
             let s = send_mpst_l_to_c((), s);
-            let (_, s) = recv_mpst_l_to_c(s)?;
+            let (_, s) = recv_mpst_l_from_c(s)?;
             let s = send_mpst_l_to_d((), s);
-            let (_, s) = recv_mpst_l_to_d(s)?;
+            let (_, s) = recv_mpst_l_from_d(s)?;
             let s = send_mpst_l_to_e((), s);
-            let (_, s) = recv_mpst_l_to_e(s)?;
+            let (_, s) = recv_mpst_l_from_e(s)?;
             let s = send_mpst_l_to_f((), s);
-            let (_, s) = recv_mpst_l_to_f(s)?;
+            let (_, s) = recv_mpst_l_from_f(s)?;
             let s = send_mpst_l_to_g((), s);
-            let (_, s) = recv_mpst_l_to_g(s)?;
+            let (_, s) = recv_mpst_l_from_g(s)?;
             let s = send_mpst_l_to_h((), s);
-            let (_, s) = recv_mpst_l_to_h(s)?;
+            let (_, s) = recv_mpst_l_from_h(s)?;
             let s = send_mpst_l_to_i((), s);
-            let (_, s) = recv_mpst_l_to_i(s)?;
+            let (_, s) = recv_mpst_l_from_i(s)?;
             let s = send_mpst_l_to_j((), s);
-            let (_, s) = recv_mpst_l_to_j(s)?;
+            let (_, s) = recv_mpst_l_from_j(s)?;
             let s = send_mpst_l_to_k((), s);
-            let (_, s) = recv_mpst_l_to_k(s)?;
-            let (_, s) = recv_mpst_l_to_m(s)?;
+            let (_, s) = recv_mpst_l_from_k(s)?;
+            let (_, s) = recv_mpst_l_from_m(s)?;
             let s = send_mpst_l_to_m((), s);
-            let (_, s) = recv_mpst_l_to_n(s)?;
+            let (_, s) = recv_mpst_l_from_n(s)?;
             let s = send_mpst_l_to_n((), s);
-            let (_, s) = recv_mpst_l_to_o(s)?;
+            let (_, s) = recv_mpst_l_from_o(s)?;
             let s = send_mpst_l_to_o((), s);
-            let (_, s) = recv_mpst_l_to_p(s)?;
+            let (_, s) = recv_mpst_l_from_p(s)?;
             let s = send_mpst_l_to_p((), s);
-            let (_, s) = recv_mpst_l_to_q(s)?;
+            let (_, s) = recv_mpst_l_from_q(s)?;
             let s = send_mpst_l_to_q((), s);
-            let (_, s) = recv_mpst_l_to_r(s)?;
+            let (_, s) = recv_mpst_l_from_r(s)?;
             let s = send_mpst_l_to_r((), s);
-            let (_, s) = recv_mpst_l_to_s(s)?;
+            let (_, s) = recv_mpst_l_from_s(s)?;
             let s = send_mpst_l_to_s((), s);
             simple_five_endpoint_l(s)
         },
@@ -3907,48 +3907,48 @@ fn simple_five_endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_m_to_t, {
+    offer_mpst!(s, recv_mpst_m_from_t, {
         Branching0fromTtoM::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoM::More(s) => {
-            let (_, s) = recv_mpst_m_to_t(s)?;
+            let (_, s) = recv_mpst_m_from_t(s)?;
             let s = send_mpst_m_to_t((), s);
             let s = send_mpst_m_to_a((), s);
-            let (_, s) = recv_mpst_m_to_a(s)?;
+            let (_, s) = recv_mpst_m_from_a(s)?;
             let s = send_mpst_m_to_b((), s);
-            let (_, s) = recv_mpst_m_to_b(s)?;
+            let (_, s) = recv_mpst_m_from_b(s)?;
             let s = send_mpst_m_to_c((), s);
-            let (_, s) = recv_mpst_m_to_c(s)?;
+            let (_, s) = recv_mpst_m_from_c(s)?;
             let s = send_mpst_m_to_d((), s);
-            let (_, s) = recv_mpst_m_to_d(s)?;
+            let (_, s) = recv_mpst_m_from_d(s)?;
             let s = send_mpst_m_to_e((), s);
-            let (_, s) = recv_mpst_m_to_e(s)?;
+            let (_, s) = recv_mpst_m_from_e(s)?;
             let s = send_mpst_m_to_f((), s);
-            let (_, s) = recv_mpst_m_to_f(s)?;
+            let (_, s) = recv_mpst_m_from_f(s)?;
             let s = send_mpst_m_to_g((), s);
-            let (_, s) = recv_mpst_m_to_g(s)?;
+            let (_, s) = recv_mpst_m_from_g(s)?;
             let s = send_mpst_m_to_h((), s);
-            let (_, s) = recv_mpst_m_to_h(s)?;
+            let (_, s) = recv_mpst_m_from_h(s)?;
             let s = send_mpst_m_to_i((), s);
-            let (_, s) = recv_mpst_m_to_i(s)?;
+            let (_, s) = recv_mpst_m_from_i(s)?;
             let s = send_mpst_m_to_j((), s);
-            let (_, s) = recv_mpst_m_to_j(s)?;
+            let (_, s) = recv_mpst_m_from_j(s)?;
             let s = send_mpst_m_to_k((), s);
-            let (_, s) = recv_mpst_m_to_k(s)?;
+            let (_, s) = recv_mpst_m_from_k(s)?;
             let s = send_mpst_m_to_l((), s);
-            let (_, s) = recv_mpst_m_to_l(s)?;
-            let (_, s) = recv_mpst_m_to_n(s)?;
+            let (_, s) = recv_mpst_m_from_l(s)?;
+            let (_, s) = recv_mpst_m_from_n(s)?;
             let s = send_mpst_m_to_n((), s);
-            let (_, s) = recv_mpst_m_to_o(s)?;
+            let (_, s) = recv_mpst_m_from_o(s)?;
             let s = send_mpst_m_to_o((), s);
-            let (_, s) = recv_mpst_m_to_p(s)?;
+            let (_, s) = recv_mpst_m_from_p(s)?;
             let s = send_mpst_m_to_p((), s);
-            let (_, s) = recv_mpst_m_to_q(s)?;
+            let (_, s) = recv_mpst_m_from_q(s)?;
             let s = send_mpst_m_to_q((), s);
-            let (_, s) = recv_mpst_m_to_r(s)?;
+            let (_, s) = recv_mpst_m_from_r(s)?;
             let s = send_mpst_m_to_r((), s);
-            let (_, s) = recv_mpst_m_to_s(s)?;
+            let (_, s) = recv_mpst_m_from_s(s)?;
             let s = send_mpst_m_to_s((), s);
             simple_five_endpoint_m(s)
         },
@@ -3956,48 +3956,48 @@ fn simple_five_endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_n_to_t, {
+    offer_mpst!(s, recv_mpst_n_from_t, {
         Branching0fromTtoN::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoN::More(s) => {
-            let (_, s) = recv_mpst_n_to_t(s)?;
+            let (_, s) = recv_mpst_n_from_t(s)?;
             let s = send_mpst_n_to_t((), s);
             let s = send_mpst_n_to_a((), s);
-            let (_, s) = recv_mpst_n_to_a(s)?;
+            let (_, s) = recv_mpst_n_from_a(s)?;
             let s = send_mpst_n_to_b((), s);
-            let (_, s) = recv_mpst_n_to_b(s)?;
+            let (_, s) = recv_mpst_n_from_b(s)?;
             let s = send_mpst_n_to_c((), s);
-            let (_, s) = recv_mpst_n_to_c(s)?;
+            let (_, s) = recv_mpst_n_from_c(s)?;
             let s = send_mpst_n_to_d((), s);
-            let (_, s) = recv_mpst_n_to_d(s)?;
+            let (_, s) = recv_mpst_n_from_d(s)?;
             let s = send_mpst_n_to_e((), s);
-            let (_, s) = recv_mpst_n_to_e(s)?;
+            let (_, s) = recv_mpst_n_from_e(s)?;
             let s = send_mpst_n_to_f((), s);
-            let (_, s) = recv_mpst_n_to_f(s)?;
+            let (_, s) = recv_mpst_n_from_f(s)?;
             let s = send_mpst_n_to_g((), s);
-            let (_, s) = recv_mpst_n_to_g(s)?;
+            let (_, s) = recv_mpst_n_from_g(s)?;
             let s = send_mpst_n_to_h((), s);
-            let (_, s) = recv_mpst_n_to_h(s)?;
+            let (_, s) = recv_mpst_n_from_h(s)?;
             let s = send_mpst_n_to_i((), s);
-            let (_, s) = recv_mpst_n_to_i(s)?;
+            let (_, s) = recv_mpst_n_from_i(s)?;
             let s = send_mpst_n_to_j((), s);
-            let (_, s) = recv_mpst_n_to_j(s)?;
+            let (_, s) = recv_mpst_n_from_j(s)?;
             let s = send_mpst_n_to_k((), s);
-            let (_, s) = recv_mpst_n_to_k(s)?;
+            let (_, s) = recv_mpst_n_from_k(s)?;
             let s = send_mpst_n_to_l((), s);
-            let (_, s) = recv_mpst_n_to_l(s)?;
+            let (_, s) = recv_mpst_n_from_l(s)?;
             let s = send_mpst_n_to_m((), s);
-            let (_, s) = recv_mpst_n_to_m(s)?;
-            let (_, s) = recv_mpst_n_to_o(s)?;
+            let (_, s) = recv_mpst_n_from_m(s)?;
+            let (_, s) = recv_mpst_n_from_o(s)?;
             let s = send_mpst_n_to_o((), s);
-            let (_, s) = recv_mpst_n_to_p(s)?;
+            let (_, s) = recv_mpst_n_from_p(s)?;
             let s = send_mpst_n_to_p((), s);
-            let (_, s) = recv_mpst_n_to_q(s)?;
+            let (_, s) = recv_mpst_n_from_q(s)?;
             let s = send_mpst_n_to_q((), s);
-            let (_, s) = recv_mpst_n_to_r(s)?;
+            let (_, s) = recv_mpst_n_from_r(s)?;
             let s = send_mpst_n_to_r((), s);
-            let (_, s) = recv_mpst_n_to_s(s)?;
+            let (_, s) = recv_mpst_n_from_s(s)?;
             let s = send_mpst_n_to_s((), s);
             simple_five_endpoint_n(s)
         },
@@ -4005,48 +4005,48 @@ fn simple_five_endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_o_to_t, {
+    offer_mpst!(s, recv_mpst_o_from_t, {
         Branching0fromTtoO::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoO::More(s) => {
-            let (_, s) = recv_mpst_o_to_t(s)?;
+            let (_, s) = recv_mpst_o_from_t(s)?;
             let s = send_mpst_o_to_t((), s);
             let s = send_mpst_o_to_a((), s);
-            let (_, s) = recv_mpst_o_to_a(s)?;
+            let (_, s) = recv_mpst_o_from_a(s)?;
             let s = send_mpst_o_to_b((), s);
-            let (_, s) = recv_mpst_o_to_b(s)?;
+            let (_, s) = recv_mpst_o_from_b(s)?;
             let s = send_mpst_o_to_c((), s);
-            let (_, s) = recv_mpst_o_to_c(s)?;
+            let (_, s) = recv_mpst_o_from_c(s)?;
             let s = send_mpst_o_to_d((), s);
-            let (_, s) = recv_mpst_o_to_d(s)?;
+            let (_, s) = recv_mpst_o_from_d(s)?;
             let s = send_mpst_o_to_e((), s);
-            let (_, s) = recv_mpst_o_to_e(s)?;
+            let (_, s) = recv_mpst_o_from_e(s)?;
             let s = send_mpst_o_to_f((), s);
-            let (_, s) = recv_mpst_o_to_f(s)?;
+            let (_, s) = recv_mpst_o_from_f(s)?;
             let s = send_mpst_o_to_g((), s);
-            let (_, s) = recv_mpst_o_to_g(s)?;
+            let (_, s) = recv_mpst_o_from_g(s)?;
             let s = send_mpst_o_to_h((), s);
-            let (_, s) = recv_mpst_o_to_h(s)?;
+            let (_, s) = recv_mpst_o_from_h(s)?;
             let s = send_mpst_o_to_i((), s);
-            let (_, s) = recv_mpst_o_to_i(s)?;
+            let (_, s) = recv_mpst_o_from_i(s)?;
             let s = send_mpst_o_to_j((), s);
-            let (_, s) = recv_mpst_o_to_j(s)?;
+            let (_, s) = recv_mpst_o_from_j(s)?;
             let s = send_mpst_o_to_k((), s);
-            let (_, s) = recv_mpst_o_to_k(s)?;
+            let (_, s) = recv_mpst_o_from_k(s)?;
             let s = send_mpst_o_to_l((), s);
-            let (_, s) = recv_mpst_o_to_l(s)?;
+            let (_, s) = recv_mpst_o_from_l(s)?;
             let s = send_mpst_o_to_m((), s);
-            let (_, s) = recv_mpst_o_to_m(s)?;
+            let (_, s) = recv_mpst_o_from_m(s)?;
             let s = send_mpst_o_to_n((), s);
-            let (_, s) = recv_mpst_o_to_n(s)?;
-            let (_, s) = recv_mpst_o_to_p(s)?;
+            let (_, s) = recv_mpst_o_from_n(s)?;
+            let (_, s) = recv_mpst_o_from_p(s)?;
             let s = send_mpst_o_to_p((), s);
-            let (_, s) = recv_mpst_o_to_q(s)?;
+            let (_, s) = recv_mpst_o_from_q(s)?;
             let s = send_mpst_o_to_q((), s);
-            let (_, s) = recv_mpst_o_to_r(s)?;
+            let (_, s) = recv_mpst_o_from_r(s)?;
             let s = send_mpst_o_to_r((), s);
-            let (_, s) = recv_mpst_o_to_s(s)?;
+            let (_, s) = recv_mpst_o_from_s(s)?;
             let s = send_mpst_o_to_s((), s);
             simple_five_endpoint_o(s)
         },
@@ -4054,48 +4054,48 @@ fn simple_five_endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_p_to_t, {
+    offer_mpst!(s, recv_mpst_p_from_t, {
         Branching0fromTtoP::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoP::More(s) => {
-            let (_, s) = recv_mpst_p_to_t(s)?;
+            let (_, s) = recv_mpst_p_from_t(s)?;
             let s = send_mpst_p_to_t((), s);
             let s = send_mpst_p_to_a((), s);
-            let (_, s) = recv_mpst_p_to_a(s)?;
+            let (_, s) = recv_mpst_p_from_a(s)?;
             let s = send_mpst_p_to_b((), s);
-            let (_, s) = recv_mpst_p_to_b(s)?;
+            let (_, s) = recv_mpst_p_from_b(s)?;
             let s = send_mpst_p_to_c((), s);
-            let (_, s) = recv_mpst_p_to_c(s)?;
+            let (_, s) = recv_mpst_p_from_c(s)?;
             let s = send_mpst_p_to_d((), s);
-            let (_, s) = recv_mpst_p_to_d(s)?;
+            let (_, s) = recv_mpst_p_from_d(s)?;
             let s = send_mpst_p_to_e((), s);
-            let (_, s) = recv_mpst_p_to_e(s)?;
+            let (_, s) = recv_mpst_p_from_e(s)?;
             let s = send_mpst_p_to_f((), s);
-            let (_, s) = recv_mpst_p_to_f(s)?;
+            let (_, s) = recv_mpst_p_from_f(s)?;
             let s = send_mpst_p_to_g((), s);
-            let (_, s) = recv_mpst_p_to_g(s)?;
+            let (_, s) = recv_mpst_p_from_g(s)?;
             let s = send_mpst_p_to_h((), s);
-            let (_, s) = recv_mpst_p_to_h(s)?;
+            let (_, s) = recv_mpst_p_from_h(s)?;
             let s = send_mpst_p_to_i((), s);
-            let (_, s) = recv_mpst_p_to_i(s)?;
+            let (_, s) = recv_mpst_p_from_i(s)?;
             let s = send_mpst_p_to_j((), s);
-            let (_, s) = recv_mpst_p_to_j(s)?;
+            let (_, s) = recv_mpst_p_from_j(s)?;
             let s = send_mpst_p_to_k((), s);
-            let (_, s) = recv_mpst_p_to_k(s)?;
+            let (_, s) = recv_mpst_p_from_k(s)?;
             let s = send_mpst_p_to_l((), s);
-            let (_, s) = recv_mpst_p_to_l(s)?;
+            let (_, s) = recv_mpst_p_from_l(s)?;
             let s = send_mpst_p_to_m((), s);
-            let (_, s) = recv_mpst_p_to_m(s)?;
+            let (_, s) = recv_mpst_p_from_m(s)?;
             let s = send_mpst_p_to_n((), s);
-            let (_, s) = recv_mpst_p_to_n(s)?;
+            let (_, s) = recv_mpst_p_from_n(s)?;
             let s = send_mpst_p_to_o((), s);
-            let (_, s) = recv_mpst_p_to_o(s)?;
-            let (_, s) = recv_mpst_p_to_q(s)?;
+            let (_, s) = recv_mpst_p_from_o(s)?;
+            let (_, s) = recv_mpst_p_from_q(s)?;
             let s = send_mpst_p_to_q((), s);
-            let (_, s) = recv_mpst_p_to_r(s)?;
+            let (_, s) = recv_mpst_p_from_r(s)?;
             let s = send_mpst_p_to_r((), s);
-            let (_, s) = recv_mpst_p_to_s(s)?;
+            let (_, s) = recv_mpst_p_from_s(s)?;
             let s = send_mpst_p_to_s((), s);
             simple_five_endpoint_p(s)
         },
@@ -4103,48 +4103,48 @@ fn simple_five_endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_q_to_t, {
+    offer_mpst!(s, recv_mpst_q_from_t, {
         Branching0fromTtoQ::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoQ::More(s) => {
-            let (_, s) = recv_mpst_q_to_t(s)?;
+            let (_, s) = recv_mpst_q_from_t(s)?;
             let s = send_mpst_q_to_t((), s);
             let s = send_mpst_q_to_a((), s);
-            let (_, s) = recv_mpst_q_to_a(s)?;
+            let (_, s) = recv_mpst_q_from_a(s)?;
             let s = send_mpst_q_to_b((), s);
-            let (_, s) = recv_mpst_q_to_b(s)?;
+            let (_, s) = recv_mpst_q_from_b(s)?;
             let s = send_mpst_q_to_c((), s);
-            let (_, s) = recv_mpst_q_to_c(s)?;
+            let (_, s) = recv_mpst_q_from_c(s)?;
             let s = send_mpst_q_to_d((), s);
-            let (_, s) = recv_mpst_q_to_d(s)?;
+            let (_, s) = recv_mpst_q_from_d(s)?;
             let s = send_mpst_q_to_e((), s);
-            let (_, s) = recv_mpst_q_to_e(s)?;
+            let (_, s) = recv_mpst_q_from_e(s)?;
             let s = send_mpst_q_to_f((), s);
-            let (_, s) = recv_mpst_q_to_f(s)?;
+            let (_, s) = recv_mpst_q_from_f(s)?;
             let s = send_mpst_q_to_g((), s);
-            let (_, s) = recv_mpst_q_to_g(s)?;
+            let (_, s) = recv_mpst_q_from_g(s)?;
             let s = send_mpst_q_to_h((), s);
-            let (_, s) = recv_mpst_q_to_h(s)?;
+            let (_, s) = recv_mpst_q_from_h(s)?;
             let s = send_mpst_q_to_i((), s);
-            let (_, s) = recv_mpst_q_to_i(s)?;
+            let (_, s) = recv_mpst_q_from_i(s)?;
             let s = send_mpst_q_to_j((), s);
-            let (_, s) = recv_mpst_q_to_j(s)?;
+            let (_, s) = recv_mpst_q_from_j(s)?;
             let s = send_mpst_q_to_k((), s);
-            let (_, s) = recv_mpst_q_to_k(s)?;
+            let (_, s) = recv_mpst_q_from_k(s)?;
             let s = send_mpst_q_to_l((), s);
-            let (_, s) = recv_mpst_q_to_l(s)?;
+            let (_, s) = recv_mpst_q_from_l(s)?;
             let s = send_mpst_q_to_m((), s);
-            let (_, s) = recv_mpst_q_to_m(s)?;
+            let (_, s) = recv_mpst_q_from_m(s)?;
             let s = send_mpst_q_to_n((), s);
-            let (_, s) = recv_mpst_q_to_n(s)?;
+            let (_, s) = recv_mpst_q_from_n(s)?;
             let s = send_mpst_q_to_o((), s);
-            let (_, s) = recv_mpst_q_to_o(s)?;
+            let (_, s) = recv_mpst_q_from_o(s)?;
             let s = send_mpst_q_to_p((), s);
-            let (_, s) = recv_mpst_q_to_p(s)?;
-            let (_, s) = recv_mpst_q_to_r(s)?;
+            let (_, s) = recv_mpst_q_from_p(s)?;
+            let (_, s) = recv_mpst_q_from_r(s)?;
             let s = send_mpst_q_to_r((), s);
-            let (_, s) = recv_mpst_q_to_s(s)?;
+            let (_, s) = recv_mpst_q_from_s(s)?;
             let s = send_mpst_q_to_s((), s);
             simple_five_endpoint_q(s)
         },
@@ -4152,48 +4152,48 @@ fn simple_five_endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_r_to_t, {
+    offer_mpst!(s, recv_mpst_r_from_t, {
         Branching0fromTtoR::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoR::More(s) => {
-            let (_, s) = recv_mpst_r_to_t(s)?;
+            let (_, s) = recv_mpst_r_from_t(s)?;
             let s = send_mpst_r_to_t((), s);
             let s = send_mpst_r_to_a((), s);
-            let (_, s) = recv_mpst_r_to_a(s)?;
+            let (_, s) = recv_mpst_r_from_a(s)?;
             let s = send_mpst_r_to_b((), s);
-            let (_, s) = recv_mpst_r_to_b(s)?;
+            let (_, s) = recv_mpst_r_from_b(s)?;
             let s = send_mpst_r_to_c((), s);
-            let (_, s) = recv_mpst_r_to_c(s)?;
+            let (_, s) = recv_mpst_r_from_c(s)?;
             let s = send_mpst_r_to_d((), s);
-            let (_, s) = recv_mpst_r_to_d(s)?;
+            let (_, s) = recv_mpst_r_from_d(s)?;
             let s = send_mpst_r_to_e((), s);
-            let (_, s) = recv_mpst_r_to_e(s)?;
+            let (_, s) = recv_mpst_r_from_e(s)?;
             let s = send_mpst_r_to_f((), s);
-            let (_, s) = recv_mpst_r_to_f(s)?;
+            let (_, s) = recv_mpst_r_from_f(s)?;
             let s = send_mpst_r_to_g((), s);
-            let (_, s) = recv_mpst_r_to_g(s)?;
+            let (_, s) = recv_mpst_r_from_g(s)?;
             let s = send_mpst_r_to_h((), s);
-            let (_, s) = recv_mpst_r_to_h(s)?;
+            let (_, s) = recv_mpst_r_from_h(s)?;
             let s = send_mpst_r_to_i((), s);
-            let (_, s) = recv_mpst_r_to_i(s)?;
+            let (_, s) = recv_mpst_r_from_i(s)?;
             let s = send_mpst_r_to_j((), s);
-            let (_, s) = recv_mpst_r_to_j(s)?;
+            let (_, s) = recv_mpst_r_from_j(s)?;
             let s = send_mpst_r_to_k((), s);
-            let (_, s) = recv_mpst_r_to_k(s)?;
+            let (_, s) = recv_mpst_r_from_k(s)?;
             let s = send_mpst_r_to_l((), s);
-            let (_, s) = recv_mpst_r_to_l(s)?;
+            let (_, s) = recv_mpst_r_from_l(s)?;
             let s = send_mpst_r_to_m((), s);
-            let (_, s) = recv_mpst_r_to_m(s)?;
+            let (_, s) = recv_mpst_r_from_m(s)?;
             let s = send_mpst_r_to_n((), s);
-            let (_, s) = recv_mpst_r_to_n(s)?;
+            let (_, s) = recv_mpst_r_from_n(s)?;
             let s = send_mpst_r_to_o((), s);
-            let (_, s) = recv_mpst_r_to_o(s)?;
+            let (_, s) = recv_mpst_r_from_o(s)?;
             let s = send_mpst_r_to_p((), s);
-            let (_, s) = recv_mpst_r_to_p(s)?;
+            let (_, s) = recv_mpst_r_from_p(s)?;
             let s = send_mpst_r_to_q((), s);
-            let (_, s) = recv_mpst_r_to_q(s)?;
-            let (_, s) = recv_mpst_r_to_s(s)?;
+            let (_, s) = recv_mpst_r_from_q(s)?;
+            let (_, s) = recv_mpst_r_from_s(s)?;
             let s = send_mpst_r_to_s((), s);
             simple_five_endpoint_r(s)
         },
@@ -4201,49 +4201,49 @@ fn simple_five_endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_s_to_t, {
+    offer_mpst!(s, recv_mpst_s_from_t, {
         Branching0fromTtoS::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromTtoS::More(s) => {
-            let (_, s) = recv_mpst_s_to_t(s)?;
+            let (_, s) = recv_mpst_s_from_t(s)?;
             let s = send_mpst_s_to_t((), s);
             let s = send_mpst_s_to_a((), s);
-            let (_, s) = recv_mpst_s_to_a(s)?;
+            let (_, s) = recv_mpst_s_from_a(s)?;
             let s = send_mpst_s_to_b((), s);
-            let (_, s) = recv_mpst_s_to_b(s)?;
+            let (_, s) = recv_mpst_s_from_b(s)?;
             let s = send_mpst_s_to_c((), s);
-            let (_, s) = recv_mpst_s_to_c(s)?;
+            let (_, s) = recv_mpst_s_from_c(s)?;
             let s = send_mpst_s_to_d((), s);
-            let (_, s) = recv_mpst_s_to_d(s)?;
+            let (_, s) = recv_mpst_s_from_d(s)?;
             let s = send_mpst_s_to_e((), s);
-            let (_, s) = recv_mpst_s_to_e(s)?;
+            let (_, s) = recv_mpst_s_from_e(s)?;
             let s = send_mpst_s_to_f((), s);
-            let (_, s) = recv_mpst_s_to_f(s)?;
+            let (_, s) = recv_mpst_s_from_f(s)?;
             let s = send_mpst_s_to_g((), s);
-            let (_, s) = recv_mpst_s_to_g(s)?;
+            let (_, s) = recv_mpst_s_from_g(s)?;
             let s = send_mpst_s_to_h((), s);
-            let (_, s) = recv_mpst_s_to_h(s)?;
+            let (_, s) = recv_mpst_s_from_h(s)?;
             let s = send_mpst_s_to_i((), s);
-            let (_, s) = recv_mpst_s_to_i(s)?;
+            let (_, s) = recv_mpst_s_from_i(s)?;
             let s = send_mpst_s_to_j((), s);
-            let (_, s) = recv_mpst_s_to_j(s)?;
+            let (_, s) = recv_mpst_s_from_j(s)?;
             let s = send_mpst_s_to_k((), s);
-            let (_, s) = recv_mpst_s_to_k(s)?;
+            let (_, s) = recv_mpst_s_from_k(s)?;
             let s = send_mpst_s_to_l((), s);
-            let (_, s) = recv_mpst_s_to_l(s)?;
+            let (_, s) = recv_mpst_s_from_l(s)?;
             let s = send_mpst_s_to_m((), s);
-            let (_, s) = recv_mpst_s_to_m(s)?;
+            let (_, s) = recv_mpst_s_from_m(s)?;
             let s = send_mpst_s_to_n((), s);
-            let (_, s) = recv_mpst_s_to_n(s)?;
+            let (_, s) = recv_mpst_s_from_n(s)?;
             let s = send_mpst_s_to_o((), s);
-            let (_, s) = recv_mpst_s_to_o(s)?;
+            let (_, s) = recv_mpst_s_from_o(s)?;
             let s = send_mpst_s_to_p((), s);
-            let (_, s) = recv_mpst_s_to_p(s)?;
+            let (_, s) = recv_mpst_s_from_p(s)?;
             let s = send_mpst_s_to_q((), s);
-            let (_, s) = recv_mpst_s_to_q(s)?;
+            let (_, s) = recv_mpst_s_from_q(s)?;
             let s = send_mpst_s_to_r((), s);
-            let (_, s) = recv_mpst_s_to_r(s)?;
+            let (_, s) = recv_mpst_s_from_r(s)?;
             simple_five_endpoint_s(s)
         },
     })
@@ -4390,43 +4390,43 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
             );
 
             let s = send_mpst_t_to_a((), s);
-            let (_, s) = recv_mpst_t_to_a(s)?;
+            let (_, s) = recv_mpst_t_from_a(s)?;
             let s = send_mpst_t_to_b((), s);
-            let (_, s) = recv_mpst_t_to_b(s)?;
+            let (_, s) = recv_mpst_t_from_b(s)?;
             let s = send_mpst_t_to_c((), s);
-            let (_, s) = recv_mpst_t_to_c(s)?;
+            let (_, s) = recv_mpst_t_from_c(s)?;
             let s = send_mpst_t_to_d((), s);
-            let (_, s) = recv_mpst_t_to_d(s)?;
+            let (_, s) = recv_mpst_t_from_d(s)?;
             let s = send_mpst_t_to_e((), s);
-            let (_, s) = recv_mpst_t_to_e(s)?;
+            let (_, s) = recv_mpst_t_from_e(s)?;
             let s = send_mpst_t_to_f((), s);
-            let (_, s) = recv_mpst_t_to_f(s)?;
+            let (_, s) = recv_mpst_t_from_f(s)?;
             let s = send_mpst_t_to_g((), s);
-            let (_, s) = recv_mpst_t_to_g(s)?;
+            let (_, s) = recv_mpst_t_from_g(s)?;
             let s = send_mpst_t_to_h((), s);
-            let (_, s) = recv_mpst_t_to_h(s)?;
+            let (_, s) = recv_mpst_t_from_h(s)?;
             let s = send_mpst_t_to_i((), s);
-            let (_, s) = recv_mpst_t_to_i(s)?;
+            let (_, s) = recv_mpst_t_from_i(s)?;
             let s = send_mpst_t_to_j((), s);
-            let (_, s) = recv_mpst_t_to_j(s)?;
+            let (_, s) = recv_mpst_t_from_j(s)?;
             let s = send_mpst_t_to_k((), s);
-            let (_, s) = recv_mpst_t_to_k(s)?;
+            let (_, s) = recv_mpst_t_from_k(s)?;
             let s = send_mpst_t_to_l((), s);
-            let (_, s) = recv_mpst_t_to_l(s)?;
+            let (_, s) = recv_mpst_t_from_l(s)?;
             let s = send_mpst_t_to_m((), s);
-            let (_, s) = recv_mpst_t_to_m(s)?;
+            let (_, s) = recv_mpst_t_from_m(s)?;
             let s = send_mpst_t_to_n((), s);
-            let (_, s) = recv_mpst_t_to_n(s)?;
+            let (_, s) = recv_mpst_t_from_n(s)?;
             let s = send_mpst_t_to_o((), s);
-            let (_, s) = recv_mpst_t_to_o(s)?;
+            let (_, s) = recv_mpst_t_from_o(s)?;
             let s = send_mpst_t_to_p((), s);
-            let (_, s) = recv_mpst_t_to_p(s)?;
+            let (_, s) = recv_mpst_t_from_p(s)?;
             let s = send_mpst_t_to_q((), s);
-            let (_, s) = recv_mpst_t_to_q(s)?;
+            let (_, s) = recv_mpst_t_from_q(s)?;
             let s = send_mpst_t_to_r((), s);
-            let (_, s) = recv_mpst_t_to_r(s)?;
+            let (_, s) = recv_mpst_t_from_r(s)?;
             let s = send_mpst_t_to_s((), s);
-            let (_, s) = recv_mpst_t_to_s(s)?;
+            let (_, s) = recv_mpst_t_from_s(s)?;
 
             recurs_t(s, i - 1)
         }

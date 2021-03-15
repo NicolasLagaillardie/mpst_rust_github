@@ -21,7 +21,7 @@
 /// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-/// create_recv_mpst_session_1!(recv_mpst_c_to_a, RoleA, next_a, RoleC);
+/// create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, next_a, RoleC);
 /// ```
 ///
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
@@ -52,7 +52,7 @@ macro_rules! create_recv_mpst_session_1 {
 /// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
 /// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 ///
-/// create_recv_mpst_session_2!(recv_mpst_a_to_c, RoleC, next_c, RoleA);
+/// create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, next_c, RoleA);
 /// ```
 ///
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.

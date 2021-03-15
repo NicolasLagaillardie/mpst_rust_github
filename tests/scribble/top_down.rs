@@ -18,8 +18,8 @@ use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 
 // Get recv functions
-use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
-use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 
 // Get send functions
 use mpstthree::functionmpst::send::send_mpst_b_to_a;
@@ -86,7 +86,7 @@ type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full,
 fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {
-            let (x, s) = recv_mpst_b_to_c(s)?;
+            let (x, s) = recv_mpst_b_from_c(s)?;
 
             assert_eq!(x, ());
 
@@ -94,7 +94,7 @@ fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst(s)
         },
         Branches0BtoC::ADD(s) => {
-            let (id, s) = recv_mpst_b_to_c(s)?;
+            let (id, s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_a(id + 1, s);
             close_mpst(s)
         },
@@ -102,18 +102,18 @@ fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_a_to_c(s)?;
+    let (_, s) = recv_mpst_a_from_c(s)?;
 
     offer_mpst_a_to_c!(s, {
         Branches0AtoC::BYE(s) => {
-            let (x, s) = recv_mpst_a_to_b(s)?;
+            let (x, s) = recv_mpst_a_from_b(s)?;
 
             assert_eq!(x, ());
 
             close_mpst(s)
         },
         Branches0AtoC::ADD(s) => {
-            let (_, s) = recv_mpst_a_to_b(s)?;
+            let (_, s) = recv_mpst_a_from_b(s)?;
             close_mpst(s)
         },
     })

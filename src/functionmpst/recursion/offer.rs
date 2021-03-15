@@ -16,9 +16,9 @@
 ///        Ok(())
 ///    },
 ///    CBranchesAtoC::Video(s) => {
-///        let (request, s) = recv_mpst_a_to_c(s)?;
+///        let (request, s) = recv_mpst_a_from_c(s)?;
 ///        let s = send_mpst_a_to_b(request + 1, s);
-///        let (video, s) = recv_mpst_a_to_b(s)?;
+///        let (video, s) = recv_mpst_a_from_b(s)?;
 ///        let s = send_mpst_a_to_c(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -28,9 +28,9 @@
 macro_rules! offer_mpst_a_to_c {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {{
 
-        use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
+        use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 
-        mpstthree::offer_mpst!($session, recv_mpst_a_to_c, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_a_from_c, { $($pat => $result,)* })
     }};
 }
 
@@ -52,9 +52,9 @@ macro_rules! offer_mpst_a_to_c {
 ///        Ok(())
 ///    },
 ///    CBranchesBtoC::Video(s) => {
-///        let (request, s) = recv_mpst_b_to_c(s)?;
+///        let (request, s) = recv_mpst_b_from_c(s)?;
 ///        let s = send_mpst_b_to_a(request + 1, s);
-///        let (video, s) = recv_mpst_b_to_a(s)?;
+///        let (video, s) = recv_mpst_b_from_a(s)?;
 ///        let s = send_mpst_b_to_c(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -64,9 +64,9 @@ macro_rules! offer_mpst_a_to_c {
 macro_rules! offer_mpst_b_to_c {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {{
 
-        use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
+        use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
 
-        mpstthree::offer_mpst!($session, recv_mpst_b_to_c, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_b_from_c, { $($pat => $result,)* })
     }};
 }
 
@@ -88,9 +88,9 @@ macro_rules! offer_mpst_b_to_c {
 ///        Ok(())
 ///    },
 ///    CBranchesAtoB::Video(s) => {
-///        let (request, s) = recv_mpst_a_to_c(s)?;
+///        let (request, s) = recv_mpst_a_from_c(s)?;
 ///        let s = send_mpst_a_to_b(request + 1, s);
-///        let (video, s) = recv_mpst_a_to_b(s)?;
+///        let (video, s) = recv_mpst_a_from_b(s)?;
 ///        let s = send_mpst_a_to_c(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -100,12 +100,12 @@ macro_rules! offer_mpst_b_to_c {
 macro_rules! offer_mpst_a_to_b {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {{
 
-        use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
+        use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 
-        mpstthree::offer_mpst!($session, recv_mpst_a_to_b, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_a_from_b, { $($pat => $result,)* })
 
         // (move || -> Result<_, Box<dyn std::error::Error>> {
-        //     let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_b($session)?;
+        //     let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_from_b($session)?;
         //     mpstthree::binary::cancel(s);
         //     match l {
         //         $(
@@ -134,9 +134,9 @@ macro_rules! offer_mpst_a_to_b {
 ///        Ok(())
 ///    },
 ///    CBranchesBtoA::Video(s) => {
-///        let (request, s) = recv_mpst_b_to_c(s)?;
+///        let (request, s) = recv_mpst_b_from_c(s)?;
 ///        let s = send_mpst_b_to_a(request + 1, s);
-///        let (video, s) = recv_mpst_b_to_a(s)?;
+///        let (video, s) = recv_mpst_b_from_a(s)?;
 ///        let s = send_mpst_b_to_c(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -146,9 +146,9 @@ macro_rules! offer_mpst_a_to_b {
 macro_rules! offer_mpst_b_to_a {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {{
 
-        use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
+        use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 
-        mpstthree::offer_mpst!($session, recv_mpst_b_to_a, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_b_from_a, { $($pat => $result,)* })
     }};
 }
 
@@ -170,9 +170,9 @@ macro_rules! offer_mpst_b_to_a {
 ///        Ok(())
 ///    },
 ///    CBranchesCtoB::Video(s) => {
-///        let (request, s) = recv_mpst_c_to_b(s)?;
+///        let (request, s) = recv_mpst_c_from_b(s)?;
 ///        let s = send_mpst_c_to_a(request + 1, s);
-///        let (video, s) = recv_mpst_c_to_a(s)?;
+///        let (video, s) = recv_mpst_c_from_a(s)?;
 ///        let s = send_mpst_c_to_b(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -182,9 +182,9 @@ macro_rules! offer_mpst_b_to_a {
 macro_rules! offer_mpst_c_to_b {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {{
 
-        use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+        use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
-        mpstthree::offer_mpst!($session, recv_mpst_c_to_b, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_c_from_b, { $($pat => $result,)* })
     }};
 }
 
@@ -206,9 +206,9 @@ macro_rules! offer_mpst_c_to_b {
 ///        Ok(())
 ///    },
 ///    CBranchesCtoA::Video(s) => {
-///        let (request, s) = recv_mpst_c_to_a(s)?;
+///        let (request, s) = recv_mpst_c_from_a(s)?;
 ///        let s = send_mpst_c_to_a(request + 1, s);
-///        let (video, s) = recv_mpst_c_to_a(s)?;
+///        let (video, s) = recv_mpst_c_from_a(s)?;
 ///        let s = send_mpst_c_to_a(video + 1, s);
 ///        authenticator_recurs(s)
 ///    },
@@ -218,8 +218,8 @@ macro_rules! offer_mpst_c_to_b {
 macro_rules! offer_mpst_c_to_a {
     ($session:expr, { $($pat:pat => $result:block,)* }) => {{
 
-        use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+        use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
-        mpstthree::offer_mpst!($session, recv_mpst_c_to_a, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_c_from_a, { $($pat => $result,)* })
     }};
 }

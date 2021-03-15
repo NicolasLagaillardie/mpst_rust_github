@@ -14,7 +14,7 @@
 ///         let s = choose_mpst_a_to_all!(s,
 /// CBranchesBtoA::Video, CBranchesCtoA::Video);
 /// let s = send_mpst_a_to_b(1, s);          let (_, s) =
-/// recv_mpst_a_to_b(s)?;          client_recurs(s, xs,
+/// recv_mpst_a_from_b(s)?;          client_recurs(s, xs,
 /// index + 1)      }
 ///     Option::None => {
 ///         let s = choose_mpst_a_to_all!(s,
@@ -67,7 +67,7 @@ macro_rules! choose_mpst_a_to_all {
 ///         let s = choose_mpst_b_to_all!(s,
 /// CBranchesAtoB::Video, CBranchesCtoB::Video);
 /// let s = send_mpst_b_to_a(1, s);          let (_, s) =
-/// recv_mpst_b_to_a(s)?;          client_recurs(s, xs,
+/// recv_mpst_b_from_a(s)?;          client_recurs(s, xs,
 /// index + 1)      }
 ///     Option::None => {
 ///         let s = choose_mpst_b_to_all!(s,
@@ -118,7 +118,7 @@ macro_rules! choose_mpst_b_to_all {
 ///         let s = choose_mpst_c_to_all!(s,
 /// CBranchesAtoC::Video, CBranchesBtoC::Video);
 /// let s = send_mpst_c_to_a(1, s);          let (_, s) =
-/// recv_mpst_c_to_a(s)?;          client_recurs(s, xs,
+/// recv_mpst_c_from_a(s)?;          client_recurs(s, xs,
 /// index + 1)      }
 ///     Option::None => {
 ///         let s = choose_mpst_c_to_all!(s,

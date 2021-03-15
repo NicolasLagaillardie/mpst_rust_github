@@ -23,10 +23,10 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::c_to_all::RoleCtoAll;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
-use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
-use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
-use mpstthree::functionmpst::recv::recv_mpst_c_to_a;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
+use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
+use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_a_to_c;
@@ -138,7 +138,7 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_b_from_c(
         s,
         |s: EndpointBVideo<i32>| {
-            let (request, s) = recv_mpst_b_to_a(s)?;
+            let (request, s) = recv_mpst_b_from_a(s)?;
             let s = send_mpst_b_to_a(request + 1, s);
 
             close_mpst(s)
@@ -148,15 +148,15 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_a_to_c(s)?;
+    let (id, s) = recv_mpst_a_from_c(s)?;
     let s = send_mpst_a_to_c(id + 1, s);
 
     offer_mpst_session_to_a_from_c(
         s,
         |s: EndpointAVideo<i32>| {
-            let (request, s) = recv_mpst_a_to_c(s)?;
+            let (request, s) = recv_mpst_a_from_c(s)?;
             let s = send_mpst_a_to_b(request + 1, s);
-            let (video, s) = recv_mpst_a_to_b(s)?;
+            let (video, s) = recv_mpst_a_from_b(s)?;
             let s = send_mpst_a_to_c(video + 1, s);
 
             assert_eq!(request, id + 1);
@@ -173,7 +173,7 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let id: i32 = rng.gen();
 
     let s = send_mpst_c_to_a(id, s);
-    let (accept, s) = recv_mpst_c_to_a(s)?;
+    let (accept, s) = recv_mpst_c_from_a(s)?;
 
     assert_eq!(accept, id + 1);
 
@@ -193,7 +193,7 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     >(s);
 
     let s = send_mpst_c_to_a(accept, s);
-    let (result, s) = recv_mpst_c_to_a(s)?;
+    let (result, s) = recv_mpst_c_from_a(s)?;
 
     assert_eq!(result, accept + 3);
 
@@ -205,7 +205,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let id: i32 = rng.gen();
 
     let s = send_mpst_c_to_a(id, s);
-    let (accept, s) = recv_mpst_c_to_a(s)?;
+    let (accept, s) = recv_mpst_c_from_a(s)?;
 
     assert_eq!(accept, id + 1);
 

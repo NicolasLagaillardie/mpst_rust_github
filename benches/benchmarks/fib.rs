@@ -75,7 +75,7 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_b,
+    recv_mpst_a_from_b,
     RoleB,
     next_b,
     1 | =>
@@ -85,7 +85,7 @@ create_recv_mpst_session_bundle!(
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a,
+    recv_mpst_b_from_a,
     RoleA,
     next_a,
     1 | =>
@@ -95,7 +95,7 @@ create_recv_mpst_session_bundle!(
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a,
+    recv_mpst_c_from_a,
     RoleA,
     next_a,
     1 | =>
@@ -174,7 +174,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
             );
 
             let s = send_mpst_a_to_b(old, s);
-            let (new, s) = recv_mpst_a_to_b(s)?;
+            let (new, s) = recv_mpst_a_from_b(s)?;
 
             recurs_a(s, i - 1, new)
         }
@@ -186,12 +186,12 @@ fn simple_five_endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_to_a, {
+    offer_mpst!(s, recv_mpst_b_from_a, {
         Branching0fromAtoB::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromAtoB::More(s) => {
-            let (new, s) = recv_mpst_b_to_a(s)?;
+            let (new, s) = recv_mpst_b_from_a(s)?;
             let s = send_mpst_b_to_a(new + old, s);
             recurs_b(s, new + old)
         },
@@ -199,7 +199,7 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_c_to_a, {
+    offer_mpst!(s, recv_mpst_c_from_a, {
         Branching0fromAtoC::Done(s) => {
             close_mpst_multi(s)
         },

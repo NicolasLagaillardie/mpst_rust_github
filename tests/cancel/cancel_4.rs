@@ -48,11 +48,11 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a,
+    recv_mpst_b_from_a,
     RoleA,
     next_a,
     1 |
-    recv_mpst_b_to_c,
+    recv_mpst_b_from_c,
     RoleC,
     next_c,
     2 | =>
@@ -85,8 +85,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     cancel(s);
 
-    // let (_, s) = recv_mpst_b_to_a(s)?;
-    // let (_, s) = recv_mpst_b_to_c(s)?;
+    // let (_, s) = recv_mpst_b_from_a(s)?;
+    // let (_, s) = recv_mpst_b_from_c(s)?;
     // close_mpst_multi(s)
 
     Ok(())

@@ -47,7 +47,7 @@ create_send_mpst_cancel!(
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a,
+    recv_mpst_b_from_a,
     RoleA,
     next_a,
     1 | =>
@@ -57,7 +57,7 @@ create_recv_mpst_session_bundle!(
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_a,
+    recv_mpst_c_from_a,
     RoleA,
     next_a,
     1 | =>
@@ -91,14 +91,14 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     cancel(s);
 
-    // let (_, s) = recv_mpst_b_to_a(s)?;
+    // let (_, s) = recv_mpst_b_from_a(s)?;
     // close_mpst_multi(s)
 
     Ok(())
 }
 
 fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_c_to_a(s)?;
+    let (_, s) = recv_mpst_c_from_a(s)?;
     close_mpst_multi(s)
 }
 

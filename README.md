@@ -47,9 +47,9 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
 // Used inside the function which process the protocol for receiving one payload
-use mpstthree::functionmpst::recv::recv_mpst_a_to_c;
-use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
-use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
+use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
+use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
 // Used inside the function which process the protocol for sending one payload
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
@@ -99,7 +99,7 @@ To check to the protocol is *correct*, it is mandatory to detail the behaviour o
 /// Function to process Endpoint of A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
-    let (x, s) = recv_mpst_a_to_c(s)?;
+    let (x, s) = recv_mpst_a_from_c(s)?;
 
     close_mpst(s)?;
 
@@ -108,7 +108,7 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 
 /// Function to process Endpoint of B
 fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-    let (x, s) = recv_mpst_b_to_a(s)?;
+    let (x, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
     close_mpst(s)?;
@@ -119,7 +119,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 /// Function to process Endpoint of C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
-    let (x, s) = recv_mpst_c_to_b(s)?;
+    let (x, s) = recv_mpst_c_from_b(s)?;
 
     close_mpst(s)?;
 
@@ -244,7 +244,7 @@ For the *multiple branching*, instead of creating new functions, the macro `offe
 
 ### Parametrisation on the number of roles
 
-This part details how to create protocols with many multiple roles. **This is still a work in progress**.
+This part details how to create protocols with many multiple roles. Please have a look at the example [long_simple_four](examples/long_simple_four.rs).
 
 ## Contributing
 

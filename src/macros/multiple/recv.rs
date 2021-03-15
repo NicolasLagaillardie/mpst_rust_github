@@ -73,7 +73,7 @@ macro_rules! recv_mpst {
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
-/// create_recv_mpst_session!(recv_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+/// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session {
@@ -139,11 +139,11 @@ macro_rules! create_recv_mpst_session {
 ///
 ///
 /// create_recv_mpst_session_bundle!(
-///    recv_mpst_d_to_a,
+///    recv_mpst_d_from_a,
 ///    RoleA,
 ///    next_a,
 ///    1 |
-///    recv_mpst_d_to_b,
+///    recv_mpst_d_from_b,
 ///    RoleB,
 ///    next_b,
 ///    2 | =>
@@ -321,7 +321,7 @@ macro_rules! create_recv_mpst_all_session_bundle {
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
-/// create_recv_http_session!(recv_mpst_d_to_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+/// create_recv_http_session!(recv_mpst_d_from_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session {
@@ -406,11 +406,11 @@ macro_rules! create_recv_http_session {
 ///
 ///
 /// create_recv_http_session_bundle!(
-///    recv_mpst_d_to_a,
+///    recv_mpst_d_from_a,
 ///    RoleA,
 ///    next_a,
 ///    1 |
-///    recv_mpst_d_to_b,
+///    recv_mpst_d_from_b,
 ///    RoleB,
 ///    next_b,
 ///    2 | =>

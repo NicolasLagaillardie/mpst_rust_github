@@ -44,7 +44,7 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_c,
+    recv_mpst_a_from_c,
     RoleC,
     next_c,
     2 | =>
@@ -54,7 +54,7 @@ create_recv_mpst_session_bundle!(
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_c,
+    recv_mpst_b_from_c,
     RoleC,
     next_c,
     2 | =>
@@ -98,7 +98,7 @@ type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleA<RoleB<RoleEnd>>, NameC>;
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_to_c, {
+    offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Done(s) => {
             close_mpst_multi(s)
         },
@@ -113,7 +113,7 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_to_c, {
+    offer_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },

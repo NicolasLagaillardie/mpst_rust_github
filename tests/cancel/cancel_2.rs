@@ -48,7 +48,7 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_to_c,
+    recv_mpst_a_from_c,
     RoleC,
     next_c,
     2 | =>
@@ -58,7 +58,7 @@ create_recv_mpst_session_bundle!(
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_a,
+    recv_mpst_b_from_a,
     RoleA,
     next_a,
     1 | =>
@@ -84,7 +84,7 @@ type EndpointB = SessionMpstThree<Recv<i32, End>, End, RoleA<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Send<i32, End>, End, RoleA<RoleEnd>, NameC>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_a_to_c(s)?;
+    let (_, s) = recv_mpst_a_from_c(s)?;
     let s = send_cancel_a_to_b(random(), s)?;
     close_mpst_multi(s)
 }
@@ -92,7 +92,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     cancel(s);
 
-    // let (_, s) = recv_mpst_b_to_a(s)?;
+    // let (_, s) = recv_mpst_b_from_a(s)?;
     // close_mpst_multi(s)
 
     Ok(())

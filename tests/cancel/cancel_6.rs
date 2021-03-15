@@ -42,7 +42,7 @@ create_send_check_cancel_bundle!(
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_c,
+    recv_mpst_b_from_c,
     RoleC,
     next_c,
     2 | =>
@@ -52,7 +52,7 @@ create_recv_mpst_session_bundle!(
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_to_c,
+    recv_mpst_d_from_c,
     RoleC,
     next_c,
     3 | =>
@@ -89,7 +89,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     cancel_mpst(s);
 
-    // let (_, s) = recv_mpst_b_to_a(s)?;
+    // let (_, s) = recv_mpst_b_from_a(s)?;
     // close_mpst_multi(s)
 
     panic!("Session dropped");
@@ -102,7 +102,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_d_to_c(s)?;
+    let (_, s) = recv_mpst_d_from_c(s)?;
     close_mpst_multi(s)
 }
 

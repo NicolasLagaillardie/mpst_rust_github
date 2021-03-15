@@ -24,7 +24,7 @@ create_multiple_normal_role!(
 create_send_mpst_session!(send_mpst_d_to_b, RoleB, next_b, RoleD, SessionMpst, 5, 2);
 
 // Create new recv functions and related types
-create_recv_mpst_session!(recv_mpst_b_to_d, RoleD, next_d, RoleB, SessionMpst, 5, 3);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, next_d, RoleB, SessionMpst, 5, 3);
 
 close_mpst!(close_mpst_multi, SessionMpst, 5);
 
@@ -48,7 +48,7 @@ fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recv_b_to_d(s: RecvSessionMPSTB<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_b_to_d(s)?;
+    let (_, s) = recv_mpst_b_from_d(s)?;
     close_mpst_multi(s)
 }
 

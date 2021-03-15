@@ -24,10 +24,10 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
 // Get recv functions
-use mpstthree::functionmpst::recv::recv_mpst_a_to_b;
-use mpstthree::functionmpst::recv::recv_mpst_b_to_a;
-use mpstthree::functionmpst::recv::recv_mpst_b_to_c;
-use mpstthree::functionmpst::recv::recv_mpst_c_to_b;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
+use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
+use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
+use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
 // Get send functions
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
@@ -106,7 +106,7 @@ fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst(s)
         },
         Branches0CtoA::Video(s) => {
-            let (request, s) = recv_mpst_c_to_b(s)?;
+            let (request, s) = recv_mpst_c_from_b(s)?;
             let s = send_mpst_c_to_b(request + 1, s);
             server(s)
         },
@@ -114,7 +114,7 @@ fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_b_to_a(s)?;
+    let (id, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_a(id + 1, s);
 
     authenticator_recurs(s)
@@ -126,9 +126,9 @@ fn authenticator_recurs(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst(s)
         },
         Branches0BtoA::Video(s) => {
-            let (request, s) = recv_mpst_b_to_a(s)?;
+            let (request, s) = recv_mpst_b_from_a(s)?;
             let s = send_mpst_b_to_c(request + 1, s);
-            let (video, s) = recv_mpst_b_to_c(s)?;
+            let (video, s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_a(video + 1, s);
             authenticator_recurs(s)
         },
@@ -140,7 +140,7 @@ fn client(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
     let s = send_mpst_a_to_b(0, s);
-    let (_, s) = recv_mpst_a_to_b(s)?;
+    let (_, s) = recv_mpst_a_from_b(s)?;
 
     client_recurs(s, xs, 1)
 }
@@ -155,7 +155,7 @@ fn client_recurs(
             let s = choose_mpst_a_to_all!(s, Branches0BtoA::Video, Branches0CtoA::Video);
 
             let s = send_mpst_a_to_b(1, s);
-            let (_, s) = recv_mpst_a_to_b(s)?;
+            let (_, s) = recv_mpst_a_from_b(s)?;
 
             client_recurs(s, xs, index + 1)
         }

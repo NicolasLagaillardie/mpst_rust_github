@@ -33,12 +33,12 @@ create_send_check_cancel_bundle!(
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_to_c, RoleC, next_c, 2 | =>
+    recv_mpst_b_from_c, RoleC, next_c, 2 | =>
     RoleB, SessionMpstThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_to_b, RoleB, next_b, 2 | =>
+    recv_mpst_c_from_b, RoleB, next_b, 2 | =>
     RoleC, SessionMpstThree, 3
 );
 
@@ -71,7 +71,7 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_b_to_c, {
+    offer_cancel_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },
@@ -120,7 +120,7 @@ fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 3
             );
 
-            let (_, s) = recv_mpst_c_to_b(s)?;
+            let (_, s) = recv_mpst_c_from_b(s)?;
 
             recurs_d(s, i - 1)
         }
