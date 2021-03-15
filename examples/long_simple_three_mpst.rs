@@ -131,16 +131,10 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
-                Branching0fromCtoA::Done,
-                Branching0fromCtoB::Done, =>
-                RoleA,
-                RoleB, =>
-                RoleC,
-                SessionMpstThree,
-                3,
-                3
+                send_mpst_c_to_a, send_mpst_c_to_b, =>
+                Branching0fromCtoA::Done, Branching0fromCtoB::Done, =>
+                RoleA, RoleB, =>
+                RoleC, SessionMpstThree, 3, 3
             );
 
             close_mpst_multi(s)
@@ -148,16 +142,10 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
-                Branching0fromCtoA::More,
-                Branching0fromCtoB::More, =>
-                RoleA,
-                RoleB, =>
-                RoleC,
-                SessionMpstThree,
-                3,
-                3
+                send_mpst_c_to_a, send_mpst_c_to_b, =>
+                Branching0fromCtoA::More, Branching0fromCtoB::More, =>
+                RoleA, RoleB, =>
+                RoleC, SessionMpstThree, 3, 3
             );
 
             let s = send_mpst_c_to_a((), s);
@@ -170,16 +158,16 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         simple_five_endpoint_a,
         simple_five_endpoint_b,
         simple_five_endpoint_c,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
+    thread_a.join()?;
+    thread_b.join()?;
+    thread_c.join()?;
 
     Ok(())
 }
@@ -189,5 +177,5 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 15;
 
 fn main() {
-    all_mpst().unwrap();
+    assert!(all_mpst().is_ok());
 }

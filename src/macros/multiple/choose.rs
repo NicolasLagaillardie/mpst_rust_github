@@ -821,3 +821,92 @@ macro_rules! choose_mpst_multi_http_to_all {
         }});
     }
 }
+
+//////////////////////////////////////////////////////////
+// Issue with sending the path such as in a macro
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! create_fn_choose_mpst_multi_to_all {
+    ($fn_name:ident, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {
+            fn $fn_name(
+                s: $sessionmpst_name<
+                    #(
+                        Send<unused#N:15, mpstthree::binary::struct_trait::End>,
+                    )0:0
+                    #(
+                        unused#N:16<
+                    )0:0
+                    mpstthree::role::end::RoleEnd
+                    #(
+                        >
+                    )0:0,
+                    $sender<mpstthree::role::end::RoleEnd>,
+                >,
+                #(
+                    path_#N:0: unused#N:15,
+                )0:0
+            ) -> $sessionmpst_name<
+                #(
+                    mpstthree::binary::struct_trait::End,
+                )0:0
+                mpstthree::role::end::RoleEnd,
+                $sender<mpstthree::role::end::RoleEnd>,
+            >
+            {
+                #(
+                    let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
+                )4:0
+
+                #(
+                    let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
+                )15:0
+
+                #(
+                    let (name_#N:0, _) = <unused#N:16::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                )0:0
+
+                let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+
+                %(
+                    let s = unused#N:14(
+                        path_#N:0($sessionmpst_name {
+                            ~(
+                                session#N:1 : channel_~N:7,
+                            )(
+                                session#N:1 : channel_~N:7,
+                            )0*
+                            stack: stack_#N:0,
+                            name: name_#N:0,
+                        }),
+                        s,
+                    );
+                )(
+                    let s = unused#N:14(
+                        path_#N:0($sessionmpst_name {
+                            ~(
+                                session#N:1 : channel_~N:7,
+                            )(
+                                session#N:1 : channel_~N:7,
+                            )0*
+                            stack: stack_#N:0,
+                            name: name_#N:0,
+                        }),
+                        s,
+                    );
+                )2*
+
+                mpstthree::binary::cancel::cancel(s);
+
+                $sessionmpst_name {
+                    #(
+                        session#N:0: channel_#N:17 ,
+                    )0:0
+                    stack: stack_^N:2,
+                    name: name_^N:2,
+                }
+            }
+        });
+    }
+}

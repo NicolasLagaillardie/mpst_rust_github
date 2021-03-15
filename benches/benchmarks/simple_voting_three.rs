@@ -293,16 +293,16 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_pawn, thread_server, thread_voter) = fork_mpst(
         black_box(simple_five_endpoint_pawn),
         black_box(simple_five_endpoint_server),
         black_box(simple_five_endpoint_voter),
     );
 
-    thread_voter.join().unwrap();
-    thread_server.join().unwrap();
-    thread_pawn.join().unwrap();
+    thread_voter.join()?;
+    thread_server.join()?;
+    thread_pawn.join()?;
 
     Ok(())
 }

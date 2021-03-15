@@ -36,7 +36,7 @@ fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Erro
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -62,7 +62,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
         threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
-    main.join().unwrap();
+    main.join()?;
 
     Ok(())
 }

@@ -209,16 +209,16 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_b),
         black_box(simple_five_endpoint_c),
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
+    thread_a.join()?;
+    thread_b.join()?;
+    thread_c.join()?;
 
     Ok(())
 }
@@ -261,7 +261,7 @@ fn recurs_b_binary(
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -288,7 +288,7 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
         threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
-    main.join().unwrap();
+    main.join()?;
 
     Ok(())
 }

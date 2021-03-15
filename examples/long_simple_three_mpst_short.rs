@@ -28,14 +28,8 @@ create_multiple_normal_role!(
 // Create new send functions
 // C
 create_send_mpst_session_bundle!(
-    send_mpst_c_to_a,
-    RoleA,
-    next_a,
-    1 |
-    send_mpst_c_to_b,
-    RoleB,
-    next_b,
-    2 | =>
+    send_mpst_c_to_a, RoleA, next_a, 1 |
+    send_mpst_c_to_b, RoleB, next_b, 2 | =>
     RoleC,
     SessionMpstThree,
     3
@@ -44,20 +38,14 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_c,
-    RoleC,
-    next_c,
-    2 | =>
+    recv_mpst_a_from_c, RoleC, next_c, 2 | =>
     RoleA,
     SessionMpstThree,
     3
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_c,
-    RoleC,
-    next_c,
-    2 | =>
+    recv_mpst_b_from_c, RoleC, next_c, 2 | =>
     RoleB,
     SessionMpstThree,
     3
@@ -136,16 +124,10 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
-                Branching0fromCtoA::Done,
-                Branching0fromCtoB::Done, =>
-                RoleA,
-                RoleB, =>
-                RoleC,
-                SessionMpstThree,
-                3,
-                3
+                send_mpst_c_to_a, send_mpst_c_to_b, =>
+                Branching0fromCtoA::Done, Branching0fromCtoB::Done, =>
+                RoleA, RoleB, =>
+                RoleC, SessionMpstThree, 3, 3
             );
 
             close_mpst_multi(s)
@@ -153,16 +135,10 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
-                Branching0fromCtoA::More,
-                Branching0fromCtoB::More, =>
-                RoleA,
-                RoleB, =>
-                RoleC,
-                SessionMpstThree,
-                3,
-                3
+                send_mpst_c_to_a, send_mpst_c_to_b, =>
+                Branching0fromCtoA::More, Branching0fromCtoB::More, =>
+                RoleA, RoleB, =>
+                RoleC, SessionMpstThree, 3, 3
             );
 
             let s = send_mpst!(s, (), next_a, SessionMpstThree, 3, 1);
@@ -175,16 +151,16 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         simple_five_endpoint_a,
         simple_five_endpoint_b,
         simple_five_endpoint_c,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
+    thread_a.join()?;
+    thread_b.join()?;
+    thread_c.join()?;
 
     Ok(())
 }
@@ -194,5 +170,5 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 15;
 
 fn main() {
-    all_mpst().unwrap();
+    assert!(all_mpst().is_ok());
 }

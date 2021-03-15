@@ -527,7 +527,7 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c, thread_d, thread_e) = fork_mpst(
         black_box(simple_five_endpoint_a),
         black_box(simple_five_endpoint_b),
@@ -536,11 +536,11 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
         black_box(simple_five_endpoint_e),
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
-    thread_e.join().unwrap();
+    thread_a.join()?;
+    thread_b.join()?;
+    thread_c.join()?;
+    thread_d.join()?;
+    thread_e.join()?;
 
     Ok(())
 }
@@ -676,7 +676,7 @@ fn binary_e_to_d(s: EtoD) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn Error>> {
+fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send + 'static>> {
     // A
     let (thread_a_to_b, s_a_to_b): (JoinHandle<()>, BtoA) =
         fork_with_thread_id(black_box(binary_a_to_b));
@@ -716,19 +716,19 @@ fn all_binaries() -> Result<(), Box<dyn Error>> {
 
     binary_d_to_e(black_box(s_d_to_e)).unwrap();
 
-    thread_a_to_b.join().unwrap();
-    thread_a_to_c.join().unwrap();
-    thread_a_to_d.join().unwrap();
-    thread_a_to_e.join().unwrap();
+    thread_a_to_b.join()?;
+    thread_a_to_c.join()?;
+    thread_a_to_d.join()?;
+    thread_a_to_e.join()?;
 
-    thread_b_to_c.join().unwrap();
-    thread_b_to_d.join().unwrap();
-    thread_b_to_e.join().unwrap();
+    thread_b_to_c.join()?;
+    thread_b_to_d.join()?;
+    thread_b_to_e.join()?;
 
-    thread_c_to_d.join().unwrap();
-    thread_c_to_e.join().unwrap();
+    thread_c_to_d.join()?;
+    thread_c_to_e.join()?;
 
-    thread_d_to_e.join().unwrap();
+    thread_d_to_e.join()?;
 
     Ok(())
 }

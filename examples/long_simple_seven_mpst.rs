@@ -533,7 +533,7 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g) = fork_mpst(
         simple_five_endpoint_a,
         simple_five_endpoint_b,
@@ -544,13 +544,13 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
         simple_five_endpoint_g,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
-    thread_e.join().unwrap();
-    thread_f.join().unwrap();
-    thread_g.join().unwrap();
+    thread_a.join()?;
+    thread_b.join()?;
+    thread_c.join()?;
+    thread_d.join()?;
+    thread_e.join()?;
+    thread_f.join()?;
+    thread_g.join()?;
 
     Ok(())
 }
@@ -560,5 +560,5 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 15;
 
 fn main() {
-    all_mpst().unwrap();
+    assert!(all_mpst().is_ok());
 }
