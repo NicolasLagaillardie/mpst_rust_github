@@ -828,7 +828,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! create_fn_choose_mpst_multi_to_all {
-    ($fn_name:ident, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($fn_name:ident, $branch:expr, $new_type:ty, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {
             fn $fn_name(
                 s: $sessionmpst_name<
@@ -843,17 +843,8 @@ macro_rules! create_fn_choose_mpst_multi_to_all {
                         >
                     )0:0,
                     $sender<mpstthree::role::end::RoleEnd>,
-                >,
-                #(
-                    path_#N:0: unused#N:15,
-                )0:0
-            ) -> $sessionmpst_name<
-                #(
-                    mpstthree::binary::struct_trait::End,
-                )0:0
-                mpstthree::role::end::RoleEnd,
-                $sender<mpstthree::role::end::RoleEnd>,
-            >
+                >
+            ) -> $new_type
             {
                 #(
                     let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
@@ -871,7 +862,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all {
 
                 %(
                     let s = unused#N:14(
-                        path_#N:0($sessionmpst_name {
+                        unused#N:15::$branch($sessionmpst_name {
                             ~(
                                 session#N:1 : channel_~N:7,
                             )(
@@ -884,7 +875,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all {
                     );
                 )(
                     let s = unused#N:14(
-                        path_#N:0($sessionmpst_name {
+                        unused#N:15::$branch($sessionmpst_name {
                             ~(
                                 session#N:1 : channel_~N:7,
                             )(
@@ -909,4 +900,17 @@ macro_rules! create_fn_choose_mpst_multi_to_all {
             }
         });
     }
+}
+
+#[macro_export]
+macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
+    ($($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        create_fn_choose_mpst_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($fn_send,)+) => ($($label,)+) => ($($receiver,)+) => $sender, $sessionmpst_name, $nsessions, $exclusion);
+    };
+    (@call_tuple $($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $fn_send:tt => $label:tt => $receiver:tt => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $fn_send => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
+    };
+    (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($fn_send:ident,)+) => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpstthree::create_fn_choose_mpst_multi_to_all!($fn_name, $branch, $new_type, $($fn_send,)+ => $($label,)+ => $($receiver,)+ => $sender, $sessionmpst_name, $nsessions, $exclusion);
+    };
 }

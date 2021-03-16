@@ -1,15 +1,12 @@
-/// An example which mixes both the usual way of creating
-/// recv/send functions
-/// with create_recv_mpst_session_bundle/
-/// create_send_mpst_session_bundle and the short way to
-/// call the code within those functions with
-/// recv_mpst/send_mpst
+/// An example which mixes both the usual way of creating recv/send functions
+/// with create_recv_mpst_session_bundle/create_send_mpst_session_bundle and the short way to
+/// call the code within those functions with recv_mpst/send_mpst
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst, recv_mpst,
-    send_mpst,
+    bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer_mpst, recv_mpst, send_mpst,
 };
 
 use std::error::Error;
@@ -30,25 +27,19 @@ create_multiple_normal_role!(
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, next_a, 1 |
     send_mpst_c_to_b, RoleB, next_b, 2 | =>
-    RoleC,
-    SessionMpstThree,
-    3
+    RoleC, SessionMpstThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, next_c, 2 | =>
-    RoleA,
-    SessionMpstThree,
-    3
+    RoleA, SessionMpstThree, 3
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_c, RoleC, next_c, 2 | =>
-    RoleB,
-    SessionMpstThree,
-    3
+    RoleB, SessionMpstThree, 3
 );
 
 // Names
@@ -79,11 +70,29 @@ type RecursBtoC = Recv<Branching0fromCtoB, End>;
 // C
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
+// Needed for create_fn_choose_mpst_multi_to_all_bundle
+type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
+type EndpointMoreC = SessionMpstThree<
+    Send<(), Recv<(), Choose0fromCtoA>>,
+    Send<(), Recv<(), Choose0fromCtoB>>,
+    R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
+    NameC,
+>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleA<RoleB<RoleEnd>>, NameC>;
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_c_to_all, more_from_c_to_all, =>
+    Done, More, =>
+    EndpointDoneC, EndpointMoreC, =>
+    send_mpst_c_to_a, send_mpst_c_to_b, =>
+    Branching0fromCtoA, Branching0fromCtoB, =>
+    RoleA, RoleB, =>
+    RoleC, SessionMpstThree, 3, 3
+);
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
@@ -122,24 +131,12 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_c_to_a, send_mpst_c_to_b, =>
-                Branching0fromCtoA::Done, Branching0fromCtoB::Done, =>
-                RoleA, RoleB, =>
-                RoleC, SessionMpstThree, 3, 3
-            );
+            let s = done_from_c_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_c_to_a, send_mpst_c_to_b, =>
-                Branching0fromCtoA::More, Branching0fromCtoB::More, =>
-                RoleA, RoleB, =>
-                RoleC, SessionMpstThree, 3, 3
-            );
+            let s = more_from_c_to_all(s);
 
             let s = send_mpst!(s, (), next_a, SessionMpstThree, 3, 1);
             let (_, s) = recv_mpst!(s, next_a, SessionMpstThree, 3, 1)()?;
