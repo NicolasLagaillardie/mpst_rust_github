@@ -11,8 +11,9 @@ use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
+    bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -257,17 +258,50 @@ type EndpointB = SessionMpstSix<End, End, End, End, RecursBtoF, RoleF<RoleEnd>, 
 type EndpointC = SessionMpstSix<End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
 type EndpointD = SessionMpstSix<End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
 type EndpointE = SessionMpstSix<End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
+type StackRecurs = RoleA<RoleB<RoleC<RoleD<RoleE<RoleEnd>>>>>;
 type EndpointF = SessionMpstSix<
     Choose0fromFtoA,
     Choose0fromFtoB,
     Choose0fromFtoC,
     Choose0fromFtoD,
     Choose0fromFtoE,
-    RoleA<RoleB<RoleC<RoleD<RoleE<RoleEnd>>>>>,
+    StackRecurs,
     NameF,
 >;
 
-// Functions
+// Needed for create_fn_choose_mpst_multi_to_all_bundle
+type EndpointDoneF = SessionMpstSix<End, End, End, End, End, RoleEnd, NameF>;
+type EndpointMoreF = SessionMpstSix<
+    Send<(), Recv<(), Choose0fromFtoA>>,
+    Send<(), Recv<(), Choose0fromFtoB>>,
+    Send<(), Recv<(), Choose0fromFtoC>>,
+    Send<(), Recv<(), Choose0fromFtoD>>,
+    Send<(), Recv<(), Choose0fromFtoE>>,
+    R2A<R2B<R2C<R2D<R2E<StackRecurs>>>>>,
+    NameF,
+>;
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_f_to_all, more_from_f_to_all, =>
+    Done, More, =>
+    EndpointDoneF, EndpointMoreF, =>
+    send_mpst_f_to_a,
+    send_mpst_f_to_b,
+    send_mpst_f_to_c,
+    send_mpst_f_to_d,
+    send_mpst_f_to_e, =>
+    Branching0fromFtoA,
+    Branching0fromFtoB,
+    Branching0fromFtoC,
+    Branching0fromFtoD,
+    Branching0fromFtoE, =>
+    RoleA,
+    RoleB,
+    RoleC,
+    RoleD,
+    RoleE, =>
+    RoleF, SessionMpstSix, 6, 6
+);
+
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_f, {
         Branching0fromFtoA::Done(s) => {
@@ -380,54 +414,12 @@ fn simple_five_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_f_to_a,
-                send_mpst_f_to_b,
-                send_mpst_f_to_c,
-                send_mpst_f_to_d,
-                send_mpst_f_to_e, =>
-                Branching0fromFtoA::Done,
-                Branching0fromFtoB::Done,
-                Branching0fromFtoC::Done,
-                Branching0fromFtoD::Done,
-                Branching0fromFtoE::Done, =>
-                RoleA,
-                RoleB,
-                RoleC,
-                RoleD,
-                RoleE, =>
-                RoleF,
-                SessionMpstSix,
-                6,
-                6
-            );
+            let s = done_from_f_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_f_to_a,
-                send_mpst_f_to_b,
-                send_mpst_f_to_c,
-                send_mpst_f_to_d,
-                send_mpst_f_to_e, =>
-                Branching0fromFtoA::More,
-                Branching0fromFtoB::More,
-                Branching0fromFtoC::More,
-                Branching0fromFtoD::More,
-                Branching0fromFtoE::More, =>
-                RoleA,
-                RoleB,
-                RoleC,
-                RoleD,
-                RoleE, =>
-                RoleF,
-                SessionMpstSix,
-                6,
-                6
-            );
+            let s = more_from_f_to_all(s);
 
             let s = send_mpst_f_to_a((), s);
             let (_, s) = recv_mpst_f_from_a(s)?;

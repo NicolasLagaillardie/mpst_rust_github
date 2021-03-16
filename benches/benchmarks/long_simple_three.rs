@@ -11,8 +11,9 @@ use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
+    bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -104,7 +105,24 @@ type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleA<RoleB<RoleEnd>>, NameC>;
 
-// Functions
+// Needed for create_fn_choose_mpst_multi_to_all_bundle
+type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
+type EndpointMoreC = SessionMpstThree<
+    Send<(), Recv<(), Choose0fromCtoA>>,
+    Send<(), Recv<(), Choose0fromCtoB>>,
+    R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
+    NameC,
+>;
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_c_to_all, more_from_c_to_all, =>
+    Done, More, =>
+    EndpointDoneC, EndpointMoreC, =>
+    send_mpst_c_to_a, send_mpst_c_to_b, =>
+    Branching0fromCtoA, Branching0fromCtoB, =>
+    RoleA, RoleB, =>
+    RoleC, SessionMpstThree, 3, 3
+);
+
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Done(s) => {
@@ -142,36 +160,12 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
-                Branching0fromCtoA::Done,
-                Branching0fromCtoB::Done, =>
-                RoleA,
-                RoleB, =>
-                RoleC,
-                SessionMpstThree,
-                3,
-                3
-            );
+            let s = done_from_c_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
-                Branching0fromCtoA::More,
-                Branching0fromCtoB::More, =>
-                RoleA,
-                RoleB, =>
-                RoleC,
-                SessionMpstThree,
-                3,
-                3
-            );
+            let s = more_from_c_to_all(s);
 
             let s = send_mpst_c_to_a((), s);
             let (_, s) = recv_mpst_c_from_a(s)?;

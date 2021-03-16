@@ -11,8 +11,9 @@ use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
+    bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -381,6 +382,7 @@ type EndpointD = SessionMpstEight<End, End, End, End, End, End, RecursDtoH, Role
 type EndpointE = SessionMpstEight<End, End, End, End, End, End, RecursEtoH, RoleH<RoleEnd>, NameE>;
 type EndpointF = SessionMpstEight<End, End, End, End, End, End, RecursFtoH, RoleH<RoleEnd>, NameF>;
 type EndpointG = SessionMpstEight<End, End, End, End, End, End, RecursGtoH, RoleH<RoleEnd>, NameG>;
+type StackRecurs = RoleA<RoleB<RoleC<RoleD<RoleE<RoleF<RoleG<RoleEnd>>>>>>>;
 type EndpointH = SessionMpstEight<
     Choose0fromHtoA,
     Choose0fromHtoB,
@@ -389,11 +391,51 @@ type EndpointH = SessionMpstEight<
     Choose0fromHtoE,
     Choose0fromHtoF,
     Choose0fromHtoG,
-    RoleA<RoleB<RoleC<RoleD<RoleE<RoleF<RoleG<RoleEnd>>>>>>>,
+    StackRecurs,
     NameH,
 >;
 
-// Functions
+// Needed for create_fn_choose_mpst_multi_to_all_bundle
+type EndpointDoneH = SessionMpstEight<End, End, End, End, End, End, End, RoleEnd, NameH>;
+type EndpointMoreH = SessionMpstEight<
+    Send<(), Recv<(), Choose0fromHtoA>>,
+    Send<(), Recv<(), Choose0fromHtoB>>,
+    Send<(), Recv<(), Choose0fromHtoC>>,
+    Send<(), Recv<(), Choose0fromHtoD>>,
+    Send<(), Recv<(), Choose0fromHtoE>>,
+    Send<(), Recv<(), Choose0fromHtoF>>,
+    Send<(), Recv<(), Choose0fromHtoG>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<R2G<StackRecurs>>>>>>>,
+    NameH,
+>;
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_h_to_all, more_from_h_to_all, =>
+    Done, More, =>
+    EndpointDoneH, EndpointMoreH, =>
+    send_mpst_h_to_a,
+    send_mpst_h_to_b,
+    send_mpst_h_to_c,
+    send_mpst_h_to_d,
+    send_mpst_h_to_e,
+    send_mpst_h_to_f,
+    send_mpst_h_to_g, =>
+    Branching0fromHtoA,
+    Branching0fromHtoB,
+    Branching0fromHtoC,
+    Branching0fromHtoD,
+    Branching0fromHtoE,
+    Branching0fromHtoF,
+    Branching0fromHtoG, =>
+    RoleA,
+    RoleB,
+    RoleC,
+    RoleD,
+    RoleE,
+    RoleF,
+    RoleG, =>
+    RoleH, SessionMpstEight, 8, 8
+);
+
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_h, {
         Branching0fromHtoA::Done(s) => {
@@ -576,66 +618,12 @@ fn simple_five_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_h_to_a,
-                send_mpst_h_to_b,
-                send_mpst_h_to_c,
-                send_mpst_h_to_d,
-                send_mpst_h_to_e,
-                send_mpst_h_to_f,
-                send_mpst_h_to_g, =>
-                Branching0fromHtoA::Done,
-                Branching0fromHtoB::Done,
-                Branching0fromHtoC::Done,
-                Branching0fromHtoD::Done,
-                Branching0fromHtoE::Done,
-                Branching0fromHtoF::Done,
-                Branching0fromHtoG::Done, =>
-                RoleA,
-                RoleB,
-                RoleC,
-                RoleD,
-                RoleE,
-                RoleF,
-                RoleG, =>
-                RoleH,
-                SessionMpstEight,
-                8,
-                8
-            );
+            let s = done_from_h_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_h_to_a,
-                send_mpst_h_to_b,
-                send_mpst_h_to_c,
-                send_mpst_h_to_d,
-                send_mpst_h_to_e,
-                send_mpst_h_to_f,
-                send_mpst_h_to_g, =>
-                Branching0fromHtoA::More,
-                Branching0fromHtoB::More,
-                Branching0fromHtoC::More,
-                Branching0fromHtoD::More,
-                Branching0fromHtoE::More,
-                Branching0fromHtoF::More,
-                Branching0fromHtoG::More, =>
-                RoleA,
-                RoleB,
-                RoleC,
-                RoleD,
-                RoleE,
-                RoleF,
-                RoleG, =>
-                RoleH,
-                SessionMpstEight,
-                8,
-                8
-            );
+            let s = more_from_h_to_all(s);
 
             let s = send_mpst_h_to_a((), s);
             let (_, s) = recv_mpst_h_from_a(s)?;

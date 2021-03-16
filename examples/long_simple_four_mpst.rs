@@ -1,8 +1,9 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer_mpst,
 };
 
 use std::error::Error;
@@ -145,13 +146,34 @@ type Choose0fromDtoC = Send<Branching0fromDtoC, End>;
 type EndpointA = SessionMpstFour<End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
 type EndpointB = SessionMpstFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = SessionMpstFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
-type EndpointD = SessionMpstFour<
-    Choose0fromDtoA,
-    Choose0fromDtoB,
-    Choose0fromDtoC,
-    RoleA<RoleB<RoleC<RoleEnd>>>,
+type StackRecurs = RoleA<RoleB<RoleC<RoleEnd>>>;
+type EndpointD =
+    SessionMpstFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, StackRecurs, NameD>;
+
+// Needed for create_fn_choose_mpst_multi_to_all_bundle
+type EndpointDoneD = SessionMpstFour<End, End, End, RoleEnd, NameD>;
+type EndpointMoreD = SessionMpstFour<
+    Send<(), Recv<(), Choose0fromDtoA>>,
+    Send<(), Recv<(), Choose0fromDtoB>>,
+    Send<(), Recv<(), Choose0fromDtoC>>,
+    R2A<R2B<R2C<StackRecurs>>>,
     NameD,
 >;
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_d_to_all, more_from_d_to_all, =>
+    Done, More, =>
+    EndpointDoneD, EndpointMoreD, =>
+    send_mpst_d_to_a,
+    send_mpst_d_to_b,
+    send_mpst_d_to_c, =>
+    Branching0fromDtoA,
+    Branching0fromDtoB,
+    Branching0fromDtoC, =>
+    RoleA,
+    RoleB,
+    RoleC, =>
+    RoleD, SessionMpstFour, 4, 4
+);
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_d, {
@@ -211,42 +233,12 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_d_to_a,
-                send_mpst_d_to_b,
-                send_mpst_d_to_c, =>
-                Branching0fromDtoA::Done,
-                Branching0fromDtoB::Done,
-                Branching0fromDtoC::Done, =>
-                RoleA,
-                RoleB,
-                RoleC, =>
-                RoleD,
-                SessionMpstFour,
-                4,
-                4
-            );
+            let s = done_from_d_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                send_mpst_d_to_a,
-                send_mpst_d_to_b,
-                send_mpst_d_to_c, =>
-                Branching0fromDtoA::More,
-                Branching0fromDtoB::More,
-                Branching0fromDtoC::More, =>
-                RoleA,
-                RoleB,
-                RoleC, =>
-                RoleD,
-                SessionMpstFour,
-                4,
-                4
-            );
+            let s = more_from_d_to_all(s);
 
             let s = send_mpst_d_to_a((), s);
             let (_, s) = recv_mpst_d_from_a(s)?;
