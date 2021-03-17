@@ -5,7 +5,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
@@ -34,11 +34,7 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3
 
 // Create new Roles
 // normal
-create_multiple_normal_role!(
-    RoleVoter, next_voter, RoleVoterDual, next_voter_dual |
-    RolePawn, next_pawn, RolePawnDual, next_pawn_dual |
-    RoleServer, next_server, RoleServerDual, next_server_dual |
-);
+create_multiple_normal_role_short!(Voter, Pawn, Server);
 
 // Create new send functions
 // SERVER

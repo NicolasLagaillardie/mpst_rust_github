@@ -22,9 +22,9 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstFive, 5)
 
 // Create new roles
 // normal
-create_multiple_normal_role_short!(A, B, C, D, E,);
+create_multiple_normal_role_short!(A, B, C, D, E);
 // broadcast
-create_multiple_broadcast_role_short!(A, B, C, D, E,);
+create_multiple_broadcast_role_short!(A, B, C, D, E);
 
 // Create new send functions
 // A

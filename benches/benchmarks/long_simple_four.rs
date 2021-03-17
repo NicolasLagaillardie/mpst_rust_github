@@ -12,8 +12,8 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
-    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
-    offer, offer_mpst,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_session_bundle, offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -25,12 +25,7 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstFour, 4)
 
 // Create new roles
 // normal
-create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
-    RoleD, next_d, RoleDDual, next_d_dual |
-);
+create_multiple_normal_role_short!(A, B, C, D);
 
 // Create new send functions
 // A

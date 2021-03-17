@@ -15,7 +15,7 @@ use std::error::Error;
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
 // Create new roles
-create_multiple_normal_role_short!(A, B, C,);
+create_multiple_normal_role_short!(A, B, C);
 
 // Names
 type NameA = RoleA<RoleEnd>;

@@ -2,8 +2,8 @@ use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
-    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
-    offer_mpst,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_session_bundle, offer_mpst,
 };
 
 use std::error::Error;
@@ -13,28 +13,7 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstTwenty, 
 
 // Create new roles
 // normal
-create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
-    RoleD, next_d, RoleDDual, next_d_dual |
-    RoleE, next_e, RoleEDual, next_e_dual |
-    RoleF, next_f, RoleFDual, next_f_dual |
-    RoleG, next_g, RoleGDual, next_g_dual |
-    RoleH, next_h, RoleHDual, next_h_dual |
-    RoleI, next_i, RoleIDual, next_i_dual |
-    RoleJ, next_j, RoleJDual, next_j_dual |
-    RoleK, next_k, RoleKDual, next_k_dual |
-    RoleL, next_l, RoleLDual, next_l_dual |
-    RoleM, next_m, RoleMDual, next_m_dual |
-    RoleN, next_n, RoleNDual, next_n_dual |
-    RoleO, next_o, RoleODual, next_o_dual |
-    RoleP, next_p, RolePDual, next_p_dual |
-    RoleQ, next_q, RoleQDual, next_q_dual |
-    RoleR, next_r, RoleRDual, next_r_dual |
-    RoleS, next_s, RoleSDual, next_s_dual |
-    RoleT, next_t, RoleTDual, next_t_dual |
-);
+create_multiple_normal_role_short!(A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T);
 
 // Create new send functions
 // A

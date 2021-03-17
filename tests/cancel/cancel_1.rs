@@ -2,8 +2,8 @@ use mpstthree::binary::cancel::cancel;
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_multiple_normal_role, create_recv_mpst_session_bundle,
-    create_send_mpst_cancel, create_send_mpst_session_bundle, create_sessionmpst, fork_mpst_multi,
+    bundle_struct_fork_close_multi, create_multiple_normal_role_short,
+    create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session_bundle,
 };
 
 use rand::random;
@@ -13,15 +13,11 @@ use std::error::Error;
 // A --> B.B--> C
 
 // Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpstThree, 3);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
 // Create new roles
 // normal
-create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
-);
+create_multiple_normal_role_short!(A, B, C);
 
 // Create new send functions
 // A
@@ -66,12 +62,6 @@ create_recv_mpst_session_bundle!(
     SessionMpstThree,
     3
 );
-
-// Create close function
-close_mpst!(close_mpst_multi, SessionMpstThree, 3);
-
-// Create fork function
-fork_mpst_multi!(fork_mpst, SessionMpstThree, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;

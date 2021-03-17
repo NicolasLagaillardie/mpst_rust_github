@@ -531,7 +531,7 @@ macro_rules! create_normal_role_short {
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_multiple_normal_role_short {
-    ($($role_name:ident,)+ ) => {
+    ($($role_name:ident),+ $(,)? ) => {
         $(mpstthree::create_normal_role_short!($role_name);)+
      }
 }
@@ -539,20 +539,18 @@ macro_rules! create_multiple_normal_role_short {
 /// Create a new broadcast [`mpstthree::role::Role`], its dual and the related *next* function to
 /// process stacks start with them. A broadcast [`mpstthree::role::Role`] is used for sending a
 /// choice. Its dual is used for receving this choice.
+/// The new
 ///
 /// # Arguments
 ///
 /// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
-/// * The name of the *dual* of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::create_broadcast_role;
+/// use mpstthree::create_broadcast_role_short;
 ///
-/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_broadcast_role_short!(A);
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
@@ -718,31 +716,19 @@ macro_rules! create_broadcast_role_short {
 /// # Arguments
 ///
 /// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
-/// * The name of the *dual* of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::create_multiple_broadcast_role;
+/// use mpstthree::create_multiple_broadcast_role_short;
 ///
-/// create_multiple_broadcast_role!(
-///    RoleAlltoC,
-///    next_all_to_c,
-///    RoleCtoAll,
-///    next_c_to_all |
-///    RoleAlltoD,
-///    next_all_to_D,
-///    RoleDtoAll,
-///    next_d_to_all |
-/// );
+/// create_multiple_broadcast_role_short!(A, B, C);
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_multiple_broadcast_role_short {
-    ($($role_name:ident,)+ ) => {
+    ($($role_name:ident),+ $(,)? ) => {
         $(mpstthree::create_broadcast_role_short!($role_name);)+
      }
 }
