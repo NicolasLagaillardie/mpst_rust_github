@@ -1,8 +1,9 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_http_to_all, create_multiple_normal_role_short,
-    create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_http_to_all,
+    create_multiple_normal_role_short, create_recv_http_session_bundle,
+    create_send_mpst_http_bundle, offer_http_mpst,
 };
 
 use hyper::{Body, Method, Request};
