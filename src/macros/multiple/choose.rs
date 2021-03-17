@@ -822,13 +822,53 @@ macro_rules! choose_mpst_multi_http_to_all {
     }
 }
 
-//////////////////////////////////////////////////////////
-// Issue with sending the path such as in a macro
-
-#[doc(hidden)]
+/// Create *choose* fuunctions, to choose among different sessions that are provided, for protocols
+/// with more than 3 participants
+///
+/// # Arguments
+///
+///  * The name of the new functions
+///  * The name of the branches, need to be the same for every participants
+///  * The new type adopted by the sender
+///  * The name of the *send* functions from the sender to each passive role
+///  * The name of the Enum containing the branches
+///  * The different passive roles
+///  * The name of the sender
+///  * The name of the *SessionMpst* type that will be used
+///  * The number of participants (all together)
+///  * The index of the sender among all participants
+///
+/// # Example
+///
+/// Available on the *long_simple_three_mpst* examples.
+///
+/// ```ignore
+/// type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = SessionMpstThree<
+///     Send<(), Recv<(), Choose0fromCtoA>>,
+///     Send<(), Recv<(), Choose0fromCtoB>>,
+///     R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
+///     NameC,
+/// >;
+/// create_fn_choose_mpst_multi_to_all_bundle!(
+///     done_from_c_to_all, more_from_c_to_all, =>
+///     Done, More, =>
+///     EndpointDoneC, EndpointMoreC, =>
+///     send_mpst_c_to_a, send_mpst_c_to_b, =>
+///     Branching0fromCtoA, Branching0fromCtoB, =>
+///     RoleA, RoleB, =>
+///     RoleC, SessionMpstThree, 3, 3
+/// );
+/// ```
 #[macro_export]
-macro_rules! create_fn_choose_mpst_multi_to_all {
-    ($fn_name:ident, $branch:expr, $new_type:ty, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
+    ($($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        create_fn_choose_mpst_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($fn_send,)+) => ($($label,)+) => ($($receiver,)+) => $sender, $sessionmpst_name, $nsessions, $exclusion);
+    };
+    (@call_tuple $($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $fn_send:tt => $label:tt => $receiver:tt => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $fn_send => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
+    };
+    (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($fn_send:ident,)+) => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {
             fn $fn_name(
                 s: $sessionmpst_name<
@@ -899,18 +939,5 @@ macro_rules! create_fn_choose_mpst_multi_to_all {
                 }
             }
         });
-    }
-}
-
-#[macro_export]
-macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
-    ($($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        create_fn_choose_mpst_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($fn_send,)+) => ($($label,)+) => ($($receiver,)+) => $sender, $sessionmpst_name, $nsessions, $exclusion);
-    };
-    (@call_tuple $($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $fn_send:tt => $label:tt => $receiver:tt => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $fn_send => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
-    };
-    (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($fn_send:ident,)+) => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpstthree::create_fn_choose_mpst_multi_to_all!($fn_name, $branch, $new_type, $($fn_send,)+ => $($label,)+ => $($receiver,)+ => $sender, $sessionmpst_name, $nsessions, $exclusion);
     };
 }

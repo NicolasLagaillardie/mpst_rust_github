@@ -5,8 +5,8 @@ use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
-    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
-    offer_mpst, recv_mpst, send_mpst,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_session_bundle, offer_mpst, recv_mpst, send_mpst,
 };
 
 use std::error::Error;
@@ -15,12 +15,43 @@ use std::error::Error;
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
 // Create new roles
-// normal
-create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
-);
+create_multiple_normal_role_short!(A, B, C,);
+
+// Names
+type NameA = RoleA<RoleEnd>;
+type NameB = RoleB<RoleEnd>;
+type NameC = RoleC<RoleEnd>;
+
+// Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+// Stack recurs for C
+type StackRecurs = RoleA<RoleB<RoleEnd>>;
+// A
+enum Branching0fromCtoA {
+    More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
+    Done(SessionMpstThree<End, End, RoleEnd, NameA>),
+}
+type RecursAtoC = Recv<Branching0fromCtoA, End>;
+// B
+enum Branching0fromCtoB {
+    More(SessionMpstThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
+    Done(SessionMpstThree<End, End, RoleEnd, NameB>),
+}
+type RecursBtoC = Recv<Branching0fromCtoB, End>;
+// C
+type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
+type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
+
+// Creating the MP sessions
+type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, StackRecurs, NameC>;
 
 // Create new send functions
 // C
@@ -42,46 +73,12 @@ create_recv_mpst_session_bundle!(
     RoleB, SessionMpstThree, 3
 );
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-
-// Types
-// Send/Recv
-type RS = Recv<(), Send<(), End>>;
-type SR = Send<(), Recv<(), End>>;
-// Roles
-type R2A<R> = RoleA<RoleA<R>>;
-type R2B<R> = RoleB<RoleB<R>>;
-type R2C<R> = RoleC<RoleC<R>>;
-// A
-enum Branching0fromCtoA {
-    More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
-    Done(SessionMpstThree<End, End, RoleEnd, NameA>),
-}
-type RecursAtoC = Recv<Branching0fromCtoA, End>;
-// B
-enum Branching0fromCtoB {
-    More(SessionMpstThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
-    Done(SessionMpstThree<End, End, RoleEnd, NameB>),
-}
-type RecursBtoC = Recv<Branching0fromCtoB, End>;
-// C
-type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
-type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
-
-// Creating the MP sessions
-type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleA<RoleB<RoleEnd>>, NameC>;
-
 // Needed for create_fn_choose_mpst_multi_to_all_bundle
 type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
 type EndpointMoreC = SessionMpstThree<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
-    R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
+    R2A<R2B<StackRecurs>>,
     NameC,
 >;
 create_fn_choose_mpst_multi_to_all_bundle!(

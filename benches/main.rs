@@ -3,7 +3,7 @@ use criterion::criterion_main;
 mod benchmarks;
 
 criterion_main! {
-    // benchmarks::long_five::long_five_protocols,
+    benchmarks::long_five::long_five_protocols,
     // benchmarks::long_simple_three_empty::long_three_empty_simple_protocols,
     // benchmarks::long_simple_three::long_three_simple_protocols,
     // benchmarks::long_simple_four_empty::long_four_empty_simple_protocols,
@@ -24,7 +24,7 @@ criterion_main! {
     // benchmarks::long_simple_eleven::long_eleven_simple_protocols,
     // benchmarks::long_simple_twenty_empty::long_twenty_empty_simple_protocols,
     // benchmarks::long_simple_twenty::long_twenty_simple_protocols,
-    benchmarks::fib::fibo,
+    // benchmarks::fib::fibo,
     // benchmarks::o_auth::o_auth,
     // benchmarks::simple_voting_three::simple_voting,
     // benchmarks::travel_three::travel,

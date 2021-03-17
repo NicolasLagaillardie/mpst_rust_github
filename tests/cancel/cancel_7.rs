@@ -3,7 +3,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, close_mpst_check_cancel, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
-    fork_mpst_multi, send_cancel,
+    fork_mpst_multi,
 };
 
 use rand::random;
@@ -48,8 +48,6 @@ create_recv_mpst_session_bundle!(
     SessionMpstFour,
     4
 );
-
-send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
 
 // Create close function
 close_mpst_check_cancel!(close_check_cancel, SessionMpstFour, 4);

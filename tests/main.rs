@@ -1,187 +1,177 @@
-mod cancel;
-mod cases;
-mod http;
-mod scribble;
-mod tcp;
-mod unit;
+/// An example which mixes both the usual way of creating recv/send functions
+/// with create_recv_mpst_session_bundle/create_send_mpst_session_bundle and the short way to
+/// call the code within those functions with recv_mpst/send_mpst
+use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::end::RoleEnd;
+use mpstthree::{
+    bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
+    create_normal_role_short, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer_mpst, recv_mpst, send_mpst,
+};
 
-#[test]
-fn unit_tests() {
-    // Checker
-    unit::checker::test_checker();
+use std::error::Error;
 
-    // Role
-    unit::roles::role_end_fields_1();
-    unit::roles::role_end_fields_2();
-    unit::roles::role_a_to_all_fields();
-    unit::roles::role_all_to_a_fields();
-    unit::roles::role_b_to_all_fields();
-    unit::roles::role_all_to_b_fields();
-    unit::roles::role_c_to_all_fields();
-    unit::roles::role_all_to_c_fields();
-    unit::roles::role_head_str();
-    unit::roles::role_tail_str();
+// Create the new SessionMpst for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
-    // SessionMPST
-    unit::sessionmpst::sessionmpst_fields();
-    unit::sessionmpst::sessionmpst_methods();
+// Create new roles
+// normal
+// create_multiple_normal_role!(
+//     RoleA, next_a, RoleADual, next_a_dual |
+//     RoleB, next_b, RoleBDual, next_b_dual |
+//     RoleC, next_c, RoleCDual, next_c_dual |
+// );
+
+create_normal_role_short!(A);
+create_normal_role_short!(B);
+create_normal_role_short!(C);
+
+// Names
+type NameA = RoleA<RoleEnd>;
+type NameB = RoleB<RoleEnd>;
+type NameC = RoleC<RoleEnd>;
+
+// Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+// Stack recurs for C
+type StackRecurs = RoleA<RoleB<RoleEnd>>;
+// A
+enum Branching0fromCtoA {
+    More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
+    Done(SessionMpstThree<End, End, RoleEnd, NameA>),
+}
+type RecursAtoC = Recv<Branching0fromCtoA, End>;
+// B
+enum Branching0fromCtoB {
+    More(SessionMpstThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
+    Done(SessionMpstThree<End, End, RoleEnd, NameB>),
+}
+type RecursBtoC = Recv<Branching0fromCtoB, End>;
+// C
+type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
+type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
+
+// Creating the MP sessions
+type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, StackRecurs, NameC>;
+
+// Create new send functions
+// C
+create_send_mpst_session_bundle!(
+    send_mpst_c_to_a, RoleA, next_a, 1 |
+    send_mpst_c_to_b, RoleB, next_b, 2 | =>
+    RoleC, SessionMpstThree, 3
+);
+
+// Create new recv functions and related types
+// A
+create_recv_mpst_session_bundle!(
+    recv_mpst_a_from_c, RoleC, next_c, 2 | =>
+    RoleA, SessionMpstThree, 3
+);
+// B
+create_recv_mpst_session_bundle!(
+    recv_mpst_b_from_c, RoleC, next_c, 2 | =>
+    RoleB, SessionMpstThree, 3
+);
+
+// Needed for create_fn_choose_mpst_multi_to_all_bundle
+type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
+type EndpointMoreC = SessionMpstThree<
+    Send<(), Recv<(), Choose0fromCtoA>>,
+    Send<(), Recv<(), Choose0fromCtoB>>,
+    R2A<R2B<StackRecurs>>,
+    NameC,
+>;
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_c_to_all, more_from_c_to_all, =>
+    Done, More, =>
+    EndpointDoneC, EndpointMoreC, =>
+    send_mpst_c_to_a, send_mpst_c_to_b, =>
+    Branching0fromCtoA, Branching0fromCtoB, =>
+    RoleA, RoleB, =>
+    RoleC, SessionMpstThree, 3, 3
+);
+
+fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, recv_mpst_a_from_c, {
+        Branching0fromCtoA::Done(s) => {
+            close_mpst_multi(s)
+        },
+        Branching0fromCtoA::More(s) => {
+            let (_, s) = recv_mpst!(s, next_c, SessionMpstThree, 3, 2)()?;
+            let s = send_mpst!(s, (), next_c, SessionMpstThree, 3, 2);
+            let (_, s) = recv_mpst!(s, next_b, SessionMpstThree, 3, 1)()?;
+            let s = send_mpst!(s, (), next_b, SessionMpstThree, 3, 1);
+            simple_five_endpoint_a(s)
+        },
+    })
 }
 
-#[test]
-#[should_panic]
-fn unit_tests_panic_test_checker_panic_stack() {
-    unit::checker_panic::test_checker_panic_stack();
+fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, recv_mpst_b_from_c, {
+        Branching0fromCtoB::Done(s) => {
+            close_mpst_multi(s)
+        },
+        Branching0fromCtoB::More(s) => {
+            let (_, s) = recv_mpst!(s, next_c, SessionMpstThree, 3, 2)()?;
+            let s = send_mpst!(s, (), next_c, SessionMpstThree, 3, 2);
+            let s = send_mpst!(s, (), next_a, SessionMpstThree, 3, 1);
+            let (_, s) = recv_mpst!(s, next_a, SessionMpstThree, 3, 1)()?;
+            simple_five_endpoint_b(s)
+        },
+    })
 }
 
-#[test]
-#[should_panic]
-fn unit_tests_panic_test_checker_panic_name() {
-    unit::checker_panic::test_checker_panic_name();
+fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+    recurs_c(s, SIZE)
 }
 
-#[test]
-fn cases_tests_binary() {
-    // Binary
-    cases::binary::ping_works();
-    cases::binary::head_str();
-    cases::binary::tail_str();
-    cases::binary::new_types();
-    cases::binary::new_types_cancel();
-    cases::binary::simple_calc_works();
-    cases::binary::nice_calc_works();
-    cases::binary::cancel_recv_works();
-    cases::binary::cancel_send_works();
-    cases::binary::delegation_works();
-    cases::binary::closure_works();
-    cases::binary::recursion_works();
-    cases::binary::selection_works();
-    cases::binary::cancel_recursion();
+fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
+    match index {
+        0 => {
+            let s = done_from_c_to_all(s);
+
+            close_mpst_multi(s)
+        }
+        i => {
+            let s = more_from_c_to_all(s);
+
+            let s = send_mpst!(s, (), next_a, SessionMpstThree, 3, 1);
+            let (_, s) = recv_mpst!(s, next_a, SessionMpstThree, 3, 1)()?;
+            let s = send_mpst!(s, (), next_b, SessionMpstThree, 3, 2);
+            let (_, s) = recv_mpst!(s, next_b, SessionMpstThree, 3, 2)()?;
+
+            recurs_c(s, i - 1)
+        }
+    }
 }
 
-#[test]
-fn cases_tests_mpst_simple() {
-    // Simple
-    cases::simple::simple_triple_endpoints();
-    cases::simple::simple_triple_endpoints_checker();
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+    let (thread_a, thread_b, thread_c) = fork_mpst(
+        simple_five_endpoint_a,
+        simple_five_endpoint_b,
+        simple_five_endpoint_c,
+    );
 
-    // Choose
-    cases::choose::simple_choice();
-    cases::choose::simple_choice_checker();
+    thread_a.join()?;
+    thread_b.join()?;
+    thread_c.join()?;
 
-    // Choose 2 A
-    cases::a_choose_2::double_choice();
-    cases::a_choose_2::double_choice_checker();
-
-    // Choose 2 A
-    cases::b_choose_2::double_choice();
-    cases::b_choose_2::double_choice_checker();
-
-    // Choose 2 A
-    cases::c_choose_2::double_choice();
-    cases::c_choose_2::double_choice_checker();
-
-    // Nested choice
-    // cases::nested_choices;
-
-    // Usecase simple A
-    cases::a_usecase::run_a_usecase_left();
-    cases::a_usecase::run_a_usecase_right();
-    cases::a_usecase::run_a_usecase_checker();
-
-    // Usecase simple B
-    cases::b_usecase::run_b_usecase_left();
-    cases::b_usecase::run_b_usecase_right();
-    cases::b_usecase::run_b_usecase_checker();
-
-    // Usecase simple C
-    cases::c_usecase::run_c_usecase_left();
-    cases::c_usecase::run_c_usecase_right();
-    cases::c_usecase::run_c_usecase_checker();
-
-    // Usecase recursive A
-    cases::a_usecase_recursive::run_a_usecase_recursive();
-    cases::a_usecase_recursive::run_a_usecase_recursive_checker();
-
-    // Usecase recursive B
-    cases::b_usecase_recursive::run_b_usecase_recursive();
-    cases::b_usecase_recursive::run_b_usecase_recursive_checker();
-
-    // Usecase recursive C
-    cases::c_usecase_recursive::run_c_usecase_recursive();
-    cases::c_usecase_recursive::run_c_usecase_recursive_checker();
+    Ok(())
 }
 
-#[test]
-fn cases_tests_mpst_macro() {
-    // Macro basics
-    cases::macro_basics::basic_macros_send();
-    cases::macro_basics::basic_macros_recv();
+/////////////////////////
 
-    // Macro choice
-    cases::macro_choice::run_usecase_right();
-    cases::macro_choice::run_usecase_left();
+static SIZE: i64 = 15;
 
-    // Macro recursive
-    cases::macro_recursive::run_macro_recursive();
-
-    // Macro multi basics
-    cases::macro_multi_sessionmpst::basic_macros();
-
-    // Macro multi send-recv
-    cases::macro_multi_send_recv_sessionmpst::test_new_send();
-
-    // Macro multi choice
-    cases::macro_multi_choice::test_new_choice_full();
-    cases::macro_multi_choice::test_new_choice_close();
-
-    // Macro multi recursion
-    cases::macro_multi_recursion::new_run_usecase_recursive();
+fn main() {
+    assert!(all_mpst().is_ok());
 }
-
-#[test]
-fn scribble_tests() {
-    scribble::top_down::top_down_approach();
-    scribble::top_down_recursive::top_down_approach();
-}
-
-#[test]
-fn canceling() {
-    cancel::cancel_1::main();
-    cancel::cancel_2::main();
-    cancel::cancel_3::main();
-    cancel::cancel_4::main();
-    cancel::cancel_5::main();
-    cancel::cancel_6::main();
-    cancel::cancel_7::main();
-    cancel::cancel_8::main();
-    cancel::cancel_9::main();
-    cancel::cancel_10::main();
-    cancel::cancel_11::main();
-}
-
-#[test]
-fn tests() {
-    let t = trybuild::TestCases::new();
-    // Infinite types
-    t.pass("tests/infinite_type/work.rs");
-    t.compile_fail("tests/infinite_type/fail.rs");
-    t.compile_fail("tests/infinite_type/fail_2.rs");
-}
-
-#[test]
-fn tcp() {
-    tcp::binary::main();
-    tcp::binary_fail::main();
-}
-
-#[test]
-fn http() {
-    http::simple_http_get::main();
-    http::simple_http_post::main();
-    http::simple_https_get::main();
-    http::complex_https_get::main();
-    http::binary_http_get::main();
-    http::o_auth::main();
-}
-
-pub fn main() {}

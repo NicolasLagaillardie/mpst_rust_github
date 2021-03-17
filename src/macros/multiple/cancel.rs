@@ -4,7 +4,7 @@
 /// Cancels a session
 #[macro_export]
 macro_rules! send_cancel {
-    ($func_name:ident, $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $name:ident, $struct_name:ident, $nsessions:literal, $msg:expr) => {
         mpst_seq::seq!(N in 1..$nsessions ! 1 {
             fn $func_name<%(S#N:0,)()0* R>(
                 s: $struct_name<
@@ -16,7 +16,7 @@ macro_rules! send_cancel {
                     R,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-            )
+            ) -> std::result::Result<(), Box<dyn std::error::Error>>
             where
                 %(
                     S#N:0: mpstthree::binary::struct_trait::Session,
@@ -26,9 +26,10 @@ macro_rules! send_cancel {
             {
                 s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap();;
                 mpstthree::binary::cancel::cancel(s);
+                panic!("{:?}", $msg);
             }
         });
-    }
+    };
 }
 
 /// Broadcast a session from the first participant to

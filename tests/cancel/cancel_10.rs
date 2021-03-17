@@ -58,7 +58,7 @@ create_recv_mpst_session_bundle!(
     RoleD, SessionMpstFour, 4
 );
 
-send_cancel!(cancel_mpst, RoleD, SessionMpstFour, 4);
+send_cancel!(cancel_mpst, RoleD, SessionMpstFour, 4, "Session dropped");
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -103,12 +103,12 @@ type EndpointD = SessionMpstFour<
     NameD,
 >;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn simple_four_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleA, SessionMpstFour, 4);
     Ok(())
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn simple_four_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_b_from_d, {
         Branching0fromDtoB::Done(s) => {
             close_mpst_multi(s)
@@ -118,12 +118,12 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_check_b_to_d((), s)?;
             let s = send_check_b_to_c((), s)?;
             let (_, s) = recv_mpst_b_from_c(s)?;
-            simple_five_endpoint_b(s)
+            simple_four_endpoint_b(s)
         },
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn simple_four_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_c_from_d, {
         Branching0fromDtoC::Done(s) => {
             close_mpst_multi(s)
@@ -133,12 +133,12 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let s = send_check_c_to_d((), s)?;
             let (_, s) = recv_mpst_c_from_b(s)?;
             let s = send_check_c_to_b((), s)?;
-            simple_five_endpoint_c(s)
+            simple_four_endpoint_c(s)
         },
     })
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn simple_four_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     recurs_d(s, SIZE)
 }
 
@@ -162,11 +162,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         }
-        5 => {
-            cancel_mpst(s);
-
-            panic!("Session dropped");
-        }
+        5 => cancel_mpst(s),
         i => {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
@@ -195,10 +191,10 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
 
 pub fn main() {
     let (thread_a, thread_b, thread_c, thread_d) = fork_mpst(
-        simple_five_endpoint_a,
-        simple_five_endpoint_b,
-        simple_five_endpoint_c,
-        simple_five_endpoint_d,
+        simple_four_endpoint_a,
+        simple_four_endpoint_b,
+        simple_four_endpoint_c,
+        simple_four_endpoint_d,
     );
 
     assert!(thread_a.join().is_err());

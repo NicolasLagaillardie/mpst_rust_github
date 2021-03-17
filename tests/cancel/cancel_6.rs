@@ -61,7 +61,7 @@ create_recv_mpst_session_bundle!(
     4
 );
 
-send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4);
+send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4, "Session dropped");
 
 // Create close function
 close_mpst!(close_mpst_multi, SessionMpstFour, 4);
@@ -87,12 +87,10 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    cancel_mpst(s);
+    cancel_mpst(s)
 
     // let (_, s) = recv_mpst_b_from_a(s)?;
     // close_mpst_multi(s)
-
-    panic!("Session dropped");
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {

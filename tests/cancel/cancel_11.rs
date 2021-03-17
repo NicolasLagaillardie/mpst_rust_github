@@ -9,7 +9,7 @@ use mpstthree::{
 use rand::random;
 use std::error::Error;
 
-// Create new SessionMpst for four participants
+// Create new SessionMpst for three participants
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
 // Create new roles
@@ -42,7 +42,7 @@ create_recv_mpst_session_bundle!(
     RoleC, SessionMpstThree, 3
 );
 
-send_cancel!(cancel_mpst, RoleC, SessionMpstThree, 3);
+send_cancel!(cancel_mpst, RoleC, SessionMpstThree, 3, "Session dropped");
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -65,24 +65,24 @@ type EndpointA = SessionMpstThree<End, End, RoleEnd, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoD, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleB<RoleB<RoleEnd>>, NameC>;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleA, SessionMpstThree, 3);
     Ok(())
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromCtoB::More(s) => {
             let s = send_check_b_to_c(random(), s)?;
-            simple_five_endpoint_b(s)
+            simple_three_endpoint_b(s)
         },
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     recurs_d(s, SIZE)
 }
 
@@ -103,10 +103,7 @@ fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         }
-        5 => {
-            cancel_mpst(s);
-            panic!("Session dropped");
-        }
+        5 => cancel_mpst(s),
         i => {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
@@ -129,9 +126,9 @@ fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
 pub fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        simple_five_endpoint_a,
-        simple_five_endpoint_b,
-        simple_five_endpoint_c,
+        simple_three_endpoint_a,
+        simple_three_endpoint_b,
+        simple_three_endpoint_c,
     );
 
     assert!(thread_a.join().is_err());
