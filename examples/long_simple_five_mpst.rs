@@ -181,6 +181,15 @@ type Choose0fromEtoA = Send<Branching0fromEtoA, End>;
 type Choose0fromEtoB = Send<Branching0fromEtoB, End>;
 type Choose0fromEtoC = Send<Branching0fromEtoC, End>;
 type Choose0fromEtoD = Send<Branching0fromEtoD, End>;
+type EndpointDoneE = SessionMpstFive<End, End, End, End, RoleEnd, NameE>;
+type EndpointMoreE = SessionMpstFive<
+    Send<(), Recv<(), Choose0fromEtoA>>,
+    Send<(), Recv<(), Choose0fromEtoB>>,
+    Send<(), Recv<(), Choose0fromEtoC>>,
+    Send<(), Recv<(), Choose0fromEtoD>>,
+    R2A<R2B<R2C<R2D<StackRecurs>>>>,
+    NameE,
+>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstFive<End, End, End, RecursAtoE, RoleE<RoleEnd>, NameA>;
@@ -197,16 +206,6 @@ type EndpointE = SessionMpstFive<
     NameE,
 >;
 
-// Needed for create_fn_choose_mpst_multi_to_all_bundle
-type EndpointDoneE = SessionMpstFive<End, End, End, End, RoleEnd, NameE>;
-type EndpointMoreE = SessionMpstFive<
-    Send<(), Recv<(), Choose0fromEtoA>>,
-    Send<(), Recv<(), Choose0fromEtoB>>,
-    Send<(), Recv<(), Choose0fromEtoC>>,
-    Send<(), Recv<(), Choose0fromEtoD>>,
-    R2A<R2B<R2C<R2D<StackRecurs>>>>,
-    NameE,
->;
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_e_to_all, more_from_e_to_all, =>
     Done, More, =>

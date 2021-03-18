@@ -2804,6 +2804,74 @@ type Choose0fromTtoP = Send<Branching0fromTtoP, End>;
 type Choose0fromTtoQ = Send<Branching0fromTtoQ, End>;
 type Choose0fromTtoR = Send<Branching0fromTtoR, End>;
 type Choose0fromTtoS = Send<Branching0fromTtoS, End>;
+type EndpointDoneT = SessionMpstTwenty<
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    End,
+    RoleEnd,
+    NameT,
+>;
+type EndpointMoreT = SessionMpstTwenty<
+    Send<(), Recv<(), Choose0fromTtoA>>,
+    Send<(), Recv<(), Choose0fromTtoB>>,
+    Send<(), Recv<(), Choose0fromTtoC>>,
+    Send<(), Recv<(), Choose0fromTtoD>>,
+    Send<(), Recv<(), Choose0fromTtoE>>,
+    Send<(), Recv<(), Choose0fromTtoF>>,
+    Send<(), Recv<(), Choose0fromTtoG>>,
+    Send<(), Recv<(), Choose0fromTtoH>>,
+    Send<(), Recv<(), Choose0fromTtoI>>,
+    Send<(), Recv<(), Choose0fromTtoJ>>,
+    Send<(), Recv<(), Choose0fromTtoK>>,
+    Send<(), Recv<(), Choose0fromTtoL>>,
+    Send<(), Recv<(), Choose0fromTtoM>>,
+    Send<(), Recv<(), Choose0fromTtoN>>,
+    Send<(), Recv<(), Choose0fromTtoO>>,
+    Send<(), Recv<(), Choose0fromTtoP>>,
+    Send<(), Recv<(), Choose0fromTtoQ>>,
+    Send<(), Recv<(), Choose0fromTtoR>>,
+    Send<(), Recv<(), Choose0fromTtoS>>,
+    R2A<
+        R2B<
+            R2C<
+                R2D<
+                    R2E<
+                        R2F<
+                            R2G<
+                                R2H<
+                                    R2I<
+                                        R2J<
+                                            R2K<
+                                                R2L<R2M<R2N<R2O<R2P<R2Q<R2R<R2S<StackRecurs>>>>>>>>,
+                                            >,
+                                        >,
+                                    >,
+                                >,
+                            >,
+                        >,
+                    >,
+                >,
+            >,
+        >,
+    >,
+    NameT,
+>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstTwenty<
@@ -3296,75 +3364,6 @@ type EndpointT = SessionMpstTwenty<
     NameT,
 >;
 
-// Needed for create_fn_choose_mpst_multi_to_all_bundle
-type EndpointDoneT = SessionMpstTwenty<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RoleEnd,
-    NameT,
->;
-type EndpointMoreT = SessionMpstTwenty<
-    Send<(), Recv<(), Choose0fromTtoA>>,
-    Send<(), Recv<(), Choose0fromTtoB>>,
-    Send<(), Recv<(), Choose0fromTtoC>>,
-    Send<(), Recv<(), Choose0fromTtoD>>,
-    Send<(), Recv<(), Choose0fromTtoE>>,
-    Send<(), Recv<(), Choose0fromTtoF>>,
-    Send<(), Recv<(), Choose0fromTtoG>>,
-    Send<(), Recv<(), Choose0fromTtoH>>,
-    Send<(), Recv<(), Choose0fromTtoI>>,
-    Send<(), Recv<(), Choose0fromTtoJ>>,
-    Send<(), Recv<(), Choose0fromTtoK>>,
-    Send<(), Recv<(), Choose0fromTtoL>>,
-    Send<(), Recv<(), Choose0fromTtoM>>,
-    Send<(), Recv<(), Choose0fromTtoN>>,
-    Send<(), Recv<(), Choose0fromTtoO>>,
-    Send<(), Recv<(), Choose0fromTtoP>>,
-    Send<(), Recv<(), Choose0fromTtoQ>>,
-    Send<(), Recv<(), Choose0fromTtoR>>,
-    Send<(), Recv<(), Choose0fromTtoS>>,
-    R2A<
-        R2B<
-            R2C<
-                R2D<
-                    R2E<
-                        R2F<
-                            R2G<
-                                R2H<
-                                    R2I<
-                                        R2J<
-                                            R2K<
-                                                R2L<R2M<R2N<R2O<R2P<R2Q<R2R<R2S<StackRecurs>>>>>>>>,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
-        >,
-    >,
-    NameT,
->;
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_t_to_all, more_from_t_to_all, =>
     Done, More, =>

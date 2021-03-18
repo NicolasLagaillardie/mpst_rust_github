@@ -301,6 +301,17 @@ type Choose0fromGtoC = Send<Branching0fromGtoC, End>;
 type Choose0fromGtoD = Send<Branching0fromGtoD, End>;
 type Choose0fromGtoE = Send<Branching0fromGtoE, End>;
 type Choose0fromGtoF = Send<Branching0fromGtoF, End>;
+type EndpointDoneG = SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameG>;
+type EndpointMoreG = SessionMpstSeven<
+    Send<(), Recv<(), Choose0fromGtoA>>,
+    Send<(), Recv<(), Choose0fromGtoB>>,
+    Send<(), Recv<(), Choose0fromGtoC>>,
+    Send<(), Recv<(), Choose0fromGtoD>>,
+    Send<(), Recv<(), Choose0fromGtoE>>,
+    Send<(), Recv<(), Choose0fromGtoF>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<StackRecurs>>>>>>,
+    NameG,
+>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstSeven<End, End, End, End, End, RecursAtoG, RoleG<RoleEnd>, NameA>;
@@ -321,18 +332,6 @@ type EndpointG = SessionMpstSeven<
     NameG,
 >;
 
-// Needed for create_fn_choose_mpst_multi_to_all_bundle
-type EndpointDoneG = SessionMpstSeven<End, End, End, End, End, End, RoleEnd, NameG>;
-type EndpointMoreG = SessionMpstSeven<
-    Send<(), Recv<(), Choose0fromGtoA>>,
-    Send<(), Recv<(), Choose0fromGtoB>>,
-    Send<(), Recv<(), Choose0fromGtoC>>,
-    Send<(), Recv<(), Choose0fromGtoD>>,
-    Send<(), Recv<(), Choose0fromGtoE>>,
-    Send<(), Recv<(), Choose0fromGtoF>>,
-    R2A<R2B<R2C<R2D<R2E<R2F<StackRecurs>>>>>>,
-    NameG,
->;
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_g_to_all, more_from_g_to_all, =>
     Done, More, =>

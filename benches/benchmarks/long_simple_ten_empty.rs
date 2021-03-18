@@ -508,6 +508,20 @@ type Choose0fromJtoF = Send<Branching0fromJtoF, End>;
 type Choose0fromJtoG = Send<Branching0fromJtoG, End>;
 type Choose0fromJtoH = Send<Branching0fromJtoH, End>;
 type Choose0fromJtoI = Send<Branching0fromJtoI, End>;
+type EndpointDoneJ = SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>;
+type EndpointMoreJ = SessionMpstTen<
+    Send<(), Recv<(), Choose0fromJtoA>>,
+    Send<(), Recv<(), Choose0fromJtoB>>,
+    Send<(), Recv<(), Choose0fromJtoC>>,
+    Send<(), Recv<(), Choose0fromJtoD>>,
+    Send<(), Recv<(), Choose0fromJtoE>>,
+    Send<(), Recv<(), Choose0fromJtoF>>,
+    Send<(), Recv<(), Choose0fromJtoG>>,
+    Send<(), Recv<(), Choose0fromJtoH>>,
+    Send<(), Recv<(), Choose0fromJtoI>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<StackRecurs>>>>>>>>>,
+    NameJ,
+>;
 
 // Creating the MP sessions
 type EndpointA =
@@ -543,21 +557,6 @@ type EndpointJ = SessionMpstTen<
     NameJ,
 >;
 
-// Needed for create_fn_choose_mpst_multi_to_all_bundle
-type EndpointDoneJ = SessionMpstTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>;
-type EndpointMoreJ = SessionMpstTen<
-    Send<(), Recv<(), Choose0fromJtoA>>,
-    Send<(), Recv<(), Choose0fromJtoB>>,
-    Send<(), Recv<(), Choose0fromJtoC>>,
-    Send<(), Recv<(), Choose0fromJtoD>>,
-    Send<(), Recv<(), Choose0fromJtoE>>,
-    Send<(), Recv<(), Choose0fromJtoF>>,
-    Send<(), Recv<(), Choose0fromJtoG>>,
-    Send<(), Recv<(), Choose0fromJtoH>>,
-    Send<(), Recv<(), Choose0fromJtoI>>,
-    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<StackRecurs>>>>>>>>>,
-    NameJ,
->;
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_j_to_all, more_from_j_to_all, =>
     Done, More, =>

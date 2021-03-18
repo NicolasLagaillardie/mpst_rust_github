@@ -47,6 +47,13 @@ type RecursBtoC = Recv<Branching0fromCtoB, End>;
 // C
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
+type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
+type EndpointMoreC = SessionMpstThree<
+    Send<(), Recv<(), Choose0fromCtoA>>,
+    Send<(), Recv<(), Choose0fromCtoB>>,
+    R2A<R2B<StackRecurs>>,
+    NameC,
+>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
@@ -73,14 +80,6 @@ create_recv_mpst_session_bundle!(
     RoleB, SessionMpstThree, 3
 );
 
-// Needed for create_fn_choose_mpst_multi_to_all_bundle
-type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
-type EndpointMoreC = SessionMpstThree<
-    Send<(), Recv<(), Choose0fromCtoA>>,
-    Send<(), Recv<(), Choose0fromCtoB>>,
-    R2A<R2B<StackRecurs>>,
-    NameC,
->;
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
     Done, More, =>

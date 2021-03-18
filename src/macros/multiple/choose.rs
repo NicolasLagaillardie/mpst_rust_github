@@ -869,7 +869,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
     };
     (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($receiver,)+) : ($($label,)+) : ($($receiver,)+) {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($receiver,)+) : ($($label,)+) : ($($receiver,)+) { // The first ($($receiver,)+) is unused
             fn $fn_name(
                 s: $sessionmpst_name<
                     #(

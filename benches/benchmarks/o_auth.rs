@@ -54,8 +54,7 @@ create_send_mpst_session_bundle!(
 );
 // C
 create_send_mpst_session_bundle!(
-    send_mpst_c_to_a, RoleA, next_a, 1 |
-    send_mpst_c_to_s, RoleS, next_s, 2 | =>
+    send_mpst_c_to_a, RoleA, next_a, 1 | =>
     RoleC, SessionMpstThree, 3
 );
 // S

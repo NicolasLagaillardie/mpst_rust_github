@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_http_to_all,
+    bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
     create_multiple_normal_role_short, create_recv_http_session_bundle,
     create_send_mpst_http_bundle, offer_http_mpst,
 };
@@ -27,8 +27,8 @@ use std::marker;
 //         }
 //         or
 //         {
-//              again(Int) from A to S;
-//              again(Int) from S to C;
+//              Again(Int) from A to S;
+//              Again(Int) from S to C;
 //         }
 //     }
 //     or
@@ -48,19 +48,16 @@ create_multiple_normal_role_short!(A, C, S);
 // Create new send functions
 // A
 create_send_mpst_http_bundle!(
-    send_http_a_to_c, RoleC, next_c, 1 |
     send_http_a_to_s, RoleS, next_s, 2 | =>
     RoleA, SessionMpstThree, 3
 );
 // C
 create_send_mpst_http_bundle!(
-    send_http_c_to_a, RoleA, next_a, 1 |
-    send_http_c_to_s, RoleS, next_s, 2 | =>
+    send_http_c_to_a, RoleA, next_a, 1 | =>
     RoleC, SessionMpstThree, 3
 );
 // S
 create_send_mpst_http_bundle!(
-    send_http_s_to_a, RoleA, next_a, 1 |
     send_http_s_to_c, RoleC, next_c, 2 | =>
     RoleS, SessionMpstThree, 3
 );
@@ -80,8 +77,7 @@ create_recv_http_session_bundle!(
 );
 // S
 create_recv_http_session_bundle!(
-    recv_http_s_to_a, RoleA, next_a, 1 |
-    recv_http_s_to_c, RoleC, next_c, 2 | =>
+    recv_http_s_to_a, RoleA, next_a, 1 | =>
     RoleS, SessionMpstThree, 3
 );
 
@@ -110,6 +106,13 @@ enum Branching0fromStoA<N: marker::Send> {
     ),
     Done(SessionMpstThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
 }
+type EndpointAuthA<N> = SessionMpstThree<End, Send<N, End>, RoleS<RoleEnd>, NameA>;
+type EndpointAgainA<N> = SessionMpstThree<
+    Recv<N, Choose1fromAtoC<N>>,
+    Send<N, Choose1fromAtoS<N>>,
+    RoleS<RoleC<RoleC<RoleS<RoleEnd>>>>,
+    NameA,
+>;
 // C
 enum Branching0fromStoC<N: marker::Send> {
     Login(
@@ -147,6 +150,9 @@ enum Branching1fromAtoS<N: marker::Send> {
     ),
 }
 type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
+type EndpointDoneS<N> = SessionMpstThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>;
+type EndpointLoginS<N> =
+    SessionMpstThree<Recv<Branching1fromAtoS<N>, End>, Send<N, End>, RoleC<RoleA<RoleEnd>>, NameS>;
 
 // Creating the MP sessions
 // A
@@ -164,6 +170,24 @@ type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, Role
 type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
 type EndpointS<N> =
     SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleA<RoleC<RoleEnd>>, NameS>;
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_s_to_all, login_from_s_to_all, =>
+    Done, Login, =>
+    EndpointDoneS<i32>, EndpointLoginS<i32>, =>
+    Branching0fromStoA::<i32>, Branching0fromStoC::<i32>, =>
+    RoleA, RoleC, =>
+    RoleS, SessionMpstThree, 3, 3
+);
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    auth_from_a_to_all, again_from_a_to_all, =>
+    Auth, Again, =>
+    EndpointAuthA<i32>, EndpointAgainA<i32>, =>
+    Branching1fromAtoC::<i32>, Branching1fromAtoS::<i32>, =>
+    RoleC, RoleS, =>
+    RoleA, SessionMpstThree, 3, 1
+);
 
 // Functions
 fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -184,37 +208,13 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     let expected = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
-        let s = choose_mpst_multi_http_to_all!(
-            s,
-            send_http_a_to_c,
-            send_http_a_to_s, =>
-            Branching1fromAtoC::<i32>::Auth,
-            Branching1fromAtoS::<i32>::Auth, =>
-            RoleC,
-            RoleS, =>
-            RoleA,
-            SessionMpstThree,
-            3,
-            1
-        );
+        let s = auth_from_a_to_all(s);
 
         let (s, _req) = send_http_a_to_s(0, s, false, Method::GET, "", vec![("", "")], "");
 
         close_mpst_multi(s)
     } else {
-        let s = choose_mpst_multi_http_to_all!(
-            s,
-            send_http_a_to_c,
-            send_http_a_to_s, =>
-            Branching1fromAtoC::<i32>::Again,
-            Branching1fromAtoS::<i32>::Again, =>
-            RoleC,
-            RoleS, =>
-            RoleA,
-            SessionMpstThree,
-            3,
-            1
-        );
+        let s = again_from_a_to_all(s);
 
         let (s, _req) = send_http_a_to_s(1, s, false, Method::GET, "", vec![("", "")], "");
 
@@ -223,8 +223,6 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    println!("C");
-
     offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
             let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
@@ -294,40 +292,14 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=6);
 
-    println!("choice: {:?}", choice);
-
     if choice == 1 {
-        let s = choose_mpst_multi_http_to_all!(
-            s,
-            send_http_s_to_a,
-            send_http_s_to_c, =>
-            Branching0fromStoA::<i32>::Done,
-            Branching0fromStoC::<i32>::Done, =>
-            RoleA,
-            RoleC, =>
-            RoleS,
-            SessionMpstThree,
-            3,
-            3
-        );
+        let s = done_from_s_to_all(s);
 
         let (s, _req) = send_http_s_to_c(0, s, false, Method::GET, "", vec![("", "")], "");
 
         close_mpst_multi(s)
     } else {
-        let s = choose_mpst_multi_http_to_all!(
-            s,
-            send_http_s_to_a,
-            send_http_s_to_c,  =>
-            Branching0fromStoA::<i32>::Login,
-            Branching0fromStoC::<i32>::Login, =>
-            RoleA,
-            RoleC, =>
-            RoleS,
-            SessionMpstThree,
-            3,
-            3
-        );
+        let s = login_from_s_to_all(s);
 
         let (s, _req) = send_http_s_to_c(1, s, false, Method::GET, "", vec![("", "")], "");
 

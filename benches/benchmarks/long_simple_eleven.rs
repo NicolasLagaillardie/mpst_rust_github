@@ -589,6 +589,22 @@ type Choose0fromKtoG = Send<Branching0fromKtoG, End>;
 type Choose0fromKtoH = Send<Branching0fromKtoH, End>;
 type Choose0fromKtoI = Send<Branching0fromKtoI, End>;
 type Choose0fromKtoJ = Send<Branching0fromKtoJ, End>;
+type EndpointDoneK =
+    SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameK>;
+type EndpointMoreK = SessionMpstEleven<
+    Send<(), Recv<(), Choose0fromKtoA>>,
+    Send<(), Recv<(), Choose0fromKtoB>>,
+    Send<(), Recv<(), Choose0fromKtoC>>,
+    Send<(), Recv<(), Choose0fromKtoD>>,
+    Send<(), Recv<(), Choose0fromKtoE>>,
+    Send<(), Recv<(), Choose0fromKtoF>>,
+    Send<(), Recv<(), Choose0fromKtoG>>,
+    Send<(), Recv<(), Choose0fromKtoH>>,
+    Send<(), Recv<(), Choose0fromKtoI>>,
+    Send<(), Recv<(), Choose0fromKtoJ>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<R2J<StackRecurs>>>>>>>>>>,
+    NameK,
+>;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstEleven<
@@ -747,23 +763,6 @@ type EndpointK = SessionMpstEleven<
     NameK,
 >;
 
-// Needed for create_fn_choose_mpst_multi_to_all_bundle
-type EndpointDoneK =
-    SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameK>;
-type EndpointMoreK = SessionMpstEleven<
-    Send<(), Recv<(), Choose0fromKtoA>>,
-    Send<(), Recv<(), Choose0fromKtoB>>,
-    Send<(), Recv<(), Choose0fromKtoC>>,
-    Send<(), Recv<(), Choose0fromKtoD>>,
-    Send<(), Recv<(), Choose0fromKtoE>>,
-    Send<(), Recv<(), Choose0fromKtoF>>,
-    Send<(), Recv<(), Choose0fromKtoG>>,
-    Send<(), Recv<(), Choose0fromKtoH>>,
-    Send<(), Recv<(), Choose0fromKtoI>>,
-    Send<(), Recv<(), Choose0fromKtoJ>>,
-    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<R2J<StackRecurs>>>>>>>>>>,
-    NameK,
->;
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_k_to_all, more_from_k_to_all, =>
     Done, More, =>
