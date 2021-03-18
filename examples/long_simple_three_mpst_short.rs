@@ -125,7 +125,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = more_from_c_to_all(s);
 
-            let s = send_mpst!(s, (), next_a, SessionMpstThree, 3, 1);
+            let s = send_mpst!(s, (), next_a, SessionMpstThree, 3, 1); // generates much more lines in the end than a single use of
+                                                                       // create_send_mpst_http_bundle, but faster to write for users
             let (_, s) = recv_mpst!(s, next_a, SessionMpstThree, 3, 1)()?;
             let s = send_mpst!(s, (), next_b, SessionMpstThree, 3, 2);
             let (_, s) = recv_mpst!(s, next_b, SessionMpstThree, 3, 2)()?;

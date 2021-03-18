@@ -383,6 +383,7 @@ macro_rules! create_multiple_broadcast_role {
 ///  * RoleXDual
 ///  * next_x
 ///  * next_x_dual
+/// If you want to specify other names, please use [`mpstthree::create_normal_role`].
 ///
 /// # Arguments
 ///
@@ -397,6 +398,7 @@ macro_rules! create_multiple_broadcast_role {
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::create_normal_role`]: ../macro.create_normal_role!.html
 #[macro_export]
 macro_rules! create_normal_role_short {
     ($role_name:ident) => {
@@ -525,6 +527,7 @@ macro_rules! create_normal_role_short {
 ///  * RoleXDual
 ///  * next_x
 ///  * next_x_dual
+/// If you want to specify other names, please use [`mpstthree::create_multiple_normal_role`].
 ///
 /// # Arguments
 ///
@@ -539,6 +542,7 @@ macro_rules! create_normal_role_short {
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::create_normal_role_short`]: ../macro.create_normal_role_short.html
 #[macro_export]
 macro_rules! create_multiple_normal_role_short {
     ($($role_name:ident),+ $(,)? ) => {
@@ -554,6 +558,7 @@ macro_rules! create_multiple_normal_role_short {
 ///  * RoleAlltoX
 ///  * next_x_to_all
 ///  * next_all_to_x
+/// If you want to specify other names, please use [`mpstthree::create_broadcast_role`].
 ///
 /// # Arguments
 ///
@@ -568,6 +573,7 @@ macro_rules! create_multiple_normal_role_short {
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::create_broadcast_role`]: ../macro.create_broadcast_role.html
 #[macro_export]
 macro_rules! create_broadcast_role_short {
     ($role_name:ident) => {
@@ -731,6 +737,8 @@ macro_rules! create_broadcast_role_short {
 ///  * RoleAlltoX
 ///  * next_x_to_all
 ///  * next_all_to_x
+/// If you want to specify other names, please use
+/// [`mpstthree::create_multiple_broadcast_role_short`]
 ///
 /// # Arguments
 ///
@@ -745,6 +753,8 @@ macro_rules! create_broadcast_role_short {
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::create_multiple_broadcast_role_short`]:
+/// ../macro.create_multiple_broadcast_role_short.html
 #[macro_export]
 macro_rules! create_multiple_broadcast_role_short {
     ($($role_name:ident),+ $(,)? ) => {

@@ -823,7 +823,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 }
 
 /// Create *choose* fuunctions, to choose among different sessions that are provided, for protocols
-/// with more than 3 participants
+/// with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -840,7 +840,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///
 /// # Example
 ///
-/// Available on the *long_simple_three_mpst* examples.
+/// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
 /// type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
