@@ -33,12 +33,12 @@ type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
 type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
 
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, next_a, RoleD);
-create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, next_d, RoleA);
+create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, RoleD);
+create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, RoleA);
 
 // Create new recv functions
-create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, next_a, RoleD);
-create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, next_d, RoleA);
+create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, RoleD);
+create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, RoleA);
 
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {

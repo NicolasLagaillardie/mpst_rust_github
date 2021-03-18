@@ -48,36 +48,36 @@ create_multiple_normal_role_short!(A, C, S);
 // Create new send functions
 // A
 create_send_mpst_http_bundle!(
-    send_http_a_to_s, RoleS, next_s, 2 | =>
+    send_http_a_to_s, RoleS, 2 | =>
     RoleA, SessionMpstThree, 3
 );
 // C
 create_send_mpst_http_bundle!(
-    send_http_c_to_a, RoleA, next_a, 1 | =>
+    send_http_c_to_a, RoleA, 1 | =>
     RoleC, SessionMpstThree, 3
 );
 // S
 create_send_mpst_http_bundle!(
-    send_http_s_to_c, RoleC, next_c, 2 | =>
+    send_http_s_to_c, RoleC, 2 | =>
     RoleS, SessionMpstThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_http_session_bundle!(
-    recv_http_a_to_c, RoleC, next_c, 1 |
-    recv_http_a_to_s, RoleS, next_s, 2 | =>
+    recv_http_a_to_c, RoleC, 1 |
+    recv_http_a_to_s, RoleS, 2 | =>
     RoleA, SessionMpstThree, 3
 );
 // C
 create_recv_http_session_bundle!(
-    recv_http_c_to_a, RoleA, next_a, 1 |
-    recv_http_c_to_s, RoleS, next_s, 2 | =>
+    recv_http_c_to_a, RoleA, 1 |
+    recv_http_c_to_s, RoleS, 2 | =>
     RoleC, SessionMpstThree, 3
 );
 // S
 create_recv_http_session_bundle!(
-    recv_http_s_to_a, RoleA, next_a, 1 | =>
+    recv_http_s_to_a, RoleA, 1 | =>
     RoleS, SessionMpstThree, 3
 );
 

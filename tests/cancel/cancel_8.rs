@@ -21,40 +21,40 @@ create_normal_role!(RoleD, next_d, RoleDDual, next_d_dual);
 // Create new send functions
 // B
 create_send_check_cancel_bundle!(
-    send_check_b_to_c, RoleC, next_c, 2 |
-    send_check_b_to_d, RoleD, next_d, 3 | =>
+    send_check_b_to_c, RoleC, 2 |
+    send_check_b_to_d, RoleD, 3 | =>
     RoleB, SessionMpstFour, 4
 );
 // C
 create_send_check_cancel_bundle!(
-    send_check_c_to_b, RoleB, next_b, 2 |
-    send_check_c_to_d, RoleD, next_d, 3 | =>
+    send_check_c_to_b, RoleB, 2 |
+    send_check_c_to_d, RoleD, 3 | =>
     RoleC, SessionMpstFour, 4
 );
 // D
 create_send_check_cancel_bundle!(
-    send_check_d_to_b, RoleB, next_b, 2 |
-    send_check_d_to_c, RoleC, next_c, 3 | =>
+    send_check_d_to_b, RoleB, 2 |
+    send_check_d_to_c, RoleC, 3 | =>
     RoleD, SessionMpstFour, 4
 );
 
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_c, RoleC, next_c, 2 |
-    recv_mpst_b_from_d, RoleD, next_d, 3 | =>
+    recv_mpst_b_from_c, RoleC, 2 |
+    recv_mpst_b_from_d, RoleD, 3 | =>
     RoleB, SessionMpstFour, 4
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_b, RoleB, next_b, 2 |
-    recv_mpst_c_from_d, RoleD, next_d, 3 | =>
+    recv_mpst_c_from_b, RoleB, 2 |
+    recv_mpst_c_from_d, RoleD, 3 | =>
     RoleC, SessionMpstFour, 4
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_from_b, RoleB, next_b, 2 |
-    recv_mpst_d_from_c, RoleC, next_c, 3 | =>
+    recv_mpst_d_from_b, RoleB, 2 |
+    recv_mpst_d_from_c, RoleC, 3 | =>
     RoleD, SessionMpstFour, 4
 );
 

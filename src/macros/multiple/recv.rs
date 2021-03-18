@@ -18,18 +18,28 @@
 /// );
 ///
 /// fn main(s: Endpoint) -> Result<(), Box<dyn std::error::Error>> {
-///    let (_payload, _s) = recv_mpst!(s, next_b, SessionMpstThree, 3, 1)()?;
+///    let (_payload, _s) = recv_mpst!(s, RoleB, SessionMpstThree, 3, 1)()?;
 /// }
 /// ```
 #[macro_export]
 macro_rules! recv_mpst {
-    ($session:expr, $next:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session:expr, $role:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
             %(
             )(
                 let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
             )0*
-            let new_queue = $next($session.stack);
+            let new_queue = {
+                fn temp<R>(r: $role<R>) -> R
+                where
+                    R: mpstthree::role::Role,
+                {
+                    let (here, there) = <R as mpstthree::role::Role>::new();
+                    r.sender.send(there).unwrap_or(());
+                    here
+                }
+                temp($session.stack)
+            };
 
             let result = $struct_name {
                 %(
@@ -73,11 +83,11 @@ macro_rules! recv_mpst {
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
-/// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+/// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session {
-    ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $struct_name<
@@ -104,7 +114,7 @@ macro_rules! create_recv_mpst_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                mpstthree::recv_mpst!(s, $next, $struct_name, $nsessions, $exclusion)()
+                mpstthree::recv_mpst!(s, $role, $struct_name, $nsessions, $exclusion)()
             }
         });
     }
@@ -141,11 +151,9 @@ macro_rules! create_recv_mpst_session {
 /// create_recv_mpst_session_bundle!(
 ///    recv_mpst_d_from_a,
 ///    RoleA,
-///    next_a,
 ///    1 |
 ///    recv_mpst_d_from_b,
 ///    RoleB,
-///    next_b,
 ///    2 | =>
 ///    RoleD,
 ///    SessionMpst,
@@ -154,8 +162,8 @@ macro_rules! create_recv_mpst_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_recv_mpst_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_recv_mpst_session!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }
 
@@ -188,7 +196,6 @@ macro_rules! create_recv_mpst_session_bundle {
 /// create_recv_mpst_all_session!(
 ///     recv_mpst_a_all_to_d,
 ///     RoleAlltoD,
-///     next_all_to_d,
 ///     RoleA,
 ///     SessionMpst,
 ///     3,
@@ -197,7 +204,7 @@ macro_rules! create_recv_mpst_session_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_all_session {
-    ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $struct_name<
@@ -231,7 +238,21 @@ macro_rules! create_recv_mpst_all_session {
                 )(
                     let (v, new_session) = mpstthree::binary::recv::recv(s.session#N:0)?;
                 )0*
-                let (new_queue, _) = $next(s.stack);
+                let (new_queue, _) = {
+                    fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
+                    where
+                        R1: mpstthree::role::Role,
+                        R2: mpstthree::role::Role,
+                    {
+                        let (here1, there1) = <R1 as mpstthree::role::Role>::new();
+                        let (here2, there2) = <R2 as mpstthree::role::Role>::new();
+                        r.sender1.send(there1).unwrap_or(());
+                        r.sender2.send(there2).unwrap_or(());
+                        (here1, here2)
+                    }
+                    temp(s.stack)
+                };
+
                 let result = $struct_name {
                     %(
                         session#N:0: s.session#N:0,
@@ -276,11 +297,9 @@ macro_rules! create_recv_mpst_all_session {
 /// create_recv_mpst_all_session_bundle!(
 ///    recv_mpst_a_all_to_b,
 ///    RoleAlltoB,
-///    next_all_to_b,
 ///    1 |
 ///    recv_mpst_a_all_to_d,
 ///    RoleAlltoD,
-///    next_all_to_d,
 ///    2 | =>
 ///    RoleA,
 ///    SessionMpst,
@@ -289,8 +308,8 @@ macro_rules! create_recv_mpst_all_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_all_session_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_recv_mpst_all_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_recv_mpst_all_session!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }
 
@@ -321,11 +340,11 @@ macro_rules! create_recv_mpst_all_session_bundle {
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
-/// create_recv_http_session!(recv_mpst_d_from_a, RoleA, next_a, RoleD, SessionMpst, 3, 1);
+/// create_recv_http_session!(recv_mpst_d_from_a, RoleA, RoleD, SessionMpst, 3, 1);
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session {
-    ($func_name:ident, $role:ident, $next:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $struct_name<
@@ -368,7 +387,7 @@ macro_rules! create_recv_http_session {
                     false => hyper::Response::default(),
                 };
 
-                let (v, s) = mpstthree::recv_mpst!(s, $next, $struct_name, $nsessions, $exclusion)()?;
+                let (v, s) = mpstthree::recv_mpst!(s, $role, $struct_name, $nsessions, $exclusion)()?;
 
                 Ok((v, s, resp))
             }
@@ -408,11 +427,9 @@ macro_rules! create_recv_http_session {
 /// create_recv_http_session_bundle!(
 ///    recv_mpst_d_from_a,
 ///    RoleA,
-///    next_a,
 ///    1 |
 ///    recv_mpst_d_from_b,
 ///    RoleB,
-///    next_b,
 ///    2 | =>
 ///    RoleD,
 ///    SessionMpst,
@@ -421,7 +438,7 @@ macro_rules! create_recv_http_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session_bundle {
-    ($($func_name:ident, $role:ident, $next:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_recv_http_session!($func_name, $role, $next, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_recv_http_session!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
     }
 }

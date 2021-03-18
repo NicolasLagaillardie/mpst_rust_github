@@ -916,7 +916,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                         );
 
                         let new_queue = {
-                            fn temp#N:0<R>(r: unused#N:16<R>) -> R
+                            fn temp<R>(r: unused#N:16<R>) -> R
                             where
                                 R: mpstthree::role::Role,
                             {
@@ -924,7 +924,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                                 r.sender.send(there).unwrap_or(());
                                 here
                             }
-                            temp#N:0(s.stack)
+                            temp(s.stack)
                         };
 
                         $sessionmpst_name {

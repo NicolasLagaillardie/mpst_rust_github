@@ -208,7 +208,7 @@ As you may notice, there is a difference made between `session_1` and `session_2
 The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the names of the role and the related `next`function. To create the `send` function from `A` to `B`, here is the expected line of code: 
 
 ```rust
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, next_b, RoleA);
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
 ```
 
 #### Making choice and offer with those new roles

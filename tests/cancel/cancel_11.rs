@@ -21,24 +21,24 @@ create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
 // Create new send functions
 // B
 create_send_check_cancel_bundle!(
-    send_check_b_to_c, RoleC, next_c, 2 | =>
+    send_check_b_to_c, RoleC, 2 | =>
     RoleB, SessionMpstThree, 3
 );
 // C
 create_send_check_cancel_bundle!(
-    send_check_c_to_b, RoleB, next_b, 2 | =>
+    send_check_c_to_b, RoleB, 2 | =>
     RoleC, SessionMpstThree, 3
 );
 
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_c, RoleC, next_c, 2 | =>
+    recv_mpst_b_from_c, RoleC, 2 | =>
     RoleB, SessionMpstThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_b, RoleB, next_b, 2 | =>
+    recv_mpst_c_from_b, RoleB, 2 | =>
     RoleC, SessionMpstThree, 3
 );
 

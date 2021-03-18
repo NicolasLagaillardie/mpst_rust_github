@@ -29,22 +29,22 @@ create_multiple_normal_role!(
 create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
 
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, next_a, RoleC);
-create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, next_c, RoleA);
-create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, next_b, RoleC);
-create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, next_a, RoleB);
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, next_b, RoleA);
+create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);
+create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, RoleA);
+create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, RoleC);
+create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, RoleB);
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, next_a, RoleC);
-create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, next_c, RoleA);
-create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, next_c, RoleB);
-create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, next_a, RoleB);
-create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, next_b, RoleA);
+create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, RoleC);
+create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
+create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
+create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
+create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
 // broadcast
-create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, next_all_to_c, RoleB);
-create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c, RoleAlltoC, next_all_to_c, RoleA);
+create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, RoleB);
+create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c, RoleAlltoC, RoleA);
 
 // Create the offer functions
 create_offer_mpst_session_2!(

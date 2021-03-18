@@ -28,11 +28,9 @@ create_multiple_normal_role!(
 create_send_check_cancel_bundle!(
     send_check_c_to_b,
     RoleB,
-    next_b,
     2 |
     send_check_c_to_d,
     RoleD,
-    next_d,
     3 | =>
     RoleC,
     SessionMpstFour,
@@ -44,7 +42,6 @@ create_send_check_cancel_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_c,
     RoleC,
-    next_c,
     2 | =>
     RoleB,
     SessionMpstFour,
@@ -54,7 +51,6 @@ create_recv_mpst_session_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c,
     RoleC,
-    next_c,
     3 | =>
     RoleD,
     SessionMpstFour,

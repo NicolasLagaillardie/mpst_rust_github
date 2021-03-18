@@ -39,34 +39,34 @@ create_multiple_normal_role_short!(Voter, Pawn, Server);
 // Create new send functions
 // SERVER
 create_send_mpst_session_bundle!(
-    send_mpst_server_to_pawn, RolePawn, next_pawn, 1 |
-    send_mpst_server_to_voter, RoleVoter, next_voter, 2 | =>
+    send_mpst_server_to_pawn, RolePawn, 1 |
+    send_mpst_server_to_voter, RoleVoter, 2 | =>
     RoleServer, SessionMpstThree, 3
 );
 // VOTER
 create_send_mpst_session_bundle!(
-    send_mpst_voter_to_pawn, RolePawn, next_pawn, 1 |
-    send_mpst_voter_to_server, RoleServer, next_server, 2 | =>
+    send_mpst_voter_to_pawn, RolePawn, 1 |
+    send_mpst_voter_to_server, RoleServer, 2 | =>
     RoleVoter, SessionMpstThree, 3
 );
 
 // Create new recv functions and related types
 // PAWN
 create_recv_mpst_session_bundle!(
-    recv_mpst_pawn_to_server, RoleServer, next_server, 1 |
-    recv_mpst_pawn_to_voter, RoleVoter, next_voter, 2 | =>
+    recv_mpst_pawn_to_server, RoleServer, 1 |
+    recv_mpst_pawn_to_voter, RoleVoter, 2 | =>
     RolePawn, SessionMpstThree, 3
 );
 // SERVER
 create_recv_mpst_session_bundle!(
-    recv_mpst_server_to_pawn, RolePawn, next_pawn, 1 |
-    recv_mpst_server_to_voter, RoleVoter, next_voter, 2 | =>
+    recv_mpst_server_to_pawn, RolePawn, 1 |
+    recv_mpst_server_to_voter, RoleVoter, 2 | =>
     RoleServer, SessionMpstThree, 3
 );
 // VOTER
 create_recv_mpst_session_bundle!(
-    recv_mpst_voter_to_pawn, RolePawn, next_pawn, 1 |
-    recv_mpst_voter_to_server, RoleServer, next_server, 2 | =>
+    recv_mpst_voter_to_pawn, RolePawn, 1 |
+    recv_mpst_voter_to_server, RoleServer, 2 | =>
     RoleVoter, SessionMpstThree, 3
 );
 

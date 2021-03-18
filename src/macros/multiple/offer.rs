@@ -59,7 +59,6 @@ macro_rules! create_offer_type_multi {
 /// create_recv_mpst_all_session!(
 ///     recv_mpst_b_all_to_d,
 ///     RoleAlltoD,
-///     next_all_to_d,
 ///     RoleB,
 ///     SessionMpst,
 ///     3,

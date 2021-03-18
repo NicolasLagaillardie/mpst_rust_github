@@ -28,378 +28,58 @@ create_multiple_broadcast_role_short!(A, B, C, D, E);
 
 // Create new send functions
 // A
-create_send_mpst_session!(
-    send_mpst_b_to_a,
-    RoleA,
-    next_a,
-    RoleB,
-    SessionMpstFive,
-    5,
-    1
-);
-create_send_mpst_session!(
-    send_mpst_c_to_a,
-    RoleA,
-    next_a,
-    RoleC,
-    SessionMpstFive,
-    5,
-    1
-);
-create_send_mpst_session!(
-    send_mpst_d_to_a,
-    RoleA,
-    next_a,
-    RoleD,
-    SessionMpstFive,
-    5,
-    1
-);
-create_send_mpst_session!(
-    send_mpst_e_to_a,
-    RoleA,
-    next_a,
-    RoleE,
-    SessionMpstFive,
-    5,
-    1
-);
+create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, SessionMpstFive, 5, 1);
+create_send_mpst_session!(send_mpst_c_to_a, RoleA, RoleC, SessionMpstFive, 5, 1);
+create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, SessionMpstFive, 5, 1);
+create_send_mpst_session!(send_mpst_e_to_a, RoleA, RoleE, SessionMpstFive, 5, 1);
 // B
-create_send_mpst_session!(
-    send_mpst_a_to_b,
-    RoleB,
-    next_b,
-    RoleA,
-    SessionMpstFive,
-    5,
-    1
-);
-create_send_mpst_session!(
-    send_mpst_c_to_b,
-    RoleB,
-    next_b,
-    RoleC,
-    SessionMpstFive,
-    5,
-    2
-);
-create_send_mpst_session!(
-    send_mpst_d_to_b,
-    RoleB,
-    next_b,
-    RoleD,
-    SessionMpstFive,
-    5,
-    2
-);
-create_send_mpst_session!(
-    send_mpst_e_to_b,
-    RoleB,
-    next_b,
-    RoleE,
-    SessionMpstFive,
-    5,
-    2
-);
+create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, SessionMpstFive, 5, 1);
+create_send_mpst_session!(send_mpst_c_to_b, RoleB, RoleC, SessionMpstFive, 5, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpstFive, 5, 2);
+create_send_mpst_session!(send_mpst_e_to_b, RoleB, RoleE, SessionMpstFive, 5, 2);
 // C
-create_send_mpst_session!(
-    send_mpst_a_to_c,
-    RoleC,
-    next_c,
-    RoleA,
-    SessionMpstFive,
-    5,
-    2
-);
-create_send_mpst_session!(
-    send_mpst_b_to_c,
-    RoleC,
-    next_c,
-    RoleB,
-    SessionMpstFive,
-    5,
-    2
-);
-create_send_mpst_session!(
-    send_mpst_d_to_c,
-    RoleC,
-    next_c,
-    RoleD,
-    SessionMpstFive,
-    5,
-    3
-);
-create_send_mpst_session!(
-    send_mpst_e_to_c,
-    RoleC,
-    next_c,
-    RoleE,
-    SessionMpstFive,
-    5,
-    3
-);
+create_send_mpst_session!(send_mpst_a_to_c, RoleC, RoleA, SessionMpstFive, 5, 2);
+create_send_mpst_session!(send_mpst_b_to_c, RoleC, RoleB, SessionMpstFive, 5, 2);
+create_send_mpst_session!(send_mpst_d_to_c, RoleC, RoleD, SessionMpstFive, 5, 3);
+create_send_mpst_session!(send_mpst_e_to_c, RoleC, RoleE, SessionMpstFive, 5, 3);
 // D
-create_send_mpst_session!(
-    send_mpst_a_to_d,
-    RoleD,
-    next_d,
-    RoleA,
-    SessionMpstFive,
-    5,
-    3
-);
-create_send_mpst_session!(
-    send_mpst_b_to_d,
-    RoleD,
-    next_d,
-    RoleB,
-    SessionMpstFive,
-    5,
-    3
-);
-create_send_mpst_session!(
-    send_mpst_c_to_d,
-    RoleD,
-    next_d,
-    RoleC,
-    SessionMpstFive,
-    5,
-    3
-);
-create_send_mpst_session!(
-    send_mpst_e_to_d,
-    RoleD,
-    next_d,
-    RoleE,
-    SessionMpstFive,
-    5,
-    4
-);
+create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, SessionMpstFive, 5, 3);
+create_send_mpst_session!(send_mpst_b_to_d, RoleD, RoleB, SessionMpstFive, 5, 3);
+create_send_mpst_session!(send_mpst_c_to_d, RoleD, RoleC, SessionMpstFive, 5, 3);
+create_send_mpst_session!(send_mpst_e_to_d, RoleD, RoleE, SessionMpstFive, 5, 4);
 // E
-create_send_mpst_session!(
-    send_mpst_a_to_e,
-    RoleE,
-    next_e,
-    RoleA,
-    SessionMpstFive,
-    5,
-    4
-);
-create_send_mpst_session!(
-    send_mpst_b_to_e,
-    RoleE,
-    next_e,
-    RoleB,
-    SessionMpstFive,
-    5,
-    4
-);
-create_send_mpst_session!(
-    send_mpst_c_to_e,
-    RoleE,
-    next_e,
-    RoleC,
-    SessionMpstFive,
-    5,
-    4
-);
-create_send_mpst_session!(
-    send_mpst_d_to_e,
-    RoleE,
-    next_e,
-    RoleD,
-    SessionMpstFive,
-    5,
-    4
-);
+create_send_mpst_session!(send_mpst_a_to_e, RoleE, RoleA, SessionMpstFive, 5, 4);
+create_send_mpst_session!(send_mpst_b_to_e, RoleE, RoleB, SessionMpstFive, 5, 4);
+create_send_mpst_session!(send_mpst_c_to_e, RoleE, RoleC, SessionMpstFive, 5, 4);
+create_send_mpst_session!(send_mpst_d_to_e, RoleE, RoleD, SessionMpstFive, 5, 4);
 
 // Create new recv functions and related types
 // normal
 // A
-create_recv_mpst_session!(
-    recv_mpst_b_from_a,
-    RoleA,
-    next_a,
-    RoleB,
-    SessionMpstFive,
-    5,
-    1
-);
-create_recv_mpst_session!(
-    recv_mpst_c_from_a,
-    RoleA,
-    next_a,
-    RoleC,
-    SessionMpstFive,
-    5,
-    1
-);
-create_recv_mpst_session!(
-    recv_mpst_d_from_a,
-    RoleA,
-    next_a,
-    RoleD,
-    SessionMpstFive,
-    5,
-    1
-);
-create_recv_mpst_session!(
-    recv_mpst_e_from_a,
-    RoleA,
-    next_a,
-    RoleE,
-    SessionMpstFive,
-    5,
-    1
-);
+create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, SessionMpstFive, 5, 1);
+create_recv_mpst_session!(recv_mpst_c_from_a, RoleA, RoleC, SessionMpstFive, 5, 1);
+create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, SessionMpstFive, 5, 1);
+create_recv_mpst_session!(recv_mpst_e_from_a, RoleA, RoleE, SessionMpstFive, 5, 1);
 // B
-create_recv_mpst_session!(
-    recv_mpst_a_from_b,
-    RoleB,
-    next_b,
-    RoleA,
-    SessionMpstFive,
-    5,
-    1
-);
-create_recv_mpst_session!(
-    recv_mpst_c_from_b,
-    RoleB,
-    next_b,
-    RoleC,
-    SessionMpstFive,
-    5,
-    2
-);
-create_recv_mpst_session!(
-    recv_mpst_d_from_b,
-    RoleB,
-    next_b,
-    RoleD,
-    SessionMpstFive,
-    5,
-    2
-);
-create_recv_mpst_session!(
-    recv_mpst_e_from_b,
-    RoleB,
-    next_b,
-    RoleE,
-    SessionMpstFive,
-    5,
-    2
-);
+create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, SessionMpstFive, 5, 1);
+create_recv_mpst_session!(recv_mpst_c_from_b, RoleB, RoleC, SessionMpstFive, 5, 2);
+create_recv_mpst_session!(recv_mpst_d_from_b, RoleB, RoleD, SessionMpstFive, 5, 2);
+create_recv_mpst_session!(recv_mpst_e_from_b, RoleB, RoleE, SessionMpstFive, 5, 2);
 // C
-create_recv_mpst_session!(
-    recv_mpst_a_from_c,
-    RoleC,
-    next_c,
-    RoleA,
-    SessionMpstFive,
-    5,
-    2
-);
-create_recv_mpst_session!(
-    recv_mpst_b_from_c,
-    RoleC,
-    next_c,
-    RoleB,
-    SessionMpstFive,
-    5,
-    2
-);
-create_recv_mpst_session!(
-    recv_mpst_d_from_c,
-    RoleC,
-    next_c,
-    RoleD,
-    SessionMpstFive,
-    5,
-    3
-);
-create_recv_mpst_session!(
-    recv_mpst_e_from_c,
-    RoleC,
-    next_c,
-    RoleE,
-    SessionMpstFive,
-    5,
-    3
-);
+create_recv_mpst_session!(recv_mpst_a_from_c, RoleC, RoleA, SessionMpstFive, 5, 2);
+create_recv_mpst_session!(recv_mpst_b_from_c, RoleC, RoleB, SessionMpstFive, 5, 2);
+create_recv_mpst_session!(recv_mpst_d_from_c, RoleC, RoleD, SessionMpstFive, 5, 3);
+create_recv_mpst_session!(recv_mpst_e_from_c, RoleC, RoleE, SessionMpstFive, 5, 3);
 // D
-create_recv_mpst_session!(
-    recv_mpst_a_from_d,
-    RoleD,
-    next_d,
-    RoleA,
-    SessionMpstFive,
-    5,
-    3
-);
-create_recv_mpst_session!(
-    recv_mpst_b_from_d,
-    RoleD,
-    next_d,
-    RoleB,
-    SessionMpstFive,
-    5,
-    3
-);
-create_recv_mpst_session!(
-    recv_mpst_c_from_d,
-    RoleD,
-    next_d,
-    RoleC,
-    SessionMpstFive,
-    5,
-    3
-);
-create_recv_mpst_session!(
-    recv_mpst_e_from_d,
-    RoleD,
-    next_d,
-    RoleE,
-    SessionMpstFive,
-    5,
-    4
-);
+create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, SessionMpstFive, 5, 3);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpstFive, 5, 3);
+create_recv_mpst_session!(recv_mpst_c_from_d, RoleD, RoleC, SessionMpstFive, 5, 3);
+create_recv_mpst_session!(recv_mpst_e_from_d, RoleD, RoleE, SessionMpstFive, 5, 4);
 // E
-create_recv_mpst_session!(
-    recv_mpst_a_from_e,
-    RoleE,
-    next_e,
-    RoleA,
-    SessionMpstFive,
-    5,
-    4
-);
-create_recv_mpst_session!(
-    recv_mpst_b_from_e,
-    RoleE,
-    next_e,
-    RoleB,
-    SessionMpstFive,
-    5,
-    4
-);
-create_recv_mpst_session!(
-    recv_mpst_c_from_e,
-    RoleE,
-    next_e,
-    RoleC,
-    SessionMpstFive,
-    5,
-    4
-);
-create_recv_mpst_session!(
-    recv_mpst_d_from_e,
-    RoleE,
-    next_e,
-    RoleD,
-    SessionMpstFive,
-    5,
-    4
-);
+create_recv_mpst_session!(recv_mpst_a_from_e, RoleE, RoleA, SessionMpstFive, 5, 4);
+create_recv_mpst_session!(recv_mpst_b_from_e, RoleE, RoleB, SessionMpstFive, 5, 4);
+create_recv_mpst_session!(recv_mpst_c_from_e, RoleE, RoleC, SessionMpstFive, 5, 4);
+create_recv_mpst_session!(recv_mpst_d_from_e, RoleE, RoleD, SessionMpstFive, 5, 4);
 
 // Names
 type NameA = RoleA<RoleEnd>;

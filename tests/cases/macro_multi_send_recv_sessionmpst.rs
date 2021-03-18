@@ -21,10 +21,10 @@ create_multiple_normal_role!(
 );
 
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, next_b, RoleD, SessionMpst, 5, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpst, 5, 2);
 
 // Create new recv functions and related types
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, next_d, RoleB, SessionMpst, 5, 3);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 5, 3);
 
 close_mpst!(close_mpst_multi, SessionMpst, 5);
 
