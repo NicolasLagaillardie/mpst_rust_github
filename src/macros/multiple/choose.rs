@@ -862,14 +862,14 @@ macro_rules! choose_mpst_multi_http_to_all {
 /// ```
 #[macro_export]
 macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
-    ($($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        create_fn_choose_mpst_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($fn_send,)+) => ($($label,)+) => ($($receiver,)+) => $sender, $sessionmpst_name, $nsessions, $exclusion);
+    ($($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        create_fn_choose_mpst_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($label,)+) => ($($receiver,)+) => $sender, $sessionmpst_name, $nsessions, $exclusion);
     };
-    (@call_tuple $($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $fn_send:tt => $label:tt => $receiver:tt => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $fn_send => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
+    (@call_tuple $($fn_name:ident,)+ => $($branch:expr,)+ => $($new_type:ty,)+ => $label:tt => $receiver:tt => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
     };
-    (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($fn_send:ident,)+) => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {
+    (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($receiver,)+) : ($($label,)+) : ($($receiver,)+) {
             fn $fn_name(
                 s: $sessionmpst_name<
                     #(
@@ -900,33 +900,44 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 
                 let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-                %(
-                    let s = unused#N:14(
-                        unused#N:15::$branch($sessionmpst_name {
+                #(
+                    let s = {
+                        let new_session = mpstthree::binary::send::send(
+                            unused#N:15::$branch($sessionmpst_name {
+                                ~(
+                                    session#N:1 : channel_~N:7,
+                                )(
+                                    session#N:1 : channel_~N:7,
+                                )0*
+                                stack: stack_#N:0,
+                                name: name_#N:0,
+                            }),
+                            s.session#N:0
+                        );
+
+                        let new_queue = {
+                            fn temp#N:0<R>(r: unused#N:16<R>) -> R
+                            where
+                                R: mpstthree::role::Role,
+                            {
+                                let (here, there) = <R as mpstthree::role::Role>::new();
+                                r.sender.send(there).unwrap_or(());
+                                here
+                            }
+                            temp#N:0(s.stack)
+                        };
+
+                        $sessionmpst_name {
                             ~(
-                                session#N:1 : channel_~N:7,
+                                session~N:8: new_session,
                             )(
-                                session#N:1 : channel_~N:7,
-                            )0*
-                            stack: stack_#N:0,
-                            name: name_#N:0,
-                        }),
-                        s,
-                    );
-                )(
-                    let s = unused#N:14(
-                        unused#N:15::$branch($sessionmpst_name {
-                            ~(
-                                session#N:1 : channel_~N:7,
-                            )(
-                                session#N:1 : channel_~N:7,
-                            )0*
-                            stack: stack_#N:0,
-                            name: name_#N:0,
-                        }),
-                        s,
-                    );
-                )2*
+                                session~N:8: s.session~N:8,
+                            )5*
+                            stack: new_queue,
+                            name: s.name,
+                        }
+                    };
+                )0:0
 
                 mpstthree::binary::cancel::cancel(s);
 

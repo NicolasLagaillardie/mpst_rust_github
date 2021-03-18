@@ -101,7 +101,6 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
     Done, More, =>
     EndpointDoneC, EndpointMoreC, =>
-    send_mpst_c_to_a, send_mpst_c_to_b, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
     RoleA, RoleB, =>
     RoleC, SessionMpstThree, 3, 3

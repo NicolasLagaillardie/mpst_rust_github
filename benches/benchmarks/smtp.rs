@@ -644,23 +644,23 @@
 
 // // Functions
 // // A
-// fn simple_five_endpoint_a(s: EndpointNoneA) -> Result<(),
+// fn simple_three_endpoint_a(s: EndpointNoneA) -> Result<(),
 // Box<dyn Error>> {     close_mpst_multi(s)
 // }
 // // C
-// fn simple_five_endpoint_c(s: EndpointNoneC) -> Result<(),
+// fn simple_three_endpoint_c(s: EndpointNoneC) -> Result<(),
 // Box<dyn Error>> {     close_mpst_multi(s)
 // }
 // // S
-// fn simple_five_endpoint_s(s: EndpointNoneS) -> Result<(),
+// fn simple_three_endpoint_s(s: EndpointNoneS) -> Result<(),
 // Box<dyn Error>> {     close_mpst_multi(s)
 // }
 
 // fn all_mpst() -> Result<(), Box<dyn Error>> {
 //     let (thread_a, thread_c, thread_s) = fork_mpst(
-//         black_box(simple_five_endpoint_a),
-//         black_box(simple_five_endpoint_c),
-//         black_box(simple_five_endpoint_s),
+//         black_box(simple_three_endpoint_a),
+//         black_box(simple_three_endpoint_c),
+//         black_box(simple_three_endpoint_s),
 //     );
 
 //     thread_a.join().unwrap();

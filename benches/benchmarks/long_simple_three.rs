@@ -113,13 +113,12 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
     Done, More, =>
     EndpointDoneC, EndpointMoreC, =>
-    send_mpst_c_to_a, send_mpst_c_to_b, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
     RoleA, RoleB, =>
     RoleC, SessionMpstThree, 3, 3
 );
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Done(s) => {
             close_mpst_multi(s)
@@ -129,12 +128,12 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_c((), s);
             let (_, s) = recv_mpst_a_from_b(s)?;
             let s = send_mpst_a_to_b((), s);
-            simple_five_endpoint_a(s)
+            simple_three_endpoint_a(s)
         },
     })
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
@@ -144,12 +143,12 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_b_to_c((), s);
             let s = send_mpst_b_to_a((), s);
             let (_, s) = recv_mpst_b_from_a(s)?;
-            simple_five_endpoint_b(s)
+            simple_three_endpoint_b(s)
         },
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     recurs_c(s, SIZE)
 }
 
@@ -175,9 +174,9 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        black_box(simple_five_endpoint_a),
-        black_box(simple_five_endpoint_b),
-        black_box(simple_five_endpoint_c),
+        black_box(simple_three_endpoint_a),
+        black_box(simple_three_endpoint_b),
+        black_box(simple_three_endpoint_c),
     );
 
     thread_a.join()?;

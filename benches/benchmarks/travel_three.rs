@@ -144,7 +144,7 @@ type EndpointS<N> = SessionMpstThree<End, Choice0fromCtoS<N>, RoleC<RoleEnd>, Na
 
 // Functions
 // A
-fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Select(s) => {
             choice_a(s)
@@ -153,7 +153,7 @@ fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
             let (query, s) = recv_mpst_a_from_c(s)?;
             let s = send_mpst_a_to_c(query, s);
             let s = send_mpst_a_to_s(random(), s);
-            simple_five_endpoint_a(s)
+            simple_three_endpoint_a(s)
         },
     })
 }
@@ -173,7 +173,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
@@ -208,7 +208,7 @@ fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 
         let s = send_mpst_c_to_a(random(), s);
         let (_quote, s) = recv_mpst_c_from_a(s)?;
-        simple_five_endpoint_c(s)
+        simple_three_endpoint_c(s)
     }
 }
 
@@ -254,14 +254,14 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching0fromCtoS::Select(s) => {
             choice_s(s)
         },
         Branching0fromCtoS::Loop(s) => {
             let (_dummy, s) = recv_mpst_s_from_a(s)?;
-            simple_five_endpoint_s(s)
+            simple_three_endpoint_s(s)
         },
     })
 }
@@ -283,9 +283,9 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(
-        black_box(simple_five_endpoint_a),
-        black_box(simple_five_endpoint_c),
-        black_box(simple_five_endpoint_s),
+        black_box(simple_three_endpoint_a),
+        black_box(simple_three_endpoint_c),
+        black_box(simple_three_endpoint_s),
     );
 
     thread_a.join()?;

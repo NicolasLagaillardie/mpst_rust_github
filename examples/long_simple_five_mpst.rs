@@ -211,10 +211,6 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_e_to_all, more_from_e_to_all, =>
     Done, More, =>
     EndpointDoneE, EndpointMoreE, =>
-    send_mpst_e_to_a,
-    send_mpst_e_to_b,
-    send_mpst_e_to_c,
-    send_mpst_e_to_d, =>
     Branching0fromEtoA,
     Branching0fromEtoB,
     Branching0fromEtoC,

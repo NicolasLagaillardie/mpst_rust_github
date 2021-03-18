@@ -140,7 +140,7 @@ type EndpointServer<N> = SessionMpstThree<
 >;
 
 // Functions
-fn simple_five_endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
     let auth = thread_rng().gen_range(1..=3);
 
     let s = send_mpst_voter_to_server(auth, s);
@@ -202,7 +202,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_five_endpoint_pawn(s: EndpointPawn) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_pawn(s: EndpointPawn) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_pawn_to_server, {
         Branching0fromStoP::Reject(s) => {
             close_mpst_multi(s)
@@ -224,7 +224,7 @@ fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=3);
 
     let (auth, s) = recv_mpst_server_to_voter(s)?;
@@ -291,9 +291,9 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_pawn, thread_server, thread_voter) = fork_mpst(
-        black_box(simple_five_endpoint_pawn),
-        black_box(simple_five_endpoint_server),
-        black_box(simple_five_endpoint_voter),
+        black_box(simple_three_endpoint_pawn),
+        black_box(simple_three_endpoint_server),
+        black_box(simple_three_endpoint_voter),
     );
 
     thread_voter.join()?;

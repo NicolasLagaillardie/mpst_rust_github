@@ -169,7 +169,7 @@ type EndpointS<N> =
     SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleA<RoleC<RoleEnd>>, NameS>;
 
 // Functions
-fn simple_five_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_a_to_s, {
         Branching0fromStoA::Done(s) => {
             let (_, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
@@ -225,7 +225,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_five_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
             let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
@@ -301,7 +301,7 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_five_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
@@ -364,9 +364,9 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
 
 pub fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(
-        simple_five_endpoint_a,
-        simple_five_endpoint_c,
-        simple_five_endpoint_s,
+        simple_three_endpoint_a,
+        simple_three_endpoint_c,
+        simple_three_endpoint_s,
     );
 
     assert!(thread_a.join().is_ok());
