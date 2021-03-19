@@ -39,6 +39,7 @@ use std::error::Error;
 /// type EndpointA = SessionMpst<AtoB, AtoC, QueueA, NameA>;
 ///
 /// // From this point...
+/// 
 /// let (channel_ab, _) = AtoB::new();
 /// let (channel_ac, _) = AtoC::new();
 ///
@@ -52,6 +53,7 @@ use std::error::Error;
 ///   stack: role_a,
 ///   name: name_a,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = close_mpst(sess);

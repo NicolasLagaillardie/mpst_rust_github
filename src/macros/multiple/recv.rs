@@ -41,17 +41,18 @@ macro_rules! recv_mpst {
                 temp($session.stack)
             };
 
-            let result = $struct_name {
-                %(
-                    session#N:0: $session.session#N:0,
-                )(
-                    session#N:0: new_session,
-                )0*
-                stack: new_queue,
-                name: $session.name,
-            };
-
-            Ok((v, result))
+            Ok((
+                v,
+                $struct_name {
+                    %(
+                        session#N:0: $session.session#N:0,
+                    )(
+                        session#N:0: new_session,
+                    )0*
+                    stack: new_queue,
+                    name: $session.name,
+                }
+            ))
         }});
     }
 }
@@ -220,7 +221,9 @@ macro_rules! create_recv_mpst_all_session {
                 (
                     T,
                     $struct_name<
-                        #(S#N:0,)0:0
+                        #(
+                            S#N:0,
+                        )0:0
                         R,
                         $name<mpstthree::role::end::RoleEnd>,
                     >,

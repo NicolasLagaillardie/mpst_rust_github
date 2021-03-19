@@ -1,13 +1,12 @@
 //! This module contains all the *receive* functions
 
-use crate::binary::recv::recv;
 use crate::binary::struct_trait::{Recv, Session};
-use crate::role::a::{next_a, RoleA};
-use crate::role::all_to_a::{next_all_to_a, RoleAlltoA};
-use crate::role::all_to_b::{next_all_to_b, RoleAlltoB};
-use crate::role::all_to_c::{next_all_to_c, RoleAlltoC};
-use crate::role::b::{next_b, RoleB};
-use crate::role::c::{next_c, RoleC};
+use crate::role::a::RoleA;
+use crate::role::all_to_a::RoleAlltoA;
+use crate::role::all_to_b::RoleAlltoB;
+use crate::role::all_to_c::RoleAlltoC;
+use crate::role::b::RoleB;
+use crate::role::c::RoleC;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
@@ -15,6 +14,83 @@ use std::error::Error;
 use std::marker;
 
 type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Box<dyn Error>>;
+
+#[doc(hidden)]
+macro_rules! recv_aux {
+    ($session:expr, $role:ident, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..3 ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
+            %(
+            )(
+                let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
+            )0*
+
+            let new_queue = {
+                fn temp<R>(r: $role<R>) -> R
+                where
+                    R: crate::role::Role,
+                {
+                    let (here, there) = <R as crate::role::Role>::new();
+                    r.sender.send(there).unwrap_or(());
+                    here
+                }
+                temp($session.stack)
+            };
+
+            Ok((
+                v,
+                crate::sessionmpst::SessionMpst {
+                    %(
+                        session#N:0: $session.session#N:0,
+                    )(
+                        session#N:0: new_session,
+                    )0*
+                    stack: new_queue,
+                    name: $session.name,
+                }
+            ))
+        }});
+    }
+}
+
+#[doc(hidden)]
+macro_rules! recv_all_aux {
+    ($session:expr, $role:ident, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..3 ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
+            %(
+            )(
+                let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
+            )0*
+
+            let (new_queue, _) = {
+                fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
+                where
+                    R1: crate::role::Role,
+                    R2: crate::role::Role,
+                {
+                    let (here1, there1) = <R1 as crate::role::Role>::new();
+                    let (here2, there2) = <R2 as crate::role::Role>::new();
+                    r.sender1.send(there1).unwrap_or(());
+                    r.sender2.send(there2).unwrap_or(());
+                    (here1, here2)
+                }
+                temp($session.stack)
+            };
+
+            Ok((
+                v,
+                crate::sessionmpst::SessionMpst {
+                    %(
+                        session#N:0: $session.session#N:0,
+                    )(
+                        session#N:0: new_session,
+                    )0*
+                    stack: new_queue,
+                    name: $session.name,
+                }
+            ))
+        }});
+    }
+}
 
 /// Receive a value of type `T` on A from B. Can fail.
 /// Returns either a pair of the received value and the
@@ -76,6 +152,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 ///   stack: role_b,
 ///   name: name_b,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_b_to_a((), sess_b);
@@ -90,16 +167,7 @@ where
     S2: Session,
     R: Role,
 {
-    let (v, new_session) = recv(s.session1)?;
-    let new_queue = next_b(s.stack);
-    let result = SessionMpst {
-        session1: new_session,
-        session2: s.session2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_aux!(s, RoleB, 1)()
 }
 
 /// Receive a value of type `T` on B from A. Can fail.
@@ -138,6 +206,7 @@ where
 /// type EndpointA = SessionMpst<AtoB, End, QueueA, NameA>;
 ///
 /// // From this point...
+/// 
 /// let (channel_ba, channel_ab) = BtoA::new();
 /// let (channel_ac, _) = BtoA::new();
 /// let (channel_bc, _) = End::new();
@@ -161,6 +230,7 @@ where
 ///   stack: role_a,
 ///   name: name_a,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_a_to_b((), sess_a);
@@ -175,16 +245,7 @@ where
     S2: Session,
     R: Role,
 {
-    let (v, new_session) = recv(s.session1)?;
-    let new_queue = next_a(s.stack);
-    let result = SessionMpst {
-        session1: new_session,
-        session2: s.session2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_aux!(s, RoleA, 1)()
 }
 
 /// Receive a value of type `T` on C from A. Can fail.
@@ -223,6 +284,7 @@ where
 /// type EndpointA = SessionMpst<End, AtoC, QueueA, NameA>;
 ///
 /// // From this point...
+/// 
 /// let (channel_ca, channel_ac) = CtoA::new();
 /// let (channel_cb, _) = End::new();
 /// let (channel_ab, _) = End::new();
@@ -246,6 +308,7 @@ where
 ///   stack: role_a,
 ///   name: name_a,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_a_to_c((), sess_a);
@@ -260,16 +323,7 @@ where
     S2: Session,
     R: Role,
 {
-    let (v, new_session) = recv(s.session1)?;
-    let new_queue = next_a(s.stack);
-    let result = SessionMpst {
-        session1: new_session,
-        session2: s.session2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_aux!(s, RoleA, 1)()
 }
 
 /// Receive a value of type `T` on A from C. Can fail.
@@ -308,6 +362,7 @@ where
 /// type EndpointC = SessionMpst<CtoA, End, QueueC, NameC>;
 ///
 /// // From this point...
+/// 
 /// let (channel_ab, _) = End::new();
 /// let (channel_cb, _) = End::new();
 /// let (channel_ac, channel_ca) = AtoC::new();
@@ -331,6 +386,7 @@ where
 ///   stack: role_c,
 ///   name: name_c,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_c_to_a((), sess_c);
@@ -345,16 +401,7 @@ where
     S2: Session,
     R: Role,
 {
-    let (v, new_session) = recv(s.session2)?;
-    let new_queue = next_c(s.stack);
-    let result = SessionMpst {
-        session1: s.session1,
-        session2: new_session,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_aux!(s, RoleC, 2)()
 }
 
 /// Receive a value of type `T` on B from C. Can fail.
@@ -393,6 +440,7 @@ where
 /// type EndpointC = SessionMpst<End, CtoB, QueueC, NameC>;
 ///
 /// // From this point...
+/// 
 /// let (channel_ba, _) = End::new();
 /// let (channel_ca, _) = End::new();
 /// let (channel_bc, channel_cb) = BtoC::new();
@@ -416,6 +464,7 @@ where
 ///   stack: role_c,
 ///   name: name_c,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_c_to_b((), sess_c);
@@ -430,16 +479,7 @@ where
     S2: Session,
     R: Role,
 {
-    let (v, new_session) = recv(s.session2)?;
-    let new_queue = next_c(s.stack);
-    let result = SessionMpst {
-        session1: s.session1,
-        session2: new_session,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_aux!(s, RoleC, 2)()
 }
 
 /// Receive a value of type `T` on C from B. Can fail.
@@ -478,6 +518,7 @@ where
 /// type EndpointB = SessionMpst<End, BtoC, QueueB, NameB>;
 ///
 /// // From this point...
+/// 
 /// let (channel_ba, _) = End::new();
 /// let (channel_ca, _) = End::new();
 /// let (channel_cb, channel_bc) = CtoB::new();
@@ -501,6 +542,7 @@ where
 ///   stack: role_b,
 ///   name: name_b,
 /// };
+/// 
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_b_to_c((), sess_b);
@@ -515,16 +557,7 @@ where
     S2: Session,
     R: Role,
 {
-    let (v, new_session) = recv(s.session2)?;
-    let new_queue = next_b(s.stack);
-    let result = SessionMpst {
-        session1: s.session1,
-        session2: new_session,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_aux!(s, RoleB, 2)()
 }
 
 /// Receive a broadcasted value of type `T` on B from A. Can
@@ -544,16 +577,7 @@ where
     R: Role,
     N: Role,
 {
-    let (v, new_session) = recv(s.session1)?;
-    let (new_queue, _) = next_all_to_b(s.stack);
-    let result = SessionMpst {
-        session1: new_session,
-        session2: s.session2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_all_aux!(s, RoleAlltoB, 1)()
 }
 
 /// Receive a broadcasted value of type `T` on C from A. Can
@@ -573,16 +597,7 @@ where
     R: Role,
     N: Role,
 {
-    let (v, new_session) = recv(s.session2)?;
-    let (new_queue, _) = next_all_to_c(s.stack);
-    let result = SessionMpst {
-        session1: s.session1,
-        session2: new_session,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_all_aux!(s, RoleAlltoC, 2)()
 }
 
 /// Receive a broadcasted value of type `T` on A from B. Can
@@ -602,16 +617,7 @@ where
     R: Role,
     N: Role,
 {
-    let (v, new_session) = recv(s.session1)?;
-    let (new_queue, _) = next_all_to_a(s.stack);
-    let result = SessionMpst {
-        session1: new_session,
-        session2: s.session2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_all_aux!(s, RoleAlltoA, 1)()
 }
 
 /// Receive a broadcasted value of type `T` on C from A. Can
@@ -631,16 +637,7 @@ where
     R: Role,
     N: Role,
 {
-    let (v, new_session) = recv(s.session2)?;
-    let (new_queue, _) = next_all_to_c(s.stack);
-    let result = SessionMpst {
-        session1: s.session1,
-        session2: new_session,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_all_aux!(s, RoleAlltoC, 2)()
 }
 
 /// Receive a broadcasted value of type `T` on A from B. Can
@@ -660,16 +657,7 @@ where
     R: Role,
     N: Role,
 {
-    let (v, new_session) = recv(s.session1)?;
-    let (new_queue, _) = next_all_to_a(s.stack);
-    let result = SessionMpst {
-        session1: new_session,
-        session2: s.session2,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_all_aux!(s, RoleAlltoA, 1)()
 }
 
 /// Receive a broadcasted value of type `T` on B from C. Can
@@ -689,14 +677,5 @@ where
     R: Role,
     N: Role,
 {
-    let (v, new_session) = recv(s.session2)?;
-    let (new_queue, _) = next_all_to_b(s.stack);
-    let result = SessionMpst {
-        session1: s.session1,
-        session2: new_session,
-        stack: new_queue,
-        name: s.name,
-    };
-
-    Ok((v, result))
+    recv_all_aux!(s, RoleAlltoB, 2)()
 }
