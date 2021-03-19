@@ -51,11 +51,9 @@ create_multiple_normal_role!(
 create_send_mpst_session_bundle!(
     send_mpst_a_to_b,
     RoleB,
-    next_b,
     1 |
     send_mpst_a_to_c,
     RoleC,
-    next_c,
     2 | =>
     RoleA,
     SessionMpstThree,
@@ -65,7 +63,6 @@ create_send_mpst_session_bundle!(
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a,
     RoleA,
-    next_a,
     1 | =>
     RoleB,
     SessionMpstThree,

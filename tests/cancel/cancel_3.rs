@@ -29,7 +29,6 @@ create_multiple_normal_role!(
 create_send_mpst_cancel!(
     send_cancel_a_to_b,
     RoleB,
-    next_b,
     RoleA,
     SessionMpstFour,
     4,
