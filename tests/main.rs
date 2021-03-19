@@ -142,13 +142,6 @@ fn cases_tests_mpst_macro() {
 }
 
 #[test]
-fn macro_fail() {
-    let t = trybuild::TestCases::new();
-    // Macro fail types
-    t.compile_fail("tests/cases/long_simple_three_mpst_short_fail.rs");
-}
-
-#[test]
 fn scribble_tests() {
     scribble::top_down::top_down_approach();
     scribble::top_down_recursive::top_down_approach();
@@ -170,12 +163,15 @@ fn canceling() {
 }
 
 #[test]
-fn infinite_types() {
+fn tests() {
     let t = trybuild::TestCases::new();
     // Infinite types
     t.pass("tests/infinite_type/work.rs");
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
+
+    // Macro multi recursion for shorting
+    t.compile_fail("tests/cases/long_simple_three_mpst_short_fail.rs");
 }
 
 #[test]

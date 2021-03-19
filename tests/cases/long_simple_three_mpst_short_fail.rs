@@ -142,9 +142,9 @@ pub fn main() {
         simple_three_endpoint_c,
     );
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
+    assert!(thread_a.join().is_err());
+    assert!(thread_b.join().is_err());
+    assert!(thread_c.join().is_err());
 }
 
 /////////////////////////
