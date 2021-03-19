@@ -52,8 +52,12 @@ macro_rules! recv_mpst {
                 temp($session.stack)
             };
 
-            let (new_stack, _) : ($receiver<mpstthree::role::end::RoleEnd>, _) =
-                <$receiver<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new(); // Would like to check without creating
+            {
+                fn temp(_s: &$receiver<mpstthree::role::end::RoleEnd>) -> Result<(), Box<dyn std::error::Error>> {
+                    Ok(())
+                }
+                temp(&$session.name)
+            }.unwrap();
 
             Ok((
                 v,
@@ -64,7 +68,7 @@ macro_rules! recv_mpst {
                         session#N:0: new_session,
                     )0*
                     stack: new_queue,
-                    name: new_stack,
+                    name: $session.name,
                 }
             ))
         }});

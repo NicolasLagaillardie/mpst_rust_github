@@ -136,6 +136,16 @@ fn cases_tests_mpst_macro() {
 
     // Macro multi recursion
     cases::macro_multi_recursion::new_run_usecase_recursive();
+
+    // Macro multi recursion for shorting
+    cases::long_simple_three_mpst_short::shorten_main();
+}
+
+#[test]
+fn macro_fail() {
+    let t = trybuild::TestCases::new();
+    // Macro fail types
+    t.compile_fail("tests/cases/long_simple_three_mpst_short_fail.rs");
 }
 
 #[test]
@@ -160,7 +170,7 @@ fn canceling() {
 }
 
 #[test]
-fn tests() {
+fn infinite_types() {
     let t = trybuild::TestCases::new();
     // Infinite types
     t.pass("tests/infinite_type/work.rs");

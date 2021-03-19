@@ -52,8 +52,12 @@ macro_rules! send_mpst {
                 temp($session.stack)
             };
 
-            let (new_stack, _) : ($sender<mpstthree::role::end::RoleEnd>, _) =
-                <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new(); // Would like to check without creating
+            {
+                fn temp(_s: &$sender<mpstthree::role::end::RoleEnd>) -> Result<(), Box<dyn std::error::Error>> {
+                    Ok(())
+                }
+                temp(&$session.name)
+            }.unwrap();
 
             $struct_name {
                 %(
@@ -62,7 +66,7 @@ macro_rules! send_mpst {
                     session#N:0: new_session,
                 )0*
                 stack: new_queue,
-                name: new_stack,
+                name: $session.name,
             }
         }});
     }

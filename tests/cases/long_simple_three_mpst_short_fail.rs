@@ -87,8 +87,8 @@ fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoA::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, RoleA, SessionMpstThree, 3, 2)()?;
-            let s = send_mpst!(s, (), RoleC, RoleA, SessionMpstThree, 3, 2);
+            let (_, s) = recv_mpst!(s, RoleC, RoleB, SessionMpstThree, 3, 2)()?;
+            let s = send_mpst!(s, (), RoleC, RoleB, SessionMpstThree, 3, 2);
             let (_, s) = recv_mpst!(s, RoleB, RoleA, SessionMpstThree, 3, 1)()?;
             let s = send_mpst!(s, (), RoleB, RoleA, SessionMpstThree, 3, 1);
             simple_three_endpoint_a(s)
@@ -125,8 +125,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = more_from_c_to_all(s);
 
-            let s = send_mpst!(s, (), RoleA, RoleC, SessionMpstThree, 3, 1); // Generates much more lines in the end than a single use of
-                                                                             // create_send_mpst_http_bundle, but faster to write for users
+            let s = send_mpst!(s, (), RoleA, RoleC, SessionMpstThree, 3, 1);
             let (_, s) = recv_mpst!(s, RoleA, RoleC, SessionMpstThree, 3, 1)()?;
             let s = send_mpst!(s, (), RoleB, RoleC, SessionMpstThree, 3, 2);
             let (_, s) = recv_mpst!(s, RoleB, RoleC, SessionMpstThree, 3, 2)()?;
@@ -136,24 +135,18 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+pub fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         simple_three_endpoint_a,
         simple_three_endpoint_b,
         simple_three_endpoint_c,
     );
 
-    thread_a.join()?;
-    thread_b.join()?;
-    thread_c.join()?;
-
-    Ok(())
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 /////////////////////////
 
 static SIZE: i64 = 15;
-
-fn main() {
-    assert!(all_mpst().is_ok());
-}
