@@ -87,9 +87,9 @@ fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoA::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, RoleA, SessionMpstThree, 3, 2)()?;
-            let s = send_mpst!(s, (), RoleC, RoleA, SessionMpstThree, 3, 2);
-            let (_, s) = recv_mpst!(s, RoleB, RoleA, SessionMpstThree, 3, 1)()?;
+            let (_, s) = recv_mpst!(s, RoleC, RoleA, SessionMpstThree, 3, 2)()?; // Should be a.recv(RoleC)
+            let s = send_mpst!(s, (), RoleC, RoleA, SessionMpstThree, 3, 2); // Should be a.send(RoleC, payload)
+            let (_, s) = recv_mpst!(s, RoleB, RoleA, SessionMpstThree, 3, 1)()?; // Should be a.recv(RoleB)
             let s = send_mpst!(s, (), RoleB, RoleA, SessionMpstThree, 3, 1);
             simple_three_endpoint_a(s)
         },
