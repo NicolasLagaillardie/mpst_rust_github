@@ -87,10 +87,10 @@ fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoA::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, SessionMpstThree, 3, 2)()?;
-            let s = send_mpst!(s, (), RoleC, SessionMpstThree, 3, 2);
-            let (_, s) = recv_mpst!(s, RoleB, SessionMpstThree, 3, 1)()?;
-            let s = send_mpst!(s, (), RoleB, SessionMpstThree, 3, 1);
+            let (_, s) = recv_mpst!(s, RoleC, RoleA, SessionMpstThree, 3, 2)()?;
+            let s = send_mpst!(s, (), RoleC, RoleA, SessionMpstThree, 3, 2);
+            let (_, s) = recv_mpst!(s, RoleB, RoleA, SessionMpstThree, 3, 1)()?;
+            let s = send_mpst!(s, (), RoleB, RoleA, SessionMpstThree, 3, 1);
             simple_three_endpoint_a(s)
         },
     })
@@ -102,10 +102,10 @@ fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoB::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, SessionMpstThree, 3, 2)()?;
-            let s = send_mpst!(s, (), RoleC, SessionMpstThree, 3, 2);
-            let s = send_mpst!(s, (), RoleA, SessionMpstThree, 3, 1);
-            let (_, s) = recv_mpst!(s, RoleA, SessionMpstThree, 3, 1)()?;
+            let (_, s) = recv_mpst!(s, RoleC, RoleB, SessionMpstThree, 3, 2)()?;
+            let s = send_mpst!(s, (), RoleC, RoleB, SessionMpstThree, 3, 2);
+            let s = send_mpst!(s, (), RoleA, RoleB, SessionMpstThree, 3, 1);
+            let (_, s) = recv_mpst!(s, RoleA, RoleB, SessionMpstThree, 3, 1)()?;
             simple_three_endpoint_b(s)
         },
     })
@@ -125,11 +125,12 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = more_from_c_to_all(s);
 
-            let s = send_mpst!(s, (), RoleA, SessionMpstThree, 3, 1); // generates much more lines in the end than a single use of
-                                                                      // create_send_mpst_http_bundle, but faster to write for users
-            let (_, s) = recv_mpst!(s, RoleA, SessionMpstThree, 3, 1)()?;
-            let s = send_mpst!(s, (), RoleB, SessionMpstThree, 3, 2);
-            let (_, s) = recv_mpst!(s, RoleB, SessionMpstThree, 3, 2)()?;
+            let s = send_mpst!(s, (), RoleA, RoleC, SessionMpstThree, 3, 1); // Generates much more lines in the end than a single use of
+                                                                             // create_send_mpst_http_bundle, but faster to write for users
+                                                                             // Also does not check sender
+            let (_, s) = recv_mpst!(s, RoleA, RoleC, SessionMpstThree, 3, 1)()?;
+            let s = send_mpst!(s, (), RoleB, RoleC, SessionMpstThree, 3, 2);
+            let (_, s) = recv_mpst!(s, RoleB, RoleC, SessionMpstThree, 3, 2)()?;
 
             recurs_c(s, i - 1)
         }

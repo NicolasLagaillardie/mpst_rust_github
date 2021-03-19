@@ -4,6 +4,16 @@
 /// Shorter way to call the code within the send function instead of having to create the function
 /// itself.
 ///
+/// # Arguments
+///
+/// * The session that will be used
+/// * The payload that will be send
+/// * The name of the receiver
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
+/// * The index of the binary session type that will receive in the SessionMpst for this specific
+///   role. Index starts at 1.
+///
 /// # Example
 ///
 /// ```ignore
@@ -18,17 +28,56 @@
 /// );
 ///
 /// fn main(s: Endpoint) {
-///    let _s = send_mpst!(s, (), RoleB, SessionMpstThree, 3, 1);
+///    let _s = send_mpst!(s, (), RoleB, RoleA, SessionMpstThree, 3, 1);
 /// }
 /// ```
 #[macro_export]
 macro_rules! send_mpst {
+    ($session:expr, $payload:expr, $receiver:ident, $sender:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
+            %(
+            )(
+                let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
+            )0*
+
+            let new_queue = {
+                fn temp<R>(r: $receiver<R>) -> R
+                where
+                    R: mpstthree::role::Role,
+                {
+                    let (here, there) = <R as mpstthree::role::Role>::new();
+                    r.sender.send(there).unwrap_or(());
+                    here
+                }
+                temp($session.stack)
+            };
+
+            let (new_stack, _) : ($sender<mpstthree::role::end::RoleEnd>, _) =
+                <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new(); // Would like to check without creating
+
+            $struct_name {
+                %(
+                    session#N:0: $session.session#N:0,
+                )(
+                    session#N:0: new_session,
+                )0*
+                stack: new_queue,
+                name: new_stack,
+            }
+        }});
+    }
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! send_aux {
     ($session:expr, $payload:expr, $role:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
             %(
             )(
                 let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
             )0*
+
             let new_queue = {
                 fn temp<R>(r: $role<R>) -> R
                 where
@@ -108,7 +157,7 @@ macro_rules! create_send_mpst_session {
                 R: mpstthree::role::Role,
             {
 
-                mpstthree::send_mpst!(s, x, $role, $struct_name, $nsessions, $exclusion)
+                mpstthree::send_aux!(s, x, $role, $struct_name, $nsessions, $exclusion)
             }
         });
     }
@@ -386,7 +435,7 @@ macro_rules! create_send_http_session {
                 };
 
                 (
-                    mpstthree::send_mpst!(s, x, $role, $struct_name, $nsessions, $exclusion),
+                    mpstthree::send_aux!(s, x, $role, $struct_name, $nsessions, $exclusion),
                     req
                 )
             }

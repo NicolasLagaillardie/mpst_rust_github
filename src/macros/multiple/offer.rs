@@ -56,14 +56,7 @@ macro_rules! create_offer_type_multi {
 /// create_sessionmpst!(SessionMpst, 3);
 /// create_offer_type_multi!(OfferMpstThree, SessionMpst, 3);
 ///
-/// create_recv_mpst_all_session!(
-///     recv_mpst_b_all_to_d,
-///     RoleAlltoD,
-///     RoleB,
-///     SessionMpst,
-///     3,
-///     2
-/// );
+/// create_recv_mpst_all_session!(recv_mpst_b_all_to_d, RoleAlltoD, RoleB, SessionMpst, 3, 2);
 ///
 /// create_offer_mpst_session_multi!(
 ///     offer_mpst_session_b_to_d,

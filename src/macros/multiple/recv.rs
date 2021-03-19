@@ -4,6 +4,16 @@
 /// Shorter way to call the code within the recv function instead of having to create the function
 /// itself.
 ///
+/// # Arguments
+///
+/// * The session that will be used
+/// * The name of the sender
+/// * The name of the receiver
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
+/// * The index of the binary session type that will receive in the SessionMpst for this specific
+///   role. Index starts at 1.
+///
 /// # Example
 ///
 /// ```ignore
@@ -18,17 +28,59 @@
 /// );
 ///
 /// fn main(s: Endpoint) -> Result<(), Box<dyn std::error::Error>> {
-///    let (_payload, _s) = recv_mpst!(s, RoleB, SessionMpstThree, 3, 1)()?;
+///    let (_payload, _s) = recv_mpst!(s, RoleB, RoleA, SessionMpstThree, 3, 1)()?;
 /// }
 /// ```
 #[macro_export]
 macro_rules! recv_mpst {
+    ($session:expr, $sender:ident, $receiver:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
+            %(
+            )(
+                let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
+            )0*
+
+            let new_queue = {
+                fn temp<R>(r: $sender<R>) -> R
+                where
+                    R: mpstthree::role::Role,
+                {
+                    let (here, there) = <R as mpstthree::role::Role>::new();
+                    r.sender.send(there).unwrap_or(());
+                    here
+                }
+                temp($session.stack)
+            };
+
+            let (new_stack, _) : ($receiver<mpstthree::role::end::RoleEnd>, _) =
+                <$receiver<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new(); // Would like to check without creating
+
+            Ok((
+                v,
+                $struct_name {
+                    %(
+                        session#N:0: $session.session#N:0,
+                    )(
+                        session#N:0: new_session,
+                    )0*
+                    stack: new_queue,
+                    name: new_stack,
+                }
+            ))
+        }});
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! recv_aux {
     ($session:expr, $role:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
             %(
             )(
                 let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
             )0*
+
             let new_queue = {
                 fn temp<R>(r: $role<R>) -> R
                 where
@@ -115,7 +167,7 @@ macro_rules! create_recv_mpst_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                mpstthree::recv_mpst!(s, $role, $struct_name, $nsessions, $exclusion)()
+                mpstthree::recv_aux!(s, $role, $struct_name, $nsessions, $exclusion)()
             }
         });
     }
@@ -194,14 +246,7 @@ macro_rules! create_recv_mpst_session_bundle {
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
-/// create_recv_mpst_all_session!(
-///     recv_mpst_a_all_to_d,
-///     RoleAlltoD,
-///     RoleA,
-///     SessionMpst,
-///     3,
-///     2
-/// );
+/// create_recv_mpst_all_session!(recv_mpst_a_all_to_d, RoleAlltoD, RoleA, SessionMpst, 3, 2);
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_all_session {
@@ -390,7 +435,7 @@ macro_rules! create_recv_http_session {
                     false => hyper::Response::default(),
                 };
 
-                let (v, s) = mpstthree::recv_mpst!(s, $role, $struct_name, $nsessions, $exclusion)()?;
+                let (v, s) = mpstthree::recv_aux!(s, $role, $struct_name, $nsessions, $exclusion)()?;
 
                 Ok((v, s, resp))
             }
