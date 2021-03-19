@@ -152,7 +152,7 @@ macro_rules! recv_all_aux {
 ///   stack: role_b,
 ///   name: name_b,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_b_to_a((), sess_b);
@@ -206,7 +206,7 @@ where
 /// type EndpointA = SessionMpst<AtoB, End, QueueA, NameA>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ba, channel_ab) = BtoA::new();
 /// let (channel_ac, _) = BtoA::new();
 /// let (channel_bc, _) = End::new();
@@ -230,7 +230,7 @@ where
 ///   stack: role_a,
 ///   name: name_a,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_a_to_b((), sess_a);
@@ -284,7 +284,7 @@ where
 /// type EndpointA = SessionMpst<End, AtoC, QueueA, NameA>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ca, channel_ac) = CtoA::new();
 /// let (channel_cb, _) = End::new();
 /// let (channel_ab, _) = End::new();
@@ -308,7 +308,7 @@ where
 ///   stack: role_a,
 ///   name: name_a,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_a_to_c((), sess_a);
@@ -362,7 +362,7 @@ where
 /// type EndpointC = SessionMpst<CtoA, End, QueueC, NameC>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ab, _) = End::new();
 /// let (channel_cb, _) = End::new();
 /// let (channel_ac, channel_ca) = AtoC::new();
@@ -386,7 +386,7 @@ where
 ///   stack: role_c,
 ///   name: name_c,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_c_to_a((), sess_c);
@@ -440,7 +440,7 @@ where
 /// type EndpointC = SessionMpst<End, CtoB, QueueC, NameC>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ba, _) = End::new();
 /// let (channel_ca, _) = End::new();
 /// let (channel_bc, channel_cb) = BtoC::new();
@@ -464,7 +464,7 @@ where
 ///   stack: role_c,
 ///   name: name_c,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_c_to_b((), sess_c);
@@ -518,7 +518,7 @@ where
 /// type EndpointB = SessionMpst<End, BtoC, QueueB, NameB>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ba, _) = End::new();
 /// let (channel_ca, _) = End::new();
 /// let (channel_cb, channel_bc) = CtoB::new();
@@ -542,7 +542,7 @@ where
 ///   stack: role_b,
 ///   name: name_b,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// send_mpst_b_to_c((), sess_b);

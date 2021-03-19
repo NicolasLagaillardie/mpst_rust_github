@@ -74,7 +74,7 @@ macro_rules! send_aux {
 /// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC, QueueA, NameA>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ab, _) = AtoB::<i32>::new();
 /// let (channel_ac, _) = AtoC::new();
 ///
@@ -88,7 +88,7 @@ macro_rules! send_aux {
 ///   stack: role_a,
 ///   name: name_a,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_a_to_b(1, sess);
@@ -138,7 +138,7 @@ where
 /// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC, QueueB, NameB>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ba, _) = BtoA::<i32>::new();
 /// let (channel_bc, _) = BtoC::new();
 ///
@@ -152,7 +152,7 @@ where
 ///   stack: role_b,
 ///   name: name_b,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_b_to_a(1, sess);
@@ -202,7 +202,7 @@ where
 /// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB, QueueC, NameC>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ca, _) = CtoA::<i32>::new();
 /// let (channel_cb, _) = CtoB::new();
 ///
@@ -216,7 +216,7 @@ where
 ///   stack: role_c,
 ///   name: name_c,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_c_to_a(1, sess);
@@ -266,7 +266,7 @@ where
 /// type EndpointA<N> = SessionMpst<AtoB, AtoC<N>, QueueA, NameA>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ab, _) = AtoB::new();
 /// let (channel_ac, _) = AtoC::<i32>::new();
 ///
@@ -280,7 +280,7 @@ where
 ///   stack: role_a,
 ///   name: name_a,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_a_to_c(1, sess);
@@ -330,7 +330,7 @@ where
 /// type EndpointB<N> = SessionMpst<BtoA, BtoC<N>, QueueB, NameB>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ba, _) = BtoA::new();
 /// let (channel_bc, _) = BtoC::<i32>::new();
 ///
@@ -344,7 +344,7 @@ where
 ///   stack: role_b,
 ///   name: name_b,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_b_to_c(1, sess);
@@ -394,7 +394,7 @@ where
 /// type EndpointC<N> = SessionMpst<CtoA, CtoB<N>, QueueC, NameC>;
 ///
 /// // From this point...
-/// 
+///
 /// let (channel_ca, _) = CtoA::new();
 /// let (channel_cb, _) = CtoB::<i32>::new();
 ///
@@ -408,7 +408,7 @@ where
 ///   stack: role_c,
 ///   name: name_c,
 /// };
-/// 
+///
 /// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
 ///
 /// let s = send_mpst_c_to_b(1, sess);
