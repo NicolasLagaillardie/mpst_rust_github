@@ -21,14 +21,7 @@ create_multiple_normal_role_short!(A, B, C);
 
 // Create new send functions
 // A
-create_send_mpst_cancel!(
-    send_cancel_a_to_b,
-    RoleB,
-    RoleA,
-    SessionMpstThree,
-    3,
-    1
-);
+create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, RoleA, SessionMpstThree, 3, 1);
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_c,

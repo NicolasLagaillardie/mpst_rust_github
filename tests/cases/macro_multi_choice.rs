@@ -40,22 +40,8 @@ create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 3, 2);
 create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, SessionMpst, 3, 1);
 create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, SessionMpst, 3, 1);
 // broadcast
-create_recv_mpst_all_session!(
-    recv_mpst_b_all_to_d,
-    RoleAlltoD,
-    RoleB,
-    SessionMpst,
-    3,
-    2
-);
-create_recv_mpst_all_session!(
-    recv_mpst_a_all_to_d,
-    RoleAlltoD,
-    RoleA,
-    SessionMpst,
-    3,
-    2
-);
+create_recv_mpst_all_session!(recv_mpst_b_all_to_d, RoleAlltoD, RoleB, SessionMpst, 3, 2);
+create_recv_mpst_all_session!(recv_mpst_a_all_to_d, RoleAlltoD, RoleA, SessionMpst, 3, 2);
 
 close_mpst!(close_mpst_multi, SessionMpst, 3);
 

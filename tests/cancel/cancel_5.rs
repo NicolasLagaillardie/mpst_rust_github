@@ -33,14 +33,7 @@ create_send_mpst_session_bundle!(
     SessionMpstThree,
     3
 );
-create_send_mpst_cancel!(
-    send_cancel_a_to_b,
-    RoleB,
-    RoleA,
-    SessionMpstThree,
-    3,
-    1
-);
+create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, RoleA, SessionMpstThree, 3, 1);
 
 // Create new recv functions and related types
 // B
