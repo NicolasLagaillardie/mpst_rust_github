@@ -1133,9 +1133,9 @@ macro_rules! choose_mpst_to_all {
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
-            $($fn_send:ident,)+ =>
-            $($label:path,)+ =>
-            $($receiver:ident,)+ =>
+            $($fn_send,)+ =>
+            $($label,)+ =>
+            $($receiver,)+ =>
             $sender,
             SessionMpst,
             3,
