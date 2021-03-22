@@ -138,11 +138,11 @@ fn client_recurs(
             let s = choose_mpst_to_all!(
                 s,
                 Branches0AtoC::Video,
-                Branches0BtoC::Video,
+                Branches0BtoC::Video, =>
                 send_mpst_c_to_a,
-                send_mpst_c_to_b,
+                send_mpst_c_to_b, =>
                 RoleA,
-                RoleB,
+                RoleB, =>
                 RoleC
             );
 
@@ -155,11 +155,11 @@ fn client_recurs(
             let s = choose_mpst_to_all!(
                 s,
                 Branches0AtoC::End,
-                Branches0BtoC::End,
+                Branches0BtoC::End, =>
                 send_mpst_c_to_a,
-                send_mpst_c_to_b,
+                send_mpst_c_to_b, =>
                 RoleA,
-                RoleB,
+                RoleB, =>
                 RoleC
             );
 

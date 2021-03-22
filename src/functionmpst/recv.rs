@@ -564,18 +564,16 @@ where
 /// fail. Returns either a pair of the received value and
 /// the continuation of the `SessionMpst<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::
-/// offer_mpst_session_to_a_from_b`].
+/// with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
 #[doc(hidden)]
-pub fn recv_mpst_a_all_to_b<T, S1, S2, R, N>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<R, R>, N>,
-) -> ResultBoxError<T, S1, S2, R, N>
+pub fn recv_mpst_a_all_to_b<T, S1, S2, R>(
+    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<R, R>, RoleA<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
 {
     recv_all_aux!(s, RoleAlltoB, 1)()
 }
@@ -584,18 +582,16 @@ where
 /// fail. Returns either a pair of the received value and
 /// the continuation of the `SessionMpst<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::
-/// offer_mpst_session_to_a_from_c`].
+/// with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
 #[doc(hidden)]
-pub fn recv_mpst_a_all_to_c<T, S1, S2, R, N>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, N>,
-) -> ResultBoxError<T, S1, S2, R, N>
+pub fn recv_mpst_a_all_to_c<T, S1, S2, R>(
+    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, RoleA<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
 {
     recv_all_aux!(s, RoleAlltoC, 2)()
 }
@@ -604,18 +600,16 @@ where
 /// fail. Returns either a pair of the received value and
 /// the continuation of the `SessionMpst<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::
-/// offer_mpst_session_to_b_from_a`].
+/// with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
 #[doc(hidden)]
-pub fn recv_mpst_b_all_to_a<T, S1, S2, R, N>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, N>,
-) -> ResultBoxError<T, S1, S2, R, N>
+pub fn recv_mpst_b_all_to_a<T, S1, S2, R>(
+    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, RoleB<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
 {
     recv_all_aux!(s, RoleAlltoA, 1)()
 }
@@ -624,18 +618,16 @@ where
 /// fail. Returns either a pair of the received value and
 /// the continuation of the `SessionMpst<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::
-/// offer_mpst_session_to_b_from_c`].
+/// with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
 #[doc(hidden)]
-pub fn recv_mpst_b_all_to_c<T, S1, S2, R, N>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, N>,
-) -> ResultBoxError<T, S1, S2, R, N>
+pub fn recv_mpst_b_all_to_c<T, S1, S2, R>(
+    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, RoleB<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
 {
     recv_all_aux!(s, RoleAlltoC, 2)()
 }
@@ -644,18 +636,16 @@ where
 /// fail. Returns either a pair of the received value and
 /// the continuation of the `SessionMpst<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::
-/// offer_mpst_session_to_c_from_a`].
+/// with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
 #[doc(hidden)]
-pub fn recv_mpst_c_all_to_a<T, S1, S2, R, N>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, N>,
-) -> ResultBoxError<T, S1, S2, R, N>
+pub fn recv_mpst_c_all_to_a<T, S1, S2, R>(
+    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, RoleC<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
 {
     recv_all_aux!(s, RoleAlltoA, 1)()
 }
@@ -664,18 +654,16 @@ where
 /// fail. Returns either a pair of the received value and
 /// the continuation of the `SessionMpst<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::
-/// offer_mpst_session_to_c_from_b`].
+/// with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
 #[doc(hidden)]
-pub fn recv_mpst_c_all_to_b<T, S1, S2, R, N>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<R, R>, N>,
-) -> ResultBoxError<T, S1, S2, R, N>
+pub fn recv_mpst_c_all_to_b<T, S1, S2, R>(
+    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<R, R>, RoleC<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
 {
     recv_all_aux!(s, RoleAlltoB, 2)()
 }

@@ -17,6 +17,13 @@
 //! ../binary/trait.Session.html [`mpstthree::role::Role`]:
 //! ../role/trait.Role.html
 
+use crate::binary::struct_trait::Session;
+use crate::role::Role;
+
+pub mod impl_a;
+pub mod impl_b;
+pub mod impl_c;
+
 /// The structure which encapsulates two binary session
 /// types, a stack and a name.
 ///
@@ -46,10 +53,10 @@
 #[derive(Debug)]
 pub struct SessionMpst<S1, S2, R, N>
 where
-    S1: crate::binary::struct_trait::Session,
-    S2: crate::binary::struct_trait::Session,
-    R: crate::role::Role,
-    N: crate::role::Role,
+    S1: Session,
+    S2: Session,
+    R: Role,
+    N: Role,
 {
     pub session1: S1,
     pub session2: S2,
@@ -58,18 +65,12 @@ where
 }
 
 #[doc(hidden)]
-impl<
-        S1: crate::binary::struct_trait::Session,
-        S2: crate::binary::struct_trait::Session,
-        R: crate::role::Role,
-        N: crate::role::Role,
-    > crate::binary::struct_trait::Session for SessionMpst<S1, S2, R, N>
-{
+impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N> {
     type Dual = SessionMpst<
-        <S1 as crate::binary::struct_trait::Session>::Dual,
-        <S2 as crate::binary::struct_trait::Session>::Dual,
-        <R as crate::role::Role>::Dual,
-        <N as crate::role::Role>::Dual,
+        <S1 as Session>::Dual,
+        <S2 as Session>::Dual,
+        <R as Role>::Dual,
+        <N as Role>::Dual,
     >;
 
     #[doc(hidden)]
