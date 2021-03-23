@@ -90,7 +90,7 @@ enum Branching0fromStoV<N: marker::Send> {
         SessionMpstThree<
             Choose1fromVtoP,
             Recv<N, Choose1fromVtoS<N>>,
-            RoleServer<RolePawn<RoleServer<RoleEnd>>>,
+            RoleServer<RoleBroadcast>,
             NameVoter,
         >,
     ),
@@ -229,8 +229,6 @@ fn simple_three_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Er
     if choice == auth {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_server_to_pawn,
-            send_mpst_server_to_voter, =>
             Branching0fromStoP::Reject,
             Branching0fromStoV::<i32>::Reject, =>
             RolePawn,
@@ -247,8 +245,6 @@ fn simple_three_endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Er
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_server_to_pawn,
-            send_mpst_server_to_voter, =>
             Branching0fromStoP::Auth,
             Branching0fromStoV::<i32>::Auth, =>
             RolePawn,

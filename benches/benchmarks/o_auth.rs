@@ -104,7 +104,7 @@ enum Branching0fromStoA<N: marker::Send> {
         SessionMpstThree<
             Recv<N, Choose1fromAtoC<N>>,
             Choose1fromAtoS<N>,
-            RoleC<RoleC<RoleS<RoleEnd>>>,
+            RoleC<RoleBroadcast>,
             NameA,
         >,
     ),
