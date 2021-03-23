@@ -1,5 +1,6 @@
 mod cancel;
 mod cases;
+mod cases_short;
 mod http;
 mod scribble;
 mod tcp;
@@ -139,6 +140,89 @@ fn cases_tests_mpst_macro() {
 
     // Macro multi recursion for shorting
     cases::long_simple_three_mpst_short::shorten_main();
+}
+
+#[test]
+fn cases_tests_mpst_simple_short() {
+    // Simple
+    cases_short::simple::simple_triple_endpoints();
+    cases_short::simple::simple_triple_endpoints_checker();
+
+    // Choose
+    cases_short::choose::simple_choice();
+    cases_short::choose::simple_choice_checker();
+
+    // Choose 2 A
+    cases_short::a_choose_2::double_choice();
+    cases_short::a_choose_2::double_choice_checker();
+
+    // Choose 2 A
+    cases_short::b_choose_2::double_choice();
+    cases_short::b_choose_2::double_choice_checker();
+
+    // Choose 2 A
+    cases_short::c_choose_2::double_choice();
+    cases_short::c_choose_2::double_choice_checker();
+
+    // Nested choice
+    // cases_short::nested_choices;
+
+    // Usecase simple A
+    cases_short::a_usecase::run_a_usecase_left();
+    cases_short::a_usecase::run_a_usecase_right();
+    cases_short::a_usecase::run_a_usecase_checker();
+
+    // Usecase simple B
+    cases_short::b_usecase::run_b_usecase_left();
+    cases_short::b_usecase::run_b_usecase_right();
+    cases_short::b_usecase::run_b_usecase_checker();
+
+    // Usecase simple C
+    cases_short::c_usecase::run_c_usecase_left();
+    cases_short::c_usecase::run_c_usecase_right();
+    cases_short::c_usecase::run_c_usecase_checker();
+
+    // Usecase recursive A
+    cases_short::a_usecase_recursive::run_a_usecase_recursive();
+    cases_short::a_usecase_recursive::run_a_usecase_recursive_checker();
+
+    // Usecase recursive B
+    cases_short::b_usecase_recursive::run_b_usecase_recursive();
+    cases_short::b_usecase_recursive::run_b_usecase_recursive_checker();
+
+    // Usecase recursive C
+    cases_short::c_usecase_recursive::run_c_usecase_recursive();
+    cases_short::c_usecase_recursive::run_c_usecase_recursive_checker();
+}
+
+#[test]
+fn cases_tests_mpst_macro_short() {
+    // Macro basics
+    cases_short::macro_basics::basic_macros_send();
+    cases_short::macro_basics::basic_macros_recv();
+
+    // Macro choice
+    cases_short::macro_choice::run_usecase_right();
+    cases_short::macro_choice::run_usecase_left();
+
+    // Macro recursive
+    cases_short::macro_recursive::run_macro_recursive();
+
+    // Macro multi basics
+    cases_short::macro_multi_sessionmpst::basic_macros();
+
+    // Macro multi send-recv
+    cases_short::macro_multi_send_recv_sessionmpst::test_new_send();
+
+    // Macro multi choice
+    cases_short::macro_multi_choice::test_new_choice_full();
+    cases_short::macro_multi_choice::test_new_choice_close();
+
+    // Macro multi recursion
+    cases_short::macro_multi_recursion::new_run_usecase_recursive();
+
+    // Macro multi recursion for shorting
+    cases_short::long_simple_three_mpst_short::shorten_main();
 }
 
 #[test]

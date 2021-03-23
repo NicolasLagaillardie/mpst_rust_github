@@ -1,9 +1,11 @@
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
 use crate::binary::struct_trait::{End, Recv, Send, Session};
+use crate::functionmpst::offer::{offer_mpst_session_to_a_from_b, offer_mpst_session_to_a_from_c};
 use crate::functionmpst::recv::*;
 use crate::functionmpst::send::*;
 use crate::functionmpst::ChooseMpst;
+use crate::functionmpst::OfferMpst;
 use crate::role::a::RoleA;
 use crate::role::a_to_all::{next_a_to_all, RoleAtoAll};
 use crate::role::all_to_b::RoleAlltoB;
@@ -67,6 +69,40 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 {
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_mpst_a_all_to_c(self)
+    }
+}
+
+impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
+    SessionMpst<
+        OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
+        End,
+        RoleAlltoB<RoleEnd, RoleEnd>,
+        RoleA<RoleEnd>,
+    >
+{
+    pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
+    where
+        F: FnOnce(SessionMpst<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        G: FnOnce(SessionMpst<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    {
+        offer_mpst_session_to_a_from_b(self, f, g)
+    }
+}
+
+impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
+    SessionMpst<
+        End,
+        OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
+        RoleAlltoC<RoleEnd, RoleEnd>,
+        RoleA<RoleEnd>,
+    >
+{
+    pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
+    where
+        F: FnOnce(SessionMpst<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        G: FnOnce(SessionMpst<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    {
+        offer_mpst_session_to_a_from_c(self, f, g)
     }
 }
 
