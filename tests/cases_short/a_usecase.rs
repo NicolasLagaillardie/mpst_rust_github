@@ -21,9 +21,6 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::functionmpst::choose::choose_left_mpst_session_a_to_all;
-use mpstthree::functionmpst::choose::choose_right_mpst_session_a_to_all;
-
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
@@ -48,13 +45,11 @@ type AtoBVideo<N> = <BtoAVideo<N> as Session>::Dual;
 
 /// Queues
 type QueueBEnd = RoleEnd;
-type QueueBEndDual = <QueueAEnd as Role>::Dual;
 type QueueBVideo = RoleA<RoleC<RoleC<RoleA<RoleEnd>>>>;
 type QueueBVideoDual = <QueueBVideo as Role>::Dual;
 type QueueBFull = RoleA<RoleA<RoleAlltoA<RoleEnd, RoleEnd>>>;
 
 type QueueCEnd = RoleEnd;
-type QueueCEndDual = <QueueCEnd as Role>::Dual;
 type QueueCVideo = RoleB<RoleB<RoleEnd>>;
 type QueueCVideoDual = <QueueCVideo as Role>::Dual;
 type QueueCFull = RoleAlltoA<RoleEnd, RoleEnd>;
@@ -155,22 +150,7 @@ fn client_video(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
     assert_eq!(accept, id + 1);
 
-    let s = choose_left_mpst_session_a_to_all::<
-        CtoBVideo<i32>,
-        CtoBClose,
-        AtoBVideo<i32>,
-        CtoAClose,
-        AtoBClose,
-        BtoAClose,
-        QueueBVideoDual,
-        QueueBEndDual,
-        QueueCVideoDual,
-        QueueCEndDual,
-        QueueAVideo,
-        QueueAEnd,
-    >(s);
-
-    let (result, s) = s.send(accept).recv()?;
+    let (result, s) = s.choose_left().send(accept).recv()?;
 
     assert_eq!(result, accept + 3);
 
@@ -185,22 +165,7 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
     assert_eq!(accept, id + 1);
 
-    let s = choose_right_mpst_session_a_to_all::<
-        CtoBVideo<i32>,
-        CtoBClose,
-        AtoBVideo<i32>,
-        CtoAClose,
-        AtoBClose,
-        BtoAClose,
-        QueueBVideoDual,
-        QueueBEndDual,
-        QueueCVideoDual,
-        QueueCEndDual,
-        QueueAVideo,
-        QueueAEnd,
-    >(s);
-
-    s.close()
+    s.choose_right().close()
 }
 
 /////////////////////////////////////////
