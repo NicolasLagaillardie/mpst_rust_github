@@ -6,6 +6,7 @@ use mpstthree::{
     fork_mpst_multi, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
@@ -159,14 +160,14 @@ type EndpointLogs<N> = SessionMpstFour<
     Choose0fromLtoA<N>,
     Choose0fromLtoC<N>,
     Choose0fromLtoS<N>,
-    Api<Controller<Storage<RoleEnd>>>,
+    RoleBroadcast,
     NameLogs,
 >;
 type EndpointLogsInit<N> = SessionMpstFour<
     Choose0fromLtoA<N>,
     Recv<N, Choose0fromLtoC<N>>,
     Choose0fromLtoS<N>,
-    Controller<Api<Controller<Storage<RoleEnd>>>>,
+    Controller<RoleBroadcast>,
     NameLogs,
 >;
 
@@ -245,9 +246,6 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
             // Up
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_logs_to_api,
-                send_failure_logs_to_controller,
-                send_logs_to_storage, =>
                 Branching0fromLtoA::Up,
                 Branching0fromLtoC::Up,
                 Branching0fromLtoS::Up, =>
@@ -283,9 +281,6 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
             // Down
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_logs_to_api,
-                send_failure_logs_to_controller,
-                send_logs_to_storage, =>
                 Branching0fromLtoA::Down,
                 Branching0fromLtoC::Down,
                 Branching0fromLtoS::Down, =>
@@ -318,9 +313,6 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
         _ => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_logs_to_api,
-                send_failure_logs_to_controller,
-                send_logs_to_storage, =>
                 Branching0fromLtoA::Close,
                 Branching0fromLtoC::Close,
                 Branching0fromLtoS::Close, =>

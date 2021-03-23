@@ -24,6 +24,7 @@ pub mod all_to_c;
 pub mod b;
 pub mod b_dual;
 pub mod b_to_all;
+pub mod broadcast;
 pub mod c;
 pub mod c_dual;
 pub mod c_to_all;

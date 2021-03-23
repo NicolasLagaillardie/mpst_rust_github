@@ -16,6 +16,7 @@ pub mod recv;
 pub mod send;
 
 use crate::binary::struct_trait::{End, Recv, Send, Session};
+use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use either::Either;
 
@@ -44,8 +45,18 @@ pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
 /// [`either::Either`]: ../either/enum.Either.html
 pub type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        <SessionMpst<S0, S1, R0, N0> as Session>::Dual,
-        <SessionMpst<S2, S3, R1, N0> as Session>::Dual,
+        SessionMpst<
+            <S0 as Session>::Dual,
+            <S1 as Session>::Dual,
+            <R0 as Role>::Dual,
+            <N0 as Role>::Dual,
+        >,
+        SessionMpst<
+            <S2 as Session>::Dual,
+            <S3 as Session>::Dual,
+            <R1 as Role>::Dual,
+            <N0 as Role>::Dual,
+        >,
     >,
     End,
 >;

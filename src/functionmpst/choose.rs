@@ -60,6 +60,9 @@ type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
 #[doc(hidden)]
 macro_rules! choose_mpst_a {
     (
+        $session_1:ty,
+        $session_2:ty,
+        $session_3:ty,
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
@@ -70,9 +73,9 @@ macro_rules! choose_mpst_a {
         $pat:path,
         $next:ident
     ) => {{
-        let (session_1_2, session_2_1) = <_ as Session>::new();
-        let (session_1_3, session_3_1) = <_ as Session>::new();
-        let (session_3_2, session_2_3) = <_ as Session>::new();
+        let (session_1_2, session_2_1) = <$session_1 as Session>::new();
+        let (session_1_3, session_3_1) = <$session_2 as Session>::new();
+        let (session_3_2, session_2_3) = <$session_3 as Session>::new();
 
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
@@ -120,6 +123,9 @@ macro_rules! choose_mpst_a {
 #[doc(hidden)]
 macro_rules! choose_mpst_b {
     (
+        $session_1:ty,
+        $session_2:ty,
+        $session_3:ty,
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
@@ -130,9 +136,9 @@ macro_rules! choose_mpst_b {
         $pat:path,
         $next:ident
     ) => {{
-        let (session_1_2, session_2_1) = <_ as Session>::new();
-        let (session_1_3, session_3_1) = <_ as Session>::new();
-        let (session_3_2, session_2_3) = <_ as Session>::new();
+        let (session_2_1, session_1_2) = <$session_1 as Session>::new();
+        let (session_3_1, session_1_3) = <$session_2 as Session>::new();
+        let (session_2_3, session_3_2) = <$session_3 as Session>::new();
 
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
@@ -180,6 +186,9 @@ macro_rules! choose_mpst_b {
 #[doc(hidden)]
 macro_rules! choose_mpst_c {
     (
+        $session_1:ty,
+        $session_2:ty,
+        $session_3:ty,
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
@@ -190,9 +199,9 @@ macro_rules! choose_mpst_c {
         $pat:path,
         $next:ident
     ) => {{
-        let (session_1_2, session_2_1) = <_ as Session>::new();
-        let (session_1_3, session_3_1) = <_ as Session>::new();
-        let (session_3_2, session_2_3) = <_ as Session>::new();
+        let (session_2_1, session_1_2) = <$session_1 as Session>::new();
+        let (session_3_1, session_1_3) = <$session_2 as Session>::new();
+        let (session_3_2, session_2_3) = <$session_3 as Session>::new();
 
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
@@ -285,6 +294,9 @@ where
     R5: Role + 'a,
 {
     choose_mpst_a!(
+        S2,
+        S3,
+        S0,
         R0,
         R2,
         R4,
@@ -346,6 +358,9 @@ where
     R5: Role + 'a,
 {
     choose_mpst_a!(
+        S4,
+        S5,
+        S1,
         R1,
         R3,
         R5,
@@ -406,6 +421,9 @@ where
     R5: Role + 'a,
 {
     choose_mpst_b!(
+        S2,
+        S0,
+        S3,
         R0,
         R2,
         R4,
@@ -466,6 +484,9 @@ where
     R5: Role + 'a,
 {
     choose_mpst_b!(
+        S4,
+        S1,
+        S5,
         R1,
         R3,
         R5,
@@ -526,6 +547,9 @@ where
     R5: Role + 'a,
 {
     choose_mpst_c!(
+        S0,
+        S2,
+        S3,
         R0,
         R2,
         R4,
@@ -586,6 +610,9 @@ where
     R5: Role + 'a,
 {
     choose_mpst_c!(
+        S1,
+        S4,
+        S5,
         R1,
         R3,
         R5,

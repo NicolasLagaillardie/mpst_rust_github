@@ -412,8 +412,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///    Option::Some(_) => {
 ///        let s = choose_mpst_multi_to_all!(
 ///            s,
-///            send_mpst_d_to_a,
-///            send_mpst_d_to_b, =>
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
 ///            RoleA,
@@ -430,8 +428,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///    Option::None => {
 ///        let s = choose_mpst_multi_to_all!(
 ///            s,
-///            send_mpst_d_to_a,
-///            send_mpst_d_to_b, =>
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
 ///            RoleA,
@@ -447,8 +443,8 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_to_all {
-    ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
+    ($session:expr, $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
             #(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
             )4:0
@@ -463,8 +459,10 @@ macro_rules! choose_mpst_multi_to_all {
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
+            let s = $session;
+
             %(
-                let s = unused#N:14(
+                let _ = mpstthree::binary::send::send(
                     unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
@@ -474,10 +472,10 @@ macro_rules! choose_mpst_multi_to_all {
                         stack: stack_#N:0,
                         name: name_#N:0,
                     }),
-                    s,
+                    s.session#N:0,
                 );
             )(
-                let s = unused#N:14(
+                let _ = mpstthree::binary::send::send(
                     unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
@@ -487,11 +485,21 @@ macro_rules! choose_mpst_multi_to_all {
                         stack: stack_#N:0,
                         name: name_#N:0,
                     }),
-                    $session,
+                    s.session#N:0,
                 );
             )2*
 
-            mpstthree::binary::cancel::cancel(s);
+            let _ = {
+                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
+                {
+                    Ok(())
+                }
+                temp(&s.stack)
+            };
+
+            // mpstthree::binary::cancel::cancel(s.stack);
+
+            // mpstthree::binary::cancel::cancel(s.name);
 
             $sessionmpst_name {
                 #(
@@ -527,7 +535,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///    Option::Some(_) => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
-///            send_mpst_d_to_b, =>
 ///            CBranchesBtoC::Video, =>
 ///            RoleA,
 ///            RoleB, =>
@@ -543,7 +550,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///    Option::None => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
-///            send_mpst_d_to_b, =>
 ///            CBranchesBtoC::End, =>
 ///            RoleA,
 ///            RoleB, =>
@@ -577,8 +583,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///    Option::Some(_) => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
-///            send_mpst_d_to_a,
-///            send_mpst_d_to_b, =>
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
 ///            RoleA,
@@ -593,8 +597,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///    Option::None => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
-///            send_mpst_d_to_a,
-///            send_mpst_d_to_b, =>
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
 ///            RoleA,
@@ -611,7 +613,7 @@ macro_rules! choose_mpst_multi_to_all {
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $pawn: ident, $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
 
             let mut temp = Vec::<End>::new();
 
@@ -637,26 +639,28 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
+            let mut s = $session;
+
             %(
                 let elt = match temp.pop() {
                     Some(e) => e,
                     _ => panic!("Error type"),
                 };
 
-                let s = unused#N:20(
+                let _  = mpstthree::binary::send::send_canceled(
                     (
                         elt,
                         unused#N:21($sessionmpst_name {
-                        ~(
-                            session#N:1 : channel_~N:7,
-                        )(
-                            session#N:1 : channel_~N:7,
-                        )0*
-                        stack: stack_#N:0,
-                        name: name_#N:0,
+                            ~(
+                                session#N:1 : channel_~N:7,
+                            )(
+                                session#N:1 : channel_~N:7,
+                            )0*
+                            stack: stack_#N:0,
+                            name: name_#N:0,
                         }
                     )),
-                    s,
+                    s.session#N:0,
                 )?;
             )(
                 let elt = match temp.pop() {
@@ -664,20 +668,20 @@ macro_rules! choose_mpst_multi_cancel_to_all {
                     _ => panic!("Error type"),
                 };
 
-                let s = unused#N:20(
+                let _  = mpstthree::binary::send::send_canceled(
                     (
                         elt,
                         unused#N:21($sessionmpst_name {
-                        ~(
-                            session#N:1 : channel_~N:7,
-                        )(
-                            session#N:1 : channel_~N:7,
-                        )0*
-                        stack: stack_#N:0,
-                        name: name_#N:0,
+                            ~(
+                                session#N:1 : channel_~N:7,
+                            )(
+                                session#N:1 : channel_~N:7,
+                            )0*
+                            stack: stack_#N:0,
+                            name: name_#N:0,
                         }
                     )),
-                    $session,
+                    s.session#N:0,
                 )?;
             )4*
 
@@ -687,7 +691,9 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             };
             let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(elt)).unwrap();
 
-            mpstthree::binary::cancel::cancel(s);
+            // mpstthree::binary::cancel::cancel(s.stack);
+
+            // mpstthree::binary::cancel::cancel(s.name);
 
             $sessionmpst_name {
                 #(
@@ -720,8 +726,6 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///    Option::Some(_) => {
 ///        let s = choose_mpst_multi_http_to_all!(
 ///            s,
-///            send_http_d_to_a,
-///            send_http_d_to_b, =>
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
 ///            RoleA,
@@ -738,8 +742,6 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///    Option::None => {
 ///        let s = choose_mpst_multi_http_to_all!(
 ///            s,
-///            send_http_d_to_a,
-///            send_http_d_to_b, =>
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
 ///            RoleA,
@@ -756,7 +758,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 #[macro_export]
 macro_rules! choose_mpst_multi_http_to_all {
     ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($fn_send$args,)+) : ($($label,)+) : ($($receiver,)+) {{
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
             #(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
             )4:0
@@ -771,8 +773,10 @@ macro_rules! choose_mpst_multi_http_to_all {
 
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
+            let mut s = $session;
+
             %(
-                let (s, _) = unused#N:14(
+                let _ = mpstthree::binary::send::send_http(
                     unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
@@ -782,7 +786,7 @@ macro_rules! choose_mpst_multi_http_to_all {
                         stack: stack_#N:0,
                         name: name_#N:0,
                     }),
-                    s,
+                    s.session#N:0,
                     false,
                     hyper::Method::GET,
                     "",
@@ -790,7 +794,7 @@ macro_rules! choose_mpst_multi_http_to_all {
                     "",
                 );
             )(
-                let (s, _) = unused#N:14(
+                let _ = mpstthree::binary::send::send_http(
                     unused#N:15($sessionmpst_name {
                         ~(
                             session#N:1 : channel_~N:7,
@@ -800,7 +804,7 @@ macro_rules! choose_mpst_multi_http_to_all {
                         stack: stack_#N:0,
                         name: name_#N:0,
                     }),
-                    $session,
+                    s.session#N:0,
                     false,
                     hyper::Method::GET,
                     "",
@@ -809,7 +813,7 @@ macro_rules! choose_mpst_multi_http_to_all {
                 );
             )2*
 
-            mpstthree::binary::cancel::cancel(s);
+            // mpstthree::binary::cancel::cancel(s);
 
             $sessionmpst_name {
                 #(
@@ -869,7 +873,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
     };
     (@call $fn_name:ident, $branch:expr, $new_type:ty => ($($label:path,)+) => ($($receiver:ident,)+) => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($receiver,)+) : ($($label,)+) : ($($receiver,)+) { // The first ($($receiver,)+) is unused
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {
             fn $fn_name(
                 s: $sessionmpst_name<
                     #(

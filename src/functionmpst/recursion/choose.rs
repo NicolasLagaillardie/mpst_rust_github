@@ -28,8 +28,6 @@
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        use mpstthree::functionmpst::send::send_mpst_a_to_b;
-        use mpstthree::functionmpst::send::send_mpst_a_to_c;
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -37,8 +35,6 @@ macro_rules! choose_mpst_a_to_all {
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
-            send_mpst_a_to_b,
-            send_mpst_a_to_c, =>
             $labelone,
             $labeltwo, =>
             RoleB,
@@ -79,8 +75,6 @@ macro_rules! choose_mpst_a_to_all {
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        use mpstthree::functionmpst::send::send_mpst_b_to_a;
-        use mpstthree::functionmpst::send::send_mpst_b_to_c;
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -88,8 +82,6 @@ macro_rules! choose_mpst_b_to_all {
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
-            send_mpst_b_to_a,
-            send_mpst_b_to_c, =>
             $labelone,
             $labeltwo, =>
             RoleA,
@@ -130,8 +122,6 @@ macro_rules! choose_mpst_b_to_all {
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($session:expr, $labelone:path, $labeltwo:path) => {{
-        use mpstthree::functionmpst::send::send_mpst_c_to_a;
-        use mpstthree::functionmpst::send::send_mpst_c_to_b;
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -139,8 +129,6 @@ macro_rules! choose_mpst_c_to_all {
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
-            send_mpst_c_to_a,
-            send_mpst_c_to_b, =>
             $labelone,
             $labeltwo, =>
             RoleA,

@@ -10,7 +10,8 @@ use crate::sessionmpst::SessionMpst;
 use std::marker;
 
 #[doc(hidden)]
-macro_rules! send_aux {
+#[macro_export]
+macro_rules! send_aux_simple {
     ($session:expr, $payload:expr, $role:ident, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..3 ! $exclusion {{ // exclusion: index of binary channel among the 2 others
             %(
@@ -103,7 +104,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux!(s, x, RoleB, 1)
+    send_aux_simple!(s, x, RoleB, 1)
 }
 
 /// Send a value of type `T` from B to A. Always succeeds.
@@ -167,7 +168,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux!(s, x, RoleA, 1)
+    send_aux_simple!(s, x, RoleA, 1)
 }
 
 /// Send a value of type `T` from C to A. Always succeeds.
@@ -231,7 +232,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux!(s, x, RoleA, 1)
+    send_aux_simple!(s, x, RoleA, 1)
 }
 
 /// Send a value of type `T` from A to C. Always succeeds.
@@ -295,7 +296,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux!(s, x, RoleC, 2)
+    send_aux_simple!(s, x, RoleC, 2)
 }
 
 /// Send a value of type `T` from B to C. Always succeeds.
@@ -359,7 +360,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux!(s, x, RoleC, 2)
+    send_aux_simple!(s, x, RoleC, 2)
 }
 
 /// Send a value of type `T` from C to B. Always succeeds.
@@ -423,5 +424,5 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux!(s, x, RoleB, 2)
+    send_aux_simple!(s, x, RoleB, 2)
 }

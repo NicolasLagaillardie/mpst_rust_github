@@ -6,6 +6,7 @@ use mpstthree::{
     fork_mpst_multi, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
@@ -231,21 +232,21 @@ type NestedStorage<N> = SessionMpstFour<
     Choose1fromStoA<N>,
     Choose1fromStoC<N>,
     Choose1fromStoL<N>,
-    Api<Controller<Logs<RoleEnd>>>,
+    RoleBroadcast,
     NameStorage,
 >;
 type EndpointStorage<N> = SessionMpstFour<
     Choose0fromStoA<N>,
     Choose0fromStoC<N>,
     Choose0fromStoL<N>,
-    Api<Controller<Logs<RoleEnd>>>,
+    RoleBroadcast,
     NameStorage,
 >;
 type EndpointStorageInit<N> = SessionMpstFour<
     Choose0fromStoA<N>,
     Recv<N, Choose0fromStoC<N>>,
     Choose0fromStoL<N>,
-    Controller<Api<Controller<Logs<RoleEnd>>>>,
+    Controller<RoleBroadcast>,
     NameStorage,
 >;
 
@@ -419,9 +420,6 @@ fn recurs_storage(
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_response_storage_to_api,
-                send_new_status_storage_to_controller,
-                send_storage_to_logs, =>
                 Branching0fromStoA::Up,
                 Branching0fromStoC::Up,
                 Branching0fromStoL::Up, =>
@@ -458,9 +456,6 @@ fn recurs_storage(
         1 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_response_storage_to_api,
-                send_new_status_storage_to_controller,
-                send_storage_to_logs, =>
                 Branching0fromStoA::Down,
                 Branching0fromStoC::Down,
                 Branching0fromStoL::Down, =>
@@ -499,9 +494,6 @@ fn recurs_storage(
         _ => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_response_storage_to_api,
-                send_new_status_storage_to_controller,
-                send_storage_to_logs, =>
                 Branching0fromStoA::Close,
                 Branching0fromStoC::Close,
                 Branching0fromStoL::Close, =>
@@ -531,9 +523,6 @@ fn nested_storage(
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_response_storage_to_api,
-                send_new_status_storage_to_controller,
-                send_storage_to_logs, =>
                 Branching1fromStoA::Request,
                 Branching1fromStoC::Up,
                 Branching1fromStoL::Up, =>
@@ -559,9 +548,6 @@ fn nested_storage(
         _ => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_response_storage_to_api,
-                send_new_status_storage_to_controller,
-                send_storage_to_logs, =>
                 Branching1fromStoA::Down,
                 Branching1fromStoC::Down,
                 Branching1fromStoL::Down, =>

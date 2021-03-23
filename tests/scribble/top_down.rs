@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::sessionmpst::SessionMpst;
 use std::marker;
@@ -77,7 +78,7 @@ type EndpointB14<N> =
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
-type OrderingC2Full = RoleA<RoleA<RoleB<RoleEnd>>>;
+type OrderingC2Full = RoleA<RoleBroadcast>;
 type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, RoleC<RoleEnd>>;
 
 ///////////////////////////////////////// END

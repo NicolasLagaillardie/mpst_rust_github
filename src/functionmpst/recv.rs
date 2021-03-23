@@ -16,7 +16,8 @@ use std::marker;
 type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Box<dyn Error>>;
 
 #[doc(hidden)]
-macro_rules! recv_aux {
+#[macro_export]
+macro_rules! recv_aux_simple {
     ($session:expr, $role:ident, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..3 ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
             %(
@@ -53,6 +54,7 @@ macro_rules! recv_aux {
 }
 
 #[doc(hidden)]
+#[macro_export]
 macro_rules! recv_all_aux {
     ($session:expr, $role:ident, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..3 ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
@@ -167,7 +169,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux!(s, RoleB, 1)()
+    recv_aux_simple!(s, RoleB, 1)()
 }
 
 /// Receive a value of type `T` on B from A. Can fail.
@@ -245,7 +247,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux!(s, RoleA, 1)()
+    recv_aux_simple!(s, RoleA, 1)()
 }
 
 /// Receive a value of type `T` on C from A. Can fail.
@@ -323,7 +325,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux!(s, RoleA, 1)()
+    recv_aux_simple!(s, RoleA, 1)()
 }
 
 /// Receive a value of type `T` on A from C. Can fail.
@@ -401,7 +403,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux!(s, RoleC, 2)()
+    recv_aux_simple!(s, RoleC, 2)()
 }
 
 /// Receive a value of type `T` on B from C. Can fail.
@@ -479,7 +481,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux!(s, RoleC, 2)()
+    recv_aux_simple!(s, RoleC, 2)()
 }
 
 /// Receive a value of type `T` on C from B. Can fail.
@@ -557,7 +559,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux!(s, RoleB, 2)()
+    recv_aux_simple!(s, RoleB, 2)()
 }
 
 /// Receive a broadcasted value of type `T` on B from A. Can

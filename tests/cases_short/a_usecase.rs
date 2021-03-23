@@ -147,11 +147,9 @@ fn client_video(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let id: i32 = rng.gen();
 
     let (accept, s) = s.send(id).recv()?;
-
-    assert_eq!(accept, id + 1);
-
     let (result, s) = s.choose_left().send(accept).recv()?;
 
+    assert_eq!(accept, id + 1);
     assert_eq!(result, accept + 3);
 
     s.close()

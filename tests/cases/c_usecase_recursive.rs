@@ -2,6 +2,7 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
@@ -82,7 +83,7 @@ type QueueBEnd = RoleEnd;
 type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 type QueueBRecurs = RoleC<RoleEnd>;
 
-type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueCRecurs = RoleBroadcast;
 type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 
 /// Creating the MP sessions

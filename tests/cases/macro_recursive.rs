@@ -2,6 +2,7 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::sessionmpst::SessionMpst;
 use std::error::Error;
@@ -65,7 +66,7 @@ type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
 type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 
-type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueCRecurs = RoleBroadcast;
 type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
 
 /// Creating the MP sessions
@@ -139,8 +140,6 @@ fn client_recurs(
                 s,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
                 RoleA,
                 RoleB, =>
                 RoleC
@@ -156,8 +155,6 @@ fn client_recurs(
                 s,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                send_mpst_c_to_a,
-                send_mpst_c_to_b, =>
                 RoleA,
                 RoleB, =>
                 RoleC

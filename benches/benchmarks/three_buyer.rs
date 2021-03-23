@@ -9,6 +9,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
@@ -114,7 +115,7 @@ type EndpointA<N> = SessionMpstThree<
 type EndpointC<N> = SessionMpstThree<
     Recv<N, Choose0fromCtoA<N>>,
     Recv<N, Choose0fromCtoS<N>>,
-    RoleS<RoleA<RoleA<RoleS<RoleEnd>>>>,
+    RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
 // S
@@ -150,8 +151,6 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_c_to_a,
-            send_mpst_c_to_s, =>
             Branching0fromCtoA::<i32>::Accept,
             Branching0fromCtoS::<i32>::Accept, =>
             RoleA,
@@ -170,8 +169,6 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_c_to_a,
-            send_mpst_c_to_s, =>
             Branching0fromCtoA::<i32>::Quit,
             Branching0fromCtoS::<i32>::Quit, =>
             RoleA,

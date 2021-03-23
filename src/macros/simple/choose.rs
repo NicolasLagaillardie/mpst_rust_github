@@ -1098,8 +1098,6 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///             s,
 ///             CBranchesAtoC::Video,
 ///             CBranchesBtoC::Video, =>
-///             send_mpst_c_to_a,
-///             send_mpst_c_to_b, =>
 ///             RoleA,
 ///             RoleB, =>
 ///             RoleC
@@ -1113,8 +1111,6 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///             s,
 ///             CBranchesAtoC::End,
 ///             CBranchesBtoC::End, =>
-///             send_mpst_c_to_a,
-///             send_mpst_c_to_b, =>
 ///             RoleA,
 ///             RoleB, =>
 ///             RoleC
@@ -1128,12 +1124,11 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! choose_mpst_to_all {
-    ($session:expr, $($label:path,)+ => $($fn_send:ident,)+ => $($receiver:ident,)+ => $sender:ident) => {{
+    ($session:expr, $($label:path,)+ => $($receiver:ident,)+ => $sender:ident) => {{
         use mpstthree::sessionmpst::SessionMpst;
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
-            $($fn_send,)+ =>
             $($label,)+ =>
             $($receiver,)+ =>
             $sender,

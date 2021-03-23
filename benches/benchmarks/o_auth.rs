@@ -9,6 +9,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
@@ -149,20 +150,15 @@ type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
 
 // Creating the MP sessions
 // A
-type ChoiceA<N> = SessionMpstThree<
-    Recv<N, Choose1fromAtoC<N>>,
-    Choose1fromAtoS<N>,
-    RoleC<RoleC<RoleS<RoleEnd>>>,
-    NameA,
->;
+type ChoiceA<N> =
+    SessionMpstThree<Recv<N, Choose1fromAtoC<N>>, Choose1fromAtoS<N>, RoleC<RoleBroadcast>, NameA>;
 type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
 // C
 type ChoiceC<N> = SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, RoleS<RoleEnd>, NameC>;
 // S
 type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
-type EndpointS<N> =
-    SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleA<RoleC<RoleEnd>>, NameS>;
+type EndpointS<N> = SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleBroadcast, NameS>;
 
 // Functions
 fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -186,8 +182,6 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     if pwd == expected {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_a_to_c,
-            send_mpst_a_to_s, =>
             Branching1fromAtoC::<i32>::Auth,
             Branching1fromAtoS::<i32>::Auth, =>
             RoleC,
@@ -204,8 +198,6 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_a_to_c,
-            send_mpst_a_to_s, =>
             Branching1fromAtoC::<i32>::Again,
             Branching1fromAtoS::<i32>::Again, =>
             RoleC,
@@ -260,8 +252,6 @@ fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_s_to_a,
-            send_mpst_s_to_c, =>
             Branching0fromStoA::<i32>::Done,
             Branching0fromStoC::<i32>::Done, =>
             RoleA,
@@ -278,8 +268,6 @@ fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_s_to_a,
-            send_mpst_s_to_c,  =>
             Branching0fromStoA::<i32>::Login,
             Branching0fromStoC::<i32>::Login, =>
             RoleA,

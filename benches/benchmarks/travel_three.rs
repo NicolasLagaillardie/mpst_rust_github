@@ -9,6 +9,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
@@ -134,10 +135,8 @@ type Choice1fromCtoS<N> = Recv<Branching1fromCtoS<N>, End>;
 type ChoiceA<N> = SessionMpstThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
 type EndpointA<N> = SessionMpstThree<Choice0fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
 // C
-type ChoiceC<N> =
-    SessionMpstThree<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleA<RoleS<RoleEnd>>, NameC>;
-type EndpointC<N> =
-    SessionMpstThree<Choose0fromCtoA<N>, Choose0fromCtoS<N>, RoleA<RoleS<RoleEnd>>, NameC>;
+type ChoiceC<N> = SessionMpstThree<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
+type EndpointC<N> = SessionMpstThree<Choose0fromCtoA<N>, Choose0fromCtoS<N>, RoleBroadcast, NameC>;
 // S
 type ChoiceS<N> = SessionMpstThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;
 type EndpointS<N> = SessionMpstThree<End, Choice0fromCtoS<N>, RoleC<RoleEnd>, NameS>;
@@ -179,8 +178,6 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_c_to_a,
-            send_mpst_c_to_s, =>
             Branching0fromCtoA::<i32>::Select,
             Branching0fromCtoS::<i32>::Select, =>
             RoleA,
@@ -194,8 +191,6 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_c_to_a,
-            send_mpst_c_to_s,  =>
             Branching0fromCtoA::<i32>::Loop,
             Branching0fromCtoS::<i32>::Loop, =>
             RoleA,
@@ -218,8 +213,6 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_c_to_a,
-            send_mpst_c_to_s, =>
             Branching1fromCtoA::<i32>::Yes,
             Branching1fromCtoS::<i32>::Yes, =>
             RoleA,
@@ -237,8 +230,6 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_c_to_a,
-            send_mpst_c_to_s,  =>
             Branching1fromCtoA::<i32>::No,
             Branching1fromCtoS::<i32>::No, =>
             RoleA,

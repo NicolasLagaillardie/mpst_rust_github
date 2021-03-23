@@ -13,6 +13,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use std::error::Error;
 use std::marker;
 use std::thread::{spawn, JoinHandle};
@@ -123,8 +124,7 @@ enum Branching0fromAtoC {
 type RecursCtoA = Recv<Branching0fromAtoC, End>;
 
 // Creating the MP sessions
-type EndpointA<N> =
-    SessionMpstThree<Choose0fromAtoB<N>, Choose0fromAtoC, RoleB<RoleC<RoleEnd>>, NameA>;
+type EndpointA<N> = SessionMpstThree<Choose0fromAtoB<N>, Choose0fromAtoC, RoleBroadcast, NameA>;
 type EndpointB<N> = SessionMpstThree<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
@@ -138,8 +138,6 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_a_to_b,
-                send_mpst_a_to_c, =>
                 Branching0fromAtoB::<i64>::Done,
                 Branching0fromAtoC::Done, =>
                 RoleB,
@@ -155,8 +153,6 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
         i => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_a_to_b,
-                send_mpst_a_to_c, =>
                 Branching0fromAtoB::<i64>::More,
                 Branching0fromAtoC::More, =>
                 RoleB,

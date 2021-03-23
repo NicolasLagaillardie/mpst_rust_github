@@ -9,6 +9,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
+use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
@@ -117,7 +118,7 @@ type Choice1fromStoV<N> = Recv<Branching1fromVtoS<N>, End>;
 type ChoiceVoter<N> = SessionMpstThree<
     Choose1fromVtoP,
     Recv<N, Choose1fromVtoS<N>>,
-    RoleServer<RolePawn<RoleServer<RoleEnd>>>,
+    RoleServer<RoleBroadcast>,
     NameVoter,
 >;
 type EndpointVoter<N> = SessionMpstThree<
@@ -135,7 +136,7 @@ type ChoiceServer<N> = SessionMpstThree<End, Choice1fromStoV<N>, RoleVoter<RoleE
 type EndpointServer<N> = SessionMpstThree<
     Choose0fromStoP,
     Recv<N, Choose0fromStoV<N>>,
-    RoleVoter<RolePawn<RoleVoter<RoleEnd>>>,
+    RoleVoter<RoleBroadcast>,
     NameServer,
 >;
 
@@ -166,8 +167,6 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     if ok == expected {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_voter_to_pawn,
-            send_mpst_voter_to_server, =>
             Branching1fromVtoP::Yes,
             Branching1fromVtoS::<i32>::Yes, =>
             RolePawn,
@@ -184,8 +183,6 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            send_mpst_voter_to_pawn,
-            send_mpst_voter_to_server, =>
             Branching1fromVtoP::No,
             Branching1fromVtoS::<i32>::No, =>
             RolePawn,

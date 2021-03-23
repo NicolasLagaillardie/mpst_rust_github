@@ -293,6 +293,7 @@ fn get_name(head: &str) -> String {
         "RoleB" => String::from("B"),
         "RoleC" => String::from("C"),
         "RoleEnd" => String::from("End"),
+        "RoleBroadcast" => String::from("Broadcast"),
         _ => panic!("Wrong head, not recognized: {}", head),
     }
 }

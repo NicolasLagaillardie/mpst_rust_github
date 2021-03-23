@@ -2,6 +2,7 @@
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_broadcast_role, create_multiple_normal_role,
@@ -91,7 +92,7 @@ type QueueBEnd = RoleEnd;
 type QueueBVideo = RoleA<RoleA<RoleD<RoleEnd>>>;
 type QueueBRecurs = RoleD<RoleEnd>;
 
-type QueueDRecurs = RoleA<RoleB<RoleEnd>>;
+type QueueDRecurs = RoleBroadcast;
 type QueueDFull = RoleA<RoleA<QueueDRecurs>>;
 
 /// Creating the MP sessions
@@ -162,8 +163,6 @@ fn client_recurs(
         Option::Some(_) => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_d_to_a,
-                send_mpst_d_to_b, =>
                 Branches0AtoD::Video,
                 Branches0BtoD::Video, =>
                 RoleA,
@@ -182,8 +181,6 @@ fn client_recurs(
         Option::None => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_d_to_a,
-                send_mpst_d_to_b, =>
                 Branches0AtoD::End,
                 Branches0BtoD::End, =>
                 RoleA,
