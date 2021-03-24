@@ -101,15 +101,15 @@ fn cases_tests_mpst_simple() {
 
     // Usecase recursive A
     cases::a_usecase_recursive::run_a_usecase_recursive();
-    cases::a_usecase_recursive::run_a_usecase_recursive_checker();
+    // cases::a_usecase_recursive::run_a_usecase_recursive_checker();
 
     // Usecase recursive B
     cases::b_usecase_recursive::run_b_usecase_recursive();
-    cases::b_usecase_recursive::run_b_usecase_recursive_checker();
+    // cases::b_usecase_recursive::run_b_usecase_recursive_checker();
 
     // Usecase recursive C
     cases::c_usecase_recursive::run_c_usecase_recursive();
-    cases::c_usecase_recursive::run_c_usecase_recursive_checker();
+    // cases::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
 #[test]
@@ -184,15 +184,15 @@ fn cases_tests_mpst_simple_short() {
 
     // Usecase recursive A
     cases_short::a_usecase_recursive::run_a_usecase_recursive();
-    cases_short::a_usecase_recursive::run_a_usecase_recursive_checker();
+    // cases_short::a_usecase_recursive::run_a_usecase_recursive_checker();
 
     // Usecase recursive B
     cases_short::b_usecase_recursive::run_b_usecase_recursive();
-    cases_short::b_usecase_recursive::run_b_usecase_recursive_checker();
+    // cases_short::b_usecase_recursive::run_b_usecase_recursive_checker();
 
     // Usecase recursive C
     cases_short::c_usecase_recursive::run_c_usecase_recursive();
-    cases_short::c_usecase_recursive::run_c_usecase_recursive_checker();
+    // cases_short::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
 #[test]

@@ -3,18 +3,18 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::Role;
+// use mpstthree::role::Role;
 use mpstthree::sessionmpst::SessionMpst;
 
-use std::any::type_name;
+// use std::any::type_name;
 use std::boxed::Box;
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
+// use std::collections::hash_map::RandomState;
+// use std::collections::HashMap;
 use std::error::Error;
-use std::fmt;
+// use std::fmt;
 use std::marker;
 
-use mpstthree::checking::checker;
+// use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
 
@@ -171,64 +171,6 @@ fn client_recurs(
     }
 }
 
-///////////////////////////////////////// Need a refactoring
-///////////////////////////////////////// to be included in
-///////////////////////////////////////// macro
-
-fn type_of<T>(_: T) -> &'static str {
-    type_name::<T>()
-}
-
-impl<N: marker::Send> fmt::Display for Branches0CtoB<N> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Branches0CtoB::Video(s) => {
-                write!(f, "Video:{}", type_of(&s))
-            }
-            Branches0CtoB::End(s) => {
-                write!(f, "End:{}", type_of(&s))
-            }
-        }
-    }
-}
-
-fn hashmap_branche_0_c_to_b() -> Vec<String> {
-    let (s_video, _) = <_ as Session>::new();
-
-    let video = Branches0CtoB::Video::<i32>(s_video);
-
-    let (s_end, _) = <_ as Session>::new();
-
-    let end = Branches0CtoB::End::<i32>(s_end);
-
-    vec![(&video).to_string(), (&end).to_string()]
-}
-
-impl<N: marker::Send> fmt::Display for Branches0AtoB<N> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Branches0AtoB::Video(s) => {
-                write!(f, "Video:{}", type_of(&s))
-            }
-            Branches0AtoB::End(s) => {
-                write!(f, "End:{}", type_of(&s))
-            }
-        }
-    }
-}
-
-fn hashmap_branche_0_a_to_b() -> Vec<String> {
-    let (s_video, _) = <_ as Session>::new();
-
-    let video = Branches0AtoB::Video::<i32>(s_video);
-
-    let (s_end, _) = <_ as Session>::new();
-
-    let end = Branches0AtoB::End::<i32>(s_end);
-
-    vec![(&video).to_string(), (&end).to_string()]
-}
-
 /////////////////////////////////////////
 
 pub fn run_a_usecase_recursive() {
@@ -245,49 +187,107 @@ pub fn run_a_usecase_recursive() {
     .is_ok());
 }
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleC<RoleC<RoleA<RoleC<RoleEnd>>>>;
+///////////////////////////////////////// Need a refactoring
+///////////////////////////////////////// to be included in
+///////////////////////////////////////// macro
 
-pub fn run_a_usecase_recursive_checker() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            // Get the new sessionmpst of the passive roles
-            let state_branches_receivers = RandomState::new();
-            let mut branches_receivers: HashMap<String, &Vec<String>> =
-                HashMap::with_hasher(state_branches_receivers);
+// fn type_of<T>(_: T) -> &'static str {
+//     type_name::<T>()
+// }
 
-            let branche_0_a_to_b: Vec<String> = hashmap_branche_0_a_to_b();
-            let branche_0_c_to_b: Vec<String> = hashmap_branche_0_c_to_b();
+// impl<N: marker::Send> fmt::Display for Branches0CtoB<N> {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//             Branches0CtoB::Video(s) => {
+//                 write!(f, "Video:{}", type_of(&s))
+//             }
+//             Branches0CtoB::End(s) => {
+//                 write!(f, "End:{}", type_of(&s))
+//             }
+//         }
+//     }
+// }
 
-            branches_receivers.insert(String::from("Branches0AtoB<i32>"), &branche_0_a_to_b);
-            branches_receivers.insert(String::from("Branches0CtoB<i32>"), &branche_0_c_to_b);
+// fn hashmap_branche_0_c_to_b() -> Vec<String> {
+//     let (s_video, _) = <_ as Session>::new();
 
-            let (s1, _): (EndpointARecurs<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+//     let video = Branches0CtoB::Video::<i32>(s_video);
 
-            // Get the new stack of the active role
-            let state_branches_sender = RandomState::new();
-            let mut branches_sender: HashMap<String, &Vec<String>> =
-                HashMap::with_hasher(state_branches_sender);
+//     let (s_end, _) = <_ as Session>::new();
 
-            let (stack_video, _): (QueueBVideo, _) = Role::new();
-            let (stack_end, _): (QueueBEnd, _) = Role::new();
+//     let end = Branches0CtoB::End::<i32>(s_end);
 
-            let mut stacks: Vec<String> = Vec::new();
-            stacks.push(type_of(&stack_video).to_string());
-            stacks.push(type_of(&stack_end).to_string());
+//     vec![(&video).to_string(), (&end).to_string()]
+// }
 
-            branches_sender.insert(String::from("Branches0AtoB<i32>"), &stacks);
-            branches_sender.insert(String::from("Branches0CtoB<i32>"), &stacks);
+// impl<N: marker::Send> fmt::Display for Branches0AtoB<N> {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//             Branches0AtoB::Video(s) => {
+//                 write!(f, "Video:{}", type_of(&s))
+//             }
+//             Branches0AtoB::End(s) => {
+//                 write!(f, "End:{}", type_of(&s))
+//             }
+//         }
+//     }
+// }
 
-            let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
+// fn hashmap_branche_0_a_to_b() -> Vec<String> {
+//     let (s_video, _) = <_ as Session>::new();
 
-            assert_eq!(a, "A: µX( A?C.A!C.X & 0 )");
-            assert_eq!(b, "B: B!C.B?C.µX( B!C.B?C.X + 0 )");
-            assert_eq!(c, "C: C?B.C!B.µX( C?B.C!A.C?A.C!B.X & 0 )");
-        }
-        Ok(())
-    }()
-    .is_ok());
-}
+//     let video = Branches0AtoB::Video::<i32>(s_video);
+
+//     let (s_end, _) = <_ as Session>::new();
+
+//     let end = Branches0AtoB::End::<i32>(s_end);
+
+//     vec![(&video).to_string(), (&end).to_string()]
+// }
+
+// type QueueBEnd = RoleEnd;
+// type QueueBVideo = RoleC<RoleC<RoleA<RoleC<RoleEnd>>>>;
+
+// pub fn run_a_usecase_recursive_checker() {
+//     assert!(|| -> Result<(), Box<dyn Error>> {
+//         {
+//             // Get the new sessionmpst of the passive roles
+//             let state_branches_receivers = RandomState::new();
+//             let mut branches_receivers: HashMap<String, &Vec<String>> =
+//                 HashMap::with_hasher(state_branches_receivers);
+
+//             let branche_0_a_to_b: Vec<String> = hashmap_branche_0_a_to_b();
+//             let branche_0_c_to_b: Vec<String> = hashmap_branche_0_c_to_b();
+
+//             branches_receivers.insert(String::from("Branches0AtoB<i32>"), &branche_0_a_to_b);
+//             branches_receivers.insert(String::from("Branches0CtoB<i32>"), &branche_0_c_to_b);
+
+//             let (s1, _): (EndpointARecurs<i32>, _) = SessionMpst::new();
+//             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
+//             let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+
+//             // Get the new stack of the active role
+//             let state_branches_sender = RandomState::new();
+//             let mut branches_sender: HashMap<String, &Vec<String>> =
+//                 HashMap::with_hasher(state_branches_sender);
+
+//             let (stack_video, _): (QueueBVideo, _) = Role::new();
+//             let (stack_end, _): (QueueBEnd, _) = Role::new();
+
+//             let mut stacks: Vec<String> = Vec::new();
+//             stacks.push(type_of(&stack_video).to_string());
+//             stacks.push(type_of(&stack_end).to_string());
+
+//             branches_sender.insert(String::from("Branches0AtoB<i32>"), &stacks);
+//             branches_sender.insert(String::from("Branches0CtoB<i32>"), &stacks);
+
+//             let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
+
+//             assert_eq!(a, "A: µX( A?C.A!C.X & 0 )");
+//             assert_eq!(b, "B: B!C.B?C.µX( B!C.B?C.X + 0 )");
+//             assert_eq!(c, "C: C?B.C!B.µX( C?B.C!A.C?A.C!B.X & 0 )");
+//         }
+//         Ok(())
+//     }()
+//     .is_ok());
+// }
