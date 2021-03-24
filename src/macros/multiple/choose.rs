@@ -395,7 +395,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * The different send functions to broadcast the choice
 ///  * The different `enum` variants which represent the different branches to be sent to each
 ///    passive role
 ///  * The different passive roles
@@ -518,7 +517,6 @@ macro_rules! choose_mpst_multi_to_all {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * The different send functions to broadcast the choice
 ///  * The different `enum` variants which represent the different branches to be sent to each
 ///    passive role
 ///  * The different passive roles
@@ -719,7 +717,6 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// # Arguments
 ///
 ///  * The session to be used
-///  * The different send functions to broadcast the choice
 ///  * The different `enum` variants which represent the different branches to be sent to each
 ///    passive role
 ///  * The different passive roles
@@ -850,7 +847,6 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///  * The name of the new functions
 ///  * The name of the branches, need to be the same for every participants
 ///  * The new type adopted by the sender
-///  * The name of the *send* functions from the sender to each passive role
 ///  * The name of the Enum containing the branches
 ///  * The different passive roles
 ///  * The name of the sender
@@ -874,7 +870,6 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///     done_from_c_to_all, more_from_c_to_all, =>
 ///     Done, More, =>
 ///     EndpointDoneC, EndpointMoreC, =>
-///     send_mpst_c_to_a, send_mpst_c_to_b, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
 ///     RoleA, RoleB, =>
 ///     RoleC, SessionMpstThree, 3, 3
