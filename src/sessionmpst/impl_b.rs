@@ -1,6 +1,7 @@
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
 use crate::binary::struct_trait::{End, Recv, Send, Session};
+use crate::functionmpst::close::close_mpst;
 use crate::functionmpst::OfferMpst;
 use crate::role::a::RoleA;
 use crate::role::all_to_a::RoleAlltoA;
@@ -12,6 +13,7 @@ use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use crate::{recv_all_aux, recv_aux_simple, send_aux_simple};
+
 use either::Either;
 use std::error::Error;
 use std::marker;
@@ -242,6 +244,6 @@ impl<
 
 impl SessionMpst<End, End, RoleEnd, RoleB<RoleEnd>> {
     pub fn close(self) -> Result<(), Box<dyn Error>> {
-        crate::functionmpst::close::close_mpst(self)
+        close_mpst(self)
     }
 }

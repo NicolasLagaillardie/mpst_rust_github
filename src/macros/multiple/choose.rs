@@ -896,13 +896,6 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                         Send<unused#N:15, mpstthree::binary::struct_trait::End>,
                     )0:0
                     mpstthree::role::broadcast::RoleBroadcast,
-                    // #(
-                    //     unused#N:16<
-                    // )0:0
-                    // mpstthree::role::end::RoleEnd
-                    // #(
-                    //     >
-                    // )0:0,
                     $sender<mpstthree::role::end::RoleEnd>,
                 >
             ) -> $new_type
@@ -935,18 +928,6 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                             }),
                             s.session#N:0
                         );
-
-                        // let new_queue = {
-                        //     fn temp<R>(r: unused#N:16<R>) -> R
-                        //     where
-                        //         R: mpstthree::role::Role,
-                        //     {
-                        //         let (here, there) = <R as mpstthree::role::Role>::new();
-                        //         r.sender.send(there).unwrap_or(());
-                        //         here
-                        //     }
-                        //     temp(s.stack)
-                        // };
 
                         $sessionmpst_name {
                             ~(
