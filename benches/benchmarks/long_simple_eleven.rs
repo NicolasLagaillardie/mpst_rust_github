@@ -9,6 +9,7 @@ use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
@@ -602,7 +603,7 @@ type EndpointMoreK = SessionMpstEleven<
     Send<(), Recv<(), Choose0fromKtoH>>,
     Send<(), Recv<(), Choose0fromKtoI>>,
     Send<(), Recv<(), Choose0fromKtoJ>>,
-    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<R2J<StackRecurs>>>>>>>>>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<R2J<RoleBroadcast>>>>>>>>>>,
     NameK,
 >;
 
@@ -747,7 +748,6 @@ type EndpointJ = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameJ,
 >;
-type StackRecurs = RoleA<RoleB<RoleC<RoleD<RoleE<RoleF<RoleG<RoleH<RoleI<RoleJ<RoleEnd>>>>>>>>>>;
 type EndpointK = SessionMpstEleven<
     Choose0fromKtoA,
     Choose0fromKtoB,
@@ -759,7 +759,7 @@ type EndpointK = SessionMpstEleven<
     Choose0fromKtoH,
     Choose0fromKtoI,
     Choose0fromKtoJ,
-    StackRecurs,
+    RoleBroadcast,
     NameK,
 >;
 

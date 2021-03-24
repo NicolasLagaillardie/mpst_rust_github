@@ -461,6 +461,14 @@ macro_rules! choose_mpst_multi_to_all {
 
             let s = $session;
 
+            let _ = {
+                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
+                {
+                    Ok(())
+                }
+                temp(&s.stack)
+            };
+
             %(
                 let _ = mpstthree::binary::send::send(
                     unused#N:15($sessionmpst_name {
@@ -488,14 +496,6 @@ macro_rules! choose_mpst_multi_to_all {
                     s.session#N:0,
                 );
             )2*
-
-            let _ = {
-                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
-                {
-                    Ok(())
-                }
-                temp(&s.stack)
-            };
 
             // mpstthree::binary::cancel::cancel(s.stack);
 
@@ -612,7 +612,7 @@ macro_rules! choose_mpst_multi_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
-    ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $pawn: ident, $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session:expr, $($label:path,)+ => $($receiver:ident,)+ => $pawn: ident, $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
 
             let mut temp = Vec::<End>::new();
@@ -640,6 +640,14 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
             let mut s = $session;
+
+            let _ = {
+                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
+                {
+                    Ok(())
+                }
+                temp(&s.stack)
+            };
 
             %(
                 let elt = match temp.pop() {
@@ -757,7 +765,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_http_to_all {
-    ($session:expr, $($fn_send:ident,)+ => $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session:expr, $($label:path,)+ => $($receiver:ident,)+ => $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
             #(
                 let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
@@ -774,6 +782,14 @@ macro_rules! choose_mpst_multi_http_to_all {
             let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
             let mut s = $session;
+
+            let _ = {
+                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
+                {
+                    Ok(())
+                }
+                temp(&s.stack)
+            };
 
             %(
                 let _ = mpstthree::binary::send::send_http(
@@ -879,13 +895,14 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                     #(
                         Send<unused#N:15, mpstthree::binary::struct_trait::End>,
                     )0:0
-                    #(
-                        unused#N:16<
-                    )0:0
-                    mpstthree::role::end::RoleEnd
-                    #(
-                        >
-                    )0:0,
+                    mpstthree::role::broadcast::RoleBroadcast,
+                    // #(
+                    //     unused#N:16<
+                    // )0:0
+                    // mpstthree::role::end::RoleEnd
+                    // #(
+                    //     >
+                    // )0:0,
                     $sender<mpstthree::role::end::RoleEnd>,
                 >
             ) -> $new_type
@@ -919,17 +936,17 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                             s.session#N:0
                         );
 
-                        let new_queue = {
-                            fn temp<R>(r: unused#N:16<R>) -> R
-                            where
-                                R: mpstthree::role::Role,
-                            {
-                                let (here, there) = <R as mpstthree::role::Role>::new();
-                                r.sender.send(there).unwrap_or(());
-                                here
-                            }
-                            temp(s.stack)
-                        };
+                        // let new_queue = {
+                        //     fn temp<R>(r: unused#N:16<R>) -> R
+                        //     where
+                        //         R: mpstthree::role::Role,
+                        //     {
+                        //         let (here, there) = <R as mpstthree::role::Role>::new();
+                        //         r.sender.send(there).unwrap_or(());
+                        //         here
+                        //     }
+                        //     temp(s.stack)
+                        // };
 
                         $sessionmpst_name {
                             ~(
@@ -937,7 +954,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
                             )(
                                 session~N:8: s.session~N:8,
                             )5*
-                            stack: new_queue,
+                            stack: s.stack,
                             name: s.name,
                         }
                     };

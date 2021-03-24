@@ -9,6 +9,7 @@ use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
@@ -153,7 +154,7 @@ type EndpointMoreD = SessionMpstFour<
     Send<(), Recv<(), Choose0fromDtoA>>,
     Send<(), Recv<(), Choose0fromDtoB>>,
     Send<(), Recv<(), Choose0fromDtoC>>,
-    R2A<R2B<R2C<StackRecurs>>>,
+    R2A<R2B<R2C<RoleBroadcast>>>,
     NameD,
 >;
 
@@ -161,9 +162,8 @@ type EndpointMoreD = SessionMpstFour<
 type EndpointA = SessionMpstFour<End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
 type EndpointB = SessionMpstFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = SessionMpstFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
-type StackRecurs = RoleA<RoleB<RoleC<RoleEnd>>>;
 type EndpointD =
-    SessionMpstFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, StackRecurs, NameD>;
+    SessionMpstFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_d_to_all, more_from_d_to_all, =>

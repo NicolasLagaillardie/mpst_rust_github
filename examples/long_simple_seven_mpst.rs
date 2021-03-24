@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
@@ -297,7 +298,7 @@ type EndpointMoreG = SessionMpstSeven<
     Send<(), Recv<(), Choose0fromGtoD>>,
     Send<(), Recv<(), Choose0fromGtoE>>,
     Send<(), Recv<(), Choose0fromGtoF>>,
-    R2A<R2B<R2C<R2D<R2E<R2F<StackRecurs>>>>>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<RoleBroadcast>>>>>>,
     NameG,
 >;
 
@@ -308,7 +309,6 @@ type EndpointC = SessionMpstSeven<End, End, End, End, End, RecursCtoG, RoleG<Rol
 type EndpointD = SessionMpstSeven<End, End, End, End, End, RecursDtoG, RoleG<RoleEnd>, NameD>;
 type EndpointE = SessionMpstSeven<End, End, End, End, End, RecursEtoG, RoleG<RoleEnd>, NameE>;
 type EndpointF = SessionMpstSeven<End, End, End, End, End, RecursFtoG, RoleG<RoleEnd>, NameF>;
-type StackRecurs = RoleA<RoleB<RoleC<RoleD<RoleE<RoleF<RoleEnd>>>>>>;
 type EndpointG = SessionMpstSeven<
     Choose0fromGtoA,
     Choose0fromGtoB,
@@ -316,7 +316,7 @@ type EndpointG = SessionMpstSeven<
     Choose0fromGtoD,
     Choose0fromGtoE,
     Choose0fromGtoF,
-    StackRecurs,
+    RoleBroadcast,
     NameG,
 >;
 

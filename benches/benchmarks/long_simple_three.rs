@@ -9,6 +9,7 @@ use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
@@ -99,14 +100,14 @@ type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
 type EndpointMoreC = SessionMpstThree<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
-    R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
+    R2A<R2B<RoleBroadcast>>,
     NameC,
 >;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleA<RoleB<RoleEnd>>, NameC>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>

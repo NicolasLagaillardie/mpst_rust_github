@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
@@ -63,7 +64,7 @@ type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>; // TODO: Remove the
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, End, RoleEnd, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoD, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleB<RoleB<RoleEnd>>, NameC>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleA, SessionMpstThree, 3);
@@ -91,7 +92,6 @@ fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         0 => {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
-                send_check_c_to_b, =>
                 Branching0fromCtoB::Done, =>
                 RoleB, =>
                 RoleA,
@@ -107,7 +107,6 @@ fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
-                send_check_c_to_b, =>
                 Branching0fromCtoB::More, =>
                 RoleB, =>
                 RoleA,

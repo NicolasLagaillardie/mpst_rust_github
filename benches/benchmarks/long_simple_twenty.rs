@@ -9,6 +9,7 @@ use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
@@ -2858,7 +2859,11 @@ type EndpointMoreT = SessionMpstTwenty<
                                     R2I<
                                         R2J<
                                             R2K<
-                                                R2L<R2M<R2N<R2O<R2P<R2Q<R2R<R2S<StackRecurs>>>>>>>>,
+                                                R2L<
+                                                    R2M<
+                                                        R2N<R2O<R2P<R2Q<R2R<R2S<RoleBroadcast>>>>>>,
+                                                    >,
+                                                >,
                                             >,
                                         >,
                                     >,
@@ -3311,35 +3316,6 @@ type EndpointS = SessionMpstTwenty<
     RoleT<RoleEnd>,
     NameS,
 >;
-type StackRecurs = RoleA<
-    RoleB<
-        RoleC<
-            RoleD<
-                RoleE<
-                    RoleF<
-                        RoleG<
-                            RoleH<
-                                RoleI<
-                                    RoleJ<
-                                        RoleK<
-                                            RoleL<
-                                                RoleM<
-                                                    RoleN<
-                                                        RoleO<RoleP<RoleQ<RoleR<RoleS<RoleEnd>>>>>,
-                                                    >,
-                                                >,
-                                            >,
-                                        >,
-                                    >,
-                                >,
-                            >,
-                        >,
-                    >,
-                >,
-            >,
-        >,
-    >,
->;
 type EndpointT = SessionMpstTwenty<
     Choose0fromTtoA,
     Choose0fromTtoB,
@@ -3360,7 +3336,7 @@ type EndpointT = SessionMpstTwenty<
     Choose0fromTtoQ,
     Choose0fromTtoR,
     Choose0fromTtoS,
-    StackRecurs,
+    RoleBroadcast,
     NameT,
 >;
 

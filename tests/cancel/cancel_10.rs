@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
@@ -95,13 +96,8 @@ type Choose0fromDtoC = Send<(End, Branching0fromDtoC), End>; // which is forwade
 type EndpointA = SessionMpstFour<End, End, End, RoleEnd, NameA>;
 type EndpointB = SessionMpstFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = SessionMpstFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
-type EndpointD = SessionMpstFour<
-    Choose0fromDtoA,
-    Choose0fromDtoB,
-    Choose0fromDtoC,
-    RoleB<RoleC<RoleB<RoleC<RoleEnd>>>>,
-    NameD,
->;
+type EndpointD =
+    SessionMpstFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
 fn simple_four_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleA, SessionMpstFour, 4);
@@ -147,8 +143,6 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
         0 => {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
-                send_check_d_to_b,
-                send_check_d_to_c, =>
                 Branching0fromDtoB::Done,
                 Branching0fromDtoC::Done, =>
                 RoleB,
@@ -166,8 +160,6 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
-                send_check_d_to_b,
-                send_check_d_to_c, =>
                 Branching0fromDtoB::More,
                 Branching0fromDtoC::More, =>
                 RoleB,

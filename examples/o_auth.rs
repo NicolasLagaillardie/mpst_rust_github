@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
@@ -100,7 +101,7 @@ enum Branching0fromStoA<N: marker::Send> {
         SessionMpstThree<
             Recv<N, Choose1fromAtoC<N>>,
             Choose1fromAtoS<N>,
-            RoleC<RoleC<RoleS<RoleEnd>>>,
+            RoleC<RoleBroadcast>,
             NameA,
         >,
     ),
@@ -110,7 +111,7 @@ type EndpointAuthA<N> = SessionMpstThree<End, Send<N, End>, RoleS<RoleEnd>, Name
 type EndpointAgainA<N> = SessionMpstThree<
     Recv<N, Choose1fromAtoC<N>>,
     Send<N, Choose1fromAtoS<N>>,
-    RoleS<RoleC<RoleC<RoleS<RoleEnd>>>>,
+    RoleS<RoleC<RoleBroadcast>>,
     NameA,
 >;
 // C
@@ -156,12 +157,8 @@ type EndpointLoginS<N> =
 
 // Creating the MP sessions
 // A
-type ChoiceA<N> = SessionMpstThree<
-    Recv<N, Choose1fromAtoC<N>>,
-    Choose1fromAtoS<N>,
-    RoleC<RoleC<RoleS<RoleEnd>>>,
-    NameA,
->;
+type ChoiceA<N> =
+    SessionMpstThree<Recv<N, Choose1fromAtoC<N>>, Choose1fromAtoS<N>, RoleC<RoleBroadcast>, NameA>;
 type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
 // C
 type ChoiceC<N> = SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
@@ -169,7 +166,7 @@ type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, Role
 // S
 type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
 type EndpointS<N> =
-    SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleA<RoleC<RoleEnd>>, NameS>;
+    SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleBroadcast, NameS>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_s_to_all, login_from_s_to_all, =>

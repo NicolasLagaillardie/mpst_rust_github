@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
@@ -187,7 +188,7 @@ type EndpointMoreE = SessionMpstFive<
     Send<(), Recv<(), Choose0fromEtoB>>,
     Send<(), Recv<(), Choose0fromEtoC>>,
     Send<(), Recv<(), Choose0fromEtoD>>,
-    R2A<R2B<R2C<R2D<StackRecurs>>>>,
+    R2A<R2B<R2C<R2D<RoleBroadcast>>>>,
     NameE,
 >;
 
@@ -196,13 +197,12 @@ type EndpointA = SessionMpstFive<End, End, End, RecursAtoE, RoleE<RoleEnd>, Name
 type EndpointB = SessionMpstFive<End, End, End, RecursBtoE, RoleE<RoleEnd>, NameB>;
 type EndpointC = SessionMpstFive<End, End, End, RecursCtoE, RoleE<RoleEnd>, NameC>;
 type EndpointD = SessionMpstFive<End, End, End, RecursDtoE, RoleE<RoleEnd>, NameD>;
-type StackRecurs = RoleA<RoleB<RoleC<RoleD<RoleEnd>>>>;
 type EndpointE = SessionMpstFive<
     Choose0fromEtoA,
     Choose0fromEtoB,
     Choose0fromEtoC,
     Choose0fromEtoD,
-    StackRecurs,
+    RoleBroadcast,
     NameE,
 >;
 

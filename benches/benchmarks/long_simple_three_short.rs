@@ -9,6 +9,7 @@ use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
@@ -39,8 +40,6 @@ type SR = Send<(), Recv<(), End>>;
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
-// Stack recurs for C
-type StackRecurs = RoleA<RoleB<RoleEnd>>;
 // A
 enum Branching0fromCtoA {
     More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
@@ -60,14 +59,14 @@ type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
 type EndpointMoreC = SessionMpstThree<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
-    R2A<R2B<StackRecurs>>,
+    R2A<R2B<RoleBroadcast>>,
     NameC,
 >;
 
 // Creating the MP sessions
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, StackRecurs, NameC>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 // Create new recv functions and related types
 // A
