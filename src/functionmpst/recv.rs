@@ -55,7 +55,7 @@ macro_rules! recv_aux_simple {
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! recv_all_aux {
+macro_rules! recv_all_aux_simple {
     ($session:expr, $role:ident, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..3 ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
             %(
@@ -63,14 +63,11 @@ macro_rules! recv_all_aux {
                 let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
             )0*
 
-            let (new_queue, _) = {
-                fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
-                where
-                    R1: crate::role::Role,
-                    R2: crate::role::Role,
+            let (new_queue_left, _new_queue_right) = { // new_queue_right = new_queue_left
+                fn temp(r: $role<crate::role::end::RoleEnd, crate::role::end::RoleEnd>) -> (crate::role::end::RoleEnd, crate::role::end::RoleEnd)
                 {
-                    let (here1, there1) = <R1 as crate::role::Role>::new();
-                    let (here2, there2) = <R2 as crate::role::Role>::new();
+                    let (here1, there1) = <crate::role::end::RoleEnd as crate::role::Role>::new();
+                    let (here2, there2) = <crate::role::end::RoleEnd as crate::role::Role>::new();
                     r.sender1.send(there1).unwrap_or(());
                     r.sender2.send(there2).unwrap_or(());
                     (here1, here2)
@@ -86,7 +83,7 @@ macro_rules! recv_all_aux {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_queue_left,
                     name: $session.name,
                 }
             ))
@@ -568,16 +565,15 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
 #[doc(hidden)]
-pub fn recv_mpst_a_all_to_b<T, S1, S2, R>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<R, R>, RoleA<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
+pub fn recv_mpst_a_all_to_b<T, S1, S2>(
+    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
 {
-    recv_all_aux!(s, RoleAlltoB, 1)()
+    recv_all_aux_simple!(s, RoleAlltoB, 1)()
 }
 
 /// Receive a broadcasted value of type `T` on C from A. Can
@@ -586,16 +582,15 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
 #[doc(hidden)]
-pub fn recv_mpst_a_all_to_c<T, S1, S2, R>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, RoleA<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
+pub fn recv_mpst_a_all_to_c<T, S1, S2>(
+    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
 {
-    recv_all_aux!(s, RoleAlltoC, 2)()
+    recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
 /// Receive a broadcasted value of type `T` on A from B. Can
@@ -604,16 +599,15 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
 #[doc(hidden)]
-pub fn recv_mpst_b_all_to_a<T, S1, S2, R>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, RoleB<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
+pub fn recv_mpst_b_all_to_a<T, S1, S2>(
+    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
 {
-    recv_all_aux!(s, RoleAlltoA, 1)()
+    recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
 /// Receive a broadcasted value of type `T` on C from A. Can
@@ -622,16 +616,15 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
 #[doc(hidden)]
-pub fn recv_mpst_b_all_to_c<T, S1, S2, R>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<R, R>, RoleB<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
+pub fn recv_mpst_b_all_to_c<T, S1, S2>(
+    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
 {
-    recv_all_aux!(s, RoleAlltoC, 2)()
+    recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
 /// Receive a broadcasted value of type `T` on A from B. Can
@@ -640,16 +633,15 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
 #[doc(hidden)]
-pub fn recv_mpst_c_all_to_a<T, S1, S2, R>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, RoleC<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
+pub fn recv_mpst_c_all_to_a<T, S1, S2>(
+    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
 {
-    recv_all_aux!(s, RoleAlltoA, 1)()
+    recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
 /// Receive a broadcasted value of type `T` on B from C. Can
@@ -658,14 +650,13 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
 #[doc(hidden)]
-pub fn recv_mpst_c_all_to_b<T, S1, S2, R>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<R, R>, RoleC<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
+pub fn recv_mpst_c_all_to_b<T, S1, S2>(
+    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
 {
-    recv_all_aux!(s, RoleAlltoB, 2)()
+    recv_all_aux_simple!(s, RoleAlltoB, 2)()
 }

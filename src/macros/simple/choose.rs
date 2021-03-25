@@ -16,8 +16,7 @@ macro_rules! create_choose_from_1_to_2_3 {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_1_2, session_2_1) =
             <$session_1 as mpstthree::binary::struct_trait::Session>::new();
@@ -50,12 +49,11 @@ macro_rules! create_choose_from_1_to_2_3 {
 
         let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
         let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = mpstthree::sessionmpst::SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -84,8 +82,7 @@ macro_rules! create_choose_from_2_to_1_3 {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_2_1, session_1_2) =
             <$session_1 as mpstthree::binary::struct_trait::Session>::new();
@@ -118,12 +115,11 @@ macro_rules! create_choose_from_2_to_1_3 {
 
         let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
         let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = mpstthree::sessionmpst::SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -152,8 +148,7 @@ macro_rules! create_choose_from_3_to_1_2 {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_3_1, session_1_3) =
             <$session_1 as mpstthree::binary::struct_trait::Session>::new();
@@ -186,12 +181,11 @@ macro_rules! create_choose_from_3_to_1_2 {
 
         let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
         let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = mpstthree::sessionmpst::SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -243,7 +237,6 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///     RoleADual,
 ///     RoleBDual,
 ///     RoleCtoAll,
-///     next_c_to_all,
 ///     RoleC
 /// );
 /// ```
@@ -256,7 +249,6 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
@@ -308,8 +300,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                 $dual_2,
                 $sender,
                 s,
-                either::Either::Right,
-                $next
+                either::Either::Right
             )
         }
     };
@@ -350,7 +341,6 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///     RoleADual,
 ///     RoleBDual,
 ///     RoleCtoAll,
-///     next_c_to_all,
 ///     RoleC
 /// );
 /// ```
@@ -363,7 +353,6 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
@@ -415,8 +404,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                 $dual_2,
                 $sender,
                 s,
-                either::Either::Left,
-                $next
+                either::Either::Left
             )
         }
     };
@@ -457,7 +445,6 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///     RoleBDual,
 ///     RoleCDual,
 ///     RoleAtoAll,
-///     next_a_to_all,
 ///     RoleA
 /// );
 /// ```
@@ -470,7 +457,6 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
@@ -522,8 +508,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                either::Either::Left,
-                $next
+                either::Either::Left
             )
         }
     };
@@ -564,7 +549,6 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///     RoleBDual,
 ///     RoleCDual,
 ///     RoleAtoAll,
-///     next_a_to_all,
 ///     RoleA
 /// );
 /// ```
@@ -577,7 +561,6 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
@@ -629,8 +612,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                either::Either::Right,
-                $next
+                either::Either::Right
             )
         }
     };
@@ -671,7 +653,6 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///     RoleADual,
 ///     RoleCDual,
 ///     RoleBtoAll,
-///     next_b_to_all,
 ///     RoleB
 /// );
 /// ```
@@ -684,7 +665,6 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
@@ -736,8 +716,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                either::Either::Left,
-                $next
+                either::Either::Left
             )
         }
     };
@@ -778,7 +757,6 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///     RoleADual,
 ///     RoleCDual,
 ///     RoleBtoAll,
-///     next_b_to_all,
 ///     RoleB
 /// );
 /// ```
@@ -791,7 +769,6 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
@@ -843,8 +820,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                 $dual_2,
                 $sender,
                 s,
-                either::Either::Right,
-                $next
+                either::Either::Right
             )
         }
     };
@@ -889,7 +865,6 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///     RoleADual,
 ///     RoleCDual,
 ///     RoleBtoAll,
-///     next_b_to_all,
 ///     RoleB
 /// );
 /// ```
@@ -903,7 +878,6 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         mpstthree::create_choose_right_from_2_to_1_and_3!(
@@ -911,7 +885,6 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
             $dual_1,
             $dual_2,
             $role_broadcast,
-            $next,
             $sender
         );
         mpstthree::create_choose_left_from_2_to_1_and_3!(
@@ -919,7 +892,6 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
             $dual_1,
             $dual_2,
             $role_broadcast,
-            $next,
             $sender
         );
     };
@@ -964,7 +936,6 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///     RoleADual,
 ///     RoleCDual,
 ///     RoleBtoAll,
-///     next_b_to_all,
 ///     RoleB
 /// );
 /// ```
@@ -978,7 +949,6 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         mpstthree::create_choose_right_from_1_to_2_and_3!(
@@ -986,7 +956,6 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
             $dual_1,
             $dual_2,
             $role_broadcast,
-            $next,
             $sender
         );
         mpstthree::create_choose_left_from_1_to_2_and_3!(
@@ -994,7 +963,6 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
             $dual_1,
             $dual_2,
             $role_broadcast,
-            $next,
             $sender
         );
     };
@@ -1039,7 +1007,6 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///     RoleADual,
 ///     RoleCDual,
 ///     RoleBtoAll,
-///     next_b_to_all,
 ///     RoleB
 /// );
 /// ```
@@ -1053,7 +1020,6 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
         $dual_1:ident,
         $dual_2:ident,
         $role_broadcast:ident,
-        $next:ident,
         $sender:ident
     ) => {
         mpstthree::create_choose_right_from_3_to_1_and_2!(
@@ -1061,7 +1027,6 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
             $dual_1,
             $dual_2,
             $role_broadcast,
-            $next,
             $sender
         );
         mpstthree::create_choose_left_from_3_to_1_and_2!(
@@ -1069,7 +1034,6 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
             $dual_1,
             $dual_2,
             $role_broadcast,
-            $next,
             $sender
         );
     };

@@ -402,7 +402,7 @@ macro_rules! create_multiple_broadcast_role {
 #[macro_export]
 macro_rules! create_normal_role_short {
     ($role_name:ident) => {
-        mpst_seq::seq!(N in 1..3 > ($role_name) {
+        mpst_seq::seq!(N in 1..3 > ($role_name) { // 3 is useless
             ////////////////////////////////////////////
             /// The Role
 
@@ -463,6 +463,7 @@ macro_rules! create_normal_role_short {
                 }
             }
 
+            #[doc(hidden)]
             fn unused^N:5<R>(r: unused^N:4<R>) -> R
             where
                 R: mpstthree::role::Role,
@@ -508,6 +509,7 @@ macro_rules! create_normal_role_short {
                 }
             }
 
+            #[doc(hidden)]
             fn unused^N:7<R>(r: unused^N:6<R>) -> R
             where
                 R: mpstthree::role::Role,

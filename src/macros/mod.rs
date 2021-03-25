@@ -8,6 +8,7 @@
 //! [`mpstthree::create_normal_role`]: ../macro.create_normal_role.html
 //! [`mpstthree::create_sessionmpst`]: ../macro.create_sessionmpst.html
 
+pub mod baking;
 pub mod multiple;
 pub mod name;
 pub mod simple;

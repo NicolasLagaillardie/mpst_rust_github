@@ -21,6 +21,7 @@ use std::error::Error;
 /// endpoints are the expected ones.
 ///
 /// Returns the 3 strings if everything went right.
+/// TODO: Adapt checker for RoleBroadcast
 pub fn checker<
     S0,
     S1,

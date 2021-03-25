@@ -6,13 +6,13 @@ use crate::binary::struct_trait::Session;
 use crate::functionmpst::ChooseMpst;
 use crate::role::a::RoleA;
 use crate::role::a_dual::RoleADual;
-use crate::role::a_to_all::{next_a_to_all, RoleAtoAll};
+use crate::role::a_to_all::RoleAtoAll;
 use crate::role::b::RoleB;
 use crate::role::b_dual::RoleBDual;
-use crate::role::b_to_all::{next_b_to_all, RoleBtoAll};
+use crate::role::b_to_all::RoleBtoAll;
 use crate::role::c::RoleC;
 use crate::role::c_dual::RoleCDual;
-use crate::role::c_to_all::{next_c_to_all, RoleCtoAll};
+use crate::role::c_to_all::RoleCtoAll;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
@@ -70,8 +70,7 @@ macro_rules! choose_mpst_a {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_1_2, session_2_1) = <$session_1 as Session>::new();
         let (session_1_3, session_3_1) = <$session_2 as Session>::new();
@@ -100,12 +99,11 @@ macro_rules! choose_mpst_a {
 
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -133,8 +131,7 @@ macro_rules! choose_mpst_b {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_3_1, session_1_3) = <$session_2 as Session>::new();
@@ -163,12 +160,11 @@ macro_rules! choose_mpst_b {
 
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -196,8 +192,7 @@ macro_rules! choose_mpst_c {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_3_1, session_1_3) = <$session_2 as Session>::new();
@@ -226,12 +221,11 @@ macro_rules! choose_mpst_c {
 
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -304,8 +298,7 @@ where
         RoleCDual,
         RoleA,
         s,
-        Either::Left,
-        next_a_to_all
+        Either::Left
     )
 }
 
@@ -368,8 +361,7 @@ where
         RoleCDual,
         RoleA,
         s,
-        Either::Right,
-        next_a_to_all
+        Either::Right
     )
 }
 
@@ -431,8 +423,7 @@ where
         RoleCDual,
         RoleB,
         s,
-        Either::Left,
-        next_b_to_all
+        Either::Left
     )
 }
 
@@ -494,8 +485,7 @@ where
         RoleCDual,
         RoleB,
         s,
-        Either::Right,
-        next_b_to_all
+        Either::Right
     )
 }
 
@@ -557,8 +547,7 @@ where
         RoleBDual,
         RoleC,
         s,
-        Either::Left,
-        next_c_to_all
+        Either::Left
     )
 }
 
@@ -620,7 +609,6 @@ where
         RoleBDual,
         RoleC,
         s,
-        Either::Right,
-        next_c_to_all
+        Either::Right
     )
 }

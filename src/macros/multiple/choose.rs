@@ -70,7 +70,6 @@ macro_rules! create_choose_type_multi {
 ///     choose_left_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
-///     next_d_to_all,
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -78,7 +77,7 @@ macro_rules! create_choose_type_multi {
 /// ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_left {
-    ($func_name:ident, $type_name: ident, $role_dual:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $type_name: ident, $role_dual:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
             fn $func_name<'a, #(S#N:0,)10:0 #(R#N:0,)11:0>(
                 s: $sessionmpst_name<
@@ -154,13 +153,12 @@ macro_rules! create_choose_mpst_session_multi_left {
                 #( // i in 1..K
                     let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Left(choice_#N:0), s.session#N:0);
                 )0:0
-                let (_, new_queue) = $recv_func(s.stack);
 
                 let s = $sessionmpst_name {
                     #(
                         session#N:0: new_session_#N:0,
                     )0:0
-                    stack: new_queue,
+                    stack: s.stack,
                     name: s.name,
                 };
 
@@ -210,7 +208,6 @@ macro_rules! create_choose_mpst_session_multi_left {
 ///     choose_right_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
-///     next_d_to_all,
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -218,7 +215,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_right {
-    ($func_name:ident, $type_name: ident, $role_dual:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $type_name: ident, $role_dual:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
             fn $func_name<'a, #(S#N:0,)10:0 #(R#N:0,)11:0>(
                 s: $sessionmpst_name<
@@ -294,13 +291,12 @@ macro_rules! create_choose_mpst_session_multi_right {
                 #( // i in 1..K
                     let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Right(choice_#N:0), s.session#N:0);
                 )0:0
-                let (_, new_queue) = $recv_func(s.stack);
 
                 let s = $sessionmpst_name {
                     #(
                         session#N:0: new_session_#N:0,
                     )0:0
-                    stack: new_queue,
+                    stack: s.stack,
                     name: s.name,
                 };
 
@@ -350,7 +346,6 @@ macro_rules! create_choose_mpst_session_multi_right {
 ///     choose_right_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
-///     next_d_to_all,
 ///     RoleD,
 ///     SessionMpst,
 ///     3
@@ -363,7 +358,6 @@ macro_rules! create_choose_mpst_session_multi_both {
         $func_name_right:ident,
         $type_name:ident,
         $role_dual:ident,
-        $recv_func:ident,
         $name:ident,
         $sessionmpst_name:ident,
         $nsessions:literal
@@ -372,7 +366,6 @@ macro_rules! create_choose_mpst_session_multi_both {
             $func_name_left,
             $type_name,
             $role_dual,
-            $recv_func,
             $name,
             $sessionmpst_name,
             $nsessions
@@ -382,7 +375,6 @@ macro_rules! create_choose_mpst_session_multi_both {
             $func_name_right,
             $type_name,
             $role_dual,
-            $recv_func,
             $name,
             $sessionmpst_name,
             $nsessions

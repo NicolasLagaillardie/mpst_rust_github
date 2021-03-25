@@ -113,6 +113,44 @@ macro_rules! recv_aux {
     }
 }
 
+#[doc(hidden)]
+#[macro_export]
+macro_rules! recv_all_aux {
+    ($session:expr, $role:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+        mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
+            %(
+            )(
+                let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
+            )0*
+
+            let (new_queue_left, _new_queue_right) = { // new_queue_right = new_queue_left
+                fn temp(r: $role<crate::role::end::RoleEnd, crate::role::end::RoleEnd>) -> (crate::role::end::RoleEnd, crate::role::end::RoleEnd)
+                {
+                    let (here1, there1) = <crate::role::end::RoleEnd as crate::role::Role>::new();
+                    let (here2, there2) = <crate::role::end::RoleEnd as crate::role::Role>::new();
+                    r.sender1.send(there1).unwrap_or(());
+                    r.sender2.send(there2).unwrap_or(());
+                    (here1, here2)
+                }
+                temp($session.stack)
+            };
+
+            Ok((
+                v,
+                $struct_name {
+                    %(
+                        session#N:0: $session.session#N:0,
+                    )(
+                        session#N:0: new_session,
+                    )0*
+                    stack: new_queue_left,
+                    name: $session.name,
+                }
+            ))
+        }});
+    }
+}
+
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a
 /// SessionMpst with more than 3 participants.
 ///

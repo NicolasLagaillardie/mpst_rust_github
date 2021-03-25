@@ -75,7 +75,6 @@ create_choose_mpst_session_multi_both!(
     choose_right_mpst_session_d_to_all,
     ChooseMpstThree,
     RoleDtoAll,
-    next_d_to_all,
     RoleD,
     SessionMpst,
     3

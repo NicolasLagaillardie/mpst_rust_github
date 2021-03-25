@@ -120,7 +120,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// # Arguments
 ///
 /// * The session to be used
-/// * The *recv* function that will be used
+/// * [Optional] The *recv* function that will be used
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 ///
@@ -153,6 +153,17 @@ macro_rules! offer_mpst {
             }
         })()
     };
+    ($session:expr, { $($pat:pat => $result:expr, )* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = $session.recv()?;
+            mpstthree::binary::cancel::cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
 }
 
 /// Offer a choice and send the session to the pawn
@@ -160,7 +171,7 @@ macro_rules! offer_mpst {
 /// # Arguments
 ///
 /// * The session to be used
-/// * The *recv* function that will be used
+/// * [Optional] The *recv* function that will be used
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 #[macro_export]
@@ -168,6 +179,18 @@ macro_rules! offer_cancel_mpst {
     ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
         (move || -> Result<_, _> {
             let ((session1, cont), s) = $recv_mpst($session)?;
+            let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(session1)).unwrap();
+            mpstthree::binary::cancel::cancel(s);
+            match cont {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+    ($session:expr, { $($pat:pat => $result:expr, )* }) => {
+        (move || -> Result<_, _> {
+            let ((session1, cont), s) = $session.recv()?;
             let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(session1)).unwrap();
             mpstthree::binary::cancel::cancel(s);
             match cont {

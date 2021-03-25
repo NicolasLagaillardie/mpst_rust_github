@@ -8,11 +8,11 @@ use crate::role::all_to_a::RoleAlltoA;
 use crate::role::all_to_b::RoleAlltoB;
 use crate::role::b::RoleB;
 use crate::role::c::RoleC;
-use crate::role::c_to_all::{next_c_to_all, RoleCtoAll};
+use crate::role::c_to_all::RoleCtoAll;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
-use crate::{recv_all_aux, recv_aux_simple, send_aux_simple};
+use crate::{recv_all_aux_simple, recv_aux_simple, send_aux_simple};
 
 use either::Either;
 use std::error::Error;
@@ -53,19 +53,19 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     }
 }
 
-impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    SessionMpst<Recv<T, S1>, S2, RoleAlltoA<R, R>, RoleC<RoleEnd>>
+impl<S1: Session, S2: Session, T: marker::Send>
+    SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>
 {
-    pub fn recv(self) -> ResultType<T, S1, S2, R> {
-        recv_all_aux!(self, RoleAlltoA, 1)()
+    pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
+        recv_all_aux_simple!(self, RoleAlltoA, 1)()
     }
 }
 
-impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    SessionMpst<S1, Recv<T, S2>, RoleAlltoB<R, R>, RoleC<RoleEnd>>
+impl<S1: Session, S2: Session, T: marker::Send>
+    SessionMpst<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>
 {
-    pub fn recv(self) -> ResultType<T, S1, S2, R> {
-        recv_all_aux!(self, RoleAlltoB, 2)()
+    pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
+        recv_all_aux_simple!(self, RoleAlltoB, 2)()
     }
 }
 
@@ -120,8 +120,7 @@ macro_rules! choose_aux {
         $receiver_2:ident,
         $sender:ident,
         $session:expr,
-        $pat:path,
-        $next:ident
+        $pat:path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_1_3, session_3_1) = <$session_2 as Session>::new();
@@ -150,12 +149,11 @@ macro_rules! choose_aux {
 
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
-        let (_, new_queue) = $next($session.stack);
 
         let s = SessionMpst {
             session1: new_session_1,
             session2: new_session_2,
-            stack: new_queue,
+            stack: $session.stack,
             name: $session.name,
         };
 
@@ -217,8 +215,7 @@ impl<
             RoleB,
             RoleC,
             self,
-            Either::Left,
-            next_c_to_all
+            Either::Left
         )
     }
 
@@ -236,8 +233,7 @@ impl<
             RoleB,
             RoleC,
             self,
-            Either::Right,
-            next_c_to_all
+            Either::Right
         )
     }
 }

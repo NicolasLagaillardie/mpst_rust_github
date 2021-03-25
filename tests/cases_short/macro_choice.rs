@@ -67,7 +67,6 @@ create_choose_both_from_3_to_1_and_2!(
     RoleADual,
     RoleBDual,
     RoleCtoAll,
-    next_c_to_all,
     RoleC
 );
 
