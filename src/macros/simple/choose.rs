@@ -244,13 +244,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
-    (
-        $func_name:ident,
-        $dual_1:ident,
-        $dual_2:ident,
-        $role_broadcast:ident,
-        $sender:ident
-    ) => {
+    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
                 mpstthree::functionmpst::ChooseMpst<
@@ -348,13 +342,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
-    (
-        $func_name:ident,
-        $dual_1:ident,
-        $dual_2:ident,
-        $role_broadcast:ident,
-        $sender:ident
-    ) => {
+    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
                 mpstthree::functionmpst::ChooseMpst<
@@ -452,13 +440,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
-    (
-        $func_name:ident,
-        $dual_1:ident,
-        $dual_2:ident,
-        $role_broadcast:ident,
-        $sender:ident
-    ) => {
+    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
                 mpstthree::functionmpst::ChooseMpst<
@@ -556,13 +538,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
-    (
-        $func_name:ident,
-        $dual_1:ident,
-        $dual_2:ident,
-        $role_broadcast:ident,
-        $sender:ident
-    ) => {
+    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
                 mpstthree::functionmpst::ChooseMpst<
@@ -660,13 +636,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
-    (
-        $func_name:ident,
-        $dual_1:ident,
-        $dual_2:ident,
-        $role_broadcast:ident,
-        $sender:ident
-    ) => {
+    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
                 mpstthree::functionmpst::ChooseMpst<
@@ -764,13 +734,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
-    (
-        $func_name:ident,
-        $dual_1:ident,
-        $dual_2:ident,
-        $role_broadcast:ident,
-        $sender:ident
-    ) => {
+    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::sessionmpst::SessionMpst<
                 mpstthree::functionmpst::ChooseMpst<

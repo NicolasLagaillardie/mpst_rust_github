@@ -275,3 +275,7 @@ fn http() {
 }
 
 pub fn main() {}
+
+// use mpstthree::bundle_impl;
+
+// bundle_impl!(SessionMPST => A, B, C, D);

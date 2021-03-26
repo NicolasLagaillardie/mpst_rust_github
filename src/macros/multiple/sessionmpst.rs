@@ -76,22 +76,28 @@ macro_rules! create_sessionmpst {
                 }
 
                 #[doc(hidden)]
-                fn head_str() -> String { // TODO: Need to modify to adapt with the number of participants
+                fn head_str() -> String {
+                    let mut result = String::from("");
+                    #(
+                        result = format!("{} + {}", result, S#N:0::head_str());
+                    )0:0
                     format!(
-                        "{} + {} + {} + {}",
-                        S1::head_str(),
-                        S2::head_str(),
+                        "{} + {} + {}",
+                        result,
                         R::head_str(),
                         N::head_str()
                     )
                 }
 
                 #[doc(hidden)]
-                fn tail_str() -> String { // TODO: Need to modify to adapt with the number of participants
+                fn tail_str() -> String {
+                    let mut result = String::from("");
+                    #(
+                        result = format!("{} + {}", result, S#N:0::head_str());
+                    )0:0
                     format!(
-                        "{} + {} + {} + {}",
-                        S1::tail_str(),
-                        S2::tail_str(),
+                        " {} + {} + {}",
+                        result,
                         R::tail_str(),
                         N::head_str()
                     )

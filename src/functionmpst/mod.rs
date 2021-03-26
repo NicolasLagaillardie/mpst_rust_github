@@ -40,9 +40,9 @@ pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
 /// [`mpstthree::binary::struct_trait::Send`] and [`either::Either`].
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::choose::choose_right_mpst_session_c_to_all`]: ../binary/choose/fn.choose_right_mpst_session_c_to_all.html
-/// [`mpstthree::binary::struct_trait::Send`]: ../binary/struct_trait/struct.Send.html
-/// [`either::Either`]: ../either/enum.Either.html
+/// [`mpstthree::choose::choose_right_mpst_session_c_to_all`]:
+/// ../binary/choose/fn.choose_right_mpst_session_c_to_all.html [`mpstthree::binary::struct_trait::
+/// Send`]: ../binary/struct_trait/struct.Send.html [`either::Either`]: ../either/enum.Either.html
 pub type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
         SessionMpst<
