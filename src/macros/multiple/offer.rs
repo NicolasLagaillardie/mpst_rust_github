@@ -47,7 +47,7 @@ macro_rules! create_offer_type_multi {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,
-///     create_offer_type_multi, create_recv_mpst_all_session, create_sessionmpst,
+///     create_offer_type_multi, create_sessionmpst,
 /// };
 ///
 /// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
@@ -56,13 +56,10 @@ macro_rules! create_offer_type_multi {
 /// create_sessionmpst!(SessionMpst, 3);
 /// create_offer_type_multi!(OfferMpstThree, SessionMpst, 3);
 ///
-/// create_recv_mpst_all_session!(recv_mpst_b_all_to_d, RoleAlltoD, RoleB, SessionMpst, 3, 2);
-///
 /// create_offer_mpst_session_multi!(
 ///     offer_mpst_session_b_to_d,
 ///     OfferMpstThree,
 ///     RoleAlltoD,
-///     recv_mpst_b_all_to_d,
 ///     RoleB,
 ///     SessionMpst,
 ///     3,
@@ -71,7 +68,7 @@ macro_rules! create_offer_type_multi {
 /// ```
 #[macro_export]
 macro_rules! create_offer_mpst_session_multi {
-    ($func_name:ident, $type_name: ident, $role:ident, $recv_func:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $type_name: ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<'a, #(S#N:0,)2:0 F, G, R1, R2, U>(
                 s: $sessionmpst_name<
@@ -107,7 +104,36 @@ macro_rules! create_offer_mpst_session_multi {
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {
-                let (e, s) = $recv_func(s)?;
+                %(
+                )(
+                    let (e, new_session) = mpstthree::binary::recv::recv(s.session#N:0)?;
+                )0*
+                let (new_queue, _) = {
+                    fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
+                    where
+                        R1: mpstthree::role::Role,
+                        R2: mpstthree::role::Role,
+                    {
+                        let (here1, there1) = <R1 as mpstthree::role::Role>::new();
+                        let (here2, there2) = <R2 as mpstthree::role::Role>::new();
+                        r.sender1.send(there1).unwrap_or(());
+                        r.sender2.send(there2).unwrap_or(());
+                        (here1, here2)
+                    }
+                    temp(s.stack)
+                };
+
+                let s = $sessionmpst_name {
+                    %(
+                        session#N:0: s.session#N:0,
+                    )(
+                        session#N:0: new_session,
+                    )0*
+                    stack: new_queue,
+                    name: s.name,
+                };
+
+                // let (e, s) = $recv_func(s)?;
                 mpstthree::binary::cancel::cancel(s);
                 e.either(f, g)
             }

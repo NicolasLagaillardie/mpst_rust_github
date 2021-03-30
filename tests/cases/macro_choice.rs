@@ -14,8 +14,8 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::{
     create_broadcast_role, create_choose_both_from_3_to_1_and_2, create_multiple_normal_role,
-    create_offer_mpst_session_2, create_recv_mpst_all_session_2, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
+    create_offer_mpst_session_2, create_recv_mpst_session_1, create_recv_mpst_session_2,
+    create_send_mpst_session_1, create_send_mpst_session_2,
 };
 
 // Create new roles
@@ -42,23 +42,10 @@ create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
 create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
 create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
-// broadcast
-create_recv_mpst_all_session_2!(recv_mpst_b_all_to_c, RoleAlltoC, RoleB);
-create_recv_mpst_all_session_2!(recv_mpst_a_all_to_c, RoleAlltoC, RoleA);
 
 // Create the offer functions
-create_offer_mpst_session_2!(
-    offer_mpst_session_b_to_c,
-    RoleAlltoC,
-    recv_mpst_b_all_to_c,
-    RoleB
-);
-create_offer_mpst_session_2!(
-    offer_mpst_session_a_to_c,
-    RoleAlltoC,
-    recv_mpst_a_all_to_c,
-    RoleA
-);
+create_offer_mpst_session_2!(offer_mpst_session_b_to_c, RoleAlltoC, RoleB);
+create_offer_mpst_session_2!(offer_mpst_session_a_to_c, RoleAlltoC, RoleA);
 
 // Create the choose functions
 create_choose_both_from_3_to_1_and_2!(

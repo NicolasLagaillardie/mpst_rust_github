@@ -1,10 +1,10 @@
 #[macro_export]
 macro_rules! bundle_impl {
-    ( $struct_name:ident => $($all_roles:ident),+ $(,)? ) => {
+    ( $sessionmpst_name:ident => $($all_roles:ident),+ $(,)? ) => {
         mpst_seq::seq!(N in 1..3 > ($($all_roles,)+) { // 3 is useless, replaced by sum($($other_roles)).
             #[must_use]
             #[derive(Debug)]
-            pub struct $struct_name<
+            pub struct $sessionmpst_name<
                 #(
                     S#N:0,
                 )20:0
@@ -26,9 +26,9 @@ macro_rules! bundle_impl {
             }
 
             #[doc(hidden)]
-            impl<#(S#N:0: mpstthree::binary::struct_trait::Session,)20:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::struct_trait::Session for $struct_name<#(S#N:0, )20:0 R, N> {
+            impl<#(S#N:0: mpstthree::binary::struct_trait::Session,)20:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::struct_trait::Session for $sessionmpst_name<#(S#N:0, )20:0 R, N> {
                 type Dual =
-                $struct_name<#(<S#N:0 as mpstthree::binary::struct_trait::Session>::Dual, )20:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
+                $sessionmpst_name<#(<S#N:0 as mpstthree::binary::struct_trait::Session>::Dual, )20:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 
                 #[doc(hidden)]
                 fn new() -> (Self, Self::Dual) {
@@ -40,14 +40,14 @@ macro_rules! bundle_impl {
                     let (name_one, name_two) = N::new();
 
                     (
-                        $struct_name {
+                        $sessionmpst_name {
                             #(
                                 session#N:0: sender#N:0,
                             )20:0
                             stack: role_one,
                             name: name_one,
                         },
-                        $struct_name {
+                        $sessionmpst_name {
                             #(
                                 session#N:0: receiver#N:0,
                             )20:0
@@ -329,7 +329,7 @@ macro_rules! bundle_impl {
                 )(
 
                     impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)20:0 R: mpstthree::role::Role, T: std::marker::Send>
-                        $struct_name<
+                        $sessionmpst_name<
                             |(
                                 mpstthree::binary::struct_trait::Send<T, S|N:0>,
                             )(
@@ -339,7 +339,7 @@ macro_rules! bundle_impl {
                             unused#N:23<mpstthree::role::end::RoleEnd>
                         >
                     {
-                        pub fn send(self, payload: T) -> $struct_name<
+                        pub fn send(self, payload: T) -> $sessionmpst_name<
                             |(
                                 S|N:0,
                             )(
@@ -362,7 +362,7 @@ macro_rules! bundle_impl {
                                 temp(self.stack)
                             };
 
-                            $struct_name {
+                            $sessionmpst_name {
                                 |(
                                     session|N:0: new_session,
                                 )(
@@ -388,7 +388,7 @@ macro_rules! bundle_impl {
                 )(
 
                     impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)20:0 R: mpstthree::role::Role, T: std::marker::Send>
-                        $struct_name<
+                        $sessionmpst_name<
                             |(
                                 mpstthree::binary::struct_trait::Recv<T, S|N:0>,
                             )(
@@ -400,7 +400,7 @@ macro_rules! bundle_impl {
                     {
                         pub fn recv(self, payload: T) -> Result<(
                                 T,
-                                $struct_name<
+                                $sessionmpst_name<
                                     |(
                                         S|N:0,
                                     )(
@@ -427,7 +427,7 @@ macro_rules! bundle_impl {
 
                             Ok((
                                 v,
-                                $struct_name {
+                                $sessionmpst_name {
                                     |(
                                         session|N:0: new_session,
                                     )(
@@ -445,7 +445,7 @@ macro_rules! bundle_impl {
             )21:0
 
             // impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)0:0 T: std::marker::Send>
-            //     $struct_name<
+            //     $sessionmpst_name<
             //         mpstthree::binary::struct_trait::Recv<T, S1>,
             //         S2,
             //         RoleAlltoB<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
@@ -454,14 +454,14 @@ macro_rules! bundle_impl {
             // {
             //     pub fn recv(self) -> Result<(
             //         T,
-            //         $struct_name<
+            //         $sessionmpst_name<
             //             #(S#N:0,)0:0
             //             mpstthree::role::end::RoleEnd,
             //             unused#N:23<mpstthree::role::end::RoleEnd>
             //         >),
             //         Box<dyn std::error::Error>
             //     > {
-            //         mpstthree::recv_all_aux!(self, RoleB, unused#N:23, $struct_name, 3, 1)()
+            //         mpstthree::recv_all_aux!(self, RoleB, unused#N:23, $sessionmpst_name, 3, 1)()
             //     }
             // }
 
@@ -473,12 +473,12 @@ macro_rules! bundle_impl {
             //     R1: mpstthree::role::Role,
             //     R2: mpstthree::role::Role
             // >
-            //     $struct_name<
+            //     $sessionmpst_name<
             //         mpstthree::binary::struct_trait::End,
             //         mpstthree::binary::struct_trait::Recv<
             //             either::Either<
-            //             $struct_name<#(S#N:0,)0:0 R1, unused#N:23<mpstthree::role::end::RoleEnd>>,
-            //             $struct_name<#(S#N:0,)3:0 R2, unused#N:23<mpstthree::role::end::RoleEnd>>>,
+            //             $sessionmpst_name<#(S#N:0,)0:0 R1, unused#N:23<mpstthree::role::end::RoleEnd>>,
+            //             $sessionmpst_name<#(S#N:0,)3:0 R2, unused#N:23<mpstthree::role::end::RoleEnd>>>,
             //             mpstthree::binary::struct_trait::End
             //         >,
             //         RoleAlltoC<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
@@ -487,8 +487,8 @@ macro_rules! bundle_impl {
             // {
             //     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
             //     where
-            //         F: FnOnce($struct_name<#(S#N:0,)0:0 R1, unused#N:23<mpstthree::role::end::RoleEnd>>) -> Result<U, Box<dyn std::error::Error + 'a>>,
-            //         G: FnOnce($struct_name<#(S#N:0,)3:0 R2, unused#N:23<mpstthree::role::end::RoleEnd>>) -> Result<U, Box<dyn std::error::Error + 'a>>,
+            //         F: FnOnce($sessionmpst_name<#(S#N:0,)0:0 R1, unused#N:23<mpstthree::role::end::RoleEnd>>) -> Result<U, Box<dyn std::error::Error + 'a>>,
+            //         G: FnOnce($sessionmpst_name<#(S#N:0,)3:0 R2, unused#N:23<mpstthree::role::end::RoleEnd>>) -> Result<U, Box<dyn std::error::Error + 'a>>,
             //     {
             //         let (e, s) = self.recv()?;
             //         mpstthree::binary::cancel::cancel(s);
@@ -512,7 +512,7 @@ macro_rules! bundle_impl {
             //         R#N:0 : mpstthree::role::Role,
             //     )11:0
             // >
-            //     $struct_name<
+            //     $sessionmpst_name<
             //         #(
             //             mpstthree::binary::struct_trait::Send<
             //                 either::Either<
@@ -549,7 +549,7 @@ macro_rules! bundle_impl {
             // {
             //     pub fn choose_left(
             //         self,
-            //     ) -> $struct_name<
+            //     ) -> $sessionmpst_name<
             //         #(
             //             <S#N:8 as mpstthree::binary::struct_trait::Session>::Dual,
             //         )0:0
@@ -607,7 +607,7 @@ macro_rules! bundle_impl {
 
             //     pub fn choose_right(
             //         self,
-            //     ) -> $struct_name<
+            //     ) -> $sessionmpst_name<
             //         #(
             //             <S#N:9 as mpstthree::binary::struct_trait::Session>::Dual,
             //         )0:0
@@ -677,7 +677,7 @@ macro_rules! bundle_impl {
             #(
 
                 impl
-                    $struct_name<
+                    $sessionmpst_name<
                         #(
                             mpstthree::binary::struct_trait::End,
                         )20:0

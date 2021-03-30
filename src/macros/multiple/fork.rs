@@ -21,16 +21,16 @@
 /// ```
 #[macro_export]
 macro_rules! fork_simple_multi {
-    ($func_name: ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(K in 1..$nsessions {
-            fn $func_name<#(S#K:0,)0:0 R, N, P>(p: P, s: $struct_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
+            fn $func_name<#(S#K:0,)0:0 R, N, P>(p: P, s: $sessionmpst_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
             where
                 #(
                     S#K:0: mpstthree::binary::struct_trait::Session + 'static,
                 )0:0
                 R: mpstthree::role::Role + 'static,
                 N: mpstthree::role::Role + 'static,
-                P: FnOnce($struct_name<#(S#K:0,)0:0 R, N>) -> Result<(), Box<dyn std::error::Error>> + std::marker::Send + 'static,
+                P: FnOnce($sessionmpst_name<#(S#K:0,)0:0 R, N>) -> Result<(), Box<dyn std::error::Error>> + std::marker::Send + 'static,
             {
                 std::thread::spawn(move || {
                     std::panic::set_hook(Box::new(|_info| {
@@ -66,7 +66,7 @@ macro_rules! fork_simple_multi {
 /// ```
 #[macro_export]
 macro_rules! fork_mpst_multi {
-    ($func_name: ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(K in 1..=$nsessions {
             fn $func_name<#(S#K:0,)14:0 #(R#K:0,)0:0 #(N#K:0,)0:0 #(F#K:0,)0:0>(
                 #(
@@ -88,7 +88,7 @@ macro_rules! fork_mpst_multi {
                     S#K:0: mpstthree::binary::struct_trait::Session + 'static,
                 )14:0
                 #( // i in 1..K
-                    F#K:0: FnOnce($struct_name<
+                    F#K:0: FnOnce($sessionmpst_name<
                         ~( // j in 0..K
                             S~K:6, // S(i + j) (with Dual if needed)
                         )(
@@ -112,7 +112,7 @@ macro_rules! fork_mpst_multi {
                 )0:0
 
                 #(
-                    let sessionmpst_#K:0 = $struct_name {
+                    let sessionmpst_#K:0 = $sessionmpst_name {
                         ~(
                             session#K:1 : channel_~K:5,
                         )(

@@ -20,9 +20,9 @@
 /// ```
 #[macro_export]
 macro_rules! close_mpst {
-    ($func_name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
-            fn $func_name<R>(s: $struct_name<#(mpstthree::binary::struct_trait::End,)0:0 mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn std::error::Error>>
+            fn $func_name<R>(s: $sessionmpst_name<#(mpstthree::binary::struct_trait::End,)0:0 mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn std::error::Error>>
             where
                 R: mpstthree::role::Role,
             {
@@ -59,9 +59,9 @@ macro_rules! close_mpst {
 /// ```
 #[macro_export]
 macro_rules! close_mpst_check_cancel {
-    ($func_name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! 1 {
-            fn $func_name<R>(s: $struct_name<#(mpstthree::binary::struct_trait::End,)0:0 mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn std::error::Error>>
+            fn $func_name<R>(s: $sessionmpst_name<#(mpstthree::binary::struct_trait::End,)0:0 mpstthree::role::end::RoleEnd, R>) -> Result<(), Box<dyn std::error::Error>>
             where
                 R: mpstthree::role::Role,
             {

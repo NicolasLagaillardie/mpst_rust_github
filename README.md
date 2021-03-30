@@ -220,7 +220,6 @@ For the *binary branching*, the macros `create_offer_mpst_session_1` and `create
 create_offer_mpst_session_2!(
     offer_mpst_session_b_to_c,
     RoleAlltoC,
-    recv_mpst_b_all_to_c,
     RoleB
 );
 ```
@@ -233,7 +232,6 @@ create_choose_left_from_3_to_1_and_2!(
     RoleADual,
     RoleBDual,
     RoleCtoAll,
-    next_c_to_all,
     RoleC
 );
 ```

@@ -4,10 +4,10 @@
 /// Cancels a session
 #[macro_export]
 macro_rules! send_cancel {
-    ($func_name:ident, $name:ident, $struct_name:ident, $nsessions:literal, $msg:expr) => {
+    ($func_name:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $msg:expr) => {
         mpst_seq::seq!(N in 1..$nsessions ! 1 {
             fn $func_name<%(S#N:0,)()0* R>(
-                s: $struct_name<
+                s: $sessionmpst_name<
                     %(
                         S#N:0,
                     )(
@@ -36,7 +36,7 @@ macro_rules! send_cancel {
 /// others. Creates the function that will be direcly sent
 #[macro_export]
 macro_rules! broadcast_cancel {
-    ($session:expr, $name:ident, $struct_name:ident, $nsessions:literal) => {
+    ($session:expr, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
                 #(
                     let mut bool_session#N:0 = true;

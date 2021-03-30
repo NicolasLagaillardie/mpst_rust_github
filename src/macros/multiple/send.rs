@@ -33,7 +33,7 @@
 /// ```
 #[macro_export]
 macro_rules! send_mpst {
-    ($session:expr, $payload:expr, $receiver:ident, $sender:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session:expr, $payload:expr, $receiver:ident, $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
             %(
             )(
@@ -59,7 +59,7 @@ macro_rules! send_mpst {
                 temp(&$session.name)
             }.unwrap();
 
-            $struct_name {
+            $sessionmpst_name {
                 %(
                     session#N:0: $session.session#N:0,
                 )(
@@ -75,7 +75,7 @@ macro_rules! send_mpst {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! send_aux {
-    ($session:expr, $payload:expr, $role:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session:expr, $payload:expr, $role:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
             %(
             )(
@@ -94,7 +94,7 @@ macro_rules! send_aux {
                 temp($session.stack)
             };
 
-            $struct_name {
+            $sessionmpst_name {
                 %(
                     session#N:0: $session.session#N:0,
                 )(
@@ -139,11 +139,11 @@ macro_rules! send_aux {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session {
-    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 x: T,
-                s: $struct_name<
+                s: $sessionmpst_name<
                     %(
                         S#N:0,
                     )(
@@ -152,7 +152,7 @@ macro_rules! create_send_mpst_session {
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-            ) -> $struct_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>
+            ) -> $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>
             where
                 T: std::marker::Send,
                 #(
@@ -161,7 +161,7 @@ macro_rules! create_send_mpst_session {
                 R: mpstthree::role::Role,
             {
 
-                mpstthree::send_aux!(s, x, $role, $struct_name, $nsessions, $exclusion)
+                mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion)
             }
         });
     }
@@ -200,11 +200,11 @@ macro_rules! create_send_mpst_session {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel {
-    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 x: T,
-                s: $struct_name<
+                s: $sessionmpst_name<
                     %(
                         S#N:0,
                     )(
@@ -213,7 +213,7 @@ macro_rules! create_send_mpst_cancel {
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-            ) -> Result<$struct_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>, std::boxed::Box<dyn std::error::Error>>
+            ) -> Result<$sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>, std::boxed::Box<dyn std::error::Error>>
             where
                 T: std::marker::Send,
                 #(
@@ -237,7 +237,7 @@ macro_rules! create_send_mpst_cancel {
                     temp(s.stack)
                 };
 
-                Ok($struct_name {
+                Ok($sessionmpst_name {
                     %(
                         session#N:0: s.session#N:0,
                     )(
@@ -295,11 +295,11 @@ macro_rules! create_send_mpst_cancel {
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel {
-    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)16:0 R>(
                 x: T,
-                s: $struct_name<
+                s: $sessionmpst_name<
                     mpstthree::binary::struct_trait::End,
                     %(
                         S#N:0,
@@ -309,7 +309,7 @@ macro_rules! create_send_check_cancel {
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-            ) -> Result<$struct_name<
+            ) -> Result<$sessionmpst_name<
                 mpstthree::binary::struct_trait::End,
                 #(S#N:0,)16:0
                 R,
@@ -347,7 +347,7 @@ macro_rules! create_send_check_cancel {
                     temp(s.stack)
                 };
 
-                Ok($struct_name {
+                Ok($sessionmpst_name {
                     %(
                         session#N:0: s.session#N:0,
                     )(
@@ -393,11 +393,11 @@ macro_rules! create_send_check_cancel {
 /// ```
 #[macro_export]
 macro_rules! create_send_http_session {
-    ($func_name:ident, $role:ident, $name:ident, $struct_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 x: T,
-                s: $struct_name<
+                s: $sessionmpst_name<
                     %(
                         S#N:0,
                     )(
@@ -413,7 +413,7 @@ macro_rules! create_send_http_session {
                 body: &'static str,
             ) ->
             (
-                $struct_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
+                $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
                 hyper::Request<hyper::Body>
             )
             where
@@ -439,7 +439,7 @@ macro_rules! create_send_http_session {
                 };
 
                 (
-                    mpstthree::send_aux!(s, x, $role, $struct_name, $nsessions, $exclusion),
+                    mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion),
                     req
                 )
             }
@@ -489,8 +489,8 @@ macro_rules! create_send_http_session {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_send_mpst_session!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_send_mpst_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
 
@@ -536,8 +536,8 @@ macro_rules! create_send_mpst_session_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_send_mpst_cancel!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_send_mpst_cancel!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
 
@@ -605,8 +605,8 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_send_check_cancel!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_send_check_cancel!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
 
@@ -652,7 +652,7 @@ macro_rules! create_send_check_cancel_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_http_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $struct_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_send_http_session!($func_name, $role, $name, $struct_name, $nsessions, $exclusion);)+
+    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+       $(mpstthree::create_send_http_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
