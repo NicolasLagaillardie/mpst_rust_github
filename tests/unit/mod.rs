@@ -1,3 +1,4 @@
+pub mod baking;
 pub mod checker;
 pub mod checker_panic;
 pub mod roles;

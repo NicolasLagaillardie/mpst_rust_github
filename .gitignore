@@ -51,5 +51,6 @@ test.rs
 /wip
 
 /scripts/numbers
+result.rs
 
 *.env

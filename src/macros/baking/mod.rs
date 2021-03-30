@@ -349,7 +349,7 @@ macro_rules! bundle_impl {
                             unused#N:23<mpstthree::role::end::RoleEnd>
                         > {
                             let new_session = mpstthree::binary::send::send(payload, self.session~N:17);
-                
+
                             let new_queue = {
                                 fn temp<R>(r: unused~N:9<R>) -> R
                                 where
@@ -361,7 +361,7 @@ macro_rules! bundle_impl {
                                 }
                                 temp(self.stack)
                             };
-                
+
                             $struct_name {
                                 |(
                                     session|N:0: new_session,
@@ -375,7 +375,7 @@ macro_rules! bundle_impl {
 
                         }
                     }
-                
+
                 )7*
 
             )21:0
@@ -398,17 +398,21 @@ macro_rules! bundle_impl {
                             unused#N:23<mpstthree::role::end::RoleEnd>
                         >
                     {
-                        pub fn recv(self, payload: T) -> $struct_name<
-                            |(
-                                S|N:0,
-                            )(
-                                S|N:0,
-                            )0*
-                            R,
-                            unused#N:23<mpstthree::role::end::RoleEnd>
+                        pub fn recv(self, payload: T) -> Result<(
+                                T,
+                                $struct_name<
+                                    |(
+                                        S|N:0,
+                                    )(
+                                        S|N:0,
+                                    )0*
+                                    R,
+                                    unused#N:23<mpstthree::role::end::RoleEnd>
+                            >),
+                            Box<dyn std::error::Error>
                         > {
-                            let (v, new_session) = mpstthree::binary::recv::recv(payload, self.session~N:17);
-                
+                            let (v, new_session) = mpstthree::binary::recv::recv(self.session~N:17)?;
+
                             let new_queue = {
                                 fn temp<R>(r: unused~N:9<R>) -> R
                                 where
@@ -420,7 +424,7 @@ macro_rules! bundle_impl {
                                 }
                                 temp(self.stack)
                             };
-                
+
                             Ok((
                                 v,
                                 $struct_name {
@@ -435,7 +439,7 @@ macro_rules! bundle_impl {
                             ))
                         }
                     }
-                
+
                 )7*
 
             )21:0

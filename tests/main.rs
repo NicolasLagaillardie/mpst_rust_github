@@ -29,6 +29,11 @@ fn unit_tests() {
 }
 
 #[test]
+fn baking() {
+    unit::baking::main();
+}
+
+#[test]
 #[should_panic]
 fn unit_tests_panic_test_checker_panic_stack() {
     unit::checker_panic::test_checker_panic_stack();
@@ -275,7 +280,3 @@ fn http() {
 }
 
 pub fn main() {}
-
-// use mpstthree::bundle_impl;
-
-// bundle_impl!(SessionMPST => A, B, C, D);

@@ -52,13 +52,8 @@ tokio = { version = "1", features = ["full"] }
 futures = "0.3.13"
 
 [dev-dependencies]
-criterion = "0.3.4"
+criterion = { version = "0.3.4", features=["html_reports"] }
 trybuild = "1.0.41"
 
 [badges]
 maintenance = { status = "actively-developed" }
-
-[features]
-# This feature _currently_ does nothing except disable a warning message, but in 0.4.0 it will be
-# required in order to have Criterion.rs generate its own plots (as opposed to using cargo-criterion)
-html_reports = []
