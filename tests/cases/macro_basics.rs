@@ -12,9 +12,9 @@ use std::error::Error;
 
 // Create new roles
 create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleD, next_d, RoleDDual, next_d_dual |
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleD, RoleDDual |
 );
 
 type TestA = RoleA<RoleEnd>;

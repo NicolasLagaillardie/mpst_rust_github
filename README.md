@@ -196,7 +196,7 @@ This part details how to create new roles and how to use them.
 Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next` function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleD`. The expected code will be:
 
 ```rust
-create_normal_role!(RoleA, next_a, RoleD, next_d);
+create_normal_role!(RoleA, RoleADual);
 ```
 
 #### Sending and receiving with those new roles

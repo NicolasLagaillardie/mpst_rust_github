@@ -27,7 +27,7 @@ nb_participants_binary = []
 nb_participants_crossbeam = []
 
 # Number of loops in the recursion
-number_of_loops = '0'
+number_of_loops = '100'
 
 
 def test(path):

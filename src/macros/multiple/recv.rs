@@ -22,9 +22,9 @@
 /// create_sessionmpst!(SessionMpstThree, 3);
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleD, next_d, RoleDDual, next_d_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleD, RoleDDual |
 /// );
 ///
 /// fn main(s: Endpoint) -> Result<(), Box<dyn std::error::Error>> {
@@ -171,9 +171,9 @@ macro_rules! recv_all_aux {
 /// use mpstthree::{create_multiple_normal_role, create_recv_mpst_session, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleD, next_d, RoleDDual, next_d_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleD, RoleDDual |
 /// );
 ///
 /// create_sessionmpst!(SessionMpst, 3);
@@ -235,9 +235,9 @@ macro_rules! create_recv_mpst_session {
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_recv_mpst_session_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleD, next_d, RoleDDual, next_d_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleD, RoleDDual |
 /// );
 ///
 /// create_sessionmpst!(SessionMpst, 3);
@@ -283,8 +283,8 @@ macro_rules! create_recv_mpst_session_bundle {
 ///     create_broadcast_role, create_normal_role, create_recv_mpst_all_session, create_sessionmpst,
 /// };
 ///
-/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+/// create_normal_role!(RoleA, RoleADual);
+/// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -378,9 +378,9 @@ macro_rules! create_recv_mpst_all_session {
 /// ```
 /// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_recv_mpst_all_session_bundle};
 ///
-/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
-/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+/// create_normal_role!(RoleA, RoleADual);
+/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
+/// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -423,9 +423,9 @@ macro_rules! create_recv_mpst_all_session_bundle {
 /// use mpstthree::{create_multiple_normal_role, create_recv_http_session, create_sessionmpst};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleD, next_d, RoleDDual, next_d_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleD, RoleDDual |
 /// );
 ///
 /// create_sessionmpst!(SessionMpst, 3);
@@ -506,9 +506,9 @@ macro_rules! create_recv_http_session {
 /// use mpstthree::{create_multiple_normal_role, create_sessionmpst, create_recv_http_session_bundle};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleD, next_d, RoleDDual, next_d_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleD, RoleDDual |
 /// );
 ///
 /// create_sessionmpst!(SessionMpst, 3);

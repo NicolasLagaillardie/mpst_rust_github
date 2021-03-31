@@ -32,10 +32,10 @@ create_sessionmpst!(SessionMpstFour, 4);
 
 // Create Roles
 create_multiple_normal_role!(
-    Api, next_api, DualAPI, next_dual_api |
-    Controller, next_controller, DualController, next_dual_controller |
-    Logs, next_logs, DualLogs, next_dual_logs |
-    Storage, next_storage, DualStorage, next_dual_storage |
+    Api, DualAPI |
+    Controller, DualController |
+    Logs, DualLogs |
+    Storage, DualStorage |
 );
 
 // Create send

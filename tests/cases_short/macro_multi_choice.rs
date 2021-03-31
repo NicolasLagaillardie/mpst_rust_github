@@ -18,12 +18,12 @@ create_sessionmpst!(SessionMpst, 3);
 // Create new roles
 // normal
 create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleD, next_d, RoleDDual, next_d_dual |
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleD, RoleDDual |
 );
 // broadcast
-create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 
 // Create new send functions
 create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, SessionMpst, 3, 1);

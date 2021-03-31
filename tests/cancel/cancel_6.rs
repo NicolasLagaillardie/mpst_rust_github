@@ -17,10 +17,10 @@ create_sessionmpst!(SessionMpstFour, 4);
 // Create new roles
 // normal
 create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
-    RoleD, next_d, RoleDDual, next_d_dual |
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleC, RoleCDual |
+    RoleD, RoleDDual |
 );
 
 // Create new send functions

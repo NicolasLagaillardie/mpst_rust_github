@@ -13,13 +13,13 @@
 /// ```
 /// use mpstthree::create_normal_role;
 ///
-/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+/// create_normal_role!(RoleA, RoleADual);
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_normal_role {
-    ($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
+    ($role_name:ident, $dual_name:ident) => {
         ////////////////////////////////////////////
         /// The Role
 
@@ -80,15 +80,6 @@ macro_rules! create_normal_role {
             }
         }
 
-        fn $role_next<R>(r: $role_name<R>) -> R
-        where
-            R: mpstthree::role::Role,
-        {
-            let (here, there) = <R as mpstthree::role::Role>::new();
-            r.sender.send(there).unwrap_or(());
-            here
-        }
-
         ////////////////////////////////////////////
         /// The Dual functions
 
@@ -124,15 +115,6 @@ macro_rules! create_normal_role {
                 )
             }
         }
-
-        fn $dual_next<R>(r: $dual_name<R>) -> R
-        where
-            R: mpstthree::role::Role,
-        {
-            let (here, there) = <R as mpstthree::role::Role>::new();
-            r.sender.send(there).unwrap_or(());
-            here
-        }
     };
 }
 
@@ -152,16 +134,16 @@ macro_rules! create_normal_role {
 /// use mpstthree::create_multiple_normal_role;
 ///
 /// create_multiple_normal_role!(
-///    RoleA, next_a, RoleADual, next_a_dual |
-///    RoleB, next_b, RoleBDual, next_b_dual |
+///    RoleA, RoleADual |
+///    RoleB, RoleBDual |
 /// );
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_multiple_normal_role {
-    ($($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident | )+ ) => {
-        $(mpstthree::create_normal_role!($role_name, $role_next, $dual_name, $dual_next);)+
+    ($($role_name:ident, $dual_name:ident | )+ ) => {
+        $(mpstthree::create_normal_role!($role_name, $dual_name);)+
      }
 }
 
@@ -181,13 +163,13 @@ macro_rules! create_multiple_normal_role {
 /// ```
 /// use mpstthree::create_broadcast_role;
 ///
-/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_broadcast_role {
-    ($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident) => {
+    ($role_name:ident, $dual_name:ident) => {
         ////////////////////////////////////////////
         /// The Role
 
@@ -265,18 +247,6 @@ macro_rules! create_broadcast_role {
             }
         }
 
-        fn $role_next<R1, R2>(r: $role_name<R1, R2>) -> (R1, R2)
-        where
-            R1: mpstthree::role::Role,
-            R2: mpstthree::role::Role,
-        {
-            let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-            let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-            r.sender1.send(there1).unwrap_or(());
-            r.sender2.send(there2).unwrap_or(());
-            (here1, here2)
-        }
-
         ////////////////////////////////////////////
         /// The Dual functions
 
@@ -323,18 +293,6 @@ macro_rules! create_broadcast_role {
                 )
             }
         }
-
-        fn $dual_next<R1, R2>(r: $dual_name<R1, R2>) -> (R1, R2)
-        where
-            R1: mpstthree::role::Role,
-            R2: mpstthree::role::Role,
-        {
-            let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-            let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-            r.sender1.send(there1).unwrap_or(());
-            r.sender2.send(there2).unwrap_or(());
-            (here1, here2)
-        }
     };
 }
 
@@ -356,21 +314,17 @@ macro_rules! create_broadcast_role {
 ///
 /// create_multiple_broadcast_role!(
 ///    RoleAlltoC,
-///    next_all_to_c,
-///    RoleCtoAll,
-///    next_c_to_all |
+///    RoleCtoAll |
 ///    RoleAlltoD,
-///    next_all_to_D,
-///    RoleDtoAll,
-///    next_d_to_all |
+///    RoleDtoAll|
 /// );
 /// ```
 ///
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 #[macro_export]
 macro_rules! create_multiple_broadcast_role {
-    ($($role_name:ident, $role_next:ident, $dual_name:ident, $dual_next:ident | )+ ) => {
-        $(mpstthree::create_broadcast_role!($role_name, $role_next, $dual_name, $dual_next);)+
+    ($($role_name:ident, $dual_name:ident | )+ ) => {
+        $(mpstthree::create_broadcast_role!($role_name, $dual_name);)+
      }
 }
 

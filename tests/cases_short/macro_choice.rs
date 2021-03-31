@@ -21,12 +21,12 @@ use mpstthree::{
 // Create new roles
 // normal
 create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleC, RoleCDual |
 );
 // broadcast
-create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);

@@ -21,9 +21,9 @@
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_1
 /// };
 ///
-/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
-/// create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
+/// create_normal_role!(RoleA, RoleADual);
+/// create_normal_role!(RoleC, RoleCDual);
+/// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_offer_mpst_session_1!(
 ///     offer_mpst_session_c_to_a,
@@ -68,9 +68,9 @@ macro_rules! create_offer_mpst_session_1 {
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_2
 /// };
 ///
-/// create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
-/// create_normal_role!(RoleC, next_c, RoleCDual, next_c_dual);
-/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_normal_role!(RoleA, RoleADual);
+/// create_normal_role!(RoleC, RoleCDual);
+/// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_offer_mpst_session_2!(
 ///     offer_mpst_session_a_to_c,

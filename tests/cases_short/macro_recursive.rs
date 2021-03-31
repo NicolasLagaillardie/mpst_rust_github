@@ -17,9 +17,9 @@ use mpstthree::{
 
 // Create new roles
 create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleC, next_c, RoleCDual, next_c_dual |
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleC, RoleCDual |
 );
 
 // Create new send functions

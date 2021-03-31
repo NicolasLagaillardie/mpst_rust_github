@@ -12,7 +12,7 @@ create_sessionmpst!(SessionMpstThree, 3);
 create_sessionmpst!(SessionMpstFour, 4);
 
 // Create an A pawn
-create_normal_role!(RoleA, next_a, RoleADual, next_a_dual);
+create_normal_role!(RoleA, RoleADual);
 
 /////////////////////////////////////////
 

@@ -50,8 +50,8 @@ macro_rules! create_offer_type_multi {
 ///     create_offer_type_multi, create_sessionmpst,
 /// };
 ///
-/// create_normal_role!(RoleB, next_b, RoleBDual, next_b_dual);
-/// create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+/// create_normal_role!(RoleB, RoleBDual);
+/// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 /// create_offer_type_multi!(OfferMpstThree, SessionMpst, 3);

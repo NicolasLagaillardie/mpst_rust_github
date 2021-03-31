@@ -223,12 +223,12 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_3_to_1_and_2};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -321,12 +321,12 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_3_to_1_and_2};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoC, next_all_to_c, RoleCtoAll, next_c_to_all);
+/// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -419,12 +419,12 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_1_to_2_and_3};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
+/// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -517,12 +517,12 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_1_to_2_and_3};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoA, next_all_to_a, RoleAtoAll, next_a_to_all);
+/// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -615,12 +615,12 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_left_from_2_to_1_and_3};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -713,12 +713,12 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_right_from_2_to_1_and_3};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -814,12 +814,12 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_2_to_1_and_3};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -885,12 +885,12 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_1_to_2_and_3};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
@@ -956,12 +956,12 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// use mpstthree::{create_multiple_normal_role, create_broadcast_role, create_sessionmpst, create_choose_both_from_3_to_1_and_2};
 ///
 /// create_multiple_normal_role!(
-///     RoleA, next_a, RoleADual, next_a_dual |
-///     RoleB, next_b, RoleBDual, next_b_dual |
-///     RoleC, next_c, RoleCDual, next_c_dual |
+///     RoleA, RoleADual |
+///     RoleB, RoleBDual |
+///     RoleC, RoleCDual |
 /// );
 ///
-/// create_broadcast_role!(RoleAlltoB, next_all_to_b, RoleBtoAll, next_b_to_all);
+/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
