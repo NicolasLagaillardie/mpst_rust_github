@@ -56,8 +56,7 @@ pub fn main() {
         let s: Server<i32> = fork(client);
         let (_result, s, _resp) = recv_http(s, false, Request::default())?;
         let (s, _req) = send_http(0, s, false, Method::GET, "", vec![("", "")], "")?;
-        close(s)?;
-        Ok(())
+        close(s)
     }()
     .is_ok());
 }

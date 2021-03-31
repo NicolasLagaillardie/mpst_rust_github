@@ -87,8 +87,7 @@ where
 /// {
 ///     let s = send_mpst_a_to_b(1, s);
 ///     let (x, s) = recv_mpst_a_from_c(s)?;
-///     close_mpst(s)?;
-///     Ok(())
+///     close_mpst(s)
 /// }
 ///
 /// /// Single test for B
@@ -96,8 +95,7 @@ where
 /// {
 ///     let (x, s) = recv_mpst_b_from_a(s)?;
 ///     let s = send_mpst_b_to_c(2, s);
-///     close_mpst(s)?;
-///     Ok(())
+///     close_mpst(s)
 /// }
 ///
 /// /// Single test for C
@@ -105,8 +103,7 @@ where
 /// {
 ///     let s = send_mpst_c_to_a(3, s);
 ///     let (x, s) = recv_mpst_c_from_b(s)?;
-///     close_mpst(s)?;
-///     Ok(())
+///     close_mpst(s)
 /// }
 /// let (thread_a, thread_b, thread_c) = fork_mpst(
 ///     simple_triple_endpoint_a,

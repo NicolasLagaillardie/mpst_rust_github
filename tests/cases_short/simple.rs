@@ -9,20 +9,10 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::sessionmpst::SessionMpst;
 
-use mpstthree::functionmpst::close::close_mpst;
-
 use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
-
-use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
-use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
-use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
-
-use mpstthree::functionmpst::send::send_mpst_a_to_b;
-use mpstthree::functionmpst::send::send_mpst_b_to_c;
-use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
 /// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
@@ -46,32 +36,29 @@ type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
 
 /// Single test for A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_a_to_b(1, s);
-    let (x, s) = recv_mpst_a_from_c(s)?;
+    let (x, s) = s.send(1).recv()?;
 
     assert_eq!(x, 3);
 
-    close_mpst(s)
+    s.close()
 }
 
 /// Single test for B
 fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-    let (x, s) = recv_mpst_b_from_a(s)?;
-    let s = send_mpst_b_to_c(2, s);
+    let (x, s) = s.recv()?;
 
     assert_eq!(x, 1);
 
-    close_mpst(s)
+    s.send(2).close()
 }
 
 /// Single test for C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_c_to_a(3, s);
-    let (x, s) = recv_mpst_c_from_b(s)?;
+    let (x, s) = s.send(3).recv()?;
 
     assert_eq!(x, 2);
 
-    close_mpst(s)
+    s.close()
 }
 
 /////////////////////////////////////////

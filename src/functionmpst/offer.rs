@@ -70,12 +70,10 @@ type SessionMpstToCFromB<S1, S2, S3, S4, S5, R1, R2> = SessionMpst<
 ///    s,
 ///    |s: EndpointARecv<i32>| {
 ///        let (request, s) = recv_mpst_a_from_b(s)?;
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    |s: EndpointAEnd| {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 /// )
 /// ```
@@ -115,12 +113,10 @@ where
 ///    s,
 ///    |s: EndpointARecv<i32>| {
 ///        let (request, s) = recv_mpst_a_from_c(s)?;
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    |s: EndpointAEnd| {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 /// )
 /// ```
@@ -160,12 +156,10 @@ where
 ///    s,
 ///    |s: EndpointBRecv<i32>| {
 ///        let (request, s) = recv_mpst_b_from_a(s)?;
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    |s: EndpointBEnd| {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 /// )
 /// ```
@@ -205,12 +199,10 @@ where
 ///    s,
 ///    |s: EndpointBRecv<i32>| {
 ///        let (request, s) = recv_mpst_b_from_c(s)?;
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    |s: EndpointBEnd| {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 /// )
 /// ```
@@ -250,12 +242,10 @@ where
 ///    s,
 ///    |s: EndpointCRecv<i32>| {
 ///        let (request, s) = recv_mpst_c_from_a(s)?;
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    |s: EndpointCEnd| {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 /// )
 /// ```
@@ -295,12 +285,10 @@ where
 ///    s,
 ///    |s: EndpointCRecv<i32>| {
 ///        let (request, s) = recv_mpst_c_from_b(s)?;
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    |s: EndpointCEnd| {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 /// )
 /// ```

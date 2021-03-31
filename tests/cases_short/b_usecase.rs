@@ -141,8 +141,7 @@ fn authenticator(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn client_video(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    let mut rng = thread_rng();
-    let id: i32 = rng.gen();
+    let id: i32 = thread_rng().gen();
 
     let (accept, s) = s.send(id).recv()?;
     let (result, s) = s.choose_left().send(accept).recv()?;
@@ -154,8 +153,7 @@ fn client_video(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn client_close(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    let mut rng = thread_rng();
-    let id: i32 = rng.gen();
+    let id: i32 = thread_rng().gen();
 
     let (accept, s) = s.send(id).recv()?;
 

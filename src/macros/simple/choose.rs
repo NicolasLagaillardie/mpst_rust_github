@@ -1043,8 +1043,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///             RoleB, =>
 ///             RoleC
 ///         );
-///         close_mpst(s)?;
-///         Ok(())
+///         close_mpst(s)
 ///     }
 /// }
 /// ```

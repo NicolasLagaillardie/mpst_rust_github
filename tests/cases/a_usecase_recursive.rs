@@ -104,8 +104,7 @@ type EndpointARecurs<N> = SessionMpst<RecursAtoB<N>, End, QueueARecurs, RoleA<Ro
 fn server(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_b!(s, {
         Branches0AtoB::End(s) => {
-            close_mpst(s)?;
-            Ok(())
+            close_mpst(s)
         },
         Branches0AtoB::Video(s) => {
             let (request, s) = recv_mpst_a_from_c(s)?;
