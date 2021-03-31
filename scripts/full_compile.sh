@@ -25,26 +25,31 @@ cargo bench --bench main -- --verbose
 # cargo flamegraph --example long_simple_eleven_binary -o flamegraphs/flamegraph_long_simple_eleven_binary.svg
 # cargo flamegraph --example long_simple_eleven_mpst -o flamegraphs/flamegraph_long_simple_eleven_mpst.svg
 
-# ./scripts/compile.sh long_simple_three_binary 
-# ./scripts/compile.sh long_simple_three_mpst
-# ./scripts/compile.sh long_simple_four_binary
-# ./scripts/compile.sh long_simple_four_mpst 
-# ./scripts/compile.sh long_simple_five_binary
-# ./scripts/compile.sh long_simple_five_mpst
-# ./scripts/compile.sh long_simple_six_binary
-# ./scripts/compile.sh long_simple_six_mpst 
-# ./scripts/compile.sh long_simple_seven_binary 
-# ./scripts/compile.sh long_simple_seven_mpst
-# ./scripts/compile.sh long_simple_eight_binary 
-# ./scripts/compile.sh long_simple_eight_mpst 
-# ./scripts/compile.sh long_simple_nine_binary 
-# ./scripts/compile.sh long_simple_nine_mpst 
-# ./scripts/compile.sh long_simple_ten_binary 
-# ./scripts/compile.sh long_simple_ten_mpst 
-# ./scripts/compile.sh long_simple_eleven_binary 
-# ./scripts/compile.sh long_simple_eleven_mpst 
-# ./scripts/compile.sh long_simple_twenty_binary 
-# ./scripts/compile.sh long_simple_twenty_mpst 
+# for i in {1..50}
+# do
+
+    # ./scripts/compile.sh long_simple_three_binary 
+    # ./scripts/compile.sh long_simple_three_mpst
+    # ./scripts/compile.sh long_simple_four_binary
+    # ./scripts/compile.sh long_simple_four_mpst 
+    # ./scripts/compile.sh long_simple_five_binary
+    # ./scripts/compile.sh long_simple_five_mpst
+    # ./scripts/compile.sh long_simple_six_binary
+    # ./scripts/compile.sh long_simple_six_mpst 
+    # ./scripts/compile.sh long_simple_seven_binary 
+    # ./scripts/compile.sh long_simple_seven_mpst
+    # ./scripts/compile.sh long_simple_eight_binary 
+    # ./scripts/compile.sh long_simple_eight_mpst 
+    # ./scripts/compile.sh long_simple_nine_binary 
+    # ./scripts/compile.sh long_simple_nine_mpst 
+    # ./scripts/compile.sh long_simple_ten_binary 
+    # ./scripts/compile.sh long_simple_ten_mpst 
+    # ./scripts/compile.sh long_simple_eleven_binary 
+    # ./scripts/compile.sh long_simple_eleven_mpst 
+    # ./scripts/compile.sh long_simple_twenty_binary 
+    # ./scripts/compile.sh long_simple_twenty_mpst 
+
+# done
 
 # python scripts/create_graph_compile.py 
 
