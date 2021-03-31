@@ -359,50 +359,6 @@ macro_rules! create_recv_mpst_all_session {
     }
 }
 
-/// Creates a *recv* function to receive from a broadcasting role on a given binary session type of
-/// a SessionMpst with more than 3 participants.
-///
-/// # Arguments
-///
-/// * The name of the new *recv* functions
-/// * The name of the broadcasting senders
-/// * The name of the related *next* functions
-/// * The index of the binary session types that will receive in the SessionMpst for this specific
-///   role. Index starts at 1.
-/// * The name of the receiver
-/// * The name of the *SessionMpst* type that will be used
-/// * The number of participants (all together)
-///
-/// # Example
-///
-/// ```
-/// use mpstthree::{create_normal_role, create_broadcast_role, create_sessionmpst, create_recv_mpst_all_session_bundle};
-///
-/// create_normal_role!(RoleA, RoleADual);
-/// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
-/// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
-///
-/// create_sessionmpst!(SessionMpst, 3);
-///
-/// create_recv_mpst_all_session_bundle!(
-///    recv_mpst_a_all_to_b,
-///    RoleAlltoB,
-///    1 |
-///    recv_mpst_a_all_to_d,
-///    RoleAlltoD,
-///    2 | =>
-///    RoleA,
-///    SessionMpst,
-///    3
-/// );
-/// ```
-#[macro_export]
-macro_rules! create_recv_mpst_all_session_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
-       $(mpstthree::create_recv_mpst_all_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
-    }
-}
-
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a
 /// SessionMpst with more than 3 participants.
 ///
