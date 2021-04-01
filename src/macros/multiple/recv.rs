@@ -403,7 +403,7 @@ macro_rules! create_recv_http_session {
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
                 http: bool,
-                req: hyper::Request<hyper::Body>,
+                req: hyper::client::ResponseFuture,
             ) -> Result<
                 (
                     T,
@@ -423,12 +423,7 @@ macro_rules! create_recv_http_session {
                 let resp = match http {
                     true => {
                         let rt = tokio::runtime::Runtime::new()?;
-                        rt.block_on(async move {
-                            let https = hyper_tls::HttpsConnector::new();
-                            let client = hyper::Client::builder().build::<_, hyper::Body>(https);
-                            let resp = client.request(req).await;
-                            resp
-                        })?
+                        rt.block_on(async move { req.await })?
                     },
                     false => hyper::Response::default(),
                 };

@@ -7,7 +7,8 @@ use mpstthree::{
     create_send_mpst_http_bundle, offer_http_mpst,
 };
 
-use hyper::{Body, Method, Request, StatusCode};
+use hyper::{Body, Client, Method, Request, StatusCode};
+use hyper_tls::HttpsConnector;
 use rand::{thread_rng, Rng};
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
@@ -15,27 +16,31 @@ use std::error::Error;
 use std::fs;
 use std::marker;
 
-// global protocol Proto(role A, role C, role S)
-// {
-//     choice at S
+// global protocol OAuth(role Auth, role Client, role Server) {
+
+//     Authorization(Approval) from Client to Auth; // Request Authorization Approval
+
+//     choice at A
 //     {
-//         login(Int) from S to C;
-//         password(Int) from C to A;
-//         choice at A
-//         {
-//              Auth(Int) from A to S;
-//              Auth(Int) from S to C;
+//         Access(Token) from Auth to Client;
+
+//         rec Loop {
+//             choice at Client { // Client makes a choice
+
+//                 RequestPicture(Token) from Client to Server; // Client sends a request for a picture, giving its access token
+//                 SendPicture(Picture) from Server to Client; // Server sends the picture file to the client
+
+//                 continue Loop; // A Recursive call
+//             } or {
+//                 Close() from Client to Server; // Close the session between Client and Server
+//                 Close() from Client to Auth; // Close the session between Client and Auth
+//             }
 //         }
-//         or
-//         {
-//              Again(Int) from A to S;
-//              Again(Int) from S to C;
-//         }
-//     }
-//     or
-//     {
-//         cancel(Int) from S to C;
-//         quit(Int) from C to A;
+
+//     } or {
+//         Close() from Auth to Client; // Close the session between Client and Auth
+//         Close() from Client to Server; // Close the session between Client and Server
+
 //     }
 // }
 
@@ -88,99 +93,86 @@ type NameC = RoleC<RoleEnd>;
 type NameS = RoleS<RoleEnd>;
 
 // Types
-// S
-type Choose0fromStoA<N> = Send<Branching0fromStoA<N>, End>;
-type Choose0fromStoC<N> = Send<Branching0fromStoC<N>, End>;
+// C
+type Choose1fromCtoA<N> = Send<Branching1fromCtoA<N>, End>;
+type Choose1fromCtoS<N> = Send<Branching1fromCtoS<N>, End>;
 // A
-type Choose1fromAtoC<N> = Send<Branching1fromAtoC<N>, End>;
-type Choose1fromAtoS<N> = Send<Branching1fromAtoS<N>, End>;
+type Choose0fromAtoC<N> = Send<Branching0fromAtoC<N>, End>;
+type Choose0fromAtoS<N> = Send<Branching0fromAtoS<N>, End>;
 
 // A
-enum Branching0fromStoA<N: marker::Send> {
-    Login(
+enum Branching1fromCtoA<N: marker::Send> {
+    Request(
         SessionMpstThree<
-            Recv<N, Choose1fromAtoC<N>>,
-            Choose1fromAtoS<N>,
-            RoleC<RoleBroadcast>,
+            Recv<N, Recv<N, Choose1fromCtoA<N>>>,
+            End,
+            RoleC<RoleC<RoleBroadcast>>,
             NameA,
         >,
     ),
     Done(SessionMpstThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
 }
-type EndpointAuthA<N> = SessionMpstThree<End, Send<N, End>, RoleS<RoleEnd>, NameA>;
-type EndpointAgainA<N> = SessionMpstThree<
-    Recv<N, Choose1fromAtoC<N>>,
-    Send<N, Choose1fromAtoS<N>>,
-    RoleS<RoleC<RoleBroadcast>>,
+type EndpointA<N> = SessionMpstThree<
+    Recv<N, Send<Branching0fromAtoC<N>, End>>,
+    Send<Branching0fromAtoS<N>, End>,
+    RoleC<RoleC<RoleBroadcast>>,
     NameA,
 >;
 // C
-enum Branching0fromStoC<N: marker::Send> {
-    Login(
+enum Branching0fromAtoC<N: marker::Send> {
+    Auth(
         SessionMpstThree<
-            Send<N, Choice1fromCtoA<N>>,
-            Recv<N, End>,
-            RoleS<RoleA<RoleA<RoleEnd>>>,
+            Recv<N, Recv<N, Choose1fromCtoA<N>>>,
+            Choose1fromCtoS<N>,
+            RoleA<RoleA<RoleBroadcast>>,
             NameC,
         >,
     ),
-    Done(SessionMpstThree<Send<N, End>, Recv<N, End>, RoleS<RoleA<RoleEnd>>, NameC>),
+    Done(SessionMpstThree<Send<N, End>, Send<N, End>, RoleS<RoleA<RoleEnd>>, NameC>),
 }
-enum Branching1fromAtoC<N: marker::Send> {
-    Auth(SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameC>),
-    Again(
-        SessionMpstThree<
-            Send<N, Choice1fromCtoA<N>>,
-            Recv<N, End>,
-            RoleS<RoleA<RoleA<RoleEnd>>>,
-            NameC,
-        >,
-    ),
-}
-type Choice1fromCtoA<N> = Recv<Branching1fromAtoC<N>, End>;
 // S
-enum Branching1fromAtoS<N: marker::Send> {
-    Auth(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleA<RoleC<RoleEnd>>, NameS>),
-    Again(
+enum Branching0fromAtoS<N: marker::Send> {
+    Auth(SessionMpstThree<End, Recv<Branching1fromCtoS<N>, End>, RoleC<RoleEnd>, NameS>),
+    Done(SessionMpstThree<End, Recv<N, End>, RoleC<RoleEnd>, NameS>),
+}
+enum Branching1fromCtoS<N: marker::Send> {
+    Request(
         SessionMpstThree<
-            Recv<N, Choice1fromStoA<N>>,
-            Send<N, End>,
-            RoleA<RoleC<RoleA<RoleEnd>>>,
+            End,
+            Recv<N, Send<N, Recv<Branching1fromCtoS<N>, End>>>,
+            RoleC<RoleC<RoleC<RoleEnd>>>,
             NameS,
         >,
     ),
+    Done(SessionMpstThree<End, Recv<N, End>, RoleC<RoleEnd>, NameS>),
 }
-type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
-type EndpointDoneS<N> = SessionMpstThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>;
-type EndpointLoginS<N> =
-    SessionMpstThree<Recv<Branching1fromAtoS<N>, End>, Send<N, End>, RoleC<RoleA<RoleEnd>>, NameS>;
-
 // Creating the MP sessions
 // A
-type ChoiceA<N> =
-    SessionMpstThree<Recv<N, Choose1fromAtoC<N>>, Choose1fromAtoS<N>, RoleC<RoleBroadcast>, NameA>;
-type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
+type EndpointA<N> = SessionMpstThree<
+    Recv<N, Send<Branching0fromAtoC<N>, End>>,
+    Send<Branching0fromAtoS<N>, End>,
+    RoleC<RoleC<RoleBroadcast>>,
+    NameA,
+>;
 // C
-type ChoiceC<N> = SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
-type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, RoleS<RoleEnd>, NameC>;
+type EndpointC<N> = SessionMpstThree<Recv<Branching0fromAtoC<N>, End>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 // S
-type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
-type EndpointS<N> = SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleBroadcast, NameS>;
+type EndpointS<N> = SessionMpstThree<Recv<Branching0fromAtoS<N>, End>, End, RoleA<RoleEnd>, NameS>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
-    done_from_s_to_all, login_from_s_to_all, =>
-    Done, Login, =>
+    done_from_c_to_all, login_from_c_to_all, =>
+    Request, Done, =>
     EndpointDoneS<i32>, EndpointLoginS<i32>, =>
-    Branching0fromStoA::<i32>, Branching0fromStoC::<i32>, =>
-    RoleA, RoleC, =>
-    RoleS, SessionMpstThree, 3, 3
+    Branching1fromCtoA::<i32>, Branching1fromCtoS::<i32>, =>
+    RoleA, RoleS, =>
+    RoleC, SessionMpstThree, 3, 2
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     auth_from_a_to_all, again_from_a_to_all, =>
-    Auth, Again, =>
+    Auth, Done, =>
     EndpointAuthA<i32>, EndpointAgainA<i32>, =>
-    Branching1fromAtoC::<i32>, Branching1fromAtoS::<i32>, =>
+    Branching0fromAtoC::<i32>, Branching0fromAtoS::<i32>, =>
     RoleC, RoleS, =>
     RoleA, SessionMpstThree, 3, 1
 );
@@ -189,7 +181,9 @@ create_fn_choose_mpst_multi_to_all_bundle!(
 fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_a_to_s, {
         Branching0fromStoA::Done(s) => {
-            let (_, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
+            let https = HttpsConnector::new();
+            let client = Client::builder().build::<_, Body>(https);
+            let (_, s, _resp) = recv_http_a_to_c(s, false, client.request(Request::default()))?;
 
             close_mpst_multi(s)
         },
@@ -200,7 +194,7 @@ fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    let (pwd, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
+    let (pwd, s, _resp) = recv_http_a_to_c(s, false, ResponseFuture::default())?;
     let expected = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
@@ -221,7 +215,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
 fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_c_to_s, {
         Branching0fromStoC::<i32>::Done(s) => {
-            let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+            let (quit, s, _resp) = recv_http_c_to_s(s, false, ResponseFuture::default())?;
             let (s, _req) = send_http_c_to_a(quit, s, false, Method::GET, "", vec![("", "")], "");
             close_mpst_multi(s)
         },
@@ -261,7 +255,7 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
                     choice_c(s)
                 }
                 Err(_) => {
-                    let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+                    let (_, s, _resp) = recv_http_c_to_s(s, false, ResponseFuture::default())?;
 
                     choice_c(s)
                 }

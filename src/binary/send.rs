@@ -1,5 +1,7 @@
 use crate::binary::struct_trait::{Send, Session};
-use hyper::{Body, Method, Request};
+use hyper::client::ResponseFuture;
+use hyper::{Body, Client, Method, Request};
+use hyper_tls::HttpsConnector;
 use std::boxed::Box;
 use std::error::Error;
 use std::io::Write;
@@ -60,14 +62,14 @@ pub fn send_http<T, S>(
     uri: &str,
     header: Vec<(&str, &str)>,
     body: &'static str,
-) -> Result<(S, Request<Body>), Box<dyn Error>>
+) -> Result<(S, ResponseFuture), Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
 {
     let (here, there) = S::new();
 
-    let req = match http {
+    let respfut = match http {
         true => {
             let mut temp = Request::builder().method(method).uri(uri);
 
@@ -75,15 +77,25 @@ where
                 temp = temp.header(elt.0, elt.1);
             }
 
-            temp.body(Body::from(body))?
+            let req = temp.body(Body::from(body))?;
+
+            let https = HttpsConnector::new();
+            let client = Client::builder().build::<_, Body>(https);
+
+            client.request(req)
         }
-        false => Request::default(),
+        false => {
+            let https = HttpsConnector::new();
+            let client = Client::builder().build::<_, Body>(https);
+
+            client.request(Request::default())
+        }
     };
 
     ////////////////
 
     match s.channel.send((x, there)) {
-        Ok(_) => Ok((here, req)),
+        Ok(_) => Ok((here, respfut)),
         Err(e) => panic!("{}", e.to_string()),
     }
 }

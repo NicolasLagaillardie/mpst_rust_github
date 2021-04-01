@@ -1,4 +1,5 @@
-use hyper::{Method, Request, StatusCode};
+use hyper::{Body, Client, Method, Request, StatusCode};
+use hyper_tls::HttpsConnector;
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork;
 use mpstthree::binary::recv::recv_http;
@@ -9,10 +10,10 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 
-type Client<N> = Send<N, Recv<N, End>>;
-type Server<N> = <Client<N> as Session>::Dual;
+type ClientMPST<N> = Send<N, Recv<N, End>>;
+type ServerMPST<N> = <ClientMPST<N> as Session>::Dual;
 
-fn client(s: Client<i32>) -> Result<(), Box<dyn Error>> {
+fn client(s: ClientMPST<i32>) -> Result<(), Box<dyn Error>> {
     match fs::read_to_string("imgur.env") {
         Ok(contents) => {
             let lines: Vec<&str> = contents.split("\n").collect();
@@ -43,8 +44,8 @@ fn client(s: Client<i32>) -> Result<(), Box<dyn Error>> {
             close(s)
         }
         Err(_) => {
-            let (s, _req) = send_http(0, s, false, Method::GET, "", vec![("", "")], "")?;
-            let (_result, s, _resp) = recv_http(s, false, Request::default())?;
+            let (s, req) = send_http(0, s, false, Method::GET, "", vec![("", "")], "")?;
+            let (_result, s, _resp) = recv_http(s, false, req)?;
 
             close(s)
         }
@@ -53,8 +54,12 @@ fn client(s: Client<i32>) -> Result<(), Box<dyn Error>> {
 
 pub fn main() {
     assert!(|| -> Result<(), Box<dyn Error>> {
-        let s: Server<i32> = fork(client);
-        let (_result, s, _resp) = recv_http(s, false, Request::default())?;
+        let s: ServerMPST<i32> = fork(client);
+        //-------
+        let https = HttpsConnector::new();
+        let client = Client::builder().build::<_, Body>(https);
+        //-------
+        let (_result, s, _resp) = recv_http(s, false, client.request(Request::default()))?;
         let (s, _req) = send_http(0, s, false, Method::GET, "", vec![("", "")], "")?;
         close(s)
     }()

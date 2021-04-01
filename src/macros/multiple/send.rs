@@ -411,11 +411,12 @@ macro_rules! create_send_http_session {
                 uri: &str,
                 header: Vec<(&str, &str)>,
                 body: &'static str,
-            ) ->
+            ) ->Result<
             (
                 $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
-                hyper::Request<hyper::Body>
-            )
+                hyper::client::ResponseFuture
+            ),
+            Box<dyn std::error::Error>>
             where
                 T: std::marker::Send,
                 #(
@@ -423,7 +424,7 @@ macro_rules! create_send_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                let req = match http {
+                let respfut = match http {
                     true => {
                         let mut temp = hyper::Request::builder()
                             .method(method)
@@ -433,14 +434,21 @@ macro_rules! create_send_http_session {
                             temp = temp.header(elt.0, elt.1);
                         }
 
-                        temp.body(hyper::Body::from(body)).unwrap_or(hyper::Request::default())
-                    },
-                    false => hyper::Request::default(),
+                        let req = temp.body(hyper::Body::from(body))?;
+                        let https = hyper_tls::HttpsConnector::new();
+                        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
+                        client.request(req)
+                    }
+                    false => {
+                        let https = hyper_tls::HttpsConnector::new();
+                        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
+                        client.request(hyper::Request::default())
+                    }
                 };
 
                 (
                     mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion),
-                    req
+                    respfut
                 )
             }
         });
