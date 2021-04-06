@@ -33,11 +33,11 @@ for d in directories:
         # If MPST of binary, append to related lists
         if 'mpst' in d:
             average_mpst.append(statistics.mean([
-                int(line) for line in file]))
+                int(line) for line in file])/10**6)
             nb_participants_mpst.append(str_to_int[name])
         else:
             average_binary.append(statistics.mean([
-                int(line) for line in file]))
+                int(line) for line in file])/10**6)
             nb_participants_binary.append(str_to_int[name])
 
         file.close()
@@ -57,13 +57,13 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the graph
 ax.plot(nb_participants_mpst, average_mpst,
-        label="MPST", linestyle='solid', linewidth=5)
+        label="MPST", linestyle='solid', linewidth=3)
 ax.plot(nb_participants_binary, average_binary,
-        label="Binary", linestyle='dashed', linewidth=5)
+        label="Binary", linestyle='dashed', linewidth=3)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
-ax.set_ylabel('Time (µs)', fontsize=30)
+ax.set_ylabel('Time (s)', fontsize=30)
 ax.tick_params(axis='both', which='major', labelsize=30)
 ax.tick_params(axis='both', which='minor', labelsize=30)
 

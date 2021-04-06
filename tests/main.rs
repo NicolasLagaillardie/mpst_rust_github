@@ -238,15 +238,15 @@ fn scribble_tests() {
 
 #[test]
 fn canceling() {
-    cancel::cancel_1::main();
-    cancel::cancel_2::main();
-    cancel::cancel_3::main();
-    cancel::cancel_4::main();
-    cancel::cancel_5::main();
-    cancel::cancel_6::main();
-    cancel::cancel_7::main();
-    cancel::cancel_8::main();
-    cancel::cancel_9::main();
+    cancel::cancel_01::main();
+    cancel::cancel_02::main();
+    cancel::cancel_03::main();
+    cancel::cancel_04::main();
+    cancel::cancel_05::main();
+    cancel::cancel_06::main();
+    cancel::cancel_07::main();
+    cancel::cancel_08::main();
+    cancel::cancel_09::main();
     cancel::cancel_10::main();
     cancel::cancel_11::main();
 }

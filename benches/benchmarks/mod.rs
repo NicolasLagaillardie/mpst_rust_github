@@ -27,3 +27,15 @@ pub mod simple_voting_three;
 pub mod smtp;
 pub mod three_buyer;
 pub mod travel_three;
+
+pub mod cancel_01;
+pub mod cancel_02;
+pub mod cancel_03;
+pub mod cancel_04;
+pub mod cancel_05;
+pub mod cancel_06;
+pub mod cancel_07;
+pub mod cancel_08;
+pub mod cancel_09;
+pub mod cancel_10;
+pub mod cancel_11;

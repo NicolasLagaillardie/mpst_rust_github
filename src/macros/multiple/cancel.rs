@@ -51,6 +51,7 @@ macro_rules! broadcast_cancel {
                                 #(
                                     s.session#N:0.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap_or(());
                                 )0:0
+                                mpstthree::binary::cancel::cancel(s);
                                 panic!("Error");
                             }
                             Ok(mpstthree::binary::struct_trait::Signal::Stop) => match bool_session#N:0 {
