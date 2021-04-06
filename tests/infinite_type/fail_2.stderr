@@ -25,15 +25,15 @@ error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_tra
    = note: required because it appears within the type `SumOp<i32>`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>: Session`
-  --> $DIR/fail_2.rs:45:1
+  --> $DIR/fail_2.rs:44:1
    |
-45 | / fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-46 | |     match xs.pop() {
-47 | |         Option::Some(x) if x % 2 == 0 => {
-48 | |             let s = choose!(SumOp::More, s);
+44 | / fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+45 | |     match xs.pop() {
+46 | |         Option::Some(x) if x % 2 == 0 => {
+47 | |             let s = choose!(SumOp::More, s);
 ...  |
-65 | |     }
-66 | | }
+64 | |     }
+65 | | }
    | |_^
    |
    = note: required because of the requirements on the impl of `Session` for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>`

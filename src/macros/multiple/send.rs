@@ -406,12 +406,12 @@ macro_rules! create_send_http_session {
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-                // http: bool,
+                http: bool,
                 // method: hyper::Method,
                 // uri: &str,
                 // header: Vec<(&str, &str)>,
                 // body: &'static str,
-                req: hyper::Request
+                req: hyper::Request<hyper::Body>
             ) ->Result<
             (
                 $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
