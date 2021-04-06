@@ -257,7 +257,9 @@ macro_rules! offer_cancel_mpst {
 macro_rules! offer_http_mpst {
     ($session:expr, $recv_mpst:ident, { $($pat:pat => $result:expr, )* }) => {
         (move || -> Result<_, _> {
-            let (l, s, req) = $recv_mpst($session, false, hyper::Request::default())?;
+            let https = hyper_tls::HttpsConnector::new();
+            let client = hyper::Client::builder().build::<_, hyper::Body>(https);
+            let (l, s, req) = $recv_mpst($session, false, client.request(hyper::Request::default())?;
             mpstthree::binary::cancel::cancel(s);
             mpstthree::binary::cancel::cancel(req);
             match l {

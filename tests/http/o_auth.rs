@@ -16,6 +16,8 @@ use std::error::Error;
 use std::fs;
 use std::marker;
 
+// TODO: update with the correct protocol
+
 // global protocol OAuth(role Auth, role Client, role Server) {
 
 //     Authorization(Approval) from Client to Auth; // Request Authorization Approval

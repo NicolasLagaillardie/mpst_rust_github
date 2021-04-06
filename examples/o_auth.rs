@@ -15,6 +15,8 @@ use std::error::Error;
 use std::fs;
 use std::marker;
 
+// TODO: update with the correct protocol
+
 // global protocol Proto(role A, role C, role S)
 // {
 //     choice at S

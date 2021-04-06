@@ -406,11 +406,12 @@ macro_rules! create_send_http_session {
                     $role<R>,
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
-                http: bool,
-                method: hyper::Method,
-                uri: &str,
-                header: Vec<(&str, &str)>,
-                body: &'static str,
+                // http: bool,
+                // method: hyper::Method,
+                // uri: &str,
+                // header: Vec<(&str, &str)>,
+                // body: &'static str,
+                req: hyper::Request
             ) ->Result<
             (
                 $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
@@ -426,15 +427,15 @@ macro_rules! create_send_http_session {
             {
                 let respfut = match http {
                     true => {
-                        let mut temp = hyper::Request::builder()
-                            .method(method)
-                            .uri(uri);
+                        // let mut temp = hyper::Request::builder()
+                        //     .method(method)
+                        //     .uri(uri);
 
-                        for elt in header {
-                            temp = temp.header(elt.0, elt.1);
-                        }
+                        // for elt in header {
+                        //     temp = temp.header(elt.0, elt.1);
+                        // }
 
-                        let req = temp.body(hyper::Body::from(body))?;
+                        // let req = temp.body(hyper::Body::from(body))?;
                         let https = hyper_tls::HttpsConnector::new();
                         let client = hyper::Client::builder().build::<_, hyper::Body>(https);
                         client.request(req)
@@ -446,10 +447,10 @@ macro_rules! create_send_http_session {
                     }
                 };
 
-                (
+                Ok((
                     mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion),
                     respfut
-                )
+                ))
             }
         });
     }
