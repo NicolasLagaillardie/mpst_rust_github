@@ -61,44 +61,44 @@ type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
 enum Branches0AtoC<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
-    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>),
+    End(SessionMpst<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
+    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
 }
 enum Branches0BtoC<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
+    End(SessionMpst<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoC<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Queues
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
-type QueueARecurs = RoleC<RoleEnd>;
-type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
+/// Stacks
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type StackARecurs = RoleC<RoleEnd>;
+type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
-type QueueBRecurs = RoleC<RoleEnd>;
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type StackBRecurs = RoleC<RoleEnd>;
 
-type QueueCRecurs = RoleBroadcast;
-type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
+type StackCRecurs = RoleBroadcast;
+type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 /// Creating the MP sessions
 
 /// For C
 type EndpointCRecurs<N> =
-    SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, QueueCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, QueueCFull, RoleC<RoleEnd>>;
+    SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, QueueARecurs, RoleA<RoleEnd>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
+type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleB<RoleEnd>>;
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, StackBRecurs, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
@@ -244,8 +244,8 @@ pub fn run_c_usecase_recursive() {
 //     vec![(&video).to_string(), (&end).to_string()]
 // }
 
-// type QueueCEnd = RoleEnd;
-// type QueueCVideo = RoleA<RoleA<RoleA<RoleB<RoleEnd>>>>;
+// type StackCEnd = RoleEnd;
+// type StackCVideo = RoleA<RoleA<RoleA<RoleB<RoleEnd>>>>;
 
 // pub fn run_c_usecase_recursive_checker() {
 //     assert!(|| -> Result<(), Box<dyn Error>> {
@@ -270,8 +270,8 @@ pub fn run_c_usecase_recursive() {
 //             let mut branches_sender: HashMap<String, &Vec<String>> =
 //                 HashMap::with_hasher(state_branches_sender);
 
-//             let (stack_video, _): (QueueCVideo, _) = Role::new();
-//             let (stack_end, _): (QueueCEnd, _) = Role::new();
+//             let (stack_video, _): (StackCVideo, _) = Role::new();
+//             let (stack_end, _): (StackCEnd, _) = Role::new();
 
 //             let mut stacks: Vec<String> = Vec::new();
 //             stacks.push(type_of(&stack_video).to_string());

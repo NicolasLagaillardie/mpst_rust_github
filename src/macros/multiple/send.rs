@@ -40,7 +40,7 @@ macro_rules! send_mpst {
                 let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
             )0*
 
-            let new_queue = {
+            let new_stack = {
                 fn temp<R>(r: $receiver<R>) -> R
                 where
                     R: mpstthree::role::Role,
@@ -65,7 +65,7 @@ macro_rules! send_mpst {
                 )(
                     session#N:0: new_session,
                 )0*
-                stack: new_queue,
+                stack: new_stack,
                 name: $session.name,
             }
         }});
@@ -82,7 +82,7 @@ macro_rules! send_aux {
                 let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
             )0*
 
-            let new_queue = {
+            let new_stack = {
                 fn temp<R>(r: $role<R>) -> R
                 where
                     R: mpstthree::role::Role,
@@ -100,7 +100,7 @@ macro_rules! send_aux {
                 )(
                     session#N:0: new_session,
                 )0*
-                stack: new_queue,
+                stack: new_stack,
                 name: $session.name,
             }
         }});
@@ -225,7 +225,7 @@ macro_rules! create_send_mpst_cancel {
                 )(
                     let new_session = mpstthree::binary::send::send_canceled(x, s.session#N:0)?;
                 )0*
-                let new_queue = {
+                let new_stack = {
                     fn temp<R>(r: $role<R>) -> R
                     where
                         R: mpstthree::role::Role,
@@ -243,7 +243,7 @@ macro_rules! create_send_mpst_cancel {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: s.name,
                 })
             }
@@ -335,7 +335,7 @@ macro_rules! create_send_check_cancel {
                     let new_session = mpstthree::binary::send::send_canceled(x, s.session#N:0)?;
                 )0*
 
-                let new_queue = {
+                let new_stack = {
                     fn temp<R>(r: $role<R>) -> R
                     where
                         R: mpstthree::role::Role,
@@ -353,7 +353,7 @@ macro_rules! create_send_check_cancel {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: s.name,
                 })
             }

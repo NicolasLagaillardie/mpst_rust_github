@@ -350,7 +350,7 @@ macro_rules! bundle_impl {
                         > {
                             let new_session = mpstthree::binary::send::send(payload, self.session~N:17);
 
-                            let new_queue = {
+                            let new_stack = {
                                 fn temp<R>(r: unused~N:9<R>) -> R
                                 where
                                     R: mpstthree::role::Role,
@@ -368,7 +368,7 @@ macro_rules! bundle_impl {
                                 )(
                                     session|N:0: self.session|N:0,
                                 )0*
-                                stack: new_queue,
+                                stack: new_stack,
                                 name: self.name,
                             }
 
@@ -413,7 +413,7 @@ macro_rules! bundle_impl {
                         > {
                             let (v, new_session) = mpstthree::binary::recv::recv(self.session~N:17)?;
 
-                            let new_queue = {
+                            let new_stack = {
                                 fn temp<R>(r: unused~N:9<R>) -> R
                                 where
                                     R: mpstthree::role::Role,
@@ -433,7 +433,7 @@ macro_rules! bundle_impl {
                                     )(
                                         session|N:0: self.session|N:0,
                                     )0*
-                                    stack: new_queue,
+                                    stack: new_stack,
                                     name: self.name,
                                 }
                             ))

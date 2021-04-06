@@ -40,7 +40,7 @@ macro_rules! recv_mpst {
                 let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
             )0*
 
-            let new_queue = {
+            let new_stack = {
                 fn temp<R>(r: $sender<R>) -> R
                 where
                     R: mpstthree::role::Role,
@@ -67,7 +67,7 @@ macro_rules! recv_mpst {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: $session.name,
                 }
             ))
@@ -85,7 +85,7 @@ macro_rules! recv_aux {
                 let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
             )0*
 
-            let new_queue = {
+            let new_stack = {
                 fn temp<R>(r: $role<R>) -> R
                 where
                     R: mpstthree::role::Role,
@@ -105,7 +105,7 @@ macro_rules! recv_aux {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: $session.name,
                 }
             ))
@@ -123,7 +123,7 @@ macro_rules! recv_all_aux {
                 let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
             )0*
 
-            let (new_queue_left, _new_queue_right) = { // new_queue_right = new_queue_left
+            let (new_stack_left, _new_stack_right) = { // new_stack_right = new_stack_left
                 fn temp(r: $role<crate::role::end::RoleEnd, crate::role::end::RoleEnd>) -> (crate::role::end::RoleEnd, crate::role::end::RoleEnd)
                 {
                     let (here1, there1) = <crate::role::end::RoleEnd as crate::role::Role>::new();
@@ -143,7 +143,7 @@ macro_rules! recv_all_aux {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue_left,
+                    stack: new_stack_left,
                     name: $session.name,
                 }
             ))
@@ -328,7 +328,7 @@ macro_rules! create_recv_mpst_all_session {
                 )(
                     let (v, new_session) = mpstthree::binary::recv::recv(s.session#N:0)?;
                 )0*
-                let (new_queue, _) = {
+                let (new_stack, _) = {
                     fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
                     where
                         R1: mpstthree::role::Role,
@@ -349,7 +349,7 @@ macro_rules! create_recv_mpst_all_session {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: s.name,
                 };
 

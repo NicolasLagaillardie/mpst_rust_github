@@ -108,7 +108,7 @@ macro_rules! create_offer_mpst_session_multi {
                 )(
                     let (e, new_session) = mpstthree::binary::recv::recv(s.session#N:0)?;
                 )0*
-                let (new_queue, _) = {
+                let (new_stack, _) = {
                     fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
                     where
                         R1: mpstthree::role::Role,
@@ -129,7 +129,7 @@ macro_rules! create_offer_mpst_session_multi {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: s.name,
                 };
 

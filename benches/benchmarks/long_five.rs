@@ -116,19 +116,19 @@ type EtoB = Recv<(), Send<(), End>>;
 type EtoC = Recv<(), Send<(), End>>;
 type EtoD = Recv<(), Send<(), End>>;
 
-// Queues
-type QueueA = RoleB<RoleC<RoleD<RoleE<RoleB<RoleC<RoleD<RoleE<RoleEnd>>>>>>>>;
-type QueueB = RoleA<RoleC<RoleD<RoleE<RoleA<RoleC<RoleD<RoleE<RoleEnd>>>>>>>>;
-type QueueC = RoleA<RoleB<RoleD<RoleE<RoleA<RoleB<RoleD<RoleE<RoleEnd>>>>>>>>;
-type QueueD = RoleA<RoleB<RoleC<RoleE<RoleA<RoleB<RoleC<RoleE<RoleEnd>>>>>>>>;
-type QueueE = RoleA<RoleB<RoleC<RoleD<RoleA<RoleB<RoleC<RoleD<RoleEnd>>>>>>>>;
+// Stacks
+type StackA = RoleB<RoleC<RoleD<RoleE<RoleB<RoleC<RoleD<RoleE<RoleEnd>>>>>>>>;
+type StackB = RoleA<RoleC<RoleD<RoleE<RoleA<RoleC<RoleD<RoleE<RoleEnd>>>>>>>>;
+type StackC = RoleA<RoleB<RoleD<RoleE<RoleA<RoleB<RoleD<RoleE<RoleEnd>>>>>>>>;
+type StackD = RoleA<RoleB<RoleC<RoleE<RoleA<RoleB<RoleC<RoleE<RoleEnd>>>>>>>>;
+type StackE = RoleA<RoleB<RoleC<RoleD<RoleA<RoleB<RoleC<RoleD<RoleEnd>>>>>>>>;
 
 // Creating the MP sessions
-type EndpointA = SessionMpstFive<AtoB, AtoC, AtoD, AtoE, QueueA, NameA>;
-type EndpointB = SessionMpstFive<BtoA, BtoC, BtoD, BtoE, QueueB, NameB>;
-type EndpointC = SessionMpstFive<CtoA, CtoB, CtoD, CtoE, QueueC, NameC>;
-type EndpointD = SessionMpstFive<DtoA, DtoB, DtoC, DtoE, QueueD, NameD>;
-type EndpointE = SessionMpstFive<EtoA, EtoB, EtoC, EtoD, QueueE, NameE>;
+type EndpointA = SessionMpstFive<AtoB, AtoC, AtoD, AtoE, StackA, NameA>;
+type EndpointB = SessionMpstFive<BtoA, BtoC, BtoD, BtoE, StackB, NameB>;
+type EndpointC = SessionMpstFive<CtoA, CtoB, CtoD, CtoE, StackC, NameC>;
+type EndpointD = SessionMpstFive<DtoA, DtoB, DtoC, DtoE, StackD, NameD>;
+type EndpointE = SessionMpstFive<EtoA, EtoB, EtoC, EtoD, StackE, NameE>;
 
 fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b((), s);

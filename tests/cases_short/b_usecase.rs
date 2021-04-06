@@ -43,21 +43,21 @@ type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = <CtoBClose as Session>::Dual;
 type BtoCVideo<N> = <CtoBVideo<N> as Session>::Dual;
 
-/// Queues
-type QueueCEnd = RoleEnd;
-type QueueCVideo = RoleB<RoleA<RoleA<RoleB<RoleEnd>>>>;
-type QueueCVideoDual = <QueueCVideo as Role>::Dual;
-type QueueCFull = RoleB<RoleB<RoleAlltoB<RoleEnd, RoleEnd>>>;
+/// Stacks
+type StackCEnd = RoleEnd;
+type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleEnd>>>>;
+type StackCVideoDual = <StackCVideo as Role>::Dual;
+type StackCFull = RoleB<RoleB<RoleAlltoB<RoleEnd, RoleEnd>>>;
 
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleC<RoleC<RoleEnd>>;
-type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-type QueueAFull = RoleAlltoB<RoleEnd, RoleEnd>;
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleC<RoleC<RoleEnd>>;
+type StackAVideoDual = <StackAVideo as Role>::Dual;
+type StackAFull = RoleAlltoB<RoleEnd, RoleEnd>;
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleC<RoleC<RoleEnd>>;
-type QueueBChoice = RoleBtoAll<QueueBVideo, QueueBEnd>;
-type QueueBFull = RoleC<RoleC<QueueBChoice>>;
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleC<RoleC<RoleEnd>>;
+type StackBChoice = RoleBtoAll<StackBVideo, StackBEnd>;
+type StackBFull = RoleC<RoleC<StackBChoice>>;
 
 /// Creating the MP sessions
 /// For C
@@ -66,8 +66,8 @@ type ChooseBtoC<N> = ChooseMpst<
     BtoCVideo<N>,
     AtoCClose,
     BtoCClose,
-    QueueCVideoDual,
-    QueueCEnd,
+    StackCVideoDual,
+    StackCEnd,
     RoleCDual<RoleEnd>,
 >;
 type ChooseBtoA<N> = ChooseMpst<
@@ -75,43 +75,43 @@ type ChooseBtoA<N> = ChooseMpst<
     CtoAVideo<N>,
     BtoAClose,
     CtoAClose,
-    QueueAVideoDual,
-    QueueAEnd,
+    StackAVideoDual,
+    StackAEnd,
     RoleADual<RoleEnd>,
 >;
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
-type EndpointBFull<N> = SessionMpst<ChooseBtoA<N>, InitB<N>, QueueBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = SessionMpst<ChooseBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
 
 /// For A
-type EndpointCVideo<N> = SessionMpst<CtoAVideo<N>, CtoBVideo<N>, QueueCVideo, RoleC<RoleEnd>>;
-type EndpointCEnd = SessionMpst<CtoAClose, CtoBClose, QueueCEnd, RoleC<RoleEnd>>;
+type EndpointCVideo<N> = SessionMpst<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
+type EndpointCEnd = SessionMpst<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
 type OfferC<N> = OfferMpst<
     CtoAVideo<N>,
     CtoBVideo<N>,
     CtoAClose,
     CtoBClose,
-    QueueCVideo,
-    QueueCEnd,
+    StackCVideo,
+    StackCEnd,
     RoleC<RoleEnd>,
 >;
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
-type EndpointCFull<N> = SessionMpst<End, InitC<N>, QueueCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = SessionMpst<End, InitC<N>, StackCFull, RoleC<RoleEnd>>;
 
 /// For B
-type EndpointAVideo<N> = SessionMpst<AtoBClose, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>;
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>;
+type EndpointAVideo<N> = SessionMpst<AtoBClose, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
+type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
 type OfferA<N> = OfferMpst<
     AtoBClose,
     AtoCVideo<N>,
     AtoBClose,
     AtoCClose,
-    QueueAVideo,
-    QueueAEnd,
+    StackAVideo,
+    StackAEnd,
     RoleA<RoleEnd>,
 >;
-type EndpointAFull<N> = SessionMpst<OfferA<N>, End, QueueAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = SessionMpst<OfferA<N>, End, StackAFull, RoleA<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {

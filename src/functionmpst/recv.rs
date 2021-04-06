@@ -25,7 +25,7 @@ macro_rules! recv_aux_simple {
                 let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
             )0*
 
-            let new_queue = {
+            let new_stack = {
                 fn temp<R>(r: $role<R>) -> R
                 where
                     R: crate::role::Role,
@@ -45,7 +45,7 @@ macro_rules! recv_aux_simple {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue,
+                    stack: new_stack,
                     name: $session.name,
                 }
             ))
@@ -63,7 +63,7 @@ macro_rules! recv_all_aux_simple {
                 let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
             )0*
 
-            let (new_queue_left, _new_queue_right) = { // new_queue_right = new_queue_left
+            let (new_stack_left, _new_stack_right) = { // new_stack_right = new_stack_left
                 fn temp(r: $role<crate::role::end::RoleEnd, crate::role::end::RoleEnd>) -> (crate::role::end::RoleEnd, crate::role::end::RoleEnd)
                 {
                     let (here1, there1) = <crate::role::end::RoleEnd as crate::role::Role>::new();
@@ -83,7 +83,7 @@ macro_rules! recv_all_aux_simple {
                     )(
                         session#N:0: new_session,
                     )0*
-                    stack: new_queue_left,
+                    stack: new_stack_left,
                     name: $session.name,
                 }
             ))
@@ -114,17 +114,17 @@ macro_rules! recv_all_aux_simple {
 /// type AtoB = Recv<(), End>;
 /// type BtoA = <AtoB as Session>::Dual;
 ///
-/// // Queue
-/// type QueueA = RoleB<RoleEnd>;
-/// type QueueB = RoleA<RoleEnd>;
+/// // Stack
+/// type StackA = RoleB<RoleEnd>;
+/// type StackB = RoleA<RoleEnd>;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA = SessionMpst<AtoB, End, QueueA, NameA>;
-/// type EndpointB = SessionMpst<BtoA, End, QueueB, NameB>;
+/// type EndpointA = SessionMpst<AtoB, End, StackA, NameA>;
+/// type EndpointB = SessionMpst<BtoA, End, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -132,8 +132,8 @@ macro_rules! recv_all_aux_simple {
 /// let (channel_ac, _) = End::new();
 /// let (channel_bc, _) = End::new();
 ///
-/// let (role_a, _) = QueueA::new();
-/// let (role_b, _) = QueueB::new();
+/// let (role_a, _) = StackA::new();
+/// let (role_b, _) = StackB::new();
 ///
 /// let (name_a, _) = NameA::new();
 /// let (name_b, _) = NameB::new();
@@ -192,17 +192,17 @@ where
 /// type BtoA = Recv<(), End>;
 /// type AtoB = <BtoA as Session>::Dual;
 ///
-/// // Queue
-/// type QueueB = RoleA<RoleEnd>;
-/// type QueueA = RoleB<RoleEnd>;
+/// // Stack
+/// type StackB = RoleA<RoleEnd>;
+/// type StackA = RoleB<RoleEnd>;
 ///
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB = SessionMpst<BtoA, End, QueueB, NameB>;
-/// type EndpointA = SessionMpst<AtoB, End, QueueA, NameA>;
+/// type EndpointB = SessionMpst<BtoA, End, StackB, NameB>;
+/// type EndpointA = SessionMpst<AtoB, End, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -210,8 +210,8 @@ where
 /// let (channel_ac, _) = BtoA::new();
 /// let (channel_bc, _) = End::new();
 ///
-/// let (role_b, _) = QueueB::new();
-/// let (role_a, _) = QueueA::new();
+/// let (role_b, _) = StackB::new();
+/// let (role_a, _) = StackA::new();
 ///
 /// let (name_b, _) = NameB::new();
 /// let (name_a, _) = NameA::new();
@@ -270,17 +270,17 @@ where
 /// type CtoA = Recv<(), End>;
 /// type AtoC = <CtoA as Session>::Dual;
 ///
-/// // Queue
-/// type QueueC = RoleA<RoleEnd>;
-/// type QueueA = RoleC<RoleEnd>;
+/// // Stack
+/// type StackC = RoleA<RoleEnd>;
+/// type StackA = RoleC<RoleEnd>;
 ///
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC = SessionMpst<CtoA, End, QueueC, NameC>;
-/// type EndpointA = SessionMpst<End, AtoC, QueueA, NameA>;
+/// type EndpointC = SessionMpst<CtoA, End, StackC, NameC>;
+/// type EndpointA = SessionMpst<End, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -288,8 +288,8 @@ where
 /// let (channel_cb, _) = End::new();
 /// let (channel_ab, _) = End::new();
 ///
-/// let (role_c, _) = QueueC::new();
-/// let (role_a, _) = QueueA::new();
+/// let (role_c, _) = StackC::new();
+/// let (role_a, _) = StackA::new();
 ///
 /// let (name_c, _) = NameC::new();
 /// let (name_a, _) = NameA::new();
@@ -348,17 +348,17 @@ where
 /// type AtoC = Recv<(), End>;
 /// type CtoA = <AtoC as Session>::Dual;
 ///
-/// // Queue
-/// type QueueA = RoleC<RoleEnd>;
-/// type QueueC = RoleA<RoleEnd>;
+/// // Stack
+/// type StackA = RoleC<RoleEnd>;
+/// type StackC = RoleA<RoleEnd>;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
 /// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA = SessionMpst<End, AtoC, QueueA, NameA>;
-/// type EndpointC = SessionMpst<CtoA, End, QueueC, NameC>;
+/// type EndpointA = SessionMpst<End, AtoC, StackA, NameA>;
+/// type EndpointC = SessionMpst<CtoA, End, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -366,8 +366,8 @@ where
 /// let (channel_cb, _) = End::new();
 /// let (channel_ac, channel_ca) = AtoC::new();
 ///
-/// let (role_a, _) = QueueA::new();
-/// let (role_c, _) = QueueC::new();
+/// let (role_a, _) = StackA::new();
+/// let (role_c, _) = StackC::new();
 ///
 /// let (name_a, _) = NameA::new();
 /// let (name_c, _) = NameC::new();
@@ -426,17 +426,17 @@ where
 /// type BtoC = Recv<(), End>;
 /// type CtoB = <BtoC as Session>::Dual;
 ///
-/// // Queue
-/// type QueueB = RoleC<RoleEnd>;
-/// type QueueC = RoleB<RoleEnd>;
+/// // Stack
+/// type StackB = RoleC<RoleEnd>;
+/// type StackC = RoleB<RoleEnd>;
 ///
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
 /// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB = SessionMpst<End, BtoC, QueueB, NameB>;
-/// type EndpointC = SessionMpst<End, CtoB, QueueC, NameC>;
+/// type EndpointB = SessionMpst<End, BtoC, StackB, NameB>;
+/// type EndpointC = SessionMpst<End, CtoB, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -444,8 +444,8 @@ where
 /// let (channel_ca, _) = End::new();
 /// let (channel_bc, channel_cb) = BtoC::new();
 ///
-/// let (role_b, _) = QueueB::new();
-/// let (role_c, _) = QueueC::new();
+/// let (role_b, _) = StackB::new();
+/// let (role_c, _) = StackC::new();
 ///
 /// let (name_b, _) = NameB::new();
 /// let (name_c, _) = NameC::new();
@@ -504,17 +504,17 @@ where
 /// type CtoB = Recv<(), End>;
 /// type BtoC = <CtoB as Session>::Dual;
 ///
-/// // Queue
-/// type QueueC = RoleB<RoleEnd>;
-/// type QueueB = RoleC<RoleEnd>;
+/// // Stack
+/// type StackC = RoleB<RoleEnd>;
+/// type StackB = RoleC<RoleEnd>;
 ///
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC = SessionMpst<End, CtoB, QueueC, NameC>;
-/// type EndpointB = SessionMpst<End, BtoC, QueueB, NameB>;
+/// type EndpointC = SessionMpst<End, CtoB, StackC, NameC>;
+/// type EndpointB = SessionMpst<End, BtoC, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -522,8 +522,8 @@ where
 /// let (channel_ca, _) = End::new();
 /// let (channel_cb, channel_bc) = CtoB::new();
 ///
-/// let (role_c, _) = QueueC::new();
-/// let (role_b, _) = QueueB::new();
+/// let (role_c, _) = StackC::new();
+/// let (role_b, _) = StackB::new();
 ///
 /// let (name_c, _) = NameC::new();
 /// let (name_b, _) = NameB::new();

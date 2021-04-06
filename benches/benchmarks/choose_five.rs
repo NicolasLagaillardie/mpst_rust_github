@@ -882,44 +882,44 @@
 // type NameD = RoleD<RoleEnd>;
 // type NameE = RoleE<RoleEnd>;
 
-// // Queues
-// type QueueAinE = RoleE<RoleEnd>;
-// type QueueAinD = RoleD<RoleAlltoE<RoleE<RoleEnd>,
-// RoleE<RoleEnd>>>; type QueueAinC =
-// RoleC<RoleAlltoD<QueueAinD, QueueAinD>>; type QueueAinB =
-// RoleB<RoleAlltoC<QueueAinC, QueueAinC>>; type QueueA =
-// RoleB<RoleC<RoleD<RoleE<RoleAlltoB<QueueAinB,
-// QueueAinB>>>>>;
+// // Stacks
+// type StackAinE = RoleE<RoleEnd>;
+// type StackAinD = RoleD<RoleAlltoE<RoleE<RoleEnd>,
+// RoleE<RoleEnd>>>; type StackAinC =
+// RoleC<RoleAlltoD<StackAinD, StackAinD>>; type StackAinB =
+// RoleB<RoleAlltoC<StackAinC, StackAinC>>; type StackA =
+// RoleB<RoleC<RoleD<RoleE<RoleAlltoB<StackAinB,
+// StackAinB>>>>>;
 
-// type QueueBinE = RoleE<RoleEnd>;
-// type QueueBinD = RoleD<RoleAlltoE<QueueBinE, QueueBinE>>;
-// type QueueBinC = RoleC<RoleAlltoD<QueueBinD, QueueBinD>>;
-// type QueueBinA =
-// RoleA<RoleC<RoleD<RoleE<RoleAlltoC<QueueBinC,
-// QueueBinC>>>>>; type QueueB = RoleA<RoleAlltoA<QueueBinA,
-// QueueBinA>>;
+// type StackBinE = RoleE<RoleEnd>;
+// type StackBinD = RoleD<RoleAlltoE<StackBinE, StackBinE>>;
+// type StackBinC = RoleC<RoleAlltoD<StackBinD, StackBinD>>;
+// type StackBinA =
+// RoleA<RoleC<RoleD<RoleE<RoleAlltoC<StackBinC,
+// StackBinC>>>>>; type StackB = RoleA<RoleAlltoA<StackBinA,
+// StackBinA>>;
 
-// type QueueCinE = RoleE<RoleEnd>;
-// type QueueCinD = RoleD<RoleAlltoE<QueueCinE, QueueCinE>>;
-// type QueueCinB =
-// RoleA<RoleB<RoleD<RoleE<RoleAlltoD<QueueCinD,
-// QueueCinD>>>>>; type QueueCinA =
-// RoleB<RoleAlltoB<QueueCinB, QueueCinB>>; type QueueC =
-// RoleA<RoleAlltoA<QueueCinA, QueueCinA>>;
+// type StackCinE = RoleE<RoleEnd>;
+// type StackCinD = RoleD<RoleAlltoE<StackCinE, StackCinE>>;
+// type StackCinB =
+// RoleA<RoleB<RoleD<RoleE<RoleAlltoD<StackCinD,
+// StackCinD>>>>>; type StackCinA =
+// RoleB<RoleAlltoB<StackCinB, StackCinB>>; type StackC =
+// RoleA<RoleAlltoA<StackCinA, StackCinA>>;
 
-// type QueueDinE = RoleE<RoleEnd>;
-// type QueueDinC =
-// RoleA<RoleB<RoleC<RoleE<RoleAlltoE<QueueDinE,
-// QueueDinE>>>>>; type QueueDinB =
-// RoleC<RoleAlltoC<QueueDinC, QueueDinC>>; type QueueDinA =
-// RoleB<RoleAlltoB<QueueDinB, QueueDinB>>; type QueueD =
-// RoleA<RoleAlltoA<QueueDinA, QueueDinA>>;
+// type StackDinE = RoleE<RoleEnd>;
+// type StackDinC =
+// RoleA<RoleB<RoleC<RoleE<RoleAlltoE<StackDinE,
+// StackDinE>>>>>; type StackDinB =
+// RoleC<RoleAlltoC<StackDinC, StackDinC>>; type StackDinA =
+// RoleB<RoleAlltoB<StackDinB, StackDinB>>; type StackD =
+// RoleA<RoleAlltoA<StackDinA, StackDinA>>;
 
-// type QueueEinD = RoleA<RoleB<RoleC<RoleD<RoleEnd>>>>;
-// type QueueEinC = RoleD<RoleAlltoD<QueueEinD, QueueEinD>>;
-// type QueueEinB = RoleC<RoleAlltoC<QueueEinC, QueueEinC>>;
-// type QueueEinA = RoleB<RoleAlltoB<QueueEinB, QueueEinB>>;
-// type QueueE = RoleA<RoleAlltoA<QueueEinA, QueueEinA>>;
+// type StackEinD = RoleA<RoleB<RoleC<RoleD<RoleEnd>>>>;
+// type StackEinC = RoleD<RoleAlltoD<StackEinD, StackEinD>>;
+// type StackEinB = RoleC<RoleAlltoC<StackEinC, StackEinC>>;
+// type StackEinA = RoleB<RoleAlltoB<StackEinB, StackEinB>>;
+// type StackE = RoleA<RoleAlltoA<StackEinA, StackEinA>>;
 
 // // Types
 // // Binary
@@ -960,8 +960,8 @@
 //     Send<(), ChooseBtoC>,
 //     Send<(), ChooseBtoD>,
 //     Send<(), ChooseBtoE>,
-//     <QueueAinB as Role>::Dual,
-//     <QueueAinB as Role>::Dual,
+//     <StackAinB as Role>::Dual,
+//     <StackAinB as Role>::Dual,
 //     RoleADual<RoleEnd>,
 // >;
 // type ChooseAtoC = ChooseMpstFive<
@@ -973,8 +973,8 @@
 //     Recv<(), OfferBtoC>,
 //     End,
 //     End,
-//     <QueueAinC as Role>::Dual,
-//     <QueueAinC as Role>::Dual,
+//     <StackAinC as Role>::Dual,
+//     <StackAinC as Role>::Dual,
 //     RoleADual<RoleEnd>,
 // >;
 // type ChooseAtoD = ChooseMpstFive<
@@ -986,8 +986,8 @@
 //     End,
 //     Recv<(), OfferBtoD>,
 //     End,
-//     <QueueAinD as Role>::Dual,
-//     <QueueAinD as Role>::Dual,
+//     <StackAinD as Role>::Dual,
+//     <StackAinD as Role>::Dual,
 //     RoleADual<RoleEnd>,
 // >;
 // type ChooseAtoE = ChooseMpstFive<
@@ -999,8 +999,8 @@
 //     End,
 //     End,
 //     Recv<(), OfferBtoE>,
-//     <QueueAinE as Role>::Dual,
-//     <QueueAinE as Role>::Dual,
+//     <StackAinE as Role>::Dual,
+//     <StackAinE as Role>::Dual,
 //     RoleADual<RoleEnd>,
 // >;
 // // B
@@ -1013,8 +1013,8 @@
 //     Recv<(), OfferCtoA>,
 //     End,
 //     End,
-//     <QueueBinA as Role>::Dual,
-//     <QueueBinA as Role>::Dual,
+//     <StackBinA as Role>::Dual,
+//     <StackBinA as Role>::Dual,
 //     RoleBDual<RoleEnd>,
 // >;
 // type ChooseBtoC = ChooseMpstFive<
@@ -1026,8 +1026,8 @@
 //     Send<(), ChooseCtoB>,
 //     Send<(), ChooseCtoD>,
 //     Send<(), ChooseCtoE>,
-//     <QueueBinC as Role>::Dual,
-//     <QueueBinC as Role>::Dual,
+//     <StackBinC as Role>::Dual,
+//     <StackBinC as Role>::Dual,
 //     RoleBDual<RoleEnd>,
 // >;
 // type ChooseBtoD = ChooseMpstFive<
@@ -1039,8 +1039,8 @@
 //     End,
 //     Recv<(), OfferCtoD>,
 //     End,
-//     <QueueBinD as Role>::Dual,
-//     <QueueBinD as Role>::Dual,
+//     <StackBinD as Role>::Dual,
+//     <StackBinD as Role>::Dual,
 //     RoleBDual<RoleEnd>,
 // >;
 // type ChooseBtoE = ChooseMpstFive<
@@ -1052,8 +1052,8 @@
 //     End,
 //     End,
 //     Recv<(), OfferCtoE>,
-//     <QueueBinE as Role>::Dual,
-//     <QueueBinE as Role>::Dual,
+//     <StackBinE as Role>::Dual,
+//     <StackBinE as Role>::Dual,
 //     RoleBDual<RoleEnd>,
 // >;
 // // C
@@ -1066,8 +1066,8 @@
 //     End,
 //     Recv<(), OfferDtoA>,
 //     End,
-//     <QueueCinA as Role>::Dual,
-//     <QueueCinA as Role>::Dual,
+//     <StackCinA as Role>::Dual,
+//     <StackCinA as Role>::Dual,
 //     RoleCDual<RoleEnd>,
 // >;
 // type ChooseCtoB = ChooseMpstFive<
@@ -1079,8 +1079,8 @@
 //     End,
 //     Recv<(), OfferDtoB>,
 //     End,
-//     <QueueCinB as Role>::Dual,
-//     <QueueCinB as Role>::Dual,
+//     <StackCinB as Role>::Dual,
+//     <StackCinB as Role>::Dual,
 //     RoleCDual<RoleEnd>,
 // >;
 // type ChooseCtoD = ChooseMpstFive<
@@ -1092,8 +1092,8 @@
 //     Send<(), ChooseDtoB>,
 //     Send<(), ChooseDtoC>,
 //     Send<(), ChooseDtoE>,
-//     <QueueCinD as Role>::Dual,
-//     <QueueCinD as Role>::Dual,
+//     <StackCinD as Role>::Dual,
+//     <StackCinD as Role>::Dual,
 //     RoleCDual<RoleEnd>,
 // >;
 // type ChooseCtoE = ChooseMpstFive<
@@ -1105,8 +1105,8 @@
 //     End,
 //     End,
 //     Recv<(), OfferDtoE>,
-//     <QueueCinE as Role>::Dual,
-//     <QueueCinE as Role>::Dual,
+//     <StackCinE as Role>::Dual,
+//     <StackCinE as Role>::Dual,
 //     RoleCDual<RoleEnd>,
 // >;
 // // D
@@ -1119,8 +1119,8 @@
 //     End,
 //     End,
 //     Recv<(), OfferEtoA>,
-//     <QueueDinA as Role>::Dual,
-//     <QueueDinA as Role>::Dual,
+//     <StackDinA as Role>::Dual,
+//     <StackDinA as Role>::Dual,
 //     RoleDDual<RoleEnd>,
 // >;
 // type ChooseDtoB = ChooseMpstFive<
@@ -1132,8 +1132,8 @@
 //     End,
 //     End,
 //     Recv<(), OfferEtoB>,
-//     <QueueDinB as Role>::Dual,
-//     <QueueDinB as Role>::Dual,
+//     <StackDinB as Role>::Dual,
+//     <StackDinB as Role>::Dual,
 //     RoleDDual<RoleEnd>,
 // >;
 // type ChooseDtoC = ChooseMpstFive<
@@ -1145,8 +1145,8 @@
 //     End,
 //     End,
 //     Recv<(), OfferEtoC>,
-//     <QueueDinC as Role>::Dual,
-//     <QueueDinC as Role>::Dual,
+//     <StackDinC as Role>::Dual,
+//     <StackDinC as Role>::Dual,
 //     RoleDDual<RoleEnd>,
 // >;
 // type ChooseDtoE = ChooseMpstFive<
@@ -1158,8 +1158,8 @@
 //     Send<(), End>,
 //     Send<(), End>,
 //     Send<(), End>,
-//     <QueueDinE as Role>::Dual,
-//     <QueueDinE as Role>::Dual,
+//     <StackDinE as Role>::Dual,
+//     <StackDinE as Role>::Dual,
 //     RoleDDual<RoleEnd>,
 // >;
 // // Offer
@@ -1173,8 +1173,8 @@
 //     Recv<(), ChooseCtoA>,
 //     End,
 //     End,
-//     QueueBinA,
-//     QueueBinA,
+//     StackBinA,
+//     StackBinA,
 //     NameA,
 // >;
 // type OfferDtoA = OfferMpstMultiFive<
@@ -1186,8 +1186,8 @@
 //     End,
 //     Recv<(), ChooseDtoA>,
 //     End,
-//     QueueCinA,
-//     QueueCinA,
+//     StackCinA,
+//     StackCinA,
 //     NameA,
 // >;
 // type OfferEtoA = OfferMpstMultiFive<
@@ -1199,8 +1199,8 @@
 //     End,
 //     End,
 //     Recv<(), End>,
-//     QueueDinA,
-//     QueueDinA,
+//     StackDinA,
+//     StackDinA,
 //     NameA,
 // >;
 // // B
@@ -1213,8 +1213,8 @@
 //     Recv<(), ChooseCtoB>,
 //     End,
 //     End,
-//     QueueBinA,
-//     QueueBinA,
+//     StackBinA,
+//     StackBinA,
 //     NameA,
 // >;
 

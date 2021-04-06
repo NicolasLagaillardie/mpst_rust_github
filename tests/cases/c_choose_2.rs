@@ -54,33 +54,33 @@ type AtoCAdd<N> = <CtoAAdd<N> as Session>::Dual;
 type BtoCNeg<N> = <CtoBNeg<N> as Session>::Dual;
 type BtoCAdd<N> = <CtoBAdd<N> as Session>::Dual;
 
-/// Queues
-type QueueOfferC = RoleA<RoleB<RoleEnd>>;
-type QueueOfferCDual = <QueueOfferC as Role>::Dual;
-type QueueFullC = RoleAlltoA<RoleEnd, RoleEnd>;
+/// Stacks
+type StackOfferC = RoleA<RoleB<RoleEnd>>;
+type StackOfferCDual = <StackOfferC as Role>::Dual;
+type StackFullC = RoleAlltoA<RoleEnd, RoleEnd>;
 
-type QueueChoiceA = RoleC<RoleEnd>;
-type QueueFullA = RoleAtoAll<QueueChoiceA, QueueChoiceA>;
+type StackChoiceA = RoleC<RoleEnd>;
+type StackFullA = RoleAtoAll<StackChoiceA, StackChoiceA>;
 
-type QueueOfferB = RoleC<RoleEnd>;
-type QueueOfferBDual = <QueueOfferB as Role>::Dual;
-type QueueFullB = RoleAlltoA<RoleEnd, RoleEnd>;
+type StackOfferB = RoleC<RoleEnd>;
+type StackOfferBDual = <StackOfferB as Role>::Dual;
+type StackFullB = RoleAlltoA<RoleEnd, RoleEnd>;
 
 /// Creating the MP sessions
 /// For C
-type EndpointCAdd<N> = SessionMpst<CtoAAdd<N>, CtoBAdd<N>, QueueOfferC, RoleC<RoleEnd>>;
-type EndpointCNeg<N> = SessionMpst<CtoANeg<N>, CtoBNeg<N>, QueueOfferC, RoleC<RoleEnd>>;
+type EndpointCAdd<N> = SessionMpst<CtoAAdd<N>, CtoBAdd<N>, StackOfferC, RoleC<RoleEnd>>;
+type EndpointCNeg<N> = SessionMpst<CtoANeg<N>, CtoBNeg<N>, StackOfferC, RoleC<RoleEnd>>;
 
 type OfferC<N> = OfferMpst<
     CtoAAdd<N>,
     CtoBAdd<N>,
     CtoANeg<N>,
     CtoBNeg<N>,
-    QueueOfferC,
-    QueueOfferC,
+    StackOfferC,
+    StackOfferC,
     RoleC<RoleEnd>,
 >;
-type EndpointChoiceC<N> = SessionMpst<OfferC<N>, End, QueueFullC, RoleC<RoleEnd>>;
+type EndpointChoiceC<N> = SessionMpst<OfferC<N>, End, StackFullC, RoleC<RoleEnd>>;
 
 /// For A
 type ChooseAtoC<N> = ChooseMpst<
@@ -88,8 +88,8 @@ type ChooseAtoC<N> = ChooseMpst<
     BtoCAdd<N>,
     AtoCNeg<N>,
     BtoCNeg<N>,
-    QueueOfferCDual,
-    QueueOfferCDual,
+    StackOfferCDual,
+    StackOfferCDual,
     RoleCDual<RoleEnd>,
 >;
 type ChooseCtoA<N> = ChooseMpst<
@@ -97,19 +97,19 @@ type ChooseCtoA<N> = ChooseMpst<
     CtoBAdd<N>,
     End,
     CtoBNeg<N>,
-    QueueOfferBDual,
-    QueueOfferBDual,
+    StackOfferBDual,
+    StackOfferBDual,
     RoleBDual<RoleEnd>,
 >;
-type EndpointChoiceA<N> = SessionMpst<ChooseCtoA<N>, ChooseAtoC<N>, QueueFullA, RoleA<RoleEnd>>;
+type EndpointChoiceA<N> = SessionMpst<ChooseCtoA<N>, ChooseAtoC<N>, StackFullA, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBAdd<N> = SessionMpst<End, BtoCAdd<N>, QueueOfferB, RoleB<RoleEnd>>;
-type EndpointBNeg<N> = SessionMpst<End, BtoCNeg<N>, QueueOfferB, RoleB<RoleEnd>>;
+type EndpointBAdd<N> = SessionMpst<End, BtoCAdd<N>, StackOfferB, RoleB<RoleEnd>>;
+type EndpointBNeg<N> = SessionMpst<End, BtoCNeg<N>, StackOfferB, RoleB<RoleEnd>>;
 
 type OfferA<N> =
-    OfferMpst<End, BtoCAdd<N>, End, BtoCNeg<N>, QueueOfferB, QueueOfferB, RoleB<RoleEnd>>;
-type EndpointChoiceB<N> = SessionMpst<OfferA<N>, End, QueueFullB, RoleB<RoleEnd>>;
+    OfferMpst<End, BtoCAdd<N>, End, BtoCNeg<N>, StackOfferB, StackOfferB, RoleB<RoleEnd>>;
+type EndpointChoiceB<N> = SessionMpst<OfferA<N>, End, StackFullB, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
@@ -142,12 +142,12 @@ fn simple_store_client_left(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error
         AtoCAdd<i32>,
         End,
         AtoCNeg<i32>,
-        QueueOfferBDual,
-        QueueOfferBDual,
-        QueueOfferCDual,
-        QueueOfferCDual,
-        QueueChoiceA,
-        QueueChoiceA,
+        StackOfferBDual,
+        StackOfferBDual,
+        StackOfferCDual,
+        StackOfferCDual,
+        StackChoiceA,
+        StackChoiceA,
     >(s);
     let s = send_mpst_a_to_c(1, s);
     close_mpst(s)
@@ -161,12 +161,12 @@ fn simple_store_client_right(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Erro
         AtoCAdd<i32>,
         End,
         AtoCNeg<i32>,
-        QueueOfferBDual,
-        QueueOfferBDual,
-        QueueOfferCDual,
-        QueueOfferCDual,
-        QueueChoiceA,
-        QueueChoiceA,
+        StackOfferBDual,
+        StackOfferBDual,
+        StackOfferCDual,
+        StackOfferCDual,
+        StackChoiceA,
+        StackChoiceA,
     >(s);
     let s = send_mpst_a_to_c(2, s);
     close_mpst(s)

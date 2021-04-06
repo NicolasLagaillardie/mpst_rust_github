@@ -29,21 +29,21 @@ use std::error::Error;
 /// type AtoB = End;
 /// type AtoC = End;
 ///
-/// // Queue
-/// type QueueA = RoleEnd;
+/// // Stack
+/// type StackA = RoleEnd;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA = SessionMpst<AtoB, AtoC, QueueA, NameA>;
+/// type EndpointA = SessionMpst<AtoB, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
 /// let (channel_ab, _) = AtoB::new();
 /// let (channel_ac, _) = AtoC::new();
 ///
-/// let (role_a, _) = QueueA::new();
+/// let (role_a, _) = StackA::new();
 ///
 /// let (name_a, _) = NameA::new();
 ///

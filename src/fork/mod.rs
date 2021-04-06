@@ -75,13 +75,13 @@ where
 /// type CtoA<N> = <AtoC<N> as Session>::Dual;
 /// type CtoB<N> = <BtoC<N> as Session>::Dual;
 ///
-/// type QueueA = RoleB<RoleC<RoleEnd>>;
-/// type QueueB = RoleA<RoleC<RoleEnd>>;
-/// type QueueC = RoleA<RoleB<RoleEnd>>;
+/// type StackA = RoleB<RoleC<RoleEnd>>;
+/// type StackB = RoleA<RoleC<RoleEnd>>;
+/// type StackC = RoleA<RoleB<RoleEnd>>;
 ///
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
-/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
-/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
+/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ///
 /// fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
 /// {
@@ -117,7 +117,7 @@ where
 /// ```
 ///
 /// Creates 3 pairs of endpoints, each pair of type `S` and
-/// `S::Dual`. Creates 3 `Role` for each queue.
+/// `S::Dual`. Creates 3 `Role` for each stack.
 /// Creates 3 `SessionMpst`, linked together with the pairs
 /// of endpoints, and get the related child processes.
 pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(

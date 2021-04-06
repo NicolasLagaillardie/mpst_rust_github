@@ -11,11 +11,11 @@ use mpstthree::role::Role;
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 
-/// Queues
-type QueueA = RoleB<RoleC<RoleEnd>>;
+/// Stacks
+type StackA = RoleB<RoleC<RoleEnd>>;
 
 /// Creating the MP sessions
-type Endpoint<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
+type Endpoint<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 
 pub fn sessionmpst_fields() {
     let (sessionmpst_1, sessionmpst_2) = Endpoint::<i32>::new();
@@ -46,7 +46,7 @@ pub fn sessionmpst_methods() {
             "{} + {} + {} + {}",
             AtoB::<i32>::head_str(),
             AtoC::<i32>::head_str(),
-            QueueA::head_str(),
+            StackA::head_str(),
             RoleA::<RoleEnd>::head_str()
         )
     );
@@ -57,7 +57,7 @@ pub fn sessionmpst_methods() {
             "{} + {} + {} + {}",
             AtoB::<i32>::tail_str(),
             AtoC::<i32>::tail_str(),
-            QueueA::tail_str(),
+            StackA::tail_str(),
             RoleA::<RoleEnd>::tail_str()
         )
     );

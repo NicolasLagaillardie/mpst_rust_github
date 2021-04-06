@@ -37,36 +37,36 @@ type RecursAtoC<N> = Recv<Branche0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branche0BtoC<N>, End>;
 
 enum Branche0AtoC<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
-    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo, RoleA<RoleEnd>>),
+    End(SessionMpst<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
+    Video(SessionMpst<AtoBVideo<N>, InitA<N>, StackAVideo, RoleA<RoleEnd>>),
 }
 enum Branche0BtoC<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
+    End(SessionMpst<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 type Choose0fromCtoA<N> = Send<Branche0AtoC<N>, End>;
 type Choose0fromCtoB<N> = Send<Branche0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Queues
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
-type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
+/// Stacks
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
-type QueueBRecurs = RoleC<RoleEnd>;
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type StackBRecurs = RoleC<RoleEnd>;
 
-type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
-type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
+type StackCRecurs = RoleA<RoleB<RoleEnd>>;
+type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 /// Creating the MP sessions
 /// For C
-type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, QueueCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
 fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
@@ -192,7 +192,7 @@ pub fn test_checker_panic_stack() {
     .is_ok());
 }
 
-type EndpointBRecursPanicName<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleC<RoleEnd>>;
+type EndpointBRecursPanicName<N> = SessionMpst<End, RecursBtoC<N>, StackBRecurs, RoleC<RoleEnd>>;
 
 pub fn test_checker_panic_name() {
     assert!(|| -> Result<(), Box<dyn Error>> {

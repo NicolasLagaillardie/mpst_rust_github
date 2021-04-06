@@ -64,85 +64,85 @@
 // type CtoAClose = <AtoCClose as Session>::Dual;
 // type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
-// /// Queues
-// type QueueAEnd = RoleEnd;
-// type QueueAVideo =
+// /// Stacks
+// type StackAEnd = RoleEnd;
+// type StackAVideo =
 // RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
-// type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-// type QueueASecond =
+// type StackAVideoDual = <StackAVideo as Role>::Dual;
+// type StackASecond =
 // RoleAlltoC<RoleAtoC<RoleAtoC<RoleEnd>>, RoleEnd>;
-// type QueueAIniit = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd,
+// type StackAIniit = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd,
 // RoleEnd>>>;
 
-// type QueueBEnd = RoleEnd;
-// type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
-// type QueueBVideoDual = <QueueBVideo as Role>::Dual;
-// type QueueBFull = RoleAlltoC<RoleEnd, RoleEnd>;
-// type QueueBFullDual = <QueueBFull as Role>::Dual;
+// type StackBEnd = RoleEnd;
+// type StackBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
+// type StackBVideoDual = <StackBVideo as Role>::Dual;
+// type StackBFull = RoleAlltoC<RoleEnd, RoleEnd>;
+// type StackBFullDual = <StackBFull as Role>::Dual;
 
-// type QueueCEnd = RoleEnd;
-// type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
-// type QueueCChoice2 = RoleCtoAll<QueueCVideo, QueueCEnd>;
-// type QueueCChoice = RoleCtoAll<QueueCChoice2, QueueCEnd>;
-// type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
+// type StackCEnd = RoleEnd;
+// type StackCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
+// type StackCChoice2 = RoleCtoAll<StackCVideo, StackCEnd>;
+// type StackCChoice = RoleCtoAll<StackCChoice2, StackCEnd>;
+// type StackCFull = RoleCtoA<RoleCtoA<StackCChoice>>;
 
 // /// Creating the MP sessions
 // /// For A
 // type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose,
-// QueueAEnd>; type EndpointAVideo<N> =
-// SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>;
+// StackAEnd>; type EndpointAVideo<N> =
+// SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo>;
 
 // type OfferA2<N> =
 //     OfferMpst<AtoBVideo<N>, AtoCVideo<N>, AtoBClose,
-// AtoCClose, QueueAVideo, QueueAEnd>; type OfferA<N> =
+// AtoCClose, StackAVideo, StackAEnd>; type OfferA<N> =
 // OfferMpst<AtoBClose, OfferA2<N>, AtoBClose, AtoCClose,
-// QueueASecond, QueueAEnd>; type InitA<N> = Recv<N, Send<N,
+// StackASecond, StackAEnd>; type InitA<N> = Recv<N, Send<N,
 // OfferA<N>>>; type EndpointAFull<N> = SessionMpst<End,
-// InitA<N>, QueueAIniit>;
+// InitA<N>, StackAIniit>;
 
 // /// For B
 // type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose,
-// QueueBEnd>; type EndpointBVideo<N> =
-// SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo>;
+// StackBEnd>; type EndpointBVideo<N> =
+// SessionMpst<BtoAVideo<N>, BtoCClose, StackBVideo>;
 
 // type OfferB2<N> = OfferMpst<BtoAVideo<N>, BtoCClose,
-// BtoAClose, BtoCClose, QueueBVideo, QueueBEnd>; type
+// BtoAClose, BtoCClose, StackBVideo, StackBEnd>; type
 // OfferB<N> = OfferMpst<BtoAClose, OfferB2<N>, BtoAClose,
-// BtoCClose, QueueBFull, QueueBEnd>;
+// BtoCClose, StackBFull, StackBEnd>;
 
 // type EndpointBFull<N> = SessionMpst<End, OfferB<N>,
-// QueueBFull>;
+// StackBFull>;
 
 // /// For C
 // type EndpointCtoAVideo2<N> = SessionMpst<BtoAVideo<N>,
-// CtoAVideo<N>, QueueAVideoDual>; type EndpointCtoAEnd2 =
-// SessionMpst<BtoAClose, CtoAClose, QueueAEnd>; type
+// CtoAVideo<N>, StackAVideoDual>; type EndpointCtoAEnd2 =
+// SessionMpst<BtoAClose, CtoAClose, StackAEnd>; type
 // EndpointCtoBVideo2<N> = SessionMpst<AtoBVideo<N>,
-// CtoBClose, QueueBVideoDual>; type EndpointCtoBEnd2 =
-// SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
+// CtoBClose, StackBVideoDual>; type EndpointCtoBEnd2 =
+// SessionMpst<AtoBClose, CtoBClose, StackBEnd>;
 
 // type ChooseCtoA2<N> =
 //     ChooseMpst<BtoAVideo<N>, CtoAVideo<N>, BtoAClose,
-// CtoAClose, QueueAVideoDual, QueueAEnd>; type
+// CtoAClose, StackAVideoDual, StackAEnd>; type
 // ChooseCtoB2<N> =     ChooseMpst<AtoBVideo<N>, CtoBClose,
-// AtoBClose, CtoBClose, QueueBVideoDual, QueueBEnd>;
+// AtoBClose, CtoBClose, StackBVideoDual, StackBEnd>;
 
 // type EndpointCtoAVideo<N> = SessionMpst<ChooseCtoA2<N>,
-// ChooseCtoB2<N>, QueueCChoice2>; type EndpointCtoAEnd =
-// SessionMpst<BtoAClose, CtoAClose, QueueAEnd>; type
+// ChooseCtoB2<N>, StackCChoice2>; type EndpointCtoAEnd =
+// SessionMpst<BtoAClose, CtoAClose, StackAEnd>; type
 // EndpointCtoBVideo<N> = SessionMpst<AtoBVideo<N>,
-// CtoBClose, QueueBVideoDual>; type EndpointCtoBEnd =
-// SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
+// CtoBClose, StackBVideoDual>; type EndpointCtoBEnd =
+// SessionMpst<AtoBClose, CtoBClose, StackBEnd>;
 
 // type ChooseCtoA<N> =
 //     ChooseMpst<BtoAClose, ChooseCtoA2<N>, CtoAClose,
-// ChooseCtoB2<N>, QueueCChoice2, QueueAEnd>; type
+// ChooseCtoB2<N>, StackCChoice2, StackAEnd>; type
 // ChooseCtoB<N> =     ChooseMpst<AtoBClose, ChooseCtoB2<N>,
-// AtoBClose, CtoBClose, QueueBFullDual, QueueBEnd>;
+// AtoBClose, CtoBClose, StackBFullDual, StackBEnd>;
 
 // type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 // type EndpointCFull<N> = SessionMpst<InitC<N>,
-// ChooseCtoB<N>, QueueCFull>;
+// ChooseCtoB<N>, StackCFull>;
 
 // // type testA = SessionMpst<
 // //     End,
@@ -372,12 +372,12 @@
 // //             BtoCClose,
 // //             BtoCClose,
 // //             AtoCClose,
-// //             QueueAVideoDual,
-// //             QueueAEnd,
-// //             QueueBVideoDual,
-// //             QueueBEnd,
-// //             QueueCVideo,
-// //             QueueCEnd,
+// //             StackAVideoDual,
+// //             StackAEnd,
+// //             StackBVideoDual,
+// //             StackBEnd,
+// //             StackCVideo,
+// //             StackCEnd,
 // //         >(s);
 
 // //         let s = send_mpst_c_to_a(accept, s);
@@ -407,12 +407,12 @@
 // //             BtoCClose,
 // //             BtoCClose,
 // //             AtoCClose,
-// //             QueueAVideoDual,
-// //             QueueAEnd,
-// //             QueueBVideoDual,
-// //             QueueBEnd,
-// //             QueueCVideo,
-// //             QueueCEnd,
+// //             StackAVideoDual,
+// //             StackAEnd,
+// //             StackBVideoDual,
+// //             StackBEnd,
+// //             StackCVideo,
+// //             StackCEnd,
 // //         >(s);
 
 // //         let s = send_mpst_c_to_a(accept, s);
@@ -442,12 +442,12 @@
 // //             BtoCClose,
 // //             BtoCClose,
 // //             AtoCClose,
-// //             QueueAVideoDual,
-// //             QueueAEnd,
-// //             QueueBVideoDual,
-// //             QueueBEnd,
-// //             QueueCVideo,
-// //             QueueCEnd,
+// //             StackAVideoDual,
+// //             StackAEnd,
+// //             StackBVideoDual,
+// //             StackBEnd,
+// //             StackCVideo,
+// //             StackCEnd,
 // //         >(s);
 
 // //         let s = send_mpst_c_to_a(accept, s);

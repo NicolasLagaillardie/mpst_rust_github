@@ -75,22 +75,22 @@ type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 ```
 
-Add the **queues**, which give the correct order of the operations for each participant.
+Add the **stacks**, which give the correct order of the operations for each participant.
 
 ```rust
-/// Queues
-type QueueA = RoleB<RoleC<RoleEnd>>;
-type QueueB = RoleA<RoleC<RoleEnd>>;
-type QueueC = RoleA<RoleB<RoleEnd>>;
+/// Stacks
+type StackA = RoleB<RoleC<RoleEnd>>;
+type StackB = RoleA<RoleC<RoleEnd>>;
+type StackC = RoleA<RoleB<RoleEnd>>;
 ```
 
-You can now encapsulate those **binary session types** and **queues** into **SessionMpst** for each participant.
+You can now encapsulate those **binary session types** and **stacks** into **SessionMpst** for each participant.
 
 ```rust
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
+type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ```
 
 To check to the protocol is *correct*, it is mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.

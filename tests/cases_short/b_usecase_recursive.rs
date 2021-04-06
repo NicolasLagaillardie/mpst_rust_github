@@ -40,44 +40,44 @@ type RecursBtoA<N> = Recv<Branches0BtoA<N>, End>;
 type RecursCtoA<N> = Recv<Branches0CtoA<N>, End>;
 
 enum Branches0BtoA<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, BtoCVideo<N>, QueueBVideo, RoleB<RoleEnd>>),
+    End(SessionMpst<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 enum Branches0CtoA<N: marker::Send> {
-    End(SessionMpst<CtoAClose, CtoBClose, QueueCEnd, RoleC<RoleEnd>>),
-    Video(SessionMpst<RecursCtoA<N>, CtoBVideo<N>, QueueCVideo, RoleC<RoleEnd>>),
+    End(SessionMpst<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
+    Video(SessionMpst<RecursCtoA<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
 }
 type Choose0fromAtoB<N> = Send<Branches0BtoA<N>, End>;
 type Choose0fromAtoC<N> = Send<Branches0CtoA<N>, End>;
 
 type InitA<N> = Send<N, Recv<N, Choose0fromAtoB<N>>>;
 
-/// Queues
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleC<RoleC<RoleA<RoleA<RoleEnd>>>>>;
-type QueueBRecurs = RoleA<RoleEnd>;
-type QueueBInit = RoleA<RoleA<RoleA<RoleEnd>>>;
+/// Stacks
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleC<RoleC<RoleA<RoleA<RoleEnd>>>>>;
+type StackBRecurs = RoleA<RoleEnd>;
+type StackBInit = RoleA<RoleA<RoleA<RoleEnd>>>;
 
-type QueueCEnd = RoleEnd;
-type QueueCVideo = RoleB<RoleB<RoleA<RoleEnd>>>;
-type QueueCRecurs = RoleA<RoleEnd>;
+type StackCEnd = RoleEnd;
+type StackCVideo = RoleB<RoleB<RoleA<RoleEnd>>>;
+type StackCRecurs = RoleA<RoleEnd>;
 
-type QueueARecurs = RoleBroadcast;
-type QueueAFull = RoleB<RoleB<QueueARecurs>>;
+type StackARecurs = RoleBroadcast;
+type StackAFull = RoleB<RoleB<StackARecurs>>;
 
 /// Creating the MP sessions
 
 /// For B
 type EndpointARecurs<N> =
-    SessionMpst<Choose0fromAtoB<N>, Choose0fromAtoC<N>, QueueARecurs, RoleA<RoleEnd>>;
-type EndpointAFull<N> = SessionMpst<InitA<N>, Choose0fromAtoC<N>, QueueAFull, RoleA<RoleEnd>>;
+    SessionMpst<Choose0fromAtoB<N>, Choose0fromAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
+type EndpointAFull<N> = SessionMpst<InitA<N>, Choose0fromAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For C
-type EndpointBRecurs<N> = SessionMpst<RecursBtoA<N>, End, QueueBRecurs, RoleB<RoleEnd>>;
-type EndpointBFull<N> = SessionMpst<InitB<N>, End, QueueBInit, RoleB<RoleEnd>>;
+type EndpointBRecurs<N> = SessionMpst<RecursBtoA<N>, End, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBFull<N> = SessionMpst<InitB<N>, End, StackBInit, RoleB<RoleEnd>>;
 
 /// For A
-type EndpointCRecurs<N> = SessionMpst<RecursCtoA<N>, End, QueueCRecurs, RoleC<RoleEnd>>;
+type EndpointCRecurs<N> = SessionMpst<RecursCtoA<N>, End, StackCRecurs, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {

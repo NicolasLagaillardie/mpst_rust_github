@@ -49,36 +49,36 @@ type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
 enum Branches0AtoC<N: marker::Send> {
     End(SessionMpst<End, End, RoleEnd, RoleA<RoleEnd>>),
-    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo, RoleA<RoleEnd>>),
+    Video(SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
 }
 enum Branches0BtoC<N: marker::Send> {
     End(SessionMpst<End, End, RoleEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoC<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Queues
-type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
-type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
+/// Stacks
+type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
-type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 
-type QueueCRecurs = RoleBroadcast;
-type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
+type StackCRecurs = RoleBroadcast;
+type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 /// Creating the MP sessions
 /// For C
 
 type EndpointCRecurs<N> =
-    SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, QueueCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, QueueCFull, RoleC<RoleEnd>>;
+    SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
+type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
 /// For A
 type EndpointARecurs<N> = SessionMpst<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
 /// For B
 type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;

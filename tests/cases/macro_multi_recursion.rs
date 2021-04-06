@@ -70,43 +70,43 @@ type RecursAtoD<N> = Recv<Branches0AtoD<N>, End>;
 type RecursBtoD<N> = Recv<Branches0BtoD<N>, End>;
 
 enum Branches0AtoD<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoDClose, QueueAEnd, NameA>),
-    Video(SessionMpst<AtoBVideo<N>, AtoDVideo<N>, QueueAVideo, NameA>),
+    End(SessionMpst<AtoBClose, AtoDClose, StackAEnd, NameA>),
+    Video(SessionMpst<AtoBVideo<N>, AtoDVideo<N>, StackAVideo, NameA>),
 }
 enum Branches0BtoD<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoDClose, QueueBEnd, NameB>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, QueueBVideo, NameB>),
+    End(SessionMpst<BtoAClose, BtoDClose, StackBEnd, NameB>),
+    Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, StackBVideo, NameB>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoD<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoD<N>, End>;
 
 type InitD<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Queues
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleD<RoleB<RoleB<RoleD<RoleD<RoleEnd>>>>>;
-type QueueARecurs = RoleD<RoleEnd>;
-type QueueAInit = RoleD<RoleD<RoleD<RoleEnd>>>;
+/// Stacks
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleD<RoleB<RoleB<RoleD<RoleD<RoleEnd>>>>>;
+type StackARecurs = RoleD<RoleEnd>;
+type StackAInit = RoleD<RoleD<RoleD<RoleEnd>>>;
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleA<RoleD<RoleEnd>>>;
-type QueueBRecurs = RoleD<RoleEnd>;
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleA<RoleD<RoleEnd>>>;
+type StackBRecurs = RoleD<RoleEnd>;
 
-type QueueDRecurs = RoleBroadcast;
-type QueueDFull = RoleA<RoleA<QueueDRecurs>>;
+type StackDRecurs = RoleBroadcast;
+type StackDFull = RoleA<RoleA<StackDRecurs>>;
 
 /// Creating the MP sessions
 /// For C
 
-type EndpointDRecurs<N> = SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, QueueDRecurs, NameD>;
-type EndpointDFull<N> = SessionMpst<InitD<N>, Choose0fromCtoB<N>, QueueDFull, NameD>;
+type EndpointDRecurs<N> = SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackDRecurs, NameD>;
+type EndpointDFull<N> = SessionMpst<InitD<N>, Choose0fromCtoB<N>, StackDFull, NameD>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoD<N>, QueueARecurs, NameA>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, NameA>;
+type EndpointARecurs<N> = SessionMpst<End, RecursAtoD<N>, StackARecurs, NameA>;
+type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAInit, NameA>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, QueueBRecurs, NameB>;
+type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {

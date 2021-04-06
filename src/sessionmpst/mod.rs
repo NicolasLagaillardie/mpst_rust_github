@@ -43,11 +43,11 @@ pub mod impl_c;
 /// type AtoB<N> = Send<N, End>;
 /// type AtoC<N> = Recv<N, End>;
 ///
-/// // Queues
-/// type QueueA = RoleB<RoleC<RoleEnd>>;
+/// // Stacks
+/// type StackA = RoleB<RoleC<RoleEnd>>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
+/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 /// ```
 #[must_use]
 #[derive(Debug)]
