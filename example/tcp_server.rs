@@ -42,5 +42,5 @@ fn main() {
         }
     }
     // close the socket server
-    drop(listener);
+    // drop(listener);
 }
