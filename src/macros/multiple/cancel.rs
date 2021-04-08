@@ -36,7 +36,7 @@ macro_rules! send_cancel {
 /// others. Creates the function that will be direcly sent
 #[macro_export]
 macro_rules! broadcast_cancel {
-    ($session:expr, $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($session:expr, $name:ident, $nsessions:literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
                 #(
                     let mut bool_session#N:0 = true;
