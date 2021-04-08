@@ -27,7 +27,7 @@ jobs:
     - name: Run tests no features
       run: cargo test --verbose --all --no-default-features --no-run
     - name: Run examples
-      run: find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3}) done' argv0 {} +
+      run: ./scripts/full_examples.sh
     - name: Run benchmarks
       run: cargo bench --verbose --all
     - name: Run doc
