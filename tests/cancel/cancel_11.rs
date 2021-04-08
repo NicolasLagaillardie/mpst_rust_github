@@ -84,10 +84,10 @@ fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 }
 
 fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    recurs_d(s, SIZE)
+    recurs_c(s, SIZE)
 }
 
-fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_cancel_to_all!(
@@ -118,7 +118,7 @@ fn recurs_d(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
             let (_, s) = recv_mpst_c_from_b(s)?;
 
-            recurs_d(s, i - 1)
+            recurs_c(s, i - 1)
         }
     }
 }
