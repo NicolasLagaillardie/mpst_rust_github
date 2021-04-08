@@ -202,7 +202,7 @@ pub fn cancel_main() {
 static SIZE: i64 = 100;
 
 fn cancel_8(c: &mut Criterion) {
-    c.bench_function(&format!("Cancel_18{}", SIZE), |b| b.iter(|| cancel_main()));
+    c.bench_function(&format!("Cancel_8 {}", SIZE), |b| b.iter(|| cancel_main()));
 }
 
 fn long_warmup() -> Criterion {
