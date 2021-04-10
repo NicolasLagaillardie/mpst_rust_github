@@ -6,19 +6,19 @@ set -e
 rm -rf compile_time/$1*.txt
 
 # Run over 100 times
-for i in {1..100}
+for i in {1..5}
 do
-# Remove previous build
-rm -rf target/release/
-rm -rf target/debug/
-rm -rf target/rls/
-rm -rf target/.rustc_info.json
-# Get time
-ts=$(date +%s%N)
-# Run command
-cargo build --example=$1
-# Get difference
-tt=$((($(date +%s%N) - $ts)/1000))
-# Output difference
-printf "$tt\n" >> compile_time/$1.txt
+    # Remove previous build
+    rm -rf target/release/
+    rm -rf target/debug/
+    rm -rf target/rls/
+    rm -rf target/.rustc_info.json
+    # Get time
+    ts=$(date +%s%N)
+    # Run command
+    cargo build --example=$1
+    # Get difference
+    tt=$((($(date +%s%N) - $ts)/1000))
+    # Output difference
+    printf "$tt\n" >> compile_time/$1.txt
 done

@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
@@ -13,7 +9,6 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
 
 // global protocol Booking(role C, role A, role S)
 // {
@@ -274,9 +269,9 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(
-        black_box(simple_three_endpoint_a),
-        black_box(simple_three_endpoint_c),
-        black_box(simple_three_endpoint_s),
+        simple_three_endpoint_a,
+        simple_three_endpoint_c,
+        simple_three_endpoint_s,
     );
 
     thread_a.join()?;
@@ -286,20 +281,6 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     Ok(())
 }
 
-/////////////////////////
-
-fn travel_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Travel MPST"), |b| b.iter(|| all_mpst()));
+fn main() {
+    assert!(all_mpst().is_ok());
 }
-
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
-
-criterion_group! {
-    name = travel;
-    config = long_warmup();
-    targets = travel_mpst
-}
-
-criterion_main!(travel);

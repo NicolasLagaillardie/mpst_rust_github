@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
@@ -13,7 +9,6 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
 
 // global protopol SimpleVoting(role VOTER, role SERVER){
 //     Authenticate(String) from VOTER to SERVER;
@@ -284,9 +279,9 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_pawn, thread_server, thread_voter) = fork_mpst(
-        black_box(simple_three_endpoint_pawn),
-        black_box(simple_three_endpoint_server),
-        black_box(simple_three_endpoint_voter),
+        simple_three_endpoint_pawn,
+        simple_three_endpoint_server,
+        simple_three_endpoint_voter,
     );
 
     thread_voter.join()?;
@@ -296,20 +291,6 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     Ok(())
 }
 
-/////////////////////////
-
-fn simple_voting_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Simple voting MPST"), |b| b.iter(|| all_mpst()));
+fn main() {
+    assert!(all_mpst().is_ok());
 }
-
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
-
-criterion_group! {
-    name = simple_voting;
-    config = long_warmup();
-    targets = simple_voting_mpst,
-}
-
-criterion_main!(simple_voting);

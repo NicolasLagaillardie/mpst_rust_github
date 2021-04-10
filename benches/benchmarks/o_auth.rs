@@ -2,7 +2,7 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
@@ -95,8 +95,8 @@ type NameS = RoleS<RoleEnd>;
 type Choose0fromStoA<N> = Send<Branching0fromStoA<N>, End>;
 type Choose0fromStoC<N> = Send<Branching0fromStoC<N>, End>;
 // A
-type Choose1fromAtoC<N> = Send<Branching1fromAtoC<N>, End>;
-type Choose1fromAtoS<N> = Send<Branching1fromAtoS<N>, End>;
+type Choose1fromAtoC<N> = <Choice1fromCtoA<N> as Session>::Dual;
+type Choose1fromAtoS<N> = <Choice1fromStoA<N> as Session>::Dual;
 
 // A
 enum Branching0fromStoA<N: marker::Send> {

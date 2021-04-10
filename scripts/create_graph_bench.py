@@ -23,9 +23,12 @@ str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
 binary = []
 mpst = []
 crossbeam = []
+cancel = []
+
 nb_participants_mpst = []
 nb_participants_binary = []
 nb_participants_crossbeam = []
+nb_participants_cancel = []
 
 # # Number of loops in the recursion
 # number_of_loops = '100'
@@ -116,7 +119,7 @@ nb_participants_crossbeam = []
 
 
 # Number of loops in the recursion
-number_of_loops = '100'
+number_of_loops = '0'
 
 
 def test(path):
@@ -129,14 +132,18 @@ def test(path):
 # For each folder in main_path
 for d in directories:
     # If name looks like the one from what we want
-    if ('MPST' in d or 'binary' in d or 'crossbeam' in d) and ' ' + number_of_loops in d:
+    if ('MPST' in d or 'binary' in d or 'crossbeam' in d or 'cancel' in  d) and ' ' + number_of_loops in d:
         # Split the name
         splitted = d.split(' ')
 
         # If MPST of binary, append to related lists
         if 'MPST' in d and str_to_int[splitted[1]] >= 3:
-            mpst.append(int(test(d))/10**9)
-            nb_participants_mpst.append(str_to_int[splitted[1]])
+            if 'cancel' in d:
+                cancel.append(int(test(d))/10**9)
+                nb_participants_cancel.append(str_to_int[splitted[1]])
+            else:
+                mpst.append(int(test(d))/10**9)
+                nb_participants_mpst.append(str_to_int[splitted[1]])
         elif 'binary' in d and str_to_int[splitted[1]] >= 3:
             binary.append(int(test(d))/10**9)
             nb_participants_binary.append(str_to_int[splitted[1]])
@@ -154,6 +161,10 @@ nb_participants_binary, binary = (list(t)
 nb_participants_crossbeam, crossbeam = (list(t)
                                         for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
+if len(cancel) > 0:
+    nb_participants_cancel, cancel = (list(t)
+                                            for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+
 # Change size
 ax = plt.figure(figsize=(30, 15)).gca()
 
@@ -162,15 +173,21 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
 ax.plot(nb_participants_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=3)
+        linestyle='solid', linewidth=5)
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary',
-        linestyle='dashed', linewidth=3)
+        linestyle='dashed', linewidth=5)
 
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='-.', linewidth=3)
+        linestyle='-.', linewidth=5)
+
+
+if len(cancel) > 0:
+# Plot the cancel graph
+    ax.plot(nb_participants_cancel, cancel, label='Cancel',
+            linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
@@ -178,26 +195,26 @@ ax.set_ylabel('Time (s)', fontsize=30)
 ax.tick_params(axis='both', which='major', labelsize=30)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
-maxi1 = max(mpst)
-maxi2 = max(binary)
-maxi3 = max(crossbeam)
-maxi = max(maxi1, maxi2, maxi3)
+# maxi1 = max(mpst)
+# maxi2 = max(binary)
+# maxi3 = max(crossbeam)
+# maxi = max(maxi1, maxi2, maxi3)
 
-mini1 = min(mpst)
-mini2 = min(binary)
-mini3 = min(crossbeam)
-mini = min(mini1, mini2, mini3)
+# mini1 = min(mpst)
+# mini2 = min(binary)
+# mini3 = min(crossbeam)
+# mini = min(mini1, mini2, mini3)
 
-# Major ticks every 20, minor ticks every 5
-major_ticks = np.arange(mini, maxi+0.1, 0.2)
-minor_ticks = np.arange(mini, maxi+0.1, 0.05)
+# # Major ticks every 20, minor ticks every 5
+# major_ticks = np.arange(mini, maxi+0.1, 0.2)
+# minor_ticks = np.arange(mini, maxi+0.1, 0.05)
 
-# ax.set_xticks(major_ticks)
-# ax.set_xticks(minor_ticks, minor=True)
-ax.set_yticks(major_ticks)
-ax.set_yticks(minor_ticks, minor=True)
+# # ax.set_xticks(major_ticks)
+# # ax.set_xticks(minor_ticks, minor=True)
+# ax.set_yticks(major_ticks)
+# ax.set_yticks(minor_ticks, minor=True)
 
-# Add grid
+# # Add grid
 ax.grid(which='both')
 
 
@@ -209,7 +226,7 @@ ax.grid(which='both')
 #           number_of_loops + ' loops')
 
 # show a legend on the plot
-ax.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
+ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
 # Save fig
 plt.savefig('./graphs_bench/graph'+number_of_loops+'.pdf')
