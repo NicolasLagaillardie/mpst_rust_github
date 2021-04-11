@@ -17,7 +17,7 @@ type Sending = crossbeam_channel::Sender<()>;
 fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
-    for _ in 0..3 {
+    for _ in 0..190 {
         let main = spawn(move || {
             for _ in 0..SIZE {
                 let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);

@@ -119,7 +119,7 @@ nb_participants_cancel = []
 
 
 # Number of loops in the recursion
-number_of_loops = '0'
+number_of_loops = '100'
 
 
 def test(path):
@@ -226,7 +226,7 @@ ax.grid(which='both')
 #           number_of_loops + ' loops')
 
 # show a legend on the plot
-ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
+# ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
 # Save fig
 plt.savefig('./graphs_bench/graph'+number_of_loops+'.pdf')

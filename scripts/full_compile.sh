@@ -44,12 +44,22 @@ set -e
 # # ./scripts/compile.sh long_simple_eleven_binary 
 # ./scripts/compile.sh long_simple_eleven_mpst 
 # # ./scripts/compile.sh long_simple_twenty_binary 
-# ./scripts/compile.sh long_simple_twenty_mpst 
-./scripts/compile.sh o_auth
-./scripts/compile.sh fib
-./scripts/compile.sh simple_voting_three
-./scripts/compile.sh three_buyer
-./scripts/compile.sh travel_three
+# ./scripts/compile.sh long_simple_twenty_mpst
+# ./scripts/compile.sh long_simple_three_crossbeam
+# ./scripts/compile.sh long_simple_four_crossbeam
+# ./scripts/compile.sh long_simple_five_crossbeam
+# ./scripts/compile.sh long_simple_six_crossbeam
+# ./scripts/compile.sh long_simple_seven_crossbeam
+# ./scripts/compile.sh long_simple_eight_crossbeam
+# ./scripts/compile.sh long_simple_nine_crossbeam
+# ./scripts/compile.sh long_simple_ten_crossbeam
+# ./scripts/compile.sh long_simple_eleven_crossbeam
+# ./scripts/compile.sh long_simple_twelve_crossbeam
+# ./scripts/compile.sh o_auth
+# ./scripts/compile.sh fib
+# ./scripts/compile.sh simple_voting_three
+# ./scripts/compile.sh three_buyer
+# ./scripts/compile.sh travel_three
 
 # python scripts/create_graph_compile.py 
 
@@ -76,3 +86,14 @@ set -e
 # cargo expand --example long_simple_ten_binary > expand/long_simple_ten_binary_expand.txt
 # cargo expand --example long_simple_eleven_binary > expand/long_simple_eleven_binary_expand.txt
 # cargo expand --example long_simple_twenty_binary > expand/long_simple_twenty_binary_expand.txt
+
+cargo expand --example long_simple_three_crossbeam > expand/long_simple_three_crossbeam_expand.txt
+cargo expand --example long_simple_four_crossbeam > expand/long_simple_four_crossbeam_expand.txt
+cargo expand --example long_simple_five_crossbeam > expand/long_simple_five_crossbeam_expand.txt
+cargo expand --example long_simple_six_crossbeam > expand/long_simple_six_crossbeam_expand.txt
+cargo expand --example long_simple_seven_crossbeam > expand/long_simple_seven_crossbeam_expand.txt
+cargo expand --example long_simple_eight_crossbeam > expand/long_simple_eight_crossbeam_expand.txt
+cargo expand --example long_simple_nine_crossbeam > expand/long_simple_nine_crossbeam_expand.txt
+cargo expand --example long_simple_ten_crossbeam > expand/long_simple_ten_crossbeam_expand.txt
+cargo expand --example long_simple_eleven_crossbeam > expand/long_simple_eleven_crossbeam_expand.txt
+cargo expand --example long_simple_twenty_crossbeam > expand/long_simple_twenty_crossbeam_expand.txt
