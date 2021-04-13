@@ -33,6 +33,8 @@ pub mod long_simple_three_short;
 pub mod long_simple_twenty;
 pub mod long_simple_twenty_empty;
 pub mod o_auth;
+pub mod ping_pong;
+pub mod ring_three;
 pub mod simple_voting_three;
 pub mod three_buyer;
 pub mod travel_three;
