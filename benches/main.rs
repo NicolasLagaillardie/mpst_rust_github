@@ -40,5 +40,4 @@ criterion_main! {
     // benchmarks::simple_voting_three::simple_voting,
     // benchmarks::travel_three::travel,
     // benchmarks::three_buyer::three_buyer,
-    // benchmarks::smtp::smtp,
 }

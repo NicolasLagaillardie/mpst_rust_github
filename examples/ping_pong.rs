@@ -7,17 +7,16 @@ use mpstthree::{
 
 use mpstthree::role::broadcast::RoleBroadcast;
 use std::error::Error;
-use std::marker;
 
-// global protocol Fibonacci(role A, role B)
+// global protocol ping_pong(role A, role B)
 // {
-//     rec Fib
+//     rec PP
 //     {
 //         choice at A
 //         {
-//             fibonacci(Long) from A to B;
-//             fibonacci(Long) from B to A;
-//             continue Fib;
+//             ping(()) from A to B;
+//             pong(()) from B to A;
+//             continue PP;
 //         }
 //         or
 //         {
@@ -66,29 +65,29 @@ type NameB = RoleB<RoleEnd>;
 
 // Types
 // A
-type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
+type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 // B
-enum Branching0fromAtoB<N: marker::Send> {
-    More(SessionMpstTwo<Recv<N, Send<N, RecursBtoA<N>>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
+enum Branching0fromAtoB {
+    More(SessionMpstTwo<Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
     Done(SessionMpstTwo<End, RoleEnd, NameB>),
 }
-type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
+type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // Creating the MP sessions
-type EndpointA<N> = SessionMpstTwo<Choose0fromAtoB<N>, RoleBroadcast, NameA>;
-type EndpointB<N> = SessionMpstTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
+type EndpointA = SessionMpstTwo<Choose0fromAtoB, RoleBroadcast, NameA>;
+type EndpointB = SessionMpstTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE, 1)
+fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    recurs_a(s, SIZE)
 }
 
-fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                Branching0fromAtoB::<i64>::Done, =>
+                Branching0fromAtoB::Done, =>
                 RoleB, =>
                 RoleA,
                 SessionMpstTwo,
@@ -101,7 +100,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
         i => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                Branching0fromAtoB::<i64>::More, =>
+                Branching0fromAtoB::More, =>
                 RoleB, =>
                 RoleA,
                 SessionMpstTwo,
@@ -109,27 +108,27 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 1
             );
 
-            let s = send_mpst_a_to_b(old, s);
-            let (new, s) = recv_mpst_a_from_b(s)?;
+            let s = send_mpst_a_to_b((), s);
+            let ((), s) = recv_mpst_a_from_b(s)?;
 
-            recurs_a(s, i - 1, new)
+            recurs_a(s, i - 1)
         }
     }
 }
 
-fn simple_three_endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_b(s, 0)
+fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    recurs_b(s)
 }
 
-fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_a, {
         Branching0fromAtoB::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromAtoB::More(s) => {
-            let (new, s) = recv_mpst_b_from_a(s)?;
-            let s = send_mpst_b_to_a(new + old, s);
-            recurs_b(s, new + old)
+            let ((), s) = recv_mpst_b_from_a(s)?;
+            let s = send_mpst_b_to_a((), s);
+            recurs_b(s)
         },
     })
 }

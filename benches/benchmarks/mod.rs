@@ -34,6 +34,5 @@ pub mod long_simple_twenty;
 pub mod long_simple_twenty_empty;
 pub mod o_auth;
 pub mod simple_voting_three;
-pub mod smtp;
 pub mod three_buyer;
 pub mod travel_three;

@@ -329,7 +329,8 @@ fn long_warmup() -> Criterion {
 
 criterion_group! {
     name = o_auth;
-    config = long_warmup();
+    // config = long_warmup();
+    config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = o_auth_mpst
 }
 

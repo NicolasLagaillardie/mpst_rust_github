@@ -605,7 +605,8 @@ fn long_warmup() -> Criterion {
 
 criterion_group! {
     name = long_six_simple_protocols;
-    config = long_warmup();
+    // config = long_warmup();
+    config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = long_simple_protocol_mpst, long_simple_protocol_binary, long_simple_protocol_crossbeam
 }
 criterion_main!(long_six_simple_protocols);

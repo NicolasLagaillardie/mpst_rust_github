@@ -204,7 +204,8 @@ fn long_warmup() -> Criterion {
 
 criterion_group! {
     name = long_three_simple_protocols;
-    config = long_warmup();
+    // config = long_warmup();
+    config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = long_simple_cancel_protocol_mpst
 }
 criterion_main!(long_three_simple_protocols);

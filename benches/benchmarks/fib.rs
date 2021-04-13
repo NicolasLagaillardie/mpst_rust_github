@@ -281,7 +281,8 @@ fn long_warmup() -> Criterion {
 
 criterion_group! {
     name = fibo;
-    config = long_warmup();
+    // config = long_warmup();
+    config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = fibo_mpst, fibo_binary
 }
 

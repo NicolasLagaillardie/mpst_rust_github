@@ -224,7 +224,8 @@ fn long_warmup() -> Criterion {
 
 criterion_group! {
     name = three_buyer;
-    config = long_warmup();
+    // config = long_warmup();
+    config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = three_buyer_mpst
 }
 
