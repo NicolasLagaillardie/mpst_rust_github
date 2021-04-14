@@ -491,21 +491,21 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 static SIZE: i64 = 0;
 
-fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("long five simple protocol MPST {}", SIZE), |b| {
+fn mesh_protocol_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("mesh five empty protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
 
-fn long_simple_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("long five simple protocol binary {}", SIZE), |b| {
+fn mesh_protocol_binary(c: &mut Criterion) {
+    c.bench_function(&format!("mesh five empty protocol binary {}", SIZE), |b| {
         b.iter(|| all_binaries())
     });
 }
 
-fn long_simple_protocol_crossbeam(c: &mut Criterion) {
+fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("long five empty simple protocol crossbeam {}", SIZE),
+        &format!("mesh five empty protocol crossbeam {}", SIZE),
         |b| b.iter(|| all_crossbeam()),
     );
 }
@@ -518,6 +518,6 @@ criterion_group! {
     name = long_five_empty_simple_protocols;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = long_simple_protocol_mpst, long_simple_protocol_binary, long_simple_protocol_crossbeam
+    targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
 }
 criterion_main!(long_five_empty_simple_protocols);

@@ -4515,8 +4515,8 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 static SIZE: i64 = 100;
 
-fn long_simple_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("long twenty cancel protocol MPST {}", SIZE), |b| {
+fn mesh_protocol_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("mesh twenty cancel protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
@@ -4529,6 +4529,6 @@ criterion_group! {
     name = mesh_twenty_protocol;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = long_simple_protocol_mpst
+    targets = mesh_protocol_mpst
 }
 criterion_main!(mesh_twenty_protocol);
