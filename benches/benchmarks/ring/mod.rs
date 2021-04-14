@@ -7,3 +7,4 @@ pub mod ring_seven;
 pub mod ring_six;
 pub mod ring_ten;
 pub mod ring_three;
+pub mod ring_twenty;
