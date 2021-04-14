@@ -34,7 +34,7 @@ harness = false
 debug = true
 
 [dependencies]
-crossbeam-channel = "0.5.0"
+crossbeam-channel = "0.5.1"
 either = "1.6.1"
 rand = "0.8.3"
 # dot = "0.1.4"
@@ -44,12 +44,12 @@ mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "
 anyhow = "1"
 hyper = { version = "0.14", features = ["full"] }
 hyper-tls = "0.5.0"
-tokio = { version = "1", features = ["full"] }
-futures = "0.3.13"
+tokio = { version = "1.5.0", features = ["full"] }
+futures = "0.3.14"
 
 [dev-dependencies]
 criterion = { version = "0.3.4", features=["html_reports"] }
-trybuild = "1.0.41"
+trybuild = "1.0.42"
 
 [badges]
 maintenance = { status = "actively-developed" }

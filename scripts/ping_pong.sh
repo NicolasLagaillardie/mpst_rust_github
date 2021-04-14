@@ -4,8 +4,8 @@ set -e
 
 next=0
 
-# Run over 1000 times
-for i in {1..1000}
+# Run over 100 times
+for i in {1..100}
 do
     cargo bench --bench ping_pong -- --verbose 
     next=$(($i+1))
