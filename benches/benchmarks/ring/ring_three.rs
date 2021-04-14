@@ -71,7 +71,6 @@ type NameB = RoleB<RoleEnd>;
 type NameC = RoleC<RoleEnd>;
 
 // Types
-// Roles
 // A
 enum Branching0fromCtoA {
     Forward(SessionMpstThree<Send<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),

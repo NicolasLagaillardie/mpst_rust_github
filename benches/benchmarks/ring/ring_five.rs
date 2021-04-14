@@ -99,12 +99,6 @@ type NameD = RoleD<RoleEnd>;
 type NameE = RoleE<RoleEnd>;
 
 // Types
-// Roles
-type R2A<R> = RoleA<RoleA<R>>;
-type R2B<R> = RoleB<RoleB<R>>;
-type R2C<R> = RoleC<RoleC<R>>;
-type R2D<R> = RoleD<RoleD<R>>;
-type R2E<R> = RoleE<RoleE<R>>;
 // A
 enum Branching0fromEtoA {
     Forward(SessionMpstFive<Send<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),

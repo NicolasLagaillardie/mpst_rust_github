@@ -47,4 +47,6 @@ criterion_main! {
     benchmarks::ring::ring_four::ring_four,
     benchmarks::ring::ring_five::ring_five,
     benchmarks::ring::ring_six::ring_six,
+    benchmarks::ring::ring_seven::ring_seven,
+    benchmarks::ring::ring_eight::ring_eight,
 }
