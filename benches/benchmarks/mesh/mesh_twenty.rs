@@ -4582,9 +4582,9 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = mesh_twenty_protocol;
+    name = mesh_twenty;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
 }
-criterion_main!(mesh_twenty_protocol);
+criterion_main!(mesh_twenty);

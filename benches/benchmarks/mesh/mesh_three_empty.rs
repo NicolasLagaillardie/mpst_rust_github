@@ -346,9 +346,9 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = long_three_empty_simple_protocols;
+    name = mesh_three_empty;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
 }
-criterion_main!(long_three_empty_simple_protocols);
+criterion_main!(mesh_three_empty);

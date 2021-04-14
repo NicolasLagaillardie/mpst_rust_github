@@ -291,9 +291,9 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = mesh_four_protocol;
+    name = mesh_four;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = mesh_protocol_mpst
 }
-criterion_main!(mesh_four_protocol);
+criterion_main!(mesh_four);

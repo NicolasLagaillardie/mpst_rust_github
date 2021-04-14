@@ -31,41 +31,29 @@ create_multiple_normal_role_short!(A, B, C, D, E);
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
-    send_mpst_a_to_b, RoleB, 1 |
-    send_mpst_a_to_c, RoleC, 2 |
-    send_mpst_a_to_d, RoleD, 3 |
-    send_mpst_a_to_e, RoleE, 4 | =>
+    send_mpst_a_to_b, RoleB, 1 | =>
     RoleA, SessionMpstFive, 5
 );
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 |
-    send_mpst_b_to_c, RoleC, 2 |
-    send_mpst_b_to_d, RoleD, 3 |
-    send_mpst_b_to_e, RoleE, 4 | =>
+    send_mpst_b_to_c, RoleC, 2 | =>
     RoleB, SessionMpstFive, 5
 );
 // C
 create_send_mpst_session_bundle!(
-    send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_b, RoleB, 2 |
-    send_mpst_c_to_d, RoleD, 3 |
-    send_mpst_c_to_e, RoleE, 4 | =>
+    send_mpst_c_to_d, RoleD, 3 | =>
     RoleC, SessionMpstFive, 5
 );
 // D
 create_send_mpst_session_bundle!(
-    send_mpst_d_to_a, RoleA, 1 |
-    send_mpst_d_to_b, RoleB, 2 |
     send_mpst_d_to_c, RoleC, 3 |
     send_mpst_d_to_e, RoleE, 4 | =>
     RoleD, SessionMpstFive, 5
 );
 // E
 create_send_mpst_session_bundle!(
-    send_mpst_e_to_a, RoleA, 1 |
-    send_mpst_e_to_b, RoleB, 2 |
-    send_mpst_e_to_c, RoleC, 3 |
     send_mpst_e_to_d, RoleD, 4 | =>
     RoleE, SessionMpstFive, 5
 );
@@ -74,8 +62,6 @@ create_send_mpst_session_bundle!(
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 |
-    recv_mpst_a_from_c, RoleC, 2 |
-    recv_mpst_a_from_d, RoleD, 3 |
     recv_mpst_a_from_e, RoleE, 4 | =>
     RoleA, SessionMpstFive, 5
 );
@@ -83,13 +69,11 @@ create_recv_mpst_session_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 |
     recv_mpst_b_from_c, RoleC, 2 |
-    recv_mpst_b_from_d, RoleD, 3 |
     recv_mpst_b_from_e, RoleE, 4 | =>
     RoleB, SessionMpstFive, 5
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_b, RoleB, 2 |
     recv_mpst_c_from_d, RoleD, 3 |
     recv_mpst_c_from_e, RoleE, 4 | =>
@@ -97,17 +81,12 @@ create_recv_mpst_session_bundle!(
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_from_a, RoleA, 1 |
-    recv_mpst_d_from_b, RoleB, 2 |
     recv_mpst_d_from_c, RoleC, 3 |
     recv_mpst_d_from_e, RoleE, 4 | =>
     RoleD, SessionMpstFive, 5
 );
 // E
 create_recv_mpst_session_bundle!(
-    recv_mpst_e_from_a, RoleA, 1 |
-    recv_mpst_e_from_b, RoleB, 2 |
-    recv_mpst_e_from_c, RoleC, 3 |
     recv_mpst_e_from_d, RoleD, 4 | =>
     RoleE, SessionMpstFive, 5
 );
@@ -120,87 +99,108 @@ type NameD = RoleD<RoleEnd>;
 type NameE = RoleE<RoleEnd>;
 
 // Types
-// Send/Recv
-type RS = Recv<(), Send<(), End>>;
-type SR = Send<(), Recv<(), End>>;
-// Roles
-type R2A<R> = RoleA<RoleA<R>>;
-type R2B<R> = RoleB<RoleB<R>>;
-type R2C<R> = RoleC<RoleC<R>>;
-type R2D<R> = RoleD<RoleD<R>>;
-type R2E<R> = RoleE<RoleE<R>>;
 // A
 enum Branching0fromEtoA {
-    More(
-        SessionMpstFive<
-            RS,
-            RS,
-            RS,
-            Recv<(), Send<(), RecursAtoE>>,
-            R2E<R2B<R2C<R2D<RoleE<RoleEnd>>>>>,
-            NameA,
-        >,
-    ),
+    Forward(SessionMpstFive<Send<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),
+    Backward(SessionMpstFive<Recv<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoE = Recv<Branching0fromEtoA, End>;
+type RecursAtoE = <Choose0fromEtoA as Session>::Dual;
 // B
 enum Branching0fromEtoB {
-    More(
+    Forward(
         SessionMpstFive<
-            SR,
-            RS,
-            RS,
-            Recv<(), Send<(), RecursBtoE>>,
-            R2E<R2A<R2C<R2D<RoleE<RoleEnd>>>>>,
+            Recv<(), End>,
+            Send<(), End>,
+            End,
+            RecursBtoE,
+            RoleA<RoleC<RoleE<RoleEnd>>>,
+            NameB,
+        >,
+    ),
+    Backward(
+        SessionMpstFive<
+            Send<(), End>,
+            Recv<(), End>,
+            End,
+            RecursBtoE,
+            RoleC<RoleA<RoleE<RoleEnd>>>,
             NameB,
         >,
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoE = Recv<Branching0fromEtoB, End>;
+type RecursBtoE = <Choose0fromEtoB as Session>::Dual;
 // C
 enum Branching0fromEtoC {
-    More(
+    Forward(
         SessionMpstFive<
-            SR,
-            SR,
-            RS,
-            Recv<(), Send<(), RecursCtoE>>,
-            R2E<R2A<R2B<R2D<RoleE<RoleEnd>>>>>,
+            End,
+            Recv<(), End>,
+            Send<(), End>,
+            RecursCtoE,
+            RoleB<RoleD<RoleE<RoleEnd>>>,
+            NameC,
+        >,
+    ),
+    Backward(
+        SessionMpstFive<
+            End,
+            Send<(), End>,
+            Recv<(), End>,
+            RecursCtoE,
+            RoleD<RoleB<RoleE<RoleEnd>>>,
             NameC,
         >,
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoE = Recv<Branching0fromEtoC, End>;
+type RecursCtoE = <Choose0fromEtoC as Session>::Dual;
 // D
 enum Branching0fromEtoD {
-    More(
+    Forward(
         SessionMpstFive<
-            SR,
-            SR,
-            SR,
-            Recv<(), Send<(), RecursDtoE>>,
-            R2E<R2A<R2B<R2C<RoleE<RoleEnd>>>>>,
+            End,
+            End,
+            Recv<(), End>,
+            Send<(), RecursDtoE>,
+            RoleC<RoleE<RoleE<RoleEnd>>>,
+            NameD,
+        >,
+    ),
+    Backward(
+        SessionMpstFive<
+            End,
+            End,
+            Send<(), End>,
+            Recv<(), RecursDtoE>,
+            RoleE<RoleC<RoleE<RoleEnd>>>,
             NameD,
         >,
     ),
     Done(SessionMpstFive<End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoE = Recv<Branching0fromEtoD, End>;
+type RecursDtoE = <Choose0fromEtoD as Session>::Dual;
 // E
 type Choose0fromEtoA = Send<Branching0fromEtoA, End>;
 type Choose0fromEtoB = Send<Branching0fromEtoB, End>;
 type Choose0fromEtoC = Send<Branching0fromEtoC, End>;
 type Choose0fromEtoD = Send<Branching0fromEtoD, End>;
 type EndpointDoneE = SessionMpstFive<End, End, End, End, RoleEnd, NameE>;
-type EndpointMoreE = SessionMpstFive<
-    Send<(), Recv<(), Choose0fromEtoA>>,
-    Send<(), Recv<(), Choose0fromEtoB>>,
-    Send<(), Recv<(), Choose0fromEtoC>>,
-    Send<(), Recv<(), Choose0fromEtoD>>,
-    R2A<R2B<R2C<R2D<RoleBroadcast>>>>,
+type EndpointForwardE = SessionMpstFive<
+    Choose0fromEtoA,
+    Choose0fromEtoB,
+    Choose0fromEtoC,
+    Recv<(), Choose0fromEtoD>,
+    RoleD<RoleBroadcast>,
+    NameE,
+>;
+type EndpointBackwardE = SessionMpstFive<
+    Choose0fromEtoA,
+    Choose0fromEtoB,
+    Choose0fromEtoC,
+    Send<(), Choose0fromEtoD>,
+    RoleD<RoleBroadcast>,
     NameE,
 >;
 
@@ -219,17 +219,14 @@ type EndpointE = SessionMpstFive<
 >;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
-    done_from_e_to_all, more_from_e_to_all, =>
-    Done, More, =>
-    EndpointDoneE, EndpointMoreE, =>
+    done_from_e_to_all, forward_from_e_to_all, backward_from_e_to_all, =>
+    Done, Forward, Backward, =>
+    EndpointDoneE, EndpointForwardE, EndpointBackwardE, =>
     Branching0fromEtoA,
     Branching0fromEtoB,
     Branching0fromEtoC,
     Branching0fromEtoD, =>
-    RoleA,
-    RoleB,
-    RoleC,
-    RoleD, =>
+    RoleA, RoleB, RoleC, RoleD, =>
     RoleE, SessionMpstFive, 5, 5
 );
 
@@ -238,15 +235,12 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         Branching0fromEtoA::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromEtoA::More(s) => {
-            let (_, s) = recv_mpst_a_from_e(s)?;
-            let s = send_mpst_a_to_e((), s);
-            let (_, s) = recv_mpst_a_from_b(s)?;
+        Branching0fromEtoA::Forward(s) => {
             let s = send_mpst_a_to_b((), s);
-            let (_, s) = recv_mpst_a_from_c(s)?;
-            let s = send_mpst_a_to_c((), s);
-            let (_, s) = recv_mpst_a_from_d(s)?;
-            let s = send_mpst_a_to_d((), s);
+            endpoint_a(s)
+        },
+        Branching0fromEtoA::Backward(s) => {
+            let (_, s) = recv_mpst_a_from_b(s)?;
             endpoint_a(s)
         },
     })
@@ -257,15 +251,14 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         Branching0fromEtoB::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromEtoB::More(s) => {
-            let (_, s) = recv_mpst_b_from_e(s)?;
-            let s = send_mpst_b_to_e((), s);
-            let s = send_mpst_b_to_a((), s);
-            let (_, s) = recv_mpst_b_from_a(s)?;
-            let (_, s) = recv_mpst_b_from_c(s)?;
+        Branching0fromEtoB::Forward(s) => {
+            let ((), s) = recv_mpst_b_from_a(s)?;
             let s = send_mpst_b_to_c((), s);
-            let (_, s) = recv_mpst_b_from_d(s)?;
-            let s = send_mpst_b_to_d((), s);
+            endpoint_b(s)
+        },
+        Branching0fromEtoB::Backward(s) => {
+            let ((), s) = recv_mpst_b_from_c(s)?;
+            let s = send_mpst_b_to_a((), s);
             endpoint_b(s)
         },
     })
@@ -276,15 +269,14 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
         Branching0fromEtoC::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromEtoC::More(s) => {
-            let (_, s) = recv_mpst_c_from_e(s)?;
-            let s = send_mpst_c_to_e((), s);
-            let s = send_mpst_c_to_a((), s);
-            let (_, s) = recv_mpst_c_from_a(s)?;
-            let s = send_mpst_c_to_b((), s);
-            let (_, s) = recv_mpst_c_from_b(s)?;
-            let (_, s) = recv_mpst_c_from_d(s)?;
+        Branching0fromEtoC::Forward(s) => {
+            let ((), s) = recv_mpst_c_from_b(s)?;
             let s = send_mpst_c_to_d((), s);
+            endpoint_c(s)
+        },
+        Branching0fromEtoC::Backward(s) => {
+            let ((), s) = recv_mpst_c_from_d(s)?;
+            let s = send_mpst_c_to_b((), s);
             endpoint_c(s)
         },
     })
@@ -295,15 +287,14 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
         Branching0fromEtoD::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromEtoD::More(s) => {
-            let (_, s) = recv_mpst_d_from_e(s)?;
+        Branching0fromEtoD::Forward(s) => {
+            let ((), s) = recv_mpst_d_from_c(s)?;
             let s = send_mpst_d_to_e((), s);
-            let s = send_mpst_d_to_a((), s);
-            let (_, s) = recv_mpst_d_from_a(s)?;
-            let s = send_mpst_d_to_b((), s);
-            let (_, s) = recv_mpst_d_from_b(s)?;
+            endpoint_d(s)
+        },
+        Branching0fromEtoD::Backward(s) => {
+            let ((), s) = recv_mpst_d_from_e(s)?;
             let s = send_mpst_d_to_c((), s);
-            let (_, s) = recv_mpst_d_from_c(s)?;
             endpoint_d(s)
         },
     })
@@ -320,17 +311,17 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         }
-        i => {
-            let s = more_from_e_to_all(s);
+        i if i % 2 == 0 => {
+            let s = forward_from_e_to_all(s);
 
-            let s = send_mpst_e_to_a((), s);
-            let (_, s) = recv_mpst_e_from_a(s)?;
-            let s = send_mpst_e_to_b((), s);
-            let (_, s) = recv_mpst_e_from_b(s)?;
-            let s = send_mpst_e_to_c((), s);
-            let (_, s) = recv_mpst_e_from_c(s)?;
-            let s = send_mpst_e_to_d((), s);
             let (_, s) = recv_mpst_e_from_d(s)?;
+
+            recurs_e(s, i - 1)
+        }
+        i => {
+            let s = backward_from_e_to_all(s);
+
+            let s = send_mpst_e_to_d((), s);
 
             recurs_e(s, i - 1)
         }
@@ -358,7 +349,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 /////////////////////////
 // A
 enum BinaryA {
-    More(Recv<(), Send<(), RecursA>>),
+    Forward(Recv<(), Send<(), RecursA>>),
     Done(End),
 }
 type RecursA = Recv<BinaryA, End>;
@@ -367,7 +358,7 @@ fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>> {
         BinaryA::Done(s) => {
             close(s)
         },
-        BinaryA::More(s) => {
+        BinaryA::Forward(s) => {
             let (_, s) = recv(s)?;
             let s = send((), s);
             binary_a_to_b(s)
@@ -387,7 +378,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
-    for _ in 0..10 {
+    for _ in 0..4 {
         let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(black_box(binary_a_to_b));
 
         threads.push(thread);
@@ -398,7 +389,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         for _ in 0..SIZE {
             sessions = sessions
                 .into_iter()
-                .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
+                .map(|s| binary_b_to_a(choose!(BinaryA::Forward, s)).unwrap())
                 .collect::<Vec<_>>();
         }
 
@@ -428,7 +419,7 @@ type Sending = crossbeam_channel::Sender<()>;
 fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
-    for _ in 0..10 {
+    for _ in 0..4 {
         let main = spawn(move || {
             for _ in 0..SIZE {
                 let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
@@ -489,35 +480,35 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 0;
+static SIZE: i64 = 100;
 
-fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh five empty protocol MPST {}", SIZE), |b| {
+fn ring_five_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("ring five empty protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
 
-fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh five empty protocol binary {}", SIZE), |b| {
+fn ring_five_binary(c: &mut Criterion) {
+    c.bench_function(&format!("ring five empty protocol binary {}", SIZE), |b| {
         b.iter(|| all_binaries())
     });
 }
 
-fn mesh_protocol_crossbeam(c: &mut Criterion) {
+fn ring_five_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh five empty protocol crossbeam {}", SIZE),
+        &format!("ring five empty protocol crossbeam {}", SIZE),
         |b| b.iter(|| all_crossbeam()),
     );
 }
 
 fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(60, 0))
+    Criterion::default().measurement_time(Duration::new(1800, 0))
 }
 
 criterion_group! {
-    name = mesh_five_empty;
+    name = ring_five;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
+    targets = ring_five_mpst, ring_five_binary, ring_five_crossbeam
 }
-criterion_main!(mesh_five_empty);
+criterion_main!(ring_five);

@@ -569,9 +569,9 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = mesh_seven_protocol;
+    name = mesh_seven;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = mesh_protocol_mpst
 }
-criterion_main!(mesh_seven_protocol);
+criterion_main!(mesh_seven);

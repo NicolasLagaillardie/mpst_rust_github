@@ -416,9 +416,9 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = long_five_protocols;
+    name = long_five_protocol;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = long_protocol_mpst, long_protocol_binary
 }
-criterion_main!(long_five_protocols);
+criterion_main!(long_five_protocol);
