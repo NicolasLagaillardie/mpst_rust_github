@@ -26,6 +26,10 @@ path = "tests/main.rs"
 name = "main"
 harness = false
 
+[[bench]]
+name = "ping_pong"
+harness = false
+
 [profile.release]
 debug = true
 
