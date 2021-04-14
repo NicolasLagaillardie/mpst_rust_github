@@ -1343,9 +1343,9 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = long_eleven_simple_protocols;
+    name = mesh_eleven_protocol;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = long_simple_protocol_mpst, long_simple_protocol_binary, long_simple_protocol_crossbeam
 }
-criterion_main!(long_eleven_simple_protocols);
+criterion_main!(mesh_eleven_protocol);
