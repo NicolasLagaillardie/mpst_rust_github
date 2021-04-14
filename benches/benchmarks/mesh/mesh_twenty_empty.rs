@@ -4560,10 +4560,9 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 0;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh twenty empty protocol MPST {}", SIZE),
-        |b| b.iter(|| all_mpst()),
-    );
+    c.bench_function(&format!("mesh twenty empty protocol MPST {}", SIZE), |b| {
+        b.iter(|| all_mpst())
+    });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {

@@ -323,17 +323,15 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 0;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh three empty protocol MPST {}", SIZE),
-        |b| b.iter(|| all_mpst()),
-    );
+    c.bench_function(&format!("mesh three empty protocol MPST {}", SIZE), |b| {
+        b.iter(|| all_mpst())
+    });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh three empty protocol binary {}", SIZE),
-        |b| b.iter(|| all_binaries()),
-    );
+    c.bench_function(&format!("mesh three empty protocol binary {}", SIZE), |b| {
+        b.iter(|| all_binaries())
+    });
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
