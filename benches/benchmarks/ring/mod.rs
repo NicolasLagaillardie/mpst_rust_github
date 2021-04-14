@@ -1,4 +1,5 @@
 pub mod ring_eight;
+pub mod ring_eleven;
 pub mod ring_five;
 pub mod ring_four;
 pub mod ring_nine;
