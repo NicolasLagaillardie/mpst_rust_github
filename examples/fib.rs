@@ -79,7 +79,7 @@ type EndpointA<N> = SessionMpstTwo<Choose0fromAtoB<N>, RoleBroadcast, NameA>;
 type EndpointB<N> = SessionMpstTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
     recurs_a(s, SIZE, 1)
 }
 
@@ -117,7 +117,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
     }
 }
 
-fn simple_three_endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
     recurs_b(s, 0)
 }
 
@@ -135,7 +135,7 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_b) = fork_mpst(simple_three_endpoint_a, simple_three_endpoint_b);
+    let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
     thread_a.join()?;
     thread_b.join()?;

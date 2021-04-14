@@ -127,7 +127,7 @@ type EndpointS<N> = SessionMpstThree<
 >;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_s(random(), s);
     let (_empty2, s) = recv_mpst_a_from_s(s)?;
     let s = send_mpst_a_to_c(random(), s);
@@ -142,7 +142,7 @@ fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let (_empty3, s) = recv_mpst_c_from_s(s)?;
     let (_empty4, s) = recv_mpst_c_from_a(s)?;
 
@@ -182,7 +182,7 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let (_empty1, s) = recv_mpst_s_from_a(s)?;
     let s = send_mpst_s_to_a(random(), s);
     let s = send_mpst_s_to_c(random(), s);
@@ -200,9 +200,9 @@ fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(
-        black_box(simple_three_endpoint_a),
-        black_box(simple_three_endpoint_c),
-        black_box(simple_three_endpoint_s),
+        black_box(endpoint_a),
+        black_box(endpoint_c),
+        black_box(endpoint_s),
     );
 
     thread_a.join()?;

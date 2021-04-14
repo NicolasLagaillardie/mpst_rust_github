@@ -3373,7 +3373,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     RoleT, SessionMpstTwenty, 20, 20
 );
 
-fn simple_twenty_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_t, {
         Branching0fromTtoA::Done(s) => {
             close_mpst_multi(s)
@@ -3417,11 +3417,11 @@ fn simple_twenty_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_r((), s);
             let (_, s) = recv_mpst_a_from_s(s)?;
             let s = send_mpst_a_to_s((), s);
-            simple_twenty_endpoint_a(s)
+            endpoint_a(s)
         }, })
 }
 
-fn simple_twenty_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_t, {
         Branching0fromTtoB::Done(s) => {
             close_mpst_multi(s)
@@ -3465,11 +3465,11 @@ fn simple_twenty_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_b_to_r((), s);
             let (_, s) = recv_mpst_b_from_s(s)?;
             let s = send_mpst_b_to_s((), s);
-            simple_twenty_endpoint_b(s)
+            endpoint_b(s)
         }, })
 }
 
-fn simple_twenty_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_t, {
         Branching0fromTtoC::Done(s) => {
             close_mpst_multi(s)
@@ -3513,11 +3513,11 @@ fn simple_twenty_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_c_to_r((), s);
             let (_, s) = recv_mpst_c_from_s(s)?;
             let s = send_mpst_c_to_s((), s);
-            simple_twenty_endpoint_c(s)
+            endpoint_c(s)
         }, })
 }
 
-fn simple_twenty_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_from_t, {
         Branching0fromTtoD::Done(s) => {
             close_mpst_multi(s)
@@ -3561,11 +3561,11 @@ fn simple_twenty_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_d_to_r((), s);
             let (_, s) = recv_mpst_d_from_s(s)?;
             let s = send_mpst_d_to_s((), s);
-            simple_twenty_endpoint_d(s)
+            endpoint_d(s)
         }, })
 }
 
-fn simple_twenty_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_from_t, {
         Branching0fromTtoE::Done(s) => {
             close_mpst_multi(s)
@@ -3609,11 +3609,11 @@ fn simple_twenty_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_e_to_r((), s);
             let (_, s) = recv_mpst_e_from_s(s)?;
             let s = send_mpst_e_to_s((), s);
-            simple_twenty_endpoint_e(s)
+            endpoint_e(s)
         }, })
 }
 
-fn simple_twenty_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
+fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_from_t, {
         Branching0fromTtoF::Done(s) => {
             close_mpst_multi(s)
@@ -3657,11 +3657,11 @@ fn simple_twenty_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_f_to_r((), s);
             let (_, s) = recv_mpst_f_from_s(s)?;
             let s = send_mpst_f_to_s((), s);
-            simple_twenty_endpoint_f(s)
+            endpoint_f(s)
         }, })
 }
 
-fn simple_twenty_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
+fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_from_t, {
         Branching0fromTtoG::Done(s) => {
             close_mpst_multi(s)
@@ -3705,11 +3705,11 @@ fn simple_twenty_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_g_to_r((), s);
             let (_, s) = recv_mpst_g_from_s(s)?;
             let s = send_mpst_g_to_s((), s);
-            simple_twenty_endpoint_g(s)
+            endpoint_g(s)
         }, })
 }
 
-fn simple_twenty_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
+fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_from_t, {
         Branching0fromTtoH::Done(s) => {
             close_mpst_multi(s)
@@ -3753,11 +3753,11 @@ fn simple_twenty_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_h_to_r((), s);
             let (_, s) = recv_mpst_h_from_s(s)?;
             let s = send_mpst_h_to_s((), s);
-            simple_twenty_endpoint_h(s)
+            endpoint_h(s)
         }, })
 }
 
-fn simple_twenty_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
+fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_from_t, {
         Branching0fromTtoI::Done(s) => {
             close_mpst_multi(s)
@@ -3801,11 +3801,11 @@ fn simple_twenty_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_i_to_r((), s);
             let (_, s) = recv_mpst_i_from_s(s)?;
             let s = send_mpst_i_to_s((), s);
-            simple_twenty_endpoint_i(s)
+            endpoint_i(s)
         }, })
 }
 
-fn simple_twenty_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
+fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_j_from_t, {
         Branching0fromTtoJ::Done(s) => {
             close_mpst_multi(s)
@@ -3849,11 +3849,11 @@ fn simple_twenty_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_j_to_r((), s);
             let (_, s) = recv_mpst_j_from_s(s)?;
             let s = send_mpst_j_to_s((), s);
-            simple_twenty_endpoint_j(s)
+            endpoint_j(s)
         }, })
 }
 
-fn simple_twenty_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
+fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_k_from_t, {
         Branching0fromTtoK::Done(s) => {
             close_mpst_multi(s)
@@ -3897,11 +3897,11 @@ fn simple_twenty_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_k_to_r((), s);
             let (_, s) = recv_mpst_k_from_s(s)?;
             let s = send_mpst_k_to_s((), s);
-            simple_twenty_endpoint_k(s)
+            endpoint_k(s)
         }, })
 }
 
-fn simple_twenty_endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
+fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_l_from_t, {
         Branching0fromTtoL::Done(s) => {
             close_mpst_multi(s)
@@ -3945,11 +3945,11 @@ fn simple_twenty_endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_l_to_r((), s);
             let (_, s) = recv_mpst_l_from_s(s)?;
             let s = send_mpst_l_to_s((), s);
-            simple_twenty_endpoint_l(s)
+            endpoint_l(s)
         }, })
 }
 
-fn simple_twenty_endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
+fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_m_from_t, {
         Branching0fromTtoM::Done(s) => {
             close_mpst_multi(s)
@@ -3993,11 +3993,11 @@ fn simple_twenty_endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_m_to_r((), s);
             let (_, s) = recv_mpst_m_from_s(s)?;
             let s = send_mpst_m_to_s((), s);
-            simple_twenty_endpoint_m(s)
+            endpoint_m(s)
         }, })
 }
 
-fn simple_twenty_endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
+fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_n_from_t, {
         Branching0fromTtoN::Done(s) => {
             close_mpst_multi(s)
@@ -4041,11 +4041,11 @@ fn simple_twenty_endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_n_to_r((), s);
             let (_, s) = recv_mpst_n_from_s(s)?;
             let s = send_mpst_n_to_s((), s);
-            simple_twenty_endpoint_n(s)
+            endpoint_n(s)
         }, })
 }
 
-fn simple_twenty_endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
+fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_o_from_t, {
         Branching0fromTtoO::Done(s) => {
             close_mpst_multi(s)
@@ -4089,11 +4089,11 @@ fn simple_twenty_endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_o_to_r((), s);
             let (_, s) = recv_mpst_o_from_s(s)?;
             let s = send_mpst_o_to_s((), s);
-            simple_twenty_endpoint_o(s)
+            endpoint_o(s)
         }, })
 }
 
-fn simple_twenty_endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
+fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_p_from_t, {
         Branching0fromTtoP::Done(s) => {
             close_mpst_multi(s)
@@ -4137,11 +4137,11 @@ fn simple_twenty_endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_p_to_r((), s);
             let (_, s) = recv_mpst_p_from_s(s)?;
             let s = send_mpst_p_to_s((), s);
-            simple_twenty_endpoint_p(s)
+            endpoint_p(s)
         }, })
 }
 
-fn simple_twenty_endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
+fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_q_from_t, {
         Branching0fromTtoQ::Done(s) => {
             close_mpst_multi(s)
@@ -4185,11 +4185,11 @@ fn simple_twenty_endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_q_to_r((), s);
             let (_, s) = recv_mpst_q_from_s(s)?;
             let s = send_mpst_q_to_s((), s);
-            simple_twenty_endpoint_q(s)
+            endpoint_q(s)
         }, })
 }
 
-fn simple_twenty_endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
+fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_r_from_t, {
         Branching0fromTtoR::Done(s) => {
             close_mpst_multi(s)
@@ -4233,11 +4233,11 @@ fn simple_twenty_endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_r_from_q(s)?;
             let (_, s) = recv_mpst_r_from_s(s)?;
             let s = send_mpst_r_to_s((), s);
-            simple_twenty_endpoint_r(s)
+            endpoint_r(s)
         }, })
 }
 
-fn simple_twenty_endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_t, {
         Branching0fromTtoS::Done(s) => {
             close_mpst_multi(s)
@@ -4281,11 +4281,11 @@ fn simple_twenty_endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_s_from_q(s)?;
             let s = send_mpst_s_to_r((), s);
             let (_, s) = recv_mpst_s_from_r(s)?;
-            simple_twenty_endpoint_s(s)
+            endpoint_s(s)
         }, })
 }
 
-fn simple_twenty_endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
+fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
     recurs_t(s, SIZE)
 }
 
@@ -4365,26 +4365,9 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         thread_s,
         thread_t,
     ) = fork_mpst(
-        simple_twenty_endpoint_a,
-        simple_twenty_endpoint_b,
-        simple_twenty_endpoint_c,
-        simple_twenty_endpoint_d,
-        simple_twenty_endpoint_e,
-        simple_twenty_endpoint_f,
-        simple_twenty_endpoint_g,
-        simple_twenty_endpoint_h,
-        simple_twenty_endpoint_i,
-        simple_twenty_endpoint_j,
-        simple_twenty_endpoint_k,
-        simple_twenty_endpoint_l,
-        simple_twenty_endpoint_m,
-        simple_twenty_endpoint_n,
-        simple_twenty_endpoint_o,
-        simple_twenty_endpoint_p,
-        simple_twenty_endpoint_q,
-        simple_twenty_endpoint_r,
-        simple_twenty_endpoint_s,
-        simple_twenty_endpoint_t,
+        endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f, endpoint_g,
+        endpoint_h, endpoint_i, endpoint_j, endpoint_k, endpoint_l, endpoint_m, endpoint_n,
+        endpoint_o, endpoint_p, endpoint_q, endpoint_r, endpoint_s, endpoint_t,
     );
 
     thread_a.join()?;

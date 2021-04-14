@@ -315,16 +315,16 @@ type EndpointNoneS = SessionMpstTwo<End, RoleEnd, NameS>;
 
 // Functions
 // C
-fn simple_three_endpoint_c(s: EndpointNoneC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointNoneC) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 // S
-fn simple_three_endpoint_s(s: EndpointNoneS) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointNoneS) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
 fn all_mpst() -> Result<(), Box<dyn Error>> {
-    let (thread_c, thread_s) = fork_mpst(simple_three_endpoint_c, simple_three_endpoint_s);
+    let (thread_c, thread_s) = fork_mpst(endpoint_c, endpoint_s);
 
     thread_c.join().unwrap();
     thread_s.join().unwrap();

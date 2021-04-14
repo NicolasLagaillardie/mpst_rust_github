@@ -582,7 +582,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     RoleJ, SessionMpstTen, 10, 10
 );
 
-fn simple_ten_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_j, {
         Branching0fromJtoA::Done(s) => {
             close_mpst_multi(s)
@@ -606,12 +606,12 @@ fn simple_ten_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_h((), s);
             let (_, s) = recv_mpst_a_from_i(s)?;
             let s = send_mpst_a_to_i((), s);
-            simple_ten_endpoint_a(s)
+            endpoint_a(s)
         },
     })
 }
 
-fn simple_ten_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_j, {
         Branching0fromJtoB::Done(s) => {
             close_mpst_multi(s)
@@ -635,12 +635,12 @@ fn simple_ten_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_b_to_h((), s);
             let (_, s) = recv_mpst_b_from_i(s)?;
             let s = send_mpst_b_to_i((), s);
-            simple_ten_endpoint_b(s)
+            endpoint_b(s)
         },
     })
 }
 
-fn simple_ten_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_j, {
         Branching0fromJtoC::Done(s) => {
             close_mpst_multi(s)
@@ -664,12 +664,12 @@ fn simple_ten_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_c_to_h((), s);
             let (_, s) = recv_mpst_c_from_i(s)?;
             let s = send_mpst_c_to_i((), s);
-            simple_ten_endpoint_c(s)
+            endpoint_c(s)
         },
     })
 }
 
-fn simple_ten_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_from_j, {
         Branching0fromJtoD::Done(s) => {
             close_mpst_multi(s)
@@ -693,12 +693,12 @@ fn simple_ten_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_d_to_h((), s);
             let (_, s) = recv_mpst_d_from_i(s)?;
             let s = send_mpst_d_to_i((), s);
-            simple_ten_endpoint_d(s)
+            endpoint_d(s)
         },
     })
 }
 
-fn simple_ten_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_from_j, {
         Branching0fromJtoE::Done(s) => {
             close_mpst_multi(s)
@@ -722,12 +722,12 @@ fn simple_ten_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_e_to_h((), s);
             let (_, s) = recv_mpst_e_from_i(s)?;
             let s = send_mpst_e_to_i((), s);
-            simple_ten_endpoint_e(s)
+            endpoint_e(s)
         },
     })
 }
 
-fn simple_ten_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
+fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_from_j, {
         Branching0fromJtoF::Done(s) => {
             close_mpst_multi(s)
@@ -751,12 +751,12 @@ fn simple_ten_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_f_to_h((), s);
             let (_, s) = recv_mpst_f_from_i(s)?;
             let s = send_mpst_f_to_i((), s);
-            simple_ten_endpoint_f(s)
+            endpoint_f(s)
         },
     })
 }
 
-fn simple_ten_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
+fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_from_j, {
         Branching0fromJtoG::Done(s) => {
             close_mpst_multi(s)
@@ -780,12 +780,12 @@ fn simple_ten_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_g_to_h((), s);
             let (_, s) = recv_mpst_g_from_i(s)?;
             let s = send_mpst_g_to_i((), s);
-            simple_ten_endpoint_g(s)
+            endpoint_g(s)
         },
     })
 }
 
-fn simple_ten_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
+fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_from_j, {
         Branching0fromJtoH::Done(s) => {
             close_mpst_multi(s)
@@ -809,12 +809,12 @@ fn simple_ten_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_h_from_g(s)?;
             let (_, s) = recv_mpst_h_from_i(s)?;
             let s = send_mpst_h_to_i((), s);
-            simple_ten_endpoint_h(s)
+            endpoint_h(s)
         },
     })
 }
 
-fn simple_ten_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
+fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_from_j, {
         Branching0fromJtoI::Done(s) => {
             close_mpst_multi(s)
@@ -838,12 +838,12 @@ fn simple_ten_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_i_from_g(s)?;
             let s = send_mpst_i_to_h((), s);
             let (_, s) = recv_mpst_i_from_h(s)?;
-            simple_ten_endpoint_i(s)
+            endpoint_i(s)
         },
     })
 }
 
-fn simple_ten_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
+fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     recurs_j(s, SIZE)
 }
 
@@ -894,16 +894,16 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         thread_i,
         thread_j,
     ) = fork_mpst(
-        black_box(simple_ten_endpoint_a),
-        black_box(simple_ten_endpoint_b),
-        black_box(simple_ten_endpoint_c),
-        black_box(simple_ten_endpoint_d),
-        black_box(simple_ten_endpoint_e),
-        black_box(simple_ten_endpoint_f),
-        black_box(simple_ten_endpoint_g),
-        black_box(simple_ten_endpoint_h),
-        black_box(simple_ten_endpoint_i),
-        black_box(simple_ten_endpoint_j),
+        black_box(endpoint_a),
+        black_box(endpoint_b),
+        black_box(endpoint_c),
+        black_box(endpoint_d),
+        black_box(endpoint_e),
+        black_box(endpoint_f),
+        black_box(endpoint_g),
+        black_box(endpoint_h),
+        black_box(endpoint_i),
+        black_box(endpoint_j),
     );
 
     thread_a.join()?;

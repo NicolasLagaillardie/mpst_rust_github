@@ -180,7 +180,7 @@
 // );
 
 // // Functions
-// fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+// fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 //     offer_http_mpst!(s, recv_http_a_to_s, {
 //         Branching0fromStoA::Done(s) => {
 //             let https = HttpsConnector::new();
@@ -214,7 +214,7 @@
 //     }
 // }
 
-// fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+// fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 //     offer_http_mpst!(s, recv_http_c_to_s, {
 //         Branching0fromStoC::<i32>::Done(s) => {
 //             let (quit, s, _resp) = recv_http_c_to_s(s, false, ResponseFuture::default())?;
@@ -291,7 +291,7 @@
 //     })
 // }
 
-// fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+// fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 //     let choice = thread_rng().gen_range(1..=6);
 
 //     if choice == 1 {
@@ -330,9 +330,9 @@
 
 // pub fn main() {
 //     let (thread_a, thread_c, thread_s) = fork_mpst(
-//         simple_three_endpoint_a,
-//         simple_three_endpoint_c,
-//         simple_three_endpoint_s,
+//         endpoint_a,
+//         endpoint_c,
+//         endpoint_s,
 //     );
 
 //     assert!(thread_a.join().is_ok());

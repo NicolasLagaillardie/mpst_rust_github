@@ -156,7 +156,7 @@ type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, Name
 type EndpointS<N> = SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleBroadcast, NameS>;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_s, {
         Branching0fromStoA::Done(s) => {
             let (_, s) = recv_mpst_a_from_c(s)?;
@@ -209,7 +209,7 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_s, {
         Branching0fromStoC::<i32>::Done(s) => {
             let (quit, s) = recv_mpst_c_from_s(s)?;
@@ -241,7 +241,7 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
@@ -299,11 +299,7 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_c, thread_s) = fork_mpst(
-        simple_three_endpoint_a,
-        simple_three_endpoint_c,
-        simple_three_endpoint_s,
-    );
+    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
     thread_a.join()?;
     thread_c.join()?;

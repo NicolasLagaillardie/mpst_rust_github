@@ -34,6 +34,8 @@ pub mod long_simple_twenty;
 pub mod long_simple_twenty_empty;
 pub mod o_auth;
 pub mod ping_pong;
+pub mod ring_five;
+pub mod ring_four;
 pub mod ring_three;
 pub mod simple_voting_three;
 pub mod three_buyer;

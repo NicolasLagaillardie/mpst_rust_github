@@ -107,7 +107,7 @@ type EndpointB<N> = SessionMpstThree<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
     recurs_a(s, SIZE, 1)
 }
 
@@ -149,7 +149,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
     }
 }
 
-fn simple_three_endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
     recurs_b(s, 0)
 }
 
@@ -166,22 +166,22 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_a, {
         Branching0fromAtoC::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromAtoC::More(s) => {
-            simple_three_endpoint_c(s)
+            endpoint_c(s)
         },
     })
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        black_box(simple_three_endpoint_a),
-        black_box(simple_three_endpoint_b),
-        black_box(simple_three_endpoint_c),
+        black_box(endpoint_a),
+        black_box(endpoint_b),
+        black_box(endpoint_c),
     );
 
     thread_a.join()?;

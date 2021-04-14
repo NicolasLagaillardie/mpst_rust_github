@@ -74,14 +74,14 @@ type NameC = RoleC<RoleEnd>;
 // Roles
 // A
 enum Branching0fromCtoA {
-    Foward(SessionMpstThree<Send<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
+    Forward(SessionMpstThree<Send<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
     Backward(SessionMpstThree<Recv<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
     Done(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = <Choose0fromCtoA as Session>::Dual;
 // B
 enum Branching0fromCtoB {
-    Foward(
+    Forward(
         SessionMpstThree<Recv<(), End>, Send<(), RecursBtoC>, RoleA<RoleC<RoleC<RoleEnd>>>, NameB>,
     ),
     Backward(
@@ -94,7 +94,7 @@ type RecursBtoC = <Choose0fromCtoB as Session>::Dual;
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
 type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
-type EndpointFowardC =
+type EndpointForwardC =
     SessionMpstThree<Choose0fromCtoA, Recv<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
 type EndpointBackwardC =
     SessionMpstThree<Choose0fromCtoA, Send<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
@@ -106,48 +106,48 @@ type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcas
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, forward_from_c_to_all, backward_from_c_to_all, =>
-    Done, Foward, Backward, =>
-    EndpointDoneC, EndpointFowardC, EndpointBackwardC, =>
+    Done, Forward, Backward, =>
+    EndpointDoneC, EndpointForwardC, EndpointBackwardC, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
     RoleA, RoleB, =>
     RoleC, SessionMpstThree, 3, 3
 );
 
-fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromCtoA::Foward(s) => {
+        Branching0fromCtoA::Forward(s) => {
             let s = send_mpst_a_to_b((), s);
-            simple_three_endpoint_a(s)
+            endpoint_a(s)
         },
         Branching0fromCtoA::Backward(s) => {
             let (_, s) = recv_mpst_a_from_b(s)?;
-            simple_three_endpoint_a(s)
+            endpoint_a(s)
         },
     })
 }
 
-fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromCtoB::Foward(s) => {
+        Branching0fromCtoB::Forward(s) => {
             let ((), s) = recv_mpst_b_from_a(s)?;
             let s = send_mpst_b_to_c((), s);
-            simple_three_endpoint_b(s)
+            endpoint_b(s)
         },
         Branching0fromCtoB::Backward(s) => {
             let ((), s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_a((), s);
-            simple_three_endpoint_b(s)
+            endpoint_b(s)
         },
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     recurs_c(s, SIZE)
 }
 
@@ -177,9 +177,9 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        black_box(simple_three_endpoint_a),
-        black_box(simple_three_endpoint_b),
-        black_box(simple_three_endpoint_c),
+        black_box(endpoint_a),
+        black_box(endpoint_b),
+        black_box(endpoint_c),
     );
 
     thread_a.join()?;

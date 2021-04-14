@@ -778,7 +778,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     RoleK, SessionMpstEleven, 11, 11
 );
 
-fn simple_eleven_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_k, {
         Branching0fromKtoA::Done(s) => {
             close_mpst_multi(s)
@@ -804,12 +804,12 @@ fn simple_eleven_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_i((), s);
             let (_, s) = recv_mpst_a_from_j(s)?;
             let s = send_mpst_a_to_j((), s);
-            simple_eleven_endpoint_a(s)
+            endpoint_a(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_k, {
         Branching0fromKtoB::Done(s) => {
             close_mpst_multi(s)
@@ -835,12 +835,12 @@ fn simple_eleven_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_b_to_i((), s);
             let (_, s) = recv_mpst_b_from_j(s)?;
             let s = send_mpst_b_to_j((), s);
-            simple_eleven_endpoint_b(s)
+            endpoint_b(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_k, {
         Branching0fromKtoC::Done(s) => {
             close_mpst_multi(s)
@@ -866,12 +866,12 @@ fn simple_eleven_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_c_to_i((), s);
             let (_, s) = recv_mpst_c_from_j(s)?;
             let s = send_mpst_c_to_j((), s);
-            simple_eleven_endpoint_c(s)
+            endpoint_c(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_d_from_k, {
         Branching0fromKtoD::Done(s) => {
             close_mpst_multi(s)
@@ -897,12 +897,12 @@ fn simple_eleven_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_d_to_i((), s);
             let (_, s) = recv_mpst_d_from_j(s)?;
             let s = send_mpst_d_to_j((), s);
-            simple_eleven_endpoint_d(s)
+            endpoint_d(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_e_from_k, {
         Branching0fromKtoE::Done(s) => {
             close_mpst_multi(s)
@@ -928,12 +928,12 @@ fn simple_eleven_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_e_to_i((), s);
             let (_, s) = recv_mpst_e_from_j(s)?;
             let s = send_mpst_e_to_j((), s);
-            simple_eleven_endpoint_e(s)
+            endpoint_e(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
+fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_f_from_k, {
         Branching0fromKtoF::Done(s) => {
             close_mpst_multi(s)
@@ -959,12 +959,12 @@ fn simple_eleven_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_f_to_i((), s);
             let (_, s) = recv_mpst_f_from_j(s)?;
             let s = send_mpst_f_to_j((), s);
-            simple_eleven_endpoint_f(s)
+            endpoint_f(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
+fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_g_from_k, {
         Branching0fromKtoG::Done(s) => {
             close_mpst_multi(s)
@@ -990,12 +990,12 @@ fn simple_eleven_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_g_to_i((), s);
             let (_, s) = recv_mpst_g_from_j(s)?;
             let s = send_mpst_g_to_j((), s);
-            simple_eleven_endpoint_g(s)
+            endpoint_g(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
+fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_h_from_k, {
         Branching0fromKtoH::Done(s) => {
             close_mpst_multi(s)
@@ -1021,12 +1021,12 @@ fn simple_eleven_endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_h_to_i((), s);
             let (_, s) = recv_mpst_h_from_j(s)?;
             let s = send_mpst_h_to_j((), s);
-            simple_eleven_endpoint_h(s)
+            endpoint_h(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
+fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_i_from_k, {
         Branching0fromKtoI::Done(s) => {
             close_mpst_multi(s)
@@ -1052,12 +1052,12 @@ fn simple_eleven_endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_i_from_h(s)?;
             let (_, s) = recv_mpst_i_from_j(s)?;
             let s = send_mpst_i_to_j((), s);
-            simple_eleven_endpoint_i(s)
+            endpoint_i(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
+fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_j_from_k, {
         Branching0fromKtoJ::Done(s) => {
             close_mpst_multi(s)
@@ -1083,12 +1083,12 @@ fn simple_eleven_endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_j_from_h(s)?;
             let s = send_mpst_j_to_i((), s);
             let (_, s) = recv_mpst_j_from_i(s)?;
-            simple_eleven_endpoint_j(s)
+            endpoint_j(s)
         },
     })
 }
 
-fn simple_eleven_endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
+fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     recurs_k(s, SIZE)
 }
 
@@ -1142,17 +1142,8 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         thread_j,
         thread_k,
     ) = fork_mpst(
-        simple_eleven_endpoint_a,
-        simple_eleven_endpoint_b,
-        simple_eleven_endpoint_c,
-        simple_eleven_endpoint_d,
-        simple_eleven_endpoint_e,
-        simple_eleven_endpoint_f,
-        simple_eleven_endpoint_g,
-        simple_eleven_endpoint_h,
-        simple_eleven_endpoint_i,
-        simple_eleven_endpoint_j,
-        simple_eleven_endpoint_k,
+        endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f, endpoint_g,
+        endpoint_h, endpoint_i, endpoint_j, endpoint_k,
     );
 
     thread_a.join()?;

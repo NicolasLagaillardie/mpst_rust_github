@@ -130,7 +130,7 @@ type EndpointC = SessionMpstFive<CtoA, CtoB, CtoD, CtoE, StackC, NameC>;
 type EndpointD = SessionMpstFive<DtoA, DtoB, DtoC, DtoE, StackD, NameD>;
 type EndpointE = SessionMpstFive<EtoA, EtoB, EtoC, EtoD, StackE, NameE>;
 
-fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b((), s);
     let s = send_mpst_a_to_c((), s);
     let s = send_mpst_a_to_d((), s);
@@ -143,7 +143,7 @@ fn simple_five_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c((), s);
     let s = send_mpst_b_to_d((), s);
@@ -156,7 +156,7 @@ fn simple_five_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_c_from_a(s)?;
     let (_, s) = recv_mpst_c_from_b(s)?;
     let s = send_mpst_c_to_d((), s);
@@ -169,7 +169,7 @@ fn simple_five_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_from_a(s)?;
     let (_, s) = recv_mpst_d_from_b(s)?;
     let (_, s) = recv_mpst_d_from_c(s)?;
@@ -182,7 +182,7 @@ fn simple_five_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_e_from_a(s)?;
     let (_, s) = recv_mpst_e_from_b(s)?;
     let (_, s) = recv_mpst_e_from_c(s)?;
@@ -197,11 +197,11 @@ fn simple_five_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_b, thread_c, thread_d, thread_e) = fork_mpst(
-        black_box(simple_five_endpoint_a),
-        black_box(simple_five_endpoint_b),
-        black_box(simple_five_endpoint_c),
-        black_box(simple_five_endpoint_d),
-        black_box(simple_five_endpoint_e),
+        black_box(endpoint_a),
+        black_box(endpoint_b),
+        black_box(endpoint_c),
+        black_box(endpoint_d),
+        black_box(endpoint_e),
     );
 
     thread_a.join()?;

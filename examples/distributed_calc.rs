@@ -105,7 +105,7 @@ type EndpointS<N> = SessionMpstThree<
 >;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Sum(s) => {
             close_mpst_multi(s)
@@ -116,7 +116,7 @@ fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let elt_1 = random();
     let elt_2 = random();
     let s = send_mpst_c_to_s(elt_1, s);
@@ -163,7 +163,7 @@ fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let (elt_1, s) = recv_mpst_s_from_c(s)?;
     let (elt_2, s) = recv_mpst_s_from_c(s)?;
 
@@ -180,11 +180,7 @@ fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_c, thread_s) = fork_mpst(
-        simple_three_endpoint_a,
-        simple_three_endpoint_c,
-        simple_three_endpoint_s,
-    );
+    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
     thread_a.join()?;
     thread_c.join()?;

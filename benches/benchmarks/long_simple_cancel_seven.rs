@@ -354,12 +354,12 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     RoleCentral, RoleG, SessionMpstEight, 8, 8
 );
 
-fn simple_seven_endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
+fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleCentral, 8);
     Ok(())
 }
 
-fn simple_seven_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_a_from_g, {
         Branching0fromGtoA::Done(s) => {
             close_mpst_multi(s)
@@ -377,12 +377,12 @@ fn simple_seven_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_e((), s)?;
             let (_, s) = recv_mpst_a_from_f(s)?;
             let s = send_mpst_a_to_f((), s)?;
-            simple_seven_endpoint_a(s)
+            endpoint_a(s)
         },
     })
 }
 
-fn simple_seven_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_b_from_g, {
         Branching0fromGtoB::Done(s) => {
             close_mpst_multi(s)
@@ -400,12 +400,12 @@ fn simple_seven_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_b_to_e((), s)?;
             let (_, s) = recv_mpst_b_from_f(s)?;
             let s = send_mpst_b_to_f((), s)?;
-            simple_seven_endpoint_b(s)
+            endpoint_b(s)
         },
     })
 }
 
-fn simple_seven_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_c_from_g, {
         Branching0fromGtoC::Done(s) => {
             close_mpst_multi(s)
@@ -423,12 +423,12 @@ fn simple_seven_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_c_to_e((), s)?;
             let (_, s) = recv_mpst_c_from_f(s)?;
             let s = send_mpst_c_to_f((), s)?;
-            simple_seven_endpoint_c(s)
+            endpoint_c(s)
         },
     })
 }
 
-fn simple_seven_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_d_from_g, {
         Branching0fromGtoD::Done(s) => {
             close_mpst_multi(s)
@@ -446,12 +446,12 @@ fn simple_seven_endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_d_to_e((), s)?;
             let (_, s) = recv_mpst_d_from_f(s)?;
             let s = send_mpst_d_to_f((), s)?;
-            simple_seven_endpoint_d(s)
+            endpoint_d(s)
         },
     })
 }
 
-fn simple_seven_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_e_from_g, {
         Branching0fromGtoE::Done(s) => {
             close_mpst_multi(s)
@@ -469,12 +469,12 @@ fn simple_seven_endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_e_from_d(s)?;
             let (_, s) = recv_mpst_e_from_f(s)?;
             let s = send_mpst_e_to_f((), s)?;
-            simple_seven_endpoint_e(s)
+            endpoint_e(s)
         },
     })
 }
 
-fn simple_seven_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
+fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_f_from_g, {
         Branching0fromGtoF::Done(s) => {
             close_mpst_multi(s)
@@ -492,12 +492,12 @@ fn simple_seven_endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_f_from_d(s)?;
             let s = send_mpst_f_to_e((), s)?;
             let (_, s) = recv_mpst_f_from_e(s)?;
-            simple_seven_endpoint_f(s)
+            endpoint_f(s)
         },
     })
 }
 
-fn simple_seven_endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
+fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     recurs_g(s, SIZE)
 }
 
@@ -532,14 +532,14 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_central, thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g) =
         fork_mpst(
-            black_box(simple_seven_endpoint_central),
-            black_box(simple_seven_endpoint_a),
-            black_box(simple_seven_endpoint_b),
-            black_box(simple_seven_endpoint_c),
-            black_box(simple_seven_endpoint_d),
-            black_box(simple_seven_endpoint_e),
-            black_box(simple_seven_endpoint_f),
-            black_box(simple_seven_endpoint_g),
+            black_box(endpoint_central),
+            black_box(endpoint_a),
+            black_box(endpoint_b),
+            black_box(endpoint_c),
+            black_box(endpoint_d),
+            black_box(endpoint_e),
+            black_box(endpoint_f),
+            black_box(endpoint_g),
         );
 
     thread_central.join()?;

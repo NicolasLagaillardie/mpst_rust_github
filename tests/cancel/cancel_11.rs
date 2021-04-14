@@ -66,24 +66,24 @@ type EndpointA = SessionMpstThree<End, End, RoleEnd, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoD, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
-fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, RoleA, 3);
     Ok(())
 }
 
-fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_cancel_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },
         Branching0fromCtoB::More(s) => {
             let s = send_check_b_to_c(random(), s)?;
-            simple_three_endpoint_b(s)
+            endpoint_b(s)
         },
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     recurs_c(s, SIZE)
 }
 
@@ -124,11 +124,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn main() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(
-        simple_three_endpoint_a,
-        simple_three_endpoint_b,
-        simple_three_endpoint_c,
-    );
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     assert!(thread_a.join().is_err());
     assert!(thread_b.join().is_err());

@@ -133,9 +133,9 @@ In the end, you have to link the threads, related to the functions above, togeth
 /// Fork all endpoints
 fn simple_triple_endpoints() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        simple_triple_endpoint_a,
-        simple_triple_endpoint_b,
-        simple_triple_endpoint_c,
+        endpoint_a,
+        endpoint_b,
+        endpoint_c,
     );
 
     thread_a.join().unwrap();

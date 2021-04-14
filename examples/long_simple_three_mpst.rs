@@ -106,7 +106,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     RoleC, SessionMpstThree, 3, 3
 );
 
-fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Done(s) => {
             close_mpst_multi(s)
@@ -116,12 +116,12 @@ fn simple_three_endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_a_to_c((), s);
             let (_, s) = recv_mpst_a_from_b(s)?;
             let s = send_mpst_a_to_b((), s);
-            simple_three_endpoint_a(s)
+            endpoint_a(s)
         },
     })
 }
 
-fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
@@ -131,12 +131,12 @@ fn simple_three_endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_b_to_c((), s);
             let s = send_mpst_b_to_a((), s);
             let (_, s) = recv_mpst_b_from_a(s)?;
-            simple_three_endpoint_b(s)
+            endpoint_b(s)
         },
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     recurs_c(s, SIZE)
 }
 
@@ -161,11 +161,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_b, thread_c) = fork_mpst(
-        simple_three_endpoint_a,
-        simple_three_endpoint_b,
-        simple_three_endpoint_c,
-    );
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     thread_a.join()?;
     thread_b.join()?;

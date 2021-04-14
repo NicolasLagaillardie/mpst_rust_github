@@ -161,7 +161,7 @@ type EndpointC0 =
 type EndpointS0 = SessionMpstThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
     let ((id, pw), s) = recv_mpst_a_from_c(s)?;
 
     if id != pw {
@@ -212,7 +212,7 @@ fn recurs_a(s: EndpointA1) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_three_endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_a, {
         Branching0fromAtoS::Fail(s) => {
             let (_, s) = recv_mpst_s_from_a(s)?;
@@ -240,7 +240,7 @@ fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn simple_three_endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
     let id: String = rand::thread_rng()
         .sample_iter(&Alphanumeric)
         .take(1)
@@ -319,11 +319,7 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_s, thread_c) = fork_mpst(
-        simple_three_endpoint_a,
-        simple_three_endpoint_c,
-        simple_three_endpoint_s,
-    );
+    let (thread_a, thread_s, thread_c) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
     thread_a.join()?;
     thread_c.join()?;
