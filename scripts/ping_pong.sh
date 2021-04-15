@@ -5,7 +5,7 @@ set -e
 next=0
 
 # Run over 100 times
-for i in {1..100}
+for i in {1..500}
 do
     cargo bench --bench ping_pong -- --verbose 
     next=$(($i+1))
