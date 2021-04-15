@@ -30,96 +30,8 @@ nb_participants_binary = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
 
-# # Number of loops in the recursion
-# number_of_loops = '100'
-
-
-# def test(path):
-#     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
-#     with open(main_path + '/' + path + path_file) as json_file:
-#         data = json.load(json_file)
-#         return data['mean']['point_estimate']
-
-
-# # For each folder in main_path
-# for d in directories:
-#     # If name looks like the one from what we want
-#     if ('MPST' in d or 'binary' in d or 'crossbeam' in d) and ' ' + number_of_loops in d:
-#         # Split the name
-#         splitted = d.split(' ')
-
-#         # If MPST of binary, append to related lists
-#         if 'MPST' in d and str_to_int[splitted[1]] >= 3:
-#             mpst.append(int(test(d))/10**9)
-#             nb_participants_mpst.append(str_to_int[splitted[1]])
-#         elif 'binary' in d and str_to_int[splitted[1]] >= 3:
-#             binary.append(int(test(d))/10**9)
-#             nb_participants_binary.append(str_to_int[splitted[1]])
-#         elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
-#             crossbeam.append(int(test(d))/10**9)
-#             nb_participants_crossbeam.append(str_to_int[splitted[1]])
-
-# # Sort the lists in pair
-# nb_participants_mpst, mpst = (list(t) for t in zip(
-#     *sorted(zip(nb_participants_mpst, mpst))))
-
-# nb_participants_binary, binary = (list(t)
-#                                   for t in zip(*sorted(zip(nb_participants_binary, binary))))
-
-# nb_participants_crossbeam, crossbeam = (list(t)
-#                                         for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
-
-# # Change size
-# ax = plt.figure(figsize=(30, 15)).gca()
-
-# ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-# ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-
-# # Plot the MPST graph
-# ax.plot(nb_participants_mpst, mpst, label='MPST',
-#         linestyle='solid', linewidth=3)
-
-# # Plot the binary graph
-# ax.plot(nb_participants_binary, binary, label='Binary',
-#         linestyle='dashed', linewidth=3)
-
-# # Plot the crossbeam graph
-# ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-#         linestyle='-.', linewidth=3)
-
-# # Label X and Y axis
-# ax.set_xlabel('Number of participants', fontsize=30)
-# ax.set_ylabel('Time (s)', fontsize=30)
-# ax.tick_params(axis='both', which='major', labelsize=30)
-# # ax.tick_params(axis='both', which='minor', labelsize=30)
-
-# maxi1 = max(mpst)
-# maxi2 = max(binary)
-# maxi3 = max(crossbeam)
-# maxi = max(maxi1, maxi2, maxi3)
-
-# mini1 = min(mpst)
-# mini2 = min(binary)
-# mini3 = min(crossbeam)
-# mini = min(mini1, mini2, mini3)
-
-# # Major ticks every 20, minor ticks every 5
-# # major_ticks = np.arange(mini, maxi+2, 10)
-# # minor_ticks = np.arange(mini, maxi+2, 2)
-# major_ticks = np.arange(mini, maxi, 0.)
-# minor_ticks = np.arange(mini, maxi, 2)
-
-# # ax.set_xticks(major_ticks)
-# # ax.set_xticks(minor_ticks, minor=True)
-# ax.set_yticks(major_ticks)
-# ax.set_yticks(minor_ticks, minor=True)
-
-# # Add grid
-# ax.grid(which='both')
-
-
 # Number of loops in the recursion
-number_of_loops = '100'
+number_of_loops = '0'
 
 
 def test(path):
@@ -132,23 +44,23 @@ def test(path):
 # For each folder in main_path
 for d in directories:
     # If name looks like the one from what we want
-    if ('MPST' in d or 'binary' in d or 'crossbeam' in d or 'cancel' in  d) and ' ' + number_of_loops in d:
+    if 'ring' in d and ' ' + number_of_loops in d:
         # Split the name
         splitted = d.split(' ')
 
         # If MPST of binary, append to related lists
         if 'MPST' in d and str_to_int[splitted[1]] >= 3:
             if 'cancel' in d:
-                cancel.append(int(test(d))/10**9)
+                cancel.append(int(test(d))/10**6)
                 nb_participants_cancel.append(str_to_int[splitted[1]])
             else:
-                mpst.append(int(test(d))/10**9)
+                mpst.append(int(test(d))/10**6)
                 nb_participants_mpst.append(str_to_int[splitted[1]])
         elif 'binary' in d and str_to_int[splitted[1]] >= 3:
-            binary.append(int(test(d))/10**9)
+            binary.append(int(test(d))/10**6)
             nb_participants_binary.append(str_to_int[splitted[1]])
         elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
-            crossbeam.append(int(test(d))/10**9)
+            crossbeam.append(int(test(d))/10**6)
             nb_participants_crossbeam.append(str_to_int[splitted[1]])
 
 # Sort the lists in pair
@@ -163,7 +75,7 @@ nb_participants_crossbeam, crossbeam = (list(t)
 
 if len(cancel) > 0:
     nb_participants_cancel, cancel = (list(t)
-                                            for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+                                      for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
 
 # Change size
 ax = plt.figure(figsize=(30, 15)).gca()
@@ -185,13 +97,13 @@ ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
 
 
 if len(cancel) > 0:
-# Plot the cancel graph
+    # Plot the cancel graph
     ax.plot(nb_participants_cancel, cancel, label='Cancel',
             linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
-ax.set_ylabel('Time (s)', fontsize=30)
+ax.set_ylabel('Time (ms)', fontsize=30)
 ax.tick_params(axis='both', which='major', labelsize=30)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
@@ -229,8 +141,7 @@ ax.grid(which='both')
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
 # Save fig
-plt.savefig('./graphs_bench/graph'+number_of_loops+'.pdf')
+plt.savefig('./graphs_bench/graph_ring_'+number_of_loops+'.pdf')
 
 # # function to show the plot
 # plt.show()
-
