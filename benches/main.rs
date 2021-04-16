@@ -3,7 +3,6 @@ use criterion::criterion_main;
 mod benchmarks;
 
 criterion_main! {
-    benchmarks::long_five::long_five_protocol,
     // //////////
     // benchmarks::mesh::mesh_three_short::mesh_three_short,
     // //////////
@@ -38,12 +37,20 @@ criterion_main! {
     // benchmarks::mesh::mesh_twenty::mesh_twenty,
     // benchmarks::mesh::mesh_cancel_twenty::mesh_twenty,
     // //////////
-    // benchmarks::fib::fibo,
-    // benchmarks::o_auth::o_auth,
-    // benchmarks::simple_voting_three::simple_voting,
-    // benchmarks::travel_three::travel,
-    // benchmarks::three_buyer::three_buyer,
-    // benchmarks::ping_pong::ping_pong,
+    // benchmarks::basic::choose_five::choose_five,
+    // benchmarks::basic::long_five::long_five,
+    benchmarks::basic::actyx_os_1::actyx_os_1,
+    benchmarks::basic::actyx_os_2::actyx_os_2,
+    benchmarks::basic::distributed_calc::distributed_calc,
+    benchmarks::basic::fib::fib,
+    benchmarks::basic::o_auth::o_auth,
+    benchmarks::basic::online_wallet::online_wallet,
+    benchmarks::basic::ping_pong::ping_pong,
+    benchmarks::basic::simple_voting_three::simple_voting,
+    benchmarks::basic::::smtp::smtp,
+    benchmarks::basic::three_buyer::three_buyer,
+    benchmarks::basic::travel_three::travel_three,
+    benchmarks::basic::video_stream::video_stream,
     // //////////
     // benchmarks::ring::ring_three::ring_three,
     // benchmarks::ring::ring_three_empty::ring_three,

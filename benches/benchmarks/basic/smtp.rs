@@ -1,6 +1,6 @@
-// Unfinished, still in process of adding send_tcp and recv_tcp
-
 // #![allow(dead_code, unused_imports)]
+
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -12,6 +12,7 @@ use mpstthree::{
 
 use rand::{thread_rng, Rng};
 use std::error::Error;
+use std::time::Duration;
 
 // global protocol Smtp(role S, role C)
 // {
@@ -853,10 +854,10 @@ fn endpoint_s_10(s: EndpointS10) -> Result<(), Box<dyn Error>> {
     })
 }
 
-///
+/////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn Error>> {
-    let (thread_c, thread_s) = fork_mpst(endpoint_c_0, endpoint_s_0);
+fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+    let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_0), black_box(endpoint_s_0));
 
     thread_c.join().unwrap();
     thread_s.join().unwrap();
@@ -864,8 +865,21 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn main() {
-    assert!(all_mpst().is_ok());
+/////////////////////////
+
+fn main(c: &mut Criterion) {
+    c.bench_function(&format!("SMTP"), |b| b.iter(|| all_mpst()));
 }
 
-// fn main() {}
+fn long_warmup() -> Criterion {
+    Criterion::default().measurement_time(Duration::new(30, 0))
+}
+
+criterion_group! {
+    name = smtp;
+    // config = long_warmup();
+    config = Criterion::default().significance_level(0.1).sample_size(10100);
+    targets = main
+}
+
+criterion_main!(smtp);
