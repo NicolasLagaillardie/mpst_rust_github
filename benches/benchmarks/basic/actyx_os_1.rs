@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send};
@@ -198,13 +200,13 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_start_controller_from_logs, {
         Branching0fromLtoC::Up(s) => {
 
-            let (success, s) = recv_start_controller_from_logs(s)?;
+            let (_, s) = recv_start_controller_from_logs(s)?;
 
             recurs_controller(s)
         },
         Branching0fromLtoC::Down(s) => {
 
-            let (failure, s) = recv_start_controller_from_logs(s)?;
+            let (_, s) = recv_start_controller_from_logs(s)?;
 
             let s = send_start_controller_to_logs(0, s);
 
@@ -341,7 +343,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn main(c: &mut Criterion) {
+fn actyx_os_1_main(c: &mut Criterion) {
     c.bench_function(&format!("Actyx OS 1"), |b| b.iter(|| all_mpst()));
 }
 
@@ -353,7 +355,7 @@ criterion_group! {
     name = actyx_os_1;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = main
+    targets = actyx_os_1_main
 }
 
 criterion_main!(actyx_os_1);

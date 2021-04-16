@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
@@ -337,7 +339,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn main(c: &mut Criterion) {
+fn online_wallet_main(c: &mut Criterion) {
     c.bench_function(&format!("Online wallet"), |b| b.iter(|| all_mpst()));
 }
 
@@ -349,7 +351,7 @@ criterion_group! {
     name = online_wallet;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = main
+    targets = online_wallet_main
 }
 
 criterion_main!(online_wallet);

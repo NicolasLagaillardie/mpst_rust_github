@@ -1,4 +1,4 @@
-// #![allow(dead_code, unused_imports)]
+#![allow(dead_code)]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
@@ -426,7 +426,7 @@ fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
             RoleC, SessionMpstTwo, 2, 1
         );
 
-        let (_, s) = recv_mpst_c_from_s(s)?;
+        let s = send_mpst_c_to_s((), s);
 
         endpoint_c_4(s)
     } else {
@@ -867,7 +867,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn main(c: &mut Criterion) {
+fn smtp_main(c: &mut Criterion) {
     c.bench_function(&format!("SMTP"), |b| b.iter(|| all_mpst()));
 }
 
@@ -879,7 +879,7 @@ criterion_group! {
     name = smtp;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = main
+    targets = smtp_main
 }
 
 criterion_main!(smtp);

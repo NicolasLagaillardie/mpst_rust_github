@@ -425,7 +425,7 @@ fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
             RoleC, SessionMpstTwo, 2, 1
         );
 
-        let (_, s) = recv_mpst_c_from_s(s)?;
+        let s = send_mpst_c_to_s((), s);
 
         endpoint_c_4(s)
     } else {

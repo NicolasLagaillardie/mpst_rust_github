@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send};
@@ -198,7 +200,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn main(c: &mut Criterion) {
+fn distributed_calc_main(c: &mut Criterion) {
     c.bench_function(&format!("Distributed calculator"), |b| {
         b.iter(|| all_mpst())
     });
@@ -212,7 +214,7 @@ criterion_group! {
     name = distributed_calc;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = main
+    targets = distributed_calc_main
 }
 
 criterion_main!(distributed_calc);

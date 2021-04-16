@@ -288,7 +288,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn travel_mpst(c: &mut Criterion) {
+fn travel_main(c: &mut Criterion) {
     c.bench_function(&format!("Travel MPST"), |b| b.iter(|| all_mpst()));
 }
 
@@ -297,10 +297,10 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = travel;
+    name = travel_three;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = travel_mpst
+    targets = travel_main
 }
 
-criterion_main!(travel);
+criterion_main!(travel_three);

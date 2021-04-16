@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use rand::{thread_rng, Rng};
@@ -186,7 +188,7 @@ pub fn run_usecase() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn main(c: &mut Criterion) {
+fn video_stream_main(c: &mut Criterion) {
     c.bench_function(&format!("Video stream"), |b| b.iter(|| run_usecase()));
 }
 
@@ -198,7 +200,7 @@ criterion_group! {
     name = video_stream;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = main
+    targets = video_stream_main
 }
 
 criterion_main!(video_stream);

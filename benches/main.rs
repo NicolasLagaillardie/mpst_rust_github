@@ -47,7 +47,7 @@ criterion_main! {
     benchmarks::basic::online_wallet::online_wallet,
     benchmarks::basic::ping_pong::ping_pong,
     benchmarks::basic::simple_voting_three::simple_voting,
-    benchmarks::basic::::smtp::smtp,
+    benchmarks::basic::smtp::smtp,
     benchmarks::basic::three_buyer::three_buyer,
     benchmarks::basic::travel_three::travel_three,
     benchmarks::basic::video_stream::video_stream,
