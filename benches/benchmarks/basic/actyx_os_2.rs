@@ -260,7 +260,7 @@ type EndpointStorageInit<N> = SessionMpstFour<
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_response_api_from_storage, {
         Branching0fromStoA::Up(s) => {
-            let (start, s) = recv_start_api_from_controller(s)?;
+            let (_, s) = recv_start_api_from_controller(s)?;
 
             let request = random::<i32>();
 
@@ -270,7 +270,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromStoA::Down(s) => {
 
-            let (stop, s) = recv_start_api_from_controller(s)?;
+            let (_, s) = recv_start_api_from_controller(s)?;
 
             endpoint_api(s)
         },
@@ -284,13 +284,13 @@ fn nested_api(s: NestedApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_response_api_from_storage, {
         Branching1fromStoA::Request(s) => {
 
-            let (response, s) = recv_response_api_from_storage(s)?;
+            let (_, s) = recv_response_api_from_storage(s)?;
 
             endpoint_api(s)
         },
         Branching1fromStoA::Down(s) => {
 
-            let (stop, s) = recv_start_api_from_controller(s)?;
+            let (_, s) = recv_start_api_from_controller(s)?;
 
             endpoint_api(s)
         },
@@ -308,7 +308,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_new_status_controller_from_storage, {
         Branching0fromStoC::Up(s) => {
 
-            let (success, s) = recv_new_status_controller_from_storage(s)?;
+            let (_, s) = recv_new_status_controller_from_storage(s)?;
 
             let start = random::<i32>();
 
@@ -318,7 +318,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromStoC::Down(s) => {
 
-            let (failure, s) = recv_new_status_controller_from_storage(s)?;
+            let (_, s) = recv_new_status_controller_from_storage(s)?;
 
             let stop = random::<i32>();
 
@@ -337,13 +337,13 @@ fn nested_controller(s: NestedController<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_new_status_controller_from_storage, {
         Branching1fromStoC::Up(s) => {
 
-            let (success, s) = recv_new_status_controller_from_storage(s)?;
+            let (_, s) = recv_new_status_controller_from_storage(s)?;
 
             recurs_controller(s)
         },
         Branching1fromStoC::Down(s) => {
 
-            let (failure, s) = recv_new_status_controller_from_storage(s)?;
+            let (_, s) = recv_new_status_controller_from_storage(s)?;
 
             let stop = random::<i32>();
 
