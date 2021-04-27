@@ -2,7 +2,7 @@
 
 set -e
 
-cargo bench --bench main -- --verbose
+# cargo bench --bench main -- --verbose
 
 # cargo criterion --message-format=json
 

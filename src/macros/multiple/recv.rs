@@ -403,7 +403,7 @@ macro_rules! create_recv_http_session {
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
                 http: bool,
-                respfuture: hyper::client::ResponseFuture,
+                respfuture: Vec::<hyper::client::ResponseFuture>,
             ) -> Result<
                 (
                     T,
@@ -420,10 +420,14 @@ macro_rules! create_recv_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
+                if respfuture.len() > 1 {
+                    panic!("Too many futures: {:?}", respfuture.len())
+                }
+
                 let resp = match http {
                     true => {
                         let rt = tokio::runtime::Runtime::new()?;
-                        rt.block_on(async move { respfuture.await })?
+                        rt.block_on(async move { respfuture[0].await })?
                     },
                     false => hyper::Response::default(),
                 };

@@ -5,12 +5,12 @@ set -e
 next=0
 
 # Run over 100 times
-for i in {1..500}
+for i in {201..1000}
 do
-    cargo bench --bench ping_pong -- --verbose 
     next=$(($i+1))
-    sed -i -e "s/static SIZE: i64 = $i;/static SIZE: i64 = $next;/g" benches/ping_pong.rs
+    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' benches/ping_pong.rs
     rm -rf target/release/
+    cargo bench --bench ping_pong -- --verbose
 done
 
-sed -i -e "s/static SIZE: i64 = $next;/static SIZE: i64 = 1;/g" benches/ping_pong.rs
+sed -ier 's/static SIZE: i64 = [0-9]\+;/static SIZE: i64 = 1;/g' benches/ping_pong.rs

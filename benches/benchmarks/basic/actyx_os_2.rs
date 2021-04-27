@@ -298,7 +298,6 @@ fn nested_api(s: NestedApi<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
-
     let s = send_start_controller_to_storage(0, s);
 
     recurs_controller(s)
