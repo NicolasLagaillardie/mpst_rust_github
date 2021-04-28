@@ -22,6 +22,7 @@ use std::error::Error;
 ///
 /// Returns the 3 strings if everything went right.
 /// TODO: Adapt checker for RoleBroadcast
+/// Useful???
 pub fn checker<
     S0,
     S1,

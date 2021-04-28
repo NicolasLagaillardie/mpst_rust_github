@@ -12,8 +12,6 @@ use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
-// TODO: update with the correct protocol
-
 // global protocol OAuth(role Auth, role Client, role Server) {
 //     Authorization(Approval) from Client to Auth; // Request Authorization Approval
 //     choice at A

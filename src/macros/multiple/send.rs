@@ -407,17 +407,14 @@ macro_rules! create_send_http_session {
                     $name<mpstthree::role::end::RoleEnd>,
                 >,
                 http: bool,
-                // method: hyper::Method,
-                // uri: &str,
-                // header: Vec<(&str, &str)>,
-                // body: &'static str,
                 req: hyper::Request<hyper::Body>
-            ) ->Result<
-            (
-                $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
-                hyper::client::ResponseFuture
-            ),
-            Box<dyn std::error::Error>>
+            ) -> Result<
+                (
+                    $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
+                    hyper::client::ResponseFuture
+                ),
+                Box<dyn std::error::Error>
+            >
             where
                 T: std::marker::Send,
                 #(
@@ -425,31 +422,17 @@ macro_rules! create_send_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                let respfut = match http {
-                    true => {
-                        // let mut temp = hyper::Request::builder()
-                        //     .method(method)
-                        //     .uri(uri);
+                let https = hyper_tls::HttpsConnector::new();
+                let client = hyper::Client::builder().build::<_, hyper::Body>(https);
 
-                        // for elt in header {
-                        //     temp = temp.header(elt.0, elt.1);
-                        // }
-
-                        // let req = temp.body(hyper::Body::from(body))?;
-                        let https = hyper_tls::HttpsConnector::new();
-                        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
-                        client.request(req)
-                    }
-                    false => {
-                        let https = hyper_tls::HttpsConnector::new();
-                        let client = hyper::Client::builder().build::<_, hyper::Body>(https);
-                        client.request(hyper::Request::default())
-                    }
+                let new_req = match http {
+                    true => req,
+                    false => hyper::Request::default(),
                 };
 
                 Ok((
                     mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion),
-                    respfut
+                    client.request(new_req)
                 ))
             }
         });

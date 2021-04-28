@@ -867,5 +867,3 @@ fn all_mpst() -> Result<(), Box<dyn Error>> {
 fn main() {
     assert!(all_mpst().is_ok());
 }
-
-// fn main() {}
