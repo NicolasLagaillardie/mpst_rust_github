@@ -327,7 +327,6 @@ macro_rules! bundle_impl {
             #(
                 ~(
                 )(
-
                     impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)20:0 R: mpstthree::role::Role, T: std::marker::Send>
                         $sessionmpst_name<
                             |(
@@ -371,13 +370,10 @@ macro_rules! bundle_impl {
                                 stack: new_stack,
                                 name: self.name,
                             }
-
-
                         }
                     }
 
                 )7*
-
             )21:0
 
 
@@ -386,7 +382,6 @@ macro_rules! bundle_impl {
             #(
                 ~(
                 )(
-
                     impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)20:0 R: mpstthree::role::Role, T: std::marker::Send>
                         $sessionmpst_name<
                             |(
@@ -441,7 +436,61 @@ macro_rules! bundle_impl {
                     }
 
                 )7*
+            )21:0
+            
 
+
+
+            #(
+                ~(
+                )(
+                    impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)20:0 T: std::marker::Send>
+                        $sessionmpst_name<
+                            |(
+                                mpstthree::binary::struct_trait::Recv<T, S|N:0>,
+                            )(
+                                S|N:0,
+                            )0*
+                            unused~N:15<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
+                            unused#N:23<mpstthree::role::end::RoleEnd>
+                        >
+                    {
+                        pub fn recv(self) -> Result<(
+                                T,
+                                $sessionmpst_name<
+                                    |(
+                                        S|N:0,
+                                    )(
+                                        S|N:0,
+                                    )0*
+                                    mpstthree::role::end::RoleEnd,
+                                    unused#N:23<mpstthree::role::end::RoleEnd>
+                            >),
+                            Box<dyn std::error::Error>
+                        > {
+                            let (v, new_session) = mpstthree::binary::recv::recv(self.session~N:17)?;
+
+                            let (here1, there1) = <mpstthree::role::end::RoleEnd as mpstthree::role::Role>::new();
+                            let (_here2, there2) = <mpstthree::role::end::RoleEnd as mpstthree::role::Role>::new();
+                            self.stack.sender1.send(there1).unwrap_or(());
+                            self.stack.sender2.send(there2).unwrap_or(());
+                                    
+                            Ok((
+                                v,
+                                $sessionmpst_name {
+                                    |(
+                                        session|N:0: new_session,
+                                    )(
+                                        session|N:0: self.session|N:0,
+                                    )0*
+                                    stack: here1,
+                                    name: self.name,
+                                }
+                            ))
+                        }
+                    }
+
+                )7*
             )21:0
 
             // impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)0:0 T: std::marker::Send>
@@ -464,6 +513,73 @@ macro_rules! bundle_impl {
             //         mpstthree::recv_all_aux!(self, RoleB, unused#N:23, $sessionmpst_name, 3, 1)()
             //     }
             // }
+
+            // TODO: offer
+
+
+
+
+
+            #(
+                ~(
+                )(
+                    impl<
+                        'a,
+                        #(S#N:0 : mpstthree::binary::struct_trait::Session,)2:0
+                        R1: mpstthree::role::Role,
+                        R2: mpstthree::role::Role,
+                    >
+                        $sessionmpst_name<
+                            |(
+                                mpstthree::binary::struct_trait::Recv<
+                                    either::Either<
+                                        $sessionmpst_name<
+                                            #(S#N:0,)0:0
+                                            R1,
+                                            unused#N:23<mpstthree::role::end::RoleEnd>
+                                        >,
+                                        $sessionmpst_name<
+                                            #(S#N:0,)3:0
+                                            R2,
+                                            unused#N:23<mpstthree::role::end::RoleEnd>
+                                        >
+                                    >,
+                                    mpstthree::binary::struct_trait::End
+                                >,
+                            )(
+                                mpstthree::binary::struct_trait::End,
+                            )0*
+                            unused~N:15<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
+                            unused#N:23<mpstthree::role::end::RoleEnd>,
+                        >
+                    {
+                        pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
+                        where
+                            F: FnOnce(
+                                $sessionmpst_name<
+                                    #(S#N:0,)0:0
+                                    R1,
+                                    unused#N:23<mpstthree::role::end::RoleEnd>,
+                                >,
+                            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+                            G: FnOnce(
+                                $sessionmpst_name<
+                                    #(S#N:0,)3:0
+                                    R2,
+                                    unused#N:23<mpstthree::role::end::RoleEnd>,
+                                >,
+                            ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+                        {
+                            let (e, s) = self.recv()?;
+                            mpstthree::binary::cancel::cancel(s);
+                            e.either(f, g)
+                        }
+                    }
+
+                )7*
+            )21:0
+
+
 
             // impl<
             //     'a,
@@ -496,7 +612,8 @@ macro_rules! bundle_impl {
             //     }
             // }
 
-
+            // TODO: choose_right
+            // TODO: choose_left
 
 
 

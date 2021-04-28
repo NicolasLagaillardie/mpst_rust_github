@@ -793,11 +793,8 @@ macro_rules! choose_mpst_multi_http_to_all {
                     }),
                     s.session#N:0,
                     false,
-                    hyper::Method::GET,
-                    "",
-                    vec![("", "")],
-                    "",
-                );
+                    Request::default()
+                )?;
             )(
                 let _ = mpstthree::binary::send::send_http(
                     unused#N:15($sessionmpst_name {
@@ -811,11 +808,8 @@ macro_rules! choose_mpst_multi_http_to_all {
                     }),
                     s.session#N:0,
                     false,
-                    hyper::Method::GET,
-                    "",
-                    vec![("", "")],
-                    "",
-                );
+                    Request::default()
+                )?;
             )2*
 
             // mpstthree::binary::cancel::cancel(s);
