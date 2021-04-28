@@ -138,8 +138,6 @@ enum Branching1fromCtoA<N: marker::Send> {
 
 type EndpointAContinue<N> = SessionMpstThree<End, Choice2fromStoA<N>, RoleS<RoleEnd>, NameA>;
 
-type EndpointAClose<N> = SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameA>;
-
 enum Branching2fromStoA<N: marker::Send> {
     Picture(SessionMpstThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
     Refusal(SessionMpstThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
@@ -158,12 +156,8 @@ enum Branching0fromAtoC<N: marker::Send> {
     Done(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleA<RoleS<RoleEnd>>, NameC>),
 }
 
-type EndpointCContinue<N> = SessionMpstThree<
-    Recv<N, End>,
-    Send<N, Choice2fromStoC<N>>,
-    RoleA<RoleS<RoleS<RoleEnd>>>,
-    NameC,
->;
+type EndpointCContinue<N> =
+    SessionMpstThree<End, Send<N, Choice2fromStoC<N>>, RoleS<RoleS<RoleEnd>>, NameC>;
 
 type EndpointCContinueLoop<N> =
     SessionMpstThree<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
@@ -190,8 +184,6 @@ enum Branching2fromStoC<N: marker::Send> {
 }
 
 type EndpointCPicture<N> = SessionMpstThree<End, Choice2fromStoC<N>, RoleS<RoleEnd>, NameC>;
-
-type EndpointCPictureLoop<N> = SessionMpstThree<End, Choice2fromStoC<N>, RoleS<RoleEnd>, NameC>;
 
 // S
 enum Branching0fromAtoS<N: marker::Send> {
@@ -336,7 +328,6 @@ fn continue_c(s: EndpointCContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = continue_from_c_to_all(s);
 
-        let (_quit, s, _resp) = recv_http_c_to_a(s, false, Vec::new())?;
         let (s, _req) = send_http_c_to_s(0, s, false, Request::default())?;
 
         picture_c(s)
