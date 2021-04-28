@@ -277,6 +277,8 @@ fn http() {
     http::complex_https_get::main();
     http::binary_http_get::main();
     http::o_auth::main();
+    http::o_auth_fail_too_true::main();
+    http::o_auth_fail_too_false::main();
 }
 
 pub fn main() {}

@@ -420,7 +420,7 @@ macro_rules! create_recv_http_session {
                 )0:0
                 R: mpstthree::role::Role,
             {
-                if ( respfuture.len() > 1 && http ) || ( !http && respfuture.len() != 0 ) {
+                if ( respfuture.len() != 1 && http ) || ( !http && respfuture.len() != 0 ) {
                     panic!("Too many futures: {:?}", respfuture.len())
                 }
 
