@@ -489,32 +489,9 @@ macro_rules! bundle_impl {
                             ))
                         }
                     }
-
                 )7*
             )21:0
 
-            // impl<#(S#N:0 : mpstthree::binary::struct_trait::Session,)0:0 T: std::marker::Send>
-            //     $sessionmpst_name<
-            //         mpstthree::binary::struct_trait::Recv<T, S1>,
-            //         S2,
-            //         RoleAlltoB<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-            //         unused#N:23<mpstthree::role::end::RoleEnd>
-            //     >
-            // {
-            //     pub fn recv(self) -> Result<(
-            //         T,
-            //         $sessionmpst_name<
-            //             #(S#N:0,)0:0
-            //             mpstthree::role::end::RoleEnd,
-            //             unused#N:23<mpstthree::role::end::RoleEnd>
-            //         >),
-            //         Box<dyn std::error::Error>
-            //     > {
-            //         mpstthree::recv_all_aux!(self, RoleB, unused#N:23, $sessionmpst_name, 3, 1)()
-            //     }
-            // }
-
-            // TODO: offer
 
 
 
@@ -525,7 +502,7 @@ macro_rules! bundle_impl {
                 )(
                     impl<
                         'a,
-                        #(S#N:0 : mpstthree::binary::struct_trait::Session,)2:0
+                        #(S#N:0 : mpstthree::binary::struct_trait::Session,)22:0
                         R1: mpstthree::role::Role,
                         R2: mpstthree::role::Role,
                     >
@@ -534,12 +511,12 @@ macro_rules! bundle_impl {
                                 mpstthree::binary::struct_trait::Recv<
                                     either::Either<
                                         $sessionmpst_name<
-                                            #(S#N:0,)0:0
+                                            #(S#N:0,)20:0
                                             R1,
                                             unused#N:23<mpstthree::role::end::RoleEnd>
                                         >,
                                         $sessionmpst_name<
-                                            #(S#N:0,)3:0
+                                            #(S#N:0,)23:0
                                             R2,
                                             unused#N:23<mpstthree::role::end::RoleEnd>
                                         >
@@ -557,14 +534,14 @@ macro_rules! bundle_impl {
                         where
                             F: FnOnce(
                                 $sessionmpst_name<
-                                    #(S#N:0,)0:0
+                                    #(S#N:0,)20:0
                                     R1,
                                     unused#N:23<mpstthree::role::end::RoleEnd>,
                                 >,
                             ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                             G: FnOnce(
                                 $sessionmpst_name<
-                                    #(S#N:0,)3:0
+                                    #(S#N:0,)23:0
                                     R2,
                                     unused#N:23<mpstthree::role::end::RoleEnd>,
                                 >,
@@ -618,6 +595,115 @@ macro_rules! bundle_impl {
 
 
 
+
+            #(
+                impl<
+                    'a,
+                    #(
+                        S#N:0: mpstthree::binary::struct_trait::Session + 'a,
+                    )25:0
+                    #(
+                        R#N:0: mpstthree::role::Role + 'a,
+                    )26:0
+                >
+                    $sessionmpst_name<
+                        ~(
+                        )(
+                            mpstthree::binary::struct_trait::Send<
+                                either::Either<
+                                    $sessionmpst_name<
+                                        |(
+                                            <S|N:1 as mpstthree::binary::struct_trait::Session>::Dual,
+                                        )(
+                                            S|N:1,
+                                        )2*
+                                        R~N:23,
+                                        unused~N:9<mpstthree::role::end::RoleEnd>
+                                    >,
+                                    $sessionmpst_name<
+                                        |(
+                                            <S|N:2 as mpstthree::binary::struct_trait::Session>::Dual,
+                                        )(
+                                            S|N:2,
+                                        )2*
+                                        R~N:24,
+                                        unused~N:9<mpstthree::role::end::RoleEnd>
+                                    >
+                                >,
+                                mpstthree::binary::struct_trait::End,
+                            >,
+                        )7*
+
+                        unused#N:27<
+                            #(
+                                R#N:0,
+                            )27:0
+                        >,
+                        
+                        unused#N:23<mpstthree::role::end::RoleEnd>,
+                    >
+                {
+                    pub fn choose_left(self) -> $sessionmpst_name<
+                        #(
+                            <S#N:37 as mpstthree::binary::struct_trait::Session>::Dual,
+                        )20:0
+                        R^N:12,
+                        unused#N:23<mpstthree::role::end::RoleEnd>
+                    >
+                    {
+                        #(
+                            let (channel_#N:32, channel_#N:33) = S#N:0::new();
+                        )24:0
+
+                        #(
+                            let (stack_#N:0, _) = <R#N:35 as mpstthree::role::Role>::new();
+                        )20:0
+                        let (stack_^N:14, _) = <R^N:12 as mpstthree::role::Role>::new();
+
+                        
+                        ~(
+                        )(
+                            let (name_~N:22, _) = <unused~N:9<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        
+                        )7*
+                        let (name_^N:14, _) = <unused#N:23::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+
+                        #(
+                            let choice_#N:0 = $sessionmpst_name {
+                                    ~(
+                                        session#N:1 : channel_~N:18,
+                                    )(
+                                        session#N:1 : channel_~N:18,
+                                    )8*
+                                    stack: stack_#N:0,
+                                    name: name_#N:0,
+                                };
+                        )20:0
+
+                        #(
+                            let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Left(choice_#N:0), self.session#N:0);
+                        )20:0
+
+                        let s = $sessionmpst_name {
+                            #(
+                                session#N:0: new_session_#N:0,
+                            )20:0
+                            stack: self.stack,
+                            name: self.name,
+                        };
+
+                        mpstthree::binary::cancel::cancel(s);
+
+                        $sessionmpst_name {
+                            #(
+                                session#N:0: channel_#N:34 ,
+                            )20:0
+                            stack: stack_^N:14,
+                            name: name_^N:14,
+                        }
+                    }
+                }
+            )21:0
 
 
 
@@ -792,7 +878,6 @@ macro_rules! bundle_impl {
             // The close methods
 
             #(
-
                 impl
                     $sessionmpst_name<
                         #(
