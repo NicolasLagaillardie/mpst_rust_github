@@ -117,9 +117,8 @@ nb_participants_cancel = []
 # # Add grid
 # ax.grid(which='both')
 
-
 # Number of loops in the recursion
-number_of_loops = '100'
+number_of_loops = '0'
 
 
 def test(path):
@@ -136,20 +135,23 @@ for d in directories:
         # Split the name
         splitted = d.split(' ')
 
-        # If MPST of binary, append to related lists
-        if 'MPST' in d and str_to_int[splitted[1]] >= 3:
-            if 'cancel' in d:
-                cancel.append(int(test(d))/10**9)
-                nb_participants_cancel.append(str_to_int[splitted[1]])
-            else:
-                mpst.append(int(test(d))/10**9)
-                nb_participants_mpst.append(str_to_int[splitted[1]])
-        elif 'binary' in d and str_to_int[splitted[1]] >= 3:
-            binary.append(int(test(d))/10**9)
-            nb_participants_binary.append(str_to_int[splitted[1]])
-        elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
-            crossbeam.append(int(test(d))/10**9)
-            nb_participants_crossbeam.append(str_to_int[splitted[1]])
+        try:
+            # If MPST of binary, append to related lists
+            if 'MPST' in d and str_to_int[splitted[1]] >= 3:
+                if 'cancel' in d:
+                    cancel.append(int(test(d))/10**9)
+                    nb_participants_cancel.append(str_to_int[splitted[1]])
+                else:
+                    mpst.append(int(test(d))/10**9)
+                    nb_participants_mpst.append(str_to_int[splitted[1]])
+            elif 'binary' in d and str_to_int[splitted[1]] >= 3:
+                binary.append(int(test(d))/10**9)
+                nb_participants_binary.append(str_to_int[splitted[1]])
+            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
+                crossbeam.append(int(test(d))/10**9)
+                nb_participants_crossbeam.append(str_to_int[splitted[1]])
+        except:
+            print("Missing ", d)
 
 # Sort the lists in pair
 nb_participants_mpst, mpst = (list(t) for t in zip(
@@ -229,7 +231,7 @@ ax.grid(which='both')
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
 # Save fig
-plt.savefig('./graphs_bench/graph'+number_of_loops+'.pdf')
+plt.savefig('./graphs_bench/graph_mesh_'+number_of_loops+'.pdf')
 
 # # function to show the plot
 # plt.show()

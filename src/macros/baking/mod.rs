@@ -437,7 +437,7 @@ macro_rules! bundle_impl {
 
                 )7*
             )21:0
-            
+
 
 
 
@@ -474,7 +474,6 @@ macro_rules! bundle_impl {
                             let (_here2, there2) = <mpstthree::role::end::RoleEnd as mpstthree::role::Role>::new();
                             self.stack.sender1.send(there1).unwrap_or(());
                             self.stack.sender2.send(there2).unwrap_or(());
-                                    
                             Ok((
                                 v,
                                 $sessionmpst_name {
@@ -598,12 +597,11 @@ macro_rules! bundle_impl {
 
             #(
                 impl<
-                    'a,
                     #(
-                        S#N:0: mpstthree::binary::struct_trait::Session + 'a,
+                        S#N:0: mpstthree::binary::struct_trait::Session,
                     )25:0
                     #(
-                        R#N:0: mpstthree::role::Role + 'a,
+                        R#N:0: mpstthree::role::Role,
                     )26:0
                 >
                     $sessionmpst_name<
@@ -613,18 +611,18 @@ macro_rules! bundle_impl {
                                 either::Either<
                                     $sessionmpst_name<
                                         |(
-                                            <S|N:1 as mpstthree::binary::struct_trait::Session>::Dual,
-                                        )(
                                             S|N:1,
+                                        )(
+                                            <S|N:1 as mpstthree::binary::struct_trait::Session>::Dual,
                                         )2*
                                         R~N:23,
                                         unused~N:9<mpstthree::role::end::RoleEnd>
                                     >,
                                     $sessionmpst_name<
                                         |(
-                                            <S|N:2 as mpstthree::binary::struct_trait::Session>::Dual,
-                                        )(
                                             S|N:2,
+                                        )(
+                                            <S|N:2 as mpstthree::binary::struct_trait::Session>::Dual,
                                         )2*
                                         R~N:24,
                                         unused~N:9<mpstthree::role::end::RoleEnd>
@@ -639,46 +637,48 @@ macro_rules! bundle_impl {
                                 R#N:0,
                             )27:0
                         >,
-                        
                         unused#N:23<mpstthree::role::end::RoleEnd>,
                     >
                 {
                     pub fn choose_left(self) -> $sessionmpst_name<
-                        #(
-                            <S#N:37 as mpstthree::binary::struct_trait::Session>::Dual,
-                        )20:0
+                        ~(
+                            <S~N:25 as mpstthree::binary::struct_trait::Session>::Dual,
+                        )(
+                            <S~N:25 as mpstthree::binary::struct_trait::Session>::Dual,
+                        )10*
                         R^N:12,
                         unused#N:23<mpstthree::role::end::RoleEnd>
                     >
                     {
-                        #(
-                            let (channel_#N:32, channel_#N:33) = S#N:0::new();
-                        )24:0
+                        ~(
+                            let (channel_~N:27, channel_~N:28) = S~N:29::new();
+                        )(
+                            let (channel_~N:28, channel_~N:27) = S~N:29::new();
+                        )9*
 
                         #(
                             let (stack_#N:0, _) = <R#N:35 as mpstthree::role::Role>::new();
                         )20:0
                         let (stack_^N:14, _) = <R^N:12 as mpstthree::role::Role>::new();
 
-                        
                         ~(
                         )(
                             let (name_~N:22, _) = <unused~N:9<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-                        
                         )7*
                         let (name_^N:14, _) = <unused#N:23::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-                        #(
-                            let choice_#N:0 = $sessionmpst_name {
-                                    ~(
-                                        session#N:1 : channel_~N:18,
+                        ~(
+                        )(
+                            let choice_~N:22 = $sessionmpst_name {
+                                    |(
+                                        session|N:0 : channel_|N:3,
                                     )(
-                                        session#N:1 : channel_~N:18,
-                                    )8*
-                                    stack: stack_#N:0,
-                                    name: name_#N:0,
+                                        session|N:0 : channel_|N:3,
+                                    )0*
+                                    stack: stack_~N:22,
+                                    name: name_~N:22,
                                 };
-                        )20:0
+                        )7*
 
                         #(
                             let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Left(choice_#N:0), self.session#N:0);
@@ -695,9 +695,74 @@ macro_rules! bundle_impl {
                         mpstthree::binary::cancel::cancel(s);
 
                         $sessionmpst_name {
+                            ~(
+                            )(
+                                session~N:22: channel_~N:31,
+                            )7*
+                            stack: stack_^N:14,
+                            name: name_^N:14,
+                        }
+                    }
+
+                    pub fn choose_right(self) -> $sessionmpst_name<
+                        ~(
+                            <S~N:26 as mpstthree::binary::struct_trait::Session>::Dual,
+                        )(
+                            <S~N:26 as mpstthree::binary::struct_trait::Session>::Dual,
+                        )10*
+                        R^N:13,
+                        unused#N:23<mpstthree::role::end::RoleEnd>
+                    >
+                    {
+                        ~(
+                            let (channel_~N:27, channel_~N:28) = S~N:30::new();
+                        )(
+                            let (channel_~N:28, channel_~N:27) = S~N:30::new();
+                        )9*
+
+                        #(
+                            let (stack_#N:0, _) = <R#N:36 as mpstthree::role::Role>::new();
+                        )20:0
+                        let (stack_^N:14, _) = <R^N:13 as mpstthree::role::Role>::new();
+
+                        ~(
+                        )(
+                            let (name_~N:22, _) = <unused~N:9<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        )7*
+                        let (name_^N:14, _) = <unused#N:23::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+
+                        ~(
+                        )(
+                            let choice_~N:22 = $sessionmpst_name {
+                                    |(
+                                        session|N:0 : channel_|N:3,
+                                    )(
+                                        session|N:0 : channel_|N:3,
+                                    )0*
+                                    stack: stack_~N:22,
+                                    name: name_~N:22,
+                                };
+                        )7*
+
+                        #(
+                            let new_session_#N:0 = mpstthree::binary::send::send(either::Either::Right(choice_#N:0), self.session#N:0);
+                        )20:0
+
+                        let s = $sessionmpst_name {
                             #(
-                                session#N:0: channel_#N:34 ,
+                                session#N:0: new_session_#N:0,
                             )20:0
+                            stack: self.stack,
+                            name: self.name,
+                        };
+
+                        mpstthree::binary::cancel::cancel(s);
+
+                        $sessionmpst_name {
+                            ~(
+                            )(
+                                session~N:22: channel_~N:31,
+                            )7*
                             stack: stack_^N:14,
                             name: name_^N:14,
                         }

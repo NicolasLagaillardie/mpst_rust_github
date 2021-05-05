@@ -40,6 +40,7 @@ macro_rules! create_choose_type_multi {
 
 /// Create the *ChooseMpst* function to send a *Choose* left branch to be used with more than 3
 /// participants.
+/// Only works when active role is the last one (TODO: adapt to any index role).
 ///
 /// # Arguments
 ///
@@ -178,6 +179,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 
 /// Create the *ChooseMpst* function to send a *Choose* right branch to be used with more than 3
 /// participants.
+/// Only works when active role is the last one (TODO: adapt to any index role).
 ///
 /// # Arguments
 ///
@@ -315,7 +317,10 @@ macro_rules! create_choose_mpst_session_multi_right {
 }
 
 /// Create the two *ChooseMpst* functions to send a *Choose* on each branch to be used with more
-/// than 3 participants.  # Arguments
+/// than 3 participants.
+/// Only works when active role is the last one (TODO: adapt to any index role).
+///
+/// # Arguments
 ///
 /// * The name of the new *ChooseMpst* function for the left branch
 /// * The name of the new *ChooseMpst* function for the right branch
@@ -393,6 +398,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
 ///  * The number of participants (all together)
+///  * The index of the active role
 ///
 /// # Example
 ///

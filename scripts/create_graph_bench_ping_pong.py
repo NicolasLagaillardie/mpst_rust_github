@@ -24,7 +24,6 @@ nb_loops_binary = []
 nb_loops_mpst = []
 nb_loops_crossbeam = []
 
-
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
@@ -40,15 +39,18 @@ for d in directories:
         # Split the name
         splitted = d.split(' ')
 
-        if 'binary' in d:
-            binary.append(int(test(d))/10**6)
-            nb_loops_binary.append(int(splitted[-1]))
-        elif 'MPST' in d:
-            mpst.append(int(test(d))/10**6)
-            nb_loops_mpst.append(int(splitted[-1]))
-        elif 'crossbeam' in d:
-            crossbeam.append(int(test(d))/10**6)
-            nb_loops_crossbeam.append(int(splitted[-1]))
+        try:
+            if 'binary' in d:
+                binary.append(int(test(d))/10**6)
+                nb_loops_binary.append(int(splitted[-1]))
+            elif 'MPST' in d:
+                mpst.append(int(test(d))/10**6)
+                nb_loops_mpst.append(int(splitted[-1]))
+            elif 'crossbeam' in d:
+                crossbeam.append(int(test(d))/10**6)
+                nb_loops_crossbeam.append(int(splitted[-1]))
+        except:
+            print("Missing ", d)
 
 # Sort the lists in pair
 nb_loops_binary, binary = (list(t)
