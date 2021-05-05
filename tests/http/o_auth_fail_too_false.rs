@@ -10,10 +10,7 @@ use mpstthree::{
 use hyper::{Body, Client, Method, Request};
 use hyper_tls::HttpsConnector;
 use rand::{thread_rng, Rng};
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
 use std::error::Error;
-use std::fs;
 use std::marker;
 
 // global protocol OAuth(role Auth, role Client, role Server) {
@@ -255,39 +252,15 @@ create_fn_choose_mpst_multi_to_all_bundle!(
 
 // Functions
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    let new_vec = match fs::read_to_string("imgur.env") {
-        Ok(contents) => {
-            let lines: Vec<&str> = contents.split("\n").collect();
+    let req = Request::builder()
+        .method(Method::GET)
+        .body(Body::default())?;
 
-            let s = RandomState::new();
-            let mut ids: HashMap<&str, &str> = HashMap::with_hasher(s);
+    let https = HttpsConnector::new();
 
-            for line in lines {
-                let temp: Vec<&str> = line.split("=").collect();
-                ids.insert(temp[0], temp[1]);
-            }
+    let client = Client::builder().build::<_, Body>(https);
 
-            let req = Request::builder()
-                .method(Method::GET)
-                .uri(ids["CREDITS_URL"])
-                .header("content-type", ids["CONTENT_TYPE"])
-                .header(
-                    "Authorization",
-                    format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
-                )
-                .header("User-Agent", ids["USER_AGENT"])
-                .header("Accept", ids["ACCEPT"])
-                .header("Connection", ids["CONNECTION"])
-                .body(Body::default())?;
-
-            let https = HttpsConnector::new();
-
-            let client = Client::builder().build::<_, Body>(https);
-
-            vec![client.request(req)]
-        }
-        Err(_) => Vec::new(),
-    };
+    let new_vec = vec![client.request(req)];
 
     let (pwd, s, _resp) = recv_http_a_to_c(s, false, new_vec)?;
     let expected = thread_rng().gen_range(1..=3);
