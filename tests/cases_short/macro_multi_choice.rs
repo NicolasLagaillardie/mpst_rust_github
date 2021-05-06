@@ -1,81 +1,38 @@
-// Test for parametrisation on the number of roles
 use rand::{thread_rng, Rng};
 
+use either::Either;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
-use mpstthree::{
-    close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
-    create_choose_type_multi, create_multiple_normal_role, create_offer_mpst_session_multi,
-    create_offer_type_multi, create_recv_mpst_session, create_send_mpst_session,
-    create_sessionmpst, fork_mpst_multi,
-};
 use std::error::Error;
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpst, 3);
+use mpstthree::{bundle_impl, fork_mpst_multi};
 
 // Create new roles
-// normal
-create_multiple_normal_role!(
-    RoleA, RoleADual |
-    RoleB, RoleBDual |
-    RoleD, RoleDDual |
-);
-// broadcast
-create_broadcast_role!(RoleAlltoD, RoleDtoAll);
-
-// Create new send functions
-create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, SessionMpst, 3, 1);
-
-// Create new recv functions and related types
-// normal
-create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, SessionMpst, 3, 1);
-
-close_mpst!(close_mpst_multi, SessionMpst, 3);
-
-create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3);
-create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
-
-create_offer_mpst_session_multi!(
-    offer_mpst_session_a_to_d,
-    OfferMpstMultiThree,
-    RoleAlltoD,
-    RoleA,
-    SessionMpst,
-    3,
-    2
-);
-
-create_offer_mpst_session_multi!(
-    offer_mpst_session_b_to_d,
-    OfferMpstMultiThree,
-    RoleAlltoD,
-    RoleB,
-    SessionMpst,
-    3,
-    2
-);
-
-create_choose_mpst_session_multi_both!(
-    choose_left_mpst_session_d_to_all,
-    choose_right_mpst_session_d_to_all,
-    ChooseMpstThree,
-    RoleDtoAll,
-    RoleD,
-    SessionMpst,
-    3
-);
+bundle_impl!(SessionMpst => A, B, D);
 
 fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+
+type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
+    Recv<Either<SessionMpst<S0, S1, R0, N0>, SessionMpst<S2, S3, R1, N0>>, End>;
+
+type ChooseMpstThree<S0, S1, S2, S3, R0, R1, N0> = Send<
+    Either<
+        SessionMpst<
+            <S0 as Session>::Dual,
+            <S1 as Session>::Dual,
+            <R0 as Role>::Dual,
+            <N0 as Role>::Dual,
+        >,
+        SessionMpst<
+            <S2 as Session>::Dual,
+            <S3 as Session>::Dual,
+            <R1 as Role>::Dual,
+            <N0 as Role>::Dual,
+        >,
+    >,
+    End,
+>;
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -98,13 +55,11 @@ type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
 /// Stacks
 type StackAEnd = RoleEnd;
-type StackAEndDual = <StackAEnd as Role>::Dual;
 type StackAVideo = RoleD<RoleB<RoleB<RoleD<RoleEnd>>>>;
 type StackAVideoDual = <StackAVideo as Role>::Dual;
 type StackAFull = RoleD<RoleD<RoleAlltoD<RoleEnd, RoleEnd>>>;
 
 type StackBEnd = RoleEnd;
-type StackBEndDual = <StackBEnd as Role>::Dual;
 type StackBVideo = RoleA<RoleA<RoleEnd>>;
 type StackBVideoDual = <StackBVideo as Role>::Dual;
 type StackBFull = RoleAlltoD<RoleEnd, RoleEnd>;
@@ -141,15 +96,8 @@ type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
 type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
 type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
-type OfferA<N> = OfferMpstMultiThree<
-    AtoBVideo<N>,
-    AtoCVideo<N>,
-    AtoBClose,
-    AtoCClose,
-    StackAVideo,
-    StackAEnd,
-    NameA,
->;
+type OfferA<N> =
+    OfferMpstThree<AtoBVideo<N>, AtoCVideo<N>, AtoBClose, AtoCClose, StackAVideo, StackAEnd, NameA>;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
 type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAFull, NameA>;
 
@@ -157,49 +105,35 @@ type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAFull, NameA>;
 type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
 type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
-type OfferB<N> = OfferMpstMultiThree<
-    BtoAVideo<N>,
-    BtoCClose,
-    BtoAClose,
-    BtoCClose,
-    StackBVideo,
-    StackBEnd,
-    NameB,
->;
+type OfferB<N> =
+    OfferMpstThree<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, StackBVideo, StackBEnd, NameB>;
 type EndpointBFull<N> = SessionMpst<End, OfferB<N>, StackBFull, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_b_to_d(
-        s,
+    s.offer(
         |s: EndpointBVideo<i32>| {
-            let (request, s) = recv_mpst_b_from_a(s)?;
-            let s = send_mpst_b_to_a(request + 1, s);
-
-            close_mpst_multi(s)
+            let (request, s) = s.recv()?;
+            s.send(request + 1).close()
         },
-        |s: EndpointBEnd| close_mpst_multi(s),
+        |s: EndpointBEnd| s.close(),
     )
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_a_from_d(s)?;
-    let s = send_mpst_a_to_d(id + 1, s);
+    let (id, s) = s.recv()?;
 
-    offer_mpst_session_a_to_d(
-        s,
+    s.send(id + 1).offer(
         |s: EndpointAVideo<i32>| {
-            let (request, s) = recv_mpst_a_from_d(s)?;
-            let s = send_mpst_a_to_b(request + 1, s);
-            let (video, s) = recv_mpst_a_from_b(s)?;
-            let s = send_mpst_a_to_d(video + 1, s);
+            let (request, s) = s.recv()?;
+            let (video, s) = s.send(request + 1).recv()?;
 
             assert_eq!(request, id + 1);
             assert_eq!(video, id + 3);
 
-            close_mpst_multi(s)
+            s.send(video + 1).close()
         },
-        |s: EndpointAEnd| close_mpst_multi(s),
+        |s: EndpointAEnd| s.close(),
     )
 }
 
@@ -207,63 +141,26 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let s = send_mpst_d_to_a(id, s);
-    let (accept, s) = recv_mpst_d_from_a(s)?;
+    let (accept, s) = s.send(id).recv()?;
 
     assert_eq!(accept, id + 1);
 
-    let s = choose_left_mpst_session_d_to_all::<
-        AtoBVideo<i32>,
-        AtoCVideo<i32>,
-        BtoAClose,
-        CtoAClose,
-        BtoCClose,
-        AtoCClose,
-        StackAVideoDual,
-        StackAEndDual,
-        <NameA as Role>::Dual,
-        StackBVideoDual,
-        StackBEndDual,
-        <NameB as Role>::Dual,
-        StackCVideo,
-        StackCEnd,
-    >(s);
-
-    let s = send_mpst_d_to_a(accept, s);
-    let (result, s) = recv_mpst_d_from_a(s)?;
+    let (result, s) = s.choose_left().send(accept).recv()?;
 
     assert_eq!(result, accept + 3);
 
-    close_mpst_multi(s)
+    s.close()
 }
 
 fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let s = send_mpst_d_to_a(id, s);
-    let (accept, s) = recv_mpst_d_from_a(s)?;
+    let (accept, s) = s.send(id).recv()?;
 
     assert_eq!(accept, id + 1);
 
-    let s = choose_right_mpst_session_d_to_all::<
-        AtoBVideo<i32>,
-        AtoCVideo<i32>,
-        BtoAClose,
-        CtoAClose,
-        BtoCClose,
-        AtoCClose,
-        StackAVideoDual,
-        StackAEndDual,
-        <NameA as Role>::Dual,
-        StackBVideoDual,
-        StackBEndDual,
-        <NameB as Role>::Dual,
-        StackCVideo,
-        StackCEnd,
-    >(s);
-
-    close_mpst_multi(s)
+    s.choose_right().close()
 }
 
 ////////////////////////////////////////

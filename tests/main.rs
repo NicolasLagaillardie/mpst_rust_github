@@ -1,4 +1,3 @@
-mod baking;
 mod cancel;
 mod cases;
 mod cases_short;
@@ -27,11 +26,6 @@ fn unit_tests() {
     // SessionMPST
     unit::sessionmpst::sessionmpst_fields();
     unit::sessionmpst::sessionmpst_methods();
-}
-
-#[test]
-fn baking() {
-    baking::basic::main();
 }
 
 #[test]

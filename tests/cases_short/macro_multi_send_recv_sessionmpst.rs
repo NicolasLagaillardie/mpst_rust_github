@@ -2,31 +2,13 @@
 
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    close_mpst, create_multiple_normal_role, create_recv_mpst_session, create_send_mpst_session,
-    create_sessionmpst, fork_mpst_multi,
-};
+use mpstthree::{bundle_impl, fork_mpst_multi};
 use std::error::Error;
 
-// Create new SessionMpst for five participants
-create_sessionmpst!(SessionMpst, 5);
-
 // Create new roles
-create_multiple_normal_role!(
-    RoleA, RoleADual |
-    RoleB, RoleBDual |
-    RoleC, RoleCDual |
-    RoleD, RoleDDual |
-    RoleE, RoleEDual |
-);
+bundle_impl!(SessionMpst => A, B, C, D, E);
 
-// Create new send functions
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpst, 5, 2);
-
-// Create new recv functions and related types
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 5, 3);
-
-close_mpst!(close_mpst_multi, SessionMpst, 5);
+fork_mpst_multi!(fork_mpst, SessionMpst, 5);
 
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
@@ -43,28 +25,25 @@ type PawnC = SessionMpst<End, End, End, End, RoleEnd, NameC>;
 type PawnE = SessionMpst<End, End, End, End, RoleEnd, NameE>;
 
 fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_d_to_b(0, s);
-    close_mpst_multi(s)
+    s.send(0).close()
 }
 
 fn recv_b_to_d(s: RecvSessionMPSTB<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_b_from_d(s)?;
-    close_mpst_multi(s)
+    let (_, s) = s.recv()?;
+    s.close()
 }
 
 fn pawn_a(s: PawnA) -> Result<(), Box<dyn Error>> {
-    close_mpst_multi(s)
+    s.close()
 }
 
 fn pawn_c(s: PawnC) -> Result<(), Box<dyn Error>> {
-    close_mpst_multi(s)
+    s.close()
 }
 
 fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
-    close_mpst_multi(s)
+    s.close()
 }
-
-fork_mpst_multi!(fork_mpst, SessionMpst, 5);
 
 ////////////////////////////////////////
 

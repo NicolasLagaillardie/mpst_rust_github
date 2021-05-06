@@ -1,21 +1,14 @@
 // Test for parametrisation on the name of the roles
 use mpstthree::binary::struct_trait::{End, Recv, Send};
-use mpstthree::fork::fork_mpst;
-use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::sessionmpst::SessionMpst;
-use mpstthree::{
-    create_multiple_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
-    create_send_mpst_session_1, create_send_mpst_session_2,
-};
 use std::error::Error;
 
+use mpstthree::{bundle_impl, fork_mpst_multi};
+
 // Create new roles
-create_multiple_normal_role!(
-    RoleA, RoleADual |
-    RoleB, RoleBDual |
-    RoleD, RoleDDual |
-);
+bundle_impl!(SessionMpst => A, B, D);
+
+fork_mpst_multi!(fork_mpst, SessionMpst, 3);
 
 type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;
@@ -32,37 +25,27 @@ type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
 // Create an B pawn
 type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
 
-// Create new send functions
-create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, RoleD);
-create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, RoleA);
-
-// Create new recv functions
-create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, RoleD);
-create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, RoleA);
-
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_a_to_d(0, s);
-    close_mpst(s)
+    s.send(0).close()
 }
 
 fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_d_to_a(0, s);
-    close_mpst(s)
+    s.send(0).close()
 }
 
 fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_a_from_d(s)?;
-    close_mpst(s)
+    let (_, s) = s.recv()?;
+    s.close()
 }
 
 fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = recv_mpst_d_from_a(s)?;
-    close_mpst(s)
+    let (_, s) = s.recv()?;
+    s.close()
 }
 
 fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
-    close_mpst(s)
+    s.close()
 }
 
 /////////////////////////////////////////

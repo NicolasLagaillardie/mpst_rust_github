@@ -1,40 +1,24 @@
 // Test for Macro, exact same as usecase-recursive
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
-use mpstthree::fork::fork_mpst;
-use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::sessionmpst::SessionMpst;
 use std::error::Error;
 use std::marker;
 
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
+    bundle_impl, choose_mpst_multi_to_all, create_recv_mpst_session_2, fork_mpst_multi, offer_mpst,
 };
 
 // Create new roles
-create_multiple_normal_role!(
-    RoleA, RoleADual |
-    RoleB, RoleBDual |
-    RoleC, RoleCDual |
-);
+bundle_impl!(SessionMpst => A, B, C);
 
-// Create new send functions
-create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);
-create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, RoleA);
-create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, RoleC);
-create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, RoleB);
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
+fork_mpst_multi!(fork_mpst, SessionMpst, 3);
 
 // Create new recv functions and related types
-create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, RoleC);
 create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
-create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
-create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -70,8 +54,14 @@ type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 /// Creating the MP sessions
-/// For C
+/// For D
 
+type EndpointCVideo<N> = SessionMpst<
+    <AtoCVideo<N> as Session>::Dual,
+    <RecursBtoC<N> as Session>::Dual,
+    RoleA<RoleA<RoleBroadcast>>,
+    RoleC<RoleEnd>,
+>;
 type EndpointCRecurs<N> =
     SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
 type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
@@ -87,19 +77,19 @@ type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branches0BtoC::End(s) => {
-            close_mpst(s)
+            s.close()
         },
         Branches0BtoC::Video(s) => {
-            let (request, s) = recv_mpst_b_from_a(s)?;
-            let s = send_mpst_b_to_a(request + 1, s);
+            let (request, s) = s.recv()?;
+            let s = s.send(request + 1);
             server(s)
         },
     })
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_a_from_c(s)?;
-    let s = send_mpst_a_to_c(id + 1, s);
+    let (id, s) = s.recv()?;
+    let s = s.send(id + 1);
 
     authenticator_recurs(s)
 }
@@ -107,13 +97,12 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branches0AtoC::End(s) => {
-            close_mpst(s)
+            s.close()
         },
         Branches0AtoC::Video(s) => {
-            let (request, s) = recv_mpst_a_from_c(s)?;
-            let s = send_mpst_a_to_b(request + 1, s);
-            let (video, s) = recv_mpst_a_from_b(s)?;
-            let s = send_mpst_a_to_c(video + 1, s);
+            let (request, s) = s.recv()?;
+            let (video, s) = s.send(request + 1).recv()?;
+            let s = s.send(video + 1);
             authenticator_recurs(s)
         },
     })
@@ -123,8 +112,7 @@ fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
-    let s = send_mpst_c_to_a(0, s);
-    let (_, s) = recv_mpst_c_from_a(s)?;
+    let (_, s) = s.send(0).recv()?;
 
     client_recurs(s, xs, 1)
 }
@@ -136,33 +124,34 @@ fn client_recurs(
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s = choose_mpst_to_all!(
+            let s: EndpointCVideo<i32> = choose_mpst_multi_to_all!(
                 s,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
                 RoleA,
                 RoleB, =>
-                RoleC
+                RoleC, SessionMpst,
+                3, 3
             );
 
-            let s = send_mpst_c_to_a(1, s);
-            let (_, s) = recv_mpst_c_from_a(s)?;
+            let (_, s) = s.send(1).recv()?;
 
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_to_all!(
+            let s = choose_mpst_multi_to_all!(
                 s,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
                 RoleA,
                 RoleB, =>
-                RoleC
+                RoleC, SessionMpst,
+                3, 3
             );
 
             assert_eq!(index, 100);
 
-            close_mpst(s)
+            s.close()
         }
     }
 }

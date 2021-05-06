@@ -393,7 +393,7 @@ macro_rules! bundle_impl {
                             unused#N:23<mpstthree::role::end::RoleEnd>
                         >
                     {
-                        pub fn recv(self, payload: T) -> Result<(
+                        pub fn recv(self) -> Result<(
                                 T,
                                 $sessionmpst_name<
                                     |(
