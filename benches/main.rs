@@ -54,6 +54,7 @@ criterion_main! {
     // //////////
     // benchmarks::ring::ring_three::ring_three,
     // benchmarks::ring::ring_three_empty::ring_three,
+    // benchmarks::ring::ring_cancel_three::ring_three,
     // benchmarks::ring::ring_four::ring_four,
     // benchmarks::ring::ring_four_empty::ring_four,
     // benchmarks::ring::ring_five::ring_five,
