@@ -325,19 +325,19 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 static SIZE: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring three MPST {}", SIZE), |b| {
+    c.bench_function(&format!("ring three protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ring three binary {}", SIZE), |b| {
+    c.bench_function(&format!("ring three protocol binary {}", SIZE), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("ring three crossbeam {}", SIZE), |b| {
+    c.bench_function(&format!("ring three protocol crossbeam {}", SIZE), |b| {
         b.iter(|| all_crossbeam())
     });
 }
