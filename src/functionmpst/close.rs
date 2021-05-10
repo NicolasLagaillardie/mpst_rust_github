@@ -7,7 +7,7 @@ use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use std::error::Error;
 
-/// Closes a [`mpstthree::sessionmpst::Sessionmpst`](../sessionmpst/struct. SessionMpst.html).
+/// Closes a [`mpstthree::sessionmpst::Sessionmpst`](../sessionmpst/struct.SessionMpst.html).
 /// Synchronises with all partners, and fails if one of the partners has
 /// crashed.
 ///

@@ -3,8 +3,9 @@
 
 /// Creates the _simple fork_ function to be used with more
 /// than 3 participants. It should be used with
-/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.
-/// html)  # Arguments
+/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
+///
+/// # Arguments
 ///
 /// * The name of the new simple *fork* function
 /// * The name of the *SessionMpst* type that will be used

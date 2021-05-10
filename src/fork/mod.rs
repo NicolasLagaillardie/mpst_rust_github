@@ -36,7 +36,7 @@ where
 }
 
 /// Creates and returns a tuple of three child processes for
-/// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst. html) linked
+/// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html) linked
 /// together.
 ///
 /// # Example

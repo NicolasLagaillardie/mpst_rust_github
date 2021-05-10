@@ -268,8 +268,8 @@ macro_rules! choose_mpst_c {
 /// * R5: stack of A on right branch
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4, RoleA<RoleEnd>>
@@ -330,8 +330,8 @@ where
 /// * R5: stack of A on right branch
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5, RoleA<RoleEnd>>
@@ -393,8 +393,8 @@ where
 /// * R5: stack of B on right branch
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4, RoleB<RoleEnd>>
@@ -455,8 +455,8 @@ where
 /// * R5: stack of B on right branch
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5, RoleB<RoleEnd>>
@@ -517,8 +517,8 @@ where
 /// * R5: stack of C on right branch
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S2, S3, R4, RoleC<RoleEnd>>
@@ -579,8 +579,8 @@ where
 /// * R5: stack of C on right branch
 ///
 /// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> SessionMpst<S4, S5, R5, RoleC<RoleEnd>>

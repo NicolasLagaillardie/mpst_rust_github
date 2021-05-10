@@ -146,7 +146,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// # Arguments
 ///
 /// * The session to be used
-/// * [Optional] The *recv* function that will be used
+/// * \[Optional\] The *recv* function that will be used
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 ///
@@ -197,7 +197,7 @@ macro_rules! offer_mpst {
 /// # Arguments
 ///
 /// * The session to be used
-/// * [Optional] The *recv* function that will be used
+/// * \[Optional\] The *recv* function that will be used
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 #[macro_export]
