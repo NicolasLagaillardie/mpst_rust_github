@@ -9,11 +9,7 @@ error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_tra
    |     T: marker::Send,
    |        ------------ required by this bound in `Recv`
    |
-note: required because it appears within the type `SumOp<i32>`
-  --> $DIR/fail_2.rs:12:6
-   |
-12 | enum SumOp<N: marker::Send + 'static> {
-   |      ^^^^^
+   = note: required because it appears within the type `SumOp<i32>`
 
 error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>>: std::marker::Send`
   --> $DIR/fail_2.rs:24:29
@@ -26,11 +22,7 @@ error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_tra
    |     T: marker::Send,
    |        ------------ required by this bound in `Recv`
    |
-note: required because it appears within the type `SumOp<i32>`
-  --> $DIR/fail_2.rs:12:6
-   |
-12 | enum SumOp<N: marker::Send + 'static> {
-   |      ^^^^^
+   = note: required because it appears within the type `SumOp<i32>`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>: Session`
   --> $DIR/fail_2.rs:44:1
@@ -46,9 +38,5 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::b
    |
    = note: required because of the requirements on the impl of `Session` for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>`
    = note: required because it appears within the type `mpstthree::binary::struct_trait::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>>`
-note: required because it appears within the type `SumOp<i32>`
-  --> $DIR/fail_2.rs:12:6
-   |
-12 | enum SumOp<N: marker::Send + 'static> {
-   |      ^^^^^
+   = note: required because it appears within the type `SumOp<i32>`
    = note: required because of the requirements on the impl of `Session` for `Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>`
