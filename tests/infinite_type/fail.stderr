@@ -1,0 +1,42 @@
+error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>>: std::marker::Send`
+  --> $DIR/fail.rs:20:23
+   |
+20 | fn nice_sum_server(s: NiceSumServer<i32>) -> Result<(), Box<dyn Error>> {
+   |                       ^^^^^^^^^^^^^^^^^^
+   |
+  ::: $WORKSPACE/src/binary/struct_trait.rs
+   |
+   |     T: marker::Send,
+   |        ------------ required by this bound in `Recv`
+   |
+   = note: required because it appears within the type `SumOp<i32>`
+
+error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>>: std::marker::Send`
+  --> $DIR/fail.rs:24:29
+   |
+24 | fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Error>> {
+   |                             ^^^^^^^^^^^^^^^^^^
+   |
+  ::: $WORKSPACE/src/binary/struct_trait.rs
+   |
+   |     T: marker::Send,
+   |        ------------ required by this bound in `Recv`
+   |
+   = note: required because it appears within the type `SumOp<i32>`
+
+error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>: Session`
+  --> $DIR/fail.rs:45:1
+   |
+45 | / fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+46 | |     match xs.pop() {
+47 | |         Option::Some(x) if x % 2 == 0 => {
+48 | |             let s = choose!(SumOp::More, s);
+...  |
+65 | |     }
+66 | | }
+   | |_^
+   |
+   = note: required because of the requirements on the impl of `Session` for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>`
+   = note: required because it appears within the type `mpstthree::binary::struct_trait::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>>>`
+   = note: required because it appears within the type `SumOp<i32>`
+   = note: required because of the requirements on the impl of `Session` for `Recv<SumOp<i32>, mpstthree::binary::struct_trait::End>`

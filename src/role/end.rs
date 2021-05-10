@@ -1,14 +1,22 @@
-use crate::role::Role;
 use crossbeam_channel::{bounded, Receiver, Sender};
 
-/// End of communication.
+/// This structure is used to close an ordering or a name.
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::binary::struct_trait::End;
+///
+/// // Creating the binary sessions
+/// type Close = End;
+/// ```
 #[derive(Debug)]
 pub struct RoleEnd {
     pub sender: Sender<()>,
     pub receiver: Receiver<()>,
 }
 
-impl Role for RoleEnd {
+impl crate::role::Role for RoleEnd {
     type Dual = RoleEnd;
 
     #[doc(hidden)]

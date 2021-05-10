@@ -1,4 +1,7 @@
-use crate::binary::{cancel, Session};
+//! This module contains all the *offer* functions
+
+use crate::binary::cancel::cancel;
+use crate::binary::struct_trait::Session;
 use crate::functionmpst::recv::{
     recv_mpst_a_all_to_b, recv_mpst_a_all_to_c, recv_mpst_b_all_to_a, recv_mpst_b_all_to_c,
     recv_mpst_c_all_to_a, recv_mpst_c_all_to_b,
@@ -14,8 +17,6 @@ use crate::role::end::RoleEnd;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use std::error::Error;
-
-// type OfferMpstGeneric<S1, S2, S3, S4, R1, R2, N1, N2> = OfferMpst<S1, S2, S3, S4, R1, R2, N1, N2>;
 
 type SessionMpstToAFromB<S1, S2, S3, S4, S5, R1, R2> = SessionMpst<
     OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
@@ -54,8 +55,30 @@ type SessionMpstToCFromB<S1, S2, S3, S4, S5, R1, R2> = SessionMpst<
     RoleC<RoleEnd>,
 >;
 
-/// Offer a choice to A from B (on its session field related to B)
-/// between two `SessionMpst`, `SessionMpst<S1, S2, R1, N1>` and `SessionMpst<S3, S4, R2, N2>`.
+/// Offer a choice to A from B (on its session field related
+/// to B) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
+///
+/// # Example
+///
+/// // Please check the tests  `usecase`
+///
+/// ```ignore
+/// offer_mpst_session_to_a_from_b(
+///    s,
+///    |s: EndpointARecv<i32>| {
+///        let (request, s) = recv_mpst_a_from_b(s)?;
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+///    |s: EndpointAEnd| {
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+/// )
+/// ```
 pub fn offer_mpst_session_to_a_from_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: SessionMpstToAFromB<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -77,8 +100,30 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to B from C (on its session field related to A)
-/// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
+/// Offer a choice to B from C (on its session field related
+/// to A) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
+///
+/// # Example
+///
+/// // Please check the tests  `usecase`
+///
+/// ```ignore
+/// offer_mpst_session_to_a_from_c(
+///    s,
+///    |s: EndpointARecv<i32>| {
+///        let (request, s) = recv_mpst_a_from_c(s)?;
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+///    |s: EndpointAEnd| {
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+/// )
+/// ```
 pub fn offer_mpst_session_to_a_from_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: SessionMpstToAFromC<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -100,8 +145,30 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from B (on its session field related to B)
-/// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
+/// Offer a choice to A from B (on its session field related
+/// to B) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
+///
+/// # Example
+///
+/// // Please check the tests  `usecase`
+///
+/// ```ignore
+/// offer_mpst_session_to_b_from_a(
+///    s,
+///    |s: EndpointBRecv<i32>| {
+///        let (request, s) = recv_mpst_b_from_a(s)?;
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+///    |s: EndpointBEnd| {
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+/// )
+/// ```
 pub fn offer_mpst_session_to_b_from_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: SessionMpstToBFromA<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -123,8 +190,30 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from B (on its session field related to B)
-/// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
+/// Offer a choice to A from B (on its session field related
+/// to B) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
+///
+/// # Example
+///
+/// // Please check the tests  `usecase`
+///
+/// ```ignore
+/// offer_mpst_session_to_b_from_c(
+///    s,
+///    |s: EndpointBRecv<i32>| {
+///        let (request, s) = recv_mpst_b_from_c(s)?;
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+///    |s: EndpointBEnd| {
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+/// )
+/// ```
 pub fn offer_mpst_session_to_b_from_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: SessionMpstToBFromC<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -146,8 +235,30 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from C (on its session field related to C)
-/// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
+/// Offer a choice to A from C (on its session field related
+/// to C) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
+///
+/// # Example
+///
+/// // Please check the tests  `usecase`
+///
+/// ```ignore
+/// offer_mpst_session_to_c_from_a(
+///    s,
+///    |s: EndpointCRecv<i32>| {
+///        let (request, s) = recv_mpst_c_from_a(s)?;
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+///    |s: EndpointCEnd| {
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+/// )
+/// ```
 pub fn offer_mpst_session_to_c_from_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: SessionMpstToCFromA<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -169,8 +280,30 @@ where
     e.either(f, g)
 }
 
-/// Offer a choice to A from C (on its session field related to C)
-/// between two `SessionMpst`, `SessionMpst<S1, S2, R1>` and `SessionMpst<S3, S4, R2>`.
+/// Offer a choice to A from C (on its session field related
+/// to C) between two
+/// [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/
+/// struct.SessionMpst. html), `SessionMpst<S1, S2, R1, N1>`
+/// and `SessionMpst<S3, S4, R2, N2>`.
+///
+/// # Example
+///
+/// // Please check the tests  `usecase`
+///
+/// ```ignore
+/// offer_mpst_session_to_c_from_b(
+///    s,
+///    |s: EndpointCRecv<i32>| {
+///        let (request, s) = recv_mpst_c_from_b(s)?;
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+///    |s: EndpointCEnd| {
+///        close_mpst(s)?;
+///        Ok(())
+///    },
+/// )
+/// ```
 pub fn offer_mpst_session_to_c_from_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: SessionMpstToCFromB<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -190,100 +323,4 @@ where
     let (e, s) = recv_mpst_c_all_to_b(s)?;
     cancel(s);
     e.either(f, g)
-}
-
-/// Offer a choice at A from C between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! offer_mpst_a_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_c($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
-}
-
-/// Offer a choice at B from C between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! offer_mpst_b_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_b_to_c($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
-}
-
-/// Offer a choice at A from B between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! offer_mpst_a_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_to_b($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
-}
-
-/// Offer a choice at B from A between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! offer_mpst_b_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_b_to_a($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
-}
-
-/// Offer a choice at C from B between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! offer_mpst_c_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_c_to_b($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
-}
-
-/// Offer a choice at C from A between many different sessions wrapped in an `enum`
-#[macro_export]
-macro_rules! offer_mpst_c_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = mpstthree::functionmpst::recv::recv_mpst_c_to_a($session)?;
-            mpstthree::binary::cancel(s);
-            match l {
-                $(
-                    $pat => { $result },
-                )*
-            }
-        })()
-    };
 }

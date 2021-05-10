@@ -1,9 +1,13 @@
+//! This module is a beta feature that only works with
+//! RoleA, RoleB and RoleC. It also has various
+//! prerequisites that are shown in tests 06.
+
 mod aux_checker;
 mod aux_dot;
 
 use self::aux_checker::{checker_aux, parse_type_of};
 
-use crate::binary::Session;
+use crate::binary::struct_trait::Session;
 use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 
@@ -11,15 +15,30 @@ use std::collections::HashMap;
 use std::error::Error;
 
 /// Displays the local endpoints of each roles.
-/// It is required that the `SessionMpst` are the root ones, and not a partial part included in a bigger one.
-/// It is useful for checking whether the implemented local endpoints are the expected ones.
+/// It is required that the `SessionMpst` are the root ones,
+/// and not a partial part included in a bigger one. It is
+/// useful for checking whether the implemented local
+/// endpoints are the expected ones.
 ///
 /// Returns the 3 strings if everything went right.
-pub fn checker<S0, S1, S2, R1, R2, R3, N1, N2, N3, S: ::std::hash::BuildHasher>(
+pub fn checker<
+    S0,
+    S1,
+    S2,
+    R1,
+    R2,
+    R3,
+    N1,
+    N2,
+    N3,
+    BH1: ::std::hash::BuildHasher,
+    BH2: ::std::hash::BuildHasher,
+>(
     s1: SessionMpst<S0, <S2 as Session>::Dual, R1, N1>,
     s2: SessionMpst<<S0 as Session>::Dual, S1, R2, N2>,
     s3: SessionMpst<S2, <S1 as Session>::Dual, R3, N3>,
-    hm: &HashMap<String, &Vec<String>, S>,
+    branches_receivers: &HashMap<String, &Vec<String>, BH1>,
+    branches_sender: &HashMap<String, &Vec<String>, BH2>,
 ) -> Result<(String, String, String), Box<dyn Error>>
 where
     S0: Session + 'static,
@@ -40,7 +59,7 @@ where
             &parse_type_of(&s1.name),
         ],
         "A",
-        hm,
+        (branches_receivers, branches_sender),
         &mut vec![],
     )?;
     // println!("result A: {}", &result_1);
@@ -52,7 +71,7 @@ where
             &parse_type_of(&s2.name),
         ],
         "B",
-        hm,
+        (branches_receivers, branches_sender),
         &mut vec![],
     )?;
     // println!("result B: {}", &result_2);
@@ -64,7 +83,7 @@ where
             &parse_type_of(&s3.name),
         ],
         "C",
-        hm,
+        (branches_receivers, branches_sender),
         &mut vec![],
     )?;
     // println!("result C: {}", &result_3);
@@ -76,8 +95,10 @@ where
     ))
 }
 
-/// macro to create hashmap function, necessary for recursion. Need to sort out the path
+/// macro to create hashmap function, necessary for
+/// recursion. Need to sort out the path
 #[macro_export]
+#[doc(hidden)]
 macro_rules! checker_hashmaps {
     // ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:path, )* }, )*) => {
         ({ $($branch:path, $func:ident, { $($pat:path, )* }, )* }) => {

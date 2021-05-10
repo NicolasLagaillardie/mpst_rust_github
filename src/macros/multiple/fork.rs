@@ -1,6 +1,24 @@
 ////////////////////////////////////////////
 /// FORK
 
+/// Creates the _simple fork_ function to be used with more
+/// than 3 participants. It should be used with
+/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.
+/// html)  # Arguments
+///
+/// * The name of the new simple *fork* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::{create_sessionmpst, fork_simple_multi};
+///
+/// create_sessionmpst!(SessionMpst, 3);
+///
+/// fork_simple_multi!(fork_simple, SessionMpst, 3);
+/// ```
 #[macro_export]
 macro_rules! fork_simple_multi {
     ($func_name: ident, $struct_name:ident, $nsessions:literal) => {
@@ -8,7 +26,7 @@ macro_rules! fork_simple_multi {
             fn $func_name<#(S#K:0,)0:0 R, N, P>(p: P, s: $struct_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
             where
                 #(
-                    S#K:0: mpstthree::binary::Session + 'static,
+                    S#K:0: mpstthree::binary::struct_trait::Session + 'static,
                 )0:0
                 R: mpstthree::role::Role + 'static,
                 N: mpstthree::role::Role + 'static,
@@ -28,10 +46,27 @@ macro_rules! fork_simple_multi {
     }
 }
 
-/// TODO
+/// Creates the _fork_ function to be used with more than 3
+/// participants. It must be used with
+/// [`mpstthree::fork_simple`](../macro.fork_simple.html)  #
+/// Arguments
+/// * The name of the new *fork* function
+/// * The name of the *simple fork* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::{create_sessionmpst, fork_mpst_multi};
+///
+/// create_sessionmpst!(SessionMpst, 3);
+///
+/// fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+/// ```
 #[macro_export]
 macro_rules! fork_mpst_multi {
-    ($func_name: ident, $fork_function: ident, $struct_name:ident, $nsessions:literal) => {
+    ($func_name: ident, $struct_name:ident, $nsessions:literal) => {
         mpst_seq::seq!(K in 1..=$nsessions {
             fn $func_name<#(S#K:0,)14:0 #(R#K:0,)0:0 #(N#K:0,)0:0 #(F#K:0,)0:0>(
                 #(
@@ -39,7 +74,7 @@ macro_rules! fork_mpst_multi {
                 )0:0
             ) -> (
                 #(
-                    Result<(), Box<(dyn std::any::Any + std::marker::Send + 'static)>>,
+                    std::thread::JoinHandle<()>,
                 )0:0
             )
             where
@@ -50,14 +85,14 @@ macro_rules! fork_mpst_multi {
                     N#K:0: mpstthree::role::Role + 'static,
                 )0:0
                 #(
-                    S#K:0: mpstthree::binary::Session + 'static,
+                    S#K:0: mpstthree::binary::struct_trait::Session + 'static,
                 )14:0
                 #( // i in 1..K
                     F#K:0: FnOnce($struct_name<
                         ~( // j in 0..K
                             S~K:6, // S(i + j) (with Dual if needed)
                         )(
-                            <S~K:6 as mpstthree::binary::Session>::Dual,
+                            <S~K:6 as mpstthree::binary::struct_trait::Session>::Dual,
                         )4*
                         R#K:0, N#K:0>) -> Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
@@ -65,7 +100,7 @@ macro_rules! fork_mpst_multi {
                 )0:0
             {
                 #( // i in 1..(diff * (diff + 1))
-                    let (channel_#K:12, channel_#K:13) = S#K:0::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
+                    let (channel_#K:12, channel_#K:13) = <S#K:0 as mpstthree::binary::struct_trait::Session>::new(); // channel_(get from matrix), channel_(opposite get from matrix) = S(i)
                 )14:0
 
                 #(
@@ -88,13 +123,17 @@ macro_rules! fork_mpst_multi {
                     };
                 )0:0
 
-                #(
-                    let thread_#K:0 = $fork_function(f#K:0, sessionmpst_#K:0);
-                )0:0
-
                 (
                     #(
-                        thread_#K:0.join(),
+                        std::thread::spawn(move || {
+                            std::panic::set_hook(Box::new(|_info| {
+                                // do nothing
+                            }));
+                            match f#K:0(sessionmpst_#K:0) {
+                                Ok(()) => (),
+                                Err(e) => panic!("{:?}", e),
+                            }
+                        }),
                     )0:0
                 )
             }

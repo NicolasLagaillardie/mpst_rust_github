@@ -1,6 +1,21 @@
 ////////////////////////////////////////////
 /// SESSIONMPST
 
+/// Creates a SessionMpst for more than 3 participants.
+///
+/// # Arguments
+///
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::create_sessionmpst;
+/// use mpstthree::role::Role;
+///
+/// create_sessionmpst!(SessionMpst, 3);
+/// ```
 #[macro_export]
 macro_rules! create_sessionmpst {
     ($struct_name:ident, $nsessions:literal) => {
@@ -9,11 +24,18 @@ macro_rules! create_sessionmpst {
             #[derive(Debug)]
             pub struct $struct_name<
                 #(
-                    S#N:0: mpstthree::binary::Session,
+                    S#N:0,
+                )0:0
+                R,
+                N
+            >
+            where
+                #(
+                    S#N:0: mpstthree::binary::struct_trait::Session,
                 )0:0
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > {
+            {
                 #(
                     pub session#N:0: S#N:0,
                 )0:0
@@ -22,9 +44,9 @@ macro_rules! create_sessionmpst {
             }
 
             #[doc(hidden)]
-            impl<#(S#N:0: mpstthree::binary::Session,)0:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::Session for $struct_name<#(S#N:0, )0:0 R, N> {
+            impl<#(S#N:0: mpstthree::binary::struct_trait::Session,)0:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::struct_trait::Session for $struct_name<#(S#N:0, )0:0 R, N> {
                 type Dual =
-                $struct_name<#(<S#N:0 as mpstthree::binary::Session>::Dual, )0:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
+                $struct_name<#(<S#N:0 as mpstthree::binary::struct_trait::Session>::Dual, )0:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 
                 #[doc(hidden)]
                 fn new() -> (Self, Self::Dual) {
@@ -54,7 +76,7 @@ macro_rules! create_sessionmpst {
                 }
 
                 #[doc(hidden)]
-                fn head_str() -> String {
+                fn head_str() -> String { // TODO: Need to modify to adapt with the number of participants
                     format!(
                         "{} + {} + {} + {}",
                         S1::head_str(),
@@ -65,7 +87,7 @@ macro_rules! create_sessionmpst {
                 }
 
                 #[doc(hidden)]
-                fn tail_str() -> String {
+                fn tail_str() -> String { // TODO: Need to modify to adapt with the number of participants
                     format!(
                         "{} + {} + {} + {}",
                         S1::tail_str(),

@@ -17,3 +17,39 @@ notes.txt
 
 .criterion
 /tmp
+
+# Remove useless workflows
+.github/workflows/cross_compile.yml
+.github/workflows/grcov.yml
+
+# Removed until finding fix
+.travis.yml
+
+# Remove expanding test
+/tests/expand.rs
+
+# Flamegraph
+/flamegraphs
+perf.data
+perf.data.old
+
+# Valgrind
+/cachegrind
+
+# Graphs
+/graphs_bench
+
+# Results
+/compile_time
+cg_diff.txt
+
+# Expand
+/expand
+test.rs
+
+# WIP
+/wip
+
+/scripts/numbers
+
+*.env
