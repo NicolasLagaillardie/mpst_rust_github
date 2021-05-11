@@ -733,7 +733,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 static SIZE: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring nine protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("ring nine cancel protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }

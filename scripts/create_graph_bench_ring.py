@@ -31,7 +31,7 @@ nb_participants_crossbeam = []
 nb_participants_cancel = []
 
 # Number of loops in the recursion
-number_of_loops = '0'
+number_of_loops = '100'
 
 
 def test(path):

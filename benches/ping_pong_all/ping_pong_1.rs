@@ -128,10 +128,6 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    recurs_b(s)
-}
-
 fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_a, {
         Branching0fromAtoB::Done(s) => {
@@ -146,7 +142,7 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 }
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_b) = fork_mpst(black_box(endpoint_a), black_box(endpoint_b));
+    let (thread_a, thread_b) = fork_mpst(black_box(endpoint_a), black_box(recurs_b));
 
     thread_a.join()?;
     thread_b.join()?;

@@ -118,7 +118,7 @@ nb_participants_cancel = []
 # ax.grid(which='both')
 
 # Number of loops in the recursion
-number_of_loops = '100'
+number_of_loops = '0'
 
 
 def test(path):
@@ -184,7 +184,6 @@ ax.plot(nb_participants_binary, binary, label='Binary',
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
         linestyle='-.', linewidth=5)
-
 
 if len(cancel) > 0:
     # Plot the cancel graph

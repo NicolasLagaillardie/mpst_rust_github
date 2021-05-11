@@ -2,6 +2,8 @@
 
 set -e
 
+sleep 5
+
 # cargo bench --bench main -- --verbose
 
 # cargo criterion --message-format=json

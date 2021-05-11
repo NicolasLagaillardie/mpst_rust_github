@@ -19,10 +19,13 @@ path_file = '/base/estimates.json'
 binary = []
 mpst = []
 crossbeam = []
+cancel = []
 
 nb_loops_binary = []
 nb_loops_mpst = []
 nb_loops_crossbeam = []
+nb_loops_cancel = []
+
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
@@ -44,8 +47,12 @@ for d in directories:
                 binary.append(int(test(d))/10**6)
                 nb_loops_binary.append(int(splitted[-1]))
             elif 'MPST' in d:
-                mpst.append(int(test(d))/10**6)
-                nb_loops_mpst.append(int(splitted[-1]))
+                if 'cancel' in d:
+                    cancel.append(int(test(d))/10**6)
+                    nb_loops_cancel.append(int(splitted[-1]))
+                else:
+                    mpst.append(int(test(d))/10**6)
+                    nb_loops_mpst.append(int(splitted[-1]))
             elif 'crossbeam' in d:
                 crossbeam.append(int(test(d))/10**6)
                 nb_loops_crossbeam.append(int(splitted[-1]))
@@ -60,6 +67,9 @@ nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
 
 nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
     *sorted(zip(nb_loops_crossbeam, crossbeam))))
+
+nb_loops_cancel, cancel = (list(t)
+                           for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
 
 # Change size
 ax = plt.figure(figsize=(30, 15)).gca()
@@ -78,6 +88,11 @@ ax.plot(nb_loops_binary, binary, label='Binary',
 # Plot the crossbeam graph
 ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
         linestyle='-.', linewidth=5)
+
+if len(cancel) > 0:
+    # Plot the cancel graph
+    ax.plot(nb_loops_cancel, cancel, label='Cancel',
+            linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of loops', fontsize=30)
