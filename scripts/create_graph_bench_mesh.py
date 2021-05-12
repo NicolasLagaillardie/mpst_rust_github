@@ -50,13 +50,13 @@ nb_participants_cancel = []
 
 #         # If MPST of binary, append to related lists
 #         if 'MPST' in d and str_to_int[splitted[1]] >= 3:
-#             mpst.append(int(test(d))/10**9)
+#             mpst.append(int(test(d))/10**6)
 #             nb_participants_mpst.append(str_to_int[splitted[1]])
 #         elif 'binary' in d and str_to_int[splitted[1]] >= 3:
-#             binary.append(int(test(d))/10**9)
+#             binary.append(int(test(d))/10**6)
 #             nb_participants_binary.append(str_to_int[splitted[1]])
 #         elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
-#             crossbeam.append(int(test(d))/10**9)
+#             crossbeam.append(int(test(d))/10**6)
 #             nb_participants_crossbeam.append(str_to_int[splitted[1]])
 
 # # Sort the lists in pair
@@ -118,7 +118,7 @@ nb_participants_cancel = []
 # ax.grid(which='both')
 
 # Number of loops in the recursion
-number_of_loops = '0'
+number_of_loops = '100'
 
 
 def test(path):
@@ -139,16 +139,16 @@ for d in directories:
             # If MPST of binary, append to related lists
             if 'MPST' in d and str_to_int[splitted[1]] >= 3:
                 if 'cancel' in d:
-                    cancel.append(int(test(d))/10**9)
+                    cancel.append(int(test(d))/10**6)
                     nb_participants_cancel.append(str_to_int[splitted[1]])
                 else:
-                    mpst.append(int(test(d))/10**9)
+                    mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
             elif 'binary' in d and str_to_int[splitted[1]] >= 3:
-                binary.append(int(test(d))/10**9)
+                binary.append(int(test(d))/10**6)
                 nb_participants_binary.append(str_to_int[splitted[1]])
             elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
-                crossbeam.append(int(test(d))/10**9)
+                crossbeam.append(int(test(d))/10**6)
                 nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
             print("Missing ", d)
@@ -192,7 +192,7 @@ if len(cancel) > 0:
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
-ax.set_ylabel('Time (s)', fontsize=30)
+ax.set_ylabel('Time (ms)', fontsize=30)
 ax.tick_params(axis='both', which='major', labelsize=30)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 

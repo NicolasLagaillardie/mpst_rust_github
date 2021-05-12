@@ -9,12 +9,13 @@ rm -rf compile_time/$1*.txt
 for i in {1..5}
 do
     # Remove previous build
-    rm -rf target/debug/
-    rm -rf target/doc/
-    rm -rf target/release/
-    rm -rf target/rls/
-    rm -rf target/.rustc_info.json
-    rm -rf target/.rustdoc_fingerprint
+    rm -rf target/*
+    # rm -rf target/debug/
+    # rm -rf target/doc/
+    # rm -rf target/release/
+    # rm -rf target/rls/
+    # rm -rf target/.rustc_info.json
+    # rm -rf target/.rustdoc_fingerprint
     # Get time
     ts=$(date +%s%N)
     # Run command
@@ -29,12 +30,13 @@ done
 for i in {1..5}
 do
     # Remove previous build
-    rm -rf target/debug/
-    rm -rf target/doc/
-    rm -rf target/release/
-    rm -rf target/rls/
-    rm -rf target/.rustc_info.json
-    rm -rf target/.rustdoc_fingerprint
+    rm -rf target/*
+    # rm -rf target/debug/
+    # rm -rf target/doc/
+    # rm -rf target/release/
+    # rm -rf target/rls/
+    # rm -rf target/.rustc_info.json
+    # rm -rf target/.rustdoc_fingerprint
     # Get time
     ts=$(date +%s%N)
     # Run command
@@ -49,12 +51,13 @@ done
 for i in {1..5}
 do
     # Remove previous build
-    rm -rf target/debug/
-    rm -rf target/doc/
-    rm -rf target/release/
-    rm -rf target/rls/
-    rm -rf target/.rustc_info.json
-    rm -rf target/.rustdoc_fingerprint
+    rm -rf target/*
+    # rm -rf target/debug/
+    # rm -rf target/doc/
+    # rm -rf target/release/
+    # rm -rf target/rls/
+    # rm -rf target/.rustc_info.json
+    # rm -rf target/.rustdoc_fingerprint
     # Get time
     ts=$(date +%s%N)
     # Run command

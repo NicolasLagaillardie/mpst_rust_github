@@ -58,6 +58,7 @@ sleep 5
 # ./scripts/compile.sh long_simple_eleven_crossbeam
 # ./scripts/compile.sh long_simple_twelve_crossbeam
 ./scripts/compile.sh o_auth
+./scripts/compile.sh o_auth_2
 ./scripts/compile.sh fib
 ./scripts/compile.sh simple_voting_three
 ./scripts/compile.sh three_buyer
