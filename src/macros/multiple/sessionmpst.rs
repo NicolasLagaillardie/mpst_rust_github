@@ -119,7 +119,7 @@ macro_rules! create_sessionmpst {
                 N: mpstthree::role::Role
             > $sessionmpst_name<#(S#N:0,)0:0 R, N> {
                 #[doc(hidden)]
-                pub fn field_names(self) -> 
+                pub fn field_names(self) ->
                     (
                         &'static [&'static str],
                         $sessionmpst_name<#(S#N:0,)0:0 R, N>
