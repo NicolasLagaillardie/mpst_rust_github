@@ -46,6 +46,8 @@ type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 
 /// Single test for A
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+    let (size, s) = s.field_names();
+    assert_eq!(size.len(), 2);
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_from_c(s)?;
 
@@ -56,6 +58,8 @@ fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 
 /// Single test for B
 fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+    let (size, s) = s.field_names();
+    assert_eq!(size.len(), 2);
     let (x, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
@@ -66,6 +70,8 @@ fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 
 /// Single test for C
 fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    let (size, s) = s.field_names();
+    assert_eq!(size.len(), 2);
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_from_b(s)?;
 

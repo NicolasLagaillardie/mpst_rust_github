@@ -62,7 +62,3 @@ pub fn sessionmpst_methods() {
         )
     );
 }
-
-pub fn sessionmpst_field_names() {
-    assert_eq!(Endpoint::<i32>::field_names(), &["session1", "session2"]);
-}

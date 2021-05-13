@@ -108,15 +108,30 @@ macro_rules! create_sessionmpst {
                         N::head_str()
                     )
                 }
+            }
 
+            #[doc(hidden)]
+            impl<
+                #(
+                    S#N:0: mpstthree::binary::struct_trait::Session,
+                )0:0
+                R: mpstthree::role::Role,
+                N: mpstthree::role::Role
+            > $sessionmpst_name<#(S#N:0,)0:0 R, N> {
                 #[doc(hidden)]
-                fn field_names() -> &'static [&'static str] {
-                    static NAMES: &[&str] = &[
-                        #(
-                            stringify!(session#N:0),
-                        )0:0
-                    ];
-                    NAMES
+                pub fn field_names(self) -> 
+                    (
+                        &'static [&'static str],
+                        $sessionmpst_name<#(S#N:0,)0:0 R, N>
+                    ) {
+                    (
+                        &[
+                            #(
+                                stringify!(session#N:0),
+                            )0:0
+                        ],
+                        self
+                    )
                 }
             }
         });

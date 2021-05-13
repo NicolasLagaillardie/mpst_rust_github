@@ -60,9 +60,6 @@ pub trait Session: marker::Sized + marker::Send {
 
     #[doc(hidden)]
     fn tail_str() -> String;
-
-    #[doc(hidden)]
-    fn field_names() -> &'static [&'static str];
 }
 
 impl Session for End {
@@ -94,12 +91,6 @@ impl Session for End {
     fn tail_str() -> String {
         String::from("")
     }
-
-    #[doc(hidden)]
-    fn field_names() -> &'static [&'static str] {
-        static NAMES: &[&str] = &[stringify!(sender), stringify!(receiver)];
-        NAMES
-    }
 }
 
 impl<T: marker::Send, S: Session> Session for Send<T, S> {
@@ -120,12 +111,6 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
-
-    #[doc(hidden)]
-    fn field_names() -> &'static [&'static str] {
-        static NAMES: &[&str] = &[stringify!(channel)];
-        NAMES
-    }
 }
 
 impl<T: marker::Send, S: Session> Session for Recv<T, S> {
@@ -145,11 +130,5 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
-    }
-
-    #[doc(hidden)]
-    fn field_names() -> &'static [&'static str] {
-        static NAMES: &[&str] = &[stringify!(channel)];
-        NAMES
     }
 }

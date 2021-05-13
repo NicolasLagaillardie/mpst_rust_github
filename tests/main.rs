@@ -26,7 +26,6 @@ fn unit_tests() {
     // SessionMPST
     unit::sessionmpst::sessionmpst_fields();
     unit::sessionmpst::sessionmpst_methods();
-    unit::sessionmpst::sessionmpst_field_names();
 }
 
 #[test]
@@ -118,7 +117,6 @@ fn cases_tests_mpst_macro() {
     // Macro basics
     cases::macro_basics::basic_macros_send();
     cases::macro_basics::basic_macros_recv();
-    cases::macro_basics::sessionmpst_field_names();
 
     // Macro choice
     cases::macro_choice::run_usecase_right();
@@ -129,7 +127,6 @@ fn cases_tests_mpst_macro() {
 
     // Macro multi basics
     cases::macro_multi_sessionmpst::basic_macros();
-    cases::macro_multi_sessionmpst::sessionmpst_field_names();
 
     // Macro multi send-recv
     cases::macro_multi_send_recv_sessionmpst::test_new_send();
@@ -247,6 +244,7 @@ fn canceling() {
     cancel::cancel_09::main();
     cancel::cancel_10::main();
     cancel::cancel_11::main();
+    cancel::cancel_12::main();
 }
 
 #[test]

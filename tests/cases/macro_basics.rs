@@ -1,5 +1,5 @@
 // Test for parametrisation on the name of the roles
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::role::end::RoleEnd;
@@ -93,10 +93,4 @@ pub fn basic_macros_recv() {
         Ok(())
     }()
     .is_ok());
-}
-
-/////////////////////////////////////////
-
-pub fn sessionmpst_field_names() {
-    assert_eq!(Pawn::field_names(), &["session1", "session2"]);
 }
