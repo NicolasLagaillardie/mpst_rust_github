@@ -59,3 +59,16 @@ pub fn basic_macros() {
     }()
     .is_ok());
 }
+
+/////////////////////////////////////////
+
+pub fn sessionmpst_field_names() {
+    assert_eq!(
+        SessionMpstThree::<End, End, RoleEnd, RoleA<RoleEnd>>::field_names(),
+        &["session1", "session2"]
+    );
+    assert_eq!(
+        SessionMpstFour::<End, End, End, RoleEnd, RoleA<RoleEnd>>::field_names(),
+        &["session1", "session2", "session3"]
+    );
+}

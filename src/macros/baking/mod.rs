@@ -84,6 +84,16 @@ macro_rules! bundle_impl {
                         N::head_str()
                     )
                 }
+
+                #[doc(hidden)]
+                fn field_names() -> &'static [&'static str] {
+                    static NAMES: &[&str] = &[
+                        #(
+                            stringify!(session#N:0),
+                        )20:0
+                    ];
+                    NAMES
+                }
             }
 
             #(

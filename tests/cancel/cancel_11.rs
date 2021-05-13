@@ -67,7 +67,7 @@ type EndpointB = SessionMpstThree<End, RecursBtoD, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, RoleA, 3);
+    broadcast_cancel!(s, 3);
     Ok(())
 }
 

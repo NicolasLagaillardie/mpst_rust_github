@@ -44,7 +44,13 @@ macro_rules! create_sessionmpst {
             }
 
             #[doc(hidden)]
-            impl<#(S#N:0: mpstthree::binary::struct_trait::Session,)0:0 R: mpstthree::role::Role, N: mpstthree::role::Role> mpstthree::binary::struct_trait::Session for $sessionmpst_name<#(S#N:0, )0:0 R, N> {
+            impl<
+                #(
+                    S#N:0: mpstthree::binary::struct_trait::Session,
+                )0:0
+                R: mpstthree::role::Role,
+                N: mpstthree::role::Role
+            > mpstthree::binary::struct_trait::Session for $sessionmpst_name<#(S#N:0, )0:0 R, N> {
                 type Dual =
                 $sessionmpst_name<#(<S#N:0 as mpstthree::binary::struct_trait::Session>::Dual, )0:0 <R as mpstthree::role::Role>::Dual, <N as mpstthree::role::Role>::Dual, >;
 
@@ -101,6 +107,16 @@ macro_rules! create_sessionmpst {
                         R::tail_str(),
                         N::head_str()
                     )
+                }
+
+                #[doc(hidden)]
+                fn field_names() -> &'static [&'static str] {
+                    static NAMES: &[&str] = &[
+                        #(
+                            stringify!(session#N:0),
+                        )0:0
+                    ];
+                    NAMES
                 }
             }
         });

@@ -98,7 +98,7 @@ type EndpointD =
     SessionMpstFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, RoleA, 4);
+    broadcast_cancel!(s, 4);
     Ok(())
 }
 

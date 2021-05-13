@@ -101,7 +101,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
 
 // Functions
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, RoleCentral, 3);
+    broadcast_cancel!(s, 3);
     Ok(())
 }
 

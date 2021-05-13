@@ -11,8 +11,7 @@ use crossbeam_channel::{bounded, Sender};
 /// the test `05_usecase.rs`.
 ///
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.
-/// html
+/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 #[derive(Debug)]
 pub struct RoleAtoAll<R1, R2>
 where

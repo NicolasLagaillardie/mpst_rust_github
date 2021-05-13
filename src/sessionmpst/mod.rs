@@ -117,4 +117,10 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
             N::tail_str()
         )
     }
+
+    #[doc(hidden)]
+    fn field_names() -> &'static [&'static str] {
+        static NAMES: &[&str] = &["session1", "session2"];
+        NAMES
+    }
 }
