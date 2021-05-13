@@ -510,4 +510,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ring_five_mpst, ring_five_binary, ring_five_crossbeam
 }
+
 criterion_main!(ring_five);

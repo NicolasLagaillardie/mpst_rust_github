@@ -351,4 +351,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
 }
+
 criterion_main!(mesh_three_empty);

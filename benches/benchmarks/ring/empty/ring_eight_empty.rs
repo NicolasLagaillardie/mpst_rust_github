@@ -767,4 +767,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ring_protocol_mpst, ring_protocol_binary, ring_protocol_crossbeam
 }
+
 criterion_main!(ring_eight);

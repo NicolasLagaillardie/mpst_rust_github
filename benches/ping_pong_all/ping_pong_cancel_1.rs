@@ -174,4 +174,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ping_pong_protocol_mpst
 }
+
 criterion_main!(ping_pong);

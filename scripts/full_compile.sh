@@ -5,6 +5,7 @@ set -e
 sleep 5
 
 # cargo bench --bench main -- --verbose
+# cargo bench --bench ping_pong -- --verbose
 
 # cargo criterion --message-format=json
 

@@ -574,4 +574,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = mesh_protocol_mpst
 }
+
 criterion_main!(mesh_seven);

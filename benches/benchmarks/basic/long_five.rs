@@ -421,4 +421,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = long_protocol_mpst, long_protocol_binary
 }
+
 criterion_main!(long_five_protocol);

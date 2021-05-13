@@ -555,4 +555,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ring_protocol_mpst
 }
+
 criterion_main!(ring_seven);

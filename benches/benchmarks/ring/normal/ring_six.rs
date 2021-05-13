@@ -585,4 +585,5 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ring_six_mpst, ring_six_binary, ring_six_crossbeam
 }
+
 criterion_main!(ring_six);
