@@ -118,21 +118,16 @@ enum Branching0fromLtoA<N: marker::Send> {
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
 type RecursAtoL<N> = Recv<Branching0fromLtoA<N>, End>;
+
 // Controller
 enum Branching0fromLtoC<N: marker::Send> {
     Up(SessionMpstFour<End, Recv<N, RecursCtoL<N>>, End, Logs<RecvLogsChoice>, NameController>),
-    Down(
-        SessionMpstFour<
-            End,
-            Recv<N, Send<N, RecursCtoL<N>>>,
-            End,
-            Logs<Logs<RecvLogsChoice>>,
-            NameController,
-        >,
-    ),
+    Down(SessionMpstFour<End, FullRecursCtoL<N>, End, Logs<Logs<RecvLogsChoice>>, NameController>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameController>),
 }
+type FullRecursCtoL<N> = Recv<N, Send<N, RecursCtoL<N>>>;
 type RecursCtoL<N> = Recv<Branching0fromLtoC<N>, End>;
+
 // Storage
 enum Branching0fromLtoS<N: marker::Send> {
     Up(SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>),
@@ -140,6 +135,7 @@ enum Branching0fromLtoS<N: marker::Send> {
     Close(SessionMpstFour<End, End, End, RoleEnd, NameStorage>),
 }
 type RecursStoL<N> = Recv<Branching0fromLtoS<N>, End>;
+
 // Storage
 type Choose0fromLtoA<N> = Send<Branching0fromLtoA<N>, End>;
 type Choose0fromLtoC<N> = Send<Branching0fromLtoC<N>, End>;
@@ -148,13 +144,16 @@ type Choose0fromLtoS<N> = Send<Branching0fromLtoS<N>, End>;
 // Creating the MP sessions
 // Api
 type EndpointApi<N> = SessionMpstFour<End, RecursAtoL<N>, End, RecvLogsChoice, NameApi>;
+
 // Controller
 type EndpointController<N> =
     SessionMpstFour<End, RecursCtoL<N>, End, RecvLogsChoice, NameController>;
 type EndpointControllerInit<N> =
     SessionMpstFour<End, Send<N, RecursCtoL<N>>, End, Logs<RecvLogsChoice>, NameController>;
+
 // Storage
 type EndpointStorage<N> = SessionMpstFour<End, End, RecursStoL<N>, RecvLogsChoice, NameStorage>;
+
 // Storage
 type EndpointLogs<N> = SessionMpstFour<
     Choose0fromLtoA<N>,

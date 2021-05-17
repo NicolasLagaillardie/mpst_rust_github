@@ -90,49 +90,31 @@ enum Branching1fromCtoA {
     Pay(SessionMpstThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
     Quit(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
-
 type Recurs1AtoC = Recv<Branching1fromCtoA, End>;
 
 // S
 enum Branching0fromAtoS {
-    Login(
-        SessionMpstThree<
-            Recv<(), End>,
-            Send<(i64, i64), Recurs1StoC>,
-            RoleA<RoleC<RoleC<RoleEnd>>>,
-            NameS,
-        >,
-    ),
+    Login(SessionMpstThree<Recv<(), End>, SDoubleRecurs1StoC, RoleACC, NameS>),
     Fail(SessionMpstThree<Recv<String, End>, End, RoleA<RoleEnd>, NameS>),
 }
-
+type RoleACC = RoleA<RoleC<RoleC<RoleEnd>>>;
 type Recurs0StoA = Recv<Branching0fromAtoS, End>;
 
 enum Branching1fromCtoS {
-    Pay(
-        SessionMpstThree<
-            End,
-            Recv<(String, i64), Send<(i64, i64), Recurs1StoC>>,
-            RoleC<RoleC<RoleC<RoleEnd>>>,
-            NameS,
-        >,
-    ),
+    Pay(SessionMpstThree<End, Recv<(String, i64), SDoubleRecurs1StoC>, RoleCCC, NameS>),
     Quit(SessionMpstThree<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
-
+type RoleCCC = RoleC<RoleC<RoleC<RoleEnd>>>;
 type Recurs1StoC = Recv<Branching1fromCtoS, End>;
+
 // C
 enum Branching0fromAtoC {
-    Login(
-        SessionMpstThree<
-            Recv<(), Choose1fromCtoA>,
-            Recv<(i64, i64), Choose1fromCtoS>,
-            RoleA<RoleS<RoleBroadcast>>,
-            NameC,
-        >,
-    ),
+    Login(SessionMpstThree<RChoose1fromCtoA, RDoubleChoose1fromCtoS, RoleASBroad, NameC>),
     Fail(SessionMpstThree<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
 }
+type RChoose1fromCtoA = Recv<(), Choose1fromCtoA>;
+type RDoubleChoose1fromCtoS = Recv<(i64, i64), Choose1fromCtoS>;
+type RoleASBroad = RoleA<RoleS<RoleBroadcast>>;
 type Recurs0CtoA = Recv<Branching0fromAtoC, End>;
 
 type Choose1fromCtoA = <Recurs1AtoC as Session>::Dual;
@@ -141,14 +123,11 @@ type Choose1fromCtoS = <Recurs1StoC as Session>::Dual;
 // Creating the MP sessions
 // Step 1
 type EndpointA1 = SessionMpstThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
-type EndpointC1 = SessionMpstThree<
-    Choose1fromCtoA,
-    Recv<(i64, i64), Choose1fromCtoS>,
-    RoleS<RoleBroadcast>,
-    NameC,
->;
-type EndpointS1 =
-    SessionMpstThree<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
+type EndpointC1 =
+    SessionMpstThree<Choose1fromCtoA, RDoubleChoose1fromCtoS, RoleS<RoleBroadcast>, NameC>;
+type EndpointS1 = SessionMpstThree<End, SDoubleRecurs1StoC, RoleC<RoleC<RoleEnd>>, NameS>;
+type SDoubleRecurs1StoC = Send<(i64, i64), Recurs1StoC>;
+
 // Step 0
 type EndpointA0 = SessionMpstThree<
     Recv<(String, String), Choose0fromAtoC>,

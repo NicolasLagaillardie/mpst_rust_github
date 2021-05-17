@@ -20,6 +20,12 @@ jobs:
       run: cargo build --verbose --all
     - name: Check
       run: cargo check --verbose --all
+    - name: Check
+      run: cargo check --examples --verbose
+    - name: Clippy
+      run: cargo clippy --verbose --all
+    - name: Clippy
+      run: cargo clippy --examples --verbose
     - name: Run tests all
       run: cargo test --verbose --all
     - name: Run tests no capture

@@ -104,7 +104,8 @@ type NameLogs = Logs<RoleEnd>;
 type NameStorage = Storage<RoleEnd>;
 
 // Receive choice from Storage
-type RecvStorageChoice = Storage<RoleEnd>;
+type StackStorage = Storage<RoleEnd>;
+type StackDoubleStorage = Storage<StackStorage>;
 
 // Api
 enum Branching0fromStoA<N: marker::Send> {
@@ -112,94 +113,60 @@ enum Branching0fromStoA<N: marker::Send> {
         SessionMpstFour<
             Recv<N, End>,
             End,
-            Send<N, Recurs1fromAtoS<N>>,
-            Controller<Storage<RecvStorageChoice>>,
+            FullRecurs1fromAtoS<N>,
+            Controller<StackDoubleStorage>,
             NameApi,
         >,
     ),
-    Down(
-        SessionMpstFour<
-            Recv<N, End>,
-            End,
-            Recurs0fromAtoS<N>,
-            Controller<RecvStorageChoice>,
-            NameApi,
-        >,
-    ),
+    Down(SessionMpstFour<Recv<N, End>, End, Recurs0fromAtoS<N>, Controller<StackStorage>, NameApi>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameApi>),
 }
+type FullRecurs1fromAtoS<N> = Send<N, Recurs1fromAtoS<N>>;
 type Recurs0fromAtoS<N> = Recv<Branching0fromStoA<N>, End>;
+
 enum Branching1fromStoA<N: marker::Send> {
-    Request(
-        SessionMpstFour<End, End, Recv<N, Recurs0fromAtoS<N>>, Storage<RecvStorageChoice>, NameApi>,
-    ),
-    Down(
-        SessionMpstFour<
-            Recv<N, End>,
-            End,
-            Recurs0fromAtoS<N>,
-            Controller<RecvStorageChoice>,
-            NameApi,
-        >,
-    ),
+    Request(SessionMpstFour<End, End, Recv<N, Recurs0fromAtoS<N>>, StackDoubleStorage, NameApi>),
+    Down(SessionMpstFour<Recv<N, End>, End, Recurs0fromAtoS<N>, Controller<StackStorage>, NameApi>),
 }
 type Recurs1fromAtoS<N> = Recv<Branching1fromStoA<N>, End>;
+
 // Controller
 enum Branching0fromStoC<N: marker::Send> {
-    Up(
-        SessionMpstFour<
-            Send<N, End>,
-            End,
-            Recv<N, Recurs1fromCtoS<N>>,
-            Storage<Api<RecvStorageChoice>>,
-            NameController,
-        >,
-    ),
+    Up(SessionMpstFour<Send<N, End>, End, FullRecurs1fromCtoS<N>, FullStackUp0, NameController>),
     Down(
-        SessionMpstFour<
-            Send<N, End>,
-            End,
-            Recv<N, Send<N, Recurs0fromCtoS<N>>>,
-            Storage<Api<Storage<RecvStorageChoice>>>,
-            NameController,
-        >,
+        SessionMpstFour<Send<N, End>, End, FullRecurs0fromCtoS<N>, FullStackDown0, NameController>,
     ),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameController>),
 }
+type FullRecurs1fromCtoS<N> = Recv<N, Recurs1fromCtoS<N>>;
+type RecvRecurs0fromCtoS<N> = Recv<N, Recurs0fromCtoS<N>>;
+type SendRecurs0fromCtoS<N> = Send<N, Recurs0fromCtoS<N>>;
+type FullRecurs0fromCtoS<N> = Recv<N, SendRecurs0fromCtoS<N>>;
+type FullStackUp0 = Storage<Api<StackStorage>>;
+type FullStackDown0 = Storage<Api<StackDoubleStorage>>;
 type Recurs0fromCtoS<N> = Recv<Branching0fromStoC<N>, End>;
+
 enum Branching1fromStoC<N: marker::Send> {
-    Up(
-        SessionMpstFour<
-            End,
-            End,
-            Recv<N, Recurs0fromCtoS<N>>,
-            Storage<RecvStorageChoice>,
-            NameController,
-        >,
-    ),
+    Up(SessionMpstFour<End, End, RecvRecurs0fromCtoS<N>, StackDoubleStorage, NameController>),
     Down(
-        SessionMpstFour<
-            Send<N, End>,
-            End,
-            Recv<N, Send<N, Recurs0fromCtoS<N>>>,
-            Storage<Api<Storage<RecvStorageChoice>>>,
-            NameController,
-        >,
+        SessionMpstFour<Send<N, End>, End, FullRecurs0fromCtoS<N>, FullStackDown0, NameController>,
     ),
 }
 type Recurs1fromCtoS<N> = Recv<Branching1fromStoC<N>, End>;
 // Logs
 enum Branching0fromStoL<N: marker::Send> {
-    Up(SessionMpstFour<End, End, Recurs1fromLtoS<N>, RecvStorageChoice, NameLogs>),
-    Down(SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>),
+    Up(SessionMpstFour<End, End, Recurs1fromLtoS<N>, StackStorage, NameLogs>),
+    Down(SessionMpstFour<End, End, Recurs0fromLtoS<N>, StackStorage, NameLogs>),
     Close(SessionMpstFour<End, End, End, RoleEnd, NameLogs>),
 }
 type Recurs0fromLtoS<N> = Recv<Branching0fromStoL<N>, End>;
+
 enum Branching1fromStoL<N: marker::Send> {
-    Up(SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>),
-    Down(SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>),
+    Up(SessionMpstFour<End, End, Recurs0fromLtoS<N>, StackStorage, NameLogs>),
+    Down(SessionMpstFour<End, End, Recurs0fromLtoS<N>, StackStorage, NameLogs>),
 }
 type Recurs1fromLtoS<N> = Recv<Branching1fromStoL<N>, End>;
+
 // Storage
 type Choose0fromStoA<N> = Send<Branching0fromStoA<N>, End>;
 type Choose0fromStoC<N> = Send<Branching0fromStoC<N>, End>;
@@ -210,23 +177,22 @@ type Choose1fromStoL<N> = Send<Branching1fromStoL<N>, End>;
 
 // Creating the MP sessions
 // Api
-type NestedApi<N> = SessionMpstFour<End, End, Recurs1fromAtoS<N>, RecvStorageChoice, NameApi>;
-type EndpointApi<N> = SessionMpstFour<End, End, Recurs0fromAtoS<N>, RecvStorageChoice, NameApi>;
+type NestedApi<N> = SessionMpstFour<End, End, Recurs1fromAtoS<N>, StackStorage, NameApi>;
+type EndpointApi<N> = SessionMpstFour<End, End, Recurs0fromAtoS<N>, StackStorage, NameApi>;
+
 // Controller
 type NestedController<N> =
-    SessionMpstFour<End, End, Recurs1fromCtoS<N>, RecvStorageChoice, NameController>;
+    SessionMpstFour<End, End, Recurs1fromCtoS<N>, StackStorage, NameController>;
 type EndpointController<N> =
-    SessionMpstFour<End, End, Recurs0fromCtoS<N>, RecvStorageChoice, NameController>;
-type EndpointControllerInit<N> = SessionMpstFour<
-    End,
-    End,
-    Send<N, Recurs0fromCtoS<N>>,
-    Storage<RecvStorageChoice>,
-    NameController,
->;
+    SessionMpstFour<End, End, Recurs0fromCtoS<N>, StackStorage, NameController>;
+type EndpointControllerInit<N> =
+    SessionMpstFour<End, End, SendRecurs0fromCtoS<N>, StackControllerInit, NameController>;
+type StackControllerInit = StackDoubleStorage;
+
 // Logs
-type NestedLogs<N> = SessionMpstFour<End, End, Recurs1fromLtoS<N>, RecvStorageChoice, NameLogs>;
-type EndpointLogs<N> = SessionMpstFour<End, End, Recurs0fromLtoS<N>, RecvStorageChoice, NameLogs>;
+type NestedLogs<N> = SessionMpstFour<End, End, Recurs1fromLtoS<N>, StackStorage, NameLogs>;
+type EndpointLogs<N> = SessionMpstFour<End, End, Recurs0fromLtoS<N>, StackStorage, NameLogs>;
+
 // Storage
 type NestedStorage<N> = SessionMpstFour<
     Choose1fromStoA<N>,

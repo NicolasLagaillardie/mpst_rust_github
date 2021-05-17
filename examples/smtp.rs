@@ -191,16 +191,24 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstTwo, 2);
 type NameC = RoleC<RoleEnd>;
 type NameS = RoleS<RoleEnd>;
 
+// Stacks
+// C
+type ThreeRoleC = RoleC<RoleC<RoleC<RoleEnd>>>;
+type FiveRoleC = RoleC<RoleC<RoleC<RoleC<RoleC<RoleEnd>>>>>;
+type TwoRoleCBroadcast = RoleC<RoleC<RoleBroadcast>>;
+
+// S
+type ThreeRoleS = RoleS<RoleS<RoleS<RoleEnd>>>;
+
 // Types
 // Step 0
 // C
 type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
 type EndpointC0 = SessionMpstTwo<Recv<(), Choose0fromCtoS>, RoleS<RoleBroadcast>, NameC>;
+
 // S
 enum Branching0fromCtoS {
-    Continue(
-        SessionMpstTwo<Recv<(), Recv<(), Choose1fromStoC>>, RoleC<RoleC<RoleBroadcast>>, NameS>,
-    ),
+    Continue(SessionMpstTwo<Recv<(), Recv<(), Choose1fromStoC>>, TwoRoleCBroadcast, NameS>),
     Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer0fromCtoS = <Choose0fromCtoS as Session>::Dual;
@@ -210,10 +218,11 @@ type EndpointS0 = SessionMpstTwo<Send<(), Offer0fromCtoS>, RoleC<RoleC<RoleEnd>>
 // C
 enum Branching1fromStoC {
     Continue(SessionMpstTwo<Recv<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(SessionMpstTwo<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>),
+    Loop(SessionMpstTwo<Recv<(), Recv<(), Offer1fromStoC>>, ThreeRoleS, NameC>),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
 type EndpointC1 = SessionMpstTwo<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose1fromStoC = Send<Branching1fromStoC, End>;
 type EndpointS1 = SessionMpstTwo<Choose1fromStoC, RoleBroadcast, NameS>;
@@ -222,11 +231,10 @@ type EndpointS1 = SessionMpstTwo<Choose1fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose2fromCtoS = Send<Branching2fromCtoS, End>;
 type EndpointC2 = SessionMpstTwo<Choose2fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching2fromCtoS {
-    Continue(
-        SessionMpstTwo<Recv<(), Send<(), Offer3fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
+    Continue(SessionMpstTwo<Recv<(), Send<(), Offer3fromCtoS>>, ThreeRoleC, NameS>),
     Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer2fromCtoS = <Choose2fromCtoS as Session>::Dual;
@@ -236,6 +244,7 @@ type EndpointS2 = SessionMpstTwo<Offer2fromCtoS, RoleC<RoleEnd>, NameS>;
 // C
 type Choose3fromCtoS = Send<Branching3fromCtoS, End>;
 type EndpointC3 = SessionMpstTwo<Choose3fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching3fromCtoS {
     Continue(SessionMpstTwo<Recv<(), Choose4fromStoC>, RoleC<RoleBroadcast>, NameS>),
@@ -252,6 +261,7 @@ enum Branching4fromStoC {
 }
 type Offer4fromStoC = <Choose4fromStoC as Session>::Dual;
 type EndpointC4 = SessionMpstTwo<Offer4fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose4fromStoC = Send<Branching4fromStoC, End>;
 type EndpointS4 = SessionMpstTwo<Choose4fromStoC, RoleBroadcast, NameS>;
@@ -260,6 +270,7 @@ type EndpointS4 = SessionMpstTwo<Choose4fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose5fromCtoS = Send<Branching5fromCtoS, End>;
 type EndpointC5 = SessionMpstTwo<Choose5fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching5fromCtoS {
     Continue(SessionMpstTwo<Recv<(), Choose6fromStoC>, RoleC<RoleBroadcast>, NameS>),
@@ -276,6 +287,7 @@ enum Branching6fromStoC {
 }
 type Offer6fromStoC = <Choose6fromStoC as Session>::Dual;
 type EndpointC6 = SessionMpstTwo<Offer6fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose6fromStoC = Send<Branching6fromStoC, End>;
 type EndpointS6 = SessionMpstTwo<Choose6fromStoC, RoleBroadcast, NameS>;
@@ -284,6 +296,7 @@ type EndpointS6 = SessionMpstTwo<Choose6fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose7fromCtoS = Send<Branching7fromCtoS, End>;
 type EndpointC7 = SessionMpstTwo<Choose7fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching7fromCtoS {
     Continue(SessionMpstTwo<Recv<(), Choose8fromStoC>, RoleC<RoleBroadcast>, NameS>),
@@ -300,6 +313,7 @@ enum Branching8fromStoC {
 }
 type Offer8fromStoC = <Choose8fromStoC as Session>::Dual;
 type EndpointC8 = SessionMpstTwo<Offer8fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose8fromStoC = Send<Branching8fromStoC, End>;
 type EndpointS8 = SessionMpstTwo<Choose8fromStoC, RoleBroadcast, NameS>;
@@ -308,17 +322,13 @@ type EndpointS8 = SessionMpstTwo<Choose8fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose9fromCtoS = Send<Branching9fromCtoS, End>;
 type EndpointC9 = SessionMpstTwo<Choose9fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching9fromCtoS {
-    Continue(
-        SessionMpstTwo<
-            Recv<(), Send<(), Recv<(), Recv<(), Offer10fromCtoS>>>>,
-            RoleC<RoleC<RoleC<RoleC<RoleC<RoleEnd>>>>>,
-            NameS,
-        >,
-    ),
-    Loop(SessionMpstTwo<Recv<(), Send<(), Offer9fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
+    Continue(SessionMpstTwo<FullOffer10fromCtoS, FiveRoleC, NameS>),
+    Loop(SessionMpstTwo<Recv<(), Send<(), Offer9fromCtoS>>, ThreeRoleC, NameS>),
 }
+type FullOffer10fromCtoS = Recv<(), Send<(), Recv<(), Recv<(), Offer10fromCtoS>>>>;
 type Offer9fromCtoS = <Choose9fromCtoS as Session>::Dual;
 type EndpointS9 = SessionMpstTwo<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
 
@@ -326,13 +336,12 @@ type EndpointS9 = SessionMpstTwo<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
 // C
 type Choose10fromCtoS = Send<Branching10fromCtoS, End>;
 type EndpointC10 = SessionMpstTwo<Choose10fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching10fromCtoS {
-    Data(SessionMpstTwo<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
-    Subject(
-        SessionMpstTwo<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
-    End(SessionMpstTwo<Recv<(), Send<(), Offer7fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
+    Data(SessionMpstTwo<Recv<(), Recv<(), Offer10fromCtoS>>, ThreeRoleC, NameS>),
+    Subject(SessionMpstTwo<Recv<(), Recv<(), Offer10fromCtoS>>, ThreeRoleC, NameS>),
+    End(SessionMpstTwo<Recv<(), Send<(), Offer7fromCtoS>>, ThreeRoleC, NameS>),
 }
 type Offer10fromCtoS = <Choose10fromCtoS as Session>::Dual;
 type EndpointS10 = SessionMpstTwo<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;

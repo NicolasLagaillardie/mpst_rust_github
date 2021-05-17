@@ -126,6 +126,8 @@ macro_rules! rec {
     }};
 }
 
+type RecRoleB<Rec> = Rx<RoleB, fn() -> Rec>;
+
 fn rec_test(ch_a: Channel<RoleA>, ch_b: Channel<RoleB>) -> Result<()> {
     let mut p = rec!(X, Tx<RoleA, Rx<RoleB, X>>);
     // the above produces the same code as below, but
@@ -133,7 +135,7 @@ fn rec_test(ch_a: Channel<RoleA>, ch_b: Channel<RoleB>) -> Result<()> {
     // is useless
     let mut _p = {
         struct Rec {
-            pub rec: Tx<RoleA, Rx<RoleB, fn() -> Rec>>,
+            pub rec: Tx<RoleA, RecRoleB<Rec>>,
         }
         fn new() -> Rec {
             Rec {

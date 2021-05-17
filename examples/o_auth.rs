@@ -89,6 +89,7 @@ type NameS = RoleS<RoleEnd>;
 // S
 type Choose0fromStoA<N> = Send<Branching0fromStoA<N>, End>;
 type Choose0fromStoC<N> = Send<Branching0fromStoC<N>, End>;
+
 // A
 type Choose1fromAtoC<N> = <Choice1fromCtoA<N> as Session>::Dual;
 type Choose1fromAtoS<N> = <Choice1fromStoA<N> as Session>::Dual;
@@ -105,42 +106,29 @@ enum Branching0fromStoA<N: marker::Send> {
     ),
     Done(SessionMpstThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
 }
+
 // C
 enum Branching0fromStoC<N: marker::Send> {
-    Login(
-        SessionMpstThree<
-            Send<N, Choice1fromCtoA<N>>,
-            Recv<N, End>,
-            RoleS<RoleA<RoleA<RoleEnd>>>,
-            NameC,
-        >,
-    ),
-    Done(SessionMpstThree<Send<N, End>, Recv<N, End>, RoleS<RoleA<RoleEnd>>, NameC>),
+    Login(SessionMpstThree<Send<N, Choice1fromCtoA<N>>, Recv<N, End>, RoleSAA, NameC>),
+    Done(SessionMpstThree<Send<N, End>, Recv<N, End>, RoleSA, NameC>),
 }
+
+type RoleSA = RoleS<RoleA<RoleEnd>>;
+
 enum Branching1fromAtoC<N: marker::Send> {
     Auth(SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameC>),
-    Again(
-        SessionMpstThree<
-            Send<N, Choice1fromCtoA<N>>,
-            Recv<N, End>,
-            RoleS<RoleA<RoleA<RoleEnd>>>,
-            NameC,
-        >,
-    ),
+    Again(SessionMpstThree<Send<N, Choice1fromCtoA<N>>, Recv<N, End>, RoleSAA, NameC>),
 }
+type RoleSAA = RoleS<RoleA<RoleA<RoleEnd>>>;
 type Choice1fromCtoA<N> = Recv<Branching1fromAtoC<N>, End>;
+
 // S
 enum Branching1fromAtoS<N: marker::Send> {
-    Auth(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleA<RoleC<RoleEnd>>, NameS>),
-    Again(
-        SessionMpstThree<
-            Recv<N, Choice1fromStoA<N>>,
-            Send<N, End>,
-            RoleA<RoleC<RoleA<RoleEnd>>>,
-            NameS,
-        >,
-    ),
+    Auth(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleAC, NameS>),
+    Again(SessionMpstThree<Recv<N, Choice1fromStoA<N>>, Send<N, End>, RoleACA, NameS>),
 }
+type RoleAC = RoleA<RoleC<RoleEnd>>;
+type RoleACA = RoleA<RoleC<RoleA<RoleEnd>>>;
 type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
 
 // Creating the MP sessions
@@ -148,9 +136,11 @@ type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
 type ChoiceA<N> =
     SessionMpstThree<Recv<N, Choose1fromAtoC<N>>, Choose1fromAtoS<N>, RoleC<RoleBroadcast>, NameA>;
 type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
+
 // C
 type ChoiceC<N> = SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, RoleS<RoleEnd>, NameC>;
+
 // S
 type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
 type EndpointS<N> = SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleBroadcast, NameS>;

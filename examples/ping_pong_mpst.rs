@@ -1,11 +1,11 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use std::error::Error;
 
 // global protocol ping_pong(role A, role B)
@@ -66,11 +66,13 @@ type NameB = RoleB<RoleEnd>;
 // Types
 // A
 type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
+
 // B
 enum Branching0fromAtoB {
-    More(SessionMpstTwo<Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
+    More(SessionMpstTwo<Recv<(), Send<(), RecursBtoA>>, ThreeRoleA, NameB>),
     Done(SessionMpstTwo<End, RoleEnd, NameB>),
 }
+type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // Creating the MP sessions
@@ -79,7 +81,7 @@ type EndpointB = SessionMpstTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE)
+    recurs_a(s, 1)
 }
 
 fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
@@ -116,10 +118,6 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    recurs_b(s)
-}
-
 fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_a, {
         Branching0fromAtoB::Done(s) => {
@@ -133,17 +131,9 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
-
-    thread_a.join()?;
-    thread_b.join()?;
-
-    Ok(())
-}
-
-static SIZE: i64 = 10;
-
 fn main() {
-    assert!(all_mpst().is_ok());
+    let (thread_a, thread_b) = fork_mpst(endpoint_a, recurs_b);
+
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
 }

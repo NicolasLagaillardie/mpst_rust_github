@@ -100,12 +100,14 @@ type Choose2fromStoC<N> = Send<Branching2fromStoC<N>, End>;
 
 type Choice0fromAtoS<N> = <Choose0fromAtoS<N> as Session>::Dual;
 type Choice1fromCtoS<N> = <Choose1fromCtoS<N> as Session>::Dual;
+
 // C
 type Choose1fromCtoA<N> = Send<Branching1fromCtoA<N>, End>;
 type Choose1fromCtoS<N> = Send<Branching1fromCtoS<N>, End>;
 
 type Choice0fromAtoC<N> = <Choose0fromAtoC<N> as Session>::Dual;
 type Choice2fromStoC<N> = <Choose2fromStoC<N> as Session>::Dual;
+
 // A
 type Choose0fromAtoC<N> = Send<Branching0fromAtoC<N>, End>;
 type Choose0fromAtoS<N> = Send<Branching0fromAtoS<N>, End>;
@@ -114,7 +116,6 @@ type Choice1fromCtoA<N> = <Choose1fromCtoA<N> as Session>::Dual;
 type Choice2fromStoA<N> = <Choose2fromStoA<N> as Session>::Dual;
 
 // A
-
 type EndpointAAuth<N> =
     SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleC<RoleC<RoleEnd>>, NameA>;
 
@@ -123,17 +124,12 @@ type EndpointAAuthLoop<N> = SessionMpstThree<Choice1fromCtoA<N>, End, RoleC<Role
 type EndpointADone<N> = SessionMpstThree<Send<N, End>, End, RoleC<RoleEnd>, NameA>;
 
 enum Branching1fromCtoA<N: marker::Send> {
-    Continue(
-        SessionMpstThree<
-            End,
-            Recv<N, Send<N, Choice2fromStoA<N>>>,
-            RoleS<RoleS<RoleS<RoleEnd>>>,
-            NameA,
-        >,
-    ),
+    Continue(SessionMpstThree<End, RSChoice2fromStoA<N>, RoleSSS, NameA>),
     Close(SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameA>),
 }
 
+type RSChoice2fromStoA<N> = Recv<N, Send<N, Choice2fromStoA<N>>>;
+type RoleSSS = RoleS<RoleS<RoleS<RoleEnd>>>;
 type EndpointAContinue<N> = SessionMpstThree<End, Choice2fromStoA<N>, RoleS<RoleEnd>, NameA>;
 
 enum Branching2fromStoA<N: marker::Send> {
@@ -143,17 +139,12 @@ enum Branching2fromStoA<N: marker::Send> {
 
 // C
 enum Branching0fromAtoC<N: marker::Send> {
-    Auth(
-        SessionMpstThree<
-            Recv<N, Choose1fromCtoA<N>>,
-            Choose1fromCtoS<N>,
-            RoleA<RoleBroadcast>,
-            NameC,
-        >,
-    ),
-    Done(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleA<RoleS<RoleEnd>>, NameC>),
+    Auth(SessionMpstThree<Recv<N, Choose1fromCtoA<N>>, Choose1fromCtoS<N>, RoleABroad, NameC>),
+    Done(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleAS, NameC>),
 }
 
+type RoleAS = RoleA<RoleS<RoleEnd>>;
+type RoleABroad = RoleA<RoleBroadcast>;
 type EndpointCContinue<N> =
     SessionMpstThree<End, Send<N, Choice2fromStoC<N>>, RoleS<RoleS<RoleEnd>>, NameC>;
 
@@ -163,24 +154,11 @@ type EndpointCContinueLoop<N> =
 type EndpointCDone<N> = SessionMpstThree<End, Send<N, End>, RoleS<RoleEnd>, NameC>;
 
 enum Branching2fromStoC<N: marker::Send> {
-    Picture(
-        SessionMpstThree<
-            Choose1fromCtoA<N>,
-            Recv<N, Choose1fromCtoS<N>>,
-            RoleS<RoleBroadcast>,
-            NameC,
-        >,
-    ),
-    Refusal(
-        SessionMpstThree<
-            Choose1fromCtoA<N>,
-            Recv<N, Choose1fromCtoS<N>>,
-            RoleS<RoleBroadcast>,
-            NameC,
-        >,
-    ),
+    Picture(SessionMpstThree<Choose1fromCtoA<N>, Recv<N, Choose1fromCtoS<N>>, RoleSBroad, NameC>),
+    Refusal(SessionMpstThree<Choose1fromCtoA<N>, Recv<N, Choose1fromCtoS<N>>, RoleSBroad, NameC>),
 }
 
+type RoleSBroad = RoleS<RoleBroadcast>;
 type EndpointCPicture<N> = SessionMpstThree<End, Choice2fromStoC<N>, RoleS<RoleEnd>, NameC>;
 
 // S
@@ -192,17 +170,14 @@ enum Branching0fromAtoS<N: marker::Send> {
 type EndpointSContinue<N> = SessionMpstThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;
 
 enum Branching1fromCtoS<N: marker::Send> {
-    Continue(
-        SessionMpstThree<
-            Send<N, Recv<N, Choose2fromStoA<N>>>,
-            Recv<N, Choose2fromStoC<N>>,
-            RoleC<RoleA<RoleA<RoleBroadcast>>>,
-            NameS,
-        >,
-    ),
-    Close(SessionMpstThree<Send<N, End>, Recv<N, End>, RoleC<RoleA<RoleEnd>>, NameS>),
+    Continue(SessionMpstThree<SRChoose2fromStoA<N>, RChoose2fromStoC<N>, RoleCAABroad, NameS>),
+    Close(SessionMpstThree<Send<N, End>, Recv<N, End>, RoleCA, NameS>),
 }
 
+type SRChoose2fromStoA<N> = Send<N, Recv<N, Choose2fromStoA<N>>>;
+type RChoose2fromStoC<N> = Recv<N, Choose2fromStoC<N>>;
+type RoleCA = RoleC<RoleA<RoleEnd>>;
+type RoleCAABroad = RoleC<RoleA<RoleA<RoleBroadcast>>>;
 type EndpointSContinueLoop<N> =
     SessionMpstThree<Choose2fromStoA<N>, Choose2fromStoC<N>, RoleBroadcast, NameS>;
 
@@ -216,9 +191,11 @@ type EndpointSRefusal<N> =
 // A
 type EndpointA<N> =
     SessionMpstThree<Recv<N, Choose0fromAtoC<N>>, Choose0fromAtoS<N>, RoleC<RoleBroadcast>, NameA>;
+
 // C
 type EndpointC<N> =
     SessionMpstThree<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+
 // S
 type EndpointS<N> = SessionMpstThree<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;
 

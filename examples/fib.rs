@@ -69,9 +69,11 @@ type NameB = RoleB<RoleEnd>;
 type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
 // B
 enum Branching0fromAtoB<N: marker::Send> {
-    More(SessionMpstTwo<Recv<N, Send<N, RecursBtoA<N>>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
+    More(SessionMpstTwo<RSRecursBtoA<N>, ThreeRoleA, NameB>),
     Done(SessionMpstTwo<End, RoleEnd, NameB>),
 }
+type RSRecursBtoA<N> = Recv<N, Send<N, RecursBtoA<N>>>;
+type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
 
 // Creating the MP sessions

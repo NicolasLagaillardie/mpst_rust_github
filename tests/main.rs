@@ -82,7 +82,7 @@ fn cases_tests_mpst_simple() {
     cases::c_choose_2::double_choice_checker();
 
     // Nested choice
-    // cases::nested_choices;
+    cases::nested_choices::nested_choice();
 
     // Usecase simple A
     cases::a_usecase::run_a_usecase_left();

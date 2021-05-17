@@ -8,7 +8,6 @@ use mpstthree::{choose, offer};
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 
-/////////////////////////
 // A
 enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),
@@ -36,19 +35,17 @@ fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Erro
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
-    for _ in 0..36 {
-        let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(binary_a_to_b);
+    let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(binary_a_to_b);
 
-        threads.push(thread);
-        sessions.push(s);
-    }
+    threads.push(thread);
+    sessions.push(s);
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..1 {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
@@ -62,15 +59,5 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
-    main.join()?;
-
-    Ok(())
-}
-
-/////////////////////////
-
-static SIZE: i64 = 15;
-
-fn main() {
-    all_binaries().unwrap();
+    main.join().unwrap();
 }

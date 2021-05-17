@@ -94,18 +94,20 @@ enum Branching0fromCtoA<N: marker::Send> {
 }
 // S
 enum Branching0fromCtoS<N: marker::Send> {
-    Accept(SessionMpstThree<End, Recv<N, Send<N, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
+    Accept(SessionMpstThree<End, Recv<N, Send<N, End>>, TwoRoleC, NameS>),
     Quit(SessionMpstThree<End, End, RoleEnd, NameS>),
 }
+type TwoRoleC = RoleC<RoleC<RoleEnd>>;
 
 // Creating the MP sessions
 // A
 type EndpointA<N> = SessionMpstThree<
     Send<N, Recv<Branching0fromCtoA<N>, End>>,
     Send<N, Recv<N, End>>,
-    RoleS<RoleS<RoleC<RoleC<RoleEnd>>>>,
+    RoleS<RoleS<TwoRoleC>>,
     NameA,
 >;
+
 // C
 type EndpointC<N> = SessionMpstThree<
     Recv<N, Choose0fromCtoA<N>>,
@@ -113,6 +115,7 @@ type EndpointC<N> = SessionMpstThree<
     RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
+
 // S
 type EndpointS<N> = SessionMpstThree<
     Recv<N, Send<N, End>>,
