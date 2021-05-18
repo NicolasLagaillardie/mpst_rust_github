@@ -43,72 +43,72 @@ sleep 5
 # ./scripts/compile.sh usecase
 # ./scripts/compile.sh online_wallet
 
-### Ping-pong
-./scripts/compile.sh ping_pong_binary
-./scripts/compile.sh ping_pong_cancel
-./scripts/compile.sh ping_pong_crossbeam
-./scripts/compile.sh ping_pong_mpst
-
-### Mesh
-# Three
-./scripts/compile.sh mesh_three_binary
-./scripts/compile.sh mesh_three_cancel
-./scripts/compile.sh mesh_three_crossbeam
-./scripts/compile.sh mesh_three_mpst
-
-# Four
-./scripts/compile.sh mesh_four_binary
-./scripts/compile.sh mesh_four_cancel
-./scripts/compile.sh mesh_four_crossbeam
-./scripts/compile.sh mesh_four_mpst
-
-# Five
-./scripts/compile.sh mesh_five_binary
-./scripts/compile.sh mesh_five_cancel
-./scripts/compile.sh mesh_five_crossbeam
-./scripts/compile.sh mesh_five_mpst
-
-# Six
-./scripts/compile.sh mesh_six_binary
-./scripts/compile.sh mesh_six_cancel
-./scripts/compile.sh mesh_six_crossbeam
-./scripts/compile.sh mesh_six_mpst
-
-# Seven
-./scripts/compile.sh mesh_seven_binary
-./scripts/compile.sh mesh_seven_cancel
-./scripts/compile.sh mesh_seven_crossbeam
-./scripts/compile.sh mesh_seven_mpst
-
-# Eight
-./scripts/compile.sh mesh_eight_binary
-./scripts/compile.sh mesh_eight_cancel
-./scripts/compile.sh mesh_eight_crossbeam
-./scripts/compile.sh mesh_eight_mpst
-
-# Nine
-./scripts/compile.sh mesh_nine_binary
-./scripts/compile.sh mesh_nine_cancel
-./scripts/compile.sh mesh_nine_crossbeam
-./scripts/compile.sh mesh_nine_mpst
-
-# Ten
-./scripts/compile.sh mesh_ten_binary
-./scripts/compile.sh mesh_ten_cancel
-./scripts/compile.sh mesh_ten_crossbeam
-./scripts/compile.sh mesh_ten_mpst
-
-# Eleven
-./scripts/compile.sh mesh_eleven_binary
-./scripts/compile.sh mesh_eleven_cancel
-./scripts/compile.sh mesh_eleven_crossbeam
-./scripts/compile.sh mesh_eleven_mpst
-
+# ### Ping-pong
+# ./scripts/compile.sh ping_pong_binary
+# ./scripts/compile.sh ping_pong_cancel
+# ./scripts/compile.sh ping_pong_crossbeam
+# ./scripts/compile.sh ping_pong_mpst
+# 
+# ### Mesh
+# # Three
+# ./scripts/compile.sh mesh_three_binary
+# ./scripts/compile.sh mesh_three_cancel
+# ./scripts/compile.sh mesh_three_crossbeam
+# ./scripts/compile.sh mesh_three_mpst
+# 
+# # Four
+# ./scripts/compile.sh mesh_four_binary
+# ./scripts/compile.sh mesh_four_cancel
+# ./scripts/compile.sh mesh_four_crossbeam
+# ./scripts/compile.sh mesh_four_mpst
+# 
+# # Five
+# ./scripts/compile.sh mesh_five_binary
+# ./scripts/compile.sh mesh_five_cancel
+# ./scripts/compile.sh mesh_five_crossbeam
+# ./scripts/compile.sh mesh_five_mpst
+# 
+# # Six
+# ./scripts/compile.sh mesh_six_binary
+# ./scripts/compile.sh mesh_six_cancel
+# ./scripts/compile.sh mesh_six_crossbeam
+# ./scripts/compile.sh mesh_six_mpst
+# 
+# # Seven
+# ./scripts/compile.sh mesh_seven_binary
+# ./scripts/compile.sh mesh_seven_cancel
+# ./scripts/compile.sh mesh_seven_crossbeam
+# ./scripts/compile.sh mesh_seven_mpst
+# 
+# # Eight
+# ./scripts/compile.sh mesh_eight_binary
+# ./scripts/compile.sh mesh_eight_cancel
+# ./scripts/compile.sh mesh_eight_crossbeam
+# ./scripts/compile.sh mesh_eight_mpst
+# 
+# # Nine
+# ./scripts/compile.sh mesh_nine_binary
+# ./scripts/compile.sh mesh_nine_cancel
+# ./scripts/compile.sh mesh_nine_crossbeam
+# ./scripts/compile.sh mesh_nine_mpst
+# 
+# # Ten
+# ./scripts/compile.sh mesh_ten_binary
+# ./scripts/compile.sh mesh_ten_cancel
+# ./scripts/compile.sh mesh_ten_crossbeam
+# ./scripts/compile.sh mesh_ten_mpst
+# 
+# # Eleven
+# ./scripts/compile.sh mesh_eleven_binary
+# ./scripts/compile.sh mesh_eleven_cancel
+# ./scripts/compile.sh mesh_eleven_crossbeam
+# ./scripts/compile.sh mesh_eleven_mpst
+# 
 # Twenty
-./scripts/compile.sh mesh_twelve_binary
-./scripts/compile.sh mesh_twelve_cancel
-./scripts/compile.sh mesh_twelve_crossbeam
-./scripts/compile.sh mesh_twelve_mpst
+./scripts/compile.sh mesh_twenty_binary
+./scripts/compile.sh mesh_twenty_cancel
+./scripts/compile.sh mesh_twenty_crossbeam
+./scripts/compile.sh mesh_twenty_mpst
 
 ### Ring
 # Three
@@ -166,10 +166,10 @@ sleep 5
 ./scripts/compile.sh ring_eleven_mpst
 
 # Twenty
-./scripts/compile.sh ring_twelve_binary
-./scripts/compile.sh ring_twelve_cancel
-./scripts/compile.sh ring_twelve_crossbeam
-./scripts/compile.sh ring_twelve_mpst
+./scripts/compile.sh ring_twenty_binary
+./scripts/compile.sh ring_twenty_cancel
+./scripts/compile.sh ring_twenty_crossbeam
+./scripts/compile.sh ring_twenty_mpst
 
 # cargo expand --example long_simple_three_mpst > expand/long_simple_three_mpst_expand.txt
 # cargo expand --example long_simple_four_mpst > expand/long_simple_four_mpst_expand.txt
