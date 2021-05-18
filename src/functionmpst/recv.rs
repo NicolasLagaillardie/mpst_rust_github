@@ -15,42 +15,52 @@ use std::marker;
 
 type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Box<dyn Error>>;
 
+// #[doc(hidden)]
+// #[macro_export]
+// macro_rules! recv_aux_simple {
+//     ($session:expr, $role:ident, $exclusion:literal) => {
+//         mpst_seq::seq!(N in 1..3 ! $exclusion {
+//             || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
+
+//                 %(
+//                 )(
+//                     let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
+//                 )0*
+
+//                 let new_stack = {
+//                     fn temp<R>(r: $role<R>) -> R
+//                     where
+//                         R: crate::role::Role,
+//                     {
+//                         let (here, there) = <R as crate::role::Role>::new();
+//                         r.sender.send(there).unwrap_or(());
+//                         here
+//                     }
+//                     temp($session.stack)
+//                 };
+
+//                 Ok((
+//                     v,
+//                     crate::sessionmpst::SessionMpst {
+//                         %(
+//                             session#N:0: $session.session#N:0,
+//                         )(
+//                             session#N:0: new_session,
+//                         )0*
+//                         stack: new_stack,
+//                         name: $session.name,
+//                     }
+//                 ))
+//             }
+//         });
+//     }
+// }
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_aux_simple {
     ($session:expr, $role:ident, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..3 ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
-            %(
-            )(
-                let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
-            )0*
-
-            let new_stack = {
-                fn temp<R>(r: $role<R>) -> R
-                where
-                    R: crate::role::Role,
-                {
-                    let (here, there) = <R as crate::role::Role>::new();
-                    r.sender.send(there).unwrap_or(());
-                    here
-                }
-                temp($session.stack)
-            };
-
-            Ok((
-                v,
-                crate::sessionmpst::SessionMpst {
-                    %(
-                        session#N:0: $session.session#N:0,
-                    )(
-                        session#N:0: new_session,
-                    )0*
-                    stack: new_stack,
-                    name: $session.name,
-                }
-            ))
-        }});
-    }
+        mpst_seq::recv_aux_simple!($role, $exclusion, ( $session ));
+    };
 }
 
 #[doc(hidden)]
