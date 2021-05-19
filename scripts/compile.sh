@@ -9,7 +9,8 @@ rm -rf compile_time/$1*.txt
 for i in {1..5}
 do
     # Remove previous build
-    rm -rf target/*
+    cargo clean
+    # rm -rf target/*
     # rm -rf target/debug/
     # rm -rf target/doc/
     # rm -rf target/release/
@@ -30,7 +31,8 @@ done
 for i in {1..5}
 do
     # Remove previous build
-    rm -rf target/*
+    cargo clean
+    # rm -rf target/*
     # rm -rf target/debug/
     # rm -rf target/doc/
     # rm -rf target/release/
@@ -51,7 +53,8 @@ done
 for i in {1..5}
 do
     # Remove previous build
-    rm -rf target/*
+    cargo clean
+    # rm -rf target/*
     # rm -rf target/debug/
     # rm -rf target/doc/
     # rm -rf target/release/

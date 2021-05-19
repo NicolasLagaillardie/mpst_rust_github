@@ -9,7 +9,8 @@ use syn::{parse_macro_input, Result, Token};
 
 mod functionmpst;
 
-use functionmpst::recv::RecvAuxSimpleMacroInput;
+use functionmpst::recv_all_aux_simple::RecvAllAuxSimpleMacroInput;
+use functionmpst::recv_aux_simple::RecvAuxSimpleMacroInput;
 
 type Diag = Vec<(u64, u64, u64)>;
 type Matrix = Vec<Vec<(u64, u64, u64)>>;
@@ -99,22 +100,22 @@ impl Parse for SeqMacroInput {
     }
 }
 
-impl Into<proc_macro2::TokenStream> for SeqMacroInput {
-    fn into(self) -> proc_macro2::TokenStream {
-        self.expand(
-            self.tt.clone(),
-            self.labels.clone(),
-            self.receivers.clone(),
-            self.role_name.clone(),
+impl From<SeqMacroInput> for proc_macro2::TokenStream {
+    fn from(input: SeqMacroInput) -> proc_macro2::TokenStream {
+        input.expand(
+            input.tt.clone(),
+            input.labels.clone(),
+            input.receivers.clone(),
+            input.role_name.clone(),
             (
-                &self.diag(false),
-                &self.matrix(false),
-                &self.diag_w_offset(false),
-                &self.matrix_w_offset(false),
-                &self.diag(true),
-                &self.matrix(true),
-                &self.diag_w_offset(true),
-                &self.matrix_w_offset(true),
+                &input.diag(false),
+                &input.matrix(false),
+                &input.diag_w_offset(false),
+                &input.matrix_w_offset(false),
+                &input.diag(true),
+                &input.matrix(true),
+                &input.diag_w_offset(true),
+                &input.matrix_w_offset(true),
             ),
         )
     }
@@ -592,7 +593,7 @@ impl SeqMacroInput {
                 return (i.0, i.1);
             }
         }
-        return (0, 0);
+        (0, 0)
     }
 
     // /// Return (line, column) of matrix from index
@@ -2521,23 +2522,38 @@ impl SeqMacroInput {
                                 return self
                                     .range_0(0, 0, 1, true)
                                     .filter_map(|j| {
-                                        if i > j {
-                                            std::option::Option::Some(self.expand_pass(
+                                        match j {
+                                            j if i > j => std::option::Option::Some(self.expand_pass(
                                                 rep_else.stream(),
                                                 (modes.0, Mode::ReplaceIdent(j), modes.2),
                                                 extracted,
                                                 diag_and_matrix,
-                                            ))
-                                        } else if i < j {
-                                            std::option::Option::Some(self.expand_pass(
+                                            )),
+                                            j if i < j => std::option::Option::Some(self.expand_pass(
                                                 rep_if.stream(),
                                                 (modes.0, Mode::ReplaceIdent(j), modes.2),
                                                 extracted,
                                                 diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::None
+                                            )),
+                                            _ => std::option::Option::None,
                                         }
+                                        // if i > j {
+                                        //     std::option::Option::Some(self.expand_pass(
+                                        //         rep_else.stream(),
+                                        //         (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                        //         extracted,
+                                        //         diag_and_matrix,
+                                        //     ))
+                                        // } else if i < j {
+                                        //     std::option::Option::Some(self.expand_pass(
+                                        //         rep_if.stream(),
+                                        //         (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                        //         extracted,
+                                        //         diag_and_matrix,
+                                        //     ))
+                                        // } else {
+                                        //     std::option::Option::None
+                                        // }
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2797,7 +2813,7 @@ impl SeqMacroInput {
 #[proc_macro]
 pub fn seq(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as SeqMacroInput);
-    let output: proc_macro2::TokenStream = input.into();
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
 
@@ -2806,14 +2822,30 @@ pub fn e_seq(input: TokenStream) -> TokenStream {
     seq(input)
 }
 
+//////////////////////////////////////
+
 #[proc_macro]
 pub fn recv_aux_simple(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as RecvAuxSimpleMacroInput);
-    let output: proc_macro2::TokenStream = input.into();
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
 
 #[proc_macro_hack]
 pub fn e_recv_aux_simple(input: TokenStream) -> TokenStream {
     recv_aux_simple(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn recv_all_aux_simple(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as RecvAllAuxSimpleMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_recv_all_aux_simple(input: TokenStream) -> TokenStream {
+    recv_all_aux_simple(input)
 }

@@ -27,9 +27,9 @@ impl Parse for RecvAuxSimpleMacroInput {
     }
 }
 
-impl Into<proc_macro2::TokenStream> for RecvAuxSimpleMacroInput {
-    fn into(self) -> proc_macro2::TokenStream {
-        self.expand()
+impl From<RecvAuxSimpleMacroInput> for proc_macro2::TokenStream {
+    fn from(input: RecvAuxSimpleMacroInput) -> proc_macro2::TokenStream {
+        input.expand()
     }
 }
 
@@ -50,19 +50,18 @@ impl RecvAuxSimpleMacroInput {
         for i in 1..3 {
             if i == (self.exclusion).base10_parse::<u64>().unwrap() {
                 all_sessions.push(format_ident!("session{}", i));
-                new_sessions.push(format_ident!("new_session"));
+                new_sessions.push(quote! { new_session });
             } else {
                 all_sessions.push(format_ident!("session{}", i));
-                new_sessions.push(format_ident!("temp_session.session{}", i));
+                let temp = format_ident!("session{}", i);
+                new_sessions.push(quote! { #session.#temp });
             }
         }
 
         quote! {
             || -> Result<_, Box<dyn std::error::Error>> {
 
-                let temp_session = #session;
-
-                let (v, new_session) = crate::binary::recv::recv( temp_session.#( #recv_vec )* )?;
+                let (v, new_session) = crate::binary::recv::recv( #session.#( #recv_vec )* )?;
 
                 let new_stack = {
                     fn temp<R>(r: #role<R>) -> R
@@ -73,7 +72,7 @@ impl RecvAuxSimpleMacroInput {
                         r.sender.send(there).unwrap_or(());
                         here
                     }
-                    temp(temp_session.stack)
+                    temp(#session.stack)
                 };
 
                 Ok((
@@ -81,7 +80,7 @@ impl RecvAuxSimpleMacroInput {
                     crate::sessionmpst::SessionMpst {
                         #( #all_sessions : #new_sessions , )*
                         stack: new_stack,
-                        name: temp_session.name,
+                        name: #session.name,
                     }
                 ))
             }
