@@ -9,39 +9,46 @@ use crate::role::Role;
 use crate::sessionmpst::SessionMpst;
 use std::marker;
 
+// #[doc(hidden)]
+// #[macro_export]
+// macro_rules! send_aux_simple {
+//     ($session:expr, $payload:expr, $role:ident, $exclusion:literal) => {
+//         mpst_seq::seq!(N in 1..3 ! $exclusion {{ // exclusion: index of binary channel among the 2 others
+//             %(
+//             )(
+//                 let new_session = crate::binary::send::send($payload, $session.session#N:0);
+//             )0*
+
+//             let new_stack = {
+//                 fn temp<R>(r: $role<R>) -> R
+//                 where
+//                     R: crate::role::Role,
+//                 {
+//                     let (here, there) = <R as crate::role::Role>::new();
+//                     r.sender.send(there).unwrap_or(());
+//                     here
+//                 }
+//                 temp($session.stack)
+//             };
+
+//             crate::sessionmpst::SessionMpst {
+//                 %(
+//                     session#N:0: $session.session#N:0,
+//                 )(
+//                     session#N:0: new_session,
+//                 )0*
+//                 stack: new_stack,
+//                 name: $session.name,
+//             }
+//         }});
+//     }
+// }
 #[doc(hidden)]
 #[macro_export]
 macro_rules! send_aux_simple {
     ($session:expr, $payload:expr, $role:ident, $exclusion:literal) => {
-        mpst_seq::seq!(N in 1..3 ! $exclusion {{ // exclusion: index of binary channel among the 2 others
-            %(
-            )(
-                let new_session = crate::binary::send::send($payload, $session.session#N:0);
-            )0*
-
-            let new_stack = {
-                fn temp<R>(r: $role<R>) -> R
-                where
-                    R: crate::role::Role,
-                {
-                    let (here, there) = <R as crate::role::Role>::new();
-                    r.sender.send(there).unwrap_or(());
-                    here
-                }
-                temp($session.stack)
-            };
-
-            crate::sessionmpst::SessionMpst {
-                %(
-                    session#N:0: $session.session#N:0,
-                )(
-                    session#N:0: new_session,
-                )0*
-                stack: new_stack,
-                name: $session.name,
-            }
-        }});
-    }
+        mpst_seq::send_aux_simple!($role, $exclusion, ($session), ($payload));
+    };
 }
 
 /// Send a value of type `T` from A to B. Always succeeds.

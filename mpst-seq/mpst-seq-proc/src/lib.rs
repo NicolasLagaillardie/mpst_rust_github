@@ -11,6 +11,7 @@ mod functionmpst;
 
 use functionmpst::recv_all_aux_simple::RecvAllAuxSimpleMacroInput;
 use functionmpst::recv_aux_simple::RecvAuxSimpleMacroInput;
+use functionmpst::send_aux_simple::SendAuxSimpleMacroInput;
 
 type Diag = Vec<(u64, u64, u64)>;
 type Matrix = Vec<Vec<(u64, u64, u64)>>;
@@ -2109,24 +2110,21 @@ impl SeqMacroInput {
                             0 => {
                                 return self
                                     .range_0(0, 0, 0, false)
-                                    .filter_map(|i| {
-                                        if i == self.exclusion.base10_parse::<u64>().unwrap()
+                                    .map(|i| {
+                                        let rep = if i
+                                            == self.exclusion.base10_parse::<u64>().unwrap()
                                             && self.objection
                                         {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
+                                            rep_else
                                         } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                            rep_if
+                                        };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2148,22 +2146,18 @@ impl SeqMacroInput {
                             2 => {
                                 return self
                                     .range_0(0, 0, 0, false)
-                                    .filter_map(|i| {
-                                        if i == 1 && self.objection {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
+                                    .map(|i| {
+                                        let rep = if i == 1 && self.objection {
+                                            rep_else
                                         } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                            rep_if
+                                        };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2171,24 +2165,21 @@ impl SeqMacroInput {
                             3 => {
                                 return self
                                     .range_17(0, 2, 0, false)
-                                    .filter_map(|i| {
-                                        if i == self.exclusion.base10_parse::<u64>().unwrap()
+                                    .map(|i| {
+                                        let rep = if i
+                                            == self.exclusion.base10_parse::<u64>().unwrap()
                                             && self.objection
                                         {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
+                                            rep_else
                                         } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                            rep_if
+                                        };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2196,22 +2187,18 @@ impl SeqMacroInput {
                             4 => {
                                 return self
                                     .range_20(0, 0, 0, 1, false)
-                                    .filter_map(|i| {
-                                        if i == 2 && self.objection {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
+                                    .map(|i| {
+                                        let rep = if i == 2 && self.objection {
+                                            rep_else
                                         } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                            rep_if
+                                        };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2219,24 +2206,20 @@ impl SeqMacroInput {
                             5 => {
                                 return self
                                     .range_12(1, 0, false)
-                                    .filter_map(|i| {
-                                        if i < (self.to).base10_parse::<u64>().unwrap()
+                                    .map(|i| {
+                                        let rep = if i < (self.to).base10_parse::<u64>().unwrap()
                                             && self.objection
                                         {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
+                                            rep_else
                                         } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                            rep_if
+                                        };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2244,22 +2227,18 @@ impl SeqMacroInput {
                             6 => {
                                 return self
                                     .one()
-                                    .filter_map(|i| {
-                                        if i == 1 && self.objection {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
+                                    .map(|i| {
+                                        let rep = if i == 1 && self.objection {
+                                            rep_else
                                         } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (Mode::ReplaceIdent(i), modes.1, modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                            rep_if
+                                        };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (Mode::ReplaceIdent(i), modes.1, modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2293,25 +2272,17 @@ impl SeqMacroInput {
                             0 => {
                                 return self
                                     .range_0(0, 0, 0, false)
-                                    .filter_map(|j| {
+                                    .map(|j| {
                                         let (k, _, _) =
                                             self.get_tuple_matrix(diag_and_matrix.1, i, j);
+                                        let rep = if k != i { rep_else } else { rep_if };
 
-                                        if k != i {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2319,25 +2290,17 @@ impl SeqMacroInput {
                             1 => {
                                 return self
                                     .range_8(0, 0, false)
-                                    .filter_map(|j| {
+                                    .map(|j| {
                                         let (k, _, _) =
                                             self.get_tuple_matrix(diag_and_matrix.1, i, j);
+                                        let rep = if k != i { rep_else } else { rep_if };
 
-                                        if k != i {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2373,25 +2336,17 @@ impl SeqMacroInput {
                             4 => {
                                 return self
                                     .range_13(0, 0, 0, false)
-                                    .filter_map(|j| {
+                                    .map(|j| {
                                         let (k, _, _) =
                                             self.get_tuple_matrix(diag_and_matrix.3, i, j);
+                                        let rep = if k != i { rep_else } else { rep_if };
 
-                                        if k != i {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2399,22 +2354,14 @@ impl SeqMacroInput {
                             5 => {
                                 return self
                                     .range_0(0, 0, 0, false)
-                                    .filter_map(|j| {
-                                        if i != j {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                    .map(|j| {
+                                        let rep = if i != j { rep_else } else { rep_if };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2422,22 +2369,14 @@ impl SeqMacroInput {
                             6 => {
                                 return self
                                     .range_0(0, 0, 0, true)
-                                    .filter_map(|j| {
-                                        if i != j {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                    .map(|j| {
+                                        let rep = if i != j { rep_else } else { rep_if };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2445,22 +2384,14 @@ impl SeqMacroInput {
                             7 => {
                                 return self
                                     .range_0(0, 0, 1, true)
-                                    .filter_map(|j| {
-                                        if i != j {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                    .map(|j| {
+                                        let rep = if i != j { rep_else } else { rep_if };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2469,25 +2400,17 @@ impl SeqMacroInput {
                                 // ~(~()()0*) with true
                                 return self
                                     .range_0(0, 0, 0, true)
-                                    .filter_map(|j| {
+                                    .map(|j| {
                                         let (k, _, _) =
                                             self.get_tuple_matrix(diag_and_matrix.5, i, j);
+                                        let rep = if k != i { rep_else } else { rep_if };
 
-                                        if k != i {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2496,24 +2419,16 @@ impl SeqMacroInput {
                                 // ~(#4) with true
                                 return self
                                     .range_12(1, 0, true)
-                                    .filter_map(|j| {
+                                    .map(|j| {
                                         let (line, _column) =
                                             self.get_line_column_from_diag(diag_and_matrix.4, j);
-                                        if i == line {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        let rep = if i == line { rep_else } else { rep_if };
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2521,39 +2436,20 @@ impl SeqMacroInput {
                             10 => {
                                 return self
                                     .range_0(0, 0, 1, true)
-                                    .filter_map(|j| {
-                                        match j {
-                                            j if i > j => std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            )),
-                                            j if i < j => std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                                extracted,
-                                                diag_and_matrix,
-                                            )),
-                                            _ => std::option::Option::None,
-                                        }
-                                        // if i > j {
-                                        //     std::option::Option::Some(self.expand_pass(
-                                        //         rep_else.stream(),
-                                        //         (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                        //         extracted,
-                                        //         diag_and_matrix,
-                                        //     ))
-                                        // } else if i < j {
-                                        //     std::option::Option::Some(self.expand_pass(
-                                        //         rep_if.stream(),
-                                        //         (modes.0, Mode::ReplaceIdent(j), modes.2),
-                                        //         extracted,
-                                        //         diag_and_matrix,
-                                        //     ))
-                                        // } else {
-                                        //     std::option::Option::None
-                                        // }
+                                    .filter_map(|j| match j {
+                                        j if i > j => std::option::Option::Some(self.expand_pass(
+                                            rep_else.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )),
+                                        j if i < j => std::option::Option::Some(self.expand_pass(
+                                            rep_if.stream(),
+                                            (modes.0, Mode::ReplaceIdent(j), modes.2),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )),
+                                        _ => std::option::Option::None,
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2598,23 +2494,16 @@ impl SeqMacroInput {
                             0 => {
                                 return self
                                     .range_0(0, 0, 0, true)
-                                    .filter_map(|k| {
+                                    .map(|k| {
                                         let cond = if k >= i { j - 1 } else { j };
-                                        if k == cond {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, modes.1, Mode::ReplaceIdent(k)),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, modes.1, Mode::ReplaceIdent(k)),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        let rep = if k == cond { rep_if } else { rep_else };
+
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, modes.1, Mode::ReplaceIdent(k)),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2622,23 +2511,16 @@ impl SeqMacroInput {
                             1 => {
                                 return self
                                     .range_0(0, 0, 1, true)
-                                    .filter_map(|k| {
+                                    .map(|k| {
                                         let cond = if k >= i { j - 1 } else { j };
-                                        if k == cond {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, modes.1, Mode::ReplaceIdent(k)),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, modes.1, Mode::ReplaceIdent(k)),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        let rep = if k == cond { rep_if } else { rep_else };
+
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, modes.1, Mode::ReplaceIdent(k)),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2647,7 +2529,7 @@ impl SeqMacroInput {
                                 // ~(~()()0*) with true
                                 return self
                                     .range_0(0, 0, 0, true)
-                                    .filter_map(|k| {
+                                    .map(|k| {
                                         let (l, _, _) =
                                             self.get_tuple_matrix(diag_and_matrix.5, j, k);
 
@@ -2659,21 +2541,15 @@ impl SeqMacroInput {
                                         let (_, _, m2) =
                                             self.get_tuple_matrix(diag_and_matrix.5, j, k);
 
-                                        if l == j || m1 == m2 {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_if.stream(),
-                                                (modes.0, modes.1, Mode::ReplaceIdent(k)),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        } else {
-                                            std::option::Option::Some(self.expand_pass(
-                                                rep_else.stream(),
-                                                (modes.0, modes.1, Mode::ReplaceIdent(k)),
-                                                extracted,
-                                                diag_and_matrix,
-                                            ))
-                                        }
+                                        let rep =
+                                            if l == j || m1 == m2 { rep_if } else { rep_else };
+
+                                        self.expand_pass(
+                                            rep.stream(),
+                                            (modes.0, modes.1, Mode::ReplaceIdent(k)),
+                                            extracted,
+                                            diag_and_matrix,
+                                        )
                                     })
                                     .map(|(ts, _)| ts)
                                     .collect();
@@ -2848,4 +2724,18 @@ pub fn recv_all_aux_simple(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_recv_all_aux_simple(input: TokenStream) -> TokenStream {
     recv_all_aux_simple(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn send_aux_simple(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as SendAuxSimpleMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_send_aux_simple(input: TokenStream) -> TokenStream {
+    send_aux_simple(input)
 }

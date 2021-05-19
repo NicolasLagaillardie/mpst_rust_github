@@ -15,46 +15,6 @@ use std::marker;
 
 type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Box<dyn Error>>;
 
-// #[doc(hidden)]
-// #[macro_export]
-// macro_rules! recv_aux_simple {
-//     ($session:expr, $role:ident, $exclusion:literal) => {
-//         mpst_seq::seq!(N in 1..3 ! $exclusion {
-//             || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
-
-//                 %(
-//                 )(
-//                     let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
-//                 )0*
-
-//                 let new_stack = {
-//                     fn temp<R>(r: $role<R>) -> R
-//                     where
-//                         R: crate::role::Role,
-//                     {
-//                         let (here, there) = <R as crate::role::Role>::new();
-//                         r.sender.send(there).unwrap_or(());
-//                         here
-//                     }
-//                     temp($session.stack)
-//                 };
-
-//                 Ok((
-//                     v,
-//                     crate::sessionmpst::SessionMpst {
-//                         %(
-//                             session#N:0: $session.session#N:0,
-//                         )(
-//                             session#N:0: new_session,
-//                         )0*
-//                         stack: new_stack,
-//                         name: $session.name,
-//                     }
-//                 ))
-//             }
-//         });
-//     }
-// }
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_aux_simple {
@@ -63,46 +23,6 @@ macro_rules! recv_aux_simple {
     };
 }
 
-// #[doc(hidden)]
-// #[macro_export]
-// macro_rules! recv_all_aux_simple {
-//     ($session:expr, $role:ident, $exclusion:literal) => {
-//         mpst_seq::seq!(N in 1..3 ! $exclusion {
-//             || -> Result<_, Box<dyn std::error::Error>> { // exclusion: index of binary channel among the 2 others
-
-//                 %(
-//                 )(
-//                     let (v, new_session) = crate::binary::recv::recv($session.session#N:0)?;
-//                 )0*
-
-//                 let (new_stack_left, _new_stack_right) = { // new_stack_right = new_stack_left
-//                     fn temp(r: $role<crate::role::end::RoleEnd, crate::role::end::RoleEnd>) -> (crate::role::end::RoleEnd, crate::role::end::RoleEnd)
-//                     {
-//                         let (here1, there1) = <crate::role::end::RoleEnd as crate::role::Role>::new();
-//                         let (here2, there2) = <crate::role::end::RoleEnd as crate::role::Role>::new();
-//                         r.sender1.send(there1).unwrap_or(());
-//                         r.sender2.send(there2).unwrap_or(());
-//                         (here1, here2)
-//                     }
-//                     temp($session.stack)
-//                 };
-
-//                 Ok((
-//                     v,
-//                     crate::sessionmpst::SessionMpst {
-//                         %(
-//                             session#N:0: $session.session#N:0,
-//                         )(
-//                             session#N:0: new_session,
-//                         )0*
-//                         stack: new_stack_left,
-//                         name: $session.name,
-//                     }
-//                 ))
-//             }
-//         });
-//     }
-// }
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_all_aux_simple {
