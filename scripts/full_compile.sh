@@ -105,23 +105,23 @@ sleep 5
 # ./scripts/compile.sh mesh_eleven_mpst
 # 
 # Twenty
-./scripts/compile.sh mesh_twenty_binary
-./scripts/compile.sh mesh_twenty_cancel
-./scripts/compile.sh mesh_twenty_crossbeam
-./scripts/compile.sh mesh_twenty_mpst
-
-### Ring
-# Three
-./scripts/compile.sh ring_three_binary
-./scripts/compile.sh ring_three_cancel
-./scripts/compile.sh ring_three_crossbeam
-./scripts/compile.sh ring_three_mpst
-
-# Four
-./scripts/compile.sh ring_four_binary
-./scripts/compile.sh ring_four_cancel
-./scripts/compile.sh ring_four_crossbeam
-./scripts/compile.sh ring_four_mpst
+# ./scripts/compile.sh mesh_twenty_binary
+# ./scripts/compile.sh mesh_twenty_cancel
+# ./scripts/compile.sh mesh_twenty_crossbeam
+# ./scripts/compile.sh mesh_twenty_mpst
+# 
+# ### Ring
+# # Three
+# ./scripts/compile.sh ring_three_binary
+# ./scripts/compile.sh ring_three_cancel
+# ./scripts/compile.sh ring_three_crossbeam
+# ./scripts/compile.sh ring_three_mpst
+# 
+# # Four
+# ./scripts/compile.sh ring_four_binary
+# ./scripts/compile.sh ring_four_cancel
+# ./scripts/compile.sh ring_four_crossbeam
+# ./scripts/compile.sh ring_four_mpst
 
 # Five
 ./scripts/compile.sh ring_five_binary

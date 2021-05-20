@@ -7,10 +7,10 @@ import numpy as np
 matplotlib.rcParams['text.usetex'] = True
 
 # Path for criterion
-main_path = './target/criterion'
+main_path_criterion = './target/criterion'
 
-# Get all directories in main_path
-directories = os.listdir(main_path)
+# Get all directories_criterion in main_path_criterion
+directories_criterion = os.listdir(main_path_criterion)
 
 # Relative path of the expected file
 path_file = '/base/estimates.json'
@@ -36,13 +36,13 @@ number_of_loops = '100'
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
-    with open(main_path + '/' + path + path_file) as json_file:
+    with open(main_path_criterion + '/' + path + path_file) as json_file:
         data = json.load(json_file)
         return data['mean']['point_estimate']
 
 
-# For each folder in main_path
-for d in directories:
+# For each folder in main_path_criterion
+for d in directories_criterion:
     # If name looks like the one from what we want
     if 'ring' in d and ' ' + number_of_loops in d:
         # Split the name

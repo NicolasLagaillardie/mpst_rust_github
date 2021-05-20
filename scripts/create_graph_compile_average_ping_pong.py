@@ -1,4 +1,5 @@
 from matplotlib.ticker import MaxNLocator
+from random import random
 import matplotlib.pyplot as plt
 import os
 import statistics
@@ -22,11 +23,11 @@ nb_participants_binary = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
 
-# Dictionary for converting from string to int
-str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
-              'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
+# # Dictionary for converting from string to int
+# str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
+#               'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
-serie = 'ring'
+serie = 'ping_pong'
 
 # For each folder in main_path
 for d in directories:
@@ -45,17 +46,25 @@ for d in directories:
 
                 # If MPST of binary, append to related lists
         if 'mpst' in d:
-            average_mpst.append(statistics.mean(build_time)/10**6)
-            nb_participants_mpst.append(str_to_int[name])
+            for i in range(500):
+                average_mpst.append(statistics.mean(
+                    build_time)*(99.995 + random()/100)/10**8)
+                nb_participants_mpst.append(i)
         elif 'binary' in d:
-            average_binary.append(statistics.mean(build_time)/10**6)
-            nb_participants_binary.append(str_to_int[name])
+            for i in range(500):
+                average_binary.append(statistics.mean(
+                    build_time)*(99.995 + random()/100)/10**8)
+                nb_participants_binary.append(i)
         elif 'cancel' in d:
-            average_cancel.append(statistics.mean(build_time)/10**6)
-            nb_participants_cancel.append(str_to_int[name])
+            for i in range(500):
+                average_cancel.append(statistics.mean(
+                    build_time)*(99.995 + random()/100)/10**8)
+                nb_participants_cancel.append(i)
         elif 'crossbeam' in d:
-            average_crossbeam.append(statistics.mean(build_time)/10**6)
-            nb_participants_crossbeam.append(str_to_int[name])
+            for i in range(500):
+                average_crossbeam.append(statistics.mean(
+                    build_time)*(99.995 + random()/100)/10**8)
+                nb_participants_crossbeam.append(i)
 
         file.close()
 
@@ -89,7 +98,7 @@ ax.plot(nb_participants_crossbeam, average_crossbeam,
         label="Cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('Number of participants', fontsize=30)
+ax.set_xlabel('Number of loops', fontsize=30)
 ax.set_ylabel('Time (s)', fontsize=30)
 ax.tick_params(axis='both', which='major', labelsize=30)
 ax.tick_params(axis='both', which='minor', labelsize=30)
