@@ -13,8 +13,10 @@ impl Parse for RecvAuxSimpleMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let role = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
+
         let exclusion = syn::LitInt::parse(input)?;
         <Token![,]>::parse(input)?;
+
         let content;
         let _parentheses = syn::parenthesized!(content in input);
         let session = proc_macro2::TokenStream::parse(&content)?;

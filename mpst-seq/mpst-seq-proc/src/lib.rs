@@ -13,6 +13,11 @@ use functionmpst::recv_all_aux_simple::RecvAllAuxSimpleMacroInput;
 use functionmpst::recv_aux_simple::RecvAuxSimpleMacroInput;
 use functionmpst::send_aux_simple::SendAuxSimpleMacroInput;
 
+mod macros;
+
+use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
+use macros::multiple::send_cancel::SendCancelMacroInput;
+
 type Diag = Vec<(u64, u64, u64)>;
 type Matrix = Vec<Vec<(u64, u64, u64)>>;
 
@@ -2738,4 +2743,32 @@ pub fn send_aux_simple(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_send_aux_simple(input: TokenStream) -> TokenStream {
     send_aux_simple(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn send_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as SendCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_send_cancel(input: TokenStream) -> TokenStream {
+    send_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn broadcast_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BroadcastCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_broadcast_cancel(input: TokenStream) -> TokenStream {
+    broadcast_cancel(input)
 }

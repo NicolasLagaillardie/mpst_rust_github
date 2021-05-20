@@ -14,12 +14,15 @@ impl Parse for SendAuxSimpleMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let role = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
+
         let exclusion = syn::LitInt::parse(input)?;
         <Token![,]>::parse(input)?;
+
         let content_session;
         let _parentheses = syn::parenthesized!(content_session in input);
         let session = proc_macro2::TokenStream::parse(&content_session)?;
         <Token![,]>::parse(input)?;
+
         let content_payload;
         let _parentheses = syn::parenthesized!(content_payload in input);
         let payload = proc_macro2::TokenStream::parse(&content_payload)?;
