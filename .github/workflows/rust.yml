@@ -15,22 +15,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Format
-      run: cargo clean && cargo fmt --verbose && cargo clean
+      run: cargo fmt --verbose
     - name: Build
-      run: cargo clean && cargo build --verbose --all && cargo clean
+      run: cargo build --verbose --all
     - name: Check
-      run: cargo clean && cargo check --verbose --all && cargo clean
+      run: cargo check --verbose --all
     - name: Check
-      run: cargo clean && cargo check --examples --verbose && cargo clean
+      run: cargo check --examples --verbose
     - name: Run tests all
-      run: cargo clean && cargo test --verbose --all && cargo clean
+      run: cargo test --verbose --all
     - name: Run tests no capture
-      run: cargo clean && cargo test --verbose --all -- --nocapture && cargo clean
+      run: cargo test --verbose --all -- --nocapture
     - name: Run tests no features
-      run: cargo clean && cargo test --verbose --all --no-default-features --no-run && cargo clean
+      run: cargo test --verbose --all --no-default-features --no-run
     - name: Run examples
-      run: cargo clean && ./scripts/full_examples.sh && cargo clean
+      run: ./scripts/full_examples.sh
     - name: Run benchmarks
-      run: cargo clean && cargo bench --verbose --all && cargo clean
+      run: cargo bench --verbose --all
     - name: Run doc
-      run: cargo clean && cargo doc --verbose --all && cargo clean
+      run: cargo doc --verbose --all
