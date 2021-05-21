@@ -59,19 +59,23 @@ impl CreateBroadcastRoleShortMacroInput {
         };
 
         // Build the new names
-        // role
-        let concatenated_role = format!("Role{}toAll", first_role);
-        let role_name = syn::Ident::new(&concatenated_role, proc_macro2::Span::call_site());
-        // dual
-        let concatenated_dual = format!("RoleAllto{}", first_role);
-        let dual_name = syn::Ident::new(&concatenated_dual, proc_macro2::Span::call_site());
+        // role to all
+        let concatenated_role_to_all_name = format!("Role{}toAll", first_role);
+        let role_to_all_name = syn::Ident::new(
+            &concatenated_role_to_all_name,
+            proc_macro2::Span::call_site(),
+        );
+        // dual to all
+        let concatenated_dual_to_all = format!("RoleAllto{}", first_role);
+        let dual_to_all_name =
+            syn::Ident::new(&concatenated_dual_to_all, proc_macro2::Span::call_site());
 
         quote! {
             ////////////////////////////////////////////
             /// The Role
 
             #[derive(Debug)]
-            struct #role_name<R1, R2>
+            struct #role_to_all_name<R1, R2>
             where
                 R1: mpstthree::role::Role,
                 R2: mpstthree::role::Role,
@@ -86,7 +90,7 @@ impl CreateBroadcastRoleShortMacroInput {
             /// The Dual
 
             #[derive(Debug)]
-            struct #dual_name<R1, R2>
+            struct #dual_to_all_name<R1, R2>
             where
                 R1: mpstthree::role::Role,
                 R2: mpstthree::role::Role,
@@ -100,8 +104,8 @@ impl CreateBroadcastRoleShortMacroInput {
             ////////////////////////////////////////////
             /// The Role functions
 
-            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role for #role_name<R1, R2> {
-                type Dual = #dual_name<
+            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role for #role_to_all_name<R1, R2> {
+                type Dual = #dual_to_all_name<
                     <R1 as mpstthree::role::Role>::Dual,
                     <R2 as mpstthree::role::Role>::Dual,
                 >;
@@ -114,11 +118,11 @@ impl CreateBroadcastRoleShortMacroInput {
                     let (sender_dual_2, _) = crossbeam_channel::bounded::<R2::Dual>(1);
 
                     (
-                        #role_name {
+                        #role_to_all_name {
                             sender1: sender_dual_1,
                             sender2: sender_dual_2,
                         },
-                        #dual_name {
+                        #dual_to_all_name {
                             sender1: sender_normal_1,
                             sender2: sender_normal_2,
                         },
@@ -127,7 +131,7 @@ impl CreateBroadcastRoleShortMacroInput {
 
                 #[doc(hidden)]
                 fn head_str() -> String {
-                    String::from(stringify!(#role_name))
+                    String::from(stringify!(#role_to_all_name))
                 }
 
                 #[doc(hidden)]
@@ -145,8 +149,8 @@ impl CreateBroadcastRoleShortMacroInput {
             ////////////////////////////////////////////
             /// The Dual functions
 
-            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role for #dual_name<R1, R2> {
-                type Dual = #role_name<
+            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role for #dual_to_all_name<R1, R2> {
+                type Dual = #role_to_all_name<
                     <R1 as mpstthree::role::Role>::Dual,
                     <R2 as mpstthree::role::Role>::Dual,
                 >;
@@ -159,11 +163,11 @@ impl CreateBroadcastRoleShortMacroInput {
                     let (sender_dual_2, _) = crossbeam_channel::bounded::<R2::Dual>(1);
 
                     (
-                        #dual_name {
+                        #dual_to_all_name {
                             sender1: sender_dual_1,
                             sender2: sender_dual_2,
                         },
-                        #role_name {
+                        #role_to_all_name {
                             sender1: sender_normal_1,
                             sender2: sender_normal_2,
                         },
@@ -172,7 +176,7 @@ impl CreateBroadcastRoleShortMacroInput {
 
                 #[doc(hidden)]
                 fn head_str() -> String {
-                    String::from(stringify!(#dual_name))
+                    String::from(stringify!(#dual_to_all_name))
                 }
 
                 #[doc(hidden)]

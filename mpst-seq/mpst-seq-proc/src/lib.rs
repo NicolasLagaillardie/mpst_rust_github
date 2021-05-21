@@ -13,6 +13,7 @@ use functionmpst::send_aux_simple::SendAuxSimpleMacroInput;
 
 mod macros;
 
+use macros::baking::BakingMacroInput;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShortMacroInput;
 use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
@@ -132,4 +133,18 @@ pub fn create_broadcast_role_short(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_broadcast_role_short(input: TokenStream) -> TokenStream {
     create_broadcast_role_short(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking(input: TokenStream) -> TokenStream {
+    baking(input)
 }

@@ -47,12 +47,14 @@ impl From<SendCancelMacroInput> for proc_macro2::TokenStream {
 
 impl SendCancelMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
+        // Get the basic elements
         let func_name = self.func_name.clone();
         let name = self.name.clone();
         let sessionmpst_name = self.sessionmpst_name.clone();
         let nsessions = (self.nsessions).base10_parse::<u64>().unwrap() - 1;
         let msg = self.msg.clone();
 
+        // Build the vec with all the types S1,..,SN
         let session_types: Vec<syn::Ident> =
             (1..nsessions).map(|i| format_ident!("S{}", i)).collect();
 
