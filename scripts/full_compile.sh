@@ -104,7 +104,7 @@ sleep 5
 ./scripts/compile.sh mesh_eleven_crossbeam
 ./scripts/compile.sh mesh_eleven_mpst
 
-Twenty
+# Twenty
 ./scripts/compile.sh mesh_twenty_binary
 ./scripts/compile.sh mesh_twenty_cancel
 ./scripts/compile.sh mesh_twenty_crossbeam
