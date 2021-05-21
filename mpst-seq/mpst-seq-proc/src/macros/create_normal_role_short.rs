@@ -48,15 +48,6 @@ impl CreateNormalRoleShortMacroInput {
         out
     }
 
-    fn lowercase(&self, elt: &str) -> String {
-        let temp = &format!("{}", elt);
-        let mut result = String::from("");
-        for c in temp.chars() {
-            result.push_str(&c.to_lowercase().to_string());
-        }
-        result
-    }
-
     fn expand(&self) -> proc_macro2::TokenStream {
         // Get all the roles provided into a Vec
         let all_roles = self.expand_role(&self.role.clone());
@@ -66,23 +57,14 @@ impl CreateNormalRoleShortMacroInput {
         } else {
             panic!("Not enough arguments")
         };
-        // Lowercase the name of the role
-        let lower_case_role = self.lowercase(&first_role);
 
         // Build the new names
         // role
         let concatenated_role = format!("Role{}", first_role);
         let role_name = syn::Ident::new(&concatenated_role, proc_macro2::Span::call_site());
-        // next function
-        let concatenated_next = format!("next_{}", lower_case_role);
-        let next_role_name = syn::Ident::new(&concatenated_next, proc_macro2::Span::call_site());
         // dual
         let concatenated_dual = format!("Role{}Dual", first_role);
         let dual_name = syn::Ident::new(&concatenated_dual, proc_macro2::Span::call_site());
-        // next dual function
-        let concatenated_next_dual = format!("next_{}_dual", lower_case_role);
-        let next_dual_name =
-            syn::Ident::new(&concatenated_next_dual, proc_macro2::Span::call_site());
 
         quote! {
             ////////////////////////////////////////////
@@ -145,16 +127,6 @@ impl CreateNormalRoleShortMacroInput {
                 }
             }
 
-            #[doc(hidden)]
-            fn #next_role_name<R>(r: #role_name<R>) -> R
-            where
-                R: mpstthree::role::Role,
-            {
-                let (here, there) = <R as mpstthree::role::Role>::new();
-                r.sender.send(there).unwrap_or(());
-                here
-            }
-
             ////////////////////////////////////////////
             /// The Dual methods
 
@@ -189,16 +161,6 @@ impl CreateNormalRoleShortMacroInput {
                         <R as mpstthree::role::Role>::tail_str()
                     )
                 }
-            }
-
-            #[doc(hidden)]
-            fn #next_dual_name<R>(r: #dual_name<R>) -> R
-            where
-                R: mpstthree::role::Role,
-            {
-                let (here, there) = <R as mpstthree::role::Role>::new();
-                r.sender.send(there).unwrap_or(());
-                here
             }
         }
     }

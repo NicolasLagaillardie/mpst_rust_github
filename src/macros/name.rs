@@ -336,8 +336,6 @@ macro_rules! create_multiple_broadcast_role {
 ///
 ///  * RoleX
 ///  * RoleXDual
-///  * next_x
-///  * next_x_dual
 ///
 /// If you want to specify other names, please use [`mpstthree::create_normal_role`].
 ///
@@ -365,10 +363,10 @@ macro_rules! create_normal_role_short {
 /// Create multiple new [`mpstthree::role::Role`], its dual and the related *next* function to
 /// process stacks start with them.
 /// When a name *X* is given, the Roles and next functions created are
+/// 
 ///  * RoleX
 ///  * RoleXDual
-///  * next_x
-///  * next_x_dual
+/// 
 /// If you want to specify other names, please use [`mpstthree::create_multiple_normal_role`].
 ///
 /// # Arguments
@@ -400,8 +398,6 @@ macro_rules! create_multiple_normal_role_short {
 ///
 ///  * RoleXtoAll
 ///  * RoleAlltoX
-///  * next_x_to_all
-///  * next_all_to_x
 ///
 /// If you want to specify other names, please use [`mpstthree::create_broadcast_role`].
 ///
@@ -500,18 +496,6 @@ macro_rules! create_broadcast_role_short {
                 }
             }
 
-            fn unused^N:9<R1, R2>(r: unused^N:8<R1, R2>) -> (R1, R2)
-            where
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-            {
-                let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-                let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-                r.sender1.send(there1).unwrap_or(());
-                r.sender2.send(there2).unwrap_or(());
-                (here1, here2)
-            }
-
             ////////////////////////////////////////////
             /// The Dual functions
 
@@ -558,18 +542,6 @@ macro_rules! create_broadcast_role_short {
                     )
                 }
             }
-
-            fn unused^N:11<R1, R2>(r: unused^N:10<R1, R2>) -> (R1, R2)
-            where
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-            {
-                let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-                let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-                r.sender1.send(there1).unwrap_or(());
-                r.sender2.send(there2).unwrap_or(());
-                (here1, here2)
-            }
         });
     }
 }
@@ -581,8 +553,6 @@ macro_rules! create_broadcast_role_short {
 ///
 ///  * RoleXtoAll
 ///  * RoleAlltoX
-///  * next_x_to_all
-///  * next_all_to_x
 ///
 /// If you want to specify other names, please use
 /// [`mpstthree::create_multiple_broadcast_role_short`]

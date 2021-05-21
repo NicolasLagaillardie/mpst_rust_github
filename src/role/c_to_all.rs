@@ -63,16 +63,3 @@ impl<R1: Role, R2: Role> Role for RoleCtoAll<R1, R2> {
         )
     }
 }
-
-#[doc(hidden)]
-pub fn next_c_to_all<R1, R2>(r: RoleCtoAll<R1, R2>) -> (R1, R2)
-where
-    R1: Role,
-    R2: Role,
-{
-    let (here1, there1) = R1::new();
-    let (here2, there2) = R2::new();
-    r.sender1.send(there1).unwrap_or(());
-    r.sender2.send(there2).unwrap_or(());
-    (here1, here2)
-}

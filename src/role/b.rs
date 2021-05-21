@@ -46,13 +46,3 @@ impl<R: Role> Role for RoleB<R> {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }
-
-#[doc(hidden)]
-pub fn next_b<R>(r: RoleB<R>) -> R
-where
-    R: Role,
-{
-    let (here, there) = R::new();
-    r.sender.send(there).unwrap_or(());
-    here
-}

@@ -48,13 +48,3 @@ impl<R: Role> Role for RoleBDual<R> {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }
-
-#[doc(hidden)]
-pub fn next_b_dual<R>(r: RoleBDual<R>) -> R
-where
-    R: Role,
-{
-    let (here, there) = R::new();
-    r.sender.send(there).unwrap_or(());
-    here
-}

@@ -48,15 +48,6 @@ impl CreateBroadcastRoleShortMacroInput {
         out
     }
 
-    fn lowercase(&self, elt: &str) -> String {
-        let temp = &format!("{}", elt);
-        let mut result = String::from("");
-        for c in temp.chars() {
-            result.push_str(&c.to_lowercase().to_string());
-        }
-        result
-    }
-
     fn expand(&self) -> proc_macro2::TokenStream {
         // Get all the roles provided into a Vec
         let all_roles = self.expand_role(&self.role.clone());
@@ -66,23 +57,14 @@ impl CreateBroadcastRoleShortMacroInput {
         } else {
             panic!("Not enough arguments")
         };
-        // Lowercase the name of the role
-        let lower_case_role = self.lowercase(&first_role);
 
         // Build the new names
         // role
         let concatenated_role = format!("Role{}toAll", first_role);
         let role_name = syn::Ident::new(&concatenated_role, proc_macro2::Span::call_site());
-        // next function
-        let concatenated_next = format!("next_{}_to_all", lower_case_role);
-        let next_role_name = syn::Ident::new(&concatenated_next, proc_macro2::Span::call_site());
         // dual
         let concatenated_dual = format!("RoleAllto{}", first_role);
         let dual_name = syn::Ident::new(&concatenated_dual, proc_macro2::Span::call_site());
-        // next dual function
-        let concatenated_next_dual = format!("next_all_to_{}", lower_case_role);
-        let next_dual_name =
-            syn::Ident::new(&concatenated_next_dual, proc_macro2::Span::call_site());
 
         quote! {
             ////////////////////////////////////////////
@@ -160,19 +142,6 @@ impl CreateBroadcastRoleShortMacroInput {
                 }
             }
 
-            #[doc(hidden)]
-            fn #next_role_name<R1, R2>(r: #role_name<R1, R2>) -> (R1, R2)
-            where
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-            {
-                let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-                let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-                r.sender1.send(there1).unwrap_or(());
-                r.sender2.send(there2).unwrap_or(());
-                (here1, here2)
-            }
-
             ////////////////////////////////////////////
             /// The Dual functions
 
@@ -216,19 +185,6 @@ impl CreateBroadcastRoleShortMacroInput {
                         <R2 as mpstthree::role::Role>::tail_str()
                     )
                 }
-            }
-
-            #[doc(hidden)]
-            fn #next_dual_name<R1, R2>(r: #dual_name<R1, R2>) -> (R1, R2)
-            where
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-            {
-                let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-                let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-                r.sender1.send(there1).unwrap_or(());
-                r.sender2.send(there2).unwrap_or(());
-                (here1, here2)
             }
         }
     }

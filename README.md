@@ -201,8 +201,6 @@ create_normal_role!(RoleA, RoleADual);
 
 #### Sending and receiving with those new roles
 
-To create the role `RoleD`, you need the related `next` function, that can be named `next_d`, to go through a stack which head is `RoleD`, such as `RoleD<RoleEnd>`. The *dual* of `RoleD`is `RoleDDual`and the related `next` function, that can be named `next_d_dual`.
-
 To *send* and *receive* with those new roles, it is mandatory to define new `send` and `recv` functions. This can easily be done with the macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2`.
 As you may notice, there is a difference made between `session_1` and `session_2`. This is due to the current limitation of the library: this is for making the difference between the binary channels used during the communication. If `A` sends to `B`, it will send on the first channel, and by convention (alphanumerical order), it will be the first binary channel, hence `create_send_mpst_session_1` will be used. If `A` send to `C` and `B` is among the participants, then `create_send_mpst_session_2` will be used.
 The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the names of the role and the related `next`function. To create the `send` function from `A` to `B`, here is the expected line of code: 

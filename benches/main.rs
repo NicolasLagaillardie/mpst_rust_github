@@ -39,7 +39,6 @@ criterion_main! {
     // benchmarks::mesh::cancel::mesh_eleven_cancel::mesh_eleven,
     // benchmarks::mesh::cancel::mesh_twenty_cancel::mesh_twenty,
     // //////////
-    // benchmarks::basic::choose_five::choose_five,
     benchmarks::basic::long_five::long_five_protocol,
     // benchmarks::basic::actyx_os_1::actyx_os_1,
     // benchmarks::basic::actyx_os_2::actyx_os_2,

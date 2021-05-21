@@ -1,6 +1,5 @@
 pub mod actyx_os_1;
 pub mod actyx_os_2;
-pub mod choose_five;
 pub mod distributed_calc;
 pub mod fib;
 pub mod long_five;
