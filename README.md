@@ -193,7 +193,8 @@ This part details how to create new roles and how to use them.
 
 #### Creation of new roles
 
-Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next` function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleD`. The expected code will be:
+Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the rolea and the name of the *dual*
+of this role. For instance, let's create the role `RoleD`. The expected code will be:
 
 ```rust
 create_normal_role!(RoleA, RoleADual);
@@ -203,7 +204,8 @@ create_normal_role!(RoleA, RoleADual);
 
 To *send* and *receive* with those new roles, it is mandatory to define new `send` and `recv` functions. This can easily be done with the macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2`.
 As you may notice, there is a difference made between `session_1` and `session_2`. This is due to the current limitation of the library: this is for making the difference between the binary channels used during the communication. If `A` sends to `B`, it will send on the first channel, and by convention (alphanumerical order), it will be the first binary channel, hence `create_send_mpst_session_1` will be used. If `A` send to `C` and `B` is among the participants, then `create_send_mpst_session_2` will be used.
-The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the names of the role and the related `next`function. To create the `send` function from `A` to `B`, here is the expected line of code: 
+The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the name of the involved roles. To create the `send` function from `A` to `B`,
+here is the expected line of code: 
 
 ```rust
 create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
@@ -212,7 +214,7 @@ create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
 #### Making choice and offer with those new roles
 
 To add a layer of features, one may expect to implement `choice` and `offer`. There are two different kind of branching: *binary* and *multiple*. The former refers to a branching with only two choices, whereas the latter refers to branching with as many choices as wanted.
-For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the names of the role and the related `next` function. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
+For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the name of the involved roles. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
 
 ```rust
 create_offer_mpst_session_2!(

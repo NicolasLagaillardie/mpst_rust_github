@@ -48,7 +48,6 @@ macro_rules! create_choose_type_multi {
 /// * The name of the *ChooseMpst* type that is used
 /// * The name of the broadcasting sender. This one should contain *toAll* according to the
 ///   convention
-/// * The name of the *next* function that is related
 /// * The name of the sender
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
@@ -187,7 +186,6 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// * The name of the *ChooseMpst* type that is used
 /// * The name of the broadcasting sender. This one should contain *toAll* according to the
 ///   convention
-/// * The name of the *next* function that is related
 /// * The name of the sender
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)
@@ -327,7 +325,6 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// * The name of the *ChooseMpst* type that is used
 /// * The name of the dual of the broadcasting sender. This one should contain *toAll* according to
 ///   the convention
-/// * The name of the *next* function that is related
 /// * The name of the sender
 /// * The name of the *SessionMpst* type that will be used
 /// * The number of participants (all together)

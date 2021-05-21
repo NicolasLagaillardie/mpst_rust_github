@@ -9,7 +9,6 @@
 ///
 /// * The name of the new *recv* function
 /// * The name of the sender
-/// * The name of related *next* function
 /// * The name of the receiver
 ///
 /// # Example
@@ -40,7 +39,6 @@ macro_rules! create_recv_mpst_session_1 {
 ///
 /// * The name of the new *recv* function
 /// * The name of the sender
-/// * The name of related *next* function
 /// * The name of the receiver
 ///
 /// # Example

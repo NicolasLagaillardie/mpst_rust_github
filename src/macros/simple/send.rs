@@ -9,7 +9,6 @@
 ///
 /// * The name of the new *send* function
 /// * The name of the receiver
-/// * The name of related *next* function
 /// * The name of the sender
 ///
 /// # Example
@@ -40,7 +39,6 @@ macro_rules! create_send_mpst_session_1 {
 ///
 /// * The name of the new *send* function
 /// * The name of the receiver
-/// * The name of related *next* function
 /// * The name of the sender
 ///
 /// # Example

@@ -1,12 +1,9 @@
-/// Create a new [`mpstthree::role::Role`], its dual and the related *next* function to process
-/// stacks start with them.
+/// Create a new [`mpstthree::role::Role`] and its dual.
 ///
 /// # Arguments
 ///
 /// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 /// * The name of the *dual* of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -118,15 +115,12 @@ macro_rules! create_normal_role {
     };
 }
 
-/// Create multiple new [`mpstthree::role::Role`], its dual and the related *next* function to
-/// process stacks start with them.
+/// Create multiple new [`mpstthree::role::Role`] and its dual.
 ///
 /// # Arguments
 ///
 /// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 /// * The name of the *dual* of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -147,16 +141,14 @@ macro_rules! create_multiple_normal_role {
      }
 }
 
-/// Create a new broadcast [`mpstthree::role::Role`], its dual and the related *next* function to
-/// process stacks start with them. A broadcast [`mpstthree::role::Role`] is used for sending a
+/// Create a new broadcast [`mpstthree::role::Role`] and its dual.
+/// A broadcast [`mpstthree::role::Role`] is used for sending a
 /// choice. Its dual is used for receving this choice.
 ///
 /// # Arguments
 ///
 /// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 /// * The name of the *dual* of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -296,16 +288,14 @@ macro_rules! create_broadcast_role {
     };
 }
 
-/// Create multiple new broadcast [`mpstthree::role::Role`], its dual and the related *next*
-/// function to process stacks start with them. A broadcast [`mpstthree::role::Role`] is used for
+/// Create multiple new broadcast [`mpstthree::role::Role`] and its dual.
+/// A broadcast [`mpstthree::role::Role`] is used for
 /// sending a choice. Its dual is used for receving this choice.
 ///
 /// # Arguments
 ///
 /// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 /// * The name of the *dual* of the new [`mpstthree::role::Role`]
-/// * The name of the *next* function that is related
 ///
 /// # Example
 ///
@@ -330,9 +320,8 @@ macro_rules! create_multiple_broadcast_role {
 
 ///////////////////////////////
 
-/// Create a new [`mpstthree::role::Role`], its dual and the related *next* function to process
-/// stacks start with them.
-/// When a name *X* is given, the Roles and next functions created are
+/// Create a new [`mpstthree::role::Role`] and its dual.
+/// When a name *X* is given, the Roles created are
 ///
 ///  * RoleX
 ///  * RoleXDual
@@ -360,9 +349,8 @@ macro_rules! create_normal_role_short {
     };
 }
 
-/// Create multiple new [`mpstthree::role::Role`], its dual and the related *next* function to
-/// process stacks start with them.
-/// When a name *X* is given, the Roles and next functions created are
+/// Create multiple new [`mpstthree::role::Role`] and its dual.
+/// When a name *X* is given, the Roles created are
 /// 
 ///  * RoleX
 ///  * RoleXDual
@@ -391,10 +379,10 @@ macro_rules! create_multiple_normal_role_short {
      }
 }
 
-/// Create a new broadcast [`mpstthree::role::Role`], its dual and the related *next* function to
-/// process stacks start with them. A broadcast [`mpstthree::role::Role`] is used for sending a
+/// Create a new broadcast [`mpstthree::role::Role`] and its dual.
+/// A broadcast [`mpstthree::role::Role`] is used for sending a
 /// choice. Its dual is used for receving this choice.
-/// When a name *X* is given, the Roles and next functions created are
+/// When a name *X* is given, the Roles created are
 ///
 ///  * RoleXtoAll
 ///  * RoleAlltoX
@@ -546,10 +534,10 @@ macro_rules! create_broadcast_role_short {
     }
 }
 
-/// Create multiple new broadcast [`mpstthree::role::Role`], its dual and the related *next*
-/// function to process stacks start with them. A broadcast [`mpstthree::role::Role`] is used for
+/// Create multiple new broadcast [`mpstthree::role::Role`] and its dual.
+/// A broadcast [`mpstthree::role::Role`] is used for
 /// sending a choice. Its dual is used for receving this choice.
-/// When a name *X* is given, the Roles and next functions created are
+/// When a name *X* is given, the Roles created are
 ///
 ///  * RoleXtoAll
 ///  * RoleAlltoX
