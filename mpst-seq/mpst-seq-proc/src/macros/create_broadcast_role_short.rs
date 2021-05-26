@@ -60,15 +60,15 @@ impl CreateBroadcastRoleShortMacroInput {
 
         // Build the new names
         // role to all
-        let concatenated_role_to_all_name = format!("Role{}toAll", first_role);
         let role_to_all_name = syn::Ident::new(
-            &concatenated_role_to_all_name,
+            &format!("Role{}toAll", first_role),
             proc_macro2::Span::call_site(),
         );
         // dual to all
-        let concatenated_dual_to_all = format!("RoleAllto{}", first_role);
-        let dual_to_all_name =
-            syn::Ident::new(&concatenated_dual_to_all, proc_macro2::Span::call_site());
+        let dual_to_all_name = syn::Ident::new(
+            &format!("RoleAllto{}", first_role),
+            proc_macro2::Span::call_site(),
+        );
 
         quote! {
             ////////////////////////////////////////////

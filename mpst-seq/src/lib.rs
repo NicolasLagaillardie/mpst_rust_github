@@ -1,5 +1,6 @@
 use proc_macro_hack::proc_macro_hack;
 
+pub use mpst_seq_proc::baking;
 pub use mpst_seq_proc::broadcast_cancel;
 pub use mpst_seq_proc::create_broadcast_role_short;
 pub use mpst_seq_proc::create_normal_role_short;
@@ -32,3 +33,6 @@ pub use mpst_seq_proc::e_create_normal_role_short;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_create_broadcast_role_short;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_baking;

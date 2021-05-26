@@ -21,7 +21,7 @@ use macros::multiple::send_cancel::SendCancelMacroInput;
 
 mod basic;
 
-use basic::basic::SeqMacroInput;
+use basic::SeqMacroInput;
 
 //////////////////////////////////////
 
