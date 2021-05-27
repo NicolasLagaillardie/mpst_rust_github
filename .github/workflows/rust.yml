@@ -40,7 +40,7 @@ jobs:
       run: cargo test --verbose --all -- --nocapture
     - name: Run tests no features
       run: cargo test --verbose --all --no-default-features --no-run
-    - name: Run examples
-      run: ./scripts/full_examples.sh
+    # - name: Run examples
+    #   run: ./scripts/full_examples.sh
     - name: Run benchmarks
       run: cargo bench --verbose --all
