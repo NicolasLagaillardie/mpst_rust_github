@@ -3,6 +3,8 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
+type VecOfTuple = Vec<(u64, u64, u64)>;
+
 #[derive(Debug)]
 pub struct BakingMacroInput {
     sessionmpst_name: syn::Ident,
@@ -51,7 +53,7 @@ impl From<BakingMacroInput> for proc_macro2::TokenStream {
 
 impl BakingMacroInput {
     /// Create the whole matrix of index according to line and column
-    fn diag(&self) -> Vec<(u64, u64, u64)> {
+    fn diag(&self) -> VecOfTuple {
         let diff = self.number_roles - 1;
 
         let mut column = 0;
@@ -74,41 +76,43 @@ impl BakingMacroInput {
     }
 
     /// Create the whole matrix of index according to line and column
-    fn matrix(&self) -> Vec<Vec<(u64, u64, u64)>> {
+    fn diag_and_matrix(&self) -> (VecOfTuple, Vec<VecOfTuple>) {
         let diag = self.diag();
 
         // Create the whole matrix
-        (1..self.number_roles)
-            .map(|i| {
-                let temp = diag
-                    .iter()
-                    .filter_map(|(line, column, index)| {
-                        if i == *line || i == *column {
-                            std::option::Option::Some((*line, *column, *index))
-                        } else {
-                            std::option::Option::None
-                        }
-                    })
-                    .collect();
-
-                temp
-            })
-            .collect()
+        (
+            self.diag(),
+            (1..=self.number_roles)
+                .map(|i| {
+                    diag.iter()
+                        .filter_map(|(line, column, index)| {
+                            if i == *line || i == *column {
+                                std::option::Option::Some((*line, *column, *index))
+                            } else {
+                                std::option::Option::None
+                            }
+                        })
+                        .collect()
+                })
+                .collect(),
+        )
     }
 
     /// Return (line, column, index) of matrix
-    fn get_tuple_matrix(&self, matrix: &[Vec<(u64, u64, u64)>], i: u64, j: u64) -> (u64, u64, u64) {
-        let list: Vec<(u64, u64, u64)> =
-            if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap()) {
-                temp.to_vec()
-            } else {
-                Vec::new()
-            };
+    fn get_tuple_matrix(&self, matrix: &[VecOfTuple], i: u64, j: u64) -> (u64, u64, u64) {
+        let list: VecOfTuple = if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap()) {
+            temp.to_vec()
+        } else {
+            panic!(
+                "Error at get_tuple_matrix for i = {:?} / matrix = {:?}",
+                i, matrix
+            )
+        };
 
         if let Some((line, column, index)) = list.get(usize::try_from(j - 1).unwrap()) {
             (*line, *column, *index)
         } else {
-            (0, 0, 0)
+            panic!("Error at get_tuple_matrix for i = {:?} and j = {:?} with list = {:?} / matrix = {:?}", i, j, list, matrix)
         }
     }
 
@@ -119,7 +123,7 @@ impl BakingMacroInput {
                 return (i.0, i.1);
             }
         }
-        (0, 0)
+        panic!("Error at get_line_column_from_diag for index = {:?}", index)
     }
 
     /// Expand send methods
@@ -136,14 +140,14 @@ impl BakingMacroInput {
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_ident in expand_send")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
                 syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
             } else {
-                panic!("Not enough arguments")
+                panic!("Not enough arguments for receiver_ident in expand_send")
             };
 
         let send_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
@@ -233,14 +237,14 @@ impl BakingMacroInput {
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_ident in expand_recv")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
                 syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
             } else {
-                panic!("Not enough arguments")
+                panic!("Not enough arguments for receiver_ident in expand_recv")
             };
 
         let send_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
@@ -337,14 +341,14 @@ impl BakingMacroInput {
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("RoleAllto{}", elt), proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_ident in expand_recv_from_all")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
                 syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
             } else {
-                panic!("Not enough arguments")
+                panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
             };
 
         let send_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
@@ -386,7 +390,7 @@ impl BakingMacroInput {
             syn::Ident::new(&format!("session{}", index), proc_macro2::Span::call_site());
 
         quote! {
-            impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
+            impl<#( #session_types_struct )* T: std::marker::Send>
                 #sessionmpst_name<
                     #( #send_sessions )*
                     #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
@@ -433,14 +437,14 @@ impl BakingMacroInput {
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("RoleAllto{}", elt), proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_ident in expand_offer")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
                 syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
             } else {
-                panic!("Not enough arguments")
+                panic!("Not enough arguments for receiver_ident in expand_offer")
             };
 
         let offer_session_types_struct: Vec<proc_macro2::TokenStream> =
@@ -540,24 +544,23 @@ impl BakingMacroInput {
         all_roles: Vec<proc_macro2::TokenStream>,
         sender: u64,
     ) -> proc_macro2::TokenStream {
-        let matrix = self.matrix();
-        let diag = self.diag();
+        let (diag, matrix) = self.diag_and_matrix();
         let sessionmpst_name = self.sessionmpst_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_ident in expand_choose")
         };
 
         let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}toAll", elt), proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_stack in expand_choose")
         };
 
         let choose_session_types_struct: Vec<proc_macro2::TokenStream> =
-            (1..((self.number_roles - 1) * self.number_roles))
+            (1..=((self.number_roles - 1) * self.number_roles))
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -565,7 +568,7 @@ impl BakingMacroInput {
                 })
                 .collect();
 
-        let choose_roles_struct: Vec<proc_macro2::TokenStream> = (1..(2 * self.number_roles))
+        let choose_roles_struct: Vec<proc_macro2::TokenStream> = (1..=(2 * self.number_roles))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -573,12 +576,17 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let choose_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let choose_sessions: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
-                    let left_sessions: Vec<proc_macro2::TokenStream> = (1..(self.number_roles - 1))
+                    let left_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
                         .map(|k| {
+
                             let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
+
+                            if l == 0 {
+                                panic!("Erratum choose_sessions / left_sessions j = {:?}", j)
+                            };
 
                             let (_, _, m1) = if j > sender {
                                 self.get_tuple_matrix(&matrix, sender, j - 1)
@@ -602,9 +610,14 @@ impl BakingMacroInput {
                         })
                         .collect();
 
-                    let right_sessions: Vec<proc_macro2::TokenStream> = (1..(self.number_roles - 1))
+                    let right_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
                         .map(|k| {
+
                             let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
+
+                            if l == 0 {
+                                panic!("Erratum choose_sessions / right_sessions j = {:?}", j);
+                            };
 
                             let (_, _, m1) = if j > sender {
                                 self.get_tuple_matrix(&matrix, sender, j - 1)
@@ -659,10 +672,10 @@ impl BakingMacroInput {
                     };
 
                     let receiver_ident =
-                        if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
+                        if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
                             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
                         } else {
-                            panic!("Not enough arguments")
+                            panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
                         };
 
                     quote! {
@@ -704,17 +717,16 @@ impl BakingMacroInput {
         );
         let new_stacks_sender = quote! { #new_stack_sender_left , #new_stack_sender_right };
 
-        let choose_left_session: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let choose_left_session: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .filter_map(|j| {
-                let (_, _, m) = if j > sender {
-                    self.get_tuple_matrix(&matrix, sender, j - 1)
-                } else {
-                    self.get_tuple_matrix(&matrix, sender, j)
-                };
-
                 if j == sender {
                     std::option::Option::None
                 } else {
+                    let (_, _, m) = if j > sender {
+                        self.get_tuple_matrix(&matrix, sender, j - 1)
+                    } else {
+                        self.get_tuple_matrix(&matrix, sender, j)
+                    };
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
                     std::option::Option::Some(
@@ -724,18 +736,17 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let choose_right_session: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let choose_right_session: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .filter_map(|j| {
-                let (_, _, m) = if j > sender {
-                    self.get_tuple_matrix(&matrix, sender, j - 1)
-                } else {
-                    self.get_tuple_matrix(&matrix, sender, j)
-                };
-                let diff = self.number_roles - 1;
-
                 if j == sender {
                     std::option::Option::None
                 } else {
+                    let (_, _, m) = if j > sender {
+                        self.get_tuple_matrix(&matrix, sender, j - 1)
+                    } else {
+                        self.get_tuple_matrix(&matrix, sender, j)
+                    };
+                    let diff = self.number_roles - 1;
                     let temp_ident = syn::Ident::new(
                         &format!("S{}", diff * (diff + 1) / 2 + m),
                         proc_macro2::Span::call_site(),
@@ -747,11 +758,11 @@ impl BakingMacroInput {
             })
             .collect();
         let choose_left_channels: Vec<proc_macro2::TokenStream> =
-            (1..((self.number_roles - 1) * self.number_roles / 2))
+            (1..=((self.number_roles - 1) * self.number_roles / 2))
                 .map(|j| {
                     let (line, column) = self.get_line_column_from_diag(&diag, j);
 
-                    let first_channel = if sender == line {
+                    let first_channel = if sender != line {
                         syn::Ident::new(
                             &format!("channel_{}_{}", line, column),
                             proc_macro2::Span::call_site(),
@@ -763,7 +774,7 @@ impl BakingMacroInput {
                         )
                     };
 
-                    let second_channel = if sender == line {
+                    let second_channel = if sender != line {
                         syn::Ident::new(
                             &format!("channel_{}_{}", column, line),
                             proc_macro2::Span::call_site(),
@@ -784,12 +795,12 @@ impl BakingMacroInput {
                 .collect();
 
         let choose_right_channels: Vec<proc_macro2::TokenStream> =
-            (1..((self.number_roles - 1) * self.number_roles / 2))
+            (1..=((self.number_roles - 1) * self.number_roles / 2))
                 .map(|j| {
                     let (line, column) = self.get_line_column_from_diag(&diag, j);
                     let diff = self.number_roles - 1;
 
-                    let first_channel = if sender == line {
+                    let first_channel = if sender != line {
                         syn::Ident::new(
                             &format!("channel_{}_{}", line, column),
                             proc_macro2::Span::call_site(),
@@ -801,7 +812,7 @@ impl BakingMacroInput {
                         )
                     };
 
-                    let second_channel = if sender == line {
+                    let second_channel = if sender != line {
                         syn::Ident::new(
                             &format!("channel_{}_{}", column, line),
                             proc_macro2::Span::call_site(),
@@ -846,22 +857,22 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
         .map(|j| {
             if sender != j {
 
                 let receiver_ident =
-                    if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
+                    if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
                         syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
                     } else {
-                        panic!("Not enough arguments")
+                        panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                     };
 
                     let new_name =
-                        if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
+                        if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
                             syn::Ident::new(&format!("name_{}", elt), proc_macro2::Span::call_site())
                         } else {
-                            panic!("Not enough arguments")
+                            panic!("Not enough arguments for new_name in new_names in expand_choose")
                         };
 
                 quote! {
@@ -873,47 +884,52 @@ impl BakingMacroInput {
         })
         .collect();
 
-        let new_sessionmpst_receivers: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessionmpst_receivers: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
-                    let new_sessions_receiver: Vec<proc_macro2::TokenStream> =
-                        (1..(self.number_roles - 1))
-                            .map(|k| {
-                                let new_session_receiver = syn::Ident::new(
-                                    &format!("session_{}", k),
+                    let new_sessions_receiver: Vec<proc_macro2::TokenStream> = (1..self
+                        .number_roles)
+                        .map(|k| {
+                            let new_session_receiver = syn::Ident::new(
+                                &format!("session{}", k),
+                                proc_macro2::Span::call_site(),
+                            );
+                            let new_channel_receiver = if j > k {
+                                syn::Ident::new(
+                                    &format!("channel_{}_{}", j, k),
                                     proc_macro2::Span::call_site(),
-                                );
-                                let new_channel_receiver = syn::Ident::new(
-                                    &format!("channel_{}", k),
+                                )
+                            } else {
+                                syn::Ident::new(
+                                    &format!("channel_{}_{}", j, k + 1),
                                     proc_macro2::Span::call_site(),
-                                );
+                                )
+                            };
 
-                                quote! { #new_session_receiver : #new_channel_receiver , }
-                            })
-                            .collect();
+                            quote! { #new_session_receiver : #new_channel_receiver , }
+                        })
+                        .collect();
 
-                    let new_choice_receiver = if let Some(elt) =
-                        all_roles.get(usize::try_from(j).unwrap())
+                    let new_choice_receiver = if j > sender
                     {
-                        syn::Ident::new(&format!("choice_{}", elt), proc_macro2::Span::call_site())
+                        syn::Ident::new(&format!("choice_{}", j - 1), proc_macro2::Span::call_site())
                     } else {
-                        panic!("Not enough arguments")
+                        syn::Ident::new(&format!("choice_{}", j), proc_macro2::Span::call_site())
                     };
 
-                    let new_stack_receiver = if let Some(elt) =
-                        all_roles.get(usize::try_from(j).unwrap())
+                    let new_stack_receiver = if j > sender
                     {
-                        syn::Ident::new(&format!("stack_{}", elt), proc_macro2::Span::call_site())
+                        syn::Ident::new(&format!("stack_{}", j - 1), proc_macro2::Span::call_site())
                     } else {
-                        panic!("Not enough arguments")
+                        syn::Ident::new(&format!("stack_{}", j), proc_macro2::Span::call_site())
                     };
 
                     let new_name_receiver = if let Some(elt) =
-                        all_roles.get(usize::try_from(j).unwrap())
+                        all_roles.get(usize::try_from(j - 1).unwrap())
                     {
                         syn::Ident::new(&format!("name_{}", elt), proc_macro2::Span::call_site())
                     } else {
-                        panic!("Not enough arguments")
+                        panic!("Not enough arguments for new_name_receiver in new_sessionmpst_receivers in expand_choose")
                     };
 
                     quote! {
@@ -935,28 +951,16 @@ impl BakingMacroInput {
 
         let new_sessions_sender_left: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender =
-                    if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                        syn::Ident::new(
-                            &format!("new_session_{}", elt),
-                            proc_macro2::Span::call_site(),
-                        )
-                    } else {
-                        panic!("Not enough arguments")
-                    };
+                let new_session_sender = syn::Ident::new(
+                    &format!("new_session_{}", j - 1),
+                    proc_macro2::Span::call_site(),
+                );
 
                 let new_choice_sender =
-                    if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                        syn::Ident::new(&format!("choice_{}", elt), proc_macro2::Span::call_site())
-                    } else {
-                        panic!("Not enough arguments")
-                    };
+                    syn::Ident::new(&format!("choice_{}", j), proc_macro2::Span::call_site());
 
-                let session_sender = if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                    syn::Ident::new(&format!("session{}", elt), proc_macro2::Span::call_site())
-                } else {
-                    panic!("Not enough arguments")
-                };
+                let session_sender =
+                    syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
 
                 quote! {
                     let #new_session_sender = mpstthree::binary::send::send(
@@ -969,28 +973,16 @@ impl BakingMacroInput {
 
         let new_sessions_sender_right: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender =
-                    if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                        syn::Ident::new(
-                            &format!("new_session_{}", elt),
-                            proc_macro2::Span::call_site(),
-                        )
-                    } else {
-                        panic!("Not enough arguments")
-                    };
+                let new_session_sender = syn::Ident::new(
+                    &format!("new_session_{}", j - 1),
+                    proc_macro2::Span::call_site(),
+                );
 
                 let new_choice_sender =
-                    if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                        syn::Ident::new(&format!("choice_{}", elt), proc_macro2::Span::call_site())
-                    } else {
-                        panic!("Not enough arguments")
-                    };
+                    syn::Ident::new(&format!("choice_{}", j), proc_macro2::Span::call_site());
 
-                let session_sender = if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                    syn::Ident::new(&format!("session{}", elt), proc_macro2::Span::call_site())
-                } else {
-                    panic!("Not enough arguments")
-                };
+                let session_sender =
+                    syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
 
                 quote! {
                     let #new_session_sender = mpstthree::binary::send::send(
@@ -1003,21 +995,13 @@ impl BakingMacroInput {
 
         let old_sessionmpst_sender: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender =
-                    if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                        syn::Ident::new(
-                            &format!("new_session_{}", elt),
-                            proc_macro2::Span::call_site(),
-                        )
-                    } else {
-                        panic!("Not enough arguments")
-                    };
+                let new_session_sender = syn::Ident::new(
+                    &format!("new_session_{}", j - 1),
+                    proc_macro2::Span::call_site(),
+                );
 
-                let session_sender = if let Some(elt) = all_roles.get(usize::try_from(j).unwrap()) {
-                    syn::Ident::new(&format!("session{}", elt), proc_macro2::Span::call_site())
-                } else {
-                    panic!("Not enough arguments")
-                };
+                let session_sender =
+                    syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
 
                 quote! {
                     #session_sender : #new_session_sender ,
@@ -1025,7 +1009,7 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let new_sessionmpst_sender: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessionmpst_sender: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
                     let new_choice_sender = if j < sender {
@@ -1052,6 +1036,16 @@ impl BakingMacroInput {
                 }
             })
             .collect();
+
+        let new_stack_sender = syn::Ident::new(
+            &format!("stack_{}", self.number_roles),
+            proc_macro2::Span::call_site(),
+        );
+
+        let new_name_sender = syn::Ident::new(
+            &format!("name_{}", self.number_roles),
+            proc_macro2::Span::call_site(),
+        );
 
         quote! {
             impl<
@@ -1088,13 +1082,13 @@ impl BakingMacroInput {
                         #new_stacks_receivers_left
                     )*
 
-                    let (stack_0, _) = <#new_stack_sender_left as mpstthree::role::Role>::new();
+                    let (#new_stack_sender, _) = <#new_stack_sender_left as mpstthree::role::Role>::new();
 
                     #(
                         #new_names
                     )*
 
-                    let (name_0, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                     #(
                         #new_sessionmpst_receivers
@@ -1118,8 +1112,8 @@ impl BakingMacroInput {
                         #(
                             #new_sessionmpst_sender
                         )*
-                        stack: stack_0,
-                        name: name_0,
+                        stack: #new_stack_sender,
+                        name: #new_name_sender,
                     }
                 }
                 pub fn choose_right(self) -> #sessionmpst_name<
@@ -1138,13 +1132,13 @@ impl BakingMacroInput {
                         #new_stacks_receivers_right
                     )*
 
-                    let (stack_0, _) = <#new_stack_sender_right as mpstthree::role::Role>::new();
+                    let (#new_stack_sender, _) = <#new_stack_sender_right as mpstthree::role::Role>::new();
 
                     #(
                         #new_names
                     )*
 
-                    let (name_0, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                     #(
                         #new_sessionmpst_receivers
@@ -1168,8 +1162,8 @@ impl BakingMacroInput {
                         #(
                             #new_sessionmpst_sender
                         )*
-                        stack: stack_0,
-                        name: name_0,
+                        stack: #new_stack_sender,
+                        name: #new_name_sender,
                     }
                 }
             }
@@ -1187,7 +1181,7 @@ impl BakingMacroInput {
             let concatenated_elt = format!("Role{}", elt);
             syn::Ident::new(&concatenated_elt, proc_macro2::Span::call_site())
         } else {
-            panic!("Not enough arguments")
+            panic!("Not enough arguments for sender_ident in expand_close")
         };
 
         let close_session_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
@@ -1620,31 +1614,11 @@ impl BakingMacroInput {
             .collect();
 
         let choose_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
-            .map(|receiver| {
-                (1..=self.number_roles)
-                    .filter_map(|sender| {
-                        if receiver != sender {
-                            std::option::Option::Some(self.expand_choose(all_roles.clone(), sender))
-                        } else {
-                            std::option::Option::None
-                        }
-                    })
-                    .collect()
-            })
+            .map(|sender| self.expand_choose(all_roles.clone(), sender))
             .collect();
 
         let close_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
-            .map(|receiver| {
-                (1..=self.number_roles)
-                    .filter_map(|sender| {
-                        if receiver != sender {
-                            std::option::Option::Some(self.expand_close(all_roles.clone(), sender))
-                        } else {
-                            std::option::Option::None
-                        }
-                    })
-                    .collect()
-            })
+            .map(|sender| self.expand_close(all_roles.clone(), sender))
             .collect();
 
         quote! {

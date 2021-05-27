@@ -477,8 +477,7 @@ impl SeqMacroInput {
         // Create the whole matrix
         self.range_0(0, 0, 1, roles_size && (number_roles > from))
             .map(|i| {
-                let temp = diag
-                    .iter()
+                diag.iter()
                     .filter_map(|(line, column, index)| {
                         if i == *line || i == *column {
                             std::option::Option::Some((*line, *column, *index))
@@ -486,9 +485,7 @@ impl SeqMacroInput {
                             std::option::Option::None
                         }
                     })
-                    .collect();
-
-                temp
+                    .collect()
             })
             .collect()
     }
@@ -536,8 +533,7 @@ impl SeqMacroInput {
         // Create the whole matrix
         self.range_15(0, 0, 1, roles_size && (number_roles > from))
             .map(|i| {
-                let temp = diag
-                    .iter()
+                diag.iter()
                     .filter_map(|(line, column, index)| {
                         if i == *line || i == *column {
                             std::option::Option::Some((*line, *column, *index))
@@ -545,9 +541,7 @@ impl SeqMacroInput {
                             std::option::Option::None
                         }
                     })
-                    .collect();
-
-                temp
+                    .collect()
             })
             .collect()
     }
