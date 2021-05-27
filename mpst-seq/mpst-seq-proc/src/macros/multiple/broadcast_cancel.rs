@@ -32,15 +32,15 @@ impl BroadcastCancelMacroInput {
         let session = self.session.clone();
         let nsessions = (self.nsessions).base10_parse::<usize>().unwrap();
 
-        let bool_session: Vec<syn::Ident> = (1..(nsessions - 1))
+        let bool_session: Vec<syn::Ident> = (1..nsessions)
             .map(|i| format_ident!("bool_session{}", i))
             .collect();
 
-        let sessions: Vec<syn::Ident> = (1..(nsessions - 1))
+        let field_session: Vec<syn::Ident> = (1..nsessions)
             .map(|i| format_ident!("session{}", i))
             .collect();
 
-        let send_sessions = quote! { #( s.#sessions.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap_or(()); )* };
+        let send_sessions = quote! { #( s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap_or(()); )* };
 
         quote! {
             #(
@@ -54,9 +54,9 @@ impl BroadcastCancelMacroInput {
             if size.len() != #nsessions - 1 {
                 panic!("Wrong number for $nsessions: expected {:?}, found {:?}", size.len(), #nsessions)
             } else {
-                while #( #bool_session ||)* false {
+                while #( #bool_session || )* false {
                     #(
-                        match s.#sessions.receiver.try_recv() {
+                        match s.#field_session.receiver.try_recv() {
                             Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
                                 #send_sessions
                                 mpstthree::binary::cancel::cancel(s);
@@ -64,13 +64,13 @@ impl BroadcastCancelMacroInput {
                             }
                             Ok(mpstthree::binary::struct_trait::Signal::Stop) => match #bool_session {
                                 true => {
-                                    s.#sessions.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
+                                    s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
                                     #bool_session = false;
                                 }
                                 false => panic!("Close already sent"),
                             }
                             Ok(mpstthree::binary::struct_trait::Signal::Offer(channel)) => {
-                                s.#sessions = channel;
+                                s.#field_session = channel;
                             }
                             _ => {}
                         };
