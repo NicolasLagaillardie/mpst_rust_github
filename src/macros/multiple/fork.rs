@@ -1,56 +1,12 @@
 ////////////////////////////////////////////
 /// FORK
 
-/// Creates the _simple fork_ function to be used with more
-/// than 3 participants. It should be used with
-/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
+/// Creates the _fork_ function to be used with more than 3
+/// participants. It must be used with
+/// [`mpstthree::fork_simple`](../macro.fork_simple.html)
 ///
 /// # Arguments
 ///
-/// * The name of the new simple *fork* function
-/// * The name of the *SessionMpst* type that will be used
-/// * The number of participants (all together)
-///
-/// # Example
-///
-/// ```
-/// use mpstthree::{create_sessionmpst, fork_simple_multi};
-///
-/// create_sessionmpst!(SessionMpst, 3);
-///
-/// fork_simple_multi!(fork_simple, SessionMpst, 3);
-/// ```
-#[macro_export]
-macro_rules! fork_simple_multi {
-    ($func_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
-        mpst_seq::seq!(K in 1..$nsessions {
-            fn $func_name<#(S#K:0,)0:0 R, N, P>(p: P, s: $sessionmpst_name<#(S#K:0,)0:0 R, N>) -> std::thread::JoinHandle<()>
-            where
-                #(
-                    S#K:0: mpstthree::binary::struct_trait::Session + 'static,
-                )0:0
-                R: mpstthree::role::Role + 'static,
-                N: mpstthree::role::Role + 'static,
-                P: FnOnce($sessionmpst_name<#(S#K:0,)0:0 R, N>) -> Result<(), Box<dyn std::error::Error>> + std::marker::Send + 'static,
-            {
-                std::thread::spawn(move || {
-                    std::panic::set_hook(Box::new(|_info| {
-                        // do nothing
-                    }));
-                    match p(s) {
-                        Ok(()) => (),
-                        Err(e) => panic!("{:?}", e),
-                    }
-                })
-            }
-        });
-    }
-}
-
-/// Creates the _fork_ function to be used with more than 3
-/// participants. It must be used with
-/// [`mpstthree::fork_simple`](../macro.fork_simple.html)  #
-/// Arguments
 /// * The name of the new *fork* function
 /// * The name of the *simple fork* function
 /// * The name of the *SessionMpst* type that will be used

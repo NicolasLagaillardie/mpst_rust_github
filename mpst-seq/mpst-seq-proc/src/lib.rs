@@ -17,6 +17,9 @@ use macros::baking::BakingMacroInput;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShortMacroInput;
 use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
+use macros::multiple::close_mpst::CloseMpstMacroInput;
+use macros::multiple::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
+use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
 
 mod basic;
@@ -147,4 +150,46 @@ pub fn baking(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_baking(input: TokenStream) -> TokenStream {
     baking(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn close_mpst(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CloseMpstMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_close_mpst(input: TokenStream) -> TokenStream {
+    close_mpst(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn close_mpst_check_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CloseMpstCheckCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_close_mpst_check_cancel(input: TokenStream) -> TokenStream {
+    close_mpst_check_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn fork_mpst_multi(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ForkMPSTMultiMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_fork_mpst_multi(input: TokenStream) -> TokenStream {
+    fork_mpst_multi(input)
 }
