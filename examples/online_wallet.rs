@@ -152,7 +152,6 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             RoleS, =>
             RoleA,
             SessionMpstThree,
-            3,
             1
         );
 
@@ -169,7 +168,6 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             RoleS, =>
             RoleA,
             SessionMpstThree,
-            3,
             1
         );
 
@@ -261,7 +259,6 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
                 RoleS, =>
                 RoleC,
                 SessionMpstThree,
-                3,
                 2
             );
 
@@ -278,7 +275,6 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
                 RoleS, =>
                 RoleC,
                 SessionMpstThree,
-                3,
                 2
             );
 

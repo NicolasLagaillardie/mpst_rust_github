@@ -93,7 +93,6 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleB, =>
                 RoleA,
                 SessionMpstTwo,
-                2,
                 1
             );
 
@@ -106,7 +105,6 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleB, =>
                 RoleA,
                 SessionMpstTwo,
-                2,
                 1
             );
 

@@ -48,7 +48,6 @@ macro_rules! choose_mpst_a_to_all {
             RoleC, =>
             RoleA,
             SessionMpst,
-            3,
             1
         )
     }};
@@ -102,7 +101,6 @@ macro_rules! choose_mpst_b_to_all {
             RoleC, =>
             RoleB,
             SessionMpst,
-            3,
             2
         )
     }};
@@ -156,7 +154,6 @@ macro_rules! choose_mpst_c_to_all {
             RoleB, =>
             RoleC,
             SessionMpst,
-            3,
             3
         )
     }};

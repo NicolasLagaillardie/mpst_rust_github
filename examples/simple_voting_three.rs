@@ -168,7 +168,6 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
             RoleServer, =>
             RoleVoter,
             SessionMpstThree,
-            3,
             3
         );
 
@@ -184,7 +183,6 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
             RoleServer, =>
             RoleVoter,
             SessionMpstThree,
-            3,
             3
         );
 
@@ -230,7 +228,6 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
             RoleVoter, =>
             RoleServer,
             SessionMpstThree,
-            3,
             2
         );
 
@@ -246,7 +243,6 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
             RoleVoter, =>
             RoleServer,
             SessionMpstThree,
-            3,
             2
         );
 

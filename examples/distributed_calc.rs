@@ -133,7 +133,6 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             RoleS, =>
             RoleC,
             SessionMpstThree,
-            3,
             2
         );
 
@@ -151,7 +150,6 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             RoleS, =>
             RoleC,
             SessionMpstThree,
-            3,
             2
         );
 

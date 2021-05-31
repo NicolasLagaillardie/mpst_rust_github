@@ -1074,7 +1074,6 @@ macro_rules! choose_mpst_to_all {
             $($receiver,)+ =>
             $sender,
             SessionMpst,
-            3,
             3
         )
     }};

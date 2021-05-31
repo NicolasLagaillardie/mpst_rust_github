@@ -150,7 +150,7 @@ fn client_recurs(
                 Branches0BtoD::Video, =>
                 RoleA, RoleB, =>
                 RoleD, SessionMpst,
-                3, 3
+                3
             );
 
             let (_, s) = s.send(1).recv()?;
@@ -166,7 +166,6 @@ fn client_recurs(
                 RoleB, =>
                 RoleD,
                 SessionMpst,
-                3,
                 3
             );
 

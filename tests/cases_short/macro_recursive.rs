@@ -131,7 +131,7 @@ fn client_recurs(
                 RoleA,
                 RoleB, =>
                 RoleC, SessionMpst,
-                3, 3
+                3
             );
 
             let (_, s) = s.send(1).recv()?;
@@ -146,7 +146,7 @@ fn client_recurs(
                 RoleA,
                 RoleB, =>
                 RoleC, SessionMpst,
-                3, 3
+                3
             );
 
             assert_eq!(index, 100);

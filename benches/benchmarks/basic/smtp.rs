@@ -349,7 +349,7 @@ fn endpoint_c_0(s: EndpointC0) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoS::Continue, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -361,7 +361,7 @@ fn endpoint_c_0(s: EndpointC0) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoS::Quit, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -394,7 +394,7 @@ fn endpoint_c_2(s: EndpointC2) -> Result<(), Box<dyn Error>> {
             s,
             Branching2fromCtoS::Continue, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -406,7 +406,7 @@ fn endpoint_c_2(s: EndpointC2) -> Result<(), Box<dyn Error>> {
             s,
             Branching2fromCtoS::Quit, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -423,7 +423,7 @@ fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
             s,
             Branching3fromCtoS::Continue, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -434,7 +434,7 @@ fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
             s,
             Branching3fromCtoS::Quit, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -466,7 +466,7 @@ fn endpoint_c_5(s: EndpointC5) -> Result<(), Box<dyn Error>> {
             s,
             Branching5fromCtoS::Continue, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -477,7 +477,7 @@ fn endpoint_c_5(s: EndpointC5) -> Result<(), Box<dyn Error>> {
             s,
             Branching5fromCtoS::Quit, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -509,7 +509,7 @@ fn endpoint_c_7(s: EndpointC7) -> Result<(), Box<dyn Error>> {
             s,
             Branching7fromCtoS::Continue, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -520,7 +520,7 @@ fn endpoint_c_7(s: EndpointC7) -> Result<(), Box<dyn Error>> {
             s,
             Branching7fromCtoS::Quit, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -552,7 +552,7 @@ fn endpoint_c_9(s: EndpointC9) -> Result<(), Box<dyn Error>> {
             s,
             Branching9fromCtoS::Continue, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -566,7 +566,7 @@ fn endpoint_c_9(s: EndpointC9) -> Result<(), Box<dyn Error>> {
             s,
             Branching9fromCtoS::Loop, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -584,7 +584,7 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
             s,
             Branching10fromCtoS::Data, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -596,7 +596,7 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
             s,
             Branching10fromCtoS::Subject, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -608,7 +608,7 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
             s,
             Branching10fromCtoS::End, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 2, 1
+            RoleC, SessionMpstTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -646,7 +646,7 @@ fn endpoint_s_1(s: EndpointS1) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromStoC::Continue, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -657,7 +657,7 @@ fn endpoint_s_1(s: EndpointS1) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromStoC::Loop, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -706,7 +706,7 @@ fn endpoint_s_4(s: EndpointS4) -> Result<(), Box<dyn Error>> {
             s,
             Branching4fromStoC::Continue, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -717,7 +717,7 @@ fn endpoint_s_4(s: EndpointS4) -> Result<(), Box<dyn Error>> {
             s,
             Branching4fromStoC::Loop, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -749,7 +749,7 @@ fn endpoint_s_6(s: EndpointS6) -> Result<(), Box<dyn Error>> {
             s,
             Branching6fromStoC::Continue, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -760,7 +760,7 @@ fn endpoint_s_6(s: EndpointS6) -> Result<(), Box<dyn Error>> {
             s,
             Branching6fromStoC::Loop, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -792,7 +792,7 @@ fn endpoint_s_8(s: EndpointS8) -> Result<(), Box<dyn Error>> {
             s,
             Branching8fromStoC::Continue, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);
@@ -803,7 +803,7 @@ fn endpoint_s_8(s: EndpointS8) -> Result<(), Box<dyn Error>> {
             s,
             Branching8fromStoC::Loop, =>
             RoleC, =>
-            RoleS, SessionMpstTwo, 2, 2
+            RoleS, SessionMpstTwo, 2
         );
 
         let s = send_mpst_s_to_c((), s);

@@ -206,7 +206,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///  * The different passive roles
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
 ///  * The index of the active role
 ///
 /// # Example
@@ -224,7 +223,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        let s = send_mpst_d_to_a(1, s);
@@ -240,7 +238,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -249,7 +246,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
         mpst_seq::choose_mpst_multi_to_all!( ( $session ) , ( $( $label , )* ) , ( $( $receiver , )* ) , $sender , $sessionmpst_name , $exclusion);
     }
 }

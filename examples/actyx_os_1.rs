@@ -253,7 +253,6 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 Storage, =>
                 Logs,
                 SessionMpstFour,
-                4,
                 3
             );
 
@@ -288,7 +287,6 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 Storage, =>
                 Logs,
                 SessionMpstFour,
-                4,
                 3
             );
 
@@ -320,7 +318,6 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
                 Storage, =>
                 Logs,
                 SessionMpstFour,
-                4,
                 3
             );
 

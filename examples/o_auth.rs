@@ -173,7 +173,6 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
             RoleS, =>
             RoleA,
             SessionMpstThree,
-            3,
             1
         );
 
@@ -189,7 +188,6 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
             RoleS, =>
             RoleA,
             SessionMpstThree,
-            3,
             1
         );
 
@@ -243,7 +241,6 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             RoleC, =>
             RoleS,
             SessionMpstThree,
-            3,
             3
         );
 
@@ -259,7 +256,6 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             RoleC, =>
             RoleS,
             SessionMpstThree,
-            3,
             3
         );
 
