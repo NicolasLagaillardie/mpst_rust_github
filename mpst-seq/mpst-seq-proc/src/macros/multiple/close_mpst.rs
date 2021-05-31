@@ -6,7 +6,7 @@ use syn::{Result, Token};
 pub struct CloseMpstMacroInput {
     func_name: syn::Ident,
     sessionmpst_name: syn::Ident,
-    nsessions: syn::LitInt,
+    nsessions: u64,
 }
 
 impl Parse for CloseMpstMacroInput {
@@ -17,7 +17,7 @@ impl Parse for CloseMpstMacroInput {
         let sessionmpst_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = syn::LitInt::parse(input)?;
+        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CloseMpstMacroInput {
             func_name,
@@ -37,15 +37,14 @@ impl CloseMpstMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let func_name = self.func_name.clone();
         let sessionmpst_name = self.sessionmpst_name.clone();
-        let nsessions = (self.nsessions).base10_parse::<usize>().unwrap();
 
-        let session_types: Vec<proc_macro2::TokenStream> = (1..nsessions)
+        let session_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|_| {
                 quote! { mpstthree::binary::struct_trait::End , }
             })
             .collect();
 
-        let session_send: Vec<proc_macro2::TokenStream> = (1..nsessions)
+        let session_send: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
@@ -55,7 +54,7 @@ impl CloseMpstMacroInput {
                 })
                 .collect();
 
-        let session_recv: Vec<proc_macro2::TokenStream> = (1..nsessions)
+        let session_recv: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());

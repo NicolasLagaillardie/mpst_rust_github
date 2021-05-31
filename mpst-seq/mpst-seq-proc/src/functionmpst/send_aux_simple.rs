@@ -7,7 +7,7 @@ pub struct SendAuxSimpleMacroInput {
     session: proc_macro2::TokenStream,
     payload: proc_macro2::TokenStream,
     role: syn::Ident,
-    exclusion: syn::LitInt,
+    exclusion: u64,
 }
 
 impl Parse for SendAuxSimpleMacroInput {
@@ -15,7 +15,7 @@ impl Parse for SendAuxSimpleMacroInput {
         let role = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let exclusion = syn::LitInt::parse(input)?;
+        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
         let content_session;
@@ -47,14 +47,13 @@ impl SendAuxSimpleMacroInput {
         let session = self.session.clone();
         let payload = self.payload.clone();
         let role = self.role.clone();
-        let recv_session =
-            format_ident!("session{}", (self.exclusion).base10_parse::<u64>().unwrap());
+        let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();
         let mut all_sessions = Vec::new();
         for i in 1..3 {
             all_sessions.push(format_ident!("session{}", i));
-            if i == (self.exclusion).base10_parse::<u64>().unwrap() {
+            if i == self.exclusion {
                 new_sessions.push(quote! { new_session });
             } else {
                 let temp = format_ident!("session{}", i);

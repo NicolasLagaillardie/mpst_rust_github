@@ -163,32 +163,32 @@ impl ForkMPSTMultiMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let func_name = self.func_name.clone();
         let sessionmpst_name = self.sessionmpst_name.clone();
-        let nsessions = self.nsessions;
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
-        let sessions: Vec<proc_macro2::TokenStream> = (1..=((nsessions - 1) * (nsessions) / 2))
-            .map(|i| {
-                let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                quote! {
-                    #temp_ident ,
-                }
-            })
-            .collect();
+        let sessions: Vec<proc_macro2::TokenStream> =
+            (1..=((self.nsessions - 1) * (self.nsessions) / 2))
+                .map(|i| {
+                    let temp_ident =
+                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    quote! {
+                        #temp_ident ,
+                    }
+                })
+                .collect();
 
-        let sessions_struct: Vec<proc_macro2::TokenStream> = (1..=((nsessions - 1) * (nsessions)
-            / 2))
-            .map(|i| {
-                let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session + 'static ,
-                }
-            })
-            .collect();
+        let sessions_struct: Vec<proc_macro2::TokenStream> =
+            (1..=((self.nsessions - 1) * (self.nsessions) / 2))
+                .map(|i| {
+                    let temp_ident =
+                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    quote! {
+                        #temp_ident : mpstthree::binary::struct_trait::Session + 'static ,
+                    }
+                })
+                .collect();
 
-        let roles: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let roles: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -198,7 +198,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -208,7 +208,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let new_roles: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -220,7 +220,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let names: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let names: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
@@ -230,7 +230,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let names_struct: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let names_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
@@ -240,7 +240,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
@@ -252,7 +252,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let functions: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let functions: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
@@ -262,7 +262,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let functions_detail: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let functions_detail: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
@@ -273,9 +273,9 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let functions_struct: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let functions_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..nsessions)
+                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
@@ -312,7 +312,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let join_handle: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let join_handle: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|_| {
                 quote! {
                     std::thread::JoinHandle<()> ,
@@ -320,29 +320,30 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((nsessions - 1) * (nsessions) / 2))
-            .map(|i| {
-                let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
-                let temp_channel_left = syn::Ident::new(
-                    &format!("channel_{}_{}", line, column),
-                    proc_macro2::Span::call_site(),
-                );
-                let temp_channel_right = syn::Ident::new(
-                    &format!("channel_{}_{}", column, line),
-                    proc_macro2::Span::call_site(),
-                );
-                quote! {
-                    let ( #temp_channel_left , #temp_channel_right ) =
-                        < #temp_ident as mpstthree::binary::struct_trait::Session>::new();
-                }
-            })
-            .collect();
+        let new_channels: Vec<proc_macro2::TokenStream> =
+            (1..=((self.nsessions - 1) * (self.nsessions) / 2))
+                .map(|i| {
+                    let temp_ident =
+                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
+                    let temp_channel_left = syn::Ident::new(
+                        &format!("channel_{}_{}", line, column),
+                        proc_macro2::Span::call_site(),
+                    );
+                    let temp_channel_right = syn::Ident::new(
+                        &format!("channel_{}_{}", column, line),
+                        proc_macro2::Span::call_site(),
+                    );
+                    quote! {
+                        let ( #temp_channel_left , #temp_channel_right ) =
+                            < #temp_ident as mpstthree::binary::struct_trait::Session>::new();
+                    }
+                })
+                .collect();
 
-        let new_sessionmpst: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let new_sessionmpst: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..nsessions)
+                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
                         let temp_session = syn::Ident::new(
@@ -386,7 +387,7 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let new_threads: Vec<proc_macro2::TokenStream> = (1..=nsessions)
+        let new_threads: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_function =
                     syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());

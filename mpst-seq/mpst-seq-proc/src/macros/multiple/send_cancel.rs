@@ -7,7 +7,7 @@ pub struct SendCancelMacroInput {
     func_name: syn::Ident,
     name: syn::Ident,
     sessionmpst_name: syn::Ident,
-    nsessions: syn::LitInt,
+    nsessions: u64,
     msg: proc_macro2::TokenStream,
 }
 
@@ -22,7 +22,7 @@ impl Parse for SendCancelMacroInput {
         let sessionmpst_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = syn::LitInt::parse(input)?;
+        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
         let content_msg;
@@ -51,12 +51,11 @@ impl SendCancelMacroInput {
         let func_name = self.func_name.clone();
         let name = self.name.clone();
         let sessionmpst_name = self.sessionmpst_name.clone();
-        let nsessions = (self.nsessions).base10_parse::<u64>().unwrap() - 1;
         let msg = self.msg.clone();
 
         // Build the vec with all the types S1,..,SN
         let session_types: Vec<syn::Ident> =
-            (1..nsessions).map(|i| format_ident!("S{}", i)).collect();
+            (1..(self.nsessions - 1)).map(|i| format_ident!("S{}", i)).collect();
 
         quote! {
             fn #func_name<#( #session_types , )* R>(

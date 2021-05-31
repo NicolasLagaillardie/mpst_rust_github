@@ -19,6 +19,7 @@ use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
 use macros::multiple::close_mpst::CloseMpstMacroInput;
 use macros::multiple::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
+use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
 
@@ -192,4 +193,18 @@ pub fn fork_mpst_multi(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_fork_mpst_multi(input: TokenStream) -> TokenStream {
     fork_mpst_multi(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_choose_type_multi(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseTypeMultiMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_choose_type_multi(input: TokenStream) -> TokenStream {
+    create_choose_type_multi(input)
 }

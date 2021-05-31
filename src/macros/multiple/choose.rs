@@ -17,24 +17,30 @@
 /// create_sessionmpst!(SessionMpst, 3);
 /// create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
 /// ```
+// #[macro_export]
+// macro_rules! create_choose_type_multi {
+//     ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
+//         mpst_seq::seq!(N in 1..$nsessions {
+//             type $type_name<
+//                 #(S#N:0,)2:0 R0, R1, N0
+//             > = mpstthree::binary::struct_trait::Send<
+//                 either::Either<
+//                     <
+//                         $sessionmpst_name<#(S#N:0,)0:0 R0, N0
+//                     > as mpstthree::binary::struct_trait::Session>::Dual,
+//                     <
+//                         $sessionmpst_name<#(S#N:0,)3:0 R1, N0
+//                     > as mpstthree::binary::struct_trait::Session>::Dual
+//                     >,
+//                 mpstthree::binary::struct_trait::End
+//             >;
+//         });
+//     }
+// }
 #[macro_export]
 macro_rules! create_choose_type_multi {
     ($type_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
-        mpst_seq::seq!(N in 1..$nsessions {
-            type $type_name<
-                #(S#N:0,)2:0 R0, R1, N0
-            > = mpstthree::binary::struct_trait::Send<
-                either::Either<
-                    <
-                        $sessionmpst_name<#(S#N:0,)0:0 R0, N0
-                    > as mpstthree::binary::struct_trait::Session>::Dual,
-                    <
-                        $sessionmpst_name<#(S#N:0,)3:0 R1, N0
-                    > as mpstthree::binary::struct_trait::Session>::Dual
-                    >,
-                mpstthree::binary::struct_trait::End
-            >;
-        });
+        mpst_seq::create_choose_type_multi!($type_name, $sessionmpst_name, $nsessions);
     }
 }
 
