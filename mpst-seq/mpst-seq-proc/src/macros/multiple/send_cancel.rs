@@ -54,8 +54,9 @@ impl SendCancelMacroInput {
         let msg = self.msg.clone();
 
         // Build the vec with all the types S1,..,SN
-        let session_types: Vec<syn::Ident> =
-            (1..(self.nsessions - 1)).map(|i| format_ident!("S{}", i)).collect();
+        let session_types: Vec<syn::Ident> = (1..(self.nsessions - 1))
+            .map(|i| format_ident!("S{}", i))
+            .collect();
 
         quote! {
             fn #func_name<#( #session_types , )* R>(
