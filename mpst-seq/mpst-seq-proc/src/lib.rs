@@ -20,6 +20,7 @@ use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
 use macros::multiple::close_mpst::CloseMpstMacroInput;
 use macros::multiple::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
 use macros::multiple::create_choose_mpst_session_multi_left::ChooseTypeMultiLeftMacroInput;
+use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRightMacroInput;
 use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
@@ -222,4 +223,18 @@ pub fn create_choose_mpst_session_multi_left(input: TokenStream) -> TokenStream 
 #[proc_macro_hack]
 pub fn e_create_choose_mpst_session_multi_left(input: TokenStream) -> TokenStream {
     create_choose_mpst_session_multi_left(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseTypeMultiRightMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStream {
+    create_choose_mpst_session_multi_right(input)
 }

@@ -29,7 +29,7 @@ pub mod sessionmpst;
 /// ```
 #[macro_export]
 macro_rules! bundle_struct_fork_close_multi {
-    ($func_name_close:ident, $func_name_fork:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name_close: ident, $func_name_fork: ident, $sessionmpst_name: ident, $nsessions: literal) => {
         mpstthree::create_sessionmpst!($sessionmpst_name, $nsessions);
         mpstthree::close_mpst!($func_name_close, $sessionmpst_name, $nsessions);
         mpstthree::fork_mpst_multi!($func_name_fork, $sessionmpst_name, $nsessions);

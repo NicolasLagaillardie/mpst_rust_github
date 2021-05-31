@@ -33,7 +33,7 @@
 /// ```
 #[macro_export]
 macro_rules! recv_mpst {
-    ($session:expr, $sender:ident, $receiver:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session: expr, $sender: ident, $receiver: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
             %(
             )(
@@ -78,7 +78,7 @@ macro_rules! recv_mpst {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_aux {
-    ($session:expr, $role:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session: expr, $role: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
             %(
             )(
@@ -116,7 +116,7 @@ macro_rules! recv_aux {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_all_aux {
-    ($session:expr, $role:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session: expr, $role: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
             %(
             )(
@@ -181,7 +181,7 @@ macro_rules! recv_all_aux {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $sessionmpst_name<
@@ -255,7 +255,7 @@ macro_rules! create_recv_mpst_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(mpstthree::create_recv_mpst_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
@@ -289,7 +289,7 @@ macro_rules! create_recv_mpst_session_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_all_session {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $sessionmpst_name<
@@ -386,7 +386,7 @@ macro_rules! create_recv_mpst_all_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 s: $sessionmpst_name<
@@ -480,7 +480,7 @@ macro_rules! create_recv_http_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(mpstthree::create_recv_http_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }

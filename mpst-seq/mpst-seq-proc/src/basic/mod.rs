@@ -1633,7 +1633,7 @@ impl SeqMacroInput {
             proc_macro2::TokenTree::Punct(ref p) if p.as_char() == '#' => {
                 let mut peek = rest.clone();
                 match (peek.next(), peek.next(), peek.next(), peek.next()) {
-                    // is this #(...)m:n ?
+                    // is this #(...)m: n ?
                     (
                         Some(proc_macro2::TokenTree::Group(ref rep)),
                         Some(proc_macro2::TokenTree::Literal(ref range)),

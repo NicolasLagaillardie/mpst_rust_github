@@ -23,7 +23,7 @@
 /// ```
 #[macro_export]
 macro_rules! fork_mpst_multi {
-    ($func_name: ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
         mpst_seq::fork_mpst_multi!($func_name, $sessionmpst_name, $nsessions);
     };
 }

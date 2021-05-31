@@ -102,8 +102,8 @@ where
 #[macro_export]
 #[doc(hidden)]
 macro_rules! checker_hashmaps {
-    // ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:path, )* }, )*) => {
-        ({ $($branch:path, $func:ident, { $($pat:path, )* }, )* }) => {
+    // ($($branch: ty, $func: ident, $branch_type: expr, { $($pat: path, $branch_name: expr, $label: path, )* }, )*) => {
+        ({ $($branch: path, $func: ident, { $($pat: path, )* }, )* }) => {
 
         let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 

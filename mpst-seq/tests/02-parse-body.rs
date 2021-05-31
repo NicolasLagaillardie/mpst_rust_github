@@ -19,7 +19,7 @@
 use mpst_seq::seq;
 
 macro_rules! expand_to_nothing {
-    ($arg:literal) => {
+    ($arg: literal) => {
         // nothing
     };
 }

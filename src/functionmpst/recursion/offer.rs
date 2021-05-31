@@ -25,7 +25,7 @@
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_a_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $($pat: pat => $result: block,)* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 
@@ -60,7 +60,7 @@ macro_rules! offer_mpst_a_to_c {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_b_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $($pat: pat => $result: block,)* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
 
@@ -95,7 +95,7 @@ macro_rules! offer_mpst_b_to_c {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_a_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $($pat: pat => $result: block,)* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 
@@ -140,7 +140,7 @@ macro_rules! offer_mpst_a_to_b {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_b_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $($pat: pat => $result: block,)* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 
@@ -175,7 +175,7 @@ macro_rules! offer_mpst_b_to_a {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_c_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $($pat: pat => $result: block,)* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
@@ -210,7 +210,7 @@ macro_rules! offer_mpst_c_to_b {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_c_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $($pat: pat => $result: block,)* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 

@@ -18,7 +18,7 @@
 /// ```
 #[macro_export]
 macro_rules! create_sessionmpst {
-    ($sessionmpst_name:ident, $nsessions:literal) => {
+    ($sessionmpst_name: ident, $nsessions: literal) => {
         mpst_seq::seq!(N in 1..$nsessions {
             #[must_use]
             #[derive(Debug)]

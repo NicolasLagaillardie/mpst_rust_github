@@ -20,7 +20,7 @@
 /// ```
 #[macro_export]
 macro_rules! close_mpst {
-    ($func_name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
         mpst_seq::close_mpst!($func_name, $sessionmpst_name, $nsessions);
     };
 }
@@ -44,7 +44,7 @@ macro_rules! close_mpst {
 /// ```
 #[macro_export]
 macro_rules! close_mpst_check_cancel {
-    ($func_name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($func_name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
         mpst_seq::close_mpst_check_cancel!($func_name, $sessionmpst_name, $nsessions);
     };
 }

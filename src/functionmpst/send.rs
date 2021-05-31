@@ -12,7 +12,7 @@ use std::marker;
 #[doc(hidden)]
 #[macro_export]
 macro_rules! send_aux_simple {
-    ($session:expr, $payload:expr, $role:ident, $exclusion:literal) => {
+    ($session: expr, $payload: expr, $role: ident, $exclusion: literal) => {
         mpst_seq::send_aux_simple!($role, $exclusion, ($session), ($payload));
     };
 }

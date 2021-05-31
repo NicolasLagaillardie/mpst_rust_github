@@ -28,13 +28,13 @@ use mpst_seq::e_seq;
 // We want this number to appear in only one place so that updating this one
 // number will correctly affect anything that depends on the number of procs.
 macro_rules! pass_nproc {
-    ($mac:ident) => {
+    ($mac: ident) => {
         $mac! { 256 }
     };
 }
 
 macro_rules! literal_identity_macro {
-    ($nproc:literal) => {
+    ($nproc: literal) => {
         $nproc
     };
 }
@@ -51,7 +51,7 @@ impl Proc {
 }
 
 macro_rules! make_procs_array {
-    ($nproc:literal) => {
+    ($nproc: literal) => {
         e_seq!(N in 0..$nproc { [#(Proc::new(),)0:0] })
     }
 }

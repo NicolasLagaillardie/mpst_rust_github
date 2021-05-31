@@ -114,7 +114,7 @@ impl<R1, C1, R2, C2> TheirChoice<R1, C1, R2, C2> {
 }
 
 macro_rules! rec {
-    ($x:ident, $t:ty) => {{
+    ($x: ident, $t: ty) => {{
         #[derive(Default)]
         struct $x;
         impl $x {

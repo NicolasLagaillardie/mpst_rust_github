@@ -30,7 +30,7 @@ where
 /// in an `enum`
 #[macro_export]
 macro_rules! offer {
-    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+    ($session: expr, { $($pat: pat => $result: expr,)* }) => {
         (move || -> Result<_, _> {
             let (l, s) = mpstthree::binary::recv::recv($session)?;
             mpstthree::binary::cancel::cancel(s);
@@ -47,7 +47,7 @@ macro_rules! offer {
 /// in an `enum`
 #[macro_export]
 macro_rules! offer_tcp {
-    ($session:expr, { $($pat:pat => $result:expr,)* }) => {
+    ($session: expr, { $($pat: pat => $result: expr,)* }) => {
         (move || -> Result<_, _> {
             let ((data, cont), s) = mpstthree::binary::recv::recv($session)?;
             mpstthree::binary::cancel::cancel(s);

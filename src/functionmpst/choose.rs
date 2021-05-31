@@ -68,9 +68,9 @@ macro_rules! choose_mpst_a {
         $stack_3:ty,
         $receiver_1:ident,
         $receiver_2:ident,
-        $sender:ident,
-        $session:expr,
-        $pat:path
+        $sender: ident,
+        $session: expr,
+        $pat: path
     ) => {{
         let (session_1_2, session_2_1) = <$session_1 as Session>::new();
         let (session_1_3, session_3_1) = <$session_2 as Session>::new();
@@ -129,9 +129,9 @@ macro_rules! choose_mpst_b {
         $stack_3:ty,
         $receiver_1:ident,
         $receiver_2:ident,
-        $sender:ident,
-        $session:expr,
-        $pat:path
+        $sender: ident,
+        $session: expr,
+        $pat: path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_3_1, session_1_3) = <$session_2 as Session>::new();
@@ -190,9 +190,9 @@ macro_rules! choose_mpst_c {
         $stack_3:ty,
         $receiver_1:ident,
         $receiver_2:ident,
-        $sender:ident,
-        $session:expr,
-        $pat:path
+        $sender: ident,
+        $session: expr,
+        $pat: path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_3_1, session_1_3) = <$session_2 as Session>::new();

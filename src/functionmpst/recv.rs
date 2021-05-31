@@ -18,7 +18,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_aux_simple {
-    ($session:expr, $role:ident, $exclusion:literal) => {
+    ($session: expr, $role: ident, $exclusion: literal) => {
         mpst_seq::recv_aux_simple!($role, $exclusion, ($session));
     };
 }
@@ -26,7 +26,7 @@ macro_rules! recv_aux_simple {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_all_aux_simple {
-    ($session:expr, $role:ident, $exclusion:literal) => {
+    ($session: expr, $role: ident, $exclusion: literal) => {
         mpst_seq::recv_all_aux_simple!($role, $exclusion, ($session));
     };
 }

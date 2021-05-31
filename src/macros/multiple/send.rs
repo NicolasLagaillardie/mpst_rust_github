@@ -33,7 +33,7 @@
 /// ```
 #[macro_export]
 macro_rules! send_mpst {
-    ($session:expr, $payload:expr, $receiver:ident, $sender:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session: expr, $payload: expr, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
             %(
             )(
@@ -75,7 +75,7 @@ macro_rules! send_mpst {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! send_aux {
-    ($session:expr, $payload:expr, $role:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($session: expr, $payload: expr, $role: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
             %(
             )(
@@ -138,7 +138,7 @@ macro_rules! send_aux {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 x: T,
@@ -198,7 +198,7 @@ macro_rules! create_send_mpst_session {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 x: T,
@@ -292,7 +292,7 @@ macro_rules! create_send_mpst_cancel {
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)16:0 R>(
                 x: T,
@@ -389,7 +389,7 @@ macro_rules! create_send_check_cancel {
 /// ```
 #[macro_export]
 macro_rules! create_send_http_session {
-    ($func_name:ident, $role:ident, $name:ident, $sessionmpst_name:ident, $nsessions:literal, $exclusion:literal) => {
+    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
             fn $func_name<T, #(S#N:0,)0:0 R>(
                 x: T,
@@ -476,7 +476,7 @@ macro_rules! create_send_http_session {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(mpstthree::create_send_mpst_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
@@ -522,7 +522,7 @@ macro_rules! create_send_mpst_session_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(mpstthree::create_send_mpst_cancel!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
@@ -590,7 +590,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(mpstthree::create_send_check_cancel!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
@@ -636,7 +636,7 @@ macro_rules! create_send_check_cancel_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_http_bundle {
-    ($($func_name:ident, $role:ident, $exclusion:literal | )+ => $name:ident, $sessionmpst_name:ident, $nsessions:literal) => {
+    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(mpstthree::create_send_http_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
     }
 }
