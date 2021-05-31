@@ -247,7 +247,14 @@ macro_rules! create_choose_mpst_session_multi_both {
 #[macro_export]
 macro_rules! choose_mpst_multi_to_all {
     ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
-        mpst_seq::choose_mpst_multi_to_all!( ( $session ) , ( $( $label , )* ) , ( $( $receiver , )* ) , $sender , $sessionmpst_name , $exclusion);
+        mpst_seq::choose_mpst_multi_to_all!(
+            ( $session ) ,
+            ( $( $label , )* ) ,
+            ( $( $receiver , )* ) ,
+            $sender ,
+            $sessionmpst_name ,
+            $exclusion
+        );
     }
 }
 
@@ -351,100 +358,14 @@ macro_rules! choose_mpst_multi_to_all {
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
     ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
-
-            let mut temp = Vec::<End>::new();
-
-            %(
-                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
-            )(
-                let (channel_#N:3, channel_#N:4) = <mpstthree::binary::struct_trait::End as mpstthree::binary::struct_trait::Session>::new();
-
-                temp.push(channel_#N:3);
-            )5*
-
-            let (stack_1, _) = <mpstthree::binary::struct_trait::End as mpstthree::binary::struct_trait::Session>::new();
-
-            #(
-                let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
-            )18:0
-
-            let (name_1, _) = <$pawn<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-            #(
-                let (name_#N:0, _) = <unused#N:22::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-            )19:0
-
-            let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-            let mut s = $session;
-
-            let _ = {
-                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
-                {
-                    Ok(())
-                }
-                temp(&s.stack)
-            };
-
-            %(
-                let elt = match temp.pop() {
-                    Some(e) => e,
-                    _ => panic!("Error type"),
-                };
-
-                let _  = mpstthree::binary::send::send_canceled(
-                    (
-                        elt,
-                        unused#N:21($sessionmpst_name {
-                            ~(
-                                session#N:1 : channel_~N:7,
-                            )(
-                                session#N:1 : channel_~N:7,
-                            )0*
-                            stack: stack_#N:0,
-                            name: name_#N:0,
-                        }
-                    )),
-                    s.session#N:0,
-                )?;
-            )(
-                let elt = match temp.pop() {
-                    Some(e) => e,
-                    _ => panic!("Error type"),
-                };
-
-                let _  = mpstthree::binary::send::send_canceled(
-                    (
-                        elt,
-                        unused#N:21($sessionmpst_name {
-                            ~(
-                                session#N:1 : channel_~N:7,
-                            )(
-                                session#N:1 : channel_~N:7,
-                            )0*
-                            stack: stack_#N:0,
-                            name: name_#N:0,
-                        }
-                    )),
-                    s.session#N:0,
-                )?;
-            )4*
-
-            let elt = match temp.pop() {
-                Some(e) => e,
-                _ => panic!("Error type"),
-            };
-            let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(elt)).unwrap();
-
-            $sessionmpst_name {
-                #(
-                    session#N:0: channel_#N:17 ,
-                )0:0
-                stack: stack_^N:2,
-                name: name_^N:2,
-            }
-        }});
+        mpst_seq::choose_mpst_multi_cancel_to_all!(
+            ( $session ) ,
+            ( $( $label , )* ) ,
+            ( $( $receiver , )* ) ,
+            $pawn ,
+            $sender ,
+            $sessionmpst_name ,
+            $exclusion);
     }
 }
 
