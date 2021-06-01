@@ -420,73 +420,14 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 #[macro_export]
 macro_rules! choose_mpst_multi_http_to_all {
     ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {{
-            #(
-                let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
-            )4:0
-
-            #(
-                let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
-            )15:0
-
-            #(
-                let (name_#N:0, _) = <unused#N:16::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-            )0:0
-
-            let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-            let mut s = $session;
-
-            let _ = {
-                fn temp(r: &mpstthree::role::broadcast::RoleBroadcast) -> Result<(), Box<dyn std::error::Error>>
-                {
-                    Ok(())
-                }
-                temp(&s.stack)
-            };
-
-            %(
-                let _ = mpstthree::binary::send::send_http(
-                    unused#N:15($sessionmpst_name {
-                        ~(
-                            session#N:1 : channel_~N:7,
-                        )(
-                            session#N:1 : channel_~N:7,
-                        )0*
-                        stack: stack_#N:0,
-                        name: name_#N:0,
-                    }),
-                    s.session#N:0,
-                    false,
-                    Request::default()
-                )?;
-            )(
-                let _ = mpstthree::binary::send::send_http(
-                    unused#N:15($sessionmpst_name {
-                        ~(
-                            session#N:1 : channel_~N:7,
-                        )(
-                            session#N:1 : channel_~N:7,
-                        )0*
-                        stack: stack_#N:0,
-                        name: name_#N:0,
-                    }),
-                    s.session#N:0,
-                    false,
-                    Request::default()
-                )?;
-            )2*
-
-            // mpstthree::binary::cancel::cancel(s);
-
-            $sessionmpst_name {
-                #(
-                    session#N:0: channel_#N:17 ,
-                )0:0
-                stack: stack_^N:2,
-                name: name_^N:2,
-            }
-        }});
+        mpst_seq::choose_mpst_multi_http_to_all!(
+            ( $session ) ,
+            ( $( $label , )* ) ,
+            ( $( $receiver , )* ) ,
+            $sender ,
+            $sessionmpst_name ,
+            $exclusion
+        );
     }
 }
 

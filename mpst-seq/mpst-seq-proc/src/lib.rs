@@ -26,6 +26,7 @@ use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRig
 use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
+use macros::multiple::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAllMacroInput;
 
 mod basic;
 
@@ -267,4 +268,18 @@ pub fn choose_mpst_multi_cancel_to_all(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_choose_mpst_multi_cancel_to_all(input: TokenStream) -> TokenStream {
     choose_mpst_multi_cancel_to_all(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseTypeMultiHttpToAllMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
+    choose_mpst_multi_http_to_all(input)
 }
