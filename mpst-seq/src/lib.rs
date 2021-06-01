@@ -11,6 +11,7 @@ pub use mpst_seq_proc::create_broadcast_role_short;
 pub use mpst_seq_proc::create_choose_mpst_session_multi_left;
 pub use mpst_seq_proc::create_choose_mpst_session_multi_right;
 pub use mpst_seq_proc::create_choose_type_multi;
+pub use mpst_seq_proc::create_fn_choose_mpst_cancel_multi_to_all_bundle;
 pub use mpst_seq_proc::create_fn_choose_mpst_multi_to_all_bundle;
 pub use mpst_seq_proc::create_normal_role_short;
 pub use mpst_seq_proc::fork_mpst_multi;
@@ -73,3 +74,6 @@ pub use mpst_seq_proc::e_choose_mpst_multi_http_to_all;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_create_fn_choose_mpst_multi_to_all_bundle;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_create_fn_choose_mpst_cancel_multi_to_all_bundle;

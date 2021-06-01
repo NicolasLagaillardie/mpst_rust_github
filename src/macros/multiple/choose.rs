@@ -486,9 +486,9 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///  * The new type adopted by the sender
 ///  * The name of the Enum containing the branches
 ///  * The different passive roles
+///  * The name of the pawn
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
 ///  * The index of the sender among all participants
 ///
 /// # Example
@@ -498,9 +498,9 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// ```ignore
 /// type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
 /// type EndpointMoreC = SessionMpstThree<
-///     Send<(), Recv<(), Choose0fromCtoA>>,
+///     End,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
-///     R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
+///     R2A<R2B<RoleB<RoleEnd>>>,
 ///     NameC,
 /// >;
 /// create_fn_choose_mpst_cancel_multi_to_all_bundle!(
@@ -508,115 +508,23 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///     Done, More, =>
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
-///     RoleA, RoleB, =>
-///     RoleC, SessionMpstThree, 3, 3
+///     RoleB, =>
+///     RoleA, RoleC, SessionMpstThree, 3
 /// );
 /// ```
 #[macro_export]
 macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
-    ($($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        create_fn_choose_mpst_cancel_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($label,)+) => ($($receiver,)+) => $pawn, $sender, $sessionmpst_name, $nsessions, $exclusion);
-    };
-    (@call_tuple $($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $label: tt => $receiver: tt => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        $(create_fn_choose_mpst_cancel_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $label => $receiver => $pawn, $sender, $sessionmpst_name, $nsessions, $exclusion);)+
-    };
-    (@call $fn_name: ident, $branch: expr, $new_type: ty => ($($label: path,)+) => ($($receiver: ident,)+) => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {
-            fn $fn_name(
-                s: $sessionmpst_name<
-                    mpstthree::binary::struct_trait::End,
-                    #(
-                        Send<(mpstthree::binary::struct_trait::End, unused#N:21), mpstthree::binary::struct_trait::End>,
-                    )19:0
-                    mpstthree::role::broadcast::RoleBroadcast,
-                    $sender<mpstthree::role::end::RoleEnd>,
-                >
-            ) -> Result<$new_type, Box<dyn std::error::Error>>
-            {
-                let mut temp = Vec::<End>::new();
-
-                %(
-                    let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
-                )(
-                    let (channel_#N:3, channel_#N:4) = <mpstthree::binary::struct_trait::End as mpstthree::binary::struct_trait::Session>::new();
-
-                    temp.push(channel_#N:3);
-                )5*
-
-                let (stack_1, _) = <mpstthree::binary::struct_trait::End as mpstthree::binary::struct_trait::Session>::new();
-
-                #(
-                    let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
-                )18:0
-
-                let (name_1, _) = <$pawn<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-                #(
-                    let (name_#N:0, _) = <unused#N:22::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-                )19:0
-
-                let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-                %(
-                    let elt = match temp.pop() {
-                        Some(e) => e,
-                        _ => panic!("Error type"),
-                    };
-
-                    let _  = mpstthree::binary::send::send_canceled(
-                        (
-                            elt,
-                            unused#N:21::$branch($sessionmpst_name {
-                                ~(
-                                    session#N:1 : channel_~N:7,
-                                )(
-                                    session#N:1 : channel_~N:7,
-                                )0*
-                                stack: stack_#N:0,
-                                name: name_#N:0,
-                            }
-                        )),
-                        s.session#N:0,
-                    )?;
-                )(
-                    let elt = match temp.pop() {
-                        Some(e) => e,
-                        _ => panic!("Error type"),
-                    };
-
-                    let _  = mpstthree::binary::send::send_canceled(
-                        (
-                            elt,
-                            unused#N:21::$branch($sessionmpst_name {
-                                ~(
-                                    session#N:1 : channel_~N:7,
-                                )(
-                                    session#N:1 : channel_~N:7,
-                                )0*
-                                stack: stack_#N:0,
-                                name: name_#N:0,
-                            }
-                        )),
-                        s.session#N:0,
-                    )?;
-                )4*
-
-                let elt = match temp.pop() {
-                    Some(e) => e,
-                    _ => panic!("Error type"),
-                };
-                let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(elt)).unwrap();
-
-                Ok(
-                    $sessionmpst_name {
-                        #(
-                            session#N:0: channel_#N:17 ,
-                        )0:0
-                        stack: stack_^N:2,
-                        name: name_^N:2,
-                    }
-                )
-            }
-        });
-    };
+    ($($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+        mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
+            ( $( $fn_name , )* ) ,
+            ( $( $branch , )* ) ,
+            ( $( $label , )* ) ,
+            ( $( $receiver , )* ) ,
+            ( $( $new_type , )* ) ,
+            $sender ,
+            $pawn ,
+            $sessionmpst_name ,
+            $exclusion
+        );
+    }
 }

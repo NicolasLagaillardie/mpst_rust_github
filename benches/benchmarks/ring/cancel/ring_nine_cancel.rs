@@ -511,7 +511,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Branching0fromItoG,
     Branching0fromItoH, =>
     RoleA, RoleB, RoleC, RoleD, RoleE, RoleF, RoleG, RoleH, =>
-    RoleCentral, RoleI, SessionMpstTen, 10, 10
+    RoleCentral, RoleI, SessionMpstTen, 10
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {

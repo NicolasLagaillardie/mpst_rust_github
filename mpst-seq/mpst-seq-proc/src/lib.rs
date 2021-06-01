@@ -25,6 +25,7 @@ use macros::multiple::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
 use macros::multiple::create_choose_mpst_session_multi_left::ChooseTypeMultiLeftMacroInput;
 use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRightMacroInput;
 use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
+use macros::multiple::create_fn_choose_mpst_cancel_multi_to_all_bundle::ChooseTypeCancelMultiToAllBundleMacroInput;
 use macros::multiple::create_fn_choose_mpst_multi_to_all_bundle::ChooseTypeMultiToAllBundleMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
@@ -297,4 +298,18 @@ pub fn create_fn_choose_mpst_multi_to_all_bundle(input: TokenStream) -> TokenStr
 #[proc_macro_hack]
 pub fn e_create_fn_choose_mpst_multi_to_all_bundle(input: TokenStream) -> TokenStream {
     create_fn_choose_mpst_multi_to_all_bundle(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_fn_choose_mpst_cancel_multi_to_all_bundle(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseTypeCancelMultiToAllBundleMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_fn_choose_mpst_cancel_multi_to_all_bundle(input: TokenStream) -> TokenStream {
+    create_fn_choose_mpst_cancel_multi_to_all_bundle(input)
 }
