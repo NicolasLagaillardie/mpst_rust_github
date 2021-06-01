@@ -410,7 +410,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     Branching0fromHtoF,
     Branching0fromHtoG, =>
     RoleA, RoleB, RoleC, RoleD, RoleE, RoleF, RoleG, =>
-    RoleH, SessionMpstEight, 8, 8
+    RoleH, SessionMpstEight, 8
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

@@ -230,7 +230,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     RoleB,
     RoleC,
     RoleD, =>
-    RoleE, SessionMpstFive, 5, 5
+    RoleE, SessionMpstFive, 5
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

@@ -97,7 +97,6 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleA,
                 RoleC,
                 SessionMpstThree,
-                3,
                 3
             );
 
@@ -112,7 +111,6 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleA,
                 RoleC,
                 SessionMpstThree,
-                3,
                 3
             );
 

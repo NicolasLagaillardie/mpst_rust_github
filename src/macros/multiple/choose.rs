@@ -269,7 +269,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///  * The different passive roles
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
+///  * The index of the active role
 ///
 /// # Example
 ///
@@ -285,7 +285,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        let s = send_mpst_d_to_a(1, s);
@@ -300,7 +299,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -334,7 +332,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        client_recurs(s, xs, index + 1)
@@ -348,7 +345,6 @@ macro_rules! choose_mpst_multi_to_all {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -357,7 +353,7 @@ macro_rules! choose_mpst_multi_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
         mpst_seq::choose_mpst_multi_cancel_to_all!(
             ( $session ) ,
             ( $( $label , )* ) ,
@@ -394,7 +390,6 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        let s = send_http_d_to_a(1, s);
@@ -410,7 +405,6 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///            RoleB, =>
 ///            RoleD,
 ///            SessionMpst,
-///            3,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -419,7 +413,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_http_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
         mpst_seq::choose_mpst_multi_http_to_all!(
             ( $session ) ,
             ( $( $label , )* ) ,
@@ -443,7 +437,6 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///  * The different passive roles
 ///  * The name of the sender
 ///  * The name of the *SessionMpst* type that will be used
-///  * The number of participants (all together)
 ///  * The index of the sender among all participants
 ///
 /// # Example
@@ -464,81 +457,22 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
 ///     RoleA, RoleB, =>
-///     RoleC, SessionMpstThree, 3, 3
+///     RoleC, SessionMpstThree, 3
 /// );
 /// ```
 #[macro_export]
 macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
-    ($($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        create_fn_choose_mpst_multi_to_all_bundle!(@call_tuple $($fn_name,)+ => $($branch,)+ => $($new_type,)+ => ($($label,)+) => ($($receiver,)+) => $sender, $sessionmpst_name, $nsessions, $exclusion);
-    };
-    (@call_tuple $($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $label: tt => $receiver: tt => $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        $(create_fn_choose_mpst_multi_to_all_bundle!(@call $fn_name, $branch, $new_type => $label => $receiver => $sender, $sessionmpst_name, $nsessions, $exclusion);)+
-    };
-    (@call $fn_name: ident, $branch: expr, $new_type: ty => ($($label: path,)+) => ($($receiver: ident,)+) => $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion : ($($label,)+) : ($($receiver,)+) {
-            fn $fn_name(
-                s: $sessionmpst_name<
-                    #(
-                        Send<unused#N:15, mpstthree::binary::struct_trait::End>,
-                    )0:0
-                    mpstthree::role::broadcast::RoleBroadcast,
-                    $sender<mpstthree::role::end::RoleEnd>,
-                >
-            ) -> $new_type
-            {
-                #(
-                    let (channel_#N:3, channel_#N:4) = <_ as mpstthree::binary::struct_trait::Session>::new();
-                )4:0
-
-                #(
-                    let (stack_#N:0, _) = <_ as mpstthree::role::Role>::new();
-                )15:0
-
-                #(
-                    let (name_#N:0, _) = <unused#N:16::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-                )0:0
-
-                let (name_^N:2, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-                #(
-                    let s = {
-                        let new_session = mpstthree::binary::send::send(
-                            unused#N:15::$branch($sessionmpst_name {
-                                ~(
-                                    session#N:1 : channel_~N:7,
-                                )(
-                                    session#N:1 : channel_~N:7,
-                                )0*
-                                stack: stack_#N:0,
-                                name: name_#N:0,
-                            }),
-                            s.session#N:0
-                        );
-
-                        $sessionmpst_name {
-                            ~(
-                                session~N:8: new_session,
-                            )(
-                                session~N:8: s.session~N:8,
-                            )5*
-                            stack: s.stack,
-                            name: s.name,
-                        }
-                    };
-                )0:0
-
-                mpstthree::binary::cancel::cancel(s);
-
-                $sessionmpst_name {
-                    #(
-                        session#N:0: channel_#N:17 ,
-                    )0:0
-                    stack: stack_^N:2,
-                    name: name_^N:2,
-                }
-            }
-        });
+    ($($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+        mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
+            ( $( $fn_name , )* ) ,
+            ( $( $branch , )* ) ,
+            ( $( $label , )* ) ,
+            ( $( $receiver , )* ) ,
+            ( $( $new_type , )* ) ,
+            $sender ,
+            $sessionmpst_name ,
+            $exclusion
+        );
     };
 }
 
@@ -672,10 +606,6 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
                     _ => panic!("Error type"),
                 };
                 let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(elt)).unwrap();
-
-                // mpstthree::binary::cancel::cancel(s.stack);
-
-                // mpstthree::binary::cancel::cancel(s.name);
 
                 Ok(
                     $sessionmpst_name {

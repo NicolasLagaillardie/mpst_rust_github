@@ -78,6 +78,12 @@ impl Parse for ChooseTypeMultiCancelToAllMacroInput {
         // The number of receivers
         let nsessions = all_receivers.len().to_string().parse::<u64>().unwrap() + 2;
 
+        if all_receivers.len().to_string().parse::<u64>().unwrap()
+            != all_labels.len().to_string().parse::<u64>().unwrap()
+        {
+            panic!("The number of receivers and labels is not the same")
+        };
+
         Ok(ChooseTypeMultiCancelToAllMacroInput {
             session: all_sessions,
             labels: all_labels,

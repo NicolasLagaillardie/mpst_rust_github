@@ -228,7 +228,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointAAuth<i32>, EndpointADone<i32>, =>
     Branching0fromAtoC::<i32>, Branching0fromAtoS::<i32>, =>
     RoleC, RoleS, =>
-    RoleA, SessionMpstThree, 3, 1
+    RoleA, SessionMpstThree, 1
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
@@ -237,7 +237,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointCContinue<i32>, EndpointCDone<i32>, =>
     Branching1fromCtoA::<i32>, Branching1fromCtoS::<i32>, =>
     RoleA, RoleS, =>
-    RoleC, SessionMpstThree, 3, 2
+    RoleC, SessionMpstThree, 2
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
@@ -246,7 +246,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointSPicture<i32>, EndpointSRefusal<i32>, =>
     Branching2fromStoA::<i32>, Branching2fromStoC::<i32>, =>
     RoleA, RoleC, =>
-    RoleS, SessionMpstThree, 3, 3
+    RoleS, SessionMpstThree, 3
 );
 
 // Functions
