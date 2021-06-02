@@ -13,3 +13,4 @@ pub mod create_offer_mpst_session_multi;
 pub mod create_offer_type_multi;
 pub mod fork_mpst_multi;
 pub mod send_cancel;
+pub mod recv_mpst;

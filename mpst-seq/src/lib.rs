@@ -19,6 +19,7 @@ pub use mpst_seq_proc::create_offer_type_multi;
 pub use mpst_seq_proc::fork_mpst_multi;
 pub use mpst_seq_proc::recv_all_aux_simple;
 pub use mpst_seq_proc::recv_aux_simple;
+pub use mpst_seq_proc::recv_mpst;
 pub use mpst_seq_proc::send_aux_simple;
 pub use mpst_seq_proc::send_cancel;
 pub use mpst_seq_proc::seq;
@@ -85,3 +86,6 @@ pub use mpst_seq_proc::e_create_offer_type_multi;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_create_offer_mpst_session_multi;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_recv_mpst;
