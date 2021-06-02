@@ -34,6 +34,7 @@ use macros::multiple::create_recv_mpst_all_session::CreateRecvMPSTAllSessionMacr
 use macros::multiple::create_recv_mpst_session::CreateRecvMPSTSessionMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::recv_mpst::RecvMPSTMacroInput;
+use macros::multiple::send_mpst::SendMPSTMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
 
 mod basic;
@@ -402,4 +403,18 @@ pub fn create_recv_mpst_all_session(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_recv_mpst_all_session(input: TokenStream) -> TokenStream {
     create_recv_mpst_all_session(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn send_mpst(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as SendMPSTMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_send_mpst(input: TokenStream) -> TokenStream {
+    send_mpst(input)
 }

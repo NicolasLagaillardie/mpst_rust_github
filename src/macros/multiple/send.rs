@@ -34,41 +34,15 @@
 #[macro_export]
 macro_rules! send_mpst {
     ($session: expr, $payload: expr, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
-            %(
-            )(
-                let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
-            )0*
-
-            let new_stack = {
-                fn temp<R>(r: $receiver<R>) -> R
-                where
-                    R: mpstthree::role::Role,
-                {
-                    let (here, there) = <R as mpstthree::role::Role>::new();
-                    r.sender.send(there).unwrap_or(());
-                    here
-                }
-                temp($session.stack)
-            };
-
-            {
-                fn temp(_s: &$sender<mpstthree::role::end::RoleEnd>) -> Result<(), Box<dyn std::error::Error>> {
-                    Ok(())
-                }
-                temp(&$session.name)
-            }.unwrap();
-
-            $sessionmpst_name {
-                %(
-                    session#N:0: $session.session#N:0,
-                )(
-                    session#N:0: new_session,
-                )0*
-                stack: new_stack,
-                name: $session.name,
-            }
-        }});
+        mpst_seq::send_mpst!(
+            ( $session ),
+            ( $payload ),
+            $receiver,
+            $sender,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
     }
 }
 
