@@ -21,7 +21,7 @@
 macro_rules! create_offer_type_multi {
     ($type_name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
         mpst_seq::create_offer_type_multi!($type_name, $sessionmpst_name, $nsessions);
-    }
+    };
 }
 
 /// Creates an *OfferMpst* function to receive an offer on a given binary session type of a
@@ -76,7 +76,7 @@ macro_rules! create_offer_mpst_session_multi {
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Offer a choice between many different sessions wrapped in an `enum`

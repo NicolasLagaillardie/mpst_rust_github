@@ -35,7 +35,7 @@
 macro_rules! recv_mpst {
     ($session: expr, $sender: ident, $receiver: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::recv_mpst!(
-            ( $session ),
+            ($session),
             $sender,
             $receiver,
             $sessionmpst_name,
@@ -43,44 +43,6 @@ macro_rules! recv_mpst {
             $exclusion
         );
     };
-}
-
-#[doc(hidden)]
-#[macro_export]
-macro_rules! recv_aux {
-    ($session: expr, $role: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion { || -> Result<_, Box<dyn std::error::Error>> {
-            %(
-            )(
-                let (v, new_session) = mpstthree::binary::recv::recv($session.session#N:0)?;
-            )0*
-
-            let new_stack = {
-                fn temp<R>(r: $role<R>) -> R
-                where
-                    R: mpstthree::role::Role,
-                {
-                    let (here, there) = <R as mpstthree::role::Role>::new();
-                    r.sender.send(there).unwrap_or(());
-                    here
-                }
-                temp($session.stack)
-            };
-
-            Ok((
-                v,
-                $sessionmpst_name {
-                    %(
-                        session#N:0: $session.session#N:0,
-                    )(
-                        session#N:0: new_session,
-                    )0*
-                    stack: new_stack,
-                    name: $session.name,
-                }
-            ))
-        }});
-    }
 }
 
 #[doc(hidden)]
@@ -151,37 +113,16 @@ macro_rules! recv_all_aux {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session {
-    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)0:0 R>(
-                s: $sessionmpst_name<
-                    %(
-                        S#N:0,
-                    )(
-                        mpstthree::binary::struct_trait::Recv<T, S#N:0>,
-                    )0*
-                    $role<R>,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<
-                (
-                    T,
-                    $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>,
-                    >,
-                ),
-                Box<dyn std::error::Error>,
-            >
-            where
-                T: std::marker::Send,
-                #(
-                    S#N:0: mpstthree::binary::struct_trait::Session,
-                )0:0
-                R: mpstthree::role::Role,
-            {
-                mpstthree::recv_aux!(s, $role, $sessionmpst_name, $nsessions, $exclusion)()
-            }
-        });
-    }
+    ($func_name: ident, $sender: ident, $receiver: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+        mpst_seq::create_recv_mpst_session!(
+            $func_name,
+            $sender,
+            $receiver,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
+    };
 }
 
 /// Creates multiple *recv* functions to receive from a simple role on a given binary session type
@@ -356,56 +297,16 @@ macro_rules! create_recv_mpst_all_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session {
-    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)0:0 R>(
-                s: $sessionmpst_name<
-                    %(
-                        S#N:0,
-                    )(
-                        mpstthree::binary::struct_trait::Recv<T, S#N:0>,
-                    )0*
-                    $role<R>,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-                http: bool,
-                mut resp_future: Vec::<hyper::client::ResponseFuture>,
-            ) -> Result<
-                (
-                    T,
-                    $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>,
-                    >,
-                    hyper::Response<hyper::Body>
-                ),
-                Box<dyn std::error::Error>,
-            >
-            where
-                T: std::marker::Send,
-                #(
-                    S#N:0: mpstthree::binary::struct_trait::Session,
-                )0:0
-                R: mpstthree::role::Role,
-            {
-                if ( resp_future.len() != 1 && http ) || ( !http && resp_future.len() != 0 ) {
-                    panic!("Too many futures: {:?}", resp_future.len())
-                }
-
-                let resp = match http {
-                    true => {
-                        let rt = tokio::runtime::Runtime::new()?;
-                        rt.block_on(async move {
-                            resp_future.remove(0).await
-                        })?
-                    },
-                    false => hyper::Response::default(),
-                };
-
-                let (v, s) = mpstthree::recv_aux!(s, $role, $sessionmpst_name, $nsessions, $exclusion)()?;
-
-                Ok((v, s, resp))
-            }
-        });
-    }
+    ($func_name: ident, $sender: ident, $receiver: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+        mpst_seq::create_recv_http_session!(
+            $func_name,
+            $sender,
+            $receiver,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
+    };
 }
 
 /// Creates multiple *recv* functions to receive from a
