@@ -246,6 +246,7 @@ fn canceling() {
     cancel::cancel_11::main();
     cancel::cancel_12::main();
     cancel::cancel_12::main();
+    cancel::cancel_13::main();
 }
 
 #[test]

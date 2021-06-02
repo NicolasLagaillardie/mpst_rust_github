@@ -284,7 +284,7 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                     } else {
                         panic!("Not enough branches for all_functions")
                     };
-                let all_send: Vec<proc_macro2::TokenStream> = (2..self.n_branches)
+                let all_send: Vec<proc_macro2::TokenStream> = (2..self.n_sessions)
                     .map(|j| {
                         let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                             .map(|k| {
