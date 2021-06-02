@@ -14,6 +14,7 @@ pub use mpst_seq_proc::create_choose_type_multi;
 pub use mpst_seq_proc::create_fn_choose_mpst_cancel_multi_to_all_bundle;
 pub use mpst_seq_proc::create_fn_choose_mpst_multi_to_all_bundle;
 pub use mpst_seq_proc::create_normal_role_short;
+pub use mpst_seq_proc::create_offer_mpst_session_multi;
 pub use mpst_seq_proc::create_offer_type_multi;
 pub use mpst_seq_proc::fork_mpst_multi;
 pub use mpst_seq_proc::recv_all_aux_simple;
@@ -81,3 +82,6 @@ pub use mpst_seq_proc::e_create_fn_choose_mpst_cancel_multi_to_all_bundle;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_create_offer_type_multi;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_create_offer_mpst_session_multi;

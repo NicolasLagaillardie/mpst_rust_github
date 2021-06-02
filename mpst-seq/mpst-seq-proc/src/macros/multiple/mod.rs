@@ -9,6 +9,7 @@ pub mod create_choose_mpst_session_multi_right;
 pub mod create_choose_type_multi;
 pub mod create_fn_choose_mpst_cancel_multi_to_all_bundle;
 pub mod create_fn_choose_mpst_multi_to_all_bundle;
+pub mod create_offer_mpst_session_multi;
+pub mod create_offer_type_multi;
 pub mod fork_mpst_multi;
 pub mod send_cancel;
-pub mod create_offer_type_multi;

@@ -27,9 +27,10 @@ use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRig
 use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
 use macros::multiple::create_fn_choose_mpst_cancel_multi_to_all_bundle::ChooseTypeCancelMultiToAllBundleMacroInput;
 use macros::multiple::create_fn_choose_mpst_multi_to_all_bundle::ChooseTypeMultiToAllBundleMacroInput;
+use macros::multiple::create_offer_mpst_session_multi::OfferMPSTSessionMultiMacroInput;
+use macros::multiple::create_offer_type_multi::OfferTypeMultiMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
-use macros::multiple::create_offer_type_multi::OfferTypeMultiMacroInput;
 
 mod basic;
 
@@ -327,4 +328,18 @@ pub fn create_offer_type_multi(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_offer_type_multi(input: TokenStream) -> TokenStream {
     create_offer_type_multi(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_offer_mpst_session_multi(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as OfferMPSTSessionMultiMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_offer_mpst_session_multi(input: TokenStream) -> TokenStream {
+    create_offer_mpst_session_multi(input)
 }
