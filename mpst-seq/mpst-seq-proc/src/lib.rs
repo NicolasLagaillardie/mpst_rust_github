@@ -42,24 +42,6 @@ use macros::multiple::recv_mpst::RecvMPSTMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
 use macros::multiple::send_mpst::SendMPSTMacroInput;
 
-mod basic;
-
-use basic::SeqMacroInput;
-
-//////////////////////////////////////
-
-#[proc_macro]
-pub fn seq(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as SeqMacroInput);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_seq(input: TokenStream) -> TokenStream {
-    seq(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]

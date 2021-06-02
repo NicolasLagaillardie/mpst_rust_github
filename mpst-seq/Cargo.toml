@@ -4,10 +4,6 @@ version = "0.0.1"
 edition = "2018"
 autotests = false
 
-[[test]]
-name = "tests"
-path = "tests/progress.rs"
-
 [dev-dependencies]
 trybuild = "1.0.41"
 

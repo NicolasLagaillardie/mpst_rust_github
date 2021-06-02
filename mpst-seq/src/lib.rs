@@ -31,10 +31,6 @@ pub use mpst_seq_proc::recv_mpst;
 pub use mpst_seq_proc::send_aux_simple;
 pub use mpst_seq_proc::send_cancel;
 pub use mpst_seq_proc::send_mpst;
-pub use mpst_seq_proc::seq;
-
-#[proc_macro_hack]
-pub use mpst_seq_proc::e_seq;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_recv_aux_simple;
