@@ -35,15 +35,15 @@
 macro_rules! send_mpst {
     ($session: expr, $payload: expr, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::send_mpst!(
-            ( $session ),
-            ( $payload ),
+            ($session),
+            ($payload),
             $receiver,
             $sender,
             $sessionmpst_name,
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more
@@ -86,7 +86,7 @@ macro_rules! create_send_mpst_session {
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more
@@ -130,7 +130,7 @@ macro_rules! create_send_mpst_cancel {
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more
@@ -176,69 +176,15 @@ macro_rules! create_send_mpst_cancel {
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel {
-    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)16:0 R>(
-                x: T,
-                s: $sessionmpst_name<
-                    mpstthree::binary::struct_trait::End,
-                    %(
-                        S#N:0,
-                    )(
-                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
-                    )3*
-                    $role<R>,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<$sessionmpst_name<
-                mpstthree::binary::struct_trait::End,
-                #(S#N:0,)16:0
-                R,
-                $name<mpstthree::role::end::RoleEnd>
-            >, std::boxed::Box<dyn std::error::Error>>
-            where
-                T: std::marker::Send,
-                #(
-                    S#N:0: mpstthree::binary::struct_trait::Session,
-                )16:0
-                R: mpstthree::role::Role,
-            {
-                match s.session1.receiver.try_recv() {
-                    Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
-                        mpstthree::binary::cancel::cancel(s);
-                        panic!("Error")
-                    },
-                    _ => {}
-                };
-
-                %(
-                )(
-                    let new_session = mpstthree::binary::send::send_canceled(x, s.session#N:0)?;
-                )0*
-
-                let new_stack = {
-                    fn temp<R>(r: $role<R>) -> R
-                    where
-                        R: mpstthree::role::Role,
-                    {
-                        let (here, there) = <R as mpstthree::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(s.stack)
-                };
-
-                Ok($sessionmpst_name {
-                    %(
-                        session#N:0: s.session#N:0,
-                    )(
-                        session#N:0: new_session,
-                    )0*
-                    stack: new_stack,
-                    name: s.name,
-                })
-            }
-        });
+    ($func_name: ident, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+        mpst_seq::create_send_check_cancel!(
+            $func_name,
+            $receiver,
+            $sender,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
     }
 }
 
@@ -282,7 +228,7 @@ macro_rules! create_send_http_session {
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Creates multiple *send* functions to send from a given binary session type of a SessionMpst with
@@ -326,8 +272,17 @@ macro_rules! create_send_http_session {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session_bundle {
-    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
-       $(mpstthree::create_send_mpst_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
+    ($($func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+       $(
+           mpstthree::create_send_mpst_session!(
+               $func_name,
+               $receiver,
+               $sender,
+               $sessionmpst_name,
+               $nsessions,
+               $exclusion
+            );
+        )+
     }
 }
 
@@ -372,8 +327,17 @@ macro_rules! create_send_mpst_session_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel_bundle {
-    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
-       $(mpstthree::create_send_mpst_cancel!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
+    ($($func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+       $(
+           mpstthree::create_send_mpst_cancel!(
+            $func_name,
+            $receiver,
+            $sender,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+            );
+        )+
     }
 }
 
@@ -440,8 +404,17 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_check_cancel_bundle {
-    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
-       $(mpstthree::create_send_check_cancel!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
+    ($($func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+       $(
+           mpstthree::create_send_check_cancel!(
+               $func_name,
+               $receiver,
+               $sender,
+               $sessionmpst_name,
+               $nsessions,
+               $exclusion
+            );
+        )+
     }
 }
 
@@ -486,7 +459,16 @@ macro_rules! create_send_check_cancel_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_http_bundle {
-    ($($func_name: ident, $role: ident, $exclusion: literal | )+ => $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
-       $(mpstthree::create_send_http_session!($func_name, $role, $name, $sessionmpst_name, $nsessions, $exclusion);)+
+    ($($func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+       $(
+           mpstthree::create_send_http_session!(
+               $func_name,
+               $receiver,
+               $sender,
+               $sessionmpst_name,
+               $nsessions,
+               $exclusion
+            );
+        )+
     }
 }

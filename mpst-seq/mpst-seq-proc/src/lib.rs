@@ -39,6 +39,7 @@ use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::recv_mpst::RecvMPSTMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
 use macros::multiple::send_mpst::SendMPSTMacroInput;
+use macros::multiple::create_send_check_cancel::CreateSendCheckCancelMacroInput;
 
 mod basic;
 
@@ -462,4 +463,18 @@ pub fn create_send_mpst_cancel(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_send_mpst_cancel(input: TokenStream) -> TokenStream {
     create_send_mpst_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_send_check_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CreateSendCheckCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_send_check_cancel(input: TokenStream) -> TokenStream {
+    create_send_check_cancel(input)
 }

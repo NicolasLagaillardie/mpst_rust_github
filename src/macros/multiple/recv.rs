@@ -180,7 +180,7 @@ macro_rules! create_recv_mpst_all_session {
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a
