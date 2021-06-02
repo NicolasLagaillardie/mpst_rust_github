@@ -3,7 +3,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
 #[derive(Debug)]
-pub struct CreateSendMPSTSessionMacroInput {
+pub struct CreateSendMPSTCancelMacroInput {
     func_name: syn::Ident,
     receiver: syn::Ident,
     sender: syn::Ident,
@@ -12,7 +12,7 @@ pub struct CreateSendMPSTSessionMacroInput {
     exclusion: u64,
 }
 
-impl Parse for CreateSendMPSTSessionMacroInput {
+impl Parse for CreateSendMPSTCancelMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let func_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
@@ -31,7 +31,7 @@ impl Parse for CreateSendMPSTSessionMacroInput {
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
-        Ok(CreateSendMPSTSessionMacroInput {
+        Ok(CreateSendMPSTCancelMacroInput {
             func_name,
             receiver,
             sender,
@@ -42,13 +42,13 @@ impl Parse for CreateSendMPSTSessionMacroInput {
     }
 }
 
-impl From<CreateSendMPSTSessionMacroInput> for proc_macro2::TokenStream {
-    fn from(input: CreateSendMPSTSessionMacroInput) -> proc_macro2::TokenStream {
+impl From<CreateSendMPSTCancelMacroInput> for proc_macro2::TokenStream {
+    fn from(input: CreateSendMPSTCancelMacroInput) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl CreateSendMPSTSessionMacroInput {
+impl CreateSendMPSTCancelMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let func_name = self.func_name.clone();
         let receiver = self.receiver.clone();
@@ -83,7 +83,7 @@ impl CreateSendMPSTSessionMacroInput {
                     let temp_ident =
                         syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
                     quote! {
-                        let new_session = mpstthree::binary::send::send(x, s.#temp_ident);
+                        let new_session = mpstthree::binary::send::send_canceled(x, s.#temp_ident)?;
                     }
                 }
             })
@@ -137,12 +137,15 @@ impl CreateSendMPSTSessionMacroInput {
                     #receiver<R>,
                     #sender<mpstthree::role::end::RoleEnd>,
                 >,
-            ) -> #sessionmpst_name<
-                    #(
-                        #session_types
-                    )*
-                    R,
-                    #sender<mpstthree::role::end::RoleEnd>,
+            ) -> Result<
+                    #sessionmpst_name<
+                        #(
+                            #session_types
+                        )*
+                        R,
+                        #sender<mpstthree::role::end::RoleEnd>,
+                    >,
+                    std::boxed::Box<dyn std::error::Error>
                 >
             where
                 T: std::marker::Send,
@@ -167,13 +170,15 @@ impl CreateSendMPSTSessionMacroInput {
                     temp(s.stack)
                 };
 
-                #sessionmpst_name {
-                    #(
-                        #new_sessions
-                    )*
-                    stack: new_stack,
-                    name: s.name,
-                }
+                Ok(
+                    #sessionmpst_name {
+                        #(
+                            #new_sessions
+                        )*
+                        stack: new_stack,
+                        name: s.name,
+                    }
+                )
             }
         }
     }

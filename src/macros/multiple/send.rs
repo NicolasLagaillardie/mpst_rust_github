@@ -121,54 +121,15 @@ macro_rules! create_send_mpst_session {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_cancel {
-    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)0:0 R>(
-                x: T,
-                s: $sessionmpst_name<
-                    %(
-                        S#N:0,
-                    )(
-                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
-                    )0*
-                    $role<R>,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> Result<$sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>, std::boxed::Box<dyn std::error::Error>>
-            where
-                T: std::marker::Send,
-                #(
-                    S#N:0: mpstthree::binary::struct_trait::Session,
-                )0:0
-                R: mpstthree::role::Role,
-            {
-                %(
-                )(
-                    let new_session = mpstthree::binary::send::send_canceled(x, s.session#N:0)?;
-                )0*
-                let new_stack = {
-                    fn temp<R>(r: $role<R>) -> R
-                    where
-                        R: mpstthree::role::Role,
-                    {
-                        let (here, there) = <R as mpstthree::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(s.stack)
-                };
-
-                Ok($sessionmpst_name {
-                    %(
-                        session#N:0: s.session#N:0,
-                    )(
-                        session#N:0: new_session,
-                    )0*
-                    stack: new_stack,
-                    name: s.name,
-                })
-            }
-        });
+    ($func_name: ident, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+        mpst_seq::create_send_mpst_cancel!(
+            $func_name,
+            $receiver,
+            $sender,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
     }
 }
 
