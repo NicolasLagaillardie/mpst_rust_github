@@ -20,5 +20,5 @@
 macro_rules! create_sessionmpst {
     ($sessionmpst_name: ident, $nsessions: literal) => {
         mpst_seq::create_sessionmpst!($sessionmpst_name, $nsessions);
-    }
+    };
 }
