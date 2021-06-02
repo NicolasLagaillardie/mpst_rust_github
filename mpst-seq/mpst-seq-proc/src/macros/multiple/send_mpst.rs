@@ -22,7 +22,7 @@ impl Parse for SendMPSTMacroInput {
 
         /////////////////////////
         let mut all_sessions: Vec<proc_macro2::TokenStream> = Vec::new();
-        for tt in sessions.clone().into_iter() {
+        for tt in sessions.into_iter() {
             let elt = match tt {
                 proc_macro2::TokenTree::Group(g) => Some(g.stream()),
                 _ => None,
@@ -39,7 +39,7 @@ impl Parse for SendMPSTMacroInput {
 
         /////////////////////////
         let mut all_payloads: Vec<proc_macro2::TokenStream> = Vec::new();
-        for tt in payloads.clone().into_iter() {
+        for tt in payloads.into_iter() {
             let elt = match tt {
                 proc_macro2::TokenTree::Group(g) => Some(g.stream()),
                 _ => None,

@@ -185,7 +185,7 @@ macro_rules! create_send_check_cancel {
             $nsessions,
             $exclusion
         );
-    }
+    };
 }
 
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more
