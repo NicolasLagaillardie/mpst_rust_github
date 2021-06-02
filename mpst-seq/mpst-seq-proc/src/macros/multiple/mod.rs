@@ -11,3 +11,4 @@ pub mod create_fn_choose_mpst_cancel_multi_to_all_bundle;
 pub mod create_fn_choose_mpst_multi_to_all_bundle;
 pub mod fork_mpst_multi;
 pub mod send_cancel;
+pub mod create_offer_type_multi;
