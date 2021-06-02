@@ -3,7 +3,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
 #[derive(Debug)]
-pub struct CreateRecvHttpSessionMacroInput {
+pub struct CreateSendHttpSessionMacroInput {
     func_name: syn::Ident,
     sender: syn::Ident,
     receiver: syn::Ident,
@@ -12,15 +12,15 @@ pub struct CreateRecvHttpSessionMacroInput {
     exclusion: u64,
 }
 
-impl Parse for CreateRecvHttpSessionMacroInput {
+impl Parse for CreateSendHttpSessionMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let func_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sender = syn::Ident::parse(input)?;
+        let receiver = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let receiver = syn::Ident::parse(input)?;
+        let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let sessionmpst_name = syn::Ident::parse(input)?;
@@ -31,7 +31,7 @@ impl Parse for CreateRecvHttpSessionMacroInput {
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
-        Ok(CreateRecvHttpSessionMacroInput {
+        Ok(CreateSendHttpSessionMacroInput {
             func_name,
             sender,
             receiver,
@@ -42,13 +42,13 @@ impl Parse for CreateRecvHttpSessionMacroInput {
     }
 }
 
-impl From<CreateRecvHttpSessionMacroInput> for proc_macro2::TokenStream {
-    fn from(input: CreateRecvHttpSessionMacroInput) -> proc_macro2::TokenStream {
+impl From<CreateSendHttpSessionMacroInput> for proc_macro2::TokenStream {
+    fn from(input: CreateSendHttpSessionMacroInput) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl CreateRecvHttpSessionMacroInput {
+impl CreateSendHttpSessionMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let func_name = self.func_name.clone();
         let sender = self.sender.clone();
@@ -75,7 +75,7 @@ impl CreateRecvHttpSessionMacroInput {
             })
             .collect();
 
-        let all_recv: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let all_send: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {}
@@ -83,19 +83,19 @@ impl CreateRecvHttpSessionMacroInput {
                     let temp_ident =
                         syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
                     quote! {
-                        let (v, new_session) = mpstthree::binary::recv::recv(s.#temp_ident)?;
+                        let new_session = mpstthree::binary::send::send(x, s.#temp_ident);
                     }
                 }
             })
             .collect();
 
-        let recv_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let send_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 if i == self.exclusion {
                     quote! {
-                        mpstthree::binary::struct_trait::Recv<T, #temp_ident >,
+                        mpstthree::binary::struct_trait::Send<T, #temp_ident >,
                     }
                 } else {
                     quote! {
@@ -129,26 +129,26 @@ impl CreateRecvHttpSessionMacroInput {
                 )*
                 R
             >(
+                x: T,
                 s: #sessionmpst_name<
                     #(
-                        #recv_types
+                        #send_types
                     )*
-                    #sender<R>,
-                    #receiver<mpstthree::role::end::RoleEnd>,
+                    #receiver<R>,
+                    #sender<mpstthree::role::end::RoleEnd>,
                 >,
                 http: bool,
-                mut resp_future: Vec::<hyper::client::ResponseFuture>,
+                req: hyper::Request<hyper::Body>
             ) -> Result<
                 (
-                    T,
                     #sessionmpst_name<
                         #(
                             #session_types
                         )*
                         R,
-                        #receiver<mpstthree::role::end::RoleEnd>,
+                        #sender<mpstthree::role::end::RoleEnd>,
                     >,
-                    hyper::Response<hyper::Body>
+                    hyper::client::ResponseFuture
                 ),
                 Box<dyn std::error::Error>,
             >
@@ -159,26 +159,20 @@ impl CreateRecvHttpSessionMacroInput {
                 )*
                 R: mpstthree::role::Role,
             {
-                if ( resp_future.len() != 1 && http ) || ( !http && resp_future.len() != 0 ) {
-                    panic!("Too many futures: {:?}", resp_future.len())
-                }
+                let https = hyper_tls::HttpsConnector::new();
+                let client = hyper::Client::builder().build::<_, hyper::Body>(https);
 
-                let resp = match http {
-                    true => {
-                        let rt = tokio::runtime::Runtime::new()?;
-                        rt.block_on(async move {
-                            resp_future.remove(0).await
-                        })?
-                    },
-                    false => hyper::Response::default(),
+                let new_req = match http {
+                    true => req,
+                    false => hyper::Request::default(),
                 };
 
                 #(
-                    #all_recv
+                    #all_send
                 )*
 
                 let new_stack = {
-                    fn temp<R>(r: #sender<R>) -> R
+                    fn temp<R>(r: #receiver<R>) -> R
                     where
                         R: mpstthree::role::Role,
                     {
@@ -190,7 +184,6 @@ impl CreateRecvHttpSessionMacroInput {
                 };
 
                 Ok((
-                    v,
                     #sessionmpst_name {
                         #(
                             #new_sessions
@@ -198,7 +191,7 @@ impl CreateRecvHttpSessionMacroInput {
                         stack: new_stack,
                         name: s.name,
                     },
-                    resp
+                    client.request(new_req)
                 ))
             }
         }

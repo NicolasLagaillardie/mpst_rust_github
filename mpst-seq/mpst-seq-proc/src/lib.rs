@@ -32,10 +32,12 @@ use macros::multiple::create_offer_type_multi::OfferTypeMultiMacroInput;
 use macros::multiple::create_recv_http_session::CreateRecvHttpSessionMacroInput;
 use macros::multiple::create_recv_mpst_all_session::CreateRecvMPSTAllSessionMacroInput;
 use macros::multiple::create_recv_mpst_session::CreateRecvMPSTSessionMacroInput;
+use macros::multiple::create_send_mpst_session::CreateSendMPSTSessionMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::recv_mpst::RecvMPSTMacroInput;
-use macros::multiple::send_mpst::SendMPSTMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
+use macros::multiple::send_mpst::SendMPSTMacroInput;
+use macros::multiple::create_send_http_session::CreateSendHttpSessionMacroInput;
 
 mod basic;
 
@@ -417,4 +419,32 @@ pub fn send_mpst(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_send_mpst(input: TokenStream) -> TokenStream {
     send_mpst(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_send_mpst_session(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CreateSendMPSTSessionMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_send_mpst_session(input: TokenStream) -> TokenStream {
+    create_send_mpst_session(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_send_http_session(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CreateSendHttpSessionMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_send_http_session(input: TokenStream) -> TokenStream {
+    create_send_http_session(input)
 }

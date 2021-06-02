@@ -89,7 +89,7 @@ impl CreateRecvMPSTAllSessionMacroInput {
             })
             .collect();
 
-        let send_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let recv_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -131,7 +131,7 @@ impl CreateRecvMPSTAllSessionMacroInput {
             >(
                 s: #sessionmpst_name<
                     #(
-                        #send_types
+                        #recv_types
                     )*
                     #sender<R, R>,
                     #receiver<mpstthree::role::end::RoleEnd>,
@@ -161,7 +161,7 @@ impl CreateRecvMPSTAllSessionMacroInput {
                 )*
 
                 let (new_stack, _) = {
-                    fn temp<R1, R2>(r: $role<R1, R2>) -> (R1, R2)
+                    fn temp<R1, R2>(r: #sender<R1, R2>) -> (R1, R2)
                     where
                         R1: mpstthree::role::Role,
                         R2: mpstthree::role::Role,

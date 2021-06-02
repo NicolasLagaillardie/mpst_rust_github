@@ -27,6 +27,8 @@ pub use mpst_seq_proc::send_aux_simple;
 pub use mpst_seq_proc::send_cancel;
 pub use mpst_seq_proc::send_mpst;
 pub use mpst_seq_proc::seq;
+pub use mpst_seq_proc::create_send_mpst_session;
+pub use mpst_seq_proc::create_send_http_session;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_seq;
@@ -105,3 +107,9 @@ pub use mpst_seq_proc::e_create_recv_mpst_all_session;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_send_mpst;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_create_send_mpst_session;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_create_send_http_session;

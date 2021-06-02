@@ -46,41 +46,6 @@ macro_rules! send_mpst {
     }
 }
 
-#[doc(hidden)]
-#[macro_export]
-macro_rules! send_aux {
-    ($session: expr, $payload: expr, $role: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {{
-            %(
-            )(
-                let new_session = mpstthree::binary::send::send($payload, $session.session#N:0);
-            )0*
-
-            let new_stack = {
-                fn temp<R>(r: $role<R>) -> R
-                where
-                    R: mpstthree::role::Role,
-                {
-                    let (here, there) = <R as mpstthree::role::Role>::new();
-                    r.sender.send(there).unwrap_or(());
-                    here
-                }
-                temp($session.stack)
-            };
-
-            $sessionmpst_name {
-                %(
-                    session#N:0: $session.session#N:0,
-                )(
-                    session#N:0: new_session,
-                )0*
-                stack: new_stack,
-                name: $session.name,
-            }
-        }});
-    }
-}
-
 /// Creates a *send* function to send from a given binary session type of a SessionMpst with more
 /// than 3 participants.
 ///
@@ -112,31 +77,15 @@ macro_rules! send_aux {
 /// ```
 #[macro_export]
 macro_rules! create_send_mpst_session {
-    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)0:0 R>(
-                x: T,
-                s: $sessionmpst_name<
-                    %(
-                        S#N:0,
-                    )(
-                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
-                    )0*
-                    $role<R>,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-            ) -> $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>
-            where
-                T: std::marker::Send,
-                #(
-                    S#N:0: mpstthree::binary::struct_trait::Session,
-                )0:0
-                R: mpstthree::role::Role,
-            {
-
-                mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion)
-            }
-        });
+    ($func_name: ident, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+        mpst_seq::create_send_mpst_session!(
+            $func_name,
+            $receiver,
+            $sender,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
     }
 }
 
@@ -363,49 +312,15 @@ macro_rules! create_send_check_cancel {
 /// ```
 #[macro_export]
 macro_rules! create_send_http_session {
-    ($func_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
-        mpst_seq::seq!(N in 1..$nsessions ! $exclusion {
-            fn $func_name<T, #(S#N:0,)0:0 R>(
-                x: T,
-                s: $sessionmpst_name<
-                    %(
-                        S#N:0,
-                    )(
-                        mpstthree::binary::struct_trait::Send<T, S#N:0>,
-                    )0*
-                    $role<R>,
-                    $name<mpstthree::role::end::RoleEnd>,
-                >,
-                http: bool,
-                req: hyper::Request<hyper::Body>
-            ) -> Result<
-                (
-                    $sessionmpst_name<#(S#N:0,)0:0 R, $name<mpstthree::role::end::RoleEnd>>,
-                    hyper::client::ResponseFuture
-                ),
-                Box<dyn std::error::Error>
-            >
-            where
-                T: std::marker::Send,
-                #(
-                    S#N:0: mpstthree::binary::struct_trait::Session,
-                )0:0
-                R: mpstthree::role::Role,
-            {
-                let https = hyper_tls::HttpsConnector::new();
-                let client = hyper::Client::builder().build::<_, hyper::Body>(https);
-
-                let new_req = match http {
-                    true => req,
-                    false => hyper::Request::default(),
-                };
-
-                Ok((
-                    mpstthree::send_aux!(s, x, $role, $sessionmpst_name, $nsessions, $exclusion),
-                    client.request(new_req)
-                ))
-            }
-        });
+    ($func_name: ident, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+        mpst_seq::create_send_http_session!(
+            $func_name,
+            $receiver,
+            $sender,
+            $sessionmpst_name,
+            $nsessions,
+            $exclusion
+        );
     }
 }
 
