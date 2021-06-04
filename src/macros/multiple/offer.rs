@@ -88,21 +88,45 @@ macro_rules! create_offer_mpst_session_multi {
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 ///
-/// # Example
+/// # Basic example
 ///
 /// ```ignore
-/// offer_mpst!(s, recv_mpst_a_from_d, {
-///    CBranchesAtoC::End(s) => {
-///        close_mpst_multi(s)
-///    },
-///    CBranchesAtoC::Video(s) => {
-///        let (request, s) = recv_mpst_a_from_d(s)?;
-///        let s = send_mpst_a_to_b(request + 1, s);
-///        let (video, s) = recv_mpst_a_from_b(s)?;
-///        let s = send_mpst_a_to_d(video + 1, s);
-///        authenticator_recurs(s)
-///    },
-/// })?;
+/// offer_mpst!(
+///     s,
+///     recv_mpst_a_from_d,
+///     {
+///         CBranchesAtoC::End(s) => {
+///             close_mpst_multi(s)
+///         },
+///         CBranchesAtoC::Video(s) => {
+///             let (request, s) = recv_mpst_a_from_d(s)?;
+///             let s = send_mpst_a_to_b(request + 1, s);
+///             let (video, s) = recv_mpst_a_from_b(s)?;
+///             let s = send_mpst_a_to_d(video + 1, s);
+///             authenticator_recurs(s)
+///         },
+///     }
+/// )?;
+/// ```
+///
+/// # Baking example
+///
+/// ```ignore
+/// offer_mpst!(
+///     s,
+///     {
+///         CBranchesAtoC::End(s) => {
+///             close_mpst_multi(s)
+///         },
+///         CBranchesAtoC::Video(s) => {
+///             let (request, s) = recv_mpst_a_from_d(s)?;
+///             let s = send_mpst_a_to_b(request + 1, s);
+///             let (video, s) = recv_mpst_a_from_b(s)?;
+///             let s = send_mpst_a_to_d(video + 1, s);
+///             authenticator_recurs(s)
+///         },
+///     }
+/// )?;
 /// ```
 #[macro_export]
 macro_rules! offer_mpst {

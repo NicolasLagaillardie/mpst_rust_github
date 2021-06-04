@@ -3,12 +3,10 @@ use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
-use mpstthree::{bundle_impl, fork_mpst_multi};
+use mpstthree::bundle_impl;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D);
-
-fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+bundle_impl!(SessionMpst => A, B, D => fork_mpst);
 
 type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;

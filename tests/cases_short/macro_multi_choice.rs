@@ -6,12 +6,10 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;
 
-use mpstthree::{bundle_impl, fork_mpst_multi};
+use mpstthree::bundle_impl;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D);
-
-fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+bundle_impl!(SessionMpst => A, B, D => fork_mpst);
 
 type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
     Recv<Either<SessionMpst<S0, S1, R0, N0>, SessionMpst<S2, S3, R1, N0>>, End>;

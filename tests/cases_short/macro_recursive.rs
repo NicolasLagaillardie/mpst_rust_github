@@ -7,14 +7,10 @@ use std::marker;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::{
-    bundle_impl, choose_mpst_multi_to_all, create_recv_mpst_session_2, fork_mpst_multi, offer_mpst,
-};
+use mpstthree::{bundle_impl, choose_mpst_multi_to_all, create_recv_mpst_session_2, offer_mpst};
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, C);
-
-fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+bundle_impl!(SessionMpst => A, B, C => fork_mpst);
 
 // Create new recv functions and related types
 create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);

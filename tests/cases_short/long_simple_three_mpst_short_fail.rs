@@ -2,16 +2,13 @@ use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, create_recv_mpst_session_bundle,
-    offer_mpst, fork_mpst_multi
+    bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mpst
 };
 
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(SessionMpstThree => A, B, C);
-
-fork_mpst_multi!(fork_mpst, SessionMpstThree, 3);
+bundle_impl!(SessionMpstThree => A, B, C => fork_mpst);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -54,18 +51,6 @@ type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
-// Create new recv functions and related types
-// A
-create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_c, RoleC, 2 | =>
-    RoleA, SessionMpstThree, 3
-);
-// B
-create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_c, RoleC, 2 | =>
-    RoleB, SessionMpstThree, 3
-);
-
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
     Done, More, =>
@@ -76,30 +61,36 @@ create_fn_choose_mpst_multi_to_all_bundle!(
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_from_c, {
-        Branching0fromCtoA::Done(s) => {
-            s.close()
-        },
-        Branching0fromCtoA::More(s) => {
-            let (_, s) = s.recv()?;
-            let (_, s) = s.send(()).recv()?;
-            let s = s.send(());
-            endpoint_a(s)
-        },
-    })
+    offer_mpst!(
+        s,
+        {
+            Branching0fromCtoA::Done(s) => {
+                s.close()
+            },
+            Branching0fromCtoA::More(s) => {
+                let (_, s) = s.recv()?;
+                let (_, s) = s.send(()).recv()?;
+                let s = s.send(());
+                endpoint_a(s)
+            },
+        }
+    )
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_from_c, {
-        Branching0fromCtoB::Done(s) => {
-            s.close()
-        },
-        Branching0fromCtoB::More(s) => {
-            let (_, s) = s.recv()?;
-            let (_, s) = s.send(()).send(()).recv()?;
-            endpoint_b(s)
-        },
-    })
+    offer_mpst!(
+        s,
+        {
+            Branching0fromCtoB::Done(s) => {
+                s.close()
+            },
+            Branching0fromCtoB::More(s) => {
+                let (_, s) = s.recv()?;
+                let (_, s) = s.send(()).send(()).recv()?;
+                endpoint_b(s)
+            },
+        }
+    )
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {

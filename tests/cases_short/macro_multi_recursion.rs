@@ -5,16 +5,13 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl, choose_mpst_multi_to_all, close_mpst, create_recv_mpst_session, fork_mpst_multi,
-    offer_mpst,
+    bundle_impl, choose_mpst_multi_to_all, close_mpst, create_recv_mpst_session, offer_mpst,
 };
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D);
-
-fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+bundle_impl!(SessionMpst => A, B, D => fork_mpst);
 
 // Create new recv functions and related types
 // normal
