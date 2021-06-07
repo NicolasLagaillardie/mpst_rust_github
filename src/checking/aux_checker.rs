@@ -15,10 +15,10 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
     branches: TupleHashmaps<BH1, BH2>, // branches_receivers, branches_sender
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    let head_session1 = get_head(&sessionmpst[0]);
-    let head_session2 = get_head(&sessionmpst[1]);
-    let head_stack = get_head(&sessionmpst[2]);
-    let sender = get_name(&get_head(&sessionmpst[3]));
+    let head_session1 = get_head(sessionmpst[0]);
+    let head_session2 = get_head(sessionmpst[1]);
+    let head_stack = get_head(sessionmpst[2]);
+    let sender = get_name(&get_head(sessionmpst[3]));
 
     // println!();
     // println!("sender checker_aux: {:?}", &sender);
@@ -149,15 +149,15 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         h if h == roles_and_sessions[0] => match_full_types(
             roles_and_sessions[1],
             [
-                &get_tail(&sessionmpst[0]),
+                &get_tail(sessionmpst[0]),
                 sessionmpst[1],
-                &get_tail(&sessionmpst[2]),
+                &get_tail(sessionmpst[2]),
                 sessionmpst[3],
             ],
             involved,
             [
-                &get_head_payload(&sessionmpst[0]),
-                &get_head_payload(&sessionmpst[1]),
+                &get_head_payload(sessionmpst[0]),
+                &get_head_payload(sessionmpst[1]),
             ],
             role,
             branches,
@@ -167,14 +167,14 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             roles_and_sessions[3],
             [
                 sessionmpst[0],
-                &get_tail(&sessionmpst[1]),
-                &get_tail(&sessionmpst[2]),
+                &get_tail(sessionmpst[1]),
+                &get_tail(sessionmpst[2]),
                 sessionmpst[3],
             ],
             involved,
             [
-                &get_head_payload(&sessionmpst[1]),
-                &get_head_payload(&sessionmpst[0]),
+                &get_head_payload(sessionmpst[1]),
+                &get_head_payload(sessionmpst[0]),
             ],
             role,
             branches,
@@ -484,7 +484,7 @@ fn get_dual(s: &str) -> String {
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
     let result = &result.replace("Revc<", "Recv<");
-    let result = switch_role(&result, "A", "ADual");
+    let result = switch_role(result, "A", "ADual");
     let result = switch_role(&result, "C", "CDual");
     let result = switch_role(&result, "B", "BDual");
     let result = switch_role(&result, "AtoAll", "AlltoA");
@@ -780,12 +780,12 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
 ) -> Result<String, Box<dyn Error>> {
     // println!("sessionmpst all_type: {:?}", &sessionmpst);
 
-    let payload_1 = get_head_payload(&sessionmpst[0]);
-    let payload_2 = get_head_payload(&sessionmpst[1]);
+    let payload_1 = get_head_payload(sessionmpst[0]);
+    let payload_2 = get_head_payload(sessionmpst[1]);
     if payload_1.contains("Either") && payload_2.contains("Either") {
         let branching_1: [String; 8] = divide_either(&payload_1);
         let branching_2: [String; 8] = divide_either(&payload_2);
-        let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+        let tails: [String; 2] = get_two_tails(sessionmpst[2]);
 
         // println!("tails: {:?}", &tails);
 
@@ -816,7 +816,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         ))
     } else if payload_1.contains("Either") {
         let branching_1: [String; 8] = divide_either(&payload_1);
-        let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+        let tails: [String; 2] = get_two_tails(sessionmpst[2]);
 
         // println!("tails: {:?}", &tails);
 
@@ -825,7 +825,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             checker_aux(
                 [
                     &get_dual(&branching_1[index[0]]),
-                    &get_dual(&sessionmpst[1]),
+                    &get_dual(sessionmpst[1]),
                     &tails[0],
                     sessionmpst[3]
                 ],
@@ -836,7 +836,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             checker_aux(
                 [
                     &get_dual(&branching_1[index[2]]),
-                    &get_dual(&sessionmpst[1]),
+                    &get_dual(sessionmpst[1]),
                     &tails[1],
                     sessionmpst[3]
                 ],
@@ -847,7 +847,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         ))
     } else if payload_2.contains("Either") {
         let branching_2: [String; 8] = divide_either(&payload_2);
-        let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+        let tails: [String; 2] = get_two_tails(sessionmpst[2]);
 
         // println!("tails: {:?}", &tails);
 
@@ -855,7 +855,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             "( {} + {} )",
             checker_aux(
                 [
-                    &get_dual(&sessionmpst[0]),
+                    &get_dual(sessionmpst[0]),
                     &get_dual(&branching_2[index[1]]),
                     &tails[0],
                     sessionmpst[3]
@@ -866,7 +866,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             )?,
             checker_aux(
                 [
-                    &get_dual(&sessionmpst[0]),
+                    &get_dual(sessionmpst[0]),
                     &get_dual(&branching_2[index[3]]),
                     &tails[1],
                     sessionmpst[3]
@@ -881,7 +881,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             "Wrong payloads, not recognized: {:?} , {:?} and {:?} ( {:?} / {:?} ) for {:?} , {:?} and {:?}",
             divide_either(&payload_1),
             divide_either(&payload_2),
-            get_two_tails(&sessionmpst[2]),
+            get_two_tails(sessionmpst[2]),
             &payload_1,
             &payload_2,
             &sessionmpst[0],
