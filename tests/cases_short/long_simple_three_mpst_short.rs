@@ -9,7 +9,20 @@ use mpstthree::{bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mp
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(SessionMpstThree => A, B, C => fork_mpst);
+bundle_impl!(
+    SessionMpstThree =>
+    A, B, C =>
+    fork_mpst
+);
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_c_to_all, more_from_c_to_all, =>
+    Done, More, =>
+    EndpointDoneC, EndpointMoreC, =>
+    Branching0fromCtoA, Branching0fromCtoB, =>
+    RoleA, RoleB, =>
+    RoleC, SessionMpstThree, 3
+);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -51,15 +64,6 @@ type EndpointMoreC = SessionMpstThree<
 type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
 type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
-
-create_fn_choose_mpst_multi_to_all_bundle!(
-    done_from_c_to_all, more_from_c_to_all, =>
-    Done, More, =>
-    EndpointDoneC, EndpointMoreC, =>
-    Branching0fromCtoA, Branching0fromCtoB, =>
-    RoleA, RoleB, =>
-    RoleC, SessionMpstThree, 3
-);
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(

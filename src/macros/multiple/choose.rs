@@ -246,7 +246,14 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+    (
+        $session: expr,
+        $( $label: path , )+ =>
+        $( $receiver: ident , )+ =>
+        $sender: ident,
+        $sessionmpst_name: ident,
+        $exclusion: literal
+    ) => {
         mpst_seq::choose_mpst_multi_to_all!(
             ( $session ) ,
             ( $( $label , )* ) ,
@@ -353,7 +360,15 @@ macro_rules! choose_mpst_multi_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_cancel_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+    (
+        $session: expr,
+        $( $label: path , )+ =>
+        $( $receiver: ident , )+ =>
+        $pawn: ident,
+        $sender: ident,
+        $sessionmpst_name: ident,
+        $exclusion: literal
+    ) => {
         mpst_seq::choose_mpst_multi_cancel_to_all!(
             ( $session ) ,
             ( $( $label , )* ) ,
@@ -413,7 +428,14 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_multi_http_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+    (
+        $session: expr,
+        $( $label: path , )+ =>
+        $( $receiver: ident , )+ =>
+        $sender: ident,
+        $sessionmpst_name: ident,
+        $exclusion: literal
+    ) => {
         mpst_seq::choose_mpst_multi_http_to_all!(
             ( $session ) ,
             ( $( $label , )* ) ,
@@ -462,7 +484,16 @@ macro_rules! choose_mpst_multi_http_to_all {
 /// ```
 #[macro_export]
 macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
-    ($($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $($label: path,)+ => $($receiver: ident,)+ => $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+    (
+        $( $fn_name: ident , )+ =>
+        $( $branch: expr , )+ =>
+        $( $new_type: ty , )+ =>
+        $( $label: path , )+ =>
+        $( $receiver: ident , )+ =>
+        $sender: ident,
+        $sessionmpst_name: ident,
+        $exclusion: literal
+    ) => {
         mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
             ( $( $fn_name , )* ) ,
             ( $( $branch , )* ) ,
@@ -514,7 +545,17 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// ```
 #[macro_export]
 macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
-    ($($fn_name: ident,)+ => $($branch: expr,)+ => $($new_type: ty,)+ => $($label: path,)+ => $($receiver: ident,)+ => $pawn: ident, $sender: ident, $sessionmpst_name: ident, $exclusion: literal) => {
+    (
+        $( $fn_name: ident , )+ =>
+        $( $branch: expr , )+ =>
+        $( $new_type: ty , )+ =>
+        $( $label: path , )+ =>
+        $( $receiver: ident , )+ =>
+        $pawn: ident,
+        $sender: ident,
+        $sessionmpst_name: ident,
+        $exclusion: literal
+    ) => {
         mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
             ( $( $fn_name , )* ) ,
             ( $( $branch , )* ) ,

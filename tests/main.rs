@@ -8,10 +8,10 @@ mod unit;
 
 #[test]
 fn unit_tests() {
-    // Checker
+    // Checker result
     unit::checker::test_checker();
 
-    // Role
+    // Role methods and fields
     unit::roles::role_end_fields_1();
     unit::roles::role_end_fields_2();
     unit::roles::role_a_to_all_fields();
@@ -23,7 +23,7 @@ fn unit_tests() {
     unit::roles::role_head_str();
     unit::roles::role_tail_str();
 
-    // SessionMPST
+    // SessionMPST methods and fields
     unit::sessionmpst::sessionmpst_fields();
     unit::sessionmpst::sessionmpst_methods();
 }
@@ -31,18 +31,20 @@ fn unit_tests() {
 #[test]
 #[should_panic]
 fn unit_tests_panic_test_checker_panic_stack() {
+    // Test panic with wrong stack
     unit::checker_panic::test_checker_panic_stack();
 }
 
 #[test]
 #[should_panic]
 fn unit_tests_panic_test_checker_panic_name() {
+    // Test panic with wrong name
     unit::checker_panic::test_checker_panic_name();
 }
 
 #[test]
 fn cases_tests_binary() {
-    // Binary
+    // Tests for sesh
     cases::binary::ping_works();
     cases::binary::head_str();
     cases::binary::tail_str();
@@ -59,6 +61,7 @@ fn cases_tests_binary() {
     cases::binary::cancel_recursion();
 }
 
+// Tests for basic functions and macros with three participants
 #[test]
 fn cases_tests_mpst_simple() {
     // Simple
@@ -112,6 +115,7 @@ fn cases_tests_mpst_simple() {
     // cases::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
+// Tests for basic functions and macros with more than three participants
 #[test]
 fn cases_tests_mpst_macro() {
     // Macro basics
@@ -142,6 +146,7 @@ fn cases_tests_mpst_macro() {
     cases::long_simple_three_mpst_short::shorten_main();
 }
 
+// Tests for baking with three participants
 #[test]
 fn cases_tests_mpst_simple_short() {
     // Simple
@@ -195,6 +200,7 @@ fn cases_tests_mpst_simple_short() {
     // cases_short::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
+// Tests for baking with more than three participants
 #[test]
 fn cases_tests_mpst_macro_short() {
     // Macro basics
@@ -227,6 +233,7 @@ fn cases_tests_mpst_macro_short() {
 
 #[test]
 fn scribble_tests() {
+    // Test code generated from Scribble
     scribble::top_down::top_down_approach();
     scribble::top_down_recursive::top_down_approach();
 }

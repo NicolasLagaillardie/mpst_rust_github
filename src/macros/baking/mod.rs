@@ -23,13 +23,31 @@
 /// ```
 #[macro_export]
 macro_rules! bundle_impl {
-    ( $sessionmpst_name: ident => $($all_roles: ident),+ $(,)? ) => {
+    ( $sessionmpst_name: ident => $( $all_roles: ident),+ $(,)? ) => {
         mpst_seq::baking!(
             $sessionmpst_name,
             ( $( $all_roles , )+ )
         );
     };
-    ( $sessionmpst_name: ident => $($all_roles: ident),+ $(,)? => $fork_mpst: ident) => {
+    ( $sessionmpst_name: ident => $( $all_roles: ident),+ $(,)? => $fork_mpst: ident) => {
+        mpst_seq::baking!(
+            $sessionmpst_name ,
+            ( $( $all_roles , )+ ) ,
+            $fork_mpst
+        );
+    };
+    (
+        $sessionmpst_name: ident =>
+        $( $all_roles: ident),+ $(,)? =>
+        $fork_mpst: ident =>
+        $(
+            $fn_name: ident,
+            $( $paths: path , )+
+            $return_type: ty,
+            $index: literal
+        ),+
+        $(,)?
+    ) => {
         mpst_seq::baking!(
             $sessionmpst_name ,
             ( $( $all_roles , )+ ) ,

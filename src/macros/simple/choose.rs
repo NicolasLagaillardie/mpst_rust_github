@@ -1065,13 +1065,13 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 /// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
 #[macro_export]
 macro_rules! choose_mpst_to_all {
-    ($session: expr, $($label: path,)+ => $($receiver: ident,)+ => $sender: ident) => {{
+    ($session: expr, $( $label: path , )+ => $( $receiver: ident , )+ => $sender: ident) => {{
         use mpstthree::sessionmpst::SessionMpst;
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
-            $($label,)+ =>
-            $($receiver,)+ =>
+            $( $label , )+ =>
+            $( $receiver , )+ =>
             $sender,
             SessionMpst,
             3

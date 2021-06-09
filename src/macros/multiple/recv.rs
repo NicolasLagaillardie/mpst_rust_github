@@ -128,7 +128,7 @@ macro_rules! create_recv_mpst_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_session_bundle {
-    ($($func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(
             mpstthree::create_recv_mpst_session!(
                 $func_name,
@@ -267,7 +267,7 @@ macro_rules! create_recv_http_session {
 /// ```
 #[macro_export]
 macro_rules! create_recv_http_session_bundle {
-    ($($func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $sessionmpst_name: ident, $nsessions: literal) => {
        $(
            mpstthree::create_recv_http_session!(
                $func_name,

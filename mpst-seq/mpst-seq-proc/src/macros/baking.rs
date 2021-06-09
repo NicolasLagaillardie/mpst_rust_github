@@ -8,10 +8,27 @@ type VecOfTuple = Vec<(u64, u64, u64)>;
 #[derive(Debug)]
 pub struct BakingMacroInput {
     sessionmpst_name: syn::Ident,
-    roles: proc_macro2::TokenStream,
     all_roles: Vec<proc_macro2::TokenStream>,
     number_roles: u64,
     fork_mpst: Vec<syn::Ident>,
+}
+
+fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStream>> {
+    let content;
+    let _parentheses = syn::parenthesized!(content in input);
+    let token_stream = proc_macro2::TokenStream::parse(&content)?;
+
+    let mut result: Vec<proc_macro2::TokenStream> = Vec::new();
+    for tt in token_stream.clone().into_iter() {
+        let elt = match tt {
+            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+            _ => None,
+        };
+        if let Some(elt_tt) = elt {
+            result.push(elt_tt)
+        }
+    }
+    Ok(result)
 }
 
 impl Parse for BakingMacroInput {
@@ -19,21 +36,22 @@ impl Parse for BakingMacroInput {
         let sessionmpst_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let content_roles;
-        let _parentheses = syn::parenthesized!(content_roles in input);
-        let roles = proc_macro2::TokenStream::parse(&content_roles)?;
+        // let content_roles;
+        // let _parentheses = syn::parenthesized!(content_roles in input);
+        // let roles = proc_macro2::TokenStream::parse(&content_roles)?;
 
         /////////////////////////
-        let mut all_roles: Vec<proc_macro2::TokenStream> = Vec::new();
-        for tt in roles.clone().into_iter() {
-            let elt = match tt {
-                proc_macro2::TokenTree::Group(g) => Some(g.stream()),
-                _ => None,
-            };
-            if let Some(elt_tt) = elt {
-                all_roles.push(elt_tt)
-            }
-        }
+        // let mut all_roles: Vec<proc_macro2::TokenStream> = Vec::new();
+        // for tt in roles.clone().into_iter() {
+        //     let elt = match tt {
+        //         proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+        //         _ => None,
+        //     };
+        //     if let Some(elt_tt) = elt {
+        //         all_roles.push(elt_tt)
+        //     }
+        // }
+        let all_roles = expand_token_stream(input.clone())?;
 
         let number_roles = all_roles.len().to_string().parse::<u64>().unwrap();
 
@@ -44,13 +62,36 @@ impl Parse for BakingMacroInput {
             Vec::new()
         };
 
-        Ok(BakingMacroInput {
-            sessionmpst_name,
-            roles,
-            all_roles,
-            number_roles,
-            fork_mpst,
-        })
+        // https://stackoverflow.com/questions/57342132/how-to-find-the-correct-return-type-for-synparse
+
+        if fork_mpst.is_empty() {
+            Ok(BakingMacroInput {
+                sessionmpst_name,
+                all_roles,
+                number_roles,
+                fork_mpst,
+            })
+        } else {
+            while input.peek(Token![,]) {
+                let fn_name = syn::Ident::parse(input)?;
+                <Token![,]>::parse(input)?;
+
+                let all_paths = expand_token_stream(input.clone())?;
+                <Token![,]>::parse(input)?;
+
+                // let return_type = syn::TypeGenerics::parse(input)?;
+                // <Token![,]>::parse(input)?;
+
+                let index = syn::LitInt::parse(input)?;
+            }
+
+            Ok(BakingMacroInput {
+                sessionmpst_name,
+                all_roles,
+                number_roles,
+                fork_mpst,
+            })
+        }
     }
 }
 

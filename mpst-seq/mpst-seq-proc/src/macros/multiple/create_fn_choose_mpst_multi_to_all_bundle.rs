@@ -175,6 +175,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                 let diff = self.n_sessions - 1;
                 let diag = self.diag();
 
+                // Build Send<*enum*, mpstthree::binary::struct_trait::End>,
                 let send_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_label =
@@ -190,6 +191,8 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                     })
                     .collect();
 
+                // Build let ( channel_n_m , channel_m_n ) =
+                //  <_ as mpstthree::binary::struct_trait::Session>::new();
                 let new_channels: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1) / 2))
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_diag(&diag, j);
@@ -208,6 +211,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                     })
                     .collect();
 
+                // Build let ( stack_n , _) = <_ as mpstthree::role::Role>::new();
                 let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
                     .map(|j| {
                         let temp_ident = syn::Ident::new(
@@ -220,6 +224,8 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                     })
                     .collect();
 
+                // Build let ( name_n , _) =
+                //      <RoleN::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
                 let new_names: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_name =

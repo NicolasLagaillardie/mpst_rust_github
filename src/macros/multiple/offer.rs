@@ -130,7 +130,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst {
-    ($session: expr, $recv_mpst: ident, { $($pat: pat => $result: expr, )* }) => {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
         (move || -> Result<_, _> {
             let (l, s) = $recv_mpst($session)?;
             mpstthree::binary::cancel::cancel(s);
@@ -141,7 +141,7 @@ macro_rules! offer_mpst {
             }
         })()
     };
-    ($session: expr, { $($pat: pat => $result: expr, )* }) => {
+    ($session: expr, { $( $pat: pat => $result: expr, )* }) => {
         (move || -> Result<_, _> {
             let (l, s) = $session.recv()?;
             mpstthree::binary::cancel::cancel(s);
@@ -164,7 +164,7 @@ macro_rules! offer_mpst {
 /// * The block of code to process each new session
 #[macro_export]
 macro_rules! offer_cancel_mpst {
-    ($session: expr, $recv_mpst: ident, { $($pat: pat => $result: expr, )* }) => {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
         (move || -> Result<_, _> {
             let ((session1, cont), s) = $recv_mpst($session)?;
             let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(session1)).unwrap();
@@ -176,7 +176,7 @@ macro_rules! offer_cancel_mpst {
             }
         })()
     };
-    ($session: expr, { $($pat: pat => $result: expr, )* }) => {
+    ($session: expr, { $( $pat: pat => $result: expr, )* }) => {
         (move || -> Result<_, _> {
             let ((session1, cont), s) = $session.recv()?;
             let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(session1)).unwrap();
@@ -217,7 +217,7 @@ macro_rules! offer_cancel_mpst {
 /// ```
 #[macro_export]
 macro_rules! offer_http_mpst {
-    ($session: expr, $recv_mpst: ident, { $($pat: pat => $result: expr, )* }) => {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
         (move || -> Result<_, _> {
             let https = hyper_tls::HttpsConnector::new();
             let client = hyper::Client::builder().build::<_, hyper::Body>(https);
