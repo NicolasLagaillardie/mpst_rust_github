@@ -35,3 +35,33 @@ macro_rules! bundle_struct_fork_close_multi {
         mpstthree::fork_mpst_multi!($func_name_fork, $sessionmpst_name, $nsessions);
     };
 }
+
+/// Creates thestructure SessionMPST
+/// [`mpstthree::create_sessionmpst`](../macro.create_sessionmpst.html),
+/// the [`mpstthree::close_mpst_cancel`](../macro.close_mpst_cancel.html) and
+/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
+/// functions to be used with more than 3 participants.
+/// It checks the send sides of the channels along the recv sides.
+///
+/// # Arguments
+///
+/// * The name of the new *close* function
+/// * The name of the new *fork* function
+/// * The name of the *SessionMpst* type that will be used
+/// * The number of participants (all together)
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::bundle_struct_fork_close_multi_cancel;
+///
+/// bundle_struct_fork_close_multi_cancel!(close_mpst, fork_mpst, SessionMpst, 3);
+/// ```
+#[macro_export]
+macro_rules! bundle_struct_fork_close_multi_cancel {
+    ($func_name_close: ident, $func_name_fork: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+        mpstthree::create_sessionmpst!($sessionmpst_name, $nsessions);
+        mpstthree::close_mpst_cancel!($func_name_close, $sessionmpst_name, $nsessions);
+        mpstthree::fork_mpst_multi!($func_name_fork, $sessionmpst_name, $nsessions);
+    };
+}

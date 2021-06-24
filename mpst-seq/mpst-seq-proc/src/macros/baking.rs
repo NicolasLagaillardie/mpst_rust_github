@@ -19,7 +19,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStrea
     let token_stream = proc_macro2::TokenStream::parse(&content)?;
 
     let mut result: Vec<proc_macro2::TokenStream> = Vec::new();
-    for tt in token_stream.clone().into_iter() {
+    for tt in token_stream.into_iter() {
         let elt = match tt {
             proc_macro2::TokenTree::Group(g) => Some(g.stream()),
             _ => None,
@@ -35,23 +35,7 @@ impl Parse for BakingMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let sessionmpst_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
-
-        // let content_roles;
-        // let _parentheses = syn::parenthesized!(content_roles in input);
-        // let roles = proc_macro2::TokenStream::parse(&content_roles)?;
-
-        /////////////////////////
-        // let mut all_roles: Vec<proc_macro2::TokenStream> = Vec::new();
-        // for tt in roles.clone().into_iter() {
-        //     let elt = match tt {
-        //         proc_macro2::TokenTree::Group(g) => Some(g.stream()),
-        //         _ => None,
-        //     };
-        //     if let Some(elt_tt) = elt {
-        //         all_roles.push(elt_tt)
-        //     }
-        // }
-        let all_roles = expand_token_stream(input.clone())?;
+        let all_roles = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
 
         let number_roles = all_roles.len().to_string().parse::<u64>().unwrap();
 
@@ -64,34 +48,43 @@ impl Parse for BakingMacroInput {
 
         // https://stackoverflow.com/questions/57342132/how-to-find-the-correct-return-type-for-synparse
 
-        if fork_mpst.is_empty() {
-            Ok(BakingMacroInput {
-                sessionmpst_name,
-                all_roles,
-                number_roles,
-                fork_mpst,
-            })
-        } else {
-            while input.peek(Token![,]) {
-                let fn_name = syn::Ident::parse(input)?;
-                <Token![,]>::parse(input)?;
+        // if fork_mpst.is_empty() {
+        //     Ok(BakingMacroInput {
+        //         sessionmpst_name,
+        //         all_roles,
+        //         number_roles,
+        //         fork_mpst,
+        //     })
+        // } else {
+        //     // let mut branching = Vec::new();
 
-                let all_paths = expand_token_stream(input.clone())?;
-                <Token![,]>::parse(input)?;
+        //     while input.peek(Token![,]) {
+        //         let _fn_name = syn::Ident::parse(input)?;
+        //         <Token![,]>::parse(input)?;
 
-                // let return_type = syn::TypeGenerics::parse(input)?;
-                // <Token![,]>::parse(input)?;
+        //         let _all_paths = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
+        //         <Token![,]>::parse(input)?;
 
-                let index = syn::LitInt::parse(input)?;
-            }
+        //         // let return_type = syn::TypeGenerics::parse(input)?;
+        //         // <Token![,]>::parse(input)?;
 
-            Ok(BakingMacroInput {
-                sessionmpst_name,
-                all_roles,
-                number_roles,
-                fork_mpst,
-            })
-        }
+        //         let _index = syn::LitInt::parse(input)?;
+        //     }
+
+        //     Ok(BakingMacroInput {
+        //         sessionmpst_name,
+        //         all_roles,
+        //         number_roles,
+        //         fork_mpst,
+        //     })
+        // }
+
+        Ok(BakingMacroInput {
+            sessionmpst_name,
+            all_roles,
+            number_roles,
+            fork_mpst,
+        })
     }
 }
 

@@ -21,6 +21,7 @@ use macros::multiple::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAl
 use macros::multiple::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAllMacroInput;
 use macros::multiple::choose_mpst_multi_to_all::ChooseTypeMultiToAllMacroInput;
 use macros::multiple::close_mpst::CloseMpstMacroInput;
+use macros::multiple::close_mpst_cancel::CloseMpstCancelMacroInput;
 use macros::multiple::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
 use macros::multiple::create_choose_mpst_session_multi_left::ChooseTypeMultiLeftMacroInput;
 use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRightMacroInput;
@@ -474,4 +475,18 @@ pub fn create_sessionmpst(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_sessionmpst(input: TokenStream) -> TokenStream {
     create_sessionmpst(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn close_mpst_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CloseMpstCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_close_mpst_cancel(input: TokenStream) -> TokenStream {
+    close_mpst_cancel(input)
 }

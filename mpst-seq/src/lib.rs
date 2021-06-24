@@ -6,6 +6,7 @@ pub use mpst_seq_proc::choose_mpst_multi_cancel_to_all;
 pub use mpst_seq_proc::choose_mpst_multi_http_to_all;
 pub use mpst_seq_proc::choose_mpst_multi_to_all;
 pub use mpst_seq_proc::close_mpst;
+pub use mpst_seq_proc::close_mpst_cancel;
 pub use mpst_seq_proc::close_mpst_check_cancel;
 pub use mpst_seq_proc::create_broadcast_role_short;
 pub use mpst_seq_proc::create_choose_mpst_session_multi_left;
@@ -121,3 +122,6 @@ pub use mpst_seq_proc::e_create_send_mpst_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_create_sessionmpst;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_close_mpst_cancel;

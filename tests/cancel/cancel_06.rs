@@ -1,8 +1,9 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, close_mpst, create_multiple_normal_role, create_recv_mpst_session_bundle,
-    create_send_check_cancel_bundle, create_sessionmpst, fork_mpst_multi, send_cancel,
+    broadcast_cancel, close_mpst_cancel, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
+    fork_mpst_multi, send_cancel,
 };
 
 use rand::random;
@@ -60,7 +61,7 @@ create_recv_mpst_session_bundle!(
 send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4, "Session dropped");
 
 // Create close function
-close_mpst!(close_mpst_multi, SessionMpstFour, 4);
+close_mpst_cancel!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);

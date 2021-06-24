@@ -2,7 +2,7 @@ use mpstthree::binary::cancel::cancel;
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_multiple_normal_role, create_recv_mpst_session_bundle,
+    close_mpst_cancel, create_multiple_normal_role, create_recv_mpst_session_bundle,
     create_send_mpst_cancel, create_send_mpst_session_bundle, create_sessionmpst, fork_mpst_multi,
 };
 
@@ -56,7 +56,7 @@ create_recv_mpst_session_bundle!(
 );
 
 // Create close function
-close_mpst!(close_mpst_multi, SessionMpstThree, 3);
+close_mpst_cancel!(close_mpst_multi, SessionMpstThree, 3);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, SessionMpstThree, 3);
@@ -83,7 +83,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     // let (_, s) = recv_mpst_b_from_a(s)?;
     // close_mpst_multi(s)
 
-    Ok(())
+    panic!("B canceled")
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
@@ -95,6 +95,6 @@ pub fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     assert!(thread_a.join().is_err());
-    assert!(thread_b.join().is_ok());
+    assert!(thread_b.join().is_err());
     assert!(thread_c.join().is_err());
 }
