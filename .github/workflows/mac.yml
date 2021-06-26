@@ -1,4 +1,4 @@
-name: Rust Mac
+name: Mac
 
 on: [push]
 

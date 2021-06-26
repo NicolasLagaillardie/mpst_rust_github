@@ -20,9 +20,15 @@ echo "cargo check --examples completed"
 echo "cargo check --benches started"
 cargo check --benches
 echo "cargo check --benches completed"
-echo "cargo test started"
-cargo t
-echo "cargo test completed"
+echo "cargo test --verbose --all started"
+cargo test --verbose --all
+echo "cargo test --verbose --all completed"
+echo "cargo test --verbose --all -- --nocapture started"
+cargo test --verbose --all -- --nocapture
+echo "cargo test --verbose --all -- --nocapture completed"
+echo "cargo test --verbose --all --no-default-features --no-run started"
+cargo test --verbose --all --no-default-features --no-run
+echo "cargo test --verbose --all --no-default-features --no-run completed"
 echo "cargo clippy started"
 cargo clippy
 echo "cargo clippy completed"

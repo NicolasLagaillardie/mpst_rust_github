@@ -807,9 +807,10 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 static SIZE: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh nine cancel protocol MPST {}", SIZE), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(
+        &format!("mesh nine cancel broadcast protocol MPST {}", SIZE),
+        |b| b.iter(|| all_mpst()),
+    );
 }
 
 fn long_warmup() -> Criterion {
