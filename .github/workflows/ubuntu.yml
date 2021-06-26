@@ -1,4 +1,4 @@
-name: Rust
+name: Rust Ubuntu
 
 on: [push]
 
@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
         rust: [stable, beta, nightly]
 
     steps:
