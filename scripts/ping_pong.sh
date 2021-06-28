@@ -2,10 +2,23 @@
 
 set -e
 
+# progress bar function
+prog() {
+    local w=80 p=$1;  shift
+    # create a string of spaces, then change them to dots
+    printf -v dots "%*s" "$(( $p*$w/100 ))" ""; dots=${dots// /.};
+    # print those dots on a fixed-width space plus the percentage etc. 
+    printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*"; 
+}
+
 # cargo bench --bench ping_pong -- --verbose
+
+sed -ier 's,},,g' benches/ping_pong.rs;
 
 for i in {1..500}
 do
+    prog "$((i/5))" still working...
+    #########################
     next=$(($i+1))
     cp benches/ping_pong_all/ping_pong_$i.rs benches/ping_pong_all/ping_pong_$next.rs
     sync
