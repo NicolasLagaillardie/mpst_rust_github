@@ -265,17 +265,15 @@ fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromAtoC::Login(s) => {
             let (_, s) = recv_mpst_c_from_a(s)?;
-            recurs_c(s)
+            recurs_c(s, 100)
         },
     })
 }
 
-fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
+fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
     let ((balance, overdraft), s) = recv_mpst_c_from_s(s)?;
 
-    let choice = thread_rng().gen_range(1..=2);
-
-    match choice {
+    match loops {
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
@@ -314,7 +312,7 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
 
             let s = send_mpst_c_to_s((payee, thread_rng().gen_range(1..=sum)), s);
 
-            recurs_c(s)
+            recurs_c(s, loops - 1)
         }
     }
 }

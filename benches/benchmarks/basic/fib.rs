@@ -261,7 +261,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-static SIZE: i64 = 10;
+static SIZE: i64 = 100;
 
 fn fibo_mpst(c: &mut Criterion) {
     c.bench_function(&format!("Fibo MPST {}", SIZE), |b| b.iter(|| all_mpst()));

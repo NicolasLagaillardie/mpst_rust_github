@@ -26,11 +26,13 @@ create_sessionmpst!(SessionMpstFour, 4);
 //         choice at Logs
 //         {
 //             Success(int) from Logs to Controller; // Logs is up
+//             continue Loop; 
 //         }
 //         or
 //         {
 //             Failure(Int) from Logs to Controller;
 //             Restart(Int) from Controller to Logs;
+//             continue Loop; 
 //         }
 //     }
 // }
@@ -234,7 +236,7 @@ fn endpoint_storage(s: EndpointStorage<i32>) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
     let (status, s) = recv_start_logs_from_controller(s)?;
-    recurs_logs(s, status, 20)
+    recurs_logs(s, status, 100)
 }
 
 fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<dyn Error>> {

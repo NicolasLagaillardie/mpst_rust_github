@@ -19,7 +19,7 @@ use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
 use macros::multiple::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAllMacroInput;
 use macros::multiple::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAllMacroInput;
-use macros::multiple::choose_mpst_multi_to_all::ChooseTypeMultiToAllMacroInput;
+use macros::multiple::choose_mpst_multi_to_all::ChooseMultiToAllMacroInput;
 use macros::multiple::close_mpst::CloseMpstMacroInput;
 use macros::multiple::close_mpst_cancel::CloseMpstCancelMacroInput;
 use macros::multiple::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
@@ -243,7 +243,7 @@ pub fn e_create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStre
 
 #[proc_macro]
 pub fn choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ChooseTypeMultiToAllMacroInput);
+    let input = parse_macro_input!(input as ChooseMultiToAllMacroInput);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }

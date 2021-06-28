@@ -61,13 +61,13 @@ create_recv_mpst_session_bundle!(
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_to_pawn, RolePawn, 1 |
-    recv_mpst_server_to_voter, RoleVoter, 2 | =>
+    recv_mpst_server_from_voter, RoleVoter, 2 | =>
     RoleServer, SessionMpstThree, 3
 );
 // VOTER
 create_recv_mpst_session_bundle!(
     recv_mpst_voter_to_pawn, RolePawn, 1 |
-    recv_mpst_voter_to_server, RoleServer, 2 | =>
+    recv_mpst_voter_from_server, RoleServer, 2 | =>
     RoleVoter, SessionMpstThree, 3
 );
 
@@ -142,14 +142,14 @@ type EndpointServer<N> = SessionMpstThree<
 
 // Functions
 fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
-    let auth = thread_rng().gen_range(1..=3);
+    let auth = thread_rng().gen_range(1..3);
 
     let s = send_mpst_voter_to_server(auth, s);
 
-    offer_mpst!(s, recv_mpst_voter_to_server, {
+    offer_mpst!(s, recv_mpst_voter_from_server, {
         Branching0fromStoV::Reject(s) => {
 
-            let (_, s) = recv_mpst_voter_to_server(s)?;
+            let (_, s) = recv_mpst_voter_from_server(s)?;
 
             close_mpst_multi(s)
         },
@@ -160,9 +160,9 @@ fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
-    let (ok, s) = recv_mpst_voter_to_server(s)?;
+    let (ok, s) = recv_mpst_voter_from_server(s)?;
 
-    let expected = thread_rng().gen_range(1..=3);
+    let expected = thread_rng().gen_range(1..3);
 
     if ok == expected {
         let s = choose_mpst_multi_to_all!(
@@ -220,9 +220,9 @@ fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=3);
+    let choice = thread_rng().gen_range(3..5);
 
-    let (auth, s) = recv_mpst_server_to_voter(s)?;
+    let (auth, s) = recv_mpst_server_from_voter(s)?;
 
     if choice == auth {
         let s = choose_mpst_multi_to_all!(
@@ -258,10 +258,10 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_server_to_voter, {
+    offer_mpst!(s, recv_mpst_server_from_voter, {
         Branching1fromVtoS::<i32>::Yes(s) => {
 
-            let (answer, s) = recv_mpst_server_to_voter(s)?;
+            let (answer, s) = recv_mpst_server_from_voter(s)?;
 
             assert_eq!(answer, 1);
 
@@ -269,7 +269,7 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
         },
         Branching1fromVtoS::<i32>::No(s) => {
 
-            let (answer, s) = recv_mpst_server_to_voter(s)?;
+            let (answer, s) = recv_mpst_server_from_voter(s)?;
 
             assert_eq!(answer, 0);
 

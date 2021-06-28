@@ -34,12 +34,14 @@ create_sessionmpst!(SessionMpstFour, 4);
 //             {
 //                 HardPing(Int) from Storage to Controller;
 //                 Response(Int) from Storage to Api;
+//                 continue Loop; 
 //             }
 //             or
 //             {
 //                 Failure(Int) from Storage to Controller;
 //                 Stop(Int) from Controller to Api;
 //                 Restart(Int) from Controller to Storage;
+//                 continue Loop; 
 //             }
 //         }
 //         or
@@ -47,6 +49,7 @@ create_sessionmpst!(SessionMpstFour, 4);
 //             Failure(Int) from Storage to Controller;
 //             Stop(Int) from Controller to Api;
 //             Restart(Int) from Controller to Storage;
+//             continue Loop; 
 //         }
 //     }
 // }
@@ -382,7 +385,7 @@ fn nested_logs(s: NestedLogs<i32>) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>> {
     let (status, s) = recv_start_storage_from_controller(s)?;
-    recurs_storage(s, status, 5, 0)
+    recurs_storage(s, status, 100, 0)
 }
 
 fn recurs_storage(

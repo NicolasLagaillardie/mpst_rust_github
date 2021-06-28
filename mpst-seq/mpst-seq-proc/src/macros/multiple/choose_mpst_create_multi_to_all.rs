@@ -6,9 +6,8 @@ use syn::{Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct ChooseMultiToAllMacroInput {
-    session: Vec<proc_macro2::TokenStream>,
-    labels: Vec<proc_macro2::TokenStream>,
+pub struct ChooseTypeCreateMultiToAllMacroInput {
+    name_macro: syn::Ident,
     receivers: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
     sessionmpst_name: syn::Ident,
@@ -30,23 +29,10 @@ fn expand_parenthesized(stream: &proc_macro2::TokenStream) -> Vec<proc_macro2::T
     out
 }
 
-impl Parse for ChooseMultiToAllMacroInput {
+impl Parse for ChooseTypeCreateMultiToAllMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        // The session
-        let content_session;
-        let _parentheses = syn::parenthesized!(content_session in input);
-        let session = proc_macro2::TokenStream::parse(&content_session)?;
-
-        let all_sessions: Vec<proc_macro2::TokenStream> = expand_parenthesized(&session);
-
-        <Token![,]>::parse(input)?;
-
-        // The labels
-        let content_labels;
-        let _parentheses = syn::parenthesized!(content_labels in input);
-        let labels = proc_macro2::TokenStream::parse(&content_labels)?;
-
-        let all_labels: Vec<proc_macro2::TokenStream> = expand_parenthesized(&labels);
+        // The name
+        let name_macro = syn::Ident::parse(input)?;
 
         <Token![,]>::parse(input)?;
 
@@ -79,9 +65,8 @@ impl Parse for ChooseMultiToAllMacroInput {
             panic!("The number of receivers and labels is not the same")
         };
 
-        Ok(ChooseMultiToAllMacroInput {
-            session: all_sessions,
-            labels: all_labels,
+        Ok(ChooseTypeCreateMultiToAllMacroInput {
+            name_macro,
             receivers: all_receivers,
             sender,
             sessionmpst_name,
@@ -91,13 +76,13 @@ impl Parse for ChooseMultiToAllMacroInput {
     }
 }
 
-impl From<ChooseMultiToAllMacroInput> for proc_macro2::TokenStream {
-    fn from(input: ChooseMultiToAllMacroInput) -> proc_macro2::TokenStream {
+impl From<ChooseTypeCreateMultiToAllMacroInput> for proc_macro2::TokenStream {
+    fn from(input: ChooseTypeCreateMultiToAllMacroInput) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl ChooseMultiToAllMacroInput {
+impl ChooseTypeCreateMultiToAllMacroInput {
     /// Create the whole matrix of index according to line and column
     fn diag(&self) -> VecOfTuple {
         let diff = self.nsessions - 1;
@@ -134,12 +119,7 @@ impl ChooseMultiToAllMacroInput {
     }
 
     fn expand(&self) -> proc_macro2::TokenStream {
-        let session = if let Some(elt) = self.session.get(usize::try_from(0).unwrap()) {
-            elt
-        } else {
-            panic!("Not enough sessions")
-        };
-        let all_labels = self.labels.clone();
+        let name_macro = self.name_macro.clone();
         let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();
         let sessionmpst_name = self.sessionmpst_name.clone();
@@ -285,42 +265,49 @@ impl ChooseMultiToAllMacroInput {
 
         quote! {
             {
-                #(
-                    #new_channels
-                )*
+                macro_rules! $name {
+                    (
+                        $session: expr ,
+                        $( $label: path , )+
+                    ) => {
+                        #(
+                            #new_channels
+                        )*
 
-                #(
-                    #new_roles
-                )*
+                        #(
+                            #new_roles
+                        )*
 
-                #(
-                    #new_names
-                )*
+                        #(
+                            #new_names
+                        )*
 
-                let ( #new_name_sender , _) =
-                    <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        let ( #new_name_sender , _) =
+                            <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-                let s = #session;
+                        let s = $session;
 
-                let _ = {
-                    fn temp(r: &mpstthree::role::broadcast::RoleBroadcast)
-                        -> Result<(), Box<dyn std::error::Error>>
-                    {
-                        Ok(())
+                        let _ = {
+                            fn temp(r: &mpstthree::role::broadcast::RoleBroadcast)
+                                -> Result<(), Box<dyn std::error::Error>>
+                            {
+                                Ok(())
+                            }
+                            temp(&s.stack)
+                        };
+
+                        #(
+                            #all_send
+                        )*
+
+                        #sessionmpst_name {
+                            #(
+                                #new_sessionmpst
+                            )*
+                            stack: #new_stack_sender ,
+                            name: #new_name_sender ,
+                        }
                     }
-                    temp(&s.stack)
-                };
-
-                #(
-                    #all_send
-                )*
-
-                #sessionmpst_name {
-                    #(
-                        #new_sessionmpst
-                    )*
-                    stack: #new_stack_sender ,
-                    name: #new_name_sender ,
                 }
             }
         }

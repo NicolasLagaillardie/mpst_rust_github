@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
+    choose_mpst_create_multi_to_all, close_mpst, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
     fork_mpst_multi, offer_mpst,
 };
@@ -21,13 +21,11 @@ create_sessionmpst!(SessionMpstFour, 4);
 //         choice at Logs
 //         {
 //             Success(int) from Logs to Controller; // Logs is up
-//             continue Loop; 
 //         }
 //         or
 //         {
 //             Failure(Int) from Logs to Controller;
 //             Restart(Int) from Controller to Logs;
-//             continue Loop; 
 //         }
 //     }
 // }
@@ -172,6 +170,16 @@ type EndpointLogsInit<N> = SessionMpstFour<
     NameLogs,
 >;
 
+choose_mpst_create_multi_to_all!(
+    choose_branch,
+    Api,
+    Controller,
+    Storage, =>
+    Logs,
+    SessionMpstFour,
+    3
+);
+
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_api_from_logs, {
         Branching0fromLtoA::Up(s) => {
@@ -245,17 +253,11 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
     match status {
         0 => {
             // Up
-            let s = choose_mpst_multi_to_all!(
+            let s = choose_branch!(
                 s,
                 Branching0fromLtoA::Up,
                 Branching0fromLtoC::Up,
-                Branching0fromLtoS::Up, =>
-                Api,
-                Controller,
-                Storage, =>
-                Logs,
-                SessionMpstFour,
-                3
+                Branching0fromLtoS::Up,
             );
 
             let success = random::<i32>();
@@ -279,17 +281,11 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
         }
         1 => {
             // Down
-            let s = choose_mpst_multi_to_all!(
+            let s = choose_branch!(
                 s,
                 Branching0fromLtoA::Down,
                 Branching0fromLtoC::Down,
-                Branching0fromLtoS::Down, =>
-                Api,
-                Controller,
-                Storage, =>
-                Logs,
-                SessionMpstFour,
-                3
+                Branching0fromLtoS::Down,
             );
 
             let failure = random::<i32>();

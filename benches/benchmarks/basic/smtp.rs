@@ -10,7 +10,6 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::time::Duration;
 
@@ -339,271 +338,255 @@ type Offer10fromCtoS = <Choose10fromCtoS as Session>::Dual;
 type EndpointS10 = SessionMpstTwo<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Functions
-fn endpoint_c_0(s: EndpointC0) -> Result<(), Box<dyn Error>> {
+fn endpoint_c_init(s: EndpointC0) -> Result<(), Box<dyn Error>> {
+    endpoint_c_0(s, 100)
+}
+
+fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_c_from_s(s)?;
 
-    let expected = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromCtoS::Quit, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoS::Continue, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-        let s = send_mpst_c_to_s((), s);
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromCtoS::Continue, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-        endpoint_c_1(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoS::Quit, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-
-        close_mpst_multi(s)
+            endpoint_c_1(s, loops)
+        }
     }
 }
 
-fn endpoint_c_1(s: EndpointC1) -> Result<(), Box<dyn Error>> {
+fn endpoint_c_1(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_s, {
         Branching1fromStoC::Continue(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_2(s)
+            endpoint_c_2(s, loops)
         },
         Branching1fromStoC::Loop(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_1(s)
+            endpoint_c_1(s, loops)
         },
     })
 }
 
-fn endpoint_c_2(s: EndpointC2) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching2fromCtoS::Quit, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching2fromCtoS::Continue, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-        let (_, s) = recv_mpst_c_from_s(s)?;
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching2fromCtoS::Continue, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-        endpoint_c_3(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching2fromCtoS::Quit, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
+            let (_, s) = recv_mpst_c_from_s(s)?;
 
-        let s = send_mpst_c_to_s((), s);
-
-        close_mpst_multi(s)
+            endpoint_c_3(s, loops)
+        }
     }
 }
 
-fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching3fromCtoS::Quit, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching3fromCtoS::Continue, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching3fromCtoS::Continue, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-        endpoint_c_4(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching3fromCtoS::Quit, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-
-        close_mpst_multi(s)
+            endpoint_c_4(s, loops)
+        }
     }
 }
 
-fn endpoint_c_4(s: EndpointC4) -> Result<(), Box<dyn Error>> {
+fn endpoint_c_4(s: EndpointC4, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_s, {
         Branching4fromStoC::Continue(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_5(s)
+            endpoint_c_5(s, loops)
         },
         Branching4fromStoC::Loop(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_4(s)
+            endpoint_c_4(s, loops)
         },
     })
 }
 
-fn endpoint_c_5(s: EndpointC5) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching5fromCtoS::Quit, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching5fromCtoS::Continue, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching5fromCtoS::Continue, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-        endpoint_c_6(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching5fromCtoS::Quit, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-
-        close_mpst_multi(s)
+            endpoint_c_6(s, loops)
+        }
     }
 }
 
-fn endpoint_c_6(s: EndpointC6) -> Result<(), Box<dyn Error>> {
+fn endpoint_c_6(s: EndpointC6, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_s, {
         Branching6fromStoC::Continue(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_7(s)
+            endpoint_c_7(s, loops)
         },
         Branching6fromStoC::Loop(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_6(s)
+            endpoint_c_6(s, loops)
         },
     })
 }
 
-fn endpoint_c_7(s: EndpointC7) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching7fromCtoS::Quit, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching7fromCtoS::Continue, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching7fromCtoS::Continue, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-        endpoint_c_8(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching7fromCtoS::Quit, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-
-        close_mpst_multi(s)
+            endpoint_c_8(s, loops)
+        }
     }
 }
 
-fn endpoint_c_8(s: EndpointC8) -> Result<(), Box<dyn Error>> {
+fn endpoint_c_8(s: EndpointC8, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_c_from_s, {
         Branching8fromStoC::Continue(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_9(s)
+            endpoint_c_9(s, loops)
         },
         Branching8fromStoC::Loop(s) => {
             let (_, s) = recv_mpst_c_from_s(s)?;
 
-            endpoint_c_7(s)
+            endpoint_c_7(s, loops)
         },
     })
 }
 
-fn endpoint_c_9(s: EndpointC9) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching9fromCtoS::Loop, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching9fromCtoS::Continue, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
+            let (_, s) = recv_mpst_c_from_s(s)?;
 
-        let s = send_mpst_c_to_s((), s);
-        let (_, s) = recv_mpst_c_from_s(s)?;
-        let s = send_mpst_c_to_s((), s);
-        let s = send_mpst_c_to_s((), s);
+            endpoint_c_9(s, loops)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching9fromCtoS::Continue, =>
+                RoleS, =>
+                RoleC, SessionMpstTwo, 1
+            );
 
-        endpoint_c_10(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching9fromCtoS::Loop, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
+            let s = send_mpst_c_to_s((), s);
+            let (_, s) = recv_mpst_c_from_s(s)?;
+            let s = send_mpst_c_to_s((), s);
+            let s = send_mpst_c_to_s((), s);
 
-        let s = send_mpst_c_to_s((), s);
-        let (_, s) = recv_mpst_c_from_s(s)?;
-
-        endpoint_c_9(s)
+            endpoint_c_10(s, loops)
+        }
     }
 }
 
-fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=3);
-
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching10fromCtoS::Data, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
-
-        let s = send_mpst_c_to_s((), s);
-        let s = send_mpst_c_to_s((), s);
-
-        endpoint_c_10(s)
-    } else if expected == 2 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching10fromCtoS::Subject, =>
-            RoleS, =>
-            RoleC, SessionMpstTwo, 1
-        );
-
-        let s = send_mpst_c_to_s((), s);
-        let s = send_mpst_c_to_s((), s);
-
-        endpoint_c_10(s)
-    } else {
+fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
+    if loops == 0 {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::End, =>
@@ -614,13 +597,41 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
         let s = send_mpst_c_to_s((), s);
         let (_, s) = recv_mpst_c_from_s(s)?;
 
-        endpoint_c_7(s)
+        endpoint_c_7(s, loops)
+    } else if loops % 2 == 1 {
+        let s = choose_mpst_multi_to_all!(
+            s,
+            Branching10fromCtoS::Subject, =>
+            RoleS, =>
+            RoleC, SessionMpstTwo, 1
+        );
+
+        let s = send_mpst_c_to_s((), s);
+        let s = send_mpst_c_to_s((), s);
+
+        endpoint_c_10(s, loops - 1)
+    } else {
+        let s = choose_mpst_multi_to_all!(
+            s,
+            Branching10fromCtoS::Data, =>
+            RoleS, =>
+            RoleC, SessionMpstTwo, 1
+        );
+
+        let s = send_mpst_c_to_s((), s);
+        let s = send_mpst_c_to_s((), s);
+
+        endpoint_c_10(s, loops - 1)
     }
 }
 
 ///
 
-fn endpoint_s_0(s: EndpointS0) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_init(s: EndpointS0) -> Result<(), Box<dyn Error>> {
+    endpoint_s_0(s, 100)
+}
+
+fn endpoint_s_0(s: EndpointS0, loops: i32) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_s_to_c((), s);
 
     offer_mpst!(s, recv_mpst_s_from_c, {
@@ -633,41 +644,42 @@ fn endpoint_s_0(s: EndpointS0) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_1(s)
+            endpoint_s_1(s, loops)
         },
     })
 }
 
-fn endpoint_s_1(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching1fromStoC::Loop, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching1fromStoC::Continue, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
+            endpoint_s_1(s, loops)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching1fromStoC::Continue, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-        endpoint_s_2(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching1fromStoC::Loop, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
-        let s = send_mpst_s_to_c((), s);
-
-        endpoint_s_1(s)
+            endpoint_s_2(s, loops)
+        }
     }
 }
 
-fn endpoint_s_2(s: EndpointS2) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_2(s: EndpointS2, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching2fromCtoS::Quit(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
@@ -678,12 +690,12 @@ fn endpoint_s_2(s: EndpointS2) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let s = send_mpst_s_to_c((), s);
 
-            endpoint_s_3(s)
+            endpoint_s_3(s, loops)
         },
     })
 }
 
-fn endpoint_s_3(s: EndpointS3) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_3(s: EndpointS3, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching3fromCtoS::Quit(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
@@ -693,40 +705,41 @@ fn endpoint_s_3(s: EndpointS3) -> Result<(), Box<dyn Error>> {
         Branching3fromCtoS::Continue(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_4(s)
+            endpoint_s_4(s, loops)
         },
     })
 }
 
-fn endpoint_s_4(s: EndpointS4) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching4fromStoC::Loop, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching4fromStoC::Continue, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
+            endpoint_s_4(s, loops)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching4fromStoC::Continue, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-        endpoint_s_5(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching4fromStoC::Loop, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
-
-        endpoint_s_4(s)
+            endpoint_s_5(s, loops)
+        }
     }
 }
 
-fn endpoint_s_5(s: EndpointS5) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_5(s: EndpointS5, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching5fromCtoS::Quit(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
@@ -736,40 +749,41 @@ fn endpoint_s_5(s: EndpointS5) -> Result<(), Box<dyn Error>> {
         Branching5fromCtoS::Continue(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_6(s)
+            endpoint_s_6(s, loops)
         },
     })
 }
 
-fn endpoint_s_6(s: EndpointS6) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching6fromStoC::Loop, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching6fromStoC::Continue, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
+            endpoint_s_6(s, loops)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching6fromStoC::Continue, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-        endpoint_s_7(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching6fromStoC::Loop, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
-
-        endpoint_s_6(s)
+            endpoint_s_7(s, loops)
+        }
     }
 }
 
-fn endpoint_s_7(s: EndpointS7) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_7(s: EndpointS7, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching7fromCtoS::Quit(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
@@ -779,46 +793,47 @@ fn endpoint_s_7(s: EndpointS7) -> Result<(), Box<dyn Error>> {
         Branching7fromCtoS::Continue(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_8(s)
+            endpoint_s_8(s, loops)
         },
     })
 }
 
-fn endpoint_s_8(s: EndpointS8) -> Result<(), Box<dyn Error>> {
-    let expected = thread_rng().gen_range(1..=2);
+fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching8fromStoC::Loop, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-    if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching8fromStoC::Continue, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
+            endpoint_s_7(s, loops)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching8fromStoC::Continue, =>
+                RoleC, =>
+                RoleS, SessionMpstTwo, 2
+            );
 
-        endpoint_s_9(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching8fromStoC::Loop, =>
-            RoleC, =>
-            RoleS, SessionMpstTwo, 2
-        );
+            let s = send_mpst_s_to_c((), s);
 
-        let s = send_mpst_s_to_c((), s);
-
-        endpoint_s_7(s)
+            endpoint_s_9(s, loops)
+        }
     }
 }
 
-fn endpoint_s_9(s: EndpointS9) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_9(s: EndpointS9, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching9fromCtoS::Loop(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let s = send_mpst_s_to_c((), s);
 
-            endpoint_s_9(s)
+            endpoint_s_9(s, loops)
         },
         Branching9fromCtoS::Continue(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
@@ -826,30 +841,30 @@ fn endpoint_s_9(s: EndpointS9) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_10(s)
+            endpoint_s_10(s, loops)
         },
     })
 }
 
-fn endpoint_s_10(s: EndpointS10) -> Result<(), Box<dyn Error>> {
+fn endpoint_s_10(s: EndpointS10, loops: i32) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching10fromCtoS::Data(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_10(s)
+            endpoint_s_10(s, loops -1)
         },
         Branching10fromCtoS::Subject(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_10(s)
+            endpoint_s_10(s, loops -1)
         },
         Branching10fromCtoS::End(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let s = send_mpst_s_to_c((), s);
 
-            endpoint_s_7(s)
+            endpoint_s_7(s, loops -1)
         },
     })
 }
@@ -857,7 +872,7 @@ fn endpoint_s_10(s: EndpointS10) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_0), black_box(endpoint_s_0));
+    let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_init), black_box(endpoint_s_init));
 
     thread_c.join().unwrap();
     thread_s.join().unwrap();
