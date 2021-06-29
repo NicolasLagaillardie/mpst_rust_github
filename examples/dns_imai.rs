@@ -34,13 +34,11 @@ create_multiple_normal_role_short!(Client, Other, Server);
 // Create new send functions
 // CLIENT
 create_send_mpst_session_bundle!(
-    send_mpst_client_to_other, RoleOther, 1 |
     send_mpst_client_to_server, RoleServer, 2 | =>
     RoleClient, SessionMpstThree, 3
 );
 // OTHER
 create_send_mpst_session_bundle!(
-    send_mpst_other_to_client, RoleClient, 1 |
     send_mpst_other_to_server, RoleServer, 2 | =>
     RoleOther, SessionMpstThree, 3
 );
@@ -54,13 +52,11 @@ create_send_mpst_session_bundle!(
 // Create new recv functions and related types
 // CLIENT
 create_recv_mpst_session_bundle!(
-    recv_mpst_client_from_other, RoleOther, 1 |
     recv_mpst_client_from_server, RoleServer, 2 | =>
     RoleClient, SessionMpstThree, 3
 );
 // OTHER
 create_recv_mpst_session_bundle!(
-    recv_mpst_other_from_client, RoleClient, 1 |
     recv_mpst_other_from_server, RoleServer, 2 | =>
     RoleOther, SessionMpstThree, 3
 );
@@ -141,7 +137,9 @@ fn endpoint_client(s: EndpointClient) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromServerToClient::Query(s) => {
 
-            let (_, s) = recv_mpst_client_from_server(s)?;
+            let ((new_address, _new_packet), s) = recv_mpst_client_from_server(s)?;
+
+            assert_eq!(new_address, -address);
 
             close_mpst_multi(s)
         },
