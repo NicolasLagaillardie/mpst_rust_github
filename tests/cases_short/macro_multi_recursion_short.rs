@@ -5,13 +5,13 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl, choose_mpst_multi_to_all, offer_mpst,
+    bundle_impl_with_enum, offer_mpst,
 };
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D => fork_mpst);
+bundle_impl_with_enum!(SessionMpst => A, B, D => fork_mpst);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -133,13 +133,10 @@ fn client_recurs(
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s: EndpointDVideo<i32> = choose_mpst_multi_to_all!(
+            let s: EndpointDVideo<i32> = choose_mpst_d_to_all!(
                 s,
                 Branches0AtoD::Video,
-                Branches0BtoD::Video, =>
-                RoleA, RoleB, =>
-                RoleD, SessionMpst,
-                3
+                Branches0BtoD::Video
             );
 
             let (_, s) = s.send(1).recv()?;
@@ -147,15 +144,10 @@ fn client_recurs(
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_multi_to_all!(
+            let s = choose_mpst_d_to_all!(
                 s,
                 Branches0AtoD::End,
-                Branches0BtoD::End, =>
-                RoleA,
-                RoleB, =>
-                RoleD,
-                SessionMpst,
-                3
+                Branches0BtoD::End
             );
 
             assert_eq!(index, 100);

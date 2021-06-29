@@ -5,20 +5,13 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl, choose_mpst_create_multi_to_all, close_mpst, create_recv_mpst_session, offer_mpst,
+    bundle_impl, choose_mpst_create_multi_to_all, offer_mpst,
 };
 use std::error::Error;
 use std::marker;
 
 // Create new roles
 bundle_impl!(SessionMpst => A, B, D => fork_mpst);
-
-// Create new recv functions and related types
-// normal
-create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 3, 2);
-
-close_mpst!(close_mpst_multi, SessionMpst, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -27,7 +20,7 @@ type NameD = RoleD<RoleEnd>;
 
 /// Test our usecase
 /// Simple types
-/// Client = C
+/// Client = D
 /// Authenticator = A
 /// Server = B
 
@@ -73,7 +66,6 @@ type StackDFull = RoleA<RoleA<StackDRecurs>>;
 
 /// Creating the MP sessions
 /// For D
-
 type EndpointDVideo<N> = SessionMpst<
     <AtoDVideo<N> as Session>::Dual,
     <RecursBtoD<N> as Session>::Dual,
@@ -99,7 +91,7 @@ choose_mpst_create_multi_to_all!(
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_from_d, {
+    offer_mpst!(s, {
         Branches0BtoD::End(s) => {
             s.close()
         },
@@ -119,7 +111,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_from_d, {
+    offer_mpst!(s, {
         Branches0AtoD::End(s) => {
             s.close()
         },

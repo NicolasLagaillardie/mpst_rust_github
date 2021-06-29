@@ -11,6 +11,7 @@ use mpstthree::bundle_impl;
 // Create new roles
 bundle_impl!(SessionMpst => A, B, C => fork_mpst);
 
+// Those types will be code generated
 type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
     Recv<Either<SessionMpst<S0, S1, R0, N0>, SessionMpst<S2, S3, R1, N0>>, End>;
 

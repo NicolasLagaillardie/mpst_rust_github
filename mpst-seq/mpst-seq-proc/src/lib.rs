@@ -14,6 +14,7 @@ use functionmpst::send_aux_simple::SendAuxSimpleMacroInput;
 mod macros;
 
 use macros::baking::BakingMacroInput;
+use macros::baking_with_enum::BakingWithEnumMacroInput;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShortMacroInput;
 use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
@@ -504,4 +505,18 @@ pub fn choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
     choose_mpst_create_multi_to_all(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_with_enum(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingWithEnumMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_with_enum(input: TokenStream) -> TokenStream {
+    baking_with_enum(input)
 }

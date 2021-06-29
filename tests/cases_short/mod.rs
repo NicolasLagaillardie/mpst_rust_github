@@ -14,6 +14,7 @@ pub mod macro_choice;
 pub mod macro_multi_choice;
 pub mod macro_multi_recursion;
 pub mod macro_multi_recursion_macro_of_macro;
+pub mod macro_multi_recursion_short;
 pub mod macro_multi_send_recv_sessionmpst;
 pub mod macro_multi_sessionmpst;
 pub mod macro_recursive;

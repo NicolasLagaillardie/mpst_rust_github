@@ -7,14 +7,10 @@ use std::marker;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::{bundle_impl, choose_mpst_multi_to_all, create_recv_mpst_session_2, offer_mpst};
+use mpstthree::{bundle_impl, choose_mpst_multi_to_all, offer_mpst};
 
 // Create new roles
 bundle_impl!(SessionMpst => A, B, C => fork_mpst);
-
-// Create new recv functions and related types
-create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
-create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -50,8 +46,7 @@ type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 /// Creating the MP sessions
-/// For D
-
+/// For C
 type EndpointCVideo<N> = SessionMpst<
     <AtoCVideo<N> as Session>::Dual,
     <RecursBtoC<N> as Session>::Dual,
@@ -71,7 +66,7 @@ type EndpointBRecurs<N> = SessionMpst<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_from_c, {
+    offer_mpst!(s, {
         Branches0BtoC::End(s) => {
             s.close()
         },
@@ -91,7 +86,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_from_c, {
+    offer_mpst!(s, {
         Branches0AtoC::End(s) => {
             s.close()
         },

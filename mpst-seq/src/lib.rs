@@ -1,6 +1,7 @@
 use proc_macro_hack::proc_macro_hack;
 
 pub use mpst_seq_proc::baking;
+pub use mpst_seq_proc::baking_with_enum;
 pub use mpst_seq_proc::broadcast_cancel;
 pub use mpst_seq_proc::choose_mpst_create_multi_to_all;
 pub use mpst_seq_proc::choose_mpst_multi_cancel_to_all;
@@ -129,3 +130,6 @@ pub use mpst_seq_proc::e_close_mpst_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_choose_mpst_create_multi_to_all;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_baking_with_enum;
