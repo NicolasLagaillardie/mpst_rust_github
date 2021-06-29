@@ -4,9 +4,7 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_impl, choose_mpst_multi_to_all, offer_mpst,
-};
+use mpstthree::{bundle_impl, choose_mpst_multi_to_all, offer_mpst};
 use std::error::Error;
 use std::marker;
 

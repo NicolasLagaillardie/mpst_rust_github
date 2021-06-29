@@ -2081,8 +2081,7 @@ impl BakingWithEnumMacroInput {
             .map(|sender| self.expand_close(all_roles.clone(), sender))
             .collect();
 
-        let choose_mpst_create_multi_to_all =
-            self.expand_choose_mpst_create_multi_to_all();
+        let choose_mpst_create_multi_to_all = self.expand_choose_mpst_create_multi_to_all();
 
         quote! {
             #[must_use]

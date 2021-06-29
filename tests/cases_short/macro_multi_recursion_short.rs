@@ -4,9 +4,7 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_impl_with_enum, offer_mpst,
-};
+use mpstthree::{bundle_impl_with_enum, offer_mpst};
 use std::error::Error;
 use std::marker;
 
@@ -133,22 +131,15 @@ fn client_recurs(
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s: EndpointDVideo<i32> = choose_mpst_d_to_all!(
-                s,
-                Branches0AtoD::Video,
-                Branches0BtoD::Video
-            );
+            let s: EndpointDVideo<i32> =
+                choose_mpst_d_to_all!(s, Branches0AtoD::Video, Branches0BtoD::Video);
 
             let (_, s) = s.send(1).recv()?;
 
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_d_to_all!(
-                s,
-                Branches0AtoD::End,
-                Branches0BtoD::End
-            );
+            let s = choose_mpst_d_to_all!(s, Branches0AtoD::End, Branches0BtoD::End);
 
             assert_eq!(index, 100);
 
