@@ -1839,9 +1839,8 @@ impl BakingWithEnumMacroInput {
                 let name_macro = if let Some(elt) =
                     all_roles.get(usize::try_from(sender - 1).unwrap())
                 {
-                    let name = String::from(format!("choose_mpst_{}_to_all", elt));
                     syn::Ident::new(
-                        &name.to_lowercase(),
+                        &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
                         proc_macro2::Span::call_site(),
                     )
                 } else {
