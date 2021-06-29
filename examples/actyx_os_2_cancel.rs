@@ -1,8 +1,8 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
+    choose_mpst_multi_to_all, close_mpst_cancel, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, create_sessionmpst,
     fork_mpst_multi, offer_mpst,
 };
 
@@ -58,16 +58,16 @@ create_multiple_normal_role!(
 );
 
 // Create send
-create_send_mpst_session_bundle!(
+create_send_mpst_cancel_bundle!(
     send_request_storage, Storage, 3 | =>
     Api, SessionMpstFour, 4
 );
-create_send_mpst_session_bundle!(
+create_send_mpst_cancel_bundle!(
     send_start_controller_to_api, Api, 1 |
     send_start_controller_to_storage, Storage, 3 | =>
     Controller, SessionMpstFour, 4
 );
-create_send_mpst_session_bundle!(
+create_send_mpst_cancel_bundle!(
     send_response_storage_to_api, Api, 1 |
     send_new_status_storage_to_controller, Controller, 2 |
     send_storage_to_logs, Logs, 3 | =>
@@ -95,7 +95,7 @@ create_recv_mpst_session_bundle!(
 );
 
 // Create close function
-close_mpst!(close_mpst_multi, SessionMpstFour, 4);
+close_mpst_cancel!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);
@@ -232,7 +232,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Request to Storage: {}", request);
 
-            let s = send_request_storage(request, s);
+            let s = send_request_storage(request, s)?;
 
             nested_api(s)
         },
@@ -274,7 +274,7 @@ fn nested_api(s: NestedApi<i32>) -> Result<(), Box<dyn Error>> {
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
     println!("Send start to Storage: {}", 0);
 
-    let s = send_start_controller_to_storage(0, s);
+    let s = send_start_controller_to_storage(0, s)?;
 
     recurs_controller(s)
 }
@@ -291,7 +291,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Send start to API: {}", start);
 
-            let s = send_start_controller_to_api(start, s);
+            let s = send_start_controller_to_api(start, s)?;
 
             nested_controller(s)
         },
@@ -305,11 +305,11 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Send stop to API: {}", stop);
 
-            let s = send_start_controller_to_api(stop, s);
+            let s = send_start_controller_to_api(stop, s)?;
 
             println!("Send start to Storage: {}", 0);
 
-            let s = send_start_controller_to_storage(0, s);
+            let s = send_start_controller_to_storage(0, s)?;
             recurs_controller(s)
         },
         Branching0fromStoC::Close(s) => {
@@ -338,11 +338,11 @@ fn nested_controller(s: NestedController<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Send stop to API: {}", stop);
 
-            let s = send_start_controller_to_api(stop, s);
+            let s = send_start_controller_to_api(stop, s)?;
 
             println!("Send start to Storage: {}", 0);
 
-            let s = send_start_controller_to_storage(0, s);
+            let s = send_start_controller_to_storage(0, s)?;
 
             recurs_controller(s)
         },
@@ -404,7 +404,7 @@ fn recurs_storage(
 
             println!("Storage restarted: {}", success);
 
-            let s = send_new_status_storage_to_controller(success, s);
+            let s = send_new_status_storage_to_controller(success, s)?;
 
             let (request, s) = recv_request_storage_from_api(s)?;
 
@@ -439,7 +439,7 @@ fn recurs_storage(
 
             println!("Failure of Storage: {}", failure);
 
-            let s = send_new_status_storage_to_controller(failure, s);
+            let s = send_new_status_storage_to_controller(failure, s)?;
 
             let (restart, s) = recv_start_storage_from_controller(s)?;
 
@@ -504,9 +504,9 @@ fn nested_storage(
 
             println!("Send hard ping: {}", ping);
 
-            let s = send_new_status_storage_to_controller(ping, s);
+            let s = send_new_status_storage_to_controller(ping, s)?;
 
-            let s = send_response_storage_to_api(-payload, s);
+            let s = send_response_storage_to_api(-payload, s)?;
 
             recurs_storage(s, 0, loops - 1, payload)
         }
@@ -528,7 +528,7 @@ fn nested_storage(
 
             println!("Failure of Storage: {}", failure);
 
-            let s = send_new_status_storage_to_controller(failure, s);
+            let s = send_new_status_storage_to_controller(failure, s)?;
 
             let (start, s) = recv_start_storage_from_controller(s)?;
 

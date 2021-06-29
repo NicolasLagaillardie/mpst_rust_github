@@ -34,14 +34,14 @@ create_sessionmpst!(SessionMpstFour, 4);
 //             {
 //                 HardPing(Int) from Storage to Controller;
 //                 Response(Int) from Storage to Api;
-//                 continue Loop; 
+//                 continue Loop;
 //             }
 //             or
 //             {
 //                 Failure(Int) from Storage to Controller;
 //                 Stop(Int) from Controller to Api;
 //                 Restart(Int) from Controller to Storage;
-//                 continue Loop; 
+//                 continue Loop;
 //             }
 //         }
 //         or
@@ -49,7 +49,7 @@ create_sessionmpst!(SessionMpstFour, 4);
 //             Failure(Int) from Storage to Controller;
 //             Stop(Int) from Controller to Api;
 //             Restart(Int) from Controller to Storage;
-//             continue Loop; 
+//             continue Loop;
 //         }
 //     }
 // }

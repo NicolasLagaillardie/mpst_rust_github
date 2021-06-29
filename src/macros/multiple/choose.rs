@@ -265,6 +265,73 @@ macro_rules! choose_mpst_multi_to_all {
     }
 }
 
+/// Create a macro that simplifies the usage of
+/// [`mpstthree::choose_mpst_multi_to_all`](../macro.choose_mpst_multi_to_all.html)
+///
+/// # Arguments
+///
+///  * The name of the new macro
+///  * The different passive roles
+///  * The name of the sender
+///  * The name of the *SessionMpst* type that will be used
+///  * The index of the active role
+///
+/// # Example
+///
+/// Available on the *cases_short/macro_multi_recursion_macro_of_macro* test.
+///
+/// ```ignore
+/// choose_mpst_create_multi_to_all!(
+///     choose_mpst_client_to_all,
+///     RoleA, RoleB, =>
+///     RoleD, SessionMpst,
+///     3
+/// );
+///
+/// match xs.pop() {
+///     Option::Some(_) => {
+///         let s: EndpointDVideo<i32> = choose_mpst_client_to_all!(
+///             s,
+///             Branches0AtoD::Video,
+///             Branches0BtoD::Video,
+///         );
+///
+///         let (_, s) = s.send(1).recv()?;
+///
+///         client_recurs(s, xs, index + 1)
+///     }
+///     Option::None => {
+///         let s = choose_mpst_client_to_all!(
+///             s,
+///             Branches0AtoD::End,
+///             Branches0BtoD::End,
+///         );
+///
+///         assert_eq!(index, 100);
+///
+///         s.close()
+///     }
+/// }
+/// ```
+#[macro_export]
+macro_rules! choose_mpst_create_multi_to_all {
+    (
+        $name: expr,
+        $( $receiver: ident , )+ =>
+        $sender: ident,
+        $sessionmpst_name: ident,
+        $exclusion: literal
+    ) => {
+        mpst_seq::choose_mpst_create_multi_to_all!(
+            $name ,
+            ( $( $receiver , )* ) ,
+            $sender ,
+            $sessionmpst_name ,
+            $exclusion
+        );
+    }
+}
+
 /// Choose among different sessions that are provided, for protocols with more than 3 participants,
 /// may fail because of a canceled session. Need to exclude the first participant
 ///

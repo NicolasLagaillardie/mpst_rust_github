@@ -1,8 +1,8 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_create_multi_to_all, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, create_sessionmpst,
+    choose_mpst_multi_to_all, close_mpst_cancel, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, create_sessionmpst,
     fork_mpst_multi, offer_mpst,
 };
 
@@ -21,11 +21,13 @@ create_sessionmpst!(SessionMpstFour, 4);
 //         choice at Logs
 //         {
 //             Success(int) from Logs to Controller; // Logs is up
+//             continue Loop;
 //         }
 //         or
 //         {
 //             Failure(Int) from Logs to Controller;
 //             Restart(Int) from Controller to Logs;
+//             continue Loop;
 //         }
 //     }
 // }
@@ -39,7 +41,7 @@ create_multiple_normal_role!(
 );
 
 // Create send
-create_send_mpst_session_bundle!(
+create_send_mpst_cancel_bundle!(
     send_start_controller_to_logs,
     Logs,
     2 | =>
@@ -47,7 +49,7 @@ create_send_mpst_session_bundle!(
     SessionMpstFour,
     4
 );
-create_send_mpst_session_bundle!(
+create_send_mpst_cancel_bundle!(
     send_logs_to_api,
     Api,
     1 |
@@ -97,7 +99,7 @@ create_recv_mpst_session_bundle!(
 );
 
 // Create close function
-close_mpst!(close_mpst_multi, SessionMpstFour, 4);
+close_mpst_cancel!(close_mpst_multi, SessionMpstFour, 4);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);
@@ -170,16 +172,6 @@ type EndpointLogsInit<N> = SessionMpstFour<
     NameLogs,
 >;
 
-choose_mpst_create_multi_to_all!(
-    choose_branch,
-    Api,
-    Controller,
-    Storage, =>
-    Logs,
-    SessionMpstFour,
-    3
-);
-
 fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_api_from_logs, {
         Branching0fromLtoA::Up(s) => {
@@ -197,7 +189,7 @@ fn endpoint_api(s: EndpointApi<i32>) -> Result<(), Box<dyn Error>> {
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
     println!("Send start to Logs: {}", 0);
 
-    let s = send_start_controller_to_logs(0, s);
+    let s = send_start_controller_to_logs(0, s)?;
 
     recurs_controller(s)
 }
@@ -220,7 +212,7 @@ fn recurs_controller(s: EndpointController<i32>) -> Result<(), Box<dyn Error>> {
 
             println!("Send restart to Logs: {}", 0);
 
-            let s = send_start_controller_to_logs(0, s);
+            let s = send_start_controller_to_logs(0, s)?;
 
             recurs_controller(s)
         },
@@ -253,18 +245,24 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
     match status {
         0 => {
             // Up
-            let s = choose_branch!(
+            let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromLtoA::Up,
                 Branching0fromLtoC::Up,
-                Branching0fromLtoS::Up,
+                Branching0fromLtoS::Up, =>
+                Api,
+                Controller,
+                Storage, =>
+                Logs,
+                SessionMpstFour,
+                3
             );
 
             let success = random::<i32>();
 
             println!("Logs is up: {}", success);
 
-            let s = send_failure_logs_to_controller(success, s);
+            let s = send_failure_logs_to_controller(success, s)?;
 
             if loops < 0 {
                 recurs_logs(s, 2, loops - 1)
@@ -281,18 +279,24 @@ fn recurs_logs(s: EndpointLogs<i32>, status: i32, loops: i32) -> Result<(), Box<
         }
         1 => {
             // Down
-            let s = choose_branch!(
+            let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromLtoA::Down,
                 Branching0fromLtoC::Down,
-                Branching0fromLtoS::Down,
+                Branching0fromLtoS::Down, =>
+                Api,
+                Controller,
+                Storage, =>
+                Logs,
+                SessionMpstFour,
+                3
             );
 
             let failure = random::<i32>();
 
             println!("Logs is down: {}", failure);
 
-            let s = send_failure_logs_to_controller(failure, s);
+            let s = send_failure_logs_to_controller(failure, s)?;
 
             let (response, s) = recv_start_logs_from_controller(s)?;
 

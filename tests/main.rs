@@ -227,6 +227,9 @@ fn cases_tests_mpst_macro_short() {
     // Macro multi recursion
     cases_short::macro_multi_recursion::new_run_usecase_recursive();
 
+    // Macro multi choice with macro of macro
+    cases_short::macro_multi_recursion_macro_of_macro::new_run_usecase_recursive();
+
     // Macro multi recursion for shorting
     cases_short::long_simple_three_mpst_short::shorten_main();
 }

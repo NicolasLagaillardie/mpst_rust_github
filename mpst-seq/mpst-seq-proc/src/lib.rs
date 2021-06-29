@@ -17,6 +17,7 @@ use macros::baking::BakingMacroInput;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShortMacroInput;
 use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
+use macros::multiple::choose_mpst_create_multi_to_all::ChooseMultiCreateToAllMacroInput;
 use macros::multiple::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAllMacroInput;
 use macros::multiple::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAllMacroInput;
 use macros::multiple::choose_mpst_multi_to_all::ChooseMultiToAllMacroInput;
@@ -489,4 +490,18 @@ pub fn close_mpst_cancel(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_close_mpst_cancel(input: TokenStream) -> TokenStream {
     close_mpst_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseMultiCreateToAllMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
+    choose_mpst_create_multi_to_all(input)
 }

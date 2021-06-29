@@ -46,39 +46,6 @@ impl Parse for BakingMacroInput {
             Vec::new()
         };
 
-        // https://stackoverflow.com/questions/57342132/how-to-find-the-correct-return-type-for-synparse
-
-        // if fork_mpst.is_empty() {
-        //     Ok(BakingMacroInput {
-        //         sessionmpst_name,
-        //         all_roles,
-        //         number_roles,
-        //         fork_mpst,
-        //     })
-        // } else {
-        //     // let mut branching = Vec::new();
-
-        //     while input.peek(Token![,]) {
-        //         let _fn_name = syn::Ident::parse(input)?;
-        //         <Token![,]>::parse(input)?;
-
-        //         let _all_paths = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
-        //         <Token![,]>::parse(input)?;
-
-        //         // let return_type = syn::TypeGenerics::parse(input)?;
-        //         // <Token![,]>::parse(input)?;
-
-        //         let _index = syn::LitInt::parse(input)?;
-        //     }
-
-        //     Ok(BakingMacroInput {
-        //         sessionmpst_name,
-        //         all_roles,
-        //         number_roles,
-        //         fork_mpst,
-        //     })
-        // }
-
         Ok(BakingMacroInput {
             sessionmpst_name,
             all_roles,

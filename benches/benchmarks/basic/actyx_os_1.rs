@@ -26,13 +26,13 @@ create_sessionmpst!(SessionMpstFour, 4);
 //         choice at Logs
 //         {
 //             Success(int) from Logs to Controller; // Logs is up
-//             continue Loop; 
+//             continue Loop;
 //         }
 //         or
 //         {
 //             Failure(Int) from Logs to Controller;
 //             Restart(Int) from Controller to Logs;
-//             continue Loop; 
+//             continue Loop;
 //         }
 //     }
 // }
