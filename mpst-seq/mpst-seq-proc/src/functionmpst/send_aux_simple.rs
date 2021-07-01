@@ -4,8 +4,8 @@ use syn::{Result, Token};
 
 #[derive(Debug)]
 pub struct SendAuxSimpleMacroInput {
-    session: proc_macro2::TokenStream,
-    payload: proc_macro2::TokenStream,
+    session: syn::Expr,
+    payload: syn::Expr,
     role: syn::Ident,
     exclusion: u64,
 }
@@ -18,14 +18,10 @@ impl Parse for SendAuxSimpleMacroInput {
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let content_session;
-        let _parentheses = syn::parenthesized!(content_session in input);
-        let session = proc_macro2::TokenStream::parse(&content_session)?;
+        let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let content_payload;
-        let _parentheses = syn::parenthesized!(content_payload in input);
-        let payload = proc_macro2::TokenStream::parse(&content_payload)?;
+        let payload = syn::Expr::parse(input)?;
 
         Ok(SendAuxSimpleMacroInput {
             session,

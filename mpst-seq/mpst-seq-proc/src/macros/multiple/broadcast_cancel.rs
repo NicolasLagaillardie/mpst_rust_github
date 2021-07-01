@@ -4,7 +4,7 @@ use syn::{Result, Token};
 
 #[derive(Debug)]
 pub struct BroadcastCancelMacroInput {
-    session: proc_macro2::TokenStream,
+    session: syn::Expr,
     nsessions: syn::LitInt,
 }
 
@@ -13,9 +13,7 @@ impl Parse for BroadcastCancelMacroInput {
         let nsessions = syn::LitInt::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let content_session;
-        let _parentheses = syn::parenthesized!(content_session in input);
-        let session = proc_macro2::TokenStream::parse(&content_session)?;
+        let session = syn::Expr::parse(input)?;
 
         Ok(BroadcastCancelMacroInput { session, nsessions })
     }

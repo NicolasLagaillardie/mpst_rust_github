@@ -14,6 +14,6 @@ macro_rules! send_cancel {
 #[macro_export]
 macro_rules! broadcast_cancel {
     ($session: expr, $nsessions: literal) => {
-        mpst_seq::broadcast_cancel!($nsessions, ($session));
+        mpst_seq::broadcast_cancel!($nsessions, $session);
     };
 }

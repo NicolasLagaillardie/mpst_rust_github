@@ -35,7 +35,7 @@
 macro_rules! recv_mpst {
     ($session: expr, $sender: ident, $receiver: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::recv_mpst!(
-            ($session),
+            $session,
             $sender,
             $receiver,
             $sessionmpst_name,
@@ -167,7 +167,7 @@ macro_rules! create_recv_mpst_session_bundle {
 ///
 /// create_sessionmpst!(SessionMpst, 3);
 ///
-/// create_recv_mpst_all_session!(recv_mpst_a_all_to_d, RoleAlltoD, RoleA, SessionMpst, 3, 2);
+/// create_recv_mpst_all_session!(recv_mpst_a_all_from_d, RoleAlltoD, RoleA, SessionMpst, 3, 2);
 /// ```
 #[macro_export]
 macro_rules! create_recv_mpst_all_session {

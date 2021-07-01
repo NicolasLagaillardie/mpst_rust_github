@@ -1,25 +1,44 @@
+//! Generates code for allowing a role, among three roles, to receive
+//! their new SessionMPST from an active role in a binary choice.
+//!
+//! # Arguments
+//!
+//! * The dual of the name of the head of the stack of the active role
+//! * The index of the binary channel among the two of the passive role
+//! * The current session representing the passive role
+//!
+//! # Example
+//!
+//! ```ignore
+//! // Among A, B and C, if B is the active role
+//! // then the head of the stack of B is
+//! // *RoleBtoAll* and its dual is *RoleAlltoB*.
+//! // If A is the current receiving role,
+//! // Then its binary channel with B is the first
+//! // one.
+//! mpst_seq::recv_all_aux_simple!(s, RoleAlltoB, 1)()
+//! ```
+
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
 #[derive(Debug)]
 pub struct RecvAllAuxSimpleMacroInput {
-    session: proc_macro2::TokenStream,
+    session: syn::Expr,
     role: syn::Ident,
     exclusion: u64,
 }
 
 impl Parse for RecvAllAuxSimpleMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let role = syn::Ident::parse(input)?;
+        let role = syn::Ident::parse(input)?; // Retrive the role
         <Token![,]>::parse(input)?;
 
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap(); // Retrive the index
         <Token![,]>::parse(input)?;
 
-        let content_session;
-        let _parentheses = syn::parenthesized!(content_session in input);
-        let session = proc_macro2::TokenStream::parse(&content_session)?;
+        let session = syn::Expr::parse(input)?;
 
         Ok(RecvAllAuxSimpleMacroInput {
             session,

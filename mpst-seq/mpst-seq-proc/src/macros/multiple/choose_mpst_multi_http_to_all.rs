@@ -7,7 +7,7 @@ type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct ChooseTypeMultiHttpToAllMacroInput {
-    session: Vec<proc_macro2::TokenStream>,
+    session: syn::Expr,
     labels: Vec<proc_macro2::TokenStream>,
     receivers: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
@@ -33,12 +33,7 @@ fn expand_parenthesized(stream: &proc_macro2::TokenStream) -> Vec<proc_macro2::T
 impl Parse for ChooseTypeMultiHttpToAllMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         // The session
-        let content_session;
-        let _parentheses = syn::parenthesized!(content_session in input);
-        let session = proc_macro2::TokenStream::parse(&content_session)?;
-
-        let all_sessions: Vec<proc_macro2::TokenStream> = expand_parenthesized(&session);
-
+        let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The labels
@@ -80,7 +75,7 @@ impl Parse for ChooseTypeMultiHttpToAllMacroInput {
         };
 
         Ok(ChooseTypeMultiHttpToAllMacroInput {
-            session: all_sessions,
+            session,
             labels: all_labels,
             receivers: all_receivers,
             sender,
@@ -134,11 +129,7 @@ impl ChooseTypeMultiHttpToAllMacroInput {
     }
 
     fn expand(&self) -> proc_macro2::TokenStream {
-        let session = if let Some(elt) = self.session.get(usize::try_from(0).unwrap()) {
-            elt
-        } else {
-            panic!("Not enough sessions")
-        };
+        let session = self.session.clone();
         let all_labels = self.labels.clone();
         let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();

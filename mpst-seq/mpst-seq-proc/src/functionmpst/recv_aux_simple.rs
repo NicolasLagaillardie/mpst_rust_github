@@ -4,7 +4,7 @@ use syn::{Result, Token};
 
 #[derive(Debug)]
 pub struct RecvAuxSimpleMacroInput {
-    session: proc_macro2::TokenStream,
+    session: syn::Expr,
     role: syn::Ident,
     exclusion: u64,
 }
@@ -17,9 +17,7 @@ impl Parse for RecvAuxSimpleMacroInput {
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let content;
-        let _parentheses = syn::parenthesized!(content in input);
-        let session = proc_macro2::TokenStream::parse(&content)?;
+        let session = syn::Expr::parse(input)?;
 
         Ok(RecvAuxSimpleMacroInput {
             session,

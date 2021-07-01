@@ -19,7 +19,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Bo
 #[macro_export]
 macro_rules! recv_aux_simple {
     ($session: expr, $role: ident, $exclusion: literal) => {
-        mpst_seq::recv_aux_simple!($role, $exclusion, ($session));
+        mpst_seq::recv_aux_simple!($role, $exclusion, $session);
     };
 }
 
@@ -27,7 +27,7 @@ macro_rules! recv_aux_simple {
 #[macro_export]
 macro_rules! recv_all_aux_simple {
     ($session: expr, $role: ident, $exclusion: literal) => {
-        mpst_seq::recv_all_aux_simple!($role, $exclusion, ($session));
+        mpst_seq::recv_all_aux_simple!($role, $exclusion, $session);
     };
 }
 
@@ -505,7 +505,7 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
 #[doc(hidden)]
-pub fn recv_mpst_a_all_to_b<T, S1, S2>(
+pub fn recv_mpst_a_all_from_b<T, S1, S2>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
 where
@@ -522,7 +522,7 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
 #[doc(hidden)]
-pub fn recv_mpst_a_all_to_c<T, S1, S2>(
+pub fn recv_mpst_a_all_from_c<T, S1, S2>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
 where
@@ -539,7 +539,7 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
 #[doc(hidden)]
-pub fn recv_mpst_b_all_to_a<T, S1, S2>(
+pub fn recv_mpst_b_all_from_a<T, S1, S2>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
 where
@@ -556,7 +556,7 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
 #[doc(hidden)]
-pub fn recv_mpst_b_all_to_c<T, S1, S2>(
+pub fn recv_mpst_b_all_from_c<T, S1, S2>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
 where
@@ -573,7 +573,7 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
 #[doc(hidden)]
-pub fn recv_mpst_c_all_to_a<T, S1, S2>(
+pub fn recv_mpst_c_all_from_a<T, S1, S2>(
     s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
 where
@@ -590,7 +590,7 @@ where
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
 #[doc(hidden)]
-pub fn recv_mpst_c_all_to_b<T, S1, S2>(
+pub fn recv_mpst_c_all_from_b<T, S1, S2>(
     s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
 where

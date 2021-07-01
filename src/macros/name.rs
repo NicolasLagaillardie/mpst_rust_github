@@ -314,7 +314,9 @@ macro_rules! create_broadcast_role {
 #[macro_export]
 macro_rules! create_multiple_broadcast_role {
     ($( $role_name: ident, $dual_name: ident | )+ ) => {
-        $(mpstthree::create_broadcast_role!($role_name, $dual_name);)+
+        $(
+            mpstthree::create_broadcast_role!($role_name, $dual_name);
+        )+
      }
 }
 
@@ -345,7 +347,7 @@ macro_rules! create_multiple_broadcast_role {
 #[macro_export]
 macro_rules! create_normal_role_short {
     ($role_name: ident) => {
-        mpst_seq::create_normal_role_short!(($role_name));
+        mpst_seq::create_normal_role_short!($role_name);
     };
 }
 
@@ -375,7 +377,9 @@ macro_rules! create_normal_role_short {
 #[macro_export]
 macro_rules! create_multiple_normal_role_short {
     ($( $role_name: ident),+ $(,)? ) => {
-        $(mpstthree::create_normal_role_short!($role_name);)+
+        $(
+            mpstthree::create_normal_role_short!($role_name);
+        )+
      }
 }
 
@@ -406,7 +410,7 @@ macro_rules! create_multiple_normal_role_short {
 #[macro_export]
 macro_rules! create_broadcast_role_short {
     ($role_name: ident) => {
-        mpst_seq::create_broadcast_role_short!(($role_name));
+        mpst_seq::create_broadcast_role_short!($role_name);
     };
 }
 
@@ -438,6 +442,8 @@ macro_rules! create_broadcast_role_short {
 #[macro_export]
 macro_rules! create_multiple_broadcast_role_short {
     ($( $role_name: ident),+ $(,)? ) => {
-        $(mpstthree::create_broadcast_role_short!($role_name);)+
+        $(
+            mpstthree::create_broadcast_role_short!($role_name);
+        )+
      }
 }

@@ -3,8 +3,8 @@
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::Session;
 use crate::functionmpst::recv::{
-    recv_mpst_a_all_to_b, recv_mpst_a_all_to_c, recv_mpst_b_all_to_a, recv_mpst_b_all_to_c,
-    recv_mpst_c_all_to_a, recv_mpst_c_all_to_b,
+    recv_mpst_a_all_from_b, recv_mpst_a_all_from_c, recv_mpst_b_all_from_a, recv_mpst_b_all_from_c,
+    recv_mpst_c_all_from_a, recv_mpst_c_all_from_b,
 };
 use crate::functionmpst::OfferMpst;
 use crate::role::a::RoleA;
@@ -92,7 +92,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_a_all_to_b(s)?;
+    let (e, s) = recv_mpst_a_all_from_b(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -133,7 +133,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_a_all_to_c(s)?;
+    let (e, s) = recv_mpst_a_all_from_c(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -174,7 +174,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_b_all_to_a(s)?;
+    let (e, s) = recv_mpst_b_all_from_a(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -215,7 +215,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_b_all_to_c(s)?;
+    let (e, s) = recv_mpst_b_all_from_c(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -256,7 +256,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_c_all_to_a(s)?;
+    let (e, s) = recv_mpst_c_all_from_a(s)?;
     cancel(s);
     e.either(f, g)
 }
@@ -297,7 +297,7 @@ where
     F: FnOnce(SessionMpst<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     G: FnOnce(SessionMpst<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
 {
-    let (e, s) = recv_mpst_c_all_to_b(s)?;
+    let (e, s) = recv_mpst_c_all_from_b(s)?;
     cancel(s);
     e.either(f, g)
 }

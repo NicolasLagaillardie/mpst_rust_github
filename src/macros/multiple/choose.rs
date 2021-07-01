@@ -255,7 +255,7 @@ macro_rules! choose_mpst_multi_to_all {
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
-            ( $session ) ,
+            $session ,
             ( $( $label , )* ) ,
             ( $( $receiver , )* ) ,
             $sender ,
@@ -437,7 +437,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_cancel_to_all!(
-            ( $session ) ,
+            $session ,
             ( $( $label , )* ) ,
             ( $( $receiver , )* ) ,
             $pawn ,
@@ -504,7 +504,7 @@ macro_rules! choose_mpst_multi_http_to_all {
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_http_to_all!(
-            ( $session ) ,
+            $session ,
             ( $( $label , )* ) ,
             ( $( $receiver , )* ) ,
             $sender ,

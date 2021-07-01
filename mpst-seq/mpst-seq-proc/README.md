@@ -1,3 +1,5 @@
-mpst-seq-proc
+# Annex library to run the procedural for mpst-seq
 
-Please refer to [https://github.com/NicolasLagaillardie/mpst_rust_github/](https://github.com/NicolasLagaillardie/mpst_rust_github/).
+This library contains the different procedural macros for [https://github.com/NicolasLagaillardie/mpst_rust_github/mpst-seq/](https://github.com/NicolasLagaillardie/mpst_rust_github/mpst-seq/).
+
+The tests for the different functions are the ones in [https://github.com/NicolasLagaillardie/mpst_rust_github/](https://github.com/NicolasLagaillardie/mpst_rust_github/).

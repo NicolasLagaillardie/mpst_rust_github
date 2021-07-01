@@ -35,8 +35,8 @@
 macro_rules! send_mpst {
     ($session: expr, $payload: expr, $receiver: ident, $sender: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::send_mpst!(
-            ($session),
-            ($payload),
+            $session,
+            $payload,
             $receiver,
             $sender,
             $sessionmpst_name,

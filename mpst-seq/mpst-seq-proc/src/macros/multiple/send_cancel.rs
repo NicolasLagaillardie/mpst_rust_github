@@ -8,7 +8,7 @@ pub struct SendCancelMacroInput {
     name: syn::Ident,
     sessionmpst_name: syn::Ident,
     nsessions: u64,
-    msg: proc_macro2::TokenStream,
+    msg: syn::Expr,
 }
 
 impl Parse for SendCancelMacroInput {
@@ -25,9 +25,7 @@ impl Parse for SendCancelMacroInput {
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let content_msg;
-        let _parentheses = syn::parenthesized!(content_msg in input);
-        let msg = proc_macro2::TokenStream::parse(&content_msg)?;
+        let msg = syn::Expr::parse(input)?;
 
         Ok(SendCancelMacroInput {
             func_name,

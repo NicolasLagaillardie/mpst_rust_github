@@ -1,18 +1,15 @@
 use quote::quote;
-use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::Result;
 
 #[derive(Debug)]
 pub struct CreateBroadcastRoleShortMacroInput {
-    role: proc_macro2::TokenStream,
+    role: syn::Ident,
 }
 
 impl Parse for CreateBroadcastRoleShortMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let content_role;
-        let _parentheses = syn::parenthesized!(content_role in input);
-        let role = proc_macro2::TokenStream::parse(&content_role)?;
+        let role = syn::Ident::parse(input)?;
 
         Ok(CreateBroadcastRoleShortMacroInput { role })
     }
@@ -25,48 +22,18 @@ impl From<CreateBroadcastRoleShortMacroInput> for proc_macro2::TokenStream {
 }
 
 impl CreateBroadcastRoleShortMacroInput {
-    fn expand_options(
-        &self,
-        tt: proc_macro2::TokenTree,
-        _rest: &mut proc_macro2::token_stream::IntoIter,
-    ) -> std::option::Option<proc_macro2::TokenStream> {
-        match tt {
-            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
-            _ => None,
-        }
-    }
-
-    fn expand_role(&self, stream: &proc_macro2::TokenStream) -> Vec<proc_macro2::TokenStream> {
-        let mut out: Vec<proc_macro2::TokenStream> = Vec::new();
-        let mut tts = stream.clone().into_iter();
-        while let Some(tt) = tts.next() {
-            let elt = self.expand_options(tt, &mut tts);
-            if let Some(elt_tt) = elt {
-                out.push(elt_tt)
-            }
-        }
-        out
-    }
-
     fn expand(&self) -> proc_macro2::TokenStream {
-        // Get all the roles provided into a Vec
-        let all_roles = self.expand_role(&self.role.clone());
-        // Get the first role, panic if it does not exist
-        let first_role = if let Some(elt) = all_roles.get(usize::try_from(0).unwrap()) {
-            format!("{}", elt)
-        } else {
-            panic!("Not enough arguments")
-        };
+        let role = self.role.clone();
 
         // Build the new names
         // role to all
         let role_to_all_name = syn::Ident::new(
-            &format!("Role{}toAll", first_role),
+            &format!("Role{}toAll", role),
             proc_macro2::Span::call_site(),
         );
         // dual to all
         let dual_to_all_name = syn::Ident::new(
-            &format!("RoleAllto{}", first_role),
+            &format!("RoleAllto{}", role),
             proc_macro2::Span::call_site(),
         );
 

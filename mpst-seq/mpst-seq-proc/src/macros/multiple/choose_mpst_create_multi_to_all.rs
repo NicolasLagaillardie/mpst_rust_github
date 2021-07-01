@@ -83,7 +83,7 @@ impl ChooseMultiCreateToAllMacroInput {
                     $( $label: path ),+ $(,)?
                 ) => {
                     mpstthree::choose_mpst_multi_to_all!(
-                        ( $session ) ,
+                        $session ,
                         $( $label , )* =>
                         #( #all_receivers , )* =>
                         #sender ,
