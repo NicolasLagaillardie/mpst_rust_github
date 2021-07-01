@@ -1,6 +1,3 @@
-#![allow(dead_code)]
-
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -11,7 +8,6 @@ use mpstthree::{
 };
 
 use std::error::Error;
-use std::time::Duration;
 
 // Create the new SessionMpst for five participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstSix, 6);
@@ -310,7 +306,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
-    recurs_e(s, SIZE)
+    recurs_e(s, 100)
 }
 
 fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
@@ -337,46 +333,20 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_central, thread_a, thread_b, thread_c, thread_d, thread_e) = fork_mpst(
-        black_box(endpoint_central),
-        black_box(endpoint_a),
-        black_box(endpoint_b),
-        black_box(endpoint_c),
-        black_box(endpoint_d),
-        black_box(endpoint_e),
+        endpoint_central,
+        endpoint_a,
+        endpoint_b,
+        endpoint_c,
+        endpoint_d,
+        endpoint_e,
     );
 
-    thread_central.join()?;
-    thread_a.join()?;
-    thread_b.join()?;
-    thread_c.join()?;
-    thread_d.join()?;
-    thread_e.join()?;
-
-    Ok(())
+    thread_central.join().unwrap();
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
+    thread_e.join().unwrap();
 }
-
-/////////////////////////
-
-static SIZE: i64 = 100;
-
-fn ring_five_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring five cancel broadcast protocol MPST {}", SIZE),
-        |b| b.iter(|| all_mpst()),
-    );
-}
-
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(1800, 0))
-}
-
-criterion_group! {
-    name = ring_five;
-    // config = long_warmup();
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ring_five_mpst
-}
-
-criterion_main!(ring_five);

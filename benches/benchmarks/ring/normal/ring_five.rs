@@ -482,19 +482,19 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 static SIZE: i64 = 100;
 
-fn ring_five_mpst(c: &mut Criterion) {
+fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ring five protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
 
-fn ring_five_binary(c: &mut Criterion) {
+fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(&format!("ring five protocol binary {}", SIZE), |b| {
         b.iter(|| all_binaries())
     });
 }
 
-fn ring_five_crossbeam(c: &mut Criterion) {
+fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(&format!("ring five protocol crossbeam {}", SIZE), |b| {
         b.iter(|| all_crossbeam())
     });
@@ -508,7 +508,7 @@ criterion_group! {
     name = ring_five;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ring_five_mpst, ring_five_binary, ring_five_crossbeam
+    targets = ring_protocol_mpst, ring_protocol_binary, ring_protocol_crossbeam
 }
 
 criterion_main!(ring_five);

@@ -557,19 +557,19 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 static SIZE: i64 = 100;
 
-fn ring_six_mpst(c: &mut Criterion) {
+fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ring six protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
 }
 
-fn ring_six_binary(c: &mut Criterion) {
+fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(&format!("ring six protocol binary {}", SIZE), |b| {
         b.iter(|| all_binaries())
     });
 }
 
-fn ring_six_crossbeam(c: &mut Criterion) {
+fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(&format!("ring six protocol crossbeam {}", SIZE), |b| {
         b.iter(|| all_crossbeam())
     });
@@ -583,7 +583,7 @@ criterion_group! {
     name = ring_six;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ring_six_mpst, ring_six_binary, ring_six_crossbeam
+    targets = ring_protocol_mpst, ring_protocol_binary, ring_protocol_crossbeam
 }
 
 criterion_main!(ring_six);

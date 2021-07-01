@@ -24,11 +24,13 @@ binary = []
 mpst = []
 crossbeam = []
 cancel = []
+broadcast_cancel = []
 
 nb_participants_mpst = []
 nb_participants_binary = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
+nb_participants_broadcast_cancel = []
 
 # # Number of loops in the recursion
 # number_of_loops = '100'
@@ -85,7 +87,7 @@ nb_participants_cancel = []
 
 # # Plot the crossbeam graph
 # ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-#         linestyle='-.', linewidth=3)
+#         linestyle='dashdot', linewidth=3)
 
 # # Label X and Y axis
 # ax.set_xlabel('Number of participants', fontsize=30)
@@ -138,16 +140,20 @@ for d in directories:
         try:
             # If MPST of binary, append to related lists
             if 'MPST' in d and str_to_int[splitted[1]] >= 3:
-                if 'cancel' in d:
+                if 'broadcast' in d:
+                    broadcast_cancel.append(int(test(d))/10**6)
+                    nb_participants_broadcast_cancel.append(
+                        str_to_int[splitted[1]])
+                elif 'cancel' in d:
                     cancel.append(int(test(d))/10**6)
                     nb_participants_cancel.append(str_to_int[splitted[1]])
                 else:
                     mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
-            elif 'binary' in d and str_to_int[splitted[1]] >= 3:
+            elif 'binary' in d and str_to_int[splitted[1]] >= 3 and 'cancel' not in d:
                 binary.append(int(test(d))/10**6)
                 nb_participants_binary.append(str_to_int[splitted[1]])
-            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3:
+            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3 and 'cancel' not in d:
                 crossbeam.append(int(test(d))/10**6)
                 nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
@@ -167,6 +173,11 @@ if len(cancel) > 0:
     nb_participants_cancel, cancel = (list(t)
                                       for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
 
+if len(broadcast_cancel) > 0:
+    nb_participants_broadcast_cancel, broadcast_cancel = (list(t)
+                                                          for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
+
+
 # Change size
 ax = plt.figure(figsize=(30, 15)).gca()
 
@@ -183,12 +194,17 @@ ax.plot(nb_participants_binary, binary, label='Binary',
 
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='-.', linewidth=5)
+        linestyle='dashdot', linewidth=5)
 
 if len(cancel) > 0:
     # Plot the cancel graph
     ax.plot(nb_participants_cancel, cancel, label='Cancel',
             linestyle='dotted', linewidth=5)
+
+# if len(broadcast_cancel) > 0:
+#     # Plot the broadcast cancel graph
+#     ax.plot(nb_participants_broadcast_cancel, broadcast_cancel,
+#             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
@@ -230,7 +246,7 @@ ax.grid(which='both')
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
 # Save fig
-plt.savefig('./graphs_bench/graph_mesh_'+number_of_loops+'.pdf')
+plt.savefig('./graphs_bench/graphMesh'+number_of_loops+'.pdf')
 
 # # function to show the plot
 # plt.show()

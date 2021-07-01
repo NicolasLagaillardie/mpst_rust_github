@@ -68,7 +68,7 @@ ax.plot(nb_participants_mpst, average_mpst,
 ax.plot(nb_participants_binary, average_binary,
         label="Binary", linestyle='dashed', linewidth=5)
 ax.plot(nb_participants_crossbeam, average_crossbeam,
-        label="Crossbeam", linestyle='-.', linewidth=5)
+        label="Crossbeam", linestyle='dashdot', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)

@@ -1,24 +1,17 @@
 #![allow(dead_code)]
 
-use crossbeam_channel::bounded;
-
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi_cancel, choose, create_fn_choose_mpst_multi_to_all_bundle,
+    bundle_struct_fork_close_multi_cancel, create_fn_choose_mpst_multi_to_all_bundle,
     create_multiple_normal_role_short, create_recv_mpst_session_bundle,
-    create_send_mpst_cancel_bundle, offer, offer_mpst,
+    create_send_mpst_cancel_bundle, offer_mpst,
 };
 
 use std::error::Error;
-use std::thread::{spawn, JoinHandle};
 use std::time::Duration;
 
 // Create the new SessionMpst for twenty participants and the close and fork functions
@@ -1092,7 +1085,7 @@ enum Branching0fromTtoA {
         >,
     ),
 }
-type RecursAtoT = Recv<Branching0fromTtoA, End>;
+type RecursAtoT = <Choose0fromTtoA as Session>::Dual;
 // B
 enum Branching0fromTtoB {
     More(
@@ -1186,7 +1179,7 @@ enum Branching0fromTtoB {
         >,
     ),
 }
-type RecursBtoT = Recv<Branching0fromTtoB, End>;
+type RecursBtoT = <Choose0fromTtoB as Session>::Dual;
 // C
 enum Branching0fromTtoC {
     More(
@@ -1280,7 +1273,7 @@ enum Branching0fromTtoC {
         >,
     ),
 }
-type RecursCtoT = Recv<Branching0fromTtoC, End>;
+type RecursCtoT = <Choose0fromTtoC as Session>::Dual;
 // D
 enum Branching0fromTtoD {
     More(
@@ -1374,7 +1367,7 @@ enum Branching0fromTtoD {
         >,
     ),
 }
-type RecursDtoT = Recv<Branching0fromTtoD, End>;
+type RecursDtoT = <Choose0fromTtoD as Session>::Dual;
 // E
 enum Branching0fromTtoE {
     More(
@@ -1468,7 +1461,7 @@ enum Branching0fromTtoE {
         >,
     ),
 }
-type RecursEtoT = Recv<Branching0fromTtoE, End>;
+type RecursEtoT = <Choose0fromTtoE as Session>::Dual;
 // F
 enum Branching0fromTtoF {
     More(
@@ -1562,7 +1555,7 @@ enum Branching0fromTtoF {
         >,
     ),
 }
-type RecursFtoT = Recv<Branching0fromTtoF, End>;
+type RecursFtoT = <Choose0fromTtoF as Session>::Dual;
 // G
 enum Branching0fromTtoG {
     More(
@@ -1656,7 +1649,7 @@ enum Branching0fromTtoG {
         >,
     ),
 }
-type RecursGtoT = Recv<Branching0fromTtoG, End>;
+type RecursGtoT = <Choose0fromTtoG as Session>::Dual;
 // H
 enum Branching0fromTtoH {
     More(
@@ -1750,7 +1743,7 @@ enum Branching0fromTtoH {
         >,
     ),
 }
-type RecursHtoT = Recv<Branching0fromTtoH, End>;
+type RecursHtoT = <Choose0fromTtoH as Session>::Dual;
 // I
 enum Branching0fromTtoI {
     More(
@@ -1844,7 +1837,7 @@ enum Branching0fromTtoI {
         >,
     ),
 }
-type RecursItoT = Recv<Branching0fromTtoI, End>;
+type RecursItoT = <Choose0fromTtoI as Session>::Dual;
 // J
 enum Branching0fromTtoJ {
     More(
@@ -1938,7 +1931,7 @@ enum Branching0fromTtoJ {
         >,
     ),
 }
-type RecursJtoT = Recv<Branching0fromTtoJ, End>;
+type RecursJtoT = <Choose0fromTtoJ as Session>::Dual;
 // K
 enum Branching0fromTtoK {
     More(
@@ -2032,7 +2025,7 @@ enum Branching0fromTtoK {
         >,
     ),
 }
-type RecursKtoT = Recv<Branching0fromTtoK, End>;
+type RecursKtoT = <Choose0fromTtoK as Session>::Dual;
 // L
 enum Branching0fromTtoL {
     More(
@@ -2126,7 +2119,7 @@ enum Branching0fromTtoL {
         >,
     ),
 }
-type RecursLtoT = Recv<Branching0fromTtoL, End>;
+type RecursLtoT = <Choose0fromTtoL as Session>::Dual;
 // M
 enum Branching0fromTtoM {
     More(
@@ -2220,7 +2213,7 @@ enum Branching0fromTtoM {
         >,
     ),
 }
-type RecursMtoT = Recv<Branching0fromTtoM, End>;
+type RecursMtoT = <Choose0fromTtoM as Session>::Dual;
 // N
 enum Branching0fromTtoN {
     More(
@@ -2314,7 +2307,7 @@ enum Branching0fromTtoN {
         >,
     ),
 }
-type RecursNtoT = Recv<Branching0fromTtoN, End>;
+type RecursNtoT = <Choose0fromTtoN as Session>::Dual;
 // O
 enum Branching0fromTtoO {
     More(
@@ -2408,7 +2401,7 @@ enum Branching0fromTtoO {
         >,
     ),
 }
-type RecursOtoT = Recv<Branching0fromTtoO, End>;
+type RecursOtoT = <Choose0fromTtoO as Session>::Dual;
 // P
 enum Branching0fromTtoP {
     More(
@@ -2502,7 +2495,7 @@ enum Branching0fromTtoP {
         >,
     ),
 }
-type RecursPtoT = Recv<Branching0fromTtoP, End>;
+type RecursPtoT = <Choose0fromTtoP as Session>::Dual;
 // Q
 enum Branching0fromTtoQ {
     More(
@@ -2596,7 +2589,7 @@ enum Branching0fromTtoQ {
         >,
     ),
 }
-type RecursQtoT = Recv<Branching0fromTtoQ, End>;
+type RecursQtoT = <Choose0fromTtoQ as Session>::Dual;
 // R
 enum Branching0fromTtoR {
     More(
@@ -2690,7 +2683,7 @@ enum Branching0fromTtoR {
         >,
     ),
 }
-type RecursRtoT = Recv<Branching0fromTtoR, End>;
+type RecursRtoT = <Choose0fromTtoR as Session>::Dual;
 // S
 enum Branching0fromTtoS {
     More(
@@ -2784,7 +2777,7 @@ enum Branching0fromTtoS {
         >,
     ),
 }
-type RecursStoT = Recv<Branching0fromTtoS, End>;
+type RecursStoT = <Choose0fromTtoS as Session>::Dual;
 // T
 type Choose0fromTtoA = Send<Branching0fromTtoA, End>;
 type Choose0fromTtoB = Send<Branching0fromTtoB, End>;
@@ -4063,138 +4056,6 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 }
 
 /////////////////////////
-// A
-enum BinaryA {
-    More(Recv<(), Send<(), RecursA>>),
-    Done(End),
-}
-type RecursA = Recv<BinaryA, End>;
-fn binary_a_to_b(s: RecursA) -> Result<(), Box<dyn Error>> {
-    offer!(s, {
-        BinaryA::Done(s) => {
-            close(s)
-        },
-        BinaryA::More(s) => {
-            let (_, s) = recv(s)?;
-            let s = send((), s);
-            binary_a_to_b(s)
-        },
-    })
-}
-
-// B
-type RecursB = <RecursA as Session>::Dual;
-fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Error>> {
-    let s = send((), s);
-    let (_, s) = recv(s)?;
-    Ok(s)
-}
-
-fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let mut threads = Vec::new();
-    let mut sessions = Vec::new();
-
-    for _ in 0..190 {
-        let (thread, s): (JoinHandle<()>, RecursB) = fork_with_thread_id(black_box(binary_a_to_b));
-
-        threads.push(thread);
-        sessions.push(s);
-    }
-
-    let main = spawn(move || {
-        for _ in 0..SIZE {
-            sessions = sessions
-                .into_iter()
-                .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
-                .collect::<Vec<_>>();
-        }
-
-        sessions
-            .into_iter()
-            .for_each(|s| close(choose!(BinaryA::Done, s)).unwrap());
-
-        threads.into_iter().for_each(|elt| elt.join().unwrap());
-    });
-
-    main.join()?;
-
-    Ok(())
-}
-
-/////////////////////////
-
-type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
-type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
-
-type SendingReceiving = crossbeam_channel::Sender<Receiving>;
-type ReceivingSending = crossbeam_channel::Receiver<Sending>;
-
-type Receiving = crossbeam_channel::Receiver<()>;
-type Sending = crossbeam_channel::Sender<()>;
-
-fn all_crossbeam() -> Result<(), Box<dyn Error>> {
-    let mut threads = Vec::new();
-
-    for _ in 0..190 {
-        let main = spawn(move || {
-            for _ in 0..SIZE {
-                let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
-                let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
-
-                let (sender_1, receiver_1) = bounded::<SendingReceiving>(1);
-                let (sender_5, receiver_5) = bounded::<ReceivingSending>(1);
-
-                let (sender_2, receiver_2) = bounded::<Receiving>(1);
-                let (sender_6, receiver_6) = bounded::<Sending>(1);
-
-                let (sender_3, receiver_3) = bounded::<()>(1);
-                let (sender_7, receiver_7) = bounded::<()>(1);
-
-                sender_0.send(receiver_1).unwrap();
-                sender_4.send(sender_5).unwrap();
-
-                let receiver_1_bis = receiver_0.recv().unwrap();
-                let sender_5_bis = receiver_4.recv().unwrap();
-
-                sender_1.send(sender_2).unwrap();
-                sender_5_bis.send(receiver_6).unwrap();
-
-                let sender_2_bis = receiver_1_bis.recv().unwrap();
-                let receiver_6_bis = receiver_5.recv().unwrap();
-
-                sender_2_bis.send(receiver_3).unwrap();
-                sender_6.send(sender_7).unwrap();
-
-                let receiver_2_bis = receiver_2.recv().unwrap();
-                let sender_7_bis = receiver_6_bis.recv().unwrap();
-
-                sender_3.send(()).unwrap();
-                sender_7_bis.send(()).unwrap();
-
-                receiver_2_bis.recv().unwrap();
-                receiver_7.recv().unwrap();
-            }
-
-            // "Close" connection
-            let (sender_close_1, receiver_close_1) = bounded::<()>(1);
-            let (sender_close_2, receiver_close_2) = bounded::<()>(1);
-
-            sender_close_1.send(()).unwrap_or(());
-            sender_close_2.send(()).unwrap_or(());
-
-            receiver_close_1.recv().unwrap_or(());
-            receiver_close_2.recv().unwrap_or(());
-        });
-
-        threads.push(main);
-    }
-
-    threads.into_iter().for_each(|elt| elt.join().unwrap());
-
-    Ok(())
-}
-
-/////////////////////////
 
 static SIZE: i64 = 100;
 
@@ -4202,20 +4063,6 @@ fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("mesh twenty cancel protocol MPST {}", SIZE), |b| {
         b.iter(|| all_mpst())
     });
-}
-
-fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh twenty cancel protocol binary {}", SIZE),
-        |b| b.iter(|| all_binaries()),
-    );
-}
-
-fn mesh_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh twenty cancel protocol crossbeam {}", SIZE),
-        |b| b.iter(|| all_crossbeam()),
-    );
 }
 
 fn long_warmup() -> Criterion {
@@ -4226,7 +4073,7 @@ criterion_group! {
     name = mesh_twenty;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
+    targets = mesh_protocol_mpst
 }
 
 criterion_main!(mesh_twenty);

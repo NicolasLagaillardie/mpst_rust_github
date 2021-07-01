@@ -1,59 +1,59 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, bundle_struct_fork_close_multi,
-    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    bundle_struct_fork_close_multi_cancel, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_cancel_bundle, offer_mpst,
 };
 
 use std::error::Error;
 
 // Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstFour, 4);
+bundle_struct_fork_close_multi_cancel!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
 
 // Create new roles
 // normal
-create_multiple_normal_role_short!(Central, A, B, C);
+create_multiple_normal_role_short!(A, B, C);
 
 // Create new send functions
 // A
-create_send_check_cancel_bundle!(
-    send_mpst_a_to_b, RoleB, 2 |
-    send_mpst_a_to_c, RoleC, 3 | =>
-    RoleA, SessionMpstFour, 4
+create_send_mpst_cancel_bundle!(
+    send_mpst_a_to_b, RoleB, 1 |
+    send_mpst_a_to_c, RoleC, 2 | =>
+    RoleA, SessionMpstThree, 3
 );
 // B
-create_send_check_cancel_bundle!(
-    send_mpst_b_to_a, RoleA, 2 |
-    send_mpst_b_to_c, RoleC, 3 | =>
-    RoleB, SessionMpstFour, 4
+create_send_mpst_cancel_bundle!(
+    send_mpst_b_to_a, RoleA, 1 |
+    send_mpst_b_to_c, RoleC, 2 | =>
+    RoleB, SessionMpstThree, 3
 );
 // C
-create_send_check_cancel_bundle!(
-    send_mpst_c_to_a, RoleA, 2 |
-    send_mpst_c_to_b, RoleB, 3 | =>
-    RoleC, SessionMpstFour, 4
+create_send_mpst_cancel_bundle!(
+    send_mpst_c_to_a, RoleA, 1 |
+    send_mpst_c_to_b, RoleB, 2 | =>
+    RoleC, SessionMpstThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_b, RoleB, 2 |
-    recv_mpst_a_from_c, RoleC, 3 | =>
-    RoleA, SessionMpstFour, 4
+    recv_mpst_a_from_b, RoleB, 1 |
+    recv_mpst_a_from_c, RoleC, 2 | =>
+    RoleA, SessionMpstThree, 3
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_a, RoleA, 2 |
-    recv_mpst_b_from_c, RoleC, 3 | =>
-    RoleB, SessionMpstFour, 4
+    recv_mpst_b_from_a, RoleA, 1 |
+    recv_mpst_b_from_c, RoleC, 2 | =>
+    RoleB, SessionMpstThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_a, RoleA, 2 |
-    recv_mpst_c_from_b, RoleB, 3 | =>
-    RoleC, SessionMpstFour, 4
+    recv_mpst_c_from_a, RoleA, 1 |
+    recv_mpst_c_from_b, RoleB, 2 | =>
+    RoleC, SessionMpstThree, 3
 );
 
 // Names
@@ -71,22 +71,21 @@ type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 // A
 enum Branching0fromCtoA {
-    More(SessionMpstFour<End, RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
-    Done(SessionMpstFour<End, End, End, RoleEnd, NameA>),
+    More(SessionMpstThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
+    Done(SessionMpstThree<End, End, RoleEnd, NameA>),
 }
-type RecursAtoC = Recv<(End, Branching0fromCtoA), End>;
+type RecursAtoC = Recv<Branching0fromCtoA, End>;
 // B
 enum Branching0fromCtoB {
-    More(SessionMpstFour<End, SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
-    Done(SessionMpstFour<End, End, End, RoleEnd, NameB>),
+    More(SessionMpstThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
+    Done(SessionMpstThree<End, End, RoleEnd, NameB>),
 }
-type RecursBtoC = Recv<(End, Branching0fromCtoB), End>;
+type RecursBtoC = Recv<Branching0fromCtoB, End>;
 // C
-type Choose0fromCtoA = <RecursAtoC as Session>::Dual;
-type Choose0fromCtoB = <RecursBtoC as Session>::Dual;
-type EndpointDoneC = SessionMpstFour<End, End, End, RoleEnd, NameC>;
-type EndpointMoreC = SessionMpstFour<
-    End,
+type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
+type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
+type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
+type EndpointMoreC = SessionMpstThree<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
     R2A<R2B<RoleBroadcast>>,
@@ -94,27 +93,21 @@ type EndpointMoreC = SessionMpstFour<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = SessionMpstFour<End, End, End, RoleEnd, RoleCentral<RoleEnd>>;
-type EndpointA = SessionMpstFour<End, End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = SessionMpstFour<End, End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstFour<End, Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = SessionMpstThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = SessionMpstThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
-create_fn_choose_mpst_cancel_multi_to_all_bundle!(
+create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
     Done, More, =>
     EndpointDoneC, EndpointMoreC, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
     RoleA, RoleB, =>
-    RoleCentral, RoleC, SessionMpstFour, 4
+    RoleC, SessionMpstThree, 3
 );
 
-fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, 4);
-    Ok(())
-}
-
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_a_from_c, {
+    offer_mpst!(s, recv_mpst_a_from_c, {
         Branching0fromCtoA::Done(s) => {
             close_mpst_multi(s)
         },
@@ -129,7 +122,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_b_from_c, {
+    offer_mpst!(s, recv_mpst_b_from_c, {
         Branching0fromCtoB::Done(s) => {
             close_mpst_multi(s)
         },
@@ -150,12 +143,12 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = done_from_c_to_all(s)?;
+            let s = done_from_c_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = more_from_c_to_all(s)?;
+            let s = more_from_c_to_all(s);
 
             let s = send_mpst_c_to_a((), s)?;
             let (_, s) = recv_mpst_c_from_a(s)?;
@@ -168,10 +161,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn main() {
-    let (thread_central, thread_a, thread_b, thread_c) =
-        fork_mpst(endpoint_central, endpoint_a, endpoint_b, endpoint_c);
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
-    thread_central.join().unwrap();
     thread_a.join().unwrap();
     thread_b.join().unwrap();
     thread_c.join().unwrap();

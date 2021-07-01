@@ -20,11 +20,13 @@ binary = []
 mpst = []
 crossbeam = []
 cancel = []
+broadcast_cancel = []
 
 nb_loops_binary = []
 nb_loops_mpst = []
 nb_loops_crossbeam = []
 nb_loops_cancel = []
+nb_loops_broadcast_cancel = []
 
 
 def test(path):
@@ -47,7 +49,10 @@ for d in directories:
                 binary.append(int(test(d))/10**6)
                 nb_loops_binary.append(int(splitted[-1]))
             elif 'MPST' in d:
-                if 'cancel' in d:
+                if 'broadcast' in d:
+                    broadcast_cancel.append(int(test(d))/10**6)
+                    nb_loops_broadcast_cancel.append(int(splitted[-1]))
+                elif 'cancel' in d:
                     cancel.append(int(test(d))/10**6)
                     nb_loops_cancel.append(int(splitted[-1]))
                 else:
@@ -71,6 +76,9 @@ nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
 nb_loops_cancel, cancel = (list(t)
                            for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
 
+nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
+                                               for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
+
 # Change size
 ax = plt.figure(figsize=(30, 15)).gca()
 
@@ -87,12 +95,17 @@ ax.plot(nb_loops_binary, binary, label='Binary',
 
 # Plot the crossbeam graph
 ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='-.', linewidth=5)
+        linestyle='dashdot', linewidth=5)
 
 if len(cancel) > 0:
     # Plot the cancel graph
     ax.plot(nb_loops_cancel, cancel, label='Cancel',
             linestyle='dotted', linewidth=5)
+
+# if len(broadcast_cancel) > 0:
+#     # Plot the broadcast cancel graph
+#     ax.plot(nb_loops_broadcast_cancel, broadcast_cancel,
+#             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of loops', fontsize=30)

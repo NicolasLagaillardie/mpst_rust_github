@@ -19,13 +19,11 @@ path_file = '/base/estimates.json'
 cancel = []
 protocol = []
 
-
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
         data = json.load(json_file)
         return data['mean']['point_estimate']
-
 
 # For each folder in main_path
 for d in directories:

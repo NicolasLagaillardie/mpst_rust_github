@@ -1,331 +1,331 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, bundle_struct_fork_close_multi,
-    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    bundle_struct_fork_close_multi_cancel, create_fn_choose_mpst_multi_to_all_bundle,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_cancel_bundle, offer_mpst,
 };
 
 use std::error::Error;
 
 // Create the new SessionMpst for eleven participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstTwelve, 12);
+bundle_struct_fork_close_multi_cancel!(close_mpst_multi, fork_mpst, SessionMpstEleven, 11);
 
 // Create new roles
 // normal
-create_multiple_normal_role_short!(Central, A, B, C, D, E, F, G, H, I, J, K);
+create_multiple_normal_role_short!(A, B, C, D, E, F, G, H, I, J, K);
 
 // Create new send functions
 // A
-create_send_check_cancel_bundle!(
-    send_mpst_a_to_b, RoleB, 2 |
-    send_mpst_a_to_c, RoleC, 3 |
-    send_mpst_a_to_d, RoleD, 4 |
-    send_mpst_a_to_e, RoleE, 5 |
-    send_mpst_a_to_f, RoleF, 6 |
-    send_mpst_a_to_g, RoleG, 7 |
-    send_mpst_a_to_h, RoleH, 8 |
-    send_mpst_a_to_i, RoleI, 9 |
-    send_mpst_a_to_j, RoleJ, 10 |
-    send_mpst_a_to_k, RoleK, 11 | =>
-    RoleA, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_a_to_b, RoleB, 1 |
+    send_mpst_a_to_c, RoleC, 2 |
+    send_mpst_a_to_d, RoleD, 3 |
+    send_mpst_a_to_e, RoleE, 4 |
+    send_mpst_a_to_f, RoleF, 5 |
+    send_mpst_a_to_g, RoleG, 6 |
+    send_mpst_a_to_h, RoleH, 7 |
+    send_mpst_a_to_i, RoleI, 8 |
+    send_mpst_a_to_j, RoleJ, 9 |
+    send_mpst_a_to_k, RoleK, 10 | =>
+    RoleA, SessionMpstEleven, 11
 );
 // B
-create_send_check_cancel_bundle!(
-    send_mpst_b_to_a, RoleA, 2 |
-    send_mpst_b_to_c, RoleC, 3 |
-    send_mpst_b_to_d, RoleD, 4 |
-    send_mpst_b_to_e, RoleE, 5 |
-    send_mpst_b_to_f, RoleF, 6 |
-    send_mpst_b_to_g, RoleG, 7 |
-    send_mpst_b_to_h, RoleH, 8 |
-    send_mpst_b_to_i, RoleI, 9 |
-    send_mpst_b_to_j, RoleJ, 10 |
-    send_mpst_b_to_k, RoleK, 11 | =>
-    RoleB, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_b_to_a, RoleA, 1 |
+    send_mpst_b_to_c, RoleC, 2 |
+    send_mpst_b_to_d, RoleD, 3 |
+    send_mpst_b_to_e, RoleE, 4 |
+    send_mpst_b_to_f, RoleF, 5 |
+    send_mpst_b_to_g, RoleG, 6 |
+    send_mpst_b_to_h, RoleH, 7 |
+    send_mpst_b_to_i, RoleI, 8 |
+    send_mpst_b_to_j, RoleJ, 9 |
+    send_mpst_b_to_k, RoleK, 10 | =>
+    RoleB, SessionMpstEleven, 11
 );
 // C
-create_send_check_cancel_bundle!(
-    send_mpst_c_to_a, RoleA, 2 |
-    send_mpst_c_to_b, RoleB, 3 |
-    send_mpst_c_to_d, RoleD, 4 |
-    send_mpst_c_to_e, RoleE, 5 |
-    send_mpst_c_to_f, RoleF, 6 |
-    send_mpst_c_to_g, RoleG, 7 |
-    send_mpst_c_to_h, RoleH, 8 |
-    send_mpst_c_to_i, RoleI, 9 |
-    send_mpst_c_to_j, RoleJ, 10 |
-    send_mpst_c_to_k, RoleK, 11 | =>
-    RoleC, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_c_to_a, RoleA, 1 |
+    send_mpst_c_to_b, RoleB, 2 |
+    send_mpst_c_to_d, RoleD, 3 |
+    send_mpst_c_to_e, RoleE, 4 |
+    send_mpst_c_to_f, RoleF, 5 |
+    send_mpst_c_to_g, RoleG, 6 |
+    send_mpst_c_to_h, RoleH, 7 |
+    send_mpst_c_to_i, RoleI, 8 |
+    send_mpst_c_to_j, RoleJ, 9 |
+    send_mpst_c_to_k, RoleK, 10 | =>
+    RoleC, SessionMpstEleven, 11
 );
 // D
-create_send_check_cancel_bundle!(
-    send_mpst_d_to_a, RoleA, 2 |
-    send_mpst_d_to_b, RoleB, 3 |
-    send_mpst_d_to_c, RoleC, 4 |
-    send_mpst_d_to_e, RoleE, 5 |
-    send_mpst_d_to_f, RoleF, 6 |
-    send_mpst_d_to_g, RoleG, 7 |
-    send_mpst_d_to_h, RoleH, 8 |
-    send_mpst_d_to_i, RoleI, 9 |
-    send_mpst_d_to_j, RoleJ, 10 |
-    send_mpst_d_to_k, RoleK, 11 | =>
-    RoleD, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_d_to_a, RoleA, 1 |
+    send_mpst_d_to_b, RoleB, 2 |
+    send_mpst_d_to_c, RoleC, 3 |
+    send_mpst_d_to_e, RoleE, 4 |
+    send_mpst_d_to_f, RoleF, 5 |
+    send_mpst_d_to_g, RoleG, 6 |
+    send_mpst_d_to_h, RoleH, 7 |
+    send_mpst_d_to_i, RoleI, 8 |
+    send_mpst_d_to_j, RoleJ, 9 |
+    send_mpst_d_to_k, RoleK, 10 | =>
+    RoleD, SessionMpstEleven, 11
 );
 // E
-create_send_check_cancel_bundle!(
-    send_mpst_e_to_a, RoleA, 2 |
-    send_mpst_e_to_b, RoleB, 3 |
-    send_mpst_e_to_c, RoleC, 4 |
-    send_mpst_e_to_d, RoleD, 5 |
-    send_mpst_e_to_f, RoleF, 6 |
-    send_mpst_e_to_g, RoleG, 7 |
-    send_mpst_e_to_h, RoleH, 8 |
-    send_mpst_e_to_i, RoleI, 9 |
-    send_mpst_e_to_j, RoleJ, 10 |
-    send_mpst_e_to_k, RoleK, 11 | =>
-    RoleE, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_e_to_a, RoleA, 1 |
+    send_mpst_e_to_b, RoleB, 2 |
+    send_mpst_e_to_c, RoleC, 3 |
+    send_mpst_e_to_d, RoleD, 4 |
+    send_mpst_e_to_f, RoleF, 5 |
+    send_mpst_e_to_g, RoleG, 6 |
+    send_mpst_e_to_h, RoleH, 7 |
+    send_mpst_e_to_i, RoleI, 8 |
+    send_mpst_e_to_j, RoleJ, 9 |
+    send_mpst_e_to_k, RoleK, 10 | =>
+    RoleE, SessionMpstEleven, 11
 );
 // F
-create_send_check_cancel_bundle!(
-    send_mpst_f_to_a, RoleA, 2 |
-    send_mpst_f_to_b, RoleB, 3 |
-    send_mpst_f_to_c, RoleC, 4 |
-    send_mpst_f_to_d, RoleD, 5 |
-    send_mpst_f_to_e, RoleE, 6 |
-    send_mpst_f_to_g, RoleG, 7 |
-    send_mpst_f_to_h, RoleH, 8 |
-    send_mpst_f_to_i, RoleI, 9 |
-    send_mpst_f_to_j, RoleJ, 10 |
-    send_mpst_f_to_k, RoleK, 11 | =>
-    RoleF, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_f_to_a, RoleA, 1 |
+    send_mpst_f_to_b, RoleB, 2 |
+    send_mpst_f_to_c, RoleC, 3 |
+    send_mpst_f_to_d, RoleD, 4 |
+    send_mpst_f_to_e, RoleE, 5 |
+    send_mpst_f_to_g, RoleG, 6 |
+    send_mpst_f_to_h, RoleH, 7 |
+    send_mpst_f_to_i, RoleI, 8 |
+    send_mpst_f_to_j, RoleJ, 9 |
+    send_mpst_f_to_k, RoleK, 10 | =>
+    RoleF, SessionMpstEleven, 11
 );
 // G
-create_send_check_cancel_bundle!(
-    send_mpst_g_to_a, RoleA, 2 |
-    send_mpst_g_to_b, RoleB, 3 |
-    send_mpst_g_to_c, RoleC, 4 |
-    send_mpst_g_to_d, RoleD, 5 |
-    send_mpst_g_to_e, RoleE, 6 |
-    send_mpst_g_to_f, RoleF, 7 |
-    send_mpst_g_to_h, RoleH, 8 |
-    send_mpst_g_to_i, RoleI, 9 |
-    send_mpst_g_to_j, RoleJ, 10 |
-    send_mpst_g_to_k, RoleK, 11 | =>
-    RoleG, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_g_to_a, RoleA, 1 |
+    send_mpst_g_to_b, RoleB, 2 |
+    send_mpst_g_to_c, RoleC, 3 |
+    send_mpst_g_to_d, RoleD, 4 |
+    send_mpst_g_to_e, RoleE, 5 |
+    send_mpst_g_to_f, RoleF, 6 |
+    send_mpst_g_to_h, RoleH, 7 |
+    send_mpst_g_to_i, RoleI, 8 |
+    send_mpst_g_to_j, RoleJ, 9 |
+    send_mpst_g_to_k, RoleK, 10 | =>
+    RoleG, SessionMpstEleven, 11
 );
 // H
-create_send_check_cancel_bundle!(
-    send_mpst_h_to_a, RoleA, 2 |
-    send_mpst_h_to_b, RoleB, 3 |
-    send_mpst_h_to_c, RoleC, 4 |
-    send_mpst_h_to_d, RoleD, 5 |
-    send_mpst_h_to_e, RoleE, 6 |
-    send_mpst_h_to_f, RoleF, 7 |
-    send_mpst_h_to_g, RoleG, 8 |
-    send_mpst_h_to_i, RoleI, 9 |
-    send_mpst_h_to_j, RoleJ, 10 |
-    send_mpst_h_to_k, RoleK, 11 | =>
-    RoleH, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_h_to_a, RoleA, 1 |
+    send_mpst_h_to_b, RoleB, 2 |
+    send_mpst_h_to_c, RoleC, 3 |
+    send_mpst_h_to_d, RoleD, 4 |
+    send_mpst_h_to_e, RoleE, 5 |
+    send_mpst_h_to_f, RoleF, 6 |
+    send_mpst_h_to_g, RoleG, 7 |
+    send_mpst_h_to_i, RoleI, 8 |
+    send_mpst_h_to_j, RoleJ, 9 |
+    send_mpst_h_to_k, RoleK, 10 | =>
+    RoleH, SessionMpstEleven, 11
 );
 // I
-create_send_check_cancel_bundle!(
-    send_mpst_i_to_a, RoleA, 2 |
-    send_mpst_i_to_b, RoleB, 3 |
-    send_mpst_i_to_c, RoleC, 4 |
-    send_mpst_i_to_d, RoleD, 5 |
-    send_mpst_i_to_e, RoleE, 6 |
-    send_mpst_i_to_f, RoleF, 7 |
-    send_mpst_i_to_g, RoleG, 8 |
-    send_mpst_i_to_h, RoleH, 9 |
-    send_mpst_i_to_j, RoleJ, 10 |
-    send_mpst_i_to_k, RoleK, 11 | =>
-    RoleI, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_i_to_a, RoleA, 1 |
+    send_mpst_i_to_b, RoleB, 2 |
+    send_mpst_i_to_c, RoleC, 3 |
+    send_mpst_i_to_d, RoleD, 4 |
+    send_mpst_i_to_e, RoleE, 5 |
+    send_mpst_i_to_f, RoleF, 6 |
+    send_mpst_i_to_g, RoleG, 7 |
+    send_mpst_i_to_h, RoleH, 8 |
+    send_mpst_i_to_j, RoleJ, 9 |
+    send_mpst_i_to_k, RoleK, 10 | =>
+    RoleI, SessionMpstEleven, 11
 );
 // J
-create_send_check_cancel_bundle!(
-    send_mpst_j_to_a, RoleA, 2 |
-    send_mpst_j_to_b, RoleB, 3 |
-    send_mpst_j_to_c, RoleC, 4 |
-    send_mpst_j_to_d, RoleD, 5 |
-    send_mpst_j_to_e, RoleE, 6 |
-    send_mpst_j_to_f, RoleF, 7 |
-    send_mpst_j_to_g, RoleG, 8 |
-    send_mpst_j_to_h, RoleH, 9 |
-    send_mpst_j_to_i, RoleI, 10 |
-    send_mpst_j_to_k, RoleK, 11 | =>
-    RoleJ, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_j_to_a, RoleA, 1 |
+    send_mpst_j_to_b, RoleB, 2 |
+    send_mpst_j_to_c, RoleC, 3 |
+    send_mpst_j_to_d, RoleD, 4 |
+    send_mpst_j_to_e, RoleE, 5 |
+    send_mpst_j_to_f, RoleF, 6 |
+    send_mpst_j_to_g, RoleG, 7 |
+    send_mpst_j_to_h, RoleH, 8 |
+    send_mpst_j_to_i, RoleI, 9 |
+    send_mpst_j_to_k, RoleK, 10 | =>
+    RoleJ, SessionMpstEleven, 11
 );
 // K
-create_send_check_cancel_bundle!(
-    send_mpst_k_to_a, RoleA, 2 |
-    send_mpst_k_to_b, RoleB, 3 |
-    send_mpst_k_to_c, RoleC, 4 |
-    send_mpst_k_to_d, RoleD, 5 |
-    send_mpst_k_to_e, RoleE, 6 |
-    send_mpst_k_to_f, RoleF, 7 |
-    send_mpst_k_to_g, RoleG, 8 |
-    send_mpst_k_to_h, RoleH, 9 |
-    send_mpst_k_to_i, RoleI, 10 |
-    send_mpst_k_to_j, RoleJ, 11 | =>
-    RoleK, SessionMpstTwelve, 12
+create_send_mpst_cancel_bundle!(
+    send_mpst_k_to_a, RoleA, 1 |
+    send_mpst_k_to_b, RoleB, 2 |
+    send_mpst_k_to_c, RoleC, 3 |
+    send_mpst_k_to_d, RoleD, 4 |
+    send_mpst_k_to_e, RoleE, 5 |
+    send_mpst_k_to_f, RoleF, 6 |
+    send_mpst_k_to_g, RoleG, 7 |
+    send_mpst_k_to_h, RoleH, 8 |
+    send_mpst_k_to_i, RoleI, 9 |
+    send_mpst_k_to_j, RoleJ, 10 | =>
+    RoleK, SessionMpstEleven, 11
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_b, RoleB, 2 |
-    recv_mpst_a_from_c, RoleC, 3 |
-    recv_mpst_a_from_d, RoleD, 4 |
-    recv_mpst_a_from_e, RoleE, 5 |
-    recv_mpst_a_from_f, RoleF, 6 |
-    recv_mpst_a_from_g, RoleG, 7 |
-    recv_mpst_a_from_h, RoleH, 8 |
-    recv_mpst_a_from_i, RoleI, 9 |
-    recv_mpst_a_from_j, RoleJ, 10 |
-    recv_mpst_a_from_k, RoleK, 11 | =>
-    RoleA, SessionMpstTwelve, 12
+    recv_mpst_a_from_b, RoleB, 1 |
+    recv_mpst_a_from_c, RoleC, 2 |
+    recv_mpst_a_from_d, RoleD, 3 |
+    recv_mpst_a_from_e, RoleE, 4 |
+    recv_mpst_a_from_f, RoleF, 5 |
+    recv_mpst_a_from_g, RoleG, 6 |
+    recv_mpst_a_from_h, RoleH, 7 |
+    recv_mpst_a_from_i, RoleI, 8 |
+    recv_mpst_a_from_j, RoleJ, 9 |
+    recv_mpst_a_from_k, RoleK, 10 | =>
+    RoleA, SessionMpstEleven, 11
 );
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_a, RoleA, 2 |
-    recv_mpst_b_from_c, RoleC, 3 |
-    recv_mpst_b_from_d, RoleD, 4 |
-    recv_mpst_b_from_e, RoleE, 5 |
-    recv_mpst_b_from_f, RoleF, 6 |
-    recv_mpst_b_from_g, RoleG, 7 |
-    recv_mpst_b_from_h, RoleH, 8 |
-    recv_mpst_b_from_i, RoleI, 9 |
-    recv_mpst_b_from_j, RoleJ, 10 |
-    recv_mpst_b_from_k, RoleK, 11 | =>
-    RoleB, SessionMpstTwelve, 12
+    recv_mpst_b_from_a, RoleA, 1 |
+    recv_mpst_b_from_c, RoleC, 2 |
+    recv_mpst_b_from_d, RoleD, 3 |
+    recv_mpst_b_from_e, RoleE, 4 |
+    recv_mpst_b_from_f, RoleF, 5 |
+    recv_mpst_b_from_g, RoleG, 6 |
+    recv_mpst_b_from_h, RoleH, 7 |
+    recv_mpst_b_from_i, RoleI, 8 |
+    recv_mpst_b_from_j, RoleJ, 9 |
+    recv_mpst_b_from_k, RoleK, 10 | =>
+    RoleB, SessionMpstEleven, 11
 );
 // C
 create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_a, RoleA, 2 |
-    recv_mpst_c_from_b, RoleB, 3 |
-    recv_mpst_c_from_d, RoleD, 4 |
-    recv_mpst_c_from_e, RoleE, 5 |
-    recv_mpst_c_from_f, RoleF, 6 |
-    recv_mpst_c_from_g, RoleG, 7 |
-    recv_mpst_c_from_h, RoleH, 8 |
-    recv_mpst_c_from_i, RoleI, 9 |
-    recv_mpst_c_from_j, RoleJ, 10 |
-    recv_mpst_c_from_k, RoleK, 11 | =>
-    RoleC, SessionMpstTwelve, 12
+    recv_mpst_c_from_a, RoleA, 1 |
+    recv_mpst_c_from_b, RoleB, 2 |
+    recv_mpst_c_from_d, RoleD, 3 |
+    recv_mpst_c_from_e, RoleE, 4 |
+    recv_mpst_c_from_f, RoleF, 5 |
+    recv_mpst_c_from_g, RoleG, 6 |
+    recv_mpst_c_from_h, RoleH, 7 |
+    recv_mpst_c_from_i, RoleI, 8 |
+    recv_mpst_c_from_j, RoleJ, 9 |
+    recv_mpst_c_from_k, RoleK, 10 | =>
+    RoleC, SessionMpstEleven, 11
 );
 // D
 create_recv_mpst_session_bundle!(
-    recv_mpst_d_from_a, RoleA, 2 |
-    recv_mpst_d_from_b, RoleB, 3 |
-    recv_mpst_d_from_c, RoleC, 4 |
-    recv_mpst_d_from_e, RoleE, 5 |
-    recv_mpst_d_from_f, RoleF, 6 |
-    recv_mpst_d_from_g, RoleG, 7 |
-    recv_mpst_d_from_h, RoleH, 8 |
-    recv_mpst_d_from_i, RoleI, 9 |
-    recv_mpst_d_from_j, RoleJ, 10 |
-    recv_mpst_d_from_k, RoleK, 11 | =>
-    RoleD, SessionMpstTwelve, 12
+    recv_mpst_d_from_a, RoleA, 1 |
+    recv_mpst_d_from_b, RoleB, 2 |
+    recv_mpst_d_from_c, RoleC, 3 |
+    recv_mpst_d_from_e, RoleE, 4 |
+    recv_mpst_d_from_f, RoleF, 5 |
+    recv_mpst_d_from_g, RoleG, 6 |
+    recv_mpst_d_from_h, RoleH, 7 |
+    recv_mpst_d_from_i, RoleI, 8 |
+    recv_mpst_d_from_j, RoleJ, 9 |
+    recv_mpst_d_from_k, RoleK, 10 | =>
+    RoleD, SessionMpstEleven, 11
 );
 // E
 create_recv_mpst_session_bundle!(
-    recv_mpst_e_from_a, RoleA, 2 |
-    recv_mpst_e_from_b, RoleB, 3 |
-    recv_mpst_e_from_c, RoleC, 4 |
-    recv_mpst_e_from_d, RoleD, 5 |
-    recv_mpst_e_from_f, RoleF, 6 |
-    recv_mpst_e_from_g, RoleG, 7 |
-    recv_mpst_e_from_h, RoleH, 8 |
-    recv_mpst_e_from_i, RoleI, 9 |
-    recv_mpst_e_from_j, RoleJ, 10 |
-    recv_mpst_e_from_k, RoleK, 11 | =>
-    RoleE, SessionMpstTwelve, 12
+    recv_mpst_e_from_a, RoleA, 1 |
+    recv_mpst_e_from_b, RoleB, 2 |
+    recv_mpst_e_from_c, RoleC, 3 |
+    recv_mpst_e_from_d, RoleD, 4 |
+    recv_mpst_e_from_f, RoleF, 5 |
+    recv_mpst_e_from_g, RoleG, 6 |
+    recv_mpst_e_from_h, RoleH, 7 |
+    recv_mpst_e_from_i, RoleI, 8 |
+    recv_mpst_e_from_j, RoleJ, 9 |
+    recv_mpst_e_from_k, RoleK, 10 | =>
+    RoleE, SessionMpstEleven, 11
 );
 // F
 create_recv_mpst_session_bundle!(
-    recv_mpst_f_from_a, RoleA, 2 |
-    recv_mpst_f_from_b, RoleB, 3 |
-    recv_mpst_f_from_c, RoleC, 4 |
-    recv_mpst_f_from_d, RoleD, 5 |
-    recv_mpst_f_from_e, RoleE, 6 |
-    recv_mpst_f_from_g, RoleG, 7 |
-    recv_mpst_f_from_h, RoleH, 8 |
-    recv_mpst_f_from_i, RoleI, 9 |
-    recv_mpst_f_from_j, RoleJ, 10 |
-    recv_mpst_f_from_k, RoleK, 11 | =>
-    RoleF, SessionMpstTwelve, 12
+    recv_mpst_f_from_a, RoleA, 1 |
+    recv_mpst_f_from_b, RoleB, 2 |
+    recv_mpst_f_from_c, RoleC, 3 |
+    recv_mpst_f_from_d, RoleD, 4 |
+    recv_mpst_f_from_e, RoleE, 5 |
+    recv_mpst_f_from_g, RoleG, 6 |
+    recv_mpst_f_from_h, RoleH, 7 |
+    recv_mpst_f_from_i, RoleI, 8 |
+    recv_mpst_f_from_j, RoleJ, 9 |
+    recv_mpst_f_from_k, RoleK, 10 | =>
+    RoleF, SessionMpstEleven, 11
 );
 // G
 create_recv_mpst_session_bundle!(
-    recv_mpst_g_from_a, RoleA, 2 |
-    recv_mpst_g_from_b, RoleB, 3 |
-    recv_mpst_g_from_c, RoleC, 4 |
-    recv_mpst_g_from_d, RoleD, 5 |
-    recv_mpst_g_from_e, RoleE, 6 |
-    recv_mpst_g_from_f, RoleF, 7 |
-    recv_mpst_g_from_h, RoleH, 8 |
-    recv_mpst_g_from_i, RoleI, 9 |
-    recv_mpst_g_from_j, RoleJ, 10 |
-    recv_mpst_g_from_k, RoleK, 11 | =>
-    RoleG, SessionMpstTwelve, 12
+    recv_mpst_g_from_a, RoleA, 1 |
+    recv_mpst_g_from_b, RoleB, 2 |
+    recv_mpst_g_from_c, RoleC, 3 |
+    recv_mpst_g_from_d, RoleD, 4 |
+    recv_mpst_g_from_e, RoleE, 5 |
+    recv_mpst_g_from_f, RoleF, 6 |
+    recv_mpst_g_from_h, RoleH, 7 |
+    recv_mpst_g_from_i, RoleI, 8 |
+    recv_mpst_g_from_j, RoleJ, 9 |
+    recv_mpst_g_from_k, RoleK, 10 | =>
+    RoleG, SessionMpstEleven, 11
 );
 // H
 create_recv_mpst_session_bundle!(
-    recv_mpst_h_from_a, RoleA, 2 |
-    recv_mpst_h_from_b, RoleB, 3 |
-    recv_mpst_h_from_c, RoleC, 4 |
-    recv_mpst_h_from_d, RoleD, 5 |
-    recv_mpst_h_from_e, RoleE, 6 |
-    recv_mpst_h_from_f, RoleF, 7 |
-    recv_mpst_h_from_g, RoleG, 8 |
-    recv_mpst_h_from_i, RoleI, 9 |
-    recv_mpst_h_from_j, RoleJ, 10 |
-    recv_mpst_h_from_k, RoleK, 11 | =>
-    RoleH, SessionMpstTwelve, 12
+    recv_mpst_h_from_a, RoleA, 1 |
+    recv_mpst_h_from_b, RoleB, 2 |
+    recv_mpst_h_from_c, RoleC, 3 |
+    recv_mpst_h_from_d, RoleD, 4 |
+    recv_mpst_h_from_e, RoleE, 5 |
+    recv_mpst_h_from_f, RoleF, 6 |
+    recv_mpst_h_from_g, RoleG, 7 |
+    recv_mpst_h_from_i, RoleI, 8 |
+    recv_mpst_h_from_j, RoleJ, 9 |
+    recv_mpst_h_from_k, RoleK, 10 | =>
+    RoleH, SessionMpstEleven, 11
 );
 // I
 create_recv_mpst_session_bundle!(
-    recv_mpst_i_from_a, RoleA, 2 |
-    recv_mpst_i_from_b, RoleB, 3 |
-    recv_mpst_i_from_c, RoleC, 4 |
-    recv_mpst_i_from_d, RoleD, 5 |
-    recv_mpst_i_from_e, RoleE, 6 |
-    recv_mpst_i_from_f, RoleF, 7 |
-    recv_mpst_i_from_g, RoleG, 8 |
-    recv_mpst_i_from_h, RoleH, 9 |
-    recv_mpst_i_from_j, RoleJ, 10 |
-    recv_mpst_i_from_k, RoleK, 11 | =>
-    RoleI, SessionMpstTwelve, 12
+    recv_mpst_i_from_a, RoleA, 1 |
+    recv_mpst_i_from_b, RoleB, 2 |
+    recv_mpst_i_from_c, RoleC, 3 |
+    recv_mpst_i_from_d, RoleD, 4 |
+    recv_mpst_i_from_e, RoleE, 5 |
+    recv_mpst_i_from_f, RoleF, 6 |
+    recv_mpst_i_from_g, RoleG, 7 |
+    recv_mpst_i_from_h, RoleH, 8 |
+    recv_mpst_i_from_j, RoleJ, 9 |
+    recv_mpst_i_from_k, RoleK, 10 | =>
+    RoleI, SessionMpstEleven, 11
 );
 // J
 create_recv_mpst_session_bundle!(
-    recv_mpst_j_from_a, RoleA, 2 |
-    recv_mpst_j_from_b, RoleB, 3 |
-    recv_mpst_j_from_c, RoleC, 4 |
-    recv_mpst_j_from_d, RoleD, 5 |
-    recv_mpst_j_from_e, RoleE, 6 |
-    recv_mpst_j_from_f, RoleF, 7 |
-    recv_mpst_j_from_g, RoleG, 8 |
-    recv_mpst_j_from_h, RoleH, 9 |
-    recv_mpst_j_from_i, RoleI, 10 |
-    recv_mpst_j_from_k, RoleK, 11 | =>
-    RoleJ, SessionMpstTwelve, 12
+    recv_mpst_j_from_a, RoleA, 1 |
+    recv_mpst_j_from_b, RoleB, 2 |
+    recv_mpst_j_from_c, RoleC, 3 |
+    recv_mpst_j_from_d, RoleD, 4 |
+    recv_mpst_j_from_e, RoleE, 5 |
+    recv_mpst_j_from_f, RoleF, 6 |
+    recv_mpst_j_from_g, RoleG, 7 |
+    recv_mpst_j_from_h, RoleH, 8 |
+    recv_mpst_j_from_i, RoleI, 9 |
+    recv_mpst_j_from_k, RoleK, 10 | =>
+    RoleJ, SessionMpstEleven, 11
 );
 // K
 create_recv_mpst_session_bundle!(
-    recv_mpst_k_from_a, RoleA, 2 |
-    recv_mpst_k_from_b, RoleB, 3 |
-    recv_mpst_k_from_c, RoleC, 4 |
-    recv_mpst_k_from_d, RoleD, 5 |
-    recv_mpst_k_from_e, RoleE, 6 |
-    recv_mpst_k_from_f, RoleF, 7 |
-    recv_mpst_k_from_g, RoleG, 8 |
-    recv_mpst_k_from_h, RoleH, 9 |
-    recv_mpst_k_from_i, RoleI, 10 |
-    recv_mpst_k_from_j, RoleJ, 11 | =>
-    RoleK, SessionMpstTwelve, 12
+    recv_mpst_k_from_a, RoleA, 1 |
+    recv_mpst_k_from_b, RoleB, 2 |
+    recv_mpst_k_from_c, RoleC, 3 |
+    recv_mpst_k_from_d, RoleD, 4 |
+    recv_mpst_k_from_e, RoleE, 5 |
+    recv_mpst_k_from_f, RoleF, 6 |
+    recv_mpst_k_from_g, RoleG, 7 |
+    recv_mpst_k_from_h, RoleH, 8 |
+    recv_mpst_k_from_i, RoleI, 9 |
+    recv_mpst_k_from_j, RoleJ, 10 | =>
+    RoleK, SessionMpstEleven, 11
 );
 
 // Names
@@ -360,8 +360,7 @@ type R2K<R> = RoleK<RoleK<R>>;
 // A
 enum Branching0fromKtoA {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             RS,
             RS,
             RS,
@@ -376,14 +375,13 @@ enum Branching0fromKtoA {
             NameA,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoK = Recv<(End, Branching0fromKtoA), End>;
+type RecursAtoK = Recv<Branching0fromKtoA, End>;
 // B
 enum Branching0fromKtoB {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             RS,
             RS,
@@ -398,14 +396,13 @@ enum Branching0fromKtoB {
             NameB,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoK = Recv<(End, Branching0fromKtoB), End>;
+type RecursBtoK = Recv<Branching0fromKtoB, End>;
 // C
 enum Branching0fromKtoC {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             RS,
@@ -420,14 +417,13 @@ enum Branching0fromKtoC {
             NameC,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoK = Recv<(End, Branching0fromKtoC), End>;
+type RecursCtoK = Recv<Branching0fromKtoC, End>;
 // D
 enum Branching0fromKtoD {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -442,14 +438,13 @@ enum Branching0fromKtoD {
             NameD,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoK = Recv<(End, Branching0fromKtoD), End>;
+type RecursDtoK = Recv<Branching0fromKtoD, End>;
 // E
 enum Branching0fromKtoE {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -464,14 +459,13 @@ enum Branching0fromKtoE {
             NameE,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoK = Recv<(End, Branching0fromKtoE), End>;
+type RecursEtoK = Recv<Branching0fromKtoE, End>;
 // F
 enum Branching0fromKtoF {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -486,14 +480,13 @@ enum Branching0fromKtoF {
             NameF,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoK = Recv<(End, Branching0fromKtoF), End>;
+type RecursFtoK = Recv<Branching0fromKtoF, End>;
 // G
 enum Branching0fromKtoG {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -508,14 +501,13 @@ enum Branching0fromKtoG {
             NameG,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoK = Recv<(End, Branching0fromKtoG), End>;
+type RecursGtoK = Recv<Branching0fromKtoG, End>;
 // H
 enum Branching0fromKtoH {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -530,14 +522,13 @@ enum Branching0fromKtoH {
             NameH,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
-type RecursHtoK = Recv<(End, Branching0fromKtoH), End>;
+type RecursHtoK = Recv<Branching0fromKtoH, End>;
 // I
 enum Branching0fromKtoI {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -552,14 +543,13 @@ enum Branching0fromKtoI {
             NameI,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
-type RecursItoK = Recv<(End, Branching0fromKtoI), End>;
+type RecursItoK = Recv<Branching0fromKtoI, End>;
 // J
 enum Branching0fromKtoJ {
     More(
-        SessionMpstTwelve<
-            End,
+        SessionMpstEleven<
             SR,
             SR,
             SR,
@@ -574,24 +564,23 @@ enum Branching0fromKtoJ {
             NameJ,
         >,
     ),
-    Done(SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
+    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
-type RecursJtoK = Recv<(End, Branching0fromKtoJ), End>;
+type RecursJtoK = Recv<Branching0fromKtoJ, End>;
 // K
-type Choose0fromKtoA = <RecursAtoK as Session>::Dual;
-type Choose0fromKtoB = <RecursBtoK as Session>::Dual;
-type Choose0fromKtoC = <RecursCtoK as Session>::Dual;
-type Choose0fromKtoD = <RecursDtoK as Session>::Dual;
-type Choose0fromKtoE = <RecursEtoK as Session>::Dual;
-type Choose0fromKtoF = <RecursFtoK as Session>::Dual;
-type Choose0fromKtoG = <RecursGtoK as Session>::Dual;
-type Choose0fromKtoH = <RecursHtoK as Session>::Dual;
-type Choose0fromKtoI = <RecursItoK as Session>::Dual;
-type Choose0fromKtoJ = <RecursJtoK as Session>::Dual;
+type Choose0fromKtoA = Send<Branching0fromKtoA, End>;
+type Choose0fromKtoB = Send<Branching0fromKtoB, End>;
+type Choose0fromKtoC = Send<Branching0fromKtoC, End>;
+type Choose0fromKtoD = Send<Branching0fromKtoD, End>;
+type Choose0fromKtoE = Send<Branching0fromKtoE, End>;
+type Choose0fromKtoF = Send<Branching0fromKtoF, End>;
+type Choose0fromKtoG = Send<Branching0fromKtoG, End>;
+type Choose0fromKtoH = Send<Branching0fromKtoH, End>;
+type Choose0fromKtoI = Send<Branching0fromKtoI, End>;
+type Choose0fromKtoJ = Send<Branching0fromKtoJ, End>;
 type EndpointDoneK =
-    SessionMpstTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameK>;
-type EndpointMoreK = SessionMpstTwelve<
-    End,
+    SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameK>;
+type EndpointMoreK = SessionMpstEleven<
     Send<(), Recv<(), Choose0fromKtoA>>,
     Send<(), Recv<(), Choose0fromKtoB>>,
     Send<(), Recv<(), Choose0fromKtoC>>,
@@ -607,23 +596,7 @@ type EndpointMoreK = SessionMpstTwelve<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = SessionMpstTwelve<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RoleEnd,
-    RoleCentral<RoleEnd>,
->;
-type EndpointA = SessionMpstTwelve<
-    End,
+type EndpointA = SessionMpstEleven<
     End,
     End,
     End,
@@ -637,8 +610,7 @@ type EndpointA = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameA,
 >;
-type EndpointB = SessionMpstTwelve<
-    End,
+type EndpointB = SessionMpstEleven<
     End,
     End,
     End,
@@ -652,8 +624,7 @@ type EndpointB = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameB,
 >;
-type EndpointC = SessionMpstTwelve<
-    End,
+type EndpointC = SessionMpstEleven<
     End,
     End,
     End,
@@ -667,8 +638,7 @@ type EndpointC = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameC,
 >;
-type EndpointD = SessionMpstTwelve<
-    End,
+type EndpointD = SessionMpstEleven<
     End,
     End,
     End,
@@ -682,8 +652,7 @@ type EndpointD = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameD,
 >;
-type EndpointE = SessionMpstTwelve<
-    End,
+type EndpointE = SessionMpstEleven<
     End,
     End,
     End,
@@ -697,8 +666,7 @@ type EndpointE = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameE,
 >;
-type EndpointF = SessionMpstTwelve<
-    End,
+type EndpointF = SessionMpstEleven<
     End,
     End,
     End,
@@ -712,8 +680,7 @@ type EndpointF = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameF,
 >;
-type EndpointG = SessionMpstTwelve<
-    End,
+type EndpointG = SessionMpstEleven<
     End,
     End,
     End,
@@ -727,8 +694,7 @@ type EndpointG = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameG,
 >;
-type EndpointH = SessionMpstTwelve<
-    End,
+type EndpointH = SessionMpstEleven<
     End,
     End,
     End,
@@ -742,8 +708,7 @@ type EndpointH = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameH,
 >;
-type EndpointI = SessionMpstTwelve<
-    End,
+type EndpointI = SessionMpstEleven<
     End,
     End,
     End,
@@ -757,8 +722,7 @@ type EndpointI = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameI,
 >;
-type EndpointJ = SessionMpstTwelve<
-    End,
+type EndpointJ = SessionMpstEleven<
     End,
     End,
     End,
@@ -772,8 +736,7 @@ type EndpointJ = SessionMpstTwelve<
     RoleK<RoleEnd>,
     NameJ,
 >;
-type EndpointK = SessionMpstTwelve<
-    End,
+type EndpointK = SessionMpstEleven<
     Choose0fromKtoA,
     Choose0fromKtoB,
     Choose0fromKtoC,
@@ -788,7 +751,7 @@ type EndpointK = SessionMpstTwelve<
     NameK,
 >;
 
-create_fn_choose_mpst_cancel_multi_to_all_bundle!(
+create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_k_to_all, more_from_k_to_all, =>
     Done, More, =>
     EndpointDoneK, EndpointMoreK, =>
@@ -812,16 +775,11 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     RoleH,
     RoleI,
     RoleJ, =>
-    RoleCentral, RoleK, SessionMpstTwelve, 12
+    RoleK, SessionMpstEleven, 11
 );
 
-fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, 12);
-    Ok(())
-}
-
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_a_from_k, {
+    offer_mpst!(s, recv_mpst_a_from_k, {
         Branching0fromKtoA::Done(s) => {
             close_mpst_multi(s)
         },
@@ -852,7 +810,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_b_from_k, {
+    offer_mpst!(s, recv_mpst_b_from_k, {
         Branching0fromKtoB::Done(s) => {
             close_mpst_multi(s)
         },
@@ -883,7 +841,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_c_from_k, {
+    offer_mpst!(s, recv_mpst_c_from_k, {
         Branching0fromKtoC::Done(s) => {
             close_mpst_multi(s)
         },
@@ -914,7 +872,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_d_from_k, {
+    offer_mpst!(s, recv_mpst_d_from_k, {
         Branching0fromKtoD::Done(s) => {
             close_mpst_multi(s)
         },
@@ -945,7 +903,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_e_from_k, {
+    offer_mpst!(s, recv_mpst_e_from_k, {
         Branching0fromKtoE::Done(s) => {
             close_mpst_multi(s)
         },
@@ -976,7 +934,7 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_f_from_k, {
+    offer_mpst!(s, recv_mpst_f_from_k, {
         Branching0fromKtoF::Done(s) => {
             close_mpst_multi(s)
         },
@@ -1007,7 +965,7 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_g_from_k, {
+    offer_mpst!(s, recv_mpst_g_from_k, {
         Branching0fromKtoG::Done(s) => {
             close_mpst_multi(s)
         },
@@ -1038,7 +996,7 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_h_from_k, {
+    offer_mpst!(s, recv_mpst_h_from_k, {
         Branching0fromKtoH::Done(s) => {
             close_mpst_multi(s)
         },
@@ -1069,7 +1027,7 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_i_from_k, {
+    offer_mpst!(s, recv_mpst_i_from_k, {
         Branching0fromKtoI::Done(s) => {
             close_mpst_multi(s)
         },
@@ -1100,7 +1058,7 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_j_from_k, {
+    offer_mpst!(s, recv_mpst_j_from_k, {
         Branching0fromKtoJ::Done(s) => {
             close_mpst_multi(s)
         },
@@ -1137,12 +1095,12 @@ fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
 fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = done_from_k_to_all(s)?;
+            let s = done_from_k_to_all(s);
 
             close_mpst_multi(s)
         }
         i => {
-            let s = more_from_k_to_all(s)?;
+            let s = more_from_k_to_all(s);
 
             let s = send_mpst_k_to_a((), s)?;
             let (_, s) = recv_mpst_k_from_a(s)?;
@@ -1172,7 +1130,6 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
 
 fn main() {
     let (
-        thread_central,
         thread_a,
         thread_b,
         thread_c,
@@ -1185,21 +1142,10 @@ fn main() {
         thread_j,
         thread_k,
     ) = fork_mpst(
-        endpoint_central,
-        endpoint_a,
-        endpoint_b,
-        endpoint_c,
-        endpoint_d,
-        endpoint_e,
-        endpoint_f,
-        endpoint_g,
-        endpoint_h,
-        endpoint_i,
-        endpoint_j,
-        endpoint_k,
+        endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f, endpoint_g,
+        endpoint_h, endpoint_i, endpoint_j, endpoint_k,
     );
 
-    thread_central.join().unwrap();
     thread_a.join().unwrap();
     thread_b.join().unwrap();
     thread_c.join().unwrap();
