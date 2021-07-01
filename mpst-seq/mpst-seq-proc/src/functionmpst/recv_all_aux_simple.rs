@@ -3,9 +3,9 @@
 //!
 //! # Arguments
 //!
+//! * The current session representing the passive role
 //! * The dual of the name of the head of the stack of the active role
 //! * The index of the binary channel among the two of the passive role
-//! * The current session representing the passive role
 //!
 //! # Example
 //!
@@ -14,7 +14,7 @@
 //! // then the head of the stack of B is
 //! // *RoleBtoAll* and its dual is *RoleAlltoB*.
 //! // If A is the current receiving role,
-//! // Then its binary channel with B is the first
+//! // then its binary channel with B is the first
 //! // one.
 //! mpst_seq::recv_all_aux_simple!(s, RoleAlltoB, 1)()
 //! ```
@@ -32,13 +32,13 @@ pub struct RecvAllAuxSimpleMacroInput {
 
 impl Parse for RecvAllAuxSimpleMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
+        let session = syn::Expr::parse(input)?;
+        <Token![,]>::parse(input)?;
+
         let role = syn::Ident::parse(input)?; // Retrive the role
         <Token![,]>::parse(input)?;
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap(); // Retrive the index
-        <Token![,]>::parse(input)?;
-
-        let session = syn::Expr::parse(input)?;
 
         Ok(RecvAllAuxSimpleMacroInput {
             session,

@@ -1,3 +1,23 @@
+//! Generates code for allowing a role, among three roles, to
+//! send a payload to a receiver role.
+//!
+//! # Arguments
+//!
+//! * The current session representing the sender
+//! * The payload to be sent
+//! * The name of the receiver
+//! * The index of the binary channel among the two of the receiver
+//!
+//! # Example
+//!
+//! ```ignore
+//! // Let's assume that, among A, B and C, B is the receiver,
+//! // A is the sender and x is the payload.
+//! // Then the binary channel of A with B is its first
+//! // channel.
+//! mpst_seq::send_aux_simple!(s, x, RoleB, 1)()
+//! ```
+
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
@@ -12,16 +32,16 @@ pub struct SendAuxSimpleMacroInput {
 
 impl Parse for SendAuxSimpleMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let role = syn::Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
-        <Token![,]>::parse(input)?;
-
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let payload = syn::Expr::parse(input)?;
+        <Token![,]>::parse(input)?;
+
+        let role = syn::Ident::parse(input)?;
+        <Token![,]>::parse(input)?;
+
+        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(SendAuxSimpleMacroInput {
             session,

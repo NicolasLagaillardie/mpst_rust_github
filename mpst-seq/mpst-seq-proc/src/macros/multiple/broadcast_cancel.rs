@@ -10,10 +10,10 @@ pub struct BroadcastCancelMacroInput {
 
 impl Parse for BroadcastCancelMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let nsessions = syn::LitInt::parse(input)?;
+        let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let session = syn::Expr::parse(input)?;
+        let nsessions = syn::LitInt::parse(input)?;
 
         Ok(BroadcastCancelMacroInput { session, nsessions })
     }

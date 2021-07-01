@@ -1,3 +1,22 @@
+//! Generates code for allowing a role, among three roles, to
+//! receive a payload from an active role.
+//!
+//! # Arguments
+//!
+//! * The current session representing the receiver
+//! * The name of the sender
+//! * The index of the binary channel among the two of the receiver
+//!
+//! # Example
+//!
+//! ```ignore
+//! // Let's assume that, among A, B and C, B is the sender
+//! // and A is the receiver.
+//! // Then the binary channel of A with B is the first
+//! // one.
+//! mpst_seq::recv_aux_simple!(s, RoleB, 1)()
+//! ```
+
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
@@ -11,13 +30,13 @@ pub struct RecvAuxSimpleMacroInput {
 
 impl Parse for RecvAuxSimpleMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let role = syn::Ident::parse(input)?;
+        let session = syn::Expr::parse(input)?; // Retrive the session
+        <Token![,]>::parse(input)?;
+
+        let role = syn::Ident::parse(input)?; // Retrive the role
         <Token![,]>::parse(input)?;
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
-        <Token![,]>::parse(input)?;
-
-        let session = syn::Expr::parse(input)?;
 
         Ok(RecvAuxSimpleMacroInput {
             session,
