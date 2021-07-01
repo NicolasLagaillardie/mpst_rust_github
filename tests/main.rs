@@ -6,6 +6,8 @@ mod scribble;
 mod tcp;
 mod unit;
 
+use ntest::timeout;
+
 #[test]
 fn unit_tests() {
     // Checker result
@@ -245,21 +247,35 @@ fn scribble_tests() {
 }
 
 #[test]
+#[timeout(30000)]
 fn canceling() {
+    println!("Starting cancel");
     cancel::cancel_01::main();
+    println!("cancel_01 done");
     cancel::cancel_02::main();
+    println!("cancel_02 done");
     cancel::cancel_03::main();
+    println!("cancel_03 done");
     cancel::cancel_04::main();
+    println!("cancel_04 done");
     cancel::cancel_05::main();
+    println!("cancel_05 done");
     cancel::cancel_06::main();
+    println!("cancel_06 done");
     cancel::cancel_07::main();
+    println!("cancel_07 done");
     cancel::cancel_08::main();
+    println!("cancel_08 done");
     cancel::cancel_09::main();
+    println!("cancel_09 done");
     cancel::cancel_10::main();
+    println!("cancel_10 done");
     cancel::cancel_11::main();
+    println!("cancel_11 done");
     cancel::cancel_12::main();
-    cancel::cancel_12::main();
+    println!("cancel_12 done");
     cancel::cancel_13::main();
+    println!("cancel_13 done");
 }
 
 #[test]
@@ -281,15 +297,25 @@ fn tcp() {
 }
 
 #[test]
+#[timeout(30000)]
 fn http() {
+    println!("Starting http");
     http::simple_http_get::main();
+    println!("simple_http_get done");
     http::simple_http_post::main();
+    println!("simple_http_post done");
     http::simple_https_get::main();
+    println!("simple_https_get done");
     http::complex_https_get::main();
+    println!("complex_https_get done");
     http::binary_http_get::main();
+    println!("binary_http_get done");
     http::o_auth::main();
+    println!("o_auth done");
     http::o_auth_fail_too_true::main();
+    println!("o_auth_fail_too_true done");
     http::o_auth_fail_too_false::main();
+    println!("o_auth_fail_too_false done");
 }
 
 pub fn main() {}

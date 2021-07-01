@@ -251,7 +251,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
 
 // Functions
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    let (pwd, s, _resp) = recv_http_a_to_c(s, true, Vec::new())?;
+    let (pwd, s, _resp) = recv_http_a_to_c(s, true, Vec::new())?; // Should fail because true but Vec::new()
     let expected = thread_rng().gen_range(1..=3);
 
     if pwd == expected {

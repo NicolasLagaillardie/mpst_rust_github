@@ -262,7 +262,7 @@ fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 
     let new_vec = vec![client.request(req)];
 
-    let (pwd, s, _resp) = recv_http_a_to_c(s, false, new_vec)?;
+    let (pwd, s, _resp) = recv_http_a_to_c(s, false, new_vec)?; // Should fail because false but new_vec not empty
     let expected = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
