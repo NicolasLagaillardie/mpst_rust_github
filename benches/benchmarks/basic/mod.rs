@@ -1,6 +1,8 @@
-pub mod actyx_os_1;
-pub mod actyx_os_2;
+pub mod actyx_os_api;
+pub mod actyx_os_logging;
 pub mod distributed_calc;
+pub mod dns_fowler;
+pub mod dns_imai;
 pub mod fib;
 pub mod long_five;
 pub mod o_auth;

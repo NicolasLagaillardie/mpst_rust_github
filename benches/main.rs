@@ -3,7 +3,7 @@ use criterion::criterion_main;
 mod benchmarks;
 
 criterion_main! {
-    benchmarks::mesh::normal::mesh_three_short::mesh_three_short,
+    // benchmarks::mesh::normal::mesh_three_short::mesh_three_short,
     // //////////
     // benchmarks::mesh::empty::mesh_three::mesh_three,
     // benchmarks::mesh::empty::mesh_four::mesh_four,
@@ -50,18 +50,20 @@ criterion_main! {
     // benchmarks::mesh::cancel::mesh_twenty::mesh_twenty,
     // //////////
     // benchmarks::basic::long_five::long_five_protocol,
-    // benchmarks::basic::actyx_os_1::actyx_os_1,
-    // benchmarks::basic::actyx_os_2::actyx_os_2,
-    // benchmarks::basic::distributed_calc::distributed_calc,
-    // benchmarks::basic::fib::fib,
-    // benchmarks::basic::o_auth::o_auth,
-    // benchmarks::basic::online_wallet::online_wallet,
-    // benchmarks::basic::ping_pong::ping_pong,
-    // benchmarks::basic::simple_voting_three::simple_voting,
-    // benchmarks::basic::smtp::smtp,
-    // benchmarks::basic::three_buyer::three_buyer,
-    // benchmarks::basic::travel_three::travel_three,
-    // benchmarks::basic::video_stream::video_stream,
+    benchmarks::basic::actyx_os_logging::actyx_os_logging,
+    benchmarks::basic::actyx_os_api::actyx_os_api,
+    benchmarks::basic::distributed_calc::distributed_calc,
+    benchmarks::basic::fib::fib,
+    benchmarks::basic::o_auth::o_auth,
+    benchmarks::basic::online_wallet::online_wallet,
+    benchmarks::basic::ping_pong::ping_pong,
+    benchmarks::basic::simple_voting_three::simple_voting,
+    benchmarks::basic::smtp::smtp,
+    benchmarks::basic::three_buyer::three_buyer,
+    benchmarks::basic::travel_three::travel_three,
+    benchmarks::basic::video_stream::video_stream,
+    benchmarks::basic::dns_fowler::dns_fowler,
+    benchmarks::basic::dns_imai::dns_imai,
     // //////////
     // benchmarks::ring::empty::ring_three::ring_three,
     // benchmarks::ring::empty::ring_four::ring_four,

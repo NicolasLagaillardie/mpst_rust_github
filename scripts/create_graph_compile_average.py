@@ -16,17 +16,19 @@ average_mpst = []
 average_binary = []
 average_crossbeam = []
 average_cancel = []
+average_cancel_broadcast = []
 
 nb_participants_mpst = []
 nb_participants_binary = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
+nb_participants_cancel_broadcast = []
 
 # Dictionary for converting from string to int
 str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
               'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
-serie = 'mesh'
+serie = 'ring'
 
 # For each folder in main_path
 for d in directories:
@@ -51,8 +53,13 @@ for d in directories:
             average_binary.append(statistics.mean(build_time)/10**6)
             nb_participants_binary.append(str_to_int[name])
         elif 'cancel' in d:
-            average_cancel.append(statistics.mean(build_time)/10**6)
-            nb_participants_cancel.append(str_to_int[name])
+            if 'broadcast' in d:
+                average_cancel_broadcast.append(
+                    statistics.mean(build_time)/10**6)
+                nb_participants_cancel_broadcast.append(str_to_int[name])
+            else:
+                average_cancel.append(statistics.mean(build_time)/10**6)
+                nb_participants_cancel.append(str_to_int[name])
         elif 'crossbeam' in d:
             average_crossbeam.append(statistics.mean(build_time)/10**6)
             nb_participants_crossbeam.append(str_to_int[name])
@@ -72,6 +79,9 @@ nb_participants_crossbeam, average_crossbeam = (list(t)
 nb_participants_cancel, average_cancel = (list(t)
                                           for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
 
+nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t)
+                                                              for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
+
 # Change size
 ax = plt.figure(figsize=(30, 15)).gca()
 
@@ -87,6 +97,8 @@ ax.plot(nb_participants_crossbeam, average_crossbeam,
         label="Crossbeam", linestyle='dashdot', linewidth=5)
 ax.plot(nb_participants_cancel, average_cancel,
         label="Cancel", linestyle='dotted', linewidth=5)
+# ax.plot(nb_participants_cancel_broadcast, average_cancel_broadcast,
+#         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('Number of participants', fontsize=30)
@@ -104,7 +116,7 @@ ax.grid(True)
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
 # Save fig
-plt.savefig(main_path + '/graph_average_compile_'+serie+'.pdf')
+plt.savefig(main_path + '/graphAverageCompile'+serie+'.pdf')
 
 # # function to show the plot
 # plt.show()

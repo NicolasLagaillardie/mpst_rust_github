@@ -172,41 +172,46 @@ fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = 1;
+fn endpoint_init(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    endpoint_c(s, 100)
+}
 
-    if choice != 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoA::<i32>::Select,
-            Branching0fromCtoS::<i32>::Select, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
-            SessionMpstThree,
-            2
-        );
-        choice_c(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoA::<i32>::Loop,
-            Branching0fromCtoS::<i32>::Loop, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
-            SessionMpstThree,
-            2
-        );
+fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromCtoA::<i32>::Select,
+                Branching0fromCtoS::<i32>::Select, =>
+                RoleA,
+                RoleS, =>
+                RoleC,
+                SessionMpstThree,
+                2
+            );
+            choice_c(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromCtoA::<i32>::Loop,
+                Branching0fromCtoS::<i32>::Loop, =>
+                RoleA,
+                RoleS, =>
+                RoleC,
+                SessionMpstThree,
+                2
+            );
 
-        let s = send_mpst_c_to_a(random(), s);
-        let (_quote, s) = recv_mpst_c_from_a(s)?;
-        endpoint_c(s)
+            let s = send_mpst_c_to_a(random(), s);
+            let (_quote, s) = recv_mpst_c_from_a(s)?;
+            endpoint_c(s, loops - 1)
+        }
     }
 }
 
 fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=3);
+    let choice = thread_rng().gen_range(1..3);
 
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
@@ -271,7 +276,7 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(endpoint_a),
-        black_box(endpoint_c),
+        black_box(endpoint_init),
         black_box(endpoint_s),
     );
 
