@@ -11,7 +11,7 @@ use mpstthree::{
 };
 
 use mpstthree::role::broadcast::RoleBroadcast;
-use rand::{random, thread_rng, Rng};
+use rand::random;
 use std::error::Error;
 use std::time::Duration;
 
@@ -168,40 +168,45 @@ fn endpoint_other(s: EndpointOther) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..3);
+    endpoint_server_recurs(s, 100)
+}
 
+fn endpoint_server_recurs(s: EndpointServer, loops: i32) -> Result<(), Box<dyn Error>> {
     let (address, s) = recv_mpst_server_from_client(s)?;
 
-    if choice == 1 {
-        let s = choose_mpst_server_to_all!(
-            s,
-            Branching0fromServerToClient::Dummy,
-            Branching0fromServerToOther::Dummy
-        );
+    match loops {
+        0 => {
+            let s = choose_mpst_server_to_all!(
+                s,
+                Branching0fromServerToClient::Query,
+                Branching0fromServerToOther::Query
+            );
 
-        let s = send_mpst_server_to_other((), s);
+            let packet = random::<i32>();
 
-        let packet = random::<i32>();
+            let s = send_mpst_server_to_other((address, packet), s);
 
-        let s = send_mpst_server_to_client((address, packet), s);
+            let ((new_address, new_packet), s) = recv_mpst_server_from_other(s)?;
 
-        close_mpst_multi(s)
-    } else {
-        let s = choose_mpst_server_to_all!(
-            s,
-            Branching0fromServerToClient::Query,
-            Branching0fromServerToOther::Query
-        );
+            let s = send_mpst_server_to_client((new_address, new_packet), s);
 
-        let packet = random::<i32>();
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_server_to_all!(
+                s,
+                Branching0fromServerToClient::Dummy,
+                Branching0fromServerToOther::Dummy
+            );
 
-        let s = send_mpst_server_to_other((address, packet), s);
+            let s = send_mpst_server_to_other((), s);
 
-        let ((new_address, new_packet), s) = recv_mpst_server_from_other(s)?;
+            let packet = random::<i32>();
 
-        let s = send_mpst_server_to_client((new_address, new_packet), s);
+            let s = send_mpst_server_to_client((address, packet), s);
 
-        close_mpst_multi(s)
+            close_mpst_multi(s)
+        }
     }
 }
 

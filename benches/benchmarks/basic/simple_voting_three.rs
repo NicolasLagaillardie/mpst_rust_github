@@ -220,40 +220,45 @@ fn choice_pawn(s: ChoicePawn) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(3..5);
+    endpoint_server_loops(s, 100)
+}
 
-    let (auth, s) = recv_mpst_server_from_voter(s)?;
+fn endpoint_server_loops(s: EndpointServer<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
+    let (_auth, s) = recv_mpst_server_from_voter(s)?;
 
-    if choice == auth {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromStoP::Reject,
-            Branching0fromStoV::<i32>::Reject, =>
-            RolePawn,
-            RoleVoter, =>
-            RoleServer,
-            SessionMpstThree,
-            2
-        );
+    match loops {
+        0 => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromStoP::Reject,
+                Branching0fromStoV::<i32>::Reject, =>
+                RolePawn,
+                RoleVoter, =>
+                RoleServer,
+                SessionMpstThree,
+                2
+            );
 
-        let s = send_mpst_server_to_voter(0, s);
+            let s = send_mpst_server_to_voter(0, s);
 
-        close_mpst_multi(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromStoP::Auth,
-            Branching0fromStoV::<i32>::Auth, =>
-            RolePawn,
-            RoleVoter, =>
-            RoleServer,
-            SessionMpstThree,
-            2
-        );
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromStoP::Auth,
+                Branching0fromStoV::<i32>::Auth, =>
+                RolePawn,
+                RoleVoter, =>
+                RoleServer,
+                SessionMpstThree,
+                2
+            );
 
-        let s = send_mpst_server_to_voter(1, s);
+            let s = send_mpst_server_to_voter(1, s);
 
-        choice_server(s)
+            choice_server(s)
+        }
     }
 }
 

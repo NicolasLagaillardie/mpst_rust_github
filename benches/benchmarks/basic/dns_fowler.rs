@@ -11,7 +11,7 @@ use mpstthree::{
 };
 
 use mpstthree::role::broadcast::RoleBroadcast;
-use rand::{random, thread_rng, Rng};
+use rand::random;
 use std::error::Error;
 use std::time::Duration;
 
@@ -189,32 +189,37 @@ fn endpoint_handler(s: EndpointHandler) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..3);
+    endpoint_regional_recurs(s, 100)
+}
 
+fn endpoint_regional_recurs(s: EndpointRegional, loops: i32) -> Result<(), Box<dyn Error>> {
     let (_domain_name, s) = recv_mpst_regional_from_handler(s)?;
 
-    if choice == 1 {
-        let s = choose_mpst_regional_to_all!(
-            s,
-            Branching0fromRegionalToData::Loop,
-            Branching0fromRegionalToHandler::Loop
-        );
+    match loops {
+        0 => {
+            let s = choose_mpst_regional_to_all!(
+                s,
+                Branching0fromRegionalToData::Invalid,
+                Branching0fromRegionalToHandler::Invalid
+            );
 
-        let zone_pid = random::<i32>();
+            let s = send_mpst_regional_to_handler((), s);
 
-        let s = send_mpst_regional_to_handler(zone_pid, s);
+            close_mpst_multi(s)
+        }
+        _ => {
+            let s = choose_mpst_regional_to_all!(
+                s,
+                Branching0fromRegionalToData::Loop,
+                Branching0fromRegionalToHandler::Loop
+            );
 
-        endpoint_regional(s)
-    } else {
-        let s = choose_mpst_regional_to_all!(
-            s,
-            Branching0fromRegionalToData::Invalid,
-            Branching0fromRegionalToHandler::Invalid
-        );
+            let zone_pid = random::<i32>();
 
-        let s = send_mpst_regional_to_handler((), s);
+            let s = send_mpst_regional_to_handler(zone_pid, s);
 
-        close_mpst_multi(s)
+            endpoint_regional_recurs(s, loops - 1)
+        }
     }
 }
 

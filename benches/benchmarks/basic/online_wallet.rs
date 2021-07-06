@@ -167,9 +167,10 @@ type EndpointS0 = SessionMpstThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
-    let ((id, pw), s) = recv_mpst_a_from_c(s)?;
+    let ((_id, _pw), s) = recv_mpst_a_from_c(s)?;
 
-    if id != pw {
+    if 0 == 1 {
+        // actual condition id != pw
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromAtoC::Fail,

@@ -126,7 +126,7 @@ type EndpointLogsInit<N> =
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_controller_to_logs(0, s)?;
 
-    recurs_0_controller(s, 100)
+    recurs_0_controller(s, 200)
 }
 
 fn recurs_0_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -135,13 +135,13 @@ fn recurs_0_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Bo
 
             let (_, s) = recv_controller_from_logs(s)?;
 
-            recurs_0_controller(s, loops)
+            recurs_0_controller(s, loops - 1)
         },
         Branching0fromLtoC::Failure(s) => {
 
             let (_, s) = recv_controller_from_logs(s)?;
 
-            recurs_1_controller(s, loops)
+            recurs_1_controller(s, loops - 1)
         },
     })
 }
@@ -188,22 +188,7 @@ fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
 
 fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
-        i if i % 2 == 0 => {
-            // Success
-            let s = choose_mpst_multi_to_all!(
-                s,
-                Branching0fromLtoC::Success, =>
-                Controller, =>
-                Logs,
-                SessionMpstTwo,
-                2
-            );
-
-            let s = send_logs_to_controller(loops, s)?;
-
-            recurs_0_logs(s, loops)
-        }
-        _ => {
+        i if i <= 0 || i % 2 == 0 => {
             // Failure
             let s = choose_mpst_multi_to_all!(
                 s,
@@ -214,9 +199,24 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 2
             );
 
-            let s = send_logs_to_controller(loops, s)?;
+            let s = send_logs_to_controller(loops - 1, s)?;
 
             recurs_1_logs(s)
+        }
+        _ => {
+            // Success
+            let s = choose_mpst_multi_to_all!(
+                s,
+                Branching0fromLtoC::Success, =>
+                Controller, =>
+                Logs,
+                SessionMpstTwo,
+                2
+            );
+
+            let s = send_logs_to_controller(loops - 1, s)?;
+
+            recurs_0_logs(s, loops - 1)
         }
     }
 }
@@ -227,7 +227,7 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
             let (loops, s) = recv_logs_from_controller(s)?;
 
-            recurs_0_logs(s, loops)
+            recurs_0_logs(s, loops - 1)
         },
         Branching1fromCtoL::Stop(s) => {
 

@@ -25,21 +25,21 @@ sleep 5
 # cargo flamegraph --example long_simple_eleven_binary -o flamegraphs/flamegraph_long_simple_eleven_binary.svg
 # cargo flamegraph --example long_simple_eleven_mpst -o flamegraphs/flamegraph_long_simple_eleven_mpst.svg
 
-### Basic examples
-./scripts/compile.sh o_auth
-./scripts/compile.sh o_auth_2
-./scripts/compile.sh fib
-./scripts/compile.sh simple_voting_three
-./scripts/compile.sh three_buyer
-./scripts/compile.sh travel_three
-./scripts/compile.sh actyx_os_logging
-./scripts/compile.sh actyx_os_api
-./scripts/compile.sh smtp
-./scripts/compile.sh distributed_calc
-./scripts/compile.sh usecase
-./scripts/compile.sh online_wallet
-./scripts/compile.sh dns_fowler
-./scripts/compile.sh dns_imai
+# ### Basic examples
+# ./scripts/compile.sh o_auth
+# ./scripts/compile.sh o_auth_2
+# ./scripts/compile.sh fib
+# ./scripts/compile.sh simple_voting_three
+# ./scripts/compile.sh three_buyer
+# ./scripts/compile.sh travel_three
+# ./scripts/compile.sh actyx_os_logging
+# ./scripts/compile.sh actyx_os_api
+# ./scripts/compile.sh smtp
+# ./scripts/compile.sh distributed_calc
+# ./scripts/compile.sh usecase
+# ./scripts/compile.sh online_wallet
+# ./scripts/compile.sh dns_fowler
+# ./scripts/compile.sh dns_imai
 
 # ### Ping-pong
 # ./scripts/compile.sh ping_pong_binary
