@@ -4,8 +4,8 @@
 /// Cancels a session
 #[macro_export]
 macro_rules! send_cancel {
-    ($func_name: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $msg: expr) => {
-        mpst_seq::send_cancel!($func_name, $name, $sessionmpst_name, $nsessions, $msg);
+    ($func_name: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal, $msg: expr) => {
+        mpst_seq::send_cancel!($func_name, $name, $meshedchannels_name, $nsessions, $msg);
     };
 }
 

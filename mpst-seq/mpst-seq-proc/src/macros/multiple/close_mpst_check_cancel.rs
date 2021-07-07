@@ -5,7 +5,7 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct CloseMpstCheckCancelMacroInput {
     func_name: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
 }
 
@@ -14,14 +14,14 @@ impl Parse for CloseMpstCheckCancelMacroInput {
         let func_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CloseMpstCheckCancelMacroInput {
             func_name,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
         })
     }
@@ -36,7 +36,7 @@ impl From<CloseMpstCheckCancelMacroInput> for proc_macro2::TokenStream {
 impl CloseMpstCheckCancelMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let func_name = self.func_name.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let session_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|_| {
@@ -71,7 +71,7 @@ impl CloseMpstCheckCancelMacroInput {
 
         quote! {
             fn #func_name<R>(
-                s: #sessionmpst_name<
+                s: #meshedchannels_name<
                     #(
                         #session_types
                     )*

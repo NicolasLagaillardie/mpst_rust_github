@@ -11,7 +11,7 @@
 /// ```
 /// use mpstthree::bundle_impl;
 ///
-/// bundle_impl!(SessionMpstThree => A, B, C);
+/// bundle_impl!(MeshedChannelsThree => A, B, C);
 /// ```
 ///
 /// # Example with fork
@@ -19,26 +19,26 @@
 /// ```
 /// use mpstthree::bundle_impl;
 ///
-/// bundle_impl!(SessionMpstThree => A, B, C => fork_mpst);
+/// bundle_impl!(MeshedChannelsThree => A, B, C => fork_mpst);
 /// ```
 #[macro_export]
 macro_rules! bundle_impl {
     (
-        $sessionmpst_name: ident =>
+        $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking!(
-            $sessionmpst_name,
+            $meshedchannels_name,
             ( $( $all_roles , )+ )
         );
     };
     (
-        $sessionmpst_name: ident =>
+        $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)? =>
         $fork_mpst: ident
     ) => {
         mpst_seq::baking!(
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             ( $( $all_roles , )+ ) ,
             $fork_mpst
         );
@@ -66,7 +66,7 @@ macro_rules! bundle_impl {
 /// ```
 /// use mpstthree::bundle_impl_with_enum;
 ///
-/// bundle_impl_with_enum!(SessionMpstThree => A, B, C);
+/// bundle_impl_with_enum!(MeshedChannelsThree => A, B, C);
 /// ```
 ///
 /// # Example with fork
@@ -74,26 +74,26 @@ macro_rules! bundle_impl {
 /// ```
 /// use mpstthree::bundle_impl_with_enum;
 ///
-/// bundle_impl_with_enum!(SessionMpstThree => A, B, C => fork_mpst);
+/// bundle_impl_with_enum!(MeshedChannelsThree => A, B, C => fork_mpst);
 /// ```
 #[macro_export]
 macro_rules! bundle_impl_with_enum {
     (
-        $sessionmpst_name: ident =>
+        $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking_with_enum!(
-            $sessionmpst_name,
+            $meshedchannels_name,
             ( $( $all_roles , )+ )
         );
     };
     (
-        $sessionmpst_name: ident =>
+        $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)? =>
         $fork_mpst: ident
     ) => {
         mpst_seq::baking_with_enum!(
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             ( $( $all_roles , )+ ) ,
             $fork_mpst
         );

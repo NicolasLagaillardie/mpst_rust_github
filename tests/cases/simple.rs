@@ -7,7 +7,7 @@ use std::error::Error;
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
 use mpstthree::functionmpst::close::close_mpst;
 
@@ -40,9 +40,9 @@ type StackB = RoleA<RoleC<RoleEnd>>;
 type StackC = RoleA<RoleB<RoleEnd>>;
 
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 
 /// Single test for A
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -102,9 +102,9 @@ pub fn simple_triple_endpoints_checker() {
             let s = RandomState::new();
             let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
-            let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
+            let (s1, _): (EndpointA<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointB<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointC<i32>, _) = MeshedChannels::new();
 
             let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 

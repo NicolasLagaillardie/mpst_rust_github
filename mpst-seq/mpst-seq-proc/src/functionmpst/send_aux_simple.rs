@@ -93,7 +93,7 @@ impl SendAuxSimpleMacroInput {
                     temp(#session.stack)
                 };
 
-                crate::sessionmpst::SessionMpst {
+                crate::meshedchannels::MeshedChannels {
                     #( #all_sessions : #new_sessions , )*
                     stack: new_stack,
                     name: #session.name,

@@ -7,7 +7,7 @@ pub struct RecvMPSTMacroInput {
     session: syn::Expr,
     sender: syn::Ident,
     receiver: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
 }
@@ -23,7 +23,7 @@ impl Parse for RecvMPSTMacroInput {
         let receiver = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -35,7 +35,7 @@ impl Parse for RecvMPSTMacroInput {
             session,
             sender,
             receiver,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             exclusion,
         })
@@ -52,7 +52,7 @@ impl RecvMPSTMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let sender = self.sender.clone();
         let receiver = self.receiver.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let session = self.session.clone();
 
         let all_recv: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
@@ -114,7 +114,7 @@ impl RecvMPSTMacroInput {
 
                 Ok((
                     v,
-                    #sessionmpst_name {
+                    #meshedchannels_name {
                         #(
                             #new_sessions
                         )*

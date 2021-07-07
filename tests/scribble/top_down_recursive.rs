@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::sessionmpst::SessionMpst;
 use std::marker;
 
 use mpstthree::role::a::RoleA;
@@ -38,11 +38,11 @@ type ADDAtoB<N> = Recv<N, End>;
 type OrderingA11 = RoleC<RoleEnd>;
 type OrderingA12Full = RoleB<OrderingA11>;
 type EndpointA13<N> =
-    SessionMpst<ADDAtoB<N>, Recv<Branches0AtoC<N>, End>, OrderingA12Full, RoleA<RoleEnd>>;
+    MeshedChannels<ADDAtoB<N>, Recv<Branches0AtoC<N>, End>, OrderingA12Full, RoleA<RoleEnd>>;
 type BYEAtoB = Recv<(), End>;
 
 type OrderingA14Full = RoleB<RoleEnd>;
-type EndpointA15 = SessionMpst<BYEAtoB, End, OrderingA14Full, RoleA<RoleEnd>>;
+type EndpointA15 = MeshedChannels<BYEAtoB, End, OrderingA14Full, RoleA<RoleEnd>>;
 
 enum Branches0AtoC<N: marker::Send> {
     ADD(EndpointA13<N>),
@@ -54,19 +54,19 @@ type TestAtoC<N> = Recv<N, Recv<Branches0AtoC<N>, End>>;
 
 type OrderingA16 = RoleC<RoleEnd>;
 type OrderingA17Full = RoleC<OrderingA16>;
-type EndpointA18<N> = SessionMpst<End, TestAtoC<N>, OrderingA17Full, RoleA<RoleEnd>>;
+type EndpointA18<N> = MeshedChannels<End, TestAtoC<N>, OrderingA17Full, RoleA<RoleEnd>>;
 
 type ADDBtoA<N> = Send<N, End>;
 type ADDBtoC<N> = Recv<N, Recv<Branches0BtoC<N>, End>>;
 
 type OrderingB13 = RoleC<RoleEnd>;
 type OrderingB14Full = RoleC<RoleA<OrderingB13>>;
-type EndpointB15<N> = SessionMpst<ADDBtoA<N>, ADDBtoC<N>, OrderingB14Full, RoleB<RoleEnd>>;
+type EndpointB15<N> = MeshedChannels<ADDBtoA<N>, ADDBtoC<N>, OrderingB14Full, RoleB<RoleEnd>>;
 type BYEBtoA = Send<(), End>;
 type BYEBtoC = Recv<(), End>;
 
 type OrderingB16Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB17 = SessionMpst<BYEBtoA, BYEBtoC, OrderingB16Full, RoleB<RoleEnd>>;
+type EndpointB17 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB16Full, RoleB<RoleEnd>>;
 
 enum Branches0BtoC<N: marker::Send> {
     ADD(EndpointB15<N>),
@@ -77,22 +77,22 @@ type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 type OrderingB18 = RoleC<RoleEnd>;
 type OrderingB19Full = OrderingB18;
 type EndpointB20<N> =
-    SessionMpst<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, RoleB<RoleEnd>>;
+    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, RoleB<RoleEnd>>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
 type OrderingC2Full = RoleA<RoleBroadcast>;
-type EndpointC3<N> = SessionMpst<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, RoleC<RoleEnd>>;
+type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, RoleC<RoleEnd>>;
 
 ///////////////////////////////////////// END
 
 ///////////////////////////////////////// For verification
 ///////////////////////////////////////// with functions
 
-type EndpointA19<N> = SessionMpst<End, Recv<Branches0AtoC<N>, End>, OrderingA16, RoleA<RoleEnd>>;
+type EndpointA19<N> = MeshedChannels<End, Recv<Branches0AtoC<N>, End>, OrderingA16, RoleA<RoleEnd>>;
 
 type EndpointC2<N> =
-    SessionMpst<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleBroadcast, RoleC<RoleEnd>>;
+    MeshedChannels<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleBroadcast, RoleC<RoleEnd>>;
 
 ///////////////////////////////////////// END
 

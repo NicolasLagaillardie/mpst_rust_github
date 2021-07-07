@@ -10,8 +10,8 @@ use mpstthree::{
 use rand::random;
 use std::error::Error;
 
-// Create new SessionMpst for three participants
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
+// Create new MeshedChannels for three participants
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
 
 // Create new roles
 // normal
@@ -23,27 +23,33 @@ create_normal_role!(RoleC, RoleCDual);
 // B
 create_send_check_cancel_bundle!(
     send_check_b_to_c, RoleC, 2 | =>
-    RoleB, SessionMpstThree, 3
+    RoleB, MeshedChannelsThree, 3
 );
 // C
 create_send_check_cancel_bundle!(
     send_check_c_to_b, RoleB, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_c, RoleC, 2 | =>
-    RoleB, SessionMpstThree, 3
+    RoleB, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 
-send_cancel!(cancel_mpst, RoleC, SessionMpstThree, 3, "Session dropped");
+send_cancel!(
+    cancel_mpst,
+    RoleC,
+    MeshedChannelsThree,
+    3,
+    "Session dropped"
+);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -53,8 +59,8 @@ type NameC = RoleC<RoleEnd>;
 // Types
 // B
 enum Branching0fromCtoB {
-    More(SessionMpstThree<End, Send<i32, RecursBtoD>, RoleC<RoleC<RoleEnd>>, NameB>),
-    Done(SessionMpstThree<End, End, RoleEnd, NameB>),
+    More(MeshedChannelsThree<End, Send<i32, RecursBtoD>, RoleC<RoleC<RoleEnd>>, NameB>),
+    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = Recv<(End, Branching0fromCtoB), End>;
 // D
@@ -62,9 +68,9 @@ type Choose0fromCtoA = End;
 type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>; // TODO: Remove the need of tuple with an End which is forwaded to A
 
 // Creating the MP sessions
-type EndpointA = SessionMpstThree<End, End, RoleEnd, NameA>;
-type EndpointB = SessionMpstThree<End, RecursBtoD, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = MeshedChannelsThree<End, End, RoleEnd, NameA>;
+type EndpointB = MeshedChannelsThree<End, RecursBtoD, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, 3);
@@ -96,7 +102,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleB, =>
                 RoleA,
                 RoleC,
-                SessionMpstThree,
+                MeshedChannelsThree,
                 3
             );
 
@@ -110,7 +116,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 RoleB, =>
                 RoleA,
                 RoleC,
-                SessionMpstThree,
+                MeshedChannelsThree,
                 3
             );
 

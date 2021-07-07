@@ -28,8 +28,8 @@ use std::error::Error;
 //     ZoneDataResponse(RRTree) from Data to Handler;
 // }
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
 
 // Create new Roles
 // normal
@@ -40,19 +40,19 @@ create_multiple_normal_role_short!(Data, Handler, Regional);
 create_send_mpst_session_bundle!(
     send_mpst_data_to_handler, RoleHandler, 1 |
     send_mpst_data_to_regional, RoleRegional, 2 | =>
-    RoleData, SessionMpstThree, 3
+    RoleData, MeshedChannelsThree, 3
 );
 // HANDLER
 create_send_mpst_session_bundle!(
     send_mpst_handler_to_data, RoleData, 1 |
     send_mpst_handler_to_regional, RoleRegional, 2 | =>
-    RoleHandler, SessionMpstThree, 3
+    RoleHandler, MeshedChannelsThree, 3
 );
 // REGIONAL
 create_send_mpst_session_bundle!(
     send_mpst_regional_to_data, RoleData, 1 |
     send_mpst_regional_to_handler, RoleHandler, 2 | =>
-    RoleRegional, SessionMpstThree, 3
+    RoleRegional, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
@@ -60,19 +60,19 @@ create_send_mpst_session_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_data_from_handler, RoleHandler, 1 |
     recv_mpst_data_from_regional, RoleRegional, 2 | =>
-    RoleData, SessionMpstThree, 3
+    RoleData, MeshedChannelsThree, 3
 );
 // HANDLER
 create_recv_mpst_session_bundle!(
     recv_mpst_handler_from_data, RoleData, 1 |
     recv_mpst_handler_from_regional, RoleRegional, 2 | =>
-    RoleHandler, SessionMpstThree, 3
+    RoleHandler, MeshedChannelsThree, 3
 );
 // REGIONAL
 create_recv_mpst_session_bundle!(
     recv_mpst_regional_from_data, RoleData, 1 |
     recv_mpst_regional_from_handler, RoleHandler, 2 | =>
-    RoleRegional, SessionMpstThree, 3
+    RoleRegional, MeshedChannelsThree, 3
 );
 
 // Names
@@ -87,43 +87,47 @@ type Choose0fromRegionalToHandler = Send<Branching0fromRegionalToHandler, End>;
 // DATA
 enum Branching0fromRegionalToData {
     Loop(
-        SessionMpstThree<
+        MeshedChannelsThree<
             Recv<(), Send<i32, End>>,
             Offer0fromRegionalToData,
             RoleHandler<RoleHandler<RoleRegional<RoleEnd>>>,
             NameData,
         >,
     ),
-    Invalid(SessionMpstThree<End, End, RoleEnd, NameData>),
+    Invalid(MeshedChannelsThree<End, End, RoleEnd, NameData>),
 }
 type Offer0fromRegionalToData = Recv<Branching0fromRegionalToData, End>;
 // HANDLER
 enum Branching0fromRegionalToHandler {
     Loop(
-        SessionMpstThree<
+        MeshedChannelsThree<
             Send<(), Recv<i32, End>>,
             Recv<i32, Send<i32, Offer0fromRegionalToHandler>>,
             RoleRegional<RoleData<RoleData<RoleRegional<RoleRegional<RoleEnd>>>>>,
             NameHandler,
         >,
     ),
-    Invalid(SessionMpstThree<End, Recv<(), End>, RoleRegional<RoleEnd>, NameHandler>),
+    Invalid(MeshedChannelsThree<End, Recv<(), End>, RoleRegional<RoleEnd>, NameHandler>),
 }
 type Offer0fromRegionalToHandler = Recv<Branching0fromRegionalToHandler, End>;
 
 // Creating the MP sessions
 // DATA
-type EndpointData =
-    SessionMpstThree<End, Recv<Branching0fromRegionalToData, End>, RoleRegional<RoleEnd>, NameData>;
+type EndpointData = MeshedChannelsThree<
+    End,
+    Recv<Branching0fromRegionalToData, End>,
+    RoleRegional<RoleEnd>,
+    NameData,
+>;
 // HANDLER
-type EndpointHandler = SessionMpstThree<
+type EndpointHandler = MeshedChannelsThree<
     End,
     Send<i32, Recv<Branching0fromRegionalToHandler, End>>,
     RoleRegional<RoleRegional<RoleEnd>>,
     NameHandler,
 >;
 // REGIONAL
-type EndpointRegional = SessionMpstThree<
+type EndpointRegional = MeshedChannelsThree<
     Choose0fromRegionalToData,
     Recv<i32, Choose0fromRegionalToHandler>,
     RoleHandler<RoleBroadcast>,
@@ -135,7 +139,7 @@ choose_mpst_create_multi_to_all!(
     RoleData,
     RoleHandler, =>
     RoleRegional,
-    SessionMpstThree,
+    MeshedChannelsThree,
     3
 );
 

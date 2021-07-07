@@ -16,6 +16,7 @@ pub use mpst_seq_proc::create_choose_mpst_session_multi_right;
 pub use mpst_seq_proc::create_choose_type_multi;
 pub use mpst_seq_proc::create_fn_choose_mpst_cancel_multi_to_all_bundle;
 pub use mpst_seq_proc::create_fn_choose_mpst_multi_to_all_bundle;
+pub use mpst_seq_proc::create_meshedchannels;
 pub use mpst_seq_proc::create_normal_role_short;
 pub use mpst_seq_proc::create_offer_mpst_session_multi;
 pub use mpst_seq_proc::create_offer_type_multi;
@@ -26,7 +27,6 @@ pub use mpst_seq_proc::create_send_check_cancel;
 pub use mpst_seq_proc::create_send_http_session;
 pub use mpst_seq_proc::create_send_mpst_cancel;
 pub use mpst_seq_proc::create_send_mpst_session;
-pub use mpst_seq_proc::create_sessionmpst;
 pub use mpst_seq_proc::fork_mpst_multi;
 pub use mpst_seq_proc::recv_all_aux_simple;
 pub use mpst_seq_proc::recv_aux_simple;
@@ -123,7 +123,7 @@ pub use mpst_seq_proc::e_create_send_http_session;
 pub use mpst_seq_proc::e_create_send_mpst_cancel;
 
 #[proc_macro_hack]
-pub use mpst_seq_proc::e_create_sessionmpst;
+pub use mpst_seq_proc::e_create_meshedchannels;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_close_mpst_cancel;

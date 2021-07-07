@@ -14,8 +14,8 @@ use mpstthree::{
 use std::error::Error;
 use std::time::Duration;
 
-// Create the new SessionMpst for eleven participants and the close and fork functions
-bundle_struct_fork_close_multi_cancel!(close_mpst_multi, fork_mpst, SessionMpstEleven, 11);
+// Create the new MeshedChannels for eleven participants and the close and fork functions
+bundle_struct_fork_close_multi_cancel!(close_mpst_multi, fork_mpst, MeshedChannelsEleven, 11);
 
 // Create new roles
 // normal
@@ -34,7 +34,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_a_to_i, RoleI, 8 |
     send_mpst_a_to_j, RoleJ, 9 |
     send_mpst_a_to_k, RoleK, 10 | =>
-    RoleA, SessionMpstEleven, 11
+    RoleA, MeshedChannelsEleven, 11
 );
 // B
 create_send_mpst_cancel_bundle!(
@@ -48,7 +48,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_b_to_i, RoleI, 8 |
     send_mpst_b_to_j, RoleJ, 9 |
     send_mpst_b_to_k, RoleK, 10 | =>
-    RoleB, SessionMpstEleven, 11
+    RoleB, MeshedChannelsEleven, 11
 );
 // C
 create_send_mpst_cancel_bundle!(
@@ -62,7 +62,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_c_to_i, RoleI, 8 |
     send_mpst_c_to_j, RoleJ, 9 |
     send_mpst_c_to_k, RoleK, 10 | =>
-    RoleC, SessionMpstEleven, 11
+    RoleC, MeshedChannelsEleven, 11
 );
 // D
 create_send_mpst_cancel_bundle!(
@@ -76,7 +76,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_d_to_i, RoleI, 8 |
     send_mpst_d_to_j, RoleJ, 9 |
     send_mpst_d_to_k, RoleK, 10 | =>
-    RoleD, SessionMpstEleven, 11
+    RoleD, MeshedChannelsEleven, 11
 );
 // E
 create_send_mpst_cancel_bundle!(
@@ -90,7 +90,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_e_to_i, RoleI, 8 |
     send_mpst_e_to_j, RoleJ, 9 |
     send_mpst_e_to_k, RoleK, 10 | =>
-    RoleE, SessionMpstEleven, 11
+    RoleE, MeshedChannelsEleven, 11
 );
 // F
 create_send_mpst_cancel_bundle!(
@@ -104,7 +104,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_f_to_i, RoleI, 8 |
     send_mpst_f_to_j, RoleJ, 9 |
     send_mpst_f_to_k, RoleK, 10 | =>
-    RoleF, SessionMpstEleven, 11
+    RoleF, MeshedChannelsEleven, 11
 );
 // G
 create_send_mpst_cancel_bundle!(
@@ -118,7 +118,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_g_to_i, RoleI, 8 |
     send_mpst_g_to_j, RoleJ, 9 |
     send_mpst_g_to_k, RoleK, 10 | =>
-    RoleG, SessionMpstEleven, 11
+    RoleG, MeshedChannelsEleven, 11
 );
 // H
 create_send_mpst_cancel_bundle!(
@@ -132,7 +132,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_h_to_i, RoleI, 8 |
     send_mpst_h_to_j, RoleJ, 9 |
     send_mpst_h_to_k, RoleK, 10 | =>
-    RoleH, SessionMpstEleven, 11
+    RoleH, MeshedChannelsEleven, 11
 );
 // I
 create_send_mpst_cancel_bundle!(
@@ -146,7 +146,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_i_to_h, RoleH, 8 |
     send_mpst_i_to_j, RoleJ, 9 |
     send_mpst_i_to_k, RoleK, 10 | =>
-    RoleI, SessionMpstEleven, 11
+    RoleI, MeshedChannelsEleven, 11
 );
 // J
 create_send_mpst_cancel_bundle!(
@@ -160,7 +160,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_j_to_h, RoleH, 8 |
     send_mpst_j_to_i, RoleI, 9 |
     send_mpst_j_to_k, RoleK, 10 | =>
-    RoleJ, SessionMpstEleven, 11
+    RoleJ, MeshedChannelsEleven, 11
 );
 // K
 create_send_mpst_cancel_bundle!(
@@ -174,7 +174,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_k_to_h, RoleH, 8 |
     send_mpst_k_to_i, RoleI, 9 |
     send_mpst_k_to_j, RoleJ, 10 | =>
-    RoleK, SessionMpstEleven, 11
+    RoleK, MeshedChannelsEleven, 11
 );
 
 // Create new recv functions and related types
@@ -190,7 +190,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_i, RoleI, 8 |
     recv_mpst_a_from_j, RoleJ, 9 |
     recv_mpst_a_from_k, RoleK, 10 | =>
-    RoleA, SessionMpstEleven, 11
+    RoleA, MeshedChannelsEleven, 11
 );
 // B
 create_recv_mpst_session_bundle!(
@@ -204,7 +204,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_i, RoleI, 8 |
     recv_mpst_b_from_j, RoleJ, 9 |
     recv_mpst_b_from_k, RoleK, 10 | =>
-    RoleB, SessionMpstEleven, 11
+    RoleB, MeshedChannelsEleven, 11
 );
 // C
 create_recv_mpst_session_bundle!(
@@ -218,7 +218,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_i, RoleI, 8 |
     recv_mpst_c_from_j, RoleJ, 9 |
     recv_mpst_c_from_k, RoleK, 10 | =>
-    RoleC, SessionMpstEleven, 11
+    RoleC, MeshedChannelsEleven, 11
 );
 // D
 create_recv_mpst_session_bundle!(
@@ -232,7 +232,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_i, RoleI, 8 |
     recv_mpst_d_from_j, RoleJ, 9 |
     recv_mpst_d_from_k, RoleK, 10 | =>
-    RoleD, SessionMpstEleven, 11
+    RoleD, MeshedChannelsEleven, 11
 );
 // E
 create_recv_mpst_session_bundle!(
@@ -246,7 +246,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_from_i, RoleI, 8 |
     recv_mpst_e_from_j, RoleJ, 9 |
     recv_mpst_e_from_k, RoleK, 10 | =>
-    RoleE, SessionMpstEleven, 11
+    RoleE, MeshedChannelsEleven, 11
 );
 // F
 create_recv_mpst_session_bundle!(
@@ -260,7 +260,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_from_i, RoleI, 8 |
     recv_mpst_f_from_j, RoleJ, 9 |
     recv_mpst_f_from_k, RoleK, 10 | =>
-    RoleF, SessionMpstEleven, 11
+    RoleF, MeshedChannelsEleven, 11
 );
 // G
 create_recv_mpst_session_bundle!(
@@ -274,7 +274,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_g_from_i, RoleI, 8 |
     recv_mpst_g_from_j, RoleJ, 9 |
     recv_mpst_g_from_k, RoleK, 10 | =>
-    RoleG, SessionMpstEleven, 11
+    RoleG, MeshedChannelsEleven, 11
 );
 // H
 create_recv_mpst_session_bundle!(
@@ -288,7 +288,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_h_from_i, RoleI, 8 |
     recv_mpst_h_from_j, RoleJ, 9 |
     recv_mpst_h_from_k, RoleK, 10 | =>
-    RoleH, SessionMpstEleven, 11
+    RoleH, MeshedChannelsEleven, 11
 );
 // I
 create_recv_mpst_session_bundle!(
@@ -302,7 +302,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_i_from_h, RoleH, 8 |
     recv_mpst_i_from_j, RoleJ, 9 |
     recv_mpst_i_from_k, RoleK, 10 | =>
-    RoleI, SessionMpstEleven, 11
+    RoleI, MeshedChannelsEleven, 11
 );
 // J
 create_recv_mpst_session_bundle!(
@@ -316,7 +316,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_j_from_h, RoleH, 8 |
     recv_mpst_j_from_i, RoleI, 9 |
     recv_mpst_j_from_k, RoleK, 10 | =>
-    RoleJ, SessionMpstEleven, 11
+    RoleJ, MeshedChannelsEleven, 11
 );
 // K
 create_recv_mpst_session_bundle!(
@@ -330,7 +330,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_k_from_h, RoleH, 8 |
     recv_mpst_k_from_i, RoleI, 9 |
     recv_mpst_k_from_j, RoleJ, 10 | =>
-    RoleK, SessionMpstEleven, 11
+    RoleK, MeshedChannelsEleven, 11
 );
 
 // Names
@@ -365,7 +365,7 @@ type R2K<R> = RoleK<RoleK<R>>;
 // A
 enum Branching0fromKtoA {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             RS,
             RS,
             RS,
@@ -380,13 +380,13 @@ enum Branching0fromKtoA {
             NameA,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoK = <Choose0fromKtoA as Session>::Dual;
 // B
 enum Branching0fromKtoB {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             RS,
             RS,
@@ -401,13 +401,13 @@ enum Branching0fromKtoB {
             NameB,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoK = <Choose0fromKtoB as Session>::Dual;
 // C
 enum Branching0fromKtoC {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             RS,
@@ -422,13 +422,13 @@ enum Branching0fromKtoC {
             NameC,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoK = <Choose0fromKtoC as Session>::Dual;
 // D
 enum Branching0fromKtoD {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -443,13 +443,13 @@ enum Branching0fromKtoD {
             NameD,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoK = <Choose0fromKtoD as Session>::Dual;
 // E
 enum Branching0fromKtoE {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -464,13 +464,13 @@ enum Branching0fromKtoE {
             NameE,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoK = <Choose0fromKtoE as Session>::Dual;
 // F
 enum Branching0fromKtoF {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -485,13 +485,13 @@ enum Branching0fromKtoF {
             NameF,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoK = <Choose0fromKtoF as Session>::Dual;
 // G
 enum Branching0fromKtoG {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -506,13 +506,13 @@ enum Branching0fromKtoG {
             NameG,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoK = <Choose0fromKtoG as Session>::Dual;
 // H
 enum Branching0fromKtoH {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -527,13 +527,13 @@ enum Branching0fromKtoH {
             NameH,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoK = <Choose0fromKtoH as Session>::Dual;
 // I
 enum Branching0fromKtoI {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -548,13 +548,13 @@ enum Branching0fromKtoI {
             NameI,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoK = <Choose0fromKtoI as Session>::Dual;
 // J
 enum Branching0fromKtoJ {
     More(
-        SessionMpstEleven<
+        MeshedChannelsEleven<
             SR,
             SR,
             SR,
@@ -569,7 +569,7 @@ enum Branching0fromKtoJ {
             NameJ,
         >,
     ),
-    Done(SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
+    Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
 type RecursJtoK = <Choose0fromKtoJ as Session>::Dual;
 // K
@@ -584,8 +584,8 @@ type Choose0fromKtoH = Send<Branching0fromKtoH, End>;
 type Choose0fromKtoI = Send<Branching0fromKtoI, End>;
 type Choose0fromKtoJ = Send<Branching0fromKtoJ, End>;
 type EndpointDoneK =
-    SessionMpstEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameK>;
-type EndpointMoreK = SessionMpstEleven<
+    MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameK>;
+type EndpointMoreK = MeshedChannelsEleven<
     Send<(), Recv<(), Choose0fromKtoA>>,
     Send<(), Recv<(), Choose0fromKtoB>>,
     Send<(), Recv<(), Choose0fromKtoC>>,
@@ -601,7 +601,7 @@ type EndpointMoreK = SessionMpstEleven<
 >;
 
 // Creating the MP sessions
-type EndpointA = SessionMpstEleven<
+type EndpointA = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -615,7 +615,7 @@ type EndpointA = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameA,
 >;
-type EndpointB = SessionMpstEleven<
+type EndpointB = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -629,7 +629,7 @@ type EndpointB = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameB,
 >;
-type EndpointC = SessionMpstEleven<
+type EndpointC = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -643,7 +643,7 @@ type EndpointC = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameC,
 >;
-type EndpointD = SessionMpstEleven<
+type EndpointD = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -657,7 +657,7 @@ type EndpointD = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameD,
 >;
-type EndpointE = SessionMpstEleven<
+type EndpointE = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -671,7 +671,7 @@ type EndpointE = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameE,
 >;
-type EndpointF = SessionMpstEleven<
+type EndpointF = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -685,7 +685,7 @@ type EndpointF = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameF,
 >;
-type EndpointG = SessionMpstEleven<
+type EndpointG = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -699,7 +699,7 @@ type EndpointG = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameG,
 >;
-type EndpointH = SessionMpstEleven<
+type EndpointH = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -713,7 +713,7 @@ type EndpointH = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameH,
 >;
-type EndpointI = SessionMpstEleven<
+type EndpointI = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -727,7 +727,7 @@ type EndpointI = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameI,
 >;
-type EndpointJ = SessionMpstEleven<
+type EndpointJ = MeshedChannelsEleven<
     End,
     End,
     End,
@@ -741,7 +741,7 @@ type EndpointJ = SessionMpstEleven<
     RoleK<RoleEnd>,
     NameJ,
 >;
-type EndpointK = SessionMpstEleven<
+type EndpointK = MeshedChannelsEleven<
     Choose0fromKtoA,
     Choose0fromKtoB,
     Choose0fromKtoC,
@@ -780,7 +780,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     RoleH,
     RoleI,
     RoleJ, =>
-    RoleK, SessionMpstEleven, 11
+    RoleK, MeshedChannelsEleven, 11
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

@@ -9,7 +9,7 @@ use mpstthree::functionmpst::close::close_mpst;
 
 use mpstthree::binary::struct_trait::{End, Recv, Session};
 use mpstthree::fork::fork_mpst;
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_dual::RoleADual;
@@ -56,12 +56,12 @@ type StackFullC = RoleAlltoB<StackOfferC, StackOfferC>;
 
 /// Creating the MP sessions
 /// For A
-type EndpointAAdd<N> = SessionMpst<AtoBAdd<N>, End, StackOfferA, RoleA<RoleEnd>>;
-type EndpointANeg<N> = SessionMpst<AtoBNeg<N>, End, StackOfferA, RoleA<RoleEnd>>;
+type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, End, StackOfferA, RoleA<RoleEnd>>;
+type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, End, StackOfferA, RoleA<RoleEnd>>;
 
 type OfferAfromB<N> =
     OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, StackOfferA, StackOfferA, RoleA<RoleEnd>>;
-type EndpointChoiceA<N> = SessionMpst<OfferAfromB<N>, End, StackFullA, RoleA<RoleEnd>>;
+type EndpointChoiceA<N> = MeshedChannels<OfferAfromB<N>, End, StackFullA, RoleA<RoleEnd>>;
 
 /// For B
 type ChooseBtoA<N> = ChooseMpst<
@@ -74,14 +74,14 @@ type ChooseBtoA<N> = ChooseMpst<
     RoleADual<RoleEnd>,
 >;
 type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>>;
-type EndpointChoiceB<N> = SessionMpst<ChooseBtoA<N>, ChooseBtoC, StackFullB, RoleB<RoleEnd>>;
+type EndpointChoiceB<N> = MeshedChannels<ChooseBtoA<N>, ChooseBtoC, StackFullB, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCAdd = SessionMpst<End, End, StackOfferC, RoleC<RoleEnd>>;
-type EndpointCNeg = SessionMpst<End, End, StackOfferC, RoleC<RoleEnd>>;
+type EndpointCAdd = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
+type EndpointCNeg = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
 
 type OfferCfromB = OfferMpst<End, End, End, End, StackOfferC, StackOfferC, RoleC<RoleEnd>>;
-type EndpointChoiceC = SessionMpst<End, OfferCfromB, StackFullC, RoleC<RoleEnd>>;
+type EndpointChoiceC = MeshedChannels<End, OfferCfromB, StackFullC, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
@@ -191,9 +191,9 @@ pub fn simple_choice_checker() {
             let s = RandomState::new();
             let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
-            let (s1, _): (EndpointChoiceA<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointChoiceB<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointChoiceC, _) = SessionMpst::new();
+            let (s1, _): (EndpointChoiceA<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointChoiceB<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointChoiceC, _) = MeshedChannels::new();
 
             let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 

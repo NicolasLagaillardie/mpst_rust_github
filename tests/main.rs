@@ -26,8 +26,8 @@ fn unit_tests() {
     unit::roles::role_tail_str();
 
     // SessionMPST methods and fields
-    unit::sessionmpst::sessionmpst_fields();
-    unit::sessionmpst::sessionmpst_methods();
+    unit::meshedchannels::meshedchannels_fields();
+    unit::meshedchannels::meshedchannels_methods();
 }
 
 #[test]
@@ -132,10 +132,10 @@ fn cases_tests_mpst_macro() {
     cases::macro_recursive::run_macro_recursive();
 
     // Macro multi basics
-    cases::macro_multi_sessionmpst::basic_macros();
+    cases::macro_multi_meshedchannels::basic_macros();
 
     // Macro multi send-recv
-    cases::macro_multi_send_recv_sessionmpst::test_new_send();
+    cases::macro_multi_send_recv_meshedchannels::test_new_send();
 
     // Macro multi choice
     cases::macro_multi_choice::test_new_choice_full();
@@ -217,10 +217,10 @@ fn cases_tests_mpst_macro_short() {
     cases_short::macro_recursive::run_macro_recursive();
 
     // Macro multi basics
-    cases_short::macro_multi_sessionmpst::basic_macros();
+    cases_short::macro_multi_meshedchannels::basic_macros();
 
     // Macro multi send-recv
-    cases_short::macro_multi_send_recv_sessionmpst::test_new_send();
+    cases_short::macro_multi_send_recv_meshedchannels::test_new_send();
 
     // Macro multi choice
     cases_short::macro_multi_choice::test_new_choice_full();

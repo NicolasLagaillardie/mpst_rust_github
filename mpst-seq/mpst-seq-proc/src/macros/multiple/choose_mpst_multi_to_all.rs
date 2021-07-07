@@ -11,7 +11,7 @@ pub struct ChooseMultiToAllMacroInput {
     labels: Vec<proc_macro2::TokenStream>,
     receivers: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
 }
@@ -58,8 +58,8 @@ impl Parse for ChooseMultiToAllMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        // The sessionmpst_name
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        // The meshedchannels_name
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The index of the sender
@@ -79,7 +79,7 @@ impl Parse for ChooseMultiToAllMacroInput {
             labels: all_labels,
             receivers: all_receivers,
             sender,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             exclusion,
         })
@@ -133,7 +133,7 @@ impl ChooseMultiToAllMacroInput {
         let all_labels = self.labels.clone();
         let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let diff = self.nsessions - 1;
         let diag = self.diag();
 
@@ -239,7 +239,7 @@ impl ChooseMultiToAllMacroInput {
                 quote! {
                     let _ = mpstthree::binary::send::send(
                         #temp_label(
-                            #sessionmpst_name {
+                            #meshedchannels_name {
                                 #(
                                     #new_sessions
                                 )*
@@ -253,7 +253,7 @@ impl ChooseMultiToAllMacroInput {
             })
             .collect();
 
-        let new_sessionmpst: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 let temp_session =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
@@ -306,9 +306,9 @@ impl ChooseMultiToAllMacroInput {
                     #all_send
                 )*
 
-                #sessionmpst_name {
+                #meshedchannels_name {
                     #(
-                        #new_sessionmpst
+                        #new_meshedchannels
                     )*
                     stack: #new_stack_sender ,
                     name: #new_name_sender ,

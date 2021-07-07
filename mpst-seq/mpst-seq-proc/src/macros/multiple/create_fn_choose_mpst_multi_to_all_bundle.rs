@@ -13,7 +13,7 @@ pub struct ChooseTypeMultiToAllBundleMacroInput {
     branches: Vec<proc_macro2::TokenStream>,
     new_types: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     n_sessions: u64,
     n_branches: u64,
     exclusion: u64,
@@ -82,8 +82,8 @@ impl Parse for ChooseTypeMultiToAllBundleMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        // The sessionmpst_name
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        // The meshedchannels_name
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The index of the sender
@@ -112,7 +112,7 @@ impl Parse for ChooseTypeMultiToAllBundleMacroInput {
             branches: all_branches,
             new_types: all_new_types,
             sender,
-            sessionmpst_name,
+            meshedchannels_name,
             n_sessions,
             n_branches,
             exclusion,
@@ -171,7 +171,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                 let all_fn_names = self.fn_names.clone();
                 let sender = self.sender.clone();
                 let all_new_types = self.new_types.clone();
-                let sessionmpst_name = self.sessionmpst_name.clone();
+                let meshedchannels_name = self.meshedchannels_name.clone();
                 let diff = self.n_sessions - 1;
                 let diag = self.diag();
 
@@ -254,7 +254,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                     proc_macro2::Span::call_site(),
                 );
 
-                let new_sessionmpst: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_session = syn::Ident::new(
                             &format!("session{}", j),
@@ -363,7 +363,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                             let s = {
                                 let new_session = mpstthree::binary::send::send(
                                     #temp_label::#temp_branches(
-                                        #sessionmpst_name {
+                                        #meshedchannels_name {
                                             #(
                                                 #sessions_sent
                                             )*
@@ -374,7 +374,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                                     s.#temp_session ,
                                 );
 
-                                #sessionmpst_name {
+                                #meshedchannels_name {
                                     #(
                                         #sessions_returned
                                     )*
@@ -388,7 +388,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
 
                 quote! {
                     fn #temp_fn_name(
-                        s: #sessionmpst_name<
+                        s: #meshedchannels_name<
                             #(
                                 #send_types
                             )*
@@ -418,9 +418,9 @@ impl ChooseTypeMultiToAllBundleMacroInput {
 
                         mpstthree::binary::cancel::cancel(s);
 
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #(
-                                #new_sessionmpst
+                                #new_meshedchannels
                             )*
                             stack: #new_stack_sender ,
                             name: #new_name_sender ,

@@ -7,20 +7,20 @@ use std::panic;
 use std::thread::{spawn, JoinHandle};
 
 use crate::binary;
+use crate::meshedchannels;
 use crate::role;
-use crate::sessionmpst;
 
 #[doc(hidden)]
 pub fn fork_simple<S1, S2, R, N, P>(
     p: P,
-    s: sessionmpst::SessionMpst<S1, S2, R, N>,
+    s: meshedchannels::MeshedChannels<S1, S2, R, N>,
 ) -> JoinHandle<()>
 where
     S1: binary::struct_trait::Session + 'static,
     S2: binary::struct_trait::Session + 'static,
     R: role::Role + 'static,
     N: role::Role + 'static,
-    P: FnOnce(sessionmpst::SessionMpst<S1, S2, R, N>) -> Result<(), Box<dyn Error>>
+    P: FnOnce(meshedchannels::MeshedChannels<S1, S2, R, N>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
 {
@@ -36,7 +36,7 @@ where
 }
 
 /// Creates and returns a tuple of three child processes for
-/// three [`mpstthree::sessionmpst::SessionMpst`](../sessionmpst/struct.SessionMpst.html) linked
+/// three [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html) linked
 /// together.
 ///
 /// # Example
@@ -49,7 +49,7 @@ where
 ///
 /// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 /// use mpstthree::fork::fork_mpst;
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 ///
 /// use mpstthree::functionmpst::close::close_mpst;
 ///
@@ -79,9 +79,9 @@ where
 /// type StackB = RoleA<RoleC<RoleEnd>>;
 /// type StackC = RoleA<RoleB<RoleEnd>>;
 ///
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
-/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
-/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+/// type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+/// type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ///
 /// fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
 /// {
@@ -118,7 +118,7 @@ where
 ///
 /// Creates 3 pairs of endpoints, each pair of type `S` and
 /// `S::Dual`. Creates 3 `Role` for each stack.
-/// Creates 3 `SessionMpst`, linked together with the pairs
+/// Creates 3 `MeshedChannels`, linked together with the pairs
 /// of endpoints, and get the related child processes.
 pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f0: F0,
@@ -135,16 +135,16 @@ where
     N0: role::Role + 'static,
     N1: role::Role + 'static,
     N2: role::Role + 'static,
-    F0: FnOnce(sessionmpst::SessionMpst<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
+    F0: FnOnce(meshedchannels::MeshedChannels<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
     F1: FnOnce(
-            sessionmpst::SessionMpst<<S0 as binary::struct_trait::Session>::Dual, S2, R1, N1>,
+            meshedchannels::MeshedChannels<<S0 as binary::struct_trait::Session>::Dual, S2, R1, N1>,
         ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
     F2: FnOnce(
-            sessionmpst::SessionMpst<
+            meshedchannels::MeshedChannels<
                 <S1 as binary::struct_trait::Session>::Dual,
                 <S2 as binary::struct_trait::Session>::Dual,
                 R2,
@@ -166,19 +166,19 @@ where
     let (name_b, _) = N1::new();
     let (name_c, _) = N2::new();
 
-    let a = sessionmpst::SessionMpst {
+    let a = meshedchannels::MeshedChannels {
         session1: channel_ab,
         session2: channel_ac,
         stack: role_a,
         name: name_a,
     };
-    let b = sessionmpst::SessionMpst {
+    let b = meshedchannels::MeshedChannels {
         session1: channel_ba,
         session2: channel_bc,
         stack: role_b,
         name: name_b,
     };
-    let c = sessionmpst::SessionMpst {
+    let c = meshedchannels::MeshedChannels {
         session1: channel_ca,
         session2: channel_cb,
         stack: role_c,

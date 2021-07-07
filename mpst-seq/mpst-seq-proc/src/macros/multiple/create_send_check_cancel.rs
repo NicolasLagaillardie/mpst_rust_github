@@ -7,7 +7,7 @@ pub struct CreateSendCheckCancelMacroInput {
     func_name: syn::Ident,
     receiver: syn::Ident,
     sender: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
 }
@@ -23,7 +23,7 @@ impl Parse for CreateSendCheckCancelMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -35,7 +35,7 @@ impl Parse for CreateSendCheckCancelMacroInput {
             func_name,
             receiver,
             sender,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             exclusion,
         })
@@ -53,7 +53,7 @@ impl CreateSendCheckCancelMacroInput {
         let func_name = self.func_name.clone();
         let receiver = self.receiver.clone();
         let sender = self.sender.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let session_types: Vec<proc_macro2::TokenStream> = (2..self.nsessions)
             .map(|i| {
@@ -130,7 +130,7 @@ impl CreateSendCheckCancelMacroInput {
                 R
             >(
                 x: T,
-                s: #sessionmpst_name<
+                s: #meshedchannels_name<
                     mpstthree::binary::struct_trait::End,
                     #(
                         #send_types
@@ -139,7 +139,7 @@ impl CreateSendCheckCancelMacroInput {
                     #sender<mpstthree::role::end::RoleEnd>,
                 >,
             ) -> Result<
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         mpstthree::binary::struct_trait::End,
                         #(
                             #session_types
@@ -181,7 +181,7 @@ impl CreateSendCheckCancelMacroInput {
                 };
 
                 Ok(
-                    #sessionmpst_name {
+                    #meshedchannels_name {
                         #(
                             #new_sessions
                         )*

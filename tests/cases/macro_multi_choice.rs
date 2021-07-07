@@ -6,14 +6,14 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
-    create_choose_type_multi, create_multiple_normal_role, create_offer_mpst_session_multi,
-    create_offer_type_multi, create_recv_mpst_session, create_send_mpst_session,
-    create_sessionmpst, fork_mpst_multi,
+    create_choose_type_multi, create_meshedchannels, create_multiple_normal_role,
+    create_offer_mpst_session_multi, create_offer_type_multi, create_recv_mpst_session,
+    create_send_mpst_session, fork_mpst_multi,
 };
 use std::error::Error;
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpst, 3);
+// Create new MeshedChannels for three participants
+create_meshedchannels!(MeshedChannels, 3);
 
 // Create new roles
 // normal
@@ -26,31 +26,31 @@ create_multiple_normal_role!(
 create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, SessionMpst, 3, 1);
+create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, MeshedChannels, 3, 1);
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, MeshedChannels, 3, 1);
 
-close_mpst!(close_mpst_multi, SessionMpst, 3);
+close_mpst!(close_mpst_multi, MeshedChannels, 3);
 
-create_offer_type_multi!(OfferMpstMultiThree, SessionMpst, 3);
-create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+create_offer_type_multi!(OfferMpstMultiThree, MeshedChannels, 3);
+create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 
 create_offer_mpst_session_multi!(
     offer_mpst_session_a_to_d,
     OfferMpstMultiThree,
     RoleAlltoD,
     RoleA,
-    SessionMpst,
+    MeshedChannels,
     3,
     2
 );
@@ -60,7 +60,7 @@ create_offer_mpst_session_multi!(
     OfferMpstMultiThree,
     RoleAlltoD,
     RoleB,
-    SessionMpst,
+    MeshedChannels,
     3,
     2
 );
@@ -71,11 +71,11 @@ create_choose_mpst_session_multi_both!(
     ChooseMpstThree,
     RoleDtoAll,
     RoleD,
-    SessionMpst,
+    MeshedChannels,
     3
 );
 
-fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -135,11 +135,11 @@ type ChooseCtoB<N> = ChooseMpstThree<
     RoleBDual<RoleEnd>,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
 
 /// For A
-type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, StackAEnd, NameA>;
+type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
+type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
 type OfferA<N> = OfferMpstMultiThree<
     AtoBVideo<N>,
@@ -151,11 +151,11 @@ type OfferA<N> = OfferMpstMultiThree<
     NameA,
 >;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAFull, NameA>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, NameA>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, StackBEnd, NameB>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
 type OfferB<N> = OfferMpstMultiThree<
     BtoAVideo<N>,
@@ -166,7 +166,7 @@ type OfferB<N> = OfferMpstMultiThree<
     StackBEnd,
     NameB,
 >;
-type EndpointBFull<N> = SessionMpst<End, OfferB<N>, StackBFull, NameB>;
+type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {

@@ -5,7 +5,7 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct OfferTypeMultiMacroInput {
     type_name: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
 }
 
@@ -14,14 +14,14 @@ impl Parse for OfferTypeMultiMacroInput {
         let type_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(OfferTypeMultiMacroInput {
             type_name,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
         })
     }
@@ -36,7 +36,7 @@ impl From<OfferTypeMultiMacroInput> for proc_macro2::TokenStream {
 impl OfferTypeMultiMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let type_name = self.type_name.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.nsessions - 1))
             .map(|i| {
@@ -79,14 +79,14 @@ impl OfferTypeMultiMacroInput {
                 N0
             > = mpstthree::binary::struct_trait::Recv<
                 either::Either<
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #(
                             #sessions_left
                         )*
                         R0,
                         N0
                     >,
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #(
                             #sessions_right
                         )*

@@ -11,7 +11,7 @@ pub struct ChooseTypeMultiLeftMacroInput {
     type_name: syn::Ident,
     role_dual: syn::Ident,
     name: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
 }
 
@@ -29,7 +29,7 @@ impl Parse for ChooseTypeMultiLeftMacroInput {
         let name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -39,7 +39,7 @@ impl Parse for ChooseTypeMultiLeftMacroInput {
             type_name,
             role_dual,
             name,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
         })
     }
@@ -133,7 +133,7 @@ impl ChooseTypeMultiLeftMacroInput {
         let type_name = self.type_name.clone();
         let role_dual = self.role_dual.clone();
         let name = self.name.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let diff = self.nsessions - 1;
         let (diag, matrix) = self.diag_and_matrix();
 
@@ -371,7 +371,7 @@ impl ChooseTypeMultiLeftMacroInput {
                     syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
 
                 quote! {
-                    let #temp_choice = #sessionmpst_name {
+                    let #temp_choice = #meshedchannels_name {
                         #(
                             #types_sessions
                         )*
@@ -397,7 +397,7 @@ impl ChooseTypeMultiLeftMacroInput {
                 })
                 .collect();
 
-        let old_session_sessionmpst: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let old_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 let temp_new_session = syn::Ident::new(
                     &format!("new_session_{}", i),
@@ -411,7 +411,7 @@ impl ChooseTypeMultiLeftMacroInput {
             })
             .collect();
 
-        let new_session_sessionmpst: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
                 let (line, column, _) = self.get_tuple_matrix(&matrix, self.nsessions, i);
                 let temp_channel = match line {
@@ -442,7 +442,7 @@ impl ChooseTypeMultiLeftMacroInput {
                     #all_roles
                 )*
             >(
-                s: #sessionmpst_name<
+                s: #meshedchannels_name<
                     #(
                         #all_types
                     )*
@@ -456,7 +456,7 @@ impl ChooseTypeMultiLeftMacroInput {
                     #name<mpstthree::role::end::RoleEnd>,
                 >,
             )
-            -> #sessionmpst_name<
+            -> #meshedchannels_name<
                 #(
                     #sessions_struct
                 )*
@@ -496,9 +496,9 @@ impl ChooseTypeMultiLeftMacroInput {
                     #new_sessions_left
                 )*
 
-                let s = #sessionmpst_name {
+                let s = #meshedchannels_name {
                     #(
-                        #old_session_sessionmpst
+                        #old_session_meshedchannels
                     )*
                     stack: s.stack,
                     name: s.name,
@@ -506,9 +506,9 @@ impl ChooseTypeMultiLeftMacroInput {
 
                 mpstthree::binary::cancel::cancel(s);
 
-                #sessionmpst_name {
+                #meshedchannels_name {
                     #(
-                        #new_session_sessionmpst
+                        #new_session_meshedchannels
                     )*
                     stack: #stack_left ,
                     name: #name_left ,

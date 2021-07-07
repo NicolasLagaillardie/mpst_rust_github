@@ -9,21 +9,21 @@ use std::error::Error;
 use mpstthree::bundle_impl;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D => fork_mpst);
+bundle_impl!(MeshedChannels => A, B, D => fork_mpst);
 
 // Those types will be code generated
 type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
-    Recv<Either<SessionMpst<S0, S1, R0, N0>, SessionMpst<S2, S3, R1, N0>>, End>;
+    Recv<Either<MeshedChannels<S0, S1, R0, N0>, MeshedChannels<S2, S3, R1, N0>>, End>;
 
 type ChooseMpstThree<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        SessionMpst<
+        MeshedChannels<
             <S0 as Session>::Dual,
             <S1 as Session>::Dual,
             <R0 as Role>::Dual,
             <N0 as Role>::Dual,
         >,
-        SessionMpst<
+        MeshedChannels<
             <S2 as Session>::Dual,
             <S3 as Session>::Dual,
             <R1 as Role>::Dual,
@@ -89,24 +89,24 @@ type ChooseCtoB<N> = ChooseMpstThree<
     RoleBDual<RoleEnd>,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
 
 /// For A
-type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, StackAEnd, NameA>;
+type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
+type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
 type OfferA<N> =
     OfferMpstThree<AtoBVideo<N>, AtoCVideo<N>, AtoBClose, AtoCClose, StackAVideo, StackAEnd, NameA>;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAFull, NameA>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, NameA>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, StackBEnd, NameB>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
 type OfferB<N> =
     OfferMpstThree<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, StackBVideo, StackBEnd, NameB>;
-type EndpointBFull<N> = SessionMpst<End, OfferB<N>, StackBFull, NameB>;
+type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {

@@ -3,13 +3,13 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_multiple_normal_role, create_recv_mpst_session, create_send_mpst_session,
-    create_sessionmpst, fork_mpst_multi,
+    close_mpst, create_meshedchannels, create_multiple_normal_role, create_recv_mpst_session,
+    create_send_mpst_session, fork_mpst_multi,
 };
 use std::error::Error;
 
-// Create new SessionMpst for five participants
-create_sessionmpst!(SessionMpst, 5);
+// Create new MeshedChannels for five participants
+create_meshedchannels!(MeshedChannels, 5);
 
 // Create new roles
 create_multiple_normal_role!(
@@ -21,12 +21,12 @@ create_multiple_normal_role!(
 );
 
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpst, 5, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 5, 2);
 
 // Create new recv functions and related types
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 5, 3);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 5, 3);
 
-close_mpst!(close_mpst_multi, SessionMpst, 5);
+close_mpst!(close_mpst_multi, MeshedChannels, 5);
 
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
@@ -34,13 +34,13 @@ type NameC = RoleC<RoleEnd>;
 type NameD = RoleD<RoleEnd>;
 type NameE = RoleE<RoleEnd>;
 
-type SendSessionMPSTD<N> = SessionMpst<End, Send<N, End>, End, End, NameB, NameD>;
+type SendSessionMPSTD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
 
-type RecvSessionMPSTB<N> = SessionMpst<End, End, Recv<N, End>, End, NameD, NameB>;
+type RecvSessionMPSTB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
 
-type PawnA = SessionMpst<End, End, End, End, RoleEnd, NameA>;
-type PawnC = SessionMpst<End, End, End, End, RoleEnd, NameC>;
-type PawnE = SessionMpst<End, End, End, End, RoleEnd, NameE>;
+type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
+type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;
+type PawnE = MeshedChannels<End, End, End, End, RoleEnd, NameE>;
 
 fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     let (size, s) = s.field_names();
@@ -74,7 +74,7 @@ fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
     close_mpst_multi(s)
 }
 
-fork_mpst_multi!(fork_mpst, SessionMpst, 5);
+fork_mpst_multi!(fork_mpst, MeshedChannels, 5);
 
 ////////////////////////////////////////
 

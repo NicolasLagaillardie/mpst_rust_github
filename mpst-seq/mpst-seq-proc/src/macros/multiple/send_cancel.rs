@@ -6,7 +6,7 @@ use syn::{Result, Token};
 pub struct SendCancelMacroInput {
     func_name: syn::Ident,
     name: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     msg: syn::Expr,
 }
@@ -19,7 +19,7 @@ impl Parse for SendCancelMacroInput {
         let name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -30,7 +30,7 @@ impl Parse for SendCancelMacroInput {
         Ok(SendCancelMacroInput {
             func_name,
             name,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             msg,
         })
@@ -48,7 +48,7 @@ impl SendCancelMacroInput {
         // Get the basic elements
         let func_name = self.func_name.clone();
         let name = self.name.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let msg = self.msg.clone();
 
         // Build the vec with all the types S1,..,SN
@@ -58,7 +58,7 @@ impl SendCancelMacroInput {
 
         quote! {
             fn #func_name<#( #session_types , )* R>(
-                s: #sessionmpst_name<
+                s: #meshedchannels_name<
                     mpstthree::binary::struct_trait::End,
                     #( #session_types , )*
                     R,

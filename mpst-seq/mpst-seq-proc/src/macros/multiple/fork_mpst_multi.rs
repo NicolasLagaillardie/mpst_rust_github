@@ -8,7 +8,7 @@ type VecOfTuple = Vec<(u64, u64, u64)>;
 #[derive(Debug)]
 pub struct ForkMPSTMultiMacroInput {
     func_name: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
 }
 
@@ -17,14 +17,14 @@ impl Parse for ForkMPSTMultiMacroInput {
         let func_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ForkMPSTMultiMacroInput {
             func_name,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
         })
     }
@@ -162,7 +162,7 @@ impl ForkMPSTMultiMacroInput {
 
     fn expand(&self) -> proc_macro2::TokenStream {
         let func_name = self.func_name.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
@@ -298,7 +298,7 @@ impl ForkMPSTMultiMacroInput {
                 let temp_name = syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
                 quote! {
                     #temp_function : FnOnce(
-                        #sessionmpst_name<
+                        #meshedchannels_name<
                             #(
                                 #temp_sessions
                             )*
@@ -341,7 +341,7 @@ impl ForkMPSTMultiMacroInput {
                 })
                 .collect();
 
-        let new_sessionmpst: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
                     .map(|j| {
@@ -366,8 +366,8 @@ impl ForkMPSTMultiMacroInput {
                     })
                     .collect();
 
-                let temp_sessionmpst = syn::Ident::new(
-                    &format!("sessionmpst_{}", i),
+                let temp_meshedchannels = syn::Ident::new(
+                    &format!("meshedchannels_{}", i),
                     proc_macro2::Span::call_site(),
                 );
                 let temp_role =
@@ -375,8 +375,8 @@ impl ForkMPSTMultiMacroInput {
                 let temp_name =
                     syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    let #temp_sessionmpst =
-                        #sessionmpst_name {
+                    let #temp_meshedchannels =
+                        #meshedchannels_name {
                             #(
                                 #temp_sessions
                             )*
@@ -391,8 +391,8 @@ impl ForkMPSTMultiMacroInput {
             .map(|i| {
                 let temp_function =
                     syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                let temp_sessionmpst = syn::Ident::new(
-                    &format!("sessionmpst_{}", i),
+                let temp_meshedchannels = syn::Ident::new(
+                    &format!("meshedchannels_{}", i),
                     proc_macro2::Span::call_site(),
                 );
                 quote! {
@@ -400,7 +400,7 @@ impl ForkMPSTMultiMacroInput {
                         std::panic::set_hook(Box::new(|_info| {
                             // do nothing
                         }));
-                        match #temp_function(#temp_sessionmpst) {
+                        match #temp_function(#temp_meshedchannels) {
                             Ok(()) => (),
                             Err(e) => panic!("{:?}", e),
                         }
@@ -459,7 +459,7 @@ impl ForkMPSTMultiMacroInput {
                 )*
 
                 #(
-                    #new_sessionmpst
+                    #new_meshedchannels
                 )*
 
                 (

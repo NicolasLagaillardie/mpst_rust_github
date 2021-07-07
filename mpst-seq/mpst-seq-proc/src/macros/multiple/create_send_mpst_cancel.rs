@@ -7,7 +7,7 @@ pub struct CreateSendMPSTCancelMacroInput {
     func_name: syn::Ident,
     receiver: syn::Ident,
     sender: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
 }
@@ -23,7 +23,7 @@ impl Parse for CreateSendMPSTCancelMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -35,7 +35,7 @@ impl Parse for CreateSendMPSTCancelMacroInput {
             func_name,
             receiver,
             sender,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             exclusion,
         })
@@ -53,7 +53,7 @@ impl CreateSendMPSTCancelMacroInput {
         let func_name = self.func_name.clone();
         let receiver = self.receiver.clone();
         let sender = self.sender.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let session_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
@@ -130,7 +130,7 @@ impl CreateSendMPSTCancelMacroInput {
                 R
             >(
                 x: T,
-                s: #sessionmpst_name<
+                s: #meshedchannels_name<
                     #(
                         #send_types
                     )*
@@ -138,7 +138,7 @@ impl CreateSendMPSTCancelMacroInput {
                     #sender<mpstthree::role::end::RoleEnd>,
                 >,
             ) -> Result<
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #(
                             #session_types
                         )*
@@ -171,7 +171,7 @@ impl CreateSendMPSTCancelMacroInput {
                 };
 
                 Ok(
-                    #sessionmpst_name {
+                    #meshedchannels_name {
                         #(
                             #new_sessions
                         )*

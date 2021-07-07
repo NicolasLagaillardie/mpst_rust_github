@@ -37,9 +37,9 @@ use std::error::Error;
 
 // Used for creating the types
 use mpstthree::binary::struct_trait::{End, Recv, Send};
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
-// Used for connecting all the roles, represented as SessionMpst, together
+// Used for connecting all the roles, represented as MeshedChannels, together
 use mpstthree::fork_mpst;
 
 // Used for create the stack and the name of each role
@@ -86,13 +86,13 @@ type StackB = RoleA<RoleC<RoleEnd>>;
 type StackC = RoleA<RoleB<RoleEnd>>;
 ```
 
-You can now encapsulate those **binary session types** and **stacks** into **SessionMpst** for each participant.
+You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels** for each participant.
 
 ```rust
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ```
 
 To check to the protocol is *correct*, it is mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.

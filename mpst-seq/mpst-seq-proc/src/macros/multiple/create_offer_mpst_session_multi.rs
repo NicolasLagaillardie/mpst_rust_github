@@ -8,7 +8,7 @@ pub struct OfferMPSTSessionMultiMacroInput {
     type_name: syn::Ident,
     role: syn::Ident,
     name: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
 }
@@ -27,7 +27,7 @@ impl Parse for OfferMPSTSessionMultiMacroInput {
         let name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -40,7 +40,7 @@ impl Parse for OfferMPSTSessionMultiMacroInput {
             type_name,
             role,
             name,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             exclusion,
         })
@@ -59,7 +59,7 @@ impl OfferMPSTSessionMultiMacroInput {
         let type_name = self.type_name.clone();
         let role = self.role.clone();
         let name = self.name.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.nsessions - 1))
             .map(|i| {
@@ -179,7 +179,7 @@ impl OfferMPSTSessionMultiMacroInput {
                 R2,
                 U
             >(
-                s: #sessionmpst_name<
+                s: #meshedchannels_name<
                     #(
                         #new_types
                     )*
@@ -196,7 +196,7 @@ impl OfferMPSTSessionMultiMacroInput {
                 R1: mpstthree::role::Role,
                 R2: mpstthree::role::Role,
                 F: FnOnce(
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #(
                             #sessions_left
                         )*
@@ -205,7 +205,7 @@ impl OfferMPSTSessionMultiMacroInput {
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #(
                             #sessions_right
                         )*
@@ -232,7 +232,7 @@ impl OfferMPSTSessionMultiMacroInput {
                     temp(s.stack)
                 };
 
-                let s = #sessionmpst_name {
+                let s = #meshedchannels_name {
                     #(
                         #new_sessions
                     )*

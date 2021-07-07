@@ -4,6 +4,7 @@ use crate::binary::cancel::cancel;
 use crate::binary::send::send;
 use crate::binary::struct_trait::Session;
 use crate::functionmpst::ChooseMpst;
+use crate::meshedchannels::MeshedChannels;
 use crate::role::a::RoleA;
 use crate::role::a_dual::RoleADual;
 use crate::role::a_to_all::RoleAtoAll;
@@ -15,20 +16,19 @@ use crate::role::c_dual::RoleCDual;
 use crate::role::c_to_all::RoleCtoAll;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
-use crate::sessionmpst::SessionMpst;
 use either::Either;
 
 type ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, N0> = ChooseMpst<S2, S0, S4, S1, R0, R1, N0>;
 type ShortChooseMpstTwo<S0, S1, S3, S5, R0, R1, N0> =
     ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R0, R1, N0>;
 
-type ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
+type ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = MeshedChannels<
     ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleBDual<RoleEnd>>,
     ShortChooseMpstTwo<S0, S1, S3, S5, R2, R3, RoleCDual<RoleEnd>>,
     RoleAtoAll<R4, R5>,
     RoleA<RoleEnd>,
 >;
-type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
+type ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = MeshedChannels<
     ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleADual<RoleEnd>>,
     ShortChooseMpstTwo<
         <S3 as Session>::Dual,
@@ -42,7 +42,7 @@ type ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = Se
     RoleBtoAll<R4, R5>,
     RoleB<RoleEnd>,
 >;
-type ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = SessionMpst<
+type ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = MeshedChannels<
     ShortChooseMpstOne<S2, S4, S0, S1, R0, R1, RoleADual<RoleEnd>>,
     ShortChooseMpstTwo<
         <S3 as Session>::Dual,
@@ -83,14 +83,14 @@ macro_rules! choose_mpst_a {
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: stack_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: stack_2,
@@ -100,7 +100,7 @@ macro_rules! choose_mpst_a {
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
 
-        let s = SessionMpst {
+        let s = MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -109,7 +109,7 @@ macro_rules! choose_mpst_a {
 
         cancel(s);
 
-        SessionMpst {
+        MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: stack_3,
@@ -144,14 +144,14 @@ macro_rules! choose_mpst_b {
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: stack_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: stack_2,
@@ -161,7 +161,7 @@ macro_rules! choose_mpst_b {
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
 
-        let s = SessionMpst {
+        let s = MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -170,7 +170,7 @@ macro_rules! choose_mpst_b {
 
         cancel(s);
 
-        SessionMpst {
+        MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: stack_3,
@@ -205,14 +205,14 @@ macro_rules! choose_mpst_c {
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: stack_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: stack_2,
@@ -222,7 +222,7 @@ macro_rules! choose_mpst_c {
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
 
-        let s = SessionMpst {
+        let s = MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -231,7 +231,7 @@ macro_rules! choose_mpst_c {
 
         cancel(s);
 
-        SessionMpst {
+        MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: stack_3,
@@ -241,16 +241,16 @@ macro_rules! choose_mpst_c {
 }
 
 /// Given a choice from A, to other processes, between two
-/// [`mpstthree::sessionmpst::SessionMpst`], choose the
+/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
 /// first option for each.
 ///
 /// A has to encapsulate all possible
-/// [`mpstthree::sessionmpst::SessionMpst`] for each other
+/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
 /// [`mpstthree::binary::struct_trait::Session`], the 3 new
 /// [`mpstthree::role::Role`] related to each first option
-/// then the related [`mpstthree::sessionmpst::
-/// SessionMpst`]. It then sends those options to the
+/// then the related [`mpstthree::meshedchannels::
+/// MeshedChannels`]. It then sends those options to the
 /// related processes.
 ///
 /// * S0: dual session from B to C on left branch
@@ -267,12 +267,12 @@ macro_rules! choose_mpst_c {
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
 /// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> SessionMpst<S2, S3, R4, RoleA<RoleEnd>>
+    s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> MeshedChannels<S2, S3, R4, RoleA<RoleEnd>>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -303,16 +303,16 @@ where
 }
 
 /// Given a choice from A, to other processes, between two
-/// [`mpstthree::sessionmpst::SessionMpst`], choose the
+/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
 /// second option for each.
 ///
 /// A has to encapsulate all possible
-/// [`mpstthree::sessionmpst::SessionMpst`] for each other
+/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
 /// [`mpstthree::binary::struct_trait::Session`], the 3 new
 /// [`mpstthree::role::Role`] related to each second option
-/// then the related [`mpstthree::sessionmpst::
-/// SessionMpst`]. It then sends those options to the
+/// then the related [`mpstthree::meshedchannels::
+/// MeshedChannels`]. It then sends those options to the
 /// related processes.
 ///
 /// * S0: dual session from B to C on left branch
@@ -329,12 +329,12 @@ where
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
 /// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-    s: ShortSessionMpstAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> SessionMpst<S4, S5, R5, RoleA<RoleEnd>>
+    s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> MeshedChannels<S4, S5, R5, RoleA<RoleEnd>>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -366,16 +366,16 @@ where
 }
 
 /// Given a choice from B, to other processes, between two
-/// [`mpstthree::sessionmpst::SessionMpst`], choose the
+/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
 /// first option for each.
 ///
 /// B has to encapsulate all possible
-/// [`mpstthree::sessionmpst::SessionMpst`] for each other
+/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
 /// [`mpstthree::binary::struct_trait::Session`], the 3 new
 /// [`mpstthree::role::Role`] related to each first option
-/// then the related [`mpstthree::sessionmpst::
-/// SessionMpst`]. It then sends those options to the
+/// then the related [`mpstthree::meshedchannels::
+/// MeshedChannels`]. It then sends those options to the
 /// related processes.
 ///
 /// * S0: dual session from A to C on left branch
@@ -392,12 +392,12 @@ where
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
 /// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> SessionMpst<S2, S3, R4, RoleB<RoleEnd>>
+    s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> MeshedChannels<S2, S3, R4, RoleB<RoleEnd>>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -428,16 +428,16 @@ where
 }
 
 /// Given a choice from B, to other processes, between two
-/// [`mpstthree::sessionmpst::SessionMpst`], choose the
+/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
 /// second option for each.
 ///
 /// B has to encapsulate all possible
-/// [`mpstthree::sessionmpst::SessionMpst`] for each other
+/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
 /// [`mpstthree::binary::struct_trait::Session`], the 3 new
 /// [`mpstthree::role::Role`] related to each second option
-/// then the related [`mpstthree::sessionmpst::
-/// SessionMpst`]. It then sends those options to the
+/// then the related [`mpstthree::meshedchannels::
+/// MeshedChannels`]. It then sends those options to the
 /// related processes.
 ///
 /// * S0: dual session from A to C on left branch
@@ -454,12 +454,12 @@ where
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
 /// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-    s: ShortSessionMpstBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> SessionMpst<S4, S5, R5, RoleB<RoleEnd>>
+    s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> MeshedChannels<S4, S5, R5, RoleB<RoleEnd>>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -490,16 +490,16 @@ where
 }
 
 /// Given a choice from C, to other processes, between two
-/// [`mpstthree::sessionmpst::SessionMpst`], choose the
+/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
 /// first option for each.
 ///
 /// C has to encapsulate all possible
-/// [`mpstthree::sessionmpst::SessionMpst`] for each other
+/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
 /// [`mpstthree::binary::struct_trait::Session`], the 3 new
 /// [`mpstthree::role::Role`] related to each first option
-/// then the related [`mpstthree::sessionmpst::
-/// SessionMpst`]. It then sends those options to the
+/// then the related [`mpstthree::meshedchannels::
+/// MeshedChannels`]. It then sends those options to the
 /// related processes.
 ///
 /// * S0: dual session from A to B on left branch
@@ -516,12 +516,12 @@ where
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
 /// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> SessionMpst<S2, S3, R4, RoleC<RoleEnd>>
+    s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> MeshedChannels<S2, S3, R4, RoleC<RoleEnd>>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -552,16 +552,16 @@ where
 }
 
 /// Given a choice from C, to other processes, between two
-/// [`mpstthree::sessionmpst::SessionMpst`], choose the
+/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
 /// second option for each.
 ///
 /// C has to encapsulate all possible
-/// [`mpstthree::sessionmpst::SessionMpst`] for each other
+/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
 /// [`mpstthree::binary::struct_trait::Session`], the 3 new
 /// [`mpstthree::role::Role`] related to each second option
-/// then the related [`mpstthree::sessionmpst::
-/// SessionMpst`]. It then sends those options to the
+/// then the related [`mpstthree::meshedchannels::
+/// MeshedChannels`]. It then sends those options to the
 /// related processes.
 ///
 /// * S0: dual session from A to B on left branch
@@ -578,12 +578,12 @@ where
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
 ///
-/// [`mpstthree::sessionmpst::Sessionmpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
 /// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
 /// [`mpstthree::role::Role`]: ../role/trait.Role.html
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-    s: ShortSessionMpstCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> SessionMpst<S4, S5, R5, RoleC<RoleEnd>>
+    s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
+) -> MeshedChannels<S4, S5, R5, RoleC<RoleEnd>>
 where
     S0: Session + 'a,
     S1: Session + 'a,

@@ -30,8 +30,8 @@ use std::time::Duration;
 //     }
 // }
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
 
 // Create new Roles
 // normal
@@ -42,13 +42,13 @@ create_multiple_normal_role_short!(Voter, Pawn, Server);
 create_send_mpst_session_bundle!(
     send_mpst_server_to_pawn, RolePawn, 1 |
     send_mpst_server_to_voter, RoleVoter, 2 | =>
-    RoleServer, SessionMpstThree, 3
+    RoleServer, MeshedChannelsThree, 3
 );
 // VOTER
 create_send_mpst_session_bundle!(
     send_mpst_voter_to_pawn, RolePawn, 1 |
     send_mpst_voter_to_server, RoleServer, 2 | =>
-    RoleVoter, SessionMpstThree, 3
+    RoleVoter, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
@@ -56,19 +56,19 @@ create_send_mpst_session_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_pawn_to_server, RoleServer, 1 |
     recv_mpst_pawn_to_voter, RoleVoter, 2 | =>
-    RolePawn, SessionMpstThree, 3
+    RolePawn, MeshedChannelsThree, 3
 );
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_to_pawn, RolePawn, 1 |
     recv_mpst_server_from_voter, RoleVoter, 2 | =>
-    RoleServer, SessionMpstThree, 3
+    RoleServer, MeshedChannelsThree, 3
 );
 // VOTER
 create_recv_mpst_session_bundle!(
     recv_mpst_voter_to_pawn, RolePawn, 1 |
     recv_mpst_voter_from_server, RoleServer, 2 | =>
-    RoleVoter, SessionMpstThree, 3
+    RoleVoter, MeshedChannelsThree, 3
 );
 
 // Names
@@ -87,53 +87,53 @@ type Choose1fromVtoS<N> = <Choice1fromStoV<N> as Session>::Dual;
 // VOTER
 enum Branching0fromStoV<N: marker::Send> {
     Auth(
-        SessionMpstThree<
+        MeshedChannelsThree<
             Choose1fromVtoP,
             Recv<N, Choose1fromVtoS<N>>,
             RoleServer<RoleBroadcast>,
             NameVoter,
         >,
     ),
-    Reject(SessionMpstThree<End, Recv<N, End>, RoleServer<RoleEnd>, NameVoter>),
+    Reject(MeshedChannelsThree<End, Recv<N, End>, RoleServer<RoleEnd>, NameVoter>),
 }
 // PAWN
 enum Branching0fromStoP {
-    Auth(SessionMpstThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>),
-    Reject(SessionMpstThree<End, End, RoleEnd, NamePawn>),
+    Auth(MeshedChannelsThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>),
+    Reject(MeshedChannelsThree<End, End, RoleEnd, NamePawn>),
 }
 enum Branching1fromVtoP {
-    Yes(SessionMpstThree<End, End, RoleEnd, NamePawn>),
-    No(SessionMpstThree<End, End, RoleEnd, NamePawn>),
+    Yes(MeshedChannelsThree<End, End, RoleEnd, NamePawn>),
+    No(MeshedChannelsThree<End, End, RoleEnd, NamePawn>),
 }
 type Choice1fromPtoV = Recv<Branching1fromVtoP, End>;
 // SERVER
 enum Branching1fromVtoS<N: marker::Send> {
-    Yes(SessionMpstThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
-    No(SessionMpstThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
+    Yes(MeshedChannelsThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
+    No(MeshedChannelsThree<End, Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
 }
 type Choice1fromStoV<N> = Recv<Branching1fromVtoS<N>, End>;
 
 // Creating the MP sessions
 // VOTER
-type ChoiceVoter<N> = SessionMpstThree<
+type ChoiceVoter<N> = MeshedChannelsThree<
     Choose1fromVtoP,
     Recv<N, Choose1fromVtoS<N>>,
     RoleServer<RoleBroadcast>,
     NameVoter,
 >;
-type EndpointVoter<N> = SessionMpstThree<
+type EndpointVoter<N> = MeshedChannelsThree<
     End,
     Send<N, Recv<Branching0fromStoV<N>, End>>,
     RoleServer<RoleServer<RoleEnd>>,
     NameVoter,
 >;
 // PAWN
-type ChoicePawn = SessionMpstThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>;
+type ChoicePawn = MeshedChannelsThree<End, Choice1fromPtoV, RoleVoter<RoleEnd>, NamePawn>;
 type EndpointPawn =
-    SessionMpstThree<Recv<Branching0fromStoP, End>, End, RoleServer<RoleEnd>, NamePawn>;
+    MeshedChannelsThree<Recv<Branching0fromStoP, End>, End, RoleServer<RoleEnd>, NamePawn>;
 // SERVER
-type ChoiceServer<N> = SessionMpstThree<End, Choice1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
-type EndpointServer<N> = SessionMpstThree<
+type ChoiceServer<N> = MeshedChannelsThree<End, Choice1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
+type EndpointServer<N> = MeshedChannelsThree<
     Choose0fromStoP,
     Recv<N, Choose0fromStoV<N>>,
     RoleVoter<RoleBroadcast>,
@@ -172,7 +172,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
             RolePawn,
             RoleServer, =>
             RoleVoter,
-            SessionMpstThree,
+            MeshedChannelsThree,
             3
         );
 
@@ -187,7 +187,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
             RolePawn,
             RoleServer, =>
             RoleVoter,
-            SessionMpstThree,
+            MeshedChannelsThree,
             3
         );
 
@@ -235,7 +235,7 @@ fn endpoint_server_loops(s: EndpointServer<i32>, loops: i32) -> Result<(), Box<d
                 RolePawn,
                 RoleVoter, =>
                 RoleServer,
-                SessionMpstThree,
+                MeshedChannelsThree,
                 2
             );
 
@@ -251,7 +251,7 @@ fn endpoint_server_loops(s: EndpointServer<i32>, loops: i32) -> Result<(), Box<d
                 RolePawn,
                 RoleVoter, =>
                 RoleServer,
-                SessionMpstThree,
+                MeshedChannelsThree,
                 2
             );
 

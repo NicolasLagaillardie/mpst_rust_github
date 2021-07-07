@@ -2,14 +2,14 @@
 use mpstthree::binary::struct_trait::{End, Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
-use mpstthree::{create_normal_role, create_sessionmpst};
+use mpstthree::{create_meshedchannels, create_normal_role};
 use std::error::Error;
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpstThree, 3);
+// Create new MeshedChannels for three participants
+create_meshedchannels!(MeshedChannelsThree, 3);
 
-// Create new SessionMpst for four participants
-create_sessionmpst!(SessionMpstFour, 4);
+// Create new MeshedChannels for four participants
+create_meshedchannels!(MeshedChannelsFour, 4);
 
 // Create an A pawn
 create_normal_role!(RoleA, RoleADual);
@@ -24,14 +24,14 @@ pub fn basic_macros() {
             let (role_one, _) = RoleEnd::new();
             let (name_one, _) = RoleEnd::new();
 
-            let _test = SessionMpstThree {
+            let _test = MeshedChannelsThree {
                 session1: sender1,
                 session2: sender2,
                 stack: role_one,
                 name: name_one,
             };
 
-            let (_test2, _) = SessionMpstThree::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+            let (_test2, _) = MeshedChannelsThree::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
         }
         Ok(())
     }()
@@ -45,7 +45,7 @@ pub fn basic_macros() {
             let (role_one, _) = RoleEnd::new();
             let (name_one, _) = RoleEnd::new();
 
-            let _test = SessionMpstFour {
+            let _test = MeshedChannelsFour {
                 session1: sender1,
                 session2: sender2,
                 session3: sender3,
@@ -53,7 +53,7 @@ pub fn basic_macros() {
                 name: name_one,
             };
 
-            let (_test2, _) = SessionMpstFour::<End, End, End, RoleEnd, RoleA<RoleEnd>>::new();
+            let (_test2, _) = MeshedChannelsFour::<End, End, End, RoleEnd, RoleA<RoleEnd>>::new();
         }
         Ok(())
     }()

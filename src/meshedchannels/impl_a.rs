@@ -3,6 +3,7 @@ use crate::binary::send::send;
 use crate::binary::struct_trait::{End, Recv, Send, Session};
 use crate::functionmpst::close::close_mpst;
 use crate::functionmpst::OfferMpst;
+use crate::meshedchannels::MeshedChannels;
 use crate::role::a::RoleA;
 use crate::role::a_to_all::RoleAtoAll;
 use crate::role::all_to_b::RoleAlltoB;
@@ -11,18 +12,17 @@ use crate::role::b::RoleB;
 use crate::role::c::RoleC;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
-use crate::sessionmpst::SessionMpst;
 use crate::{recv_all_aux_simple, recv_aux_simple, send_aux_simple};
 
 use either::Either;
 use std::error::Error;
 use std::marker;
 
-type ReturnType<S1, S2, R> = SessionMpst<S1, S2, R, RoleA<RoleEnd>>;
+type ReturnType<S1, S2, R> = MeshedChannels<S1, S2, R, RoleA<RoleEnd>>;
 type ResultType<T, S1, S2, R> = Result<(T, ReturnType<S1, S2, R>), Box<dyn Error>>;
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    SessionMpst<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
+    MeshedChannels<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
 {
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
         send_aux_simple!(self, payload, RoleB, 1)
@@ -30,7 +30,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    SessionMpst<S1, Send<T, S2>, RoleC<R>, RoleA<RoleEnd>>
+    MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleA<RoleEnd>>
 {
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
         send_aux_simple!(self, payload, RoleC, 2)
@@ -38,7 +38,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    SessionMpst<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
+    MeshedChannels<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
 {
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_aux_simple!(self, RoleB, 1)()
@@ -46,7 +46,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>
+    MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>
 {
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_aux_simple!(self, RoleC, 2)()
@@ -54,7 +54,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, T: marker::Send>
-    SessionMpst<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>
+    MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>
 {
     pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
         recv_all_aux_simple!(self, RoleAlltoB, 1)()
@@ -62,7 +62,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, T: marker::Send>
-    SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>
+    MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>
 {
     pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
         recv_all_aux_simple!(self, RoleAlltoC, 2)()
@@ -70,7 +70,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
 }
 
 impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
-    SessionMpst<
+    MeshedChannels<
         OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
         End,
         RoleAlltoB<RoleEnd, RoleEnd>,
@@ -79,8 +79,8 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
 {
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
-        F: FnOnce(SessionMpst<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-        G: FnOnce(SessionMpst<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     {
         let (e, s) = self.recv()?;
         cancel(s);
@@ -89,7 +89,7 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
 }
 
 impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
-    SessionMpst<
+    MeshedChannels<
         End,
         OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
         RoleAlltoC<RoleEnd, RoleEnd>,
@@ -98,8 +98,8 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
 {
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
-        F: FnOnce(SessionMpst<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-        G: FnOnce(SessionMpst<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     {
         let (e, s) = self.recv()?;
         cancel(s);
@@ -133,14 +133,14 @@ macro_rules! choose_aux {
         let (name_2, _) = <$receiver_2<RoleEnd> as Role>::new();
         let (name_3, _) = $sender::<RoleEnd>::new();
 
-        let choice_1 = SessionMpst {
+        let choice_1 = MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: stack_1,
             name: name_1,
         };
 
-        let choice_2 = SessionMpst {
+        let choice_2 = MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: stack_2,
@@ -150,7 +150,7 @@ macro_rules! choose_aux {
         let new_session_1 = send($pat(choice_1), $session.session1);
         let new_session_2 = send($pat(choice_2), $session.session2);
 
-        let s = SessionMpst {
+        let s = MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -159,7 +159,7 @@ macro_rules! choose_aux {
 
         cancel(s);
 
-        SessionMpst {
+        MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: stack_3,
@@ -182,18 +182,18 @@ impl<
         R4: Role,
         R5: Role,
     >
-    SessionMpst<
+    MeshedChannels<
         Send<
             Either<
-                SessionMpst<S2, <S0 as Session>::Dual, R0, RoleB<RoleEnd>>,
-                SessionMpst<S4, <S1 as Session>::Dual, R1, RoleB<RoleEnd>>,
+                MeshedChannels<S2, <S0 as Session>::Dual, R0, RoleB<RoleEnd>>,
+                MeshedChannels<S4, <S1 as Session>::Dual, R1, RoleB<RoleEnd>>,
             >,
             End,
         >,
         Send<
             Either<
-                SessionMpst<S3, S0, R2, RoleC<RoleEnd>>,
-                SessionMpst<S5, S1, R3, RoleC<RoleEnd>>,
+                MeshedChannels<S3, S0, R2, RoleC<RoleEnd>>,
+                MeshedChannels<S5, S1, R3, RoleC<RoleEnd>>,
             >,
             End,
         >,
@@ -203,7 +203,7 @@ impl<
 {
     pub fn choose_left(
         self,
-    ) -> SessionMpst<<S2 as Session>::Dual, <S3 as Session>::Dual, R4, RoleA<RoleEnd>> {
+    ) -> MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, R4, RoleA<RoleEnd>> {
         choose_aux!(
             S2,
             S3,
@@ -221,7 +221,7 @@ impl<
 
     pub fn choose_right(
         self,
-    ) -> SessionMpst<<S4 as Session>::Dual, <S5 as Session>::Dual, R5, RoleA<RoleEnd>> {
+    ) -> MeshedChannels<<S4 as Session>::Dual, <S5 as Session>::Dual, R5, RoleA<RoleEnd>> {
         choose_aux!(
             S4,
             S5,
@@ -238,7 +238,7 @@ impl<
     }
 }
 
-impl SessionMpst<End, End, RoleEnd, RoleA<RoleEnd>> {
+impl MeshedChannels<End, End, RoleEnd, RoleA<RoleEnd>> {
     pub fn close(self) -> Result<(), Box<dyn Error>> {
         close_mpst(self)
     }

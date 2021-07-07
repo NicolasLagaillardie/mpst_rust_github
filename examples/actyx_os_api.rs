@@ -1,9 +1,8 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, create_sessionmpst,
-    fork_mpst_multi, offer_mpst,
+    choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
 };
 
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -11,8 +10,8 @@ use rand::random;
 use std::error::Error;
 use std::marker;
 
-// Create new SessionMpst for seven participants
-create_sessionmpst!(SessionMpstFour, 4);
+// Create new MeshedChannels for seven participants
+create_meshedchannels!(MeshedChannelsFour, 4);
 
 // global protocol API(role API, role Controller, role Storage, Role User)
 //     {
@@ -55,21 +54,21 @@ create_send_mpst_cancel_bundle!(
     send_api_to_controller, Controller, 1 |
     send_api_to_storage, Storage, 2 |
     send_api_to_user, User, 3 | =>
-    Api, SessionMpstFour, 4
+    Api, MeshedChannelsFour, 4
 );
 create_send_mpst_cancel_bundle!(
     send_controller_to_api, Api, 1 |
     send_controller_to_storage, Storage, 2 | =>
-    Controller, SessionMpstFour, 4
+    Controller, MeshedChannelsFour, 4
 );
 create_send_mpst_cancel_bundle!(
     send_storage_to_api, Api, 1 |
     send_storage_to_controller, Controller, 2 | =>
-    Storage, SessionMpstFour, 4
+    Storage, MeshedChannelsFour, 4
 );
 create_send_mpst_cancel_bundle!(
     send_user_to_api, Api, 1 | =>
-    User, SessionMpstFour, 4
+    User, MeshedChannelsFour, 4
 );
 
 // Create recv
@@ -77,29 +76,29 @@ create_recv_mpst_session_bundle!(
     recv_api_from_controller, Controller, 1 |
     recv_api_from_storage, Storage, 2 |
     recv_api_from_user, User, 3 | =>
-    Api, SessionMpstFour, 4
+    Api, MeshedChannelsFour, 4
 );
 create_recv_mpst_session_bundle!(
     recv_controller_from_api, Api, 1 |
     recv_controller_from_storage, Storage, 2 | =>
-    Controller, SessionMpstFour, 4
+    Controller, MeshedChannelsFour, 4
 );
 create_recv_mpst_session_bundle!(
     recv_storage_from_api, Api, 1 |
     recv_storage_from_controller, Controller, 2 | =>
-    Storage, SessionMpstFour, 4
+    Storage, MeshedChannelsFour, 4
 );
 create_recv_mpst_session_bundle!(
     recv_user_from_api, Api, 1 |
     recv_user_from_controller, Controller, 2 | =>
-    User, SessionMpstFour, 4
+    User, MeshedChannelsFour, 4
 );
 
 // Create close function
-close_mpst!(close_mpst_multi, SessionMpstFour, 4);
+close_mpst!(close_mpst_multi, MeshedChannelsFour, 4);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);
+fork_mpst_multi!(fork_mpst, MeshedChannelsFour, 4);
 
 // Names
 type NameApi = Api<RoleEnd>;
@@ -110,7 +109,7 @@ type NameUser = User<RoleEnd>;
 // Api
 enum Branching0fromCtoA<N: marker::Send> {
     Up(
-        SessionMpstFour<
+        MeshedChannelsFour<
             Recv<N, Send<N, Recurs0fromCtoA<N>>>,
             Send<N, Recv<N, End>>,
             Send<N, Recv<N, End>>,
@@ -119,7 +118,7 @@ enum Branching0fromCtoA<N: marker::Send> {
         >,
     ),
     Down(
-        SessionMpstFour<
+        MeshedChannelsFour<
             Recv<N, Send<N, Recurs0fromCtoA<N>>>,
             End,
             Send<N, Recv<N, End>>,
@@ -127,7 +126,7 @@ enum Branching0fromCtoA<N: marker::Send> {
             NameApi,
         >,
     ),
-    Close(SessionMpstFour<Recv<N, End>, End, Send<N, End>, Controller<User<RoleEnd>>, NameApi>),
+    Close(MeshedChannelsFour<Recv<N, End>, End, Send<N, End>, Controller<User<RoleEnd>>, NameApi>),
 }
 type Recurs0fromCtoA<N> = Recv<Branching0fromCtoA<N>, End>;
 // Controller
@@ -137,7 +136,7 @@ type Choose0fromCtoU<N> = Send<Branching0fromCtoU<N>, End>;
 // Storage
 enum Branching0fromCtoS<N: marker::Send> {
     Up(
-        SessionMpstFour<
+        MeshedChannelsFour<
             Recv<N, Send<N, End>>,
             Recurs0fromCtoS<N>,
             End,
@@ -146,7 +145,7 @@ enum Branching0fromCtoS<N: marker::Send> {
         >,
     ),
     Down(
-        SessionMpstFour<
+        MeshedChannelsFour<
             End,
             Recv<N, Recurs0fromCtoS<N>>,
             End,
@@ -154,13 +153,13 @@ enum Branching0fromCtoS<N: marker::Send> {
             NameStorage,
         >,
     ),
-    Close(SessionMpstFour<End, Recv<N, End>, End, Controller<RoleEnd>, NameStorage>),
+    Close(MeshedChannelsFour<End, Recv<N, End>, End, Controller<RoleEnd>, NameStorage>),
 }
 type Recurs0fromCtoS<N> = Recv<Branching0fromCtoS<N>, End>;
 // User
 enum Branching0fromCtoU<N: marker::Send> {
     Up(
-        SessionMpstFour<
+        MeshedChannelsFour<
             Recv<N, Send<N, End>>,
             Recurs0fromCtoU<N>,
             End,
@@ -169,7 +168,7 @@ enum Branching0fromCtoU<N: marker::Send> {
         >,
     ),
     Down(
-        SessionMpstFour<
+        MeshedChannelsFour<
             Recv<N, Send<N, End>>,
             Recurs0fromCtoU<N>,
             End,
@@ -177,20 +176,20 @@ enum Branching0fromCtoU<N: marker::Send> {
             NameUser,
         >,
     ),
-    Close(SessionMpstFour<Recv<N, End>, End, End, Api<RoleEnd>, NameUser>),
+    Close(MeshedChannelsFour<Recv<N, End>, End, End, Api<RoleEnd>, NameUser>),
 }
 type Recurs0fromCtoU<N> = Recv<Branching0fromCtoU<N>, End>;
 
 // Creating the MP sessions
 // Api
-type EndpointApi0<N> = SessionMpstFour<
+type EndpointApi0<N> = MeshedChannelsFour<
     Send<N, Recurs0fromCtoA<N>>,
     End,
     Recv<N, End>,
     User<Controller<Controller<RoleEnd>>>,
     NameApi,
 >;
-type EndpointApiInit<N> = SessionMpstFour<
+type EndpointApiInit<N> = MeshedChannelsFour<
     Recv<N, Send<N, Recurs0fromCtoA<N>>>,
     End,
     Recv<N, End>,
@@ -198,14 +197,14 @@ type EndpointApiInit<N> = SessionMpstFour<
     NameApi,
 >;
 // Controller
-type EndpointController0<N> = SessionMpstFour<
+type EndpointController0<N> = MeshedChannelsFour<
     Recv<N, Choose0fromCtoA<N>>,
     Choose0fromCtoS<N>,
     Choose0fromCtoU<N>,
     Api<RoleBroadcast>,
     NameController,
 >;
-type EndpointControllerInit<N> = SessionMpstFour<
+type EndpointControllerInit<N> = MeshedChannelsFour<
     Send<N, Recv<N, Choose0fromCtoA<N>>>,
     Send<N, Recv<N, Choose0fromCtoS<N>>>,
     Choose0fromCtoU<N>,
@@ -214,8 +213,8 @@ type EndpointControllerInit<N> = SessionMpstFour<
 >;
 // Storage
 type EndpointStorage0<N> =
-    SessionMpstFour<End, Recurs0fromCtoS<N>, End, Controller<RoleEnd>, NameStorage>;
-type EndpointStorageInit<N> = SessionMpstFour<
+    MeshedChannelsFour<End, Recurs0fromCtoS<N>, End, Controller<RoleEnd>, NameStorage>;
+type EndpointStorageInit<N> = MeshedChannelsFour<
     End,
     Recv<N, Send<N, Recurs0fromCtoS<N>>>,
     End,
@@ -224,7 +223,7 @@ type EndpointStorageInit<N> = SessionMpstFour<
 >;
 // User
 type EndpointUserInit<N> =
-    SessionMpstFour<Send<N, End>, Recurs0fromCtoU<N>, End, Api<Controller<RoleEnd>>, NameUser>;
+    MeshedChannelsFour<Send<N, End>, Recurs0fromCtoU<N>, End, Api<Controller<RoleEnd>>, NameUser>;
 
 /////////////////////////
 
@@ -293,7 +292,7 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Storage,
                 User, =>
                 Controller,
-                SessionMpstFour,
+                MeshedChannelsFour,
                 2
             );
 
@@ -313,7 +312,7 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Storage,
                 User, =>
                 Controller,
-                SessionMpstFour,
+                MeshedChannelsFour,
                 2
             );
 
@@ -331,7 +330,7 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Storage,
                 User, =>
                 Controller,
-                SessionMpstFour,
+                MeshedChannelsFour,
                 2
             );
 

@@ -30,6 +30,7 @@ use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRig
 use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
 use macros::multiple::create_fn_choose_mpst_cancel_multi_to_all_bundle::ChooseTypeCancelMultiToAllBundleMacroInput;
 use macros::multiple::create_fn_choose_mpst_multi_to_all_bundle::ChooseTypeMultiToAllBundleMacroInput;
+use macros::multiple::create_meshedchannels::CreateSessionMPSTMacroInput;
 use macros::multiple::create_offer_mpst_session_multi::OfferMPSTSessionMultiMacroInput;
 use macros::multiple::create_offer_type_multi::OfferTypeMultiMacroInput;
 use macros::multiple::create_recv_http_session::CreateRecvHttpSessionMacroInput;
@@ -39,7 +40,6 @@ use macros::multiple::create_send_check_cancel::CreateSendCheckCancelMacroInput;
 use macros::multiple::create_send_http_session::CreateSendHttpSessionMacroInput;
 use macros::multiple::create_send_mpst_cancel::CreateSendMPSTCancelMacroInput;
 use macros::multiple::create_send_mpst_session::CreateSendMPSTSessionMacroInput;
-use macros::multiple::create_sessionmpst::CreateSessionMPSTMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::recv_mpst::RecvMPSTMacroInput;
 use macros::multiple::send_cancel::SendCancelMacroInput;
@@ -468,15 +468,15 @@ pub fn e_create_send_check_cancel(input: TokenStream) -> TokenStream {
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn create_sessionmpst(input: TokenStream) -> TokenStream {
+pub fn create_meshedchannels(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CreateSessionMPSTMacroInput);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
 
 #[proc_macro_hack]
-pub fn e_create_sessionmpst(input: TokenStream) -> TokenStream {
-    create_sessionmpst(input)
+pub fn e_create_meshedchannels(input: TokenStream) -> TokenStream {
+    create_meshedchannels(input)
 }
 
 //////////////////////////////////////

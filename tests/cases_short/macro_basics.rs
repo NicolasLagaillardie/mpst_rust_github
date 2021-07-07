@@ -6,22 +6,22 @@ use std::error::Error;
 use mpstthree::bundle_impl;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D => fork_mpst);
+bundle_impl!(MeshedChannels => A, B, D => fork_mpst);
 
 type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;
 type TestD = RoleD<RoleEnd>;
 
-type SendSessionMPSTD<N> = SessionMpst<Send<N, End>, End, TestA, TestD>;
+type SendSessionMPSTD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
 
-type SendSessionMPSTA<N> = SessionMpst<End, Send<N, End>, TestD, TestA>;
+type SendSessionMPSTA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
 
-type RecvSessionMPSTD<N> = SessionMpst<Recv<N, End>, End, TestA, TestD>;
+type RecvSessionMPSTD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
 
-type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
+type RecvSessionMPSTA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
 
 // Create an B pawn
-type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
+type Pawn = MeshedChannels<End, End, RoleEnd, TestB>;
 
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {

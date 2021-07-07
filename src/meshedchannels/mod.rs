@@ -31,7 +31,7 @@ pub mod impl_c;
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 ///
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
@@ -46,11 +46,11 @@ pub mod impl_c;
 /// type StackA = RoleB<RoleC<RoleEnd>>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 /// ```
 #[must_use]
 #[derive(Debug)]
-pub struct SessionMpst<S1, S2, R, N>
+pub struct MeshedChannels<S1, S2, R, N>
 where
     S1: Session,
     S2: Session,
@@ -64,8 +64,8 @@ where
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2, R, N> {
-    type Dual = SessionMpst<
+impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, S2, R, N> {
+    type Dual = MeshedChannels<
         <S1 as Session>::Dual,
         <S2 as Session>::Dual,
         <R as Role>::Dual,
@@ -81,13 +81,13 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
         let (name_one, name_two) = N::new();
 
         (
-            SessionMpst {
+            MeshedChannels {
                 session1: sender_one,
                 session2: sender_two,
                 stack: role_one,
                 name: name_one,
             },
-            SessionMpst {
+            MeshedChannels {
                 session1: receiver_one,
                 session2: receiver_two,
                 stack: role_two,
@@ -120,9 +120,9 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for SessionMpst<S1, S2,
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> SessionMpst<S1, S2, R, N> {
+impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
     #[doc(hidden)]
-    pub fn field_names(self) -> (&'static [&'static str], SessionMpst<S1, S2, R, N>) {
+    pub fn field_names(self) -> (&'static [&'static str], MeshedChannels<S1, S2, R, N>) {
         (&["session1", "session2"], self)
     }
 }

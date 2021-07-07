@@ -35,8 +35,8 @@ use std::time::Duration;
 //     }
 // }
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
 
 // Create new roles
 // normal
@@ -47,19 +47,19 @@ create_multiple_normal_role_short!(A, C, S);
 create_send_mpst_session_bundle!(
     send_mpst_a_to_c, RoleC, 1 |
     send_mpst_a_to_s, RoleS, 2 | =>
-    RoleA, SessionMpstThree, 3
+    RoleA, MeshedChannelsThree, 3
 );
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_s, RoleS, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_a, RoleA, 1 |
     send_mpst_s_to_c, RoleC, 2 | =>
-    RoleS, SessionMpstThree, 3
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
@@ -67,19 +67,19 @@ create_send_mpst_session_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 |
     recv_mpst_a_from_s, RoleS, 2 | =>
-    RoleA, SessionMpstThree, 3
+    RoleA, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_s, RoleS, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_a, RoleA, 1 |
     recv_mpst_s_from_c, RoleC, 2 | =>
-    RoleS, SessionMpstThree, 3
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Names
@@ -94,32 +94,32 @@ type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
 
 // A
 enum Branching0fromCtoA<N: marker::Send> {
-    Accept(SessionMpstThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
-    Quit(SessionMpstThree<End, End, RoleEnd, NameA>),
+    Accept(MeshedChannelsThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
+    Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
 // S
 enum Branching0fromCtoS<N: marker::Send> {
-    Accept(SessionMpstThree<End, Recv<N, Send<N, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
-    Quit(SessionMpstThree<End, End, RoleEnd, NameS>),
+    Accept(MeshedChannelsThree<End, Recv<N, Send<N, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
+    Quit(MeshedChannelsThree<End, End, RoleEnd, NameS>),
 }
 
 // Creating the MP sessions
 // A
-type EndpointA<N> = SessionMpstThree<
+type EndpointA<N> = MeshedChannelsThree<
     Send<N, Recv<Branching0fromCtoA<N>, End>>,
     Send<N, Recv<N, End>>,
     RoleS<RoleS<RoleC<RoleC<RoleEnd>>>>,
     NameA,
 >;
 // C
-type EndpointC<N> = SessionMpstThree<
+type EndpointC<N> = MeshedChannelsThree<
     Recv<N, Choose0fromCtoA<N>>,
     Recv<N, Choose0fromCtoS<N>>,
     RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
 // S
-type EndpointS<N> = SessionMpstThree<
+type EndpointS<N> = MeshedChannelsThree<
     Recv<N, Send<N, End>>,
     Send<N, Recv<Branching0fromCtoS<N>, End>>,
     RoleA<RoleA<RoleC<RoleC<RoleEnd>>>>,
@@ -156,7 +156,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             RoleA,
             RoleS, =>
             RoleC,
-            SessionMpstThree,
+            MeshedChannelsThree,
             2
         );
 
@@ -173,7 +173,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             RoleA,
             RoleS, =>
             RoleC,
-            SessionMpstThree,
+            MeshedChannelsThree,
             2
         );
         close_mpst_multi(s)

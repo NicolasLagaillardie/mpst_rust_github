@@ -9,7 +9,7 @@ use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, D => fork_mpst);
+bundle_impl!(MeshedChannels => A, B, D => fork_mpst);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -37,12 +37,12 @@ type RecursAtoD<N> = <Choose0fromCtoA<N> as Session>::Dual;
 type RecursBtoD<N> = <Choose0fromCtoB<N> as Session>::Dual;
 
 enum Branches0AtoD<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoDClose, StackAEnd, NameA>),
-    Video(SessionMpst<AtoBVideo<N>, AtoDVideo<N>, StackAVideo, NameA>),
+    End(MeshedChannels<AtoBClose, AtoDClose, StackAEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo<N>, AtoDVideo<N>, StackAVideo, NameA>),
 }
 enum Branches0BtoD<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoDClose, StackBEnd, NameB>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, StackBVideo, NameB>),
+    End(MeshedChannels<BtoAClose, BtoDClose, StackBEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo<N>, RecursBtoD<N>, StackBVideo, NameB>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoD<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoD<N>, End>;
@@ -64,26 +64,27 @@ type StackDFull = RoleA<RoleA<StackDRecurs>>;
 
 /// Creating the MP sessions
 /// For D
-type EndpointDVideo<N> = SessionMpst<
+type EndpointDVideo<N> = MeshedChannels<
     <AtoDVideo<N> as Session>::Dual,
     <RecursBtoD<N> as Session>::Dual,
     RoleA<RoleA<RoleBroadcast>>,
     NameD,
 >;
-type EndpointDRecurs<N> = SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackDRecurs, NameD>;
-type EndpointDFull<N> = SessionMpst<InitD<N>, Choose0fromCtoB<N>, StackDFull, NameD>;
+type EndpointDRecurs<N> =
+    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackDRecurs, NameD>;
+type EndpointDFull<N> = MeshedChannels<InitD<N>, Choose0fromCtoB<N>, StackDFull, NameD>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoD<N>, StackARecurs, NameA>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAInit, NameA>;
+type EndpointARecurs<N> = MeshedChannels<End, RecursAtoD<N>, StackARecurs, NameA>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, StackBRecurs, NameB>;
+type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
 choose_mpst_create_multi_to_all!(
     choose_mpst_client_to_all,
     RoleA, RoleB, =>
-    RoleD, SessionMpst,
+    RoleD, MeshedChannels,
     3
 );
 

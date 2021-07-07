@@ -164,28 +164,28 @@ create_multiple_normal_role!(
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_s, RoleS, 1 | =>
-    RoleC, SessionMpstTwo, 2
+    RoleC, MeshedChannelsTwo, 2
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 1 | =>
-    RoleS, SessionMpstTwo, 2
+    RoleS, MeshedChannelsTwo, 2
 );
 
 // Create new recv functions and related types
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_s, RoleS, 1 | =>
-    RoleC, SessionMpstTwo, 2
+    RoleC, MeshedChannelsTwo, 2
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_c, RoleC, 1 | =>
-    RoleS, SessionMpstTwo, 2
+    RoleS, MeshedChannelsTwo, 2
 );
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstTwo, 2);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
 
 // Names
 type NameC = RoleC<RoleEnd>;
@@ -195,147 +195,153 @@ type NameS = RoleS<RoleEnd>;
 // Step 0
 // C
 type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
-type EndpointC0 = SessionMpstTwo<Recv<(), Choose0fromCtoS>, RoleS<RoleBroadcast>, NameC>;
+type EndpointC0 = MeshedChannelsTwo<Recv<(), Choose0fromCtoS>, RoleS<RoleBroadcast>, NameC>;
 // S
 enum Branching0fromCtoS {
     Continue(
-        SessionMpstTwo<Recv<(), Recv<(), Choose1fromStoC>>, RoleC<RoleC<RoleBroadcast>>, NameS>,
+        MeshedChannelsTwo<Recv<(), Recv<(), Choose1fromStoC>>, RoleC<RoleC<RoleBroadcast>>, NameS>,
     ),
-    Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Quit(MeshedChannelsTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer0fromCtoS = <Choose0fromCtoS as Session>::Dual;
-type EndpointS0 = SessionMpstTwo<Send<(), Offer0fromCtoS>, RoleC<RoleC<RoleEnd>>, NameS>;
+type EndpointS0 = MeshedChannelsTwo<Send<(), Offer0fromCtoS>, RoleC<RoleC<RoleEnd>>, NameS>;
 
 // Step 1
 // C
 enum Branching1fromStoC {
-    Continue(SessionMpstTwo<Recv<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(SessionMpstTwo<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Loop(
+        MeshedChannelsTwo<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>,
+    ),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
-type EndpointC1 = SessionMpstTwo<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
+type EndpointC1 = MeshedChannelsTwo<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
 // S
 type Choose1fromStoC = Send<Branching1fromStoC, End>;
-type EndpointS1 = SessionMpstTwo<Choose1fromStoC, RoleBroadcast, NameS>;
+type EndpointS1 = MeshedChannelsTwo<Choose1fromStoC, RoleBroadcast, NameS>;
 
 // Step 2
 // C
 type Choose2fromCtoS = Send<Branching2fromCtoS, End>;
-type EndpointC2 = SessionMpstTwo<Choose2fromCtoS, RoleBroadcast, NameC>;
+type EndpointC2 = MeshedChannelsTwo<Choose2fromCtoS, RoleBroadcast, NameC>;
 // S
 enum Branching2fromCtoS {
     Continue(
-        SessionMpstTwo<Recv<(), Send<(), Offer3fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
+        MeshedChannelsTwo<Recv<(), Send<(), Offer3fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
     ),
-    Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Quit(MeshedChannelsTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer2fromCtoS = <Choose2fromCtoS as Session>::Dual;
-type EndpointS2 = SessionMpstTwo<Offer2fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS2 = MeshedChannelsTwo<Offer2fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Step 3
 // C
 type Choose3fromCtoS = Send<Branching3fromCtoS, End>;
-type EndpointC3 = SessionMpstTwo<Choose3fromCtoS, RoleBroadcast, NameC>;
+type EndpointC3 = MeshedChannelsTwo<Choose3fromCtoS, RoleBroadcast, NameC>;
 // S
 enum Branching3fromCtoS {
-    Continue(SessionMpstTwo<Recv<(), Choose4fromStoC>, RoleC<RoleBroadcast>, NameS>),
-    Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose4fromStoC>, RoleC<RoleBroadcast>, NameS>),
+    Quit(MeshedChannelsTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer3fromCtoS = <Choose3fromCtoS as Session>::Dual;
-type EndpointS3 = SessionMpstTwo<Offer3fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS3 = MeshedChannelsTwo<Offer3fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Step 4
 // C
 enum Branching4fromStoC {
-    Continue(SessionMpstTwo<Recv<(), Choose5fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(SessionMpstTwo<Recv<(), Offer4fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose5fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Loop(MeshedChannelsTwo<Recv<(), Offer4fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
 }
 type Offer4fromStoC = <Choose4fromStoC as Session>::Dual;
-type EndpointC4 = SessionMpstTwo<Offer4fromStoC, RoleS<RoleEnd>, NameC>;
+type EndpointC4 = MeshedChannelsTwo<Offer4fromStoC, RoleS<RoleEnd>, NameC>;
 // S
 type Choose4fromStoC = Send<Branching4fromStoC, End>;
-type EndpointS4 = SessionMpstTwo<Choose4fromStoC, RoleBroadcast, NameS>;
+type EndpointS4 = MeshedChannelsTwo<Choose4fromStoC, RoleBroadcast, NameS>;
 
 // Step 5
 // C
 type Choose5fromCtoS = Send<Branching5fromCtoS, End>;
-type EndpointC5 = SessionMpstTwo<Choose5fromCtoS, RoleBroadcast, NameC>;
+type EndpointC5 = MeshedChannelsTwo<Choose5fromCtoS, RoleBroadcast, NameC>;
 // S
 enum Branching5fromCtoS {
-    Continue(SessionMpstTwo<Recv<(), Choose6fromStoC>, RoleC<RoleBroadcast>, NameS>),
-    Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose6fromStoC>, RoleC<RoleBroadcast>, NameS>),
+    Quit(MeshedChannelsTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer5fromCtoS = <Choose5fromCtoS as Session>::Dual;
-type EndpointS5 = SessionMpstTwo<Offer5fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS5 = MeshedChannelsTwo<Offer5fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Step 6
 // C
 enum Branching6fromStoC {
-    Continue(SessionMpstTwo<Recv<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(SessionMpstTwo<Recv<(), Offer6fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Loop(MeshedChannelsTwo<Recv<(), Offer6fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
 }
 type Offer6fromStoC = <Choose6fromStoC as Session>::Dual;
-type EndpointC6 = SessionMpstTwo<Offer6fromStoC, RoleS<RoleEnd>, NameC>;
+type EndpointC6 = MeshedChannelsTwo<Offer6fromStoC, RoleS<RoleEnd>, NameC>;
 // S
 type Choose6fromStoC = Send<Branching6fromStoC, End>;
-type EndpointS6 = SessionMpstTwo<Choose6fromStoC, RoleBroadcast, NameS>;
+type EndpointS6 = MeshedChannelsTwo<Choose6fromStoC, RoleBroadcast, NameS>;
 
 // Step 7
 // C
 type Choose7fromCtoS = Send<Branching7fromCtoS, End>;
-type EndpointC7 = SessionMpstTwo<Choose7fromCtoS, RoleBroadcast, NameC>;
+type EndpointC7 = MeshedChannelsTwo<Choose7fromCtoS, RoleBroadcast, NameC>;
 // S
 enum Branching7fromCtoS {
-    Continue(SessionMpstTwo<Recv<(), Choose8fromStoC>, RoleC<RoleBroadcast>, NameS>),
-    Quit(SessionMpstTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose8fromStoC>, RoleC<RoleBroadcast>, NameS>),
+    Quit(MeshedChannelsTwo<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer7fromCtoS = <Choose7fromCtoS as Session>::Dual;
-type EndpointS7 = SessionMpstTwo<Offer7fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS7 = MeshedChannelsTwo<Offer7fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Step 8
 // C
 enum Branching8fromStoC {
-    Continue(SessionMpstTwo<Recv<(), Choose9fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(SessionMpstTwo<Recv<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Continue(MeshedChannelsTwo<Recv<(), Choose9fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Loop(MeshedChannelsTwo<Recv<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
 }
 type Offer8fromStoC = <Choose8fromStoC as Session>::Dual;
-type EndpointC8 = SessionMpstTwo<Offer8fromStoC, RoleS<RoleEnd>, NameC>;
+type EndpointC8 = MeshedChannelsTwo<Offer8fromStoC, RoleS<RoleEnd>, NameC>;
 // S
 type Choose8fromStoC = Send<Branching8fromStoC, End>;
-type EndpointS8 = SessionMpstTwo<Choose8fromStoC, RoleBroadcast, NameS>;
+type EndpointS8 = MeshedChannelsTwo<Choose8fromStoC, RoleBroadcast, NameS>;
 
 // Step 9
 // C
 type Choose9fromCtoS = Send<Branching9fromCtoS, End>;
-type EndpointC9 = SessionMpstTwo<Choose9fromCtoS, RoleBroadcast, NameC>;
+type EndpointC9 = MeshedChannelsTwo<Choose9fromCtoS, RoleBroadcast, NameC>;
 // S
 enum Branching9fromCtoS {
     Continue(
-        SessionMpstTwo<
+        MeshedChannelsTwo<
             Recv<(), Send<(), Recv<(), Recv<(), Offer10fromCtoS>>>>,
             RoleC<RoleC<RoleC<RoleC<RoleC<RoleEnd>>>>>,
             NameS,
         >,
     ),
-    Loop(SessionMpstTwo<Recv<(), Send<(), Offer9fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
+    Loop(
+        MeshedChannelsTwo<Recv<(), Send<(), Offer9fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
+    ),
 }
 type Offer9fromCtoS = <Choose9fromCtoS as Session>::Dual;
-type EndpointS9 = SessionMpstTwo<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS9 = MeshedChannelsTwo<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Step 10
 // C
 type Choose10fromCtoS = Send<Branching10fromCtoS, End>;
-type EndpointC10 = SessionMpstTwo<Choose10fromCtoS, RoleBroadcast, NameC>;
+type EndpointC10 = MeshedChannelsTwo<Choose10fromCtoS, RoleBroadcast, NameC>;
 // S
 enum Branching10fromCtoS {
-    Data(SessionMpstTwo<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
-    Subject(
-        SessionMpstTwo<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
+    Data(
+        MeshedChannelsTwo<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
     ),
-    End(SessionMpstTwo<Recv<(), Send<(), Offer7fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
+    Subject(
+        MeshedChannelsTwo<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
+    ),
+    End(MeshedChannelsTwo<Recv<(), Send<(), Offer7fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
 }
 type Offer10fromCtoS = <Choose10fromCtoS as Session>::Dual;
-type EndpointS10 = SessionMpstTwo<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS10 = MeshedChannelsTwo<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_c_init(s: EndpointC0) -> Result<(), Box<dyn Error>> {
@@ -351,7 +357,7 @@ fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoS::Quit, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -363,7 +369,7 @@ fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoS::Continue, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -397,7 +403,7 @@ fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching2fromCtoS::Quit, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -409,7 +415,7 @@ fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching2fromCtoS::Continue, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -427,7 +433,7 @@ fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching3fromCtoS::Quit, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -439,7 +445,7 @@ fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching3fromCtoS::Continue, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -471,7 +477,7 @@ fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching5fromCtoS::Quit, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -483,7 +489,7 @@ fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching5fromCtoS::Continue, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -515,7 +521,7 @@ fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching7fromCtoS::Quit, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -527,7 +533,7 @@ fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching7fromCtoS::Continue, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -559,7 +565,7 @@ fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching9fromCtoS::Loop, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -572,7 +578,7 @@ fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching9fromCtoS::Continue, =>
                 RoleS, =>
-                RoleC, SessionMpstTwo, 1
+                RoleC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -591,7 +597,7 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
             s,
             Branching10fromCtoS::End, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 1
+            RoleC, MeshedChannelsTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -603,7 +609,7 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
             s,
             Branching10fromCtoS::Subject, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 1
+            RoleC, MeshedChannelsTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -615,7 +621,7 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
             s,
             Branching10fromCtoS::Data, =>
             RoleS, =>
-            RoleC, SessionMpstTwo, 1
+            RoleC, MeshedChannelsTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -656,7 +662,7 @@ fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching1fromStoC::Loop, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -669,7 +675,7 @@ fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching1fromStoC::Continue, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -717,7 +723,7 @@ fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching4fromStoC::Loop, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -729,7 +735,7 @@ fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching4fromStoC::Continue, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -761,7 +767,7 @@ fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching6fromStoC::Loop, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -773,7 +779,7 @@ fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching6fromStoC::Continue, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -805,7 +811,7 @@ fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching8fromStoC::Loop, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -817,7 +823,7 @@ fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching8fromStoC::Continue, =>
                 RoleC, =>
-                RoleS, SessionMpstTwo, 2
+                RoleS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);

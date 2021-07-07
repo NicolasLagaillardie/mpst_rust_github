@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::role::broadcast::RoleBroadcast;
 // use mpstthree::role::Role;
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
 // use std::any::type_name;
 use std::boxed::Box;
@@ -61,12 +61,12 @@ type RecursBtoA<N> = Recv<Branches0BtoA<N>, End>;
 type RecursCtoA<N> = Recv<Branches0CtoA<N>, End>;
 
 enum Branches0BtoA<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 enum Branches0CtoA<N: marker::Send> {
-    End(SessionMpst<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
-    Video(SessionMpst<RecursCtoA<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
+    End(MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
+    Video(MeshedChannels<RecursCtoA<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
 }
 type Choose0fromAtoB<N> = Send<Branches0BtoA<N>, End>;
 type Choose0fromAtoC<N> = Send<Branches0CtoA<N>, End>;
@@ -90,15 +90,15 @@ type StackAFull = RoleB<RoleB<StackARecurs>>;
 
 /// For B
 type EndpointARecurs<N> =
-    SessionMpst<Choose0fromAtoB<N>, Choose0fromAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
-type EndpointAFull<N> = SessionMpst<InitA<N>, Choose0fromAtoC<N>, StackAFull, RoleA<RoleEnd>>;
+    MeshedChannels<Choose0fromAtoB<N>, Choose0fromAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, Choose0fromAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For C
-type EndpointBRecurs<N> = SessionMpst<RecursBtoA<N>, End, StackBRecurs, RoleB<RoleEnd>>;
-type EndpointBFull<N> = SessionMpst<InitB<N>, End, StackBInit, RoleB<RoleEnd>>;
+type EndpointBRecurs<N> = MeshedChannels<RecursBtoA<N>, End, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBInit, RoleB<RoleEnd>>;
 
 /// For A
-type EndpointCRecurs<N> = SessionMpst<RecursCtoA<N>, End, StackCRecurs, RoleC<RoleEnd>>;
+type EndpointCRecurs<N> = MeshedChannels<RecursCtoA<N>, End, StackCRecurs, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
@@ -250,7 +250,7 @@ pub fn run_b_usecase_recursive() {
 // pub fn run_b_usecase_recursive_checker() {
 //     assert!(|| -> Result<(), Box<dyn Error>> {
 //         {
-//             // Get the new sessionmpst of the passive roles
+//             // Get the new meshedchannels of the passive roles
 //             let state_branches_receivers = RandomState::new();
 //             let mut branches_receivers: HashMap<String, &Vec<String>> =
 //                 HashMap::with_hasher(state_branches_receivers);
@@ -261,9 +261,9 @@ pub fn run_b_usecase_recursive() {
 //             branches_receivers.insert(String::from("Branches0CtoA<i32>"), &branche_0_c_to_a);
 //             branches_receivers.insert(String::from("Branches0BtoA<i32>"), &branche_0_b_to_a);
 
-//             let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-//             let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
-//             let (s3, _): (EndpointCRecurs<i32>, _) = SessionMpst::new();
+//             let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
+//             let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();
+//             let (s3, _): (EndpointCRecurs<i32>, _) = MeshedChannels::new();
 
 //             // Get the new stack of the active role
 //             let state_branches_sender = RandomState::new();

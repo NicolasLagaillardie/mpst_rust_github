@@ -9,21 +9,21 @@ use rand::{thread_rng, Rng};
 use mpstthree::bundle_impl;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, C => fork_mpst);
+bundle_impl!(MeshedChannels => A, B, C => fork_mpst);
 
 // Those types will be code generated
 type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
-    Recv<Either<SessionMpst<S0, S1, R0, N0>, SessionMpst<S2, S3, R1, N0>>, End>;
+    Recv<Either<MeshedChannels<S0, S1, R0, N0>, MeshedChannels<S2, S3, R1, N0>>, End>;
 
 type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        SessionMpst<
+        MeshedChannels<
             <S0 as Session>::Dual,
             <S1 as Session>::Dual,
             <R0 as Role>::Dual,
             <N0 as Role>::Dual,
         >,
-        SessionMpst<
+        MeshedChannels<
             <S2 as Session>::Dual,
             <S3 as Session>::Dual,
             <R1 as Role>::Dual,
@@ -84,11 +84,11 @@ type ChooseCtoB<N> = ChooseMpst<
     RoleBDual<RoleEnd>,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-type EndpointCFull<N> = SessionMpst<InitC<N>, ChooseCtoB<N>, StackCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointAVideo<N> = SessionMpst<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
-type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
+type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
+type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
 type OfferA<N> = OfferMpst<
     AtoBVideo<N>,
@@ -100,11 +100,11 @@ type OfferA<N> = OfferMpst<
     RoleA<RoleEnd>,
 >;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, StackAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCClose, StackBVideo, RoleB<RoleEnd>>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, RoleB<RoleEnd>>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
 
 type OfferB<N> = OfferMpst<
     BtoAVideo<N>,
@@ -115,7 +115,7 @@ type OfferB<N> = OfferMpst<
     StackBEnd,
     RoleB<RoleEnd>,
 >;
-type EndpointBFull<N> = SessionMpst<End, OfferB<N>, StackBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {

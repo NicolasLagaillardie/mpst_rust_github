@@ -1,9 +1,8 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, close_mpst_cancel, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, create_sessionmpst,
-    fork_mpst_multi, send_cancel,
+    broadcast_cancel, close_mpst_cancel, create_meshedchannels, create_multiple_normal_role,
+    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, fork_mpst_multi, send_cancel,
 };
 
 use rand::random;
@@ -12,8 +11,8 @@ use std::error::Error;
 // B --> C canceled
 // C-->B.C-->D
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpstFour, 4);
+// Create new MeshedChannels for three participants
+create_meshedchannels!(MeshedChannelsFour, 4);
 
 // Create new roles
 // normal
@@ -34,7 +33,7 @@ create_send_check_cancel_bundle!(
     RoleD,
     3 | =>
     RoleC,
-    SessionMpstFour,
+    MeshedChannelsFour,
     4
 );
 
@@ -45,7 +44,7 @@ create_recv_mpst_session_bundle!(
     RoleC,
     2 | =>
     RoleB,
-    SessionMpstFour,
+    MeshedChannelsFour,
     4
 );
 // D
@@ -54,17 +53,17 @@ create_recv_mpst_session_bundle!(
     RoleC,
     3 | =>
     RoleD,
-    SessionMpstFour,
+    MeshedChannelsFour,
     4
 );
 
-send_cancel!(cancel_mpst, RoleB, SessionMpstFour, 4, "Session dropped");
+send_cancel!(cancel_mpst, RoleB, MeshedChannelsFour, 4, "Session dropped");
 
 // Create close function
-close_mpst_cancel!(close_mpst_multi, SessionMpstFour, 4);
+close_mpst_cancel!(close_mpst_multi, MeshedChannelsFour, 4);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst, SessionMpstFour, 4);
+fork_mpst_multi!(fork_mpst, MeshedChannelsFour, 4);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -73,10 +72,11 @@ type NameC = RoleC<RoleEnd>;
 type NameD = RoleD<RoleEnd>;
 
 // Types
-type EndpointA = SessionMpstFour<End, End, End, RoleEnd, NameA>;
-type EndpointB = SessionMpstFour<End, Recv<i32, End>, End, RoleC<RoleEnd>, NameB>;
-type EndpointC = SessionMpstFour<End, Send<i32, End>, Send<i32, End>, RoleB<RoleD<RoleEnd>>, NameC>;
-type EndpointD = SessionMpstFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
+type EndpointA = MeshedChannelsFour<End, End, End, RoleEnd, NameA>;
+type EndpointB = MeshedChannelsFour<End, Recv<i32, End>, End, RoleC<RoleEnd>, NameB>;
+type EndpointC =
+    MeshedChannelsFour<End, Send<i32, End>, Send<i32, End>, RoleB<RoleD<RoleEnd>>, NameC>;
+type EndpointD = MeshedChannelsFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     broadcast_cancel!(s, 4);

@@ -6,21 +6,21 @@
 /// # Arguments
 ///
 /// * The name of the new *ChooseMpst* type
-/// * The *SessionMpst* type that will be used
+/// * The *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_choose_type_multi, create_sessionmpst};
+/// use mpstthree::{create_choose_type_multi, create_meshedchannels};
 ///
-/// create_sessionmpst!(SessionMpst, 3);
-/// create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
+/// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 /// ```
 #[macro_export]
 macro_rules! create_choose_type_multi {
-    ($type_name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
-        mpst_seq::create_choose_type_multi!($type_name, $sessionmpst_name, $nsessions);
+    ($type_name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $nsessions);
     };
 }
 
@@ -35,7 +35,7 @@ macro_rules! create_choose_type_multi {
 /// * The name of the broadcasting sender. This one should contain *toAll* according to the
 ///   convention
 /// * The name of the sender
-/// * The name of the *SessionMpst* type that will be used
+/// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
 /// # Example
@@ -43,33 +43,33 @@ macro_rules! create_choose_type_multi {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_left, create_choose_type_multi,
-///     create_normal_role, create_sessionmpst,
+///     create_normal_role, create_meshedchannels,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
-/// create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
+/// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 ///
 /// create_choose_mpst_session_multi_left!(
 ///     choose_left_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
 ///     RoleD,
-///     SessionMpst,
+///     MeshedChannels,
 ///     3
 /// );
 /// ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_left {
-    ($func_name: ident, $type_name: ident, $role_dual: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+    ($func_name: ident, $type_name: ident, $role_dual: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
         mpst_seq::create_choose_mpst_session_multi_left!(
             $func_name,
             $type_name,
             $role_dual,
             $name,
-            $sessionmpst_name,
+            $meshedchannels_name,
             $nsessions
         );
     };
@@ -86,7 +86,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// * The name of the broadcasting sender. This one should contain *toAll* according to the
 ///   convention
 /// * The name of the sender
-/// * The name of the *SessionMpst* type that will be used
+/// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
 /// # Example
@@ -94,33 +94,33 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_right, create_choose_type_multi,
-///     create_normal_role, create_sessionmpst,
+///     create_normal_role, create_meshedchannels,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
-/// create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
+/// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 ///
 /// create_choose_mpst_session_multi_right!(
 ///     choose_right_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
 ///     RoleD,
-///     SessionMpst,
+///     MeshedChannels,
 ///     3
 /// );
 /// ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_right {
-    ($func_name: ident, $type_name: ident, $role_dual: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
+    ($func_name: ident, $type_name: ident, $role_dual: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
         mpst_seq::create_choose_mpst_session_multi_right!(
             $func_name,
             $type_name,
             $role_dual,
             $name,
-            $sessionmpst_name,
+            $meshedchannels_name,
             $nsessions
         );
     };
@@ -138,7 +138,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// * The name of the dual of the broadcasting sender. This one should contain *toAll* according to
 ///   the convention
 /// * The name of the sender
-/// * The name of the *SessionMpst* type that will be used
+/// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
 /// # Example
@@ -146,14 +146,14 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_both, create_choose_type_multi,
-///     create_normal_role, create_sessionmpst,
+///     create_normal_role, create_meshedchannels,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
-/// create_choose_type_multi!(ChooseMpstThree, SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
+/// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 ///
 /// create_choose_mpst_session_multi_both!(
 ///     choose_left_mpst_session_d_to_all,
@@ -161,7 +161,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
 ///     RoleD,
-///     SessionMpst,
+///     MeshedChannels,
 ///     3
 /// );
 /// ```
@@ -173,7 +173,7 @@ macro_rules! create_choose_mpst_session_multi_both {
         $type_name: ident,
         $role_dual: ident,
         $name: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $nsessions: literal
     ) => {
         mpstthree::create_choose_mpst_session_multi_left!(
@@ -181,7 +181,7 @@ macro_rules! create_choose_mpst_session_multi_both {
             $type_name,
             $role_dual,
             $name,
-            $sessionmpst_name,
+            $meshedchannels_name,
             $nsessions
         );
 
@@ -190,7 +190,7 @@ macro_rules! create_choose_mpst_session_multi_both {
             $type_name,
             $role_dual,
             $name,
-            $sessionmpst_name,
+            $meshedchannels_name,
             $nsessions
         );
     };
@@ -205,7 +205,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///    passive role
 ///  * The different passive roles
 ///  * The name of the sender
-///  * The name of the *SessionMpst* type that will be used
+///  * The name of the *MeshedChannels* type that will be used
 ///  * The index of the active role
 ///
 /// # Example
@@ -222,7 +222,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        let s = send_mpst_d_to_a(1, s);
@@ -237,7 +237,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -251,7 +251,7 @@ macro_rules! choose_mpst_multi_to_all {
         $( $label: path , )+ =>
         $( $receiver: ident , )+ =>
         $sender: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
@@ -259,7 +259,7 @@ macro_rules! choose_mpst_multi_to_all {
             ( $( $label , )* ) ,
             ( $( $receiver , )* ) ,
             $sender ,
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             $exclusion
         );
     }
@@ -273,7 +273,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///  * The name of the new macro
 ///  * The different passive roles
 ///  * The name of the sender
-///  * The name of the *SessionMpst* type that will be used
+///  * The name of the *MeshedChannels* type that will be used
 ///  * The index of the active role
 ///
 /// # Example
@@ -284,7 +284,7 @@ macro_rules! choose_mpst_multi_to_all {
 /// choose_mpst_create_multi_to_all!(
 ///     choose_mpst_client_to_all,
 ///     RoleA, RoleB, =>
-///     RoleD, SessionMpst,
+///     RoleD, MeshedChannels,
 ///     3
 /// );
 ///
@@ -319,14 +319,14 @@ macro_rules! choose_mpst_create_multi_to_all {
         $name: expr,
         $( $receiver: ident , )+ =>
         $sender: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_create_multi_to_all!(
             $name ,
             ( $( $receiver , )* ) ,
             $sender ,
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             $exclusion
         );
     }
@@ -342,7 +342,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///    passive role
 ///  * The different passive roles
 ///  * The name of the sender
-///  * The name of the *SessionMpst* type that will be used
+///  * The name of the *MeshedChannels* type that will be used
 ///  * The index of the active role
 ///
 /// # Example
@@ -358,7 +358,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        let s = send_mpst_d_to_a(1, s);
@@ -372,7 +372,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -386,7 +386,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///
 /// ```compile_fail
 /// use mpstthree::role::Role;
-/// use mpstthree::{create_multiple_normal_role, create_sessionmpst, choose_mpst_multi_cancel_to_all};
+/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, choose_mpst_multi_cancel_to_all};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
@@ -394,7 +394,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///     RoleD, RoleDDual |
 /// );
 ///
-/// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, SessionMpst, 3);
+/// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, MeshedChannels, 3);
 ///
 /// match xs.pop() {
 ///    Option::Some(_) => {
@@ -405,7 +405,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        client_recurs(s, xs, index + 1)
@@ -418,7 +418,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -433,7 +433,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
         $( $receiver: ident , )+ =>
         $pawn: ident,
         $sender: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_cancel_to_all!(
@@ -442,7 +442,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             ( $( $receiver , )* ) ,
             $pawn ,
             $sender ,
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             $exclusion);
     }
 }
@@ -456,7 +456,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///    passive role
 ///  * The different passive roles
 ///  * The name of the sender
-///  * The name of the *SessionMpst* type that will be used
+///  * The name of the *MeshedChannels* type that will be used
 ///  * The number of participants (all together)
 ///
 /// # Example
@@ -471,7 +471,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        let s = send_http_d_to_a(1, s);
@@ -486,7 +486,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///            RoleA,
 ///            RoleB, =>
 ///            RoleD,
-///            SessionMpst,
+///            MeshedChannels,
 ///            3
 ///        );
 ///        close_mpst_multi(s)
@@ -500,7 +500,7 @@ macro_rules! choose_mpst_multi_http_to_all {
         $( $label: path , )+ =>
         $( $receiver: ident , )+ =>
         $sender: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_http_to_all!(
@@ -508,7 +508,7 @@ macro_rules! choose_mpst_multi_http_to_all {
             ( $( $label , )* ) ,
             ( $( $receiver , )* ) ,
             $sender ,
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             $exclusion
         );
     }
@@ -525,7 +525,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///  * The name of the Enum containing the branches
 ///  * The different passive roles
 ///  * The name of the sender
-///  * The name of the *SessionMpst* type that will be used
+///  * The name of the *MeshedChannels* type that will be used
 ///  * The index of the sender among all participants
 ///
 /// # Example
@@ -533,8 +533,8 @@ macro_rules! choose_mpst_multi_http_to_all {
 /// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
-/// type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
-/// type EndpointMoreC = SessionMpstThree<
+/// type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = MeshedChannelsThree<
 ///     Send<(), Recv<(), Choose0fromCtoA>>,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
 ///     R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
@@ -546,7 +546,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
 ///     RoleA, RoleB, =>
-///     RoleC, SessionMpstThree, 3
+///     RoleC, MeshedChannelsThree, 3
 /// );
 /// ```
 #[macro_export]
@@ -558,7 +558,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $( $label: path , )+ =>
         $( $receiver: ident , )+ =>
         $sender: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
@@ -568,7 +568,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
             ( $( $receiver , )* ) ,
             ( $( $new_type , )* ) ,
             $sender ,
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             $exclusion
         );
     };
@@ -586,7 +586,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///  * The different passive roles
 ///  * The name of the pawn
 ///  * The name of the sender
-///  * The name of the *SessionMpst* type that will be used
+///  * The name of the *MeshedChannels* type that will be used
 ///  * The index of the sender among all participants
 ///
 /// # Example
@@ -594,8 +594,8 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
-/// type EndpointDoneC = SessionMpstThree<End, End, RoleEnd, NameC>;
-/// type EndpointMoreC = SessionMpstThree<
+/// type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = MeshedChannelsThree<
 ///     End,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
 ///     R2A<R2B<RoleB<RoleEnd>>>,
@@ -607,7 +607,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
 ///     RoleB, =>
-///     RoleA, RoleC, SessionMpstThree, 3
+///     RoleA, RoleC, MeshedChannelsThree, 3
 /// );
 /// ```
 #[macro_export]
@@ -620,7 +620,7 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
         $( $receiver: ident , )+ =>
         $pawn: ident,
         $sender: ident,
-        $sessionmpst_name: ident,
+        $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
@@ -631,7 +631,7 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
             ( $( $new_type , )* ) ,
             $sender ,
             $pawn ,
-            $sessionmpst_name ,
+            $meshedchannels_name ,
             $exclusion
         );
     }

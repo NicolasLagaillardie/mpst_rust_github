@@ -92,7 +92,7 @@ impl RecvAllAuxSimpleMacroInput {
 
                 Ok((
                     v,
-                    crate::sessionmpst::SessionMpst {
+                    crate::meshedchannels::MeshedChannels {
                         #( #all_sessions : #new_sessions , )*
                         stack: new_stack_left,
                         name: #session.name,

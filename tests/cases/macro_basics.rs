@@ -2,8 +2,8 @@
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
+use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::sessionmpst::SessionMpst;
 use mpstthree::{
     create_multiple_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
     create_send_mpst_session_1, create_send_mpst_session_2,
@@ -21,16 +21,16 @@ type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;
 type TestD = RoleD<RoleEnd>;
 
-type SendSessionMPSTD<N> = SessionMpst<Send<N, End>, End, TestA, TestD>;
+type SendSessionMPSTD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
 
-type SendSessionMPSTA<N> = SessionMpst<End, Send<N, End>, TestD, TestA>;
+type SendSessionMPSTA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
 
-type RecvSessionMPSTD<N> = SessionMpst<Recv<N, End>, End, TestA, TestD>;
+type RecvSessionMPSTD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
 
-type RecvSessionMPSTA<N> = SessionMpst<End, Recv<N, End>, TestD, TestA>;
+type RecvSessionMPSTA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
 
 // Create an B pawn
-type Pawn = SessionMpst<End, End, RoleEnd, TestB>;
+type Pawn = MeshedChannels<End, End, RoleEnd, TestB>;
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, RoleD);

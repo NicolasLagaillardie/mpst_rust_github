@@ -6,26 +6,26 @@
 /// # Arguments
 ///
 /// * The name of the new *OfferMpst* type
-/// * The *SessionMpst* type that will be used
+/// * The *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_offer_type_multi, create_sessionmpst};
+/// use mpstthree::{create_offer_type_multi, create_meshedchannels};
 ///
-/// create_sessionmpst!(SessionMpst, 3);
-/// create_offer_type_multi!(OfferMpstThree, SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
+/// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
 /// ```
 #[macro_export]
 macro_rules! create_offer_type_multi {
-    ($type_name: ident, $sessionmpst_name: ident, $nsessions: literal) => {
-        mpst_seq::create_offer_type_multi!($type_name, $sessionmpst_name, $nsessions);
+    ($type_name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+        mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $nsessions);
     };
 }
 
 /// Creates an *OfferMpst* function to receive an offer on a given binary session type of a
-/// SessionMpst with more than 3 participants.
+/// MeshedChannels with more than 3 participants.
 ///
 /// # Arguments
 ///
@@ -35,9 +35,9 @@ macro_rules! create_offer_type_multi {
 ///   the convention
 /// * The name of the *recv* function that is related
 /// * The name of the receiver
-/// * The name of the *SessionMpst* type that will be used
+/// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
-/// * The index of the binary session type that will receive in the SessionMpst for this specific
+/// * The index of the binary session type that will receive in the MeshedChannels for this specific
 ///   role. Index starts at 1.
 ///
 /// # Example
@@ -45,34 +45,34 @@ macro_rules! create_offer_type_multi {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,
-///     create_offer_type_multi, create_sessionmpst,
+///     create_offer_type_multi, create_meshedchannels,
 /// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
-/// create_offer_type_multi!(OfferMpstThree, SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
+/// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
 ///
 /// create_offer_mpst_session_multi!(
 ///     offer_mpst_session_b_to_d,
 ///     OfferMpstThree,
 ///     RoleAlltoD,
 ///     RoleB,
-///     SessionMpst,
+///     MeshedChannels,
 ///     3,
 ///     2
 /// );
 /// ```
 #[macro_export]
 macro_rules! create_offer_mpst_session_multi {
-    ($func_name: ident, $type_name: ident, $role: ident, $name: ident, $sessionmpst_name: ident, $nsessions: literal, $exclusion: literal) => {
+    ($func_name: ident, $type_name: ident, $role: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             $type_name,
             $role,
             $name,
-            $sessionmpst_name,
+            $meshedchannels_name,
             $nsessions,
             $exclusion
         );

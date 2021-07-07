@@ -26,8 +26,8 @@ use std::marker;
 //     }
 // }
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstTwo, 2);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
 
 // Create new roles
 // normal
@@ -40,24 +40,24 @@ create_multiple_normal_role!(
 // A
 create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
-    RoleA, SessionMpstTwo, 2
+    RoleA, MeshedChannelsTwo, 2
 );
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    RoleB, SessionMpstTwo, 2
+    RoleB, MeshedChannelsTwo, 2
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    RoleA, SessionMpstTwo, 2
+    RoleA, MeshedChannelsTwo, 2
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    RoleB, SessionMpstTwo, 2
+    RoleB, MeshedChannelsTwo, 2
 );
 
 // Names
@@ -69,16 +69,16 @@ type NameB = RoleB<RoleEnd>;
 type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
 // B
 enum Branching0fromAtoB<N: marker::Send> {
-    More(SessionMpstTwo<RSRecursBtoA<N>, ThreeRoleA, NameB>),
-    Done(SessionMpstTwo<End, RoleEnd, NameB>),
+    More(MeshedChannelsTwo<RSRecursBtoA<N>, ThreeRoleA, NameB>),
+    Done(MeshedChannelsTwo<End, RoleEnd, NameB>),
 }
 type RSRecursBtoA<N> = Recv<N, Send<N, RecursBtoA<N>>>;
 type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
 
 // Creating the MP sessions
-type EndpointA<N> = SessionMpstTwo<Choose0fromAtoB<N>, RoleBroadcast, NameA>;
-type EndpointB<N> = SessionMpstTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
+type EndpointA<N> = MeshedChannelsTwo<Choose0fromAtoB<N>, RoleBroadcast, NameA>;
+type EndpointB<N> = MeshedChannelsTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
@@ -93,7 +93,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 Branching0fromAtoB::<i64>::Done, =>
                 RoleB, =>
                 RoleA,
-                SessionMpstTwo,
+                MeshedChannelsTwo,
                 1
             );
 
@@ -105,7 +105,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 Branching0fromAtoB::<i64>::More, =>
                 RoleB, =>
                 RoleA,
-                SessionMpstTwo,
+                MeshedChannelsTwo,
                 1
             );
 

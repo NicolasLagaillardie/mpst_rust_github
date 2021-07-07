@@ -4,19 +4,19 @@ use syn::{Result, Token};
 
 #[derive(Debug)]
 pub struct CreateSessionMPSTMacroInput {
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
 }
 
 impl Parse for CreateSessionMPSTMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CreateSessionMPSTMacroInput {
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
         })
     }
@@ -30,7 +30,7 @@ impl From<CreateSessionMPSTMacroInput> for proc_macro2::TokenStream {
 
 impl CreateSessionMPSTMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|i| {
@@ -137,7 +137,7 @@ impl CreateSessionMPSTMacroInput {
         quote! {
             #[must_use]
             #[derive(Debug)]
-            pub struct #sessionmpst_name<
+            pub struct #meshedchannels_name<
                 #(
                     #sessions
                 )*
@@ -165,7 +165,7 @@ impl CreateSessionMPSTMacroInput {
                 )*
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::Session for #sessionmpst_name<
+            > mpstthree::binary::struct_trait::Session for #meshedchannels_name<
                 #(
                     #sessions
                 )*
@@ -173,7 +173,7 @@ impl CreateSessionMPSTMacroInput {
                 N
             > {
                 type Dual =
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #(
                         #sessions_dual
                     )*
@@ -191,14 +191,14 @@ impl CreateSessionMPSTMacroInput {
                     let (name_one, name_two) = N::new();
 
                     (
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #(
                                 #senders_sessions
                             )*
                             stack: role_one,
                             name: name_one,
                         },
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #(
                                 #receivers_sessions
                             )*
@@ -244,7 +244,7 @@ impl CreateSessionMPSTMacroInput {
                 )*
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > #sessionmpst_name<
+            > #meshedchannels_name<
                 #(
                     #sessions
                 )*
@@ -255,7 +255,7 @@ impl CreateSessionMPSTMacroInput {
                 pub fn field_names(self) ->
                     (
                         &'static [&'static str],
-                        #sessionmpst_name<
+                        #meshedchannels_name<
                             #(
                                 #sessions
                             )*

@@ -19,5 +19,5 @@ pub mod checking;
 pub mod fork;
 pub mod functionmpst;
 pub mod macros;
+pub mod meshedchannels;
 pub mod role;
-pub mod sessionmpst;

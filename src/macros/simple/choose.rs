@@ -33,14 +33,14 @@ macro_rules! create_choose_from_1_to_2_3 {
             <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
         let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-        let choice_1 = mpstthree::sessionmpst::SessionMpst {
+        let choice_1 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: role_1,
             name: name_1,
         };
 
-        let choice_2 = mpstthree::sessionmpst::SessionMpst {
+        let choice_2 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_2,
@@ -50,7 +50,7 @@ macro_rules! create_choose_from_1_to_2_3 {
         let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
         let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
 
-        let s = mpstthree::sessionmpst::SessionMpst {
+        let s = mpstthree::meshedchannels::MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -59,7 +59,7 @@ macro_rules! create_choose_from_1_to_2_3 {
 
         mpstthree::binary::cancel::cancel(s);
 
-        mpstthree::sessionmpst::SessionMpst {
+        mpstthree::meshedchannels::MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: role_3,
@@ -99,14 +99,14 @@ macro_rules! create_choose_from_2_to_1_3 {
             <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
         let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-        let choice_1 = mpstthree::sessionmpst::SessionMpst {
+        let choice_1 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: role_1,
             name: name_1,
         };
 
-        let choice_2 = mpstthree::sessionmpst::SessionMpst {
+        let choice_2 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_2,
@@ -116,7 +116,7 @@ macro_rules! create_choose_from_2_to_1_3 {
         let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
         let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
 
-        let s = mpstthree::sessionmpst::SessionMpst {
+        let s = mpstthree::meshedchannels::MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -125,7 +125,7 @@ macro_rules! create_choose_from_2_to_1_3 {
 
         mpstthree::binary::cancel::cancel(s);
 
-        mpstthree::sessionmpst::SessionMpst {
+        mpstthree::meshedchannels::MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: role_3,
@@ -165,14 +165,14 @@ macro_rules! create_choose_from_3_to_1_2 {
             <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
         let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
-        let choice_1 = mpstthree::sessionmpst::SessionMpst {
+        let choice_1 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_1_2,
             session2: session_1_3,
             stack: role_1,
             name: name_1,
         };
 
-        let choice_2 = mpstthree::sessionmpst::SessionMpst {
+        let choice_2 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_2_1,
             session2: session_2_3,
             stack: role_2,
@@ -182,7 +182,7 @@ macro_rules! create_choose_from_3_to_1_2 {
         let new_session_1 = mpstthree::binary::send::send($pat(choice_1), $session.session1);
         let new_session_2 = mpstthree::binary::send::send($pat(choice_2), $session.session2);
 
-        let s = mpstthree::sessionmpst::SessionMpst {
+        let s = mpstthree::meshedchannels::MeshedChannels {
             session1: new_session_1,
             session2: new_session_2,
             stack: $session.stack,
@@ -191,7 +191,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 
         mpstthree::binary::cancel::cancel(s);
 
-        mpstthree::sessionmpst::SessionMpst {
+        mpstthree::meshedchannels::MeshedChannels {
             session1: session_3_1,
             session2: session_3_2,
             stack: role_3,
@@ -204,7 +204,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the third role to the others.  Must be
-/// used with [`mpstthree::sessionmpst::SessionMpst`].
+/// used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -221,7 +221,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_right_from_3_to_1_and_2
+///     create_meshedchannels, create_choose_right_from_3_to_1_and_2
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -232,7 +232,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_right_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
@@ -243,12 +243,12 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: mpstthree::sessionmpst::SessionMpst<
+            s: mpstthree::meshedchannels::MeshedChannels<
                 mpstthree::functionmpst::ChooseMpst<
                     S0,
                     S2,
@@ -270,7 +270,12 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                 $role_broadcast<R4, R5>,
                 $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
+        ) -> mpstthree::meshedchannels::MeshedChannels<
+            S4,
+            S5,
+            R5,
+            $sender<mpstthree::role::end::RoleEnd>,
+        >
         where
             S0: mpstthree::binary::struct_trait::Session + 'a,
             S1: mpstthree::binary::struct_trait::Session + 'a,
@@ -304,7 +309,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the third role to the others.  Must be
-/// used with [`mpstthree::sessionmpst::SessionMpst`].
+/// used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -320,7 +325,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{
-///     create_multiple_normal_role, create_broadcast_role, create_sessionmpst,
+///     create_multiple_normal_role, create_broadcast_role, create_meshedchannels,
 ///     create_choose_left_from_3_to_1_and_2
 /// };
 ///
@@ -332,7 +337,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_left_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
@@ -343,12 +348,12 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: mpstthree::sessionmpst::SessionMpst<
+            s: mpstthree::meshedchannels::MeshedChannels<
                 mpstthree::functionmpst::ChooseMpst<
                     S0,
                     S2,
@@ -370,7 +375,12 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                 $role_broadcast<R4, R5>,
                 $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
+        ) -> mpstthree::meshedchannels::MeshedChannels<
+            S2,
+            S3,
+            R4,
+            $sender<mpstthree::role::end::RoleEnd>,
+        >
         where
             S0: mpstthree::binary::struct_trait::Session + 'a,
             S1: mpstthree::binary::struct_trait::Session + 'a,
@@ -404,7 +414,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the first role to the others.  Must be
-/// used with [`mpstthree::sessionmpst::SessionMpst`].
+/// used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -421,7 +431,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_left_from_1_to_2_and_3
+///     create_meshedchannels, create_choose_left_from_1_to_2_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -432,7 +442,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_left_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
@@ -443,12 +453,12 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: mpstthree::sessionmpst::SessionMpst<
+            s: mpstthree::meshedchannels::MeshedChannels<
                 mpstthree::functionmpst::ChooseMpst<
                     S2,
                     S0,
@@ -470,7 +480,12 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 $role_broadcast<R4, R5>,
                 $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
+        ) -> mpstthree::meshedchannels::MeshedChannels<
+            S2,
+            S3,
+            R4,
+            $sender<mpstthree::role::end::RoleEnd>,
+        >
         where
             S0: mpstthree::binary::struct_trait::Session + 'a,
             S1: mpstthree::binary::struct_trait::Session + 'a,
@@ -504,7 +519,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the first role to the others.  Must be
-/// used with [`mpstthree::sessionmpst::SessionMpst`].
+/// used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -521,7 +536,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_right_from_1_to_2_and_3
+///     create_meshedchannels, create_choose_right_from_1_to_2_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -532,7 +547,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_right_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
@@ -543,12 +558,12 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: mpstthree::sessionmpst::SessionMpst<
+            s: mpstthree::meshedchannels::MeshedChannels<
                 mpstthree::functionmpst::ChooseMpst<
                     S2,
                     S0,
@@ -570,7 +585,12 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 $role_broadcast<R4, R5>,
                 $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
+        ) -> mpstthree::meshedchannels::MeshedChannels<
+            S4,
+            S5,
+            R5,
+            $sender<mpstthree::role::end::RoleEnd>,
+        >
         where
             S0: mpstthree::binary::struct_trait::Session + 'a,
             S1: mpstthree::binary::struct_trait::Session + 'a,
@@ -604,7 +624,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the second role to the others.  Must be
-/// used with [`mpstthree::sessionmpst::SessionMpst`].
+/// used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -621,7 +641,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_left_from_2_to_1_and_3
+///     create_meshedchannels, create_choose_left_from_2_to_1_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -632,7 +652,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_left_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -643,12 +663,12 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: mpstthree::sessionmpst::SessionMpst<
+            s: mpstthree::meshedchannels::MeshedChannels<
                 mpstthree::functionmpst::ChooseMpst<
                     S2,
                     S0,
@@ -670,7 +690,12 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                 $role_broadcast<R4, R5>,
                 $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S2, S3, R4, $sender<mpstthree::role::end::RoleEnd>>
+        ) -> mpstthree::meshedchannels::MeshedChannels<
+            S2,
+            S3,
+            R4,
+            $sender<mpstthree::role::end::RoleEnd>,
+        >
         where
             S0: mpstthree::binary::struct_trait::Session + 'a,
             S1: mpstthree::binary::struct_trait::Session + 'a,
@@ -704,7 +729,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the second role to the others.  Must
-/// be used with [`mpstthree::sessionmpst::SessionMpst`].
+/// be used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -721,7 +746,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_right_from_2_to_1_and_3
+///     create_meshedchannels, create_choose_right_from_2_to_1_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -732,7 +757,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_right_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -743,12 +768,12 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
-            s: mpstthree::sessionmpst::SessionMpst<
+            s: mpstthree::meshedchannels::MeshedChannels<
                 mpstthree::functionmpst::ChooseMpst<
                     S2,
                     S0,
@@ -770,7 +795,12 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                 $role_broadcast<R4, R5>,
                 $sender<mpstthree::role::end::RoleEnd>,
             >,
-        ) -> mpstthree::sessionmpst::SessionMpst<S4, S5, R5, $sender<mpstthree::role::end::RoleEnd>>
+        ) -> mpstthree::meshedchannels::MeshedChannels<
+            S4,
+            S5,
+            R5,
+            $sender<mpstthree::role::end::RoleEnd>,
+        >
         where
             S0: mpstthree::binary::struct_trait::Session + 'a,
             S1: mpstthree::binary::struct_trait::Session + 'a,
@@ -805,7 +835,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// Call both
 /// [`mpstthree::create_choose_right_from_2_to_1_and_3`](../macro.create_choose_right_from_2_to_1_and_3.html)
 /// and [`mpstthree::create_choose_left_from_2_to_1_and_3`](../macro.create_choose_left_from_2_to_1_and_3.html).
-/// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
+/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -823,7 +853,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_both_from_2_to_1_and_3
+///     create_meshedchannels, create_choose_both_from_2_to_1_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -834,7 +864,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_both_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -846,7 +876,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
@@ -877,7 +907,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// Call both
 /// [`mpstthree::create_choose_right_from_1_to_2_and_3`](../macro.create_choose_right_from_1_to_2_and_3.html)
 /// and [`mpstthree::create_choose_left_from_1_to_2_and_3`](../macro.create_choose_left_from_1_to_2_and_3.html).
-/// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
+/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -895,7 +925,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_both_from_1_to_2_and_3
+///     create_meshedchannels, create_choose_both_from_1_to_2_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -906,7 +936,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_both_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -918,7 +948,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
@@ -949,7 +979,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// Call both
 /// [`mpstthree::create_choose_right_from_3_to_1_and_2`](../macro.create_choose_right_from_3_to_1_and_2.html)
 /// and [`mpstthree::create_choose_left_from_3_to_1_and_2`](../macro.create_choose_left_from_3_to_1_and_2.html).
-/// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
+/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -967,7 +997,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{  
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_sessionmpst, create_choose_both_from_3_to_1_and_2
+///     create_meshedchannels, create_choose_both_from_3_to_1_and_2
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -978,7 +1008,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
-/// create_sessionmpst!(SessionMpst, 3);
+/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_both_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_b_to_all,
@@ -990,7 +1020,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
@@ -1019,7 +1049,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 }
 
 /// Choose among two different sessions.
-/// Must be used with [`mpstthree::sessionmpst::SessionMpst`].
+/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
 /// # Arguments
 ///
 ///  * The session to be used
@@ -1062,7 +1092,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 /// }
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! choose_mpst_to_all {
     (
@@ -1071,14 +1101,14 @@ macro_rules! choose_mpst_to_all {
         $( $receiver: ident , )+ =>
         $sender: ident
     ) => {{
-        use mpstthree::sessionmpst::SessionMpst;
+        use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
             $( $label , )+ =>
             $( $receiver , )+ =>
             $sender,
-            SessionMpst,
+            MeshedChannels,
             3
         )
     }};

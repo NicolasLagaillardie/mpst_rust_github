@@ -8,7 +8,7 @@ pub struct SendMPSTMacroInput {
     receiver: syn::Ident,
     payload: syn::Expr,
     sender: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
 }
@@ -27,7 +27,7 @@ impl Parse for SendMPSTMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -40,7 +40,7 @@ impl Parse for SendMPSTMacroInput {
             receiver,
             payload,
             sender,
-            sessionmpst_name,
+            meshedchannels_name,
             nsessions,
             exclusion,
         })
@@ -57,7 +57,7 @@ impl SendMPSTMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let receiver = self.receiver.clone();
         let sender = self.sender.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let session = self.session.clone();
         let payload = self.payload.clone();
 
@@ -118,7 +118,7 @@ impl SendMPSTMacroInput {
                     temp(&s.name)
                 }.unwrap();
 
-                #sessionmpst_name {
+                #meshedchannels_name {
                     #(
                         #new_sessions
                     )*

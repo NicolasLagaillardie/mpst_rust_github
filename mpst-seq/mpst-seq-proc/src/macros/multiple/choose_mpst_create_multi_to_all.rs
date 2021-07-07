@@ -7,7 +7,7 @@ pub struct ChooseMultiCreateToAllMacroInput {
     name_macro: syn::Ident,
     receivers: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     exclusion: u64,
 }
 
@@ -45,8 +45,8 @@ impl Parse for ChooseMultiCreateToAllMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        // The sessionmpst_name
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        // The meshedchannels_name
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The index of the sender
@@ -56,7 +56,7 @@ impl Parse for ChooseMultiCreateToAllMacroInput {
             name_macro,
             receivers: all_receivers,
             sender,
-            sessionmpst_name,
+            meshedchannels_name,
             exclusion,
         })
     }
@@ -73,7 +73,7 @@ impl ChooseMultiCreateToAllMacroInput {
         let name_macro = self.name_macro.clone();
         let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let exclusion = self.exclusion;
 
         quote! {
@@ -87,7 +87,7 @@ impl ChooseMultiCreateToAllMacroInput {
                         $( $label , )* =>
                         #( #all_receivers , )* =>
                         #sender ,
-                        #sessionmpst_name ,
+                        #meshedchannels_name ,
                         #exclusion
                     );
                 }

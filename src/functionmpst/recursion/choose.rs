@@ -38,7 +38,7 @@ macro_rules! choose_mpst_a_to_all {
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
-        use mpstthree::sessionmpst::SessionMpst;
+        use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
@@ -47,7 +47,7 @@ macro_rules! choose_mpst_a_to_all {
             RoleB,
             RoleC, =>
             RoleA,
-            SessionMpst,
+            MeshedChannels,
             1
         )
     }};
@@ -91,7 +91,7 @@ macro_rules! choose_mpst_b_to_all {
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
-        use mpstthree::sessionmpst::SessionMpst;
+        use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
@@ -100,7 +100,7 @@ macro_rules! choose_mpst_b_to_all {
             RoleA,
             RoleC, =>
             RoleB,
-            SessionMpst,
+            MeshedChannels,
             2
         )
     }};
@@ -144,7 +144,7 @@ macro_rules! choose_mpst_c_to_all {
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
-        use mpstthree::sessionmpst::SessionMpst;
+        use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_mpst_multi_to_all!(
             $session,
@@ -153,7 +153,7 @@ macro_rules! choose_mpst_c_to_all {
             RoleA,
             RoleB, =>
             RoleC,
-            SessionMpst,
+            MeshedChannels,
             3
         )
     }};

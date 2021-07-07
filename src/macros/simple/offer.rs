@@ -3,7 +3,7 @@
 
 /// Create an *offer* function to recv on the first binary
 /// session from any kind of role.  Must be used with
-/// [`mpstthree::sessionmpst::SessionMpst`].
+/// [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -15,7 +15,7 @@
 ///
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::{
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_1
 /// };
@@ -31,7 +31,7 @@
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]:../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]:../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_offer_mpst_session_1 {
     ($func_name: ident, $role: ident, $name: ident) => {
@@ -40,7 +40,7 @@ macro_rules! create_offer_mpst_session_1 {
             OfferMpst,
             $role,
             $name,
-            SessionMpst,
+            MeshedChannels,
             3,
             1
         );
@@ -49,7 +49,7 @@ macro_rules! create_offer_mpst_session_1 {
 
 /// Create an *offer* function to recv on the second binary
 /// session from any kind of role.  Must be used with
-/// [`mpstthree::sessionmpst::SessionMpst`].
+/// [`mpstthree::meshedchannels::MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -61,7 +61,7 @@ macro_rules! create_offer_mpst_session_1 {
 ///
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::{
 ///     create_broadcast_role, create_normal_role, create_offer_mpst_session_2
 /// };
@@ -77,7 +77,7 @@ macro_rules! create_offer_mpst_session_1 {
 /// );
 /// ```
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {
@@ -86,7 +86,7 @@ macro_rules! create_offer_mpst_session_2 {
             OfferMpst,
             $role,
             $name,
-            SessionMpst,
+            MeshedChannels,
             3,
             2
         );

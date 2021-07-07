@@ -1,6 +1,7 @@
 //! This module contains all the *receive* functions
 
 use crate::binary::struct_trait::{Recv, Session};
+use crate::meshedchannels::MeshedChannels;
 use crate::role::a::RoleA;
 use crate::role::all_to_a::RoleAlltoA;
 use crate::role::all_to_b::RoleAlltoB;
@@ -9,11 +10,10 @@ use crate::role::b::RoleB;
 use crate::role::c::RoleC;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
-use crate::sessionmpst::SessionMpst;
 use std::error::Error;
 use std::marker;
 
-type ResultBoxError<T, S1, S2, R, N> = Result<(T, SessionMpst<S1, S2, R, N>), Box<dyn Error>>;
+type ResultBoxError<T, S1, S2, R, N> = Result<(T, MeshedChannels<S1, S2, R, N>), Box<dyn Error>>;
 
 #[doc(hidden)]
 #[macro_export]
@@ -33,14 +33,14 @@ macro_rules! recv_all_aux_simple {
 
 /// Receive a value of type `T` on A from B. Can fail.
 /// Returns either a pair of the received value and the
-/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// continuation of the `MeshedChannels<S1, S2, R, N>`
 /// or an error.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -63,8 +63,8 @@ macro_rules! recv_all_aux_simple {
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA = SessionMpst<AtoB, End, StackA, NameA>;
-/// type EndpointB = SessionMpst<BtoA, End, StackB, NameB>;
+/// type EndpointA = MeshedChannels<AtoB, End, StackA, NameA>;
+/// type EndpointB = MeshedChannels<BtoA, End, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -78,14 +78,14 @@ macro_rules! recv_all_aux_simple {
 /// let (name_a, _) = NameA::new();
 /// let (name_b, _) = NameB::new();
 ///
-/// let sess_a = SessionMpst {
+/// let sess_a = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
 ///   name: name_a,
 /// };
 ///
-/// let sess_b = SessionMpst {
+/// let sess_b = MeshedChannels {
 ///   session1: channel_ba,
 ///   session2: channel_bc,
 ///   stack: role_b,
@@ -98,7 +98,7 @@ macro_rules! recv_all_aux_simple {
 /// recv_mpst_a_from_b(sess_a);
 /// ```
 pub fn recv_mpst_a_from_b<T, S1, S2, R>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
+    s: MeshedChannels<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
 where
     T: marker::Send,
@@ -111,14 +111,14 @@ where
 
 /// Receive a value of type `T` on B from A. Can fail.
 /// Returns either a pair of the received value and the
-/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// continuation of the `MeshedChannels<S1, S2, R, N>`
 /// or an error.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -141,8 +141,8 @@ where
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB = SessionMpst<BtoA, End, StackB, NameB>;
-/// type EndpointA = SessionMpst<AtoB, End, StackA, NameA>;
+/// type EndpointB = MeshedChannels<BtoA, End, StackB, NameB>;
+/// type EndpointA = MeshedChannels<AtoB, End, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -156,14 +156,14 @@ where
 /// let (name_b, _) = NameB::new();
 /// let (name_a, _) = NameA::new();
 ///
-/// let sess_b = SessionMpst {
+/// let sess_b = MeshedChannels {
 ///   session1: channel_ba,
 ///   session2: channel_bc,
 ///   stack: role_b,
 ///   name: name_b,
 /// };
 ///
-/// let sess_a = SessionMpst {
+/// let sess_a = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
@@ -176,7 +176,7 @@ where
 /// recv_mpst_b_from_a(sess_b);
 /// ```
 pub fn recv_mpst_b_from_a<T, S1, S2, R>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
+    s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
 where
     T: marker::Send,
@@ -189,14 +189,14 @@ where
 
 /// Receive a value of type `T` on C from A. Can fail.
 /// Returns either a pair of the received value and the
-/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// continuation of the `MeshedChannels<S1, S2, R, N>`
 /// or an error.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -219,8 +219,8 @@ where
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC = SessionMpst<CtoA, End, StackC, NameC>;
-/// type EndpointA = SessionMpst<End, AtoC, StackA, NameA>;
+/// type EndpointC = MeshedChannels<CtoA, End, StackC, NameC>;
+/// type EndpointA = MeshedChannels<End, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -234,14 +234,14 @@ where
 /// let (name_c, _) = NameC::new();
 /// let (name_a, _) = NameA::new();
 ///
-/// let sess_c = SessionMpst {
+/// let sess_c = MeshedChannels {
 ///   session1: channel_ca,
 ///   session2: channel_cb,
 ///   stack: role_c,
 ///   name: name_c,
 /// };
 ///
-/// let sess_a = SessionMpst {
+/// let sess_a = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
@@ -254,7 +254,7 @@ where
 /// recv_mpst_c_from_a(sess_c);
 /// ```
 pub fn recv_mpst_c_from_a<T, S1, S2, R>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
+    s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
 where
     T: marker::Send,
@@ -267,14 +267,14 @@ where
 
 /// Receive a value of type `T` on A from C. Can fail.
 /// Returns either a pair of the received value and the
-/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// continuation of the `MeshedChannels<S1, S2, R, N>`
 /// or an error.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -297,8 +297,8 @@ where
 /// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA = SessionMpst<End, AtoC, StackA, NameA>;
-/// type EndpointC = SessionMpst<CtoA, End, StackC, NameC>;
+/// type EndpointA = MeshedChannels<End, AtoC, StackA, NameA>;
+/// type EndpointC = MeshedChannels<CtoA, End, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -312,14 +312,14 @@ where
 /// let (name_a, _) = NameA::new();
 /// let (name_c, _) = NameC::new();
 ///
-/// let sess_a = SessionMpst {
+/// let sess_a = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
 ///   name: name_a,
 /// };
 ///
-/// let sess_c = SessionMpst {
+/// let sess_c = MeshedChannels {
 ///   session1: channel_ca,
 ///   session2: channel_cb,
 ///   stack: role_c,
@@ -332,7 +332,7 @@ where
 /// recv_mpst_a_from_c(sess_a);
 /// ```
 pub fn recv_mpst_a_from_c<T, S1, S2, R>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
+    s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
 where
     T: marker::Send,
@@ -345,14 +345,14 @@ where
 
 /// Receive a value of type `T` on B from C. Can fail.
 /// Returns either a pair of the received value and the
-/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// continuation of the `MeshedChannels<S1, S2, R, N>`
 /// or an error.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::b::RoleB;
@@ -375,8 +375,8 @@ where
 /// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB = SessionMpst<End, BtoC, StackB, NameB>;
-/// type EndpointC = SessionMpst<End, CtoB, StackC, NameC>;
+/// type EndpointB = MeshedChannels<End, BtoC, StackB, NameB>;
+/// type EndpointC = MeshedChannels<End, CtoB, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -390,14 +390,14 @@ where
 /// let (name_b, _) = NameB::new();
 /// let (name_c, _) = NameC::new();
 ///
-/// let sess_b = SessionMpst {
+/// let sess_b = MeshedChannels {
 ///   session1: channel_ba,
 ///   session2: channel_bc,
 ///   stack: role_b,
 ///   name: name_b,
 /// };
 ///
-/// let sess_c = SessionMpst {
+/// let sess_c = MeshedChannels {
 ///   session1: channel_ca,
 ///   session2: channel_cb,
 ///   stack: role_c,
@@ -410,7 +410,7 @@ where
 /// recv_mpst_b_from_c(sess_b);
 /// ```
 pub fn recv_mpst_b_from_c<T, S1, S2, R>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
+    s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
 where
     T: marker::Send,
@@ -423,14 +423,14 @@ where
 
 /// Receive a value of type `T` on C from B. Can fail.
 /// Returns either a pair of the received value and the
-/// continuation of the `SessionMpst<S1, S2, R, N>`
+/// continuation of the `MeshedChannels<S1, S2, R, N>`
 /// or an error.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Recv, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::b::RoleB;
@@ -453,8 +453,8 @@ where
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC = SessionMpst<End, CtoB, StackC, NameC>;
-/// type EndpointB = SessionMpst<End, BtoC, StackB, NameB>;
+/// type EndpointC = MeshedChannels<End, CtoB, StackC, NameC>;
+/// type EndpointB = MeshedChannels<End, BtoC, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -468,14 +468,14 @@ where
 /// let (name_c, _) = NameC::new();
 /// let (name_b, _) = NameB::new();
 ///
-/// let sess_c = SessionMpst {
+/// let sess_c = MeshedChannels {
 ///   session1: channel_ca,
 ///   session2: channel_cb,
 ///   stack: role_c,
 ///   name: name_c,
 /// };
 ///
-/// let sess_b = SessionMpst {
+/// let sess_b = MeshedChannels {
 ///   session1: channel_ba,
 ///   session2: channel_bc,
 ///   stack: role_b,
@@ -488,7 +488,7 @@ where
 /// recv_mpst_c_from_b(sess_c);
 /// ```
 pub fn recv_mpst_c_from_b<T, S1, S2, R>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
+    s: MeshedChannels<S1, Recv<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
 where
     T: marker::Send,
@@ -501,12 +501,12 @@ where
 
 /// Receive a broadcasted value of type `T` on B from A. Can
 /// fail. Returns either a pair of the received value and
-/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_b<T, S1, S2>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
+    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
 where
     T: marker::Send,
@@ -518,12 +518,12 @@ where
 
 /// Receive a broadcasted value of type `T` on C from A. Can
 /// fail. Returns either a pair of the received value and
-/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_c<T, S1, S2>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
+    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
 where
     T: marker::Send,
@@ -535,12 +535,12 @@ where
 
 /// Receive a broadcasted value of type `T` on A from B. Can
 /// fail. Returns either a pair of the received value and
-/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_a<T, S1, S2>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
+    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
 where
     T: marker::Send,
@@ -552,12 +552,12 @@ where
 
 /// Receive a broadcasted value of type `T` on C from A. Can
 /// fail. Returns either a pair of the received value and
-/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_c<T, S1, S2>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
+    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
 where
     T: marker::Send,
@@ -569,12 +569,12 @@ where
 
 /// Receive a broadcasted value of type `T` on A from B. Can
 /// fail. Returns either a pair of the received value and
-/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_a<T, S1, S2>(
-    s: SessionMpst<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
+    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
 where
     T: marker::Send,
@@ -586,12 +586,12 @@ where
 
 /// Receive a broadcasted value of type `T` on B from C. Can
 /// fail. Returns either a pair of the received value and
-/// the continuation of the `SessionMpst<S1, S2, R, N>` or
+/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
 /// an error. Should not be used as a standalone, but rather
 /// with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_b<T, S1, S2>(
-    s: SessionMpst<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
+    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
 ) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
 where
     T: marker::Send,

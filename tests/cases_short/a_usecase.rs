@@ -4,8 +4,8 @@ use mpstthree::checking::checker;
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
+use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
-use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
 use std::collections::hash_map::RandomState;
@@ -80,11 +80,11 @@ type ChooseAtoC<N> = ChooseMpst<
     RoleCDual<RoleEnd>,
 >;
 type InitA<N> = Send<N, Recv<N, ChooseAtoB<N>>>;
-type EndpointAFull<N> = SessionMpst<InitA<N>, ChooseAtoC<N>, StackAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, ChooseAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
 
 type OfferB<N> = OfferMpst<
     BtoAVideo<N>,
@@ -96,11 +96,11 @@ type OfferB<N> = OfferMpst<
     RoleB<RoleEnd>,
 >;
 type InitB<N> = Recv<N, Send<N, OfferB<N>>>;
-type EndpointBFull<N> = SessionMpst<InitB<N>, End, StackBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBFull, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCVideo<N> = SessionMpst<CtoAClose, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
-type EndpointCEnd = SessionMpst<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
+type EndpointCVideo<N> = MeshedChannels<CtoAClose, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
+type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
 type OfferC<N> = OfferMpst<
     CtoAClose,
@@ -111,7 +111,7 @@ type OfferC<N> = OfferMpst<
     StackCEnd,
     RoleC<RoleEnd>,
 >;
-type EndpointCFull<N> = SessionMpst<OfferC<N>, End, StackCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<OfferC<N>, End, StackCFull, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -206,9 +206,9 @@ pub fn run_a_usecase_checker() {
             let s = RandomState::new();
             let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
-            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+            let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointCFull<i32>, _) = MeshedChannels::new();
 
             let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 

@@ -1,12 +1,12 @@
 //! This module contains all the *send* functions
 
 use crate::binary::struct_trait::{Send, Session};
+use crate::meshedchannels::MeshedChannels;
 use crate::role::a::RoleA;
 use crate::role::b::RoleB;
 use crate::role::c::RoleC;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
-use crate::sessionmpst::SessionMpst;
 use std::marker;
 
 #[doc(hidden)]
@@ -18,13 +18,13 @@ macro_rules! send_aux_simple {
 }
 
 /// Send a value of type `T` from A to B. Always succeeds.
-/// Returns the continuation `SessionMpst<S1, S2, R, N>`.
+/// Returns the continuation `MeshedChannels<S1, S2, R, N>`.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Send, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -45,7 +45,7 @@ macro_rules! send_aux_simple {
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = SessionMpst<AtoB<N>, AtoC, StackA, NameA>;
+/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -56,7 +56,7 @@ macro_rules! send_aux_simple {
 ///
 /// let (name_a, _) = NameA::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
@@ -69,8 +69,8 @@ macro_rules! send_aux_simple {
 /// ```
 pub fn send_mpst_a_to_b<T, S1, S2, R>(
     x: T,
-    s: SessionMpst<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
-) -> SessionMpst<S1, S2, R, RoleA<RoleEnd>>
+    s: MeshedChannels<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
+) -> MeshedChannels<S1, S2, R, RoleA<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
@@ -81,14 +81,14 @@ where
 }
 
 /// Send a value of type `T` from B to A. Always succeeds.
-/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// Returns the continuation of the `MeshedChannels<S1, S2, R,
 /// N>`.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Send, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -109,7 +109,7 @@ where
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB<N> = SessionMpst<BtoA<N>, BtoC, StackB, NameB>;
+/// type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -120,7 +120,7 @@ where
 ///
 /// let (name_b, _) = NameB::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ba,
 ///   session2: channel_bc,
 ///   stack: role_b,
@@ -133,8 +133,8 @@ where
 /// ```
 pub fn send_mpst_b_to_a<T, S1, S2, R>(
     x: T,
-    s: SessionMpst<Send<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
-) -> SessionMpst<S1, S2, R, RoleB<RoleEnd>>
+    s: MeshedChannels<Send<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
+) -> MeshedChannels<S1, S2, R, RoleB<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
@@ -145,14 +145,14 @@ where
 }
 
 /// Send a value of type `T` from C to A. Always succeeds.
-/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// Returns the continuation of the `MeshedChannels<S1, S2, R,
 /// N>`.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Send, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -173,7 +173,7 @@ where
 /// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<CtoA<N>, CtoB, StackC, NameC>;
+/// type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -184,7 +184,7 @@ where
 ///
 /// let (name_c, _) = NameC::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ca,
 ///   session2: channel_cb,
 ///   stack: role_c,
@@ -197,8 +197,8 @@ where
 /// ```
 pub fn send_mpst_c_to_a<T, S1, S2, R>(
     x: T,
-    s: SessionMpst<Send<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
-) -> SessionMpst<S1, S2, R, RoleC<RoleEnd>>
+    s: MeshedChannels<Send<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
+) -> MeshedChannels<S1, S2, R, RoleC<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
@@ -209,14 +209,14 @@ where
 }
 
 /// Send a value of type `T` from A to C. Always succeeds.
-/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// Returns the continuation of the `MeshedChannels<S1, S2, R,
 /// N>`.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Send, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -237,7 +237,7 @@ where
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = SessionMpst<AtoB, AtoC<N>, StackA, NameA>;
+/// type EndpointA<N> = MeshedChannels<AtoB, AtoC<N>, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -248,7 +248,7 @@ where
 ///
 /// let (name_a, _) = NameA::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
@@ -261,8 +261,8 @@ where
 /// ```
 pub fn send_mpst_a_to_c<T, S1, S2, R>(
     x: T,
-    s: SessionMpst<S1, Send<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
-) -> SessionMpst<S1, S2, R, RoleA<RoleEnd>>
+    s: MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
+) -> MeshedChannels<S1, S2, R, RoleA<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
@@ -273,14 +273,14 @@ where
 }
 
 /// Send a value of type `T` from B to C. Always succeeds.
-/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// Returns the continuation of the `MeshedChannels<S1, S2, R,
 /// N>`.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Send, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -301,7 +301,7 @@ where
 /// type NameB = RoleB<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointB<N> = SessionMpst<BtoA, BtoC<N>, StackB, NameB>;
+/// type EndpointB<N> = MeshedChannels<BtoA, BtoC<N>, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -312,7 +312,7 @@ where
 ///
 /// let (name_b, _) = NameB::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ba,
 ///   session2: channel_bc,
 ///   stack: role_b,
@@ -325,8 +325,8 @@ where
 /// ```
 pub fn send_mpst_b_to_c<T, S1, S2, R>(
     x: T,
-    s: SessionMpst<S1, Send<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
-) -> SessionMpst<S1, S2, R, RoleB<RoleEnd>>
+    s: MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
+) -> MeshedChannels<S1, S2, R, RoleB<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,
@@ -337,14 +337,14 @@ where
 }
 
 /// Send a value of type `T` from C to B. Always succeeds.
-/// Returns the continuation of the `SessionMpst<S1, S2, R,
+/// Returns the continuation of the `MeshedChannels<S1, S2, R,
 /// N>`.
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Send, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -365,7 +365,7 @@ where
 /// type NameC = RoleC<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointC<N> = SessionMpst<CtoA, CtoB<N>, StackC, NameC>;
+/// type EndpointC<N> = MeshedChannels<CtoA, CtoB<N>, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -376,7 +376,7 @@ where
 ///
 /// let (name_c, _) = NameC::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ca,
 ///   session2: channel_cb,
 ///   stack: role_c,
@@ -389,8 +389,8 @@ where
 /// ```
 pub fn send_mpst_c_to_b<T, S1, S2, R>(
     x: T,
-    s: SessionMpst<S1, Send<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
-) -> SessionMpst<S1, S2, R, RoleC<RoleEnd>>
+    s: MeshedChannels<S1, Send<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
+) -> MeshedChannels<S1, S2, R, RoleC<RoleEnd>>
 where
     T: marker::Send,
     S1: Session,

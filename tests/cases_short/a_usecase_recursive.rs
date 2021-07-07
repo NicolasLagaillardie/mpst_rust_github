@@ -2,8 +2,8 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
+use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
 use std::error::Error;
@@ -40,12 +40,12 @@ type RecursCtoB<N> = Recv<Branches0CtoB<N>, End>;
 type RecursAtoB<N> = Recv<Branches0AtoB<N>, End>;
 
 enum Branches0CtoB<N: marker::Send> {
-    End(SessionMpst<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
-    Video(SessionMpst<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
+    End(MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
+    Video(MeshedChannels<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
 }
 enum Branches0AtoB<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
-    Video(SessionMpst<RecursAtoB<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
+    Video(MeshedChannels<RecursAtoB<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
 }
 type Choose0fromBtoC<N> = Send<Branches0CtoB<N>, End>;
 type Choose0fromBtoA<N> = Send<Branches0AtoB<N>, End>;
@@ -69,15 +69,15 @@ type StackBFull = RoleC<RoleC<StackBRecurs>>;
 
 /// For B
 type EndpointBRecurs<N> =
-    SessionMpst<Choose0fromBtoA<N>, Choose0fromBtoC<N>, StackBRecurs, RoleB<RoleEnd>>;
-type EndpointBFull<N> = SessionMpst<Choose0fromBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
+    MeshedChannels<Choose0fromBtoA<N>, Choose0fromBtoC<N>, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<Choose0fromBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCRecurs<N> = SessionMpst<End, RecursCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = SessionMpst<End, InitC<N>, StackCInit, RoleC<RoleEnd>>;
+type EndpointCRecurs<N> = MeshedChannels<End, RecursCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCInit, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<RecursAtoB<N>, End, StackARecurs, RoleA<RoleEnd>>;
+type EndpointARecurs<N> = MeshedChannels<RecursAtoB<N>, End, StackARecurs, RoleA<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {

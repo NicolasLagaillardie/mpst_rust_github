@@ -7,7 +7,7 @@ type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct BakingMacroInput {
-    sessionmpst_name: syn::Ident,
+    meshedchannels_name: syn::Ident,
     all_roles: Vec<proc_macro2::TokenStream>,
     number_roles: u64,
     fork_mpst: Vec<syn::Ident>,
@@ -33,7 +33,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStrea
 
 impl Parse for BakingMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let sessionmpst_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
         let all_roles = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
 
@@ -47,7 +47,7 @@ impl Parse for BakingMacroInput {
         };
 
         Ok(BakingMacroInput {
-            sessionmpst_name,
+            meshedchannels_name,
             all_roles,
             number_roles,
             fork_mpst,
@@ -204,7 +204,7 @@ impl BakingMacroInput {
         session_types: Vec<syn::Ident>,
         session_types_struct: Vec<proc_macro2::TokenStream>,
     ) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
@@ -259,13 +259,13 @@ impl BakingMacroInput {
 
         quote! {
             impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #( #send_sessions )*
                     #receiver_ident<R>,
                     #sender_ident<mpstthree::role::end::RoleEnd>
                 >
             {
-                pub fn send(self, payload: T) -> #sessionmpst_name<
+                pub fn send(self, payload: T) -> #meshedchannels_name<
                     #( #session_types , )*
                     R,
                     #sender_ident<mpstthree::role::end::RoleEnd>
@@ -282,7 +282,7 @@ impl BakingMacroInput {
                         }
                         temp(self.stack)
                     };
-                    #sessionmpst_name {
+                    #meshedchannels_name {
                         #( #new_sessions )*
                         stack: new_stack,
                         name: self.name,
@@ -301,7 +301,7 @@ impl BakingMacroInput {
         session_types: Vec<syn::Ident>,
         session_types_struct: Vec<proc_macro2::TokenStream>,
     ) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
@@ -356,7 +356,7 @@ impl BakingMacroInput {
 
         quote! {
             impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #( #send_sessions )*
                     #sender_ident<R>,
                     #receiver_ident<mpstthree::role::end::RoleEnd>
@@ -364,7 +364,7 @@ impl BakingMacroInput {
             {
                 pub fn recv(self) -> Result<(
                     T,
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #( #session_types , )*
                         R,
                         #receiver_ident<mpstthree::role::end::RoleEnd>
@@ -385,7 +385,7 @@ impl BakingMacroInput {
                     };
                     Ok((
                         v,
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #( #new_sessions )*
                             stack: new_stack,
                             name: self.name,
@@ -405,7 +405,7 @@ impl BakingMacroInput {
         session_types: Vec<syn::Ident>,
         session_types_struct: Vec<proc_macro2::TokenStream>,
     ) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("RoleAllto{}", elt), proc_macro2::Span::call_site())
@@ -460,7 +460,7 @@ impl BakingMacroInput {
 
         quote! {
             impl<#( #session_types_struct )* T: std::marker::Send>
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #( #send_sessions )*
                     #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
                     #receiver_ident<mpstthree::role::end::RoleEnd>
@@ -468,7 +468,7 @@ impl BakingMacroInput {
             {
                 pub fn recv(self) -> Result<(
                     T,
-                    #sessionmpst_name<
+                    #meshedchannels_name<
                         #( #session_types , )*
                         mpstthree::role::end::RoleEnd,
                         #receiver_ident<mpstthree::role::end::RoleEnd>
@@ -483,7 +483,7 @@ impl BakingMacroInput {
 
                     Ok((
                         v,
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #( #new_sessions )*
                             stack: here1,
                             name: self.name,
@@ -501,7 +501,7 @@ impl BakingMacroInput {
         sender: u64,
         receiver: u64,
     ) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("RoleAllto{}", elt), proc_macro2::Span::call_site())
@@ -549,12 +549,12 @@ impl BakingMacroInput {
                     quote! {
                         mpstthree::binary::struct_trait::Recv<
                             either::Either<
-                                #sessionmpst_name<
+                                #meshedchannels_name<
                                     #( #left_sessions )*
                                     R1,
                                     #receiver_ident<mpstthree::role::end::RoleEnd>
                                 >,
-                                #sessionmpst_name<
+                                #meshedchannels_name<
                                     #( #right_sessions )*
                                     R2,
                                     #receiver_ident<mpstthree::role::end::RoleEnd>
@@ -576,7 +576,7 @@ impl BakingMacroInput {
                 R1: mpstthree::role::Role,
                 R2: mpstthree::role::Role,
             >
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #( #offer_sessions )*
                     #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
                     #receiver_ident<mpstthree::role::end::RoleEnd>,
@@ -585,14 +585,14 @@ impl BakingMacroInput {
                 pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
                 where
                     F: FnOnce(
-                        #sessionmpst_name<
+                        #meshedchannels_name<
                             #( #left_sessions )*
                             R1,
                             #receiver_ident<mpstthree::role::end::RoleEnd>,
                         >,
                     ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                     G: FnOnce(
-                        #sessionmpst_name<
+                        #meshedchannels_name<
                             #( #right_sessions )*
                             R2,
                             #receiver_ident<mpstthree::role::end::RoleEnd>,
@@ -614,7 +614,7 @@ impl BakingMacroInput {
         sender: u64,
     ) -> proc_macro2::TokenStream {
         let (diag, matrix) = self.diag_and_matrix();
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
@@ -750,14 +750,14 @@ impl BakingMacroInput {
                     quote! {
                         mpstthree::binary::struct_trait::Send<
                             either::Either<
-                                #sessionmpst_name<
+                                #meshedchannels_name<
                                     #(
                                         #left_sessions
                                     )*
                                     #stack_left
                                     #receiver_ident<mpstthree::role::end::RoleEnd>
                                 >,
-                                #sessionmpst_name<
+                                #meshedchannels_name<
                                     #(
                                         #right_sessions
                                     )*
@@ -953,7 +953,7 @@ impl BakingMacroInput {
         })
         .collect();
 
-        let new_sessionmpst_receivers: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_meshedchannels_receivers: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
                     let new_sessions_receiver: Vec<proc_macro2::TokenStream> = (1..self
@@ -998,11 +998,11 @@ impl BakingMacroInput {
                     {
                         syn::Ident::new(&format!("name_{}", elt), proc_macro2::Span::call_site())
                     } else {
-                        panic!("Not enough arguments for new_name_receiver in new_sessionmpst_receivers in expand_choose")
+                        panic!("Not enough arguments for new_name_receiver in new_meshedchannels_receivers in expand_choose")
                     };
 
                     quote! {
-                        let #new_choice_receiver = #sessionmpst_name {
+                        let #new_choice_receiver = #meshedchannels_name {
                             #(
                                 #new_sessions_receiver
                             )*
@@ -1062,7 +1062,7 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let old_sessionmpst_sender: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let old_meshedchannels_sender: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
             .map(|j| {
                 let new_session_sender = syn::Ident::new(
                     &format!("new_session_{}", j - 1),
@@ -1078,7 +1078,7 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let new_sessionmpst_sender: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_meshedchannels_sender: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
                     let new_choice_sender = if j < sender {
@@ -1125,7 +1125,7 @@ impl BakingMacroInput {
                     #choose_roles_struct
                 )*
             >
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #(
                         #choose_sessions
                     )*
@@ -1135,7 +1135,7 @@ impl BakingMacroInput {
                     #sender_ident<mpstthree::role::end::RoleEnd>,
                 >
             {
-                pub fn choose_left(self) -> #sessionmpst_name<
+                pub fn choose_left(self) -> #meshedchannels_name<
                     #(
                         #choose_left_session
                     )*
@@ -1160,16 +1160,16 @@ impl BakingMacroInput {
                     let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                     #(
-                        #new_sessionmpst_receivers
+                        #new_meshedchannels_receivers
                     )*
 
                     #(
                         #new_sessions_sender_left
                     )*
 
-                    let s = #sessionmpst_name {
+                    let s = #meshedchannels_name {
                         #(
-                            #old_sessionmpst_sender
+                            #old_meshedchannels_sender
                         )*
                         stack: self.stack,
                         name: self.name,
@@ -1177,15 +1177,15 @@ impl BakingMacroInput {
 
                     mpstthree::binary::cancel::cancel(s);
 
-                    #sessionmpst_name {
+                    #meshedchannels_name {
                         #(
-                            #new_sessionmpst_sender
+                            #new_meshedchannels_sender
                         )*
                         stack: #new_stack_sender,
                         name: #new_name_sender,
                     }
                 }
-                pub fn choose_right(self) -> #sessionmpst_name<
+                pub fn choose_right(self) -> #meshedchannels_name<
                     #(
                         #choose_right_session
                     )*
@@ -1210,16 +1210,16 @@ impl BakingMacroInput {
                     let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                     #(
-                        #new_sessionmpst_receivers
+                        #new_meshedchannels_receivers
                     )*
 
                     #(
                         #new_sessions_sender_right
                     )*
 
-                    let s = #sessionmpst_name {
+                    let s = #meshedchannels_name {
                         #(
-                            #old_sessionmpst_sender
+                            #old_meshedchannels_sender
                         )*
                         stack: self.stack,
                         name: self.name,
@@ -1227,9 +1227,9 @@ impl BakingMacroInput {
 
                     mpstthree::binary::cancel::cancel(s);
 
-                    #sessionmpst_name {
+                    #meshedchannels_name {
                         #(
-                            #new_sessionmpst_sender
+                            #new_meshedchannels_sender
                         )*
                         stack: #new_stack_sender,
                         name: #new_name_sender,
@@ -1244,7 +1244,7 @@ impl BakingMacroInput {
         all_roles: Vec<proc_macro2::TokenStream>,
         sender: u64,
     ) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             let concatenated_elt = format!("Role{}", elt);
@@ -1279,7 +1279,7 @@ impl BakingMacroInput {
 
         quote! {
             impl
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #(
                         #close_session_types
                     )*
@@ -1518,7 +1518,7 @@ impl BakingMacroInput {
         } else {
             panic!("Error at expand_fork_mpst: not enough elements in fork_mpst")
         };
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
@@ -1654,7 +1654,7 @@ impl BakingMacroInput {
                 let temp_name = syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
                 quote! {
                     #temp_function : FnOnce(
-                        #sessionmpst_name<
+                        #meshedchannels_name<
                             #(
                                 #temp_sessions
                             )*
@@ -1697,7 +1697,7 @@ impl BakingMacroInput {
                 })
                 .collect();
 
-        let new_sessionmpst: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
                     .map(|j| {
@@ -1722,8 +1722,8 @@ impl BakingMacroInput {
                     })
                     .collect();
 
-                let temp_sessionmpst = syn::Ident::new(
-                    &format!("sessionmpst_{}", i),
+                let temp_meshedchannels = syn::Ident::new(
+                    &format!("meshedchannels_{}", i),
                     proc_macro2::Span::call_site(),
                 );
                 let temp_role =
@@ -1731,8 +1731,8 @@ impl BakingMacroInput {
                 let temp_name =
                     syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    let #temp_sessionmpst =
-                        #sessionmpst_name {
+                    let #temp_meshedchannels =
+                        #meshedchannels_name {
                             #(
                                 #temp_sessions
                             )*
@@ -1747,8 +1747,8 @@ impl BakingMacroInput {
             .map(|i| {
                 let temp_function =
                     syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                let temp_sessionmpst = syn::Ident::new(
-                    &format!("sessionmpst_{}", i),
+                let temp_meshedchannels = syn::Ident::new(
+                    &format!("meshedchannels_{}", i),
                     proc_macro2::Span::call_site(),
                 );
                 quote! {
@@ -1756,7 +1756,7 @@ impl BakingMacroInput {
                         std::panic::set_hook(Box::new(|_info| {
                             // do nothing
                         }));
-                        match #temp_function(#temp_sessionmpst) {
+                        match #temp_function(#temp_meshedchannels) {
                             Ok(()) => (),
                             Err(e) => panic!("{:?}", e),
                         }
@@ -1815,7 +1815,7 @@ impl BakingMacroInput {
                 )*
 
                 #(
-                    #new_sessionmpst
+                    #new_meshedchannels
                 )*
 
                 (
@@ -1828,7 +1828,7 @@ impl BakingMacroInput {
     }
 
     fn expand(&self) -> proc_macro2::TokenStream {
-        let sessionmpst_name = self.sessionmpst_name.clone();
+        let meshedchannels_name = self.meshedchannels_name.clone();
 
         // Get all the roles provided into a Vec
         let all_roles = self.all_roles.clone();
@@ -2014,7 +2014,7 @@ impl BakingMacroInput {
         quote! {
             #[must_use]
             #[derive(Debug)]
-            pub struct #sessionmpst_name<
+            pub struct #meshedchannels_name<
                 #( #session_types , )*
                 R,
                 N
@@ -2033,14 +2033,14 @@ impl BakingMacroInput {
                 #( #session_types_struct )*
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::Session for #sessionmpst_name<
+            > mpstthree::binary::struct_trait::Session for #meshedchannels_name<
                 #(
                     #session_types , )*
                     R,
                     N
                 > {
                 type Dual =
-                #sessionmpst_name<
+                #meshedchannels_name<
                     #( #session_types_dual_struct )*
                     <R as mpstthree::role::Role>::Dual,
                     <N as mpstthree::role::Role>::Dual,
@@ -2053,12 +2053,12 @@ impl BakingMacroInput {
                     let (role_one, role_two) = R::new();
                     let (name_one, name_two) = N::new();
                     (
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #( #sender_struct )*
                             stack: role_one,
                             name: name_one,
                         },
-                        #sessionmpst_name {
+                        #meshedchannels_name {
                             #( #receiver_struct )*
                             stack: role_two,
                             name: name_two,
@@ -2093,12 +2093,12 @@ impl BakingMacroInput {
                     #( #session_types_struct )*
                     R: mpstthree::role::Role,
                     N: mpstthree::role::Role
-                > #sessionmpst_name<#( #session_types , )* R, N> {
+                > #meshedchannels_name<#( #session_types , )* R, N> {
                 #[doc(hidden)]
                 pub fn field_names(self) ->
                     (
                         &'static [&'static str],
-                        #sessionmpst_name<#( #session_types , )* R, N>
+                        #meshedchannels_name<#( #session_types , )* R, N>
                     ) {
                     (
                         &[

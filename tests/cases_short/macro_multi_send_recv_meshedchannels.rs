@@ -6,7 +6,7 @@ use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(SessionMpst => A, B, C, D, E => fork_mpst);
+bundle_impl!(MeshedChannels => A, B, C, D, E => fork_mpst);
 
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
@@ -14,13 +14,13 @@ type NameC = RoleC<RoleEnd>;
 type NameD = RoleD<RoleEnd>;
 type NameE = RoleE<RoleEnd>;
 
-type SendSessionMPSTD<N> = SessionMpst<End, Send<N, End>, End, End, NameB, NameD>;
+type SendSessionMPSTD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
 
-type RecvSessionMPSTB<N> = SessionMpst<End, End, Recv<N, End>, End, NameD, NameB>;
+type RecvSessionMPSTB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
 
-type PawnA = SessionMpst<End, End, End, End, RoleEnd, NameA>;
-type PawnC = SessionMpst<End, End, End, End, RoleEnd, NameC>;
-type PawnE = SessionMpst<End, End, End, End, RoleEnd, NameE>;
+type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
+type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;
+type PawnE = MeshedChannels<End, End, End, End, RoleEnd, NameE>;
 
 fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
     s.send(0).close()

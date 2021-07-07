@@ -32,8 +32,8 @@ use std::time::Duration;
 //     }
 // }
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
 
 // Create new roles
 // normal
@@ -48,37 +48,37 @@ create_multiple_normal_role!(
 create_send_mpst_session_bundle!(
     send_mpst_a_to_c, RoleC, 1 |
     send_mpst_a_to_s, RoleS, 2 | =>
-    RoleA, SessionMpstThree, 3
+    RoleA, MeshedChannelsThree, 3
 );
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_s, RoleS, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
-    RoleS, SessionMpstThree, 3
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
-    RoleA, SessionMpstThree, 3
+    RoleA, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_s, RoleS, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_a, RoleA, 1 |
     recv_mpst_s_from_c, RoleC, 2 | =>
-    RoleS, SessionMpstThree, 3
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Names
@@ -92,8 +92,8 @@ type Choose0fromAtoS = <Recurs0StoA as Session>::Dual;
 type Choose0fromAtoC = <Recurs0CtoA as Session>::Dual;
 
 enum Branching1fromCtoA {
-    Pay(SessionMpstThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
-    Quit(SessionMpstThree<End, End, RoleEnd, NameA>),
+    Pay(MeshedChannelsThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
+    Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
 
 type Recurs1AtoC = Recv<Branching1fromCtoA, End>;
@@ -101,42 +101,42 @@ type Recurs1AtoC = Recv<Branching1fromCtoA, End>;
 // S
 enum Branching0fromAtoS {
     Login(
-        SessionMpstThree<
+        MeshedChannelsThree<
             Recv<(), End>,
             Send<(i64, i64), Recurs1StoC>,
             RoleA<RoleC<RoleC<RoleEnd>>>,
             NameS,
         >,
     ),
-    Fail(SessionMpstThree<Recv<String, End>, End, RoleA<RoleEnd>, NameS>),
+    Fail(MeshedChannelsThree<Recv<String, End>, End, RoleA<RoleEnd>, NameS>),
 }
 
 type Recurs0StoA = Recv<Branching0fromAtoS, End>;
 
 enum Branching1fromCtoS {
     Pay(
-        SessionMpstThree<
+        MeshedChannelsThree<
             End,
             Recv<(String, i64), Send<(i64, i64), Recurs1StoC>>,
             RoleC<RoleC<RoleC<RoleEnd>>>,
             NameS,
         >,
     ),
-    Quit(SessionMpstThree<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Quit(MeshedChannelsThree<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 
 type Recurs1StoC = Recv<Branching1fromCtoS, End>;
 // C
 enum Branching0fromAtoC {
     Login(
-        SessionMpstThree<
+        MeshedChannelsThree<
             Recv<(), Choose1fromCtoA>,
             Recv<(i64, i64), Choose1fromCtoS>,
             RoleA<RoleS<RoleBroadcast>>,
             NameC,
         >,
     ),
-    Fail(SessionMpstThree<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
+    Fail(MeshedChannelsThree<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
 }
 type Recurs0CtoA = Recv<Branching0fromAtoC, End>;
 
@@ -145,25 +145,25 @@ type Choose1fromCtoS = <Recurs1StoC as Session>::Dual;
 
 // Creating the MP sessions
 // Step 1
-type EndpointA1 = SessionMpstThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
-type EndpointC1 = SessionMpstThree<
+type EndpointA1 = MeshedChannelsThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
+type EndpointC1 = MeshedChannelsThree<
     Choose1fromCtoA,
     Recv<(i64, i64), Choose1fromCtoS>,
     RoleS<RoleBroadcast>,
     NameC,
 >;
 type EndpointS1 =
-    SessionMpstThree<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
+    MeshedChannelsThree<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
 // Step 0
-type EndpointA0 = SessionMpstThree<
+type EndpointA0 = MeshedChannelsThree<
     Recv<(String, String), Choose0fromAtoC>,
     Choose0fromAtoS,
     RoleC<RoleBroadcast>,
     NameA,
 >;
 type EndpointC0 =
-    SessionMpstThree<Send<(String, String), Recurs0CtoA>, End, RoleA<RoleA<RoleEnd>>, NameC>;
-type EndpointS0 = SessionMpstThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
+    MeshedChannelsThree<Send<(String, String), Recurs0CtoA>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+type EndpointS0 = MeshedChannelsThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
@@ -178,7 +178,7 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             RoleC,
             RoleS, =>
             RoleA,
-            SessionMpstThree,
+            MeshedChannelsThree,
             1
         );
 
@@ -194,7 +194,7 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             RoleC,
             RoleS, =>
             RoleA,
-            SessionMpstThree,
+            MeshedChannelsThree,
             1
         );
 
@@ -283,7 +283,7 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 RoleA,
                 RoleS, =>
                 RoleC,
-                SessionMpstThree,
+                MeshedChannelsThree,
                 2
             );
 
@@ -299,7 +299,7 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 RoleA,
                 RoleS, =>
                 RoleC,
-                SessionMpstThree,
+                MeshedChannelsThree,
                 2
             );
 

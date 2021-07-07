@@ -1,23 +1,23 @@
 error[E0308]: mismatched types
   --> $DIR/long_simple_three_mpst_short_fail.rs:86:26
    |
-86 |             let (_, s) = recv_mpst!(s, RoleC, RoleB, SessionMpstThree, 3, 2)()?;
-   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected struct `RoleB`, found struct `RoleA`
+86 |             let (_, s) = recv_mpst!(s, RoleC, RoleB, MeshedChannelsThree, 3, 2)()?;
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected struct `RoleB`, found struct `RoleA`
    |
    = note: expected reference `&RoleB<RoleEnd>`
               found reference `&RoleA<RoleEnd>`
 note: return type inferred to be `&RoleB<RoleEnd>` here
   --> $DIR/long_simple_three_mpst_short_fail.rs:86:26
    |
-86 |             let (_, s) = recv_mpst!(s, RoleC, RoleB, SessionMpstThree, 3, 2)()?;
-   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+86 |             let (_, s) = recv_mpst!(s, RoleC, RoleB, MeshedChannelsThree, 3, 2)()?;
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    = note: this error originates in a macro (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0308]: mismatched types
   --> $DIR/long_simple_three_mpst_short_fail.rs:87:21
    |
-87 |             let s = send_mpst!(s, (), RoleC, RoleB, SessionMpstThree, 3, 2);
-   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected struct `RoleB`, found struct `RoleA`
+87 |             let s = send_mpst!(s, (), RoleC, RoleB, MeshedChannelsThree, 3, 2);
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected struct `RoleB`, found struct `RoleA`
    |
    = note: expected reference `&RoleB<RoleEnd>`
               found reference `&RoleA<RoleEnd>`
