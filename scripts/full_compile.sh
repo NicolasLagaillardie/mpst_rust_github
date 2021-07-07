@@ -36,7 +36,7 @@ sleep 5
 # ./scripts/compile.sh actyx_os_api
 # ./scripts/compile.sh smtp
 # ./scripts/compile.sh distributed_calc
-# ./scripts/compile.sh usecase
+# ./scripts/compile.sh video_stream
 # ./scripts/compile.sh online_wallet
 # ./scripts/compile.sh dns_fowler
 # ./scripts/compile.sh dns_imai
