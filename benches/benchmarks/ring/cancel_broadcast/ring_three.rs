@@ -22,7 +22,6 @@ create_multiple_normal_role_short!(Central, A, B, C);
 
 // Create new send functions
 // A
-// A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
     RoleA, MeshedChannelsFour, 4

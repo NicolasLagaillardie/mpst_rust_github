@@ -10,8 +10,7 @@ pub mod send;
 /// Creates thestructure SessionMPST
 /// [`mpstthree::create_meshedchannels`](../macro.create_meshedchannels.html),
 /// the [`mpstthree::close_mpst`](../macro.close_mpst.html) and
-/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
-/// functions to be used with more than 3 participants.
+/// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html).
 ///
 /// # Arguments
 ///
@@ -40,7 +39,7 @@ macro_rules! bundle_struct_fork_close_multi {
 /// [`mpstthree::create_meshedchannels`](../macro.create_meshedchannels.html),
 /// the [`mpstthree::close_mpst_cancel`](../macro.close_mpst_cancel.html) and
 /// [`mpstthree::fork_mpst_multi`](../macro.fork_mpst_multi.html)
-/// functions to be used with more than 3 participants.
+/// functions to be used with more than 2 participants.
 /// It checks the send sides of the channels along the recv sides.
 ///
 /// # Arguments

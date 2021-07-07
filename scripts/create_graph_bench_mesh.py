@@ -132,7 +132,6 @@ offset = matplotlib.transforms.ScaledTranslation(0.25, 0, fig.dpi_scale_trans)
 for label in ax.xaxis.get_majorticklabels():
     label.set_transform(label.get_transform() + offset)
 
-
 # maxi1 = max(mpst)
 # maxi2 = max(binary)
 # maxi3 = max(crossbeam)

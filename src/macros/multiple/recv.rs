@@ -46,7 +46,7 @@ macro_rules! recv_mpst {
 }
 
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a
-/// MeshedChannels with more than 3 participants.
+/// MeshedChannels.
 ///
 /// # Arguments
 ///
@@ -88,7 +88,7 @@ macro_rules! create_recv_mpst_session {
 }
 
 /// Creates multiple *recv* functions to receive from a simple role on a given binary session type
-/// of a MeshedChannels with more than 3 participants.
+/// of a MeshedChannels.
 ///
 /// # Arguments
 ///
@@ -143,7 +143,7 @@ macro_rules! create_recv_mpst_session_bundle {
 }
 
 /// Creates a *recv* function to receive from a broadcasting role on a given binary session type of
-/// a MeshedChannels with more than 3 participants.
+/// a MeshedChannels.
 ///
 /// # Arguments
 ///
@@ -184,7 +184,7 @@ macro_rules! create_recv_mpst_all_session {
 }
 
 /// Creates a *recv* function to receive from a simple role on a given binary session type of a
-/// MeshedChannels with more than 3 participants.
+/// MeshedChannels.
 ///
 /// # Arguments
 ///
@@ -227,7 +227,7 @@ macro_rules! create_recv_http_session {
 
 /// Creates multiple *recv* functions to receive from a
 /// simple role on a given binary session type of a
-/// MeshedChannels with more than 3 participants.
+/// MeshedChannels.
 ///
 /// # Arguments
 ///

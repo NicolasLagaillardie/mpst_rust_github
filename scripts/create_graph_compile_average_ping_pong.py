@@ -93,31 +93,45 @@ nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t)
                                                               for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
 
 # Change size
-ax = plt.figure(figsize=(30, 15)).gca()
+fig, ax = plt.subplots(figsize=(60,60))
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the graph
-ax.plot(nb_participants_mpst, average_mpst,
-        label="MPST", linestyle='solid', linewidth=15)
-ax.plot(nb_participants_binary, average_binary,
-        label="Binary", linestyle='dashed', linewidth=15)
-ax.plot(nb_participants_crossbeam, average_crossbeam,
-        label="Crossbeam", linestyle='dashdot', linewidth=15)
-ax.plot(nb_participants_cancel, average_cancel,
-        label="Cancel", linestyle='dotted', linewidth=15)
-# ax.plot(nb_participants_cancel_broadcast, average_cancel_broadcast,
-#         label="Broadcast cancel", linestyle='dotted', linewidth=5)
+# Plot the MPST graph
+ax.plot(nb_participants_mpst, average_mpst, label='MPST',
+        linestyle='solid', linewidth=10, marker='>', markersize=30)
+
+# Plot the binary graph
+ax.plot(nb_participants_binary, average_binary, label='Binary',
+        linestyle='solid', linewidth=10, marker='o', markersize=30)
+
+# Plot the crossbeam graph
+ax.plot(nb_participants_crossbeam, average_crossbeam, label='Crossbeam',
+        linestyle='solid', linewidth=10, marker='d', markersize=30)
+
+if len(average_cancel) > 0:
+    # Plot the cancel graph
+    ax.plot(nb_participants_cancel, average_cancel, label='Cancel',
+            linestyle='solid', linewidth=10, marker='*', markersize=30)
 
 # Label X and Y axis
-ax.set_xlabel('Number of loops', fontsize=90)
-ax.set_ylabel('Time (s)', fontsize=90)
-ax.tick_params(axis='both', which='major', labelsize=30)
-ax.tick_params(axis='both', which='minor', labelsize=30)
+ax.set_xlabel('\# loops', fontsize=200)
+ax.set_ylabel('Time (ms)', fontsize=200)
+ax.tick_params(axis='both', which='major', labelsize=190)
+# ax.xaxis.set_ticks(np.arange(100, 510, 100))
+# ax.set_xlim(3, 10)
+# ax.set_ylim(0, 180)
+# ax.tick_params(axis='both', which='minor', labelsize=30)
+
+offset = matplotlib.transforms.ScaledTranslation(0.25, 0, fig.dpi_scale_trans)
+
+# apply offset transform to all x ticklabels.
+for label in ax.xaxis.get_majorticklabels():
+    label.set_transform(label.get_transform() + offset)
 
 # Add grid
-ax.grid(True)
+# ax.grid(True)
 
 # # giving a title to my graph
 # plt.title('Compile time needed')

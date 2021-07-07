@@ -8,5 +8,6 @@ pub mod mesh_six;
 pub mod mesh_ten;
 pub mod mesh_three;
 pub mod mesh_twenty;
+pub mod mesh_two;
 
 pub mod mesh_three_short;

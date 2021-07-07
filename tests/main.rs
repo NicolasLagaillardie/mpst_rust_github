@@ -8,6 +8,8 @@ mod unit;
 
 use ntest::timeout;
 
+
+
 #[test]
 fn unit_tests() {
     // Checker result
@@ -28,6 +30,11 @@ fn unit_tests() {
     // SessionMPST methods and fields
     unit::meshedchannels::meshedchannels_fields();
     unit::meshedchannels::meshedchannels_methods();
+
+
+    for i in 0..3 {
+        println!("i: {:?}", &i);
+    }
 }
 
 #[test]

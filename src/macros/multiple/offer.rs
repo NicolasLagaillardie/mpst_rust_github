@@ -25,7 +25,7 @@ macro_rules! create_offer_type_multi {
 }
 
 /// Creates an *OfferMpst* function to receive an offer on a given binary session type of a
-/// MeshedChannels with more than 3 participants.
+/// MeshedChannels.
 ///
 /// # Arguments
 ///

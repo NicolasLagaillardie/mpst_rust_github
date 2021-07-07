@@ -93,26 +93,27 @@ if len(broadcast_cancel) > 0:
 # Change size
 # ax = plt.figure(figsize=(50, 50)).gca()
 fig, ax = plt.subplots(figsize=(60,60))
+plt.gcf().subplots_adjust(bottom=0.25)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
 ax.plot(nb_participants_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=10, marker='>', markersize=60)
+        linestyle='solid', linewidth=20, marker='>', markersize=150)
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary',
-        linestyle='solid', linewidth=10, marker='o', markersize=60)
+        linestyle='solid', linewidth=20, marker='o', markersize=150)
 
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=10, marker='d', markersize=60)
+        linestyle='solid', linewidth=20, marker='d', markersize=150)
 
 if len(cancel) > 0:
     # Plot the cancel graph
     ax.plot(nb_participants_cancel, cancel, label='Cancel',
-            linestyle='solid', linewidth=10, marker='*', markersize=60)
+            linestyle='solid', linewidth=20, marker='*', markersize=150)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph
@@ -120,10 +121,11 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# participants', fontsize=200)
-ax.set_ylabel('Time (ms)', fontsize=200)
-ax.tick_params(axis='both', which='major', labelsize=200)
-# ax.xaxis.set_ticks(np.arange(100, 510, 100))
+ax.set_xlabel('\# roles', fontsize=600)
+# ax.set_ylabel('Time (ms)', fontsize=500)
+ax.tick_params(axis='both', which='major', labelsize=500)
+ax.xaxis.set_ticks(np.arange(3, 11, 2))
+ax.yaxis.set_ticks(np.arange(0, 70, 15))
 ax.set_xlim(3, 10)
 ax.set_ylim(0, 64)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
@@ -138,7 +140,7 @@ ax.set_ylim(0, 64)
 # mini3 = min(crossbeam)
 # mini = min(mini1, mini2, mini3)
 
-offset = matplotlib.transforms.ScaledTranslation(0.25, 0, fig.dpi_scale_trans)
+offset = matplotlib.transforms.ScaledTranslation(1, 0, fig.dpi_scale_trans)
 
 # apply offset transform to all x ticklabels.
 for label in ax.xaxis.get_majorticklabels():

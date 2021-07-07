@@ -5,6 +5,7 @@ mod benchmarks;
 criterion_main! {
     // benchmarks::mesh::normal::mesh_three_short::mesh_three_short,
     // //////////
+    benchmarks::mesh::empty::mesh_two::mesh_two,
     // benchmarks::mesh::empty::mesh_three::mesh_three,
     // benchmarks::mesh::empty::mesh_four::mesh_four,
     // benchmarks::mesh::empty::mesh_five::mesh_five,
@@ -16,6 +17,7 @@ criterion_main! {
     // benchmarks::mesh::empty::mesh_eleven::mesh_eleven,
     // benchmarks::mesh::empty::mesh_twenty::mesh_twenty,
     // //////////
+    benchmarks::mesh::normal::mesh_two::mesh_two,
     // benchmarks::mesh::normal::mesh_three::mesh_three,
     // benchmarks::mesh::normal::mesh_four::mesh_four,
     // benchmarks::mesh::normal::mesh_five::mesh_five,
@@ -38,6 +40,7 @@ criterion_main! {
     // benchmarks::mesh::cancel_broadcast::mesh_eleven::mesh_eleven,
     // benchmarks::mesh::cancel_broadcast::mesh_twenty::mesh_twenty,
     // //////////
+    benchmarks::mesh::cancel::mesh_two::mesh_two,
     // benchmarks::mesh::cancel::mesh_three::mesh_three,
     // benchmarks::mesh::cancel::mesh_four::mesh_four,
     // benchmarks::mesh::cancel::mesh_five::mesh_five,
@@ -54,15 +57,16 @@ criterion_main! {
     // benchmarks::basic::distributed_calc::distributed_calc,
     // benchmarks::basic::fib::fib,
     // benchmarks::basic::o_auth::o_auth,
-    benchmarks::basic::online_wallet::online_wallet,
+    // benchmarks::basic::online_wallet::online_wallet,
     // benchmarks::basic::simple_voting_three::simple_voting,
     // benchmarks::basic::smtp::smtp,
     // benchmarks::basic::three_buyer::three_buyer,
     // benchmarks::basic::travel_three::travel_three,
     // benchmarks::basic::video_stream::video_stream,
-    benchmarks::basic::dns_fowler::dns_fowler,
-    benchmarks::basic::dns_imai::dns_imai,
+    // benchmarks::basic::dns_fowler::dns_fowler,
+    // benchmarks::basic::dns_imai::dns_imai,
     // //////////
+    benchmarks::ring::empty::ring_two::ring_two,
     // benchmarks::ring::empty::ring_three::ring_three,
     // benchmarks::ring::empty::ring_four::ring_four,
     // benchmarks::ring::empty::ring_five::ring_five,
@@ -74,6 +78,7 @@ criterion_main! {
     // benchmarks::ring::empty::ring_eleven::ring_eleven,
     // benchmarks::ring::empty::ring_twenty::ring_twenty,
     // //////////
+    benchmarks::ring::normal::ring_two::ring_two,
     // benchmarks::ring::normal::ring_three::ring_three,
     // benchmarks::ring::normal::ring_four::ring_four,
     // benchmarks::ring::normal::ring_five::ring_five,
@@ -96,6 +101,7 @@ criterion_main! {
     // benchmarks::ring::cancel_broadcast::ring_eleven::ring_eleven,
     // benchmarks::ring::cancel_broadcast::ring_twenty::ring_twenty,
     // //////////
+    benchmarks::ring::cancel::ring_two::ring_two,
     // benchmarks::ring::cancel::ring_three::ring_three,
     // benchmarks::ring::cancel::ring_four::ring_four,
     // benchmarks::ring::cancel::ring_five::ring_five,

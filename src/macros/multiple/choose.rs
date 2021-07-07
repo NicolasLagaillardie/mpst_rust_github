@@ -196,7 +196,7 @@ macro_rules! create_choose_mpst_session_multi_both {
     };
 }
 
-/// Choose among different sessions that are provided, for protocols with more than 3 participants
+/// Choose among different sessions that are provided.
 ///
 /// # Arguments
 ///
@@ -332,7 +332,7 @@ macro_rules! choose_mpst_create_multi_to_all {
     }
 }
 
-/// Choose among different sessions that are provided, for protocols with more than 3 participants,
+/// Choose among different sessions that are provided,
 /// may fail because of a canceled session. Need to exclude the first participant
 ///
 /// # Arguments
@@ -447,7 +447,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
     }
 }
 
-/// Choose among different sessions that are provided, for protocols with more than 3 participants
+/// Choose among different sessions that are provided.
 ///
 /// # Arguments
 ///
@@ -514,8 +514,7 @@ macro_rules! choose_mpst_multi_http_to_all {
     }
 }
 
-/// Create *choose* fuunctions, to choose among different sessions that are provided, for protocols
-/// with more than 3 participants.
+/// Create *choose* fuunctions, to choose among different sessions that are provided.
 ///
 /// # Arguments
 ///
@@ -574,8 +573,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
     };
 }
 
-/// Create *choose* fuunctions, to choose among different sessions that are provided, for protocols
-/// with more than 3 participants.
+/// Create *choose* fuunctions, to choose among different sessions that are provided.
 ///
 /// # Arguments
 ///
