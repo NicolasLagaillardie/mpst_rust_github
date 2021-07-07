@@ -100,19 +100,19 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the graph
 ax.plot(nb_participants_mpst, average_mpst,
-        label="MPST", linestyle='solid', linewidth=5)
+        label="MPST", linestyle='solid', linewidth=15)
 ax.plot(nb_participants_binary, average_binary,
-        label="Binary", linestyle='dashed', linewidth=5)
+        label="Binary", linestyle='dashed', linewidth=15)
 ax.plot(nb_participants_crossbeam, average_crossbeam,
-        label="Crossbeam", linestyle='dashdot', linewidth=5)
+        label="Crossbeam", linestyle='dashdot', linewidth=15)
 ax.plot(nb_participants_cancel, average_cancel,
-        label="Cancel", linestyle='dotted', linewidth=5)
+        label="Cancel", linestyle='dotted', linewidth=15)
 # ax.plot(nb_participants_cancel_broadcast, average_cancel_broadcast,
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('Number of loops', fontsize=30)
-ax.set_ylabel('Time (s)', fontsize=30)
+ax.set_xlabel('Number of loops', fontsize=90)
+ax.set_ylabel('Time (s)', fontsize=90)
 ax.tick_params(axis='both', which='major', labelsize=30)
 ax.tick_params(axis='both', which='minor', labelsize=30)
 

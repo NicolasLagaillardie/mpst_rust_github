@@ -91,37 +91,41 @@ if len(broadcast_cancel) > 0:
                                                           for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
 
 # Change size
-ax = plt.figure(figsize=(30, 15)).gca()
+# ax = plt.figure(figsize=(50, 50)).gca()
+fig, ax = plt.subplots(figsize=(60,60))
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
 ax.plot(nb_participants_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=5)
+        linestyle='solid', linewidth=10, marker='>', markersize=60)
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary',
-        linestyle='dashed', linewidth=5)
+        linestyle='solid', linewidth=10, marker='o', markersize=60)
 
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='dashdot', linewidth=5)
+        linestyle='solid', linewidth=10, marker='d', markersize=60)
 
 if len(cancel) > 0:
     # Plot the cancel graph
     ax.plot(nb_participants_cancel, cancel, label='Cancel',
-            linestyle='dotted', linewidth=5)
+            linestyle='solid', linewidth=10, marker='*', markersize=60)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph
-#     ax.plot(nb_participants_broadcast_cancel, broadcast_cancel,
+#     ax.plot(nb_loops_broadcast_cancel, broadcast_cancel,
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('Number of participants', fontsize=30)
-ax.set_ylabel('Time (ms)', fontsize=30)
-ax.tick_params(axis='both', which='major', labelsize=30)
+ax.set_xlabel('\# participants', fontsize=200)
+ax.set_ylabel('Time (ms)', fontsize=200)
+ax.tick_params(axis='both', which='major', labelsize=200)
+# ax.xaxis.set_ticks(np.arange(100, 510, 100))
+ax.set_xlim(3, 10)
+ax.set_ylim(0, 64)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 # maxi1 = max(mpst)
@@ -134,6 +138,12 @@ ax.tick_params(axis='both', which='major', labelsize=30)
 # mini3 = min(crossbeam)
 # mini = min(mini1, mini2, mini3)
 
+offset = matplotlib.transforms.ScaledTranslation(0.25, 0, fig.dpi_scale_trans)
+
+# apply offset transform to all x ticklabels.
+for label in ax.xaxis.get_majorticklabels():
+    label.set_transform(label.get_transform() + offset)
+
 # # Major ticks every 20, minor ticks every 5
 # major_ticks = np.arange(mini, maxi+0.1, 0.2)
 # minor_ticks = np.arange(mini, maxi+0.1, 0.05)
@@ -144,7 +154,7 @@ ax.tick_params(axis='both', which='major', labelsize=30)
 # ax.set_yticks(minor_ticks, minor=True)
 
 # # Add grid
-ax.grid(which='both')
+# ax.grid(which='both')
 
 
 # ax.grid(which='minor', alpha=0.2)

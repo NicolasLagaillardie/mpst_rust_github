@@ -78,29 +78,30 @@ nb_loops_cancel, cancel = (list(t)
 
 nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
                                                for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
-
+ 
 # Change size
-ax = plt.figure(figsize=(30, 15)).gca()
+fig, ax = plt.subplots(figsize=(100, 70))
+# fig, ax = plt.subplots(figsize=(75,50))
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
 ax.plot(nb_loops_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=5)
+        linestyle='solid', linewidth=5, marker='>', markersize=20)
 
 # Plot the binary graph
 ax.plot(nb_loops_binary, binary, label='Binary',
-        linestyle='dashed', linewidth=5)
+        linestyle='solid', linewidth=5, marker='o', markersize=20)
 
 # Plot the crossbeam graph
 ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='dashdot', linewidth=5)
+        linestyle='solid', linewidth=5, marker='d', markersize=20)
 
 if len(cancel) > 0:
     # Plot the cancel graph
-    ax.plot(nb_loops_cancel, cancel, label='Cancel',
-            linestyle='dotted', linewidth=5)
+    ax.plot(nb_loops_cancel, cancel, label='AMPST',
+            linestyle='solid', linewidth=5, marker='*', markersize=20)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph
@@ -108,10 +109,13 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('Number of loops', fontsize=30)
-ax.set_ylabel('Time (ms)', fontsize=30)
-ax.tick_params(axis='both', which='major', labelsize=30)
-# ax.tick_params(axis='both', which='minor', labelsize=30)
+ax.set_xlabel('\# iterations', fontsize=200)
+ax.set_ylabel('Time (ms)', fontsize=200)
+ax.tick_params(axis='both', which='major', labelsize=200)
+ax.xaxis.set_ticks(np.arange(100, 510, 100))
+ax.set_xlim(0, 510)
+ax.set_ylim(0, 25)
+# ax.tick_params(axis='both', which='minor', labelsize=90)
 
 # maxi1 = max(ping_pong)
 # maxi2 = max(binary)
@@ -133,7 +137,7 @@ ax.tick_params(axis='both', which='major', labelsize=30)
 # ax.set_yticks(minor_ticks, minor=True)
 
 # # Add grid
-ax.grid(which='both')
+# ax.grid(which='both')
 
 
 # ax.grid(which='minor', alpha=0.2)
@@ -144,10 +148,12 @@ ax.grid(which='both')
 #           number_of_loops + ' loops')
 
 # show a legend on the plot
-# ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
+# ax.legend(bbox_to_anchor=(0.25, 0.80), loc="center", prop={'size': 150}, markerscale=3)
+ax.legend(bbox_to_anchor=(0.5, 1.08), loc="center",
+          prop={'size': 200}, markerscale=5, ncol=4)
 
 # Save fig
-plt.savefig('./graphs_bench/graph_ping_pong.pdf')
+plt.savefig('./graphs_bench/graphPingPong.pdf')
 
 # # function to show the plot
 # plt.show()

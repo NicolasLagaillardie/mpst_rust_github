@@ -480,7 +480,7 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static SIZE: i64 = 0;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ring five empty protocol MPST {}", SIZE), |b| {

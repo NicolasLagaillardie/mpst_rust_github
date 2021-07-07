@@ -73,7 +73,7 @@ ax.grid(which='both')
 ax.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={'size': 20})
 
 # Save fig
-plt.savefig('./graphs_bench/graph_cancel.pdf')
+plt.savefig('./graphs_bench/graphCancel.pdf')
 
 # # function to show the plot
 # plt.show()
