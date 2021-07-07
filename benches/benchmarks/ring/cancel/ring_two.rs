@@ -6,9 +6,9 @@ use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi_cancel,  create_fn_choose_mpst_multi_to_all_bundle,
+    bundle_struct_fork_close_multi_cancel, create_fn_choose_mpst_multi_to_all_bundle,
     create_multiple_normal_role_short, create_recv_mpst_session_bundle,
-    create_send_mpst_cancel_bundle,  offer_mpst,
+    create_send_mpst_cancel_bundle, offer_mpst,
 };
 
 use std::error::Error;

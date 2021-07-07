@@ -285,9 +285,10 @@ fn ring_protocol_binary(c: &mut Criterion) {
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("ring two empty protocol crossbeam {}", SIZE), |b| {
-        b.iter(|| all_crossbeam())
-    });
+    c.bench_function(
+        &format!("ring two empty protocol crossbeam {}", SIZE),
+        |b| b.iter(|| all_crossbeam()),
+    );
 }
 
 fn long_warmup() -> Criterion {
