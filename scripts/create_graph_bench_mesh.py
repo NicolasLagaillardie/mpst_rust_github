@@ -16,7 +16,7 @@ directories = os.listdir(main_path)
 path_file = '/base/estimates.json'
 
 # Dictionary for converting from string to int
-str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
+str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
               'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
 # Lists for plots
@@ -35,6 +35,7 @@ nb_participants_broadcast_cancel = []
 # Number of loops in the recursion
 number_of_loops = '100'
 
+
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
@@ -51,7 +52,7 @@ for d in directories:
 
         try:
             # If MPST of binary, append to related lists
-            if 'MPST' in d and str_to_int[splitted[1]] >= 3:
+            if 'MPST' in d and str_to_int[splitted[1]] >= 2:
                 if 'broadcast' in d:
                     broadcast_cancel.append(int(test(d))/10**6)
                     nb_participants_broadcast_cancel.append(
@@ -62,10 +63,10 @@ for d in directories:
                 else:
                     mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
-            elif 'binary' in d and str_to_int[splitted[1]] >= 3 and 'cancel' not in d:
+            elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
                 binary.append(int(test(d))/10**6)
                 nb_participants_binary.append(str_to_int[splitted[1]])
-            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3 and 'cancel' not in d:
+            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
                 crossbeam.append(int(test(d))/10**6)
                 nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
@@ -90,27 +91,28 @@ if len(broadcast_cancel) > 0:
                                                           for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
 
 # ax = plt.figure(figsize=(50, 50)).gca()
-fig, ax = plt.subplots(figsize=(60,60))
+fig, ax = plt.subplots(figsize=(60, 60))
+plt.gcf().subplots_adjust(bottom=0.27, left=0.18)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
 ax.plot(nb_participants_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=10, marker='>', markersize=60)
+        linestyle='solid', linewidth=20, marker='>', markersize=150)
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary',
-        linestyle='solid', linewidth=10, marker='o', markersize=60)
+        linestyle='solid', linewidth=20, marker='o', markersize=150)
 
 # Plot the crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=10, marker='d', markersize=60)
+        linestyle='solid', linewidth=20, marker='d', markersize=150)
 
 if len(cancel) > 0:
     # Plot the cancel graph
     ax.plot(nb_participants_cancel, cancel, label='Cancel',
-            linestyle='solid', linewidth=10, marker='*', markersize=60)
+            linestyle='solid', linewidth=20, marker='*', markersize=150)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph
@@ -118,19 +120,25 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# participants', fontsize=200)
-ax.set_ylabel('Time (ms)', fontsize=200)
-ax.tick_params(axis='both', which='major', labelsize=200)
-# ax.xaxis.set_ticks(np.arange(100, 510, 100))
-ax.set_xlim(3, 10)
-ax.set_ylim(0, 180)
+ax.set_xlabel('\# roles', fontsize=600)
+# ax.set_ylabel('Time (ms)', fontsize=500)
+ax.tick_params(axis='both', which='major', labelsize=500)
+ax.xaxis.set_ticks(np.arange(2, 11, 2))
+ax.yaxis.set_ticks(np.arange(0, 190, 60))
+ax.set_xlim(2, 10)
+ax.set_ylim(0, 190)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
-offset = matplotlib.transforms.ScaledTranslation(0.25, 0, fig.dpi_scale_trans)
+offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
 # apply offset transform to all x ticklabels.
 for label in ax.xaxis.get_majorticklabels():
-    label.set_transform(label.get_transform() + offset)
+    label.set_transform(label.get_transform() + offset_x)
+
+offset_y = matplotlib.transforms.ScaledTranslation(-1, 0, fig.dpi_scale_trans)
+
+for label in ax.yaxis.get_majorticklabels():
+    label.set_transform(label.get_transform() + offset_y)
 
 # maxi1 = max(mpst)
 # maxi2 = max(binary)

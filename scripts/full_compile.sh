@@ -49,6 +49,13 @@ sleep 5
 # ./scripts/compile.sh ping_pong_mpst
 
 # ### Mesh
+# Two
+./scripts/compile.sh mesh_two_binary
+./scripts/compile.sh mesh_two_cancel
+# ./scripts/compile.sh mesh_three_broadcast_cancel
+./scripts/compile.sh mesh_two_crossbeam
+./scripts/compile.sh mesh_two_mpst
+
 # # Three
 # ./scripts/compile.sh mesh_three_binary
 # ./scripts/compile.sh mesh_three_cancel
@@ -120,6 +127,13 @@ sleep 5
 # ./scripts/compile.sh mesh_twenty_mpst
 
 # ### Ring
+# # Two
+./scripts/compile.sh ring_two_binary
+./scripts/compile.sh ring_two_cancel
+# ./scripts/compile.sh ring_two_broadcast_cancel
+./scripts/compile.sh ring_two_crossbeam
+./scripts/compile.sh ring_two_mpst
+
 # # Three
 # ./scripts/compile.sh ring_three_binary
 # ./scripts/compile.sh ring_three_cancel
@@ -223,5 +237,5 @@ sleep 5
 # cargo expand --example long_simple_eleven_crossbeam > expand/long_simple_eleven_crossbeam_expand.txt
 # cargo expand --example long_simple_twenty_crossbeam > expand/long_simple_twenty_crossbeam_expand.txt
 
-cargo bench --bench main -- --verbose
+# cargo bench --bench main -- --verbose
 # cargo bench --bench ping_pong -- --verbose

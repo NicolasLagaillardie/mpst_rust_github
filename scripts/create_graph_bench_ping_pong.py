@@ -78,10 +78,10 @@ nb_loops_cancel, cancel = (list(t)
 
 nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
                                                for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
- 
+
 # Change size
-fig, ax = plt.subplots(figsize=(100, 70))
-# fig, ax = plt.subplots(figsize=(75,50))
+fig, ax = plt.subplots(figsize=(60, 60))
+plt.gcf().subplots_adjust(bottom=0.27, left=0.25)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -109,13 +109,25 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# iterations', fontsize=200)
-ax.set_ylabel('Time (ms)', fontsize=200)
-ax.tick_params(axis='both', which='major', labelsize=200)
-ax.xaxis.set_ticks(np.arange(100, 510, 100))
+ax.set_xlabel('\# iterations', fontsize=600)
+ax.set_ylabel('Time (ms)', fontsize=500)
+ax.tick_params(axis='both', which='major', labelsize=500)
+ax.xaxis.set_ticks(np.arange(0, 510, 250))
+ax.yaxis.set_ticks(np.arange(0, 25, 8))
 ax.set_xlim(0, 510)
 ax.set_ylim(0, 25)
-# ax.tick_params(axis='both', which='minor', labelsize=90)
+# ax.tick_params(axis='both', which='minor', labelsize=30)
+
+offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
+
+# apply offset transform to all x ticklabels.
+for label in ax.xaxis.get_majorticklabels():
+    label.set_transform(label.get_transform() + offset_x)
+
+offset_y = matplotlib.transforms.ScaledTranslation(-1, 0, fig.dpi_scale_trans)
+
+for label in ax.yaxis.get_majorticklabels():
+    label.set_transform(label.get_transform() + offset_y)
 
 # maxi1 = max(ping_pong)
 # maxi2 = max(binary)
@@ -149,8 +161,8 @@ ax.set_ylim(0, 25)
 
 # show a legend on the plot
 # ax.legend(bbox_to_anchor=(0.25, 0.80), loc="center", prop={'size': 150}, markerscale=3)
-ax.legend(bbox_to_anchor=(0.5, 1.08), loc="center",
-          prop={'size': 200}, markerscale=5, ncol=4)
+# ax.legend(bbox_to_anchor=(0.5, 1.08), loc="center",
+#           prop={'size': 200}, markerscale=5, ncol=4)
 
 # Save fig
 plt.savefig('./graphs_bench/graphPingPong.pdf')

@@ -16,7 +16,7 @@ directories_criterion = os.listdir(main_path_criterion)
 path_file = '/base/estimates.json'
 
 # Dictionary for converting from string to int
-str_to_int = {'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
+str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
               'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
 # Lists for plots
@@ -52,7 +52,7 @@ for d in directories_criterion:
 
         try:
             # If MPST of binary, append to related lists
-            if 'MPST' in d and str_to_int[splitted[1]] >= 3:
+            if 'MPST' in d and str_to_int[splitted[1]] >= 2:
                 if 'broadcast' in d:
                     broadcast_cancel.append(int(test(d))/10**6)
                     nb_participants_broadcast_cancel.append(
@@ -63,10 +63,10 @@ for d in directories_criterion:
                 else:
                     mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
-            elif 'binary' in d and str_to_int[splitted[1]] >= 3 and 'cancel' not in d:
+            elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
                 binary.append(int(test(d))/10**6)
                 nb_participants_binary.append(str_to_int[splitted[1]])
-            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 3 and 'cancel' not in d:
+            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
                 crossbeam.append(int(test(d))/10**6)
                 nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
@@ -92,8 +92,8 @@ if len(broadcast_cancel) > 0:
 
 # Change size
 # ax = plt.figure(figsize=(50, 50)).gca()
-fig, ax = plt.subplots(figsize=(60,60))
-plt.gcf().subplots_adjust(bottom=0.25)
+fig, ax = plt.subplots(figsize=(60, 60))
+plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -124,9 +124,9 @@ if len(cancel) > 0:
 ax.set_xlabel('\# roles', fontsize=600)
 # ax.set_ylabel('Time (ms)', fontsize=500)
 ax.tick_params(axis='both', which='major', labelsize=500)
-ax.xaxis.set_ticks(np.arange(3, 11, 2))
-ax.yaxis.set_ticks(np.arange(0, 70, 15))
-ax.set_xlim(3, 10)
+ax.xaxis.set_ticks(np.arange(2, 11, 2))
+ax.yaxis.set_ticks(np.arange(0, 70, 30))
+ax.set_xlim(2, 10)
 ax.set_ylim(0, 64)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
@@ -140,11 +140,16 @@ ax.set_ylim(0, 64)
 # mini3 = min(crossbeam)
 # mini = min(mini1, mini2, mini3)
 
-offset = matplotlib.transforms.ScaledTranslation(1, 0, fig.dpi_scale_trans)
+offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
 # apply offset transform to all x ticklabels.
 for label in ax.xaxis.get_majorticklabels():
-    label.set_transform(label.get_transform() + offset)
+    label.set_transform(label.get_transform() + offset_x)
+
+offset_y = matplotlib.transforms.ScaledTranslation(-1, 0, fig.dpi_scale_trans)
+
+for label in ax.yaxis.get_majorticklabels():
+    label.set_transform(label.get_transform() + offset_y)
 
 # # Major ticks every 20, minor ticks every 5
 # major_ticks = np.arange(mini, maxi+0.1, 0.2)
