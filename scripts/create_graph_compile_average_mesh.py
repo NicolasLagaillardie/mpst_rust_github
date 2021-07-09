@@ -86,7 +86,7 @@ nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t)
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
-plt.gcf().subplots_adjust(bottom=0.3, left=0.2)
+plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -113,7 +113,7 @@ if len(average_cancel) > 0:
 
 # Label X and Y axis
 ax.set_xlabel('\# roles', fontsize=600)
-# ax.set_ylabel('Time (ms)', fontsize=500)
+# ax.set_ylabel('Time (s)', fontsize=600)
 ax.tick_params(axis='both', which='major', labelsize=500)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
 ax.yaxis.set_ticks(np.arange(50, 73, 10))

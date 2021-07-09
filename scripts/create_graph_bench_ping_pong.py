@@ -45,7 +45,7 @@ for d in directories:
         splitted = d.split(' ')
 
         try:
-            if 'binary' in d:
+            if 'binary' in d and 'cancel' not in d:
                 binary.append(int(test(d))/10**6)
                 nb_loops_binary.append(int(splitted[-1]))
             elif 'MPST' in d:
@@ -58,7 +58,7 @@ for d in directories:
                 else:
                     mpst.append(int(test(d))/10**6)
                     nb_loops_mpst.append(int(splitted[-1]))
-            elif 'crossbeam' in d:
+            elif 'crossbeam' in d and 'cancel' not in d:
                 crossbeam.append(int(test(d))/10**6)
                 nb_loops_crossbeam.append(int(splitted[-1]))
         except:

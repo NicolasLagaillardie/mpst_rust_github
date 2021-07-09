@@ -1,3 +1,4 @@
+use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::{Send, Session};
 use hyper::client::ResponseFuture;
 use hyper::{Body, Client, Method, Request};
@@ -110,6 +111,9 @@ where
     let (here, there) = S::new();
     match s.channel.send((x, there)) {
         Ok(_) => Ok(here),
-        Err(e) => panic!("{}", e.to_string()),
+        Err(e) => {
+            cancel(s);
+            panic!("{}", e.to_string())
+        }
     }
 }
