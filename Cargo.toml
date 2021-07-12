@@ -9,10 +9,11 @@ repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT"
 keywords = ["multiparty", "session"]
 categories = ["concurrency", "development-tools::cargo-plugins"]
-exclude = [".travis.yml", ".gitignore", "mpst_seq/"]
+exclude = [".travis.yml", ".gitignore", "mpst_seq/", "mpst_seq_proc/"]
 autotests = false
 
 [workspace]
+exclude = ["mpst_seq/", "mpst_seq_proc/"]
 
 [[bin]]
 name = "mpst"
@@ -39,9 +40,8 @@ either = "1.6.1"
 rand = "0.8.4"
 # dot = "0.1.4"
 # sesh = "0.1.1"
-# mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst_seq", branch = "main" }
 # mpst-seq = { path = "mpst_seq", version = "0.0.3" }
-mpst-seq = "0.0.3"
+mpst-seq = "0.0.4"
 # anyhow = "1"
 hyper = { version = "0.14", features = ["full"] }
 hyper-tls = "0.5"
@@ -50,7 +50,7 @@ tokio = { version = "1.8", features = ["full"] }
 # field_types = "1.1.0"
 
 [dev-dependencies]
-criterion = { version = "0.3.4", features=["html_reports"] }
+criterion = { version = "0.3.4", features = ["html_reports"] }
 trybuild = "1.0.42"
 ntest = "0.7.3"
 

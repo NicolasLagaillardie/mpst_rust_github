@@ -1,9 +1,9 @@
 # Multiparty session types for Rust
 
 <!-- [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github) -->
-![Rust Ubuntu](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/ubuntu/badge.svg)
-![Rust Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/windows/badge.svg)
-![Rust Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/mac/badge.svg)
+![Ubuntu](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/ubuntu/badge.svg)
+![Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/windows/badge.svg)
+![Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/mac/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
 [![Minimum rustc version](https://img.shields.io/badge/rustc-1.53+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
