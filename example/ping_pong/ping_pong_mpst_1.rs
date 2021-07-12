@@ -81,7 +81,7 @@ type EndpointB = MeshedChannelsTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, 1)
+    recurs_a(s, SIZE)
 }
 
 fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
@@ -135,3 +135,7 @@ fn main() {
     thread_a.join().unwrap();
     thread_b.join().unwrap();
 }
+
+/////////////////////////
+
+static SIZE: i64 = 1;

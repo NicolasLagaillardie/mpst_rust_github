@@ -52,7 +52,6 @@ test.rs
 # WIP
 /wip
 
-/scripts/numbers
 result.rs
 
 *.env

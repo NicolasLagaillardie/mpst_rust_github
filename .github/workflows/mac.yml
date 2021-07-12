@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [macOS-latest]
-        rust: [stable, beta, nightly]
+        rust: [stable]
 
     steps:
     - uses: actions/checkout@v2
@@ -43,6 +43,6 @@ jobs:
     - name: Run tests no features
       run: cargo test --verbose --all --no-default-features --no-run
     # - name: Run examples
-    #   run: ./scripts/full_examples.sh
+    #   run: ./scripts/create_files/full_examples.sh
     - name: Run benchmarks
       run: cargo bench --verbose --all

@@ -10,7 +10,7 @@ cargo check --example=$1 || command_failed=1
 if [ ${command_failed:-0} -ne 1 ]
 then
     # Run over 100 times
-    for i in {1..5}
+    for i in {1..$2}
     do
         # Remove previous build
         cargo clean

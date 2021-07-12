@@ -38,7 +38,7 @@ for d in directories:
 
         file = open(main_path + '/' + d, "r")
 
-        name = d.split('.txt')[0].split(serie + '_')[1].split('_')[0]
+        (name, number) = d.split('.txt')[0].split(serie + '_')[1].split('_')
 
         build_time = []
 
@@ -47,32 +47,23 @@ for d in directories:
                 build_time.append(int(line.split('build; ')[1].split('\n')[0]))
 
                 # If MPST of binary, append to related lists
+
         if 'mpst' in d:
-            for i in range(500):
-                average_mpst.append(statistics.mean(
-                    build_time)*(99.995 + random()/100)/10**8)
-                nb_participants_mpst.append(i)
+            average_mpst.append(statistics.mean(build_time))
+            nb_participants_mpst.append(int(number))
         elif 'binary' in d:
-            for i in range(500):
-                average_binary.append(statistics.mean(
-                    build_time)*(99.995 + random()/100)/10**8)
-                nb_participants_binary.append(i)
+            average_binary.append(statistics.mean(build_time))
+            nb_participants_binary.append(int(number))
         elif 'cancel' in d:
             if 'broadcast' in d:
-                for i in range(500):
-                    average_cancel_broadcast.append(statistics.mean(
-                        build_time)*(99.995 + random()/100)/10**8)
-                    nb_participants_cancel_broadcast.append(i)
+                average_cancel_broadcast.append(statistics.mean(build_time))
+                nb_participants_cancel_broadcast.append(int(number))
             else:
-                for i in range(500):
-                    average_cancel.append(statistics.mean(
-                        build_time)*(99.995 + random()/100)/10**8)
-                    nb_participants_cancel.append(i)
+                average_cancel.append(statistics.mean(build_time))
+                nb_participants_cancel.append(int(number))
         elif 'crossbeam' in d:
-            for i in range(500):
-                average_crossbeam.append(statistics.mean(
-                    build_time)*(99.995 + random()/100)/10**8)
-                nb_participants_crossbeam.append(i)
+            average_crossbeam.append(statistics.mean(build_time))
+            nb_participants_crossbeam.append(int(number))
 
         file.close()
 
@@ -93,7 +84,7 @@ nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t)
                                                               for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
 
 # Change size
-fig, ax = plt.subplots(figsize=(60,60))
+fig, ax = plt.subplots(figsize=(60, 60))
 plt.gcf().subplots_adjust(bottom=0.27, left=0.25)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))

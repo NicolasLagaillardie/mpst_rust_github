@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Create the ping_pong files from benches/ping_pong_all, for i from 1 to arg
+
 set -e
 
 # progress bar function
@@ -11,13 +13,11 @@ prog() {
     printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*"; 
 }
 
-# cargo bench --bench ping_pong -- --verbose
-
 sed -ier 's,},,g' benches/ping_pong.rs;
 
-for i in {1..500}
+for i in $(eval echo {1..$1})
 do
-    prog "$((i/5))" still working...
+    prog "$((i/$(( $1 / 100 ))))" still working...
     #########################
     next=$(($i+1))
     cp benches/ping_pong_all/ping_pong_$i.rs benches/ping_pong_all/ping_pong_$next.rs
@@ -40,13 +40,9 @@ do
     sync
     printf 'pub mod ping_pong_cancel_broadcast_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
     printf '\tping_pong_all::ping_pong_cancel_broadcast_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
-    # rm -rf target/release/
-    # cargo bench --bench ping_pong -- --verbose
 done
 
 printf '}' >> benches/ping_pong.rs;
-find benches/ping_pong_all/ -name *.rser -delete
+find benches/ -name *.rser -delete
 
 cargo fmt
-
-# sed -ier 's/static SIZE: i64 = [0-9]\+;/static SIZE: i64 = 1;/g' benches/ping_pong.rs

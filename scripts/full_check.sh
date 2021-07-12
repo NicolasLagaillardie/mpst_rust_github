@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Check Rust code before pushing
+
 set -e
 
 echo "cargo fmt started"
