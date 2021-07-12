@@ -35,8 +35,8 @@ harness = false
 debug = true
 
 [dependencies]
-# mpst-seq = { path = "mpst_seq", version = "0.0.6" }
-mpst-seq = "0.0.6"
+mpst-seq = { path = "mpst_seq", version = "0.0.6" }
+# mpst-seq = "0.0.6"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
 rand = "0.8.4"
