@@ -3,6 +3,7 @@ codecov:
 
 ignore:
   - "mpst_seq/"
+  - "mpst-seq/"
 
 coverage:
   precision: 2
