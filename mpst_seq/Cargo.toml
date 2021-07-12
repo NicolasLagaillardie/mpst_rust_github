@@ -10,8 +10,8 @@ license = "MIT"
 exclude = [".travis.yml", ".gitignore", "mpst_seq_proc/"]
 autotests = false
 
-[workspace]
-exclude = ["mpst_seq_proc/"]
+# [workspace]
+# exclude = ["mpst_seq_proc/"]
 
 [dev-dependencies]
 trybuild = "1.0.41"

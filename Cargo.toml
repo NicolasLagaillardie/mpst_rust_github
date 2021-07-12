@@ -13,7 +13,7 @@ exclude = [".travis.yml", ".gitignore", "mpst_seq/", "mpst_seq_proc/"]
 autotests = false
 
 [workspace]
-# exclude = ["mpst_seq/", "mpst_seq_proc/"]
+exclude = ["mpst_seq/", "mpst_seq_proc/"]
 
 [[bin]]
 name = "mpst"
