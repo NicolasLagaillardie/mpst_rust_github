@@ -7,6 +7,15 @@ use crossbeam_channel::{bounded, Sender};
 ///
 /// This `struct` is used for branching without `enum`. See
 /// the test `05_usecase.rs`.
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::role::all_to_c::RoleAlltoC;
+/// use mpstthree::role::end::RoleEnd;
+///
+/// type NameAlltoCDual = RoleAlltoC<RoleEnd, RoleEnd>;
+/// ```
 #[derive(Debug)]
 pub struct RoleAlltoC<R1, R2>
 where

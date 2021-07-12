@@ -1,5 +1,5 @@
 //! Generates code for allowing a role, among three roles, to receive
-//! their new SessionMPST from an active role in a binary choice.
+//! their new MeshedChannels from an active role in a binary choice.
 //!
 //! # Arguments
 //!

@@ -25,7 +25,7 @@ fn unit_tests() {
     unit::roles::role_head_str();
     unit::roles::role_tail_str();
 
-    // SessionMPST methods and fields
+    // MeshedChannels methods and fields
     unit::meshedchannels::meshedchannels_fields();
     unit::meshedchannels::meshedchannels_methods();
 }
@@ -249,33 +249,20 @@ fn scribble_tests() {
 #[test]
 #[timeout(30000)]
 fn canceling() {
-    println!("Starting cancel");
     cancel::cancel_01::main();
-    println!("cancel_01 done");
     cancel::cancel_02::main();
-    println!("cancel_02 done");
     cancel::cancel_03::main();
-    println!("cancel_03 done");
     cancel::cancel_04::main();
-    println!("cancel_04 done");
     cancel::cancel_05::main();
-    println!("cancel_05 done");
     cancel::cancel_06::main();
-    println!("cancel_06 done");
     cancel::cancel_07::main();
-    println!("cancel_07 done");
     cancel::cancel_08::main();
-    println!("cancel_08 done");
     cancel::cancel_09::main();
-    println!("cancel_09 done");
     cancel::cancel_10::main();
-    println!("cancel_10 done");
     cancel::cancel_11::main();
-    println!("cancel_11 done");
     cancel::cancel_12::main();
-    println!("cancel_12 done");
     cancel::cancel_13::main();
-    println!("cancel_13 done");
+    cancel::cancel_14::main();
 }
 
 #[test]
@@ -297,7 +284,7 @@ fn tcp() {
 }
 
 #[test]
-#[timeout(30000)]
+#[timeout(60000)]
 fn http() {
     println!("Starting http");
     http::simple_http_get::main();

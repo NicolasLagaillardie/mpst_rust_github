@@ -9,7 +9,16 @@ use crossbeam_channel::{bounded, Sender};
 /// of the [`mpstthree::meshedchannels::MeshedChannels`] related
 /// to C.
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: RoleBroadcastmeshedchannels/struct.MeshedChannels.html
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::role::c::RoleC;
+/// use mpstthree::role::end::RoleEnd;
+///
+/// type NameC = RoleC<RoleEnd>;
+/// ```
 #[derive(Debug)]
 pub struct RoleC<R>
 where

@@ -3,7 +3,7 @@
 
 /// Creates the _fork_ function to be used with more than 3
 /// participants. It must be used with
-/// [`mpstthree::fork_simple`](../macro.fork_simple.html)
+/// [`mpstthree::fork_simple`](./macro.fork_simple.html)
 ///
 /// # Arguments
 ///

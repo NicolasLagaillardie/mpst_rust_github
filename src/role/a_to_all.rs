@@ -10,8 +10,17 @@ use crossbeam_channel::{bounded, Sender};
 /// This `struct` is used for branching without `enum`. See
 /// the test `05_usecase.rs`.
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../../meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ../../binary/trait.Session.html
+///
+/// # Example
+///
+/// ```
+/// use mpstthree::role::a_to_all::RoleAtoAll;
+/// use mpstthree::role::end::RoleEnd;
+///
+/// type NameAtoAllDual = RoleAtoAll<RoleEnd, RoleEnd>;
+/// ```
 #[derive(Debug)]
 pub struct RoleAtoAll<R1, R2>
 where

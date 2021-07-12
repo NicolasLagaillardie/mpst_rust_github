@@ -1,14 +1,16 @@
 use crossbeam_channel::{bounded, Receiver, Sender};
 
-/// This structure is used to close an ordering or a name.
+/// This structure is used for closing a stack for an active role
+/// which is about to broadcast a choice with an `enum`.
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::End;
+/// use mpstthree::role::broadcast::RoleBroadcast;
+/// use mpstthree::role::a::RoleA;
+/// use mpstthree::role::end::RoleEnd;
 ///
-/// // Creating the binary sessions
-/// type Close = End;
+/// type BroadcastA = RoleA<RoleBroadcast>;
 /// ```
 #[derive(Debug)]
 pub struct RoleBroadcast {

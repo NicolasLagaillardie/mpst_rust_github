@@ -9,7 +9,7 @@ repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT"
 keywords = ["multiparty", "session"]
 categories = ["concurrency", "development-tools::cargo-plugins"]
-exclude = [".travis.yml", ".gitignore", "mpst_seq/"]
+exclude = [".travis.yml", "codecov.yml", ".gitignore", "mpst_seq/", ".github/", ".cargo_vcs_info.json", "scripts/", "example", "rustfmt_2.toml"]
 autotests = false
 
 [workspace]
@@ -35,8 +35,8 @@ harness = false
 debug = true
 
 [dependencies]
-mpst-seq = { path = "mpst_seq", version = "0.0.5" }
-# mpst-seq = "0.0.5"
+# mpst-seq = { path = "mpst_seq", version = "0.0.6" }
+mpst-seq = "0.0.6"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
 rand = "0.8.4"

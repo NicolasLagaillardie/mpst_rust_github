@@ -92,7 +92,7 @@ macro_rules! recv_all_aux_simple {
 ///   name: name_b,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// send_mpst_b_to_a((), sess_b);
 /// recv_mpst_a_from_b(sess_a);
@@ -170,7 +170,7 @@ where
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// send_mpst_a_to_b((), sess_a);
 /// recv_mpst_b_from_a(sess_b);
@@ -248,7 +248,7 @@ where
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// send_mpst_a_to_c((), sess_a);
 /// recv_mpst_c_from_a(sess_c);
@@ -326,7 +326,7 @@ where
 ///   name: name_c,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// send_mpst_c_to_a((), sess_c);
 /// recv_mpst_a_from_c(sess_a);
@@ -404,7 +404,7 @@ where
 ///   name: name_c,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// send_mpst_c_to_b((), sess_c);
 /// recv_mpst_b_from_c(sess_b);
@@ -482,7 +482,7 @@ where
 ///   name: name_b,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// send_mpst_b_to_c((), sess_b);
 /// recv_mpst_c_from_b(sess_c);

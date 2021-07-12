@@ -23,7 +23,7 @@
 /// create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, RoleC);
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_recv_mpst_session_1 {
     ($func_name: ident, $role: ident, $name: ident) => {
@@ -53,7 +53,7 @@ macro_rules! create_recv_mpst_session_1 {
 /// create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_recv_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {

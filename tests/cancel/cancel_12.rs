@@ -92,15 +92,14 @@ type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>;
 type Choose0fromDtoC = Send<(End, Branching0fromDtoC), End>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsFour<End, End, End, RoleEnd, NameA>;
+type EndpointCentral = MeshedChannelsFour<End, End, End, RoleEnd, NameA>;
 type EndpointB = MeshedChannelsFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = MeshedChannelsFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
 type EndpointD =
     MeshedChannelsFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, 3);
-    Ok(())
+fn enpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
+    broadcast_cancel!(s, 4)
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
@@ -178,13 +177,13 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn main() {
-    let (thread_a, thread_b, thread_c, thread_d) =
-        fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
+    let (thread_central, thread_b, thread_c, thread_d) =
+        fork_mpst(enpoint_central, endpoint_b, endpoint_c, endpoint_d);
 
-    assert!(thread_a.join().is_err());
-    assert!(thread_b.join().is_err());
-    assert!(thread_c.join().is_err());
-    assert!(thread_d.join().is_err());
+    assert!(thread_central.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }
 
 /////////////////////////

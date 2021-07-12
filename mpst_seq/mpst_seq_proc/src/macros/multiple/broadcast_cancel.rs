@@ -41,39 +41,43 @@ impl BroadcastCancelMacroInput {
         let send_sessions = quote! { #( s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap_or(()); )* };
 
         quote! {
-            #(
-                let mut #bool_session = true;
-            )*
+            {
+                #(
+                    let mut #bool_session = true;
+                )*
 
-            let mut s = #session;
+                let mut s = #session;
 
-            let (size, mut s) = s.field_names();
+                let (size, mut s) = s.field_names();
 
-            if size.len() != #nsessions - 1 {
-                panic!("Wrong number for $nsessions: expected {:?}, found {:?}", size.len(), #nsessions)
-            } else {
-                while #( #bool_session || )* false {
-                    #(
-                        match s.#field_session.receiver.try_recv() {
-                            Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
-                                #send_sessions
-                                mpstthree::binary::cancel::cancel(s);
-                                panic!("Error");
-                            }
-                            Ok(mpstthree::binary::struct_trait::Signal::Stop) => match #bool_session {
-                                true => {
-                                    s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
-                                    #bool_session = false;
+                if size.len() != #nsessions - 1 {
+                    panic!("Wrong number for $nsessions: expected {:?}, found {:?}", size.len(), #nsessions)
+                } else {
+                    while #( #bool_session || )* false {
+                        #(
+                            match s.#field_session.receiver.try_recv() {
+                                Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
+                                    #send_sessions
+                                    mpstthree::binary::cancel::cancel(s);
+                                    panic!("Error");
                                 }
-                                false => panic!("Close already sent"),
-                            }
-                            Ok(mpstthree::binary::struct_trait::Signal::Offer(channel)) => {
-                                s.#field_session = channel;
-                            }
-                            _ => {}
-                        };
-                    )*
-                }
+                                Ok(mpstthree::binary::struct_trait::Signal::Stop) => match #bool_session {
+                                    true => {
+                                        s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
+                                        #bool_session = false;
+                                    }
+                                    false => panic!("Close already sent"),
+                                }
+                                Ok(mpstthree::binary::struct_trait::Signal::Offer(channel)) => {
+                                    s.#field_session = channel;
+                                }
+                                _ => {}
+                            };
+                        )*
+                    }
+                };
+
+                Ok(())
             }
         }
     }

@@ -267,9 +267,9 @@ macro_rules! choose_mpst_c {
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
 ///
-/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ./role/trait.Role.html
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S2, S3, R4, RoleA<RoleEnd>>
@@ -329,9 +329,9 @@ where
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
 ///
-/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ./role/trait.Role.html
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S4, S5, R5, RoleA<RoleEnd>>
@@ -392,9 +392,9 @@ where
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
 ///
-/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ./role/trait.Role.html
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S2, S3, R4, RoleB<RoleEnd>>
@@ -454,9 +454,9 @@ where
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
 ///
-/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ./role/trait.Role.html
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S4, S5, R5, RoleB<RoleEnd>>
@@ -516,9 +516,9 @@ where
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
 ///
-/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ./role/trait.Role.html
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S2, S3, R4, RoleC<RoleEnd>>
@@ -578,9 +578,9 @@ where
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
 ///
-/// [`mpstthree::meshedchannels::Sessionmpst`]: ../meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ../role/trait.Role.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
+/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+/// [`mpstthree::role::Role`]: ./role/trait.Role.html
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S4, S5, R5, RoleC<RoleEnd>>

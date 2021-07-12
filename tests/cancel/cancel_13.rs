@@ -1,159 +1,194 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    broadcast_cancel, bundle_struct_fork_close_multi,
-    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
+    create_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
+    offer_cancel_mpst, send_cancel,
 };
 
 use std::error::Error;
 
-// global protocol ping_pong(role A, role B)
-// {
-//     rec PP
-//     {
-//         choice at A
-//         {
-//             ping(()) from A to B;
-//             pong(()) from B to A;
-//             continue PP;
-//         }
-//         or
-//         {
-//             stop() from A to B;
-//         }
-//     }
-// }
-
-// Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
+// Create new MeshedChannels for four participants
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsFour, 4);
 
 // Create new roles
 // normal
-create_multiple_normal_role!(
-    RoleA, RoleADual |
-    RoleB, RoleBDual |
-    RoleCentral, RoleCentralDual |
-);
+create_normal_role!(RoleA, RoleADual);
+create_normal_role!(RoleB, RoleBDual);
+create_normal_role!(RoleC, RoleCDual);
+create_normal_role!(RoleD, RoleDDual);
 
 // Create new send functions
-// A
-create_send_check_cancel_bundle!(
-    send_mpst_a_to_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsThree, 3
-);
 // B
 create_send_check_cancel_bundle!(
-    send_mpst_b_to_a, RoleA, 2 | =>
-    RoleB, MeshedChannelsThree, 3
+    send_check_b_to_c, RoleC, 2 |
+    send_check_b_to_d, RoleD, 3 | =>
+    RoleB, MeshedChannelsFour, 4
+);
+// C
+create_send_check_cancel_bundle!(
+    send_check_c_to_b, RoleB, 2 |
+    send_check_c_to_d, RoleD, 3 | =>
+    RoleC, MeshedChannelsFour, 4
+);
+// D
+create_send_check_cancel_bundle!(
+    send_check_d_to_b, RoleB, 2 |
+    send_check_d_to_c, RoleC, 3 | =>
+    RoleD, MeshedChannelsFour, 4
 );
 
 // Create new recv functions and related types
-// A
-create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsThree, 3
-);
 // B
 create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_a, RoleA, 2 | =>
-    RoleB, MeshedChannelsThree, 3
+    recv_mpst_b_from_c, RoleC, 2 |
+    recv_mpst_b_from_d, RoleD, 3 | =>
+    RoleB, MeshedChannelsFour, 4
 );
+// C
+create_recv_mpst_session_bundle!(
+    recv_mpst_c_from_b, RoleB, 2 |
+    recv_mpst_c_from_d, RoleD, 3 | =>
+    RoleC, MeshedChannelsFour, 4
+);
+// D
+create_recv_mpst_session_bundle!(
+    recv_mpst_d_from_b, RoleB, 2 |
+    recv_mpst_d_from_c, RoleC, 3 | =>
+    RoleD, MeshedChannelsFour, 4
+);
+
+// For sending a canceled signal
+send_cancel!(cancel_mpst, RoleB, MeshedChannelsFour, 4, "Session dropped");
 
 // Names
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
+type NameC = RoleC<RoleEnd>;
+type NameD = RoleD<RoleEnd>;
 
 // Types
-// A
-type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
+// Send/Recv
+type RS<S> = Recv<(), Send<(), S>>;
+type SR<S> = Send<(), Recv<(), S>>;
+// Roles
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+type R2D<R> = RoleD<RoleD<R>>;
 // B
-enum Branching0fromAtoB {
-    More(
-        MeshedChannelsThree<
-            End,
-            Recv<(), Send<(), RecursBtoA>>,
-            RoleA<RoleA<RoleA<RoleEnd>>>,
-            NameB,
-        >,
-    ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+enum Branching0fromDtoB {
+    More(MeshedChannelsFour<End, SR<End>, RS<RecursBtoD>, R2D<R2C<RoleD<RoleEnd>>>, NameB>),
+    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoA = Recv<(End, Branching0fromAtoB), End>;
+type RecursBtoD = Recv<(End, Branching0fromDtoB), End>;
+// C
+enum Branching0fromDtoC {
+    More(MeshedChannelsFour<End, RS<End>, RS<RecursCtoD>, R2D<R2B<RoleD<RoleEnd>>>, NameC>),
+    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
+}
+type RecursCtoD = Recv<(End, Branching0fromDtoC), End>;
+// D
+type Choose0fromDtoA = End;
+type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>;
+type Choose0fromDtoC = Send<(End, Branching0fromDtoC), End>;
 
 // Creating the MP sessions
+type EndpointCentral = MeshedChannelsFour<End, End, End, RoleEnd, NameA>;
+type EndpointB = MeshedChannelsFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
+type EndpointC = MeshedChannelsFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
+type EndpointD =
+    MeshedChannelsFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
-type EndpointDoneA = MeshedChannelsThree<End, End, RoleEnd, NameA>;
-type EndpointForwardA = MeshedChannelsThree<
-    End,
-    Send<(), Recv<(), Choose0fromAtoB>>,
-    RoleB<RoleB<RoleBroadcast>>,
-    NameA,
->;
-
-type EndpointCentral = MeshedChannelsThree<End, End, RoleEnd, RoleCentral<RoleEnd>>;
-type EndpointA = MeshedChannelsThree<End, Choose0fromAtoB, RoleBroadcast, NameA>;
-type EndpointB = MeshedChannelsThree<End, RecursBtoA, RoleA<RoleEnd>, NameB>;
-
-create_fn_choose_mpst_cancel_multi_to_all_bundle!(
-    done_from_a_to_all, more_from_a_to_all, =>
-    Done, More, =>
-    EndpointDoneA, EndpointForwardA, =>
-    Branching0fromAtoB, =>
-    RoleB, =>
-    RoleCentral, RoleA, MeshedChannelsThree, 2
-);
-
-// Functions
-fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, 3);
-    Ok(())
+fn enpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
+    broadcast_cancel!(s, 4)
 }
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE)
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    // offer_cancel_mpst!(s, recv_mpst_b_from_d, {
+    //     Branching0fromDtoB::Done(s) => {
+    //         close_mpst_multi(s)
+    //     },
+    //     Branching0fromDtoB::More(s) => {
+    //         let (_, s) = recv_mpst_b_from_d(s)?;
+    //         let s = send_check_b_to_d((), s)?;
+    //         let s = send_check_b_to_c((), s)?;
+    //         let (_, s) = recv_mpst_b_from_c(s)?;
+    //         endpoint_b(s)
+    //     },
+    // })
+    cancel_mpst(s)
 }
 
-fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = done_from_a_to_all(s)?;
-
-            close_mpst_multi(s)
-        }
-        i => {
-            let s = more_from_a_to_all(s)?;
-
-            let s = send_mpst_a_to_b((), s)?;
-            let ((), s) = recv_mpst_a_from_b(s)?;
-
-            recurs_a(s, i - 1)
-        }
-    }
-}
-
-fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_cancel_mpst!(s, recv_mpst_b_from_a, {
-        Branching0fromAtoB::Done(s) => {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+    offer_cancel_mpst!(s, recv_mpst_c_from_d, {
+        Branching0fromDtoC::Done(s) => {
             close_mpst_multi(s)
         },
-        Branching0fromAtoB::More(s) => {
-            let ((), s) = recv_mpst_b_from_a(s)?;
-            let s = send_mpst_b_to_a((), s)?;
-            recurs_b(s)
+        Branching0fromDtoC::More(s) => {
+            let (_, s) = recv_mpst_c_from_d(s)?;
+            let s = send_check_c_to_d((), s)?;
+            let (_, s) = recv_mpst_c_from_b(s)?;
+            let s = send_check_c_to_b((), s)?;
+            endpoint_c(s)
         },
     })
 }
 
-pub fn main() {
-    let (thread_central, thread_a, thread_b) = fork_mpst(endpoint_central, endpoint_a, recurs_b);
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+    recurs_d(s, SIZE)
+}
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_central.join().is_ok());
+fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
+    match index {
+        0 => {
+            let s = choose_mpst_multi_cancel_to_all!(
+                s,
+                Branching0fromDtoB::Done,
+                Branching0fromDtoC::Done, =>
+                RoleB,
+                RoleC, =>
+                RoleA,
+                RoleD,
+                MeshedChannelsFour,
+                4
+            );
+
+            close_mpst_multi(s)
+        }
+        i => {
+            let s = choose_mpst_multi_cancel_to_all!(
+                s,
+                Branching0fromDtoB::More,
+                Branching0fromDtoC::More, =>
+                RoleB,
+                RoleC, =>
+                RoleA,
+                RoleD,
+                MeshedChannelsFour,
+                4
+            );
+
+            let s = send_check_d_to_b((), s)?;
+            let (_, s) = recv_mpst_d_from_b(s)?;
+            let s = send_check_d_to_c((), s)?;
+            let (_, s) = recv_mpst_d_from_c(s)?;
+
+            recurs_d(s, i - 1)
+        }
+    }
+}
+
+pub fn main() {
+    let (thread_central, thread_b, thread_c, thread_d) =
+        fork_mpst(enpoint_central, endpoint_b, endpoint_c, endpoint_d);
+
+    assert!(thread_central.join().is_err());
+    assert!(thread_b.join().is_err());
+    assert!(thread_c.join().is_err());
+    assert!(thread_d.join().is_err());
 }
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static SIZE: i64 = 15;
