@@ -15,4 +15,5 @@ trybuild = "1.0.41"
 [dependencies]
 proc-macro-hack = "0.5.19"
 # mpst-seq-proc = { git = "https://github.com/NicolasLagaillardie/mpst_seq_proc", branch = "main" }
-mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.2" }
+# mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.2" }
+mpst-seq-proc = "0.0.2"
