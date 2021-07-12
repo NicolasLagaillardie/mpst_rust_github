@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.0.4"
+version = "0.0.5"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
@@ -40,8 +40,8 @@ rand = "0.8.4"
 # dot = "0.1.4"
 # sesh = "0.1.1"
 # mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst_seq", branch = "main" }
-# mpst-seq = { path = "mpst_seq", version = "0.0.2" }
-mpst-seq = "0.0.2"
+# mpst-seq = { path = "mpst_seq", version = "0.0.3" }
+mpst-seq = "0.0.3"
 # anyhow = "1"
 hyper = { version = "0.14", features = ["full"] }
 hyper-tls = "0.5"
