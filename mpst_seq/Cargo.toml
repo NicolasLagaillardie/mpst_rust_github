@@ -7,7 +7,7 @@ edition = "2018"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq/"
 license = "MIT"
-exclude = [".travis.yml", ".gitignore", "mpst_seq_proc/"]
+exclude = ["mpst_seq_proc/"]
 autotests = false
 
 [workspace]
