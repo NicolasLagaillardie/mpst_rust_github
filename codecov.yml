@@ -2,7 +2,7 @@ codecov:
   require_ci_to_pass: yes
 
 ignore:
-  - "mpst-seq/"
+  - "mpst_seq/"
 
 coverage:
   precision: 2
