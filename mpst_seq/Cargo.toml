@@ -7,7 +7,10 @@ edition = "2018"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/mpst_seq"
 license = "MIT"
+exclude = [".travis.yml", ".gitignore", "mpst_seq/"]
 autotests = false
+
+[workspace]
 
 [dev-dependencies]
 trybuild = "1.0.41"
