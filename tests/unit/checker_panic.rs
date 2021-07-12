@@ -1,7 +1,7 @@
 use mpstthree::checking::checker;
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
 use std::any::type_name;
 use std::boxed::Box;
@@ -37,36 +37,36 @@ type RecursAtoC<N> = Recv<Branche0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branche0BtoC<N>, End>;
 
 enum Branche0AtoC<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoCClose, QueueAEnd, RoleA<RoleEnd>>),
-    Video(SessionMpst<AtoBVideo<N>, InitA<N>, QueueAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
+    Video(MeshedChannels<AtoBVideo<N>, InitA<N>, StackAVideo, RoleA<RoleEnd>>),
 }
 enum Branche0BtoC<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoC<N>, QueueBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 type Choose0fromCtoA<N> = Send<Branche0AtoC<N>, End>;
 type Choose0fromCtoB<N> = Send<Branche0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Queues
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
-type QueueAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
+/// Stacks
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
+type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
-type QueueBRecurs = RoleC<RoleEnd>;
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
+type StackBRecurs = RoleC<RoleEnd>;
 
-type QueueCRecurs = RoleA<RoleB<RoleEnd>>;
-type QueueCFull = RoleA<RoleA<QueueCRecurs>>;
+type StackCRecurs = RoleA<RoleB<RoleEnd>>;
+type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 /// Creating the MP sessions
 /// For C
-type EndpointCFull<N> = SessionMpst<InitC<N>, Choose0fromCtoB<N>, QueueCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
 fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
@@ -109,14 +109,14 @@ fn hashmap_c_branches_a_to_c() -> Vec<String> {
     let (role_end, _) = <_ as Role>::new();
     let (name_end, _) = <_ as Role>::new();
 
-    let s_video = SessionMpst {
+    let s_video = MeshedChannels {
         session1: channel_1_video,
         session2: channel_2_video,
         stack: role_video,
         name: name_video,
     };
 
-    let s_end = SessionMpst {
+    let s_end = MeshedChannels {
         session1: channel_1_end,
         session2: channel_2_end,
         stack: role_end,
@@ -143,14 +143,14 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
     let (role_end, _) = <_ as Role>::new();
     let (name_end, _) = <_ as Role>::new();
 
-    let s_video = SessionMpst {
+    let s_video = MeshedChannels {
         session1: channel_1_video,
         session2: channel_2_video,
         stack: role_video,
         name: name_video,
     };
 
-    let s_end = SessionMpst {
+    let s_end = MeshedChannels {
         session1: channel_1_end,
         session2: channel_2_end,
         stack: role_end,
@@ -168,7 +168,8 @@ fn hashmap_c_branches_b_to_c() -> Vec<String> {
 
 /////////////////////////////////////////
 
-type EndpointBRecursPanicStack<N> = SessionMpst<End, RecursBtoC<N>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+type EndpointBRecursPanicStack<N> =
+    MeshedChannels<End, RecursBtoC<N>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
 
 pub fn test_checker_panic_stack() {
     assert!(|| -> Result<(), Box<dyn Error>> {
@@ -181,9 +182,9 @@ pub fn test_checker_panic_stack() {
             hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
             hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
-            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBRecursPanicStack<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+            let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointBRecursPanicStack<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointCFull<i32>, _) = MeshedChannels::new();
 
             checker(s1, s2, s3, &hm, &HashMap::new())?;
         }
@@ -192,7 +193,7 @@ pub fn test_checker_panic_stack() {
     .is_ok());
 }
 
-type EndpointBRecursPanicName<N> = SessionMpst<End, RecursBtoC<N>, QueueBRecurs, RoleC<RoleEnd>>;
+type EndpointBRecursPanicName<N> = MeshedChannels<End, RecursBtoC<N>, StackBRecurs, RoleC<RoleEnd>>;
 
 pub fn test_checker_panic_name() {
     assert!(|| -> Result<(), Box<dyn Error>> {
@@ -205,9 +206,9 @@ pub fn test_checker_panic_name() {
             hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
             hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
 
-            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBRecursPanicName<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+            let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointBRecursPanicName<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointCFull<i32>, _) = MeshedChannels::new();
 
             checker(s1, s2, s3, &hm, &HashMap::new())?;
         }

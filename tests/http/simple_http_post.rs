@@ -20,12 +20,6 @@ async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync
     Ok(resp)
 }
 
-fn result() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    let _ = aux()?;
-
-    Ok(())
-}
-
 pub fn main() {
-    assert!(result().is_ok());
+    assert!(aux().is_ok());
 }

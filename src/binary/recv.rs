@@ -1,6 +1,6 @@
 use crate::binary::struct_trait::{Recv, Session};
-use hyper::{Body, Client, Request, Response};
-use hyper_tls::HttpsConnector;
+use hyper::client::ResponseFuture;
+use hyper::{Body, Response};
 use std::boxed::Box;
 use std::error::Error;
 use std::io::Read;
@@ -53,7 +53,7 @@ where
 pub fn recv_http<T, S>(
     s: Recv<T, S>,
     http: bool,
-    req: Request<Body>,
+    req: ResponseFuture,
 ) -> Result<(T, S, Response<Body>), Box<dyn Error>>
 where
     T: marker::Send,
@@ -63,11 +63,7 @@ where
     let resp = match http {
         true => {
             let rt = Runtime::new()?;
-            rt.block_on(async move {
-                let https = HttpsConnector::new();
-                let client = Client::builder().build::<_, Body>(https);
-                client.request(req).await
-            })?
+            rt.block_on(async move { req.await })?
         }
         false => Response::default(),
     };

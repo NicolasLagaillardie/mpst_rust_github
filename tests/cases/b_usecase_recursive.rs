@@ -2,18 +2,19 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
-use mpstthree::role::Role;
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::role::broadcast::RoleBroadcast;
+// use mpstthree::role::Role;
+use mpstthree::meshedchannels::MeshedChannels;
 
-use std::any::type_name;
+// use std::any::type_name;
 use std::boxed::Box;
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
+// use std::collections::hash_map::RandomState;
+// use std::collections::HashMap;
 use std::error::Error;
-use std::fmt;
+// use std::fmt;
 use std::marker;
 
-use mpstthree::checking::checker;
+// use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
 
@@ -60,44 +61,44 @@ type RecursBtoA<N> = Recv<Branches0BtoA<N>, End>;
 type RecursCtoA<N> = Recv<Branches0CtoA<N>, End>;
 
 enum Branches0BtoA<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>),
-    Video(SessionMpst<BtoAVideo<N>, BtoCVideo<N>, QueueBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>),
 }
 enum Branches0CtoA<N: marker::Send> {
-    End(SessionMpst<CtoAClose, CtoBClose, QueueCEnd, RoleC<RoleEnd>>),
-    Video(SessionMpst<RecursCtoA<N>, CtoBVideo<N>, QueueCVideo, RoleC<RoleEnd>>),
+    End(MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
+    Video(MeshedChannels<RecursCtoA<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
 }
 type Choose0fromAtoB<N> = Send<Branches0BtoA<N>, End>;
 type Choose0fromAtoC<N> = Send<Branches0CtoA<N>, End>;
 
 type InitA<N> = Send<N, Recv<N, Choose0fromAtoB<N>>>;
 
-/// Queues
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleC<RoleC<RoleA<RoleA<RoleEnd>>>>>;
-type QueueBRecurs = RoleA<RoleEnd>;
-type QueueBInit = RoleA<RoleA<RoleA<RoleEnd>>>;
+/// Stacks
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleC<RoleC<RoleA<RoleA<RoleEnd>>>>>;
+type StackBRecurs = RoleA<RoleEnd>;
+type StackBInit = RoleA<RoleA<RoleA<RoleEnd>>>;
 
-type QueueCEnd = RoleEnd;
-type QueueCVideo = RoleB<RoleB<RoleA<RoleEnd>>>;
-type QueueCRecurs = RoleA<RoleEnd>;
+type StackCEnd = RoleEnd;
+type StackCVideo = RoleB<RoleB<RoleA<RoleEnd>>>;
+type StackCRecurs = RoleA<RoleEnd>;
 
-type QueueARecurs = RoleB<RoleC<RoleEnd>>;
-type QueueAFull = RoleB<RoleB<QueueARecurs>>;
+type StackARecurs = RoleBroadcast;
+type StackAFull = RoleB<RoleB<StackARecurs>>;
 
 /// Creating the MP sessions
 
 /// For B
 type EndpointARecurs<N> =
-    SessionMpst<Choose0fromAtoB<N>, Choose0fromAtoC<N>, QueueARecurs, RoleA<RoleEnd>>;
-type EndpointAFull<N> = SessionMpst<InitA<N>, Choose0fromAtoC<N>, QueueAFull, RoleA<RoleEnd>>;
+    MeshedChannels<Choose0fromAtoB<N>, Choose0fromAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, Choose0fromAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For C
-type EndpointBRecurs<N> = SessionMpst<RecursBtoA<N>, End, QueueBRecurs, RoleB<RoleEnd>>;
-type EndpointBFull<N> = SessionMpst<InitB<N>, End, QueueBInit, RoleB<RoleEnd>>;
+type EndpointBRecurs<N> = MeshedChannels<RecursBtoA<N>, End, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBInit, RoleB<RoleEnd>>;
 
 /// For A
-type EndpointCRecurs<N> = SessionMpst<RecursCtoA<N>, End, QueueCRecurs, RoleC<RoleEnd>>;
+type EndpointCRecurs<N> = MeshedChannels<RecursCtoA<N>, End, StackCRecurs, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
@@ -169,64 +170,6 @@ fn client_recurs(
     }
 }
 
-///////////////////////////////////////// Need a refactoring
-///////////////////////////////////////// to be included in
-///////////////////////////////////////// macro
-
-fn type_of<T>(_: T) -> &'static str {
-    type_name::<T>()
-}
-
-impl<N: marker::Send> fmt::Display for Branches0BtoA<N> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Branches0BtoA::Video(s) => {
-                write!(f, "Video:{}", type_of(&s))
-            }
-            Branches0BtoA::End(s) => {
-                write!(f, "End:{}", type_of(&s))
-            }
-        }
-    }
-}
-
-fn hashmap_branche_0_b_to_a() -> Vec<String> {
-    let (s_video, _) = <_ as Session>::new();
-
-    let video = Branches0BtoA::Video::<i32>(s_video);
-
-    let (s_end, _) = <_ as Session>::new();
-
-    let end = Branches0BtoA::End::<i32>(s_end);
-
-    vec![(&video).to_string(), (&end).to_string()]
-}
-
-impl<N: marker::Send> fmt::Display for Branches0CtoA<N> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Branches0CtoA::Video(s) => {
-                write!(f, "Video:{}", type_of(&s))
-            }
-            Branches0CtoA::End(s) => {
-                write!(f, "End:{}", type_of(&s))
-            }
-        }
-    }
-}
-
-fn hashmap_branche_0_c_to_a() -> Vec<String> {
-    let (s_video, _) = <_ as Session>::new();
-
-    let video = Branches0CtoA::Video::<i32>(s_video);
-
-    let (s_end, _) = <_ as Session>::new();
-
-    let end = Branches0CtoA::End::<i32>(s_end);
-
-    vec![(&video).to_string(), (&end).to_string()]
-}
-
 /////////////////////////////////////////
 
 pub fn run_b_usecase_recursive() {
@@ -243,49 +186,107 @@ pub fn run_b_usecase_recursive() {
     .is_ok());
 }
 
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleB<RoleB<RoleB<RoleC<RoleEnd>>>>;
+// ///////////////////////////////////////// Need a refactoring
+// ///////////////////////////////////////// to be included in
+// ///////////////////////////////////////// macro
 
-pub fn run_b_usecase_recursive_checker() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            // Get the new sessionmpst of the passive roles
-            let state_branches_receivers = RandomState::new();
-            let mut branches_receivers: HashMap<String, &Vec<String>> =
-                HashMap::with_hasher(state_branches_receivers);
+// fn type_of<T>(_: T) -> &'static str {
+//     type_name::<T>()
+// }
 
-            let branche_0_c_to_a: Vec<String> = hashmap_branche_0_c_to_a();
-            let branche_0_b_to_a: Vec<String> = hashmap_branche_0_b_to_a();
+// impl<N: marker::Send> fmt::Display for Branches0BtoA<N> {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//             Branches0BtoA::Video(s) => {
+//                 write!(f, "Video:{}", type_of(&s))
+//             }
+//             Branches0BtoA::End(s) => {
+//                 write!(f, "End:{}", type_of(&s))
+//             }
+//         }
+//     }
+// }
 
-            branches_receivers.insert(String::from("Branches0CtoA<i32>"), &branche_0_c_to_a);
-            branches_receivers.insert(String::from("Branches0BtoA<i32>"), &branche_0_b_to_a);
+// fn hashmap_branche_0_b_to_a() -> Vec<String> {
+//     let (s_video, _) = <_ as Session>::new();
 
-            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointCRecurs<i32>, _) = SessionMpst::new();
+//     let video = Branches0BtoA::Video::<i32>(s_video);
 
-            // Get the new stack of the active role
-            let state_branches_sender = RandomState::new();
-            let mut branches_sender: HashMap<String, &Vec<String>> =
-                HashMap::with_hasher(state_branches_sender);
+//     let (s_end, _) = <_ as Session>::new();
 
-            let (stack_video, _): (QueueAVideo, _) = Role::new();
-            let (stack_end, _): (QueueAEnd, _) = Role::new();
+//     let end = Branches0BtoA::End::<i32>(s_end);
 
-            let mut stacks: Vec<String> = Vec::new();
-            stacks.push(type_of(&stack_video).to_string());
-            stacks.push(type_of(&stack_end).to_string());
+//     vec![(&video).to_string(), (&end).to_string()]
+// }
 
-            branches_sender.insert(String::from("Branches0CtoA<i32>"), &stacks);
-            branches_sender.insert(String::from("Branches0BtoA<i32>"), &stacks);
+// impl<N: marker::Send> fmt::Display for Branches0CtoA<N> {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//             Branches0CtoA::Video(s) => {
+//                 write!(f, "Video:{}", type_of(&s))
+//             }
+//             Branches0CtoA::End(s) => {
+//                 write!(f, "End:{}", type_of(&s))
+//             }
+//         }
+//     }
+// }
 
-            let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
+// fn hashmap_branche_0_c_to_a() -> Vec<String> {
+//     let (s_video, _) = <_ as Session>::new();
 
-            assert_eq!(a, "A: A!B.A?B.µX( A!B.A?B.X + 0 )");
-            assert_eq!(b, "B: B?A.B!A.µX( B?A.B!C.B?C.B!A.X & 0 )");
-            assert_eq!(c, "C: µX( C?B.C!B.X & 0 )");
-        }
-        Ok(())
-    }()
-    .is_ok());
-}
+//     let video = Branches0CtoA::Video::<i32>(s_video);
+
+//     let (s_end, _) = <_ as Session>::new();
+
+//     let end = Branches0CtoA::End::<i32>(s_end);
+
+//     vec![(&video).to_string(), (&end).to_string()]
+// }
+
+// type StackAEnd = RoleEnd;
+// type StackAVideo = RoleB<RoleB<RoleB<RoleC<RoleEnd>>>>;
+
+// pub fn run_b_usecase_recursive_checker() {
+//     assert!(|| -> Result<(), Box<dyn Error>> {
+//         {
+//             // Get the new meshedchannels of the passive roles
+//             let state_branches_receivers = RandomState::new();
+//             let mut branches_receivers: HashMap<String, &Vec<String>> =
+//                 HashMap::with_hasher(state_branches_receivers);
+
+//             let branche_0_c_to_a: Vec<String> = hashmap_branche_0_c_to_a();
+//             let branche_0_b_to_a: Vec<String> = hashmap_branche_0_b_to_a();
+
+//             branches_receivers.insert(String::from("Branches0CtoA<i32>"), &branche_0_c_to_a);
+//             branches_receivers.insert(String::from("Branches0BtoA<i32>"), &branche_0_b_to_a);
+
+//             let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
+//             let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();
+//             let (s3, _): (EndpointCRecurs<i32>, _) = MeshedChannels::new();
+
+//             // Get the new stack of the active role
+//             let state_branches_sender = RandomState::new();
+//             let mut branches_sender: HashMap<String, &Vec<String>> =
+//                 HashMap::with_hasher(state_branches_sender);
+
+//             let (stack_video, _): (StackAVideo, _) = Role::new();
+//             let (stack_end, _): (StackAEnd, _) = Role::new();
+
+//             let mut stacks: Vec<String> = Vec::new();
+//             stacks.push(type_of(&stack_video).to_string());
+//             stacks.push(type_of(&stack_end).to_string());
+
+//             branches_sender.insert(String::from("Branches0CtoA<i32>"), &stacks);
+//             branches_sender.insert(String::from("Branches0BtoA<i32>"), &stacks);
+
+//             let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
+
+//             assert_eq!(a, "A: A!B.A?B.µX( A!B.A?B.X + 0 )");
+//             assert_eq!(b, "B: B?A.B!A.µX( B?A.B!C.B?C.B!A.X & 0 )");
+//             assert_eq!(c, "C: µX( C?B.C!B.X & 0 )");
+//         }
+//         Ok(())
+//     }()
+//     .is_ok());
+// }

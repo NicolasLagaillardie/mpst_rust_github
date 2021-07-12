@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # counts instructions for a standard workload
 
 # Exit if error

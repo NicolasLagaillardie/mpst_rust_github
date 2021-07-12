@@ -2,46 +2,47 @@
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_broadcast_role, create_multiple_normal_role,
-    create_recv_mpst_session, create_send_mpst_session, create_sessionmpst, fork_mpst_multi,
-    offer_mpst,
+    choose_mpst_multi_to_all, close_mpst, create_broadcast_role, create_meshedchannels,
+    create_multiple_normal_role, create_recv_mpst_session, create_send_mpst_session,
+    fork_mpst_multi, offer_mpst,
 };
 use std::error::Error;
 use std::marker;
 
-// Create new SessionMpst for three participants
-create_sessionmpst!(SessionMpst, 3);
+// Create new MeshedChannels for three participants
+create_meshedchannels!(MeshedChannels, 3);
 
 // Create new roles
 // normal
 create_multiple_normal_role!(
-    RoleA, next_a, RoleADual, next_a_dual |
-    RoleB, next_b, RoleBDual, next_b_dual |
-    RoleD, next_d, RoleDDual, next_d_dual |
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleD, RoleDDual |
 );
 // broadcast
-create_broadcast_role!(RoleAlltoD, next_all_to_d, RoleDtoAll, next_d_to_all);
+create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, SessionMpst, 3, 2);
-create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, SessionMpst, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, SessionMpst, 3, 1);
+create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, MeshedChannels, 3, 1);
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, SessionMpst, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, SessionMpst, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, SessionMpst, 3, 1);
+create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, MeshedChannels, 3, 1);
 
-close_mpst!(close_mpst_multi, SessionMpst, 3);
+close_mpst!(close_mpst_multi, MeshedChannels, 3);
 
-fork_mpst_multi!(fork_mpst, SessionMpst, 3);
+fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -69,43 +70,44 @@ type RecursAtoD<N> = Recv<Branches0AtoD<N>, End>;
 type RecursBtoD<N> = Recv<Branches0BtoD<N>, End>;
 
 enum Branches0AtoD<N: marker::Send> {
-    End(SessionMpst<AtoBClose, AtoDClose, QueueAEnd, NameA>),
-    Video(SessionMpst<AtoBVideo<N>, AtoDVideo<N>, QueueAVideo, NameA>),
+    End(MeshedChannels<AtoBClose, AtoDClose, StackAEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo<N>, AtoDVideo<N>, StackAVideo, NameA>),
 }
 enum Branches0BtoD<N: marker::Send> {
-    End(SessionMpst<BtoAClose, BtoDClose, QueueBEnd, NameB>),
-    Video(SessionMpst<BtoAVideo<N>, RecursBtoD<N>, QueueBVideo, NameB>),
+    End(MeshedChannels<BtoAClose, BtoDClose, StackBEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo<N>, RecursBtoD<N>, StackBVideo, NameB>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoD<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoD<N>, End>;
 
 type InitD<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Queues
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleD<RoleB<RoleB<RoleD<RoleD<RoleEnd>>>>>;
-type QueueARecurs = RoleD<RoleEnd>;
-type QueueAInit = RoleD<RoleD<RoleD<RoleEnd>>>;
+/// Stacks
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleD<RoleB<RoleB<RoleD<RoleD<RoleEnd>>>>>;
+type StackARecurs = RoleD<RoleEnd>;
+type StackAInit = RoleD<RoleD<RoleD<RoleEnd>>>;
 
-type QueueBEnd = RoleEnd;
-type QueueBVideo = RoleA<RoleA<RoleD<RoleEnd>>>;
-type QueueBRecurs = RoleD<RoleEnd>;
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleA<RoleD<RoleEnd>>>;
+type StackBRecurs = RoleD<RoleEnd>;
 
-type QueueDRecurs = RoleA<RoleB<RoleEnd>>;
-type QueueDFull = RoleA<RoleA<QueueDRecurs>>;
+type StackDRecurs = RoleBroadcast;
+type StackDFull = RoleA<RoleA<StackDRecurs>>;
 
 /// Creating the MP sessions
 /// For C
 
-type EndpointDRecurs<N> = SessionMpst<Choose0fromCtoA<N>, Choose0fromCtoB<N>, QueueDRecurs, NameD>;
-type EndpointDFull<N> = SessionMpst<InitD<N>, Choose0fromCtoB<N>, QueueDFull, NameD>;
+type EndpointDRecurs<N> =
+    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackDRecurs, NameD>;
+type EndpointDFull<N> = MeshedChannels<InitD<N>, Choose0fromCtoB<N>, StackDFull, NameD>;
 
 /// For A
-type EndpointARecurs<N> = SessionMpst<End, RecursAtoD<N>, QueueARecurs, NameA>;
-type EndpointAFull<N> = SessionMpst<End, InitA<N>, QueueAInit, NameA>;
+type EndpointARecurs<N> = MeshedChannels<End, RecursAtoD<N>, StackARecurs, NameA>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 
 /// For B
-type EndpointBRecurs<N> = SessionMpst<End, RecursBtoD<N>, QueueBRecurs, NameB>;
+type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
 /// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
@@ -162,15 +164,12 @@ fn client_recurs(
         Option::Some(_) => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_d_to_a,
-                send_mpst_d_to_b, =>
                 Branches0AtoD::Video,
                 Branches0BtoD::Video, =>
                 RoleA,
                 RoleB, =>
                 RoleD,
-                SessionMpst,
-                3,
+                MeshedChannels,
                 3
             );
 
@@ -182,15 +181,12 @@ fn client_recurs(
         Option::None => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                send_mpst_d_to_a,
-                send_mpst_d_to_b, =>
                 Branches0AtoD::End,
                 Branches0BtoD::End, =>
                 RoleA,
                 RoleB, =>
                 RoleD,
-                SessionMpst,
-                3,
+                MeshedChannels,
                 3
             );
 

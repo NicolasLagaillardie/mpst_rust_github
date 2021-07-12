@@ -8,19 +8,21 @@ mod aux_dot;
 use self::aux_checker::{checker_aux, parse_type_of};
 
 use crate::binary::struct_trait::Session;
+use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
-use crate::sessionmpst::SessionMpst;
 
 use std::collections::HashMap;
 use std::error::Error;
 
 /// Displays the local endpoints of each roles.
-/// It is required that the `SessionMpst` are the root ones,
+/// It is required that the `MeshedChannels` are the root ones,
 /// and not a partial part included in a bigger one. It is
 /// useful for checking whether the implemented local
 /// endpoints are the expected ones.
 ///
 /// Returns the 3 strings if everything went right.
+/// TODO: Adapt checker for RoleBroadcast
+/// Useful???
 pub fn checker<
     S0,
     S1,
@@ -34,9 +36,9 @@ pub fn checker<
     BH1: ::std::hash::BuildHasher,
     BH2: ::std::hash::BuildHasher,
 >(
-    s1: SessionMpst<S0, <S2 as Session>::Dual, R1, N1>,
-    s2: SessionMpst<<S0 as Session>::Dual, S1, R2, N2>,
-    s3: SessionMpst<S2, <S1 as Session>::Dual, R3, N3>,
+    s1: MeshedChannels<S0, <S2 as Session>::Dual, R1, N1>,
+    s2: MeshedChannels<<S0 as Session>::Dual, S1, R2, N2>,
+    s3: MeshedChannels<S2, <S1 as Session>::Dual, R3, N3>,
     branches_receivers: &HashMap<String, &Vec<String>, BH1>,
     branches_sender: &HashMap<String, &Vec<String>, BH2>,
 ) -> Result<(String, String, String), Box<dyn Error>>
@@ -100,8 +102,8 @@ where
 #[macro_export]
 #[doc(hidden)]
 macro_rules! checker_hashmaps {
-    // ($($branch:ty, $func:ident, $branch_type:expr, { $($pat:path, $branch_name:expr, $label:path, )* }, )*) => {
-        ({ $($branch:path, $func:ident, { $($pat:path, )* }, )* }) => {
+    // ($( $branch: ty, $func: ident, $branch_type: expr, { $( $pat: path, $branch_name: expr, $label: path, )* }, )*) => {
+        ({ $( $branch: path, $func: ident, { $( $pat: path, )* }, )* }) => {
 
         let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 

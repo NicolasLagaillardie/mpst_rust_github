@@ -1,4 +1,5 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
@@ -6,40 +7,42 @@ use mpstthree::{
     create_send_mpst_http_bundle, offer_http_mpst,
 };
 
-use hyper::{Body, Method, Request, StatusCode};
+use hyper::Request;
 use rand::{thread_rng, Rng};
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
 use std::error::Error;
-use std::fs;
 use std::marker;
 
-// global protocol Proto(role A, role C, role S)
-// {
-//     choice at S
+// global protocol OAuth(role Auth, role Client, role Server) {
+//     Authorization(Approval) from Client to Auth; // Request Authorization Approval
+//     choice at A
 //     {
-//         login(Int) from S to C;
-//         password(Int) from C to A;
-//         choice at A
-//         {
-//              Auth(Int) from A to S;
-//              Auth(Int) from S to C;
+//         Access(Token) from Auth to Client;
+//         rec Loop {
+//             choice at Client { // Client makes a choice
+//                 RequestPicture(Token) from Client to Server; // Client sends a request for a picture, giving its access token
+//                 GetAuth(Token) from Server to Auth; // Server checks the Token with Auth
+//                 SendAuth(Token) from Auth to Server; // Auth answers the check
+//                 choice at S
+//                 {
+//                     SendPicture(Answer) from Server to Client; // Server sends the picture file to the client
+//                     continue Loop; // A Recursive call
+//                 } or {
+//                     SendRefusal(Answer) from Server to Client; // Server sends refusal to the client
+//                     continue Loop; // A Recursive call
+//                 }
+//             } or {
+//                 Close() from Client to Server; // Close the session between Client and Server
+//                 Close() from Server to Auth; // Close the session between Server and Auth
+//             }
 //         }
-//         or
-//         {
-//              Again(Int) from A to S;
-//              Again(Int) from S to C;
-//         }
-//     }
-//     or
-//     {
-//         cancel(Int) from S to C;
-//         quit(Int) from C to A;
+//     } or {
+//         Close() from Auth to Client; // Close the session between Client and Auth
+//         Close() from Client to Server; // Close the session between Client and Server
 //     }
 // }
 
-// Create the new SessionMpst for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, SessionMpstThree, 3);
+// Create the new MeshedChannels for three participants and the close and fork functions
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
 
 // Create new roles
 // normal
@@ -48,18 +51,21 @@ create_multiple_normal_role_short!(A, C, S);
 // Create new send functions
 // A
 create_send_mpst_http_bundle!(
+    send_http_a_to_c, RoleC, 1 |
     send_http_a_to_s, RoleS, 2 | =>
-    RoleA, SessionMpstThree, 3
+    RoleA, MeshedChannelsThree, 3
 );
 // C
 create_send_mpst_http_bundle!(
-    send_http_c_to_a, RoleA, 1 | =>
-    RoleC, SessionMpstThree, 3
+    send_http_c_to_a, RoleA, 1 |
+    send_http_c_to_s, RoleS, 2 | =>
+    RoleC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_http_bundle!(
+    send_http_s_to_a, RoleA, 1 |
     send_http_s_to_c, RoleC, 2 | =>
-    RoleS, SessionMpstThree, 3
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
@@ -67,18 +73,19 @@ create_send_mpst_http_bundle!(
 create_recv_http_session_bundle!(
     recv_http_a_to_c, RoleC, 1 |
     recv_http_a_to_s, RoleS, 2 | =>
-    RoleA, SessionMpstThree, 3
+    RoleA, MeshedChannelsThree, 3
 );
 // C
 create_recv_http_session_bundle!(
     recv_http_c_to_a, RoleA, 1 |
     recv_http_c_to_s, RoleS, 2 | =>
-    RoleC, SessionMpstThree, 3
+    RoleC, MeshedChannelsThree, 3
 );
 // S
 create_recv_http_session_bundle!(
-    recv_http_s_to_a, RoleA, 1 | =>
-    RoleS, SessionMpstThree, 3
+    recv_http_s_to_a, RoleA, 1 |
+    recv_http_s_to_c, RoleC, 2 | =>
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Names
@@ -88,260 +95,315 @@ type NameS = RoleS<RoleEnd>;
 
 // Types
 // S
-type Choose0fromStoA<N> = Send<Branching0fromStoA<N>, End>;
-type Choose0fromStoC<N> = Send<Branching0fromStoC<N>, End>;
+type Choose2fromStoA<N> = Send<Branching2fromStoA<N>, End>;
+type Choose2fromStoC<N> = Send<Branching2fromStoC<N>, End>;
+
+type Choice0fromAtoS<N> = <Choose0fromAtoS<N> as Session>::Dual;
+type Choice1fromCtoS<N> = <Choose1fromCtoS<N> as Session>::Dual;
+// C
+type Choose1fromCtoA<N> = Send<Branching1fromCtoA<N>, End>;
+type Choose1fromCtoS<N> = Send<Branching1fromCtoS<N>, End>;
+
+type Choice0fromAtoC<N> = <Choose0fromAtoC<N> as Session>::Dual;
+type Choice2fromStoC<N> = <Choose2fromStoC<N> as Session>::Dual;
 // A
-type Choose1fromAtoC<N> = Send<Branching1fromAtoC<N>, End>;
-type Choose1fromAtoS<N> = Send<Branching1fromAtoS<N>, End>;
+type Choose0fromAtoC<N> = Send<Branching0fromAtoC<N>, End>;
+type Choose0fromAtoS<N> = Send<Branching0fromAtoS<N>, End>;
+
+type Choice1fromCtoA<N> = <Choose1fromCtoA<N> as Session>::Dual;
+type Choice2fromStoA<N> = <Choose2fromStoA<N> as Session>::Dual;
 
 // A
-enum Branching0fromStoA<N: marker::Send> {
-    Login(
-        SessionMpstThree<
-            Recv<N, Choose1fromAtoC<N>>,
-            Choose1fromAtoS<N>,
-            RoleC<RoleC<RoleS<RoleEnd>>>,
+
+type EndpointAAuth<N> =
+    MeshedChannelsThree<Send<N, Choice1fromCtoA<N>>, End, RoleC<RoleC<RoleEnd>>, NameA>;
+
+type EndpointAAuthLoop<N> = MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
+
+type EndpointADone<N> = MeshedChannelsThree<Send<N, End>, End, RoleC<RoleEnd>, NameA>;
+
+enum Branching1fromCtoA<N: marker::Send> {
+    Continue(
+        MeshedChannelsThree<
+            End,
+            Recv<N, Send<N, Choice2fromStoA<N>>>,
+            RoleS<RoleS<RoleS<RoleEnd>>>,
             NameA,
         >,
     ),
-    Done(SessionMpstThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
+    Close(MeshedChannelsThree<End, Recv<N, End>, RoleS<RoleEnd>, NameA>),
 }
-type EndpointAuthA<N> = SessionMpstThree<End, Send<N, End>, RoleS<RoleEnd>, NameA>;
-type EndpointAgainA<N> = SessionMpstThree<
-    Recv<N, Choose1fromAtoC<N>>,
-    Send<N, Choose1fromAtoS<N>>,
-    RoleS<RoleC<RoleC<RoleS<RoleEnd>>>>,
-    NameA,
->;
+
+type EndpointAContinue<N> = MeshedChannelsThree<End, Choice2fromStoA<N>, RoleS<RoleEnd>, NameA>;
+
+enum Branching2fromStoA<N: marker::Send> {
+    Picture(MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
+    Refusal(MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
+}
+
 // C
-enum Branching0fromStoC<N: marker::Send> {
-    Login(
-        SessionMpstThree<
-            Send<N, Choice1fromCtoA<N>>,
-            Recv<N, End>,
-            RoleS<RoleA<RoleA<RoleEnd>>>,
+enum Branching0fromAtoC<N: marker::Send> {
+    Auth(
+        MeshedChannelsThree<
+            Recv<N, Choose1fromCtoA<N>>,
+            Choose1fromCtoS<N>,
+            RoleA<RoleBroadcast>,
             NameC,
         >,
     ),
-    Done(SessionMpstThree<Send<N, End>, Recv<N, End>, RoleS<RoleA<RoleEnd>>, NameC>),
+    Done(MeshedChannelsThree<Recv<N, End>, Send<N, End>, RoleA<RoleS<RoleEnd>>, NameC>),
 }
-enum Branching1fromAtoC<N: marker::Send> {
-    Auth(SessionMpstThree<End, Recv<N, End>, RoleS<RoleEnd>, NameC>),
-    Again(
-        SessionMpstThree<
-            Send<N, Choice1fromCtoA<N>>,
-            Recv<N, End>,
-            RoleS<RoleA<RoleA<RoleEnd>>>,
+
+type EndpointCContinue<N> =
+    MeshedChannelsThree<End, Send<N, Choice2fromStoC<N>>, RoleS<RoleS<RoleEnd>>, NameC>;
+
+type EndpointCContinueLoop<N> =
+    MeshedChannelsThree<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
+
+type EndpointCDone<N> = MeshedChannelsThree<End, Send<N, End>, RoleS<RoleEnd>, NameC>;
+
+enum Branching2fromStoC<N: marker::Send> {
+    Picture(
+        MeshedChannelsThree<
+            Choose1fromCtoA<N>,
+            Recv<N, Choose1fromCtoS<N>>,
+            RoleS<RoleBroadcast>,
+            NameC,
+        >,
+    ),
+    Refusal(
+        MeshedChannelsThree<
+            Choose1fromCtoA<N>,
+            Recv<N, Choose1fromCtoS<N>>,
+            RoleS<RoleBroadcast>,
             NameC,
         >,
     ),
 }
-type Choice1fromCtoA<N> = Recv<Branching1fromAtoC<N>, End>;
+
+type EndpointCPicture<N> = MeshedChannelsThree<End, Choice2fromStoC<N>, RoleS<RoleEnd>, NameC>;
+
 // S
-enum Branching1fromAtoS<N: marker::Send> {
-    Auth(SessionMpstThree<Recv<N, End>, Send<N, End>, RoleA<RoleC<RoleEnd>>, NameS>),
-    Again(
-        SessionMpstThree<
-            Recv<N, Choice1fromStoA<N>>,
-            Send<N, End>,
-            RoleA<RoleC<RoleA<RoleEnd>>>,
+enum Branching0fromAtoS<N: marker::Send> {
+    Auth(MeshedChannelsThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>),
+    Done(MeshedChannelsThree<End, Recv<N, End>, RoleC<RoleEnd>, NameS>),
+}
+
+type EndpointSContinue<N> = MeshedChannelsThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;
+
+enum Branching1fromCtoS<N: marker::Send> {
+    Continue(
+        MeshedChannelsThree<
+            Send<N, Recv<N, Choose2fromStoA<N>>>,
+            Recv<N, Choose2fromStoC<N>>,
+            RoleC<RoleA<RoleA<RoleBroadcast>>>,
             NameS,
         >,
     ),
+    Close(MeshedChannelsThree<Send<N, End>, Recv<N, End>, RoleC<RoleA<RoleEnd>>, NameS>),
 }
-type Choice1fromStoA<N> = Recv<Branching1fromAtoS<N>, End>;
-type EndpointDoneS<N> = SessionMpstThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>;
-type EndpointLoginS<N> =
-    SessionMpstThree<Recv<Branching1fromAtoS<N>, End>, Send<N, End>, RoleC<RoleA<RoleEnd>>, NameS>;
+
+type EndpointSContinueLoop<N> =
+    MeshedChannelsThree<Choose2fromStoA<N>, Choose2fromStoC<N>, RoleBroadcast, NameS>;
+
+type EndpointSPicture<N> =
+    MeshedChannelsThree<End, Send<N, Choice1fromCtoS<N>>, RoleC<RoleC<RoleEnd>>, NameS>;
+
+type EndpointSRefusal<N> =
+    MeshedChannelsThree<End, Send<N, Choice1fromCtoS<N>>, RoleC<RoleC<RoleEnd>>, NameS>;
 
 // Creating the MP sessions
 // A
-type ChoiceA<N> = SessionMpstThree<
-    Recv<N, Choose1fromAtoC<N>>,
-    Choose1fromAtoS<N>,
-    RoleC<RoleC<RoleS<RoleEnd>>>,
+type EndpointA<N> = MeshedChannelsThree<
+    Recv<N, Choose0fromAtoC<N>>,
+    Choose0fromAtoS<N>,
+    RoleC<RoleBroadcast>,
     NameA,
 >;
-type EndpointA<N> = SessionMpstThree<End, Recv<Branching0fromStoA<N>, End>, RoleS<RoleEnd>, NameA>;
 // C
-type ChoiceC<N> = SessionMpstThree<Send<N, Choice1fromCtoA<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
-type EndpointC<N> = SessionMpstThree<End, Recv<Branching0fromStoC<N>, End>, RoleS<RoleEnd>, NameC>;
+type EndpointC<N> =
+    MeshedChannelsThree<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 // S
-type ChoiceS<N> = SessionMpstThree<Choice1fromStoA<N>, End, RoleA<RoleEnd>, NameS>;
-type EndpointS<N> =
-    SessionMpstThree<Choose0fromStoA<N>, Choose0fromStoC<N>, RoleA<RoleC<RoleEnd>>, NameS>;
-
-create_fn_choose_mpst_multi_to_all_bundle!(
-    done_from_s_to_all, login_from_s_to_all, =>
-    Done, Login, =>
-    EndpointDoneS<i32>, EndpointLoginS<i32>, =>
-    Branching0fromStoA::<i32>, Branching0fromStoC::<i32>, =>
-    RoleA, RoleC, =>
-    RoleS, SessionMpstThree, 3, 3
-);
+type EndpointS<N> = MeshedChannelsThree<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     auth_from_a_to_all, again_from_a_to_all, =>
-    Auth, Again, =>
-    EndpointAuthA<i32>, EndpointAgainA<i32>, =>
-    Branching1fromAtoC::<i32>, Branching1fromAtoS::<i32>, =>
+    Auth, Done, =>
+    EndpointAAuth<i32>, EndpointADone<i32>, =>
+    Branching0fromAtoC::<i32>, Branching0fromAtoS::<i32>, =>
     RoleC, RoleS, =>
-    RoleA, SessionMpstThree, 3, 1
+    RoleA, MeshedChannelsThree, 1
+);
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    continue_from_c_to_all, close_from_c_to_all, =>
+    Continue, Close, =>
+    EndpointCContinue<i32>, EndpointCDone<i32>, =>
+    Branching1fromCtoA::<i32>, Branching1fromCtoS::<i32>, =>
+    RoleA, RoleS, =>
+    RoleC, MeshedChannelsThree, 2
+);
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    picture_from_s_to_all, refusal_from_s_to_all, =>
+    Picture, Refusal, =>
+    EndpointSPicture<i32>, EndpointSRefusal<i32>, =>
+    Branching2fromStoA::<i32>, Branching2fromStoC::<i32>, =>
+    RoleA, RoleC, =>
+    RoleS, MeshedChannelsThree, 3
 );
 
 // Functions
-fn simple_three_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    offer_http_mpst!(s, recv_http_a_to_s, {
-        Branching0fromStoA::Done(s) => {
-            let (_, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
-
-            close_mpst_multi(s)
-        },
-        Branching0fromStoA::Login(s) => {
-            choice_a(s)
-        },
-    })
-}
-
-fn choice_a(s: ChoiceA<i32>) -> Result<(), Box<dyn Error>> {
-    let (pwd, s, _resp) = recv_http_a_to_c(s, false, Request::default())?;
+fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+    let (pwd, s, _resp) = recv_http_a_to_c(s, false, Vec::new())?;
     let expected = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
         let s = auth_from_a_to_all(s);
 
-        let (s, _req) = send_http_a_to_s(0, s, false, Method::GET, "", vec![("", "")], "");
+        let (s, _req) = send_http_a_to_c(0, s, false, Request::default())?;
 
-        close_mpst_multi(s)
+        auth_a(s)
     } else {
         let s = again_from_a_to_all(s);
 
-        let (s, _req) = send_http_a_to_s(1, s, false, Method::GET, "", vec![("", "")], "");
+        let (s, _req) = send_http_a_to_c(1, s, false, Request::default())?;
 
-        choice_a(s)
+        close_mpst_multi(s)
     }
 }
 
-fn simple_three_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    offer_http_mpst!(s, recv_http_c_to_s, {
-        Branching0fromStoC::<i32>::Done(s) => {
-            let (quit, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
-            let (s, _req) = send_http_c_to_a(quit, s, false, Method::GET, "", vec![("", "")], "");
-            close_mpst_multi(s)
+fn auth_a(s: EndpointAAuthLoop<i32>) -> Result<(), Box<dyn Error>> {
+    offer_http_mpst!(s, recv_http_a_to_c, {
+        Branching1fromCtoA::Continue(s) => {
+            let (_, s, _resp) = recv_http_a_to_s(s, false, Vec::new())?;
+            let (s, _req) = send_http_a_to_s(0, s, false, Request::default())?;
+
+            continue_a(s)
         },
-        Branching0fromStoC::<i32>::Login(s) => {
+        Branching1fromCtoA::Close(s) => {
+            let (_, s, _resp) = recv_http_a_to_s(s, false, Vec::new())?;
 
-            /////////////
-            // Get the tokens
+            close_mpst_multi(s)
 
-            match fs::read_to_string("imgur.env") {
-                Ok(contents) => {
-                    let lines: Vec<&str> = contents.split("\n").collect();
-                    let hasher = RandomState::new();
-                    let mut ids: HashMap<&str, &str> = HashMap::with_hasher(hasher);
-                    for line in lines {
-                        let temp: Vec<&str> = line.split("=").collect();
-                        ids.insert(temp[0], temp[1]);
-                    }
-
-                    let req = Request::builder()
-                        .method(Method::GET)
-                        .uri(ids["CREDITS_URL"])
-                        .header("content-type", ids["CONTENT_TYPE"])
-                        .header(
-                            "Authorization",
-                            format!("{} {}", ids["TOKEN_TYPE"], ids["ACCESS_TOKEN"]),
-                        )
-                        .header("User-Agent", ids["USER_AGENT"])
-                        .header("Accept", ids["ACCEPT"])
-                        .header("Connection", ids["CONNECTION"])
-                        .body(Body::default())?;
-
-                    /////////////
-                    let (_, s, resp) = recv_http_c_to_s(s, true, req)?;
-
-                    assert_eq!(resp.status(), StatusCode::from_u16(200).unwrap());
-
-                    choice_c(s)
-                }
-                Err(_) => {
-                    let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
-
-                    choice_c(s)
-                }
-            }
         },
     })
 }
 
-fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    let (s, _req) = send_http_c_to_a(
-        thread_rng().gen_range(1..=3),
-        s,
-        false,
-        Method::GET,
-        "",
-        vec![("", "")],
-        "",
-    );
+fn continue_a(s: EndpointAContinue<i32>) -> Result<(), Box<dyn Error>> {
+    offer_http_mpst!(s, recv_http_a_to_s, {
+        Branching2fromStoA::Picture(s) => {
+            auth_a(s)
+        },
+        Branching2fromStoA::Refusal(s) => {
+            auth_a(s)
+        },
+    })
+}
+
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    let (s, _req) = send_http_c_to_a(0, s, false, Request::default())?;
 
     offer_http_mpst!(s, recv_http_c_to_a, {
-        Branching1fromAtoC::<i32>::Auth(s) => {
-            let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
-
+        Branching0fromAtoC::<i32>::Done(s) => {
+            let (_quit, s, _resp) = recv_http_c_to_a(s, false, Vec::new())?;
+            let (s, _req) = send_http_c_to_s(0, s, false, Request::default())?;
             close_mpst_multi(s)
         },
-        Branching1fromAtoC::<i32>::Again(s) => {
-            let (_, s, _resp) = recv_http_c_to_s(s, false, Request::default())?;
+        Branching0fromAtoC::<i32>::Auth(s) => {
+            let (_quit, s, _resp) = recv_http_c_to_a(s, false, Vec::new())?;
 
-            choice_c(s)
+            continue_c(s)
         },
     })
 }
 
-fn simple_three_endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn continue_c(s: EndpointCContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
-        let s = done_from_s_to_all(s);
+        let s = close_from_c_to_all(s);
 
-        let (s, _req) = send_http_s_to_c(0, s, false, Method::GET, "", vec![("", "")], "");
+        let (s, _req) = send_http_c_to_s(0, s, false, Request::default())?;
 
         close_mpst_multi(s)
     } else {
-        let s = login_from_s_to_all(s);
+        let s = continue_from_c_to_all(s);
 
-        let (s, _req) = send_http_s_to_c(1, s, false, Method::GET, "", vec![("", "")], "");
+        let (s, _req) = send_http_c_to_s(0, s, false, Request::default())?;
 
-        choice_s(s)
+        picture_c(s)
     }
 }
 
-fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
+fn picture_c(s: EndpointCPicture<i32>) -> Result<(), Box<dyn Error>> {
+    offer_http_mpst!(s, recv_http_c_to_s, {
+        Branching2fromStoC::<i32>::Picture(s) => {
+            let (_quit, s, _resp) = recv_http_c_to_s(s, false, Vec::new())?;
+
+            continue_c(s)
+        },
+        Branching2fromStoC::<i32>::Refusal(s) => {
+            let (_quit, s, _resp) = recv_http_c_to_s(s, false, Vec::new())?;
+
+            continue_c(s)
+        },
+    })
+}
+
+fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     offer_http_mpst!(s, recv_http_s_to_a, {
-        Branching1fromAtoS::<i32>::Auth(s) => {
-            let (success, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
-            let (s, _req) = send_http_s_to_c(success, s, false, Method::GET, "", vec![("", "")], "");
+        Branching0fromAtoS::<i32>::Done(s) => {
+            let (_quit, s, _resp) = recv_http_s_to_c(s, false, Vec::new())?;
 
             close_mpst_multi(s)
         },
-        Branching1fromAtoS::<i32>::Again(s) => {
-            let (fail, s, _resp) = recv_http_s_to_a(s, false, Request::default())?;
-            let (s, _req) = send_http_s_to_c(fail, s, false, Method::GET, "", vec![("", "")], "");
-
-            choice_s(s)
+        Branching0fromAtoS::<i32>::Auth(s) => {
+            continue_s(s)
         },
     })
+}
+
+fn continue_s(s: EndpointSContinue<i32>) -> Result<(), Box<dyn Error>> {
+    offer_http_mpst!(s, recv_http_s_to_c, {
+        Branching1fromCtoS::<i32>::Continue(s) => {
+            let (_quit, s, _resp) = recv_http_s_to_c(s, false, Vec::new())?;
+            let (s, _req) = send_http_s_to_a(0, s, false, Request::default())?;
+            let (_quit, s, _resp) = recv_http_s_to_a(s, false, Vec::new())?;
+
+            picture_s(s)
+        },
+        Branching1fromCtoS::<i32>::Close(s) => {
+            let (_quit, s, _resp) = recv_http_s_to_c(s, false, Vec::new())?;
+            let (s, _req) = send_http_s_to_a(0, s, false, Request::default())?;
+
+            close_mpst_multi(s)
+        },
+    })
+}
+
+fn picture_s(s: EndpointSContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
+    let choice = thread_rng().gen_range(1..=6);
+
+    if choice == 1 {
+        let s = refusal_from_s_to_all(s);
+
+        let (s, _req) = send_http_s_to_c(0, s, false, Request::default())?;
+
+        continue_s(s)
+    } else {
+        let s = picture_from_s_to_all(s);
+
+        let (s, _req) = send_http_s_to_c(0, s, false, Request::default())?;
+
+        continue_s(s)
+    }
 }
 
 /////////////////////////
 
 pub fn main() {
-    let (thread_a, thread_c, thread_s) = fork_mpst(
-        simple_three_endpoint_a,
-        simple_three_endpoint_c,
-        simple_three_endpoint_s,
-    );
+    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
     assert!(thread_a.join().is_ok());
     assert!(thread_c.join().is_ok());

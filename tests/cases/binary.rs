@@ -102,12 +102,10 @@ pub fn ping_works() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         let s = fork::fork(move |s: Send<(), End>| {
             let s = send::send((), s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         });
         let ((), s) = recv::recv(s)?;
-        close::close(s)?;
-        Ok(())
+        close::close(s)
     }()
     .is_ok());
 }
@@ -120,12 +118,10 @@ pub fn ping_works() {
 ///         let s2 = send::send((), s1);
 ///         close::close(s2)?;
 ///         let s3 = send::send((), s1);
-///         close::close(s3)?;
-///         Ok(())
+///         close::close(s3)
 ///     });
 ///     let ((), r2) = recv::recv(r1)?;
-///     close::close(r2)?;
-///     Ok(())
+///     close::close(r2)
 /// }()
 /// .is_ok());
 /// ```
@@ -148,15 +144,13 @@ fn simple_calc_server(s: SimpleCalcServer<i32>) -> Result<(), Box<dyn Error>> {
         |s: NegServer<i32>| {
             let (x, s) = recv::recv(s)?;
             let s = send::send(-x, s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         },
         |s: AddServer<i32>| {
             let (x, s) = recv::recv(s)?;
             let (y, s) = recv::recv(s)?;
             let s = send::send(x.wrapping_add(y), s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         },
     )
 }
@@ -209,15 +203,13 @@ fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
         CalcOp::Neg(s) => {
             let (x, s) = recv::recv(s)?;
             let s = send::send(-x, s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         },
         CalcOp::Add(s) => {
             let (x, s) = recv::recv(s)?;
             let (y, s) = recv::recv(s)?;
             let s = send::send(x.wrapping_add(y), s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         },
     })
 }
@@ -278,8 +270,7 @@ pub fn cancel_send_works() {
 
     assert!(|| -> Result<(), Box<dyn Error>> {
         let s = send::send((), s);
-        close::close(s)?;
-        Ok(())
+        close::close(s)
     }()
     .is_err());
 
@@ -297,8 +288,7 @@ pub fn delegation_works() {
 
     assert!(|| -> Result<(), Box<dyn Error>> {
         let u = send::send(s, u);
-        close::close(u)?;
-        Ok(())
+        close::close(u)
     }()
     .is_err());
 
@@ -351,11 +341,9 @@ fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Er
         },
         SumOp::Done(s) => {
             let s = send::send(x, s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         },
-    })?;
-    Ok(())
+    })
 }
 
 fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
@@ -446,7 +434,7 @@ pub fn selection_works() {
 
     for other_thread in other_threads {
         let msg = format!("Thread {:?} crashed.", other_thread);
-        assert!(other_thread.join().is_ok(), msg);
+        assert!(other_thread.join().is_ok(), "{}", msg);
     }
 }
 
@@ -460,14 +448,12 @@ fn deadlock_loop() {
             }
         }
         let s = send::send((), s);
-        close::close(s)?;
-        Ok(())
+        close::close(s)
     });
 
     || -> Result<(), Box<dyn Error>> {
         let ((), s) = recv::recv(s)?;
-        close::close(s)?;
-        Ok(())
+        close::close(s)
     }()
     .unwrap();
 }
@@ -481,8 +467,7 @@ fn deadlock_forget() {
 
     || -> Result<(), Box<dyn Error>> {
         let ((), s) = recv::recv(s)?;
-        close::close(s)?;
-        Ok(())
+        close::close(s)
     }()
     .unwrap();
 }
@@ -494,16 +479,14 @@ fn deadlock_new() {
         let (x, r1) = recv::recv(r1)?;
         let s2 = send::send(x, s2);
         close::close(r1)?;
-        close::close(s2)?;
-        Ok(())
+        close::close(s2)
     });
 
     || -> Result<(), Box<dyn Error>> {
         let (x, r2) = recv::recv(r2)?;
         let s1 = send::send(x, s1);
         close::close(r2)?;
-        close::close(s1)?;
-        Ok(())
+        close::close(s1)
     }()
     .unwrap();
 }

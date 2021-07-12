@@ -2,12 +2,12 @@
 
 use crate::binary::struct_trait::End;
 use crate::binary::struct_trait::Signal;
+use crate::meshedchannels::MeshedChannels;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
-use crate::sessionmpst::SessionMpst;
 use std::error::Error;
 
-/// Closes a [`mpstthree::sessionmpst::Sessionmpst`](../sessionmpst/struct. SessionMpst.html).
+/// Closes a [`mpstthree::meshedchannels::Sessionmpst`](../meshedchannels/struct.MeshedChannels.html).
 /// Synchronises with all partners, and fails if one of the partners has
 /// crashed.
 ///
@@ -15,7 +15,7 @@ use std::error::Error;
 ///
 /// ```
 /// use mpstthree::binary::struct_trait::{End, Session};
-/// use mpstthree::sessionmpst::SessionMpst;
+/// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
@@ -29,25 +29,25 @@ use std::error::Error;
 /// type AtoB = End;
 /// type AtoC = End;
 ///
-/// // Queue
-/// type QueueA = RoleEnd;
+/// // Stack
+/// type StackA = RoleEnd;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA = SessionMpst<AtoB, AtoC, QueueA, NameA>;
+/// type EndpointA = MeshedChannels<AtoB, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
 /// let (channel_ab, _) = AtoB::new();
 /// let (channel_ac, _) = AtoC::new();
 ///
-/// let (role_a, _) = QueueA::new();
+/// let (role_a, _) = StackA::new();
 ///
 /// let (name_a, _) = NameA::new();
 ///
-/// let sess = SessionMpst {
+/// let sess = MeshedChannels {
 ///   session1: channel_ab,
 ///   session2: channel_ac,
 ///   stack: role_a,
@@ -58,7 +58,7 @@ use std::error::Error;
 ///
 /// let s = close_mpst(sess);
 /// ```
-pub fn close_mpst<R>(s: SessionMpst<End, End, RoleEnd, R>) -> Result<(), Box<dyn Error>>
+pub fn close_mpst<R>(s: MeshedChannels<End, End, RoleEnd, R>) -> Result<(), Box<dyn Error>>
 where
     R: Role,
 {

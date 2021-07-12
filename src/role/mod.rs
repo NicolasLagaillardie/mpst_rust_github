@@ -10,10 +10,9 @@
 //! the end of any ordering.
 //!
 //! [`mpstthree::role::Role`]: ../role/trait.Role.html
-//! [`mpstthree::role::end::RoleEnd`]:
-//! ../role/end/struct.RoleEnd.html [`mpstthree::role::a::
-//! RoleA`]: ../role/a/struct.RoleA.html [`mpstthree::role::
-//! b::RoleB`]:  /role/b/struct.RoleB.html
+//! [`mpstthree::role::end::RoleEnd`]: ../role/end/struct.RoleEnd.html
+//! [`mpstthree::role::a::RoleA`]: ../role/a/struct.RoleA.html
+//! [`mpstthree::role::b::RoleB`]:  /role/b/struct.RoleB.html
 
 pub mod a;
 pub mod a_dual;
@@ -24,6 +23,7 @@ pub mod all_to_c;
 pub mod b;
 pub mod b_dual;
 pub mod b_to_all;
+pub mod broadcast;
 pub mod c;
 pub mod c_dual;
 pub mod c_to_all;

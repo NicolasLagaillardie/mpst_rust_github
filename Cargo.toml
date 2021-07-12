@@ -2,14 +2,14 @@
 name = "mpstthree"
 version = "0.0.3"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
-license = "MIT"
-description = "A library implementing Multiparty Session Types for 3 participants"
+edition = "2018"
+description = "A library implementing Multiparty Session Types for 3 or more participants"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+license = "MIT"
 keywords = ["multiparty", "session"]
 categories = ["concurrency", "development-tools::cargo-plugins"]
 exclude = [".travis.yml", ".gitignore"]
-edition = "2018"
 autotests = false
 
 [workspace]
@@ -26,39 +26,33 @@ path = "tests/main.rs"
 name = "main"
 harness = false
 
-[[example]]
-name = "tcp_server"
-path = "examples/tcp/server.rs"
-
-[[example]]
-name = "tcp_client"
-path = "examples/tcp/client.rs"
+[[bench]]
+name = "ping_pong"
+harness = false
 
 [profile.release]
 debug = true
 
 [dependencies]
-crossbeam-channel = "0.5.0"
+crossbeam-channel = "0.5.1"
 either = "1.6.1"
-rand = "0.8.3"
+rand = "0.8.4"
 # dot = "0.1.4"
 # sesh = "0.1.1"
-mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main"}
+# mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main" }
 # mpst-seq = { path = "../mpst-seq" }
-anyhow = "1"
+mpst-seq = { path = "mpst-seq" }
+# anyhow = "1"
 hyper = { version = "0.14", features = ["full"] }
-hyper-tls = "0.5.0"
-tokio = { version = "1", features = ["full"] }
-futures = "0.3.13"
+hyper-tls = "0.5"
+tokio = { version = "1.8", features = ["full"] }
+# futures = "0.3"
+# field_types = "1.1.0"
 
 [dev-dependencies]
-criterion = "0.3.4"
-trybuild = "1.0.41"
+criterion = { version = "0.3.4", features=["html_reports"] }
+trybuild = "1.0.42"
+ntest = "0.7.3"
 
 [badges]
 maintenance = { status = "actively-developed" }
-
-[features]
-# This feature _currently_ does nothing except disable a warning message, but in 0.4.0 it will be
-# required in order to have Criterion.rs generate its own plots (as opposed to using cargo-criterion)
-html_reports = []

@@ -35,8 +35,7 @@ fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Er
         },
         SumOp::Done(s) => {
             let s = send::send(x, s);
-            close::close(s)?;
-            Ok(())
+            close::close(s)
         },
     })?;
     Ok(())

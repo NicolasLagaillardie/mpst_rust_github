@@ -3,14 +3,14 @@ use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
 /// Gives the order to the
-/// [`mpstthree::sessionmpst::SessionMpst`] related to
+/// [`mpstthree::meshedchannels::MeshedChannels`] related to
 /// the `Dual` of C.
 ///
 /// This `struct` should only be used in the `stack` field
-/// of the [`mpstthree::sessionmpst::SessionMpst`] related
+/// of the [`mpstthree::meshedchannels::MeshedChannels`] related
 /// to the `Dual` of C.
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html
 #[derive(Debug)]
 pub struct RoleCDual<R>
 where
@@ -47,14 +47,4 @@ impl<R: Role> Role for RoleCDual<R> {
     fn tail_str() -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
-}
-
-#[doc(hidden)]
-pub fn next_c_dual<R>(r: RoleCDual<R>) -> R
-where
-    R: Role,
-{
-    let (here, there) = R::new();
-    r.sender.send(there).unwrap_or(());
-    here
 }

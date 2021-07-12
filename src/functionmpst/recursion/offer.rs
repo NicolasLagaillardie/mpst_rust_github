@@ -12,8 +12,7 @@
 /// ```ignore
 /// offer_mpst_a_to_c!(s, {
 ///    CBranchesAtoC::End(s) => {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    CBranchesAtoC::Video(s) => {
 ///        let (request, s) = recv_mpst_a_from_c(s)?;
@@ -26,11 +25,11 @@
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_a_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 
-        mpstthree::offer_mpst!($session, recv_mpst_a_from_c, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_a_from_c, { $( $pat => $result , )* })
     }};
 }
 
@@ -48,8 +47,7 @@ macro_rules! offer_mpst_a_to_c {
 /// ```ignore
 /// offer_mpst_b_to_c!(s, {
 ///    CBranchesBtoC::End(s) => {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    CBranchesBtoC::Video(s) => {
 ///        let (request, s) = recv_mpst_b_from_c(s)?;
@@ -62,11 +60,11 @@ macro_rules! offer_mpst_a_to_c {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_b_to_c {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
 
-        mpstthree::offer_mpst!($session, recv_mpst_b_from_c, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_b_from_c, { $( $pat => $result , )* })
     }};
 }
 
@@ -84,8 +82,7 @@ macro_rules! offer_mpst_b_to_c {
 /// ```ignore
 /// offer_mpst_a_to_b!(s, {
 ///    CBranchesAtoB::End(s) => {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    CBranchesAtoB::Video(s) => {
 ///        let (request, s) = recv_mpst_a_from_c(s)?;
@@ -98,11 +95,11 @@ macro_rules! offer_mpst_b_to_c {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_a_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 
-        mpstthree::offer_mpst!($session, recv_mpst_a_from_b, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_a_from_b, { $( $pat => $result , )* })
 
         // (move || -> Result<_, Box<dyn std::error::Error>> {
         //     let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_from_b($session)?;
@@ -130,8 +127,7 @@ macro_rules! offer_mpst_a_to_b {
 /// ```ignore
 /// offer_mpst_b_to_a!(s, {
 ///    CBranchesBtoA::End(s) => {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    CBranchesBtoA::Video(s) => {
 ///        let (request, s) = recv_mpst_b_from_c(s)?;
@@ -144,11 +140,11 @@ macro_rules! offer_mpst_a_to_b {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_b_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 
-        mpstthree::offer_mpst!($session, recv_mpst_b_from_a, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_b_from_a, { $( $pat => $result , )* })
     }};
 }
 
@@ -166,8 +162,7 @@ macro_rules! offer_mpst_b_to_a {
 /// ```ignore
 /// offer_mpst_c_to_b!(s, {
 ///    CBranchesCtoB::End(s) => {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    CBranchesCtoB::Video(s) => {
 ///        let (request, s) = recv_mpst_c_from_b(s)?;
@@ -180,11 +175,11 @@ macro_rules! offer_mpst_b_to_a {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_c_to_b {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
-        mpstthree::offer_mpst!($session, recv_mpst_c_from_b, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_c_from_b, { $( $pat => $result , )* })
     }};
 }
 
@@ -202,8 +197,7 @@ macro_rules! offer_mpst_c_to_b {
 /// ```ignore
 /// offer_mpst_c_to_a!(s, {
 ///    CBranchesCtoA::End(s) => {
-///        close_mpst(s)?;
-///        Ok(())
+///        close_mpst(s)
 ///    },
 ///    CBranchesCtoA::Video(s) => {
 ///        let (request, s) = recv_mpst_c_from_a(s)?;
@@ -216,10 +210,10 @@ macro_rules! offer_mpst_c_to_b {
 /// ```
 #[macro_export]
 macro_rules! offer_mpst_c_to_a {
-    ($session:expr, { $($pat:pat => $result:block,)* }) => {{
+    ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
 
         use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
-        mpstthree::offer_mpst!($session, recv_mpst_c_from_a, { $($pat => $result,)* })
+        mpstthree::offer_mpst!($session, recv_mpst_c_from_a, { $( $pat => $result , )* })
     }};
 }

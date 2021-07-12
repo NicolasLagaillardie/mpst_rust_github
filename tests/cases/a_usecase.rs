@@ -4,8 +4,8 @@ use mpstthree::checking::checker;
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
+use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
-use mpstthree::sessionmpst::SessionMpst;
 
 use std::boxed::Box;
 use std::collections::hash_map::RandomState;
@@ -61,23 +61,23 @@ type AtoCClose = <CtoAClose as Session>::Dual;
 type AtoBClose = <BtoAClose as Session>::Dual;
 type AtoBVideo<N> = <BtoAVideo<N> as Session>::Dual;
 
-/// Queues
-type QueueBEnd = RoleEnd;
-type QueueBEndDual = <QueueAEnd as Role>::Dual;
-type QueueBVideo = RoleA<RoleC<RoleC<RoleA<RoleEnd>>>>;
-type QueueBVideoDual = <QueueBVideo as Role>::Dual;
-type QueueBFull = RoleA<RoleA<RoleAlltoA<RoleEnd, RoleEnd>>>;
+/// Stacks
+type StackBEnd = RoleEnd;
+type StackBEndDual = <StackAEnd as Role>::Dual;
+type StackBVideo = RoleA<RoleC<RoleC<RoleA<RoleEnd>>>>;
+type StackBVideoDual = <StackBVideo as Role>::Dual;
+type StackBFull = RoleA<RoleA<RoleAlltoA<RoleEnd, RoleEnd>>>;
 
-type QueueCEnd = RoleEnd;
-type QueueCEndDual = <QueueCEnd as Role>::Dual;
-type QueueCVideo = RoleB<RoleB<RoleEnd>>;
-type QueueCVideoDual = <QueueCVideo as Role>::Dual;
-type QueueCFull = RoleAlltoA<RoleEnd, RoleEnd>;
+type StackCEnd = RoleEnd;
+type StackCEndDual = <StackCEnd as Role>::Dual;
+type StackCVideo = RoleB<RoleB<RoleEnd>>;
+type StackCVideoDual = <StackCVideo as Role>::Dual;
+type StackCFull = RoleAlltoA<RoleEnd, RoleEnd>;
 
-type QueueAEnd = RoleEnd;
-type QueueAVideo = RoleB<RoleB<RoleEnd>>;
-type QueueAChoice = RoleAtoAll<QueueAVideo, QueueAEnd>;
-type QueueAFull = RoleB<RoleB<QueueAChoice>>;
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleB<RoleB<RoleEnd>>;
+type StackAChoice = RoleAtoAll<StackAVideo, StackAEnd>;
+type StackAFull = RoleB<RoleB<StackAChoice>>;
 
 /// Creating the MP sessions
 /// For A
@@ -86,8 +86,8 @@ type ChooseAtoB<N> = ChooseMpst<
     CtoBVideo<N>,
     AtoBClose,
     CtoBClose,
-    QueueBVideoDual,
-    QueueBEnd,
+    StackBVideoDual,
+    StackBEnd,
     RoleBDual<RoleEnd>,
 >;
 type ChooseAtoC<N> = ChooseMpst<
@@ -95,43 +95,43 @@ type ChooseAtoC<N> = ChooseMpst<
     BtoCVideo<N>,
     BtoCClose,
     AtoCClose,
-    QueueCVideoDual,
-    QueueCEnd,
+    StackCVideoDual,
+    StackCEnd,
     RoleCDual<RoleEnd>,
 >;
 type InitA<N> = Send<N, Recv<N, ChooseAtoB<N>>>;
-type EndpointAFull<N> = SessionMpst<InitA<N>, ChooseAtoC<N>, QueueAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, ChooseAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBVideo<N> = SessionMpst<BtoAVideo<N>, BtoCVideo<N>, QueueBVideo, RoleB<RoleEnd>>;
-type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose, QueueBEnd, RoleB<RoleEnd>>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
 
 type OfferB<N> = OfferMpst<
     BtoAVideo<N>,
     BtoCVideo<N>,
     BtoAClose,
     BtoCClose,
-    QueueBVideo,
-    QueueBEnd,
+    StackBVideo,
+    StackBEnd,
     RoleB<RoleEnd>,
 >;
 type InitB<N> = Recv<N, Send<N, OfferB<N>>>;
-type EndpointBFull<N> = SessionMpst<InitB<N>, End, QueueBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBFull, RoleB<RoleEnd>>;
 
 /// For C
-type EndpointCVideo<N> = SessionMpst<CtoAClose, CtoBVideo<N>, QueueCVideo, RoleC<RoleEnd>>;
-type EndpointCEnd = SessionMpst<CtoAClose, CtoBClose, QueueCEnd, RoleC<RoleEnd>>;
+type EndpointCVideo<N> = MeshedChannels<CtoAClose, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
+type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
 type OfferC<N> = OfferMpst<
     CtoAClose,
     CtoBVideo<N>,
     CtoAClose,
     CtoBClose,
-    QueueCVideo,
-    QueueCEnd,
+    StackCVideo,
+    StackCEnd,
     RoleC<RoleEnd>,
 >;
-type EndpointCFull<N> = SessionMpst<OfferC<N>, End, QueueCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<OfferC<N>, End, StackCFull, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
 fn server(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -184,12 +184,12 @@ fn client_video(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
         CtoAClose,
         AtoBClose,
         BtoAClose,
-        QueueBVideoDual,
-        QueueBEndDual,
-        QueueCVideoDual,
-        QueueCEndDual,
-        QueueAVideo,
-        QueueAEnd,
+        StackBVideoDual,
+        StackBEndDual,
+        StackCVideoDual,
+        StackCEndDual,
+        StackAVideo,
+        StackAEnd,
     >(s);
 
     let s = send_mpst_a_to_b(accept, s);
@@ -216,12 +216,12 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
         CtoAClose,
         AtoBClose,
         BtoAClose,
-        QueueBVideoDual,
-        QueueBEndDual,
-        QueueCVideoDual,
-        QueueCEndDual,
-        QueueAVideo,
-        QueueAEnd,
+        StackBVideoDual,
+        StackBEndDual,
+        StackCVideoDual,
+        StackCEndDual,
+        StackAVideo,
+        StackAEnd,
     >(s);
 
     close_mpst(s)
@@ -267,9 +267,9 @@ pub fn run_a_usecase_checker() {
             let s = RandomState::new();
             let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
-            let (s1, _): (EndpointAFull<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointBFull<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointCFull<i32>, _) = SessionMpst::new();
+            let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointCFull<i32>, _) = MeshedChannels::new();
 
             let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 

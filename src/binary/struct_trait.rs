@@ -62,7 +62,7 @@ pub trait Session: marker::Sized + marker::Send {
     fn tail_str() -> String;
 }
 
-impl crate::binary::struct_trait::Session for End {
+impl Session for End {
     type Dual = End;
 
     #[doc(hidden)]
@@ -93,9 +93,7 @@ impl crate::binary::struct_trait::Session for End {
     }
 }
 
-impl<T: marker::Send, S: crate::binary::struct_trait::Session> crate::binary::struct_trait::Session
-    for Send<T, S>
-{
+impl<T: marker::Send, S: Session> Session for Send<T, S> {
     type Dual = Recv<T, S::Dual>;
 
     #[doc(hidden)]
@@ -115,9 +113,7 @@ impl<T: marker::Send, S: crate::binary::struct_trait::Session> crate::binary::st
     }
 }
 
-impl<T: marker::Send, S: crate::binary::struct_trait::Session> crate::binary::struct_trait::Session
-    for Recv<T, S>
-{
+impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     type Dual = Send<T, S::Dual>;
 
     #[doc(hidden)]

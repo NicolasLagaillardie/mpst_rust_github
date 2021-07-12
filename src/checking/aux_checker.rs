@@ -10,19 +10,19 @@ type TupleHashmaps<'a, BH1, BH2> = (
 
 #[doc(hidden)]
 pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     role: &str,
     branches: TupleHashmaps<BH1, BH2>, // branches_receivers, branches_sender
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    let head_session1 = get_head(&sessionmpst[0]);
-    let head_session2 = get_head(&sessionmpst[1]);
-    let head_stack = get_head(&sessionmpst[2]);
-    let sender = get_name(&get_head(&sessionmpst[3]));
+    let head_session1 = get_head(meshedchannels[0]);
+    let head_session2 = get_head(meshedchannels[1]);
+    let head_stack = get_head(meshedchannels[2]);
+    let sender = get_name(&get_head(meshedchannels[3]));
 
     // println!();
     // println!("sender checker_aux: {:?}", &sender);
-    // println!("sessionmpst checker_aux: {:?}", &sessionmpst);
+    // println!("meshedchannels checker_aux: {:?}", &meshedchannels);
     // println!("head_stack checker_aux: {:?}", &head_stack);
 
     // for (key, value) in &*branches.0 {
@@ -35,7 +35,7 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
         let result = match sender.as_str() {
             "A" => match_headers(
                 ["B", head_session1.as_str(), "C", head_session2.as_str()],
-                sessionmpst,
+                meshedchannels,
                 [sender, receiver],
                 [0, 0, 4, 4],
                 role,
@@ -44,7 +44,7 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
             )?,
             "B" => match_headers(
                 ["A", head_session1.as_str(), "C", head_session2.as_str()],
-                sessionmpst,
+                meshedchannels,
                 [sender, receiver],
                 [0, 1, 4, 5],
                 role,
@@ -53,7 +53,7 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
             )?,
             "C" => match_headers(
                 ["A", head_session1.as_str(), "B", head_session2.as_str()],
-                sessionmpst,
+                meshedchannels,
                 [sender, receiver],
                 [1, 1, 5, 5],
                 role,
@@ -61,9 +61,9 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
                 seen,
             )?,
             "All" => match receiver.as_str() {
-                "A" => match_recv_from_all("A", ["B", "C"], sessionmpst, role, branches, seen)?,
-                "B" => match_recv_from_all("B", ["A", "C"], sessionmpst, role, branches, seen)?,
-                "C" => match_recv_from_all("C", ["A", "B"], sessionmpst, role, branches, seen)?,
+                "A" => match_recv_from_all("A", ["B", "C"], meshedchannels, role, branches, seen)?,
+                "B" => match_recv_from_all("B", ["A", "C"], meshedchannels, role, branches, seen)?,
+                "C" => match_recv_from_all("C", ["A", "B"], meshedchannels, role, branches, seen)?,
                 _ => panic!("Wrong receiver on All, not recognized: {}", receiver),
             },
             _ => panic!("Wrong sender, not recognized: {}", sender),
@@ -78,25 +78,25 @@ pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::Build
 fn match_recv_from_all<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     sender: &str,
     receivers: [&str; 2],
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst match_recv_from_all: {:?}",
-    // &sessionmpst);
+    // println!("meshedchannels match_recv_from_all: {:?}",
+    // &meshedchannels);
 
     match role {
         receiver if receiver == receivers[0] => checker_aux(
             [
-                sessionmpst[0],
-                sessionmpst[1],
-                &sessionmpst[2].replacen(
+                meshedchannels[0],
+                meshedchannels[1],
+                &meshedchannels[2].replacen(
                     &format!("RoleAllto{}", sender),
                     &format!("Role{}", receiver),
                     1,
                 ),
-                sessionmpst[3],
+                meshedchannels[3],
             ],
             role,
             branches,
@@ -104,14 +104,14 @@ fn match_recv_from_all<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHas
         ),
         receiver if receiver == receivers[1] => checker_aux(
             [
-                sessionmpst[0],
-                sessionmpst[1],
-                &sessionmpst[2].replacen(
+                meshedchannels[0],
+                meshedchannels[1],
+                &meshedchannels[2].replacen(
                     &format!("RoleAllto{}", sender),
                     &format!("Role{}", receiver),
                     1,
                 ),
-                sessionmpst[3],
+                meshedchannels[3],
             ],
             role,
             branches,
@@ -124,7 +124,7 @@ fn match_recv_from_all<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHas
 #[doc(hidden)]
 fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     roles_and_sessions: [&str; 4], // role 1, session 1, role 2, session 2
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     involved: [String; 2],
     index: [usize; 4],
     role: &str,
@@ -135,8 +135,8 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     //     "roles_and_sessions match_headers: {:?}",
     //     &roles_and_sessions
     // );
-    // println!("sessionmpst match_headers: {:?}",
-    // &sessionmpst); println!("involved match_headers:
+    // println!("meshedchannels match_headers: {:?}",
+    // &meshedchannels); println!("involved match_headers:
     // {:?}", &involved); println!("index match_headers:
     // {:?}", &index); println!("seen match_headers: {:?}",
     // &seen); println!("role match_headers: {:?}", &role);
@@ -149,15 +149,15 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         h if h == roles_and_sessions[0] => match_full_types(
             roles_and_sessions[1],
             [
-                &get_tail(&sessionmpst[0]),
-                sessionmpst[1],
-                &get_tail(&sessionmpst[2]),
-                sessionmpst[3],
+                &get_tail(meshedchannels[0]),
+                meshedchannels[1],
+                &get_tail(meshedchannels[2]),
+                meshedchannels[3],
             ],
             involved,
             [
-                &get_head_payload(&sessionmpst[0]),
-                &get_head_payload(&sessionmpst[1]),
+                &get_head_payload(meshedchannels[0]),
+                &get_head_payload(meshedchannels[1]),
             ],
             role,
             branches,
@@ -166,21 +166,21 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         h if h == roles_and_sessions[2] => match_full_types(
             roles_and_sessions[3],
             [
-                sessionmpst[0],
-                &get_tail(&sessionmpst[1]),
-                &get_tail(&sessionmpst[2]),
-                sessionmpst[3],
+                meshedchannels[0],
+                &get_tail(meshedchannels[1]),
+                &get_tail(meshedchannels[2]),
+                meshedchannels[3],
             ],
             involved,
             [
-                &get_head_payload(&sessionmpst[1]),
-                &get_head_payload(&sessionmpst[0]),
+                &get_head_payload(meshedchannels[1]),
+                &get_head_payload(meshedchannels[0]),
             ],
             role,
             branches,
             seen,
         ),
-        h if h == "All" => all_type(sessionmpst, index, role, branches, seen),
+        h if h == "All" => all_type(meshedchannels, index, role, branches, seen),
         _ => panic!("Wrong receiver, not recognized: {}", involved[1]),
     }
 }
@@ -188,21 +188,29 @@ fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
 #[doc(hidden)]
 fn match_full_types<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     head_session: &str,
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     involved: [String; 2],
     payloads: [&str; 2],
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst match_full_types: {:?}",
-    // &sessionmpst); println!("head_session
+    // println!("meshedchannels match_full_types: {:?}",
+    // &meshedchannels); println!("head_session
     // match_full_types: {:?}", &head_session);
 
     match head_session {
-        "Send" => send_type(sessionmpst, involved, payloads, role, branches, seen, " + "),
+        "Send" => send_type(
+            meshedchannels,
+            involved,
+            payloads,
+            role,
+            branches,
+            seen,
+            " + ",
+        ),
         "Recv" => recv_type(
-            sessionmpst,
+            meshedchannels,
             involved,
             payloads[0],
             role,
@@ -293,6 +301,7 @@ fn get_name(head: &str) -> String {
         "RoleB" => String::from("B"),
         "RoleC" => String::from("C"),
         "RoleEnd" => String::from("End"),
+        "RoleBroadcast" => String::from("Broadcast"),
         _ => panic!("Wrong head, not recognized: {}", head),
     }
 }
@@ -396,7 +405,7 @@ fn get_fields(s: &str) -> [String; 4] {
     let mut result: [String; 4] = Default::default();
     let mut index = -1;
     let mut index_session = 0;
-    let new_s = &s.replace("SessionMpst", "");
+    let new_s = &s.replace("MeshedChannels", "");
     for c in new_s.chars() {
         match c {
             ',' => {
@@ -437,7 +446,7 @@ fn divide_either(s: &str) -> [String; 8] {
     let mut index = -2;
     let mut index_session = 0;
     let new_s = s.replacen("Either", "", 1);
-    let new_s = &new_s.replace("SessionMpst", "");
+    let new_s = &new_s.replace("MeshedChannels", "");
     for c in new_s.chars() {
         match c {
             ',' => {
@@ -483,7 +492,7 @@ fn get_dual(s: &str) -> String {
     let result = &s.replace("Send<", "Revc<");
     let result = &result.replace("Recv<", "Send<");
     let result = &result.replace("Revc<", "Recv<");
-    let result = switch_role(&result, "A", "ADual");
+    let result = switch_role(result, "A", "ADual");
     let result = switch_role(&result, "C", "CDual");
     let result = switch_role(&result, "B", "BDual");
     let result = switch_role(&result, "AtoAll", "AlltoA");
@@ -501,7 +510,7 @@ fn switch_role(s: &str, a: &str, b: &str) -> String {
 
 #[doc(hidden)]
 fn send_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     involved: [String; 2],
     payloads: [&str; 2],
     role: &str,
@@ -509,13 +518,13 @@ fn send_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst send_type: {:?}", &sessionmpst);
+    // println!("meshedchannels send_type: {:?}", &meshedchannels);
     // println!("payload send_type: {:?}", &payloads);
 
     if seen.contains(&String::from(payloads[0])) {
         Ok(String::from("X"))
     } else if branches.0.contains_key(payloads[0]) && branches.0.contains_key(payloads[1]) {
-        // println!("possible new stack: {:?}", &sessionmpst);
+        // println!("possible new stack: {:?}", &meshedchannels);
         recurs_type(payloads, role, branches, seen, symbol)
     } else {
         // println!(
@@ -527,14 +536,14 @@ fn send_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             "{}!{}.{}",
             involved[0],
             involved[1],
-            checker_aux(sessionmpst, role, branches, seen)?
+            checker_aux(meshedchannels, role, branches, seen)?
         ))
     }
 }
 
 #[doc(hidden)]
 fn recv_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     involved: [String; 2],
     payload: &str,
     role: &str,
@@ -542,7 +551,7 @@ fn recv_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
     seen: &mut Vec<String>,
     symbol: &str,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst recv_type: {:?}", &sessionmpst);
+    // println!("meshedchannels recv_type: {:?}", &meshedchannels);
     // println!("payload recv_type: {:?}", &payload);
 
     if payload.contains("Either") {
@@ -576,7 +585,7 @@ fn recv_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             "{}?{}.{}",
             involved[0],
             involved[1],
-            checker_aux(sessionmpst, role, branches, seen)?
+            checker_aux(meshedchannels, role, branches, seen)?
         ))
     }
 }
@@ -771,20 +780,20 @@ fn recurs_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
 
 #[doc(hidden)]
 fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    sessionmpst: [&str; 4],
+    meshedchannels: [&str; 4],
     index: [usize; 4],
     role: &str,
     branches: TupleHashmaps<BH1, BH2>,
     seen: &mut Vec<String>,
 ) -> Result<String, Box<dyn Error>> {
-    // println!("sessionmpst all_type: {:?}", &sessionmpst);
+    // println!("meshedchannels all_type: {:?}", &meshedchannels);
 
-    let payload_1 = get_head_payload(&sessionmpst[0]);
-    let payload_2 = get_head_payload(&sessionmpst[1]);
+    let payload_1 = get_head_payload(meshedchannels[0]);
+    let payload_2 = get_head_payload(meshedchannels[1]);
     if payload_1.contains("Either") && payload_2.contains("Either") {
         let branching_1: [String; 8] = divide_either(&payload_1);
         let branching_2: [String; 8] = divide_either(&payload_2);
-        let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+        let tails: [String; 2] = get_two_tails(meshedchannels[2]);
 
         // println!("tails: {:?}", &tails);
 
@@ -795,7 +804,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
                     &get_dual(&branching_1[index[0]]),
                     &get_dual(&branching_2[index[1]]),
                     &tails[0],
-                    sessionmpst[3]
+                    meshedchannels[3]
                 ],
                 role,
                 branches,
@@ -806,7 +815,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
                     &get_dual(&branching_1[index[2]]),
                     &get_dual(&branching_2[index[3]]),
                     &tails[1],
-                    sessionmpst[3]
+                    meshedchannels[3]
                 ],
                 role,
                 branches,
@@ -815,7 +824,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         ))
     } else if payload_1.contains("Either") {
         let branching_1: [String; 8] = divide_either(&payload_1);
-        let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+        let tails: [String; 2] = get_two_tails(meshedchannels[2]);
 
         // println!("tails: {:?}", &tails);
 
@@ -824,9 +833,9 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             checker_aux(
                 [
                     &get_dual(&branching_1[index[0]]),
-                    &get_dual(&sessionmpst[1]),
+                    &get_dual(meshedchannels[1]),
                     &tails[0],
-                    sessionmpst[3]
+                    meshedchannels[3]
                 ],
                 role,
                 branches,
@@ -835,9 +844,9 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             checker_aux(
                 [
                     &get_dual(&branching_1[index[2]]),
-                    &get_dual(&sessionmpst[1]),
+                    &get_dual(meshedchannels[1]),
                     &tails[1],
-                    sessionmpst[3]
+                    meshedchannels[3]
                 ],
                 role,
                 branches,
@@ -846,7 +855,7 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
         ))
     } else if payload_2.contains("Either") {
         let branching_2: [String; 8] = divide_either(&payload_2);
-        let tails: [String; 2] = get_two_tails(&sessionmpst[2]);
+        let tails: [String; 2] = get_two_tails(meshedchannels[2]);
 
         // println!("tails: {:?}", &tails);
 
@@ -854,10 +863,10 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             "( {} + {} )",
             checker_aux(
                 [
-                    &get_dual(&sessionmpst[0]),
+                    &get_dual(meshedchannels[0]),
                     &get_dual(&branching_2[index[1]]),
                     &tails[0],
-                    sessionmpst[3]
+                    meshedchannels[3]
                 ],
                 role,
                 branches,
@@ -865,10 +874,10 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             )?,
             checker_aux(
                 [
-                    &get_dual(&sessionmpst[0]),
+                    &get_dual(meshedchannels[0]),
                     &get_dual(&branching_2[index[3]]),
                     &tails[1],
-                    sessionmpst[3]
+                    meshedchannels[3]
                 ],
                 role,
                 branches,
@@ -880,12 +889,12 @@ fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
             "Wrong payloads, not recognized: {:?} , {:?} and {:?} ( {:?} / {:?} ) for {:?} , {:?} and {:?}",
             divide_either(&payload_1),
             divide_either(&payload_2),
-            get_two_tails(&sessionmpst[2]),
+            get_two_tails(meshedchannels[2]),
             &payload_1,
             &payload_2,
-            &sessionmpst[0],
-            &sessionmpst[1],
-            &sessionmpst[2]
+            &meshedchannels[0],
+            &meshedchannels[1],
+            &meshedchannels[2]
         );
     }
 }

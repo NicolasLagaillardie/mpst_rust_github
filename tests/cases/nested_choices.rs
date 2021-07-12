@@ -1,512 +1,339 @@
-// Unfinished
-
-// use rand::{thread_rng, Rng};
-
-// use mpstthree::checking::checker;
-
-// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
-// use mpstthree::fork_mpst;
-// use mpstthree::role::Role;
-// use mpstthree::sessionmpst::SessionMpst;
-
 // use std::boxed::Box;
-// use std::collections::HashMap;
 // use std::error::Error;
 
 // use mpstthree::functionmpst::close::close_mpst;
 
-// use mpstthree::role::a_to_b::RoleAtoB;
-// use mpstthree::role::a_to_c::RoleAtoC;
-// use mpstthree::role::all_to_c::RoleAlltoC;
-// use mpstthree::role::b_to_a::RoleBtoA;
-// use mpstthree::role::b_to_c::RoleBtoC;
-// use mpstthree::role::c_to_a::RoleCtoA;
-// use mpstthree::role::c_to_all::RoleCtoAll;
+// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+// use mpstthree::fork::fork_mpst;
+// use mpstthree::role::Role;
+// use mpstthree::meshedchannels::MeshedChannels;
+
+// use mpstthree::role::a::RoleA;
+// use mpstthree::role::a_dual::RoleADual;
+// use mpstthree::role::all_to_b::RoleAlltoB;
+// use mpstthree::role::b::RoleB;
+// use mpstthree::role::b_to_all::RoleBtoAll;
+// use mpstthree::role::c::RoleC;
+// use mpstthree::role::c_dual::RoleCDual;
 // use mpstthree::role::end::RoleEnd;
 
 // use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
-// use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
-// use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 // use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
-// use mpstthree::functionmpst::send::send_mpst_a_to_b;
 // use mpstthree::functionmpst::send::send_mpst_a_to_c;
 // use mpstthree::functionmpst::send::send_mpst_b_to_a;
-// use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
-// use mpstthree::functionmpst::offer::
-// offer_mpst_session_a_to_c; use mpstthree::functionmpst::
-// offer::offer_mpst_session_b_to_c;
+// use mpstthree::functionmpst::offer::offer_mpst_session_to_a_from_b;
+// use mpstthree::functionmpst::offer::offer_mpst_session_to_c_from_b;
 
-// use mpstthree::functionmpst::choose::
-// choose_left_mpst_session_c_to_all; use
-// mpstthree::functionmpst::choose::choose_right_mpst_session_c_to_all;
+// use mpstthree::functionmpst::choose::choose_left_mpst_session_b_to_all;
+// use mpstthree::functionmpst::choose::choose_right_mpst_session_b_to_all;
 
 // use mpstthree::functionmpst::ChooseMpst;
 // use mpstthree::functionmpst::OfferMpst;
 
-// /// Test for nested choices
-// ///
-// /// A: A?C.A!C.( ( A?C.A!B.A?B.A!C.0 & 0 ) & 0 )
-// /// B: ( ( B?A.B!A.0 & 0 ) & 0 )
-// /// C: C!A.C?A.( ( C!A.C?A.0 + 0 ) + 0 )
+// /// Test a simple storage server, implemented using binary
+// /// choice. Simple types
+// type AtoBNeg<N> = Recv<N, End>;
+// type AtoBAdd<N> = Recv<N, End>;
+// type AtoBAddOffer<N> = Recv<N, OfferA1<N>>;
 
-// type AtoCClose = End;
-// type AtoBClose = End;
-// type AtoCVideo<N> = Recv<N, Send<N, End>>;
-// type AtoBVideo<N> = Send<N, Recv<N, End>>;
+// type AtoCNeg<N> = Send<N, End>;
+// type AtoCAdd<N> = Send<N, End>;
+// type AtoCAddOffer<N> = Send<N, End>;
 
-// type BtoAClose = <AtoBClose as Session>::Dual;
-// type BtoCClose = End;
-// type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+// type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
+// type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
+// type BtoAAddOffer<N> = <AtoBAddOffer<N> as Session>::Dual;
 
-// type CtoBClose = <BtoCClose as Session>::Dual;
-// type CtoAClose = <AtoCClose as Session>::Dual;
-// type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
+// type CtoANeg<N> = <AtoCNeg<N> as Session>::Dual;
+// type CtoAAdd<N> = <AtoCAdd<N> as Session>::Dual;
+// type CtoAAddOffer<N> = <AtoCAddOffer<N> as Session>::Dual;
 
-// /// Queues
-// type QueueAEnd = RoleEnd;
-// type QueueAVideo =
-// RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>;
-// type QueueAVideoDual = <QueueAVideo as Role>::Dual;
-// type QueueASecond =
-// RoleAlltoC<RoleAtoC<RoleAtoC<RoleEnd>>, RoleEnd>;
-// type QueueAIniit = RoleAtoC<RoleAtoC<RoleAlltoC<RoleEnd,
-// RoleEnd>>>;
+// /// Stacks
+// type StackOfferA = RoleB<RoleC<RoleEnd>>;
+// type StackOfferADual = <StackOfferA as Role>::Dual;
+// type StackOfferDoubleA = RoleB<RoleC<RoleAlltoB<RoleEnd, RoleEnd>>>;
+// type StackOfferDoubleADual = <StackOfferDoubleA as Role>::Dual;
+// type StackFullA = RoleAlltoB<RoleEnd, RoleEnd>;
 
-// type QueueBEnd = RoleEnd;
-// type QueueBVideo = RoleBtoA<RoleBtoA<RoleEnd>>;
-// type QueueBVideoDual = <QueueBVideo as Role>::Dual;
-// type QueueBFull = RoleAlltoC<RoleEnd, RoleEnd>;
-// type QueueBFullDual = <QueueBFull as Role>::Dual;
+// type StackChoiceB = RoleA<RoleEnd>;
+// type StackFullB = RoleBtoAll<StackChoiceB, StackChoiceB>;
+// type StackChoiceDoubleB = RoleA<RoleEnd>;
+// type StackFullDoubleB = RoleA<RoleBtoAll<StackChoiceDoubleB, StackChoiceDoubleB>>;
 
-// type QueueCEnd = RoleEnd;
-// type QueueCVideo = RoleCtoA<RoleCtoA<RoleEnd>>;
-// type QueueCChoice2 = RoleCtoAll<QueueCVideo, QueueCEnd>;
-// type QueueCChoice = RoleCtoAll<QueueCChoice2, QueueCEnd>;
-// type QueueCFull = RoleCtoA<RoleCtoA<QueueCChoice>>;
+// type StackOfferC = RoleA<RoleEnd>;
+// type StackOfferCDual = <StackOfferC as Role>::Dual;
+// type StackOfferDoubleC = RoleA<StackFullC>;
+// type StackOfferDoubleCDual = <StackOfferDoubleC as Role>::Dual;
+// type StackFullC = RoleAlltoB<RoleEnd, RoleEnd>;
 
 // /// Creating the MP sessions
 // /// For A
-// type EndpointAEnd = SessionMpst<AtoBClose, AtoCClose,
-// QueueAEnd>; type EndpointAVideo<N> =
-// SessionMpst<AtoBVideo<N>, AtoCVideo<N>, QueueAVideo>;
+// type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, AtoCAdd<N>, StackOfferA, RoleA<RoleEnd>>;
+// type EndpointAAddOffer<N> =
+//     MeshedChannels<AtoBAddOffer<N>, AtoCAddOffer<N>, StackOfferDoubleA, RoleA<RoleEnd>>;
+// type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, AtoCNeg<N>, StackOfferA, RoleA<RoleEnd>>;
 
-// type OfferA2<N> =
-//     OfferMpst<AtoBVideo<N>, AtoCVideo<N>, AtoBClose,
-// AtoCClose, QueueAVideo, QueueAEnd>; type OfferA<N> =
-// OfferMpst<AtoBClose, OfferA2<N>, AtoBClose, AtoCClose,
-// QueueASecond, QueueAEnd>; type InitA<N> = Recv<N, Send<N,
-// OfferA<N>>>; type EndpointAFull<N> = SessionMpst<End,
-// InitA<N>, QueueAIniit>;
+// type OfferA0<N> = OfferMpst<
+//     AtoBAddOffer<N>,
+//     AtoCAddOffer<N>,
+//     AtoBNeg<N>,
+//     AtoCNeg<N>,
+//     StackOfferDoubleA,
+//     StackOfferA,
+//     RoleA<RoleEnd>,
+// >;
+// type OfferA1<N> = OfferMpst<
+//     AtoBAdd<N>,
+//     AtoCAdd<N>,
+//     AtoBNeg<N>,
+//     AtoCNeg<N>,
+//     StackOfferA,
+//     StackOfferA,
+//     RoleA<RoleEnd>,
+// >;
+// type EndpointChoiceA0<N> = MeshedChannels<OfferA0<N>, End, StackFullA, RoleA<RoleEnd>>;
+// type EndpointChoiceA1<N> = MeshedChannels<OfferA1<N>, End, StackFullA, RoleA<RoleEnd>>;
 
 // /// For B
-// type EndpointBEnd = SessionMpst<BtoAClose, BtoCClose,
-// QueueBEnd>; type EndpointBVideo<N> =
-// SessionMpst<BtoAVideo<N>, BtoCClose, QueueBVideo>;
-
-// type OfferB2<N> = OfferMpst<BtoAVideo<N>, BtoCClose,
-// BtoAClose, BtoCClose, QueueBVideo, QueueBEnd>; type
-// OfferB<N> = OfferMpst<BtoAClose, OfferB2<N>, BtoAClose,
-// BtoCClose, QueueBFull, QueueBEnd>;
-
-// type EndpointBFull<N> = SessionMpst<End, OfferB<N>,
-// QueueBFull>;
+// type ChooseBtoA0<N> = ChooseMpst<
+//     BtoAAddOffer<N>,
+//     CtoAAddOffer<N>,
+//     BtoANeg<N>,
+//     CtoANeg<N>,
+//     StackOfferADual,
+//     StackOfferADual,
+//     RoleADual<RoleEnd>,
+// >;
+// type ChooseBtoA1<N> = ChooseMpst<
+//     BtoAAdd<N>,
+//     CtoAAdd<N>,
+//     BtoANeg<N>,
+//     CtoANeg<N>,
+//     StackOfferADual,
+//     StackOfferADual,
+//     RoleADual<RoleEnd>,
+// >;
+// type ChooseBtoC0<N> = ChooseMpst<
+//     AtoCAdd<N>,
+//     OfferC1<N>,
+//     AtoCNeg<N>,
+//     End,
+//     StackOfferCDual,
+//     StackOfferCDual,
+//     RoleCDual<RoleEnd>,
+// >;
+// type ChooseBtoC1<N> = ChooseMpst<
+//     AtoCAdd<N>,
+//     End,
+//     AtoCNeg<N>,
+//     End,
+//     StackOfferCDual,
+//     StackOfferCDual,
+//     RoleCDual<RoleEnd>,
+// >;
+// type EndpointChoiceB0<N> = MeshedChannels<ChooseBtoA0<N>, ChooseBtoC0<N>, StackFullB, RoleB<RoleEnd>>;
+// type EndpointChoiceB1<N> = MeshedChannels<ChooseBtoA1<N>, ChooseBtoC1<N>, StackFullB, RoleB<RoleEnd>>;
 
 // /// For C
-// type EndpointCtoAVideo2<N> = SessionMpst<BtoAVideo<N>,
-// CtoAVideo<N>, QueueAVideoDual>; type EndpointCtoAEnd2 =
-// SessionMpst<BtoAClose, CtoAClose, QueueAEnd>; type
-// EndpointCtoBVideo2<N> = SessionMpst<AtoBVideo<N>,
-// CtoBClose, QueueBVideoDual>; type EndpointCtoBEnd2 =
-// SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
+// type EndpointCAddOffer<N> =
+//     MeshedChannels<CtoAAddOffer<N>, OfferC1<N>, StackOfferDoubleC, RoleC<RoleEnd>>;
+// type EndpointCAdd<N> = MeshedChannels<CtoAAdd<N>, End, StackOfferC, RoleC<RoleEnd>>;
+// type EndpointCNeg<N> = MeshedChannels<CtoANeg<N>, End, StackOfferC, RoleC<RoleEnd>>;
 
-// type ChooseCtoA2<N> =
-//     ChooseMpst<BtoAVideo<N>, CtoAVideo<N>, BtoAClose,
-// CtoAClose, QueueAVideoDual, QueueAEnd>; type
-// ChooseCtoB2<N> =     ChooseMpst<AtoBVideo<N>, CtoBClose,
-// AtoBClose, CtoBClose, QueueBVideoDual, QueueBEnd>;
-
-// type EndpointCtoAVideo<N> = SessionMpst<ChooseCtoA2<N>,
-// ChooseCtoB2<N>, QueueCChoice2>; type EndpointCtoAEnd =
-// SessionMpst<BtoAClose, CtoAClose, QueueAEnd>; type
-// EndpointCtoBVideo<N> = SessionMpst<AtoBVideo<N>,
-// CtoBClose, QueueBVideoDual>; type EndpointCtoBEnd =
-// SessionMpst<AtoBClose, CtoBClose, QueueBEnd>;
-
-// type ChooseCtoA<N> =
-//     ChooseMpst<BtoAClose, ChooseCtoA2<N>, CtoAClose,
-// ChooseCtoB2<N>, QueueCChoice2, QueueAEnd>; type
-// ChooseCtoB<N> =     ChooseMpst<AtoBClose, ChooseCtoB2<N>,
-// AtoBClose, CtoBClose, QueueBFullDual, QueueBEnd>;
-
-// type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-// type EndpointCFull<N> = SessionMpst<InitC<N>,
-// ChooseCtoB<N>, QueueCFull>;
-
-// // type testA = SessionMpst<
-// //     End,
-// //     Recv<
-// //         i32,
-// //         Send<
-// //             i32,
-// //             Recv<
-// //                 Either<
-// //                     SessionMpst<
-// //                         End,
-// //                         Recv<
-// //                             Either<
-// //                                 SessionMpst<
-// //                                     Send<i32,
-// Recv<i32, End>>, //
-// Recv<i32, Send<i32, End>>, //
-// RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>, //
-// >, //                                 SessionMpst<End,
-// End, RoleEnd>, //                             >,
-// //                             End,
-// //                         >,
-// //                         RoleAtoC<RoleEnd>,
-// //                     >,
-// //                     SessionMpst<End, End, RoleEnd>,
-// //                 >,
-// //                 End,
-// //             >,
-// //         >,
-// //     >,
-// //     RoleAtoC<RoleAtoC<RoleAtoC<RoleEnd>>>,
-// // >;
-// // type testB = SessionMpst<
-// //     End,
-// //     Recv<
-// //         Either<
-// //             SessionMpst<
-// //                 End,
-// //                 Recv<
-// //                     Either<
-// //                         SessionMpst<Recv<i32,
-// Send<i32, End>>, End, RoleBtoA<RoleBtoA<RoleEnd>>>, //
-// SessionMpst<End, End, RoleEnd>, //                     >,
-// //                     End,
-// //                 >,
-// //                 RoleBtoC<RoleEnd>,
-// //             >,
-// //             SessionMpst<End, End, RoleEnd>,
-// //         >,
-// //         End,
-// //     >,
-// //     RoleBtoC<RoleEnd>,
-// // >;
-// // type testC = SessionMpst<
-// //     Send<
-// //         i32,
-// //         Recv<
-// //             i32,
-// //             Send<
-// //                 Either<
-// //                     SessionMpst<
-// //                         End,
-// //                         Send<
-// //                             Either<
-// //                                 SessionMpst<
-// //                                     Send<i32,
-// Recv<i32, End>>, //
-// Recv<i32, Send<i32, End>>, //
-// RoleAtoC<RoleAtoB<RoleAtoB<RoleAtoC<RoleEnd>>>>, //
-// >, //                                 SessionMpst<End,
-// End, RoleEnd>, //                             >,
-// //                             End,
-// //                         >,
-// //
-// RoleAlltoC<RoleAtoC<RoleAtoC<RoleEnd>>, RoleEnd>, //
-// >, //                     SessionMpst<
-// //                         End,
-// //                         Send<
-// //                             Either<
-// //                                 SessionMpst<
-// //                                     Recv<i32,
-// Send<i32, End>>, //
-// End, //
-// RoleBtoA<RoleBtoA<RoleEnd>>, //
-// >, //                                 SessionMpst<End,
-// End, RoleEnd>, //                             >,
-// //                             End,
-// //                         >,
-// //                         RoleEnd,
-// //                     >,
-// //                 >,
-// //                 End,
-// //             >,
-// //         >,
-// //     >,
-// //     Send<
-// //         Either<
-// //             SessionMpst<
-// //                 End,
-// //                 Send<
-// //                     Either<
-// //                         SessionMpst<Recv<i32,
-// Send<i32, End>>, End, RoleBtoA<RoleBtoA<RoleEnd>>>, //
-// SessionMpst<End, End, RoleEnd>, //                     >,
-// //                     End,
-// //                 >,
-// //                 RoleBtoC<RoleEnd>,
-// //             >,
-// //             SessionMpst<End, End, RoleEnd>,
-// //         >,
-// //         End,
-// //     >,
-// //     RoleCtoA<RoleCtoA<RoleCtoAll<RoleCtoAll<RoleCtoA<RoleCtoA<RoleEnd>>,
-// RoleEnd>, RoleEnd>>>, // >;
-
-// type resultExpected = mpstthree::binary::struct_trait::Recv<
-//     _,
-//     mpstthree::binary::struct_trait::Send<
-//         _,
-//         mpstthree::binary::struct_trait::Recv<
-//             either::Either<
-//                 _,
-//                 mpstthree::sessionmpst::SessionMpst<
-//                     _,
-//                     mpstthree::binary::struct_trait::Recv<
-//                         either::Either<
-//
-// mpstthree::sessionmpst::SessionMpst<
-// mpstthree::binary::struct_trait::Recv<
-// i32,
-// mpstthree::binary::struct_trait::Send<i32, mpstthree::binary::struct_trait::End>,
-// >,
-// mpstthree::binary::struct_trait::End,
-// mpstthree::role::b_to_a::RoleBtoA<
-// mpstthree::role::b_to_a::RoleBtoA<
-// mpstthree::role::end::RoleEnd,
-// >,                                 >,
-//                             >,
-//
-// mpstthree::sessionmpst::SessionMpst<
-// mpstthree::binary::struct_trait::End,
-// mpstthree::binary::struct_trait::End,
-// mpstthree::role::end::RoleEnd,
-// >,                         >,
-//                         mpstthree::binary::struct_trait::End,
-//                     >,
-//                     _,
-//                 >,
-//             >,
-//             _,
-//         >,
-//     >,
+// type OfferC0<N> = OfferMpst<
+//     CtoAAddOffer<N>,
+//     OfferC1<N>,
+//     CtoANeg<N>,
+//     End,
+//     StackOfferDoubleC,
+//     StackOfferC,
+//     RoleC<RoleEnd>,
 // >;
+// type OfferC1<N> =
+//     OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, StackOfferC, StackOfferC, RoleC<RoleEnd>>;
+// type EndpointChoiceC0<N> = MeshedChannels<End, OfferC0<N>, StackFullC, RoleC<RoleEnd>>;
+// type EndpointChoiceC1<N> = MeshedChannels<End, OfferC1<N>, StackFullC, RoleC<RoleEnd>>;
 
-// type resultFound = mpstthree::binary::struct_trait::Recv<
-//     _,
-//     mpstthree::binary::struct_trait::Send<
-//         _,
-//         mpstthree::binary::struct_trait::Recv<
-//             either::Either<_,
-// mpstthree::sessionmpst::SessionMpst<_, mpstthree::binary:
-// :End, _>>,             _,         >,
-//     >,
-// >;
+// /// Functions related to endpoints
+// fn simple_store_server_0(s: EndpointChoiceA0<i32>) -> Result<(), Box<dyn Error>> {
+//     offer_mpst_session_to_a_from_b(
+//         s,
+//         |s: EndpointAAddOffer<i32>| {
+//             let (x, s) = recv_mpst_a_from_b(s)?;
+//             let s = send_mpst_a_to_c(x + 1, s);
 
-// // /// Functions related to endpoints
-// // fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn
-// Error>> { //     offer_mpst_session_b_to_c(
-// //         s,
-// //         |s: EndpointBVideo<i32>| {
-// //             let (request, s) = recv_mpst_b_from_a(s)?;
-// //             let s = send_mpst_b_to_a(request + 1, s);
+//             simple_store_server_1(s)
+//         },
+//         |s: EndpointANeg<i32>| {
+//             let (x, s) = recv_mpst_a_from_b(s)?;
+//             let s = send_mpst_a_to_c(x + 1, s);
 
-// //             close_mpst(s)?;
+//             close_mpst(s)
+//         },
+//     )
+// }
 
-// //             Ok(())
-// //         },
-// //         |s: EndpointBEnd| {
-// //             close_mpst(s)?;
+// fn simple_store_server_1(s: EndpointChoiceA1<i32>) -> Result<(), Box<dyn Error>> {
+//     offer_mpst_session_to_a_from_b(
+//         s,
+//         |s: EndpointAAdd<i32>| {
+//             let (x, s) = recv_mpst_a_from_b(s)?;
+//             let s = send_mpst_a_to_c(x + 1, s);
 
-// //             Ok(())
-// //         },
-// //     )
-// // }
+//             close_mpst(s)
+//         },
+//         |s: EndpointANeg<i32>| {
+//             let (x, s) = recv_mpst_a_from_b(s)?;
+//             let s = send_mpst_a_to_c(x + 1, s);
 
-// // fn authenticator(s: EndpointAFull<i32>) -> Result<(),
-// Box<dyn Error>> { //     let (id, s) =
-// recv_mpst_a_from_c(s)?; //     let s = send_mpst_a_to_c(id
-// + 1, s);
+//             close_mpst(s)
+//         },
+//     )
+// }
 
-// //     offer_mpst_session_a_to_c(
-// //         s,
-// //         |s: EndpointAVideo<i32>| {
-// //             let (request, s) = recv_mpst_a_from_c(s)?;
-// //             let s = send_mpst_a_to_b(request + 1, s);
-// //             let (video, s) = recv_mpst_a_from_b(s)?;
-// //             let s = send_mpst_a_to_c(video + 1, s);
+// fn simple_store_client_left_0(s: EndpointChoiceB0<i32>) -> Result<(), Box<dyn Error>> {
+//     let s = choose_left_mpst_session_b_to_all::<
+//         CtoAAddOffer<i32>,
+//         CtoANeg<i32>,
+//         BtoAAddOffer<i32>,
+//         OfferC1<i32>,
+//         BtoANeg<i32>,
+//         End,
+//         StackOfferDoubleADual,
+//         StackOfferDoubleADual,
+//         StackOfferDoubleCDual,
+//         StackOfferDoubleCDual,
+//         StackChoiceDoubleB,
+//         StackChoiceDoubleB,
+//     >(s);
+//     let s = send_mpst_b_to_a(1, s);
+//     simple_store_client_left_1(s)
+// }
 
-// //             assert_eq!(request, id + 1);
-// //             assert_eq!(video, id + 3);
+// fn simple_store_client_left_0_1(s: EndpointChoiceB1<i32>) -> Result<(), Box<dyn Error>> {
+//     let s = choose_left_mpst_session_b_to_all::<
+//         CtoAAdd<i32>,
+//         CtoANeg<i32>,
+//         BtoAAdd<i32>,
+//         End,
+//         BtoANeg<i32>,
+//         End,
+//         StackOfferADual,
+//         StackOfferADual,
+//         StackOfferCDual,
+//         StackOfferCDual,
+//         StackChoiceB,
+//         StackChoiceB,
+//     >(s);
+//     let s = send_mpst_b_to_a(1, s);
+//     close_mpst(s)
+// }
 
-// //             close_mpst(s)?;
-// //             Ok(())
-// //         },
-// //         |s: EndpointAEnd| {
-// //             close_mpst(s)?;
+// fn simple_store_client_right_0_1(s: EndpointChoiceB1<i32>) -> Result<(), Box<dyn Error>> {
+//     let s = choose_right_mpst_session_b_to_all::<
+//         CtoAAdd<i32>,
+//         CtoANeg<i32>,
+//         BtoAAdd<i32>,
+//         End,
+//         BtoANeg<i32>,
+//         End,
+//         StackOfferADual,
+//         StackOfferADual,
+//         StackOfferCDual,
+//         StackOfferCDual,
+//         StackChoiceB,
+//         StackChoiceB,
+//     >(s);
+//     let s = send_mpst_b_to_a(1, s);
+//     close_mpst(s)
+// }
 
-// //             Ok(())
-// //         },
-// //     )
-// // }
+// fn simple_store_client_right_0(s: EndpointChoiceB0<i32>) -> Result<(), Box<dyn Error>> {
+//     let s = choose_right_mpst_session_b_to_all::<
+//         CtoAAdd<i32>,
+//         CtoANeg<i32>,
+//         BtoAAdd<i32>,
+//         End,
+//         BtoANeg<i32>,
+//         End,
+//         StackOfferADual,
+//         StackOfferADual,
+//         StackOfferCDual,
+//         StackOfferCDual,
+//         StackChoiceB,
+//         StackChoiceB,
+//     >(s);
+//     let s = send_mpst_b_to_a(2, s);
+//     close_mpst(s)
+// }
 
-// // fn client_video_video(s: EndpointCFull<i32>) ->
-// Result<(), Box<dyn Error>> { //     {
-// //         let mut rng = thread_rng();
-// //         let id: i32 = rng.gen();
+// fn simple_store_pawn_0(s: EndpointChoiceC0<i32>) -> Result<(), Box<dyn Error>> {
+//     offer_mpst_session_to_c_from_b(
+//         s,
+//         |s: EndpointCAddOffer<i32>| {
+//             let (x, s) = recv_mpst_c_from_a(s)?;
 
-// //         let s = send_mpst_c_to_a(id, s);
-// //         let (accept, s) = recv_mpst_c_from_a(s)?;
+//             simple_store_pawn_1(s)
+//         },
+//         |s: EndpointCNeg<i32>| {
+//             let (x, s) = recv_mpst_c_from_a(s)?;
 
-// //         assert_eq!(accept, id + 1);
+//             close_mpst(s)
+//         },
+//     )
+// }
 
-// //         let s = choose_left_mpst_session_c_to_all::<
-// //             BtoAVideo<i32>,
-// //             AtoBClose,
-// //             CtoAVideo<i32>,
-// //             BtoCClose,
-// //             BtoCClose,
-// //             AtoCClose,
-// //             QueueAVideoDual,
-// //             QueueAEnd,
-// //             QueueBVideoDual,
-// //             QueueBEnd,
-// //             QueueCVideo,
-// //             QueueCEnd,
-// //         >(s);
+// fn simple_store_pawn_1(s: EndpointChoiceC1<i32>) -> Result<(), Box<dyn Error>> {
+//     offer_mpst_session_to_c_from_b(
+//         s,
+//         |s: EndpointCAdd<i32>| {
+//             let (x, s) = recv_mpst_c_from_a(s)?;
 
-// //         let s = send_mpst_c_to_a(accept, s);
-// //         let (result, s) = recv_mpst_c_from_a(s)?;
+//             close_mpst(s)
+//         },
+//         |s: EndpointCNeg<i32>| {
+//             let (x, s) = recv_mpst_c_from_a(s)?;
 
-// //         assert_eq!(result, accept + 3);
+//             close_mpst(s)
+//         },
+//     )
+// }
 
-// //         close_mpst(s)?;
-// //     }
-// //     Ok(())
-// // }
+// /////////////////////////////////////////
 
-// // fn client_video_close(s: EndpointCFull<i32>) ->
-// Result<(), Box<dyn Error>> { //     {
-// //         let mut rng = thread_rng();
-// //         let id: i32 = rng.gen();
-
-// //         let s = send_mpst_c_to_a(id, s);
-// //         let (accept, s) = recv_mpst_c_from_a(s)?;
-
-// //         assert_eq!(accept, id + 1);
-
-// //         let s = choose_left_mpst_session_c_to_all::<
-// //             BtoAVideo<i32>,
-// //             AtoBClose,
-// //             CtoAVideo<i32>,
-// //             BtoCClose,
-// //             BtoCClose,
-// //             AtoCClose,
-// //             QueueAVideoDual,
-// //             QueueAEnd,
-// //             QueueBVideoDual,
-// //             QueueBEnd,
-// //             QueueCVideo,
-// //             QueueCEnd,
-// //         >(s);
-
-// //         let s = send_mpst_c_to_a(accept, s);
-// //         let (result, s) = recv_mpst_c_from_a(s)?;
-
-// //         assert_eq!(result, accept + 3);
-
-// //         close_mpst(s)?;
-// //     }
-// //     Ok(())
-// // }
-
-// // fn client_close(s: EndpointCFull<i32>) -> Result<(),
-// Box<dyn Error>> { //     {
-// //         let mut rng = thread_rng();
-// //         let id: i32 = rng.gen();
-
-// //         let s = send_mpst_c_to_a(id, s);
-// //         let (accept, s) = recv_mpst_c_from_a(s)?;
-
-// //         assert_eq!(accept, id + 1);
-
-// //         let s = choose_right_mpst_session_c_to_all::<
-// //             BtoAVideo<i32>,
-// //             AtoBClose,
-// //             CtoAVideo<i32>,
-// //             BtoCClose,
-// //             BtoCClose,
-// //             AtoCClose,
-// //             QueueAVideoDual,
-// //             QueueAEnd,
-// //             QueueBVideoDual,
-// //             QueueBEnd,
-// //             QueueCVideo,
-// //             QueueCEnd,
-// //         >(s);
-
-// //         let s = send_mpst_c_to_a(accept, s);
-// //         let (result, s) = recv_mpst_c_from_a(s)?;
-
-// //         assert_eq!(result, accept + 3);
-
-// //         close_mpst(s)?;
-// //     }
-// //     Ok(())
-// // }
-
-// #[test]
-// fn run_nested_choices() {
-//     // assert!(|| -> Result<(), Box<dyn Error>> {
-//     //     // Test video branch.
-//     //     {
-//     //         let (thread_a, thread_b, thread_c) =
-//     //             fork_mpst(authenticator, server,
-// client_video_video);
-
-//     //         assert!(thread_a.is_ok());
-//     //         assert!(thread_b.is_ok());
-//     //         assert!(thread_c.is_ok());
-//     //     }
-
-//     //     // Test end branch.
-//     //     {
-//     //         let (thread_a, thread_b, thread_c) =
-// fork_mpst(authenticator, server, client_close);
-
-//     //         assert!(thread_a.is_ok());
-//     //         assert!(thread_b.is_ok());
-//     //         assert!(thread_c.is_ok());
-//     //     }
-
-//     //     Ok(())
-//     // }()
-//     // .is_ok());
-
+// pub fn nested_choice() {
 //     assert!(|| -> Result<(), Box<dyn Error>> {
+//         // Test the left branch.
 //         {
-//             let hm: HashMap<String, &Vec<String>> =
-// HashMap::new();
+//             let (thread_a, thread_b, thread_c) = fork_mpst(
+//                 simple_store_server_0,
+//                 simple_store_client_left_0,
+//                 simple_store_pawn_0,
+//             );
 
-//             let (s1, _): (EndpointAFull<i32>, _) =
-// SessionMpst::new();             let (s2, _):
-// (EndpointBFull<i32>, _) = SessionMpst::new();
-// let (s3, _): (EndpointCFull<i32>, _) =
-// SessionMpst::new();
+//             assert!(thread_a.join().is_ok());
+//             assert!(thread_b.join().is_ok());
+//             assert!(thread_c.join().is_ok());
+//         }
 
-//             let (a, b, c) = checker(s1, s2, s3, &hm)?;
+//         // Test the right branch.
+//         {
+//             let (thread_a, thread_b, thread_c) = fork_mpst(
+//                 simple_store_server_0,
+//                 simple_store_client_right_0,
+//                 simple_store_pawn_0,
+//             );
 
-//             assert_eq!(a, "A: A?C.A!C.( (
-// A?C.A!B.A?B.A!C.0 & 0 ) & 0 )");
-// assert_eq!(b, "B: ( ( B?A.B!A.0 & 0 ) & 0 )");
-//             assert_eq!(c, "C: C!A.C?A.( ( C?A.C!A.0 + 0 )
-// + 0 )");         }
+//             assert!(thread_a.join().is_ok());
+//             assert!(thread_b.join().is_ok());
+//             assert!(thread_c.join().is_ok());
+//         }
+
 //         Ok(())
 //     }()
 //     .is_ok());
 // }
+
+pub fn nested_choice() {}

@@ -1,9 +1,11 @@
 # Multiparty session types for Rust
 
 <!-- [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github) -->
-![Rust](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/Rust/badge.svg)
+![Rust Ubuntu](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/ubuntu/badge.svg)
+![Rust Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/windows/badge.svg)
+![Rust Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/workflows/mac/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.50+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.53+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
 [![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
@@ -35,9 +37,9 @@ use std::error::Error;
 
 // Used for creating the types
 use mpstthree::binary::struct_trait::{End, Recv, Send};
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
-// Used for connecting all the roles, represented as SessionMpst, together
+// Used for connecting all the roles, represented as MeshedChannels, together
 use mpstthree::fork_mpst;
 
 // Used for create the stack and the name of each role
@@ -75,22 +77,22 @@ type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 ```
 
-Add the **queues**, which give the correct order of the operations for each participant.
+Add the **stacks**, which give the correct order of the operations for each participant.
 
 ```rust
-/// Queues
-type QueueA = RoleB<RoleC<RoleEnd>>;
-type QueueB = RoleA<RoleC<RoleEnd>>;
-type QueueC = RoleA<RoleB<RoleEnd>>;
+/// Stacks
+type StackA = RoleB<RoleC<RoleEnd>>;
+type StackB = RoleA<RoleC<RoleEnd>>;
+type StackC = RoleA<RoleB<RoleEnd>>;
 ```
 
-You can now encapsulate those **binary session types** and **queues** into **SessionMpst** for each participant.
+You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels** for each participant.
 
 ```rust
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
+type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ```
 
 To check to the protocol is *correct*, it is mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.
@@ -133,9 +135,9 @@ In the end, you have to link the threads, related to the functions above, togeth
 /// Fork all endpoints
 fn simple_triple_endpoints() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
-        simple_triple_endpoint_a,
-        simple_triple_endpoint_b,
-        simple_triple_endpoint_c,
+        endpoint_a,
+        endpoint_b,
+        endpoint_c,
     );
 
     thread_a.join().unwrap();
@@ -193,19 +195,19 @@ This part details how to create new roles and how to use them.
 
 #### Creation of new roles
 
-Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the role, the name of the `next` function to go through the stack, the name of the *dual* of this role and the name of the `next` function for this dual. For instance, let's create the role `RoleD`. The expected code will be:
+Instead of being limited by roles `RoleA`, `RoleB` and `RoleC`, you can now create your roles. To achieve this, you need to use the macros `create_normal_role` and `create_broadcast_role`, respectively for binary types and broadcasted ones. Example of use can be found in the [macro-basic](tests/macro-basics.rs). Those macros take, as parameters and in the order, the name of the rolea and the name of the *dual*
+of this role. For instance, let's create the role `RoleD`. The expected code will be:
 
 ```rust
-create_normal_role!(RoleA, next_a, RoleD, next_d);
+create_normal_role!(RoleA, RoleADual);
 ```
 
 #### Sending and receiving with those new roles
 
-To create the role `RoleD`, you need the related `next` function, that can be named `next_d`, to go through a stack which head is `RoleD`, such as `RoleD<RoleEnd>`. The *dual* of `RoleD`is `RoleDDual`and the related `next` function, that can be named `next_d_dual`.
-
 To *send* and *receive* with those new roles, it is mandatory to define new `send` and `recv` functions. This can easily be done with the macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2`.
 As you may notice, there is a difference made between `session_1` and `session_2`. This is due to the current limitation of the library: this is for making the difference between the binary channels used during the communication. If `A` sends to `B`, it will send on the first channel, and by convention (alphanumerical order), it will be the first binary channel, hence `create_send_mpst_session_1` will be used. If `A` send to `C` and `B` is among the participants, then `create_send_mpst_session_2` will be used.
-The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the names of the role and the related `next`function. To create the `send` function from `A` to `B`, here is the expected line of code: 
+The macros `create_send_mpst_session_1`, `create_send_mpst_session_2`, `create_recv_mpst_session_1` and `create_recv_mpst_session_2` expect the same inputs: the name of the new function created and the name of the involved roles. To create the `send` function from `A` to `B`,
+here is the expected line of code: 
 
 ```rust
 create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
@@ -214,13 +216,12 @@ create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
 #### Making choice and offer with those new roles
 
 To add a layer of features, one may expect to implement `choice` and `offer`. There are two different kind of branching: *binary* and *multiple*. The former refers to a branching with only two choices, whereas the latter refers to branching with as many choices as wanted.
-For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the names of the role and the related `next` function. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
+For the *binary branching*, the macros `create_offer_mpst_session_1` and `create_offer_mpst_session_2` for offer, and `create_choose_left_from_X_to_Y_and_Z` (where X, Y and Z are numbers linked to the roles) are used. The inputs are the name of the new `offer`( respectively `choose`) functions and the name of the involved roles. For instance, to create an *offer* function for role `B` to receive from role `C`, here is an example of code: 
 
 ```rust
 create_offer_mpst_session_2!(
     offer_mpst_session_b_to_c,
     RoleAlltoC,
-    recv_mpst_b_all_to_c,
     RoleB
 );
 ```
@@ -233,7 +234,6 @@ create_choose_left_from_3_to_1_and_2!(
     RoleADual,
     RoleBDual,
     RoleCtoAll,
-    next_c_to_all,
     RoleC
 );
 ```

@@ -3,13 +3,13 @@ use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
 /// Gives the order to the
-/// [`mpstthree::sessionmpst::SessionMpst`] related to B.
+/// [`mpstthree::meshedchannels::MeshedChannels`] related to B.
 ///
 /// This `struct` should only be used in the `stack` field
-/// of the [`mpstthree::sessionmpst::SessionMpst`] related
+/// of the [`mpstthree::meshedchannels::MeshedChannels`] related
 /// to B.
 ///
-/// [`mpstthree::sessionmpst::SessionMpst`]: ../sessionmpst/struct.SessionMpst.html
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html
 pub struct RoleB<R>
 where
     R: Role,
@@ -45,14 +45,4 @@ impl<R: Role> Role for RoleB<R> {
     fn tail_str() -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
-}
-
-#[doc(hidden)]
-pub fn next_b<R>(r: RoleB<R>) -> R
-where
-    R: Role,
-{
-    let (here, there) = R::new();
-    r.sender.send(there).unwrap_or(());
-    here
 }

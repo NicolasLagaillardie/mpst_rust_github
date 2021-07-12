@@ -1,0 +1,48 @@
+name: Ubuntu
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build, test and benchmarks all
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        rust: [stable]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Format
+      run: cargo fmt --verbose --all -- --check
+    - name: Clippy
+      run: cargo clippy --verbose -- -D warnings
+    - name: Check lib
+      run: cargo check --verbose --all
+    - name: Check examples
+      run: cargo check --examples --verbose
+    - name: Check tests
+      run: cargo check --tests --verbose
+    - name: Check benches
+      run: cargo check --benches --verbose
+    - name: Run doc
+      run: cargo doc --verbose --all
+    - name: Build lib
+      run: cargo build --verbose --all
+    - name: Build examples
+      run: cargo build --examples --verbose
+    - name: Build tests
+      run: cargo build --tests --verbose
+    - name: Build benches
+      run: cargo build --benches --verbose
+    - name: Run tests all
+      run: cargo test --verbose --all
+    - name: Run tests no capture
+      run: cargo test --verbose --all -- --nocapture
+    - name: Run tests no features
+      run: cargo test --verbose --all --no-default-features --no-run
+    # - name: Run examples
+    #   run: ./scripts/create_files/full_examples.sh
+    - name: Run benchmarks
+      run: cargo bench --verbose --all

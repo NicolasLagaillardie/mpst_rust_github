@@ -7,7 +7,7 @@ use std::error::Error;
 
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::fork::fork_mpst;
-use mpstthree::sessionmpst::SessionMpst;
+use mpstthree::meshedchannels::MeshedChannels;
 
 use mpstthree::functionmpst::close::close_mpst;
 
@@ -34,18 +34,20 @@ type BtoC<N> = Send<N, End>;
 type CtoA<N> = <AtoC<N> as Session>::Dual;
 type CtoB<N> = <BtoC<N> as Session>::Dual;
 
-/// Queues
-type QueueA = RoleB<RoleC<RoleEnd>>;
-type QueueB = RoleA<RoleC<RoleEnd>>;
-type QueueC = RoleA<RoleB<RoleEnd>>;
+/// Stacks
+type StackA = RoleB<RoleC<RoleEnd>>;
+type StackB = RoleA<RoleC<RoleEnd>>;
+type StackC = RoleA<RoleB<RoleEnd>>;
 
 /// Creating the MP sessions
-type EndpointA<N> = SessionMpst<AtoB<N>, AtoC<N>, QueueA, RoleA<RoleEnd>>;
-type EndpointB<N> = SessionMpst<BtoA<N>, BtoC<N>, QueueB, RoleB<RoleEnd>>;
-type EndpointC<N> = SessionMpst<CtoA<N>, CtoB<N>, QueueC, RoleC<RoleEnd>>;
+type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 
 /// Single test for A
-fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+    let (size, s) = s.field_names();
+    assert_eq!(size.len(), 2);
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_from_c(s)?;
 
@@ -55,7 +57,9 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 /// Single test for B
-fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+    let (size, s) = s.field_names();
+    assert_eq!(size.len(), 2);
     let (x, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
@@ -65,7 +69,9 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 /// Single test for C
-fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+    let (size, s) = s.field_names();
+    assert_eq!(size.len(), 2);
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_from_b(s)?;
 
@@ -79,11 +85,7 @@ fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 pub fn simple_triple_endpoints() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (thread_a, thread_b, thread_c) = fork_mpst(
-                simple_triple_endpoint_a,
-                simple_triple_endpoint_b,
-                simple_triple_endpoint_c,
-            );
+            let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
             assert!(thread_a.join().is_ok());
             assert!(thread_b.join().is_ok());
@@ -100,9 +102,9 @@ pub fn simple_triple_endpoints_checker() {
             let s = RandomState::new();
             let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
 
-            let (s1, _): (EndpointA<i32>, _) = SessionMpst::new();
-            let (s2, _): (EndpointB<i32>, _) = SessionMpst::new();
-            let (s3, _): (EndpointC<i32>, _) = SessionMpst::new();
+            let (s1, _): (EndpointA<i32>, _) = MeshedChannels::new();
+            let (s2, _): (EndpointB<i32>, _) = MeshedChannels::new();
+            let (s3, _): (EndpointC<i32>, _) = MeshedChannels::new();
 
             let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
 
