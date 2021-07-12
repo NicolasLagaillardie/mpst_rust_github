@@ -12,7 +12,7 @@
 //! [`mpstthree::role::Role`]: ../role/trait.Role.html
 //! [`mpstthree::role::end::RoleEnd`]: ../role/end/struct.RoleEnd.html
 //! [`mpstthree::role::a::RoleA`]: ../role/a/struct.RoleA.html
-//! [`mpstthree::role::b::RoleB`]:  /role/b/struct.RoleB.html
+//! [`mpstthree::role::b::RoleB`]: ../role/b/struct.RoleB.html
 
 pub mod a;
 pub mod a_dual;

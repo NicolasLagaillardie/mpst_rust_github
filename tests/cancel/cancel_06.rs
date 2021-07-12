@@ -79,8 +79,7 @@ type EndpointC =
 type EndpointD = MeshedChannelsFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    broadcast_cancel!(s, 4);
-    Ok(())
+    broadcast_cancel!(s, 4)
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {

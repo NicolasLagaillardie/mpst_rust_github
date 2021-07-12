@@ -34,3 +34,6 @@ echo "cargo test --verbose --all --no-default-features --no-run completed"
 echo "cargo clippy started"
 cargo clippy
 echo "cargo clippy completed"
+echo "cargo doc started"
+cargo doc
+echo "cargo doc completed"

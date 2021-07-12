@@ -266,7 +266,7 @@ macro_rules! choose_mpst_multi_to_all {
 }
 
 /// Create a macro that simplifies the usage of
-/// [`mpstthree::choose_mpst_multi_to_all`](../macro.choose_mpst_multi_to_all.html)
+/// [`mpstthree::choose_mpst_multi_to_all`](./macro.choose_mpst_multi_to_all.html)
 ///
 /// # Arguments
 ///

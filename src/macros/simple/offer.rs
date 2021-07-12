@@ -77,7 +77,7 @@ macro_rules! create_offer_mpst_session_1 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ../meshedchannels/struct.MeshedChannels.html.
+/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
 #[macro_export]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {

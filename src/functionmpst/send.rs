@@ -63,7 +63,7 @@ macro_rules! send_aux_simple {
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = send_mpst_a_to_b(1, sess);
 /// ```
@@ -127,7 +127,7 @@ where
 ///   name: name_b,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = send_mpst_b_to_a(1, sess);
 /// ```
@@ -191,7 +191,7 @@ where
 ///   name: name_c,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = send_mpst_c_to_a(1, sess);
 /// ```
@@ -255,7 +255,7 @@ where
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = send_mpst_a_to_c(1, sess);
 /// ```
@@ -319,7 +319,7 @@ where
 ///   name: name_b,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = send_mpst_b_to_c(1, sess);
 /// ```
@@ -383,7 +383,7 @@ where
 ///   name: name_c,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = send_mpst_c_to_b(1, sess);
 /// ```

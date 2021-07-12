@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-
 use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -12,7 +8,6 @@ use mpstthree::{
 };
 
 use std::error::Error;
-use std::time::Duration;
 
 // global protocol ping_pong(role A, role B)
 // {
@@ -150,40 +145,14 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
-    let (thread_central, thread_a, thread_b) = fork_mpst(
-        black_box(endpoint_central),
-        black_box(endpoint_a),
-        black_box(recurs_b),
-    );
+pub fn main() {
+    let (thread_central, thread_a, thread_b) = fork_mpst(endpoint_central, endpoint_a, recurs_b);
 
-    thread_central.join()?;
-    thread_a.join()?;
-    thread_b.join()?;
-
-    Ok(())
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_central.join().is_ok());
 }
 
 /////////////////////////
 
 static SIZE: i64 = 1;
-
-fn ping_pong_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ping pong cancel broadcast protocol MPST {}", SIZE),
-        |b| b.iter(|| all_mpst()),
-    );
-}
-
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(1800, 0))
-}
-
-criterion_group! {
-    name = ping_pong;
-    // config = long_warmup();
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ping_pong_protocol_mpst
-}
-
-criterion_main!(ping_pong);

@@ -30,7 +30,7 @@ use macros::multiple::create_choose_mpst_session_multi_right::ChooseTypeMultiRig
 use macros::multiple::create_choose_type_multi::ChooseTypeMultiMacroInput;
 use macros::multiple::create_fn_choose_mpst_cancel_multi_to_all_bundle::ChooseTypeCancelMultiToAllBundleMacroInput;
 use macros::multiple::create_fn_choose_mpst_multi_to_all_bundle::ChooseTypeMultiToAllBundleMacroInput;
-use macros::multiple::create_meshedchannels::CreateSessionMPSTMacroInput;
+use macros::multiple::create_meshedchannels::CreateMeshedChannelsMacroInput;
 use macros::multiple::create_offer_mpst_session_multi::OfferMPSTSessionMultiMacroInput;
 use macros::multiple::create_offer_type_multi::OfferTypeMultiMacroInput;
 use macros::multiple::create_recv_http_session::CreateRecvHttpSessionMacroInput;
@@ -469,7 +469,7 @@ pub fn e_create_send_check_cancel(input: TokenStream) -> TokenStream {
 
 #[proc_macro]
 pub fn create_meshedchannels(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as CreateSessionMPSTMacroInput);
+    let input = parse_macro_input!(input as CreateMeshedChannelsMacroInput);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }

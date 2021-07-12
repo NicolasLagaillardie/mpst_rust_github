@@ -21,13 +21,13 @@ type TestA = RoleA<RoleEnd>;
 type TestB = RoleB<RoleEnd>;
 type TestD = RoleD<RoleEnd>;
 
-type SendSessionMPSTD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
+type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
 
-type SendSessionMPSTA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
+type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
 
-type RecvSessionMPSTD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
+type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
 
-type RecvSessionMPSTA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
+type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
 
 // Create an B pawn
 type Pawn = MeshedChannels<End, End, RoleEnd, TestB>;
@@ -41,22 +41,22 @@ create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, RoleD);
 create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, RoleA);
 
 // The functions for the basic exchanges
-fn send_a_to_d(s: SendSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
+fn send_a_to_d(s: SendMeshedChannelsA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_d(0, s);
     close_mpst(s)
 }
 
-fn send_d_to_a(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
+fn send_d_to_a(s: SendMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_d_to_a(0, s);
     close_mpst(s)
 }
 
-fn recv_a_to_d(s: RecvSessionMPSTA<i32>) -> Result<(), Box<dyn Error>> {
+fn recv_a_to_d(s: RecvMeshedChannelsA<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_from_d(s)?;
     close_mpst(s)
 }
 
-fn recv_d_to_a(s: RecvSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
+fn recv_d_to_a(s: RecvMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_d_from_a(s)?;
     close_mpst(s)
 }

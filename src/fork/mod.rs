@@ -36,7 +36,7 @@ where
 }
 
 /// Creates and returns a tuple of three child processes for
-/// three [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html) linked
+/// three [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html) linked
 /// together.
 ///
 /// # Example

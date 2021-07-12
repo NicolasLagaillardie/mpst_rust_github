@@ -7,7 +7,7 @@ use crate::role::end::RoleEnd;
 use crate::role::Role;
 use std::error::Error;
 
-/// Closes a [`mpstthree::meshedchannels::Sessionmpst`](../meshedchannels/struct.MeshedChannels.html).
+/// Closes a [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html).
 /// Synchronises with all partners, and fails if one of the partners has
 /// crashed.
 ///
@@ -54,7 +54,7 @@ use std::error::Error;
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](../fork/index.html).
+/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
 ///
 /// let s = close_mpst(sess);
 /// ```

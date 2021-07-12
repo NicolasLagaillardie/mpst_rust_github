@@ -57,7 +57,7 @@ type MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
 
 /// Offer a choice to A from B (on its session field related
 /// to B) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html),
+/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -98,7 +98,7 @@ where
 }
 
 /// Offer a choice to B from C (on its session field related to A) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html),
+/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -139,7 +139,7 @@ where
 }
 
 /// Offer a choice to A from B (on its session field related to B) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html),
+/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -180,7 +180,7 @@ where
 }
 
 /// Offer a choice to A from B (on its session field related to B) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html),
+/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -221,7 +221,7 @@ where
 }
 
 /// Offer a choice to A from C (on its session field related to C) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html),
+/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -262,7 +262,7 @@ where
 }
 
 /// Offer a choice to A from C (on its session field related to C) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](../meshedchannels/struct.MeshedChannels.html),
+/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example

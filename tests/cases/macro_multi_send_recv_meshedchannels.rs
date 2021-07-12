@@ -34,22 +34,22 @@ type NameC = RoleC<RoleEnd>;
 type NameD = RoleD<RoleEnd>;
 type NameE = RoleE<RoleEnd>;
 
-type SendSessionMPSTD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
+type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
 
-type RecvSessionMPSTB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
+type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
 
 type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
 type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;
 type PawnE = MeshedChannels<End, End, End, End, RoleEnd, NameE>;
 
-fn send_d_to_b(s: SendSessionMPSTD<i32>) -> Result<(), Box<dyn Error>> {
+fn send_d_to_b(s: SendMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
     let (size, s) = s.field_names();
     assert_eq!(size.len(), 4);
     let s = send_mpst_d_to_b(0, s);
     close_mpst_multi(s)
 }
 
-fn recv_b_to_d(s: RecvSessionMPSTB<i32>) -> Result<(), Box<dyn Error>> {
+fn recv_b_to_d(s: RecvMeshedChannelsB<i32>) -> Result<(), Box<dyn Error>> {
     let (size, s) = s.field_names();
     assert_eq!(size.len(), 4);
     let (_, s) = recv_mpst_b_from_d(s)?;

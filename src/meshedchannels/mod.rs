@@ -13,8 +13,8 @@
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
 //!   `RoleB<RoleEnd>`.
 //!
-//! [`mpstthree::binary::struct_trait::Session`]: ../binary/trait.Session.html
-//! [`mpstthree::role::Role`]: ../role/trait.Role.html
+//! [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
+//! [`mpstthree::role::Role`]: ./role/trait.Role.html
 
 use crate::binary::struct_trait::Session;
 use crate::role::Role;

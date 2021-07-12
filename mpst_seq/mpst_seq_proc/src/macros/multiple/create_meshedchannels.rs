@@ -3,32 +3,32 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
 #[derive(Debug)]
-pub struct CreateSessionMPSTMacroInput {
+pub struct CreateMeshedChannelsMacroInput {
     meshedchannels_name: syn::Ident,
     nsessions: u64,
 }
 
-impl Parse for CreateSessionMPSTMacroInput {
+impl Parse for CreateMeshedChannelsMacroInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
-        Ok(CreateSessionMPSTMacroInput {
+        Ok(CreateMeshedChannelsMacroInput {
             meshedchannels_name,
             nsessions,
         })
     }
 }
 
-impl From<CreateSessionMPSTMacroInput> for proc_macro2::TokenStream {
-    fn from(input: CreateSessionMPSTMacroInput) -> proc_macro2::TokenStream {
+impl From<CreateMeshedChannelsMacroInput> for proc_macro2::TokenStream {
+    fn from(input: CreateMeshedChannelsMacroInput) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl CreateSessionMPSTMacroInput {
+impl CreateMeshedChannelsMacroInput {
     fn expand(&self) -> proc_macro2::TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
