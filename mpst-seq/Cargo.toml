@@ -1,6 +1,6 @@
 [package]
 name = "mpst-seq"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2018"
 autotests = false
 
@@ -10,5 +10,4 @@ trybuild = "1.0.41"
 [dependencies]
 proc-macro-hack = "0.5.19"
 # mpst-seq-proc = { git = "https://github.com/NicolasLagaillardie/mpst-seq-proc", branch = "main" }
-# mpst-seq-proc = { path = "../mpst-seq-proc" }
-mpst-seq-proc = { path = "mpst-seq-proc" }
+mpst-seq-proc = { path = "mpst-seq-proc", version = "0.0.2" }

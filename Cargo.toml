@@ -40,8 +40,7 @@ rand = "0.8.4"
 # dot = "0.1.4"
 # sesh = "0.1.1"
 # mpst-seq = { git = "https://github.com/NicolasLagaillardie/mpst-seq", branch = "main" }
-# mpst-seq = { path = "../mpst-seq" }
-mpst-seq = { path = "mpst-seq" }
+mpst-seq = { path = "mpst-seq", version = "0.0.2" }
 # anyhow = "1"
 hyper = { version = "0.14", features = ["full"] }
 hyper-tls = "0.5"
