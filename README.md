@@ -13,7 +13,6 @@
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
 It relies on [sesh](https://github.com/wenkokke/sesh).
-Another library is coming soon to extend to any number of participants.
 
 A short video presentation of the library can be found here: [https://youtu.be/ej1FetN31HE](https://youtu.be/ej1FetN31HE).
 
