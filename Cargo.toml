@@ -40,8 +40,8 @@ either = "1.6.1"
 rand = "0.8.4"
 # dot = "0.1.4"
 # sesh = "0.1.1"
-# mpst-seq = { path = "mpst_seq", version = "0.0.3" }
-mpst-seq = "0.0.4"
+mpst-seq = { path = "mpst_seq", version = "0.0.4" }
+# mpst-seq = "0.0.4"
 # anyhow = "1"
 hyper = { version = "0.14", features = ["full"] }
 hyper-tls = "0.5"
