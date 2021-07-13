@@ -120,7 +120,7 @@ where
 /// `S::Dual`. Creates 3 `Role` for each stack.
 /// Creates 3 `MeshedChannels`, linked together with the pairs
 /// of endpoints, and get the related child processes.
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f0: F0,

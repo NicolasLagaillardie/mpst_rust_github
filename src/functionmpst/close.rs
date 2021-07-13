@@ -8,7 +8,7 @@ use crate::role::Role;
 use std::error::Error;
 
 /// Closes a [`MeshedChannels`].
-/// 
+///
 /// Synchronises with all partners, and fails if one of the partners has
 /// crashed.
 ///
@@ -59,7 +59,7 @@ use std::error::Error;
 ///
 /// let s = close_mpst(sess);
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn close_mpst<R>(s: MeshedChannels<End, End, RoleEnd, R>) -> Result<(), Box<dyn Error>>
 where

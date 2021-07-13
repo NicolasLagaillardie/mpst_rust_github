@@ -312,7 +312,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///     }
 /// }
 /// ```
-/// 
+///
 /// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 #[macro_export]
 macro_rules! choose_mpst_create_multi_to_all {

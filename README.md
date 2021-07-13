@@ -22,12 +22,15 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.0.6"
+mpstthree = "0.0.8"
 ```
 
 ## Example
 
-Here a way to create a simple protocol involving 3 participants, **A**, **B** and **C**. **A** sends a payload to **B**, then receives another from **C**. Upon receiving the payload from **A**, **B** sends a payload to **C**. This protocol can be written as **A!B.A?C.B!C.0**. 
+Assume a simple protocol involving 3 participants, **A**, **B** and **C**.
+**A** sends a payload to **B**, then receives another payload from **C**.
+Upon receiving the payload from **A**, **B** sends a payload to **C**.
+This protocol can be written as **A!B.A?C.B!C.0**. 
 To implement this example, first, get the right components from the library.
 
 ```rust
@@ -39,100 +42,109 @@ use std::error::Error;
 use mpstthree::binary::struct_trait::{End, Recv, Send};
 use mpstthree::meshedchannels::MeshedChannels;
 
-// Used for connecting all the roles, represented as MeshedChannels, together
-use mpstthree::fork_mpst;
-
-// Used for create the stack and the name of each role
+// Used for creating the stack and the name of each role
 use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
-// Used inside the function which process the protocol for receiving one payload
+// Used inside the functions which process the protocol for receiving one payload
 use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
-// Used inside the function which process the protocol for sending one payload
+// Used inside the functions which process the protocol for sending one payload
 use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
-// Used inside the function which process the protocol for closing the connexion
+// Used inside the functions which process the protocol for closing the connexion
 use mpstthree::functionmpst::close::close_mpst;
+
+// Used for connecting all the roles, represented as MeshedChannels, together
+use mpstthree::fork_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
-Note that each created type can be reused as many time as needed. Here, for this example, we create several times the same binary session type for clarity, but we could use only two of those types for the whole protocol instead.
+Note that each created type can be reused as many time as needed.
+For our example, we create several times the same binary session type for clarity,
+but we could use only two of those types for the whole protocol instead.
 
 ```rust
-/// Creating the binary sessions
+// Creating the binary sessions
+// for A
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 
+// for B
 type BtoA<N> = Recv<N, End>;
 type BtoC<N> = Send<N, End>;
 
+// for C
 type CtoA<N> = Send<N, End>;
 type CtoB<N> = Recv<N, End>;
 ```
 
-Add the **stacks**, which give the correct order of the operations for each participant.
+Add the **stacks** which give the correct order of the operations for each participant.
 
 ```rust
-/// Stacks
+// Stacks
+// for A
 type StackA = RoleB<RoleC<RoleEnd>>;
+// for B
 type StackB = RoleA<RoleC<RoleEnd>>;
+// for C
 type StackC = RoleA<RoleB<RoleEnd>>;
 ```
 
 You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels** for each participant.
+We also add the names of the related roles.
 
 ```rust
-/// Creating the MP sessions
+// Creating the MP sessions
+// for A
 type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+// for B
 type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+// for C
 type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ```
 
-To check to the protocol is *correct*, it is mandatory to detail the behaviour of the participants with functions which input the **Endpoints** defined above.
+To run the protocol,
+we need to detail the behaviour of the participants with functions that input the **Endpoints** defined above.
 
 ```rust
-/// Function to process Endpoint of A
+// Function to process Endpoint of A
 fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_from_c(s)?;
 
-    close_mpst(s)?;
-
-    Ok(())
+    close_mpst(s)
 }
 
-/// Function to process Endpoint of B
+// Function to process Endpoint of B
 fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
-    close_mpst(s)?;
-
-    Ok(())
+    close_mpst(s)
 }
 
-/// Function to process Endpoint of C
+// Function to process Endpoint of C
 fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_from_b(s)?;
 
-    close_mpst(s)?;
-
-    Ok(())
+    close_mpst(s)
 }
 ```
 
-In the end, you have to link the threads, related to the functions above, together with **fork_mpst()**. Do not forget to **unwrap()** the returned threads.
+In the end, you have to link/fork the threads,
+related to the functions above, together with **fork_mpst()**.
+Do not forget to **unwrap()** the returned threads.
 
 ```rust
-/// Fork all endpoints
+// Fork all endpoints
 fn simple_triple_endpoints() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         endpoint_a,
@@ -152,7 +164,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to have [Rust](https://www.rust-lang.org/). You should get `cargo` installed.
+You need to have [Rust](https://www.rust-lang.org/).
+You will get `cargo` installed.
 
 ### Building
 
@@ -178,12 +191,17 @@ For running the tests, run this code.
 $ cargo test
 ```
 
-Tests are divided into 4 files:
+Tests are divided into 8 folders:
 
-* [simple](tests/simple.rs) is the basic global protocol shown in [Examples](#Example).
-* [choose](tests/choose.rs) checks that a protocol where a role **B** spreads a choice to the two other roles. For simplifying the test, role **C** is doing nothing. The protocol can be written as **B→A:{B!A.0, B!A.0}**.
-* [usecase](test/usecase.rs) is implementing the protocol given in [1](.github/pdf/GPS.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
-* [usecase-recursive](test/usecase-recursive.rs) is implementing the protocol given in [2](.github/pdf/GPR.pdf), where **Client → C**, **Authenticator → A** and **Server → B**.
+* [unit](tests/unit/) contains unit tests for the library.
+* [basics](tests/basics/) contains the protocol shown in [Examples](#Example), alongside examples with the types and functions directly provided by the library.
+* [basics_macros](tests/basics_macros/) contains protocols with three or more participants using macros.
+* [baking](tests/baking/) contains protocols written with methods instead of functions.
+* [cancel](tests/cancel/) contains protocols written with cancellation.
+* [tcp](tests/tcp/) contains protocols written to work with **TCP** transport.
+* [http](tests/tcp/) contains protocols written to work with **HTTP** transport.
+* [scribble](tests/scribble/) contains protocols generated with Scribble.
+* [infinite_type](tests/infinite_type/) contains protocols that fail because of overflow when evaluated.
 
 ## Going further
 

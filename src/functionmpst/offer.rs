@@ -75,7 +75,7 @@ type MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
 ///    },
 /// )
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_a_from_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToAFromB<S1, S2, S3, S4, S5, R1, R2>,
@@ -118,7 +118,7 @@ where
 ///    },
 /// )
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_a_from_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToAFromC<S1, S2, S3, S4, S5, R1, R2>,
@@ -161,7 +161,7 @@ where
 ///    },
 /// )
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_b_from_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToBFromA<S1, S2, S3, S4, S5, R1, R2>,
@@ -204,7 +204,7 @@ where
 ///    },
 /// )
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_b_from_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToBFromC<S1, S2, S3, S4, S5, R1, R2>,
@@ -247,7 +247,7 @@ where
 ///    },
 /// )
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_c_from_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToCFromA<S1, S2, S3, S4, S5, R1, R2>,
@@ -290,7 +290,7 @@ where
 ///    },
 /// )
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_c_from_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2>,

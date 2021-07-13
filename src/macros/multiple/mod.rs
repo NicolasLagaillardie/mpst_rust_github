@@ -25,7 +25,7 @@ pub mod send;
 ///
 /// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, MeshedChannels, 3);
 /// ```
-/// 
+///
 /// [`create_meshedchannels`]: crate::create_meshedchannels
 /// [`close_mpst`]: crate::close_mpst
 /// [`fork_mpst_multi`]: crate::fork_mpst_multi
@@ -59,7 +59,7 @@ macro_rules! bundle_struct_fork_close_multi {
 ///
 /// bundle_struct_fork_close_multi_cancel!(close_mpst, fork_mpst, MeshedChannels, 3);
 /// ```
-/// 
+///
 /// [`create_meshedchannels`]: crate::create_meshedchannels
 /// [`close_mpst_cancel`]: crate::close_mpst_cancel
 /// [`fork_mpst_multi`]: crate::fork_mpst_multi

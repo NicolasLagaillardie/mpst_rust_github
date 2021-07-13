@@ -35,5 +35,5 @@ echo "cargo clippy started"
 cargo clippy
 echo "cargo clippy completed"
 echo "cargo doc started"
-cargo doc
+cargo doc --verbose --workspace --all-features
 echo "cargo doc completed"
