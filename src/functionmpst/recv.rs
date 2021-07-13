@@ -92,7 +92,7 @@ macro_rules! recv_all_aux_simple {
 ///   name: name_b,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
+/// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
 /// send_mpst_b_to_a((), sess_b);
 /// recv_mpst_a_from_b(sess_a);
@@ -170,7 +170,7 @@ where
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
+/// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
 /// send_mpst_a_to_b((), sess_a);
 /// recv_mpst_b_from_a(sess_b);
@@ -248,7 +248,7 @@ where
 ///   name: name_a,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
+/// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
 /// send_mpst_a_to_c((), sess_a);
 /// recv_mpst_c_from_a(sess_c);
@@ -326,7 +326,7 @@ where
 ///   name: name_c,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
+/// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
 /// send_mpst_c_to_a((), sess_c);
 /// recv_mpst_a_from_c(sess_a);
@@ -404,7 +404,7 @@ where
 ///   name: name_c,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
+/// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
 /// send_mpst_c_to_b((), sess_c);
 /// recv_mpst_b_from_c(sess_b);
@@ -482,7 +482,7 @@ where
 ///   name: name_b,
 /// };
 ///
-/// // ...to this point, should not be written in general. Please look at [`mpstthree::fork`](./fork/index.html).
+/// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
 /// send_mpst_b_to_c((), sess_b);
 /// recv_mpst_c_from_b(sess_c);
@@ -499,11 +499,11 @@ where
     recv_aux_simple!(s, RoleB, 2)()
 }
 
-/// Receive a broadcasted value of type `T` on B from A. Can
-/// fail. Returns either a pair of the received value and
-/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
-/// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::offer_mpst_session_to_a_from_b`].
+// Receive a broadcasted value of type `T` on B from A. Can
+// fail. Returns either a pair of the received value and
+// the continuation of the `MeshedChannels<S1, S2, R, N>` or
+// an error. Should not be used as a standalone, but rather
+// with [`offer_mpst_session_to_a_from_b`](crate::functionmpst::offer::offer_mpst_session_to_a_from_b).
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_b<T, S1, S2>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
@@ -516,11 +516,11 @@ where
     recv_all_aux_simple!(s, RoleAlltoB, 1)()
 }
 
-/// Receive a broadcasted value of type `T` on C from A. Can
-/// fail. Returns either a pair of the received value and
-/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
-/// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::offer_mpst_session_to_a_from_c`].
+// Receive a broadcasted value of type `T` on C from A. Can
+// fail. Returns either a pair of the received value and
+// the continuation of the `MeshedChannels<S1, S2, R, N>` or
+// an error. Should not be used as a standalone, but rather
+// with [`offer_mpst_session_to_a_from_c`](crate::functionmpst::offer::offer_mpst_session_to_a_from_c).
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_c<T, S1, S2>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
@@ -533,11 +533,11 @@ where
     recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
-/// Receive a broadcasted value of type `T` on A from B. Can
-/// fail. Returns either a pair of the received value and
-/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
-/// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::offer_mpst_session_to_b_from_a`].
+// Receive a broadcasted value of type `T` on A from B. Can
+// fail. Returns either a pair of the received value and
+// the continuation of the `MeshedChannels<S1, S2, R, N>` or
+// an error. Should not be used as a standalone, but rather
+// with [`offer_mpst_session_to_b_from_a`](crate::functionmpst::offer::offer_mpst_session_to_b_from_a).
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_a<T, S1, S2>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
@@ -550,11 +550,11 @@ where
     recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
-/// Receive a broadcasted value of type `T` on C from A. Can
-/// fail. Returns either a pair of the received value and
-/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
-/// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::offer_mpst_session_to_b_from_c`].
+// Receive a broadcasted value of type `T` on C from A. Can
+// fail. Returns either a pair of the received value and
+// the continuation of the `MeshedChannels<S1, S2, R, N>` or
+// an error. Should not be used as a standalone, but rather
+// with [`offer_mpst_session_to_b_from_c`](crate::functionmpst::offer::offer_mpst_session_to_b_from_c).
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_c<T, S1, S2>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
@@ -567,11 +567,11 @@ where
     recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
-/// Receive a broadcasted value of type `T` on A from B. Can
-/// fail. Returns either a pair of the received value and
-/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
-/// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::offer_mpst_session_to_c_from_a`].
+// Receive a broadcasted value of type `T` on A from B. Can
+// fail. Returns either a pair of the received value and
+// the continuation of the `MeshedChannels<S1, S2, R, N>` or
+// an error. Should not be used as a standalone, but rather
+// with [`offer_mpst_session_to_c_from_a`](crate::functionmpst::offer::offer_mpst_session_to_c_from_a).
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_a<T, S1, S2>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
@@ -584,11 +584,11 @@ where
     recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
-/// Receive a broadcasted value of type `T` on B from C. Can
-/// fail. Returns either a pair of the received value and
-/// the continuation of the `MeshedChannels<S1, S2, R, N>` or
-/// an error. Should not be used as a standalone, but rather
-/// with [`mpstthree::offer::offer_mpst_session_to_c_from_b`].
+// Receive a broadcasted value of type `T` on B from C. Can
+// fail. Returns either a pair of the received value and
+// the continuation of the `MeshedChannels<S1, S2, R, N>` or
+// an error. Should not be used as a standalone, but rather
+// with [`offer_mpst_session_to_c_from_b`](crate::functionmpst::offer::offer_mpst_session_to_c_from_b).
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_b<T, S1, S2>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,

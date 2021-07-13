@@ -8,9 +8,8 @@ pub mod recv;
 pub mod send;
 
 /// Creates the structure MeshedChannels
-/// [`mpstthree::create_meshedchannels`](./macro.create_meshedchannels.html),
-/// the [`mpstthree::close_mpst`](./macro.close_mpst.html) and
-/// [`mpstthree::fork_mpst_multi`](./macro.fork_mpst_multi.html).
+/// [`create_meshedchannels`],
+/// the [`close_mpst`] and [`fork_mpst_multi`].
 ///
 /// # Arguments
 ///
@@ -26,6 +25,10 @@ pub mod send;
 ///
 /// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, MeshedChannels, 3);
 /// ```
+/// 
+/// [`create_meshedchannels`]: crate::create_meshedchannels
+/// [`close_mpst`]: crate::close_mpst
+/// [`fork_mpst_multi`]: crate::fork_mpst_multi
 #[macro_export]
 macro_rules! bundle_struct_fork_close_multi {
     ($func_name_close: ident, $func_name_fork: ident, $meshedchannels_name: ident, $nsessions: literal) => {
@@ -36,9 +39,9 @@ macro_rules! bundle_struct_fork_close_multi {
 }
 
 /// Creates the structure MeshedChannels
-/// [`mpstthree::create_meshedchannels`](./macro.create_meshedchannels.html),
-/// the [`mpstthree::close_mpst_cancel`](./macro.close_mpst_cancel.html) and
-/// [`mpstthree::fork_mpst_multi`](./macro.fork_mpst_multi.html)
+/// [`create_meshedchannels`],
+/// the [`close_mpst_cancel`] and
+/// [`fork_mpst_multi`]
 /// functions to be used with more than 2 participants.
 /// It checks the send sides of the channels along the recv sides.
 ///
@@ -56,6 +59,10 @@ macro_rules! bundle_struct_fork_close_multi {
 ///
 /// bundle_struct_fork_close_multi_cancel!(close_mpst, fork_mpst, MeshedChannels, 3);
 /// ```
+/// 
+/// [`create_meshedchannels`]: crate::create_meshedchannels
+/// [`close_mpst_cancel`]: crate::close_mpst_cancel
+/// [`fork_mpst_multi`]: crate::fork_mpst_multi
 #[macro_export]
 macro_rules! bundle_struct_fork_close_multi_cancel {
     ($func_name_close: ident, $func_name_fork: ident, $meshedchannels_name: ident, $nsessions: literal) => {

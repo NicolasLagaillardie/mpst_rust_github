@@ -3,7 +3,7 @@
 
 /// Create a *send* function to send on the first binary
 /// session from any kind of role.  Must be used with
-/// [`mpstthree::meshedchannels::MeshedChannels`].
+/// [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -23,7 +23,7 @@
 /// create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_send_mpst_session_1 {
     ($func_name: ident, $role: ident, $name: ident) => {
@@ -33,7 +33,7 @@ macro_rules! create_send_mpst_session_1 {
 
 /// Create a *send* function to send on the second binary
 /// session from any kind of role.  Must be used with
-/// [`mpstthree::meshedchannels::MeshedChannels`].
+/// [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -53,7 +53,7 @@ macro_rules! create_send_mpst_session_1 {
 /// create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, RoleA);
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_send_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {

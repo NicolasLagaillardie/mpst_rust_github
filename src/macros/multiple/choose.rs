@@ -265,8 +265,7 @@ macro_rules! choose_mpst_multi_to_all {
     }
 }
 
-/// Create a macro that simplifies the usage of
-/// [`mpstthree::choose_mpst_multi_to_all`](./macro.choose_mpst_multi_to_all.html)
+/// Create a macro that simplifies the usage of [`choose_mpst_multi_to_all`].
 ///
 /// # Arguments
 ///
@@ -313,6 +312,8 @@ macro_rules! choose_mpst_multi_to_all {
 ///     }
 /// }
 /// ```
+/// 
+/// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 #[macro_export]
 macro_rules! choose_mpst_create_multi_to_all {
     (

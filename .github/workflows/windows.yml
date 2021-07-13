@@ -27,7 +27,7 @@ jobs:
     - name: Check benches
       run: cargo check --benches --verbose
     - name: Run doc
-      run: cargo doc --verbose --all
+      run: cargo doc --verbose --workspace --all-features
     - name: Build lib
       run: cargo build --verbose --all
     - name: Build examples
