@@ -15,32 +15,36 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Format
-      run: cargo fmt --verbose --all -- --check
+      run: cargo fmt --verbose --all -- --check --all-features
     - name: Clippy
-      run: cargo clippy --verbose -- -D warnings
+      run: cargo clippy --all-features --verbose -- -D warnings
     - name: Check lib
-      run: cargo check --verbose --all
+      run: cargo check --verbose --all --all-features
     - name: Check examples
-      run: cargo check --examples --verbose
+      run: cargo check --examples --verbose --all-features
     - name: Check tests
-      run: cargo check --tests --verbose
+      run: cargo check --tests --verbose --all-features
     - name: Check benches
-      run: cargo check --benches --verbose
+      run: cargo check --benches --verbose --all-features
     - name: Run doc
       run: cargo doc --verbose --workspace --all-features
     - name: Build lib
-      run: cargo build --verbose --all
+      run: cargo build --verbose --all --all-features
     - name: Build examples
-      run: cargo build --examples --verbose
+      run: cargo build --examples --verbose --all-features
     - name: Build tests
-      run: cargo build --tests --verbose
+      run: cargo build --tests --verbose --all-features
     - name: Build benches
-      run: cargo build --benches --verbose
+      run: cargo build --benches --verbose --all-features
+    - name: Run lib
+      run: cargo run --verbose --all-features
     - name: Run tests all
       run: cargo test --verbose --all
     - name: Run tests no capture
       run: cargo test --verbose --all -- --nocapture
     - name: Run tests no features
       run: cargo test --verbose --all --no-default-features --no-run
+    - name: Run tests all features
+      run: cargo test --verbose --all-features
     - name: Run benchmarks
       run: cargo bench --verbose --all

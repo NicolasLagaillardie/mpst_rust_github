@@ -19,6 +19,7 @@ use crossbeam_channel::{bounded, Sender};
 ///
 /// type NameB = RoleB<RoleEnd>;
 /// ```
+#[derive(Debug)]
 pub struct RoleB<R>
 where
     R: Role,
