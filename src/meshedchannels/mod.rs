@@ -4,17 +4,17 @@
 //! It contains 4 fields:
 //! - **session1**: contains the first binary session type, which links the participant to the first
 //!   participant in the alphanumerical order. It contains
-//!   [`mpstthree::binary::struct_trait::Session`].
+//!   [`Session`].
 //! - **session2**: contains the second binary session type, which links the participant to the
 //!   second participant in the alphanumerical order. It contains
-//!   [`mpstthree::binary::struct_trait::Session`].
+//!   [`Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and the others.
-//!   It contains [`mpstthree::role::Role`].
+//!   It contains [`Role`].
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
 //!   `RoleB<RoleEnd>`.
 //!
-//! [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-//! [`mpstthree::role::Role`]: ./role/trait.Role.html
+//! [`Session`]: crate::binary::struct_trait::Session
+//! [`Role`]: crate::role::Role
 
 use crate::binary::struct_trait::Session;
 use crate::role::Role;

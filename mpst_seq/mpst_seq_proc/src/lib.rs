@@ -18,6 +18,7 @@ use macros::baking_with_enum::BakingWithEnumMacroInput;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShortMacroInput;
 use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
+use macros::multiple::checking::CheckingInput;
 use macros::multiple::choose_mpst_create_multi_to_all::ChooseMultiCreateToAllMacroInput;
 use macros::multiple::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAllMacroInput;
 use macros::multiple::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAllMacroInput;
@@ -519,4 +520,18 @@ pub fn baking_with_enum(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_baking_with_enum(input: TokenStream) -> TokenStream {
     baking_with_enum(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn checking(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CheckingInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_checking(input: TokenStream) -> TokenStream {
+    checking(input)
 }

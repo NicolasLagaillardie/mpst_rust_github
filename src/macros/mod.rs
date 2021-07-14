@@ -2,11 +2,11 @@
 //! the parametrisation on the name and number of
 //! participants.
 //!
-//! They main ones are[`mpstthree::create_normal_role`] and
-//! [`mpstthree::create_meshedchannels`]
+//! They main ones are[`create_normal_role`] and
+//! [`create_meshedchannels`]
 //!
-//! [`mpstthree::create_normal_role`]: ./macro.create_normal_role.html
-//! [`mpstthree::create_meshedchannels`]: ./macro.create_meshedchannels.html
+//! [`create_normal_role`]: crate::create_normal_role
+//! [`create_meshedchannels`]: crate::create_meshedchannels
 
 pub mod baking;
 pub mod multiple;

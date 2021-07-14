@@ -10,7 +10,7 @@ pub struct ChooseTypeMultiCancelToAllMacroInput {
     session: syn::Expr,
     labels: Vec<proc_macro2::TokenStream>,
     receivers: Vec<proc_macro2::TokenStream>,
-    pawn: syn::Ident,
+    broadcaster: syn::Ident,
     sender: syn::Ident,
     meshedchannels_name: syn::Ident,
     nsessions: u64,
@@ -55,8 +55,8 @@ impl Parse for ChooseTypeMultiCancelToAllMacroInput {
 
         <Token![,]>::parse(input)?;
 
-        // The pawn
-        let pawn = syn::Ident::parse(input)?;
+        // The broadcaster
+        let broadcaster = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The sender
@@ -83,7 +83,7 @@ impl Parse for ChooseTypeMultiCancelToAllMacroInput {
             session,
             labels: all_labels,
             receivers: all_receivers,
-            pawn,
+            broadcaster,
             sender,
             meshedchannels_name,
             nsessions,
@@ -138,7 +138,7 @@ impl ChooseTypeMultiCancelToAllMacroInput {
         let session = self.session.clone();
         let all_labels = self.labels.clone();
         let all_receivers = self.receivers.clone();
-        let pawn = self.pawn.clone();
+        let broadcaster = self.broadcaster.clone();
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let diff = self.nsessions - 1;
@@ -314,7 +314,7 @@ impl ChooseTypeMultiCancelToAllMacroInput {
                 )*
 
                 let (name_1, _) =
-                    <#pawn<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    <#broadcaster<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                 #(
                     #new_names

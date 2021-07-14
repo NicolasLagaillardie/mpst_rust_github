@@ -1,4 +1,4 @@
-//! This module contains all the *choose* functions
+//! This module contains all the *choose* functions for three participants A, B and C
 
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
@@ -241,14 +241,14 @@ macro_rules! choose_mpst_c {
 }
 
 /// Given a choice from A, to other processes, between two
-/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
+/// [`MeshedChannels`], choose the
 /// first option for each.
 ///
 /// A has to encapsulate all possible
-/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
+/// [`MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
-/// [`mpstthree::binary::struct_trait::Session`], the 3 new
-/// [`mpstthree::role::Role`] related to each first option
+/// [`Session`], the 3 new
+/// [`Role`] related to each first option
 /// then the related [`mpstthree::meshedchannels::
 /// MeshedChannels`]. It then sends those options to the
 /// related processes.
@@ -267,9 +267,9 @@ macro_rules! choose_mpst_c {
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S2, S3, R4, RoleA<RoleEnd>>
@@ -303,14 +303,14 @@ where
 }
 
 /// Given a choice from A, to other processes, between two
-/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
+/// [`MeshedChannels`], choose the
 /// second option for each.
 ///
 /// A has to encapsulate all possible
-/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
+/// [`MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
-/// [`mpstthree::binary::struct_trait::Session`], the 3 new
-/// [`mpstthree::role::Role`] related to each second option
+/// [`Session`], the 3 new
+/// [`Role`] related to each second option
 /// then the related [`mpstthree::meshedchannels::
 /// MeshedChannels`]. It then sends those options to the
 /// related processes.
@@ -329,9 +329,9 @@ where
 /// * R4: stack of A on left branch
 /// * R5: stack of A on right branch
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S4, S5, R5, RoleA<RoleEnd>>
@@ -366,14 +366,14 @@ where
 }
 
 /// Given a choice from B, to other processes, between two
-/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
+/// [`MeshedChannels`], choose the
 /// first option for each.
 ///
 /// B has to encapsulate all possible
-/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
+/// [`MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
-/// [`mpstthree::binary::struct_trait::Session`], the 3 new
-/// [`mpstthree::role::Role`] related to each first option
+/// [`Session`], the 3 new
+/// [`Role`] related to each first option
 /// then the related [`mpstthree::meshedchannels::
 /// MeshedChannels`]. It then sends those options to the
 /// related processes.
@@ -392,9 +392,9 @@ where
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S2, S3, R4, RoleB<RoleEnd>>
@@ -428,14 +428,14 @@ where
 }
 
 /// Given a choice from B, to other processes, between two
-/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
+/// [`MeshedChannels`], choose the
 /// second option for each.
 ///
 /// B has to encapsulate all possible
-/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
+/// [`MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
-/// [`mpstthree::binary::struct_trait::Session`], the 3 new
-/// [`mpstthree::role::Role`] related to each second option
+/// [`Session`], the 3 new
+/// [`Role`] related to each second option
 /// then the related [`mpstthree::meshedchannels::
 /// MeshedChannels`]. It then sends those options to the
 /// related processes.
@@ -454,9 +454,9 @@ where
 /// * R4: stack of B on left branch
 /// * R5: stack of B on right branch
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S4, S5, R5, RoleB<RoleEnd>>
@@ -490,14 +490,14 @@ where
 }
 
 /// Given a choice from C, to other processes, between two
-/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
+/// [`MeshedChannels`], choose the
 /// first option for each.
 ///
 /// C has to encapsulate all possible
-/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
+/// [`MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
-/// [`mpstthree::binary::struct_trait::Session`], the 3 new
-/// [`mpstthree::role::Role`] related to each first option
+/// [`Session`], the 3 new
+/// [`Role`] related to each first option
 /// then the related [`mpstthree::meshedchannels::
 /// MeshedChannels`]. It then sends those options to the
 /// related processes.
@@ -516,9 +516,9 @@ where
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S2, S3, R4, RoleC<RoleEnd>>
@@ -552,14 +552,14 @@ where
 }
 
 /// Given a choice from C, to other processes, between two
-/// [`mpstthree::meshedchannels::MeshedChannels`], choose the
+/// [`MeshedChannels`], choose the
 /// second option for each.
 ///
 /// C has to encapsulate all possible
-/// [`mpstthree::meshedchannels::MeshedChannels`] for each other
+/// [`MeshedChannels`] for each other
 /// role. This function creates the 6 new binary
-/// [`mpstthree::binary::struct_trait::Session`], the 3 new
-/// [`mpstthree::role::Role`] related to each second option
+/// [`Session`], the 3 new
+/// [`Role`] related to each second option
 /// then the related [`mpstthree::meshedchannels::
 /// MeshedChannels`]. It then sends those options to the
 /// related processes.
@@ -578,9 +578,9 @@ where
 /// * R4: stack of C on left branch
 /// * R5: stack of C on right branch
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: ./binary/trait.Session.html
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
 ) -> MeshedChannels<S4, S5, R5, RoleC<RoleEnd>>

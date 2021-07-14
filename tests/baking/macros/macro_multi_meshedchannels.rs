@@ -11,7 +11,7 @@ create_meshedchannels!(MeshedChannelsThree, 3);
 // Create new MeshedChannels for four participants
 create_meshedchannels!(MeshedChannelsFour, 4);
 
-// Create an A pawn
+// Create an A dummy
 create_normal_role!(RoleA, RoleADual);
 
 /////////////////////////////////////////

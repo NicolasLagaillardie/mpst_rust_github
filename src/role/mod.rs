@@ -2,17 +2,17 @@
 //! name of a participant.
 //!
 //! Every structure that relies on this trait, such as
-//! [`mpstthree::role::a::RoleA`] and
-//! [`mpstthree::role::b::RoleB`], contains at
-//! least a parameter, which is a [`mpstthree::role::Role`]
+//! [`RoleA`] and
+//! [`RoleB`], contains at
+//! least a parameter, which is a [`Role`]
 //! itself. The only exception is
-//! [`mpstthree::role::end::RoleEnd`], which represents
+//! [`RoleEnd`], which represents
 //! the end of any ordering.
 //!
-//! [`mpstthree::role::Role`]: ../role/trait.Role.html
-//! [`mpstthree::role::end::RoleEnd`]: ../role/end/struct.RoleEnd.html
-//! [`mpstthree::role::a::RoleA`]: ../role/a/struct.RoleA.html
-//! [`mpstthree::role::b::RoleB`]: ../role/b/struct.RoleB.html
+//! [`Role`]: crate::role::Role
+//! [`RoleEnd`]: crate::role::end::RoleEnd
+//! [`RoleA`]: crate::role::a::RoleA
+//! [`RoleB`]: crate::role::b::RoleB
 
 pub mod a;
 pub mod a_dual;
@@ -39,7 +39,7 @@ pub trait Role: marker::Sized + marker::Send {
     //
     // The `new` function is used internally in this library to
     // define functions such as
-    // [`mpstthree::fork::fork_simple`]. The `Dual` is often
+    // [`fork_simple`](crate::fork::fork_simple). The `Dual` is often
     // unused, but may be necessary for specific cases, such as
     // closing a connection.
     #[doc(hidden)]

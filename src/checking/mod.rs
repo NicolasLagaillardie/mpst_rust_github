@@ -4,6 +4,7 @@
 
 mod aux_checker;
 mod aux_dot;
+pub mod main;
 
 use self::aux_checker::{checker_aux, parse_type_of};
 

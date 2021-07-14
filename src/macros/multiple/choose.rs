@@ -265,8 +265,7 @@ macro_rules! choose_mpst_multi_to_all {
     }
 }
 
-/// Create a macro that simplifies the usage of
-/// [`mpstthree::choose_mpst_multi_to_all`](./macro.choose_mpst_multi_to_all.html)
+/// Create a macro that simplifies the usage of [`choose_mpst_multi_to_all`].
 ///
 /// # Arguments
 ///
@@ -313,6 +312,8 @@ macro_rules! choose_mpst_multi_to_all {
 ///     }
 /// }
 /// ```
+///
+/// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 #[macro_export]
 macro_rules! choose_mpst_create_multi_to_all {
     (
@@ -431,7 +432,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
         $session: expr,
         $( $label: path , )+ =>
         $( $receiver: ident , )+ =>
-        $pawn: ident,
+        $broadcaster: ident,
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
@@ -440,7 +441,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             $session ,
             ( $( $label , )* ) ,
             ( $( $receiver , )* ) ,
-            $pawn ,
+            $broadcaster ,
             $sender ,
             $meshedchannels_name ,
             $exclusion);
@@ -582,7 +583,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///  * The new type adopted by the sender
 ///  * The name of the Enum containing the branches
 ///  * The different passive roles
-///  * The name of the pawn
+///  * The name of the broadcaster
 ///  * The name of the sender
 ///  * The name of the *MeshedChannels* type that will be used
 ///  * The index of the sender among all participants
@@ -616,7 +617,7 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
         $( $new_type: ty , )+ =>
         $( $label: path , )+ =>
         $( $receiver: ident , )+ =>
-        $pawn: ident,
+        $broadcaster: ident,
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
@@ -628,7 +629,7 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
             ( $( $receiver , )* ) ,
             ( $( $new_type , )* ) ,
             $sender ,
-            $pawn ,
+            $broadcaster ,
             $meshedchannels_name ,
             $exclusion
         );

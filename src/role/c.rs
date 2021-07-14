@@ -3,13 +3,13 @@ use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
 /// Gives the order to the
-/// [`mpstthree::meshedchannels::MeshedChannels`] related to C.
+/// [`MeshedChannels`] related to C.
 ///
 /// This `struct` should only be used in the `stack` field
-/// of the [`mpstthree::meshedchannels::MeshedChannels`] related
+/// of the [`MeshedChannels`] related
 /// to C.
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: RoleBroadcastmeshedchannels/struct.MeshedChannels.html
+/// [`MeshedChannels`]: RoleBroadcastmeshedchannels/struct.MeshedChannels.html
 ///
 /// # Example
 ///

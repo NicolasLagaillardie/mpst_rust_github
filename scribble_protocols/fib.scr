@@ -1,0 +1,16 @@
+global protocol Fibonacci(role A, role B)
+{
+    rec Fib
+    {
+        choice at A
+        {
+            fibonacci(Long) from A to B;
+            fibonacci(Long) from B to A;
+            continue Fib;
+        }
+        or
+        {
+            stop() from A to B;
+        }
+    }
+}

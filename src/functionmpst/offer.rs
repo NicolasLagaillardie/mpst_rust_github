@@ -56,8 +56,7 @@ type MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
 >;
 
 /// Offer a choice to A from B (on its session field related
-/// to B) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
+/// to B) between two [`MeshedChannels`],
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -76,6 +75,8 @@ type MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
 ///    },
 /// )
 /// ```
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_a_from_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToAFromB<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -98,7 +99,7 @@ where
 }
 
 /// Offer a choice to B from C (on its session field related to A) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
+/// [`MeshedChannels`],
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -117,6 +118,8 @@ where
 ///    },
 /// )
 /// ```
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_a_from_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToAFromC<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -139,7 +142,7 @@ where
 }
 
 /// Offer a choice to A from B (on its session field related to B) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
+/// [`MeshedChannels`],
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -158,6 +161,8 @@ where
 ///    },
 /// )
 /// ```
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_b_from_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToBFromA<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -180,7 +185,7 @@ where
 }
 
 /// Offer a choice to A from B (on its session field related to B) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
+/// [`MeshedChannels`],
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -199,6 +204,8 @@ where
 ///    },
 /// )
 /// ```
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_b_from_c<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToBFromC<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -221,7 +228,7 @@ where
 }
 
 /// Offer a choice to A from C (on its session field related to C) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
+/// [`MeshedChannels`],
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -240,6 +247,8 @@ where
 ///    },
 /// )
 /// ```
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_c_from_a<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToCFromA<S1, S2, S3, S4, S5, R1, R2>,
     f: F,
@@ -262,7 +271,7 @@ where
 }
 
 /// Offer a choice to A from C (on its session field related to C) between two
-/// [`mpstthree::meshedchannels::MeshedChannels`](./meshedchannels/struct.MeshedChannels.html),
+/// [`MeshedChannels`],
 /// `MeshedChannels<S1, S2, R1, N1>` and `MeshedChannels<S3, S4, R2, N2>`.
 ///
 /// # Example
@@ -281,6 +290,8 @@ where
 ///    },
 /// )
 /// ```
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn offer_mpst_session_to_c_from_b<'a, S1, S2, S3, S4, S5, F, G, R1, R2, U>(
     s: MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2>,
     f: F,

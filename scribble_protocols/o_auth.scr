@@ -1,0 +1,23 @@
+global protocol Proto(role A, role C, role S)
+{
+    choice at S
+    {
+        login(Int) from S to C;
+        password(Int) from C to A;
+        choice at A
+        {
+             Auth(Int) from A to S;
+             Auth(Int) from S to C;
+        }
+        or
+        {
+             again(Int) from A to S;
+             again(Int) from S to C;
+        }
+    }
+    or
+    {
+        cancel(Int) from S to C;
+        quit(Int) from C to A;
+    }
+}

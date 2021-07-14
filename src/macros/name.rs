@@ -1,9 +1,9 @@
-/// Create a new [`mpstthree::role::Role`] and its dual.
+/// Create a new [`Role`] and its dual.
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
+/// * The name of the *dual* of the new [`Role`]
 ///
 /// # Example
 ///
@@ -13,7 +13,7 @@
 /// create_normal_role!(RoleA, RoleADual);
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`Role`]: crate::role::Role
 #[macro_export]
 macro_rules! create_normal_role {
     ($role_name: ident, $dual_name: ident) => {
@@ -115,12 +115,12 @@ macro_rules! create_normal_role {
     };
 }
 
-/// Create multiple new [`mpstthree::role::Role`] and its dual.
+/// Create multiple new [`Role`] and its dual.
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
+/// * The name of the *dual* of the new [`Role`]
 ///
 /// # Example
 ///
@@ -133,7 +133,7 @@ macro_rules! create_normal_role {
 /// );
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`Role`]: crate::role::Role
 #[macro_export]
 macro_rules! create_multiple_normal_role {
     ($( $role_name: ident, $dual_name: ident | )+ ) => {
@@ -141,14 +141,14 @@ macro_rules! create_multiple_normal_role {
      }
 }
 
-/// Create a new broadcast [`mpstthree::role::Role`] and its dual.
-/// A broadcast [`mpstthree::role::Role`] is used for sending a
+/// Create a new broadcast [`Role`] and its dual.
+/// A broadcast [`Role`] is used for sending a
 /// choice. Its dual is used for receving this choice.
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
+/// * The name of the *dual* of the new [`Role`]
 ///
 /// # Example
 ///
@@ -158,7 +158,7 @@ macro_rules! create_multiple_normal_role {
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`Role`]: crate::role::Role
 #[macro_export]
 macro_rules! create_broadcast_role {
     ($role_name: ident, $dual_name: ident) => {
@@ -288,14 +288,14 @@ macro_rules! create_broadcast_role {
     };
 }
 
-/// Create multiple new broadcast [`mpstthree::role::Role`] and its dual.
-/// A broadcast [`mpstthree::role::Role`] is used for
+/// Create multiple new broadcast [`Role`] and its dual.
+/// A broadcast [`Role`] is used for
 /// sending a choice. Its dual is used for receving this choice.
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
-/// * The name of the *dual* of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
+/// * The name of the *dual* of the new [`Role`]
 ///
 /// # Example
 ///
@@ -310,7 +310,7 @@ macro_rules! create_broadcast_role {
 /// );
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
+/// [`Role`]: crate::role::Role
 #[macro_export]
 macro_rules! create_multiple_broadcast_role {
     ($( $role_name: ident, $dual_name: ident | )+ ) => {
@@ -322,17 +322,17 @@ macro_rules! create_multiple_broadcast_role {
 
 ///////////////////////////////
 
-/// Create a new [`mpstthree::role::Role`] and its dual.
+/// Create a new [`Role`] and its dual.
 /// When a name *X* is given, the Roles created are
 ///
 ///  * RoleX
 ///  * RoleXDual
 ///
-/// If you want to specify other names, please use [`mpstthree::create_normal_role`].
+/// If you want to specify other names, please use [`create_normal_role`].
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
 ///
 /// # Example
 ///
@@ -342,8 +342,8 @@ macro_rules! create_multiple_broadcast_role {
 /// create_normal_role_short!(A);
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
-/// [`mpstthree::create_normal_role`]: ./macro.create_normal_role!.html
+/// [`Role`]: crate::role::Role
+/// [`create_normal_role`]: crate::create_normal_role
 #[macro_export]
 macro_rules! create_normal_role_short {
     ($role_name: ident) => {
@@ -351,17 +351,17 @@ macro_rules! create_normal_role_short {
     };
 }
 
-/// Create multiple new [`mpstthree::role::Role`] and its dual.
+/// Create multiple new [`Role`] and its dual.
 /// When a name *X* is given, the Roles created are
 ///
 ///  * RoleX
 ///  * RoleXDual
 ///
-/// If you want to specify other names, please use [`mpstthree::create_multiple_normal_role`].
+/// If you want to specify other names, please use [`create_multiple_normal_role`].
 ///
 /// # Arguments
 ///
-/// * The names of the new [`mpstthree::role::Role`]
+/// * The names of the new [`Role`]
 ///
 /// # Example
 ///
@@ -371,9 +371,8 @@ macro_rules! create_normal_role_short {
 /// create_multiple_normal_role_short!(A, B, C);
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
-/// [`mpstthree::create_normal_role_short`]: ./macro.create_normal_role_short.html
-/// [`mpstthree::create_multiple_normal_role`]: ./macro.create_multiple_normal_role.html
+/// [`Role`]: crate::role::Role
+/// [`create_multiple_normal_role`]: crate::create_multiple_normal_role
 #[macro_export]
 macro_rules! create_multiple_normal_role_short {
     ($( $role_name: ident),+ $(,)? ) => {
@@ -383,19 +382,19 @@ macro_rules! create_multiple_normal_role_short {
      }
 }
 
-/// Create a new broadcast [`mpstthree::role::Role`] and its dual.
-/// A broadcast [`mpstthree::role::Role`] is used for sending a
+/// Create a new broadcast [`Role`] and its dual.
+/// A broadcast [`Role`] is used for sending a
 /// choice. Its dual is used for receving this choice.
 /// When a name *X* is given, the Roles created are
 ///
 ///  * RoleXtoAll
 ///  * RoleAlltoX
 ///
-/// If you want to specify other names, please use [`mpstthree::create_broadcast_role`].
+/// If you want to specify other names, please use [`create_broadcast_role`].
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
 ///
 /// # Example
 ///
@@ -405,8 +404,8 @@ macro_rules! create_multiple_normal_role_short {
 /// create_broadcast_role_short!(A);
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
-/// [`mpstthree::create_broadcast_role`]: ./macro.create_broadcast_role.html
+/// [`Role`]: crate::role::Role
+/// [`create_broadcast_role`]: crate::create_broadcast_role
 #[macro_export]
 macro_rules! create_broadcast_role_short {
     ($role_name: ident) => {
@@ -414,8 +413,8 @@ macro_rules! create_broadcast_role_short {
     };
 }
 
-/// Create multiple new broadcast [`mpstthree::role::Role`] and its dual.
-/// A broadcast [`mpstthree::role::Role`] is used for
+/// Create multiple new broadcast [`Role`] and its dual.
+/// A broadcast [`Role`] is used for
 /// sending a choice. Its dual is used for receving this choice.
 /// When a name *X* is given, the Roles created are
 ///
@@ -423,11 +422,11 @@ macro_rules! create_broadcast_role_short {
 ///  * RoleAlltoX
 ///
 /// If you want to specify other names, please use
-/// [`mpstthree::create_multiple_broadcast_role_short`]
+/// [`create_multiple_broadcast_role_short`]
 ///
 /// # Arguments
 ///
-/// * The name of the new [`mpstthree::role::Role`]
+/// * The name of the new [`Role`]
 ///
 /// # Example
 ///
@@ -437,8 +436,8 @@ macro_rules! create_broadcast_role_short {
 /// create_multiple_broadcast_role_short!(A, B, C);
 /// ```
 ///
-/// [`mpstthree::role::Role`]: ./role/trait.Role.html
-/// [`mpstthree::create_multiple_broadcast_role_short`]: ./macro.create_multiple_broadcast_role_short.html
+/// [`Role`]: crate::role::Role
+/// [`create_multiple_broadcast_role_short`]: crate::create_multiple_broadcast_role_short
 #[macro_export]
 macro_rules! create_multiple_broadcast_role_short {
     ($( $role_name: ident),+ $(,)? ) => {

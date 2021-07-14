@@ -3,15 +3,15 @@ use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
 
 /// Gives the order to the
-/// [`mpstthree::meshedchannels::MeshedChannels`] related to C
-/// to execute its [`mpstthree::binary::struct_trait::Session`] fields
+/// [`MeshedChannels`] related to C
+/// to execute its [`Session`] fields
 /// with every other processes.
 ///
 /// This `struct` is used for branching without `enum`. See
 /// the test `05_usecase.rs`.
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: RoleBroadcastmeshedchannels/struct.MeshedChannels.html
-/// [`mpstthree::binary::struct_trait::Session`]: RoleBroadcastbinary/trait.Session.
+/// [`MeshedChannels`]: RoleBroadcastmeshedchannels/struct.MeshedChannels.html
+/// [`Session`]: RoleBroadcastbinary/trait.Session.
 ///
 /// # Example
 ///

@@ -204,7 +204,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the third role to the others.  Must be
-/// used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -243,7 +243,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
@@ -309,7 +309,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the third role to the others.  Must be
-/// used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -348,7 +348,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
@@ -414,7 +414,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the first role to the others.  Must be
-/// used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -453,7 +453,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
@@ -519,7 +519,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the first role to the others.  Must be
-/// used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -558,7 +558,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
@@ -624,7 +624,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// left branch from the second role to the others.  Must be
-/// used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -663,7 +663,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
@@ -729,7 +729,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 
 /// Create the *ChooseMpst* function to send a *Choose*
 /// right branch from the second role to the others.  Must
-/// be used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// be used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -768,7 +768,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     ($func_name: ident, $dual_1:ident, $dual_2:ident, $role_broadcast: ident, $sender: ident) => {
@@ -832,10 +832,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
     };
 }
 
-/// Call both
-/// [`mpstthree::create_choose_right_from_2_to_1_and_3`](./macro.create_choose_right_from_2_to_1_and_3.html)
-/// and [`mpstthree::create_choose_left_from_2_to_1_and_3`](./macro.create_choose_left_from_2_to_1_and_3.html).
-/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// Call both [create_choose_right_from_2_to_1_and_3]
+/// and [create_choose_left_from_2_to_1_and_3].
+/// Must be used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -876,7 +875,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [create_choose_right_from_2_to_1_and_3]: crate::create_choose_right_from_2_to_1_and_3
+/// [create_choose_left_from_2_to_1_and_3]: crate::create_choose_left_from_2_to_1_and_3
 #[macro_export]
 macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
@@ -904,10 +905,9 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
     };
 }
 
-/// Call both
-/// [`mpstthree::create_choose_right_from_1_to_2_and_3`](./macro.create_choose_right_from_1_to_2_and_3.html)
-/// and [`mpstthree::create_choose_left_from_1_to_2_and_3`](./macro.create_choose_left_from_1_to_2_and_3.html).
-/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// Call both [create_choose_right_from_1_to_2_and_3]
+/// and [create_choose_left_from_1_to_2_and_3].
+/// Must be used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -948,7 +948,9 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [create_choose_right_from_1_to_2_and_3]: crate::create_choose_right_from_1_to_2_and_3
+/// [create_choose_left_from_1_to_2_and_3]: crate::create_choose_left_from_1_to_2_and_3
 #[macro_export]
 macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
@@ -976,10 +978,9 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
     };
 }
 
-/// Call both
-/// [`mpstthree::create_choose_right_from_3_to_1_and_2`](./macro.create_choose_right_from_3_to_1_and_2.html)
-/// and [`mpstthree::create_choose_left_from_3_to_1_and_2`](./macro.create_choose_left_from_3_to_1_and_2.html).
-/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// Call both [create_choose_right_from_3_to_1_and_2]
+/// and [create_choose_left_from_3_to_1_and_2].
+/// Must be used with [`MeshedChannels`].
 ///
 /// # Arguments
 ///
@@ -1020,7 +1021,9 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// );
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [create_choose_right_from_3_to_1_and_2]: crate::create_choose_right_from_3_to_1_and_2
+/// [create_choose_left_from_3_to_1_and_2]: crate::create_choose_left_from_3_to_1_and_2
 #[macro_export]
 macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
@@ -1049,7 +1052,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 }
 
 /// Choose among two different sessions.
-/// Must be used with [`mpstthree::meshedchannels::MeshedChannels`].
+/// Must be used with [`MeshedChannels`].
 /// # Arguments
 ///
 ///  * The session to be used
@@ -1092,7 +1095,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 /// }
 /// ```
 ///
-/// [`mpstthree::meshedchannels::MeshedChannels`]: ./meshedchannels/struct.MeshedChannels.html.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! choose_mpst_to_all {
     (

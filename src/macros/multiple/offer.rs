@@ -154,7 +154,7 @@ macro_rules! offer_mpst {
     };
 }
 
-/// Offer a choice and send the session to the pawn
+/// Offer a choice and send the session to the broadcaster
 ///
 /// # Arguments
 ///
