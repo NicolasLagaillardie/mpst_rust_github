@@ -10,7 +10,6 @@
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
 [![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
 
-
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
 It relies on [sesh](https://github.com/wenkokke/sesh).
 
@@ -22,7 +21,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.0.8"
+mpstthree = "0.0.10"
 ```
 
 ## Example
@@ -30,7 +29,7 @@ mpstthree = "0.0.8"
 Assume a simple protocol involving 3 participants, **A**, **B** and **C**.
 **A** sends a payload to **B**, then receives another payload from **C**.
 Upon receiving the payload from **A**, **B** sends a payload to **C**.
-This protocol can be written as **A!B.A?C.B!C.0**. 
+This protocol can be written as **A!B.A?C.B!C.0**.
 To implement this example, first, get the right components from the library.
 
 ```rust
@@ -172,7 +171,7 @@ You will get `cargo` installed.
 For building the library, run this code.
 
 ```sh
-$ cargo build
+cargo build
 ```
 
 ### Running
@@ -180,7 +179,7 @@ $ cargo build
 For running the library, run this code.
 
 ```sh
-$ cargo run
+cargo run
 ```
 
 ### Run test
@@ -188,7 +187,7 @@ $ cargo run
 For running the tests, run this code.
 
 ```sh
-$ cargo test
+cargo test
 ```
 
 Tests are divided into 8 folders:

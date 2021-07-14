@@ -100,21 +100,25 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
     fn head_str() -> String {
         format!(
             "{} + {} + {} + {}",
-            S1::head_str(),
-            S2::head_str(),
-            R::head_str(),
-            N::head_str()
+            <S1 as Session>::head_str(),
+            <S2 as Session>::head_str(),
+            <R as Role>::head_str(),
+            <N as Role>::head_str()
         )
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
         format!(
-            "{} + {} + {} + {}",
-            S1::tail_str(),
-            S2::tail_str(),
-            R::tail_str(),
-            N::tail_str()
+            "{}<{}> + {}<{}> + {}<{}> + {}<{}>",
+            <S1 as Session>::head_str(),
+            <S1 as Session>::tail_str(),
+            <S2 as Session>::head_str(),
+            <S2 as Session>::tail_str(),
+            <R as Role>::head_str(),
+            <R as Role>::tail_str(),
+            <N as Role>::head_str(),
+            <N as Role>::tail_str(),
         )
     }
 }

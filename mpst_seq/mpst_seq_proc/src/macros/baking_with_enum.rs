@@ -1974,10 +1974,42 @@ impl BakingWithEnumMacroInput {
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                quote! { result = format!(
-                    "{} + {}",
-                    result,
-                    <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()) ;
+                quote! {
+                    if result == String::from("") {
+                        result = format!(
+                            "{}",
+                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()
+                        ) ;
+                    } else {
+                        result = format!(
+                            "{} + {}",
+                            result,
+                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()
+                        );
+                    }
+                }
+            })
+            .collect();
+
+        let tail_str: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+            .map(|i| {
+                let temp_ident =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                quote! {
+                    if result == String::from("") {
+                        result = format!(
+                            "{}<{}>",
+                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::Session>::tail_str()
+                        ) ;
+                    } else {
+                        result = format!(
+                            "{} + {}<{}>",
+                            result,
+                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::Session>::tail_str()
+                        ) ;
+                    }
                 }
             })
             .collect();
@@ -2144,19 +2176,21 @@ impl BakingWithEnumMacroInput {
                     format!(
                         "{} + {} + {}",
                         result,
-                        R::head_str(),
-                        N::head_str()
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
                     )
                 }
                 #[doc(hidden)]
                 fn tail_str() -> String {
                     let mut result = String::from("");
-                    #( #head_str )*
+                    #( #tail_str )*
                     format!(
-                        " {} + {} + {}",
+                        "{} + {}<{}> + {}<{}>",
                         result,
-                        R::tail_str(),
-                        N::head_str()
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
                     )
                 }
             }

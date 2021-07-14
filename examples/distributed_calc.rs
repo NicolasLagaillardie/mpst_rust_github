@@ -10,6 +10,9 @@ use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
+use std::any::type_name;
+use mpstthree::binary::struct_trait::Session;
+
 // global protocol TwoBuyer(role A, role C, role S)
 // {
 //     element_1(int) from C to S
@@ -179,6 +182,9 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 
 fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
+
+    println!("{:?}", EndpointS::<i32>::tail_str());
+    println!("{:?}", type_name::<Branching0fromCtoA>());
 
     thread_a.join()?;
     thread_c.join()?;

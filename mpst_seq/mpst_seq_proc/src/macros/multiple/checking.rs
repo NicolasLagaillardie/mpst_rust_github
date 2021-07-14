@@ -4,12 +4,12 @@ use syn::Result;
 
 #[derive(Debug)]
 pub struct CheckingInput {
-    session: syn::Expr,
+    session: syn::Type,
 }
 
 impl Parse for CheckingInput {
     fn parse(input: ParseStream) -> Result<Self> {
-        let session = syn::Expr::parse(input)?;
+        let session = syn::Type::parse(input)?;
 
         println!("{:?}", session.clone());
         println!("");
