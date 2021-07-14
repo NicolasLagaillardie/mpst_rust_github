@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Format
-      run: cargo fmt --verbose --all -- --check --all-features
+      run: cargo fmt --verbose --all -- --check
     - name: Clippy
       run: cargo clippy --all-features --verbose -- -D warnings
     - name: Check lib
