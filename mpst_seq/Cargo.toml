@@ -18,5 +18,5 @@ trybuild = "1.0.42"
 
 [dependencies]
 proc-macro-hack = "0.5.19"
-mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.7" }
-# mpst-seq-proc = "0.0.7"
+# mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.7" }
+mpst-seq-proc = "0.0.7"
