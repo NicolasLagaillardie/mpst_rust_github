@@ -29,8 +29,8 @@ type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
 
 type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
 
-// Create an B pawn
-type Pawn = MeshedChannels<End, End, RoleEnd, TestB>;
+// Create an B dummy
+type Dummy = MeshedChannels<End, End, RoleEnd, TestB>;
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, RoleD);
@@ -61,7 +61,7 @@ fn recv_d_to_a(s: RecvMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
-fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
+fn dummy(s: Dummy) -> Result<(), Box<dyn Error>> {
     close_mpst(s)
 }
 
@@ -70,10 +70,10 @@ fn pawn(s: Pawn) -> Result<(), Box<dyn Error>> {
 pub fn basic_macros_send() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(send_a_to_d, pawn, recv_d_to_a);
+            let (thread_a, thread_dummy, thread_d) = fork_mpst(send_a_to_d, dummy, recv_d_to_a);
 
             assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
+            assert!(thread_dummy.join().is_ok());
             assert!(thread_d.join().is_ok());
         }
         Ok(())
@@ -84,10 +84,10 @@ pub fn basic_macros_send() {
 pub fn basic_macros_recv() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(recv_a_to_d, pawn, send_d_to_a);
+            let (thread_a, thread_dummy, thread_d) = fork_mpst(recv_a_to_d, dummy, send_d_to_a);
 
             assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
+            assert!(thread_dummy.join().is_ok());
             assert!(thread_d.join().is_ok());
         }
         Ok(())

@@ -1,0 +1,17 @@
+global protocol HandleDNSRequest(role Handler, role Regional) {
+    rec QueryResolution {
+        FindNearestZone(DomainName) from Handler to Regional;
+        choice at Regional {
+            ZoneResponse(ZonePID) from Regional to Handler;
+            Handler initiates GetZoneData(Handler, new Data);
+            continue QueryResolution;
+        } or {
+            InvalidZone() from Regional to Handler;
+        }
+    }
+}
+
+global protocol GetZoneData(role Handler, role Data) {
+    ZoneDataRequest() from Handler to Data;
+    ZoneDataResponse(RRTree) from Data to Handler;
+}

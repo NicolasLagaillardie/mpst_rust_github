@@ -20,7 +20,8 @@ use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
-// use mpstthree::checking;
+use crossbeam_channel::{bounded, Receiver, Sender};
+use mpstthree::checking;
 
 /// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
@@ -42,29 +43,47 @@ type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
 type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 
-// struct Point {
-//     x: i32,
-//     y: i32,
-// }
+type EndpointTest = MeshedChannels<End, End, RoleEnd, RoleA<RoleEnd>>;
 
-// impl Point {
-//     fn new() -> Self {
-//         Point { x: 0, y: 0 }
-//     }
-// }
+#[derive(Debug)]
+struct MeshedChannelsPoints<T>
+where
+    T: std::marker::Send,
+{
+    sender: Sender<T>,
+    receiver: Receiver<T>,
+    stack: Sender<()>,
+    name: Sender<()>,
+}
 
 /// Single test for A
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
     let (_, s) = recv_mpst_a_from_c(s)?;
 
-    // let (test_struct, _) = EndpointA::<i32>::new();
+    let (test_struct, _) = EndpointTest::new();
+    let (test_sender, test_receiver) = bounded::<i32>(1);
+    let (test_stack, _) = bounded::<()>(1);
+    let (test_name, _) = bounded::<()>(1);
 
-    // println!("{:?}", test_struct);
-    // checking!(s);
-    // checking!(test_struct);
-    // mpst_seq::checking!(test_struct);
-    // mpst_seq::checking!(Point { x: 5, y: 7 });
+    checking!(s);
+    checking!(test_struct);
+    mpst_seq::checking!(test_struct);
+    mpst_seq::checking!(MeshedChannelsPoints::<i32> {
+        sender: test_sender,
+        receiver: test_receiver,
+        stack: test_stack,
+        name: test_name
+    });
+    mpst_seq::checking!(s);
+    checking!(test_channel);
+    mpst_seq::checking!(test_channel);
+
+    println!("{:?}", test_sender);
+    println!("{:?}", test_receiver);
+    println!("{:?}", test_stack);
+    println!("{:?}", test_name);
+    println!("{:?}", test_struct);
 
     close_mpst(s)
 }

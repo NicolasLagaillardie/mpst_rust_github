@@ -45,13 +45,14 @@ cargo check --examples --verbose --all-features
 cargo check --tests --verbose --all-features
 cargo check --benches --verbose --all-features
 cargo doc --verbose --workspace --all-features
-cargo build --verbose --all --all-features
-cargo build --examples --verbose --all-features
-cargo build --tests --verbose --all-features
-cargo build --benches --verbose --all-features
-cargo run --verbose --all-features
-cargo test --verbose --all
-cargo test --verbose --all -- --nocapture
-cargo test --verbose --all --no-default-features --no-run
-cargo test --verbose --all-features
-cargo bench --verbose --all
+# cargo build --verbose --all --all-features
+# cargo build --examples --verbose --all-features
+# cargo build --tests --verbose --all-features
+# cargo build --benches --verbose --all-features
+# cargo run --verbose --all-features
+find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3}) done' argv0 {} +
+# cargo test --verbose --all
+# cargo test --verbose --all -- --nocapture
+cargo test --verbose --all --no-default-features --no-run -- --nocapture
+# cargo test --verbose --all-features
+# cargo bench --verbose --all

@@ -13,7 +13,7 @@ pub struct ChooseTypeCancelMultiToAllBundleMacroInput {
     branches: Vec<proc_macro2::TokenStream>,
     new_types: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
-    pawn: syn::Ident,
+    broadcaster: syn::Ident,
     meshedchannels_name: syn::Ident,
     n_sessions: u64,
     n_branches: u64,
@@ -81,8 +81,8 @@ impl Parse for ChooseTypeCancelMultiToAllBundleMacroInput {
         let sender = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        // The pawn
-        let pawn = syn::Ident::parse(input)?;
+        // The broadcaster
+        let broadcaster = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The meshedchannels_name
@@ -118,7 +118,7 @@ impl Parse for ChooseTypeCancelMultiToAllBundleMacroInput {
             branches: all_branches,
             new_types: all_new_types,
             sender,
-            pawn,
+            broadcaster,
             meshedchannels_name,
             n_sessions,
             n_branches,
@@ -178,7 +178,7 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                 let all_branches = self.branches.clone();
                 let all_fn_names = self.fn_names.clone();
                 let sender = self.sender.clone();
-                let pawn = self.pawn.clone();
+                let broadcaster = self.broadcaster.clone();
                 let all_new_types = self.new_types.clone();
                 let meshedchannels_name = self.meshedchannels_name.clone();
                 let diff = self.n_sessions - 1;
@@ -392,7 +392,7 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                         )*
 
                         let (name_1, _) =
-                            <#pawn<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                            <#broadcaster<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
 
                         #(
                             #new_names

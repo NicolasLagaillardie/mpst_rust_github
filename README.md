@@ -206,7 +206,7 @@ Tests are divided into 8 folders:
 ## Going further
 
 With this library, one can write any protocol with at least two participants and using methods to shorten the writing and checking.
-You can check the tests and examples to have 
+You can check the tests and examples to have a larger overview of the different possibilities provided by this library.
 
 ## Contributing
 
