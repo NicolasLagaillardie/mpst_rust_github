@@ -172,16 +172,10 @@ fn client_recurs(
 
 /////////////////////////////////////////
 
-pub fn run_usecase() -> Result<(), Box<dyn Error>> {
+fn main() {
     let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
     thread_a.join().unwrap();
     thread_s.join().unwrap();
     thread_c.join().unwrap();
-
-    Ok(())
-}
-
-fn main() {
-    assert!(run_usecase().is_ok());
 }

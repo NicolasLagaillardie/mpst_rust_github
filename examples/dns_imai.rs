@@ -204,17 +204,11 @@ fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_other, thread_server, thread_client) =
         fork_mpst(endpoint_client, endpoint_other, endpoint_server);
 
-    thread_client.join()?;
-    thread_server.join()?;
-    thread_other.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_client.join().unwrap();
+    thread_server.join().unwrap();
+    thread_other.join().unwrap();
 }

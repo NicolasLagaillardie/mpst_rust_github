@@ -268,16 +268,10 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
-    thread_a.join()?;
-    thread_c.join()?;
-    thread_s.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_a.join().unwrap();
+    thread_c.join().unwrap();
+    thread_s.join().unwrap();
 }

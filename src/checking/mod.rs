@@ -5,6 +5,7 @@
 mod aux_checker;
 mod aux_dot;
 pub mod main;
+pub mod new_test;
 
 use self::aux_checker::{checker_aux, parse_type_of};
 
@@ -109,7 +110,7 @@ macro_rules! checker_hashmaps {
         let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
 
         fn type_of<T>(_: T) -> &'static str {
-            type_name::<T>()
+            std::any::type_name::<T>()
         }
 
         $(

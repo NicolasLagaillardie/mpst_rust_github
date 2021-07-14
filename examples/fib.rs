@@ -134,17 +134,11 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
-    thread_a.join()?;
-    thread_b.join()?;
-
-    Ok(())
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
 }
 
 static SIZE: i64 = 10;
-
-fn main() {
-    assert!(all_mpst().is_ok());
-}

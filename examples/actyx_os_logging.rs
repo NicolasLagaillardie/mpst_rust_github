@@ -234,15 +234,9 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_controller, thread_logs) = fork_mpst(endpoint_controller, endpoint_logs);
 
-    thread_controller.join()?;
-    thread_logs.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_controller.join().unwrap();
+    thread_logs.join().unwrap();
 }
