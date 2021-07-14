@@ -11,8 +11,8 @@ impl Parse for CheckingInput {
     fn parse(input: ParseStream) -> Result<Self> {
         let session = syn::Type::parse(input)?;
 
-        println!("{:?}", session.clone());
-        println!("");
+        println!("{:?}", session);
+        println!();
 
         // match session.clone() {
         //     syn::Expr::Group(group) => match *group.expr {

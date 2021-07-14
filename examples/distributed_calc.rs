@@ -10,8 +10,8 @@ use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
-use std::any::type_name;
 use mpstthree::binary::struct_trait::Session;
+use std::any::type_name;
 
 // global protocol TwoBuyer(role A, role C, role S)
 // {
