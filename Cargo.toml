@@ -9,7 +9,7 @@ repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT"
 keywords = ["multiparty", "session"]
 categories = ["concurrency", "development-tools::cargo-plugins"]
-exclude = [".travis.yml", "codecov.yml", ".gitignore", "mpst_seq/", ".github/", ".cargo_vcs_info.json", "scripts/", "example", "rustfmt_2.toml"]
+exclude = [".travis.yml", "codecov.yml", ".gitignore", "mpst_seq/", ".github/", ".cargo_vcs_info.json", "scripts/", "example/", "rustfmt_2.toml"]
 autotests = false
 
 [workspace]
