@@ -62,11 +62,38 @@ pub fn meshedchannels_methods() {
     assert_eq!(
         Endpoint::<i32>::tail_str(),
         format!(
-            "{} + {} + {} + {}",
+            "{}<{}> + {}<{}> + {}<{}> + {}<{}>",
+            AtoB::<i32>::head_str(),
             AtoB::<i32>::tail_str(),
+            AtoC::<i32>::head_str(),
             AtoC::<i32>::tail_str(),
+            StackA::head_str(),
             StackA::tail_str(),
+            RoleA::<RoleEnd>::head_str(),
             RoleA::<RoleEnd>::tail_str()
         )
     );
+
+    assert_eq!(
+        Endpoint::<i32>::tail_str(),
+        format!("Send<End<>> + Recv<End<>> + RoleB<RoleC<RoleEnd<>>> + RoleA<RoleEnd<>>")
+    );
+
+    assert_eq!(AtoB::<i32>::head_str(), format!("Send"));
+    assert_eq!(AtoB::<i32>::tail_str(), format!("End<>"));
+
+    assert_eq!(AtoC::<i32>::head_str(), format!("Recv"));
+    assert_eq!(AtoC::<i32>::tail_str(), format!("End<>"));
+
+    assert_eq!(End::head_str(), format!("End"));
+    assert_eq!(End::tail_str(), format!(""));
+
+    assert_eq!(RoleA::<RoleEnd>::head_str(), format!("RoleA"));
+    assert_eq!(RoleA::<RoleEnd>::tail_str(), format!("RoleEnd<>"));
+
+    assert_eq!(RoleB::<RoleEnd>::head_str(), format!("RoleB"));
+    assert_eq!(RoleB::<RoleEnd>::tail_str(), format!("RoleEnd<>"));
+
+    assert_eq!(RoleC::<RoleEnd>::head_str(), format!("RoleC"));
+    assert_eq!(RoleC::<RoleEnd>::tail_str(), format!("RoleEnd<>"));
 }
