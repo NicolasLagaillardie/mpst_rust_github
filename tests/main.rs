@@ -282,23 +282,14 @@ fn tcp() {
 #[test]
 #[timeout(60000)]
 fn http() {
-    println!("Starting http");
     http::simple_http_get::main();
-    println!("simple_http_get done");
     http::simple_http_post::main();
-    println!("simple_http_post done");
     http::simple_https_get::main();
-    println!("simple_https_get done");
     http::complex_https_get::main();
-    println!("complex_https_get done");
     http::binary_http_get::main();
-    println!("binary_http_get done");
     http::o_auth::main();
-    println!("o_auth done");
     http::o_auth_fail_too_true::main();
-    println!("o_auth_fail_too_true done");
     http::o_auth_fail_too_false::main();
-    println!("o_auth_fail_too_false done");
 }
 
 pub fn main() {}
