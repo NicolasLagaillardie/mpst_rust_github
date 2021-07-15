@@ -1359,10 +1359,12 @@ impl BakingWithEnumMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#role_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
                     format!(
@@ -1389,10 +1391,12 @@ impl BakingWithEnumMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#dual_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
                     format!(
@@ -1454,10 +1458,12 @@ impl BakingWithEnumMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#role_to_all_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
                     format!(
@@ -1495,10 +1501,12 @@ impl BakingWithEnumMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#dual_to_all_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
                     format!(
@@ -1982,7 +1990,7 @@ impl BakingWithEnumMacroInput {
                         ) ;
                     } else {
                         result = format!(
-                            "{} + {}",
+                            "{}\n{}",
                             result,
                             <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()
                         );
@@ -2004,7 +2012,7 @@ impl BakingWithEnumMacroInput {
                         ) ;
                     } else {
                         result = format!(
-                            "{} + {}<{}>",
+                            "{}\n{}<{}>",
                             result,
                             <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str(),
                             <#temp_ident as mpstthree::binary::struct_trait::Session>::tail_str()
@@ -2169,23 +2177,25 @@ impl BakingWithEnumMacroInput {
                         }
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     let mut result = String::from("");
                     #( #head_str )*
                     format!(
-                        "{} + {} + {}",
+                        "{}\n{}\n{}",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <N as mpstthree::role::Role>::head_str()
                     )
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
                     let mut result = String::from("");
                     #( #tail_str )*
                     format!(
-                        "{} + {}<{}> + {}<{}>",
+                        "{}\n{}<{}>\n{}<{}>",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <R as mpstthree::role::Role>::tail_str(),

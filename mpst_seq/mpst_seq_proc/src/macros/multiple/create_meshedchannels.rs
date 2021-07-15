@@ -126,7 +126,7 @@ impl CreateMeshedChannelsMacroInput {
                         ) ;
                     } else {
                         result = format!(
-                            "{} + {}",
+                            "{}\n{}",
                             result,
                             <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()
                         );
@@ -148,7 +148,7 @@ impl CreateMeshedChannelsMacroInput {
                         ) ;
                     } else {
                         result = format!(
-                            "{} + {}<{}>",
+                            "{}\n{}<{}>",
                             result,
                             <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str(),
                             <#temp_ident as mpstthree::binary::struct_trait::Session>::tail_str()
@@ -249,7 +249,7 @@ impl CreateMeshedChannelsMacroInput {
                         #head_str
                     )*
                     format!(
-                        "{} + {} + {}",
+                        "{}\n{}\n{}",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <N as mpstthree::role::Role>::head_str()
@@ -263,7 +263,7 @@ impl CreateMeshedChannelsMacroInput {
                         #tail_str
                     )*
                     format!(
-                        "{} + {}<{}> + {}<{}>",
+                        "{}\n{}<{}>\n{}<{}>",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <R as mpstthree::role::Role>::tail_str(),

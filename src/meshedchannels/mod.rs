@@ -99,7 +99,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
     #[doc(hidden)]
     fn head_str() -> String {
         format!(
-            "{} + {} + {} + {}",
+            "{}\n{}\n{}\n{}",
             <S1 as Session>::head_str(),
             <S2 as Session>::head_str(),
             <R as Role>::head_str(),
@@ -110,7 +110,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
     #[doc(hidden)]
     fn tail_str() -> String {
         format!(
-            "{}<{}> + {}<{}> + {}<{}> + {}<{}>",
+            "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
             <S1 as Session>::head_str(),
             <S1 as Session>::tail_str(),
             <S2 as Session>::head_str(),

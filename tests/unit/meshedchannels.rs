@@ -51,7 +51,7 @@ pub fn meshedchannels_methods() {
     assert_eq!(
         Endpoint::<i32>::head_str(),
         format!(
-            "{} + {} + {} + {}",
+            "{}\n{}\n{}\n{}",
             AtoB::<i32>::head_str(),
             AtoC::<i32>::head_str(),
             StackA::head_str(),
@@ -62,7 +62,7 @@ pub fn meshedchannels_methods() {
     assert_eq!(
         Endpoint::<i32>::tail_str(),
         format!(
-            "{}<{}> + {}<{}> + {}<{}> + {}<{}>",
+            "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
             AtoB::<i32>::head_str(),
             AtoB::<i32>::tail_str(),
             AtoC::<i32>::head_str(),
@@ -76,7 +76,7 @@ pub fn meshedchannels_methods() {
 
     assert_eq!(
         Endpoint::<i32>::tail_str(),
-        format!("Send<End<>> + Recv<End<>> + RoleB<RoleC<RoleEnd<>>> + RoleA<RoleEnd<>>")
+        format!("Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nRoleA<RoleEnd<>>")
     );
 
     assert_eq!(AtoB::<i32>::head_str(), format!("Send"));

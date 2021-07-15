@@ -180,6 +180,8 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
+    mpstthree::checker_concat!(EndpointA, EndpointC<i32>, EndpointS<i32>);
+
     thread_a.join().unwrap();
     thread_c.join().unwrap();
     thread_s.join().unwrap();
