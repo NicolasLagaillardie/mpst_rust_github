@@ -8,7 +8,6 @@ use mpstthree::{
 use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
 use std::error::Error;
-use std::marker;
 
 // global protocol TwoBuyer(role A, role C, role S)
 // {
@@ -73,7 +72,7 @@ type NameS = RoleS<RoleEnd>;
 // Types
 // A
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
-type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
+type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
 
 // A
 enum Branching0fromCtoA {
@@ -81,9 +80,9 @@ enum Branching0fromCtoA {
     Diff(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
 // S
-enum Branching0fromCtoS<N: marker::Send> {
-    Sum(MeshedChannelsThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannelsThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
+enum Branching0fromCtoS {
+    Sum(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
@@ -92,14 +91,14 @@ type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<R
 // C
 type EndpointC<N> = MeshedChannelsThree<
     Choose0fromCtoA,
-    Send<N, Send<N, Choose0fromCtoS<N>>>,
+    Send<N, Send<N, Choose0fromCtoS>>,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
 // S
 type EndpointS<N> = MeshedChannelsThree<
     End,
-    Recv<N, Recv<N, Recv<Branching0fromCtoS<N>, End>>>,
+    Recv<N, Recv<N, Recv<Branching0fromCtoS, End>>>,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,
 >;
@@ -128,7 +127,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Sum,
-            Branching0fromCtoS::<i32>::Sum, =>
+            Branching0fromCtoS::Sum, =>
             RoleA,
             RoleS, =>
             RoleC,
@@ -145,7 +144,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Diff,
-            Branching0fromCtoS::<i32>::Diff, =>
+            Branching0fromCtoS::Diff, =>
             RoleA,
             RoleS, =>
             RoleC,
@@ -177,10 +176,71 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
+// fn type_of<T>(_: T) -> &'static str {
+//     std::any::type_name::<T>()
+// }
+
+// impl std::fmt::Display for Branching0fromCtoA {
+//     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+//         match self {
+//             Branching0fromCtoA::Sum(s) => {
+//                 write!(f, "Sum\n{}", type_of(&s))
+//             }
+//             Branching0fromCtoA::Diff(s) => {
+//                 write!(f, "Diff\n{}", type_of(&s))
+//             }
+//         }
+//     }
+// }
+
+// fn hashmap_branch_0_c_to_b() -> std::collections::HashMap<String, String> {
+//     let state_branches_receivers = std::collections::hash_map::RandomState::new();
+
+//     let mut all_branches: std::collections::HashMap<String, String> =
+//         std::collections::HashMap::with_hasher(state_branches_receivers);
+
+//     let temp_video =
+//         (Branching0fromCtoA::Sum(<_ as mpstthree::binary::struct_trait::Session>::new().0))
+//             .to_string();
+
+//     let video = temp_video
+//         .split('\n')
+//         .filter(|s| !s.is_empty())
+//         .collect::<Vec<_>>();
+
+//     let temp_end =
+//         (Branching0fromCtoA::Diff(<_ as mpstthree::binary::struct_trait::Session>::new().0))
+//             .to_string();
+
+//     let end = temp_end
+//         .split('\n')
+//         .filter(|s| !s.is_empty())
+//         .collect::<Vec<_>>();
+
+//     all_branches.insert(String::from(video[0]), String::from(video[1]));
+//     all_branches.insert(String::from(end[0]), String::from(end[1]));
+
+//     all_branches
+// }
+
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
-    mpstthree::checker_concat!(EndpointA, EndpointC<i32>, EndpointS<i32>);
+    mpstthree::checker_concat!(
+        EndpointA,
+        EndpointC<i32>,
+        EndpointS<i32>,
+        {
+            Branching0fromCtoA,
+            Sum,
+            Diff
+        },
+        {
+            Branching0fromCtoS,
+            Sum,
+            Diff
+        }
+    );
 
     thread_a.join().unwrap();
     thread_c.join().unwrap();

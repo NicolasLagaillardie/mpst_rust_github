@@ -6,16 +6,44 @@ use std::error::Error;
 #[macro_export]
 macro_rules! checker_concat {
     (
-        $( $sessiontype: ty),+ $(,)?
-    ) => {{
+        $( $sessiontype: ty , )+
+        $(
+            {
+                $choice: ty,
+                $(
+                    $branches: ident
+                ),+ $(,)?
+            }
+        ),+ $(,)?
+    ) => {
+
+        fn type_of<T>(_: T) -> &'static str {
+            std::any::type_name::<T>()
+        }
+
         let mut sessions = Vec::new();
         let mut tail_sessions = Vec::new();
+
         $(
             sessions.push(String::from(std::any::type_name::<$sessiontype>()));
             tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::Session>::tail_str());
         )+
+
+        mpst_seq::checking!(
+            $(
+                {
+                    $choice: ty,
+                    $(
+                        $branches: ident,
+                    )+
+                }
+            )+
+        );
+
+        println!("branches_receivers: {:?}", branches_receivers);
+
         println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions));
-    }};
+    };
 }
 
 /// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
@@ -35,10 +63,12 @@ fn clean_sessions(sessions: Vec<String>) -> Result<HashMap<String, Vec<String>>,
     let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
     for session in sessions {
         let mut temp = String::from(&session);
-        // Replace with regex expression term1::term2::term3 by term3
+
+        // Replace with regex expression -> term1::term2::term3 by term3
         for caps in main_re.captures_iter(&session) {
             temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
         }
+
         // Remove whitespaces
         temp.retain(|c| !c.is_whitespace());
 
@@ -49,7 +79,7 @@ fn clean_sessions(sessions: Vec<String>) -> Result<HashMap<String, Vec<String>>,
         let name = &full_block[full_block.len() - 1]
             .split(['<', '>'].as_ref())
             .filter(|s| !s.is_empty())
-            .map(|s| String::from(s))
+            .map(String::from)
             .collect::<Vec<_>>()[0];
 
         // Insert the vec of fields (minus the name's role) linked to the name of the role
@@ -69,7 +99,7 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
     for tail_session in tail_sessions {
         // Split according to '\n'
         let full_vec: Vec<&str> = tail_session
-            .split("\n")
+            .split('\n')
             .filter(|s| !s.is_empty())
             .collect::<Vec<_>>();
 
@@ -78,7 +108,7 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
             &mut full_vec[full_vec.len() - 2]
                 .split(['<', '>'].as_ref())
                 .filter(|s| !s.is_empty())
-                .map(|s| String::from(s))
+                .map(String::from)
                 .collect::<Vec<_>>(),
         );
 
@@ -91,14 +121,8 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
     // Remove RoleBroadcast and RoleEnd
     roles = roles
         .iter()
-        .filter_map(|s| {
-            if s == "RoleBroadcast" || s == "RoleEnd" {
-                std::option::Option::None
-            } else {
-                std::option::Option::Some(s)
-            }
-        })
-        .map(|s| String::from(s))
+        .filter(|s| *s != "RoleBroadcast" && *s != "RoleEnd")
+        .map(String::from)
         .collect();
 
     // Sort

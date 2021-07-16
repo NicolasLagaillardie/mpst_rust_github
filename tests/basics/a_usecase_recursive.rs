@@ -207,7 +207,7 @@ pub fn run_a_usecase_recursive() {
 //     }
 // }
 
-// fn hashmap_branche_0_c_to_b() -> Vec<String> {
+// fn hashmap_branch_0_c_to_b() -> Vec<String> {
 //     let (s_video, _) = <_ as Session>::new();
 
 //     let video = Branches0CtoB::Video::<i32>(s_video);
@@ -232,7 +232,7 @@ pub fn run_a_usecase_recursive() {
 //     }
 // }
 
-// fn hashmap_branche_0_a_to_b() -> Vec<String> {
+// fn hashmap_branch_0_a_to_b() -> Vec<String> {
 //     let (s_video, _) = <_ as Session>::new();
 
 //     let video = Branches0AtoB::Video::<i32>(s_video);
@@ -255,11 +255,11 @@ pub fn run_a_usecase_recursive() {
 //             let mut branches_receivers: HashMap<String, &Vec<String>> =
 //                 HashMap::with_hasher(state_branches_receivers);
 
-//             let branche_0_a_to_b: Vec<String> = hashmap_branche_0_a_to_b();
-//             let branche_0_c_to_b: Vec<String> = hashmap_branche_0_c_to_b();
+//             let branch_0_a_to_b: Vec<String> = hashmap_branch_0_a_to_b();
+//             let branch_0_c_to_b: Vec<String> = hashmap_branch_0_c_to_b();
 
-//             branches_receivers.insert(String::from("Branches0AtoB<i32>"), &branche_0_a_to_b);
-//             branches_receivers.insert(String::from("Branches0CtoB<i32>"), &branche_0_c_to_b);
+//             branches_receivers.insert(String::from("Branches0AtoB<i32>"), &branch_0_a_to_b);
+//             branches_receivers.insert(String::from("Branches0CtoB<i32>"), &branch_0_c_to_b);
 
 //             let (s1, _): (EndpointARecurs<i32>, _) = MeshedChannels::new();
 //             let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();

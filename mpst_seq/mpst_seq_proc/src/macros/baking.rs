@@ -28,6 +28,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStrea
             result.push(elt_tt)
         }
     }
+
     Ok(result)
 }
 
