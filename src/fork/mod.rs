@@ -3,29 +3,24 @@
 
 use std::error::Error;
 use std::marker;
-use std::panic;
+use std::panic::set_hook;
 use std::thread::{spawn, JoinHandle};
 
-use crate::binary;
-use crate::meshedchannels;
-use crate::role;
+use crate::binary::struct_trait::Session;
+use crate::meshedchannels::MeshedChannels;
+use crate::role::Role;
 
 #[doc(hidden)]
-pub fn fork_simple<S1, S2, R, N, P>(
-    p: P,
-    s: meshedchannels::MeshedChannels<S1, S2, R, N>,
-) -> JoinHandle<()>
+fn fork_simple<S1, S2, R, N, P>(p: P, s: MeshedChannels<S1, S2, R, N>) -> JoinHandle<()>
 where
-    S1: binary::struct_trait::Session + 'static,
-    S2: binary::struct_trait::Session + 'static,
-    R: role::Role + 'static,
-    N: role::Role + 'static,
-    P: FnOnce(meshedchannels::MeshedChannels<S1, S2, R, N>) -> Result<(), Box<dyn Error>>
-        + marker::Send
-        + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R: Role + 'static,
+    N: Role + 'static,
+    P: FnOnce(MeshedChannels<S1, S2, R, N>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
     spawn(move || {
-        panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match p(s) {
@@ -128,30 +123,23 @@ pub fn fork_mpst<S0, S1, S2, R0, R1, R2, N0, N1, N2, F0, F1, F2>(
     f2: F2,
 ) -> (JoinHandle<()>, JoinHandle<()>, JoinHandle<()>)
 where
-    S0: binary::struct_trait::Session + 'static,
-    S1: binary::struct_trait::Session + 'static,
-    S2: binary::struct_trait::Session + 'static,
-    R0: role::Role + 'static,
-    R1: role::Role + 'static,
-    R2: role::Role + 'static,
-    N0: role::Role + 'static,
-    N1: role::Role + 'static,
-    N2: role::Role + 'static,
-    F0: FnOnce(meshedchannels::MeshedChannels<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
+    S0: Session + 'static,
+    S1: Session + 'static,
+    S2: Session + 'static,
+    R0: Role + 'static,
+    R1: Role + 'static,
+    R2: Role + 'static,
+    N0: Role + 'static,
+    N1: Role + 'static,
+    N2: Role + 'static,
+    F0: FnOnce(MeshedChannels<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
-    F1: FnOnce(
-            meshedchannels::MeshedChannels<<S0 as binary::struct_trait::Session>::Dual, S2, R1, N1>,
-        ) -> Result<(), Box<dyn Error>>
+    F1: FnOnce(MeshedChannels<<S0 as Session>::Dual, S2, R1, N1>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
     F2: FnOnce(
-            meshedchannels::MeshedChannels<
-                <S1 as binary::struct_trait::Session>::Dual,
-                <S2 as binary::struct_trait::Session>::Dual,
-                R2,
-                N2,
-            >,
+            MeshedChannels<<S1 as Session>::Dual, <S2 as Session>::Dual, R2, N2>,
         ) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
@@ -168,19 +156,19 @@ where
     let (name_b, _) = N1::new();
     let (name_c, _) = N2::new();
 
-    let a = meshedchannels::MeshedChannels {
+    let a = MeshedChannels {
         session1: channel_ab,
         session2: channel_ac,
         stack: role_a,
         name: name_a,
     };
-    let b = meshedchannels::MeshedChannels {
+    let b = MeshedChannels {
         session1: channel_ba,
         session2: channel_bc,
         stack: role_b,
         name: name_b,
     };
-    let c = meshedchannels::MeshedChannels {
+    let c = MeshedChannels {
         session1: channel_ca,
         session2: channel_cb,
         stack: role_c,

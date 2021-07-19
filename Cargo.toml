@@ -54,6 +54,7 @@ hyper = { version = "0.14.10", features = ["full"] }
 hyper-tls = "0.5.0"
 tokio = { version = "1.8.1", features = ["full"] }
 regex = "1.5.4"
+petgraph = "0.6.0"
 
 [dev-dependencies]
 criterion = { version = "0.3.4", features = ["html_reports"] }

@@ -1,8 +1,9 @@
 mod baking;
 mod basics;
-pub mod basics_macros;
+mod basics_macros;
 mod binary;
 mod cancel;
+mod graph;
 mod http;
 mod scribble;
 mod tcp;
@@ -243,7 +244,6 @@ fn scribble_tests() {
 }
 
 #[test]
-#[timeout(30000)]
 fn canceling() {
     cancel::cancel_01::main();
     cancel::cancel_02::main();
@@ -290,6 +290,11 @@ fn http() {
     http::o_auth::main();
     http::o_auth_fail_too_true::main();
     http::o_auth_fail_too_false::main();
+}
+
+#[test]
+fn graph() {
+    graph::simple::simple_triple_endpoints();
 }
 
 pub fn main() {}

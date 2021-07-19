@@ -15,17 +15,39 @@ use crate::role::Role;
 use crate::{recv_all_aux_simple, recv_aux_simple, send_aux_simple};
 
 use either::Either;
+
+use std::any::type_name;
 use std::error::Error;
 use std::marker;
 
+use petgraph::graph::NodeIndex;
+use petgraph::Graph;
+
 type ReturnType<S1, S2, R> = MeshedChannels<S1, S2, R, RoleA<RoleEnd>>;
 type ResultType<T, S1, S2, R> = Result<(T, ReturnType<S1, S2, R>), Box<dyn Error>>;
+type ResultTypeDot<T, S1, S2, R> =
+    Result<(T, ReturnType<S1, S2, R>, Graph<String, String>, NodeIndex), Box<dyn Error>>;
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     MeshedChannels<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
 {
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
         send_aux_simple!(self, payload, RoleB, 1)
+    }
+
+    pub fn dot_send(
+        self,
+        payload: T,
+        mut g: Graph<String, String>,
+        previous_node: NodeIndex,
+    ) -> (ReturnType<S1, S2, R>, Graph<String, String>, NodeIndex) {
+        let new_node = g.add_node(g.node_count().to_string());
+        g.add_edge(
+            previous_node,
+            new_node,
+            format!("A!B: {:?}", type_name::<T>()),
+        );
+        (send_aux_simple!(self, payload, RoleB, 1), g, new_node)
     }
 }
 
@@ -35,6 +57,21 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
         send_aux_simple!(self, payload, RoleC, 2)
     }
+
+    pub fn dot_send(
+        self,
+        payload: T,
+        mut g: Graph<String, String>,
+        previous_node: NodeIndex,
+    ) -> (ReturnType<S1, S2, R>, Graph<String, String>, NodeIndex) {
+        let new_node = g.add_node(g.node_count().to_string());
+        g.add_edge(
+            previous_node,
+            new_node,
+            format!("A!C: {:?}", type_name::<T>()),
+        );
+        (send_aux_simple!(self, payload, RoleC, 2), g, new_node)
+    }
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
@@ -43,6 +80,21 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_aux_simple!(self, RoleB, 1)()
     }
+
+    pub fn dot_recv(
+        self,
+        mut g: Graph<String, String>,
+        previous_node: NodeIndex,
+    ) -> ResultTypeDot<T, S1, S2, R> {
+        let new_node = g.add_node(g.node_count().to_string());
+        g.add_edge(
+            previous_node,
+            new_node,
+            format!("A?B: {:?}", type_name::<T>()),
+        );
+        let (payload, s) = recv_aux_simple!(self, RoleB, 1)()?;
+        Ok((payload, s, g, new_node))
+    }
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
@@ -50,6 +102,21 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 {
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_aux_simple!(self, RoleC, 2)()
+    }
+
+    pub fn dot_recv(
+        self,
+        mut g: Graph<String, String>,
+        previous_node: NodeIndex,
+    ) -> ResultTypeDot<T, S1, S2, R> {
+        let new_node = g.add_node(g.node_count().to_string());
+        g.add_edge(
+            previous_node,
+            new_node,
+            format!("A?C: {:?}", type_name::<T>()),
+        );
+        let (payload, s) = recv_aux_simple!(self, RoleC, 2)()?;
+        Ok((payload, s, g, new_node))
     }
 }
 

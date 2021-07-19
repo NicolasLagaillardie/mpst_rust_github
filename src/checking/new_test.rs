@@ -40,10 +40,37 @@ macro_rules! checker_concat {
             )+
         );
 
-        println!("branches_receivers: {:?}", branches_receivers);
-
-        println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions));
+        println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers));
     };
+}
+
+#[doc(hidden)]
+fn clean_sesion(session: String) -> Result<Vec<String>, Box<dyn Error>> {
+    // The regex expression
+    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
+    let mut temp = String::from(&session);
+
+    // Replace with regex expression -> term1::term2::term3 by term3
+    for caps in main_re.captures_iter(&session) {
+        temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
+    }
+
+    // Remove whitespaces
+    temp.retain(|c| !c.is_whitespace());
+
+    // Get each field of the MeshedChannels
+    let mut full_block = get_blocks(temp)?;
+
+    // Get the name of the role
+    let name = &full_block[full_block.len() - 1]
+        .split(['<', '>'].as_ref())
+        .filter(|s| !s.is_empty())
+        .map(String::from)
+        .collect::<Vec<_>>()[0];
+
+    full_block.push(String::from(name));
+
+    Ok(full_block)
 }
 
 /// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
@@ -59,34 +86,13 @@ fn clean_sessions(sessions: Vec<String>) -> Result<HashMap<String, Vec<String>>,
     let mut all_sessions: HashMap<String, Vec<String>> =
         HashMap::with_hasher(state_branches_receivers);
 
-    // The regex expression
-    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
     for session in sessions {
-        let mut temp = String::from(&session);
+        let full_block = clean_sesion(session)?;
 
-        // Replace with regex expression -> term1::term2::term3 by term3
-        for caps in main_re.captures_iter(&session) {
-            temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
-        }
-
-        // Remove whitespaces
-        temp.retain(|c| !c.is_whitespace());
-
-        // Get each field of the MeshedChannels
-        let full_block = get_blocks(temp.clone())?;
-
-        // Get the name of the role
-        let name = &full_block[full_block.len() - 1]
-            .split(['<', '>'].as_ref())
-            .filter(|s| !s.is_empty())
-            .map(String::from)
-            .collect::<Vec<_>>()[0];
+        let name = String::from(&full_block[full_block.len() - 1]);
 
         // Insert the vec of fields (minus the name's role) linked to the name of the role
-        all_sessions.insert(
-            String::from(name),
-            full_block[..(full_block.len() - 1)].to_vec(),
-        );
+        all_sessions.insert(name, full_block[..(full_block.len() - 2)].to_vec());
     }
 
     Ok(all_sessions)
@@ -142,7 +148,8 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut index = -1;
 
     for i in full_block.chars() {
-        if i == '>' && index == 0 {
+        if i == '&' {
+        } else if i == '>' && index == 0 {
             result.push(format!("{}{}", temp, i));
             temp = String::from("");
         } else if i == '<' && index >= 0 {
@@ -173,6 +180,7 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
 pub fn checker(
     sessions: Vec<String>,
     tail_sessions: Vec<String>,
+    branches_receivers: HashMap<String, std::collections::HashMap<String, String>>,
 ) -> Result<Vec<String>, Box<dyn Error>> {
     println!("sessions: {:?}", &sessions);
 
@@ -181,6 +189,7 @@ pub fn checker(
 
     println!("clean_sessions: {:?}", &clean_sessions);
     println!("roles: {:?}", &roles);
+    println!("branches_receivers: {:?}", &branches_receivers);
 
     Ok(vec![String::from("")])
 }
