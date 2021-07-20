@@ -2044,7 +2044,7 @@ impl BakingWithEnumMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    if result == String::from("") {
+                    if result == "".to_string() {
                         result = format!(
                             "{}",
                             <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
@@ -2065,7 +2065,7 @@ impl BakingWithEnumMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    if result == String::from("") {
+                    if result == "".to_string() {
                         result = format!(
                             "{}<{}>",
                             <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
@@ -2241,7 +2241,7 @@ impl BakingWithEnumMacroInput {
 
                 #[doc(hidden)]
                 fn head_str() -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
                     #( #head_str )*
                     format!(
                         "{}\n{}\n{}",
@@ -2253,7 +2253,7 @@ impl BakingWithEnumMacroInput {
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
                     #( #tail_str )*
                     format!(
                         "{}\n{}<{}>\n{}<{}>",
@@ -2267,7 +2267,7 @@ impl BakingWithEnumMacroInput {
 
                 #[doc(hidden)]
                 fn self_head_str(&self) -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
                     #( #head_str )*
                     format!(
                         "{}\n{}\n{}",
@@ -2279,7 +2279,7 @@ impl BakingWithEnumMacroInput {
 
                 #[doc(hidden)]
                 fn self_tail_str(&self) -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
                     #( #tail_str )*
                     format!(
                         "{}\n{}<{}>\n{}<{}>",

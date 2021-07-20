@@ -57,7 +57,7 @@ impl<R1: Role, R2: Role> Role for RoleAtoAll<R1, R2> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleAtoAll")
+        "RoleAtoAll".to_string()
     }
 
     #[doc(hidden)]
@@ -73,7 +73,7 @@ impl<R1: Role, R2: Role> Role for RoleAtoAll<R1, R2> {
 
     #[doc(hidden)]
     fn self_head_str(&self) -> String {
-        String::from("RoleAtoAll")
+        "RoleAtoAll".to_string()
     }
 
     #[doc(hidden)]

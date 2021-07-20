@@ -55,7 +55,7 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("Send")
+        "Send".to_string()
     }
 
     #[doc(hidden)]
@@ -65,7 +65,7 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
 
     #[doc(hidden)]
     fn self_head_str(&self) -> String {
-        String::from("Send")
+        "Send".to_string()
     }
 
     #[doc(hidden)]

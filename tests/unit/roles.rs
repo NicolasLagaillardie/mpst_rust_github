@@ -164,69 +164,69 @@ pub fn role_all_to_c_fields() {
 }
 
 pub fn role_head_str() {
-    assert_eq!(RoleEnd::head_str(), String::from("RoleEnd"));
-    assert_eq!(RoleA::<RoleEnd>::head_str(), String::from("RoleA"));
-    assert_eq!(RoleB::<RoleEnd>::head_str(), String::from("RoleB"));
-    assert_eq!(RoleC::<RoleEnd>::head_str(), String::from("RoleC"));
-    assert_eq!(RoleADual::<RoleEnd>::head_str(), String::from("RoleADual"));
-    assert_eq!(RoleBDual::<RoleEnd>::head_str(), String::from("RoleBDual"));
-    assert_eq!(RoleCDual::<RoleEnd>::head_str(), String::from("RoleCDual"));
+    assert_eq!(RoleEnd::head_str(), "RoleEnd".to_string());
+    assert_eq!(RoleA::<RoleEnd>::head_str(), "RoleA".to_string());
+    assert_eq!(RoleB::<RoleEnd>::head_str(), "RoleB".to_string());
+    assert_eq!(RoleC::<RoleEnd>::head_str(), "RoleC".to_string());
+    assert_eq!(RoleADual::<RoleEnd>::head_str(), "RoleADual".to_string());
+    assert_eq!(RoleBDual::<RoleEnd>::head_str(), "RoleBDual".to_string());
+    assert_eq!(RoleCDual::<RoleEnd>::head_str(), "RoleCDual".to_string());
     assert_eq!(
         RoleAtoAll::<RoleEnd, RoleEnd>::head_str(),
-        String::from("RoleAtoAll")
+        "RoleAtoAll".to_string()
     );
     assert_eq!(
         RoleBtoAll::<RoleEnd, RoleEnd>::head_str(),
-        String::from("RoleBtoAll")
+        "RoleBtoAll".to_string()
     );
     assert_eq!(
         RoleCtoAll::<RoleEnd, RoleEnd>::head_str(),
-        String::from("RoleCtoAll")
+        "RoleCtoAll".to_string()
     );
     assert_eq!(
         RoleAlltoA::<RoleEnd, RoleEnd>::head_str(),
-        String::from("RoleAlltoA")
+        "RoleAlltoA".to_string()
     );
     assert_eq!(
         RoleAlltoB::<RoleEnd, RoleEnd>::head_str(),
-        String::from("RoleAlltoB")
+        "RoleAlltoB".to_string()
     );
     assert_eq!(
         RoleAlltoC::<RoleEnd, RoleEnd>::head_str(),
-        String::from("RoleAlltoC")
+        "RoleAlltoC".to_string()
     );
 }
 
 pub fn role_tail_str() {
-    assert_eq!(RoleEnd::tail_str(), String::from(""));
-    assert_eq!(RoleA::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
-    assert_eq!(RoleB::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
-    assert_eq!(RoleC::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
-    assert_eq!(RoleADual::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
-    assert_eq!(RoleBDual::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
-    assert_eq!(RoleCDual::<RoleEnd>::tail_str(), String::from("RoleEnd<>"));
+    assert_eq!(RoleEnd::tail_str(), "".to_string());
+    assert_eq!(RoleA::<RoleEnd>::tail_str(), "RoleEnd<>".to_string());
+    assert_eq!(RoleB::<RoleEnd>::tail_str(), "RoleEnd<>".to_string());
+    assert_eq!(RoleC::<RoleEnd>::tail_str(), "RoleEnd<>".to_string());
+    assert_eq!(RoleADual::<RoleEnd>::tail_str(), "RoleEnd<>".to_string());
+    assert_eq!(RoleBDual::<RoleEnd>::tail_str(), "RoleEnd<>".to_string());
+    assert_eq!(RoleCDual::<RoleEnd>::tail_str(), "RoleEnd<>".to_string());
     assert_eq!(
         RoleAtoAll::<RoleEnd, RoleEnd>::tail_str(),
-        String::from("RoleEnd<> + RoleEnd<>")
+        "RoleEnd<> + RoleEnd<>".to_string()
     );
     assert_eq!(
         RoleBtoAll::<RoleEnd, RoleEnd>::tail_str(),
-        String::from("RoleEnd<> + RoleEnd<>")
+        "RoleEnd<> + RoleEnd<>".to_string()
     );
     assert_eq!(
         RoleCtoAll::<RoleEnd, RoleEnd>::tail_str(),
-        String::from("RoleEnd<> + RoleEnd<>")
+        "RoleEnd<> + RoleEnd<>".to_string()
     );
     assert_eq!(
         RoleAlltoA::<RoleEnd, RoleEnd>::tail_str(),
-        String::from("RoleEnd<> + RoleEnd<>")
+        "RoleEnd<> + RoleEnd<>".to_string()
     );
     assert_eq!(
         RoleAlltoB::<RoleEnd, RoleEnd>::tail_str(),
-        String::from("RoleEnd<> + RoleEnd<>")
+        "RoleEnd<> + RoleEnd<>".to_string()
     );
     assert_eq!(
         RoleAlltoC::<RoleEnd, RoleEnd>::tail_str(),
-        String::from("RoleEnd<> + RoleEnd<>")
+        "RoleEnd<> + RoleEnd<>".to_string()
     );
 }

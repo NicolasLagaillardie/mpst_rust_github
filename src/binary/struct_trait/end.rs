@@ -41,22 +41,22 @@ impl Session for End {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("End")
+        "End".to_string()
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
-        String::from("")
+        "".to_string()
     }
 
     #[doc(hidden)]
     fn self_head_str(&self) -> String {
-        String::from("End")
+        "End".to_string()
     }
 
     #[doc(hidden)]
     fn self_tail_str(&self) -> String {
-        String::from("")
+        "".to_string()
     }
 }
 

@@ -8,14 +8,14 @@ use std::error::Error;
 #[doc(hidden)]
 fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut result = Vec::new();
-    let mut temp = String::from("");
+    let mut temp = "".to_string();
     let mut index = -1;
 
     for i in full_block.chars() {
         if i == '&' || i.is_whitespace() {
         } else if i == '>' && index == 0 {
             result.push(temp.to_string());
-            temp = String::from("");
+            temp = "".to_string();
         } else if i == '<' && index >= 0 {
             temp = format!("{}{}", temp, i);
             index += 1;
@@ -24,7 +24,7 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
             index -= 1;
         } else if i == ',' && index == 0 {
             result.push(temp);
-            temp = String::from("");
+            temp = "".to_string();
         } else if index >= 0 {
             temp = format!("{}{}", temp, i);
         } else if i == '<' {

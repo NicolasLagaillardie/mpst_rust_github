@@ -87,12 +87,12 @@ impl Session for End {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("End")
+        "End".to_string()
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
-        String::from("")
+        "".to_string()
     }
 }
 
@@ -143,7 +143,7 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("Send")
+        "Send".to_string()
     }
 
     #[doc(hidden)]
@@ -179,7 +179,7 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("Recv")
+        "Recv".to_string()
     }
 
     #[doc(hidden)]
@@ -208,14 +208,14 @@ impl<T: FromStr + marker::Send, S: FromStr + Session> FromStr for Recv<T, S> {
 #[doc(hidden)]
 fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut result = Vec::new();
-    let mut temp = String::from("");
+    let mut temp = "".to_string();
     let mut index = -1;
 
     for i in full_block.chars() {
         if i == '&' {
         } else if i == '>' && index == 0 {
             result.push(format!("{}{}", temp, i));
-            temp = String::from("");
+            temp = "".to_string();
         } else if i == '<' && index >= 0 {
             temp = format!("{}{}", temp, i);
             index += 1;
@@ -224,7 +224,7 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
             index -= 1;
         } else if i == ',' && index == 0 {
             result.push(temp);
-            temp = String::from("");
+            temp = "".to_string();
         } else if index >= 0 {
             temp = format!("{}{}", temp, i);
         } else if i == '<' {

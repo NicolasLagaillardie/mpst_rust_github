@@ -24,15 +24,15 @@ use std::thread::sleep;
 use std::time::Duration;
 
 pub fn head_str() {
-    assert_eq!(End::head_str(), String::from("End"));
-    assert_eq!(Send::<i32, End>::head_str(), String::from("Send"));
-    assert_eq!(Recv::<i32, End>::head_str(), String::from("Recv"));
+    assert_eq!(End::head_str(), "End".to_string());
+    assert_eq!(Send::<i32, End>::head_str(), "Send".to_string());
+    assert_eq!(Recv::<i32, End>::head_str(), "Recv".to_string());
 }
 
 pub fn tail_str() {
-    assert_eq!(End::tail_str(), String::from(""));
-    assert_eq!(Send::<i32, End>::tail_str(), String::from("End<>"));
-    assert_eq!(Recv::<i32, End>::tail_str(), String::from("End<>"));
+    assert_eq!(End::tail_str(), "".to_string());
+    assert_eq!(Send::<i32, End>::tail_str(), "End<>".to_string());
+    assert_eq!(Recv::<i32, End>::tail_str(), "End<>".to_string());
 }
 
 pub fn new_types() {

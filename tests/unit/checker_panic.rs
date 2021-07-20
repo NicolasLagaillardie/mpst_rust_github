@@ -179,8 +179,8 @@ pub fn test_checker_panic_stack() {
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
-            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
+            hm.insert("Branche0AtoC<i32>".to_string(), &c_branches_a_to_c);
+            hm.insert("Branche0BtoC<i32>".to_string(), &c_branches_b_to_c);
 
             let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
             let (s2, _): (EndpointBRecursPanicStack<i32>, _) = MeshedChannels::new();
@@ -203,8 +203,8 @@ pub fn test_checker_panic_name() {
             let c_branches_a_to_c: Vec<String> = hashmap_c_branches_a_to_c();
             let c_branches_b_to_c: Vec<String> = hashmap_c_branches_b_to_c();
 
-            hm.insert(String::from("Branche0AtoC<i32>"), &c_branches_a_to_c);
-            hm.insert(String::from("Branche0BtoC<i32>"), &c_branches_b_to_c);
+            hm.insert("Branche0AtoC<i32>".to_string(), &c_branches_a_to_c);
+            hm.insert("Branche0BtoC<i32>".to_string(), &c_branches_b_to_c);
 
             let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
             let (s2, _): (EndpointBRecursPanicName<i32>, _) = MeshedChannels::new();

@@ -54,7 +54,7 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("Recv")
+        "Recv".to_string()
     }
 
     #[doc(hidden)]
@@ -64,7 +64,7 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
 
     #[doc(hidden)]
     fn self_head_str(&self) -> String {
-        String::from("Recv")
+        "Recv".to_string()
     }
 
     #[doc(hidden)]

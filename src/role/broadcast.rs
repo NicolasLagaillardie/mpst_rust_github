@@ -40,21 +40,21 @@ impl crate::role::Role for RoleBroadcast {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleBroadcast")
+        "RoleBroadcast".to_string()
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
-        String::from("")
+        "".to_string()
     }
 
     #[doc(hidden)]
     fn self_head_str(&self) -> String {
-        String::from("RoleBroadcast")
+        "RoleBroadcast".to_string()
     }
 
     #[doc(hidden)]
     fn self_tail_str(&self) -> String {
-        String::from("")
+        "".to_string()
     }
 }

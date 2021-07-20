@@ -182,8 +182,8 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        let s = send_mpst_a_to_c(String::from("Fail"), s);
-        let s = send_mpst_a_to_s(String::from("Fail"), s);
+        let s = send_mpst_a_to_c("Fail".to_string(), s);
+        let s = send_mpst_a_to_s("Fail".to_string(), s);
 
         close_mpst_multi(s)
     } else {
