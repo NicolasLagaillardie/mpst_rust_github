@@ -12,9 +12,9 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut index = -1;
 
     for i in full_block.chars() {
-        if i == '&' {
+        if i == '&' || i.is_whitespace() {
         } else if i == '>' && index == 0 {
-            result.push(format!("{}{}", temp, i));
+            result.push(temp.to_string());
             temp = String::from("");
         } else if i == '<' && index >= 0 {
             temp = format!("{}{}", temp, i);
@@ -35,7 +35,10 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     }
 
     if !temp.is_empty() {
-        result.push(temp);
+        let mut chars = temp.chars();
+        chars.next_back();
+
+        result.push(chars.as_str().to_string());
     }
 
     Ok(result)

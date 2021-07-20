@@ -45,4 +45,14 @@ impl crate::role::Role for RoleEnd {
     fn tail_str() -> String {
         String::from("")
     }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        String::from("RoleEnd")
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
+        String::from("")
+    }
 }

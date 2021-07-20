@@ -297,4 +297,11 @@ fn graph() {
     graph::simple::simple_triple_endpoints();
 }
 
+#[test]
+fn from_str() {
+    unit::from_str::binary_sessions();
+    unit::from_str::meshedchannels();
+    unit::from_str::roles();
+}
+
 pub fn main() {}

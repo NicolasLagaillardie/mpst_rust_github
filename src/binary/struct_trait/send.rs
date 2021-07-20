@@ -62,6 +62,16 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        String::from("Send")
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
+        format!("{}<{}>", S::head_str(), S::tail_str())
+    }
 }
 
 impl<T: FromStr + marker::Send, S: FromStr + Session> FromStr for Send<T, S>

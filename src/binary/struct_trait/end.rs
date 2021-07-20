@@ -48,6 +48,16 @@ impl Session for End {
     fn tail_str() -> String {
         String::from("")
     }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        String::from("End")
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
+        String::from("")
+    }
 }
 
 #[derive(Debug, Clone)]

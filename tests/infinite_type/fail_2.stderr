@@ -4,7 +4,7 @@ error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_tra
 20 | fn nice_sum_server(s: NiceSumServer<i32>) -> Result<(), Box<dyn Error>> {
    |                       ^^^^^^^^^^^^^^^^^^
    |
-  ::: $WORKSPACE/src/binary/struct_trait.rs
+  ::: $WORKSPACE/src/binary/struct_trait/recv.rs
    |
    |     T: marker::Send,
    |        ------------ required by this bound in `Recv`
@@ -21,7 +21,7 @@ error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_tra
 24 | fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Error>> {
    |                             ^^^^^^^^^^^^^^^^^^
    |
-  ::: $WORKSPACE/src/binary/struct_trait.rs
+  ::: $WORKSPACE/src/binary/struct_trait/recv.rs
    |
    |     T: marker::Send,
    |        ------------ required by this bound in `Recv`

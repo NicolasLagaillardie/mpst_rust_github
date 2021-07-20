@@ -121,6 +121,32 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <N as Role>::tail_str(),
         )
     }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        format!(
+            "{}\n{}\n{}\n{}",
+            <S1 as Session>::head_str(),
+            <S2 as Session>::head_str(),
+            <R as Role>::head_str(),
+            <N as Role>::head_str()
+        )
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
+        format!(
+            "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
+            <S1 as Session>::head_str(),
+            <S1 as Session>::tail_str(),
+            <S2 as Session>::head_str(),
+            <S2 as Session>::tail_str(),
+            <R as Role>::head_str(),
+            <R as Role>::tail_str(),
+            <N as Role>::head_str(),
+            <N as Role>::tail_str(),
+        )
+    }
 }
 
 #[doc(hidden)]

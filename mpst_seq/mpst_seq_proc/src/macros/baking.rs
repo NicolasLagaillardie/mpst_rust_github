@@ -1373,6 +1373,20 @@ impl BakingMacroInput {
                         <R as mpstthree::role::Role>::tail_str()
                     )
                 }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    format!(
+                        "{}<{}>",
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str()
+                    )
+                }
             }
             ////////////////////////////////////////////
             /// The normal Dual implementation of Role
@@ -1399,6 +1413,20 @@ impl BakingMacroInput {
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}>",
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#dual_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}>",
                         <R as mpstthree::role::Role>::head_str(),
@@ -1474,6 +1502,22 @@ impl BakingMacroInput {
                         <R2 as mpstthree::role::Role>::tail_str()
                     )
                 }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_to_all_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    format!(
+                        "{}<{}> + {}<{}>",
+                        <R1 as mpstthree::role::Role>::head_str(),
+                        <R1 as mpstthree::role::Role>::tail_str(),
+                        <R2 as mpstthree::role::Role>::head_str(),
+                        <R2 as mpstthree::role::Role>::tail_str()
+                    )
+                }
             }
             ////////////////////////////////////////////
             /// The all Dual implementation of Role
@@ -1509,6 +1553,22 @@ impl BakingMacroInput {
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}> + {}<{}>",
+                        <R1 as mpstthree::role::Role>::head_str(),
+                        <R1 as mpstthree::role::Role>::tail_str(),
+                        <R2 as mpstthree::role::Role>::head_str(),
+                        <R2 as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#dual_to_all_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}> + {}<{}>",
                         <R1 as mpstthree::role::Role>::head_str(),
@@ -2122,6 +2182,32 @@ impl BakingMacroInput {
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    let mut result = String::from("");
+                    #( #tail_str )*
+                    format!(
+                        "{}\n{}<{}>\n{}<{}>",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    let mut result = String::from("");
+                    #( #head_str )*
+                    format!(
+                        "{}\n{}\n{}",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     let mut result = String::from("");
                     #( #tail_str )*
                     format!(

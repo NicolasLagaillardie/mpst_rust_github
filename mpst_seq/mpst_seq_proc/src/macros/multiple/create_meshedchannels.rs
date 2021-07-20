@@ -271,6 +271,36 @@ impl CreateMeshedChannelsMacroInput {
                         <N as mpstthree::role::Role>::tail_str()
                     )
                 }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    let mut result = String::from("");
+                    #(
+                        #head_str
+                    )*
+                    format!(
+                        "{}\n{}\n{}",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    let mut result = String::from("");
+                    #(
+                        #tail_str
+                    )*
+                    format!(
+                        "{}\n{}<{}>\n{}<{}>",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
+                    )
+                }
             }
 
             #[doc(hidden)]
