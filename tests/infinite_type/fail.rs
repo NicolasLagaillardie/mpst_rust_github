@@ -1,5 +1,5 @@
 use mpstthree::binary::*;
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::choose;
 use mpstthree::offer;
 

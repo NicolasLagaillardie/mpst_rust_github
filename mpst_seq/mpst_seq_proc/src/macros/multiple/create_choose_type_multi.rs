@@ -77,7 +77,7 @@ impl ChooseTypeMultiMacroInput {
                 R0,
                 R1,
                 N0
-            > = mpstthree::binary::struct_trait::Send<
+            > = mpstthree::binary::struct_trait::send::Send<
                 either::Either<
                     <
                         #meshedchannels_name<
@@ -86,7 +86,7 @@ impl ChooseTypeMultiMacroInput {
                             )*
                             R0,
                             N0
-                        > as mpstthree::binary::struct_trait::Session>::Dual,
+                        > as mpstthree::binary::struct_trait::session::Session>::Dual,
                     <
                         #meshedchannels_name<
                             #(
@@ -94,9 +94,9 @@ impl ChooseTypeMultiMacroInput {
                             )*
                             R1,
                             N0
-                        > as mpstthree::binary::struct_trait::Session>::Dual
+                        > as mpstthree::binary::struct_trait::session::Session>::Dual
                     >,
-                mpstthree::binary::struct_trait::End
+                mpstthree::binary::struct_trait::end::End
             >;
         }
     }

@@ -77,7 +77,7 @@ impl OfferTypeMultiMacroInput {
                 R0,
                 R1,
                 N0
-            > = mpstthree::binary::struct_trait::Recv<
+            > = mpstthree::binary::struct_trait::recv::Recv<
                 either::Either<
                     #meshedchannels_name<
                         #(
@@ -94,7 +94,7 @@ impl OfferTypeMultiMacroInput {
                         N0
                     >
                 >,
-                mpstthree::binary::struct_trait::End
+                mpstthree::binary::struct_trait::end::End
             >;
         }
     }

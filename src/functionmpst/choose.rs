@@ -2,7 +2,7 @@
 
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
-use crate::binary::struct_trait::Session;
+use crate::binary::struct_trait::session::Session;
 use crate::functionmpst::ChooseMpst;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::a::RoleA;
@@ -268,7 +268,7 @@ macro_rules! choose_mpst_c {
 /// * R5: stack of A on right branch
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 /// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
@@ -330,7 +330,7 @@ where
 /// * R5: stack of A on right branch
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 /// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
@@ -393,7 +393,7 @@ where
 /// * R5: stack of B on right branch
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 /// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
@@ -455,7 +455,7 @@ where
 /// * R5: stack of B on right branch
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 /// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
@@ -517,7 +517,7 @@ where
 /// * R5: stack of C on right branch
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 /// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
@@ -579,7 +579,7 @@ where
 /// * R5: stack of C on right branch
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 /// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,

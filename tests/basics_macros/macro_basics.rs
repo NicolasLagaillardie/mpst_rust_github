@@ -1,5 +1,5 @@
 // Test for parametrisation on the name of the roles
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::meshedchannels::MeshedChannels;

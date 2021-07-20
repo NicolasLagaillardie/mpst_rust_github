@@ -158,15 +158,15 @@ impl ChooseTypeMultiCancelToAllMacroInput {
                 if i < self.nsessions {
                     quote! {
                         let ( #channel_left , #channel_right ) =
-                            <mpstthree::binary::struct_trait::End
-                                as mpstthree::binary::struct_trait::Session>::new();
+                            <mpstthree::binary::struct_trait::end::End
+                                as mpstthree::binary::struct_trait::session::Session>::new();
 
                         temp.push( #channel_left );
                     }
                 } else {
                     quote! {
                         let ( #channel_left , #channel_right ) =
-                            <_ as mpstthree::binary::struct_trait::Session>::new();
+                            <_ as mpstthree::binary::struct_trait::session::Session>::new();
                     }
                 }
             })
@@ -299,15 +299,15 @@ impl ChooseTypeMultiCancelToAllMacroInput {
 
         quote! {
             {
-                let mut temp = Vec::<mpstthree::binary::struct_trait::End>::new();
+                let mut temp = Vec::<mpstthree::binary::struct_trait::end::End>::new();
 
                 #(
                     #new_channels
                 )*
 
                 let (stack_1, _) =
-                    <mpstthree::binary::struct_trait::End
-                        as mpstthree::binary::struct_trait::Session>::new();
+                    <mpstthree::binary::struct_trait::end::End
+                        as mpstthree::binary::struct_trait::session::Session>::new();
 
                 #(
                     #new_roles
@@ -342,7 +342,7 @@ impl ChooseTypeMultiCancelToAllMacroInput {
                     Some(e) => e,
                     _ => panic!("Error type"),
                 };
-                let s = s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Offer(elt)).unwrap();
+                let s = s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Offer(elt)).unwrap();
 
                 #meshedchannels_name {
                     #(

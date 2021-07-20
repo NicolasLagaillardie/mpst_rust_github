@@ -9,7 +9,7 @@ pub mod new_test;
 
 use self::aux_checker::{checker_aux, parse_type_of};
 
-use crate::binary::struct_trait::Session;
+use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
 

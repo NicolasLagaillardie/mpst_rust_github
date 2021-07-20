@@ -175,7 +175,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                 let diff = self.n_sessions - 1;
                 let diag = self.diag();
 
-                // Build Send<*enum*, mpstthree::binary::struct_trait::End>,
+                // Build Send<*enum*, mpstthree::binary::struct_trait::end::End>,
                 let send_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_label =
@@ -186,13 +186,13 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                             };
 
                         quote! {
-                            Send< #temp_label , mpstthree::binary::struct_trait::End> ,
+                            Send< #temp_label , mpstthree::binary::struct_trait::end::End> ,
                         }
                     })
                     .collect();
 
                 // Build let ( channel_n_m , channel_m_n ) =
-                //  <_ as mpstthree::binary::struct_trait::Session>::new();
+                //  <_ as mpstthree::binary::struct_trait::session::Session>::new();
                 let new_channels: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1) / 2))
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_diag(&diag, j);
@@ -206,7 +206,7 @@ impl ChooseTypeMultiToAllBundleMacroInput {
                         );
                         quote! {
                             let ( #channel_left , #channel_right ) =
-                                <_ as mpstthree::binary::struct_trait::Session>::new();
+                                <_ as mpstthree::binary::struct_trait::session::Session>::new();
                         }
                     })
                     .collect();

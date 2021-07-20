@@ -38,7 +38,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 // Used for creating the types
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::meshedchannels::MeshedChannels;
 
 // Used for creating the stack and the name of each role

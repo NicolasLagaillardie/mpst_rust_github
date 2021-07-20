@@ -38,7 +38,7 @@ impl BroadcastCancelMacroInput {
             .map(|i| format_ident!("session{}", i))
             .collect();
 
-        let send_sessions = quote! { #( s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap_or(()); )* };
+        let send_sessions = quote! { #( s.#field_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Cancel).unwrap_or(()); )* };
 
         quote! {
             {
@@ -56,19 +56,19 @@ impl BroadcastCancelMacroInput {
                     while #( #bool_session || )* false {
                         #(
                             match s.#field_session.receiver.try_recv() {
-                                Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
+                                Ok(mpstthree::binary::struct_trait::end::Signal::Cancel) => {
                                     #send_sessions
                                     mpstthree::binary::cancel::cancel(s);
                                     panic!("Error");
                                 }
-                                Ok(mpstthree::binary::struct_trait::Signal::Stop) => match #bool_session {
+                                Ok(mpstthree::binary::struct_trait::end::Signal::Stop) => match #bool_session {
                                     true => {
-                                        s.#field_session.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
+                                        s.#field_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(());
                                         #bool_session = false;
                                     }
                                     false => panic!("Close already sent"),
                                 }
-                                Ok(mpstthree::binary::struct_trait::Signal::Offer(channel)) => {
+                                Ok(mpstthree::binary::struct_trait::end::Signal::Offer(channel)) => {
                                     s.#field_session = channel;
                                 }
                                 _ => {}

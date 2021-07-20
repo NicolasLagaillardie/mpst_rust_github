@@ -70,7 +70,7 @@ impl CreateRecvMPSTSessionMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session ,
+                    #temp_ident : mpstthree::binary::struct_trait::session::Session ,
                 }
             })
             .collect();
@@ -95,7 +95,7 @@ impl CreateRecvMPSTSessionMacroInput {
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 if i == self.exclusion {
                     quote! {
-                        mpstthree::binary::struct_trait::Recv<T, #temp_ident >,
+                        mpstthree::binary::struct_trait::recv::Recv<T, #temp_ident >,
                     }
                 } else {
                     quote! {

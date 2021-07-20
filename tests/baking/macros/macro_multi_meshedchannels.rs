@@ -1,5 +1,5 @@
 // Test for parametrisation on the number of roles
-use mpstthree::binary::struct_trait::{End, Session};
+use mpstthree::binary::struct_trait::{end::End, session::Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{create_meshedchannels, create_normal_role};

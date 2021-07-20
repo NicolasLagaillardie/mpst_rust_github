@@ -150,7 +150,7 @@ impl ChooseMultiToAllMacroInput {
                 );
                 quote! {
                     let ( #channel_left , #channel_right ) =
-                        <_ as mpstthree::binary::struct_trait::Session>::new();
+                        <_ as mpstthree::binary::struct_trait::session::Session>::new();
                 }
             })
             .collect();

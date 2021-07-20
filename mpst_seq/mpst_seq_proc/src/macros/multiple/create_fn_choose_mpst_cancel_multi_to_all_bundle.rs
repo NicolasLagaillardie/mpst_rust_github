@@ -196,10 +196,10 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                         quote! {
                             Send<
                                 (
-                                    mpstthree::binary::struct_trait::End,
+                                    mpstthree::binary::struct_trait::end::End,
                                     #temp_label
                                 ),
-                                mpstthree::binary::struct_trait::End
+                                mpstthree::binary::struct_trait::end::End
                             > ,
                         }
                     })
@@ -219,14 +219,14 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                         if j < self.n_sessions {
                             quote! {
                                 let ( #channel_left , #channel_right ) =
-                                    <mpstthree::binary::struct_trait::End
-                                        as mpstthree::binary::struct_trait::Session>::new();
+                                    <mpstthree::binary::struct_trait::end::End
+                                        as mpstthree::binary::struct_trait::session::Session>::new();
                                 temp.push( #channel_left );
                             }
                         } else {
                             quote! {
                                 let ( #channel_left , #channel_right ) =
-                                    <_ as mpstthree::binary::struct_trait::Session>::new();
+                                    <_ as mpstthree::binary::struct_trait::session::Session>::new();
                             }
                         }
                     })
@@ -368,7 +368,7 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                 quote! {
                     fn #temp_fn_name(
                         s: #meshedchannels_name<
-                            mpstthree::binary::struct_trait::End,
+                            mpstthree::binary::struct_trait::end::End,
                             #(
                                 #send_types
                             )*
@@ -377,15 +377,15 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                         >
                     ) -> Result< #temp_new_type , Box<dyn std::error::Error>>
                     {
-                        let mut temp = Vec::<mpstthree::binary::struct_trait::End>::new();
+                        let mut temp = Vec::<mpstthree::binary::struct_trait::end::End>::new();
 
                         #(
                             #new_channels
                         )*
 
                         let (stack_1, _) =
-                            <mpstthree::binary::struct_trait::End
-                                as mpstthree::binary::struct_trait::Session>::new();
+                            <mpstthree::binary::struct_trait::end::End
+                                as mpstthree::binary::struct_trait::session::Session>::new();
 
                         #(
                             #new_roles
@@ -411,7 +411,7 @@ impl ChooseTypeCancelMultiToAllBundleMacroInput {
                         };
                         let s =
                             s.session1.sender.send(
-                                mpstthree::binary::struct_trait::Signal::Offer(elt)
+                                mpstthree::binary::struct_trait::end::Signal::Offer(elt)
                             ).unwrap();
 
                         Ok(

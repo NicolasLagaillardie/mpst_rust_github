@@ -1,4 +1,4 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,

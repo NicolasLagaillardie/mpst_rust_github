@@ -1,5 +1,5 @@
 // Test for parametrisation on the name of the roles
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 

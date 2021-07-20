@@ -6,7 +6,7 @@ use std::marker;
 use std::panic::set_hook;
 use std::thread::{spawn, JoinHandle};
 
-use crate::binary::struct_trait::Session;
+use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
 
@@ -42,7 +42,7 @@ where
 /// use std::collections::HashMap;
 /// use std::error::Error;
 ///
-/// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 /// use mpstthree::fork::fork_mpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///

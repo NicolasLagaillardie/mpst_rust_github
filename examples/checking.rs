@@ -1,4 +1,4 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
@@ -175,53 +175,6 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
         },
     })
 }
-
-// fn type_of<T>(_: T) -> &'static str {
-//     std::any::type_name::<T>()
-// }
-
-// impl std::fmt::Display for Branching0fromCtoA {
-//     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-//         match self {
-//             Branching0fromCtoA::Sum(s) => {
-//                 write!(f, "Sum\n{}", type_of(&s))
-//             }
-//             Branching0fromCtoA::Diff(s) => {
-//                 write!(f, "Diff\n{}", type_of(&s))
-//             }
-//         }
-//     }
-// }
-
-// fn hashmap_branch_0_c_to_b() -> std::collections::HashMap<String, String> {
-//     let state_branches_receivers = std::collections::hash_map::RandomState::new();
-
-//     let mut all_branches: std::collections::HashMap<String, String> =
-//         std::collections::HashMap::with_hasher(state_branches_receivers);
-
-//     let temp_video =
-//         (Branching0fromCtoA::Sum(<_ as mpstthree::binary::struct_trait::Session>::new().0))
-//             .to_string();
-
-//     let video = temp_video
-//         .split('\n')
-//         .filter(|s| !s.is_empty())
-//         .collect::<Vec<_>>();
-
-//     let temp_end =
-//         (Branching0fromCtoA::Diff(<_ as mpstthree::binary::struct_trait::Session>::new().0))
-//             .to_string();
-
-//     let end = temp_end
-//         .split('\n')
-//         .filter(|s| !s.is_empty())
-//         .collect::<Vec<_>>();
-
-//     all_branches.insert(String::from(video[0]), String::from(video[1]));
-//     all_branches.insert(String::from(end[0]), String::from(end[1]));
-
-//     all_branches
-// }
 
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);

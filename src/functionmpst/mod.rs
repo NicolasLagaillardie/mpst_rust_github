@@ -14,7 +14,7 @@ pub mod recursion;
 pub mod recv;
 pub mod send;
 
-use crate::binary::struct_trait::{End, Recv, Send, Session};
+use crate::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
 use either::Either;
@@ -28,7 +28,7 @@ use either::Either;
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 /// [`offer_mpst_session_to_b_from_a`]: crate::functionmpst::offer::offer_mpst_session_to_b_from_a
-/// [`Recv`]: crate::binary::struct_trait::Recv
+/// [`Recv`]: crate::binary::struct_trait::recv::Recv
 /// [`Either`]: either::Either
 pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
     Recv<Either<MeshedChannels<S0, S1, R0, N0>, MeshedChannels<S2, S3, R1, N0>>, End>;
@@ -40,7 +40,7 @@ pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 /// [`choose_right_mpst_session_c_to_all`]: crate::functionmpst::choose::choose_right_mpst_session_c_to_all
-/// [`Send`]: crate::binary::struct_trait::Send
+/// [`Send`]: crate::binary::struct_trait::send::Send
 /// [`Either`]: either::Either
 pub type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<

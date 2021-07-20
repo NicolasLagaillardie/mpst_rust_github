@@ -13,10 +13,10 @@
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
 //!   `RoleB<RoleEnd>`.
 //!
-//! [`Session`]: crate::binary::struct_trait::Session
+//! [`Session`]: crate::binary::struct_trait::session::Session
 //! [`Role`]: crate::role::Role
 
-use crate::binary::struct_trait::Session;
+use crate::binary::struct_trait::session::Session;
 use crate::role::Role;
 
 pub mod impl_a;
@@ -29,7 +29,7 @@ pub mod impl_c;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 ///
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///

@@ -5,7 +5,7 @@ use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
-use mpstthree::binary::struct_trait::{End, Recv, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 

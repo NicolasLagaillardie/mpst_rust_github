@@ -76,7 +76,7 @@ impl OfferMPSTSessionMultiMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session,
+                    #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
             })
             .collect();
@@ -85,7 +85,7 @@ impl OfferMPSTSessionMultiMacroInput {
             .map(|i| {
                 if i != self.exclusion {
                     quote! {
-                        mpstthree::binary::struct_trait::End,
+                        mpstthree::binary::struct_trait::end::End,
                     }
                 } else {
                     let temp_all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self

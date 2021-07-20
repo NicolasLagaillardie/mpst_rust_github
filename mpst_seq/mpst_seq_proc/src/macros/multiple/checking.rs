@@ -97,7 +97,7 @@ impl CheckingInput {
                 let branch_name = syn::Ident::new(&branch.to_lowercase(), proc_macro2::Span::call_site());
                 quote! {
                     let #temp =
-                        (#name_key::#branch_ident(<_ as mpstthree::binary::struct_trait::Session>::new().0))
+                        (#name_key::#branch_ident(<_ as mpstthree::binary::struct_trait::session::Session>::new().0))
                             .to_string();
 
                     let #branch_name = #temp

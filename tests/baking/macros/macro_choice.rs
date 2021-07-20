@@ -1,5 +1,5 @@
 use either::Either;
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;

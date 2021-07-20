@@ -1,4 +1,4 @@
-use crate::binary::struct_trait::{Recv, Session};
+use crate::binary::struct_trait::{recv::Recv, session::Session};
 use hyper::client::ResponseFuture;
 use hyper::{Body, Response};
 use std::boxed::Box;

@@ -8,11 +8,11 @@ use std::net::{Shutdown, TcpStream};
 ///
 /// ```
 /// use mpstthree::binary::cancel::cancel;
-/// use mpstthree::binary::struct_trait::End;
+/// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
-/// use mpstthree::binary::struct_trait::Session;
+/// use mpstthree::binary::struct_trait::session::Session;
 ///
 /// let (s, s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
 /// cancel(s);
@@ -30,11 +30,11 @@ pub fn cancel<T>(s: T) {
 ///
 /// ```
 /// use mpstthree::binary::cancel::cancel_tcp;
-/// use mpstthree::binary::struct_trait::End;
+/// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
-/// use mpstthree::binary::struct_trait::Session;
+/// use mpstthree::binary::struct_trait::session::Session;
 /// use std::net::{TcpListener, TcpStream};
 ///
 /// let listener = TcpListener::bind("0.0.0.0:3333").unwrap();

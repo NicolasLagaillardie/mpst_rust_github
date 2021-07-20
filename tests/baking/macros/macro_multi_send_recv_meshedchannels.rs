@@ -1,6 +1,6 @@
 // Test for parametrisation on the number of roles
 
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::bundle_impl;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;

@@ -1,6 +1,6 @@
 use crate::binary::cancel::cancel;
 use crate::binary::recv::recv;
-use crate::binary::struct_trait::{End, Recv, Session};
+use crate::binary::struct_trait::{end::End, recv::Recv, session::Session};
 use either::Either;
 use std::boxed::Box;
 use std::error::Error;

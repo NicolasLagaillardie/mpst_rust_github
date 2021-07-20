@@ -4,7 +4,7 @@ use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork;
 use mpstthree::binary::recv::recv_http;
 use mpstthree::binary::send::send_http;
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;

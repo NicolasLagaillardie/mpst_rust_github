@@ -59,17 +59,17 @@ impl SendCancelMacroInput {
         quote! {
             fn #func_name<#( #session_types , )* R>(
                 s: #meshedchannels_name<
-                    mpstthree::binary::struct_trait::End,
+                    mpstthree::binary::struct_trait::end::End,
                     #( #session_types , )*
                     R,
                     #name<mpstthree::role::end::RoleEnd>,
                 >,
             ) -> std::result::Result<(), Box<dyn std::error::Error>>
             where
-                #( #session_types : mpstthree::binary::struct_trait::Session , )*
+                #( #session_types : mpstthree::binary::struct_trait::session::Session , )*
                 R: mpstthree::role::Role,
             {
-                s.session1.sender.send(mpstthree::binary::struct_trait::Signal::Cancel).unwrap();;
+                s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Cancel).unwrap();;
                 mpstthree::binary::cancel::cancel(s);
                 panic!("{:?}", #msg);
             }

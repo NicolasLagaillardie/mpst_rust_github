@@ -5,7 +5,7 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::End;
+/// use mpstthree::binary::struct_trait::end::End;
 ///
 /// // Creating the binary sessions
 /// type Close = End;

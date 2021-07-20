@@ -11,7 +11,7 @@ use crossbeam_channel::{bounded, Sender};
 /// the test `05_usecase.rs`.
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 ///
 /// # Example
 ///

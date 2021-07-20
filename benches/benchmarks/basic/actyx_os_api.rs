@@ -2,7 +2,7 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,

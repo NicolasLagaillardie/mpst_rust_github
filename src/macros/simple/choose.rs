@@ -19,11 +19,11 @@ macro_rules! create_choose_from_1_to_2_3 {
         $pat: path
     ) => {{
         let (session_1_2, session_2_1) =
-            <$session_1 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_1 as mpstthree::binary::struct_trait::session::Session>::new();
         let (session_1_3, session_3_1) =
-            <$session_2 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_2 as mpstthree::binary::struct_trait::session::Session>::new();
         let (session_3_2, session_2_3) =
-            <$session_3 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_3 as mpstthree::binary::struct_trait::session::Session>::new();
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
@@ -85,11 +85,11 @@ macro_rules! create_choose_from_2_to_1_3 {
         $pat: path
     ) => {{
         let (session_2_1, session_1_2) =
-            <$session_1 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_1 as mpstthree::binary::struct_trait::session::Session>::new();
         let (session_2_3, session_3_2) =
-            <$session_2 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_2 as mpstthree::binary::struct_trait::session::Session>::new();
         let (session_3_1, session_1_3) =
-            <$session_3 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_3 as mpstthree::binary::struct_trait::session::Session>::new();
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
@@ -151,11 +151,11 @@ macro_rules! create_choose_from_3_to_1_2 {
         $pat: path
     ) => {{
         let (session_3_1, session_1_3) =
-            <$session_1 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_1 as mpstthree::binary::struct_trait::session::Session>::new();
         let (session_3_2, session_2_3) =
-            <$session_2 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_2 as mpstthree::binary::struct_trait::session::Session>::new();
         let (session_2_1, session_1_2) =
-            <$session_3 as mpstthree::binary::struct_trait::Session>::new();
+            <$session_3 as mpstthree::binary::struct_trait::session::Session>::new();
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
@@ -259,9 +259,9 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -277,12 +277,12 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
             $sender<mpstthree::role::end::RoleEnd>,
         >
         where
-            S0: mpstthree::binary::struct_trait::Session + 'a,
-            S1: mpstthree::binary::struct_trait::Session + 'a,
-            S2: mpstthree::binary::struct_trait::Session + 'a,
-            S3: mpstthree::binary::struct_trait::Session + 'a,
-            S4: mpstthree::binary::struct_trait::Session + 'a,
-            S5: mpstthree::binary::struct_trait::Session + 'a,
+            S0: mpstthree::binary::struct_trait::session::Session + 'a,
+            S1: mpstthree::binary::struct_trait::session::Session + 'a,
+            S2: mpstthree::binary::struct_trait::session::Session + 'a,
+            S3: mpstthree::binary::struct_trait::session::Session + 'a,
+            S4: mpstthree::binary::struct_trait::session::Session + 'a,
+            S5: mpstthree::binary::struct_trait::session::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -364,9 +364,9 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -382,12 +382,12 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
             $sender<mpstthree::role::end::RoleEnd>,
         >
         where
-            S0: mpstthree::binary::struct_trait::Session + 'a,
-            S1: mpstthree::binary::struct_trait::Session + 'a,
-            S2: mpstthree::binary::struct_trait::Session + 'a,
-            S3: mpstthree::binary::struct_trait::Session + 'a,
-            S4: mpstthree::binary::struct_trait::Session + 'a,
-            S5: mpstthree::binary::struct_trait::Session + 'a,
+            S0: mpstthree::binary::struct_trait::session::Session + 'a,
+            S1: mpstthree::binary::struct_trait::session::Session + 'a,
+            S2: mpstthree::binary::struct_trait::session::Session + 'a,
+            S3: mpstthree::binary::struct_trait::session::Session + 'a,
+            S4: mpstthree::binary::struct_trait::session::Session + 'a,
+            S5: mpstthree::binary::struct_trait::session::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -470,9 +470,9 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 >,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
-                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S5,
-                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     R2,
                     R3,
                     $dual_2<mpstthree::role::end::RoleEnd>,
@@ -487,12 +487,12 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
             $sender<mpstthree::role::end::RoleEnd>,
         >
         where
-            S0: mpstthree::binary::struct_trait::Session + 'a,
-            S1: mpstthree::binary::struct_trait::Session + 'a,
-            S2: mpstthree::binary::struct_trait::Session + 'a,
-            S3: mpstthree::binary::struct_trait::Session + 'a,
-            S4: mpstthree::binary::struct_trait::Session + 'a,
-            S5: mpstthree::binary::struct_trait::Session + 'a,
+            S0: mpstthree::binary::struct_trait::session::Session + 'a,
+            S1: mpstthree::binary::struct_trait::session::Session + 'a,
+            S2: mpstthree::binary::struct_trait::session::Session + 'a,
+            S3: mpstthree::binary::struct_trait::session::Session + 'a,
+            S4: mpstthree::binary::struct_trait::session::Session + 'a,
+            S5: mpstthree::binary::struct_trait::session::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -575,9 +575,9 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 >,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
-                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S5,
-                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     R2,
                     R3,
                     $dual_2<mpstthree::role::end::RoleEnd>,
@@ -592,12 +592,12 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
             $sender<mpstthree::role::end::RoleEnd>,
         >
         where
-            S0: mpstthree::binary::struct_trait::Session + 'a,
-            S1: mpstthree::binary::struct_trait::Session + 'a,
-            S2: mpstthree::binary::struct_trait::Session + 'a,
-            S3: mpstthree::binary::struct_trait::Session + 'a,
-            S4: mpstthree::binary::struct_trait::Session + 'a,
-            S5: mpstthree::binary::struct_trait::Session + 'a,
+            S0: mpstthree::binary::struct_trait::session::Session + 'a,
+            S1: mpstthree::binary::struct_trait::session::Session + 'a,
+            S2: mpstthree::binary::struct_trait::session::Session + 'a,
+            S3: mpstthree::binary::struct_trait::session::Session + 'a,
+            S4: mpstthree::binary::struct_trait::session::Session + 'a,
+            S5: mpstthree::binary::struct_trait::session::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -679,9 +679,9 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -697,12 +697,12 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
             $sender<mpstthree::role::end::RoleEnd>,
         >
         where
-            S0: mpstthree::binary::struct_trait::Session + 'a,
-            S1: mpstthree::binary::struct_trait::Session + 'a,
-            S2: mpstthree::binary::struct_trait::Session + 'a,
-            S3: mpstthree::binary::struct_trait::Session + 'a,
-            S4: mpstthree::binary::struct_trait::Session + 'a,
-            S5: mpstthree::binary::struct_trait::Session + 'a,
+            S0: mpstthree::binary::struct_trait::session::Session + 'a,
+            S1: mpstthree::binary::struct_trait::session::Session + 'a,
+            S2: mpstthree::binary::struct_trait::session::Session + 'a,
+            S3: mpstthree::binary::struct_trait::session::Session + 'a,
+            S4: mpstthree::binary::struct_trait::session::Session + 'a,
+            S5: mpstthree::binary::struct_trait::session::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,
@@ -784,9 +784,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                     $dual_1<mpstthree::role::end::RoleEnd>,
                 >,
                 mpstthree::functionmpst::ChooseMpst<
-                    <S0 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
-                    <S1 as mpstthree::binary::struct_trait::Session>::Dual,
+                    <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S5,
                     R2,
                     R3,
@@ -802,12 +802,12 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
             $sender<mpstthree::role::end::RoleEnd>,
         >
         where
-            S0: mpstthree::binary::struct_trait::Session + 'a,
-            S1: mpstthree::binary::struct_trait::Session + 'a,
-            S2: mpstthree::binary::struct_trait::Session + 'a,
-            S3: mpstthree::binary::struct_trait::Session + 'a,
-            S4: mpstthree::binary::struct_trait::Session + 'a,
-            S5: mpstthree::binary::struct_trait::Session + 'a,
+            S0: mpstthree::binary::struct_trait::session::Session + 'a,
+            S1: mpstthree::binary::struct_trait::session::Session + 'a,
+            S2: mpstthree::binary::struct_trait::session::Session + 'a,
+            S3: mpstthree::binary::struct_trait::session::Session + 'a,
+            S4: mpstthree::binary::struct_trait::session::Session + 'a,
+            S5: mpstthree::binary::struct_trait::session::Session + 'a,
             R0: mpstthree::role::Role + 'a,
             R1: mpstthree::role::Role + 'a,
             R2: mpstthree::role::Role + 'a,

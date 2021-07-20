@@ -70,7 +70,7 @@ impl CreateSendCheckCancelMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session ,
+                    #temp_ident : mpstthree::binary::struct_trait::session::Session ,
                 }
             })
             .collect();
@@ -95,7 +95,7 @@ impl CreateSendCheckCancelMacroInput {
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 if i == self.exclusion {
                     quote! {
-                        mpstthree::binary::struct_trait::Send<T, #temp_ident >,
+                        mpstthree::binary::struct_trait::send::Send<T, #temp_ident >,
                     }
                 } else {
                     quote! {
@@ -131,7 +131,7 @@ impl CreateSendCheckCancelMacroInput {
             >(
                 x: T,
                 s: #meshedchannels_name<
-                    mpstthree::binary::struct_trait::End,
+                    mpstthree::binary::struct_trait::end::End,
                     #(
                         #send_types
                     )*
@@ -140,7 +140,7 @@ impl CreateSendCheckCancelMacroInput {
                 >,
             ) -> Result<
                     #meshedchannels_name<
-                        mpstthree::binary::struct_trait::End,
+                        mpstthree::binary::struct_trait::end::End,
                         #(
                             #session_types
                         )*
@@ -157,7 +157,7 @@ impl CreateSendCheckCancelMacroInput {
                 R: mpstthree::role::Role,
             {
                 match s.session1.receiver.try_recv() {
-                    Ok(mpstthree::binary::struct_trait::Signal::Cancel) => {
+                    Ok(mpstthree::binary::struct_trait::end::Signal::Cancel) => {
                         mpstthree::binary::cancel::cancel(s);
                         panic!("Error")
                     },

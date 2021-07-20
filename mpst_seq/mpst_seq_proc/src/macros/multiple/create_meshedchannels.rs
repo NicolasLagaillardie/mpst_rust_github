@@ -48,7 +48,7 @@ impl CreateMeshedChannelsMacroInput {
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
                     <
-                        #temp_ident as mpstthree::binary::struct_trait::Session
+                        #temp_ident as mpstthree::binary::struct_trait::session::Session
                     >::Dual,
                 }
             })
@@ -59,7 +59,7 @@ impl CreateMeshedChannelsMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session,
+                    #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
             })
             .collect();
@@ -122,13 +122,13 @@ impl CreateMeshedChannelsMacroInput {
                     if result == String::from("") {
                         result = format!(
                             "{}",
-                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
                         ) ;
                     } else {
                         result = format!(
                             "{}\n{}",
                             result,
-                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
                         );
                     }
                 }
@@ -143,15 +143,15 @@ impl CreateMeshedChannelsMacroInput {
                     if result == String::from("") {
                         result = format!(
                             "{}<{}>",
-                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str(),
-                            <#temp_ident as mpstthree::binary::struct_trait::Session>::tail_str()
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
                         ) ;
                     } else {
                         result = format!(
                             "{}\n{}<{}>",
                             result,
-                            <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str(),
-                            <#temp_ident as mpstthree::binary::struct_trait::Session>::tail_str()
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
                         ) ;
                     }
                 }
@@ -199,7 +199,7 @@ impl CreateMeshedChannelsMacroInput {
                 )*
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::Session for #meshedchannels_name<
+            > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
                 #(
                     #sessions
                 )*

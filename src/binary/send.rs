@@ -1,5 +1,5 @@
 use crate::binary::cancel::cancel;
-use crate::binary::struct_trait::{Send, Session};
+use crate::binary::struct_trait::{send::Send, session::Session};
 use hyper::client::ResponseFuture;
 use hyper::{Body, Client, Method, Request};
 use hyper_tls::HttpsConnector;

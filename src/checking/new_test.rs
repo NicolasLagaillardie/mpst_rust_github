@@ -26,7 +26,7 @@ macro_rules! checker_concat {
 
         $(
             sessions.push(String::from(std::any::type_name::<$sessiontype>()));
-            tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::Session>::tail_str());
+            tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
         )+
 
         mpst_seq::checking!(
@@ -45,10 +45,10 @@ macro_rules! checker_concat {
 }
 
 #[doc(hidden)]
-fn clean_sesion(session: String) -> Result<Vec<String>, Box<dyn Error>> {
+fn clean_session(session: String) -> Result<Vec<String>, Box<dyn Error>> {
     // The regex expression
     let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
-    let mut temp = String::from(&session);
+    let mut temp = String::from(&session).replace("&", "");
 
     // Replace with regex expression -> term1::term2::term3 by term3
     for caps in main_re.captures_iter(&session) {
@@ -87,7 +87,7 @@ fn clean_sessions(sessions: Vec<String>) -> Result<HashMap<String, Vec<String>>,
         HashMap::with_hasher(state_branches_receivers);
 
     for session in sessions {
-        let full_block = clean_sesion(session)?;
+        let full_block = clean_session(session)?;
 
         let name = String::from(&full_block[full_block.len() - 1]);
 
@@ -140,7 +140,7 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
     Ok(roles)
 }
 
-/// Separate the different _fields_ of a stringified MeshedChannels.
+/// Separate the different _fields_ of a stringified type.
 #[doc(hidden)]
 fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut result = Vec::new();
@@ -177,19 +177,73 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     Ok(result)
 }
 
+/// Get the start of a Recv/Send session, and its payload and continuation
+#[doc(hidden)]
+fn get_head_payload_continuation(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
+    if full_block[0..3] == *"End" {
+        Ok(vec!["End".to_string()])
+    } else {
+        let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
+        result.append(&mut get_blocks(full_block)?);
+        Ok(result)
+    }
+}
+
 pub fn checker(
     sessions: Vec<String>,
     tail_sessions: Vec<String>,
-    branches_receivers: HashMap<String, std::collections::HashMap<String, String>>,
+    branches_receivers: HashMap<String, HashMap<String, String>>,
 ) -> Result<Vec<String>, Box<dyn Error>> {
     println!("sessions: {:?}", &sessions);
+    println!();
 
     let clean_sessions = clean_sessions(sessions)?;
     let roles = roles(tail_sessions)?;
 
-    println!("clean_sessions: {:?}", &clean_sessions);
-    println!("roles: {:?}", &roles);
+    let state_branches = RandomState::new();
+    let mut update_branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        HashMap::with_hasher(state_branches);
+
     println!("branches_receivers: {:?}", &branches_receivers);
+    println!();
+
+    for (choice, branches) in branches_receivers {
+        let state_branch = RandomState::new();
+        let mut temp_branch: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branch);
+
+        for (branch, session) in branches {
+            temp_branch.insert(branch, clean_session(session)?);
+        }
+
+        update_branches_receivers.insert(choice, temp_branch);
+    }
+
+    println!("clean_sessions: {:?}", &clean_sessions);
+    println!();
+
+    println!("roles: {:?}", &roles);
+    println!();
+
+    println!(
+        "update_branches_receivers: {:?}",
+        &update_branches_receivers
+    );
+    println!();
+
+    for (role, fields) in clean_sessions {
+        println!("role: {:?}:", role);
+        println!("fields: {:?}:", &fields);
+        println!();
+        for field in fields {
+            println!("field: {:?}:", &field);
+            println!(
+                "head, payload and continuation: {:?}:",
+                get_head_payload_continuation(String::from(&field))?
+            );
+            println!();
+        }
+        println!();
+    }
 
     Ok(vec![String::from("")])
 }

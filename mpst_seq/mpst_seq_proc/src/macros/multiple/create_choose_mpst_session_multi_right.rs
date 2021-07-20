@@ -152,7 +152,7 @@ impl ChooseTypeMultiRightMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session + 'a ,
+                    #temp_ident : mpstthree::binary::struct_trait::session::Session + 'a ,
                 }
             })
             .collect();
@@ -188,7 +188,7 @@ impl ChooseTypeMultiRightMacroInput {
 
                         if k == i {
                             quote! {
-                                < #temp_ident as mpstthree::binary::struct_trait::Session>::Dual,
+                                < #temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
                             }
                         } else {
                             quote! {
@@ -209,7 +209,7 @@ impl ChooseTypeMultiRightMacroInput {
 
                         if k == i {
                             quote! {
-                                < #temp_ident as mpstthree::binary::struct_trait::Session>::Dual,
+                                < #temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
                             }
                         } else {
                             quote! {
@@ -267,7 +267,7 @@ impl ChooseTypeMultiRightMacroInput {
                     proc_macro2::Span::call_site(),
                 );
                 quote! {
-                    < #temp_ident as mpstthree::binary::struct_trait::Session>::Dual,
+                    < #temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
                 }
             })
             .collect();

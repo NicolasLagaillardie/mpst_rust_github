@@ -40,7 +40,7 @@ impl CloseMpstCheckCancelMacroInput {
 
         let session_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|_| {
-                quote! { mpstthree::binary::struct_trait::End , }
+                quote! { mpstthree::binary::struct_trait::end::End , }
             })
             .collect();
 
@@ -49,7 +49,7 @@ impl CloseMpstCheckCancelMacroInput {
                     let temp_ident =
                         syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
                     quote! {
-                        s.#temp_ident.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(());
+                        s.#temp_ident.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(());
                     }
                 })
                 .collect();
@@ -60,9 +60,9 @@ impl CloseMpstCheckCancelMacroInput {
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
                 quote! {
                     match s.#temp_ident.receiver.recv() {
-                        Ok(mpstthree::binary::struct_trait::Signal::Stop) => {},
-                        Ok(mpstthree::binary::struct_trait::Signal::Cancel) => panic!("Received a cancel signal"),
-                        Ok(mpstthree::binary::struct_trait::Signal::Offer(_)) => {},
+                        Ok(mpstthree::binary::struct_trait::end::Signal::Stop) => {},
+                        Ok(mpstthree::binary::struct_trait::end::Signal::Cancel) => panic!("Received a cancel signal"),
+                        Ok(mpstthree::binary::struct_trait::end::Signal::Offer(_)) => {},
                         Err(e) => panic!("{}", e.to_string()),
                     };
                 }

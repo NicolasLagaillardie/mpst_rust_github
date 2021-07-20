@@ -40,7 +40,7 @@ impl CloseMpstCancelMacroInput {
 
         let session_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
             .map(|_| {
-                quote! { mpstthree::binary::struct_trait::End , }
+                quote! { mpstthree::binary::struct_trait::end::End , }
             })
             .collect();
 
@@ -49,7 +49,7 @@ impl CloseMpstCancelMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    s.#temp_ident.sender.send(mpstthree::binary::struct_trait::Signal::Stop)?;
+                    s.#temp_ident.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop)?;
                 }
             })
             .collect();
