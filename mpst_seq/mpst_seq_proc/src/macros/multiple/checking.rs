@@ -40,12 +40,16 @@ impl Parse for CheckingInput {
         let state_branches = RandomState::new();
         let mut choices: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branches);
 
-        loop {
-            match attempt_extraction(input) {
-                Ok(result) => choices.insert(result[0].clone(), result[1..].to_vec()),
-                Err(_) => break,
-            };
+        while let Ok(result) = attempt_extraction(input) {
+            choices.insert(result[0].clone(), result[1..].to_vec());
         }
+
+        // loop {
+        //     match attempt_extraction(input) {
+        //         Ok(result) => choices.insert(result[0].clone(), result[1..].to_vec()),
+        //         Err(_) => break,
+        //     };
+        // }
 
         Ok(CheckingInput { choices })
     }
