@@ -1,4 +1,5 @@
 use petgraph::dot::Dot;
+use petgraph::graph::NodeIndex;
 use petgraph::Graph;
 
 use regex::Regex;
@@ -222,88 +223,139 @@ fn get_head_payload_continuation(full_block: String) -> Result<Vec<String>, Box<
     }
 }
 
+#[doc(hidden)]
+fn aux_get_graph(
+    current_role: &str,
+    mut full_session: Vec<String>,
+    roles: &[String],
+    mut index_node: Vec<usize>,
+    mut previous_node: NodeIndex<u32>,
+    compare_end: Vec<String>,
+    depth_level: usize,
+    index_current_role: usize,
+    mut g: Graph<String, String>,
+) -> Result<Graph<String, String>, Box<dyn Error>> {
+    if compare_end == full_session {
+        Ok(g)
+    } else {
+        // Get the size of the full_session
+        let size_full_session = full_session.len() - 1;
+
+        // Get the head of the stack
+        let stack = &get_head_payload_continuation(full_session[size_full_session].clone())?;
+
+        println!("stack: {:?}", &stack);
+
+        if stack.len() == 3 {
+            // If it is a simple choice
+            Ok(g)
+        } else if stack.len() == 2 {
+            // If it is a simple interaction
+            let head_stack = &stack[0];
+
+            // The index of the head_stack among the roles
+            let index_head = roles.iter().position(|r| r == head_stack).unwrap();
+
+            // Add the offset depending on the relative positions of the roles
+            let offset = (index_current_role < index_head) as usize;
+
+            // The running session
+            let running_session =
+                get_head_payload_continuation(full_session[index_head - offset].to_string())?;
+
+            // If Send/Recv, everything is good, else, panic
+            if running_session[0] == *"Send" {
+                // Increase the index for the nodes
+                index_node[depth_level] += 1;
+
+                // Add the new `step`
+                let new_node = g.add_node(index_node[depth_level].to_string());
+
+                // Add the new edge between the previous and the new node,
+                // and label it with the corresponding interaction
+                g.add_edge(
+                    previous_node,
+                    new_node,
+                    format!("{}!{}: {}", &current_role, &head_stack, &running_session[1]),
+                );
+
+                // Replace the old binary session with the new one
+                full_session[index_head - offset] = running_session[2].to_string();
+
+                // Replace the old stack with the new one
+                full_session[size_full_session] = stack[1].to_string();
+
+                // Update the previous node
+                previous_node = new_node;
+            } else if running_session[0] == *"Recv" {
+                index_node[depth_level] += 1;
+                let new_node = g.add_node(index_node[depth_level].to_string());
+                g.add_edge(
+                    previous_node,
+                    new_node,
+                    format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
+                );
+                full_session[index_head - offset] = running_session[2].to_string();
+                full_session[size_full_session] = stack[1].to_string();
+                previous_node = new_node;
+            } else {
+                panic!("Did not found a correct session")
+            }
+
+            aux_get_graph(
+                current_role,
+                full_session,
+                roles,
+                index_node,
+                previous_node,
+                compare_end,
+                depth_level,
+                index_current_role,
+                g,
+            )
+        } else {
+            panic!("Did not found a correct stack")
+        }
+    }
+}
+
 /// Build the digraph from the current full_session.
 #[doc(hidden)]
 fn get_graph_session(
     current_role: &str,
-    mut full_session: Vec<String>,
+    full_session: Vec<String>,
     roles: &[String],
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     // Create the new graph that will be returned in the end
     let mut g = Graph::<String, String>::new();
 
     // Start the index for the different `steps` of the choreography
-    let mut index_node = 0;
+    let index_node = vec![0];
 
     // Add the first node for the graph
-    let mut previous_node = g.add_node(index_node.to_string());
+    let previous_node = g.add_node(index_node[0].to_string());
 
     // The `End` vec that we will compare to `full_session`
     let mut compare_end = vec!["End".to_string(); full_session.len() - 1];
     compare_end.push("RoleEnd".to_string());
 
     // The index of the current_role among the roles
-    let index_current_role = &roles.iter().position(|r| r == current_role).unwrap();
+    let index_current_role = roles.iter().position(|r| r == current_role).unwrap();
 
-    // As long as the sessions are not full `End`
-    while compare_end != full_session {
-        // Get the size of the full_session
-        let size_full_session = full_session.len() - 1;
+    // The index of the current_role among the roles
+    let start_depth_level = 0;
 
-        // Get the head of the stack
-        let stack = &get_head_payload_continuation(full_session[size_full_session].clone())?;
-        let head_stack = &stack[0];
-
-        // The index of the head_stack among the roles
-        let index_head = &roles.iter().position(|r| r == head_stack).unwrap();
-
-        // Add the offset depending on the relative positions of the roles
-        let offset = (index_current_role < index_head) as usize;
-
-        // The running session
-        let running_session =
-            get_head_payload_continuation(full_session[index_head - offset].to_string())?;
-
-        // If Send/Recv, everything is good, else, panic
-        if running_session[0] == *"Send" {
-            // Increase the index for the nodes
-            index_node += 1;
-
-            // Add the new `step`
-            let new_node = g.add_node(index_node.to_string());
-
-            // Add the new edge between the previous and the new node,
-            // and label it with the corresponding interaction
-            g.add_edge(
-                previous_node,
-                new_node,
-                format!("{}!{}: {}", &current_role, &head_stack, &running_session[1]),
-            );
-            // Replace the old binary session with the new one
-            full_session[index_head - offset] = running_session[2].to_string();
-
-            // Replace the old stack with the new one
-            full_session[size_full_session] = stack[1].to_string();
-
-            // Update the previous node
-            previous_node = new_node;
-        } else if running_session[0] == *"Recv" {
-            index_node += 1;
-            let new_node = g.add_node(index_node.to_string());
-            g.add_edge(
-                previous_node,
-                new_node,
-                format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
-            );
-            full_session[index_head - offset] = running_session[2].to_string();
-            full_session[size_full_session] = stack[1].to_string();
-            previous_node = new_node;
-        } else {
-            panic!("Did not found a correct session")
-        }
-    }
-
-    Ok(g)
+    aux_get_graph(
+        current_role,
+        full_session,
+        roles,
+        index_node,
+        previous_node,
+        compare_end,
+        start_depth_level,
+        index_current_role,
+        g,
+    )
 }
 
 pub fn checker(
@@ -348,6 +400,7 @@ pub fn checker(
     println!();
 
     for (role, full_session) in clean_sessions.clone() {
+        println!("Role: {:?}", &role);
         let graph = get_graph_session(&role, full_session, &roles)?;
         println!("Graph: {:?}", Dot::new(&graph));
     }
