@@ -1,201 +1,220 @@
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
-};
+use rand::{thread_rng, Rng};
 
-use mpstthree::role::broadcast::RoleBroadcast;
-use rand::{random, thread_rng, Rng};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::fork::fork_mpst;
+use mpstthree::meshedchannels::MeshedChannels;
+use mpstthree::role::Role;
+
+use std::boxed::Box;
 use std::error::Error;
 
-// global protocol TwoBuyer(role A, role C, role S)
-// {
-//     element_1(int) from C to S
-//     element_2(int) from C to S
+use mpstthree::role::a::RoleA;
+use mpstthree::role::a_to_all::RoleAtoAll;
+use mpstthree::role::all_to_a::RoleAlltoA;
+use mpstthree::role::b::RoleB;
+use mpstthree::role::b_dual::RoleBDual;
+use mpstthree::role::c::RoleC;
+use mpstthree::role::c_dual::RoleCDual;
+use mpstthree::role::end::RoleEnd;
 
-//     choice at C
-//     {
-//         sum(int) from S to C;
-//         diff() from S to C;
-//         diff() from C to A;
-//     }
-//     or
-//     {
-//         diff(int) from S to C;
-//         diff() from S to C;
-//         diff() from C to A;
-//     }
-// }
+use mpstthree::functionmpst::ChooseMpst;
+use mpstthree::functionmpst::OfferMpst;
 
-// Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
+/// Test our usecase
+/// Simple types
+/// Client = A
+/// Authenticator = B
+/// Server = C
 
-// Create new roles
-// normal
-create_multiple_normal_role_short!(A, C, S);
+type BtoAClose = End;
+type BtoCClose = End;
+type BtoAVideo<N> = Recv<N, Send<N, End>>;
+type BtoCVideo<N> = Send<N, Recv<N, End>>;
 
-// Create new send functions
-// C
-create_send_mpst_session_bundle!(
-    send_mpst_c_to_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
-);
-// S
-create_send_mpst_session_bundle!(
-    send_mpst_s_to_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
-);
+type CtoBClose = <BtoCClose as Session>::Dual;
+type CtoAClose = End;
+type CtoBVideo<N> = <BtoCVideo<N> as Session>::Dual;
 
-// Create new recv functions and related types
-// A
-create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_c, RoleC, 1 | =>
-    RoleA, MeshedChannelsThree, 3
-);
-// C
-create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
-);
-// S
-create_recv_mpst_session_bundle!(
-    recv_mpst_s_from_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
-);
+type AtoCClose = <CtoAClose as Session>::Dual;
+type AtoBClose = <BtoAClose as Session>::Dual;
+type AtoBVideo<N> = <BtoAVideo<N> as Session>::Dual;
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
+/// Stacks
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleC<RoleC<RoleA<RoleEnd>>>>;
+type StackBVideoDual = <StackBVideo as Role>::Dual;
+type StackBFull = RoleA<RoleA<RoleAlltoA<RoleEnd, RoleEnd>>>;
 
-// Types
-// A
-type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
-type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
+type StackCEnd = RoleEnd;
+type StackCVideo = RoleB<RoleB<RoleEnd>>;
+type StackCVideoDual = <StackCVideo as Role>::Dual;
+type StackCFull = RoleAlltoA<RoleEnd, RoleEnd>;
 
-// A
-enum Branching0fromCtoA {
-    Sum(MeshedChannelsThree<End, End, RoleEnd, NameA>),
-    Diff(MeshedChannelsThree<End, End, RoleEnd, NameA>),
-}
-// S
-enum Branching0fromCtoS {
-    Sum(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
-}
+type StackAEnd = RoleEnd;
+type StackAVideo = RoleB<RoleB<RoleEnd>>;
+type StackAChoice = RoleAtoAll<StackAVideo, StackAEnd>;
+type StackAFull = RoleB<RoleB<StackAChoice>>;
 
-// Creating the MP sessions
-// A
-type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<RoleEnd>, NameA>;
-// C
-type EndpointC<N> = MeshedChannelsThree<
-    Choose0fromCtoA,
-    Send<N, Send<N, Choose0fromCtoS>>,
-    RoleS<RoleS<RoleBroadcast>>,
-    NameC,
+/// Creating the MP sessions
+/// For A
+type ChooseAtoB<N> = ChooseMpst<
+    AtoBVideo<N>,
+    CtoBVideo<N>,
+    AtoBClose,
+    CtoBClose,
+    StackBVideoDual,
+    StackBEnd,
+    RoleBDual<RoleEnd>,
 >;
-// S
-type EndpointS<N> = MeshedChannelsThree<
-    End,
-    Recv<N, Recv<N, Recv<Branching0fromCtoS, End>>>,
-    RoleC<RoleC<RoleC<RoleEnd>>>,
-    NameS,
+type ChooseAtoC<N> = ChooseMpst<
+    AtoCClose,
+    BtoCVideo<N>,
+    BtoCClose,
+    AtoCClose,
+    StackCVideoDual,
+    StackCEnd,
+    RoleCDual<RoleEnd>,
 >;
+type InitA<N> = Send<N, Recv<N, ChooseAtoB<N>>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, ChooseAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
-// Functions
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_a_from_c, {
-        Branching0fromCtoA::Sum(s) => {
-            close_mpst_multi(s)
+/// For B
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
+
+type OfferB<N> = OfferMpst<
+    BtoAVideo<N>,
+    BtoCVideo<N>,
+    BtoAClose,
+    BtoCClose,
+    StackBVideo,
+    StackBEnd,
+    RoleB<RoleEnd>,
+>;
+type InitB<N> = Recv<N, Send<N, OfferB<N>>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBFull, RoleB<RoleEnd>>;
+
+/// For C
+type EndpointCVideo<N> = MeshedChannels<CtoAClose, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
+type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
+
+type OfferC<N> = OfferMpst<
+    CtoAClose,
+    CtoBVideo<N>,
+    CtoAClose,
+    CtoBClose,
+    StackCVideo,
+    StackCEnd,
+    RoleC<RoleEnd>,
+>;
+type EndpointCFull<N> = MeshedChannels<OfferC<N>, End, StackCFull, RoleC<RoleEnd>>;
+
+/// Functions related to endpoints
+fn server(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+    s.offer(
+        |s: EndpointCVideo<i32>| {
+            let (request, s) = s.recv()?;
+            s.send(request + 1).close()
         },
-        Branching0fromCtoA::Diff(s) => {
-            close_mpst_multi(s)
-        },
-    })
+        |s: EndpointCEnd| s.close(),
+    )
 }
 
-fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random();
-    let elt_2 = random();
-    let s = send_mpst_c_to_s(elt_1, s);
-    let s = send_mpst_c_to_s(elt_2, s);
+fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
+    let (id, s) = s.recv()?;
 
-    let choice = thread_rng().gen_range(1..=2);
+    s.send(id + 1).offer(
+        |s: EndpointBVideo<i32>| {
+            let (request, s) = s.recv()?;
+            let (video, s) = s.send(request + 1).recv()?;
+            let s = s.send(video + 1);
 
-    if choice != 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoA::Sum,
-            Branching0fromCtoS::Sum, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
-            MeshedChannelsThree,
-            2
-        );
+            assert_eq!(request, id + 1);
+            assert_eq!(video, id + 3);
 
-        let (sum, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(sum, elt_1 + elt_2);
-
-        close_mpst_multi(s)
-    } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoA::Diff,
-            Branching0fromCtoS::Diff, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
-            MeshedChannelsThree,
-            2
-        );
-
-        let (diff, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(diff, elt_1 - elt_2);
-
-        close_mpst_multi(s)
-    }
+            s.close()
+        },
+        |s: EndpointBEnd| s.close(),
+    )
 }
 
-fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
-    let (elt_1, s) = recv_mpst_s_from_c(s)?;
-    let (elt_2, s) = recv_mpst_s_from_c(s)?;
+fn client_video(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
+    let mut rng = thread_rng();
+    let id: i32 = rng.gen();
 
-    offer_mpst!(s, recv_mpst_s_from_c, {
-        Branching0fromCtoS::Sum(s) => {
-            let s = send_mpst_s_to_c(elt_1 + elt_2, s);
-            close_mpst_multi(s)
-        },
-        Branching0fromCtoS::Diff(s) => {
-            let s = send_mpst_s_to_c(elt_1 - elt_2, s);
-            close_mpst_multi(s)
-        },
-    })
+    let (accept, s) = s.send(id).recv()?;
+    let (result, s) = s.choose_left().send(accept).recv()?;
+
+    assert_eq!(accept, id + 1);
+    assert_eq!(result, accept + 3);
+
+    s.close()
 }
+
+fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
+    let mut rng = thread_rng();
+    let id: i32 = rng.gen();
+
+    let (accept, s) = s.send(id).recv()?;
+
+    assert_eq!(accept, id + 1);
+
+    s.choose_right().close()
+}
+
+/////////////////////////////////////////
+
+fn run_a_usecase_left() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        // Test video branch.
+        {
+            let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
+
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
+        }
+
+        Ok(())
+    }()
+    .is_ok());
+}
+
+fn run_a_usecase_right() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        // Test end branch.
+        {
+            let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
+
+            assert!(thread_a.join().is_ok());
+            assert!(thread_b.join().is_ok());
+            assert!(thread_c.join().is_ok());
+        }
+
+        Ok(())
+    }()
+    .is_ok());
+}
+
+/////////////////////////////////////////
 
 fn main() {
-    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
+    run_a_usecase_left();
+    run_a_usecase_right();
 
     mpstthree::checker_concat!(
-        EndpointA,
-        EndpointC<i32>,
-        EndpointS<i32>,
-        {
-            Branching0fromCtoA,
-            Sum,
-            Diff
-        },
-        {
-            Branching0fromCtoS,
-            Sum,
-            Diff
-        }
+        EndpointAFull<i32>,
+        EndpointCFull<i32>,
+        EndpointBFull<i32>,
+        // {
+        //     Branching0fromCtoA,
+        //     Sum,
+        //     Diff
+        // },
+        // {
+        //     Branching0fromCtoS,
+        //     Sum,
+        //     Diff
+        // }
     );
-
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
 }

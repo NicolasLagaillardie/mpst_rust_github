@@ -1,4 +1,8 @@
+use petgraph::dot::Dot;
+use petgraph::Graph;
+
 use regex::Regex;
+
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
@@ -39,6 +43,30 @@ macro_rules! checker_concat {
                 }
             )+
         );
+
+        println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers));
+    };
+    (
+        $(
+            $sessiontype: ty
+        ),+ $(,)?
+    ) => {
+
+        fn type_of<T>(_: T) -> &'static str {
+            std::any::type_name::<T>()
+        }
+
+        let mut sessions = Vec::new();
+        let mut tail_sessions = Vec::new();
+
+        $(
+            sessions.push(String::from(std::any::type_name::<$sessiontype>()));
+            tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
+        )+
+
+        let state_branches = std::collections::hash_map::RandomState::new();
+        let mut branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
+            std::collections::HashMap::with_hasher(state_branches);
 
         println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers));
     };
@@ -110,13 +138,13 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
             .collect::<Vec<_>>();
 
         // Split according to both '<' and '>', and append to result
-        roles.append(
-            &mut full_vec[full_vec.len() - 2]
-                .split(['<', '>'].as_ref())
-                .filter(|s| !s.is_empty())
-                .map(String::from)
-                .collect::<Vec<_>>(),
-        );
+        // roles.append(
+        //     &mut full_vec[full_vec.len() - 2]
+        //         .split(['<', '>'].as_ref())
+        //         .filter(|s| !s.is_empty())
+        //         .map(String::from)
+        //         .collect::<Vec<_>>(),
+        // );
 
         // Split and push the name of the role of the MeshecChannels
         roles.push(String::from(
@@ -125,11 +153,11 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
     }
 
     // Remove RoleBroadcast and RoleEnd
-    roles = roles
-        .iter()
-        .filter(|s| *s != "RoleBroadcast" && *s != "RoleEnd")
-        .map(String::from)
-        .collect();
+    // roles = roles
+    //     .iter()
+    //     .filter(|s| *s != "RoleBroadcast" && *s != "RoleEnd")
+    //     .map(String::from)
+    //     .collect();
 
     // Sort
     roles.sort();
@@ -145,12 +173,14 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
 fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut result = Vec::new();
     let mut temp = "".to_string();
+
+    // Start at -1 because we want to remove the first `<` and the term before
     let mut index = -1;
 
     for i in full_block.chars() {
-        if i == '&' {
+        if i == '&' || i.is_whitespace() {
         } else if i == '>' && index == 0 {
-            result.push(format!("{}{}", temp, i));
+            result.push(temp.to_string());
             temp = "".to_string();
         } else if i == '<' && index >= 0 {
             temp = format!("{}{}", temp, i);
@@ -171,13 +201,16 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     }
 
     if !temp.is_empty() {
-        result.push(temp);
+        let mut chars = temp.chars();
+        chars.next_back();
+
+        result.push(chars.as_str().to_string());
     }
 
     Ok(result)
 }
 
-/// Get the start of a Recv/Send session, and its payload and continuation
+/// Get the start of a Recv/Send session, and its payload and continuation.
 #[doc(hidden)]
 fn get_head_payload_continuation(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
     if full_block[0..3] == *"End" {
@@ -187,6 +220,90 @@ fn get_head_payload_continuation(full_block: String) -> Result<Vec<String>, Box<
         result.append(&mut get_blocks(full_block)?);
         Ok(result)
     }
+}
+
+/// Build the digraph from the current full_session.
+#[doc(hidden)]
+fn get_graph_session(
+    current_role: &str,
+    mut full_session: Vec<String>,
+    roles: &[String],
+) -> Result<Graph<String, String>, Box<dyn Error>> {
+    // Create the new graph that will be returned in the end
+    let mut g = Graph::<String, String>::new();
+
+    // Start the index for the different `steps` of the choreography
+    let mut index_node = 0;
+
+    // Add the first node for the graph
+    let mut previous_node = g.add_node(index_node.to_string());
+
+    // The `End` vec that we will compare to `full_session`
+    let mut compare_end = vec!["End".to_string(); full_session.len() - 1];
+    compare_end.push("RoleEnd".to_string());
+
+    // The index of the current_role among the roles
+    let index_current_role = &roles.iter().position(|r| r == current_role).unwrap();
+
+    // As long as the sessions are not full `End`
+    while compare_end != full_session {
+        // Get the size of the full_session
+        let size_full_session = full_session.len() - 1;
+
+        // Get the head of the stack
+        let stack = &get_head_payload_continuation(full_session[size_full_session].clone())?;
+        let head_stack = &stack[0];
+
+        // The index of the head_stack among the roles
+        let index_head = &roles.iter().position(|r| r == head_stack).unwrap();
+
+        // Add the offset depending on the relative positions of the roles
+        let offset = (index_current_role < index_head) as usize;
+
+        // The running session
+        let running_session =
+            get_head_payload_continuation(full_session[index_head - offset].to_string())?;
+
+        // If Send/Recv, everything is good, else, panic
+        if running_session[0] == *"Send" {
+            // Increase the index for the nodes
+            index_node += 1;
+
+            // Add the new `step`
+            let new_node = g.add_node(index_node.to_string());
+
+            // Add the new edge between the previous and the new node,
+            // and label it with the corresponding interaction
+            g.add_edge(
+                previous_node,
+                new_node,
+                format!("{}!{}: {}", &current_role, &head_stack, &running_session[1]),
+            );
+            // Replace the old binary session with the new one
+            full_session[index_head - offset] = running_session[2].to_string();
+
+            // Replace the old stack with the new one
+            full_session[size_full_session] = stack[1].to_string();
+
+            // Update the previous node
+            previous_node = new_node;
+        } else if running_session[0] == *"Recv" {
+            index_node += 1;
+            let new_node = g.add_node(index_node.to_string());
+            g.add_edge(
+                previous_node,
+                new_node,
+                format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
+            );
+            full_session[index_head - offset] = running_session[2].to_string();
+            full_session[size_full_session] = stack[1].to_string();
+            previous_node = new_node;
+        } else {
+            panic!("Did not found a correct session")
+        }
+    }
+
+    Ok(g)
 }
 
 pub fn checker(
@@ -229,6 +346,11 @@ pub fn checker(
         &update_branches_receivers
     );
     println!();
+
+    for (role, full_session) in clean_sessions.clone() {
+        let graph = get_graph_session(&role, full_session, &roles)?;
+        println!("Graph: {:?}", Dot::new(&graph));
+    }
 
     for (role, fields) in clean_sessions {
         println!("role: {:?}:", role);

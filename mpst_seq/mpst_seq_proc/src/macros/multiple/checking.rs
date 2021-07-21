@@ -44,13 +44,6 @@ impl Parse for CheckingInput {
             choices.insert(result[0].clone(), result[1..].to_vec());
         }
 
-        // loop {
-        //     match attempt_extraction(input) {
-        //         Ok(result) => choices.insert(result[0].clone(), result[1..].to_vec()),
-        //         Err(_) => break,
-        //     };
-        // }
-
         Ok(CheckingInput { choices })
     }
 }
