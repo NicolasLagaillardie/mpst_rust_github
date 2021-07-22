@@ -255,6 +255,7 @@ fn build_dual(session: String) -> Result<String, Box<dyn Error>> {
 }
 
 #[doc(hidden)]
+#[allow(clippy::too_many_arguments)]
 fn aux_get_graph(
     current_role: &str,
     mut full_session: Vec<String>,
