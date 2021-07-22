@@ -68,7 +68,7 @@ impl CheckingInput {
             let branches: Vec<proc_macro2::TokenStream> = value
                 .iter()
                 .map(|branch| {
-                    let branch_ident = syn::Ident::new(&branch, proc_macro2::Span::call_site());
+                    let branch_ident = syn::Ident::new(branch, proc_macro2::Span::call_site());
                     quote! {
                         #name_key::#branch_ident(s) => {
                             write!(f, "{}\n{}", stringify!(#branch_ident), type_of(&s))
@@ -90,7 +90,7 @@ impl CheckingInput {
             let branches_hashmap: Vec<proc_macro2::TokenStream> = value.iter()
             .map(|branch| {
                 let temp = syn::Ident::new(&format!("temp_{}", branch).to_lowercase(), proc_macro2::Span::call_site());
-                let branch_ident = syn::Ident::new(&branch, proc_macro2::Span::call_site());
+                let branch_ident = syn::Ident::new(branch, proc_macro2::Span::call_site());
                 let branch_name = syn::Ident::new(&branch.to_lowercase(), proc_macro2::Span::call_site());
                 quote! {
                     let #temp =

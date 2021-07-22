@@ -129,9 +129,6 @@ fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
             let (video, s) = s.send(request + 1).recv()?;
             let s = s.send(video + 1);
 
-            assert_eq!(request, id + 1);
-            assert_eq!(video, id + 3);
-
             s.close()
         },
         |s: EndpointBEnd| s.close(),
@@ -143,10 +140,7 @@ fn client_video(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let id: i32 = rng.gen();
 
     let (accept, s) = s.send(id).recv()?;
-    let (result, s) = s.choose_left().send(accept).recv()?;
-
-    assert_eq!(accept, id + 1);
-    assert_eq!(result, accept + 3);
+    let (_, s) = s.choose_left().send(accept).recv()?;
 
     s.close()
 }
@@ -155,9 +149,7 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let (accept, s) = s.send(id).recv()?;
-
-    assert_eq!(accept, id + 1);
+    let (_, s) = s.send(id).recv()?;
 
     s.choose_right().close()
 }
@@ -165,43 +157,26 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 fn run_a_usecase_left() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test video branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
+    // Test video branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
 }
 
 fn run_a_usecase_right() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test end branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
+    // Test end branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
 }
 
 /////////////////////////////////////////
 
-fn main() {
-    run_a_usecase_left();
-    run_a_usecase_right();
-
+fn checking() -> Result<(), Box<dyn Error>> {
     mpstthree::checker_concat!(
         EndpointAFull<i32>,
         EndpointCFull<i32>,
@@ -217,4 +192,12 @@ fn main() {
         //     Diff
         // }
     );
+
+    Ok(())
+}
+
+fn main() {
+    run_a_usecase_left();
+    run_a_usecase_right();
+    checking().unwrap();
 }

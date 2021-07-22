@@ -45,7 +45,9 @@ macro_rules! checker_concat {
             )+
         );
 
-        println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers));
+        let result = mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers)?;
+
+        println!("result: {:?}", result);
     };
     (
         $(
@@ -69,7 +71,9 @@ macro_rules! checker_concat {
         let mut branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
             std::collections::HashMap::with_hasher(state_branches);
 
-        println!("{:?}", mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers));
+        let result = mpstthree::checking::new_test::checker(sessions, tail_sessions, branches_receivers)?;
+
+        println!("result: {:?}", result);
     };
 }
 
@@ -214,8 +218,13 @@ fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
 /// Get the start of a Recv/Send session, and its payload and continuation.
 #[doc(hidden)]
 fn get_head_payload_continuation(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
-    if full_block[0..3] == *"End" {
+    println!("full_block: {:?}", &full_block);
+    if full_block == *"End" {
+        // If the full block is a `End` type
         Ok(vec!["End".to_string()])
+    } else if full_block == *"RoleEnd" {
+        // If the full block is a `End` type
+        Ok(vec!["RoleEnd".to_string()])
     } else {
         let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
         result.append(&mut get_blocks(full_block)?);
@@ -231,11 +240,20 @@ fn aux_get_graph(
     mut index_node: Vec<usize>,
     mut previous_node: NodeIndex<u32>,
     compare_end: Vec<String>,
-    depth_level: usize,
+    mut depth_level: usize,
     index_current_role: usize,
     mut g: Graph<String, String>,
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
+        index_node[depth_level] += 1;
+        let new_node = g.add_node(
+            index_node[..depth_level]
+                .to_vec()
+                .into_iter()
+                .map(|i| i.to_string())
+                .collect::<String>(),
+        );
+        g.add_edge(previous_node, new_node, "0".to_string());
         Ok(g)
     } else {
         // Get the size of the full_session
@@ -248,7 +266,105 @@ fn aux_get_graph(
 
         if stack.len() == 3 {
             // If it is a simple choice
-            Ok(g)
+
+            let mut number_of_send = 0;
+            let mut number_of_recv = 0;
+            let mut pos_recv = 0;
+            for (pos, session) in full_session[..(full_session.len() - 1)]
+                .to_vec()
+                .iter()
+                .enumerate()
+            {
+                match (
+                    get_head_payload_continuation(session.to_string())?[0].as_str(),
+                    number_of_send,
+                    number_of_recv,
+                    pos,
+                ) {
+                    ("Send", n_send, 0, n_pos) if n_send == n_pos => {
+                        number_of_send += 1;
+                    }
+                    ("Recv", 0, 0, new_pos) => {
+                        number_of_recv += 1;
+                        pos_recv = new_pos;
+                    }
+                    ("End", 0, _, _) => {}
+                    _ => panic!("Wrong session heads"),
+                }
+            }
+
+            // Increase the index for the nodes
+            index_node.push(0);
+
+            // Increase the depth level
+            depth_level += 1;
+
+            // Add the new `step`
+            let new_node = g.add_node(
+                index_node[..depth_level]
+                    .to_vec()
+                    .into_iter()
+                    .map(|i| i.to_string())
+                    .collect::<String>(),
+            );
+
+            if number_of_recv == 1 {
+                // The offset depending on the relative positions of the roles
+                let offset = (index_current_role <= pos_recv) as usize;
+
+                // Add the new edge between the previous and the new node,
+                // and label it with the corresponding interaction
+                println!("current role for choose: {:?}", &current_role);
+                println!("possible role for choose: {:?}", &roles[pos_recv + offset]);
+                g.add_edge(
+                    previous_node,
+                    new_node,
+                    format!("& {}", &roles[pos_recv + offset]),
+                );
+                previous_node = new_node;
+
+                // Should be `Either<MC, MC>`
+                let payload_either =
+                    &get_head_payload_continuation(full_session[pos_recv].to_string())?[1];
+                println!("payload_either: {:?}", &payload_either);
+
+                // Should be `[Either, MC, MC]`
+                let choices = get_head_payload_continuation(payload_either.to_string())?;
+                println!("choices: {:?}", &choices);
+
+                // The left choice
+                let choice_left = clean_session(choices[1].clone())?;
+                println!("Choose left: {:?}", &choice_left);
+                g = aux_get_graph(
+                    current_role,
+                    choice_left[..(choice_left.len() - 2)].to_vec(),
+                    roles,
+                    index_node.clone(),
+                    previous_node,
+                    compare_end.clone(),
+                    depth_level,
+                    index_current_role,
+                    g,
+                )?;
+
+                println!("Current g: {:?}", &g);
+
+                let choice_right = clean_session(choices[2].clone())?;
+                println!("Choose right: {:?}", &choice_right);
+                aux_get_graph(
+                    current_role,
+                    choice_right[..(choice_right.len() - 2)].to_vec(),
+                    roles,
+                    index_node,
+                    previous_node,
+                    compare_end,
+                    depth_level,
+                    index_current_role,
+                    g,
+                )
+            } else {
+                Ok(g)
+            }
         } else if stack.len() == 2 {
             // If it is a simple interaction
             let head_stack = &stack[0];
@@ -256,7 +372,7 @@ fn aux_get_graph(
             // The index of the head_stack among the roles
             let index_head = roles.iter().position(|r| r == head_stack).unwrap();
 
-            // Add the offset depending on the relative positions of the roles
+            // The offset depending on the relative positions of the roles
             let offset = (index_current_role < index_head) as usize;
 
             // The running session
@@ -269,7 +385,13 @@ fn aux_get_graph(
                 index_node[depth_level] += 1;
 
                 // Add the new `step`
-                let new_node = g.add_node(index_node[depth_level].to_string());
+                let new_node = g.add_node(
+                    index_node[..depth_level]
+                        .to_vec()
+                        .into_iter()
+                        .map(|i| i.to_string())
+                        .collect::<String>(),
+                );
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
@@ -289,7 +411,13 @@ fn aux_get_graph(
                 previous_node = new_node;
             } else if running_session[0] == *"Recv" {
                 index_node[depth_level] += 1;
-                let new_node = g.add_node(index_node[depth_level].to_string());
+                let new_node = g.add_node(
+                    index_node[..depth_level]
+                        .to_vec()
+                        .into_iter()
+                        .map(|i| i.to_string())
+                        .collect::<String>(),
+                );
                 g.add_edge(
                     previous_node,
                     new_node,
@@ -400,8 +528,8 @@ pub fn checker(
     println!();
 
     for (role, full_session) in clean_sessions.clone() {
-        println!("Role: {:?}", &role);
         let graph = get_graph_session(&role, full_session, &roles)?;
+        println!("Role: {:?}", &role);
         println!("Graph: {:?}", Dot::new(&graph));
     }
 
