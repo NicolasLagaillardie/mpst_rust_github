@@ -142,27 +142,11 @@ fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
             .filter(|s| !s.is_empty())
             .collect::<Vec<_>>();
 
-        // Split according to both '<' and '>', and append to result
-        // roles.append(
-        //     &mut full_vec[full_vec.len() - 2]
-        //         .split(['<', '>'].as_ref())
-        //         .filter(|s| !s.is_empty())
-        //         .map(String::from)
-        //         .collect::<Vec<_>>(),
-        // );
-
         // Split and push the name of the role of the MeshecChannels
         roles.push(String::from(
             full_vec[full_vec.len() - 1].split('<').collect::<Vec<_>>()[0],
         ));
     }
-
-    // Remove RoleBroadcast and RoleEnd
-    // roles = roles
-    //     .iter()
-    //     .filter(|s| *s != "RoleBroadcast" && *s != "RoleEnd")
-    //     .map(String::from)
-    //     .collect();
 
     // Sort
     roles.sort();
@@ -249,6 +233,28 @@ fn extract_index_node(
 }
 
 #[doc(hidden)]
+fn build_dual(session: String) -> Result<String, Box<dyn Error>> {
+    if session == *"End" {
+        Ok(session)
+    } else {
+        let all_fields = get_head_payload_continuation(session)?;
+        match all_fields[0].as_str() {
+            "Recv" => Ok(format!(
+                "Send<{},{}>",
+                all_fields[1],
+                build_dual(all_fields[2].to_string())?
+            )),
+            "Send" => Ok(format!(
+                "Recv<{},{}>",
+                all_fields[1],
+                build_dual(all_fields[2].to_string())?
+            )),
+            _ => panic!("Wrond head"),
+        }
+    }
+}
+
+#[doc(hidden)]
 fn aux_get_graph(
     current_role: &str,
     mut full_session: Vec<String>,
@@ -262,7 +268,7 @@ fn aux_get_graph(
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
-        let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+        let new_node = g.add_node(extract_index_node(index_node, depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
         Ok(g)
     } else {
@@ -280,6 +286,10 @@ fn aux_get_graph(
             let mut number_of_send = 0;
             let mut number_of_recv = 0;
             let mut pos_recv = 0;
+
+            let mut choice_left: Vec<String> = Vec::new();
+            let mut choice_right: Vec<String> = Vec::new();
+
             for (pos, session) in full_session[..(full_session.len() - 1)]
                 .to_vec()
                 .iter()
@@ -293,6 +303,42 @@ fn aux_get_graph(
                 ) {
                     ("Send", n_send, 0, n_pos) if n_send == n_pos => {
                         number_of_send += 1;
+
+                        // Should be `Either<MC, MC>`
+                        let payload_either =
+                            &get_head_payload_continuation(session.to_string())?[1];
+                        println!("payload_either: {:?}", &payload_either);
+
+                        // Should be `[Either, MC, MC]`
+                        let choices = get_head_payload_continuation(payload_either.to_string())?;
+                        println!("choices: {:?}", &choices);
+
+                        // Split the new session
+                        let blocks_left = get_blocks(choices[1].to_string())?;
+                        let blocks_right = get_blocks(choices[2].to_string())?;
+                        println!("blocks_left: {:?}", &blocks_left);
+                        println!("blocks_right: {:?}", &blocks_right);
+
+                        // Get the index of the receiver
+                        let receiver = &get_head_payload_continuation(
+                            blocks_left[blocks_left.len() - 1].to_string(),
+                        )?[0];
+                        let index_receiver = roles.iter().position(|r| r == receiver).unwrap();
+
+                        // The offset depending on the relative positions of the roles
+                        let offset = (index_current_role > index_receiver) as usize;
+
+                        // Push the choice
+                        choice_left.push(
+                            build_dual(blocks_left[index_current_role - offset].to_string())?
+                                .to_string(),
+                        );
+                        choice_right.push(
+                            build_dual(blocks_right[index_current_role - offset].to_string())?
+                                .to_string(),
+                        );
+                        println!("choice_left: {:?}", &choice_left);
+                        println!("choice_right: {:?}", &choice_right);
                     }
                     ("Recv", 0, 0, new_pos) => {
                         number_of_recv += 1;
@@ -318,8 +364,8 @@ fn aux_get_graph(
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
-                println!("current role for choose: {:?}", &current_role);
-                println!("possible role for choose: {:?}", &roles[pos_recv + offset]);
+                println!("current role for offer: {:?}", &current_role);
+                println!("possible role for offer: {:?}", &roles[pos_recv + offset]);
                 g.add_edge(
                     previous_node,
                     new_node,
@@ -333,15 +379,15 @@ fn aux_get_graph(
                 println!("payload_either: {:?}", &payload_either);
 
                 // Should be `[Either, MC, MC]`
-                let choices = get_head_payload_continuation(payload_either.to_string())?;
-                println!("choices: {:?}", &choices);
+                let offers = get_head_payload_continuation(payload_either.to_string())?;
+                println!("offers: {:?}", &offers);
 
-                // The left choice
-                let choice_left = clean_session(choices[1].clone())?;
-                println!("Choose left: {:?}", &choice_left);
+                // The left offer
+                let offer_left = clean_session(offers[1].clone())?;
+                println!("Offer left: {:?}", &offer_left);
                 g = aux_get_graph(
                     current_role,
-                    choice_left[..(choice_left.len() - 2)].to_vec(),
+                    offer_left[..(offer_left.len() - 2)].to_vec(),
                     roles,
                     index_node.clone(),
                     previous_node,
@@ -353,11 +399,11 @@ fn aux_get_graph(
 
                 println!("Current g: {:?}", &g);
 
-                let choice_right = clean_session(choices[2].clone())?;
-                println!("Choose right: {:?}", &choice_right);
+                let offer_right = clean_session(offers[2].clone())?;
+                println!("Choose right: {:?}", &offer_right);
                 aux_get_graph(
                     current_role,
-                    choice_right[..(choice_right.len() - 2)].to_vec(),
+                    offer_right[..(offer_right.len() - 2)].to_vec(),
                     roles,
                     index_node,
                     previous_node,
@@ -367,7 +413,41 @@ fn aux_get_graph(
                     g,
                 )
             } else {
-                Ok(g)
+                // Add the new edge between the previous and the new node,
+                // and label it with the corresponding interaction
+                println!("current role for choose: {:?}", &current_role);
+                g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
+                previous_node = new_node;
+
+                // Add the corresponding stacks
+                choice_left.push(stack[1].to_string());
+                choice_right.push(stack[2].to_string());
+                println!("sent choice_left: {:?}", &choice_left);
+                println!("sent choice_right: {:?}", &choice_right);
+
+                g = aux_get_graph(
+                    current_role,
+                    choice_left,
+                    roles,
+                    index_node.clone(),
+                    previous_node,
+                    compare_end.clone(),
+                    depth_level,
+                    index_current_role,
+                    g,
+                )?;
+
+                aux_get_graph(
+                    current_role,
+                    choice_right,
+                    roles,
+                    index_node,
+                    previous_node,
+                    compare_end,
+                    depth_level,
+                    index_current_role,
+                    g,
+                )
             }
         } else if stack.len() == 2 {
             // If it is a simple interaction
