@@ -233,6 +233,22 @@ fn get_head_payload_continuation(full_block: String) -> Result<Vec<String>, Box<
 }
 
 #[doc(hidden)]
+fn extract_index_node(
+    index_node: Vec<usize>,
+    depth_level: usize,
+) -> Result<String, Box<dyn Error>> {
+    Ok(format!(
+        "{}{}",
+        index_node[..depth_level]
+            .to_vec()
+            .into_iter()
+            .map(|i| format!("{}.", i))
+            .collect::<String>(),
+        index_node[depth_level]
+    ))
+}
+
+#[doc(hidden)]
 fn aux_get_graph(
     current_role: &str,
     mut full_session: Vec<String>,
@@ -246,13 +262,7 @@ fn aux_get_graph(
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
-        let new_node = g.add_node(
-            index_node[..depth_level]
-                .to_vec()
-                .into_iter()
-                .map(|i| i.to_string())
-                .collect::<String>(),
-        );
+        let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
         Ok(g)
     } else {
@@ -300,13 +310,7 @@ fn aux_get_graph(
             depth_level += 1;
 
             // Add the new `step`
-            let new_node = g.add_node(
-                index_node[..depth_level]
-                    .to_vec()
-                    .into_iter()
-                    .map(|i| i.to_string())
-                    .collect::<String>(),
-            );
+            let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
 
             if number_of_recv == 1 {
                 // The offset depending on the relative positions of the roles
@@ -385,13 +389,7 @@ fn aux_get_graph(
                 index_node[depth_level] += 1;
 
                 // Add the new `step`
-                let new_node = g.add_node(
-                    index_node[..depth_level]
-                        .to_vec()
-                        .into_iter()
-                        .map(|i| i.to_string())
-                        .collect::<String>(),
-                );
+                let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
@@ -411,13 +409,7 @@ fn aux_get_graph(
                 previous_node = new_node;
             } else if running_session[0] == *"Recv" {
                 index_node[depth_level] += 1;
-                let new_node = g.add_node(
-                    index_node[..depth_level]
-                        .to_vec()
-                        .into_iter()
-                        .map(|i| i.to_string())
-                        .collect::<String>(),
-                );
+                let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
                 g.add_edge(
                     previous_node,
                     new_node,
