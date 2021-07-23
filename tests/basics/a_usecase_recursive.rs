@@ -25,143 +25,143 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
 // Get recv functions
-use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
+use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
+use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
-use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
 // Get send functions
-use mpstthree::functionmpst::send::send_mpst_a_to_c;
+use mpstthree::functionmpst::send::send_mpst_a_to_b;
+use mpstthree::functionmpst::send::send_mpst_b_to_a;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
-use mpstthree::functionmpst::send::send_mpst_c_to_a;
 use mpstthree::functionmpst::send::send_mpst_c_to_b;
 
-use mpstthree::choose_mpst_b_to_all;
-use mpstthree::offer_mpst_a_to_b;
-use mpstthree::offer_mpst_c_to_b;
+use mpstthree::choose_mpst_a_to_all;
+use mpstthree::offer_mpst_b_to_a;
+use mpstthree::offer_mpst_c_to_a;
 
 /// Test our usecase
 /// Simple types
-/// Client = B
-/// Authenticator = C
-/// Server = A
+/// Client = B → Y → A
+/// Authenticator = C → Z → B
+/// Server = A → X → C
 
-type CtoBClose = End;
+type BtoAClose = End;
+type BtoCClose = End;
+type BtoCVideo<N> = Send<N, Recv<N, End>>;
+type BtoAVideo<N> = Recv<N, Send<N, RecursBtoA<N>>>;
+
+type InitB<N> = Recv<N, Send<N, RecursBtoA<N>>>;
+
+type CtoBClose = <BtoCClose as Session>::Dual;
 type CtoAClose = End;
-type CtoAVideo<N> = Send<N, Recv<N, End>>;
-type CtoBVideo<N> = Recv<N, Send<N, RecursCtoB<N>>>;
+type CtoBVideo<N> = <BtoCVideo<N> as Session>::Dual;
 
-type InitC<N> = Recv<N, Send<N, RecursCtoB<N>>>;
+type RecursBtoA<N> = Recv<Branches0BtoA<N>, End>;
+type RecursCtoA<N> = Recv<Branches0CtoA<N>, End>;
 
-type AtoCClose = <CtoAClose as Session>::Dual;
-type AtoBClose = End;
-type AtoCVideo<N> = <CtoAVideo<N> as Session>::Dual;
-
-type RecursCtoB<N> = Recv<Branches0CtoB<N>, End>;
-type RecursAtoB<N> = Recv<Branches0AtoB<N>, End>;
-
-enum Branches0CtoB<N: marker::Send> {
+enum Branches0BtoA<N: marker::Send> {
+    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
+    Video(MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>),
+}
+enum Branches0CtoA<N: marker::Send> {
     End(MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
-    Video(MeshedChannels<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
+    Video(MeshedChannels<RecursCtoA<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>),
 }
-enum Branches0AtoB<N: marker::Send> {
-    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<RecursAtoB<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
-}
-type Choose0fromBtoC<N> = Send<Branches0CtoB<N>, End>;
-type Choose0fromBtoA<N> = Send<Branches0AtoB<N>, End>;
+type Choose0fromAtoB<N> = Send<Branches0BtoA<N>, End>;
+type Choose0fromAtoC<N> = Send<Branches0CtoA<N>, End>;
 
-type InitB<N> = Send<N, Recv<N, Choose0fromBtoC<N>>>;
+type InitA<N> = Send<N, Recv<N, Choose0fromAtoB<N>>>;
 
 /// Stacks
+type StackBEnd = RoleEnd;
+type StackBVideo = RoleA<RoleC<RoleC<RoleA<RoleA<RoleEnd>>>>>;
+type StackBRecurs = RoleA<RoleEnd>;
+type StackBInit = RoleA<RoleA<RoleA<RoleEnd>>>;
+
 type StackCEnd = RoleEnd;
-type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleB<RoleEnd>>>>>;
-type StackCRecurs = RoleB<RoleEnd>;
-type StackCInit = RoleB<RoleB<RoleB<RoleEnd>>>;
+type StackCVideo = RoleB<RoleB<RoleA<RoleEnd>>>;
+type StackCRecurs = RoleA<RoleEnd>;
 
-type StackAEnd = RoleEnd;
-type StackAVideo = RoleC<RoleC<RoleB<RoleEnd>>>;
-type StackARecurs = RoleB<RoleEnd>;
-
-type StackBRecurs = RoleBroadcast;
-type StackBFull = RoleC<RoleC<StackBRecurs>>;
+type StackARecurs = RoleBroadcast;
+type StackAFull = RoleB<RoleB<StackARecurs>>;
 
 /// Creating the MP sessions
 
 /// For B
-type EndpointBRecurs<N> =
-    MeshedChannels<Choose0fromBtoA<N>, Choose0fromBtoC<N>, StackBRecurs, RoleB<RoleEnd>>;
-type EndpointBFull<N> = MeshedChannels<Choose0fromBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
+type EndpointARecurs<N> =
+    MeshedChannels<Choose0fromAtoB<N>, Choose0fromAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, Choose0fromAtoC<N>, StackAFull, RoleA<RoleEnd>>;
 
 /// For C
-type EndpointCRecurs<N> = MeshedChannels<End, RecursCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCInit, RoleC<RoleEnd>>;
+type EndpointBRecurs<N> = MeshedChannels<RecursBtoA<N>, End, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBInit, RoleB<RoleEnd>>;
 
 /// For A
-type EndpointARecurs<N> = MeshedChannels<RecursAtoB<N>, End, StackARecurs, RoleA<RoleEnd>>;
+type EndpointCRecurs<N> = MeshedChannels<RecursCtoA<N>, End, StackCRecurs, RoleC<RoleEnd>>;
 
 /// Functions related to endpoints
-fn server(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_a_to_b!(s, {
-        Branches0AtoB::End(s) => {
+fn server(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
+    offer_mpst_c_to_a!(s, {
+        Branches0CtoA::End(s) => {
             close_mpst(s)
         },
-        Branches0AtoB::Video(s) => {
-            let (request, s) = recv_mpst_a_from_c(s)?;
-            let s = send_mpst_a_to_c(request + 1, s);
+        Branches0CtoA::Video(s) => {
+            let (request, s) = recv_mpst_c_from_b(s)?;
+            let s = send_mpst_c_to_b(request + 1, s);
             server(s)
         },
     })
 }
 
-fn authenticator(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = recv_mpst_c_from_b(s)?;
-    let s = send_mpst_c_to_b(id + 1, s);
+fn authenticator(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
+    let (id, s) = recv_mpst_b_from_a(s)?;
+    let s = send_mpst_b_to_a(id + 1, s);
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointCRecurs<i32>) -> Result<(), Box<dyn Error>> {
-    offer_mpst_c_to_b!(s, {
-        Branches0CtoB::End(s) => {
+fn authenticator_recurs(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
+    offer_mpst_b_to_a!(s, {
+        Branches0BtoA::End(s) => {
             close_mpst(s)
         },
-        Branches0CtoB::Video(s) => {
-            let (request, s) = recv_mpst_c_from_b(s)?;
-            let s = send_mpst_c_to_a(request + 1, s);
-            let (video, s) = recv_mpst_c_from_a(s)?;
-            let s = send_mpst_c_to_b(video + 1, s);
+        Branches0BtoA::Video(s) => {
+            let (request, s) = recv_mpst_b_from_a(s)?;
+            let s = send_mpst_b_to_c(request + 1, s);
+            let (video, s) = recv_mpst_b_from_c(s)?;
+            let s = send_mpst_b_to_a(video + 1, s);
             authenticator_recurs(s)
         },
     })
 }
 
-fn client(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
+fn client(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
-    let s = send_mpst_b_to_c(0, s);
-    let (_, s) = recv_mpst_b_from_c(s)?;
+    let s = send_mpst_a_to_b(0, s);
+    let (_, s) = recv_mpst_a_from_b(s)?;
 
     client_recurs(s, xs, 1)
 }
 
 fn client_recurs(
-    s: EndpointBRecurs<i32>,
+    s: EndpointARecurs<i32>,
     mut xs: Vec<i32>,
     index: i32,
 ) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s = choose_mpst_b_to_all!(s, Branches0AtoB::Video, Branches0CtoB::Video);
+            let s = choose_mpst_a_to_all!(s, Branches0BtoA::Video, Branches0CtoA::Video);
 
-            let s = send_mpst_b_to_c(1, s);
-            let (_, s) = recv_mpst_b_from_c(s)?;
+            let s = send_mpst_a_to_b(1, s);
+            let (_, s) = recv_mpst_a_from_b(s)?;
 
             client_recurs(s, xs, index + 1)
         }
         Option::None => {
-            let s = choose_mpst_b_to_all!(s, Branches0AtoB::End, Branches0CtoB::End);
+            let s = choose_mpst_a_to_all!(s, Branches0BtoA::End, Branches0CtoA::End);
 
             assert_eq!(index, 100);
 
@@ -175,7 +175,7 @@ fn client_recurs(
 pub fn run_a_usecase_recursive() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         {
-            let (thread_a, thread_b, thread_c) = fork_mpst(server, client, authenticator);
+            let (thread_a, thread_b, thread_c) = fork_mpst(client, authenticator, server);
 
             assert!(thread_a.join().is_ok());
             assert!(thread_b.join().is_ok());
@@ -186,68 +186,68 @@ pub fn run_a_usecase_recursive() {
     .is_ok());
 }
 
-///////////////////////////////////////// TODO: Need a refactoring
-///////////////////////////////////////// to be included in
-///////////////////////////////////////// macro
+// ///////////////////////////////////////// Need a refactoring
+// ///////////////////////////////////////// to be included in
+// ///////////////////////////////////////// macro
 
 // fn type_of<T>(_: T) -> &'static str {
 //     type_name::<T>()
 // }
 
-// impl<N: marker::Send> fmt::Display for Branches0CtoB<N> {
+// impl<N: marker::Send> fmt::Display for Branches0BtoA<N> {
 //     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 //         match self {
-//             Branches0CtoB::Video(s) => {
+//             Branches0BtoA::Video(s) => {
 //                 write!(f, "Video:{}", type_of(&s))
 //             }
-//             Branches0CtoB::End(s) => {
+//             Branches0BtoA::End(s) => {
 //                 write!(f, "End:{}", type_of(&s))
 //             }
 //         }
 //     }
 // }
 
-// fn hashmap_branch_0_c_to_b() -> Vec<String> {
+// fn hashmap_branch_0_b_to_a() -> Vec<String> {
 //     let (s_video, _) = <_ as Session>::new();
 
-//     let video = Branches0CtoB::Video::<i32>(s_video);
+//     let video = Branches0BtoA::Video::<i32>(s_video);
 
 //     let (s_end, _) = <_ as Session>::new();
 
-//     let end = Branches0CtoB::End::<i32>(s_end);
+//     let end = Branches0BtoA::End::<i32>(s_end);
 
 //     vec![(&video).to_string(), (&end).to_string()]
 // }
 
-// impl<N: marker::Send> fmt::Display for Branches0AtoB<N> {
+// impl<N: marker::Send> fmt::Display for Branches0CtoA<N> {
 //     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 //         match self {
-//             Branches0AtoB::Video(s) => {
+//             Branches0CtoA::Video(s) => {
 //                 write!(f, "Video:{}", type_of(&s))
 //             }
-//             Branches0AtoB::End(s) => {
+//             Branches0CtoA::End(s) => {
 //                 write!(f, "End:{}", type_of(&s))
 //             }
 //         }
 //     }
 // }
 
-// fn hashmap_branch_0_a_to_b() -> Vec<String> {
+// fn hashmap_branch_0_c_to_a() -> Vec<String> {
 //     let (s_video, _) = <_ as Session>::new();
 
-//     let video = Branches0AtoB::Video::<i32>(s_video);
+//     let video = Branches0CtoA::Video::<i32>(s_video);
 
 //     let (s_end, _) = <_ as Session>::new();
 
-//     let end = Branches0AtoB::End::<i32>(s_end);
+//     let end = Branches0CtoA::End::<i32>(s_end);
 
 //     vec![(&video).to_string(), (&end).to_string()]
 // }
 
-// type StackBEnd = RoleEnd;
-// type StackBVideo = RoleC<RoleC<RoleA<RoleC<RoleEnd>>>>;
+// type StackAEnd = RoleEnd;
+// type StackAVideo = RoleB<RoleB<RoleB<RoleC<RoleEnd>>>>;
 
-// pub fn run_a_usecase_recursive_checker() {
+// pub fn run_b_usecase_recursive_checker() {
 //     assert!(|| -> Result<(), Box<dyn Error>> {
 //         {
 //             // Get the new meshedchannels of the passive roles
@@ -255,36 +255,36 @@ pub fn run_a_usecase_recursive() {
 //             let mut branches_receivers: HashMap<String, &Vec<String>> =
 //                 HashMap::with_hasher(state_branches_receivers);
 
-//             let branch_0_a_to_b: Vec<String> = hashmap_branch_0_a_to_b();
-//             let branch_0_c_to_b: Vec<String> = hashmap_branch_0_c_to_b();
+//             let branch_0_c_to_a: Vec<String> = hashmap_branch_0_c_to_a();
+//             let branch_0_b_to_a: Vec<String> = hashmap_branch_0_b_to_a();
 
-//             branches_receivers.insert("Branches0AtoB<i32>".to_string(), &branch_0_a_to_b);
-//             branches_receivers.insert("Branches0CtoB<i32>".to_string(), &branch_0_c_to_b);
+//             branches_receivers.insert("Branches0CtoA<i32>".to_string(), &branch_0_c_to_a);
+//             branches_receivers.insert("Branches0BtoA<i32>".to_string(), &branch_0_b_to_a);
 
-//             let (s1, _): (EndpointARecurs<i32>, _) = MeshedChannels::new();
+//             let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
 //             let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();
-//             let (s3, _): (EndpointCFull<i32>, _) = MeshedChannels::new();
+//             let (s3, _): (EndpointCRecurs<i32>, _) = MeshedChannels::new();
 
 //             // Get the new stack of the active role
 //             let state_branches_sender = RandomState::new();
 //             let mut branches_sender: HashMap<String, &Vec<String>> =
 //                 HashMap::with_hasher(state_branches_sender);
 
-//             let (stack_video, _): (StackBVideo, _) = Role::new();
-//             let (stack_end, _): (StackBEnd, _) = Role::new();
+//             let (stack_video, _): (StackAVideo, _) = Role::new();
+//             let (stack_end, _): (StackAEnd, _) = Role::new();
 
 //             let mut stacks: Vec<String> = Vec::new();
 //             stacks.push(type_of(&stack_video).to_string());
 //             stacks.push(type_of(&stack_end).to_string());
 
-//             branches_sender.insert("Branches0AtoB<i32>".to_string(), &stacks);
-//             branches_sender.insert("Branches0CtoB<i32>".to_string(), &stacks);
+//             branches_sender.insert("Branches0CtoA<i32>".to_string(), &stacks);
+//             branches_sender.insert("Branches0BtoA<i32>".to_string(), &stacks);
 
 //             let (a, b, c) = checker(s1, s2, s3, &branches_receivers, &branches_sender)?;
 
-//             assert_eq!(a, "A: µX( A?C.A!C.X & 0 )");
-//             assert_eq!(b, "B: B!C.B?C.µX( B!C.B?C.X + 0 )");
-//             assert_eq!(c, "C: C?B.C!B.µX( C?B.C!A.C?A.C!B.X & 0 )");
+//             assert_eq!(a, "A: A!B.A?B.µX( A!B.A?B.X + 0 )");
+//             assert_eq!(b, "B: B?A.B!A.µX( B?A.B!C.B?C.B!A.X & 0 )");
+//             assert_eq!(c, "C: µX( C?B.C!B.X & 0 )");
 //         }
 //         Ok(())
 //     }()

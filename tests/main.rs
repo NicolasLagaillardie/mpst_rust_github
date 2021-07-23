@@ -78,16 +78,16 @@ fn basics() {
     basics::choose::simple_choice_checker();
 
     // Choose 2 A
-    basics::a_choose_2::double_choice();
-    basics::a_choose_2::double_choice_checker();
+    basics::a_choose::double_choice();
+    basics::a_choose::double_choice_checker();
 
     // Choose 2 A
-    basics::b_choose_2::double_choice();
-    basics::b_choose_2::double_choice_checker();
+    basics::b_choose::double_choice();
+    basics::b_choose::double_choice_checker();
 
     // Choose 2 A
-    basics::c_choose_2::double_choice();
-    basics::c_choose_2::double_choice_checker();
+    basics::c_choose::double_choice();
+    basics::c_choose::double_choice_checker();
 
     // Usecase simple A
     basics::a_usecase::run_a_usecase_left();
@@ -160,16 +160,16 @@ fn cases_tests_mpst_simple_short() {
     baking::basics::choose::simple_choice_checker();
 
     // Choose 2 A
-    baking::basics::a_choose_2::double_choice();
-    baking::basics::a_choose_2::double_choice_checker();
+    baking::basics::a_choose::double_choice();
+    baking::basics::a_choose::double_choice_checker();
 
     // Choose 2 A
-    baking::basics::b_choose_2::double_choice();
-    baking::basics::b_choose_2::double_choice_checker();
+    baking::basics::b_choose::double_choice();
+    baking::basics::b_choose::double_choice_checker();
 
     // Choose 2 A
-    baking::basics::c_choose_2::double_choice();
-    baking::basics::c_choose_2::double_choice_checker();
+    baking::basics::c_choose::double_choice();
+    baking::basics::c_choose::double_choice_checker();
 
     // Usecase simple A
     baking::basics::a_usecase::run_a_usecase_left();
