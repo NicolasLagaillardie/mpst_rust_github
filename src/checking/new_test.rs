@@ -494,11 +494,11 @@ fn aux_get_graph(
                     depth_level,
                     index_current_role,
                     g,
-                    branches_receivers.clone(),
+                    branches_receivers,
                     branches_aready_seen,
                     branching_sessions,
-                    group_branches.clone(),
-                    groups_already_under_investigation.clone(),
+                    group_branches,
+                    groups_already_under_investigation,
                 )
             } else {
                 // Add the new edge between the previous and the new node,
@@ -540,11 +540,11 @@ fn aux_get_graph(
                     depth_level,
                     index_current_role,
                     g,
-                    branches_receivers.clone(),
+                    branches_receivers,
                     branches_aready_seen,
                     branching_sessions,
-                    group_branches.clone(),
-                    groups_already_under_investigation.clone(),
+                    group_branches,
+                    groups_already_under_investigation,
                 )
             }
         } else if stack.len() == 2 {
@@ -618,11 +618,11 @@ fn aux_get_graph(
                 depth_level,
                 index_current_role,
                 g,
-                branches_receivers.clone(),
+                branches_receivers,
                 branches_aready_seen,
                 branching_sessions,
-                group_branches.clone(),
-                groups_already_under_investigation.clone(),
+                group_branches,
+                groups_already_under_investigation,
             )
         } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
             let mut number_of_send = 0;
@@ -753,16 +753,13 @@ fn aux_get_graph(
                     )?;
                     println!("current graph: {:?}", &Dot::new(&g));
                 } else if !branches_aready_seen.contains_key(&current_branch) {
-                } else {
-                    if let Some(new_node) = branches_aready_seen.get(&current_branch) {
-                        if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node
-                        {
-                            g.add_edge(previous_node, *new_node, "µ".to_string());
-                            println!("Added edge");
-                        }
-                    } else {
-                        panic!("Cannot happen")
+                } else if let Some(new_node) = branches_aready_seen.get(&current_branch) {
+                    if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
+                        g.add_edge(previous_node, *new_node, "µ".to_string());
+                        println!("Added edge");
                     }
+                } else {
+                    panic!("Cannot happen")
                 }
             }
 
@@ -820,7 +817,7 @@ fn get_graph_session(
         start_depth_level,
         index_current_role,
         g,
-        branches_receivers.clone(),
+        branches_receivers,
         branches_aready_seen,
         branching_sessions,
         group_branches,
