@@ -157,16 +157,18 @@ pub fn run_b_usecase_recursive() {
 fn checking() -> Result<(), Box<dyn Error>> {
     mpstthree::checker_concat!(
         EndpointARecurs,
-        EndpointCRecurs,
-        EndpointBRecurs
+        EndpointCFull,
+        EndpointBFull
         =>
         [
-            Branches0AtoB::Video, 
-            EndpointBFull
+            EndpointBFull,
+            Branches0AtoB::Video,
+            Branches0CtoB::Video
         ],
         [
+            EndpointBEnd,
             Branches0AtoB::End,
-            EndpointBEnd
+            Branches0CtoB::End
         ],
         =>
         {

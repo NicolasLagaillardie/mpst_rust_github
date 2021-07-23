@@ -25,11 +25,13 @@ macro_rules! checker_concat {
         =>
         $(
             [
-                $corresponding_branch: path ,
-                $branch_stack: ty 
+                $branch_stack: ty,
+                $(
+                    $corresponding_branch: path
+                ),+ $(,)?
             ]
         ),+ $(,)?
-        => 
+        =>
         $(
             {
                 $choice: ty,
@@ -50,16 +52,30 @@ macro_rules! checker_concat {
         let mut branching_sessions: std::collections::HashMap<String, String> =
             std::collections::HashMap::with_hasher(state_branching_sessions);
 
+        let state_group_branches = std::collections::hash_map::RandomState::new();
+        let mut group_branches: std::collections::HashMap<String, i32> =
+            std::collections::HashMap::with_hasher(state_group_branches);
+
         $(
             sessions.push(String::from(std::any::type_name::<$sessiontype>()));
             tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
         )+
 
+        let mut index = 0;
+
         $(
-            branching_sessions.insert(
-                stringify!($corresponding_branch).to_string(),
-                String::from(std::any::type_name::<$branch_stack>())
-            );
+            let temp_branch_stack = String::from(std::any::type_name::<$branch_stack>());
+            $(
+                branching_sessions.insert(
+                    stringify!($corresponding_branch).to_string(),
+                    temp_branch_stack.clone()
+                );
+                group_branches.insert(
+                    stringify!($corresponding_branch).to_string(),
+                    index
+                );
+            )+
+            index += 1;
         )+
 
         mpst_seq::checking!(
@@ -77,7 +93,8 @@ macro_rules! checker_concat {
             sessions,
             tail_sessions,
             branches_receivers,
-            branching_sessions
+            branching_sessions,
+            group_branches
         )?;
 
         println!("result: {:?}", result);
@@ -108,11 +125,16 @@ macro_rules! checker_concat {
         let mut branching_sessions: std::collections::HashMap<String, String> =
             std::collections::HashMap::with_hasher(state_branching_sessions);
 
+        let state_group_branches = std::collections::hash_map::RandomState::new();
+        let mut group_branches: std::collections::HashMap<String, i32> =
+            std::collections::HashMap::with_hasher(state_group_branches);
+
         let result = mpstthree::checking::new_test::checker(
             sessions,
             tail_sessions,
             branches_receivers,
-            branching_sessions
+            branching_sessions,
+            group_branches
         )?;
 
         println!("result: {:?}", result);
@@ -310,10 +332,16 @@ fn aux_get_graph(
     mut g: Graph<String, String>,
     branches_receivers: HashMap<String, HashMap<String, Vec<String>>>,
     mut branches_aready_seen: HashMap<String, NodeIndex<u32>>,
-    branching_sessions: HashMap<String, String>,
+    branching_sessions: HashMap<String, Vec<String>>,
+    group_branches: HashMap<String, i32>,
+    groups_already_under_investigation: Vec<Vec<String>>,
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
+        println!(
+            "Adding node: {:?}",
+            &extract_index_node(index_node.clone(), depth_level)?
+        );
         let new_node = g.add_node(extract_index_node(index_node, depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
         Ok(g)
@@ -403,6 +431,10 @@ fn aux_get_graph(
 
             // Add the new `step`
             let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+            println!(
+                "Adding node: {:?}",
+                &extract_index_node(index_node.clone(), depth_level)?
+            );
 
             if number_of_recv == 1 {
                 // The offset depending on the relative positions of the roles
@@ -444,6 +476,8 @@ fn aux_get_graph(
                     branches_receivers.clone(),
                     branches_aready_seen.clone(),
                     branching_sessions.clone(),
+                    group_branches.clone(),
+                    groups_already_under_investigation.clone(),
                 )?;
 
                 println!("Current g: {:?}", &g);
@@ -463,6 +497,8 @@ fn aux_get_graph(
                     branches_receivers.clone(),
                     branches_aready_seen,
                     branching_sessions,
+                    group_branches.clone(),
+                    groups_already_under_investigation.clone(),
                 )
             } else {
                 // Add the new edge between the previous and the new node,
@@ -490,6 +526,8 @@ fn aux_get_graph(
                     branches_receivers.clone(),
                     branches_aready_seen.clone(),
                     branching_sessions.clone(),
+                    group_branches.clone(),
+                    groups_already_under_investigation.clone(),
                 )?;
 
                 aux_get_graph(
@@ -505,6 +543,8 @@ fn aux_get_graph(
                     branches_receivers.clone(),
                     branches_aready_seen,
                     branching_sessions,
+                    group_branches.clone(),
+                    groups_already_under_investigation.clone(),
                 )
             }
         } else if stack.len() == 2 {
@@ -528,6 +568,10 @@ fn aux_get_graph(
 
                 // Add the new `step`
                 let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                println!(
+                    "Adding node: {:?}",
+                    &extract_index_node(index_node.clone(), depth_level)?
+                );
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
@@ -548,6 +592,10 @@ fn aux_get_graph(
             } else if running_session[0] == *"Recv" {
                 index_node[depth_level] += 1;
                 let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                println!(
+                    "Adding node: {:?}",
+                    &extract_index_node(index_node.clone(), depth_level)?
+                );
                 g.add_edge(
                     previous_node,
                     new_node,
@@ -573,14 +621,15 @@ fn aux_get_graph(
                 branches_receivers.clone(),
                 branches_aready_seen,
                 branching_sessions,
+                group_branches.clone(),
+                groups_already_under_investigation.clone(),
             )
         } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
             let mut number_of_send = 0;
 
-            // let state_all_choices = RandomState::new();
-            // let mut all_choices: HashMap<String, HashMap<String, Vec<String>>> =
-            //     HashMap::with_hasher(state_all_choices);
             let mut all_branches = Vec::new();
+
+            println!("running RoleBroadcast");
 
             // Check all the sessions
             for (pos, session) in full_session[..(full_session.len() - 1)]
@@ -618,12 +667,22 @@ fn aux_get_graph(
                 }
             }
 
-            println!("all_branches: {:?}", &all_branches);
-
             let mut node_added = false;
 
-            for current_branch in all_branches {
-                if !branches_aready_seen.contains_key(&current_branch) {
+            all_branches.sort();
+
+            for current_branch in all_branches.clone() {
+                println!("current branch: {:?}", &current_branch);
+                println!("branches_aready_seen: {:?}", &branches_aready_seen);
+                println!(
+                    "groups_already_under_investigation: {:?}",
+                    &groups_already_under_investigation
+                );
+                println!("all_branches: {:?}", &all_branches);
+
+                if !branches_aready_seen.contains_key(&current_branch)
+                    && !groups_already_under_investigation.contains(&all_branches)
+                {
                     // If the node was not added
                     if !node_added {
                         // Increase the index for the nodes
@@ -635,24 +694,46 @@ fn aux_get_graph(
                         // Add the new `step`
                         let new_node =
                             g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                        println!(
+                            "Adding node: {:?}",
+                            &extract_index_node(index_node.clone(), depth_level)?
+                        );
 
                         // Add the corresponding edge
                         g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
 
-                        // Update previous node
-                        previous_node = new_node;
-
                         node_added = true;
+
+                        previous_node = new_node;
                     }
 
-                    // Insert the new node/branch in the list of the ones already seen
-                    branches_aready_seen.insert(current_branch.clone(), previous_node);
-
                     let session = if let Some(session) = branching_sessions.get(&current_branch) {
-                        get_blocks(session.to_string())?
+                        println!("working session: {:?}", &session);
+                        session[..(session.len() - 1)].to_vec()
                     } else {
                         panic!("Missing session")
                     };
+
+                    // Insert the new node/branch in the list of the ones already seen
+                    let index_group = if let Some(index) = group_branches.get(&current_branch) {
+                        println!("index session: {:?}", &index);
+                        index
+                    } else {
+                        panic!("Missing index")
+                    };
+
+                    for (temp_current_branch, temp_index) in group_branches.clone() {
+                        if temp_index == *index_group {
+                            branches_aready_seen.insert(temp_current_branch.clone(), previous_node);
+                        }
+                    }
+
+                    println!("new session: {:?}", &session);
+                    println!("full session: {:?}", &full_session);
+
+                    let mut temp_groups_already_under_investigation =
+                        groups_already_under_investigation.clone();
+                    temp_groups_already_under_investigation.push(all_branches.clone());
 
                     g = aux_get_graph(
                         current_role,
@@ -667,10 +748,18 @@ fn aux_get_graph(
                         branches_receivers.clone(),
                         branches_aready_seen.clone(),
                         branching_sessions.clone(),
+                        group_branches.clone(),
+                        temp_groups_already_under_investigation.clone(),
                     )?;
+                    println!("current graph: {:?}", &Dot::new(&g));
+                } else if !branches_aready_seen.contains_key(&current_branch) {
                 } else {
                     if let Some(new_node) = branches_aready_seen.get(&current_branch) {
-                        g.add_edge(previous_node, *new_node, "0".to_string());
+                        if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node
+                        {
+                            g.add_edge(previous_node, *new_node, "µ".to_string());
+                            println!("Added edge");
+                        }
                     } else {
                         panic!("Cannot happen")
                     }
@@ -691,7 +780,8 @@ fn get_graph_session(
     full_session: Vec<String>,
     roles: &[String],
     branches_receivers: HashMap<String, HashMap<String, Vec<String>>>,
-    branching_sessions: HashMap<String, String>,
+    branching_sessions: HashMap<String, Vec<String>>,
+    group_branches: HashMap<String, i32>,
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     // Create the new graph that will be returned in the end
     let mut g = Graph::<String, String>::new();
@@ -717,6 +807,9 @@ fn get_graph_session(
     let branches_aready_seen: HashMap<String, NodeIndex<u32>> =
         HashMap::with_hasher(state_branches_aready_seen);
 
+    let inside = Vec::<String>::new();
+    let groups_already_under_investigation = vec![inside];
+
     aux_get_graph(
         current_role,
         full_session,
@@ -730,6 +823,8 @@ fn get_graph_session(
         branches_receivers.clone(),
         branches_aready_seen,
         branching_sessions,
+        group_branches,
+        groups_already_under_investigation,
     )
 }
 
@@ -738,6 +833,7 @@ pub fn checker(
     tail_sessions: Vec<String>,
     branches_receivers: HashMap<String, HashMap<String, String>>,
     branching_sessions: HashMap<String, String>,
+    group_branches: HashMap<String, i32>,
 ) -> Result<Vec<String>, Box<dyn Error>> {
     println!("sessions: {:?}", &sessions);
     println!();
@@ -775,16 +871,41 @@ pub fn checker(
     );
     println!();
 
+    println!("branching_sessions: {:?}", &branching_sessions);
+    println!();
+
+    println!("group_branches: {:?}", &group_branches);
+    println!();
+
+    let state_branching_sessions = RandomState::new();
+    let mut update_branching_sessions: HashMap<String, Vec<String>> =
+        HashMap::with_hasher(state_branching_sessions);
+
+    for (branch, session) in branching_sessions {
+        let current_clean_session = clean_session(session.to_string())?;
+        update_branching_sessions.insert(
+            branch.to_string(),
+            current_clean_session[..(current_clean_session.len() - 1)].to_vec(),
+        );
+    }
+
+    println!(
+        "update_branching_sessions: {:?}",
+        &update_branching_sessions
+    );
+    println!();
+
     for (role, full_session) in clean_sessions.clone() {
         let graph = get_graph_session(
             &role,
             full_session,
             &roles,
             update_branches_receivers.clone(),
-            branching_sessions.clone(),
+            update_branching_sessions.clone(),
+            group_branches.clone(),
         )?;
         println!("Role: {:?}", &role);
-        println!("Graph: {:?}", Dot::new(&graph));
+        println!("Final graph: {:?}", Dot::new(&graph));
     }
 
     for (role, fields) in clean_sessions {
