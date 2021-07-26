@@ -3,18 +3,11 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::role::broadcast::RoleBroadcast;
-// use mpstthree::role::Role;
 use mpstthree::meshedchannels::MeshedChannels;
 
-// use std::any::type_name;
 use std::boxed::Box;
-// use std::collections::hash_map::RandomState;
-// use std::collections::HashMap;
 use std::error::Error;
-// use std::fmt;
 use std::marker;
-
-// use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
 

@@ -7,7 +7,6 @@ use mpstthree::role::broadcast::RoleBroadcast;
 
 use std::boxed::Box;
 use std::error::Error;
-use std::marker;
 
 // Get roles
 use mpstthree::role::a::RoleA;
@@ -27,30 +26,30 @@ use mpstthree::offer_mpst_b_to_c;
 
 type AtoCClose = End;
 type AtoBClose = End;
-type AtoBVideo<N> = Send<N, Recv<N, End>>;
-type AtoCVideo<N> = Recv<N, Send<N, RecursAtoC<N>>>;
+type AtoBVideo = Send<i32, Recv<i32, End>>;
+type AtoCVideo = Recv<i32, Send<i32, RecursAtoC>>;
 
-type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
+type InitA = Recv<i32, Send<i32, RecursAtoC>>;
 
 type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = End;
-type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+type BtoAVideo = <AtoBVideo as Session>::Dual;
 
-type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
-type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
+type RecursAtoC = Recv<Branches0AtoC, End>;
+type RecursBtoC = Recv<Branches0BtoC, End>;
 
-enum Branches0AtoC<N: marker::Send> {
+enum Branches0AtoC {
     End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
+    Video(MeshedChannels<AtoBVideo, AtoCVideo, StackAVideo, RoleA<RoleEnd>>),
 }
-enum Branches0BtoC<N: marker::Send> {
+enum Branches0BtoC {
     End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
-    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
+    Video(MeshedChannels<BtoAVideo, RecursBtoC, StackBVideo, RoleB<RoleEnd>>),
 }
-type Choose0fromCtoA<N> = Send<Branches0AtoC<N>, End>;
-type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
+type Choose0fromCtoA = Send<Branches0AtoC, End>;
+type Choose0fromCtoB = Send<Branches0BtoC, End>;
 
-type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
+type InitC = Send<i32, Recv<i32, Choose0fromCtoA>>;
 
 /// Stacks
 type StackAEnd = RoleEnd;
@@ -68,19 +67,26 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 /// Creating the MP sessions
 
 /// For C
-type EndpointCRecurs<N> =
-    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
+type EndpointCEnd = MeshedChannels<End, End, RoleEnd, RoleC<RoleEnd>>;
+type EndpointCVideo = MeshedChannels<
+    Send<i32, Recv<i32, Send<Branches0AtoC, End>>>,
+    Send<Branches0BtoC, End>,
+    RoleA<RoleA<RoleBroadcast>>,
+    RoleC<RoleEnd>,
+>;
+type EndpointCRecurs =
+    MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, RoleC<RoleEnd>>;
+type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, RoleC<RoleEnd>>;
 
 /// For A
-type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
-type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
+type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, RoleA<RoleEnd>>;
+type EndpointAFull = MeshedChannels<End, InitA, StackAInit, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoC<N>, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBFull = MeshedChannels<End, RecursBtoC, StackBRecurs, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
-fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
+fn server(s: EndpointBFull) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::End(s) => {
             s.close()
@@ -93,14 +99,14 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator(s: EndpointAFull) -> Result<(), Box<dyn Error>> {
     let (id, s) = s.recv()?;
     let s = s.send(id + 1);
 
     authenticator_recurs(s)
 }
 
-fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
+fn authenticator_recurs(s: EndpointARecurs) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_c!(s, {
         Branches0AtoC::End(s) => {
             s.close()
@@ -114,7 +120,7 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
+fn client(s: EndpointCFull) -> Result<(), Box<dyn Error>> {
     let xs: Vec<i32> = (1..100).map(|_| thread_rng().gen()).collect();
 
     let (_, s) = s.send(0).recv()?;
@@ -122,14 +128,10 @@ fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     client_recurs(s, xs, 1)
 }
 
-fn client_recurs(
-    s: EndpointCRecurs<i32>,
-    mut xs: Vec<i32>,
-    index: i32,
-) -> Result<(), Box<dyn Error>> {
+fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>, index: i32) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
-            let s: EndpointCFull<i32> =
+            let s: EndpointCFull =
                 choose_mpst_c_to_all!(s, Branches0AtoC::Video, Branches0BtoC::Video);
 
             let (_, s) = s.send(1).recv()?;
@@ -160,4 +162,53 @@ pub fn run_c_usecase_recursive() {
         Ok(())
     }()
     .is_ok());
+}
+
+pub fn run_c_usecase_recursive_checker() {
+    let graphs = mpstthree::checker_concat!(
+        EndpointAFull,
+        EndpointCFull,
+        EndpointBFull
+        =>
+        [
+            EndpointCVideo,
+            Branches0AtoC::Video,
+            Branches0BtoC::Video
+        ],
+        [
+            EndpointCEnd,
+            Branches0AtoC::End,
+            Branches0BtoC::End
+        ],
+        =>
+        {
+            Branches0AtoC,
+            End,
+            Video
+        },
+        {
+            Branches0BtoC,
+            End,
+            Video
+        }
+    )
+    .unwrap();
+
+    ////////////// Test graph A
+    let graph_a = &graphs["RoleA"];
+
+    assert_eq!(graph_a.node_count(), 9);
+    assert_eq!(graph_a.edge_count(), 9);
+
+    ////////////// Test graph B
+    let graph_b = &graphs["RoleB"];
+
+    assert_eq!(graph_b.node_count(), 5);
+    assert_eq!(graph_b.edge_count(), 5);
+
+    ////////////// Test graph C
+    let graph_c = &graphs["RoleC"];
+
+    assert_eq!(graph_c.node_count(), 7);
+    assert_eq!(graph_c.edge_count(), 7);
 }

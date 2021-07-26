@@ -1,902 +1,810 @@
-use std::any::type_name;
-use std::cmp::Reverse;
+use petgraph::graph::NodeIndex;
+use petgraph::Graph;
+
+use regex::Regex;
+
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
-type TupleHashmaps<'a, BH1, BH2> = (
-    &'a HashMap<String, &'a Vec<String>, BH1>,
-    &'a HashMap<String, &'a Vec<String>, BH2>,
-);
-
 #[doc(hidden)]
-pub(crate) fn checker_aux<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    meshedchannels: [&str; 4],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>, // branches_receivers, branches_sender
-    seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>> {
-    let head_session1 = get_head(meshedchannels[0]);
-    let head_session2 = get_head(meshedchannels[1]);
-    let head_stack = get_head(meshedchannels[2]);
-    let sender = get_name(&get_head(meshedchannels[3]));
+pub(crate) fn clean_session(session: String) -> Result<Vec<String>, Box<dyn Error>> {
+    // The regex expression
+    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
+    let mut temp = String::from(&session).replace("&", "");
 
-    // println!();
-    // println!("sender checker_aux: {:?}", &sender);
-    // println!("meshedchannels checker_aux: {:?}", &meshedchannels);
-    // println!("head_stack checker_aux: {:?}", &head_stack);
+    // Replace with regex expression -> term1::term2::term3 by term3
+    for caps in main_re.captures_iter(&session) {
+        temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
+    }
 
-    // for (key, value) in &*branches.0 {
-    // println!("Values: {} / {:?}", key, value);
-    // }
+    // Remove whitespaces
+    temp.retain(|c| !c.is_whitespace());
 
-    if !head_stack.contains("RoleEnd") {
-        let receiver = get_name(&head_stack);
+    // Get each field of the MeshedChannels
+    /* println!("temp: {:?}", &temp); */
+    let mut full_block = get_blocks(temp)?;
+    /* println!("full_block: {:?}", &full_block); */
 
-        let result = match sender.as_str() {
-            "A" => match_headers(
-                ["B", head_session1.as_str(), "C", head_session2.as_str()],
-                meshedchannels,
-                [sender, receiver],
-                [0, 0, 4, 4],
-                role,
-                branches,
-                seen,
-            )?,
-            "B" => match_headers(
-                ["A", head_session1.as_str(), "C", head_session2.as_str()],
-                meshedchannels,
-                [sender, receiver],
-                [0, 1, 4, 5],
-                role,
-                branches,
-                seen,
-            )?,
-            "C" => match_headers(
-                ["A", head_session1.as_str(), "B", head_session2.as_str()],
-                meshedchannels,
-                [sender, receiver],
-                [1, 1, 5, 5],
-                role,
-                branches,
-                seen,
-            )?,
-            "All" => match receiver.as_str() {
-                "A" => match_recv_from_all("A", ["B", "C"], meshedchannels, role, branches, seen)?,
-                "B" => match_recv_from_all("B", ["A", "C"], meshedchannels, role, branches, seen)?,
-                "C" => match_recv_from_all("C", ["A", "B"], meshedchannels, role, branches, seen)?,
-                _ => panic!("Wrong receiver on All, not recognized: {}", receiver),
-            },
-            _ => panic!("Wrong sender, not recognized: {}", sender),
-        };
+    // Get the name of the role
+    let name = &full_block[full_block.len() - 1]
+        .split(['<', '>'].as_ref())
+        .filter(|s| !s.is_empty())
+        .map(String::from)
+        .collect::<Vec<_>>()[0];
+
+    full_block.push(String::from(name));
+
+    Ok(full_block)
+}
+
+/// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
+///
+/// Remove the unnecessary terms before each :: (such as mpstthree in mpstthree::Session),
+/// and link each new String with its respective role.
+#[doc(hidden)]
+pub(crate) fn clean_sessions(
+    sessions: Vec<String>,
+) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
+    // The hasher of the HashMap
+    let state_branches_receivers = RandomState::new();
+
+    // The result
+    let mut all_sessions: HashMap<String, Vec<String>> =
+        HashMap::with_hasher(state_branches_receivers);
+
+    for session in sessions {
+        let full_block = clean_session(session)?;
+
+        let name = String::from(&full_block[full_block.len() - 1]);
+
+        // Insert the vec of fields (minus the name's role) linked to the name of the role
+        all_sessions.insert(name, full_block[..(full_block.len() - 2)].to_vec());
+    }
+
+    Ok(all_sessions)
+}
+
+// Get the roles from the tail_sessions (the ones from the method tail_str for MeshedChannels).
+#[doc(hidden)]
+pub(crate) fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
+    let mut roles = Vec::new();
+    for tail_session in tail_sessions {
+        // Split according to '\n'
+        let full_vec: Vec<&str> = tail_session
+            .split('\n')
+            .filter(|s| !s.is_empty())
+            .collect::<Vec<_>>();
+
+        // Split and push the name of the role of the MeshecChannels
+        roles.push(String::from(
+            full_vec[full_vec.len() - 1].split('<').collect::<Vec<_>>()[0],
+        ));
+    }
+
+    // Sort
+    roles.sort();
+
+    // Remove duplicates
+    roles.dedup();
+
+    Ok(roles)
+}
+
+/// Separate the different _fields_ of a stringified type.
+#[doc(hidden)]
+pub(crate) fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
+    let mut result = Vec::new();
+    let mut temp = "".to_string();
+
+    // Start at -1 because we want to remove the first `<` and the term before
+    let mut index = -1;
+
+    for i in full_block.chars() {
+        if i == '&' || i.is_whitespace() {
+        } else if i == '>' && index == 0 {
+            result.push(temp.to_string());
+            temp = "".to_string();
+        } else if i == '<' && index >= 0 {
+            temp = format!("{}{}", temp, i);
+            index += 1;
+        } else if i == '>' && index >= 0 {
+            temp = format!("{}{}", temp, i);
+            index -= 1;
+        } else if i == ',' && index == 0 {
+            result.push(temp);
+            temp = "".to_string();
+        } else if index >= 0 {
+            temp = format!("{}{}", temp, i);
+        } else if i == '<' {
+            index += 1;
+        } else if i == '>' {
+            index -= 1;
+        }
+    }
+
+    if !temp.is_empty() {
+        let mut chars = temp.chars();
+        chars.next_back();
+
+        result.push(chars.as_str().to_string());
+    }
+
+    Ok(result)
+}
+
+/// Get the start of a Recv/Send session, and its payload and continuation.
+#[doc(hidden)]
+pub(crate) fn get_head_payload_continuation(
+    full_block: String,
+) -> Result<Vec<String>, Box<dyn Error>> {
+    /* println!("full_block: {:?}", &full_block); */
+    if full_block == *"End" {
+        // If the full block is a `End` type
+        Ok(vec!["End".to_string()])
+    } else if full_block == *"RoleEnd" {
+        // If the full block is a `End` type
+        Ok(vec!["RoleEnd".to_string()])
+    } else {
+        let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
+        result.append(&mut get_blocks(full_block)?);
         Ok(result)
+    }
+}
+
+#[doc(hidden)]
+pub(crate) fn extract_index_node(
+    index_node: Vec<usize>,
+    depth_level: usize,
+) -> Result<String, Box<dyn Error>> {
+    Ok(format!(
+        "{}{}",
+        index_node[..depth_level]
+            .to_vec()
+            .into_iter()
+            .map(|i| format!("{}.", i))
+            .collect::<String>(),
+        index_node[depth_level]
+    ))
+}
+
+#[doc(hidden)]
+pub(crate) fn build_dual(session: String) -> Result<String, Box<dyn Error>> {
+    if session == *"End" {
+        Ok(session)
     } else {
-        Ok(String::from("0"))
-    }
-}
-
-#[doc(hidden)]
-fn match_recv_from_all<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    sender: &str,
-    receivers: [&str; 2],
-    meshedchannels: [&str; 4],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>> {
-    // println!("meshedchannels match_recv_from_all: {:?}",
-    // &meshedchannels);
-
-    match role {
-        receiver if receiver == receivers[0] => checker_aux(
-            [
-                meshedchannels[0],
-                meshedchannels[1],
-                &meshedchannels[2].replacen(
-                    &format!("RoleAllto{}", sender),
-                    &format!("Role{}", receiver),
-                    1,
-                ),
-                meshedchannels[3],
-            ],
-            role,
-            branches,
-            seen,
-        ),
-        receiver if receiver == receivers[1] => checker_aux(
-            [
-                meshedchannels[0],
-                meshedchannels[1],
-                &meshedchannels[2].replacen(
-                    &format!("RoleAllto{}", sender),
-                    &format!("Role{}", receiver),
-                    1,
-                ),
-                meshedchannels[3],
-            ],
-            role,
-            branches,
-            seen,
-        ),
-        _ => panic!("Wrong role, not recognized: {}", role),
-    }
-}
-
-#[doc(hidden)]
-fn match_headers<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    roles_and_sessions: [&str; 4], // role 1, session 1, role 2, session 2
-    meshedchannels: [&str; 4],
-    involved: [String; 2],
-    index: [usize; 4],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>> {
-    // println!(
-    //     "roles_and_sessions match_headers: {:?}",
-    //     &roles_and_sessions
-    // );
-    // println!("meshedchannels match_headers: {:?}",
-    // &meshedchannels); println!("involved match_headers:
-    // {:?}", &involved); println!("index match_headers:
-    // {:?}", &index); println!("seen match_headers: {:?}",
-    // &seen); println!("role match_headers: {:?}", &role);
-    // println!(
-    //     "roles_and_sessions match_headers: {:?}",
-    //     &roles_and_sessions
-    // );
-
-    match involved[1].as_str() {
-        h if h == roles_and_sessions[0] => match_full_types(
-            roles_and_sessions[1],
-            [
-                &get_tail(meshedchannels[0]),
-                meshedchannels[1],
-                &get_tail(meshedchannels[2]),
-                meshedchannels[3],
-            ],
-            involved,
-            [
-                &get_head_payload(meshedchannels[0]),
-                &get_head_payload(meshedchannels[1]),
-            ],
-            role,
-            branches,
-            seen,
-        ),
-        h if h == roles_and_sessions[2] => match_full_types(
-            roles_and_sessions[3],
-            [
-                meshedchannels[0],
-                &get_tail(meshedchannels[1]),
-                &get_tail(meshedchannels[2]),
-                meshedchannels[3],
-            ],
-            involved,
-            [
-                &get_head_payload(meshedchannels[1]),
-                &get_head_payload(meshedchannels[0]),
-            ],
-            role,
-            branches,
-            seen,
-        ),
-        h if h == "All" => all_type(meshedchannels, index, role, branches, seen),
-        _ => panic!("Wrong receiver, not recognized: {}", involved[1]),
-    }
-}
-
-#[doc(hidden)]
-fn match_full_types<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    head_session: &str,
-    meshedchannels: [&str; 4],
-    involved: [String; 2],
-    payloads: [&str; 2],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>> {
-    // println!("meshedchannels match_full_types: {:?}",
-    // &meshedchannels); println!("head_session
-    // match_full_types: {:?}", &head_session);
-
-    match head_session {
-        "Send" => send_type(
-            meshedchannels,
-            involved,
-            payloads,
-            role,
-            branches,
-            seen,
-            " + ",
-        ),
-        "Recv" => recv_type(
-            meshedchannels,
-            involved,
-            payloads[0],
-            role,
-            branches,
-            seen,
-            " & ",
-        ),
-        _ => panic!("Wrong session type, not recognized: {}", head_session),
-    }
-}
-
-#[doc(hidden)]
-pub fn parse_type_of<T>(_: T) -> String {
-    parse_type(type_name::<T>())
-}
-
-#[doc(hidden)]
-fn parse_type(s: &str) -> String {
-    let mut result = s;
-
-    // println!("Start result: {:?}", &result);
-
-    let mut to_remove: Vec<String> = Vec::new();
-
-    let mut temp_str = String::from("");
-
-    let mut previous_char = '$';
-
-    for c in result.chars() {
-        match c {
-            ':' if previous_char == ':' => {
-                temp_str.push(':');
-                if !to_remove.contains(&temp_str) {
-                    to_remove.push(temp_str);
-                }
-                temp_str = String::from("");
-            }
-            ':' => {
-                temp_str.push(c);
-                previous_char = c;
-            }
-            '_' => {
-                temp_str.push(c);
-                previous_char = c;
-            }
-            '&' => {
-                temp_str.push(c);
-                previous_char = c;
-            }
-            c if c.is_alphanumeric() => {
-                temp_str.push(c);
-                previous_char = c;
-            }
-            _ => {
-                temp_str = String::from("");
-                previous_char = '$';
-            }
+        let all_fields = get_head_payload_continuation(session)?;
+        match all_fields[0].as_str() {
+            "Recv" => Ok(format!(
+                "Send<{},{}>",
+                all_fields[1],
+                build_dual(all_fields[2].to_string())?
+            )),
+            "Send" => Ok(format!(
+                "Recv<{},{}>",
+                all_fields[1],
+                build_dual(all_fields[2].to_string())?
+            )),
+            _ => panic!("Wrond head"),
         }
     }
-
-    to_remove.sort_by_key(|b| Reverse(b.chars().count()));
-
-    // println!("to_remove: {:?}", &to_remove);
-
-    let mut temp = String::from(result);
-
-    for elt in to_remove.iter() {
-        temp = temp.replace(elt, "");
-    }
-
-    result = &temp;
-
-    // println!("End result: {:?}", &result);
-
-    result.chars().filter(|c| !c.is_whitespace()).collect()
 }
 
 #[doc(hidden)]
-fn get_name(head: &str) -> String {
-    match head {
-        "RoleAtoAll" => String::from("All"),
-        "RoleBtoAll" => String::from("All"),
-        "RoleCtoAll" => String::from("All"),
-        "RoleAlltoA" => String::from("A"),
-        "RoleAlltoB" => String::from("B"),
-        "RoleAlltoC" => String::from("C"),
-        "RoleA" => String::from("A"),
-        "RoleB" => String::from("B"),
-        "RoleC" => String::from("C"),
-        "RoleEnd" => String::from("End"),
-        "RoleBroadcast" => String::from("Broadcast"),
-        _ => panic!("Wrong head, not recognized: {}", head),
-    }
-}
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn aux_get_graph(
+    current_role: &str,
+    mut full_session: Vec<String>,
+    roles: &[String],
+    mut index_node: Vec<usize>,
+    mut previous_node: NodeIndex<u32>,
+    compare_end: Vec<String>,
+    mut depth_level: usize,
+    index_current_role: usize,
+    mut g: Graph<String, String>,
+    branches_receivers: HashMap<String, HashMap<String, Vec<String>>>,
+    mut branches_aready_seen: HashMap<String, NodeIndex<u32>>,
+    branching_sessions: HashMap<String, Vec<String>>,
+    group_branches: HashMap<String, i32>,
+    groups_already_under_investigation: Vec<Vec<String>>,
+) -> Result<Graph<String, String>, Box<dyn Error>> {
+    if compare_end == full_session {
+        index_node[depth_level] += 1;
+        /* println!(
+            "Adding node: {:?}",
+            &extract_index_node(index_node.clone(), depth_level)?
+        ); */
+        let new_node = g.add_node(extract_index_node(index_node, depth_level)?);
+        g.add_edge(previous_node, new_node, "0".to_string());
+        Ok(g)
+    } else {
+        // Get the size of the full_session
+        let size_full_session = full_session.len() - 1;
 
-#[doc(hidden)]
-fn get_head(s: &str) -> String {
-    // println!("get_head: {}", &s);
+        // Get the head of the stack
+        let stack = &get_head_payload_continuation(full_session[size_full_session].clone())?;
 
-    let mut result: Vec<&str> = s.split('<').collect();
-    if result[0] == "Either" {
-        return String::from(s);
-    }
-    result = result
-        .iter()
-        .map(|&x| {
-            if x.contains(',') {
-                let temp: Vec<&str> = x.split(',').collect();
-                temp[1]
+        /* println!("stack: {:?}", &stack); */
+
+        if stack.len() == 3 {
+            // If it is a simple choice
+
+            let mut number_of_send = 0;
+            let mut number_of_recv = 0;
+            let mut pos_recv = 0;
+
+            let mut choice_left = Vec::new();
+            let mut choice_right = Vec::new();
+
+            for (pos, session) in full_session[..(full_session.len() - 1)]
+                .to_vec()
+                .iter()
+                .enumerate()
+            {
+                match (
+                    get_head_payload_continuation(session.to_string())?[0].as_str(),
+                    number_of_send,
+                    number_of_recv,
+                    pos,
+                ) {
+                    ("Send", n_send, 0, n_pos) if n_send == n_pos => {
+                        number_of_send += 1;
+
+                        // Should be `Either<MC, MC>`
+                        let payload_either =
+                            &get_head_payload_continuation(session.to_string())?[1];
+                        /* println!("payload_either: {:?}", &payload_either); */
+
+                        // Should be `[Either, MC, MC]`
+                        let choices = get_head_payload_continuation(payload_either.to_string())?;
+                        /* println!("choices: {:?}", &choices); */
+
+                        // Split the new session
+                        let blocks_left = get_blocks(choices[1].to_string())?;
+                        let blocks_right = get_blocks(choices[2].to_string())?;
+                        /* println!("blocks_left: {:?}", &blocks_left); */
+                        /* println!("blocks_right: {:?}", &blocks_right); */
+
+                        // Get the index of the receiver
+                        let receiver = &get_head_payload_continuation(
+                            blocks_left[blocks_left.len() - 1].to_string(),
+                        )?[0];
+                        let index_receiver = roles.iter().position(|r| r == receiver).unwrap();
+
+                        // The offset depending on the relative positions of the roles
+                        let offset = (index_current_role > index_receiver) as usize;
+
+                        // Push the choice
+                        choice_left.push(
+                            build_dual(blocks_left[index_current_role - offset].to_string())?
+                                .to_string(),
+                        );
+                        choice_right.push(
+                            build_dual(blocks_right[index_current_role - offset].to_string())?
+                                .to_string(),
+                        );
+                        /* println!("choice_left: {:?}", &choice_left); */
+                        /* println!("choice_right: {:?}", &choice_right); */
+                    }
+                    ("Recv", 0, 0, new_pos) => {
+                        number_of_recv += 1;
+                        pos_recv = new_pos;
+                    }
+                    ("End", 0, _, _) => {}
+                    _ => panic!("Wrong session heads"),
+                }
+            }
+
+            // Increase the index for the nodes
+            index_node.push(0);
+
+            // Increase the depth level
+            depth_level += 1;
+
+            // Add the new `step`
+            let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+            /* println!(
+                "Adding node: {:?}",
+                &extract_index_node(index_node.clone(), depth_level)?
+            ); */
+
+            if number_of_recv == 1 {
+                // The offset depending on the relative positions of the roles
+                let offset = (index_current_role <= pos_recv) as usize;
+
+                // Add the new edge between the previous and the new node,
+                // and label it with the corresponding interaction
+                /* println!("current role for offer: {:?}", &current_role); */
+                /* println!("possible role for offer: {:?}", &roles[pos_recv + offset]); */
+                g.add_edge(
+                    previous_node,
+                    new_node,
+                    format!("& {}", &roles[pos_recv + offset]),
+                );
+                previous_node = new_node;
+
+                // Should be `Either<MC, MC>`
+                let payload_either =
+                    &get_head_payload_continuation(full_session[pos_recv].to_string())?[1];
+                /* println!("payload_either: {:?}", &payload_either); */
+
+                // Should be `[Either, MC, MC]`
+                let offers = get_head_payload_continuation(payload_either.to_string())?;
+                /* println!("offers: {:?}", &offers); */
+
+                // The left offer
+                let offer_left = clean_session(offers[1].clone())?;
+                /* println!("Offer left: {:?}", &offer_left); */
+                g = aux_get_graph(
+                    current_role,
+                    offer_left[..(offer_left.len() - 2)].to_vec(),
+                    roles,
+                    index_node.clone(),
+                    previous_node,
+                    compare_end.clone(),
+                    depth_level,
+                    index_current_role,
+                    g,
+                    branches_receivers.clone(),
+                    branches_aready_seen.clone(),
+                    branching_sessions.clone(),
+                    group_branches.clone(),
+                    groups_already_under_investigation.clone(),
+                )?;
+
+                /* println!("Current g: {:?}", &g); */
+
+                let offer_right = clean_session(offers[2].clone())?;
+                /* println!("Choose right: {:?}", &offer_right); */
+                aux_get_graph(
+                    current_role,
+                    offer_right[..(offer_right.len() - 2)].to_vec(),
+                    roles,
+                    index_node,
+                    previous_node,
+                    compare_end,
+                    depth_level,
+                    index_current_role,
+                    g,
+                    branches_receivers,
+                    branches_aready_seen,
+                    branching_sessions,
+                    group_branches,
+                    groups_already_under_investigation,
+                )
             } else {
-                x
-            }
-        })
-        .collect::<Vec<_>>();
+                // Add the new edge between the previous and the new node,
+                // and label it with the corresponding interaction
+                /* println!("current role for choose: {:?}", &current_role); */
+                g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
+                previous_node = new_node;
 
-    // println!("result get_head : {}", &result[0]);
+                // Add the corresponding stacks
+                choice_left.push(stack[1].to_string());
+                choice_right.push(stack[2].to_string());
+                /* println!("sent choice_left: {:?}", &choice_left); */
+                /* println!("sent choice_right: {:?}", &choice_right); */
 
-    String::from(result[0])
-}
-
-#[doc(hidden)]
-fn get_head_payload(s: &str) -> String {
-    // println!("get_head_payload: {}", &s);
-
-    let payload = &get_two_tails(s)[0];
-
-    // println!("payload get_head_payload: {}", &payload);
-
-    if payload.contains("::") {
-        String::from(payload.split("::").collect::<Vec<_>>()[1])
-    } else {
-        String::from(payload)
-    }
-}
-
-#[doc(hidden)]
-fn get_two_tails(s: &str) -> [String; 2] {
-    // println!("get_two_tails: {}", &s);
-
-    let mut result: [String; 2] = Default::default();
-    if s == "End" {
-        result[1].push_str("End");
-        return result;
-    }
-    let mut index = -1;
-    let mut index_session = 0;
-    for c in s.chars() {
-        match c {
-            ',' => {
-                if index <= 0 && !result[index_session].is_empty() {
-                    index_session += 1;
-                } else if index >= 0 {
-                    result[index_session].push(c);
-                }
-            }
-            '<' => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-                index += 1;
-            }
-            '>' => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-                index -= 1;
-            }
-            _ => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-            }
-        }
-    }
-
-    // println!("result get_two_tails: {}", &s);
-
-    if result[1].is_empty() {
-        let mut temp: [String; 2] = Default::default();
-        temp[0].push_str(&result[0]);
-        temp[1].push_str(&result[0]);
-        temp
-    } else {
-        result
-    }
-}
-
-#[doc(hidden)]
-fn get_fields(s: &str) -> [String; 4] {
-    // println!("get_fields: {}", &s);
-
-    let mut result: [String; 4] = Default::default();
-    let mut index = -1;
-    let mut index_session = 0;
-    let new_s = &s.replace("MeshedChannels", "");
-    for c in new_s.chars() {
-        match c {
-            ',' => {
-                if index <= 0 && !result[index_session].is_empty() {
-                    index_session += 1;
-                } else {
-                    result[index_session].push(c);
-                }
-            }
-            '<' => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-                index += 1;
-            }
-            '>' => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-                index -= 1;
-            }
-            _ => {
-                result[index_session].push(c);
-            }
-        }
-    }
-
-    // println!("result get_fields: {}", &s);
-
-    result
-}
-
-#[doc(hidden)]
-fn divide_either(s: &str) -> [String; 8] {
-    // println!("divide_either: {}", &s);
-
-    let mut result: [String; 8] = Default::default();
-    let mut index = -2;
-    let mut index_session = 0;
-    let new_s = s.replacen("Either", "", 1);
-    let new_s = &new_s.replace("MeshedChannels", "");
-    for c in new_s.chars() {
-        match c {
-            ',' => {
-                if index <= 0 && !result[index_session].is_empty() {
-                    index_session += 1;
-                } else {
-                    result[index_session].push(c);
-                }
-            }
-            '<' => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-                index += 1;
-            }
-            '>' => {
-                if index >= 0 {
-                    result[index_session].push(c);
-                }
-                index -= 1;
-            }
-            _ => {
-                result[index_session].push(c);
-            }
-        }
-    }
-
-    // println!("result divide_either: {:?}", &result);
-
-    result
-}
-
-#[doc(hidden)]
-fn get_tail(s: &str) -> String {
-    let result: Vec<&str> = s.split('<').collect();
-    result[1..].join("<")
-}
-
-#[doc(hidden)]
-fn get_dual(s: &str) -> String {
-    // println!("Dual: {}", &s);
-
-    let result = &s.replace("Send<", "Revc<");
-    let result = &result.replace("Recv<", "Send<");
-    let result = &result.replace("Revc<", "Recv<");
-    let result = switch_role(result, "A", "ADual");
-    let result = switch_role(&result, "C", "CDual");
-    let result = switch_role(&result, "B", "BDual");
-    let result = switch_role(&result, "AtoAll", "AlltoA");
-    let result = switch_role(&result, "BtoAll", "AlltoB");
-    switch_role(&result, "CtoAll", "AlltoC")
-}
-
-#[doc(hidden)]
-fn switch_role(s: &str, a: &str, b: &str) -> String {
-    let result = &s.replace(&format!("Role{}<", a), &format!("Role{}<", "XxX"));
-    let result = &result.replace(&format!("Role{}<", b), &format!("Role{}<", a));
-    let result = &result.replace(&format!("Role{}<", "XxX"), &format!("Role{}<", a));
-    String::from(result)
-}
-
-#[doc(hidden)]
-fn send_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    meshedchannels: [&str; 4],
-    involved: [String; 2],
-    payloads: [&str; 2],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-    symbol: &str,
-) -> Result<String, Box<dyn Error>> {
-    // println!("meshedchannels send_type: {:?}", &meshedchannels);
-    // println!("payload send_type: {:?}", &payloads);
-
-    if seen.contains(&String::from(payloads[0])) {
-        Ok(String::from("X"))
-    } else if branches.0.contains_key(payloads[0]) && branches.0.contains_key(payloads[1]) {
-        // println!("possible new stack: {:?}", &meshedchannels);
-        recurs_type(payloads, role, branches, seen, symbol)
-    } else {
-        // println!(
-        //     "payload send_type: {:?} / {:?} / {:?} / {:?}",
-        //     involved[0], involved[1], &payloads, role
-        // );
-
-        Ok(format!(
-            "{}!{}.{}",
-            involved[0],
-            involved[1],
-            checker_aux(meshedchannels, role, branches, seen)?
-        ))
-    }
-}
-
-#[doc(hidden)]
-fn recv_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    meshedchannels: [&str; 4],
-    involved: [String; 2],
-    payload: &str,
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-    symbol: &str,
-) -> Result<String, Box<dyn Error>> {
-    // println!("meshedchannels recv_type: {:?}", &meshedchannels);
-    // println!("payload recv_type: {:?}", &payload);
-
-    if payload.contains("Either") {
-        let branching: [String; 8] = divide_either(payload);
-        Ok(format!(
-            "( {} & {} )",
-            checker_aux(
-                [&branching[0], &branching[1], &branching[2], &branching[3]],
-                role,
-                branches,
-                seen
-            )?,
-            checker_aux(
-                [&branching[4], &branching[5], &branching[6], &branching[7]],
-                role,
-                branches,
-                seen
-            )?,
-        ))
-    } else if seen.contains(&String::from(payload)) {
-        Ok(String::from("X"))
-    } else if branches.0.contains_key(payload) {
-        recurs_type([payload, ""], role, branches, seen, symbol)
-    } else {
-        // println!(
-        //     "payload recv_type: {:?} / {:?} / {:?} / {:?}",
-        //     involved[0], involved[1], &payload, role
-        // );
-
-        Ok(format!(
-            "{}?{}.{}",
-            involved[0],
-            involved[1],
-            checker_aux(meshedchannels, role, branches, seen)?
-        ))
-    }
-}
-
-#[doc(hidden)]
-fn change_order(
-    sessions_and_stack: &[String; 4],
-    full_role: &str,
-    previous_role: &str,
-) -> (String, String) {
-    match full_role {
-        "RoleA" => match previous_role {
-            "RoleB" => (
-                get_dual(&sessions_and_stack[0]),
-                get_dual(&sessions_and_stack[1]),
-            ),
-            "RoleC" => (
-                get_dual(&sessions_and_stack[1]),
-                get_dual(&sessions_and_stack[0]),
-            ),
-            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-        },
-        "RoleB" => match previous_role {
-            "RoleA" => (
-                get_dual(&sessions_and_stack[0]),
-                get_dual(&sessions_and_stack[1]),
-            ),
-            "RoleC" => (
-                get_dual(&sessions_and_stack[0]),
-                get_dual(&sessions_and_stack[1]),
-            ),
-            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-        },
-        "RoleC" => match previous_role {
-            "RoleA" => (
-                get_dual(&sessions_and_stack[0]),
-                get_dual(&sessions_and_stack[1]),
-            ),
-            "RoleB" => (
-                get_dual(&sessions_and_stack[0]),
-                get_dual(&sessions_and_stack[1]),
-            ),
-            _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-        },
-        _ => panic!("Wrong roles {} / {}", previous_role, full_role),
-    }
-}
-
-#[doc(hidden)]
-fn recurs_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    payloads: [&str; 2],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-    symbol: &str,
-) -> Result<String, Box<dyn Error>> {
-    // println!("payload recurs_type: {:?}", &payloads);
-    // println!(
-    //     "branches_receivers recurs_type 1: {:?}",
-    //     branches.0.get(payloads[0])
-    // );
-    // println!(
-    //     "branches_receivers recurs_type 2: {:?}",
-    //     branches.0.get(payloads[1])
-    // );
-
-    let mut vec_result = Vec::new();
-    let mut recurs = false;
-
-    seen.push(String::from(payloads[0]));
-    seen.push(String::from(payloads[1]));
-
-    match (
-        branches.0.get(payloads[0]),
-        branches.0.get(payloads[1]),
-        branches.1.get(payloads[0]),
-    ) {
-        (Some(branches0), Some(branches1), Some(&stack)) => {
-            for (i, _) in branches0.iter().enumerate() {
-                let full_role: &str = &format!("Role{}", role);
-
-                let sessions_and_stack_0 = get_fields(&parse_type(&branches0[i]));
-                let sessions_and_stack_1 = get_fields(&parse_type(&branches1[i]));
-
-                let new_sessions_and_stack = match role {
-                    "A" => [
-                        sessions_and_stack_0[0].clone(),
-                        sessions_and_stack_1[0].clone(),
-                        sessions_and_stack_0[2].clone(),
-                        sessions_and_stack_0[3].clone(),
-                    ],
-                    "B" => [
-                        sessions_and_stack_0[0].clone(),
-                        sessions_and_stack_1[1].clone(),
-                        sessions_and_stack_0[2].clone(),
-                        sessions_and_stack_0[3].clone(),
-                    ],
-                    "C" => [
-                        sessions_and_stack_0[1].clone(),
-                        sessions_and_stack_1[1].clone(),
-                        sessions_and_stack_0[2].clone(),
-                        sessions_and_stack_0[3].clone(),
-                    ],
-                    _ => panic!("Wrong role: {}", role),
-                };
-
-                // println!("new_sessions_and_stack: {:?}",
-                // new_sessions_and_stack);
-
-                let previous_role: &str =
-                    new_sessions_and_stack[3].split('<').collect::<Vec<_>>()[0];
-
-                // println!("previous_role: {:?}", previous_role);
-
-                // println!("full_role: {:?}", full_role);
-
-                let new_order = change_order(&new_sessions_and_stack, full_role, previous_role);
-
-                let new_stack = &parse_type(&stack[i]);
-
-                // println!("new_stack: {:?}", new_stack);
-
-                // println!(
-                //     "Coco: {} / {} / {} / {}",
-                //     &new_order.0,
-                //     &new_order.1,
-                //     new_stack,
-                //     &format!("Role{}<RoleEnd>", role),
-                // );
-
-                let result_branch = checker_aux(
-                    [
-                        &new_order.0,
-                        &new_order.1,
-                        new_stack,
-                        &format!("Role{}<RoleEnd>", role),
-                    ],
-                    role,
-                    branches,
-                    seen,
+                g = aux_get_graph(
+                    current_role,
+                    choice_left,
+                    roles,
+                    index_node.clone(),
+                    previous_node,
+                    compare_end.clone(),
+                    depth_level,
+                    index_current_role,
+                    g,
+                    branches_receivers.clone(),
+                    branches_aready_seen.clone(),
+                    branching_sessions.clone(),
+                    group_branches.clone(),
+                    groups_already_under_investigation.clone(),
                 )?;
 
-                recurs = result_branch.contains(&String::from(".X"))
-                    || result_branch.contains(&String::from(" X "))
-                    || recurs;
-                vec_result.push(result_branch);
-
-                // println!("partial vec_result: {:?}",
-                // vec_result);
+                aux_get_graph(
+                    current_role,
+                    choice_right,
+                    roles,
+                    index_node,
+                    previous_node,
+                    compare_end,
+                    depth_level,
+                    index_current_role,
+                    g,
+                    branches_receivers,
+                    branches_aready_seen,
+                    branching_sessions,
+                    group_branches,
+                    groups_already_under_investigation,
+                )
             }
-        }
-        (Some(branches0), None, _) => {
-            for branch in branches0.iter() {
-                let sessions_and_stack = get_fields(&parse_type(branch));
+        } else if stack.len() == 2 {
+            // If it is a simple interaction
+            let head_stack = &stack[0];
 
-                // if symbol != " + " {
-                let result_branch = checker_aux(
-                    [
-                        &sessions_and_stack[0],
-                        &sessions_and_stack[1],
-                        &sessions_and_stack[2],
-                        &sessions_and_stack[3],
-                    ],
-                    role,
-                    branches,
-                    seen,
-                )?;
-                recurs = result_branch.contains(&String::from(".X")) || recurs;
-                vec_result.push(result_branch);
+            // The index of the head_stack among the roles
+            let index_head = roles.iter().position(|r| r == head_stack).unwrap();
+
+            // The offset depending on the relative positions of the roles
+            let offset = (index_current_role < index_head) as usize;
+
+            // The running session
+            let running_session =
+                get_head_payload_continuation(full_session[index_head - offset].to_string())?;
+
+            // If Send/Recv, everything is good, else, panic
+            if running_session[0] == *"Send" {
+                // Increase the index for the nodes
+                index_node[depth_level] += 1;
+
+                // Add the new `step`
+                let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                /* println!(
+                    "Adding node: {:?}",
+                    &extract_index_node(index_node.clone(), depth_level)?
+                ); */
+
+                // Add the new edge between the previous and the new node,
+                // and label it with the corresponding interaction
+                g.add_edge(
+                    previous_node,
+                    new_node,
+                    format!("{}!{}: {}", &current_role, &head_stack, &running_session[1]),
+                );
+
+                // Replace the old binary session with the new one
+                full_session[index_head - offset] = running_session[2].to_string();
+
+                // Replace the old stack with the new one
+                full_session[size_full_session] = stack[1].to_string();
+
+                // Update the previous node
+                previous_node = new_node;
+            } else if running_session[0] == *"Recv" {
+                if let Some(choice) = branches_receivers.get(&running_session[1]) {
+                    let state_all_branches = RandomState::new();
+                    let mut all_branches: HashMap<String, Vec<String>> =
+                        HashMap::with_hasher(state_all_branches);
+
+                    let mut all_branches_vec = Vec::new();
+
+                    for (branch, session) in choice {
+                        all_branches.insert(
+                            format!(
+                                "{}::{}",
+                                &running_session[1].to_string(),
+                                &branch.to_string()
+                            ),
+                            session.to_vec(),
+                        );
+
+                        all_branches_vec.push(format!(
+                            "{}::{}",
+                            &running_session[1].to_string(),
+                            &branch.to_string()
+                        ));
+                    }
+
+                    let mut node_added = false;
+
+                    for (current_branch, session) in all_branches.clone() {
+                        if !branches_aready_seen.contains_key(&current_branch)
+                            && !groups_already_under_investigation.contains(&all_branches_vec)
+                        {
+                            // If the node was not added
+                            if !node_added {
+                                // Increase the index for the nodes
+                                index_node.push(0);
+
+                                // Increase the depth level
+                                depth_level += 1;
+
+                                // Add the new `step`
+                                let new_node = g
+                                    .add_node(extract_index_node(index_node.clone(), depth_level)?);
+                                /* println!(
+                                    "Adding node: {:?}",
+                                    &extract_index_node(index_node.clone(), depth_level)?
+                                ); */
+
+                                // Add the corresponding edge
+                                g.add_edge(previous_node, new_node, format!("& {}", &head_stack));
+
+                                node_added = true;
+
+                                previous_node = new_node;
+                            }
+
+                            // Insert the new node/branch in the list of the ones already seen
+                            let index_group =
+                                if let Some(index) = group_branches.get(&current_branch) {
+                                    /* println!("index session: {:?}", &index); */
+                                    index
+                                } else {
+                                    panic!("Missing index")
+                                };
+
+                            for (temp_current_branch, temp_index) in group_branches.clone() {
+                                if temp_index == *index_group {
+                                    branches_aready_seen
+                                        .insert(temp_current_branch.clone(), previous_node);
+                                }
+                            }
+
+                            /* println!("new session: {:?}", &session); */
+                            /* println!("full session: {:?}", &full_session); */
+
+                            let mut temp_groups_already_under_investigation =
+                                groups_already_under_investigation.clone();
+                            temp_groups_already_under_investigation.push(all_branches_vec.clone());
+
+                            g = aux_get_graph(
+                                current_role,
+                                session[..(session.len() - 2)].to_vec(),
+                                roles,
+                                index_node.clone(),
+                                previous_node,
+                                compare_end.clone(),
+                                depth_level,
+                                index_current_role,
+                                g,
+                                branches_receivers.clone(),
+                                branches_aready_seen.clone(),
+                                branching_sessions.clone(),
+                                group_branches.clone(),
+                                temp_groups_already_under_investigation.clone(),
+                            )?;
+                            /* println!("current graph: {:?}", Dot::new(&g)); */
+                        } else if !branches_aready_seen.contains_key(&current_branch) {
+                        } else if let Some(new_node) = branches_aready_seen.get(&current_branch) {
+                            if !g.contains_edge(previous_node, *new_node)
+                                && previous_node != *new_node
+                            {
+                                g.add_edge(previous_node, *new_node, "µ".to_string());
+                                /* println!("Added edge"); */
+                            }
+                        } else {
+                            panic!("Should not happen")
+                        }
+                    }
+
+                    return Ok(g);
+                } else {
+                    index_node[depth_level] += 1;
+                    let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                    /* println!(
+                        "Adding node: {:?}",
+                        &extract_index_node(index_node.clone(), depth_level)?
+                    ); */
+                    g.add_edge(
+                        previous_node,
+                        new_node,
+                        format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
+                    );
+                    full_session[index_head - offset] = running_session[2].to_string();
+                    full_session[size_full_session] = stack[1].to_string();
+                    previous_node = new_node;
+                }
+            } else {
+                panic!("Did not found a correct session")
             }
-        }
-        _ => {
-            panic!(
-                "Error with hashmap and payload: {:?} / {:?} / {:?}",
-                branches.0, branches.1, payloads
+
+            aux_get_graph(
+                current_role,
+                full_session,
+                roles,
+                index_node,
+                previous_node,
+                compare_end,
+                depth_level,
+                index_current_role,
+                g,
+                branches_receivers,
+                branches_aready_seen,
+                branching_sessions,
+                group_branches,
+                groups_already_under_investigation,
             )
+        } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
+            let mut number_of_send = 0;
+
+            let mut all_branches = Vec::new();
+
+            /* println!("running RoleBroadcast"); */
+
+            // Check all the sessions
+            for (pos, session) in full_session[..(full_session.len() - 1)]
+                .to_vec()
+                .iter()
+                .enumerate()
+            {
+                match (
+                    get_head_payload_continuation(session.to_string())?[0].as_str(),
+                    number_of_send,
+                    pos,
+                ) {
+                    ("Send", n_send, n_pos) if n_send == n_pos => {
+                        number_of_send += 1;
+
+                        // Should be a specific `enum`
+                        let payload_either =
+                            &get_head_payload_continuation(session.to_string())?[1];
+                        /* println!("payload_either: {:?}", &payload_either); */
+
+                        // Update all_choices
+                        if let Some(choice) = branches_receivers.get(payload_either) {
+                            for key in choice.keys() {
+                                all_branches.push(format!(
+                                    "{}::{}",
+                                    payload_either.to_string(),
+                                    key.to_string()
+                                ));
+                            }
+                        } else {
+                            panic!("Missing the enum: {:?}", payload_either)
+                        }
+                    }
+                    _ => panic!("Wrong session heads"),
+                }
+            }
+
+            let mut node_added = false;
+
+            all_branches.sort();
+
+            for current_branch in all_branches.clone() {
+                /* println!("current branch: {:?}", &current_branch); */
+                /* println!("branches_aready_seen: {:?}", &branches_aready_seen); */
+                /* println!(
+                    "groups_already_under_investigation: {:?}",
+                    &groups_already_under_investigation
+                ); */
+                /* println!("all_branches: {:?}", &all_branches); */
+
+                if !branches_aready_seen.contains_key(&current_branch)
+                    && !groups_already_under_investigation.contains(&all_branches)
+                {
+                    // If the node was not added
+                    if !node_added {
+                        // Increase the index for the nodes
+                        index_node.push(0);
+
+                        // Increase the depth level
+                        depth_level += 1;
+
+                        // Add the new `step`
+                        let new_node =
+                            g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                        /* println!(
+                            "Adding node: {:?}",
+                            &extract_index_node(index_node.clone(), depth_level)?
+                        ); */
+
+                        // Add the corresponding edge
+                        g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
+
+                        node_added = true;
+
+                        previous_node = new_node;
+                    }
+
+                    let session = if let Some(session) = branching_sessions.get(&current_branch) {
+                        /* println!("working session: {:?}", &session); */
+                        session[..(session.len() - 1)].to_vec()
+                    } else {
+                        panic!("Missing session")
+                    };
+
+                    // Insert the new node/branch in the list of the ones already seen
+                    let index_group = if let Some(index) = group_branches.get(&current_branch) {
+                        /* println!("index session: {:?}", &index); */
+                        index
+                    } else {
+                        panic!("Missing index")
+                    };
+
+                    for (temp_current_branch, temp_index) in group_branches.clone() {
+                        if temp_index == *index_group {
+                            branches_aready_seen.insert(temp_current_branch.clone(), previous_node);
+                        }
+                    }
+
+                    /* println!("new session: {:?}", &session); */
+                    /* println!("full session: {:?}", &full_session); */
+
+                    let mut temp_groups_already_under_investigation =
+                        groups_already_under_investigation.clone();
+                    temp_groups_already_under_investigation.push(all_branches.clone());
+
+                    g = aux_get_graph(
+                        current_role,
+                        session,
+                        roles,
+                        index_node.clone(),
+                        previous_node,
+                        compare_end.clone(),
+                        depth_level,
+                        index_current_role,
+                        g,
+                        branches_receivers.clone(),
+                        branches_aready_seen.clone(),
+                        branching_sessions.clone(),
+                        group_branches.clone(),
+                        temp_groups_already_under_investigation.clone(),
+                    )?;
+                    /* println!("current graph: {:?}", Dot::new(&g)); */
+                } else if !branches_aready_seen.contains_key(&current_branch) {
+                } else if let Some(new_node) = branches_aready_seen.get(&current_branch) {
+                    if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
+                        g.add_edge(previous_node, *new_node, "µ".to_string());
+                        /* println!("Added edge"); */
+                    }
+                } else {
+                    panic!("Should not happen")
+                }
+            }
+
+            Ok(g)
+        } else {
+            panic!("Did not found a correct stack")
         }
-    }
-
-    let result = vec_result.join(symbol);
-
-    // println!("result recurs_type: {}", &result);
-    // println!();
-    // println!();
-
-    if recurs {
-        Ok(format!("µX( {} )", result))
-    } else {
-        Ok(format!("( {} )", result))
     }
 }
 
+/// Build the digraph from the current full_session.
 #[doc(hidden)]
-fn all_type<BH1: ::std::hash::BuildHasher, BH2: ::std::hash::BuildHasher>(
-    meshedchannels: [&str; 4],
-    index: [usize; 4],
-    role: &str,
-    branches: TupleHashmaps<BH1, BH2>,
-    seen: &mut Vec<String>,
-) -> Result<String, Box<dyn Error>> {
-    // println!("meshedchannels all_type: {:?}", &meshedchannels);
+pub(crate) fn get_graph_session(
+    current_role: &str,
+    full_session: Vec<String>,
+    roles: &[String],
+    branches_receivers: HashMap<String, HashMap<String, Vec<String>>>,
+    branching_sessions: HashMap<String, Vec<String>>,
+    group_branches: HashMap<String, i32>,
+) -> Result<Graph<String, String>, Box<dyn Error>> {
+    // Create the new graph that will be returned in the end
+    let mut g = Graph::<String, String>::new();
 
-    let payload_1 = get_head_payload(meshedchannels[0]);
-    let payload_2 = get_head_payload(meshedchannels[1]);
-    if payload_1.contains("Either") && payload_2.contains("Either") {
-        let branching_1: [String; 8] = divide_either(&payload_1);
-        let branching_2: [String; 8] = divide_either(&payload_2);
-        let tails: [String; 2] = get_two_tails(meshedchannels[2]);
+    // Start the index for the different `steps` of the choreography
+    let index_node = vec![0];
 
-        // println!("tails: {:?}", &tails);
+    // Add the first node for the graph
+    let previous_node = g.add_node(index_node[0].to_string());
 
-        Ok(format!(
-            "( {} + {} )",
-            checker_aux(
-                [
-                    &get_dual(&branching_1[index[0]]),
-                    &get_dual(&branching_2[index[1]]),
-                    &tails[0],
-                    meshedchannels[3]
-                ],
-                role,
-                branches,
-                seen
-            )?,
-            checker_aux(
-                [
-                    &get_dual(&branching_1[index[2]]),
-                    &get_dual(&branching_2[index[3]]),
-                    &tails[1],
-                    meshedchannels[3]
-                ],
-                role,
-                branches,
-                seen
-            )?,
-        ))
-    } else if payload_1.contains("Either") {
-        let branching_1: [String; 8] = divide_either(&payload_1);
-        let tails: [String; 2] = get_two_tails(meshedchannels[2]);
+    // The `End` vec that we will compare to `full_session`
+    let mut compare_end = vec!["End".to_string(); full_session.len() - 1];
+    compare_end.push("RoleEnd".to_string());
 
-        // println!("tails: {:?}", &tails);
+    // The index of the current_role among the roles
+    let index_current_role = roles.iter().position(|r| r == current_role).unwrap();
 
-        Ok(format!(
-            "( {} + {} )",
-            checker_aux(
-                [
-                    &get_dual(&branching_1[index[0]]),
-                    &get_dual(meshedchannels[1]),
-                    &tails[0],
-                    meshedchannels[3]
-                ],
-                role,
-                branches,
-                seen
-            )?,
-            checker_aux(
-                [
-                    &get_dual(&branching_1[index[2]]),
-                    &get_dual(meshedchannels[1]),
-                    &tails[1],
-                    meshedchannels[3]
-                ],
-                role,
-                branches,
-                seen
-            )?,
-        ))
-    } else if payload_2.contains("Either") {
-        let branching_2: [String; 8] = divide_either(&payload_2);
-        let tails: [String; 2] = get_two_tails(meshedchannels[2]);
+    // The index of the current_role among the roles
+    let start_depth_level = 0;
 
-        // println!("tails: {:?}", &tails);
+    // The branches already seen
+    let state_branches_aready_seen = RandomState::new();
+    let branches_aready_seen: HashMap<String, NodeIndex<u32>> =
+        HashMap::with_hasher(state_branches_aready_seen);
 
-        Ok(format!(
-            "( {} + {} )",
-            checker_aux(
-                [
-                    &get_dual(meshedchannels[0]),
-                    &get_dual(&branching_2[index[1]]),
-                    &tails[0],
-                    meshedchannels[3]
-                ],
-                role,
-                branches,
-                seen
-            )?,
-            checker_aux(
-                [
-                    &get_dual(meshedchannels[0]),
-                    &get_dual(&branching_2[index[3]]),
-                    &tails[1],
-                    meshedchannels[3]
-                ],
-                role,
-                branches,
-                seen
-            )?,
-        ))
-    } else {
-        panic!(
-            "Wrong payloads, not recognized: {:?} , {:?} and {:?} ( {:?} / {:?} ) for {:?} , {:?} and {:?}",
-            divide_either(&payload_1),
-            divide_either(&payload_2),
-            get_two_tails(meshedchannels[2]),
-            &payload_1,
-            &payload_2,
-            &meshedchannels[0],
-            &meshedchannels[1],
-            &meshedchannels[2]
-        );
-    }
+    let inside = Vec::<String>::new();
+    let groups_already_under_investigation = vec![inside];
+
+    aux_get_graph(
+        current_role,
+        full_session,
+        roles,
+        index_node,
+        previous_node,
+        compare_end,
+        start_depth_level,
+        index_current_role,
+        g,
+        branches_receivers,
+        branches_aready_seen,
+        branching_sessions,
+        group_branches,
+        groups_already_under_investigation,
+    )
 }
 
 //////////////////////////////////
@@ -906,354 +814,206 @@ mod tests {
     // Note this useful idiom: importing names from outer (for
     // mod tests) scope.
     use super::*;
+    use std::collections::hash_map::RandomState;
+    use std::collections::HashMap;
 
     #[test]
-    #[should_panic]
-    fn get_head_panic() {
-        get_name("");
-    }
-
-    #[test]
-    #[should_panic]
-    fn match_full_types_panic() {
-        let _ = match_full_types(
-            "",
-            ["", "", "", ""],
-            [String::from(""), String::from("")],
-            ["", ""],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
+    fn test_clean_session() {
+        let dirty_session = String::from(
+            "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+            binary::struct_trait::recv::Recv<checking_recursion::\
+            Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
+            ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
+            struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
+            End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
+            mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
+            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>",
         );
+
+        let clean_session_compare = vec![
+            "Recv<Branches0AtoB,End>".to_string(),
+            "Recv<i32,Send<i32,End>>".to_string(),
+            "RoleC<RoleC<RoleB<RoleEnd>>>".to_string(),
+            "RoleA<RoleEnd>".to_string(),
+            "RoleA".to_string(),
+        ];
+
+        assert_eq!(clean_session(dirty_session).unwrap(), clean_session_compare);
     }
 
     #[test]
-    #[should_panic]
-    fn match_headers_panic() {
-        let _ = match_headers(
-            ["", "", "", ""],
-            ["", "", "", ""],
-            [String::from(""), String::from("")],
-            [0, 0, 0, 0],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-        );
-    }
+    fn test_clean_sessions() {
+        let dirty_sessions = vec![
+            "mpstthree::meshedchannels::MeshedChannels<mpstthree::binary::\
+            struct_trait::recv::Recv<checking_recursion::Branches0AtoB, mpstthree\
+            ::binary::struct_trait::end::End>, mpstthree::binary::\
+            struct_trait::end::End, mpstthree::role::b::RoleB<mpstthree::role\
+            ::end::RoleEnd>, mpstthree::role::a::RoleA<mpstthree::role::end::\
+            RoleEnd>>"
+                .to_string(),
+            "mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+            binary::struct_trait::end::End, mpstthree::binary::struct_trait::\
+            recv::Recv<i32, mpstthree::binary::struct_trait::send::Send<\
+            i32, mpstthree::binary::struct_trait::recv::Recv<checking_recursion\
+            ::Branches0CtoB, mpstthree::binary::struct_trait::end::End>>>, mpstthree\
+            ::role::b::RoleB<mpstthree::role::b::RoleB<mpstthree::role::b::RoleB\
+            <mpstthree::role::end::RoleEnd>>>, mpstthree::role::c::RoleC<\
+            mpstthree::role::end::RoleEnd>>"
+                .to_string(),
+            "mpstthree::meshedchannels::\
+            MeshedChannels<mpstthree::binary::struct_trait::send::Send<\
+            checking_recursion::Branches0AtoB, mpstthree::binary::struct_trait\
+            ::end::End>, mpstthree::binary::struct_trait::send::Send<i32, mpstthree\
+            ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::struct_trait\
+            ::send::Send<checking_recursion::Branches0CtoB, mpstthree::binary::\
+            struct_trait::end::End>>>, mpstthree::role::c::RoleC<mpstthree::\
+            role::c::RoleC<mpstthree::role::broadcast::RoleBroadcast>>, mpstthree\
+            ::role::b::RoleB<mpstthree::role::end::RoleEnd>>"
+                .to_string(),
+        ];
 
-    #[test]
-    fn get_head_either() {
-        let test = "Either<Left, Right>";
-        assert_eq!(get_head(test), String::from(test));
-    }
+        // The hasher of the HashMap
+        let state_clean_sessions_compare = RandomState::new();
+        // The result
+        let mut clean_sessions_compare: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_clean_sessions_compare);
 
-    #[test]
-    fn send_type_x() {
-        let test = send_type(
-            ["", "", "", ""],
-            [String::from(""), String::from("")],
-            ["A", ""],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![String::from("A")],
-            "",
-        )
-        .unwrap();
-
-        assert_eq!(test, String::from("X"));
-    }
-
-    #[test]
-    #[should_panic]
-    fn recurs_type_panic() {
-        let _ = recurs_type(
-            ["", ""],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-            "",
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn match_recv_from_all_panic_at_checker_aux_0() {
-        let _ = match_recv_from_all(
-            "",
-            ["", ""],
-            ["", "", "", ""],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn match_recv_from_all_panic_at_checker_aux_1() {
-        let _ = match_recv_from_all(
-            "",
-            ["", ""],
-            ["A", "", "", ""],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn match_recv_from_all_panic() {
-        let _ = match_recv_from_all(
-            "",
-            ["", ""],
-            ["", "", "", ""],
-            "A",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn all_type_panic() {
-        let _ = all_type(
-            ["", "", "", ""],
-            [0, 0, 0, 0],
-            "",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn checker_aux_panic() {
-        let _ = checker_aux(
-            [
-                "End",
-                "End",
-                "RoleAlltoA<RoleEnd, RoleEnd>",
-                "RoleA<RoleEnd>",
+        clean_sessions_compare.insert(
+            "RoleC".to_string(),
+            vec![
+                "End".to_string(),
+                "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string(),
+                "RoleB<RoleB<RoleB<RoleEnd>>>".to_string(),
             ],
-            "A",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
         );
-    }
-
-    #[test]
-    #[should_panic]
-    fn checker_aux_panic_a() {
-        let _ = checker_aux(
-            [
-                "End",
-                "End",
-                "RoleAlltoA<RoleEnd, RoleEnd>",
-                "RoleA<RoleEnd>",
+        clean_sessions_compare.insert(
+            "RoleA".to_string(),
+            vec![
+                "Recv<Branches0AtoB,End>".to_string(),
+                "End".to_string(),
+                "RoleB<RoleEnd>".to_string(),
             ],
-            "A",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
         );
-    }
-
-    #[test]
-    #[should_panic]
-    fn checker_aux_panic_b() {
-        let _ = checker_aux(
-            [
-                "End",
-                "End",
-                "RoleAlltoB<RoleEnd, RoleEnd>",
-                "RoleB<RoleEnd>",
+        clean_sessions_compare.insert(
+            "RoleB".to_string(),
+            vec![
+                "Send<Branches0AtoB,End>".to_string(),
+                "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>".to_string(),
+                "RoleC<RoleC<RoleBroadcast>>".to_string(),
             ],
-            "B",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
         );
-    }
-
-    #[test]
-    #[should_panic]
-    fn checker_aux_panic_c() {
-        let _ = checker_aux(
-            [
-                "End",
-                "End",
-                "RoleAlltoC<RoleEnd, RoleEnd>",
-                "RoleC<RoleEnd>",
-            ],
-            "C",
-            (&HashMap::new(), &HashMap::new()),
-            &mut vec![],
-        );
-    }
-
-    #[test]
-    fn parse_type_test() {
-        let test = parse_type("&mpstthree::binary::struct_trait::recv::Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, mpstthree::binary::struct_trait::recv::Recv<06_a_usecase_recursive::Branche0CtoB<i32>, mpstthree::binary::struct_trait::end::End>>>");
 
         assert_eq!(
-            test,
-            String::from("Recv<i32,Send<i32,Recv<Branche0CtoB<i32>,End>>>")
+            clean_sessions_compare,
+            clean_sessions(dirty_sessions).unwrap()
         );
     }
 
     #[test]
-    fn change_order_test() {
-        let test = change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleB<RoleEnd>>"),
-            ],
-            "RoleA",
-            "RoleB",
-        );
+    fn test_roles() {
+        let dirty_roles = vec![
+            "Recv<End<>>\nEnd<>\nRoleB<RoleEnd<>>\nRoleA<RoleEnd<>>".to_string(),
+            "End<>\nRecv<Send<Recv<End<>>>>\nRoleB<RoleB<\
+                RoleB<RoleEnd<>>>>\nRoleC<RoleEnd<>>"
+                .to_string(),
+            "Send<End<>>\nSend<Recv<Send<End<>>>>\nRoleC<\
+                RoleC<RoleBroadcast<>>>\nRoleB<RoleEnd<>>"
+                .to_string(),
+        ];
 
-        assert_eq!(test.0, "Recv<End>");
-        assert_eq!(test.1, "Send<End>");
+        let clean_roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
 
-        ////////////////////////////////////////////
-
-        let test = change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleA<RoleEnd>>"),
-            ],
-            "RoleB",
-            "RoleA",
-        );
-
-        assert_eq!(test.0, "Recv<End>");
-        assert_eq!(test.1, "Send<End>");
-
-        ////////////////////////////////////////////
-
-        let test = change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleC<RoleEnd>>"),
-            ],
-            "RoleA",
-            "RoleC",
-        );
-
-        assert_eq!(test.0, "Send<End>");
-        assert_eq!(test.1, "Recv<End>");
-
-        ////////////////////////////////////////////
-
-        let test = change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleA<RoleEnd>>"),
-            ],
-            "RoleC",
-            "RoleA",
-        );
-
-        assert_eq!(test.0, "Recv<End>");
-        assert_eq!(test.1, "Send<End>");
-
-        ////////////////////////////////////////////
-
-        let test = change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleC<RoleEnd>>"),
-            ],
-            "RoleB",
-            "RoleC",
-        );
-
-        assert_eq!(test.0, "Recv<End>");
-        assert_eq!(test.1, "Send<End>");
-
-        ////////////////////////////////////////////
-
-        let test = change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleB<RoleEnd>>"),
-            ],
-            "RoleC",
-            "RoleB",
-        );
-
-        assert_eq!(test.0, "Recv<End>");
-        assert_eq!(test.1, "Send<End>");
+        assert_eq!(clean_roles, roles(dirty_roles).unwrap());
     }
 
     #[test]
-    #[should_panic]
-    fn change_order_panic_a_none() {
-        change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleB<RoleEnd>>"),
-            ],
-            "RoleA",
-            "Role",
+    fn test_get_blocks() {
+        let dirty_blocks = "MeshedChannels<Send<Branches0AtoB,End>,Send\
+        <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
+        <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
+            .to_string();
+
+        let clean_blocks = vec![
+            "Send<Branches0AtoB,End>",
+            "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+            "RoleC<RoleC<RoleBroadcast>>",
+            "RoleB<RoleEnd>",
+        ];
+
+        assert_eq!(clean_blocks, get_blocks(dirty_blocks).unwrap());
+    }
+
+    #[test]
+    fn test_get_head_payload_continuation() {
+        // End
+        let dirty_end = "End".to_string();
+
+        let clean_end = vec!["End".to_string()];
+
+        assert_eq!(clean_end, get_head_payload_continuation(dirty_end).unwrap());
+
+        // RoleEnd
+        let dirty_role_end = "RoleEnd".to_string();
+
+        let clean_role_end = vec!["RoleEnd".to_string()];
+
+        assert_eq!(
+            clean_role_end,
+            get_head_payload_continuation(dirty_role_end).unwrap()
         );
+
+        // Random
+        let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string();
+
+        let clean_random = vec![
+            "Recv".to_string(),
+            "i32".to_string(),
+            "Send<i32,Recv<Branches0CtoB,End>>".to_string(),
+        ];
+
+        assert_eq!(
+            clean_random,
+            get_head_payload_continuation(dirty_random).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_extract_index_node() {
+        let index_node = vec![0, 1, 4, 5];
+
+        assert_eq!(
+            "0.1.4.5".to_string(),
+            extract_index_node(index_node.to_vec(), 3).unwrap()
+        );
+
+        assert_eq!(
+            "0.1.4".to_string(),
+            extract_index_node(index_node.to_vec(), 2).unwrap()
+        );
+
+        assert_eq!(
+            "0".to_string(),
+            extract_index_node(index_node.to_vec(), 0).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_build_dual() {
+        let session = "Recv<i32,Send<Branches0CtoB,End>>".to_string();
+        let dual_session = "Send<i32,Recv<Branches0CtoB,End>>".to_string();
+
+        assert_eq!(dual_session, build_dual(session).unwrap());
     }
 
     #[test]
     #[should_panic]
-    fn change_order_panic_b_none() {
-        change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleB<RoleEnd>>"),
-            ],
-            "RoleB",
-            "Role",
-        );
-    }
+    fn test_build_dual_panic() {
+        let session = "Coco<i32,Banana<Branches0CtoB,End>>".to_string();
 
-    #[test]
-    #[should_panic]
-    fn change_order_panic_c_none() {
-        change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleB<RoleEnd>>"),
-            ],
-            "RoleC",
-            "Role",
-        );
-    }
-
-    #[test]
-    #[should_panic]
-    fn change_order_panic_none_a() {
-        change_order(
-            &[
-                String::from("Send<End>"),
-                String::from("Recv<End>"),
-                String::from("RoleEnd"),
-                String::from("RoleB<RoleEnd>>"),
-            ],
-            "Role",
-            "RoleA",
-        );
+        build_dual(session).unwrap();
     }
 }

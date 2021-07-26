@@ -14,9 +14,6 @@ use ntest::timeout;
 
 #[test]
 fn unit_tests() {
-    // Checker result
-    unit::checker::test_checker();
-
     // Role methods and fields
     unit::roles::role_end_fields_1();
     unit::roles::role_end_fields_2();
@@ -32,20 +29,6 @@ fn unit_tests() {
     // MeshedChannels methods and fields
     unit::meshedchannels::meshedchannels_fields();
     unit::meshedchannels::meshedchannels_methods();
-}
-
-#[test]
-#[should_panic]
-fn unit_tests_panic_test_checker_panic_stack() {
-    // Test panic with wrong stack
-    unit::checker_panic::test_checker_panic_stack();
-}
-
-#[test]
-#[should_panic]
-fn unit_tests_panic_test_checker_panic_name() {
-    // Test panic with wrong name
-    unit::checker_panic::test_checker_panic_name();
 }
 
 #[test]
@@ -107,15 +90,15 @@ fn basics() {
 
     // Usecase recursive A
     basics::a_usecase_recursive::run_a_usecase_recursive();
-    // a_usecase_recursive::run_a_usecase_recursive_checker();
+    basics::a_usecase_recursive::run_a_usecase_recursive_checker();
 
     // Usecase recursive B
     basics::b_usecase_recursive::run_b_usecase_recursive();
-    // b_usecase_recursive::run_b_usecase_recursive_checker();
+    basics::b_usecase_recursive::run_b_usecase_recursive_checker();
 
     // Usecase recursive C
     basics::c_usecase_recursive::run_c_usecase_recursive();
-    // c_usecase_recursive::run_c_usecase_recursive_checker();
+    basics::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
 // Tests for macros with three participants but any role
@@ -189,15 +172,15 @@ fn cases_tests_mpst_simple_short() {
 
     // Usecase recursive A
     baking::basics::a_usecase_recursive::run_a_usecase_recursive();
-    // baking::a_usecase_recursive::run_a_usecase_recursive_checker();
+    baking::basics::a_usecase_recursive::run_a_usecase_recursive_checker();
 
     // Usecase recursive B
     baking::basics::b_usecase_recursive::run_b_usecase_recursive();
-    // baking::b_usecase_recursive::run_b_usecase_recursive_checker();
+    baking::basics::b_usecase_recursive::run_b_usecase_recursive_checker();
 
     // Usecase recursive C
     baking::basics::c_usecase_recursive::run_c_usecase_recursive();
-    // baking::c_usecase_recursive::run_c_usecase_recursive_checker();
+    baking::basics::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
 // Tests for baking with more than three participants

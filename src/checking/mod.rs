@@ -1,143 +1,254 @@
-//! This module is a beta feature that only works with
-//! RoleA, RoleB and RoleC. It also has various
-//! prerequisites that are shown in tests 06.
+// use petgraph::dot::Dot;
+use petgraph::Graph;
 
-mod aux_checker;
-pub mod main;
-pub mod new_test;
-
-use self::aux_checker::{checker_aux, parse_type_of};
-
-use crate::binary::struct_trait::session::Session;
-use crate::meshedchannels::MeshedChannels;
-use crate::role::Role;
-
+use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
-/// Displays the local endpoints of each roles.
-/// It is required that the `MeshedChannels` are the root ones,
-/// and not a partial part included in a bigger one. It is
-/// useful for checking whether the implemented local
-/// endpoints are the expected ones.
-///
-/// Returns the 3 strings if everything went right.
-/// TODO: Adapt checker for RoleBroadcast
-/// Useful???
-pub fn checker<
-    S0,
-    S1,
-    S2,
-    R1,
-    R2,
-    R3,
-    N1,
-    N2,
-    N3,
-    BH1: ::std::hash::BuildHasher,
-    BH2: ::std::hash::BuildHasher,
->(
-    s1: MeshedChannels<S0, <S2 as Session>::Dual, R1, N1>,
-    s2: MeshedChannels<<S0 as Session>::Dual, S1, R2, N2>,
-    s3: MeshedChannels<S2, <S1 as Session>::Dual, R3, N3>,
-    branches_receivers: &HashMap<String, &Vec<String>, BH1>,
-    branches_sender: &HashMap<String, &Vec<String>, BH2>,
-) -> Result<(String, String, String), Box<dyn Error>>
-where
-    S0: Session + 'static,
-    S1: Session + 'static,
-    S2: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    R3: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
-    N3: Role + 'static,
-{
-    let result_1 = checker_aux(
-        [
-            &parse_type_of(&s1.session1),
-            &parse_type_of(&s1.session2),
-            &parse_type_of(&s1.stack),
-            &parse_type_of(&s1.name),
-        ],
-        "A",
-        (branches_receivers, branches_sender),
-        &mut vec![],
-    )?;
-    // println!("result A: {}", &result_1);
-    let result_2 = checker_aux(
-        [
-            &parse_type_of(&s2.session1),
-            &parse_type_of(&s2.session2),
-            &parse_type_of(&s2.stack),
-            &parse_type_of(&s2.name),
-        ],
-        "B",
-        (branches_receivers, branches_sender),
-        &mut vec![],
-    )?;
-    // println!("result B: {}", &result_2);
-    let result_3 = checker_aux(
-        [
-            &parse_type_of(&s3.session1),
-            &parse_type_of(&s3.session2),
-            &parse_type_of(&s3.stack),
-            &parse_type_of(&s3.name),
-        ],
-        "C",
-        (branches_receivers, branches_sender),
-        &mut vec![],
-    )?;
-    // println!("result C: {}", &result_3);
+mod aux_checker;
 
-    Ok((
-        format!("A: {}", &result_1),
-        format!("B: {}", &result_2),
-        format!("C: {}", &result_3),
-    ))
+use aux_checker::*;
+
+/// The macro that allows to create digraphs from each endpoint, along with `enum` if needed.
+///
+/// # Arguments
+///
+/// * Each starting endpoint, separated by a comma
+/// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice
+/// * \[Optional\] Each `enum`, along with their respective branch/variant, separated by a comma.
+/// Those `enum` must not have any parameter, such as `<i32>`.
+#[macro_export]
+macro_rules! checker_concat {
+    (
+        $(
+            $sessiontype: ty
+        ),+ $(,)?
+        =>
+        $(
+            [
+                $branch_stack: ty,
+                $(
+                    $corresponding_branch: path
+                ),+ $(,)?
+            ]
+        ),+ $(,)?
+        =>
+        $(
+            {
+                $choice: ty,
+                $(
+                    $branches: ident
+                ),+ $(,)?
+            }
+        ),+ $(,)?
+    ) => {
+        {
+            let mut sessions = Vec::new();
+            let mut tail_sessions = Vec::new();
+            let state_branching_sessions = std::collections::hash_map::RandomState::new();
+            let mut branching_sessions: std::collections::HashMap<String, String> =
+                std::collections::HashMap::with_hasher(state_branching_sessions);
+
+            let state_group_branches = std::collections::hash_map::RandomState::new();
+            let mut group_branches: std::collections::HashMap<String, i32> =
+                std::collections::HashMap::with_hasher(state_group_branches);
+
+            $(
+                sessions.push(String::from(std::any::type_name::<$sessiontype>()));
+                tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
+            )+
+
+            let mut index = 0;
+
+            $(
+                let temp_branch_stack = String::from(std::any::type_name::<$branch_stack>());
+                $(
+                    branching_sessions.insert(
+                        stringify!($corresponding_branch).to_string(),
+                        temp_branch_stack.clone()
+                    );
+                    group_branches.insert(
+                        stringify!($corresponding_branch).to_string(),
+                        index
+                    );
+                )+
+                index += 1;
+            )+
+
+            mpst_seq::checking!(
+                $(
+                    {
+                        $choice: ty,
+                        $(
+                            $branches: ident,
+                        )+
+                    }
+                )+
+            );
+
+            mpstthree::checking::checker(
+                sessions,
+                tail_sessions,
+                branches_receivers,
+                branching_sessions,
+                group_branches
+            )
+
+            /* println!("result: {:?}", result); */
+        }
+    };
+    (
+        $(
+            $sessiontype: ty
+        ),+ $(,)?
+    ) => {
+        {
+            let mut sessions = Vec::new();
+            let mut tail_sessions = Vec::new();
+
+            $(
+                sessions.push(String::from(std::any::type_name::<$sessiontype>()));
+                tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
+            )+
+
+            let state_branches = std::collections::hash_map::RandomState::new();
+            let mut branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
+                std::collections::HashMap::with_hasher(state_branches);
+
+            let state_branching_sessions = std::collections::hash_map::RandomState::new();
+            let mut branching_sessions: std::collections::HashMap<String, String> =
+                std::collections::HashMap::with_hasher(state_branching_sessions);
+
+            let state_group_branches = std::collections::hash_map::RandomState::new();
+            let mut group_branches: std::collections::HashMap<String, i32> =
+                std::collections::HashMap::with_hasher(state_group_branches);
+
+            mpstthree::checking::checker(
+                sessions,
+                tail_sessions,
+                branches_receivers,
+                branching_sessions,
+                group_branches
+            )
+
+            /* println!("result: {:?}", result); */
+        }
+    };
 }
 
-/// macro to create hashmap function, necessary for
-/// recursion. Need to sort out the path
-#[macro_export]
 #[doc(hidden)]
-macro_rules! checker_hashmaps {
-    // ($( $branch: ty, $func: ident, $branch_type: expr, { $( $pat: path, $branch_name: expr, $label: path, )* }, )*) => {
-        ({ $( $branch: path, $func: ident, { $( $pat: path, )* }, )* }) => {
+pub fn checker(
+    sessions: Vec<String>,
+    tail_sessions: Vec<String>,
+    branches_receivers: HashMap<String, HashMap<String, String>>,
+    branching_sessions: HashMap<String, String>,
+    group_branches: HashMap<String, i32>,
+) -> Result<HashMap<String, Graph<String, String>>, Box<dyn Error>> {
+    /* println!("sessions: {:?}", &sessions); */
+    /* println!(); */
 
-        let mut hm: HashMap<String, &Vec<String>> = HashMap::new();
+    let clean_sessions = clean_sessions(sessions.to_vec())?;
 
-        fn type_of<T>(_: T) -> &'static str {
-            std::any::type_name::<T>()
+    /* println!("clean_sessions: {:?}", &clean_sessions); */
+
+    /* println!("tail_sessions: {:?}", &tail_sessions); */
+    /* println!(); */
+
+    let roles = roles(tail_sessions)?;
+
+    if roles.len() != sessions.len() {
+        panic!("The numbers of roles and sessions are not equal")
+    }
+
+    /* println!("roles: {:?}", &roles); */
+
+    let state_branches = RandomState::new();
+    let mut update_branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        HashMap::with_hasher(state_branches);
+
+    /* println!("branches_receivers: {:?}", &branches_receivers); */
+    /* println!(); */
+
+    for (choice, branches) in branches_receivers {
+        let state_branch = RandomState::new();
+        let mut temp_branch: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branch);
+
+        for (branch, session) in branches {
+            /* println!("Dirty session: {:?}", &session); */
+            /* println!("Clean session: {:?}", clean_session(session.to_string())?); */
+            temp_branch.insert(branch, clean_session(session)?);
         }
 
-        $(
-            impl<N: marker::Send> fmt::Display for $branch<N> {
-                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                    match self {
-                        $(
-                            $pat(s) => write!(f, stringify!($pat), type_of(&s)),
-                        )*
-                    }
-                }
-            }
+        update_branches_receivers.insert(choice, temp_branch);
+    }
 
-            fn $func() -> Vec<String> {
-                let vec = Vec::new();
+    /* println!("clean_sessions: {:?}", &clean_sessions); */
+    /* println!(); */
 
-                $(
-                    let (s, _) = <_ as Session>::new();
+    /* println!("roles: {:?}", &roles); */
+    /* println!(); */
 
-                    vec.push((&$pat::<i32>(s).to_string()));
-                )*
+    /* println!(
+        "update_branches_receivers: {:?}",
+        &update_branches_receivers
+    ); */
+    /* println!(); */
 
-                vec
-            }
+    /* println!("branching_sessions: {:?}", &branching_sessions); */
+    /* println!(); */
 
-            hm.insert(String::from(stringify!($branch)), &$func());
-        )*
+    /* println!("group_branches: {:?}", &group_branches); */
+    /* println!(); */
 
-        hm
-    };
+    let state_branching_sessions = RandomState::new();
+    let mut update_branching_sessions: HashMap<String, Vec<String>> =
+        HashMap::with_hasher(state_branching_sessions);
+
+    for (branch, session) in branching_sessions {
+        let current_clean_session = clean_session(session.to_string())?;
+        update_branching_sessions.insert(
+            branch.to_string(),
+            current_clean_session[..(current_clean_session.len() - 1)].to_vec(),
+        );
+    }
+
+    /* println!(
+        "update_branching_sessions: {:?}",
+        &update_branching_sessions
+    ); */
+    /* println!(); */
+
+    let state_result = RandomState::new();
+    let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
+
+    for (role, full_session) in clean_sessions.clone() {
+        let graph = get_graph_session(
+            &role,
+            full_session,
+            &roles,
+            update_branches_receivers.clone(),
+            update_branching_sessions.clone(),
+            group_branches.clone(),
+        )?;
+        /* println!("Role: {:?}", &role); */
+        /* println!("Final graph: {:?}", Dot::new(&graph)); */
+        result.insert(role.to_string(), graph);
+    }
+
+    // for (role, fields) in clean_sessions {
+    //     /* println!("role: {:?}:", role); */
+    //     /* println!("fields: {:?}:", &fields); */
+    //     /* println!(); */
+    //     for field in fields {
+    //         /* println!("field: {:?}:", &field); */
+    //         /* println!(
+    //             "head, payload and continuation: {:?}:",
+    //             get_head_payload_continuation(String::from(&field))?
+    //         ); */
+    //         /* println!(); */
+    //     }
+    //     /* println!(); */
+    // }
+
+    Ok(result)
 }

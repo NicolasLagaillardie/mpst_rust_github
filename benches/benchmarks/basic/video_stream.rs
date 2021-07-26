@@ -14,8 +14,6 @@ use std::error::Error;
 use std::marker;
 use std::time::Duration;
 
-// use mpstthree::checking::checker;
-
 use mpstthree::functionmpst::close::close_mpst;
 
 // Get roles

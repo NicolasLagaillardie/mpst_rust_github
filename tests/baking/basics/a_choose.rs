@@ -2,11 +2,7 @@
 // B → Y → C
 // C → Z → A
 
-use mpstthree::checking::checker;
-
 use std::boxed::Box;
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
 use std::error::Error;
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
@@ -180,22 +176,28 @@ pub fn double_choice() {
 }
 
 pub fn double_choice_checker() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let s = RandomState::new();
-            let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
+    let graphs = mpstthree::checker_concat!(
+        EndpointChoiceA<i32>,
+        EndpointChoiceC<i32>,
+        EndpointChoiceB<i32>
+    )
+    .unwrap();
 
-            let (s1, _): (EndpointChoiceA<i32>, _) = MeshedChannels::new();
-            let (s2, _): (EndpointChoiceB<i32>, _) = MeshedChannels::new();
-            let (s3, _): (EndpointChoiceC<i32>, _) = MeshedChannels::new();
+    ////////////// Test graph A
+    let graph_a = &graphs["RoleA"];
 
-            let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
+    assert_eq!(graph_a.node_count(), 6);
+    assert_eq!(graph_a.edge_count(), 5);
 
-            assert_eq!(a, "A: ( A!C.0 + A!C.0 )");
-            assert_eq!(b, "B: ( B?C.0 & B?C.0 )");
-            assert_eq!(c, "C: ( C?A.C!B.0 & C?A.C!B.0 )");
-        }
-        Ok(())
-    }()
-    .is_ok());
+    ////////////// Test graph B
+    let graph_b = &graphs["RoleB"];
+
+    assert_eq!(graph_b.node_count(), 6);
+    assert_eq!(graph_b.edge_count(), 5);
+
+    ////////////// Test graph C
+    let graph_c = &graphs["RoleC"];
+
+    assert_eq!(graph_c.node_count(), 8);
+    assert_eq!(graph_c.edge_count(), 7);
 }

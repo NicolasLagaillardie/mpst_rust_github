@@ -1,15 +1,11 @@
 use rand::{thread_rng, Rng};
 
-use mpstthree::checking::checker;
-
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
 use std::boxed::Box;
-use std::collections::hash_map::RandomState;
-use std::collections::HashMap;
 use std::error::Error;
 
 use mpstthree::role::a::RoleA;
@@ -202,22 +198,25 @@ pub fn run_c_usecase_right() {
 }
 
 pub fn run_c_usecase_checker() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let s = RandomState::new();
-            let hm: HashMap<String, &Vec<String>> = HashMap::with_hasher(s);
+    let graphs =
+        mpstthree::checker_concat!(EndpointBFull<i32>, EndpointAFull<i32>, EndpointCFull<i32>)
+            .unwrap();
 
-            let (s1, _): (EndpointAFull<i32>, _) = MeshedChannels::new();
-            let (s2, _): (EndpointBFull<i32>, _) = MeshedChannels::new();
-            let (s3, _): (EndpointCFull<i32>, _) = MeshedChannels::new();
+    ////////////// Test graph A
+    let graph_a = &graphs["RoleA"];
 
-            let (a, b, c) = checker(s1, s2, s3, &hm, &HashMap::new())?;
+    assert_eq!(graph_a.node_count(), 10);
+    assert_eq!(graph_a.edge_count(), 9);
 
-            assert_eq!(a, "A: A?C.A!C.( A?C.A!B.A?B.A!C.0 & 0 )");
-            assert_eq!(b, "B: ( B?A.B!A.0 & 0 )");
-            assert_eq!(c, "C: C!A.C?A.( C!A.C?A.0 + 0 )");
-        }
-        Ok(())
-    }()
-    .is_ok());
+    ////////////// Test graph B
+    let graph_b = &graphs["RoleB"];
+
+    assert_eq!(graph_b.node_count(), 6);
+    assert_eq!(graph_b.edge_count(), 5);
+
+    ////////////// Test graph C
+    let graph_c = &graphs["RoleC"];
+
+    assert_eq!(graph_c.node_count(), 8);
+    assert_eq!(graph_c.edge_count(), 7);
 }
