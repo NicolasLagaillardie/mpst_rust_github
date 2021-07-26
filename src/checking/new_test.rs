@@ -590,20 +590,130 @@ fn aux_get_graph(
                 // Update the previous node
                 previous_node = new_node;
             } else if running_session[0] == *"Recv" {
-                index_node[depth_level] += 1;
-                let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
-                println!(
-                    "Adding node: {:?}",
-                    &extract_index_node(index_node.clone(), depth_level)?
-                );
-                g.add_edge(
-                    previous_node,
-                    new_node,
-                    format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
-                );
-                full_session[index_head - offset] = running_session[2].to_string();
-                full_session[size_full_session] = stack[1].to_string();
-                previous_node = new_node;
+                if let Some(choice) = branches_receivers.get(&running_session[1]) {
+                    let state_all_branches = RandomState::new();
+                    let mut all_branches: HashMap<String, Vec<String>> =
+                        HashMap::with_hasher(state_all_branches);
+
+                    let mut all_branches_vec = Vec::new();
+
+                    for (branch, session) in choice {
+                        all_branches.insert(
+                            format!(
+                                "{}::{}",
+                                &running_session[1].to_string(),
+                                &branch.to_string()
+                            ),
+                            session.to_vec(),
+                        );
+
+                        all_branches_vec.push(format!(
+                            "{}::{}",
+                            &running_session[1].to_string(),
+                            &branch.to_string()
+                        ));
+                    }
+
+                    let mut node_added = false;
+
+                    for (current_branch, session) in all_branches.clone() {
+                        if !branches_aready_seen.contains_key(&current_branch)
+                            && !groups_already_under_investigation.contains(&all_branches_vec)
+                        {
+                            // If the node was not added
+                            if !node_added {
+                                // Increase the index for the nodes
+                                index_node.push(0);
+
+                                // Increase the depth level
+                                depth_level += 1;
+
+                                // Add the new `step`
+                                let new_node = g
+                                    .add_node(extract_index_node(index_node.clone(), depth_level)?);
+                                println!(
+                                    "Adding node: {:?}",
+                                    &extract_index_node(index_node.clone(), depth_level)?
+                                );
+
+                                // Add the corresponding edge
+                                g.add_edge(previous_node, new_node, format!("& {}", &head_stack));
+
+                                node_added = true;
+
+                                previous_node = new_node;
+                            }
+
+                            // Insert the new node/branch in the list of the ones already seen
+                            let index_group =
+                                if let Some(index) = group_branches.get(&current_branch) {
+                                    println!("index session: {:?}", &index);
+                                    index
+                                } else {
+                                    panic!("Missing index")
+                                };
+
+                            for (temp_current_branch, temp_index) in group_branches.clone() {
+                                if temp_index == *index_group {
+                                    branches_aready_seen
+                                        .insert(temp_current_branch.clone(), previous_node);
+                                }
+                            }
+
+                            println!("new session: {:?}", &session);
+                            println!("full session: {:?}", &full_session);
+
+                            let mut temp_groups_already_under_investigation =
+                                groups_already_under_investigation.clone();
+                            temp_groups_already_under_investigation.push(all_branches_vec.clone());
+
+                            g = aux_get_graph(
+                                current_role,
+                                session[..(session.len() - 2)].to_vec(),
+                                roles,
+                                index_node.clone(),
+                                previous_node,
+                                compare_end.clone(),
+                                depth_level,
+                                index_current_role,
+                                g,
+                                branches_receivers.clone(),
+                                branches_aready_seen.clone(),
+                                branching_sessions.clone(),
+                                group_branches.clone(),
+                                temp_groups_already_under_investigation.clone(),
+                            )?;
+                            println!("current graph: {:?}", &Dot::new(&g));
+                        } else if !branches_aready_seen.contains_key(&current_branch) {
+                        } else if let Some(new_node) = branches_aready_seen.get(&current_branch) {
+                            if !g.contains_edge(previous_node, *new_node)
+                                && previous_node != *new_node
+                            {
+                                g.add_edge(previous_node, *new_node, "µ".to_string());
+                                println!("Added edge");
+                            }
+                        } else {
+                            panic!("Should not happen")
+                        }
+                    }
+
+                    return Ok(g);
+                } else {
+                    index_node[depth_level] += 1;
+                    let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                    println!(
+                        "Adding node: {:?}",
+                        &extract_index_node(index_node.clone(), depth_level)?
+                    );
+                    g.add_edge(
+                        previous_node,
+                        new_node,
+                        format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
+                    );
+                    full_session[index_head - offset] = running_session[2].to_string();
+                    full_session[size_full_session] = stack[1].to_string();
+                    previous_node = new_node;
+                }
             } else {
                 panic!("Did not found a correct session")
             }
@@ -759,7 +869,7 @@ fn aux_get_graph(
                         println!("Added edge");
                     }
                 } else {
-                    panic!("Cannot happen")
+                    panic!("Should not happen")
                 }
             }
 

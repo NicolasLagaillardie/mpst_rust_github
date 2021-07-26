@@ -52,7 +52,7 @@ either = "1.6.1"
 rand = "0.8.4"
 hyper = { version = "0.14.11", features = ["full"] }
 hyper-tls = "0.5.0"
-tokio = { version = "1.8.2", features = ["full"] }
+tokio = { version = "1.9.0", features = ["full"] }
 regex = "1.5.4"
 petgraph = "0.6.0"
 
