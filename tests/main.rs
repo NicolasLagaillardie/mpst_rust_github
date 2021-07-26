@@ -3,6 +3,7 @@ mod basics;
 mod basics_macros;
 mod binary;
 mod cancel;
+mod checking;
 mod graph;
 mod http;
 mod scribble;
@@ -302,6 +303,13 @@ fn from_str() {
     unit::from_str::binary_sessions();
     unit::from_str::meshedchannels();
     unit::from_str::roles();
+}
+
+#[test]
+fn checking() {
+    checking::checking_simple::main();
+    checking::checking_choice::main();
+    checking::checking_recursion::main();
 }
 
 pub fn main() {}

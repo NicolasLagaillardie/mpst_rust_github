@@ -123,6 +123,11 @@ impl CheckingInput {
         }
 
         quote! {
+
+            fn type_of<T>(_: T) -> &'static str {
+                std::any::type_name::<T>()
+            }
+
             let state_branches = std::collections::hash_map::RandomState::new();
             let mut branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
                 std::collections::HashMap::with_hasher(state_branches);

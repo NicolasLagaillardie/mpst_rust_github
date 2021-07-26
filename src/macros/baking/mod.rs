@@ -4,7 +4,7 @@
 ///
 /// * Name of the new SessionMST
 /// * Names of the new roles
-/// * [Optional (1)] Name of the new fork function
+/// * \[Optional\] Name of the new fork function
 ///
 /// # Basic example
 ///
@@ -59,7 +59,7 @@ macro_rules! bundle_impl {
 ///
 /// * Name of the new SessionMST
 /// * Names of the new roles
-/// * [Optional (1)] Name of the new fork function
+/// * \[Optional\] Name of the new fork function
 ///
 /// # Basic example
 ///
