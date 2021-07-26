@@ -3,7 +3,6 @@
 //! prerequisites that are shown in tests 06.
 
 mod aux_checker;
-pub mod graph;
 pub mod main;
 pub mod new_test;
 

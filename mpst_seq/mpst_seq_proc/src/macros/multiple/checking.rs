@@ -71,7 +71,12 @@ impl CheckingInput {
                     let branch_ident = syn::Ident::new(branch, proc_macro2::Span::call_site());
                     quote! {
                         #name_key::#branch_ident(s) => {
-                            write!(f, "{}\n{}", stringify!(#branch_ident), type_of(&s))
+                            write!(
+                                f,
+                                "{}\n{}",
+                                stringify!(#branch_ident),
+                                type_of(&s)
+                            )
                         }
                     }
                 })

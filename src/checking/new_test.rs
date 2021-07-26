@@ -150,7 +150,9 @@ fn clean_session(session: String) -> Result<Vec<String>, Box<dyn Error>> {
     temp.retain(|c| !c.is_whitespace());
 
     // Get each field of the MeshedChannels
+    /* println!("temp: {:?}", &temp); */
     let mut full_block = get_blocks(temp)?;
+    /* println!("full_block: {:?}", &full_block); */
 
     // Get the name of the role
     let name = &full_block[full_block.len() - 1]
@@ -929,6 +931,7 @@ fn get_graph_session(
     )
 }
 
+#[doc(hidden)]
 pub fn checker(
     sessions: Vec<String>,
     tail_sessions: Vec<String>,
@@ -940,7 +943,15 @@ pub fn checker(
     /* println!(); */
 
     let clean_sessions = clean_sessions(sessions)?;
+
+    /* println!("clean_sessions: {:?}", &clean_sessions); */
+
+    /* println!("tail_sessions: {:?}", &tail_sessions); */
+    /* println!(); */
+
     let roles = roles(tail_sessions)?;
+
+    /* println!("roles: {:?}", &roles); */
 
     let state_branches = RandomState::new();
     let mut update_branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
@@ -954,6 +965,8 @@ pub fn checker(
         let mut temp_branch: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branch);
 
         for (branch, session) in branches {
+            /* println!("Dirty session: {:?}", &session); */
+            /* println!("Clean session: {:?}", clean_session(session.to_string())?); */
             temp_branch.insert(branch, clean_session(session)?);
         }
 
@@ -1034,4 +1047,210 @@ pub fn checker(
 //////////////////////////////////
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    // Note this useful idiom: importing names from outer (for
+    // mod tests) scope.
+    use super::*;
+    use std::collections::hash_map::RandomState;
+    use std::collections::HashMap;
+
+    #[test]
+    fn test_clean_session() {
+        let dirty_session = String::from(
+            "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+            binary::struct_trait::recv::Recv<checking_recursion::\
+            Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
+            ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
+            struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
+            End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
+            mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
+            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>",
+        );
+
+        let clean_session_compare = vec![
+            "Recv<Branches0AtoB,End>".to_string(),
+            "Recv<i32,Send<i32,End>>".to_string(),
+            "RoleC<RoleC<RoleB<RoleEnd>>>".to_string(),
+            "RoleA<RoleEnd>".to_string(),
+            "RoleA".to_string(),
+        ];
+
+        assert_eq!(clean_session(dirty_session).unwrap(), clean_session_compare);
+    }
+
+    #[test]
+    fn test_clean_sessions() {
+        let dirty_sessions = vec![
+            "mpstthree::meshedchannels::MeshedChannels<mpstthree::binary::\
+            struct_trait::recv::Recv<checking_recursion::Branches0AtoB, mpstthree\
+            ::binary::struct_trait::end::End>, mpstthree::binary::\
+            struct_trait::end::End, mpstthree::role::b::RoleB<mpstthree::role\
+            ::end::RoleEnd>, mpstthree::role::a::RoleA<mpstthree::role::end::\
+            RoleEnd>>"
+                .to_string(),
+            "mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+            binary::struct_trait::end::End, mpstthree::binary::struct_trait::\
+            recv::Recv<i32, mpstthree::binary::struct_trait::send::Send<\
+            i32, mpstthree::binary::struct_trait::recv::Recv<checking_recursion\
+            ::Branches0CtoB, mpstthree::binary::struct_trait::end::End>>>, mpstthree\
+            ::role::b::RoleB<mpstthree::role::b::RoleB<mpstthree::role::b::RoleB\
+            <mpstthree::role::end::RoleEnd>>>, mpstthree::role::c::RoleC<\
+            mpstthree::role::end::RoleEnd>>"
+                .to_string(),
+            "mpstthree::meshedchannels::\
+            MeshedChannels<mpstthree::binary::struct_trait::send::Send<\
+            checking_recursion::Branches0AtoB, mpstthree::binary::struct_trait\
+            ::end::End>, mpstthree::binary::struct_trait::send::Send<i32, mpstthree\
+            ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::struct_trait\
+            ::send::Send<checking_recursion::Branches0CtoB, mpstthree::binary::\
+            struct_trait::end::End>>>, mpstthree::role::c::RoleC<mpstthree::\
+            role::c::RoleC<mpstthree::role::broadcast::RoleBroadcast>>, mpstthree\
+            ::role::b::RoleB<mpstthree::role::end::RoleEnd>>"
+                .to_string(),
+        ];
+
+        // The hasher of the HashMap
+        let state_clean_sessions_compare = RandomState::new();
+        // The result
+        let mut clean_sessions_compare: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_clean_sessions_compare);
+
+        clean_sessions_compare.insert(
+            "RoleC".to_string(),
+            vec![
+                "End".to_string(),
+                "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string(),
+                "RoleB<RoleB<RoleB<RoleEnd>>>".to_string(),
+            ],
+        );
+        clean_sessions_compare.insert(
+            "RoleA".to_string(),
+            vec![
+                "Recv<Branches0AtoB,End>".to_string(),
+                "End".to_string(),
+                "RoleB<RoleEnd>".to_string(),
+            ],
+        );
+        clean_sessions_compare.insert(
+            "RoleB".to_string(),
+            vec![
+                "Send<Branches0AtoB,End>".to_string(),
+                "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>".to_string(),
+                "RoleC<RoleC<RoleBroadcast>>".to_string(),
+            ],
+        );
+
+        assert_eq!(
+            clean_sessions_compare,
+            clean_sessions(dirty_sessions).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_roles() {
+        let dirty_roles = vec![
+            "Recv<End<>>\nEnd<>\nRoleB<RoleEnd<>>\nRoleA<RoleEnd<>>".to_string(),
+            "End<>\nRecv<Send<Recv<End<>>>>\nRoleB<RoleB<\
+                RoleB<RoleEnd<>>>>\nRoleC<RoleEnd<>>"
+                .to_string(),
+            "Send<End<>>\nSend<Recv<Send<End<>>>>\nRoleC<\
+                RoleC<RoleBroadcast<>>>\nRoleB<RoleEnd<>>"
+                .to_string(),
+        ];
+
+        let clean_roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        assert_eq!(clean_roles, roles(dirty_roles).unwrap());
+    }
+
+    #[test]
+    fn test_get_blocks() {
+        let dirty_blocks = "MeshedChannels<Send<Branches0AtoB,End>,Send\
+        <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
+        <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
+            .to_string();
+
+        let clean_blocks = vec![
+            "Send<Branches0AtoB,End>",
+            "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+            "RoleC<RoleC<RoleBroadcast>>",
+            "RoleB<RoleEnd>",
+        ];
+
+        assert_eq!(clean_blocks, get_blocks(dirty_blocks).unwrap());
+    }
+
+    #[test]
+    fn test_get_head_payload_continuation() {
+        // End
+        let dirty_end = "End".to_string();
+
+        let clean_end = vec!["End".to_string()];
+
+        assert_eq!(clean_end, get_head_payload_continuation(dirty_end).unwrap());
+
+        // RoleEnd
+        let dirty_role_end = "RoleEnd".to_string();
+
+        let clean_role_end = vec!["RoleEnd".to_string()];
+
+        assert_eq!(
+            clean_role_end,
+            get_head_payload_continuation(dirty_role_end).unwrap()
+        );
+
+        // Random
+        let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string();
+
+        let clean_random = vec![
+            "Recv".to_string(),
+            "i32".to_string(),
+            "Send<i32,Recv<Branches0CtoB,End>>".to_string(),
+        ];
+
+        assert_eq!(
+            clean_random,
+            get_head_payload_continuation(dirty_random).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_extract_index_node() {
+        let index_node = vec![0, 1, 4, 5];
+
+        assert_eq!(
+            "0.1.4.5".to_string(),
+            extract_index_node(index_node.to_vec(), 3).unwrap()
+        );
+
+        assert_eq!(
+            "0.1.4".to_string(),
+            extract_index_node(index_node.to_vec(), 2).unwrap()
+        );
+
+        assert_eq!(
+            "0".to_string(),
+            extract_index_node(index_node.to_vec(), 0).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_build_dual() {
+        let session = "Recv<i32,Send<Branches0CtoB,End>>".to_string();
+        let dual_session = "Send<i32,Recv<Branches0CtoB,End>>".to_string();
+
+        assert_eq!(dual_session, build_dual(session).unwrap());
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_build_dual_panic() {
+        let session = "Coco<i32,Banana<Branches0CtoB,End>>".to_string();
+
+        build_dual(session).unwrap();
+    }
+}
