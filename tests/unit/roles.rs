@@ -1,3 +1,5 @@
+// TODO: add missing tests for self and basic Role
+
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::a_to_all::RoleAtoAll;
@@ -7,6 +9,7 @@ use mpstthree::role::all_to_c::RoleAlltoC;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::b_dual::RoleBDual;
 use mpstthree::role::b_to_all::RoleBtoAll;
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::c_to_all::RoleCtoAll;
@@ -20,6 +23,11 @@ pub fn role_end_fields_1() {
     assert_eq!(role_end_2.sender.send(()), Ok(()));
     assert_eq!(role_end_1.receiver.recv(), Ok(()));
     assert_eq!(role_end_2.receiver.recv(), Ok(()));
+
+    assert_eq!(role_end_1.self_head_str(), "RoleEnd".to_string());
+    assert_eq!(role_end_1.self_tail_str(), "".to_string());
+    assert_eq!(role_end_2.self_head_str(), "RoleEnd".to_string());
+    assert_eq!(role_end_2.self_tail_str(), "".to_string());
 }
 
 pub fn role_end_fields_2() {
@@ -29,6 +37,71 @@ pub fn role_end_fields_2() {
     assert_eq!(role_end_1.sender.send(()), Ok(()));
     assert_eq!(role_end_2.receiver.recv(), Ok(()));
     assert_eq!(role_end_1.receiver.recv(), Ok(()));
+
+    assert_eq!(role_end_1.self_head_str(), "RoleEnd".to_string());
+    assert_eq!(role_end_1.self_tail_str(), "".to_string());
+    assert_eq!(role_end_2.self_head_str(), "RoleEnd".to_string());
+    assert_eq!(role_end_2.self_tail_str(), "".to_string());
+}
+
+pub fn role_a_fields() {
+    let (role_sender, role_receiver) = RoleA::<RoleEnd>::new();
+
+    // role_sender
+    let (here, there) = RoleEnd::new();
+    role_sender.sender.send(there).unwrap_or(());
+
+    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert_eq!(role_sender.self_head_str(), "RoleA".to_string());
+    assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
+
+    // role_sender
+    let (here, there) = RoleEnd::new();
+    role_receiver.sender.send(there).unwrap_or(());
+
+    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert_eq!(role_receiver.self_head_str(), "RoleADual".to_string());
+    assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
+}
+
+pub fn role_b_fields() {
+    let (role_sender, role_receiver) = RoleB::<RoleEnd>::new();
+
+    // role_sender
+    let (here, there) = RoleEnd::new();
+    role_sender.sender.send(there).unwrap_or(());
+
+    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert_eq!(role_sender.self_head_str(), "RoleB".to_string());
+    assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
+
+    // role_sender
+    let (here, there) = RoleEnd::new();
+    role_receiver.sender.send(there).unwrap_or(());
+
+    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert_eq!(role_receiver.self_head_str(), "RoleBDual".to_string());
+    assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
+}
+
+pub fn role_c_fields() {
+    let (role_sender, role_receiver) = RoleC::<RoleEnd>::new();
+
+    // role_sender
+    let (here, there) = RoleEnd::new();
+    role_sender.sender.send(there).unwrap_or(());
+
+    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert_eq!(role_sender.self_head_str(), "RoleC".to_string());
+    assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
+
+    // role_sender
+    let (here, there) = RoleEnd::new();
+    role_receiver.sender.send(there).unwrap_or(());
+
+    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert_eq!(role_receiver.self_head_str(), "RoleCDual".to_string());
+    assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
 
 pub fn role_a_to_all_fields() {
@@ -229,4 +302,30 @@ pub fn role_tail_str() {
         RoleAlltoC::<RoleEnd, RoleEnd>::tail_str(),
         "RoleEnd<> + RoleEnd<>".to_string()
     );
+}
+
+pub fn role_broadcast_fields_1() {
+    let (role_end_1, role_end_2) = RoleBroadcast::new();
+
+    assert_eq!(role_end_1.sender.send(()), Ok(()));
+    assert_eq!(role_end_2.sender.send(()), Ok(()));
+    assert_eq!(role_end_1.receiver.recv(), Ok(()));
+    assert_eq!(role_end_2.receiver.recv(), Ok(()));
+
+    assert_eq!(RoleBroadcast::head_str(), "RoleBroadcast".to_string());
+    assert_eq!(RoleBroadcast::tail_str(), "".to_string());
+}
+
+pub fn role_broadcast_fields_2() {
+    let (role_end_1, role_end_2) = RoleBroadcast::new();
+
+    assert_eq!(role_end_2.sender.send(()), Ok(()));
+    assert_eq!(role_end_1.sender.send(()), Ok(()));
+    assert_eq!(role_end_2.receiver.recv(), Ok(()));
+    assert_eq!(role_end_1.receiver.recv(), Ok(()));
+
+    assert_eq!(role_end_1.self_head_str(), "RoleBroadcast".to_string());
+    assert_eq!(role_end_1.self_tail_str(), "".to_string());
+    assert_eq!(role_end_2.self_head_str(), "RoleBroadcast".to_string());
+    assert_eq!(role_end_2.self_tail_str(), "".to_string());
 }

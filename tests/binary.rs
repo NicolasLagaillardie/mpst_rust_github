@@ -41,7 +41,7 @@ pub fn new_types() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_1.sender.send(Signal::Stop) {
             Ok(()) => Ok(()),
-            Err(e) => panic!("{}", e.to_string()),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -49,7 +49,7 @@ pub fn new_types() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_2.sender.send(Signal::Stop) {
             Ok(()) => Ok(()),
-            _ => panic!("Error"),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -57,7 +57,7 @@ pub fn new_types() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_1.receiver.recv() {
             Ok(Signal::Stop) => Ok(()),
-            _ => panic!("Error"),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -65,7 +65,7 @@ pub fn new_types() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_2.receiver.recv() {
             Ok(Signal::Stop) => Ok(()),
-            _ => panic!("Error"),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -77,7 +77,7 @@ pub fn new_types_cancel() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_1.sender.send(Signal::Cancel) {
             Ok(()) => Ok(()),
-            Err(e) => panic!("{}", e.to_string()),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -85,7 +85,7 @@ pub fn new_types_cancel() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_2.sender.send(Signal::Cancel) {
             Ok(()) => Ok(()),
-            _ => panic!("Error"),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -93,7 +93,7 @@ pub fn new_types_cancel() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_1.receiver.recv() {
             Ok(Signal::Cancel) => Ok(()),
-            _ => panic!("Error"),
+            _ => unreachable!(),
         }
     }()
     .is_ok());
@@ -101,7 +101,7 @@ pub fn new_types_cancel() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         match session_end_2.receiver.recv() {
             Ok(Signal::Cancel) => Ok(()),
-            _ => panic!("Error"),
+            _ => unreachable!(),
         }
     }()
     .is_ok());

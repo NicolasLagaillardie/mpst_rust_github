@@ -15,16 +15,38 @@ use ntest::timeout;
 #[test]
 fn unit_tests() {
     // Role methods and fields
+    // RoleEnd
     unit::roles::role_end_fields_1();
     unit::roles::role_end_fields_2();
+
+    // RoleA
+    unit::roles::role_a_fields();
+
+    // RoleB
+    unit::roles::role_b_fields();
+
+    // RoleC
+    unit::roles::role_c_fields();
+
+    // RoleAtoAll
     unit::roles::role_a_to_all_fields();
     unit::roles::role_all_to_a_fields();
+
+    // RoleBtoAll
     unit::roles::role_b_to_all_fields();
     unit::roles::role_all_to_b_fields();
+
+    // RoleCtoAll
     unit::roles::role_c_to_all_fields();
     unit::roles::role_all_to_c_fields();
+
+    // head_str and tail_str
     unit::roles::role_head_str();
     unit::roles::role_tail_str();
+
+    // RoleBroadcast
+    unit::roles::role_broadcast_fields_1();
+    unit::roles::role_broadcast_fields_2();
 
     // MeshedChannels methods and fields
     unit::meshedchannels::meshedchannels_fields();
@@ -295,4 +317,7 @@ fn checking() {
     checking::checking_recursion::main();
 }
 
-pub fn main() {}
+#[test]
+pub fn main() {
+    assert!(true);
+}

@@ -57,8 +57,8 @@ regex = "1.5.4"
 petgraph = "0.6.0"
 
 [dev-dependencies]
-criterion = { version = "0.3.4", features = ["html_reports"] }
-trybuild = "1.0.42"
+criterion = { version = "0.3.5", features = ["html_reports"] }
+trybuild = "1.0.43"
 ntest = "0.7.3"
 
 [badges]

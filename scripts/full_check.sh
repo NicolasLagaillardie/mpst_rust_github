@@ -40,11 +40,11 @@ set -e
 
 cargo fmt --verbose --all -- --check
 cargo clippy --all-features --verbose -- -D warnings
-cargo check --verbose --all --all-features
-cargo check --examples --verbose --all-features
-cargo check --tests --verbose --all-features
-cargo check --benches --verbose --all-features
-cargo doc --verbose --workspace --all-features
+RUST_BACKTRACE=1 cargo check --verbose --all --all-features
+RUST_BACKTRACE=1 cargo check --examples --verbose --all-features
+RUST_BACKTRACE=1 cargo check --tests --verbose --all-features
+RUST_BACKTRACE=1 cargo check --benches --verbose --all-features
+RUST_BACKTRACE=1 cargo doc --verbose --workspace --all-features
 # cargo build --verbose --all --all-features
 # cargo build --examples --verbose --all-features
 # cargo build --tests --verbose --all-features
@@ -53,6 +53,6 @@ cargo doc --verbose --workspace --all-features
 find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3}) done' argv0 {} +
 # cargo test --verbose --all
 # cargo test --verbose --all -- --nocapture
-cargo test --verbose --all --no-default-features --no-run -- --nocapture
+RUST_BACKTRACE=1 cargo test --verbose --all --no-default-features --no-run -- --nocapture
 # cargo test --verbose --all-features
 # cargo bench --verbose --all
