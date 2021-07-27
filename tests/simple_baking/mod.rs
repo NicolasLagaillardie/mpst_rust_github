@@ -8,3 +8,4 @@ pub mod c_choose;
 pub mod c_usecase;
 pub mod c_usecase_recursive;
 pub mod choose;
+pub mod simple;

@@ -81,10 +81,10 @@ type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, Rol
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
 /// For B
-type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
 
 /// Functions related to endpoints
-fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
+fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branches0BtoC::End(s) => {
             close_mpst(s)
