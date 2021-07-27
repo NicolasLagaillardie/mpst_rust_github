@@ -16,7 +16,7 @@ use aux_checker::*;
 /// * Each starting endpoint, separated by a comma
 /// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all the different branches sent.
 /// Currently, we do not support parameters for branches with `enum`
-/// 
+///
 /// ```ignore
 /// // Assume that there are two choices (Branches0BtoA and Branches0CtoA), each one with two branches (Video and End),
 /// // then the call for this macro would be as followed.
@@ -48,7 +48,7 @@ macro_rules! checker_concat {
             [
                 $branch_stack: ty,
                 $(
-                    $test_choice: ty, $test_branch: ident
+                    $choice: ty, $branch: ident
                 ),+ $(,)?
             ]
         ),+ $(,)?
@@ -77,13 +77,17 @@ macro_rules! checker_concat {
                     branching_sessions.insert(
                         format!(
                             "{}::{}",
-                            stringify!($test_choice).to_string(),
-                            stringify!($test_branch).to_string(),
+                            stringify!($choice).to_string(),
+                            stringify!($branch).to_string(),
                         ),
                         temp_branch_stack.clone()
                     );
                     group_branches.insert(
-                        stringify!($corresponding_branch).to_string(),
+                        format!(
+                            "{}::{}",
+                            stringify!($choice).to_string(),
+                            stringify!($branch).to_string(),
+                        ),
                         index
                     );
                 )+
@@ -94,8 +98,8 @@ macro_rules! checker_concat {
                 $(
                     $(
                         {
-                            $test_choice: ty,
-                            $test_branch: ident,
+                            $choice: ty,
+                            $branch: ident,
                         }
                     )+
                 )+
