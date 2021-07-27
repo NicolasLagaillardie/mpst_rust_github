@@ -74,7 +74,7 @@ fn tests_binary() {
 
 // Tests for basic functions
 #[test]
-fn basics() {
+fn simple_basics() {
     // Simple
     basics::simple::simple_triple_endpoints();
     basics::simple::simple_triple_endpoints_checker();
@@ -125,7 +125,7 @@ fn basics() {
 
 // Tests for macros with three participants but any role
 #[test]
-fn cases_tests_mpst_macro() {
+fn macro_basics() {
     // Macro basics
     basics_macros::macro_basics::basic_macros_send();
     basics_macros::macro_basics::basic_macros_recv();
@@ -156,7 +156,7 @@ fn cases_tests_mpst_macro() {
 
 // Tests for baking with three participants
 #[test]
-fn cases_tests_mpst_simple_short() {
+fn simple_baking() {
     // Simple
     baking::simple::simple_triple_endpoints();
     baking::simple::simple_triple_endpoints_checker();
@@ -207,7 +207,7 @@ fn cases_tests_mpst_simple_short() {
 
 // Tests for baking with more than three participants
 #[test]
-fn cases_tests_mpst_macro_short() {
+fn macro_baking() {
     // Macro basics
     baking::macros::macro_basics::basic_macros_send();
     baking::macros::macro_basics::basic_macros_recv();

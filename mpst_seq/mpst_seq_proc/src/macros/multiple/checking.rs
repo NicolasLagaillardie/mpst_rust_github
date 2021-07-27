@@ -41,7 +41,13 @@ impl Parse for CheckingInput {
         let mut choices: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branches);
 
         while let Ok(result) = attempt_extraction(input) {
-            choices.insert(result[0].clone(), result[1..].to_vec());
+            let vec_to_add = if let Some(temp_vec) = choices.get_mut(&result[0]) {
+                temp_vec.append(&mut result[1..].to_vec());
+                temp_vec.to_vec()
+            } else {
+                result[1..].to_vec()
+            };
+            choices.insert(result[0].clone(), vec_to_add);
         }
 
         Ok(CheckingInput { choices })

@@ -172,25 +172,14 @@ pub fn run_a_usecase_recursive_checker() {
         =>
         [
             EndpointAVideo,
-            Branches0BtoA::Video,
-            Branches0CtoA::Video
+            Branches0BtoA, Video,
+            Branches0CtoA, Video
         ],
         [
             EndpointAEnd,
-            Branches0BtoA::End,
-            Branches0CtoA::End
-        ],
-        =>
-        {
-            Branches0BtoA,
-            End,
-            Video
-        },
-        {
-            Branches0CtoA,
-            End,
-            Video
-        }
+            Branches0BtoA, End,
+            Branches0CtoA, End
+        ]
     )
     .unwrap();
 

@@ -75,25 +75,14 @@ pub fn main() {
         =>
         [
             EndpointBFull,
-            Branches0AtoB::Video,
-            Branches0CtoB::Video
+            Branches0AtoB, Video,
+            Branches0CtoB, Video
         ],
         [
             EndpointBEnd,
-            Branches0AtoB::End,
-            Branches0CtoB::End
-        ],
-        =>
-        {
-            Branches0AtoB,
-            End,
-            Video
-        },
-        {
-            Branches0CtoB,
-            End,
-            Video
-        }
+            Branches0AtoB, End,
+            Branches0CtoB, End
+        ]
     )
     .unwrap();
 

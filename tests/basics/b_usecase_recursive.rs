@@ -189,25 +189,14 @@ pub fn run_b_usecase_recursive_checker() {
         =>
         [
             EndpointBVideo,
-            Branches0CtoB::Video,
-            Branches0AtoB::Video
+            Branches0CtoB, Video,
+            Branches0AtoB, Video
         ],
         [
             EndpointBEnd,
-            Branches0CtoB::End,
-            Branches0AtoB::End
-        ],
-        =>
-        {
-            Branches0CtoB,
-            End,
-            Video
-        },
-        {
-            Branches0AtoB,
-            End,
-            Video
-        }
+            Branches0CtoB, End,
+            Branches0AtoB, End
+        ]
     )
     .unwrap();
 
