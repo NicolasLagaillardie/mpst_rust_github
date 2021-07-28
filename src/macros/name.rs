@@ -64,7 +64,7 @@ macro_rules! create_normal_role {
 
             #[doc(hidden)]
             fn head_str() -> String {
-                String::from(stringify!($dual_name))
+                String::from(stringify!($role_name))
             }
 
             #[doc(hidden)]
@@ -78,7 +78,7 @@ macro_rules! create_normal_role {
 
             #[doc(hidden)]
             fn self_head_str(&self) -> String {
-                String::from(stringify!($dual_name))
+                String::from(stringify!($role_name))
             }
 
             #[doc(hidden)]
@@ -114,7 +114,7 @@ macro_rules! create_normal_role {
 
             #[doc(hidden)]
             fn head_str() -> String {
-                String::from(stringify!($role_name))
+                String::from(stringify!($dual_name))
             }
 
             #[doc(hidden)]
@@ -128,7 +128,7 @@ macro_rules! create_normal_role {
 
             #[doc(hidden)]
             fn self_head_str(&self) -> String {
-                String::from(stringify!($role_name))
+                String::from(stringify!($dual_name))
             }
 
             #[doc(hidden)]

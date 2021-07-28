@@ -319,7 +319,9 @@ fn checking_basics() {
 }
 
 #[test]
-fn checking_complex() {}
+fn checking_complex() {
+    checking::complex::commit_protocol::main();
+}
 
 #[test]
 pub fn main() {
