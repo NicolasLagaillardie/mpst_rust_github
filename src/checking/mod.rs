@@ -65,10 +65,11 @@ macro_rules! checker_concat {
                 tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
             )+
 
-            let state_group_branches_treated = std::collections::hash_map::RandomState::new();
-            let mut group_branches_treated: std::collections::HashMap<
-                String, std::collections::HashMap<String, i32>
-            > = std::collections::HashMap::with_hasher(state_group_branches_treated);
+            let state_group_branches = std::collections::hash_map::RandomState::new();
+            let mut group_branches: std::collections::HashMap<String, i32> =
+                std::collections::HashMap::with_hasher(state_group_branches);
+
+            let mut index = 0;
 
             $(
                 let temp_branch_stack = String::from(std::any::type_name::<$branch_stack>());
@@ -82,55 +83,20 @@ macro_rules! checker_concat {
                         temp_branch_stack.clone()
                     );
 
-                    if let Some(choice_treated) = group_branches_treated.get_mut(stringify!($choice)) {
-                        let mut current_index = 0;
-
-                        for (_, index) in choice_treated.iter_mut() {
-                            *index += 1;
-                            current_index = *index;
-                        }
-
-                        choice_treated.insert(
-                            stringify!($branch).to_string(),
-                            current_index
-                        );
-                    } else {
-
-                        let state_temp_group_branches_treated = std::collections::hash_map::RandomState::new();
-                        let mut temp_group_branches_treated: std::collections::HashMap<String, i32> =
-                            std::collections::HashMap::with_hasher(state_temp_group_branches_treated);
-
-                        temp_group_branches_treated.insert(
-                            stringify!($branch).to_string(),
-                            0
-                        );
-
-                        group_branches_treated.insert(
-                            stringify!($choice).to_string(),
-                            temp_group_branches_treated
-                        );
-                    }
-                )+
-            )+
-
-            /* println!("group_branches_treated: {:?}", &group_branches_treated); */
-
-            let state_group_branches = std::collections::hash_map::RandomState::new();
-            let mut group_branches: std::collections::HashMap<String, i32> =
-                std::collections::HashMap::with_hasher(state_group_branches);
-
-            for (choice, branch_index) in group_branches_treated {
-                for (branch, index) in branch_index {
                     group_branches.insert(
                         format!(
                             "{}::{}",
-                            choice.to_string(),
-                            branch.to_string(),
+                            stringify!($choice).to_string(),
+                            stringify!($branch).to_string(),
                         ),
                         index
                     );
-                }
-            }
+                )+
+
+                index += 1;
+            )+
+
+            /* println!("group_branches_treated: {:?}", &group_branches_treated); */
 
             /* println!("group_branches: {:?}", &group_branches); */
 

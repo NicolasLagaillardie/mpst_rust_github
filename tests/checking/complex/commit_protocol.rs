@@ -110,7 +110,6 @@ type EndpointDFull = MeshedChannels<Recurs0DfromA, End, End, RoleA<RoleEnd>, Nam
 
 /////////////////////////////////////////
 
-#[test]
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         EndpointAFull,
@@ -154,6 +153,7 @@ pub fn main() {
             6 [ label = \"\\\"0.3.1\\\"\" ]\n    \
             7 [ label = \"\\\"0.3.2\\\"\" ]\n    \
             8 [ label = \"\\\"0.3.3\\\"\" ]\n    \
+            9 [ label = \"\\\"0.1\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"+ RoleA\\\"\" ]\n    \
             1 -> 2 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
             2 -> 3 [ label = \"\\\"RoleA!RoleC: ()\\\"\" ]\n    \
@@ -162,7 +162,8 @@ pub fn main() {
             5 -> 6 [ label = \"\\\"RoleA?RoleD: ()\\\"\" ]\n    \
             6 -> 7 [ label = \"\\\"RoleA?RoleC: ()\\\"\" ]\n    \
             7 -> 8 [ label = \"\\\"RoleA!RoleB: ()\\\"\" ]\n    \
-            8 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+            8 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
+            1 -> 9 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -177,11 +178,13 @@ pub fn main() {
             2 [ label = \"\\\"0.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.1.0\\\"\" ]\n    \
             4 [ label = \"\\\"0.1.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.1\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"& RoleA\\\"\" ]\n    \
             1 -> 2 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
             2 -> 3 [ label = \"\\\"& RoleA\\\"\" ]\n    \
             3 -> 4 [ label = \"\\\"RoleB?RoleA: ()\\\"\" ]\n    \
-            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
+            1 -> 5 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -196,11 +199,13 @@ pub fn main() {
             2 [ label = \"\\\"0.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.1.0\\\"\" ]\n    \
             4 [ label = \"\\\"0.1.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.1\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"& RoleA\\\"\" ]\n    \
             1 -> 2 [ label = \"\\\"RoleC?RoleA: ()\\\"\" ]\n    \
             2 -> 3 [ label = \"\\\"& RoleA\\\"\" ]\n    \
             3 -> 4 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
-            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
+            1 -> 5 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -215,11 +220,13 @@ pub fn main() {
             2 [ label = \"\\\"0.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.1.0\\\"\" ]\n    \
             4 [ label = \"\\\"0.1.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.1\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"& RoleA\\\"\" ]\n    \
             1 -> 2 [ label = \"\\\"RoleD?RoleA: ()\\\"\" ]\n    \
             2 -> 3 [ label = \"\\\"& RoleA\\\"\" ]\n    \
             3 -> 4 [ label = \"\\\"RoleD!RoleA: ()\\\"\" ]\n    \
-            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
+            1 -> 5 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 }

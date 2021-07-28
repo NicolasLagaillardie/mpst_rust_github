@@ -206,7 +206,6 @@ pub(crate) fn aux_get_graph(
     mut branches_aready_seen: HashMap<String, NodeIndex<u32>>,
     branching_sessions: HashMap<String, Vec<String>>,
     group_branches: HashMap<String, i32>,
-    mut groups_already_under_investigation: Vec<Vec<String>>,
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
@@ -349,7 +348,6 @@ pub(crate) fn aux_get_graph(
                     branches_aready_seen.clone(),
                     branching_sessions.clone(),
                     group_branches.clone(),
-                    groups_already_under_investigation.clone(),
                 )?;
 
                 /* println!("Current g: {:?}", &g); */
@@ -370,7 +368,6 @@ pub(crate) fn aux_get_graph(
                     branches_aready_seen,
                     branching_sessions,
                     group_branches,
-                    groups_already_under_investigation,
                 )
             } else {
                 // Add the new edge between the previous and the new node,
@@ -399,7 +396,6 @@ pub(crate) fn aux_get_graph(
                     branches_aready_seen.clone(),
                     branching_sessions.clone(),
                     group_branches.clone(),
-                    groups_already_under_investigation.clone(),
                 )?;
 
                 aux_get_graph(
@@ -416,7 +412,6 @@ pub(crate) fn aux_get_graph(
                     branches_aready_seen,
                     branching_sessions,
                     group_branches,
-                    groups_already_under_investigation,
                 )
             }
         } else if stack.len() == 2 {
@@ -495,15 +490,16 @@ pub(crate) fn aux_get_graph(
                     for (current_branch, session) in all_branches.clone() {
                         /* println!("current branch: {:?}", &current_branch); */
                         /* println!("branches_aready_seen: {:?}", &branches_aready_seen); */
-                        /* println!(
-                            "groups_already_under_investigation: {:?}",
-                            &groups_already_under_investigation
-                        ); */
                         /* println!("group_branches: {:?}", &group_branches); */
                         /* println!(); */
-                        if !branches_aready_seen.contains_key(&current_branch)
-                            && !groups_already_under_investigation.contains(&all_branches_vec)
-                        {
+                        if let Some(new_node) = branches_aready_seen.get(&current_branch) {
+                            if !g.contains_edge(previous_node, *new_node)
+                                && previous_node != *new_node
+                            {
+                                g.add_edge(previous_node, *new_node, "µ".to_string());
+                                /* println!("Added edge"); */
+                            }
+                        } else {
                             // If the node was not added
                             if !node_added {
                                 // Increase the index for the nodes
@@ -528,6 +524,33 @@ pub(crate) fn aux_get_graph(
                                 previous_node = new_node;
                             }
 
+                            let mut temp_branches_aready_seen = branches_aready_seen.clone();
+
+                            for temp_current_branch in all_branches.clone() {
+                                temp_branches_aready_seen
+                                    .insert(temp_current_branch.0.clone(), previous_node);
+                            }
+
+                            /* println!("new session: {:?}", &session); */
+                            /* println!("full session: {:?}", &full_session); */
+
+                            g = aux_get_graph(
+                                current_role,
+                                session[..(session.len() - 2)].to_vec(),
+                                roles,
+                                index_node.clone(),
+                                previous_node,
+                                compare_end.clone(),
+                                depth_level,
+                                index_current_role,
+                                g,
+                                branches_receivers.clone(),
+                                temp_branches_aready_seen.clone(),
+                                branching_sessions.clone(),
+                                group_branches.clone(),
+                            )?;
+                            /* println!("current graph: {:?}", Dot::new(&g)); */
+
                             // Insert the new node/branch in the list of the ones already seen
                             let index_group =
                                 if let Some(index) = group_branches.get(&current_branch) {
@@ -543,39 +566,6 @@ pub(crate) fn aux_get_graph(
                                         .insert(temp_current_branch.clone(), previous_node);
                                 }
                             }
-
-                            /* println!("new session: {:?}", &session); */
-                            /* println!("full session: {:?}", &full_session); */
-
-                            groups_already_under_investigation.push(all_branches_vec.clone());
-
-                            g = aux_get_graph(
-                                current_role,
-                                session[..(session.len() - 2)].to_vec(),
-                                roles,
-                                index_node.clone(),
-                                previous_node,
-                                compare_end.clone(),
-                                depth_level,
-                                index_current_role,
-                                g,
-                                branches_receivers.clone(),
-                                branches_aready_seen.clone(),
-                                branching_sessions.clone(),
-                                group_branches.clone(),
-                                groups_already_under_investigation.clone(),
-                            )?;
-                            /* println!("current graph: {:?}", Dot::new(&g)); */
-                        } else if !branches_aready_seen.contains_key(&current_branch) {
-                        } else if let Some(new_node) = branches_aready_seen.get(&current_branch) {
-                            if !g.contains_edge(previous_node, *new_node)
-                                && previous_node != *new_node
-                            {
-                                g.add_edge(previous_node, *new_node, "µ".to_string());
-                                /* println!("Added edge"); */
-                            }
-                        } else {
-                            panic!("Should not happen")
                         }
                     }
 
@@ -614,7 +604,6 @@ pub(crate) fn aux_get_graph(
                 branches_aready_seen,
                 branching_sessions,
                 group_branches,
-                groups_already_under_investigation,
             )
         } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
             let mut number_of_send = 0;
@@ -638,21 +627,20 @@ pub(crate) fn aux_get_graph(
                         number_of_send += 1;
 
                         // Should be a specific `enum`
-                        let payload_either =
-                            &get_head_payload_continuation(session.to_string())?[1];
+                        let payload = &get_head_payload_continuation(session.to_string())?[1];
                         /* println!("payload_either: {:?}", &payload_either); */
 
                         // Update all_choices
-                        if let Some(choice) = branches_receivers.get(payload_either) {
-                            for key in choice.keys() {
+                        if let Some(choice) = branches_receivers.get(payload) {
+                            for branch in choice.keys() {
                                 all_branches.push(format!(
                                     "{}::{}",
-                                    payload_either.to_string(),
-                                    key.to_string()
+                                    payload.to_string(),
+                                    branch.to_string()
                                 ));
                             }
                         } else {
-                            panic!("Missing the enum: {:?}", payload_either)
+                            panic!("Missing the enum {:?} in branches_receivers", payload)
                         }
                     }
                     _ => panic!("Wrong session heads"),
@@ -665,21 +653,23 @@ pub(crate) fn aux_get_graph(
 
             /* println!("role: {:?}", &current_role); */
             /* println!(); */
+            /* println!("all_branches: {:?}", &all_branches); */
+            /* println!("branches_receivers: {:?}", &branches_receivers); */
+            /* println!("group_branches: {:?}", &group_branches); */
+            /* println!(); */
 
             for current_branch in all_branches.clone() {
                 /* println!("current branch: {:?}", &current_branch); */
                 /* println!("branches_aready_seen: {:?}", &branches_aready_seen); */
-                /* println!(
-                    "groups_already_under_investigation: {:?}",
-                    &groups_already_under_investigation
-                ); */
                 /* println!("group_branches: {:?}", &group_branches); */
-                /* println!("all_branches: {:?}", &all_branches); */
                 /* println!(); */
 
-                if !branches_aready_seen.contains_key(&current_branch)
-                    && !groups_already_under_investigation.contains(&all_branches)
-                {
+                if let Some(new_node) = branches_aready_seen.get(&current_branch) {
+                    if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
+                        g.add_edge(previous_node, *new_node, "µ".to_string());
+                        /* println!("Added edge"); */
+                    }
+                } else {
                     // If the node was not added
                     if !node_added {
                         // Increase the index for the nodes
@@ -711,6 +701,33 @@ pub(crate) fn aux_get_graph(
                         panic!("Missing session")
                     };
 
+                    let mut temp_branches_aready_seen = branches_aready_seen.clone();
+
+                    for temp_current_branch in all_branches.clone() {
+                        temp_branches_aready_seen
+                            .insert(temp_current_branch.clone(), previous_node);
+                    }
+
+                    /* println!("updated branches_aready_seen: {:?}", &branches_aready_seen); */
+                    /* println!("new session: {:?}", &session); */
+                    /* println!("full session: {:?}", &full_session); */
+
+                    g = aux_get_graph(
+                        current_role,
+                        session,
+                        roles,
+                        index_node.clone(),
+                        previous_node,
+                        compare_end.clone(),
+                        depth_level,
+                        index_current_role,
+                        g,
+                        branches_receivers.clone(),
+                        temp_branches_aready_seen.clone(),
+                        branching_sessions.clone(),
+                        group_branches.clone(),
+                    )?;
+
                     // Insert the new node/branch in the list of the ones already seen
                     let index_group = if let Some(index) = group_branches.get(&current_branch) {
                         /* println!("index session: {:?}", &index); */
@@ -728,38 +745,8 @@ pub(crate) fn aux_get_graph(
                         }
                     }
 
-                    /* println!("updated branches_aready_seen: {:?}", &branches_aready_seen); */
-                    /* println!("new session: {:?}", &session); */
-                    /* println!("full session: {:?}", &full_session); */
-
-                    groups_already_under_investigation.push(all_branches.clone());
-
-                    g = aux_get_graph(
-                        current_role,
-                        session,
-                        roles,
-                        index_node.clone(),
-                        previous_node,
-                        compare_end.clone(),
-                        depth_level,
-                        index_current_role,
-                        g,
-                        branches_receivers.clone(),
-                        branches_aready_seen.clone(),
-                        branching_sessions.clone(),
-                        group_branches.clone(),
-                        groups_already_under_investigation.clone(),
-                    )?;
                     /* println!("current graph: {:?}", Dot::new(&g)); */
                     /* println!(); */
-                } else if !branches_aready_seen.contains_key(&current_branch) {
-                } else if let Some(new_node) = branches_aready_seen.get(&current_branch) {
-                    if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
-                        g.add_edge(previous_node, *new_node, "µ".to_string());
-                        /* println!("Added edge"); */
-                    }
-                } else {
-                    panic!("Should not happen")
                 }
                 /* println!(); */
             }
@@ -808,9 +795,6 @@ pub(crate) fn get_graph_session(
     let branches_aready_seen: HashMap<String, NodeIndex<u32>> =
         HashMap::with_hasher(state_branches_aready_seen);
 
-    let inside = Vec::<String>::new();
-    let groups_already_under_investigation = vec![inside];
-
     aux_get_graph(
         current_role,
         full_session,
@@ -825,7 +809,6 @@ pub(crate) fn get_graph_session(
         branches_aready_seen,
         branching_sessions,
         group_branches,
-        groups_already_under_investigation,
     )
 }
 
