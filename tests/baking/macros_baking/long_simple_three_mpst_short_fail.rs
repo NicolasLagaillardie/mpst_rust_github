@@ -1,9 +1,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mpst
-};
+use mpstthree::{bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mpst};
 
 use std::error::Error;
 
@@ -42,7 +40,7 @@ type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
 type EndpointMoreC = MeshedChannelsThree<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
-    R2A<R2B<RoleBroadcast>>,
+    RoleA<RoleA<RoleA<RoleB<RoleBroadcast>>>>,
     NameC,
 >;
 
@@ -99,12 +97,10 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
-        0 => {
-            done_from_c_to_all(s).close()
-        }
+        0 => done_from_c_to_all(s).close(),
         i => {
             let (_, s) = more_from_c_to_all(s).send(()).recv()?;
-            let (_, s) = .send(()).recv()?;
+            let (_, s) = s.send(()).recv()?;
 
             recurs_c(s, i - 1)
         }
@@ -112,11 +108,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn main() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(
-        endpoint_a,
-        endpoint_b,
-        endpoint_c,
-    );
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     assert!(thread_a.join().is_err());
     assert!(thread_b.join().is_err());

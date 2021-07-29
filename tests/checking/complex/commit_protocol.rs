@@ -8,7 +8,7 @@ use mpstthree::{create_meshedchannels, create_multiple_normal_role};
 
 use petgraph::dot::Dot;
 
-// Create new MeshedChannels for four participants
+// Create new MeshedChannels
 create_meshedchannels!(MeshedChannels, 4);
 
 // Create new roles

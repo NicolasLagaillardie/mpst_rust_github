@@ -1,13 +1,11 @@
+mod baking;
+mod basics;
 mod binary;
 mod cancel;
 mod checking;
 mod graph;
 mod http;
-mod macros_baking;
-mod macros_basics;
 mod scribble;
-mod simple_baking;
-mod simple_basics;
 mod tcp;
 mod unit;
 
@@ -121,170 +119,170 @@ fn tests_binary() {
 #[test]
 fn simple_basics() {
     // Simple
-    simple_basics::simple::simple_triple_endpoints();
-    simple_basics::simple::simple_triple_endpoints_checker();
+    basics::simple_basics::simple::simple_triple_endpoints();
+    basics::simple_basics::simple::simple_triple_endpoints_checker();
 
     // Choose
-    simple_basics::choose::simple_choice();
-    simple_basics::choose::simple_choice_checker();
+    basics::simple_basics::choose::simple_choice();
+    basics::simple_basics::choose::simple_choice_checker();
 
     // Choose 2 A
-    simple_basics::a_choose::double_choice();
-    simple_basics::a_choose::double_choice_checker();
+    basics::simple_basics::a_choose::double_choice();
+    basics::simple_basics::a_choose::double_choice_checker();
 
     // Choose 2 A
-    simple_basics::b_choose::double_choice();
-    simple_basics::b_choose::double_choice_checker();
+    basics::simple_basics::b_choose::double_choice();
+    basics::simple_basics::b_choose::double_choice_checker();
 
     // Choose 2 A
-    simple_basics::c_choose::double_choice();
-    simple_basics::c_choose::double_choice_checker();
+    basics::simple_basics::c_choose::double_choice();
+    basics::simple_basics::c_choose::double_choice_checker();
 
     // Usecase simple A
-    simple_basics::a_usecase::run_a_usecase_left();
-    simple_basics::a_usecase::run_a_usecase_right();
-    simple_basics::a_usecase::run_a_usecase_checker();
+    basics::simple_basics::a_usecase::run_a_usecase_left();
+    basics::simple_basics::a_usecase::run_a_usecase_right();
+    basics::simple_basics::a_usecase::run_a_usecase_checker();
 
     // Usecase simple B
-    simple_basics::b_usecase::run_b_usecase_left();
-    simple_basics::b_usecase::run_b_usecase_right();
-    simple_basics::b_usecase::run_b_usecase_checker();
+    basics::simple_basics::b_usecase::run_b_usecase_left();
+    basics::simple_basics::b_usecase::run_b_usecase_right();
+    basics::simple_basics::b_usecase::run_b_usecase_checker();
 
     // Usecase simple C
-    simple_basics::c_usecase::run_c_usecase_left();
-    simple_basics::c_usecase::run_c_usecase_right();
-    simple_basics::c_usecase::run_c_usecase_checker();
+    basics::simple_basics::c_usecase::run_c_usecase_left();
+    basics::simple_basics::c_usecase::run_c_usecase_right();
+    basics::simple_basics::c_usecase::run_c_usecase_checker();
 
     // Usecase recursive A
-    simple_basics::a_usecase_recursive::run_a_usecase_recursive();
-    simple_basics::a_usecase_recursive::run_a_usecase_recursive_checker();
+    basics::simple_basics::a_usecase_recursive::run_a_usecase_recursive();
+    basics::simple_basics::a_usecase_recursive::run_a_usecase_recursive_checker();
 
     // Usecase recursive B
-    simple_basics::b_usecase_recursive::run_b_usecase_recursive();
-    simple_basics::b_usecase_recursive::run_b_usecase_recursive_checker();
+    basics::simple_basics::b_usecase_recursive::run_b_usecase_recursive();
+    basics::simple_basics::b_usecase_recursive::run_b_usecase_recursive_checker();
 
     // Usecase recursive C
-    simple_basics::c_usecase_recursive::run_c_usecase_recursive();
-    simple_basics::c_usecase_recursive::run_c_usecase_recursive_checker();
+    basics::simple_basics::c_usecase_recursive::run_c_usecase_recursive();
+    basics::simple_basics::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
 // Tests for macros with three participants but any role
 #[test]
 fn macro_basics() {
     // Macro basics
-    macros_basics::macro_basics::basic_macros_send();
-    macros_basics::macro_basics::basic_macros_recv();
+    basics::macros_basics::macro_basics::basic_macros_send();
+    basics::macros_basics::macro_basics::basic_macros_recv();
 
     // Macro choice
-    macros_basics::macro_choice::run_usecase_right();
-    macros_basics::macro_choice::run_usecase_left();
+    basics::macros_basics::macro_choice::run_usecase_right();
+    basics::macros_basics::macro_choice::run_usecase_left();
 
     // Macro recursive
-    macros_basics::macro_recursive::run_macro_recursive();
+    basics::macros_basics::macro_recursive::run_macro_recursive();
 
     // Macro multi basics
-    macros_basics::macro_multi_meshedchannels::basic_macros();
+    basics::macros_basics::macro_multi_meshedchannels::basic_macros();
 
     // Macro multi send-recv
-    macros_basics::macro_multi_send_recv_meshedchannels::test_new_send();
+    basics::macros_basics::macro_multi_send_recv_meshedchannels::test_new_send();
 
     // Macro multi choice
-    macros_basics::macro_multi_choice::test_new_choice_full();
-    macros_basics::macro_multi_choice::test_new_choice_close();
+    basics::macros_basics::macro_multi_choice::test_new_choice_full();
+    basics::macros_basics::macro_multi_choice::test_new_choice_close();
 
     // Macro multi recursion
-    macros_basics::macro_multi_recursion::new_run_usecase_recursive();
+    basics::macros_basics::macro_multi_recursion::new_run_usecase_recursive();
 
     // Macro multi recursion for shorting
-    macros_basics::long_simple_three_mpst_short::shorten_main();
+    basics::macros_basics::long_simple_three_mpst_short::shorten_main();
 }
 
 // Tests for baking with three participants
 #[test]
 fn simple_baking() {
     // Simple
-    simple_baking::simple::simple_triple_endpoints();
-    simple_baking::simple::simple_triple_endpoints_checker();
+    baking::simple_baking::simple::simple_triple_endpoints();
+    baking::simple_baking::simple::simple_triple_endpoints_checker();
 
     // Choose
-    simple_baking::choose::simple_choice();
-    simple_baking::choose::simple_choice_checker();
+    baking::simple_baking::choose::simple_choice();
+    baking::simple_baking::choose::simple_choice_checker();
 
     // Choose 2 A
-    simple_baking::a_choose::double_choice();
-    simple_baking::a_choose::double_choice_checker();
+    baking::simple_baking::a_choose::double_choice();
+    baking::simple_baking::a_choose::double_choice_checker();
 
     // Choose 2 A
-    simple_baking::b_choose::double_choice();
-    simple_baking::b_choose::double_choice_checker();
+    baking::simple_baking::b_choose::double_choice();
+    baking::simple_baking::b_choose::double_choice_checker();
 
     // Choose 2 A
-    simple_baking::c_choose::double_choice();
-    simple_baking::c_choose::double_choice_checker();
+    baking::simple_baking::c_choose::double_choice();
+    baking::simple_baking::c_choose::double_choice_checker();
 
     // Usecase simple A
-    simple_baking::a_usecase::run_a_usecase_left();
-    simple_baking::a_usecase::run_a_usecase_right();
-    simple_baking::a_usecase::run_a_usecase_checker();
+    baking::simple_baking::a_usecase::run_a_usecase_left();
+    baking::simple_baking::a_usecase::run_a_usecase_right();
+    baking::simple_baking::a_usecase::run_a_usecase_checker();
 
     // Usecase simple B
-    simple_baking::b_usecase::run_b_usecase_left();
-    simple_baking::b_usecase::run_b_usecase_right();
-    simple_baking::b_usecase::run_b_usecase_checker();
+    baking::simple_baking::b_usecase::run_b_usecase_left();
+    baking::simple_baking::b_usecase::run_b_usecase_right();
+    baking::simple_baking::b_usecase::run_b_usecase_checker();
 
     // Usecase simple C
-    simple_baking::c_usecase::run_c_usecase_left();
-    simple_baking::c_usecase::run_c_usecase_right();
-    simple_baking::c_usecase::run_c_usecase_checker();
+    baking::simple_baking::c_usecase::run_c_usecase_left();
+    baking::simple_baking::c_usecase::run_c_usecase_right();
+    baking::simple_baking::c_usecase::run_c_usecase_checker();
 
     // Usecase recursive A
-    simple_baking::a_usecase_recursive::run_a_usecase_recursive();
-    simple_baking::a_usecase_recursive::run_a_usecase_recursive_checker();
+    baking::simple_baking::a_usecase_recursive::run_a_usecase_recursive();
+    baking::simple_baking::a_usecase_recursive::run_a_usecase_recursive_checker();
 
     // Usecase recursive B
-    simple_baking::b_usecase_recursive::run_b_usecase_recursive();
-    simple_baking::b_usecase_recursive::run_b_usecase_recursive_checker();
+    baking::simple_baking::b_usecase_recursive::run_b_usecase_recursive();
+    baking::simple_baking::b_usecase_recursive::run_b_usecase_recursive_checker();
 
     // Usecase recursive C
-    simple_baking::c_usecase_recursive::run_c_usecase_recursive();
-    simple_baking::c_usecase_recursive::run_c_usecase_recursive_checker();
+    baking::simple_baking::c_usecase_recursive::run_c_usecase_recursive();
+    baking::simple_baking::c_usecase_recursive::run_c_usecase_recursive_checker();
 }
 
 // Tests for baking with more than three participants
 #[test]
 fn macro_baking() {
     // Macro basics
-    macros_baking::macro_basics::basic_macros_send();
-    macros_baking::macro_basics::basic_macros_recv();
+    baking::macros_baking::macro_basics::basic_macros_send();
+    baking::macros_baking::macro_basics::basic_macros_recv();
 
     // Macro choice
-    macros_baking::macro_choice::run_usecase_right();
-    macros_baking::macro_choice::run_usecase_left();
+    baking::macros_baking::macro_choice::run_usecase_right();
+    baking::macros_baking::macro_choice::run_usecase_left();
 
     // Macro recursive
-    macros_baking::macro_recursive::run_macro_recursive();
+    baking::macros_baking::macro_recursive::run_macro_recursive();
 
     // Macro multi basics
-    macros_baking::macro_multi_meshedchannels::basic_macros();
+    baking::macros_baking::macro_multi_meshedchannels::basic_macros();
 
     // Macro multi send-recv
-    macros_baking::macro_multi_send_recv_meshedchannels::test_new_send();
+    baking::macros_baking::macro_multi_send_recv_meshedchannels::test_new_send();
 
     // Macro multi choice
-    macros_baking::macro_multi_choice::test_new_choice_full();
-    macros_baking::macro_multi_choice::test_new_choice_close();
+    baking::macros_baking::macro_multi_choice::test_new_choice_full();
+    baking::macros_baking::macro_multi_choice::test_new_choice_close();
 
     // Macro multi recursion
-    macros_baking::macro_multi_recursion::new_run_usecase_recursive();
+    baking::macros_baking::macro_multi_recursion::new_run_usecase_recursive();
 
     // Macro multi choice with macro of macro
-    macros_baking::macro_multi_recursion_macro_of_macro::new_run_usecase_recursive();
+    baking::macros_baking::macro_multi_recursion_macro_of_macro::new_run_usecase_recursive();
 
     // Macro multi choice with macro of macro directly in the baking generation
-    macros_baking::macro_multi_recursion_short::new_run_usecase_recursive();
+    baking::macros_baking::macro_multi_recursion_short::new_run_usecase_recursive();
 
     // Macro multi recursion for shorting
-    macros_baking::long_simple_three_mpst_short::shorten_main();
+    baking::macros_baking::long_simple_three_mpst_short::shorten_main();
 }
 
 #[test]
@@ -321,7 +319,10 @@ fn tests() {
     t.compile_fail("tests/infinite_type/fail_2.rs");
 
     // Macro multi recursion for shorting
-    t.compile_fail("tests/macros_basics/long_simple_three_mpst_short_fail.rs");
+    t.compile_fail("tests/basics/macros_basics/long_simple_three_mpst_short_fail.rs");
+
+    // Macro multi recursion for shorting
+    t.compile_fail("tests/baking/macros_baking/long_simple_three_mpst_short_fail.rs");
 }
 
 #[test]
@@ -365,6 +366,8 @@ fn checking_basics() {
 #[test]
 fn checking_complex() {
     checking::complex::commit_protocol::main();
+    checking::complex::two_peers_branchings_sync::main();
+    checking::complex::four_players_game_sync::main();
 }
 
 #[test]

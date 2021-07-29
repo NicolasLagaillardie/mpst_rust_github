@@ -587,7 +587,10 @@ pub(crate) fn aux_get_graph(
                     previous_node = new_node;
                 }
             } else {
-                panic!("Did not found a correct session")
+                panic!(
+                    "Did not found a correct session. Found session: {:?}",
+                    full_session
+                )
             }
 
             aux_get_graph(
@@ -754,7 +757,10 @@ pub(crate) fn aux_get_graph(
 
             Ok(g)
         } else {
-            panic!("Did not found a correct stack")
+            panic!(
+                "Did not found a correct stack. Found stack and session: {:?} / {:?}",
+                stack, full_session
+            )
         }
     }
 }
@@ -819,8 +825,18 @@ mod tests {
     // Note this useful idiom: importing names from outer (for
     // mod tests) scope.
     use super::*;
+
     use std::collections::hash_map::RandomState;
     use std::collections::HashMap;
+
+    use crate as mpstthree;
+
+    use crate::binary::struct_trait::end::End;
+    use crate::binary::struct_trait::recv::Recv;
+    use crate::binary::struct_trait::send::Send;
+    use crate::role::end::RoleEnd;
+
+    use crate::{checker_concat, create_meshedchannels, create_multiple_normal_role};
 
     #[test]
     fn test_clean_session() {
@@ -1020,5 +1036,59 @@ mod tests {
         let session = "Coco<i32,Banana<Branches0CtoB,End>>".to_string();
 
         build_dual(session).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_stack() {
+        // Create new MeshedChannels
+        create_meshedchannels!(MeshedChannels, 2);
+
+        // Create new roles
+        create_multiple_normal_role!(
+            RoleA, RoleADual |
+            RoleB, RoleBDual |
+        );
+
+        // Types
+
+        // Creating the MP sessions
+
+        // For A
+        type EndpointAFull = MeshedChannels<Recv<(), End>, RoleEnd, RoleA<RoleEnd>>;
+
+        // For B
+        type EndpointBFull = MeshedChannels<Send<(), End>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+
+        /////////////////////////////////////////
+
+        checker_concat!(EndpointAFull, EndpointBFull).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_session() {
+        // Create new MeshedChannels
+        create_meshedchannels!(MeshedChannels, 2);
+
+        // Create new roles
+        create_multiple_normal_role!(
+            RoleA, RoleADual |
+            RoleB, RoleBDual |
+        );
+
+        // Types
+
+        // Creating the MP sessions
+
+        // For A
+        type EndpointAFull = MeshedChannels<End, RoleB<RoleEnd>, RoleA<RoleEnd>>;
+
+        // For B
+        type EndpointBFull = MeshedChannels<Send<(), End>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+
+        /////////////////////////////////////////
+
+        checker_concat!(EndpointAFull, EndpointBFull).unwrap();
     }
 }

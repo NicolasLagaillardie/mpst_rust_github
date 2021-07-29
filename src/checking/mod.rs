@@ -137,15 +137,15 @@ macro_rules! checker_concat {
             )+
 
             let state_branches = std::collections::hash_map::RandomState::new();
-            let mut branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
+            let branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
                 std::collections::HashMap::with_hasher(state_branches);
 
             let state_branching_sessions = std::collections::hash_map::RandomState::new();
-            let mut branching_sessions: std::collections::HashMap<String, String> =
+            let branching_sessions: std::collections::HashMap<String, String> =
                 std::collections::HashMap::with_hasher(state_branching_sessions);
 
             let state_group_branches = std::collections::hash_map::RandomState::new();
-            let mut group_branches: std::collections::HashMap<String, i32> =
+            let group_branches: std::collections::HashMap<String, i32> =
                 std::collections::HashMap::with_hasher(state_group_branches);
 
             mpstthree::checking::checker(
