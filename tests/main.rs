@@ -14,44 +14,88 @@ mod unit;
 use ntest::timeout;
 
 #[test]
-fn unit_tests() {
+fn unit_tests_basics_roles() {
     // Role methods and fields
     // RoleEnd
-    unit::roles::role_end_fields_1();
-    unit::roles::role_end_fields_2();
+    unit::basics_roles::role_end_fields_1();
+    unit::basics_roles::role_end_fields_2();
 
     // RoleA
-    unit::roles::role_a_fields();
+    unit::basics_roles::role_a_fields();
 
     // RoleB
-    unit::roles::role_b_fields();
+    unit::basics_roles::role_b_fields();
 
     // RoleC
-    unit::roles::role_c_fields();
+    unit::basics_roles::role_c_fields();
 
     // RoleAtoAll
-    unit::roles::role_a_to_all_fields();
-    unit::roles::role_all_to_a_fields();
+    unit::basics_roles::role_a_to_all_fields();
+    unit::basics_roles::role_all_to_a_fields();
 
     // RoleBtoAll
-    unit::roles::role_b_to_all_fields();
-    unit::roles::role_all_to_b_fields();
+    unit::basics_roles::role_b_to_all_fields();
+    unit::basics_roles::role_all_to_b_fields();
 
     // RoleCtoAll
-    unit::roles::role_c_to_all_fields();
-    unit::roles::role_all_to_c_fields();
+    unit::basics_roles::role_c_to_all_fields();
+    unit::basics_roles::role_all_to_c_fields();
 
     // head_str and tail_str
-    unit::roles::role_head_str();
-    unit::roles::role_tail_str();
+    unit::basics_roles::role_head_str();
+    unit::basics_roles::role_tail_str();
 
     // RoleBroadcast
-    unit::roles::role_broadcast_fields_1();
-    unit::roles::role_broadcast_fields_2();
+    unit::basics_roles::role_broadcast_fields_1();
+    unit::basics_roles::role_broadcast_fields_2();
+}
+
+#[test]
+fn unit_tests_macros_roles() {
+    // Role methods and fields
+
+    // RoleA
+    unit::macros_roles::role_a_fields();
+
+    // RoleB
+    unit::macros_roles::role_b_fields();
+
+    // RoleC
+    unit::macros_roles::role_c_fields();
+
+    // RoleAtoAll
+    unit::macros_roles::role_a_to_all_fields();
+    unit::macros_roles::role_all_to_a_fields();
+
+    // RoleBtoAll
+    unit::macros_roles::role_b_to_all_fields();
+    unit::macros_roles::role_all_to_b_fields();
+
+    // RoleCtoAll
+    unit::macros_roles::role_c_to_all_fields();
+    unit::macros_roles::role_all_to_c_fields();
+
+    // head_str and tail_str
+    unit::macros_roles::role_head_str();
+    unit::macros_roles::role_tail_str();
+}
+
+#[test]
+fn unit_tests_meshedchannels() {
+    // MeshedChannels methods and fields
+    unit::basics_meshedchannels::meshedchannels_fields();
+    unit::basics_meshedchannels::meshedchannels_methods();
+    unit::basics_meshedchannels::meshedchannels_self_methods();
 
     // MeshedChannels methods and fields
-    unit::meshedchannels::meshedchannels_fields();
-    unit::meshedchannels::meshedchannels_methods();
+    unit::macros_meshedchannels::meshedchannels_fields();
+    unit::macros_meshedchannels::meshedchannels_methods();
+    unit::macros_meshedchannels::meshedchannels_self_methods();
+
+    // MeshedChannels methods and fields
+    unit::baking_meshedchannels::meshedchannels_fields();
+    unit::baking_meshedchannels::meshedchannels_methods();
+    unit::baking_meshedchannels::meshedchannels_self_methods();
 }
 
 #[test]
