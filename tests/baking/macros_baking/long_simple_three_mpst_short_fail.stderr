@@ -12,3 +12,10 @@ error[E0599]: no method named `recv` found for struct `MeshedChannelsThree<mpstt
 ...
 103 |             let (_, s) = s.send(()).recv()?;
     |                                     ^^^^ method not found in `MeshedChannelsThree<mpstthree::binary::struct_trait::end::End, mpstthree::binary::struct_trait::send::Send<(), Recv<(), mpstthree::binary::struct_trait::send::Send<Branching0fromCtoB, mpstthree::binary::struct_trait::end::End>>>, RoleB<RoleBroadcast>, RoleC<RoleEnd>>`
+    |
+    = note: the method was found for
+            - `MeshedChannelsThree<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>`
+            - `MeshedChannelsThree<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>`
+            - `MeshedChannelsThree<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>`
+            - `MeshedChannelsThree<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>`
+            and 8 more types

@@ -20,6 +20,8 @@ use mpstthree::functionmpst::send::send_mpst_a_to_b;
 use mpstthree::functionmpst::send::send_mpst_b_to_c;
 use mpstthree::functionmpst::send::send_mpst_c_to_a;
 
+use petgraph::dot::Dot;
+
 /// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
@@ -99,18 +101,48 @@ pub fn simple_triple_endpoints_checker() {
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
 
-    assert_eq!(graph_a.node_count(), 4);
-    assert_eq!(graph_a.edge_count(), 3);
+    assert_eq!(
+        format!("{:?}", Dot::new(&graph_a)),
+        "digraph {\n    \
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"1\\\"\" ]\n    \
+            2 [ label = \"\\\"2\\\"\" ]\n    \
+            3 [ label = \"\\\"3\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleA!RoleB: i32\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleA?RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n\
+        }\n"
+    );
 
     ////////////// Test graph B
     let graph_b = &graphs["RoleB"];
 
-    assert_eq!(graph_b.node_count(), 4);
-    assert_eq!(graph_b.edge_count(), 3);
+    assert_eq!(
+        format!("{:?}", Dot::new(&graph_b)),
+        "digraph {\n    \
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"1\\\"\" ]\n    \
+            2 [ label = \"\\\"2\\\"\" ]\n    \
+            3 [ label = \"\\\"3\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleB?RoleA: i32\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleB!RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n\
+        }\n"
+    );
 
     ////////////// Test graph C
     let graph_c = &graphs["RoleC"];
 
-    assert_eq!(graph_c.node_count(), 4);
-    assert_eq!(graph_c.edge_count(), 3);
+    assert_eq!(
+        format!("{:?}", Dot::new(&graph_c)),
+        "digraph {\n    \
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"1\\\"\" ]\n    \
+            2 [ label = \"\\\"2\\\"\" ]\n    \
+            3 [ label = \"\\\"3\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleC!RoleA: i32\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleC?RoleB: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n\
+        }\n"
+    );
 }

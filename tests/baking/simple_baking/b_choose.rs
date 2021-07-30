@@ -18,6 +18,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
+use petgraph::dot::Dot;
+
 /// Test a simple storage server, implemented using binary
 /// choice. Simple types
 type AtoBNeg<N> = Recv<N, End>;
@@ -182,18 +184,64 @@ pub fn double_choice_checker() {
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
 
-    assert_eq!(graph_a.node_count(), 8);
-    assert_eq!(graph_a.edge_count(), 7);
+    assert_eq!(
+        format!("{:?}", Dot::new(&graph_a)),
+        "digraph {\n    \
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.0\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.3\\\"\" ]\n    \
+            5 [ label = \"\\\"0.1\\\"\" ]\n    \
+            6 [ label = \"\\\"0.2\\\"\" ]\n    \
+            7 [ label = \"\\\"0.3\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"& RoleB\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
+            1 -> 5 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
+            5 -> 6 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            6 -> 7 [ label = \"\\\"0\\\"\" ]\n\
+        }\n"
+    );
 
     ////////////// Test graph B
     let graph_b = &graphs["RoleB"];
 
-    assert_eq!(graph_b.node_count(), 6);
-    assert_eq!(graph_b.edge_count(), 5);
+    assert_eq!(
+        format!("{:?}", Dot::new(&graph_b)),
+        "digraph {\n    \
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.0\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"+ RoleB\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
+            1 -> 4 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"0\\\"\" ]\n\
+        }\n"
+    );
 
     ////////////// Test graph C
     let graph_c = &graphs["RoleC"];
 
-    assert_eq!(graph_c.node_count(), 6);
-    assert_eq!(graph_c.edge_count(), 5);
+    assert_eq!(
+        format!("{:?}", Dot::new(&graph_c)),
+        "digraph {\n    \
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.0\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"& RoleB\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
+            1 -> 4 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"0\\\"\" ]\n\
+        }\n"
+    );
 }

@@ -294,6 +294,10 @@ pub(crate) fn aux_get_graph(
                 }
             }
 
+            if number_of_recv == 0 && number_of_send == 0 {
+                panic!("Expected choose or offer, only found End")
+            }
+
             // Increase the index for the nodes
             index_node.push(0);
 
@@ -829,15 +833,6 @@ mod tests {
     use std::collections::hash_map::RandomState;
     use std::collections::HashMap;
 
-    use crate as mpstthree;
-
-    use crate::binary::struct_trait::end::End;
-    use crate::binary::struct_trait::recv::Recv;
-    use crate::binary::struct_trait::send::Send;
-    use crate::role::end::RoleEnd;
-
-    use crate::{checker_concat, create_meshedchannels, create_multiple_normal_role};
-
     #[test]
     fn test_clean_session() {
         let dirty_session = String::from(
@@ -1041,54 +1036,368 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_aux_graph_panic_stack() {
-        // Create new MeshedChannels
-        create_meshedchannels!(MeshedChannels, 2);
+        let state_branches = RandomState::new();
+        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
 
-        // Create new roles
-        create_multiple_normal_role!(
-            RoleA, RoleADual |
-            RoleB, RoleBDual |
-        );
+        let state_branching_sessions = RandomState::new();
+        let branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
 
-        // Types
+        let state_group_branches = RandomState::new();
+        let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
 
-        // Creating the MP sessions
+        let current_role = "RoleA";
 
-        // For A
-        type EndpointAFull = MeshedChannels<Recv<(), End>, RoleEnd, RoleA<RoleEnd>>;
+        let full_session = vec!["Recv<(),End>".to_string(), "RoleEnd".to_string()];
 
-        // For B
-        type EndpointBFull = MeshedChannels<Send<(), End>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+        let roles = vec!["RoleA".to_string(), "RoleB".to_string()];
 
-        /////////////////////////////////////////
-
-        checker_concat!(EndpointAFull, EndpointBFull).unwrap();
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
     }
 
     #[test]
     #[should_panic]
     fn test_aux_graph_panic_session() {
-        // Create new MeshedChannels
-        create_meshedchannels!(MeshedChannels, 2);
+        let state_branches = RandomState::new();
+        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
 
-        // Create new roles
-        create_multiple_normal_role!(
-            RoleA, RoleADual |
-            RoleB, RoleBDual |
+        let state_branching_sessions = RandomState::new();
+        let branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
+
+        let state_group_branches = RandomState::new();
+        let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
+
+        let current_role = "RoleB";
+
+        let full_session = vec!["End".to_string(), "RoleA<RoleEnd>".to_string()];
+
+        let roles = vec!["RoleA".to_string(), "RoleB".to_string()];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_choice_end() {
+        let state_branches = RandomState::new();
+        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
+
+        let state_branching_sessions = RandomState::new();
+        let branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
+
+        let state_group_branches = RandomState::new();
+        let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
+
+        let current_role = "RoleA";
+
+        let full_session = vec![
+            "End".to_string(),
+            "End".to_string(),
+            "RoleAtoAll<RoleEnd,RoleEnd>".to_string(),
+        ];
+
+        let roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_choice_end_send() {
+        let state_branches = RandomState::new();
+        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
+
+        let state_branching_sessions = RandomState::new();
+        let branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
+
+        let state_group_branches = RandomState::new();
+        let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
+
+        let current_role = "RoleA";
+
+        let full_session = vec![
+            "End".to_string(),
+            "Send<(),End>".to_string(),
+            "RoleAtoAll<RoleEnd,RoleEnd>".to_string(),
+        ];
+
+        let roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_choice_recv_recv() {
+        let state_branches = RandomState::new();
+        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
+
+        let state_branching_sessions = RandomState::new();
+        let branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
+
+        let state_group_branches = RandomState::new();
+        let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
+
+        let current_role = "RoleA";
+
+        let full_session = vec![
+            "Recv<(),End>".to_string(),
+            "Recv<(),End>".to_string(),
+            "RoleAlltoB<RoleEnd,RoleEnd>".to_string(),
+        ];
+
+        let roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_enum_choice_index() {
+        let state_branches = RandomState::new();
+        let mut branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
+
+        let state_branches_choice_end = RandomState::new();
+        let mut branches_receivers_choice_end: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branches_choice_end);
+
+        branches_receivers_choice_end.insert(
+            "End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
         );
 
-        // Types
+        branches_receivers.insert(
+            "Branching0AtoB".to_string(),
+            branches_receivers_choice_end.clone(),
+        );
+        branches_receivers.insert(
+            "Branching0AtoC".to_string(),
+            branches_receivers_choice_end.clone(),
+        );
 
-        // Creating the MP sessions
+        let state_branching_sessions = RandomState::new();
+        let mut branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
 
-        // For A
-        type EndpointAFull = MeshedChannels<End, RoleB<RoleEnd>, RoleA<RoleEnd>>;
+        branching_sessions.insert(
+            "Branching0AtoB::End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
+        branching_sessions.insert(
+            "Branching0AtoC::End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
 
-        // For B
-        type EndpointBFull = MeshedChannels<Send<(), End>, RoleA<RoleEnd>, RoleB<RoleEnd>>;
+        let state_group_branches = RandomState::new();
+        let mut group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
 
-        /////////////////////////////////////////
+        group_branches.insert("Branching0AtoB::End".to_string(), 0);
+        group_branches.insert("Branching0AtoC::End".to_string(), 0);
 
-        checker_concat!(EndpointAFull, EndpointBFull).unwrap();
+        let current_role = "RoleA";
+
+        let full_session = vec![
+            "Send<Branching0AtoB,End>".to_string(),
+            "Send<Branching0AtoC,End>".to_string(),
+            "RoleBroadcast".to_string(),
+        ];
+
+        let roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_enum_offer_index() {
+        let state_branches = RandomState::new();
+        let mut branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
+
+        let state_branches_choice_end = RandomState::new();
+        let mut branches_receivers_choice_end: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branches_choice_end);
+
+        branches_receivers_choice_end.insert(
+            "End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
+
+        branches_receivers.insert(
+            "Branching0AtoB".to_string(),
+            branches_receivers_choice_end.clone(),
+        );
+        branches_receivers.insert(
+            "Branching0AtoC".to_string(),
+            branches_receivers_choice_end.clone(),
+        );
+
+        let state_branching_sessions = RandomState::new();
+        let mut branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
+
+        branching_sessions.insert(
+            "Branching0AtoB::End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
+        branching_sessions.insert(
+            "Branching0AtoC::End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
+
+        let state_group_branches = RandomState::new();
+        let mut group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
+
+        group_branches.insert("Branching0AtoB::End".to_string(), 0);
+        group_branches.insert("Branching0AtoC::End".to_string(), 0);
+
+        let current_role = "RoleA";
+
+        let full_session = vec![
+            "Recv<Branching0AtoB,End>".to_string(),
+            "End".to_string(),
+            "RoleB<RoleEnd>".to_string(),
+        ];
+
+        let roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_graph_panic_enum_missing() {
+        let state_branches = RandomState::new();
+        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+            HashMap::with_hasher(state_branches);
+
+        let state_branching_sessions = RandomState::new();
+        let mut branching_sessions: HashMap<String, Vec<String>> =
+            HashMap::with_hasher(state_branching_sessions);
+
+        branching_sessions.insert(
+            "Branching0AtoB::End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
+        branching_sessions.insert(
+            "Branching0AtoC::End".to_string(),
+            vec!["End".to_string(), "End".to_string(), "RoleEnd".to_string()],
+        );
+
+        let state_group_branches = RandomState::new();
+        let mut group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
+
+        group_branches.insert("Branching0AtoB::End".to_string(), 0);
+        group_branches.insert("Branching0AtoC::End".to_string(), 0);
+
+        let current_role = "RoleA";
+
+        let full_session = vec![
+            "Send<Branching0AtoB,End>".to_string(),
+            "Send<Branching0AtoC,End>".to_string(),
+            "RoleBroadcast".to_string(),
+        ];
+
+        let roles = vec![
+            "RoleA".to_string(),
+            "RoleB".to_string(),
+            "RoleC".to_string(),
+        ];
+
+        get_graph_session(
+            current_role,
+            full_session,
+            &roles,
+            branches_receivers,
+            branching_sessions,
+            group_branches,
+        )
+        .unwrap();
     }
 }
