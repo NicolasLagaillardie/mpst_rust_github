@@ -18,8 +18,9 @@ use aux_checker::*;
 /// Currently, we do not support parameters for branches with `enum`
 ///
 /// ```ignore
-/// // Assume that there are two choices (Branches0BtoA and Branches0CtoA), each one with two branches (Video and End),
-/// // then the call for this macro would be as followed.
+/// // Assume that there are two choices (Branches0BtoA and Branches0CtoA), each one with two branches (Video and End).
+/// // Assume also that the starting Endpoints of the three roles are EndpointAFull, EndpointCFull and EndpointBFull
+/// // (the order does not matter). The call for this macro would be as followed
 /// mpstthree::checker_concat!(
 ///     EndpointAFull,
 ///     EndpointCFull,
@@ -54,21 +55,24 @@ macro_rules! checker_concat {
         ),+ $(,)?
     ) => {
         {
+            // All the starting sessions, stringified
             let mut sessions = Vec::new();
-            let mut tail_sessions = Vec::new();
+
+            $(
+                sessions.push(String::from(std::any::type_name::<$sessiontype>()));
+            )+
+
+            // Each choice and branch:  { choice_1 : { branch_1 : session_1 ; branch_2 : session_2 ; ... } ; ... }
             let state_branching_sessions = std::collections::hash_map::RandomState::new();
             let mut branching_sessions: std::collections::HashMap<String, String> =
                 std::collections::HashMap::with_hasher(state_branching_sessions);
 
-            $(
-                sessions.push(String::from(std::any::type_name::<$sessiontype>()));
-                tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
-            )+
-
+            // All branches, grouped by choice:  { choice_1::branch_1 : 0 ; choice_1::branch_2 : 1 ; choice_2::branch_1 : 0 ; choice_2::branch_2 : 1 ; ...  }
             let state_group_branches = std::collections::hash_map::RandomState::new();
             let mut group_branches: std::collections::HashMap<String, i32> =
                 std::collections::HashMap::with_hasher(state_group_branches);
 
+            // Start the index for group_branches
             let mut index = 0;
 
             $(
@@ -96,10 +100,7 @@ macro_rules! checker_concat {
                 index += 1;
             )+
 
-            /* println!("group_branches_treated: {:?}", &group_branches_treated); */
-
-            /* println!("group_branches: {:?}", &group_branches); */
-
+            // Macro to implement Display for the `enum`
             mpst_seq::checking!(
                 $(
                     $(
@@ -111,15 +112,13 @@ macro_rules! checker_concat {
                 )+
             );
 
+            // Create the graphs with the previous inputs
             mpstthree::checking::checker(
                 sessions,
-                tail_sessions,
                 branches_receivers,
                 branching_sessions,
                 group_branches
             )
-
-            /* println!("result: {:?}", result); */
         }
     };
     (
@@ -129,11 +128,9 @@ macro_rules! checker_concat {
     ) => {
         {
             let mut sessions = Vec::new();
-            let mut tail_sessions = Vec::new();
 
             $(
                 sessions.push(String::from(std::any::type_name::<$sessiontype>()));
-                tail_sessions.push(<$sessiontype as mpstthree::binary::struct_trait::session::Session>::tail_str());
             )+
 
             let state_branches = std::collections::hash_map::RandomState::new();
@@ -150,81 +147,42 @@ macro_rules! checker_concat {
 
             mpstthree::checking::checker(
                 sessions,
-                tail_sessions,
                 branches_receivers,
                 branching_sessions,
                 group_branches
             )
-
-            /* println!("result: {:?}", result); */
         }
     };
 }
 
+// The starting function for extracting the graphs
 #[doc(hidden)]
 pub fn checker(
     sessions: Vec<String>,
-    tail_sessions: Vec<String>,
     branches_receivers: HashMap<String, HashMap<String, String>>,
     branching_sessions: HashMap<String, String>,
     group_branches: HashMap<String, i32>,
 ) -> Result<HashMap<String, Graph<String, String>>, Box<dyn Error>> {
-    /* println!("sessions: {:?}", &sessions); */
-    /* println!(); */
+    // Clean the input sessions and extract the roles
+    let (clean_sessions, roles) = clean_sessions(sessions.to_vec())?;
 
-    let clean_sessions = clean_sessions(sessions.to_vec())?;
-
-    /* println!("clean_sessions: {:?}", &clean_sessions); */
-
-    /* println!("tail_sessions: {:?}", &tail_sessions); */
-    /* println!(); */
-
-    let roles = roles(tail_sessions)?;
-
-    if roles.len() != sessions.len() {
-        panic!("The numbers of roles and sessions are not equal")
-    }
-
-    /* println!("roles: {:?}", &roles); */
-
+    // The cleaned branches_receivers
     let state_branches = RandomState::new();
     let mut update_branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
         HashMap::with_hasher(state_branches);
-
-    /* println!("branches_receivers: {:?}", &branches_receivers); */
-    /* println!(); */
 
     for (choice, branches) in branches_receivers {
         let state_branch = RandomState::new();
         let mut temp_branch: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branch);
 
         for (branch, session) in branches {
-            /* println!("Dirty session: {:?}", &session); */
-            /* println!("Clean session: {:?}", clean_session(session.to_string())?); */
             temp_branch.insert(branch, clean_session(session)?);
         }
 
         update_branches_receivers.insert(choice, temp_branch);
     }
 
-    /* println!("clean_sessions: {:?}", &clean_sessions); */
-    /* println!(); */
-
-    /* println!("roles: {:?}", &roles); */
-    /* println!(); */
-
-    /* println!(
-        "update_branches_receivers: {:?}",
-        &update_branches_receivers
-    ); */
-    /* println!(); */
-
-    /* println!("branching_sessions: {:?}", &branching_sessions); */
-    /* println!(); */
-
-    /* println!("group_branches: {:?}", &group_branches); */
-    /* println!(); */
-
+    // The cleaned branching_sessions
     let state_branching_sessions = RandomState::new();
     let mut update_branching_sessions: HashMap<String, Vec<String>> =
         HashMap::with_hasher(state_branching_sessions);
@@ -237,43 +195,24 @@ pub fn checker(
         );
     }
 
-    /* println!(
-        "update_branching_sessions: {:?}",
-        &update_branching_sessions
-    ); */
-    /* println!(); */
-
+    // The final result Hashmap
     let state_result = RandomState::new();
     let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
 
+    // Get all the graphs and add them to the result Hashmap
     for (role, full_session) in clean_sessions.clone() {
-        let graph = get_graph_session(
-            &role,
-            full_session,
-            &roles,
-            update_branches_receivers.clone(),
-            update_branching_sessions.clone(),
-            group_branches.clone(),
-        )?;
-        /* println!("Role: {:?}", &role); */
-        /* println!("Final graph: {:?}", Dot::new(&graph)); */
-        result.insert(role.to_string(), graph);
+        result.insert(
+            role.to_string(),
+            get_graph_session(
+                &role,
+                full_session,
+                &roles,
+                update_branches_receivers.clone(),
+                update_branching_sessions.clone(),
+                group_branches.clone(),
+            )?,
+        );
     }
-
-    // for (role, fields) in clean_sessions {
-    //     /* println!("role: {:?}:", role); */
-    //     /* println!("fields: {:?}:", &fields); */
-    //     /* println!(); */
-    //     for field in fields {
-    //         /* println!("field: {:?}:", &field); */
-    //         /* println!(
-    //             "head, payload and continuation: {:?}:",
-    //             get_head_payload_continuation(String::from(&field))?
-    //         ); */
-    //         /* println!(); */
-    //     }
-    //     /* println!(); */
-    // }
 
     Ok(result)
 }

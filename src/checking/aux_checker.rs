@@ -7,8 +7,32 @@ use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
 
+type VecOfStr = Vec<String>;
+type HashMapStrVecOfStr = HashMap<String, VecOfStr>;
+
+/// Clean the provided session, which should be stringified.
+///
+/// From
+///     "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+///     binary::struct_trait::recv::Recv<checking_recursion::\
+///     Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
+///     ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
+///     struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
+///     End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
+///     mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
+///     ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
+///
+/// to
+///
+/// [
+///     "Recv<Branches0AtoB,End>",
+///     "Recv<i32,Send<i32,End>>",
+///     "RoleC<RoleC<RoleB<RoleEnd>>>",
+///     "RoleA<RoleEnd>",
+///     "RoleA"
+/// ]
 #[doc(hidden)]
-pub(crate) fn clean_session(session: String) -> Result<Vec<String>, Box<dyn Error>> {
+pub(crate) fn clean_session(session: String) -> Result<VecOfStr, Box<dyn Error>> {
     // The regex expression
     let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
     let mut temp = String::from(&session).replace("&", "");
@@ -22,9 +46,8 @@ pub(crate) fn clean_session(session: String) -> Result<Vec<String>, Box<dyn Erro
     temp.retain(|c| !c.is_whitespace());
 
     // Get each field of the MeshedChannels
-    /* println!("temp: {:?}", &temp); */
+
     let mut full_block = get_blocks(temp)?;
-    /* println!("full_block: {:?}", &full_block); */
 
     // Get the name of the role
     let name = &full_block[full_block.len() - 1]
@@ -42,44 +65,41 @@ pub(crate) fn clean_session(session: String) -> Result<Vec<String>, Box<dyn Erro
 ///
 /// Remove the unnecessary terms before each :: (such as mpstthree in mpstthree::Session),
 /// and link each new String with its respective role.
+/// Uses the clean_session() function to achieve the result
 #[doc(hidden)]
 pub(crate) fn clean_sessions(
-    sessions: Vec<String>,
-) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
+    sessions: VecOfStr,
+) -> Result<(HashMapStrVecOfStr, VecOfStr), Box<dyn Error>> {
     // The hasher of the HashMap
     let state_branches_receivers = RandomState::new();
 
+    // All the roles
+    let mut roles = Vec::new();
+
     // The result
-    let mut all_sessions: HashMap<String, Vec<String>> =
-        HashMap::with_hasher(state_branches_receivers);
+    let mut all_sessions: HashMapStrVecOfStr = HashMap::with_hasher(state_branches_receivers);
+
+    let mut size_sessions = 0;
 
     for session in sessions {
         let full_block = clean_session(session)?;
 
+        // The number of expected roles
+        size_sessions = full_block.len() - 2;
+
+        // Collect the last field of the meshedChannels (the name field)
         let name = String::from(&full_block[full_block.len() - 1]);
+
+        // Collect the names of the roles
+        roles.push(name.to_string());
 
         // Insert the vec of fields (minus the name's role) linked to the name of the role
         all_sessions.insert(name, full_block[..(full_block.len() - 2)].to_vec());
     }
 
-    Ok(all_sessions)
-}
-
-// Get the roles from the tail_sessions (the ones from the method tail_str for MeshedChannels).
-#[doc(hidden)]
-pub(crate) fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn Error>> {
-    let mut roles = Vec::new();
-    for tail_session in tail_sessions {
-        // Split according to '\n'
-        let full_vec: Vec<&str> = tail_session
-            .split('\n')
-            .filter(|s| !s.is_empty())
-            .collect::<Vec<_>>();
-
-        // Split and push the name of the role of the MeshecChannels
-        roles.push(String::from(
-            full_vec[full_vec.len() - 1].split('<').collect::<Vec<_>>()[0],
-        ));
+    // If the number of roles is different from the number of sessions
+    if roles.len() != size_sessions {
+        panic!("The numbers of roles and sessions are not equal")
     }
 
     // Sort
@@ -88,12 +108,26 @@ pub(crate) fn roles(tail_sessions: Vec<String>) -> Result<Vec<String>, Box<dyn E
     // Remove duplicates
     roles.dedup();
 
-    Ok(roles)
+    Ok((all_sessions, roles))
 }
 
 /// Separate the different _fields_ of a stringified type.
+///
+/// From
+///     "MeshedChannels<Send<Branches0AtoB,End>,Send\
+///     <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
+///     <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
+///
+/// to
+///
+/// [
+///     "Send<Branches0AtoB,End>",
+///     "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+///     "RoleC<RoleC<RoleBroadcast>>",
+///     "RoleB<RoleEnd>",
+/// ]
 #[doc(hidden)]
-pub(crate) fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Error>> {
+pub(crate) fn get_blocks(full_block: String) -> Result<VecOfStr, Box<dyn Error>> {
     let mut result = Vec::new();
     let mut temp = "".to_string();
 
@@ -133,12 +167,11 @@ pub(crate) fn get_blocks(full_block: String) -> Result<Vec<String>, Box<dyn Erro
     Ok(result)
 }
 
-/// Get the start of a Recv/Send session, and its payload and continuation.
+/// Get the head of a Recv/Send session, its payload and its continuation.
 #[doc(hidden)]
 pub(crate) fn get_head_payload_continuation(
     full_block: String,
-) -> Result<Vec<String>, Box<dyn Error>> {
-    /* println!("full_block: {:?}", &full_block); */
+) -> Result<VecOfStr, Box<dyn Error>> {
     if full_block == *"End" {
         // If the full block is a `End` type
         Ok(vec!["End".to_string()])
@@ -152,6 +185,9 @@ pub(crate) fn get_head_payload_continuation(
     }
 }
 
+/// Extract the correct label for a node from the index_node and the depth of the current node.
+///
+/// From [0, 1, 0, 5] and 2 to "0.1.0".
 #[doc(hidden)]
 pub(crate) fn extract_index_node(
     index_node: Vec<usize>,
@@ -168,6 +204,7 @@ pub(crate) fn extract_index_node(
     ))
 }
 
+/// Switch all Send and Recv at the head of each session
 #[doc(hidden)]
 pub(crate) fn build_dual(session: String) -> Result<String, Box<dyn Error>> {
     if session == *"End" {
@@ -194,25 +231,21 @@ pub(crate) fn build_dual(session: String) -> Result<String, Box<dyn Error>> {
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn aux_get_graph(
     current_role: &str,
-    mut full_session: Vec<String>,
+    mut full_session: VecOfStr,
     roles: &[String],
     mut index_node: Vec<usize>,
     mut previous_node: NodeIndex<u32>,
-    compare_end: Vec<String>,
+    compare_end: VecOfStr,
     mut depth_level: usize,
     index_current_role: usize,
     mut g: Graph<String, String>,
-    branches_receivers: HashMap<String, HashMap<String, Vec<String>>>,
+    branches_receivers: HashMap<String, HashMapStrVecOfStr>,
     mut branches_aready_seen: HashMap<String, NodeIndex<u32>>,
-    branching_sessions: HashMap<String, Vec<String>>,
+    branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
-        /* println!(
-            "Adding node: {:?}",
-            &extract_index_node(index_node.clone(), depth_level)?
-        ); */
         let new_node = g.add_node(extract_index_node(index_node, depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
         Ok(g)
@@ -222,8 +255,6 @@ pub(crate) fn aux_get_graph(
 
         // Get the head of the stack
         let stack = &get_head_payload_continuation(full_session[size_full_session].clone())?;
-
-        /* println!("stack: {:?}", &stack); */
 
         if stack.len() == 3 {
             // If it is a simple choice
@@ -252,17 +283,13 @@ pub(crate) fn aux_get_graph(
                         // Should be `Either<MC, MC>`
                         let payload_either =
                             &get_head_payload_continuation(session.to_string())?[1];
-                        /* println!("payload_either: {:?}", &payload_either); */
 
                         // Should be `[Either, MC, MC]`
                         let choices = get_head_payload_continuation(payload_either.to_string())?;
-                        /* println!("choices: {:?}", &choices); */
 
                         // Split the new session
                         let blocks_left = get_blocks(choices[1].to_string())?;
                         let blocks_right = get_blocks(choices[2].to_string())?;
-                        /* println!("blocks_left: {:?}", &blocks_left); */
-                        /* println!("blocks_right: {:?}", &blocks_right); */
 
                         // Get the index of the receiver
                         let receiver = &get_head_payload_continuation(
@@ -282,8 +309,6 @@ pub(crate) fn aux_get_graph(
                             build_dual(blocks_right[index_current_role - offset].to_string())?
                                 .to_string(),
                         );
-                        /* println!("choice_left: {:?}", &choice_left); */
-                        /* println!("choice_right: {:?}", &choice_right); */
                     }
                     ("Recv", 0, 0, new_pos) => {
                         number_of_recv += 1;
@@ -306,10 +331,6 @@ pub(crate) fn aux_get_graph(
 
             // Add the new `step`
             let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
-            /* println!(
-                "Adding node: {:?}",
-                &extract_index_node(index_node.clone(), depth_level)?
-            ); */
 
             if number_of_recv == 1 {
                 // The offset depending on the relative positions of the roles
@@ -317,8 +338,7 @@ pub(crate) fn aux_get_graph(
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
-                /* println!("current role for offer: {:?}", &current_role); */
-                /* println!("possible role for offer: {:?}", &roles[pos_recv + offset]); */
+
                 g.add_edge(
                     previous_node,
                     new_node,
@@ -329,15 +349,13 @@ pub(crate) fn aux_get_graph(
                 // Should be `Either<MC, MC>`
                 let payload_either =
                     &get_head_payload_continuation(full_session[pos_recv].to_string())?[1];
-                /* println!("payload_either: {:?}", &payload_either); */
 
                 // Should be `[Either, MC, MC]`
                 let offers = get_head_payload_continuation(payload_either.to_string())?;
-                /* println!("offers: {:?}", &offers); */
 
                 // The left offer
                 let offer_left = clean_session(offers[1].clone())?;
-                /* println!("Offer left: {:?}", &offer_left); */
+
                 g = aux_get_graph(
                     current_role,
                     offer_left[..(offer_left.len() - 2)].to_vec(),
@@ -354,10 +372,8 @@ pub(crate) fn aux_get_graph(
                     group_branches.clone(),
                 )?;
 
-                /* println!("Current g: {:?}", &g); */
-
                 let offer_right = clean_session(offers[2].clone())?;
-                /* println!("Choose right: {:?}", &offer_right); */
+
                 aux_get_graph(
                     current_role,
                     offer_right[..(offer_right.len() - 2)].to_vec(),
@@ -376,15 +392,13 @@ pub(crate) fn aux_get_graph(
             } else {
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
-                /* println!("current role for choose: {:?}", &current_role); */
+
                 g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
                 previous_node = new_node;
 
                 // Add the corresponding stacks
                 choice_left.push(stack[1].to_string());
                 choice_right.push(stack[2].to_string());
-                /* println!("sent choice_left: {:?}", &choice_left); */
-                /* println!("sent choice_right: {:?}", &choice_right); */
 
                 g = aux_get_graph(
                     current_role,
@@ -439,10 +453,6 @@ pub(crate) fn aux_get_graph(
 
                 // Add the new `step`
                 let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
-                /* println!(
-                    "Adding node: {:?}",
-                    &extract_index_node(index_node.clone(), depth_level)?
-                ); */
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
@@ -485,23 +495,14 @@ pub(crate) fn aux_get_graph(
                     all_branches_vec.sort();
                     all_branches.sort();
 
-                    /* println!("all_branches: {:?}", &all_branches); */
-                    /* println!("all_branches_vec: {:?}", &all_branches_vec); */
-                    /* println!("current_role: {:?}", &current_role); */
-
                     let mut node_added = false;
 
                     for (current_branch, session) in all_branches.clone() {
-                        /* println!("current branch: {:?}", &current_branch); */
-                        /* println!("branches_aready_seen: {:?}", &branches_aready_seen); */
-                        /* println!("group_branches: {:?}", &group_branches); */
-                        /* println!(); */
                         if let Some(new_node) = branches_aready_seen.get(&current_branch) {
                             if !g.contains_edge(previous_node, *new_node)
                                 && previous_node != *new_node
                             {
                                 g.add_edge(previous_node, *new_node, "µ".to_string());
-                                /* println!("Added edge"); */
                             }
                         } else {
                             // If the node was not added
@@ -515,10 +516,6 @@ pub(crate) fn aux_get_graph(
                                 // Add the new `step`
                                 let new_node = g
                                     .add_node(extract_index_node(index_node.clone(), depth_level)?);
-                                /* println!(
-                                    "Adding node: {:?}",
-                                    &extract_index_node(index_node.clone(), depth_level)?
-                                ); */
 
                                 // Add the corresponding edge
                                 g.add_edge(previous_node, new_node, format!("& {}", &head_stack));
@@ -535,9 +532,6 @@ pub(crate) fn aux_get_graph(
                                     .insert(temp_current_branch.0.clone(), previous_node);
                             }
 
-                            /* println!("new session: {:?}", &session); */
-                            /* println!("full session: {:?}", &full_session); */
-
                             g = aux_get_graph(
                                 current_role,
                                 session[..(session.len() - 2)].to_vec(),
@@ -553,12 +547,10 @@ pub(crate) fn aux_get_graph(
                                 branching_sessions.clone(),
                                 group_branches.clone(),
                             )?;
-                            /* println!("current graph: {:?}", Dot::new(&g)); */
 
                             // Insert the new node/branch in the list of the ones already seen
                             let index_group =
                                 if let Some(index) = group_branches.get(&current_branch) {
-                                    /* println!("index session: {:?}", &index); */
                                     index
                                 } else {
                                     panic!("Missing index")
@@ -577,10 +569,6 @@ pub(crate) fn aux_get_graph(
                 } else {
                     index_node[depth_level] += 1;
                     let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
-                    /* println!(
-                        "Adding node: {:?}",
-                        &extract_index_node(index_node.clone(), depth_level)?
-                    ); */
                     g.add_edge(
                         previous_node,
                         new_node,
@@ -617,8 +605,6 @@ pub(crate) fn aux_get_graph(
 
             let mut all_branches = Vec::new();
 
-            /* println!("running RoleBroadcast"); */
-
             // Check all the sessions
             for (pos, session) in full_session[..(full_session.len() - 1)]
                 .to_vec()
@@ -635,7 +621,6 @@ pub(crate) fn aux_get_graph(
 
                         // Should be a specific `enum`
                         let payload = &get_head_payload_continuation(session.to_string())?[1];
-                        /* println!("payload_either: {:?}", &payload_either); */
 
                         // Update all_choices
                         if let Some(choice) = branches_receivers.get(payload) {
@@ -658,23 +643,10 @@ pub(crate) fn aux_get_graph(
 
             all_branches.sort();
 
-            /* println!("role: {:?}", &current_role); */
-            /* println!(); */
-            /* println!("all_branches: {:?}", &all_branches); */
-            /* println!("branches_receivers: {:?}", &branches_receivers); */
-            /* println!("group_branches: {:?}", &group_branches); */
-            /* println!(); */
-
             for current_branch in all_branches.clone() {
-                /* println!("current branch: {:?}", &current_branch); */
-                /* println!("branches_aready_seen: {:?}", &branches_aready_seen); */
-                /* println!("group_branches: {:?}", &group_branches); */
-                /* println!(); */
-
                 if let Some(new_node) = branches_aready_seen.get(&current_branch) {
                     if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
                         g.add_edge(previous_node, *new_node, "µ".to_string());
-                        /* println!("Added edge"); */
                     }
                 } else {
                     // If the node was not added
@@ -688,10 +660,6 @@ pub(crate) fn aux_get_graph(
                         // Add the new `step`
                         let new_node =
                             g.add_node(extract_index_node(index_node.clone(), depth_level)?);
-                        /* println!(
-                            "Adding node: {:?}",
-                            &extract_index_node(index_node.clone(), depth_level)?
-                        ); */
 
                         // Add the corresponding edge
                         g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
@@ -702,7 +670,6 @@ pub(crate) fn aux_get_graph(
                     }
 
                     let session = if let Some(session) = branching_sessions.get(&current_branch) {
-                        /* println!("working session: {:?}", &session); */
                         session[..(session.len() - 1)].to_vec()
                     } else {
                         panic!("Missing session")
@@ -714,10 +681,6 @@ pub(crate) fn aux_get_graph(
                         temp_branches_aready_seen
                             .insert(temp_current_branch.clone(), previous_node);
                     }
-
-                    /* println!("updated branches_aready_seen: {:?}", &branches_aready_seen); */
-                    /* println!("new session: {:?}", &session); */
-                    /* println!("full session: {:?}", &full_session); */
 
                     g = aux_get_graph(
                         current_role,
@@ -737,7 +700,6 @@ pub(crate) fn aux_get_graph(
 
                     // Insert the new node/branch in the list of the ones already seen
                     let index_group = if let Some(index) = group_branches.get(&current_branch) {
-                        /* println!("index session: {:?}", &index); */
                         index
                     } else {
                         panic!("Missing index")
@@ -745,19 +707,11 @@ pub(crate) fn aux_get_graph(
 
                     for (temp_current_branch, temp_index) in group_branches.clone() {
                         if temp_index == *index_group {
-                            /* println!("index session: {:?}", &index_group); */
-                            /* println!("added previous node: {:?}", &previous_node); */
-                            /* println!("temp_current_branch: {:?}", &temp_current_branch); */
                             branches_aready_seen.insert(temp_current_branch.clone(), previous_node);
                         }
                     }
-
-                    /* println!("current graph: {:?}", Dot::new(&g)); */
-                    /* println!(); */
                 }
-                /* println!(); */
             }
-            /* println!(); */
 
             Ok(g)
         } else {
@@ -769,14 +723,14 @@ pub(crate) fn aux_get_graph(
     }
 }
 
-/// Build the digraph from the current full_session.
+/// Build the digraphs.
 #[doc(hidden)]
 pub(crate) fn get_graph_session(
     current_role: &str,
-    full_session: Vec<String>,
+    full_session: VecOfStr,
     roles: &[String],
-    branches_receivers: HashMap<String, HashMap<String, Vec<String>>>,
-    branching_sessions: HashMap<String, Vec<String>>,
+    branches_receivers: HashMap<String, HashMapStrVecOfStr>,
+    branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     // Create the new graph that will be returned in the end
@@ -793,8 +747,7 @@ pub(crate) fn get_graph_session(
     compare_end.push("RoleEnd".to_string());
 
     // The index of the current_role among the roles
-    /* println!("Expected role: {:?}", &current_role); */
-    /* println!("All role: {:?}", &roles); */
+
     let index_current_role = roles.iter().position(|r| r == current_role).unwrap();
 
     // The index of the current_role among the roles
@@ -826,8 +779,6 @@ pub(crate) fn get_graph_session(
 
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for
-    // mod tests) scope.
     use super::*;
 
     use std::collections::hash_map::RandomState;
@@ -835,23 +786,22 @@ mod tests {
 
     #[test]
     fn test_clean_session() {
-        let dirty_session = String::from(
-            "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+        let dirty_session = "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
             binary::struct_trait::recv::Recv<checking_recursion::\
             Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
             ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
             struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
             End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
             mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
-            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>",
-        );
+            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
+            .to_string();
 
         let clean_session_compare = vec![
-            "Recv<Branches0AtoB,End>".to_string(),
-            "Recv<i32,Send<i32,End>>".to_string(),
-            "RoleC<RoleC<RoleB<RoleEnd>>>".to_string(),
-            "RoleA<RoleEnd>".to_string(),
-            "RoleA".to_string(),
+            "Recv<Branches0AtoB,End>",
+            "Recv<i32,Send<i32,End>>",
+            "RoleC<RoleC<RoleB<RoleEnd>>>",
+            "RoleA<RoleEnd>",
+            "RoleA",
         ];
 
         assert_eq!(clean_session(dirty_session).unwrap(), clean_session_compare);
@@ -890,8 +840,9 @@ mod tests {
 
         // The hasher of the HashMap
         let state_clean_sessions_compare = RandomState::new();
+
         // The result
-        let mut clean_sessions_compare: HashMap<String, Vec<String>> =
+        let mut clean_sessions_compare: HashMapStrVecOfStr =
             HashMap::with_hasher(state_clean_sessions_compare);
 
         clean_sessions_compare.insert(
@@ -919,31 +870,41 @@ mod tests {
             ],
         );
 
-        assert_eq!(
-            clean_sessions_compare,
-            clean_sessions(dirty_sessions).unwrap()
-        );
-    }
-
-    #[test]
-    fn test_roles() {
-        let dirty_roles = vec![
-            "Recv<End<>>\nEnd<>\nRoleB<RoleEnd<>>\nRoleA<RoleEnd<>>".to_string(),
-            "End<>\nRecv<Send<Recv<End<>>>>\nRoleB<RoleB<\
-                RoleB<RoleEnd<>>>>\nRoleC<RoleEnd<>>"
-                .to_string(),
-            "Send<End<>>\nSend<Recv<Send<End<>>>>\nRoleC<\
-                RoleC<RoleBroadcast<>>>\nRoleB<RoleEnd<>>"
-                .to_string(),
-        ];
-
         let clean_roles = vec![
             "RoleA".to_string(),
             "RoleB".to_string(),
             "RoleC".to_string(),
         ];
 
-        assert_eq!(clean_roles, roles(dirty_roles).unwrap());
+        assert_eq!(
+            (clean_sessions_compare, clean_roles),
+            clean_sessions(dirty_sessions).unwrap()
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_clean_sessions_panic() {
+        let dirty_sessions = vec![
+            "mpstthree::meshedchannels::MeshedChannels<mpstthree::binary::\
+            struct_trait::recv::Recv<checking_recursion::Branches0AtoB, mpstthree\
+            ::binary::struct_trait::end::End>, mpstthree::binary::\
+            struct_trait::end::End, mpstthree::role::b::RoleB<mpstthree::role\
+            ::end::RoleEnd>, mpstthree::role::a::RoleA<mpstthree::role::end::\
+            RoleEnd>>"
+                .to_string(),
+            "mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+            binary::struct_trait::end::End, mpstthree::binary::struct_trait::\
+            recv::Recv<i32, mpstthree::binary::struct_trait::send::Send<\
+            i32, mpstthree::binary::struct_trait::recv::Recv<checking_recursion\
+            ::Branches0CtoB, mpstthree::binary::struct_trait::end::End>>>, mpstthree\
+            ::role::b::RoleB<mpstthree::role::b::RoleB<mpstthree::role::b::RoleB\
+            <mpstthree::role::end::RoleEnd>>>, mpstthree::role::c::RoleC<\
+            mpstthree::role::end::RoleEnd>>"
+                .to_string(),
+        ];
+
+        clean_sessions(dirty_sessions).unwrap();
     }
 
     #[test]
@@ -968,14 +929,14 @@ mod tests {
         // End
         let dirty_end = "End".to_string();
 
-        let clean_end = vec!["End".to_string()];
+        let clean_end = vec!["End"];
 
         assert_eq!(clean_end, get_head_payload_continuation(dirty_end).unwrap());
 
         // RoleEnd
         let dirty_role_end = "RoleEnd".to_string();
 
-        let clean_role_end = vec!["RoleEnd".to_string()];
+        let clean_role_end = vec!["RoleEnd"];
 
         assert_eq!(
             clean_role_end,
@@ -985,11 +946,7 @@ mod tests {
         // Random
         let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string();
 
-        let clean_random = vec![
-            "Recv".to_string(),
-            "i32".to_string(),
-            "Send<i32,Recv<Branches0CtoB,End>>".to_string(),
-        ];
+        let clean_random = vec!["Recv", "i32", "Send<i32,Recv<Branches0CtoB,End>>"];
 
         assert_eq!(
             clean_random,
@@ -999,30 +956,21 @@ mod tests {
 
     #[test]
     fn test_extract_index_node() {
-        let index_node = vec![0, 1, 4, 5];
+        assert_eq!("0.1.4.5", extract_index_node(vec![0, 1, 4, 5], 3).unwrap());
 
-        assert_eq!(
-            "0.1.4.5".to_string(),
-            extract_index_node(index_node.to_vec(), 3).unwrap()
-        );
+        assert_eq!("0.1.4", extract_index_node(vec![0, 1, 4, 5], 2).unwrap());
 
-        assert_eq!(
-            "0.1.4".to_string(),
-            extract_index_node(index_node.to_vec(), 2).unwrap()
-        );
-
-        assert_eq!(
-            "0".to_string(),
-            extract_index_node(index_node.to_vec(), 0).unwrap()
-        );
+        assert_eq!("0", extract_index_node(vec![0, 1, 4, 5], 0).unwrap());
     }
 
     #[test]
     fn test_build_dual() {
         let session = "Recv<i32,Send<Branches0CtoB,End>>".to_string();
-        let dual_session = "Send<i32,Recv<Branches0CtoB,End>>".to_string();
 
-        assert_eq!(dual_session, build_dual(session).unwrap());
+        assert_eq!(
+            "Send<i32,Recv<Branches0CtoB,End>>",
+            build_dual(session).unwrap()
+        );
     }
 
     #[test]
@@ -1037,12 +985,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_stack() {
         let state_branches = RandomState::new();
-        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branching_sessions = RandomState::new();
-        let branching_sessions: HashMap<String, Vec<String>> =
-            HashMap::with_hasher(state_branching_sessions);
+        let branching_sessions: HashMapStrVecOfStr = HashMap::with_hasher(state_branching_sessions);
 
         let state_group_branches = RandomState::new();
         let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
@@ -1068,12 +1015,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_session() {
         let state_branches = RandomState::new();
-        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branching_sessions = RandomState::new();
-        let branching_sessions: HashMap<String, Vec<String>> =
-            HashMap::with_hasher(state_branching_sessions);
+        let branching_sessions: HashMapStrVecOfStr = HashMap::with_hasher(state_branching_sessions);
 
         let state_group_branches = RandomState::new();
         let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
@@ -1099,12 +1045,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_choice_end() {
         let state_branches = RandomState::new();
-        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branching_sessions = RandomState::new();
-        let branching_sessions: HashMap<String, Vec<String>> =
-            HashMap::with_hasher(state_branching_sessions);
+        let branching_sessions: HashMapStrVecOfStr = HashMap::with_hasher(state_branching_sessions);
 
         let state_group_branches = RandomState::new();
         let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
@@ -1138,12 +1083,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_choice_end_send() {
         let state_branches = RandomState::new();
-        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branching_sessions = RandomState::new();
-        let branching_sessions: HashMap<String, Vec<String>> =
-            HashMap::with_hasher(state_branching_sessions);
+        let branching_sessions: HashMapStrVecOfStr = HashMap::with_hasher(state_branching_sessions);
 
         let state_group_branches = RandomState::new();
         let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
@@ -1177,12 +1121,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_choice_recv_recv() {
         let state_branches = RandomState::new();
-        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branching_sessions = RandomState::new();
-        let branching_sessions: HashMap<String, Vec<String>> =
-            HashMap::with_hasher(state_branching_sessions);
+        let branching_sessions: HashMapStrVecOfStr = HashMap::with_hasher(state_branching_sessions);
 
         let state_group_branches = RandomState::new();
         let group_branches: HashMap<String, i32> = HashMap::with_hasher(state_group_branches);
@@ -1216,11 +1159,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_enum_choice_index() {
         let state_branches = RandomState::new();
-        let mut branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let mut branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branches_choice_end = RandomState::new();
-        let mut branches_receivers_choice_end: HashMap<String, Vec<String>> =
+        let mut branches_receivers_choice_end: HashMapStrVecOfStr =
             HashMap::with_hasher(state_branches_choice_end);
 
         branches_receivers_choice_end.insert(
@@ -1238,7 +1181,7 @@ mod tests {
         );
 
         let state_branching_sessions = RandomState::new();
-        let mut branching_sessions: HashMap<String, Vec<String>> =
+        let mut branching_sessions: HashMapStrVecOfStr =
             HashMap::with_hasher(state_branching_sessions);
 
         branching_sessions.insert(
@@ -1285,11 +1228,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_enum_offer_index() {
         let state_branches = RandomState::new();
-        let mut branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let mut branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branches_choice_end = RandomState::new();
-        let mut branches_receivers_choice_end: HashMap<String, Vec<String>> =
+        let mut branches_receivers_choice_end: HashMapStrVecOfStr =
             HashMap::with_hasher(state_branches_choice_end);
 
         branches_receivers_choice_end.insert(
@@ -1307,7 +1250,7 @@ mod tests {
         );
 
         let state_branching_sessions = RandomState::new();
-        let mut branching_sessions: HashMap<String, Vec<String>> =
+        let mut branching_sessions: HashMapStrVecOfStr =
             HashMap::with_hasher(state_branching_sessions);
 
         branching_sessions.insert(
@@ -1354,11 +1297,11 @@ mod tests {
     #[should_panic]
     fn test_aux_graph_panic_enum_missing() {
         let state_branches = RandomState::new();
-        let branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
+        let branches_receivers: HashMap<String, HashMapStrVecOfStr> =
             HashMap::with_hasher(state_branches);
 
         let state_branching_sessions = RandomState::new();
-        let mut branching_sessions: HashMap<String, Vec<String>> =
+        let mut branching_sessions: HashMapStrVecOfStr =
             HashMap::with_hasher(state_branching_sessions);
 
         branching_sessions.insert(
