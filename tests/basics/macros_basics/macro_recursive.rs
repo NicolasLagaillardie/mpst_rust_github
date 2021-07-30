@@ -1,7 +1,7 @@
 // Test for Macro, exact same as usecase-recursive
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
+use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;

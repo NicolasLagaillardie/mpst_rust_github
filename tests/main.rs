@@ -5,6 +5,7 @@ mod cancel;
 mod checking;
 mod graph;
 mod http;
+mod infinite_type;
 mod scribble;
 mod tcp;
 mod unit;
@@ -311,12 +312,22 @@ fn canceling() {
 }
 
 #[test]
-fn tests() {
+fn infinite_type_pass() {
+    infinite_type::work::main();
+}
+
+#[test]
+fn infinite_type_fail() {
     let t = trybuild::TestCases::new();
+
     // Infinite types
-    t.pass("tests/infinite_type/work.rs");
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
+}
+
+#[test]
+fn compile_fail() {
+    let t = trybuild::TestCases::new();
 
     // Macro multi recursion for shorting
     t.compile_fail("tests/basics/macros_basics/long_simple_three_mpst_short_fail.rs");

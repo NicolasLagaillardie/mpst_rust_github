@@ -1,3 +1,5 @@
+#![cfg(feature = "binary")]
+
 //! The slightly modified binary session type library.
 //!
 //! [![github]](https://github.com/wenkokke/sesh)&ensp;[![crates-io]](https://crates.io/crates/sesh)&ensp;[![docs-rs]](https://docs.rs/sesh)
@@ -13,5 +15,4 @@ pub mod offer;
 pub mod recv;
 pub mod select;
 pub mod send;
-// pub mod struct_trait;
 pub mod struct_trait;

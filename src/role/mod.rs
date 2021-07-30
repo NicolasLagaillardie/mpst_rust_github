@@ -1,3 +1,5 @@
+#![cfg(feature = "role")]
+
 //! The main trait used for representing an ordering or the
 //! name of a participant.
 //!

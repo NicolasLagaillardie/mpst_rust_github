@@ -2,7 +2,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
-use mpstthree::fork::fork_mpst;
+use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 
 use mpstthree::role::a::RoleA;

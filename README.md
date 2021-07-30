@@ -61,7 +61,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 use mpstthree::functionmpst::close::close_mpst;
 
 // Used for connecting all the roles, represented as MeshedChannels, together
-use mpstthree::fork_mpst;
+use mpstthree::functionmpst::fork_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.

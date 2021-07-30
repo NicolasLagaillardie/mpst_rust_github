@@ -22,44 +22,135 @@ exclude = [
 ]
 autotests = false
 
+###################################
+
 [workspace]
 exclude = ["mpst_seq/"]
+
+###################################
 
 [[bin]]
 name = "mpst"
 path = "main.rs"
 
+###################################
+
 [[test]]
 name = "tests"
 path = "tests/main.rs"
+required-features = ["full", "rand"]
+
+###################################
 
 [[bench]]
 name = "main"
 harness = false
+required-features = ["full", "rand"]
 
 [[bench]]
 name = "ping_pong"
 harness = false
+required-features = ["full", "rand"]
+
+###################################
+
+[[example]]
+name = "actyx_os_api"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "actyx_os_logging"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "distributed_calc"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "dns_fowler"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "dns_imai"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "fib"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "o_auth"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "o_auth_2"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "online_wallet"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "simple_voting"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "smtp"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "three_buyers"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "travel_three"
+required-features = ["macros", "rand"]
+
+[[example]]
+name = "video_stream"
+required-features = ["macros", "rand"]
+
+###################################
 
 [profile.release]
 debug = true
+
+###################################
 
 [dependencies]
 mpst-seq = { path = "mpst_seq", version = "0.0.8" }
 # mpst-seq = "0.0.8"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
-rand = "0.8.4"
-hyper = { version = "0.14.11", features = ["full"] }
-hyper-tls = "0.5.0"
-tokio = { version = "1.9.0", features = ["full"] }
-regex = "1.5.4"
-petgraph = "0.6.0"
+rand = { version = "0.8.4", optional = true }
+hyper = { version = "0.14.11", features = ["full"], optional = true }
+hyper-tls = { version = "0.5.0", optional = true }
+tokio = { version = "1.9.0", features = ["full"], optional = true }
+regex = { version = "1.5.4", optional = true }
+petgraph = { version = "0.6.0", optional = true }
+
+###################################
 
 [dev-dependencies]
 criterion = { version = "0.3.5", features = ["html_reports"] }
 trybuild = "1.0.43"
 ntest = "0.7.3"
+
+###################################
+
+[features]
+default = ["binary", "role", "meshedchannels", "functionmpst"]
+binary = []
+functionmpst = []
+meshedchannels = []
+role = []
+macros = ["default"]
+checking = ["default", "regex", "petgraph"]
+baking = ["default"]
+transport = ["default", "hyper", "hyper-tls", "tokio"]
+full = ["checking", "macros", "baking", "transport"]
+
+###################################
 
 [badges]
 maintenance = { status = "actively-developed" }

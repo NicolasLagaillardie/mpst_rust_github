@@ -15,8 +15,8 @@ use rand::{thread_rng, Rng};
 use std::boxed::Box;
 use std::error::Error;
 
-use mpstthree::fork::fork_mpst;
 use mpstthree::functionmpst::close::close_mpst;
+use mpstthree::functionmpst::fork::fork_mpst;
 
 // Get recv functions
 use mpstthree::functionmpst::recv::recv_mpst_a_from_b;

@@ -1,5 +1,5 @@
-use mpstthree::binary::*;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::binary::*;
 use mpstthree::choose;
 use mpstthree::offer;
 
@@ -64,7 +64,7 @@ fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32,
     }
 }
 
-fn main() {
+pub fn main() {
     // Pick some random numbers.
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();

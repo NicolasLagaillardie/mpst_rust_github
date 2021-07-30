@@ -1,4 +1,5 @@
-// use petgraph::dot::Dot;
+#![cfg(feature = "checking")]
+
 use petgraph::Graph;
 
 use std::collections::hash_map::RandomState;

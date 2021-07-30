@@ -43,7 +43,7 @@ where
 /// use std::error::Error;
 ///
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-/// use mpstthree::fork::fork_mpst;
+/// use mpstthree::functionmpst::fork::fork_mpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///
 /// use mpstthree::functionmpst::close::close_mpst;

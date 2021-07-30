@@ -1,3 +1,9 @@
+#[cfg(feature = "full")]
+extern crate mpstthree;
+
+#[cfg(feature = "rand")]
+extern crate rand;
+
 use mpstthree::binary::*;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::choose;

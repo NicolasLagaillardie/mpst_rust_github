@@ -1,9 +1,9 @@
 use mpstthree::binary::cancel::cancel_tcp;
 use mpstthree::binary::close::close_tcp;
 use mpstthree::binary::fork::fork_tcp;
-use mpstthree::binary::recv::recv_tcp;
-use mpstthree::binary::send::send_tcp;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::transport::tcp::recv::recv_tcp;
+use mpstthree::transport::tcp::send::send_tcp;
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;

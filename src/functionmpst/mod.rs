@@ -1,3 +1,5 @@
+#![cfg(feature = "functionmpst")]
+
 //! This module contains all the functions that are used
 //! for consuming [`MeshedChannels`].
 //!
@@ -9,6 +11,7 @@
 
 pub mod choose;
 pub mod close;
+pub mod fork;
 pub mod offer;
 pub mod recursion;
 pub mod recv;

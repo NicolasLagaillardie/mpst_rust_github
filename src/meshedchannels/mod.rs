@@ -1,3 +1,5 @@
+#![cfg(feature = "meshedchannels")]
+
 //! The main structure used for representing a participant,
 //! also named a party, within a protocol.
 //!

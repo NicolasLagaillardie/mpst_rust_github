@@ -1,3 +1,5 @@
+#![cfg(feature = "baking")]
+
 /// Create a new SessionMST structuren, new roles and the baking environment.
 ///
 /// # Arguments
