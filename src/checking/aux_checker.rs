@@ -32,13 +32,13 @@ type HashMapStrVecOfStr = HashMap<String, VecOfStr>;
 ///     "RoleA"
 /// ]
 #[doc(hidden)]
-pub(crate) fn clean_session(session: String) -> Result<VecOfStr, Box<dyn Error>> {
+pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     // The regex expression
     let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
-    let mut temp = String::from(&session).replace("&", "");
+    let mut temp = session.replace("&", "");
 
     // Replace with regex expression -> term1::term2::term3 by term3
-    for caps in main_re.captures_iter(&session) {
+    for caps in main_re.captures_iter(session) {
         temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
     }
 
@@ -47,16 +47,17 @@ pub(crate) fn clean_session(session: String) -> Result<VecOfStr, Box<dyn Error>>
 
     // Get each field of the MeshedChannels
 
-    let mut full_block = get_blocks(temp)?;
+    let mut full_block = get_blocks(&temp)?;
 
     // Get the name of the role
-    let name = &full_block[full_block.len() - 1]
+    let name = full_block[full_block.len() - 1]
         .split(['<', '>'].as_ref())
         .filter(|s| !s.is_empty())
         .map(String::from)
-        .collect::<Vec<_>>()[0];
+        .collect::<Vec<_>>()[0]
+        .to_string();
 
-    full_block.push(String::from(name));
+    full_block.push(name);
 
     Ok(full_block)
 }
@@ -82,19 +83,22 @@ pub(crate) fn clean_sessions(
     let mut size_sessions = 0;
 
     for session in sessions {
-        let full_block = clean_session(session)?;
+        let full_block = clean_session(&session)?;
 
         // The number of expected roles
         size_sessions = full_block.len() - 2;
 
         // Collect the last field of the meshedChannels (the name field)
-        let name = String::from(&full_block[full_block.len() - 1]);
+        let name = &full_block[full_block.len() - 1];
 
         // Collect the names of the roles
         roles.push(name.to_string());
 
         // Insert the vec of fields (minus the name's role) linked to the name of the role
-        all_sessions.insert(name, full_block[..(full_block.len() - 2)].to_vec());
+        all_sessions.insert(
+            name.to_string(),
+            full_block[..(full_block.len() - 2)].to_vec(),
+        );
     }
 
     // If the number of roles is different from the number of sessions
@@ -127,7 +131,7 @@ pub(crate) fn clean_sessions(
 ///     "RoleB<RoleEnd>",
 /// ]
 #[doc(hidden)]
-pub(crate) fn get_blocks(full_block: String) -> Result<VecOfStr, Box<dyn Error>> {
+pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
     let mut result = Vec::new();
     let mut temp = "".to_string();
 
@@ -169,17 +173,15 @@ pub(crate) fn get_blocks(full_block: String) -> Result<VecOfStr, Box<dyn Error>>
 
 /// Get the head of a Recv/Send session, its payload and its continuation.
 #[doc(hidden)]
-pub(crate) fn get_head_payload_continuation(
-    full_block: String,
-) -> Result<VecOfStr, Box<dyn Error>> {
-    if full_block == *"End" {
+pub(crate) fn get_head_payload_continuation(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
+    if full_block == "End" {
         // If the full block is a `End` type
         Ok(vec!["End".to_string()])
-    } else if full_block == *"RoleEnd" {
+    } else if full_block == "RoleEnd" {
         // If the full block is a `End` type
         Ok(vec!["RoleEnd".to_string()])
     } else {
-        let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
+        let mut result = vec![full_block.to_string().split('<').collect::<Vec<_>>()[0].to_string()];
         result.append(&mut get_blocks(full_block)?);
         Ok(result)
     }
@@ -190,7 +192,7 @@ pub(crate) fn get_head_payload_continuation(
 /// From [0, 1, 0, 5] and 2 to "0.1.0".
 #[doc(hidden)]
 pub(crate) fn extract_index_node(
-    index_node: Vec<usize>,
+    index_node: &[usize],
     depth_level: usize,
 ) -> Result<String, Box<dyn Error>> {
     Ok(format!(
@@ -206,21 +208,21 @@ pub(crate) fn extract_index_node(
 
 /// Switch all Send and Recv at the head of each session
 #[doc(hidden)]
-pub(crate) fn build_dual(session: String) -> Result<String, Box<dyn Error>> {
-    if session == *"End" {
-        Ok(session)
+pub(crate) fn build_dual(session: &str) -> Result<String, Box<dyn Error>> {
+    if session == "End" {
+        Ok(session.to_string())
     } else {
         let all_fields = get_head_payload_continuation(session)?;
         match all_fields[0].as_str() {
             "Recv" => Ok(format!(
                 "Send<{},{}>",
                 all_fields[1],
-                build_dual(all_fields[2].to_string())?
+                build_dual(&all_fields[2])?
             )),
             "Send" => Ok(format!(
                 "Recv<{},{}>",
                 all_fields[1],
-                build_dual(all_fields[2].to_string())?
+                build_dual(&all_fields[2])?
             )),
             _ => panic!("Wrond head"),
         }
@@ -246,15 +248,16 @@ pub(crate) fn aux_get_graph(
 ) -> Result<Graph<String, String>, Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
-        let new_node = g.add_node(extract_index_node(index_node, depth_level)?);
+        let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
+
         Ok(g)
     } else {
         // Get the size of the full_session
         let size_full_session = full_session.len() - 1;
 
         // Get the head of the stack
-        let stack = &get_head_payload_continuation(full_session[size_full_session].clone())?;
+        let stack = &get_head_payload_continuation(&full_session[size_full_session])?;
 
         if stack.len() == 3 {
             // If it is a simple choice
@@ -272,7 +275,7 @@ pub(crate) fn aux_get_graph(
                 .enumerate()
             {
                 match (
-                    get_head_payload_continuation(session.to_string())?[0].as_str(),
+                    get_head_payload_continuation(session)?[0].as_str(),
                     number_of_send,
                     number_of_recv,
                     pos,
@@ -281,34 +284,26 @@ pub(crate) fn aux_get_graph(
                         number_of_send += 1;
 
                         // Should be `Either<MC, MC>`
-                        let payload_either =
-                            &get_head_payload_continuation(session.to_string())?[1];
+                        let payload_either = &get_head_payload_continuation(session)?[1];
 
                         // Should be `[Either, MC, MC]`
-                        let choices = get_head_payload_continuation(payload_either.to_string())?;
+                        let choices = get_head_payload_continuation(payload_either)?;
 
                         // Split the new session
-                        let blocks_left = get_blocks(choices[1].to_string())?;
-                        let blocks_right = get_blocks(choices[2].to_string())?;
+                        let blocks_left = get_blocks(&choices[1])?;
+                        let blocks_right = get_blocks(&choices[2])?;
 
                         // Get the index of the receiver
-                        let receiver = &get_head_payload_continuation(
-                            blocks_left[blocks_left.len() - 1].to_string(),
-                        )?[0];
+                        let receiver =
+                            &get_head_payload_continuation(&blocks_left[blocks_left.len() - 1])?[0];
                         let index_receiver = roles.iter().position(|r| r == receiver).unwrap();
 
                         // The offset depending on the relative positions of the roles
                         let offset = (index_current_role > index_receiver) as usize;
 
                         // Push the choice
-                        choice_left.push(
-                            build_dual(blocks_left[index_current_role - offset].to_string())?
-                                .to_string(),
-                        );
-                        choice_right.push(
-                            build_dual(blocks_right[index_current_role - offset].to_string())?
-                                .to_string(),
-                        );
+                        choice_left.push(build_dual(&blocks_left[index_current_role - offset])?);
+                        choice_right.push(build_dual(&blocks_right[index_current_role - offset])?);
                     }
                     ("Recv", 0, 0, new_pos) => {
                         number_of_recv += 1;
@@ -330,9 +325,10 @@ pub(crate) fn aux_get_graph(
             depth_level += 1;
 
             // Add the new `step`
-            let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+            let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
 
             if number_of_recv == 1 {
+                // If a passive role
                 // The offset depending on the relative positions of the roles
                 let offset = (index_current_role <= pos_recv) as usize;
 
@@ -344,17 +340,26 @@ pub(crate) fn aux_get_graph(
                     new_node,
                     format!("& {}", &roles[pos_recv + offset]),
                 );
+
+                println!(
+                    "{}{} {} ? left {}{}",
+                    current_role,
+                    previous_node.index(),
+                    pos_recv + offset,
+                    current_role,
+                    new_node.index()
+                );
+
                 previous_node = new_node;
 
                 // Should be `Either<MC, MC>`
-                let payload_either =
-                    &get_head_payload_continuation(full_session[pos_recv].to_string())?[1];
+                let payload_either = &get_head_payload_continuation(&full_session[pos_recv])?[1];
 
                 // Should be `[Either, MC, MC]`
-                let offers = get_head_payload_continuation(payload_either.to_string())?;
+                let offers = get_head_payload_continuation(payload_either)?;
 
                 // The left offer
-                let offer_left = clean_session(offers[1].clone())?;
+                let offer_left = clean_session(&offers[1])?;
 
                 g = aux_get_graph(
                     current_role,
@@ -372,7 +377,7 @@ pub(crate) fn aux_get_graph(
                     group_branches.clone(),
                 )?;
 
-                let offer_right = clean_session(offers[2].clone())?;
+                let offer_right = clean_session(&offers[2])?;
 
                 aux_get_graph(
                     current_role,
@@ -390,10 +395,11 @@ pub(crate) fn aux_get_graph(
                     group_branches,
                 )
             } else {
+                // If the active role
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
 
-                g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
+                g.add_edge(previous_node, new_node, format!("+ {}", current_role));
                 previous_node = new_node;
 
                 // Add the corresponding stacks
@@ -444,22 +450,33 @@ pub(crate) fn aux_get_graph(
 
             // The running session
             let running_session =
-                get_head_payload_continuation(full_session[index_head - offset].to_string())?;
+                get_head_payload_continuation(&full_session[index_head - offset])?;
 
             // If Send/Recv, everything is good, else, panic
             if running_session[0] == *"Send" {
+                // If send simple payload
                 // Increase the index for the nodes
                 index_node[depth_level] += 1;
 
                 // Add the new `step`
-                let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
 
                 // Add the new edge between the previous and the new node,
                 // and label it with the corresponding interaction
                 g.add_edge(
                     previous_node,
                     new_node,
-                    format!("{}!{}: {}", &current_role, &head_stack, &running_session[1]),
+                    format!("{}!{}: {}", current_role, head_stack, &running_session[1]),
+                );
+
+                println!(
+                    "{}{} {} ! {} {}{}",
+                    current_role,
+                    previous_node.index(),
+                    index_head,
+                    &running_session[1],
+                    current_role,
+                    new_node.index()
                 );
 
                 // Replace the old binary session with the new one
@@ -472,24 +489,17 @@ pub(crate) fn aux_get_graph(
                 previous_node = new_node;
             } else if running_session[0] == *"Recv" {
                 if let Some(choice) = branches_receivers.get(&running_session[1]) {
+                    // If receive recursive choice
                     let mut all_branches = Vec::new();
                     let mut all_branches_vec = Vec::new();
 
                     for (branch, session) in choice {
                         all_branches.push((
-                            format!(
-                                "{}::{}",
-                                &running_session[1].to_string(),
-                                &branch.to_string()
-                            ),
+                            format!("{}::{}", &running_session[1], &branch),
                             session.to_vec(),
                         ));
 
-                        all_branches_vec.push(format!(
-                            "{}::{}",
-                            &running_session[1].to_string(),
-                            &branch.to_string()
-                        ));
+                        all_branches_vec.push(format!("{}::{}", &running_session[1], &branch));
                     }
 
                     all_branches_vec.sort();
@@ -514,11 +524,11 @@ pub(crate) fn aux_get_graph(
                                 depth_level += 1;
 
                                 // Add the new `step`
-                                let new_node = g
-                                    .add_node(extract_index_node(index_node.clone(), depth_level)?);
+                                let new_node =
+                                    g.add_node(extract_index_node(&index_node, depth_level)?);
 
                                 // Add the corresponding edge
-                                g.add_edge(previous_node, new_node, format!("& {}", &head_stack));
+                                g.add_edge(previous_node, new_node, format!("& {}", head_stack));
 
                                 node_added = true;
 
@@ -567,13 +577,26 @@ pub(crate) fn aux_get_graph(
 
                     return Ok(g);
                 } else {
+                    // If receive simple payload
                     index_node[depth_level] += 1;
-                    let new_node = g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                    let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
+
                     g.add_edge(
                         previous_node,
                         new_node,
-                        format!("{}?{}: {}", &current_role, &head_stack, &running_session[1]),
+                        format!("{}?{}: {}", current_role, head_stack, &running_session[1]),
                     );
+
+                    println!(
+                        "{}{} {} ? {} {}{}",
+                        current_role,
+                        previous_node.index(),
+                        index_head,
+                        &running_session[1],
+                        current_role,
+                        new_node.index()
+                    );
+
                     full_session[index_head - offset] = running_session[2].to_string();
                     full_session[size_full_session] = stack[1].to_string();
                     previous_node = new_node;
@@ -612,7 +635,7 @@ pub(crate) fn aux_get_graph(
                 .enumerate()
             {
                 match (
-                    get_head_payload_continuation(session.to_string())?[0].as_str(),
+                    get_head_payload_continuation(session)?[0].as_str(),
                     number_of_send,
                     pos,
                 ) {
@@ -620,16 +643,12 @@ pub(crate) fn aux_get_graph(
                         number_of_send += 1;
 
                         // Should be a specific `enum`
-                        let payload = &get_head_payload_continuation(session.to_string())?[1];
+                        let payload = &get_head_payload_continuation(session)?[1];
 
                         // Update all_choices
                         if let Some(choice) = branches_receivers.get(payload) {
                             for branch in choice.keys() {
-                                all_branches.push(format!(
-                                    "{}::{}",
-                                    payload.to_string(),
-                                    branch.to_string()
-                                ));
+                                all_branches.push(format!("{}::{}", payload, branch));
                             }
                         } else {
                             panic!("Missing the enum {:?} in branches_receivers", payload)
@@ -658,11 +677,10 @@ pub(crate) fn aux_get_graph(
                         depth_level += 1;
 
                         // Add the new `step`
-                        let new_node =
-                            g.add_node(extract_index_node(index_node.clone(), depth_level)?);
+                        let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
 
                         // Add the corresponding edge
-                        g.add_edge(previous_node, new_node, format!("+ {}", &current_role));
+                        g.add_edge(previous_node, new_node, format!("+ {}", current_role));
 
                         node_added = true;
 
@@ -758,7 +776,10 @@ pub(crate) fn get_graph_session(
     let branches_aready_seen: HashMap<String, NodeIndex<u32>> =
         HashMap::with_hasher(state_branches_aready_seen);
 
-    aux_get_graph(
+    println!(".outputs");
+    println!(".state graph");
+
+    let result = aux_get_graph(
         current_role,
         full_session,
         roles,
@@ -772,7 +793,13 @@ pub(crate) fn get_graph_session(
         branches_aready_seen,
         branching_sessions,
         group_branches,
-    )
+    );
+
+    println!(".marking {}0", current_role);
+    println!(".end");
+    println!();
+
+    result
 }
 
 //////////////////////////////////
@@ -793,8 +820,7 @@ mod tests {
             struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
             End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
             mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
-            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
-            .to_string();
+            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>";
 
         let clean_session_compare = vec![
             "Recv<Branches0AtoB,End>",
@@ -911,8 +937,7 @@ mod tests {
     fn test_get_blocks() {
         let dirty_blocks = "MeshedChannels<Send<Branches0AtoB,End>,Send\
         <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
-        <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
-            .to_string();
+        <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>";
 
         let clean_blocks = vec![
             "Send<Branches0AtoB,End>",
@@ -927,14 +952,14 @@ mod tests {
     #[test]
     fn test_get_head_payload_continuation() {
         // End
-        let dirty_end = "End".to_string();
+        let dirty_end = "End";
 
         let clean_end = vec!["End"];
 
         assert_eq!(clean_end, get_head_payload_continuation(dirty_end).unwrap());
 
         // RoleEnd
-        let dirty_role_end = "RoleEnd".to_string();
+        let dirty_role_end = "RoleEnd";
 
         let clean_role_end = vec!["RoleEnd"];
 
@@ -944,7 +969,7 @@ mod tests {
         );
 
         // Random
-        let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string();
+        let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>";
 
         let clean_random = vec!["Recv", "i32", "Send<i32,Recv<Branches0CtoB,End>>"];
 
@@ -956,16 +981,16 @@ mod tests {
 
     #[test]
     fn test_extract_index_node() {
-        assert_eq!("0.1.4.5", extract_index_node(vec![0, 1, 4, 5], 3).unwrap());
+        assert_eq!("0.1.4.5", extract_index_node(&vec![0, 1, 4, 5], 3).unwrap());
 
-        assert_eq!("0.1.4", extract_index_node(vec![0, 1, 4, 5], 2).unwrap());
+        assert_eq!("0.1.4", extract_index_node(&vec![0, 1, 4, 5], 2).unwrap());
 
-        assert_eq!("0", extract_index_node(vec![0, 1, 4, 5], 0).unwrap());
+        assert_eq!("0", extract_index_node(&vec![0, 1, 4, 5], 0).unwrap());
     }
 
     #[test]
     fn test_build_dual() {
-        let session = "Recv<i32,Send<Branches0CtoB,End>>".to_string();
+        let session = "Recv<i32,Send<Branches0CtoB,End>>";
 
         assert_eq!(
             "Send<i32,Recv<Branches0CtoB,End>>",
@@ -976,7 +1001,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_build_dual_panic() {
-        let session = "Coco<i32,Banana<Branches0CtoB,End>>".to_string();
+        let session = "Coco<i32,Banana<Branches0CtoB,End>>";
 
         build_dual(session).unwrap();
     }

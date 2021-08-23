@@ -177,7 +177,7 @@ pub fn checker(
         let mut temp_branch: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branch);
 
         for (branch, session) in branches {
-            temp_branch.insert(branch, clean_session(session)?);
+            temp_branch.insert(branch, clean_session(&session)?);
         }
 
         update_branches_receivers.insert(choice, temp_branch);
@@ -189,7 +189,7 @@ pub fn checker(
         HashMap::with_hasher(state_branching_sessions);
 
     for (branch, session) in branching_sessions {
-        let current_clean_session = clean_session(session.to_string())?;
+        let current_clean_session = clean_session(&session)?;
         update_branching_sessions.insert(
             branch.to_string(),
             current_clean_session[..(current_clean_session.len() - 1)].to_vec(),
