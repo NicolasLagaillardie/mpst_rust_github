@@ -45,12 +45,12 @@ required-features = ["full", "rand"]
 [[bench]]
 name = "main"
 harness = false
-required-features = ["full", "rand"]
+required-features = ["macros", "rand"]
 
 [[bench]]
 name = "ping_pong"
 harness = false
-required-features = ["full", "rand"]
+required-features = ["macros", "rand"]
 
 ###################################
 
@@ -84,7 +84,7 @@ required-features = ["macros", "rand"]
 
 [[example]]
 name = "o_auth_2"
-required-features = ["macros", "rand"]
+required-features = ["macros", "transport", "rand"]
 
 [[example]]
 name = "online_wallet"
@@ -125,7 +125,7 @@ either = "1.6.1"
 rand = { version = "0.8.4", optional = true }
 hyper = { version = "0.14.11", features = ["full"], optional = true }
 hyper-tls = { version = "0.5.0", optional = true }
-tokio = { version = "1.9.0", features = ["full"], optional = true }
+tokio = { version = "1.10.0", features = ["full"], optional = true }
 regex = { version = "1.5.4", optional = true }
 petgraph = { version = "0.6.0", optional = true }
 
@@ -133,7 +133,7 @@ petgraph = { version = "0.6.0", optional = true }
 
 [dev-dependencies]
 criterion = { version = "0.3.5", features = ["html_reports"] }
-trybuild = "1.0.43"
+trybuild = "1.0.45"
 ntest = "0.7.3"
 
 ###################################

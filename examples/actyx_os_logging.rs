@@ -118,12 +118,14 @@ type EndpointLogsInit<N> =
     MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_controller_to_logs(0, s)?;
+    let s = send_controller_to_logs(100, s)?;
 
     recurs_0_controller(s, 100)
 }
 
 fn recurs_0_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
+    println!("controller: {}", &loops);
+
     offer_mpst!(s, recv_controller_from_logs, {
         Branching0fromLtoC::Success(s) => {
 
@@ -181,8 +183,10 @@ fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
+    println!("logs: {}", &loops);
+
     match loops {
-        i if i % 2 == 0 => {
+        i if i % 2 == 0 && i > 0 => {
             // Success
             let s = choose_mpst_multi_to_all!(
                 s,
@@ -193,9 +197,9 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 2
             );
 
-            let s = send_logs_to_controller(loops, s)?;
+            let s = send_logs_to_controller(loops - 1, s)?;
 
-            recurs_0_logs(s, loops)
+            recurs_0_logs(s, loops - 1)
         }
         _ => {
             // Failure
@@ -208,7 +212,7 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 2
             );
 
-            let s = send_logs_to_controller(loops, s)?;
+            let s = send_logs_to_controller(loops - 1, s)?;
 
             recurs_1_logs(s)
         }
@@ -221,7 +225,7 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
             let (loops, s) = recv_logs_from_controller(s)?;
 
-            recurs_0_logs(s, loops)
+            recurs_0_logs(s, loops - 1)
         },
         Branching1fromCtoL::Stop(s) => {
 

@@ -50,7 +50,23 @@ RUST_BACKTRACE=1 cargo doc --verbose --workspace --all-features
 # cargo build --tests --verbose --all-features
 # cargo build --benches --verbose --all-features
 # cargo run --verbose --all-features
-find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3}) done' argv0 {} +
+# find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3} --features="macros rand") done' argv0 {} +
+
+cargo run --example actyx_os_api --features="macros rand"
+cargo run --example actyx_os_logging --features="macros rand"
+cargo run --example distributed_calc --features="macros rand"
+cargo run --example dns_fowler --features="macros rand"
+cargo run --example dns_imai --features="macros rand"
+cargo run --example fib --features="macros rand"
+cargo run --example o_auth --features="macros rand"
+cargo run --example o_auth_2 --features="macros transport rand"
+cargo run --example online_wallet --features="macros rand"
+cargo run --example simple_voting --features="macros rand"
+cargo run --example smtp --features="macros rand"
+cargo run --example three_buyers --features="macros rand"
+cargo run --example travel_three --features="macros rand"
+cargo run --example video_stream --features="macros rand"
+
 # cargo test --verbose --all
 # cargo test --verbose --all -- --nocapture
 RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture
