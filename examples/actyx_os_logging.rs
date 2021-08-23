@@ -124,8 +124,6 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
 }
 
 fn recurs_0_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
-    println!("controller: {}", &loops);
-
     offer_mpst!(s, recv_controller_from_logs, {
         Branching0fromLtoC::Success(s) => {
 
@@ -183,8 +181,6 @@ fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
-    println!("logs: {}", &loops);
-
     match loops {
         i if i % 2 == 0 && i > 0 => {
             // Success
