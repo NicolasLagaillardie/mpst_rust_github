@@ -245,13 +245,14 @@ pub(crate) fn aux_get_graph(
     mut branches_already_seen: HashMap<String, NodeIndex<u32>>,
     branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
-) -> Result<Graph<String, String>, Box<dyn Error>> {
+    mut cfsm: VecOfStr,
+) -> Result<(Graph<String, String>, VecOfStr), Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
         let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
 
-        Ok(g)
+        Ok((g, cfsm))
     } else {
         // Get the size of the full_session
         let size_full_session = full_session.len() - 1;
@@ -324,24 +325,8 @@ pub(crate) fn aux_get_graph(
             // Increase the depth level
             depth_level += 1;
 
-            // Add the new `step`
-            let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
-
             if number_of_recv == 1 {
                 // If this is a passive role
-
-                // The offset depending on the relative positions of the roles
-                let offset = (index_current_role <= pos_recv) as usize;
-
-                // Add the new edge between the previous and the new node,
-                // and label it with the corresponding interaction
-                g.add_edge(
-                    previous_node,
-                    new_node,
-                    format!("& {}", &roles[pos_recv + offset]),
-                );
-
-                previous_node = new_node;
 
                 // Should be `Either<MC, MC>`
                 let payload_either = &get_head_payload_continuation(&full_session[pos_recv])?[1];
@@ -352,7 +337,7 @@ pub(crate) fn aux_get_graph(
                 // The left offer
                 let offer_left = clean_session(&offers[1])?;
 
-                g = aux_get_graph(
+                let (g, cfsm) = aux_get_graph(
                     current_role,
                     offer_left[..(offer_left.len() - 2)].to_vec(),
                     roles,
@@ -366,6 +351,7 @@ pub(crate) fn aux_get_graph(
                     branches_already_seen.clone(),
                     branching_sessions.clone(),
                     group_branches.clone(),
+                    cfsm,
                 )?;
 
                 let offer_right = clean_session(&offers[2])?;
@@ -384,21 +370,16 @@ pub(crate) fn aux_get_graph(
                     branches_already_seen,
                     branching_sessions,
                     group_branches,
+                    cfsm,
                 )
             } else {
                 // If this is the active role
-
-                // Add the new edge between the previous and the new node,
-                // and label it with the corresponding interaction
-                g.add_edge(previous_node, new_node, format!("+ {}", current_role));
-
-                previous_node = new_node;
 
                 // Add the corresponding stacks
                 choice_left.push(stack[1].to_string());
                 choice_right.push(stack[2].to_string());
 
-                g = aux_get_graph(
+                let (g, cfsm) = aux_get_graph(
                     current_role,
                     choice_left,
                     roles,
@@ -412,6 +393,7 @@ pub(crate) fn aux_get_graph(
                     branches_already_seen.clone(),
                     branching_sessions.clone(),
                     group_branches.clone(),
+                    cfsm,
                 )?;
 
                 aux_get_graph(
@@ -428,6 +410,7 @@ pub(crate) fn aux_get_graph(
                     branches_already_seen,
                     branching_sessions,
                     group_branches,
+                    cfsm,
                 )
             }
         } else if stack.len() == 2 {
@@ -447,6 +430,7 @@ pub(crate) fn aux_get_graph(
             // If Send/Recv, everything is good, else, panic
             if running_session[0] == *"Send" {
                 // If send simple payload
+
                 // Increase the index for the nodes
                 index_node[depth_level] += 1;
 
@@ -461,7 +445,7 @@ pub(crate) fn aux_get_graph(
                     format!("{}!{}: {}", current_role, head_stack, &running_session[1]),
                 );
 
-                println!(
+                cfsm.push(format!(
                     "{}{} {} ! {} {}{}",
                     current_role,
                     previous_node.index(),
@@ -469,7 +453,7 @@ pub(crate) fn aux_get_graph(
                     &running_session[1],
                     current_role,
                     new_node.index()
-                );
+                ));
 
                 // Replace the old binary session with the new one
                 full_session[index_head - offset] = running_session[2].to_string();
@@ -515,16 +499,7 @@ pub(crate) fn aux_get_graph(
                                 // Increase the depth level
                                 depth_level += 1;
 
-                                // Add the new `step`
-                                let new_node =
-                                    g.add_node(extract_index_node(&index_node, depth_level)?);
-
-                                // Add the corresponding edge
-                                g.add_edge(previous_node, new_node, format!("& {}", head_stack));
-
                                 node_added = true;
-
-                                previous_node = new_node;
                             }
 
                             let mut temp_branches_already_seen = branches_already_seen.clone();
@@ -534,7 +509,7 @@ pub(crate) fn aux_get_graph(
                                     .insert(temp_current_branch.0.clone(), previous_node);
                             }
 
-                            g = aux_get_graph(
+                            let result = aux_get_graph(
                                 current_role,
                                 session[..(session.len() - 2)].to_vec(),
                                 roles,
@@ -543,12 +518,16 @@ pub(crate) fn aux_get_graph(
                                 compare_end.clone(),
                                 depth_level,
                                 index_current_role,
-                                g,
+                                g.clone(),
                                 branches_receivers.clone(),
                                 temp_branches_already_seen.clone(),
                                 branching_sessions.clone(),
                                 group_branches.clone(),
+                                cfsm.clone(),
                             )?;
+
+                            g = result.0;
+                            cfsm = result.1;
 
                             // Insert the new node/branch in the list of the ones already seen
                             let index_group =
@@ -567,10 +546,12 @@ pub(crate) fn aux_get_graph(
                         }
                     }
 
-                    return Ok(g);
+                    return Ok((g, cfsm));
                 } else {
                     // If receive simple payload
+
                     index_node[depth_level] += 1;
+
                     let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
 
                     g.add_edge(
@@ -579,7 +560,7 @@ pub(crate) fn aux_get_graph(
                         format!("{}?{}: {}", current_role, head_stack, &running_session[1]),
                     );
 
-                    println!(
+                    cfsm.push(format!(
                         "{}{} {} ? {} {}{}",
                         current_role,
                         previous_node.index(),
@@ -587,7 +568,7 @@ pub(crate) fn aux_get_graph(
                         &running_session[1],
                         current_role,
                         new_node.index()
-                    );
+                    ));
 
                     full_session[index_head - offset] = running_session[2].to_string();
                     full_session[size_full_session] = stack[1].to_string();
@@ -614,6 +595,7 @@ pub(crate) fn aux_get_graph(
                 branches_already_seen,
                 branching_sessions,
                 group_branches,
+                cfsm,
             )
         } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
             let mut number_of_send = 0;
@@ -668,15 +650,7 @@ pub(crate) fn aux_get_graph(
                         // Increase the depth level
                         depth_level += 1;
 
-                        // Add the new `step`
-                        let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
-
-                        // Add the corresponding edge
-                        g.add_edge(previous_node, new_node, format!("+ {}", current_role));
-
                         node_added = true;
-
-                        previous_node = new_node;
                     }
 
                     let session = if let Some(session) = branching_sessions.get(&current_branch) {
@@ -692,7 +666,7 @@ pub(crate) fn aux_get_graph(
                             .insert(temp_current_branch.clone(), previous_node);
                     }
 
-                    g = aux_get_graph(
+                    let result = aux_get_graph(
                         current_role,
                         session,
                         roles,
@@ -701,12 +675,16 @@ pub(crate) fn aux_get_graph(
                         compare_end.clone(),
                         depth_level,
                         index_current_role,
-                        g,
+                        g.clone(),
                         branches_receivers.clone(),
                         temp_branches_already_seen.clone(),
                         branching_sessions.clone(),
                         group_branches.clone(),
+                        cfsm.clone(),
                     )?;
+
+                    g = result.0;
+                    cfsm = result.1;
 
                     // Insert the new node/branch in the list of the ones already seen
                     let index_group = if let Some(index) = group_branches.get(&current_branch) {
@@ -724,7 +702,7 @@ pub(crate) fn aux_get_graph(
                 }
             }
 
-            Ok(g)
+            Ok((g, cfsm))
         } else {
             panic!(
                 "Did not found a correct stack. Found stack and session: {:?} / {:?}",
@@ -769,10 +747,9 @@ pub(crate) fn get_graph_session(
     let branches_already_seen: HashMap<String, NodeIndex<u32>> =
         HashMap::with_hasher(state_branches_already_seen);
 
-    println!(".outputs");
-    println!(".state graph");
+    let cfsm = vec![".outputs".to_string(), ".state graph".to_string()];
 
-    let result = aux_get_graph(
+    let (result, mut cfsm) = aux_get_graph(
         current_role,
         full_session,
         roles,
@@ -786,13 +763,15 @@ pub(crate) fn get_graph_session(
         branches_already_seen,
         branching_sessions,
         group_branches,
-    );
+        cfsm,
+    )?;
 
-    println!(".marking {}0", current_role);
-    println!(".end");
-    println!();
+    cfsm.push(format!(".marking {}0", current_role));
+    cfsm.push(".end".to_string());
 
-    result
+    println!("{:?}", cfsm);
+
+    Ok(result)
 }
 
 //////////////////////////////////

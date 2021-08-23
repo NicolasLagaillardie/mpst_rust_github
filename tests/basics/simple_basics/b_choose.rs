@@ -236,20 +236,18 @@ pub fn double_choice_checker() {
         format!("{:?}", Dot::new(&graph_a)),
         "digraph {\n    \
             0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
-            2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.2\\\"\" ]\n    \
-            4 [ label = \"\\\"0.3\\\"\" ]\n    \
-            5 [ label = \"\\\"0.1\\\"\" ]\n    \
-            6 [ label = \"\\\"0.2\\\"\" ]\n    \
-            7 [ label = \"\\\"0.3\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"& RoleB\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 5 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
-            6 -> 7 [ label = \"\\\"0\\\"\" ]\n\
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.2\\\"\" ]\n    \
+            3 [ label = \"\\\"0.3\\\"\" ]\n    \
+            4 [ label = \"\\\"0.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2\\\"\" ]\n    \
+            6 [ label = \"\\\"0.3\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 4 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            5 -> 6 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -260,16 +258,14 @@ pub fn double_choice_checker() {
         format!("{:?}", Dot::new(&graph_b)),
         "digraph {\n    \
             0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
-            2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.2\\\"\" ]\n    \
-            4 [ label = \"\\\"0.1\\\"\" ]\n    \
-            5 [ label = \"\\\"0.2\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"+ RoleB\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 4 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
-            4 -> 5 [ label = \"\\\"0\\\"\" ]\n\
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.2\\\"\" ]\n    \
+            3 [ label = \"\\\"0.1\\\"\" ]\n    \
+            4 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 3 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -280,16 +276,14 @@ pub fn double_choice_checker() {
         format!("{:?}", Dot::new(&graph_c)),
         "digraph {\n    \
             0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
-            2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.2\\\"\" ]\n    \
-            4 [ label = \"\\\"0.1\\\"\" ]\n    \
-            5 [ label = \"\\\"0.2\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"& RoleB\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 4 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
-            4 -> 5 [ label = \"\\\"0\\\"\" ]\n\
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.2\\\"\" ]\n    \
+            3 [ label = \"\\\"0.1\\\"\" ]\n    \
+            4 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 3 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 }

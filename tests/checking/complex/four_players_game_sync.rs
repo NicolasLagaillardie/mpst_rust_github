@@ -39,19 +39,19 @@ enum Branches0BfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameB>),
     Win(
         MeshedChannels<
-            Send<(), Recurs0BfromA>,
-            Recv<(), End>,
+            Recv<(), Send<(), Recurs0BfromA>>,
+            Send<(), End>,
             End,
-            RoleC<RoleA<RoleA<RoleEnd>>>,
+            RoleA<RoleC<RoleA<RoleA<RoleEnd>>>>,
             NameB,
         >,
     ),
     Lose(
         MeshedChannels<
-            Send<(), Recurs0BfromA>,
-            Recv<(), End>,
+            Recv<(), Send<(), Recurs0BfromA>>,
+            Send<(), End>,
             End,
-            RoleC<RoleA<RoleA<RoleEnd>>>,
+            RoleA<RoleC<RoleA<RoleA<RoleEnd>>>>,
             NameB,
         >,
     ),
@@ -64,19 +64,19 @@ enum Branches0CfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameC>),
     Win(
         MeshedChannels<
-            Recv<(), Send<(), Recurs0CfromA>>,
-            Send<(), End>,
+            Send<(), Recurs0CfromA>,
             Recv<(), End>,
-            RoleA<RoleB<RoleA<RoleD<RoleA<RoleEnd>>>>>,
+            Send<(), End>,
+            RoleB<RoleA<RoleD<RoleA<RoleEnd>>>>,
             NameC,
         >,
     ),
     Lose(
         MeshedChannels<
-            Recv<(), Send<(), Recurs0CfromA>>,
-            Send<(), End>,
+            Send<(), Recurs0CfromA>,
             Recv<(), End>,
-            RoleA<RoleB<RoleA<RoleD<RoleA<RoleEnd>>>>>,
+            Send<(), End>,
+            RoleB<RoleA<RoleD<RoleA<RoleEnd>>>>,
             NameC,
         >,
     ),
@@ -89,19 +89,19 @@ enum Branches0DfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameD>),
     Win(
         MeshedChannels<
-            Send<(), Recurs0DfromA>,
+            Recv<(), Recurs0DfromA>,
             End,
             Recv<(), End>,
-            RoleC<RoleA<RoleA<RoleEnd>>>,
+            RoleA<RoleC<RoleA<RoleEnd>>>,
             NameD,
         >,
     ),
     Lose(
         MeshedChannels<
-            Send<(), Recurs0DfromA>,
+            Recv<(), Recurs0DfromA>,
             End,
             Recv<(), End>,
-            RoleC<RoleA<RoleA<RoleEnd>>>,
+            RoleA<RoleC<RoleA<RoleEnd>>>,
             NameD,
         >,
     ),
@@ -112,17 +112,17 @@ enum Branches0DfromA {
 // For A
 type EndpointAEnd = MeshedChannels<End, End, End, RoleEnd, NameA>;
 type EndpointALose = MeshedChannels<
-    Recv<(), Choose0fromAtoB>,
-    Send<(), Send<(), Choose0fromAtoC>>,
+    Send<(), Recv<(), Choose0fromAtoB>>,
+    Recv<(), Choose0fromAtoC>,
     Send<(), Choose0fromAtoD>,
-    RoleC<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
+    RoleB<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
     NameA,
 >;
 type EndpointAWin = MeshedChannels<
-    Recv<(), Choose0fromAtoB>,
-    Send<(), Send<(), Choose0fromAtoC>>,
+    Send<(), Recv<(), Choose0fromAtoB>>,
+    Recv<(), Choose0fromAtoC>,
     Send<(), Choose0fromAtoD>,
-    RoleC<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
+    RoleB<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
     NameA,
 >;
 type EndpointAFull =
@@ -173,29 +173,27 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_a)),
         "digraph {\n    \
-            0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
-            2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            4 [ label = \"\\\"0.2\\\"\" ]\n    \
-            5 [ label = \"\\\"0.3\\\"\" ]\n    \
-            6 [ label = \"\\\"0.4\\\"\" ]\n    \
-            7 [ label = \"\\\"0.1\\\"\" ]\n    \
-            8 [ label = \"\\\"0.2\\\"\" ]\n    \
-            9 [ label = \"\\\"0.3\\\"\" ]\n    \
-            10 [ label = \"\\\"0.4\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"+ RoleA\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 3 [ label = \"\\\"RoleA!RoleC: ()\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
-            4 -> 5 [ label = \"\\\"RoleA!RoleC: ()\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleA!RoleD: ()\\\"\" ]\n    \
-            6 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
-            1 -> 7 [ label = \"\\\"RoleA!RoleC: ()\\\"\" ]\n    \
-            7 -> 8 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
-            8 -> 9 [ label = \"\\\"RoleA!RoleC: ()\\\"\" ]\n    \
-            9 -> 10 [ label = \"\\\"RoleA!RoleD: ()\\\"\" ]\n    \
-            10 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+			0 [ label = \"\\\"0\\\"\" ]\n    \
+			1 [ label = \"\\\"0.1\\\"\" ]\n    \
+			2 [ label = \"\\\"0.1\\\"\" ]\n    \
+			3 [ label = \"\\\"0.2\\\"\" ]\n    \
+			4 [ label = \"\\\"0.3\\\"\" ]\n    \
+			5 [ label = \"\\\"0.4\\\"\" ]\n    \
+			6 [ label = \"\\\"0.1\\\"\" ]\n    \
+			7 [ label = \"\\\"0.2\\\"\" ]\n    \
+			8 [ label = \"\\\"0.3\\\"\" ]\n    \
+			9 [ label = \"\\\"0.4\\\"\" ]\n    \
+			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+			0 -> 2 [ label = \"\\\"RoleA!RoleB: ()\\\"\" ]\n    \
+			2 -> 3 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
+			3 -> 4 [ label = \"\\\"RoleA?RoleC: ()\\\"\" ]\n    \
+			4 -> 5 [ label = \"\\\"RoleA!RoleD: ()\\\"\" ]\n    \
+			5 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+			0 -> 6 [ label = \"\\\"RoleA!RoleB: ()\\\"\" ]\n    \
+			6 -> 7 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
+			7 -> 8 [ label = \"\\\"RoleA?RoleC: ()\\\"\" ]\n    \
+			8 -> 9 [ label = \"\\\"RoleA!RoleD: ()\\\"\" ]\n    \
+			9 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -205,21 +203,23 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_b)),
         "digraph {\n    \
-            0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
-            2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            4 [ label = \"\\\"0.2\\\"\" ]\n    \
-            5 [ label = \"\\\"0.1\\\"\" ]\n    \
-            6 [ label = \"\\\"0.2\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"& RoleA\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 3 [ label = \"\\\"RoleB?RoleC: ()\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
-            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
-            1 -> 5 [ label = \"\\\"RoleB?RoleC: ()\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
-            6 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+			0 [ label = \"\\\"0\\\"\" ]\n    \
+			1 [ label = \"\\\"0.1\\\"\" ]\n    \
+			2 [ label = \"\\\"0.1\\\"\" ]\n    \
+			3 [ label = \"\\\"0.2\\\"\" ]\n    \
+			4 [ label = \"\\\"0.3\\\"\" ]\n    \
+			5 [ label = \"\\\"0.1\\\"\" ]\n    \
+			6 [ label = \"\\\"0.2\\\"\" ]\n    \
+			7 [ label = \"\\\"0.3\\\"\" ]\n    \
+			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+			0 -> 2 [ label = \"\\\"RoleB?RoleA: ()\\\"\" ]\n    \
+			2 -> 3 [ label = \"\\\"RoleB!RoleC: ()\\\"\" ]\n    \
+			3 -> 4 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
+			4 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+			0 -> 5 [ label = \"\\\"RoleB?RoleA: ()\\\"\" ]\n    \
+			5 -> 6 [ label = \"\\\"RoleB!RoleC: ()\\\"\" ]\n    \
+			6 -> 7 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
+			7 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -229,29 +229,23 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_c)),
         "digraph {\n    \
-            0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
-            2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            4 [ label = \"\\\"0.2\\\"\" ]\n    \
-            5 [ label = \"\\\"0.3\\\"\" ]\n    \
-            6 [ label = \"\\\"0.4\\\"\" ]\n    \
-            7 [ label = \"\\\"0.1\\\"\" ]\n    \
-            8 [ label = \"\\\"0.2\\\"\" ]\n    \
-            9 [ label = \"\\\"0.3\\\"\" ]\n    \
-            10 [ label = \"\\\"0.4\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"& RoleA\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 3 [ label = \"\\\"RoleC?RoleA: ()\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"RoleC!RoleB: ()\\\"\" ]\n    \
-            4 -> 5 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleC?RoleD: ()\\\"\" ]\n    \
-            6 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
-            1 -> 7 [ label = \"\\\"RoleC?RoleA: ()\\\"\" ]\n    \
-            7 -> 8 [ label = \"\\\"RoleC!RoleB: ()\\\"\" ]\n    \
-            8 -> 9 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
-            9 -> 10 [ label = \"\\\"RoleC?RoleD: ()\\\"\" ]\n    \
-            10 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+			0 [ label = \"\\\"0\\\"\" ]\n    \
+			1 [ label = \"\\\"0.1\\\"\" ]\n    \
+			2 [ label = \"\\\"0.1\\\"\" ]\n    \
+			3 [ label = \"\\\"0.2\\\"\" ]\n    \
+			4 [ label = \"\\\"0.3\\\"\" ]\n    \
+			5 [ label = \"\\\"0.1\\\"\" ]\n    \
+			6 [ label = \"\\\"0.2\\\"\" ]\n    \
+			7 [ label = \"\\\"0.3\\\"\" ]\n    \
+			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+			0 -> 2 [ label = \"\\\"RoleC?RoleB: ()\\\"\" ]\n    \
+			2 -> 3 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
+			3 -> 4 [ label = \"\\\"RoleC!RoleD: ()\\\"\" ]\n    \
+			4 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+			0 -> 5 [ label = \"\\\"RoleC?RoleB: ()\\\"\" ]\n    \
+			5 -> 6 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
+			6 -> 7 [ label = \"\\\"RoleC!RoleD: ()\\\"\" ]\n    \
+			7 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -261,20 +255,19 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_d)),
         "digraph {\n    \
-    0 [ label = \"\\\"0\\\"\" ]\n    \
-    1 [ label = \"\\\"0.0\\\"\" ]\n    \
-    2 [ label = \"\\\"0.1\\\"\" ]\n    \
-    3 [ label = \"\\\"0.1\\\"\" ]\n    \
-    4 [ label = \"\\\"0.2\\\"\" ]\n    \
-    5 [ label = \"\\\"0.1\\\"\" ]\n    \
-    6 [ label = \"\\\"0.2\\\"\" ]\n    \
-    0 -> 1 [ label = \"\\\"& RoleA\\\"\" ]\n    \
-    1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-    1 -> 3 [ label = \"\\\"RoleD?RoleC: ()\\\"\" ]\n    \
-    3 -> 4 [ label = \"\\\"RoleD!RoleA: ()\\\"\" ]\n    \
-    4 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
-    1 -> 5 [ label = \"\\\"RoleD?RoleC: ()\\\"\" ]\n    \
-    5 -> 6 [ label = \"\\\"RoleD!RoleA: ()\\\"\" ]\n    \
-    6 -> 1 [ label = \"\\\"µ\\\"\" ]\n}\n"
+			0 [ label = \"\\\"0\\\"\" ]\n    \
+			1 [ label = \"\\\"0.1\\\"\" ]\n    \
+			2 [ label = \"\\\"0.1\\\"\" ]\n    \
+			3 [ label = \"\\\"0.2\\\"\" ]\n    \
+			4 [ label = \"\\\"0.1\\\"\" ]\n    \
+			5 [ label = \"\\\"0.2\\\"\" ]\n    \
+			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+			0 -> 2 [ label = \"\\\"RoleD?RoleA: ()\\\"\" ]\n    \
+			2 -> 3 [ label = \"\\\"RoleD?RoleC: ()\\\"\" ]\n    \
+			3 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+			0 -> 4 [ label = \"\\\"RoleD?RoleA: ()\\\"\" ]\n    \
+			4 -> 5 [ label = \"\\\"RoleD?RoleC: ()\\\"\" ]\n    \
+			5 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
+        }\n"
     );
 }

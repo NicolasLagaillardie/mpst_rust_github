@@ -192,15 +192,13 @@ pub fn run_b_usecase_recursive_checker() {
         format!("{:?}", Dot::new(&graph_a)),
         "digraph {\n    \
             0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"0.0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
             2 [ label = \"\\\"0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            4 [ label = \"\\\"0.2\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"& RoleB\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 3 [ label = \"\\\"RoleA?RoleC: i32\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
-            4 -> 1 [ label = \"\\\"µ\\\"\" ]\n\
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleA?RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            3 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -213,17 +211,15 @@ pub fn run_b_usecase_recursive_checker() {
             0 [ label = \"\\\"0\\\"\" ]\n    \
             1 [ label = \"\\\"1\\\"\" ]\n    \
             2 [ label = \"\\\"2\\\"\" ]\n    \
-            3 [ label = \"\\\"2.0\\\"\" ]\n    \
+            3 [ label = \"\\\"2.1\\\"\" ]\n    \
             4 [ label = \"\\\"2.1\\\"\" ]\n    \
-            5 [ label = \"\\\"2.1\\\"\" ]\n    \
-            6 [ label = \"\\\"2.2\\\"\" ]\n    \
+            5 [ label = \"\\\"2.2\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"RoleB!RoleC: i32\\\"\" ]\n    \
             1 -> 2 [ label = \"\\\"RoleB?RoleC: i32\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"+ RoleB\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
-            3 -> 5 [ label = \"\\\"RoleB!RoleC: i32\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleB?RoleC: i32\\\"\" ]\n    \
-            6 -> 3 [ label = \"\\\"µ\\\"\" ]\n\
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
+            2 -> 4 [ label = \"\\\"RoleB!RoleC: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleB?RoleC: i32\\\"\" ]\n    \
+            5 -> 2 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -236,21 +232,19 @@ pub fn run_b_usecase_recursive_checker() {
             0 [ label = \"\\\"0\\\"\" ]\n    \
             1 [ label = \"\\\"1\\\"\" ]\n    \
             2 [ label = \"\\\"2\\\"\" ]\n    \
-            3 [ label = \"\\\"2.0\\\"\" ]\n    \
+            3 [ label = \"\\\"2.1\\\"\" ]\n    \
             4 [ label = \"\\\"2.1\\\"\" ]\n    \
-            5 [ label = \"\\\"2.1\\\"\" ]\n    \
-            6 [ label = \"\\\"2.2\\\"\" ]\n    \
-            7 [ label = \"\\\"2.3\\\"\" ]\n    \
-            8 [ label = \"\\\"2.4\\\"\" ]\n    \
+            5 [ label = \"\\\"2.2\\\"\" ]\n    \
+            6 [ label = \"\\\"2.3\\\"\" ]\n    \
+            7 [ label = \"\\\"2.4\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"RoleC?RoleB: i32\\\"\" ]\n    \
             1 -> 2 [ label = \"\\\"RoleC!RoleB: i32\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"& RoleB\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
-            3 -> 5 [ label = \"\\\"RoleC?RoleB: i32\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleC!RoleA: i32\\\"\" ]\n    \
-            6 -> 7 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
-            7 -> 8 [ label = \"\\\"RoleC!RoleB: i32\\\"\" ]\n    \
-            8 -> 3 [ label = \"\\\"µ\\\"\" ]\n\
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
+            2 -> 4 [ label = \"\\\"RoleC?RoleB: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleC!RoleA: i32\\\"\" ]\n    \
+            5 -> 6 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            6 -> 7 [ label = \"\\\"RoleC!RoleB: i32\\\"\" ]\n    \
+            7 -> 2 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 }
