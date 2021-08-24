@@ -8,6 +8,8 @@ use mpstthree::{create_meshedchannels, create_multiple_normal_role};
 
 use petgraph::dot::Dot;
 
+use std::fs::read_to_string;
+
 // Create new MeshedChannels
 create_meshedchannels!(MeshedChannels, 4);
 
@@ -39,19 +41,19 @@ enum Branches0BfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameB>),
     Win(
         MeshedChannels<
-            Recv<(), Send<(), Recurs0BfromA>>,
-            Send<(), End>,
+            Send<i32, Recurs0BfromA>,
+            Recv<i32, End>,
             End,
-            RoleA<RoleC<RoleA<RoleA<RoleEnd>>>>,
+            RoleC<RoleA<RoleA<RoleEnd>>>,
             NameB,
         >,
     ),
     Lose(
         MeshedChannels<
-            Recv<(), Send<(), Recurs0BfromA>>,
-            Send<(), End>,
+            Send<i32, Recurs0BfromA>,
+            Recv<i32, End>,
             End,
-            RoleA<RoleC<RoleA<RoleA<RoleEnd>>>>,
+            RoleC<RoleA<RoleA<RoleEnd>>>,
             NameB,
         >,
     ),
@@ -64,19 +66,19 @@ enum Branches0CfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameC>),
     Win(
         MeshedChannels<
-            Send<(), Recurs0CfromA>,
-            Recv<(), End>,
-            Send<(), End>,
-            RoleB<RoleA<RoleD<RoleA<RoleEnd>>>>,
+            Recv<i32, Send<i32, Recurs0CfromA>>,
+            Send<i32, End>,
+            Send<i32, End>,
+            RoleA<RoleB<RoleD<RoleA<RoleA<RoleEnd>>>>>,
             NameC,
         >,
     ),
     Lose(
         MeshedChannels<
-            Send<(), Recurs0CfromA>,
-            Recv<(), End>,
-            Send<(), End>,
-            RoleB<RoleA<RoleD<RoleA<RoleEnd>>>>,
+            Recv<i32, Send<i32, Recurs0CfromA>>,
+            Send<i32, End>,
+            Send<i32, End>,
+            RoleA<RoleB<RoleD<RoleA<RoleA<RoleEnd>>>>>,
             NameC,
         >,
     ),
@@ -89,18 +91,18 @@ enum Branches0DfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameD>),
     Win(
         MeshedChannels<
-            Recv<(), Recurs0DfromA>,
+            Recv<i32, Recurs0DfromA>,
             End,
-            Recv<(), End>,
+            Recv<i32, End>,
             RoleA<RoleC<RoleA<RoleEnd>>>,
             NameD,
         >,
     ),
     Lose(
         MeshedChannels<
-            Recv<(), Recurs0DfromA>,
+            Recv<i32, Recurs0DfromA>,
             End,
-            Recv<(), End>,
+            Recv<i32, End>,
             RoleA<RoleC<RoleA<RoleEnd>>>,
             NameD,
         >,
@@ -112,17 +114,17 @@ enum Branches0DfromA {
 // For A
 type EndpointAEnd = MeshedChannels<End, End, End, RoleEnd, NameA>;
 type EndpointALose = MeshedChannels<
-    Send<(), Recv<(), Choose0fromAtoB>>,
-    Recv<(), Choose0fromAtoC>,
-    Send<(), Choose0fromAtoD>,
-    RoleB<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
+    Recv<i32, Choose0fromAtoB>,
+    Send<i32, Recv<i32, Choose0fromAtoC>>,
+    Send<i32, Choose0fromAtoD>,
+    RoleC<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
     NameA,
 >;
 type EndpointAWin = MeshedChannels<
-    Send<(), Recv<(), Choose0fromAtoB>>,
-    Recv<(), Choose0fromAtoC>,
-    Send<(), Choose0fromAtoD>,
-    RoleB<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
+    Recv<i32, Choose0fromAtoB>,
+    Send<i32, Recv<i32, Choose0fromAtoC>>,
+    Send<i32, Choose0fromAtoD>,
+    RoleC<RoleB<RoleC<RoleD<RoleBroadcast>>>>,
     NameA,
 >;
 type EndpointAFull =
@@ -141,6 +143,7 @@ type EndpointDFull = MeshedChannels<Recurs0DfromA, End, End, RoleA<RoleEnd>, Nam
 
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
+        "four_players_game_sync",
         EndpointAFull,
         EndpointBFull,
         EndpointCFull,
@@ -173,27 +176,27 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_a)),
         "digraph {\n    \
-			0 [ label = \"\\\"0\\\"\" ]\n    \
-			1 [ label = \"\\\"0.1\\\"\" ]\n    \
-			2 [ label = \"\\\"0.1\\\"\" ]\n    \
-			3 [ label = \"\\\"0.2\\\"\" ]\n    \
-			4 [ label = \"\\\"0.3\\\"\" ]\n    \
-			5 [ label = \"\\\"0.4\\\"\" ]\n    \
-			6 [ label = \"\\\"0.1\\\"\" ]\n    \
-			7 [ label = \"\\\"0.2\\\"\" ]\n    \
-			8 [ label = \"\\\"0.3\\\"\" ]\n    \
-			9 [ label = \"\\\"0.4\\\"\" ]\n    \
-			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-			0 -> 2 [ label = \"\\\"RoleA!RoleB: ()\\\"\" ]\n    \
-			2 -> 3 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
-			3 -> 4 [ label = \"\\\"RoleA?RoleC: ()\\\"\" ]\n    \
-			4 -> 5 [ label = \"\\\"RoleA!RoleD: ()\\\"\" ]\n    \
-			5 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
-			0 -> 6 [ label = \"\\\"RoleA!RoleB: ()\\\"\" ]\n    \
-			6 -> 7 [ label = \"\\\"RoleA?RoleB: ()\\\"\" ]\n    \
-			7 -> 8 [ label = \"\\\"RoleA?RoleC: ()\\\"\" ]\n    \
-			8 -> 9 [ label = \"\\\"RoleA!RoleD: ()\\\"\" ]\n    \
-			9 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.3\\\"\" ]\n    \
+            5 [ label = \"\\\"0.4\\\"\" ]\n    \
+            6 [ label = \"\\\"0.1\\\"\" ]\n    \
+            7 [ label = \"\\\"0.2\\\"\" ]\n    \
+            8 [ label = \"\\\"0.3\\\"\" ]\n    \
+            9 [ label = \"\\\"0.4\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"RoleA?RoleC: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleA!RoleD: i32\\\"\" ]\n    \
+            5 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+            0 -> 6 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
+            6 -> 7 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
+            7 -> 8 [ label = \"\\\"RoleA?RoleC: i32\\\"\" ]\n    \
+            8 -> 9 [ label = \"\\\"RoleA!RoleD: i32\\\"\" ]\n    \
+            9 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -203,23 +206,19 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_b)),
         "digraph {\n    \
-			0 [ label = \"\\\"0\\\"\" ]\n    \
-			1 [ label = \"\\\"0.1\\\"\" ]\n    \
-			2 [ label = \"\\\"0.1\\\"\" ]\n    \
-			3 [ label = \"\\\"0.2\\\"\" ]\n    \
-			4 [ label = \"\\\"0.3\\\"\" ]\n    \
-			5 [ label = \"\\\"0.1\\\"\" ]\n    \
-			6 [ label = \"\\\"0.2\\\"\" ]\n    \
-			7 [ label = \"\\\"0.3\\\"\" ]\n    \
-			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-			0 -> 2 [ label = \"\\\"RoleB?RoleA: ()\\\"\" ]\n    \
-			2 -> 3 [ label = \"\\\"RoleB!RoleC: ()\\\"\" ]\n    \
-			3 -> 4 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
-			4 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
-			0 -> 5 [ label = \"\\\"RoleB?RoleA: ()\\\"\" ]\n    \
-			5 -> 6 [ label = \"\\\"RoleB!RoleC: ()\\\"\" ]\n    \
-			6 -> 7 [ label = \"\\\"RoleB!RoleA: ()\\\"\" ]\n    \
-			7 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleB?RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
+            3 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+            0 -> 4 [ label = \"\\\"RoleB?RoleC: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
+            5 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -229,23 +228,27 @@ pub fn main() {
     assert_eq!(
         format!("{:?}", Dot::new(&graph_c)),
         "digraph {\n    \
-			0 [ label = \"\\\"0\\\"\" ]\n    \
-			1 [ label = \"\\\"0.1\\\"\" ]\n    \
-			2 [ label = \"\\\"0.1\\\"\" ]\n    \
-			3 [ label = \"\\\"0.2\\\"\" ]\n    \
-			4 [ label = \"\\\"0.3\\\"\" ]\n    \
-			5 [ label = \"\\\"0.1\\\"\" ]\n    \
-			6 [ label = \"\\\"0.2\\\"\" ]\n    \
-			7 [ label = \"\\\"0.3\\\"\" ]\n    \
-			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-			0 -> 2 [ label = \"\\\"RoleC?RoleB: ()\\\"\" ]\n    \
-			2 -> 3 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
-			3 -> 4 [ label = \"\\\"RoleC!RoleD: ()\\\"\" ]\n    \
-			4 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
-			0 -> 5 [ label = \"\\\"RoleC?RoleB: ()\\\"\" ]\n    \
-			5 -> 6 [ label = \"\\\"RoleC!RoleA: ()\\\"\" ]\n    \
-			6 -> 7 [ label = \"\\\"RoleC!RoleD: ()\\\"\" ]\n    \
-			7 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
+            0 [ label = \"\\\"0\\\"\" ]\n    \
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.3\\\"\" ]\n    \
+            5 [ label = \"\\\"0.4\\\"\" ]\n    \
+            6 [ label = \"\\\"0.1\\\"\" ]\n    \
+            7 [ label = \"\\\"0.2\\\"\" ]\n    \
+            8 [ label = \"\\\"0.3\\\"\" ]\n    \
+            9 [ label = \"\\\"0.4\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleC!RoleB: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"RoleC!RoleD: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleC!RoleA: i32\\\"\" ]\n    \
+            5 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+            0 -> 6 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
+            6 -> 7 [ label = \"\\\"RoleC!RoleB: i32\\\"\" ]\n    \
+            7 -> 8 [ label = \"\\\"RoleC!RoleD: i32\\\"\" ]\n    \
+            8 -> 9 [ label = \"\\\"RoleC!RoleA: i32\\\"\" ]\n    \
+            9 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
@@ -262,12 +265,21 @@ pub fn main() {
 			4 [ label = \"\\\"0.1\\\"\" ]\n    \
 			5 [ label = \"\\\"0.2\\\"\" ]\n    \
 			0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-			0 -> 2 [ label = \"\\\"RoleD?RoleA: ()\\\"\" ]\n    \
-			2 -> 3 [ label = \"\\\"RoleD?RoleC: ()\\\"\" ]\n    \
+			0 -> 2 [ label = \"\\\"RoleD?RoleA: i32\\\"\" ]\n    \
+			2 -> 3 [ label = \"\\\"RoleD?RoleC: i32\\\"\" ]\n    \
 			3 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
-			0 -> 4 [ label = \"\\\"RoleD?RoleA: ()\\\"\" ]\n    \
-			4 -> 5 [ label = \"\\\"RoleD?RoleC: ()\\\"\" ]\n    \
+			0 -> 4 [ label = \"\\\"RoleD?RoleA: i32\\\"\" ]\n    \
+			4 -> 5 [ label = \"\\\"RoleD?RoleC: i32\\\"\" ]\n    \
 			5 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
+    );
+
+    ////////////// Test KMC output
+    assert_eq!(
+        "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
+        \u{1b}[92mTrue\n\u{1b}[0mreduced 2-exhaustive: \
+        \u{1b}[92mTrue\n\u{1b}[0mreduced 2-safe: \
+        \u{1b}[92mTrue\n\u{1b}[0m\n",
+        read_to_string("outputs/four_players_game_sync_kmc.txt").unwrap()
     );
 }

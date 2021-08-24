@@ -31,8 +31,13 @@ type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs =
-        mpstthree::checker_concat!(EndpointA<i32>, EndpointC<i32>, EndpointB<i32>).unwrap();
+    let graphs = mpstthree::checker_concat!(
+        "checking_simple",
+        EndpointA<i32>,
+        EndpointC<i32>,
+        EndpointB<i32>
+    )
+    .unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

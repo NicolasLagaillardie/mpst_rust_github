@@ -377,6 +377,7 @@ fn checking_basics() {
 #[test]
 fn checking_complex() {
     checking::complex::commit_protocol::main();
+    checking::complex::async_paper_ext_rev_sync::main();
     checking::complex::two_peers_branchings_sync::main();
     checking::complex::four_players_game_sync::main();
 }

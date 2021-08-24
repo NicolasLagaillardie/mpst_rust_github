@@ -721,8 +721,9 @@ pub(crate) fn aux_get_graph(
             Ok((g, cfsm))
         } else {
             panic!(
-                "Did not found a correct stack. Found stack and session: {:?} / {:?}",
-                stack, full_session
+                "Did not found a correct stack for role {}. \
+                Found stack and session: {:?} / {:?}",
+                current_role, stack, full_session
             )
         }
     }

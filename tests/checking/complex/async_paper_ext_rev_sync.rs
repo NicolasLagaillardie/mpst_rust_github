@@ -32,8 +32,8 @@ type Choose0fromCtoS = Send<Branches0SfromC, End>;
 type Recurs1CfromS = Recv<Branches1CfromS, End>;
 
 enum Branches1CfromS {
-    Okay(MeshedChannels<End, End, RoleEnd, NameC>),
-    Error(MeshedChannels<End, End, RoleEnd, NameC>),
+    Okay(MeshedChannels<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>),
+    Error(MeshedChannels<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>),
     Ko(MeshedChannels<Choose0fromCtoM, Choose0fromCtoS, RoleBroadcast, NameC>),
 }
 
@@ -49,7 +49,7 @@ type Recurs1MfromS = Recv<Branches1MfromS, End>;
 
 enum Branches1MfromS {
     Okay(MeshedChannels<End, End, RoleEnd, NameM>),
-    Error(MeshedChannels<End, End, RoleEnd, NameM>),
+    Error(MeshedChannels<End, Recv<i32, End>, RoleS<RoleEnd>, NameM>),
     Ko(MeshedChannels<Recurs0MfromC, End, RoleC<RoleEnd>, NameM>),
 }
 
@@ -60,7 +60,7 @@ enum Branches0SfromC {
     End(MeshedChannels<End, End, RoleEnd, NameS>),
     Looping(
         MeshedChannels<
-            Recv<(), Recv<(), Choose1fromStoC>>,
+            Recv<i32, Recv<i32, Choose1fromStoC>>,
             Choose1fromStoM,
             RoleC<RoleC<RoleBroadcast>>,
             NameS,
@@ -74,7 +74,8 @@ type Choose1fromStoM = Send<Branches1MfromS, End>;
 // Creating the MP sessions
 
 // For S
-type EndpointSEnd = MeshedChannels<End, End, RoleEnd, NameS>;
+type EndpointSOkay = MeshedChannels<Send<i32, End>, End, RoleC<RoleEnd>, NameS>;
+type EndpointSError = MeshedChannels<Send<i32, End>, Send<i32, End>, RoleC<RoleM<RoleEnd>>, NameS>;
 type EndpointSKo = MeshedChannels<Recurs0SfromC, End, RoleC<RoleEnd>, NameS>;
 
 type EndpointSFull = MeshedChannels<Recurs0SfromC, End, RoleC<RoleEnd>, NameS>;
@@ -85,14 +86,16 @@ type EndpointMFull = MeshedChannels<Recurs0MfromC, End, RoleC<RoleEnd>, NameM>;
 // For C
 type EndpointCEnd = MeshedChannels<End, End, RoleEnd, NameC>;
 type EndpointCLooping =
-    MeshedChannels<End, Send<(), Send<(), Recurs1CfromS>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>;
+    MeshedChannels<End, Send<i32, Send<i32, Recurs1CfromS>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>;
 
 type EndpointCFull = MeshedChannels<Choose0fromCtoM, Choose0fromCtoS, RoleBroadcast, NameC>;
 
 /////////////////////////////////////////
 
+#[test]
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
+        "async_paper_ext_rev_sync",
         EndpointCFull,
         EndpointSFull,
         EndpointMFull
@@ -108,12 +111,12 @@ pub fn main() {
             Branches0SfromC, Looping
         ],
         [
-            EndpointSEnd,
+            EndpointSError,
             Branches1CfromS, Error,
             Branches1MfromS, Error
         ],
         [
-            EndpointSEnd,
+            EndpointSOkay,
             Branches1CfromS, Okay,
             Branches1MfromS, Okay
         ],
@@ -136,13 +139,19 @@ pub fn main() {
             2 [ label = \"\\\"0.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.2\\\"\" ]\n    \
             4 [ label = \"\\\"0.2.1\\\"\" ]\n    \
-            5 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2.2\\\"\" ]\n    \
+            6 [ label = \"\\\"0.2.3\\\"\" ]\n    \
+            7 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            8 [ label = \"\\\"0.2.2\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-            0 -> 2 [ label = \"\\\"RoleS?RoleC: ()\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"RoleS?RoleC: ()\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleS?RoleC: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleS?RoleC: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"RoleS!RoleC: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleS!RoleM: i32\\\"\" ]\n    \
+            5 -> 6 [ label = \"\\\"0\\\"\" ]\n    \
             3 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
-            3 -> 5 [ label = \"\\\"0\\\"\" ]\n\
+            3 -> 7 [ label = \"\\\"RoleS!RoleC: i32\\\"\" ]\n    \
+            7 -> 8 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -155,10 +164,12 @@ pub fn main() {
             0 [ label = \"\\\"0\\\"\" ]\n    \
             1 [ label = \"\\\"0.1\\\"\" ]\n    \
             2 [ label = \"\\\"0.0.1\\\"\" ]\n    \
-            3 [ label = \"\\\"0.0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.0.1\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-            0 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-            0 -> 3 [ label = \"\\\"0\\\"\" ]\n\
+            0 -> 2 [ label = \"\\\"RoleM?RoleS: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 4 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -173,13 +184,17 @@ pub fn main() {
             2 [ label = \"\\\"0.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.2\\\"\" ]\n    \
             4 [ label = \"\\\"0.2.1\\\"\" ]\n    \
-            5 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2.2\\\"\" ]\n    \
+            6 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            7 [ label = \"\\\"0.2.2\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-            0 -> 2 [ label = \"\\\"RoleC!RoleS: ()\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"RoleC!RoleS: ()\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleC!RoleS: i32\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleC!RoleS: i32\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"RoleC?RoleS: i32\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"0\\\"\" ]\n    \
             3 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
-            3 -> 5 [ label = \"\\\"0\\\"\" ]\n\
+            3 -> 6 [ label = \"\\\"RoleC?RoleS: i32\\\"\" ]\n    \
+            6 -> 7 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 }

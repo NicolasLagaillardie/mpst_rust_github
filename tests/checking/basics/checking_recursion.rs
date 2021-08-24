@@ -71,6 +71,7 @@ type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, RoleA<RoleE
 
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
+        "checking_recursion",
         EndpointARecurs,
         EndpointCFull,
         EndpointBFull

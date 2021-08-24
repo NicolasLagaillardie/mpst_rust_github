@@ -5,9 +5,8 @@ use petgraph::Graph;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
-use std::fs::{create_dir_all, File};
+use std::fs::{create_dir_all, remove_file, File};
 use std::io::Write;
-use std::path::Path;
 use std::process::Command;
 use std::str;
 
@@ -47,6 +46,87 @@ use aux_checker::*;
 #[macro_export]
 macro_rules! checker_concat {
     (
+        $(
+            $sessiontype: ty
+        ),+ $(,)?
+    ) => {
+        {
+            mpstthree::checker_concat!(
+                "",
+                $(
+                    $sessiontype,
+                )+
+            )
+        }
+    };
+    (
+        $name_file: expr,
+        $(
+            $sessiontype: ty
+        ),+ $(,)?
+    ) => {
+        {
+            let mut sessions = Vec::new();
+
+            $(
+                sessions.push(String::from(std::any::type_name::<$sessiontype>()));
+            )+
+
+            let state_branching_sessions = std::collections::hash_map::RandomState::new();
+            let branching_sessions: std::collections::HashMap<String, String> =
+                std::collections::HashMap::with_hasher(state_branching_sessions);
+
+            let state_group_branches = std::collections::hash_map::RandomState::new();
+            let group_branches: std::collections::HashMap<String, i32> =
+                std::collections::HashMap::with_hasher(state_group_branches);
+
+            let state_branches = std::collections::hash_map::RandomState::new();
+            let branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
+                std::collections::HashMap::with_hasher(state_branches);
+
+            mpstthree::checking::checker(
+                $name_file,
+                sessions,
+                branches_receivers,
+                branching_sessions,
+                group_branches
+            )
+        }
+    };
+    (
+        $(
+            $sessiontype: ty
+        ),+ $(,)?
+        =>
+        $(
+            [
+                $branch_stack: ty,
+                $(
+                    $choice: ty, $branch: ident
+                ),+ $(,)?
+            ]
+        ),+ $(,)?
+    ) => {
+        {
+            mpstthree::checker_concat!(
+                "",
+                $(
+                    $sessiontype,
+                )+
+                =>
+                $(
+                    [
+                        $branch_stack,
+                        $(
+                            $choice, $branch,
+                        )+
+                    ],
+                )+
+            )
+        }
+    };
+    (
+        $name_file: expr,
         $(
             $sessiontype: ty
         ),+ $(,)?
@@ -120,38 +200,7 @@ macro_rules! checker_concat {
 
             // Create the graphs with the previous inputs
             mpstthree::checking::checker(
-                sessions,
-                branches_receivers,
-                branching_sessions,
-                group_branches
-            )
-        }
-    };
-    (
-        $(
-            $sessiontype: ty
-        ),+ $(,)?
-    ) => {
-        {
-            let mut sessions = Vec::new();
-
-            $(
-                sessions.push(String::from(std::any::type_name::<$sessiontype>()));
-            )+
-
-            let state_branches = std::collections::hash_map::RandomState::new();
-            let branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
-                std::collections::HashMap::with_hasher(state_branches);
-
-            let state_branching_sessions = std::collections::hash_map::RandomState::new();
-            let branching_sessions: std::collections::HashMap<String, String> =
-                std::collections::HashMap::with_hasher(state_branching_sessions);
-
-            let state_group_branches = std::collections::hash_map::RandomState::new();
-            let group_branches: std::collections::HashMap<String, i32> =
-                std::collections::HashMap::with_hasher(state_group_branches);
-
-            mpstthree::checking::checker(
+                $name_file,
                 sessions,
                 branches_receivers,
                 branching_sessions,
@@ -164,6 +213,7 @@ macro_rules! checker_concat {
 // The starting function for extracting the graphs
 #[doc(hidden)]
 pub fn checker(
+    name_file: &str,
     sessions: Vec<String>,
     branches_receivers: HashMap<String, HashMap<String, String>>,
     branching_sessions: HashMap<String, String>,
@@ -205,51 +255,93 @@ pub fn checker(
     let state_result = RandomState::new();
     let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
 
-    // Create cfsm folder if missing
-    create_dir_all("cfsm")?;
+    if !name_file.is_empty() {
+        // If a name file has been provided
 
-    // Create a new non existing file
-    let mut index_cfsm = 0;
+        // Create cfsm folder if missing
+        create_dir_all("cfsm")?;
 
-    while Path::new(&format!("cfsm/{}.txt", index_cfsm)).exists() {
-        index_cfsm += 1;
-    }
+        // Create the file
+        let mut cfsm_file = File::create(format!("cfsm/{}.txt", name_file))?;
 
-    let mut cfsm_file = File::create(format!("cfsm/{}.txt", index_cfsm))?;
+        let mut cfsm_sort = vec![vec!["".to_string()]; roles.len()];
 
-    // Get all the graphs and add them to the result Hashmap
-    for (role, full_session) in clean_sessions.clone() {
-        // Get the graph and the cfsm for the current role
-        let (graph, cfsm) = get_graph_session(
-            &role,
-            full_session,
-            &roles,
-            update_branches_receivers.clone(),
-            update_branching_sessions.clone(),
-            group_branches.clone(),
-        )?;
+        // Get all the graphs and add them to the result Hashmap
+        for (role, full_session) in clean_sessions.clone() {
+            // Get the graph and the cfsm for the current role
+            let (graph, cfsm) = get_graph_session(
+                &role,
+                full_session,
+                &roles,
+                update_branches_receivers.clone(),
+                update_branching_sessions.clone(),
+                group_branches.clone(),
+            )?;
 
-        // Insert the graph to the returned result
-        result.insert(role.to_string(), graph);
+            // Insert the graph to the returned result
+            result.insert(role.to_string(), graph);
+
+            let index_role = roles.iter().position(|r| r == &role).unwrap();
+
+            cfsm_sort[index_role] = cfsm;
+        }
 
         // Write the cfsm into the file
-        for s in cfsm.iter() {
-            writeln!(&mut cfsm_file, "{}", s)?;
+        for elt_cfsm in cfsm_sort.iter() {
+            for elt in elt_cfsm.iter() {
+                writeln!(&mut cfsm_file, "{}", elt)?;
+            }
         }
+
+        // Add a blank line
         writeln!(&mut cfsm_file)?;
+
+        // Delete previous files
+        remove_file(format!("../mpst_rust_github/outputs/{}_kmc.txt", name_file)).unwrap_or(());
+        remove_file(format!(
+            "../mpst_rust_github/outputs/{}-sync-0norm-system.dot",
+            name_file
+        ))
+        .unwrap_or(());
+        remove_file(format!(
+            "../mpst_rust_github/outputs/{}-sync-0norm-system.png",
+            name_file
+        ))
+        .unwrap_or(());
+        remove_file(format!(
+            "../mpst_rust_github/outputs/{}-ts-2.fsm",
+            name_file
+        ))
+        .unwrap_or(());
+
+        // Run KMC tool, the outputs files of the tool are in the "outputs" folder
+        let kmc = Command::new("./../kmc/KMC")
+            .arg(format!("../mpst_rust_github/cfsm/{}.txt", name_file))
+            .arg("2")
+            .arg("--fsm")
+            .output()?;
+
+        // Write down the stdout of the previous command into
+        // a corresponding file in the "outputs" folder
+        let mut kmc_file = File::create(format!("outputs/{}_kmc.txt", name_file))?;
+        writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc.stdout)?)?;
+    } else {
+        // Get all the graphs and add them to the result Hashmap
+        for (role, full_session) in clean_sessions.clone() {
+            // Get the graph and the cfsm for the current role
+            let (graph, _) = get_graph_session(
+                &role,
+                full_session,
+                &roles,
+                update_branches_receivers.clone(),
+                update_branching_sessions.clone(),
+                group_branches.clone(),
+            )?;
+
+            // Insert the graph to the returned result
+            result.insert(role.to_string(), graph);
+        }
     }
-
-    // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc = Command::new("./../kmc/KMC")
-        .arg(format!("../mpst_rust_github/cfsm/{}.txt", index_cfsm))
-        .arg("2")
-        .arg("--fsm")
-        .output()?;
-
-    // Write down the stdout of the previous command into a corresponding
-    // file in the "outputs" folder
-    let mut kmc_file = File::create(format!("outputs/{}_kmc.txt", index_cfsm))?;
-    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc.stdout)?)?;
 
     Ok(result)
 }
