@@ -5,6 +5,11 @@ use petgraph::Graph;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
+use std::process::Command;
+use std::str;
 
 mod aux_checker;
 
@@ -200,20 +205,48 @@ pub fn checker(
     let state_result = RandomState::new();
     let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
 
+    // Create a new non existing file
+    let mut index_cfsm = 0;
+
+    while Path::new(&format!("cfsm/{}.txt", index_cfsm)).exists() {
+        index_cfsm += 1;
+    }
+
+    let mut cfsm_file = File::create(format!("cfsm/{}.txt", index_cfsm))?;
+
     // Get all the graphs and add them to the result Hashmap
     for (role, full_session) in clean_sessions.clone() {
-        result.insert(
-            role.to_string(),
-            get_graph_session(
-                &role,
-                full_session,
-                &roles,
-                update_branches_receivers.clone(),
-                update_branching_sessions.clone(),
-                group_branches.clone(),
-            )?,
-        );
+        // Get the graph and the cfsm for the current role
+        let (graph, cfsm) = get_graph_session(
+            &role,
+            full_session,
+            &roles,
+            update_branches_receivers.clone(),
+            update_branching_sessions.clone(),
+            group_branches.clone(),
+        )?;
+
+        // Insert the graph to the returned result
+        result.insert(role.to_string(), graph);
+
+        // Write the cfsm into the file
+        for s in cfsm.iter() {
+            writeln!(&mut cfsm_file, "{}", s)?;
+        }
+        writeln!(&mut cfsm_file)?;
     }
+
+    // Run KMC tool, the outputs files of the tool are in the "outputs" folder
+    let kmc = Command::new("./../kmc/KMC")
+        .arg(format!("../mpst_rust_github/cfsm/{}.txt", index_cfsm))
+        .arg("2")
+        .arg("--fsm")
+        .output()?;
+
+    // Write down the stdout of the previous command into a corresponding
+    // file in the "outputs" folder
+    let mut kmc_file = File::create(format!("outputs/{}_kmc.txt", index_cfsm))?;
+    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc.stdout)?)?;
 
     Ok(result)
 }

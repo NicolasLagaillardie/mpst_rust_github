@@ -245,8 +245,8 @@ pub(crate) fn aux_get_graph(
     mut branches_already_seen: HashMap<String, NodeIndex<u32>>,
     branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
-    mut cfsm: VecOfStr,
-) -> Result<(Graph<String, String>, VecOfStr), Box<dyn Error>> {
+    mut cfsm: Vec<(String, usize)>,
+) -> Result<(Graph<String, String>, Vec<(String, usize)>), Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
         let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
@@ -445,14 +445,16 @@ pub(crate) fn aux_get_graph(
                     format!("{}!{}: {}", current_role, head_stack, &running_session[1]),
                 );
 
-                cfsm.push(format!(
-                    "{}{} {} ! {} {}{}",
-                    current_role,
-                    previous_node.index(),
-                    index_head,
-                    &running_session[1],
-                    current_role,
-                    new_node.index()
+                cfsm.push((
+                    format!(
+                        "{}{} {} ! {} {}",
+                        current_role,
+                        previous_node.index(),
+                        index_head,
+                        &running_session[1],
+                        current_role
+                    ),
+                    new_node.index(),
                 ));
 
                 // Replace the old binary session with the new one
@@ -489,6 +491,10 @@ pub(crate) fn aux_get_graph(
                                 && previous_node != *new_node
                             {
                                 g.add_edge(previous_node, *new_node, "µ".to_string());
+
+                                if let Some(elt) = cfsm.pop() {
+                                    cfsm.push((elt.0, new_node.index()));
+                                }
                             }
                         } else {
                             // If the node was not added
@@ -560,14 +566,16 @@ pub(crate) fn aux_get_graph(
                         format!("{}?{}: {}", current_role, head_stack, &running_session[1]),
                     );
 
-                    cfsm.push(format!(
-                        "{}{} {} ? {} {}{}",
-                        current_role,
-                        previous_node.index(),
-                        index_head,
-                        &running_session[1],
-                        current_role,
-                        new_node.index()
+                    cfsm.push((
+                        format!(
+                            "{}{} {} ? {} {}",
+                            current_role,
+                            previous_node.index(),
+                            index_head,
+                            &running_session[1],
+                            current_role
+                        ),
+                        new_node.index(),
                     ));
 
                     full_session[index_head - offset] = running_session[2].to_string();
@@ -598,6 +606,8 @@ pub(crate) fn aux_get_graph(
                 cfsm,
             )
         } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
+            // If it is a broadcasting role
+
             let mut number_of_send = 0;
 
             let mut all_branches = Vec::new();
@@ -640,6 +650,10 @@ pub(crate) fn aux_get_graph(
                 if let Some(new_node) = branches_already_seen.get(&current_branch) {
                     if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
                         g.add_edge(previous_node, *new_node, "µ".to_string());
+
+                        if let Some(elt) = cfsm.pop() {
+                            cfsm.push((elt.0, new_node.index()));
+                        }
                     }
                 } else {
                     // If the node was not added
@@ -721,7 +735,7 @@ pub(crate) fn get_graph_session(
     branches_receivers: HashMap<String, HashMapStrVecOfStr>,
     branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
-) -> Result<Graph<String, String>, Box<dyn Error>> {
+) -> Result<(Graph<String, String>, Vec<String>), Box<dyn Error>> {
     // Create the new graph that will be returned in the end
     let mut g = Graph::<String, String>::new();
 
@@ -747,9 +761,9 @@ pub(crate) fn get_graph_session(
     let branches_already_seen: HashMap<String, NodeIndex<u32>> =
         HashMap::with_hasher(state_branches_already_seen);
 
-    let cfsm = vec![".outputs".to_string(), ".state graph".to_string()];
+    let cfsm: Vec<(String, usize)> = Vec::new();
 
-    let (result, mut cfsm) = aux_get_graph(
+    let (result, cfsm) = aux_get_graph(
         current_role,
         full_session,
         roles,
@@ -766,12 +780,22 @@ pub(crate) fn get_graph_session(
         cfsm,
     )?;
 
-    cfsm.push(format!(".marking {}0", current_role));
-    cfsm.push(".end".to_string());
+    // The missing strings for starting cfsm
+    let mut cfsm_result = vec![".outputs".to_string(), ".state graph".to_string()];
 
-    println!("{:?}", cfsm);
+    // Format the tuples into strings and add them to cfsm_result
+    let mut clean_cfsm = cfsm
+        .iter()
+        .map(|(s, i)| format!("{}{}", s, i))
+        .collect::<Vec<String>>();
 
-    Ok(result)
+    cfsm_result.append(&mut clean_cfsm);
+
+    // The missing strings for ending cfsm
+    cfsm_result.push(format!(".marking {}0", current_role));
+    cfsm_result.push(".end".to_string());
+
+    Ok((result, cfsm_result))
 }
 
 //////////////////////////////////

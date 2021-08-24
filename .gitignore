@@ -55,6 +55,11 @@ test.rs
 # WIP
 /wip
 
+# Temp file
 result.rs
+
+# cfsm output
+cfsm/*
+outputs/*
 
 *.env
