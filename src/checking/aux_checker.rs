@@ -9,6 +9,8 @@ use std::error::Error;
 
 type VecOfStr = Vec<String>;
 type HashMapStrVecOfStr = HashMap<String, VecOfStr>;
+type GraphOfStrStr = Graph<String, String>;
+type VecOfTuple = Vec<(String, usize)>;
 
 /// Clean the provided session, which should be stringified.
 ///
@@ -240,13 +242,13 @@ pub(crate) fn aux_get_graph(
     compare_end: VecOfStr,
     mut depth_level: usize,
     index_current_role: usize,
-    mut g: Graph<String, String>,
+    mut g: GraphOfStrStr,
     branches_receivers: HashMap<String, HashMapStrVecOfStr>,
     mut branches_already_seen: HashMap<String, NodeIndex<u32>>,
     branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
-    mut cfsm: Vec<(String, usize)>,
-) -> Result<(Graph<String, String>, Vec<(String, usize)>), Box<dyn Error>> {
+    mut cfsm: VecOfTuple,
+) -> Result<(GraphOfStrStr, VecOfTuple), Box<dyn Error>> {
     if compare_end == full_session {
         index_node[depth_level] += 1;
         let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
@@ -735,7 +737,7 @@ pub(crate) fn get_graph_session(
     branches_receivers: HashMap<String, HashMapStrVecOfStr>,
     branching_sessions: HashMapStrVecOfStr,
     group_branches: HashMap<String, i32>,
-) -> Result<(Graph<String, String>, Vec<String>), Box<dyn Error>> {
+) -> Result<(GraphOfStrStr, VecOfStr), Box<dyn Error>> {
     // Create the new graph that will be returned in the end
     let mut g = Graph::<String, String>::new();
 
@@ -761,7 +763,7 @@ pub(crate) fn get_graph_session(
     let branches_already_seen: HashMap<String, NodeIndex<u32>> =
         HashMap::with_hasher(state_branches_already_seen);
 
-    let cfsm: Vec<(String, usize)> = Vec::new();
+    let cfsm: VecOfTuple = Vec::new();
 
     let (result, cfsm) = aux_get_graph(
         current_role,

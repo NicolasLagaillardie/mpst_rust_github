@@ -5,7 +5,7 @@ use petgraph::Graph;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
-use std::fs::File;
+use std::fs::{create_dir_all, File};
 use std::io::Write;
 use std::path::Path;
 use std::process::Command;
@@ -204,6 +204,9 @@ pub fn checker(
     // The final result Hashmap
     let state_result = RandomState::new();
     let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
+
+    // Create cfsm folder if missing
+    create_dir_all("cfsm")?;
 
     // Create a new non existing file
     let mut index_cfsm = 0;

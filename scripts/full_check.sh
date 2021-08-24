@@ -4,6 +4,8 @@
 
 set -e
 
+rm -rf cfsm/
+
 # echo "cargo fmt started"
 # cargo fmt
 # echo "cargo fmt completed"
