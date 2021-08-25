@@ -586,8 +586,8 @@ pub(crate) fn aux_get_graph(
                 }
             } else {
                 panic!(
-                    "Did not found a correct session. Found session: {:?}",
-                    full_session
+                    "Did not found a correct session for role {:?}. Found session: {:?}",
+                    current_role, full_session
                 )
             }
 

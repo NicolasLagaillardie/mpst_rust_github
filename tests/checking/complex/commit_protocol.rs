@@ -226,9 +226,17 @@ pub fn main() {
     ////////////// Test KMC output
     assert_eq!(
         "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
+        \u{1b}[92mTrue\n\u{1b}[0mreduced 1-exhaustive: \
+        \u{1b}[92mTrue\n\u{1b}[0mreduced 1-safe: \
+        \u{1b}[92mTrue\n\u{1b}[0m\n",
+        read_to_string("outputs/commit_protocol_1_kmc.txt").unwrap()
+    );
+
+    assert_eq!(
+        "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
         \u{1b}[92mTrue\n\u{1b}[0mreduced 2-exhaustive: \
         \u{1b}[92mTrue\n\u{1b}[0mreduced 2-safe: \
         \u{1b}[92mTrue\n\u{1b}[0m\n",
-        read_to_string("outputs/commit_protocol_kmc.txt").unwrap()
+        read_to_string("outputs/commit_protocol_2_kmc.txt").unwrap()
     );
 }
