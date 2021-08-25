@@ -3,7 +3,7 @@ name: Coverage
 on: [push, pull_request]
 
 jobs:
-  build:
+  codecov:
 
     runs-on: ubuntu-latest
 
@@ -16,5 +16,5 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         cargo install cargo-tarpaulin
-        cargo tarpaulin --out Xml --timeout 1200 --all-features
+        cargo tarpaulin --out Xml --timeout 1200 --all-features -- --skip kmc
         bash <(curl -s https://codecov.io/bash) -X gcov -t $CODECOV_TOKEN -F unittests

@@ -2,7 +2,6 @@ mod baking;
 mod basics;
 mod binary;
 mod cancel;
-mod checking;
 mod graph;
 mod http;
 mod infinite_type;
@@ -365,21 +364,6 @@ fn from_str() {
     unit::from_str::binary_sessions();
     unit::from_str::meshedchannels();
     unit::from_str::roles();
-}
-
-#[test]
-fn checking_basics() {
-    checking::basics::checking_simple::main();
-    checking::basics::checking_choice::main();
-    checking::basics::checking_recursion::main();
-}
-
-#[test]
-fn checking_complex() {
-    checking::complex::commit_protocol::main();
-    checking::complex::async_paper_ext_rev_sync::main();
-    checking::complex::two_peers_branchings_sync::main();
-    checking::complex::four_players_game_sync::main();
 }
 
 #[test]

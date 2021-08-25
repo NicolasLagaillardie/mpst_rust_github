@@ -14,10 +14,15 @@ mod aux_checker;
 
 use aux_checker::*;
 
-/// The macro that allows to create digraphs from each endpoint, along with `enum` if needed.
+/// The macro that allows to create digraphs from each endpoint,
+/// along with `enum` if needed. You can also provide the name of
+/// a file for running the [`KMC`] tool and checking the
+/// properties of the provided protocol. The [`KMC`] repository
+/// must be installed next to the current one.
 ///
 /// # Arguments
 ///
+/// * \[Optional\] The name of the new file after running the [`KMC`] tool
 /// * Each starting endpoint, separated by a comma
 /// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all the different branches sent.
 /// Currently, we do not support parameters for branches with `enum`
@@ -43,6 +48,8 @@ use aux_checker::*;
 ///     ]
 /// )
 /// ```
+///
+/// [`KMC`]: https://github.com/julien-lange/kmc
 #[macro_export]
 macro_rules! checker_concat {
     (

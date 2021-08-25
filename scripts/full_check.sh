@@ -42,9 +42,10 @@ rm -rf cfsm/
 
 cargo fmt --verbose --all -- --check
 cargo clippy --all-features --verbose -- -D warnings
+cargo doc --all-features
 RUST_BACKTRACE=1 cargo check --verbose --all --all-features
 RUST_BACKTRACE=1 cargo check --examples --verbose --all-features
-RUST_BACKTRACE=1 cargo check --tests --verbose --all-features
+RUST_BACKTRACE=1 cargo check --tests --verbose --all-features 
 RUST_BACKTRACE=1 cargo check --benches --verbose --all-features
 RUST_BACKTRACE=1 cargo doc --verbose --workspace --all-features
 # cargo build --verbose --all --all-features
@@ -72,5 +73,6 @@ cargo run --example video_stream --features="macros rand"
 # cargo test --verbose --all
 # cargo test --verbose --all -- --nocapture
 RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture
+# RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture --skip kmc
 # cargo test --verbose --all-features
 # cargo bench --verbose --all
