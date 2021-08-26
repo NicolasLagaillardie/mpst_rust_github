@@ -217,6 +217,67 @@ macro_rules! checker_concat {
     };
 }
 
+// Run the KMC command line
+pub(crate) fn kmc_cli(name_file: &str) -> Result<(), Box<dyn Error>> {
+    // Delete previous files
+    remove_file(format!(
+        "../mpst_rust_github/outputs/{}_1_kmc.txt",
+        name_file
+    ))
+    .unwrap_or(());
+    remove_file(format!(
+        "../mpst_rust_github/outputs/{}_2_kmc.txt",
+        name_file
+    ))
+    .unwrap_or(());
+    remove_file(format!(
+        "../mpst_rust_github/outputs/{}-sync-0norm-system.dot",
+        name_file
+    ))
+    .unwrap_or(());
+    remove_file(format!(
+        "../mpst_rust_github/outputs/{}-sync-0norm-system.png",
+        name_file
+    ))
+    .unwrap_or(());
+    remove_file(format!(
+        "../mpst_rust_github/outputs/{}-ts-1.fsm",
+        name_file
+    ))
+    .unwrap_or(());
+    remove_file(format!(
+        "../mpst_rust_github/outputs/{}-ts-2.fsm",
+        name_file
+    ))
+    .unwrap_or(());
+
+    // Run KMC tool, the outputs files of the tool are in the "outputs" folder
+    let kmc_1 = Command::new("./../kmc/KMC")
+        .arg(format!("cfsm/{}.txt", name_file))
+        .arg("1")
+        .arg("--fsm")
+        .output()?;
+
+    // Write down the stdout of the previous command into
+    // a corresponding file in the "outputs" folder
+    let mut kmc_file = File::create(format!("outputs/{}_1_kmc.txt", name_file))?;
+    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_1.stdout)?)?;
+
+    // Run KMC tool, the outputs files of the tool are in the "outputs" folder
+    let kmc_2 = Command::new("./../kmc/KMC")
+        .arg(format!("cfsm/{}.txt", name_file))
+        .arg("2")
+        .arg("--fsm")
+        .output()?;
+
+    // Write down the stdout of the previous command into
+    // a corresponding file in the "outputs" folder
+    let mut kmc_file = File::create(format!("outputs/{}_2_kmc.txt", name_file))?;
+    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_2.stdout)?)?;
+
+    Ok(())
+}
+
 // The starting function for extracting the graphs
 #[doc(hidden)]
 pub fn checker(
@@ -298,66 +359,12 @@ pub fn checker(
             for elt in elt_cfsm.iter() {
                 writeln!(&mut cfsm_file, "{}", elt)?;
             }
+
+            // Add a blank line
+            writeln!(&mut cfsm_file)?;
         }
 
-        // Add a blank line
-        writeln!(&mut cfsm_file)?;
-
-        // Delete previous files
-        remove_file(format!(
-            "../mpst_rust_github/outputs/{}_1_kmc.txt",
-            name_file
-        ))
-        .unwrap_or(());
-        remove_file(format!(
-            "../mpst_rust_github/outputs/{}_2_kmc.txt",
-            name_file
-        ))
-        .unwrap_or(());
-        remove_file(format!(
-            "../mpst_rust_github/outputs/{}-sync-0norm-system.dot",
-            name_file
-        ))
-        .unwrap_or(());
-        remove_file(format!(
-            "../mpst_rust_github/outputs/{}-sync-0norm-system.png",
-            name_file
-        ))
-        .unwrap_or(());
-        remove_file(format!(
-            "../mpst_rust_github/outputs/{}-ts-1.fsm",
-            name_file
-        ))
-        .unwrap_or(());
-        remove_file(format!(
-            "../mpst_rust_github/outputs/{}-ts-2.fsm",
-            name_file
-        ))
-        .unwrap_or(());
-
-        // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-        let kmc_1 = Command::new("./../kmc/KMC")
-            .arg(format!("cfsm/{}.txt", name_file))
-            .arg("1")
-            .arg("--fsm")
-            .output()?;
-
-        // Write down the stdout of the previous command into
-        // a corresponding file in the "outputs" folder
-        let mut kmc_file = File::create(format!("outputs/{}_1_kmc.txt", name_file))?;
-        writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_1.stdout)?)?;
-
-        // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-        let kmc_2 = Command::new("./../kmc/KMC")
-            .arg(format!("cfsm/{}.txt", name_file))
-            .arg("2")
-            .arg("--fsm")
-            .output()?;
-
-        // Write down the stdout of the previous command into
-        // a corresponding file in the "outputs" folder
-        let mut kmc_file = File::create(format!("outputs/{}_2_kmc.txt", name_file))?;
-        writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_2.stdout)?)?;
+        kmc_cli(name_file)?;
     } else {
         // Get all the graphs and add them to the result Hashmap
         for (role, full_session) in clean_sessions.clone() {

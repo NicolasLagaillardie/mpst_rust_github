@@ -159,7 +159,8 @@ pub fn main() {
         "CSA: \u{1b}[92mTrue\n\
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 1-exhaustive: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 1-safe: \u{1b}[91mFalse\n\u{1b}[0m\n",
+        \u{1b}[0mreduced 1-safe: \u{1b}[91mFalse\n\
+        \u{1b}[0m\n",
         read_to_string("outputs/inf_snd_rcv_1_kmc.txt").unwrap()
     );
 
@@ -167,7 +168,8 @@ pub fn main() {
         "CSA: \u{1b}[92mTrue\n\
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 2-exhaustive: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 2-safe: \u{1b}[91mFalse\n\u{1b}[0m\n",
+        \u{1b}[0mreduced 2-safe: \u{1b}[91mFalse\n\
+        \u{1b}[0m\n",
         read_to_string("outputs/inf_snd_rcv_2_kmc.txt").unwrap()
     );
 }

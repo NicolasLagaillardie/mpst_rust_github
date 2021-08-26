@@ -21,6 +21,10 @@ create_multiple_normal_role!(
     RoleD, RoleDDual |
 );
 
+// Payload types
+struct Update {}
+struct Okay {}
+
 // Names
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
@@ -43,14 +47,16 @@ type Recurs0BfromA = Recv<Branches0BfromA, End>;
 
 enum Branches0BfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameB>),
-    CommitForward(MeshedChannels<Send<i32, Recurs1BfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameB>),
+    CommitForward(
+        MeshedChannels<Send<Update, Recurs1BfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameB>,
+    ),
 }
 
 type Recurs1BfromA = Recv<Branches1BfromA, End>;
 
 enum Branches1BfromA {
     CommitBackward(
-        MeshedChannels<Recv<i32, Recurs0BfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameB>,
+        MeshedChannels<Recv<Okay, Recurs0BfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameB>,
     ),
 }
 
@@ -59,14 +65,16 @@ type Recurs0CfromA = Recv<Branches0CfromA, End>;
 
 enum Branches0CfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameC>),
-    CommitForward(MeshedChannels<Recv<i32, Recurs1CfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameC>),
+    CommitForward(
+        MeshedChannels<Recv<Update, Recurs1CfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameC>,
+    ),
 }
 
 type Recurs1CfromA = Recv<Branches1CfromA, End>;
 
 enum Branches1CfromA {
     CommitBackward(
-        MeshedChannels<Send<i32, Recurs0CfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameC>,
+        MeshedChannels<Send<Okay, Recurs0CfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameC>,
     ),
 }
 
@@ -75,14 +83,16 @@ type Recurs0DfromA = Recv<Branches0DfromA, End>;
 
 enum Branches0DfromA {
     End(MeshedChannels<End, End, End, RoleEnd, NameD>),
-    CommitForward(MeshedChannels<Recv<i32, Recurs1DfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameD>),
+    CommitForward(
+        MeshedChannels<Recv<Update, Recurs1DfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameD>,
+    ),
 }
 
 type Recurs1DfromA = Recv<Branches1DfromA, End>;
 
 enum Branches1DfromA {
     CommitBackward(
-        MeshedChannels<Send<i32, Recurs0DfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameD>,
+        MeshedChannels<Send<Okay, Recurs0DfromA>, End, End, RoleA<RoleA<RoleEnd>>, NameD>,
     ),
 }
 
@@ -91,16 +101,16 @@ enum Branches1DfromA {
 // For A
 type EndpointAEnd = MeshedChannels<End, End, End, RoleEnd, NameA>;
 type EndpointACommitForward = MeshedChannels<
-    Recv<i32, Choose1fromAtoB>,
-    Send<i32, Choose1fromAtoC>,
-    Send<i32, Choose1fromAtoD>,
+    Recv<Update, Choose1fromAtoB>,
+    Send<Update, Choose1fromAtoC>,
+    Send<Update, Choose1fromAtoD>,
     RoleB<RoleC<RoleD<RoleBroadcast>>>,
     NameA,
 >;
 type EndpointACommitBackward = MeshedChannels<
-    Send<i32, Choose0fromAtoB>,
-    Recv<i32, Choose0fromAtoC>,
-    Recv<i32, Choose0fromAtoD>,
+    Send<Okay, Choose0fromAtoB>,
+    Recv<Okay, Choose0fromAtoC>,
+    Recv<Okay, Choose0fromAtoD>,
     RoleD<RoleC<RoleB<RoleBroadcast>>>,
     NameA,
 >;
@@ -161,12 +171,12 @@ pub fn main() {
             5 [ label = \"\\\"0.3.2\\\"\" ]\n    \
             6 [ label = \"\\\"0.3.3\\\"\" ]\n    \
             7 [ label = \"\\\"0.1\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleA!RoleC: i32\\\"\" ]\n    \
-            2 -> 3 [ label = \"\\\"RoleA!RoleD: i32\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"RoleA?RoleD: i32\\\"\" ]\n    \
-            4 -> 5 [ label = \"\\\"RoleA?RoleC: i32\\\"\" ]\n    \
-            5 -> 6 [ label = \"\\\"RoleA!RoleB: i32\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleA?RoleB: Update\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleA!RoleC: Update\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleA!RoleD: Update\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"RoleA?RoleD: Okay\\\"\" ]\n    \
+            4 -> 5 [ label = \"\\\"RoleA?RoleC: Okay\\\"\" ]\n    \
+            5 -> 6 [ label = \"\\\"RoleA!RoleB: Okay\\\"\" ]\n    \
             6 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
             0 -> 7 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
@@ -182,8 +192,8 @@ pub fn main() {
             1 [ label = \"\\\"0.1\\\"\" ]\n    \
             2 [ label = \"\\\"0.1.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleB?RoleA: i32\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleB!RoleA: Update\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleB?RoleA: Okay\\\"\" ]\n    \
             2 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
             0 -> 3 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
@@ -199,8 +209,8 @@ pub fn main() {
             1 [ label = \"\\\"0.1\\\"\" ]\n    \
             2 [ label = \"\\\"0.1.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"RoleC?RoleA: i32\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleC!RoleA: i32\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleC?RoleA: Update\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleC!RoleA: Okay\\\"\" ]\n    \
             2 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
             0 -> 3 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
@@ -216,8 +226,8 @@ pub fn main() {
             1 [ label = \"\\\"0.1\\\"\" ]\n    \
             2 [ label = \"\\\"0.1.1\\\"\" ]\n    \
             3 [ label = \"\\\"0.1\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"RoleD?RoleA: i32\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"RoleD!RoleA: i32\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"RoleD?RoleA: Update\\\"\" ]\n    \
+            1 -> 2 [ label = \"\\\"RoleD!RoleA: Okay\\\"\" ]\n    \
             2 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
             0 -> 3 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
@@ -225,18 +235,20 @@ pub fn main() {
 
     ////////////// Test KMC output
     assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 1-exhaustive: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 1-safe: \
-        \u{1b}[92mTrue\n\u{1b}[0m\n",
+        "CSA: \u{1b}[92mTrue\n\
+        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0m\n",
         read_to_string("outputs/commit_protocol_1_kmc.txt").unwrap()
     );
 
     assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 2-exhaustive: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 2-safe: \
-        \u{1b}[92mTrue\n\u{1b}[0m\n",
+        "CSA: \u{1b}[92mTrue\n\
+        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 2-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 2-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0m\n",
         read_to_string("outputs/commit_protocol_2_kmc.txt").unwrap()
     );
 }
