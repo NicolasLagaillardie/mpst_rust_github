@@ -92,7 +92,6 @@ type EndpointCFull = MeshedChannels<Choose0fromCtoM, Choose0fromCtoS, RoleBroadc
 
 /////////////////////////////////////////
 
-#[test]
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         "async_paper_ext_rev_sync",
