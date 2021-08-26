@@ -14,6 +14,7 @@ pub fn kmc_complex() {
     checking::complex::two_peers_branchings_sync::main();
     checking::complex::four_players_game_sync::main();
     checking::complex::alternating_bit::main();
+    checking::complex::inf_snd_rcv::main();
 }
 
 #[test]

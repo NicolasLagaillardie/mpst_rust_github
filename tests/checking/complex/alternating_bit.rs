@@ -55,8 +55,6 @@ type Recurs0BfromA = Recv<Branches0BfromA, End>;
 
 type Choose1fromBtoA = Send<Branches1AfromB, End>;
 
-// type Choose2fromBtoA = Send<Branches2AfromB, End>;
-
 enum Branches0BfromA {
     End(MeshedChannels<End, RoleEnd, NameB>),
     Start(MeshedChannels<Recv<D0, Send<A0, Choose1fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>),
@@ -80,10 +78,6 @@ type EndpointBExtend1 =
 type EndpointBEnd2 = MeshedChannels<End, RoleEnd, NameB>;
 type EndpointBLooping2 = MeshedChannels<End, RoleEnd, NameB>;
 type EndpointBExtend2 = MeshedChannels<End, RoleEnd, NameB>;
-// type EndpointBLooping2 =
-//     MeshedChannels<Send<A0, Recv<D1, Choose2fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
-// type EndpointBExtend2 =
-//     MeshedChannels<Send<A0, Recv<D1, Recurs0BfromA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>;
 type EndpointBFull = MeshedChannels<Send<A1, Recurs0BfromA>, RoleA<RoleA<RoleEnd>>, NameB>;
 
 /////////////////////////////////////////
