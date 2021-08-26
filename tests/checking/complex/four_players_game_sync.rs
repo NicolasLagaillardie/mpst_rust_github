@@ -287,8 +287,8 @@ pub fn main() {
     assert_eq!(
         "CSA: \u{1b}[92mTrue\n\
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 2-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 2-safe: \u{1b}[92mTrue\n\
         \u{1b}[0m\n",
         read_to_string("outputs/four_players_game_sync_2_kmc.txt").unwrap()
     );
