@@ -78,7 +78,7 @@ type EndpointBExtend1 =
 type EndpointBEnd2 = MeshedChannels<End, RoleEnd, NameB>;
 type EndpointBLooping2 = MeshedChannels<End, RoleEnd, NameB>;
 type EndpointBExtend2 = MeshedChannels<End, RoleEnd, NameB>;
-type EndpointBFull = MeshedChannels<Send<A1, Recurs0BfromA>, RoleA<RoleA<RoleEnd>>, NameB>;
+type EndpointBFull = MeshedChannels<Recurs0BfromA, RoleA<RoleEnd>, NameB>;
 
 /////////////////////////////////////////
 
@@ -171,30 +171,28 @@ pub fn main() {
         format!("{:?}", Dot::new(&graph_b)),
         "digraph {\n    \
             0 [ label = \"\\\"0\\\"\" ]\n    \
-            1 [ label = \"\\\"1\\\"\" ]\n    \
-            2 [ label = \"\\\"1.1\\\"\" ]\n    \
-            3 [ label = \"\\\"1.1\\\"\" ]\n    \
-            4 [ label = \"\\\"1.2\\\"\" ]\n    \
-            5 [ label = \"\\\"1.2.1\\\"\" ]\n    \
-            6 [ label = \"\\\"1.2.1\\\"\" ]\n    \
-            7 [ label = \"\\\"1.2.2\\\"\" ]\n    \
-            8 [ label = \"\\\"1.2.1\\\"\" ]\n    \
-            9 [ label = \"\\\"1.2.2\\\"\" ]\n    \
-            10 [ label = \"\\\"1.1\\\"\" ]\n    \
-            11 [ label = \"\\\"1.2\\\"\" ]\n    \
-            0 -> 1 [ label = \"\\\"RoleB!RoleA: A1\\\"\" ]\n    \
-            1 -> 2 [ label = \"\\\"0\\\"\" ]\n    \
-            1 -> 3 [ label = \"\\\"RoleB?RoleA: D0\\\"\" ]\n    \
-            3 -> 4 [ label = \"\\\"RoleB!RoleA: A0\\\"\" ]\n    \
-            4 -> 5 [ label = \"\\\"0\\\"\" ]\n    \
-            4 -> 6 [ label = \"\\\"RoleB?RoleA: D1\\\"\" ]\n    \
-            6 -> 7 [ label = \"\\\"RoleB!RoleA: A1\\\"\" ]\n    \
-            7 -> 1 [ label = \"\\\"µ\\\"\" ]\n    \
-            4 -> 8 [ label = \"\\\"RoleB?RoleA: D0\\\"\" ]\n    \
-            8 -> 9 [ label = \"\\\"RoleB!RoleA: A0\\\"\" ]\n    \
-            9 -> 4 [ label = \"\\\"µ\\\"\" ]\n    \
-            1 -> 10 [ label = \"\\\"RoleB?RoleA: D1\\\"\" ]\n    \
-            10 -> 11 [ label = \"\\\"0\\\"\" ]\n\
+            1 [ label = \"\\\"0.1\\\"\" ]\n    \
+            2 [ label = \"\\\"0.1\\\"\" ]\n    \
+            3 [ label = \"\\\"0.2\\\"\" ]\n    \
+            4 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            5 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            6 [ label = \"\\\"0.2.2\\\"\" ]\n    \
+            7 [ label = \"\\\"0.2.1\\\"\" ]\n    \
+            8 [ label = \"\\\"0.2.2\\\"\" ]\n    \
+            9 [ label = \"\\\"0.1\\\"\" ]\n    \
+            10 [ label = \"\\\"0.2\\\"\" ]\n    \
+            0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleB?RoleA: D0\\\"\" ]\n    \
+            2 -> 3 [ label = \"\\\"RoleB!RoleA: A0\\\"\" ]\n    \
+            3 -> 4 [ label = \"\\\"0\\\"\" ]\n    \
+            3 -> 5 [ label = \"\\\"RoleB?RoleA: D1\\\"\" ]\n    \
+            5 -> 6 [ label = \"\\\"RoleB!RoleA: A1\\\"\" ]\n    \
+            6 -> 0 [ label = \"\\\"µ\\\"\" ]\n    \
+            3 -> 7 [ label = \"\\\"RoleB?RoleA: D0\\\"\" ]\n    \
+            7 -> 8 [ label = \"\\\"RoleB!RoleA: A0\\\"\" ]\n    \
+            8 -> 3 [ label = \"\\\"µ\\\"\" ]\n    \
+            0 -> 9 [ label = \"\\\"RoleB?RoleA: D1\\\"\" ]\n    \
+            9 -> 10 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
 
@@ -203,7 +201,7 @@ pub fn main() {
         "CSA: \u{1b}[92mTrue\n\
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-safe: \u{1b}[91mFalse\n\
+        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
         \u{1b}[0m\n",
         read_to_string("outputs/alternating_bit_1_kmc.txt").unwrap()
     );
@@ -212,7 +210,7 @@ pub fn main() {
         "CSA: \u{1b}[92mTrue\n\
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 2-exhaustive: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 2-safe: \u{1b}[91mFalse\n\
+        \u{1b}[0mreduced 2-safe: \u{1b}[92mTrue\n\
         \u{1b}[0m\n",
         read_to_string("outputs/alternating_bit_2_kmc.txt").unwrap()
     );
