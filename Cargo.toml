@@ -80,6 +80,11 @@ name = "extra"
 path = "tests/extra.rs"
 required-features = ["baking", "rand"]
 
+[[test]]
+name = "main"
+path = "tests/main.rs"
+required-features = []
+
 ###################################
 
 [[bench]]

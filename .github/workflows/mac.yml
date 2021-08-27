@@ -38,36 +38,70 @@ jobs:
         ghc KMC -threaded
         ghc GenCFSMs
     - name: Format
-      run: cargo fmt --verbose --all -- --check
+      run: |
+        cargo clean
+        cargo fmt --verbose --all -- --check
     - name: Clippy
-      run: cargo clippy --all-features --verbose -- -D warnings
+      run: |
+        cargo clean
+        cargo clippy --all-features --verbose -- -D warnings
     - name: Check lib
-      run: cargo check --verbose --all --all-features
+      run: |
+        cargo clean
+        cargo check --verbose --all --all-features
     - name: Check examples
-      run: cargo check --examples --verbose --all-features
+      run: |
+        cargo clean
+        cargo check --examples --verbose --all-features
     - name: Check tests
-      run: cargo check --tests --verbose --all-features
+      run: |
+        cargo clean
+        cargo check --tests --verbose --all-features
     - name: Check benches
-      run: cargo check --benches --verbose --all-features
+      run: |
+        cargo clean
+        cargo check --benches --verbose --all-features
     - name: Run doc
-      run: cargo doc --verbose --workspace --all-features
+      run: |
+        cargo clean
+        cargo doc --verbose --workspace --all-features
     - name: Build lib
-      run: cargo build --verbose --all --all-features
+      run: |
+        cargo clean
+        cargo build --verbose --all --all-features
     - name: Build examples
-      run: cargo build --examples --verbose --all-features
+      run: |
+        cargo clean
+        cargo build --examples --verbose --all-features
     - name: Build tests
-      run: cargo build --tests --verbose --all-features
+      run: |
+        cargo clean
+        cargo build --tests --verbose --all-features
     - name: Build benches
-      run: cargo build --benches --verbose --all-features
+      run: |
+        cargo clean
+        cargo build --benches --verbose --all-features
     - name: Run lib
-      run: cargo run --verbose --all-features -- --skip kmc
+      run: |
+        cargo clean
+        cargo run --verbose --all-features -- --skip kmc
     - name: Run tests all
-      run: cargo test --verbose --all -- --skip kmc
+      run: |
+        cargo clean
+        cargo test --verbose --all -- --skip kmc
     - name: Run tests no capture
-      run: cargo test --verbose --all -- --nocapture --skip kmc
+      run: |
+        cargo clean
+        cargo test --verbose --all -- --nocapture --skip kmc
     - name: Run tests no features
-      run: cargo test --verbose --all --no-default-features --no-run -- --skip kmc
+      run: |
+        cargo clean
+        cargo test --verbose --all --no-default-features --no-run -- --skip kmc
     - name: Run tests all features
-      run: cargo test --verbose --all-features -- --skip kmc
+      run: |
+        cargo clean
+        cargo test --verbose --all-features -- --skip kmc
     - name: Run benchmarks
-      run: cargo bench --verbose --all
+      run: |
+        cargo clean
+        cargo bench --verbose --all

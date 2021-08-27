@@ -21,4 +21,6 @@ pub fn kmc_complex() {
     checking_mod::complex::four_players_game_sync::main();
     checking_mod::complex::alternating_bit::main();
     checking_mod::complex::inf_snd_rcv::main();
+    checking_mod::complex::bargain::main();
+    checking_mod::complex::cloud_system::main();
 }
