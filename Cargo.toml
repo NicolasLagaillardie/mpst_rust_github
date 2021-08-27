@@ -8,7 +8,7 @@ readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT"
 keywords = ["multiparty", "session"]
-categories = ["concurrency", "development-tools::cargo-plugins"]
+categories = ["concurrency"]
 exclude = [
     ".travis.yml",
     "codecov.yml",
@@ -36,84 +36,119 @@ path = "main.rs"
 ###################################
 
 [[test]]
-name = "main-tests"
-path = "tests/main.rs"
-required-features = ["full", "rand"]
+name = "checking"
+path = "tests/checking.rs"
+required-features = ["checking", "rand"]
 
 [[test]]
-name = "kmc-tests"
-path = "tests/kmc.rs"
-required-features = ["full", "rand"]
+name = "basics"
+path = "tests/basics.rs"
+required-features = ["checking", "rand"]
+
+[[test]]
+name = "binary"
+path = "tests/binary.rs"
+required-features = ["rand"]
+
+[[test]]
+name = "cancel"
+path = "tests/cancel.rs"
+required-features = ["macros_multiple", "rand"]
+
+[[test]]
+name = "macros_multiple"
+path = "tests/macros_multiple.rs"
+required-features = ["macros_multiple", "rand"]
+
+[[test]]
+name = "macros_simple"
+path = "tests/macros_simple.rs"
+required-features = ["macros_simple", "rand"]
+
+[[test]]
+name = "transport"
+path = "tests/transport.rs"
+required-features = ["transport", "rand"]
+
+[[test]]
+name = "baking"
+path = "tests/baking.rs"
+required-features = ["baking", "rand"]
+
+[[test]]
+name = "extra"
+path = "tests/extra.rs"
+required-features = ["baking", "rand"]
 
 ###################################
 
 [[bench]]
 name = "main"
 harness = false
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[bench]]
 name = "ping_pong"
 harness = false
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 ###################################
 
 [[example]]
 name = "actyx_os_api"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "actyx_os_logging"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "distributed_calc"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "dns_fowler"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "dns_imai"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "fib"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "o_auth"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "o_auth_2"
-required-features = ["macros", "transport", "rand"]
+required-features = ["macros_multiple", "transport", "rand"]
 
 [[example]]
 name = "online_wallet"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "simple_voting"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "smtp"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "three_buyers"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "travel_three"
-required-features = ["macros", "rand"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "video_stream"
-required-features = ["macros", "rand"]
+required-features = ["macros_simple", "rand"]
 
 ###################################
 
@@ -149,11 +184,12 @@ binary = []
 functionmpst = []
 meshedchannels = []
 role = []
-macros = ["default"]
+macros_simple = ["default"]
+macros_multiple = ["default", "macros_simple"]
 checking = ["default", "regex", "petgraph"]
-baking = ["default"]
+baking = ["default", "macros_multiple"]
 transport = ["default", "hyper", "hyper-tls", "tokio"]
-full = ["checking", "macros", "baking", "transport"]
+full = ["checking", "baking", "transport"]
 
 ###################################
 

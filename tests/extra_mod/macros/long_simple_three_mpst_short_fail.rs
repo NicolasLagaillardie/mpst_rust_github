@@ -1,6 +1,3 @@
-/// An example which mixes both the usual way of creating recv/send functions
-/// with create_recv_mpst_session_bundle/create_send_mpst_session_bundle and the short way to
-/// call the code within those functions with recv_mpst/send_mpst
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -86,9 +83,9 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoA::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, RoleA, MeshedChannelsThree, 3, 2)()?; // Should be a.recv(RoleC)
-            let s = send_mpst!(s, (), RoleC, RoleA, MeshedChannelsThree, 3, 2); // Should be a.send(RoleC, payload)
-            let (_, s) = recv_mpst!(s, RoleB, RoleA, MeshedChannelsThree, 3, 1)()?; // Should be a.recv(RoleB)
+            let (_, s) = recv_mpst!(s, RoleC, RoleB, MeshedChannelsThree, 3, 2)()?;
+            let s = send_mpst!(s, (), RoleC, RoleB, MeshedChannelsThree, 3, 2);
+            let (_, s) = recv_mpst!(s, RoleB, RoleA, MeshedChannelsThree, 3, 1)()?;
             let s = send_mpst!(s, (), RoleB, RoleA, MeshedChannelsThree, 3, 1);
             endpoint_a(s)
         },
@@ -134,12 +131,18 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-pub fn shorten_main() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
+/////////////////////////////////////////
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
+pub fn main() {
+    let (thread_a, thread_b, thread_c) = fork_mpst(
+        endpoint_a,
+        endpoint_b,
+        endpoint_c,
+    );
+
+    assert!(thread_a.join().is_err());
+    assert!(thread_b.join().is_err());
+    assert!(thread_c.join().is_err());
 }
 
 /////////////////////////

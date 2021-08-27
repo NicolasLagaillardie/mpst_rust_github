@@ -1,6 +1,3 @@
-/// An example which mixes both the usual way of creating recv/send functions
-/// with create_recv_mpst_session_bundle/create_send_mpst_session_bundle and the short way to
-/// call the code within those functions with recv_mpst/send_mpst
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -9,20 +6,7 @@ use mpstthree::{bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mp
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(
-    MeshedChannelsThree =>
-    A, B, C =>
-    fork_mpst
-);
-
-create_fn_choose_mpst_multi_to_all_bundle!(
-    done_from_c_to_all, more_from_c_to_all, =>
-    Done, More, =>
-    EndpointDoneC, EndpointMoreC, =>
-    Branching0fromCtoA, Branching0fromCtoB, =>
-    RoleA, RoleB, =>
-    RoleC, MeshedChannelsThree, 3
-);
+bundle_impl!(MeshedChannelsThree => A, B, C => fork_mpst);
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -56,7 +40,7 @@ type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
 type EndpointMoreC = MeshedChannelsThree<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
-    R2A<R2B<RoleBroadcast>>,
+    RoleA<RoleA<RoleA<RoleB<RoleBroadcast>>>>,
     NameC,
 >;
 
@@ -64,6 +48,15 @@ type EndpointMoreC = MeshedChannelsThree<
 type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
 type EndpointB = MeshedChannelsThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
 type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+
+create_fn_choose_mpst_multi_to_all_bundle!(
+    done_from_c_to_all, more_from_c_to_all, =>
+    Done, More, =>
+    EndpointDoneC, EndpointMoreC, =>
+    Branching0fromCtoA, Branching0fromCtoB, =>
+    RoleA, RoleB, =>
+    RoleC, MeshedChannelsThree, 3
+);
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(
@@ -114,12 +107,14 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-pub fn shorten_main() {
+/////////////////////////////////////////
+
+pub fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
+    assert!(thread_a.join().is_err());
+    assert!(thread_b.join().is_err());
+    assert!(thread_c.join().is_err());
 }
 
 /////////////////////////

@@ -39,10 +39,15 @@ pub mod checking;
 #[cfg(feature = "checking")]
 pub use self::checking::*;
 
-pub mod macros;
+pub mod macros_simple;
 
-#[cfg(feature = "macros")]
-pub use self::macros::*;
+#[cfg(feature = "macros_simple")]
+pub use self::macros_simple::*;
+
+pub mod macros_multiple;
+
+#[cfg(feature = "macros_multiple")]
+pub use self::macros_multiple::*;
 
 pub mod baking;
 
