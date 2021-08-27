@@ -63,7 +63,14 @@ macro_rules! create_choose_type_multi {
 /// ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_left {
-    ($func_name: ident, $type_name: ident, $role_dual: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    (
+        $func_name: ident,
+        $type_name: ident,
+        $role_dual: ident,
+        $name: ident,
+        $meshedchannels_name: ident,
+        $nsessions: literal
+    ) => {
         mpst_seq::create_choose_mpst_session_multi_left!(
             $func_name,
             $type_name,
@@ -114,7 +121,14 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// ```
 #[macro_export]
 macro_rules! create_choose_mpst_session_multi_right {
-    ($func_name: ident, $type_name: ident, $role_dual: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    (
+        $func_name: ident,
+        $type_name: ident,
+        $role_dual: ident,
+        $name: ident,
+        $meshedchannels_name: ident,
+        $nsessions: literal
+    ) => {
         mpst_seq::create_choose_mpst_session_multi_right!(
             $func_name,
             $type_name,

@@ -35,7 +35,7 @@
 #[macro_export]
 macro_rules! create_offer_mpst_session_1 {
     ($func_name: ident, $role: ident, $name: ident) => {
-        mpstthree::create_offer_mpst_session_multi!(
+        mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             OfferMpst,
             $role,
@@ -81,7 +81,7 @@ macro_rules! create_offer_mpst_session_1 {
 #[macro_export]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {
-        mpstthree::create_offer_mpst_session_multi!(
+        mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             OfferMpst,
             $role,

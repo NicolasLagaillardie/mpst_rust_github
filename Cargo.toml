@@ -38,7 +38,7 @@ path = "main.rs"
 [[test]]
 name = "checking"
 path = "tests/checking.rs"
-required-features = ["checking", "rand"]
+required-features = ["macros_multiple", "checking", "rand"]
 
 [[test]]
 name = "basics"
@@ -68,12 +68,12 @@ required-features = ["macros_simple", "rand"]
 [[test]]
 name = "transport"
 path = "tests/transport.rs"
-required-features = ["transport", "rand"]
+required-features = ["macros_multiple", "transport", "rand"]
 
 [[test]]
 name = "baking"
 path = "tests/baking.rs"
-required-features = ["baking", "rand"]
+required-features = ["baking", "checking", "rand"]
 
 [[test]]
 name = "extra"

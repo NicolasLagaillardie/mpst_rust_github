@@ -26,8 +26,8 @@
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_recv_mpst_session_1 {
-    ($func_name: ident, $role: ident, $name: ident) => {
-        mpstthree::create_recv_mpst_session!($func_name, $role, $name, MeshedChannels, 3, 1);
+    ($func_name: ident, $sender: ident, $receiver: ident) => {
+        mpst_seq::create_recv_mpst_session!($func_name, $sender, $receiver, MeshedChannels, 3, 1);
     };
 }
 
@@ -56,7 +56,7 @@ macro_rules! create_recv_mpst_session_1 {
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 #[macro_export]
 macro_rules! create_recv_mpst_session_2 {
-    ($func_name: ident, $role: ident, $name: ident) => {
-        mpstthree::create_recv_mpst_session!($func_name, $role, $name, MeshedChannels, 3, 2);
+    ($func_name: ident, $sender: ident, $receiver: ident) => {
+        mpst_seq::create_recv_mpst_session!($func_name, $sender, $receiver, MeshedChannels, 3, 2);
     };
 }

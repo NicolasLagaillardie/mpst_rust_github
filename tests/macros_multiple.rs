@@ -56,4 +56,7 @@ fn macro_basics() {
 
     // Macro multi recursion for shorting
     macros_multiple_mod::long_simple_three_mpst_short::main();
+
+    // Macro recursive
+    macros_multiple_mod::macro_recursive::run_macro_recursive();
 }

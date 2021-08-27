@@ -203,7 +203,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 ////////////////////////////////////////////
 
 /// Create the *ChooseMpst* function to send a *Choose*
-/// right branch from the third role to the others.  Must be
+/// right branch from the third role to the others. Must be
 /// used with [`MeshedChannels`].
 ///
 /// # Arguments
@@ -221,7 +221,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_right_from_3_to_1_and_2
+///     create_choose_right_from_3_to_1_and_2
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -231,8 +231,6 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_right_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
@@ -308,7 +306,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 }
 
 /// Create the *ChooseMpst* function to send a *Choose*
-/// left branch from the third role to the others.  Must be
+/// left branch from the third role to the others. Must be
 /// used with [`MeshedChannels`].
 ///
 /// # Arguments
@@ -325,7 +323,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// ```
 /// use mpstthree::role::Role;
 /// use mpstthree::{
-///     create_multiple_normal_role, create_broadcast_role, create_meshedchannels,
+///     create_multiple_normal_role, create_broadcast_role,
 ///     create_choose_left_from_3_to_1_and_2
 /// };
 ///
@@ -336,8 +334,6 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_left_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
@@ -413,7 +409,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 }
 
 /// Create the *ChooseMpst* function to send a *Choose*
-/// left branch from the first role to the others.  Must be
+/// left branch from the first role to the others. Must be
 /// used with [`MeshedChannels`].
 ///
 /// # Arguments
@@ -431,7 +427,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_left_from_1_to_2_and_3
+///     create_choose_left_from_1_to_2_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -441,8 +437,6 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_left_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
@@ -518,7 +512,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 }
 
 /// Create the *ChooseMpst* function to send a *Choose*
-/// right branch from the first role to the others.  Must be
+/// right branch from the first role to the others. Must be
 /// used with [`MeshedChannels`].
 ///
 /// # Arguments
@@ -536,7 +530,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_right_from_1_to_2_and_3
+///     create_choose_right_from_1_to_2_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -546,8 +540,6 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_right_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
@@ -623,7 +615,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 }
 
 /// Create the *ChooseMpst* function to send a *Choose*
-/// left branch from the second role to the others.  Must be
+/// left branch from the second role to the others. Must be
 /// used with [`MeshedChannels`].
 ///
 /// # Arguments
@@ -641,7 +633,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_left_from_2_to_1_and_3
+///     create_choose_left_from_2_to_1_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -651,8 +643,6 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_left_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -728,7 +718,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 }
 
 /// Create the *ChooseMpst* function to send a *Choose*
-/// right branch from the second role to the others.  Must
+/// right branch from the second role to the others. Must
 /// be used with [`MeshedChannels`].
 ///
 /// # Arguments
@@ -746,7 +736,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_right_from_2_to_1_and_3
+///     create_choose_right_from_2_to_1_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -756,8 +746,6 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_right_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -852,7 +840,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_both_from_2_to_1_and_3
+///     create_choose_both_from_2_to_1_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -862,8 +850,6 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_both_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -925,7 +911,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_both_from_1_to_2_and_3
+///     create_choose_both_from_1_to_2_and_3
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -935,8 +921,6 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_both_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_b_to_all,
@@ -998,7 +982,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// use mpstthree::role::Role;
 /// use mpstthree::{  
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_meshedchannels, create_choose_both_from_3_to_1_and_2
+///     create_choose_both_from_3_to_1_and_2
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -1008,8 +992,6 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
-///
-/// create_meshedchannels!(MeshedChannels, 3);
 ///
 /// create_choose_both_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_b_to_all,

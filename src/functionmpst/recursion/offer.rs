@@ -60,17 +60,6 @@ macro_rules! offer_aux {
             }
         })()
     };
-    ($session: expr, { $( $pat: pat => $result: expr, )* }) => {
-        (move || -> Result<_, _> {
-            let (l, s) = $session.recv()?;
-            mpstthree::binary::cancel::cancel(s);
-            match l {
-                $(
-                    $pat => $result,
-                )*
-            }
-        })()
-    };
 }
 
 /// Offer a choice to A from C between many different

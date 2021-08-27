@@ -18,7 +18,4 @@ fn macro_basics() {
     // Macro choice
     macros_simple_mod::macro_choice::run_usecase_right();
     macros_simple_mod::macro_choice::run_usecase_left();
-
-    // Macro recursive
-    macros_simple_mod::macro_recursive::run_macro_recursive();
 }
