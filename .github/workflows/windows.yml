@@ -14,29 +14,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Haskell
-      uses: actions/setup-haskell@v1.1
-      with:
-        ghc-version: 'latest'
-        cabal-version: 'latest'
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 'latest'
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install matplotlib scipy
-    - name: Install cabal dependencies
-      run: |
-        cabal install cmdargs ansi-terminal parallel split MissingH --lib
-    - name: Install KMC
-      run: |
-        cd ..
-        git clone https://bitbucket.org/julien-lange/kmc-cav19.git
-        cd kmc-cav19
-        ghc KMC -threaded
-        ghc GenCFSMs
+    # - name: Install Haskell
+    #   uses: actions/setup-haskell@v1.1
+    #   with:
+    #     ghc-version: 'latest'
+    #     cabal-version: 'latest'
+    # - name: Set up Python
+    #   uses: actions/setup-python@v2
+    #   with:
+    #     python-version: 'latest'
+    # - name: Install Python dependencies
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install matplotlib scipy
+    # - name: Install cabal dependencies
+    #   run: |
+    #     cabal install cmdargs ansi-terminal parallel split MissingH --lib
+    # - name: Install KMC
+    #   run: |
+    #     cd ..
+    #     git clone https://bitbucket.org/julien-lange/kmc-cav19.git
+    #     cd kmc-cav19
+    #     ghc KMC -threaded
+    #     ghc GenCFSMs
     - name: Format
       run: |
         cargo clean
