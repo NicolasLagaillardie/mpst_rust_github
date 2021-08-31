@@ -22,8 +22,8 @@ create_multiple_normal_role!(
 );
 
 // Payload types
-struct Update {}
-struct Okay {}
+struct Update;
+struct Okay;
 
 // Names
 type NameA = RoleA<RoleEnd>;

@@ -21,12 +21,12 @@ create_multiple_normal_role!(
 );
 
 // Payload types
-struct Req {}
-struct Data {}
-struct Ko {}
-struct Error {}
-struct Okay {}
-struct Log {}
+struct Req;
+struct Data;
+struct Ko;
+struct Error;
+struct Okay;
+struct Log;
 
 // Names
 type NameC = RoleC<RoleEnd>;

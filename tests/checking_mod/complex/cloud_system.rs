@@ -23,14 +23,14 @@ create_multiple_normal_role!(
 
 // The new types
 
-struct Connect {}
-struct SyncAccess {}
-struct Access {}
-struct Logout {}
-struct SyncLogout {}
-struct SyncLog {}
-struct Setup {}
-struct Log {}
+struct Connect;
+struct SyncAccess;
+struct Access;
+struct Logout;
+struct SyncLogout;
+struct SyncLog;
+struct Setup;
+struct Log;
 
 // Names
 type NameA = RoleA<RoleEnd>;

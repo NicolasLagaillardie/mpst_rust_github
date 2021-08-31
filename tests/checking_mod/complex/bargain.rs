@@ -22,10 +22,10 @@ create_multiple_normal_role!(
 
 // The new types
 
-struct Haggle {}
-struct Price {}
-struct Happy {}
-struct Info {}
+struct Haggle;
+struct Price;
+struct Happy;
+struct Info;
 
 // Names
 type NameA = RoleA<RoleEnd>;

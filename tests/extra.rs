@@ -20,6 +20,7 @@ fn infinite_type_fail() {
     // Infinite types
     t.compile_fail("tests/infinite_type/fail.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
+    t.compile_fail("tests/infinite_type/fail_3.rs");
 }
 
 #[test]
