@@ -1,3 +1,5 @@
+#![cfg(feature = "role")]
+
 //! The main trait used for representing an ordering or the
 //! name of a participant.
 //!
@@ -50,4 +52,10 @@ pub trait Role: marker::Sized + marker::Send {
 
     #[doc(hidden)]
     fn tail_str() -> String;
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String;
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String;
 }

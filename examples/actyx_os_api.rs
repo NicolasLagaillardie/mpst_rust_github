@@ -1,4 +1,4 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
@@ -6,7 +6,9 @@ use mpstthree::{
 };
 
 use mpstthree::role::broadcast::RoleBroadcast;
+
 use rand::random;
+
 use std::error::Error;
 use std::marker;
 
@@ -403,7 +405,7 @@ fn endpoint_user(s: EndpointUserInit<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_api, thread_controller, thread_storage, thread_user) = fork_mpst(
         endpoint_api,
         endpoint_controller,
@@ -411,14 +413,8 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         endpoint_user,
     );
 
-    thread_api.join()?;
-    thread_controller.join()?;
-    thread_storage.join()?;
-    thread_user.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_api.join().unwrap();
+    thread_controller.join().unwrap();
+    thread_storage.join().unwrap();
+    thread_user.join().unwrap();
 }

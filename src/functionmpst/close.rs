@@ -1,7 +1,7 @@
 //! This module contains the *close* function
 
-use crate::binary::struct_trait::End;
-use crate::binary::struct_trait::Signal;
+use crate::binary::struct_trait::end::End;
+use crate::binary::struct_trait::end::Signal;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
@@ -15,7 +15,7 @@ use std::error::Error;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Session};
+/// use mpstthree::binary::struct_trait::{end::End, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///

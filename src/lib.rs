@@ -15,9 +15,46 @@
 //! <br>
 
 pub mod binary;
-pub mod checking;
-pub mod fork;
-pub mod functionmpst;
-pub mod macros;
-pub mod meshedchannels;
+
+#[cfg(feature = "binary")]
+pub use self::binary::*;
+
 pub mod role;
+
+#[cfg(feature = "role")]
+pub use self::role::*;
+
+pub mod meshedchannels;
+
+#[cfg(feature = "meshedchannels")]
+pub use self::meshedchannels::*;
+
+pub mod functionmpst;
+
+#[cfg(feature = "functionmpst")]
+pub use self::functionmpst::*;
+
+pub mod checking;
+
+#[cfg(feature = "checking")]
+pub use self::checking::*;
+
+pub mod macros_simple;
+
+#[cfg(feature = "macros_simple")]
+pub use self::macros_simple::*;
+
+pub mod macros_multiple;
+
+#[cfg(feature = "macros_multiple")]
+pub use self::macros_multiple::*;
+
+pub mod baking;
+
+#[cfg(feature = "baking")]
+pub use self::baking::*;
+
+pub mod transport;
+
+#[cfg(feature = "transport")]
+pub use self::transport::*;

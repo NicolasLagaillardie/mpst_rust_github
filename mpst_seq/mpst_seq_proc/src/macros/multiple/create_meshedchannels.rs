@@ -48,7 +48,7 @@ impl CreateMeshedChannelsMacroInput {
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
                     <
-                        #temp_ident as mpstthree::binary::struct_trait::Session
+                        #temp_ident as mpstthree::binary::struct_trait::session::Session
                     >::Dual,
                 }
             })
@@ -59,7 +59,7 @@ impl CreateMeshedChannelsMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::binary::struct_trait::Session,
+                    #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
             })
             .collect();
@@ -119,7 +119,41 @@ impl CreateMeshedChannelsMacroInput {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    result = format!("{} + {}", result, #temp_ident::head_str());
+                    if result == "".to_string() {
+                        result = format!(
+                            "{}",
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
+                        ) ;
+                    } else {
+                        result = format!(
+                            "{}\n{}",
+                            result,
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
+                        );
+                    }
+                }
+            })
+            .collect();
+
+        let tail_str: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+            .map(|i| {
+                let temp_ident =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                quote! {
+                    if result == "".to_string() {
+                        result = format!(
+                            "{}<{}>",
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
+                        ) ;
+                    } else {
+                        result = format!(
+                            "{}\n{}<{}>",
+                            result,
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
+                        ) ;
+                    }
                 }
             })
             .collect();
@@ -165,7 +199,7 @@ impl CreateMeshedChannelsMacroInput {
                 )*
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::Session for #meshedchannels_name<
+            > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
                 #(
                     #sessions
                 )*
@@ -210,29 +244,61 @@ impl CreateMeshedChannelsMacroInput {
 
                 #[doc(hidden)]
                 fn head_str() -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
                     #(
                         #head_str
                     )*
                     format!(
-                        "{} + {} + {}",
+                        "{}\n{}\n{}",
                         result,
-                        R::head_str(),
-                        N::head_str()
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
                     )
                 }
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
+                    #(
+                        #tail_str
+                    )*
+                    format!(
+                        "{}\n{}<{}>\n{}<{}>",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    let mut result = "".to_string();
                     #(
                         #head_str
                     )*
                     format!(
-                        " {} + {} + {}",
+                        "{}\n{}\n{}",
                         result,
-                        R::tail_str(),
-                        N::head_str()
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    let mut result = "".to_string();
+                    #(
+                        #tail_str
+                    )*
+                    format!(
+                        "{}\n{}<{}>\n{}<{}>",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
                     )
                 }
             }

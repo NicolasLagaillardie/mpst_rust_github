@@ -1,12 +1,13 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 
@@ -200,15 +201,9 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_server, thread_voter) = fork_mpst(endpoint_server, endpoint_voter);
 
-    thread_voter.join()?;
-    thread_server.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_voter.join().unwrap();
+    thread_server.join().unwrap();
 }

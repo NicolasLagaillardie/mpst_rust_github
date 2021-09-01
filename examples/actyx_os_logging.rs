@@ -1,11 +1,13 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
+use rand::{thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 
@@ -118,9 +120,11 @@ type EndpointLogsInit<N> =
     MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_controller_to_logs(0, s)?;
+    let start = thread_rng().gen_range(5..100);
 
-    recurs_0_controller(s, 100)
+    let s = send_controller_to_logs(start, s)?;
+
+    recurs_0_controller(s, start)
 }
 
 fn recurs_0_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -182,7 +186,7 @@ fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
 
 fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
-        i if i % 2 == 0 => {
+        i if i % 2 == 0 && i > 0 => {
             // Success
             let s = choose_mpst_multi_to_all!(
                 s,
@@ -193,9 +197,9 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 2
             );
 
-            let s = send_logs_to_controller(loops, s)?;
+            let s = send_logs_to_controller(loops - 1, s)?;
 
-            recurs_0_logs(s, loops)
+            recurs_0_logs(s, loops - 1)
         }
         _ => {
             // Failure
@@ -208,7 +212,7 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 2
             );
 
-            let s = send_logs_to_controller(loops, s)?;
+            let s = send_logs_to_controller(loops - 1, s)?;
 
             recurs_1_logs(s)
         }
@@ -221,7 +225,7 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
             let (loops, s) = recv_logs_from_controller(s)?;
 
-            recurs_0_logs(s, loops)
+            recurs_0_logs(s, loops - 1)
         },
         Branching1fromCtoL::Stop(s) => {
 
@@ -234,15 +238,9 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_controller, thread_logs) = fork_mpst(endpoint_controller, endpoint_logs);
 
-    thread_controller.join()?;
-    thread_logs.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_controller.join().unwrap();
+    thread_logs.join().unwrap();
 }

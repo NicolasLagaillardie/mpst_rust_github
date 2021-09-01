@@ -1,6 +1,6 @@
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
-use crate::binary::struct_trait::{End, Recv, Send, Session};
+use crate::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use crate::functionmpst::close::close_mpst;
 use crate::functionmpst::OfferMpst;
 use crate::meshedchannels::MeshedChannels;
@@ -15,6 +15,7 @@ use crate::role::Role;
 use crate::{recv_all_aux_simple, recv_aux_simple, send_aux_simple};
 
 use either::Either;
+
 use std::error::Error;
 use std::marker;
 

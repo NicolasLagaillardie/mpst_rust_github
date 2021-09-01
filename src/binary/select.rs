@@ -1,4 +1,4 @@
-use crate::binary::struct_trait::{Recv, Session};
+use crate::binary::struct_trait::{recv::Recv, session::Session};
 use crossbeam_channel::Select;
 use std::boxed::Box;
 use std::error::Error;

@@ -11,7 +11,7 @@ use crossbeam_channel::{bounded, Sender};
 /// the test `05_usecase.rs`.
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`Session`]: crate::binary::struct_trait::Session
+/// [`Session`]: crate::binary::struct_trait::session::Session
 ///
 /// # Example
 ///
@@ -57,11 +57,27 @@ impl<R1: Role, R2: Role> Role for RoleAtoAll<R1, R2> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleAtoAll")
+        "RoleAtoAll".to_string()
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
+        format!(
+            "{}<{}> + {}<{}>",
+            R1::head_str(),
+            R1::tail_str(),
+            R2::head_str(),
+            R2::tail_str()
+        )
+    }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        "RoleAtoAll".to_string()
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
         format!(
             "{}<{}> + {}<{}>",
             R1::head_str(),

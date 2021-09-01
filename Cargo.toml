@@ -1,58 +1,203 @@
 [package]
 name = "mpstthree"
-version = "0.0.9"
+version = "0.0.11"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session"]
-categories = ["concurrency", "development-tools::cargo-plugins"]
-exclude = [".travis.yml", "codecov.yml", ".gitignore", "mpst_seq/", ".github/", ".cargo_vcs_info.json", "scripts/", "example", "rustfmt_2.toml"]
+categories = ["concurrency"]
+exclude = [
+    ".travis.yml",
+    "codecov.yml",
+    ".gitignore",
+    "mpst_seq/",
+    ".github/",
+    ".cargo_vcs_info.json",
+    "scripts/",
+    "example/",
+    "rustfmt_2.toml",
+]
 autotests = false
+
+###################################
 
 [workspace]
 exclude = ["mpst_seq/"]
+
+###################################
 
 [[bin]]
 name = "mpst"
 path = "main.rs"
 
+###################################
+
 [[test]]
-name = "tests"
+name = "checking"
+path = "tests/checking.rs"
+required-features = ["macros_multiple", "checking"]
+
+[[test]]
+name = "basics"
+path = "tests/basics.rs"
+required-features = ["checking"]
+
+[[test]]
+name = "binary"
+path = "tests/binary.rs"
+required-features = ["binary"]
+
+[[test]]
+name = "cancel"
+path = "tests/cancel.rs"
+required-features = ["macros_multiple"]
+
+[[test]]
+name = "macros_multiple"
+path = "tests/macros_multiple.rs"
+required-features = ["macros_multiple"]
+
+[[test]]
+name = "macros_simple"
+path = "tests/macros_simple.rs"
+required-features = ["macros_simple"]
+
+[[test]]
+name = "transport"
+path = "tests/transport.rs"
+required-features = ["macros_multiple", "transport"]
+
+[[test]]
+name = "baking"
+path = "tests/baking.rs"
+required-features = ["baking", "checking"]
+
+[[test]]
+name = "extra"
+path = "tests/extra.rs"
+required-features = ["baking"]
+
+[[test]]
+name = "main"
 path = "tests/main.rs"
+required-features = []
+
+###################################
 
 [[bench]]
 name = "main"
 harness = false
+required-features = ["macros_multiple"]
 
 [[bench]]
 name = "ping_pong"
 harness = false
+required-features = ["macros_multiple"]
+
+###################################
+
+[[example]]
+name = "actyx_os_api"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "actyx_os_logging"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "distributed_calc"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "dns_fowler"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "dns_imai"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "fib"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "o_auth"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "o_auth_2"
+required-features = ["macros_multiple", "transport", "rand"]
+
+[[example]]
+name = "online_wallet"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "simple_voting"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "smtp"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "three_buyers"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "travel_three"
+required-features = ["macros_multiple", "rand"]
+
+[[example]]
+name = "video_stream"
+required-features = ["macros_simple", "rand"]
+
+###################################
 
 [profile.release]
 debug = true
 
+###################################
+
 [dependencies]
-mpst-seq = { path = "mpst_seq", version = "0.0.7" }
-# mpst-seq = "0.0.7"
+mpst-seq = { path = "mpst_seq", version = "0.0.9" }
+# mpst-seq = "0.0.9"
+rand = { version = "0.8.4", optional = true }
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
-rand = "0.8.4"
-hyper = { version = "0.14", features = ["full"] }
-hyper-tls = "0.5"
-tokio = { version = "1.8", features = ["full"] }
-# dot = "0.1.4"
-# sesh = "0.1.1"
-# anyhow = "1"
-# futures = "0.3"
-# field_types = "1.1.0"
+hyper = { version = "0.14.12", features = ["full"], optional = true }
+hyper-tls = { version = "0.5.0", optional = true }
+tokio = { version = "1.11.0", features = ["full"], optional = true }
+regex = { version = "1.5.4", optional = true }
+petgraph = { version = "0.6.0", optional = true }
+
+###################################
 
 [dev-dependencies]
-criterion = { version = "0.3.4", features = ["html_reports"] }
-trybuild = "1.0.42"
+criterion = { version = "0.3.5", features = ["html_reports"] }
+trybuild = "1.0.45"
 ntest = "0.7.3"
+rand = "0.8.4"
+
+###################################
+
+[features]
+default = ["binary", "role", "meshedchannels", "functionmpst"]
+binary = []
+functionmpst = []
+meshedchannels = []
+role = []
+macros_simple = ["default"]
+macros_multiple = ["default", "macros_simple"]
+checking = ["default", "regex", "petgraph"]
+baking = ["default", "macros_multiple"]
+transport = ["default", "hyper", "hyper-tls", "tokio"]
+full = ["checking", "baking", "transport"]
+
+###################################
 
 [badges]
 maintenance = { status = "actively-developed" }

@@ -1,12 +1,12 @@
 [package]
 name = "mpst-seq-proc"
-version = "0.0.7"
+version = "0.0.9"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 description = "A library with macro for mpstthree"
 edition = "2018"
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq/mpst_seq_proc"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 autotests = false
 
 [workspace]
@@ -15,7 +15,7 @@ autotests = false
 proc-macro = true
 
 [dependencies]
-syn = { version = "1.0.73", features = ["extra-traits", "full", "parsing"] }
+syn = { version = "1.0.75", features = ["extra-traits", "full", "parsing"] }
 quote = "1.0.9"
-proc-macro2 = "1.0.27"
+proc-macro2 = "1.0.29"
 proc-macro-hack = "0.5.19"

@@ -1,3 +1,5 @@
+#![cfg(feature = "meshedchannels")]
+
 //! The main structure used for representing a participant,
 //! also named a party, within a protocol.
 //!
@@ -13,10 +15,10 @@
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
 //!   `RoleB<RoleEnd>`.
 //!
-//! [`Session`]: crate::binary::struct_trait::Session
+//! [`Session`]: crate::binary::struct_trait::session::Session
 //! [`Role`]: crate::role::Role
 
-use crate::binary::struct_trait::Session;
+use crate::binary::struct_trait::session::Session;
 use crate::role::Role;
 
 pub mod impl_a;
@@ -29,7 +31,7 @@ pub mod impl_c;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 ///
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///
@@ -99,22 +101,52 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
     #[doc(hidden)]
     fn head_str() -> String {
         format!(
-            "{} + {} + {} + {}",
-            S1::head_str(),
-            S2::head_str(),
-            R::head_str(),
-            N::head_str()
+            "{}\n{}\n{}\n{}",
+            <S1 as Session>::head_str(),
+            <S2 as Session>::head_str(),
+            <R as Role>::head_str(),
+            <N as Role>::head_str()
         )
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
         format!(
-            "{} + {} + {} + {}",
-            S1::tail_str(),
-            S2::tail_str(),
-            R::tail_str(),
-            N::tail_str()
+            "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
+            <S1 as Session>::head_str(),
+            <S1 as Session>::tail_str(),
+            <S2 as Session>::head_str(),
+            <S2 as Session>::tail_str(),
+            <R as Role>::head_str(),
+            <R as Role>::tail_str(),
+            <N as Role>::head_str(),
+            <N as Role>::tail_str(),
+        )
+    }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        format!(
+            "{}\n{}\n{}\n{}",
+            <S1 as Session>::head_str(),
+            <S2 as Session>::head_str(),
+            <R as Role>::head_str(),
+            <N as Role>::head_str()
+        )
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
+        format!(
+            "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
+            <S1 as Session>::head_str(),
+            <S1 as Session>::tail_str(),
+            <S2 as Session>::head_str(),
+            <S2 as Session>::tail_str(),
+            <R as Role>::head_str(),
+            <R as Role>::tail_str(),
+            <N as Role>::head_str(),
+            <N as Role>::tail_str(),
         )
     }
 }

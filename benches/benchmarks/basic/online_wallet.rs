@@ -2,7 +2,7 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
@@ -182,8 +182,8 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             1
         );
 
-        let s = send_mpst_a_to_c(String::from("Fail"), s);
-        let s = send_mpst_a_to_s(String::from("Fail"), s);
+        let s = send_mpst_a_to_c("Fail".to_string(), s);
+        let s = send_mpst_a_to_s("Fail".to_string(), s);
 
         close_mpst_multi(s)
     } else {

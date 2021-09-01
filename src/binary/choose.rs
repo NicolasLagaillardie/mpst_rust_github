@@ -1,6 +1,6 @@
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
-use crate::binary::struct_trait::{End, Send, Session};
+use crate::binary::struct_trait::{end::End, send::Send, session::Session};
 use either::Either;
 
 /// Choose between two sessions `S1` and `S2`. Implemented
@@ -38,22 +38,9 @@ where
 #[macro_export]
 macro_rules! choose {
     ($label: path, $session: expr) => {{
-        let (here, there) = <_ as mpstthree::binary::struct_trait::Session>::new();
+        let (here, there) = <_ as mpstthree::binary::struct_trait::session::Session>::new();
         let s = mpstthree::binary::send::send($label(there), $session);
         mpstthree::binary::cancel::cancel(s);
-        here
-    }};
-}
-
-/// Choose between many different sessions wrapped in an
-/// `enum`
-#[macro_export]
-macro_rules! choose_tcp {
-    ($label: path, $session: expr, $data: expr) => {{
-        let (here, there) = <_ as Session>::new();
-        let s = mpstthree::binary::send::send(($data, $label(there)), $session);
-        mpstthree::binary::cancel::cancel(s);
-        mpstthree::binary::cancel::cancel($data);
         here
     }};
 }

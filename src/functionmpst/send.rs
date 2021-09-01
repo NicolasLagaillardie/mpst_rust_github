@@ -1,6 +1,6 @@
 //! This module contains all the *send* functions
 
-use crate::binary::struct_trait::{Send, Session};
+use crate::binary::struct_trait::{send::Send, session::Session};
 use crate::meshedchannels::MeshedChannels;
 use crate::role::a::RoleA;
 use crate::role::b::RoleB;
@@ -13,7 +13,7 @@ use std::marker;
 #[macro_export]
 macro_rules! send_aux_simple {
     ($session: expr, $payload: expr, $role: ident, $exclusion: literal) => {
-        mpst_seq::send_aux_simple!($session, $payload, $role, $exclusion);
+        mpst_seq::send_aux_simple!($session, $payload, $role, $exclusion)
     };
 }
 
@@ -23,7 +23,7 @@ macro_rules! send_aux_simple {
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
@@ -87,7 +87,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
@@ -151,7 +151,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
@@ -215,7 +215,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
@@ -279,7 +279,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
@@ -343,7 +343,7 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{End, Send, Session};
+/// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///

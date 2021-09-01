@@ -1,4 +1,5 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_create_multi_to_all,
@@ -6,8 +7,8 @@ use mpstthree::{
     create_send_mpst_session_bundle, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
+
 use std::error::Error;
 
 // explicit global protocol Dns(role Client, role Server, role Other)
@@ -204,17 +205,11 @@ fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_other, thread_server, thread_client) =
         fork_mpst(endpoint_client, endpoint_other, endpoint_server);
 
-    thread_client.join()?;
-    thread_server.join()?;
-    thread_other.join()?;
-
-    Ok(())
-}
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_client.join().unwrap();
+    thread_server.join().unwrap();
+    thread_other.join().unwrap();
 }

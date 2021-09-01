@@ -183,7 +183,7 @@ impl ForkMPSTMultiMacroInput {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                     quote! {
-                        #temp_ident : mpstthree::binary::struct_trait::Session + 'static ,
+                        #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                     }
                 })
                 .collect();
@@ -286,7 +286,7 @@ impl ForkMPSTMultiMacroInput {
                             }
                         } else {
                             quote! {
-                                < #temp_ident  as mpstthree::binary::struct_trait::Session>::Dual ,
+                                < #temp_ident  as mpstthree::binary::struct_trait::session::Session>::Dual ,
                             }
                         }
                     })
@@ -320,26 +320,27 @@ impl ForkMPSTMultiMacroInput {
             })
             .collect();
 
-        let new_channels: Vec<proc_macro2::TokenStream> =
-            (1..=((self.nsessions - 1) * (self.nsessions) / 2))
-                .map(|i| {
-                    let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                    let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
-                    let temp_channel_left = syn::Ident::new(
-                        &format!("channel_{}_{}", line, column),
-                        proc_macro2::Span::call_site(),
-                    );
-                    let temp_channel_right = syn::Ident::new(
-                        &format!("channel_{}_{}", column, line),
-                        proc_macro2::Span::call_site(),
-                    );
-                    quote! {
-                        let ( #temp_channel_left , #temp_channel_right ) =
-                            < #temp_ident as mpstthree::binary::struct_trait::Session>::new();
-                    }
-                })
-                .collect();
+        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((self.nsessions - 1)
+            * (self.nsessions)
+            / 2))
+            .map(|i| {
+                let temp_ident =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
+                let temp_channel_left = syn::Ident::new(
+                    &format!("channel_{}_{}", line, column),
+                    proc_macro2::Span::call_site(),
+                );
+                let temp_channel_right = syn::Ident::new(
+                    &format!("channel_{}_{}", column, line),
+                    proc_macro2::Span::call_site(),
+                );
+                quote! {
+                    let ( #temp_channel_left , #temp_channel_right ) =
+                        < #temp_ident as mpstthree::binary::struct_trait::session::Session>::new();
+                }
+            })
+            .collect();
 
         let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {

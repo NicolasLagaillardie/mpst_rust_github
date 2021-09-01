@@ -1,20 +1,13 @@
 use rand::{thread_rng, Rng};
 
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
-use mpstthree::fork::fork_mpst;
-use mpstthree::role::broadcast::RoleBroadcast;
-// use mpstthree::role::Role;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
+use mpstthree::role::broadcast::RoleBroadcast;
 
-// use std::any::type_name;
 use std::boxed::Box;
-// use std::collections::hash_map::RandomState;
-// use std::collections::HashMap;
 use std::error::Error;
-// use std::fmt;
 use std::marker;
-
-// use mpstthree::checking::checker;
 
 use mpstthree::functionmpst::close::close_mpst;
 
@@ -172,16 +165,10 @@ fn client_recurs(
 
 /////////////////////////////////////////
 
-pub fn run_usecase() -> Result<(), Box<dyn Error>> {
+fn main() {
     let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
     thread_a.join().unwrap();
     thread_s.join().unwrap();
     thread_c.join().unwrap();
-
-    Ok(())
-}
-
-fn main() {
-    assert!(run_usecase().is_ok());
 }

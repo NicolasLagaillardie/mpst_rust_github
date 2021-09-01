@@ -111,6 +111,22 @@ impl CreateBroadcastRoleShortMacroInput {
                         <R2 as mpstthree::role::Role>::tail_str()
                     )
                 }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_to_all_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    format!(
+                        "{}<{}> + {}<{}>",
+                        <R1 as mpstthree::role::Role>::head_str(),
+                        <R1 as mpstthree::role::Role>::tail_str(),
+                        <R2 as mpstthree::role::Role>::head_str(),
+                        <R2 as mpstthree::role::Role>::tail_str()
+                    )
+                }
             }
 
             ////////////////////////////////////////////
@@ -148,6 +164,22 @@ impl CreateBroadcastRoleShortMacroInput {
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}> + {}<{}>",
+                        <R1 as mpstthree::role::Role>::head_str(),
+                        <R1 as mpstthree::role::Role>::tail_str(),
+                        <R2 as mpstthree::role::Role>::head_str(),
+                        <R2 as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#dual_to_all_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}> + {}<{}>",
                         <R1 as mpstthree::role::Role>::head_str(),

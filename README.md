@@ -8,8 +8,7 @@
 [![Minimum rustc version](https://img.shields.io/badge/rustc-1.53+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
-[![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
-
+<!-- [![License: "MIT OR Apache-2.0"](https://img.shields.io/crates/l/mpstthree.svg)](#license) -->
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
 It relies on [sesh](https://github.com/wenkokke/sesh).
@@ -22,7 +21,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.0.8"
+mpstthree = "0.0.10"
 ```
 
 ## Example
@@ -30,7 +29,7 @@ mpstthree = "0.0.8"
 Assume a simple protocol involving 3 participants, **A**, **B** and **C**.
 **A** sends a payload to **B**, then receives another payload from **C**.
 Upon receiving the payload from **A**, **B** sends a payload to **C**.
-This protocol can be written as **A!B.A?C.B!C.0**. 
+This protocol can be written as **A!B.A?C.B!C.0**.
 To implement this example, first, get the right components from the library.
 
 ```rust
@@ -39,7 +38,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 // Used for creating the types
-use mpstthree::binary::struct_trait::{End, Recv, Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::meshedchannels::MeshedChannels;
 
 // Used for creating the stack and the name of each role
@@ -62,7 +61,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 use mpstthree::functionmpst::close::close_mpst;
 
 // Used for connecting all the roles, represented as MeshedChannels, together
-use mpstthree::fork_mpst;
+use mpstthree::functionmpst::fork_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
@@ -172,7 +171,7 @@ You will get `cargo` installed.
 For building the library, run this code.
 
 ```sh
-$ cargo build
+cargo build
 ```
 
 ### Running
@@ -180,7 +179,7 @@ $ cargo build
 For running the library, run this code.
 
 ```sh
-$ cargo run
+cargo run
 ```
 
 ### Run test
@@ -188,7 +187,7 @@ $ cargo run
 For running the tests, run this code.
 
 ```sh
-$ cargo test
+cargo test
 ```
 
 Tests are divided into 8 folders:
@@ -226,7 +225,8 @@ See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE)
+or [MIT license](LICENSE-MIT) at your option.
 
 ## Acknowledgment
 

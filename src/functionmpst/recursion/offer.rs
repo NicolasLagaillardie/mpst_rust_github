@@ -1,3 +1,67 @@
+/// Offer a choice between many different sessions wrapped in an `enum`
+///
+/// # Arguments
+///
+/// * The session to be used
+/// * \[Optional\] The *recv* function that will be used
+/// * Each path, which are each variant of the enum which contains the new branches
+/// * The block of code to process each new session
+///
+/// # Basic example
+///
+/// ```ignore
+/// offer_aux!(
+///     s,
+///     recv_mpst_a_from_d,
+///     {
+///         CBranchesAtoC::End(s) => {
+///             close_mpst_multi(s)
+///         },
+///         CBranchesAtoC::Video(s) => {
+///             let (request, s) = recv_mpst_a_from_d(s)?;
+///             let s = send_mpst_a_to_b(request + 1, s);
+///             let (video, s) = recv_mpst_a_from_b(s)?;
+///             let s = send_mpst_a_to_d(video + 1, s);
+///             authenticator_recurs(s)
+///         },
+///     }
+/// )?;
+/// ```
+///
+/// # Baking example
+///
+/// ```ignore
+/// offer_aux!(
+///     s,
+///     {
+///         CBranchesAtoC::End(s) => {
+///             close_mpst_multi(s)
+///         },
+///         CBranchesAtoC::Video(s) => {
+///             let (request, s) = recv_mpst_a_from_d(s)?;
+///             let s = send_mpst_a_to_b(request + 1, s);
+///             let (video, s) = recv_mpst_a_from_b(s)?;
+///             let s = send_mpst_a_to_d(video + 1, s);
+///             authenticator_recurs(s)
+///         },
+///     }
+/// )?;
+/// ```
+#[macro_export]
+macro_rules! offer_aux {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
+        (move || -> Result<_, _> {
+            let (l, s) = $recv_mpst($session)?;
+            mpstthree::binary::cancel::cancel(s);
+            match l {
+                $(
+                    $pat => $result,
+                )*
+            }
+        })()
+    };
+}
+
 /// Offer a choice to A from C between many different
 /// sessions wrapped in an `enum`
 ///
@@ -29,7 +93,7 @@ macro_rules! offer_mpst_a_to_c {
 
         use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 
-        mpstthree::offer_mpst!($session, recv_mpst_a_from_c, { $( $pat => $result , )* })
+        mpstthree::offer_aux!($session, recv_mpst_a_from_c, { $( $pat => $result , )* })
     }};
 }
 
@@ -64,7 +128,7 @@ macro_rules! offer_mpst_b_to_c {
 
         use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
 
-        mpstthree::offer_mpst!($session, recv_mpst_b_from_c, { $( $pat => $result , )* })
+        mpstthree::offer_aux!($session, recv_mpst_b_from_c, { $( $pat => $result , )* })
     }};
 }
 
@@ -99,7 +163,7 @@ macro_rules! offer_mpst_a_to_b {
 
         use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 
-        mpstthree::offer_mpst!($session, recv_mpst_a_from_b, { $( $pat => $result , )* })
+        mpstthree::offer_aux!($session, recv_mpst_a_from_b, { $( $pat => $result , )* })
 
         // (move || -> Result<_, Box<dyn std::error::Error>> {
         //     let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_from_b($session)?;
@@ -144,7 +208,7 @@ macro_rules! offer_mpst_b_to_a {
 
         use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 
-        mpstthree::offer_mpst!($session, recv_mpst_b_from_a, { $( $pat => $result , )* })
+        mpstthree::offer_aux!($session, recv_mpst_b_from_a, { $( $pat => $result , )* })
     }};
 }
 
@@ -179,7 +243,7 @@ macro_rules! offer_mpst_c_to_b {
 
         use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
-        mpstthree::offer_mpst!($session, recv_mpst_c_from_b, { $( $pat => $result , )* })
+        mpstthree::offer_aux!($session, recv_mpst_c_from_b, { $( $pat => $result , )* })
     }};
 }
 
@@ -214,6 +278,6 @@ macro_rules! offer_mpst_c_to_a {
 
         use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
-        mpstthree::offer_mpst!($session, recv_mpst_c_from_a, { $( $pat => $result , )* })
+        mpstthree::offer_aux!($session, recv_mpst_c_from_a, { $( $pat => $result , )* })
     }};
 }

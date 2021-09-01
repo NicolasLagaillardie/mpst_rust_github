@@ -48,11 +48,21 @@ impl<R: Role> Role for RoleB<R> {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleB")
+        "RoleB".to_string()
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
+        format!("{}<{}>", R::head_str(), R::tail_str())
+    }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        "RoleB".to_string()
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }

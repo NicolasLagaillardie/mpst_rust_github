@@ -92,6 +92,20 @@ impl CreateNormalRoleShortMacroInput {
                         <R as mpstthree::role::Role>::tail_str()
                     )
                 }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    format!(
+                        "{}<{}>",
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str()
+                    )
+                }
             }
 
             ////////////////////////////////////////////
@@ -122,6 +136,20 @@ impl CreateNormalRoleShortMacroInput {
 
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}>",
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#dual_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}>",
                         <R as mpstthree::role::Role>::head_str(),

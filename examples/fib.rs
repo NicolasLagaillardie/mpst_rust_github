@@ -1,4 +1,4 @@
-use mpstthree::binary::struct_trait::{End, Recv, Send, Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
@@ -6,6 +6,9 @@ use mpstthree::{
 };
 
 use mpstthree::role::broadcast::RoleBroadcast;
+
+use rand::{thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 
@@ -82,7 +85,7 @@ type EndpointB<N> = MeshedChannelsTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE, 1)
+    recurs_a(s, thread_rng().gen_range(1..20), 1)
 }
 
 fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
@@ -134,17 +137,9 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
-    thread_a.join()?;
-    thread_b.join()?;
-
-    Ok(())
-}
-
-static SIZE: i64 = 10;
-
-fn main() {
-    assert!(all_mpst().is_ok());
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
 }

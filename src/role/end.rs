@@ -5,7 +5,7 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::End;
+/// use mpstthree::binary::struct_trait::end::End;
 ///
 /// // Creating the binary sessions
 /// type Close = End;
@@ -38,11 +38,21 @@ impl crate::role::Role for RoleEnd {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        String::from("RoleEnd")
+        "RoleEnd".to_string()
     }
 
     #[doc(hidden)]
     fn tail_str() -> String {
-        String::from("")
+        "".to_string()
+    }
+
+    #[doc(hidden)]
+    fn self_head_str(&self) -> String {
+        "RoleEnd".to_string()
+    }
+
+    #[doc(hidden)]
+    fn self_tail_str(&self) -> String {
+        "".to_string()
     }
 }

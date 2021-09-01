@@ -28,6 +28,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStrea
             result.push(elt_tt)
         }
     }
+
     Ok(result)
 }
 
@@ -226,7 +227,7 @@ impl BakingMacroInput {
                 let temp_type = syn::Ident::new(&format!("S{}", k), proc_macro2::Span::call_site());
 
                 if k == cond {
-                    quote! { mpstthree::binary::struct_trait::Send<T, #temp_type > ,}
+                    quote! { mpstthree::binary::struct_trait::send::Send<T, #temp_type > ,}
                 } else {
                     quote! { #temp_type , }
                 }
@@ -323,7 +324,7 @@ impl BakingMacroInput {
                 let temp_type = syn::Ident::new(&format!("S{}", k), proc_macro2::Span::call_site());
 
                 if k == cond {
-                    quote! { mpstthree::binary::struct_trait::Recv<T, #temp_type > ,}
+                    quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > ,}
                 } else {
                     quote! { #temp_type ,}
                 }
@@ -427,7 +428,7 @@ impl BakingMacroInput {
                 let temp_type = syn::Ident::new(&format!("S{}", k), proc_macro2::Span::call_site());
 
                 if k == cond {
-                    quote! { mpstthree::binary::struct_trait::Recv<T, #temp_type > ,}
+                    quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > ,}
                 } else {
                     quote! { #temp_type ,}
                 }
@@ -521,7 +522,7 @@ impl BakingMacroInput {
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                    quote! { #temp_ident : mpstthree::binary::struct_trait::Session , }
+                    quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
                 })
                 .collect();
 
@@ -547,7 +548,7 @@ impl BakingMacroInput {
                 let cond = if k >= receiver { sender - 1 } else { sender };
                 if k == cond {
                     quote! {
-                        mpstthree::binary::struct_trait::Recv<
+                        mpstthree::binary::struct_trait::recv::Recv<
                             either::Either<
                                 #meshedchannels_name<
                                     #( #left_sessions )*
@@ -560,11 +561,11 @@ impl BakingMacroInput {
                                     #receiver_ident<mpstthree::role::end::RoleEnd>
                                 >
                             >,
-                            mpstthree::binary::struct_trait::End
+                            mpstthree::binary::struct_trait::end::End
                         >,
                     }
                 } else {
-                    quote! { mpstthree::binary::struct_trait::End, }
+                    quote! { mpstthree::binary::struct_trait::end::End, }
                 }
             })
             .collect();
@@ -633,7 +634,7 @@ impl BakingMacroInput {
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                    quote! { #temp_ident : mpstthree::binary::struct_trait::Session , }
+                    quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
                 })
                 .collect();
 
@@ -674,7 +675,7 @@ impl BakingMacroInput {
                             if l == j || m1 == m2 {
                                 quote! { #temp_ident , }
                             } else {
-                                quote! { <#temp_ident as mpstthree::binary::struct_trait::Session>::Dual , }
+                                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
                             }
                         })
                         .collect();
@@ -707,7 +708,7 @@ impl BakingMacroInput {
                             if l == j || m1 == m2 {
                                 quote! { #temp_ident , }
                             } else {
-                                quote! { <#temp_ident as mpstthree::binary::struct_trait::Session>::Dual , }
+                                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
                             }
                         })
                         .collect();
@@ -748,7 +749,7 @@ impl BakingMacroInput {
                         };
 
                     quote! {
-                        mpstthree::binary::struct_trait::Send<
+                        mpstthree::binary::struct_trait::send::Send<
                             either::Either<
                                 #meshedchannels_name<
                                     #(
@@ -765,7 +766,7 @@ impl BakingMacroInput {
                                     #receiver_ident<mpstthree::role::end::RoleEnd>
                                 >
                             >,
-                            mpstthree::binary::struct_trait::End,
+                            mpstthree::binary::struct_trait::end::End,
                         >,
                     }
                 } else {
@@ -799,7 +800,7 @@ impl BakingMacroInput {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
                     std::option::Option::Some(
-                        quote! { <#temp_ident as mpstthree::binary::struct_trait::Session>::Dual, },
+                        quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
                     )
                 }
             })
@@ -821,7 +822,7 @@ impl BakingMacroInput {
                         proc_macro2::Span::call_site(),
                     );
                     std::option::Option::Some(
-                        quote! { <#temp_ident as mpstthree::binary::struct_trait::Session>::Dual, },
+                        quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
                     )
                 }
             })
@@ -859,7 +860,7 @@ impl BakingMacroInput {
                         syn::Ident::new(&format!("S{}", j), proc_macro2::Span::call_site());
 
                     quote! { let ( #first_channel , #second_channel ) =
-                    <#temp_session as mpstthree::binary::struct_trait::Session>::new() ; }
+                    <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ; }
                 })
                 .collect();
 
@@ -1255,7 +1256,7 @@ impl BakingMacroInput {
 
         let close_session_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
             .map(|_i| {
-                quote! { mpstthree::binary::struct_trait::End, }
+                quote! { mpstthree::binary::struct_trait::end::End, }
             })
             .collect();
 
@@ -1265,7 +1266,7 @@ impl BakingMacroInput {
                         &format!("session{}", i),
                         proc_macro2::Span::call_site(),
                     );
-                    quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::Signal::Stop).unwrap_or(()); }
+                    quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(()); }
                 })
                 .collect();
 
@@ -1358,12 +1359,28 @@ impl BakingMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#role_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}>",
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}>",
                         <R as mpstthree::role::Role>::head_str(),
@@ -1388,12 +1405,28 @@ impl BakingMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#dual_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}>",
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#dual_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}>",
                         <R as mpstthree::role::Role>::head_str(),
@@ -1453,12 +1486,30 @@ impl BakingMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#role_to_all_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}> + {}<{}>",
+                        <R1 as mpstthree::role::Role>::head_str(),
+                        <R1 as mpstthree::role::Role>::tail_str(),
+                        <R2 as mpstthree::role::Role>::head_str(),
+                        <R2 as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_to_all_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}> + {}<{}>",
                         <R1 as mpstthree::role::Role>::head_str(),
@@ -1494,12 +1545,30 @@ impl BakingMacroInput {
                         },
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
                     String::from(stringify!(#dual_to_all_name))
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
+                    format!(
+                        "{}<{}> + {}<{}>",
+                        <R1 as mpstthree::role::Role>::head_str(),
+                        <R1 as mpstthree::role::Role>::tail_str(),
+                        <R2 as mpstthree::role::Role>::head_str(),
+                        <R2 as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#dual_to_all_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
                     format!(
                         "{}<{}> + {}<{}>",
                         <R1 as mpstthree::role::Role>::head_str(),
@@ -1539,7 +1608,7 @@ impl BakingMacroInput {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                     quote! {
-                        #temp_ident : mpstthree::binary::struct_trait::Session + 'static ,
+                        #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                     }
                 })
                 .collect();
@@ -1642,7 +1711,7 @@ impl BakingMacroInput {
                             }
                         } else {
                             quote! {
-                                < #temp_ident  as mpstthree::binary::struct_trait::Session>::Dual ,
+                                < #temp_ident  as mpstthree::binary::struct_trait::session::Session>::Dual ,
                             }
                         }
                     })
@@ -1676,26 +1745,27 @@ impl BakingMacroInput {
             })
             .collect();
 
-        let new_channels: Vec<proc_macro2::TokenStream> =
-            (1..=((self.number_roles - 1) * (self.number_roles) / 2))
-                .map(|i| {
-                    let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                    let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
-                    let temp_channel_left = syn::Ident::new(
-                        &format!("channel_{}_{}", line, column),
-                        proc_macro2::Span::call_site(),
-                    );
-                    let temp_channel_right = syn::Ident::new(
-                        &format!("channel_{}_{}", column, line),
-                        proc_macro2::Span::call_site(),
-                    );
-                    quote! {
-                        let ( #temp_channel_left , #temp_channel_right ) =
-                            < #temp_ident as mpstthree::binary::struct_trait::Session>::new();
-                    }
-                })
-                .collect();
+        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((self.number_roles - 1)
+            * (self.number_roles)
+            / 2))
+            .map(|i| {
+                let temp_ident =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
+                let temp_channel_left = syn::Ident::new(
+                    &format!("channel_{}_{}", line, column),
+                    proc_macro2::Span::call_site(),
+                );
+                let temp_channel_right = syn::Ident::new(
+                    &format!("channel_{}_{}", column, line),
+                    proc_macro2::Span::call_site(),
+                );
+                quote! {
+                    let ( #temp_channel_left , #temp_channel_right ) =
+                        < #temp_ident as mpstthree::binary::struct_trait::session::Session>::new();
+                }
+            })
+            .collect();
 
         let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
             .map(|i| {
@@ -1847,7 +1917,7 @@ impl BakingMacroInput {
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::Session , }
+                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
             })
             .collect();
 
@@ -1855,7 +1925,7 @@ impl BakingMacroInput {
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                quote! { <#temp_ident as mpstthree::binary::struct_trait::Session>::Dual , }
+                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
             })
             .collect();
 
@@ -1876,7 +1946,7 @@ impl BakingMacroInput {
                     syn::Ident::new(&format!("receiver{}", i), proc_macro2::Span::call_site());
                 let temp_type = syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! { let ( #temp_sender , #temp_receiver ) =
-                <#temp_type as mpstthree::binary::struct_trait::Session>::new() ; }
+                <#temp_type as mpstthree::binary::struct_trait::session::Session>::new() ; }
             })
             .collect();
 
@@ -1904,10 +1974,42 @@ impl BakingMacroInput {
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
-                quote! { result = format!(
-                    "{} + {}",
-                    result,
-                    <#temp_ident as mpstthree::binary::struct_trait::Session>::head_str()) ;
+                quote! {
+                    if result == "".to_string() {
+                        result = format!(
+                            "{}",
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
+                        ) ;
+                    } else {
+                        result = format!(
+                            "{}\n{}",
+                            result,
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
+                        );
+                    }
+                }
+            })
+            .collect();
+
+        let tail_str: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+            .map(|i| {
+                let temp_ident =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                quote! {
+                    if result == "".to_string() {
+                        result = format!(
+                            "{}<{}>",
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
+                        ) ;
+                    } else {
+                        result = format!(
+                            "{}\n{}<{}>",
+                            result,
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
+                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
+                        ) ;
+                    }
                 }
             })
             .collect();
@@ -2033,7 +2135,7 @@ impl BakingMacroInput {
                 #( #session_types_struct )*
                 R: mpstthree::role::Role,
                 N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::Session for #meshedchannels_name<
+            > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
                 #(
                     #session_types , )*
                     R,
@@ -2065,26 +2167,56 @@ impl BakingMacroInput {
                         }
                     )
                 }
+
                 #[doc(hidden)]
                 fn head_str() -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
                     #( #head_str )*
                     format!(
-                        "{} + {} + {}",
+                        "{}\n{}\n{}",
                         result,
-                        R::head_str(),
-                        N::head_str()
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
                     )
                 }
+
                 #[doc(hidden)]
                 fn tail_str() -> String {
-                    let mut result = String::from("");
+                    let mut result = "".to_string();
+                    #( #tail_str )*
+                    format!(
+                        "{}\n{}<{}>\n{}<{}>",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    let mut result = "".to_string();
                     #( #head_str )*
                     format!(
-                        " {} + {} + {}",
+                        "{}\n{}\n{}",
                         result,
-                        R::tail_str(),
-                        N::head_str()
+                        <R as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::head_str()
+                    )
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    let mut result = "".to_string();
+                    #( #tail_str )*
+                    format!(
+                        "{}\n{}<{}>\n{}<{}>",
+                        result,
+                        <R as mpstthree::role::Role>::head_str(),
+                        <R as mpstthree::role::Role>::tail_str(),
+                        <N as mpstthree::role::Role>::head_str(),
+                        <N as mpstthree::role::Role>::tail_str()
                     )
                 }
             }

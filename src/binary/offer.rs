@@ -1,6 +1,6 @@
 use crate::binary::cancel::cancel;
 use crate::binary::recv::recv;
-use crate::binary::struct_trait::{End, Recv, Session};
+use crate::binary::struct_trait::{end::End, recv::Recv, session::Session};
 use either::Either;
 use std::boxed::Box;
 use std::error::Error;
@@ -35,25 +35,6 @@ macro_rules! offer {
             let (l, s) = mpstthree::binary::recv::recv($session)?;
             mpstthree::binary::cancel::cancel(s);
             match l {
-                $(
-                    $pat => $result,
-                )*
-            }
-        })()
-    };
-}
-
-/// Offer a choice between many different sessions wrapped
-/// in an `enum`
-#[macro_export]
-macro_rules! offer_tcp {
-    ($session: expr, { $( $pat: pat => $result: expr , )* }) => {
-        (move || -> Result<_, _> {
-            let ((data, cont), s) = mpstthree::binary::recv::recv($session)?;
-            mpstthree::binary::cancel::cancel(s);
-            mpstthree::binary::cancel::cancel(data);
-
-            match cont {
                 $(
                     $pat => $result,
                 )*

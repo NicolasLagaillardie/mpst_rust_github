@@ -1,6 +1,4 @@
-// use hyper::body::HttpBody as _;
 use hyper::{Body, Client, Method, Request, Response, StatusCode};
-// use tokio::io::{stdout, AsyncWriteExt as _};
 
 #[tokio::main]
 async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync>> {
