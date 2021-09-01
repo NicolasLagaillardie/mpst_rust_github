@@ -5,6 +5,7 @@
 set -e
 
 rm -rf cfsm/
+cargo clean
 
 # echo "cargo fmt started"
 # cargo fmt
