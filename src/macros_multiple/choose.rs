@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// CHOICE
+//! This module contains the macros
+//! for creating choose functions for any number
+//! of participants.
 
 /// Create the *ChooseMpst* type to be used with more than 3 participants.
 ///

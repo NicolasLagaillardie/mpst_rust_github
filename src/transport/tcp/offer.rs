@@ -1,3 +1,7 @@
+//! This module contains the macros for
+//! receiving a choice
+//! for a TCP connection.
+
 /// Offer a choice between many different sessions wrapped
 /// in an `enum`
 #[macro_export]

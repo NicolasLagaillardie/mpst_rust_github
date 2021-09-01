@@ -1,3 +1,7 @@
+//! This module contains the required definitions and
+//! functions for a role to broadcast multiple choices.
+//! Its dual is it self.
+
 use crossbeam_channel::{bounded, Receiver, Sender};
 
 /// This structure is used for closing a stack for an active role
@@ -14,7 +18,9 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// ```
 #[derive(Debug)]
 pub struct RoleBroadcast {
+    #[doc(hidden)]
     pub sender: Sender<()>,
+    #[doc(hidden)]
     pub receiver: Receiver<()>,
 }
 

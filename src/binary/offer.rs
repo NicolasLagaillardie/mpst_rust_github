@@ -1,3 +1,7 @@
+//! This module contains the functions and macros
+//! for receiving
+//! a choice for binary sessions.
+
 use crate::binary::cancel::cancel;
 use crate::binary::recv::recv;
 use crate::binary::struct_trait::{end::End, recv::Recv, session::Session};

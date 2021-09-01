@@ -1,3 +1,7 @@
+//! This module contains the macros for
+//! choosing a specific branch
+//! for a TCP connection.
+
 /// Choose between many different sessions wrapped in an
 /// `enum`
 #[macro_export]

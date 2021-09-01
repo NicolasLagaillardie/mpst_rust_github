@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// CHOOSE
+//! This module contains the macros
+//! for creating choose functions for three
+//! of participants, whatever are their name.
 
 /// Create the core for the choose_mpst macros
 #[macro_export]

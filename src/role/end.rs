@@ -1,3 +1,7 @@
+//! This module contains the required definitions and
+//! functions for closing a stack.
+//! Its dual is it self.
+
 use crossbeam_channel::{bounded, Receiver, Sender};
 
 /// This structure is used to close an ordering or a name.
@@ -12,7 +16,9 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// ```
 #[derive(Debug)]
 pub struct RoleEnd {
+    #[doc(hidden)]
     pub sender: Sender<()>,
+    #[doc(hidden)]
     pub receiver: Receiver<()>,
 }
 

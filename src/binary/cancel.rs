@@ -1,3 +1,6 @@
+//! This module contains the functions
+//! for cancelling binary sessions.
+
 use std::mem;
 use std::net::{Shutdown, TcpStream};
 

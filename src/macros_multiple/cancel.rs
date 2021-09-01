@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// CHOICE
+//! This module contains the macros
+//! for creating cancellation functions for any number
+//! of participants.
 
 /// Creates a function that will cancel a session and send a `Cancel` signal to the broadcasting role.
 ///

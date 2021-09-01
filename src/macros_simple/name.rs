@@ -1,3 +1,6 @@
+//! This module contains the macros
+//! for creating new participants.
+
 /// Create a new [`Role`] and its dual.
 ///
 /// # Arguments

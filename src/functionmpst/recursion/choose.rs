@@ -1,3 +1,8 @@
+//! This module contains the *choose* macros
+//! for recursion for roles A, B and C.
+//! They all accept the current session
+//! and the different branches.
+
 #[doc(hidden)]
 #[macro_export]
 macro_rules! choose_aux {
@@ -56,7 +61,7 @@ macro_rules! choose_aux {
 /// TO TEST
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
-    ($session: expr, $labelone: path, $labeltwo: path) => {{
+    ($session: expr, $( $label: path),+ $(,)? ) => {{
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -64,8 +69,7 @@ macro_rules! choose_mpst_a_to_all {
 
         mpstthree::choose_aux!(
             $session,
-            $labelone,
-            $labeltwo, =>
+            $( $label , )+ =>
             RoleB,
             RoleC, =>
             RoleA,
@@ -109,7 +113,7 @@ macro_rules! choose_mpst_a_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
-    ($session: expr, $labelone: path, $labeltwo: path) => {{
+    ($session: expr,  $( $label: path),+ $(,)? ) => {{
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -117,8 +121,7 @@ macro_rules! choose_mpst_b_to_all {
 
         mpstthree::choose_aux!(
             $session,
-            $labelone,
-            $labeltwo, =>
+            $( $label , )+ =>
             RoleA,
             RoleC, =>
             RoleB,
@@ -162,7 +165,7 @@ macro_rules! choose_mpst_b_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
-    ($session: expr, $labelone: path, $labeltwo: path) => {{
+    ($session: expr,  $( $label: path),+ $(,)? ) => {{
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -170,8 +173,7 @@ macro_rules! choose_mpst_c_to_all {
 
         mpstthree::choose_aux!(
             $session,
-            $labelone,
-            $labeltwo, =>
+            $( $label , )+ =>
             RoleA,
             RoleB, =>
             RoleC,

@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// RECV
+//! This module contains the macros
+//! for creating receive functions for three
+//! of participants, whatever are their name.
 
 /// Create a *recv* function to recv on the first binary
 /// session from any kind of role.  Must be used with

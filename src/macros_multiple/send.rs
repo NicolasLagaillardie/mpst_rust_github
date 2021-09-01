@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// SEND
+//! This module contains the macros
+//! for creating send functions for any number
+//! of participants.
 
 /// Shorter way to call the code within the send function instead of having to create the function
 /// itself.

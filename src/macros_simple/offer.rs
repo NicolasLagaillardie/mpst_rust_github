@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// OFFER
+//! This module contains the macros
+//! for creating offer functions for three
+//! of participants, whatever are their name.
 
 /// Create an *offer* function to recv on the first binary
 /// session from any kind of role.  Must be used with

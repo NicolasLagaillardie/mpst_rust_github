@@ -1,6 +1,11 @@
 #![cfg(feature = "baking")]
 
-/// Create a new SessionMST structuren, new roles and the baking environment.
+//! This module contains the macros for
+//! creating the different structures and
+//! associated functions for any number
+//! of participants to simplify send/recv.
+
+/// Create a new SessionMST structure, new roles and the baking environment.
 ///
 /// # Arguments
 ///

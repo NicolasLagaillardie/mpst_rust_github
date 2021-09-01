@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// CLOSE
+//! This module contains the macros
+//! for creating close functions for any number
+//! of participants.
 
 /// Create the close function to be used with more than 3
 /// participants.

@@ -197,6 +197,16 @@ baking = ["default", "macros_multiple"]
 transport = ["default", "hyper", "hyper-tls", "tokio"]
 full = ["checking", "baking", "transport"]
 
+
+###################################
+
+# docs.rs-specific configuration
+[package.metadata.docs.rs]
+# document all features
+all-features = true
+# defines the configuration attribute `docsrs`
+rustdoc-args = ["--cfg", "docsrs"]
+
 ###################################
 
 [badges]

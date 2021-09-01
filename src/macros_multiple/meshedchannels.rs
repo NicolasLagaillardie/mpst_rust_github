@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// MeshedChannels
+//! This module contains the macros
+//! for creating MeshedChannels for any number
+//! of participants.
 
 /// Creates a MeshedChannels for more than 3 participants.
 ///

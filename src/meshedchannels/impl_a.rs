@@ -1,3 +1,6 @@
+//! The different associated functions for role A
+//! with only A, B and C in the protocol.
+
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
 use crate::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
@@ -25,6 +28,7 @@ type ResultType<T, S1, S2, R> = Result<(T, ReturnType<S1, S2, R>), Box<dyn Error
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     MeshedChannels<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
 {
+    /// Send a payload of type T to role B
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
         send_aux_simple!(self, payload, RoleB, 1)
     }
@@ -33,6 +37,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleA<RoleEnd>>
 {
+    /// Send a payload of type T to role C
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
         send_aux_simple!(self, payload, RoleC, 2)
     }
@@ -41,6 +46,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     MeshedChannels<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>
 {
+    /// Receive a payload from role B
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_aux_simple!(self, RoleB, 1)()
     }
@@ -49,6 +55,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
     MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>
 {
+    /// Receive a payload from role C
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
         recv_aux_simple!(self, RoleC, 2)()
     }
@@ -57,6 +64,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 impl<S1: Session, S2: Session, T: marker::Send>
     MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>
 {
+    #[doc(hidden)]
     pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
         recv_all_aux_simple!(self, RoleAlltoB, 1)()
     }
@@ -65,6 +73,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
 impl<S1: Session, S2: Session, T: marker::Send>
     MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>
 {
+    #[doc(hidden)]
     pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
         recv_all_aux_simple!(self, RoleAlltoC, 2)()
     }
@@ -78,6 +87,7 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
         RoleA<RoleEnd>,
     >
 {
+    /// Receive a binary choice from role B
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
         F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
@@ -97,6 +107,7 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
         RoleA<RoleEnd>,
     >
 {
+    /// Receive a binary choice from role C
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
         F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
@@ -202,6 +213,7 @@ impl<
         RoleA<RoleEnd>,
     >
 {
+    /// Choose the left branch of a binary choice and send it to B and C
     pub fn choose_left(
         self,
     ) -> MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, R4, RoleA<RoleEnd>> {
@@ -220,6 +232,7 @@ impl<
         )
     }
 
+    /// Choose the right branch of a binary choice and send it to B and C
     pub fn choose_right(
         self,
     ) -> MeshedChannels<<S4 as Session>::Dual, <S5 as Session>::Dual, R5, RoleA<RoleEnd>> {
@@ -240,6 +253,7 @@ impl<
 }
 
 impl MeshedChannels<End, End, RoleEnd, RoleA<RoleEnd>> {
+    /// Close the current connection
     pub fn close(self) -> Result<(), Box<dyn Error>> {
         close_mpst(self)
     }

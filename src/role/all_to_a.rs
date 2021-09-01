@@ -1,3 +1,8 @@
+//! This module contains the required definitions and
+//! functions for the basic role A when it is receiving
+//! an external choice.
+//! Its dual is [RoleAtoAll](crate::role::a_to_all::RoleAtoAll).
+
 use crate::role::a_to_all::RoleAtoAll;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
@@ -24,7 +29,9 @@ where
     R1::Dual: Role,
     R2::Dual: Role,
 {
+    #[doc(hidden)]
     pub sender1: Sender<R1::Dual>,
+    #[doc(hidden)]
     pub sender2: Sender<R2::Dual>,
 }
 

@@ -1,3 +1,7 @@
+//! This module contains the functions for
+//! receiving a payload
+//! for a TCP connection.
+
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use std::boxed::Box;
 use std::error::Error;

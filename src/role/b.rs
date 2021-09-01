@@ -1,3 +1,7 @@
+//! This module contains the required definitions and
+//! functions for the basic role B.
+//! Its dual is [RoleBDual](crate::role::b_dual::RoleBDual).
+
 use crate::role::b_dual::RoleBDual;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
@@ -25,6 +29,7 @@ where
     R: Role,
     R::Dual: Role,
 {
+    #[doc(hidden)]
     pub sender: Sender<R::Dual>,
 }
 

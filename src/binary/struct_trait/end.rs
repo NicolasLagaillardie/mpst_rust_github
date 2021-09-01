@@ -1,3 +1,6 @@
+//! This module contains the definition and associated functions and traits
+//! for the End structure.
+
 use crate::binary::struct_trait::session::Session;
 use crossbeam_channel::{bounded, Receiver, Sender};
 use std::error::Error;
@@ -8,14 +11,20 @@ use std::str::FromStr;
 #[must_use]
 #[derive(Debug)]
 pub struct End {
+    #[doc(hidden)]
     pub sender: Sender<Signal>,
+    #[doc(hidden)]
     pub receiver: Receiver<Signal>,
 }
 
+#[doc(hidden)]
 #[derive(Debug)]
 pub enum Signal {
+    #[doc(hidden)]
     Offer(End),
+    #[doc(hidden)]
     Stop,
+    #[doc(hidden)]
     Cancel,
 }
 
@@ -60,6 +69,7 @@ impl Session for End {
     }
 }
 
+#[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct EndError {
     details: String,
@@ -74,7 +84,7 @@ impl EndError {
 }
 
 impl fmt::Display for EndError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Expected `End`, found {:?}", self.details)
     }
 }

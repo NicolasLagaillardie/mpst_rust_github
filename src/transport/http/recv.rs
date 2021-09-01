@@ -1,3 +1,7 @@
+//! This module contains the functions and macros for
+//! receiving a payload
+//! for an HTTP connection, for at least two participants.
+
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use hyper::client::ResponseFuture;
 use hyper::{Body, Response};

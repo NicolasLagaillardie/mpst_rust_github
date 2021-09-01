@@ -1,3 +1,7 @@
+//! This module contains the functions and macros
+//! for sending
+//! a choice for binary sessions.
+
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
 use crate::binary::struct_trait::{end::End, send::Send, session::Session};

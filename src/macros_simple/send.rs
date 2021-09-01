@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// SEND
+//! This module contains the macros
+//! for creating send functions for three
+//! of participants, whatever are their name.
 
 /// Create a *send* function to send on the first binary
 /// session from any kind of role.  Must be used with

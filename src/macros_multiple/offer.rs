@@ -1,5 +1,7 @@
 ////////////////////////////////////////////
-/// OFFER
+//! This module contains the macros
+//! for creating offer functions for any number
+//! of participants.
 
 /// Create the *OfferMpst* type to be used with more than 3 participants.
 ///

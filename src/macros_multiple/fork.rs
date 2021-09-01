@@ -1,5 +1,6 @@
-////////////////////////////////////////////
-/// FORK
+//! This module contains the macros
+//! for creating fork functions for any number
+//! of participants.
 
 /// Creates the _fork_ function to be used with more than 3
 /// participants.
