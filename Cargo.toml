@@ -48,7 +48,7 @@ required-features = ["checking"]
 [[test]]
 name = "binary"
 path = "tests/binary.rs"
-required-features = []
+required-features = ["binary"]
 
 [[test]]
 name = "cancel"
