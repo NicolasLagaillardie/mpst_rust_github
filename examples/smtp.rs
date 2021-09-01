@@ -11,6 +11,7 @@ use mpstthree::{
 };
 
 use rand::{thread_rng, Rng};
+
 use std::error::Error;
 
 // global protocol Smtp(role S, role C)

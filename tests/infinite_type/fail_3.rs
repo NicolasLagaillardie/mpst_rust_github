@@ -1,9 +1,3 @@
-#[cfg(feature = "full")]
-extern crate mpstthree;
-
-#[cfg(feature = "rand")]
-extern crate rand;
-
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::binary::*;
 use mpstthree::choose;
@@ -13,7 +7,6 @@ use rand::{thread_rng, Rng};
 
 use std::boxed::Box;
 use std::error::Error;
-use std::marker;
 
 enum SumOp {
     More(Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<Self, End>>>>>),

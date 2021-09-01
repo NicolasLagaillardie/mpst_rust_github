@@ -1,11 +1,11 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use std::error::Error;
 use std::marker;
 

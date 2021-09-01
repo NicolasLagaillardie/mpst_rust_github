@@ -6,6 +6,9 @@ use mpstthree::{
 };
 
 use mpstthree::role::broadcast::RoleBroadcast;
+
+use rand::{thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 
@@ -82,7 +85,7 @@ type EndpointB<N> = MeshedChannelsTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE, 1)
+    recurs_a(s, thread_rng().gen_range(1..20), 1)
 }
 
 fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
@@ -140,5 +143,3 @@ fn main() {
     thread_a.join().unwrap();
     thread_b.join().unwrap();
 }
-
-static SIZE: i64 = 10;
