@@ -105,7 +105,7 @@ required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "actyx_os_logging"
-required-features = ["macros_multiple"]
+required-features = ["macros_multiple", "rand"]
 
 [[example]]
 name = "distributed_calc"

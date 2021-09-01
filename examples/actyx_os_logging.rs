@@ -6,6 +6,8 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
 };
 
+use rand::{thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 
@@ -118,9 +120,11 @@ type EndpointLogsInit<N> =
     MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_controller_to_logs(100, s)?;
+    let start = thread_rng().gen_range(5..100);
 
-    recurs_0_controller(s, 100)
+    let s = send_controller_to_logs(start, s)?;
+
+    recurs_0_controller(s, start)
 }
 
 fn recurs_0_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
