@@ -8,7 +8,7 @@
 [![Minimum rustc version](https://img.shields.io/badge/rustc-1.53+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
-[![License: MIT](https://img.shields.io/crates/l/mpstthree.svg)](#license)
+<!-- [![License: "MIT OR Apache-2.0"](https://img.shields.io/crates/l/mpstthree.svg)](#license) -->
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
 It relies on [sesh](https://github.com/wenkokke/sesh).
@@ -225,7 +225,8 @@ See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE)
+or [MIT license](LICENSE-MIT) at your option.
 
 ## Acknowledgment
 
