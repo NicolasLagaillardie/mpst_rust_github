@@ -74,5 +74,6 @@ cargo run --example video_stream --features="macros_simple rand"
 # cargo test --verbose --all -- --nocapture
 RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture
 # RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture --skip kmc
+cargo test --verbose --all --no-default-features --no-run
 # cargo test --verbose --all-features
 # cargo bench --verbose --all
