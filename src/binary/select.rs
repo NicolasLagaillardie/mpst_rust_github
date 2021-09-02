@@ -1,4 +1,4 @@
-//! This module contains the functions for 
+//! This module contains the functions for
 //! selecting the first active session.
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
