@@ -1,3 +1,6 @@
+//! This module contains the functions for sending
+//! a payload for binary sessions.
+
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::{send::Send, session::Session};
 use std::boxed::Box;

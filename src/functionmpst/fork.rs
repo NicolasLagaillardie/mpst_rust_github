@@ -37,9 +37,6 @@ where
 /// # Example
 ///
 /// ```
-/// use std::boxed::Box;
-/// use std::collections::hash_map::RandomState;
-/// use std::collections::HashMap;
 /// use std::error::Error;
 ///
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
@@ -81,14 +78,14 @@ where
 /// fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
 /// {
 ///     let s = send_mpst_a_to_b(1, s);
-///     let (x, s) = recv_mpst_a_from_c(s)?;
+///     let (_x, s) = recv_mpst_a_from_c(s)?;
 ///     close_mpst(s)
 /// }
 ///
 /// /// Single test for B
 /// fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>>
 /// {
-///     let (x, s) = recv_mpst_b_from_a(s)?;
+///     let (_x, s) = recv_mpst_b_from_a(s)?;
 ///     let s = send_mpst_b_to_c(2, s);
 ///     close_mpst(s)
 /// }
@@ -97,7 +94,7 @@ where
 /// fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
 /// {
 ///     let s = send_mpst_c_to_a(3, s);
-///     let (x, s) = recv_mpst_c_from_b(s)?;
+///     let (_x, s) = recv_mpst_c_from_b(s)?;
 ///     close_mpst(s)
 /// }
 /// let (thread_a, thread_b, thread_c) = fork_mpst(

@@ -20,8 +20,6 @@ use std::error::Error;
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::b::RoleB;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::close::close_mpst;
@@ -35,9 +33,6 @@ use std::error::Error;
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointA = MeshedChannels<AtoB, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -57,7 +52,7 @@ use std::error::Error;
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = close_mpst(sess);
+/// let _s = close_mpst(sess);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels

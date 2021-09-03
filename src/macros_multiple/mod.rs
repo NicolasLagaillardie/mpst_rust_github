@@ -9,14 +9,32 @@
 //!
 //! [`create_normal_role`]: crate::create_normal_role
 //! [`create_meshedchannels`]: crate::create_meshedchannels
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"macros_multiple"` feature.*
 
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod cancel;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod choose;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod close;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod fork;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod meshedchannels;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod offer;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod recv;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod send;
 
 /// Creates the structure MeshedChannels
@@ -41,7 +59,11 @@ pub mod send;
 /// [`create_meshedchannels`]: crate::create_meshedchannels
 /// [`close_mpst`]: crate::close_mpst
 /// [`fork_mpst_multi`]: crate::fork_mpst_multi
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! bundle_struct_fork_close_multi {
     ($func_name_close: ident, $func_name_fork: ident, $meshedchannels_name: ident, $nsessions: literal) => {
         mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
@@ -75,7 +97,11 @@ macro_rules! bundle_struct_fork_close_multi {
 /// [`create_meshedchannels`]: crate::create_meshedchannels
 /// [`close_mpst_cancel`]: crate::close_mpst_cancel
 /// [`fork_mpst_multi`]: crate::fork_mpst_multi
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! bundle_struct_fork_close_multi_cancel {
     ($func_name_close: ident, $func_name_fork: ident, $meshedchannels_name: ident, $nsessions: literal) => {
         mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);

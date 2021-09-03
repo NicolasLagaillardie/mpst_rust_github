@@ -1,5 +1,9 @@
-////////////////////////////////////////////
-/// OFFER
+//! This module contains the macros
+//! for creating offer functions for three
+//! of participants, whatever are their name.
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"macros_simple"` feature.*
 
 /// Create an *offer* function to recv on the first binary
 /// session from any kind of role.  Must be used with
@@ -32,7 +36,11 @@
 /// ```
 ///
 /// [`MeshedChannels`]:.crate::meshedchannels::MeshedChannels.
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_simple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_offer_mpst_session_1 {
     ($func_name: ident, $role: ident, $name: ident) => {
         mpst_seq::create_offer_mpst_session_multi!(
@@ -78,7 +86,11 @@ macro_rules! create_offer_mpst_session_1 {
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_simple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {
         mpst_seq::create_offer_mpst_session_multi!(

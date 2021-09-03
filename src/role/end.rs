@@ -1,3 +1,8 @@
+//! This module contains the required definitions and
+//! functions for closing a stack.
+//! Its dual is it self.
+
+use crate::role::Role;
 use crossbeam_channel::{bounded, Receiver, Sender};
 
 /// This structure is used to close an ordering or a name.
@@ -5,18 +10,23 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::end::End;
+/// use mpstthree::role::Role; // Only used for example
+/// use mpstthree::role::end::RoleEnd;
 ///
 /// // Creating the binary sessions
-/// type Close = End;
+/// type Close = RoleEnd;
+///
+/// let _ = Close::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleEnd {
+    #[doc(hidden)]
     pub sender: Sender<()>,
+    #[doc(hidden)]
     pub receiver: Receiver<()>,
 }
 
-impl crate::role::Role for RoleEnd {
+impl Role for RoleEnd {
     type Dual = RoleEnd;
 
     #[doc(hidden)]

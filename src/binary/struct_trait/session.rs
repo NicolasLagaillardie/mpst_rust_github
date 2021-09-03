@@ -1,3 +1,5 @@
+//! This module contains the trait for session types. Provides duality.
+
 use std::marker;
 
 /// Trait for session types. Provides duality.

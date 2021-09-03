@@ -28,13 +28,35 @@ pub mod impl_c;
 /// The structure which encapsulates two binary session
 /// types, a stack and a name.
 ///
+/// # Arguments
+///
+/// * The first binary [`session`](crate::binary::struct_trait::session::Session).
+///     It must be filled with [`Send`](crate::binary::struct_trait::send::Send) and/or
+///     [`Recv`](crate::binary::struct_trait::recv::Recv) and end with
+///     [`End`](crate::binary::struct_trait::end::End).
+///
+/// * The second binary [`session`](crate::binary::struct_trait::session::Session).
+///     It must be filled with [`Send`](crate::binary::struct_trait::send::Send) and/or
+///     [`Recv`](crate::binary::struct_trait::recv::Recv) and end with
+///     [`End`](crate::binary::struct_trait::end::End).
+///
+/// * The stack of the MeshedChannels.
+///     It must be filled with a role, such as [`RoleA`](crate::role::a::RoleA) or
+///     [`RoleBtoAll`](crate::role::b_to_all::RoleBtoAll) and end with
+///     [`RoleEnd`](crate::role::end::RoleEnd).
+///
+/// * The name of the role of the MeshedChannels.
+///     It must be one among: *RoleA<RoleEnd>*, *RoleB<RoleEnd>* or
+///     *RoleC<RoleEnd>*.
+///
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 ///
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///
+/// use mpstthree::binary::struct_trait::session::Session; // Only used for example
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
@@ -49,6 +71,8 @@ pub mod impl_c;
 ///
 /// // Creating the MP sessions
 /// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+///
+/// let _ = EndpointA::<i32>::new(); // Only used for example
 /// ```
 #[must_use]
 #[derive(Debug)]
@@ -59,9 +83,13 @@ where
     R: Role,
     N: Role,
 {
+    #[doc(hidden)]
     pub session1: S1,
+    #[doc(hidden)]
     pub session2: S2,
+    #[doc(hidden)]
     pub stack: R,
+    #[doc(hidden)]
     pub name: N,
 }
 

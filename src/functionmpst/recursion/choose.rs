@@ -1,51 +1,9 @@
-/// Choose among different sessions that are provided.
-///
-/// # Arguments
-///
-///  * The session to be used
-///  * The different `enum` variants which represent the different branches to be sent to each
-///    passive role
-///  * The different passive roles
-///  * The name of the sender
-///  * The name of the *MeshedChannels* type that will be used
-///  * The index of the active role
-///
-/// # Example
-///
-/// Available on the *cases/13_macro_multi_recursion* test.
-///
-/// ```ignore
-/// match xs.pop() {
-///    Option::Some(_) => {
-///        let s = choose_aux!(
-///            s,
-///            CBranchesAtoC::Video,
-///            CBranchesBtoC::Video, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
-///            MeshedChannels,
-///            3
-///        );
-///        let s = send_mpst_d_to_a(1, s);
-///        let (_, s) = recv_mpst_d_from_a(s)?;
-///        client_recurs(s, xs, index + 1)
-///    }
-///    Option::None => {
-///        let s = choose_aux!(
-///            s,
-///            CBranchesAtoC::End,
-///            CBranchesBtoC::End, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
-///            MeshedChannels,
-///            3
-///        );
-///        close_mpst_multi(s)
-///    }
-/// }
-/// ```
+//! This module contains the *choose* macros
+//! for recursion for roles A, B and C.
+//! They all accept the current session
+//! and the different branches.
+
+#[doc(hidden)]
 #[macro_export]
 macro_rules! choose_aux {
     (
@@ -103,7 +61,7 @@ macro_rules! choose_aux {
 /// TO TEST
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
-    ($session: expr, $labelone: path, $labeltwo: path) => {{
+    ($session: expr, $( $label: path),+ $(,)? ) => {{
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -111,8 +69,7 @@ macro_rules! choose_mpst_a_to_all {
 
         mpstthree::choose_aux!(
             $session,
-            $labelone,
-            $labeltwo, =>
+            $( $label , )+ =>
             RoleB,
             RoleC, =>
             RoleA,
@@ -156,7 +113,7 @@ macro_rules! choose_mpst_a_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
-    ($session: expr, $labelone: path, $labeltwo: path) => {{
+    ($session: expr,  $( $label: path),+ $(,)? ) => {{
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -164,8 +121,7 @@ macro_rules! choose_mpst_b_to_all {
 
         mpstthree::choose_aux!(
             $session,
-            $labelone,
-            $labeltwo, =>
+            $( $label , )+ =>
             RoleA,
             RoleC, =>
             RoleB,
@@ -209,7 +165,7 @@ macro_rules! choose_mpst_b_to_all {
 /// ```
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
-    ($session: expr, $labelone: path, $labeltwo: path) => {{
+    ($session: expr,  $( $label: path),+ $(,)? ) => {{
         use mpstthree::role::a::RoleA;
         use mpstthree::role::b::RoleB;
         use mpstthree::role::c::RoleC;
@@ -217,8 +173,7 @@ macro_rules! choose_mpst_c_to_all {
 
         mpstthree::choose_aux!(
             $session,
-            $labelone,
-            $labeltwo, =>
+            $( $label , )+ =>
             RoleA,
             RoleB, =>
             RoleC,

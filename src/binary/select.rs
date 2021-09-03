@@ -1,3 +1,6 @@
+//! This module contains the functions for
+//! selecting the first active session.
+
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use crossbeam_channel::Select;
 use std::boxed::Box;
@@ -13,7 +16,7 @@ enum SelectError {
 }
 
 impl fmt::Display for SelectError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             SelectError::EmptyVec => {
                 write!(f, "please use a vector with at least one element")

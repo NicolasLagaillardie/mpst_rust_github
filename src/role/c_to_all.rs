@@ -1,3 +1,8 @@
+//! This module contains the required definitions and
+//! functions for the basic role C when it is making
+//! an internal choice.
+//! Its dual is [RoleAlltoC](crate::role::all_to_c::RoleAlltoC).
+
 use crate::role::all_to_c::RoleAlltoC;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
@@ -10,16 +15,19 @@ use crossbeam_channel::{bounded, Sender};
 /// This `struct` is used for branching without `enum`. See
 /// the test `05_usecase.rs`.
 ///
-/// [`MeshedChannels`]: RoleBroadcastmeshedchannels/struct.MeshedChannels.html
-/// [`Session`]: RoleBroadcastbinary/trait.Session.
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
+/// [`Session`]: crate::binary::struct_trait::session::Session
 ///
 /// # Example
 ///
 /// ```
+/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::c_to_all::RoleCtoAll;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// type NameCtoAllDual = RoleCtoAll<RoleEnd, RoleEnd>;
+///
+/// let _ = NameCtoAllDual::new(); // Only used for example
 /// ```
 /// html
 #[derive(Debug)]
@@ -30,7 +38,9 @@ where
     R1::Dual: Role,
     R2::Dual: Role,
 {
+    #[doc(hidden)]
     pub sender1: Sender<R1::Dual>,
+    #[doc(hidden)]
     pub sender2: Sender<R2::Dual>,
 }
 

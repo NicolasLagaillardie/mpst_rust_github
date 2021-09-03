@@ -1,52 +1,11 @@
-/// Offer a choice between many different sessions wrapped in an `enum`
-///
-/// # Arguments
-///
-/// * The session to be used
-/// * \[Optional\] The *recv* function that will be used
-/// * Each path, which are each variant of the enum which contains the new branches
-/// * The block of code to process each new session
-///
-/// # Basic example
-///
-/// ```ignore
-/// offer_aux!(
-///     s,
-///     recv_mpst_a_from_d,
-///     {
-///         CBranchesAtoC::End(s) => {
-///             close_mpst_multi(s)
-///         },
-///         CBranchesAtoC::Video(s) => {
-///             let (request, s) = recv_mpst_a_from_d(s)?;
-///             let s = send_mpst_a_to_b(request + 1, s);
-///             let (video, s) = recv_mpst_a_from_b(s)?;
-///             let s = send_mpst_a_to_d(video + 1, s);
-///             authenticator_recurs(s)
-///         },
-///     }
-/// )?;
-/// ```
-///
-/// # Baking example
-///
-/// ```ignore
-/// offer_aux!(
-///     s,
-///     {
-///         CBranchesAtoC::End(s) => {
-///             close_mpst_multi(s)
-///         },
-///         CBranchesAtoC::Video(s) => {
-///             let (request, s) = recv_mpst_a_from_d(s)?;
-///             let s = send_mpst_a_to_b(request + 1, s);
-///             let (video, s) = recv_mpst_a_from_b(s)?;
-///             let s = send_mpst_a_to_d(video + 1, s);
-///             authenticator_recurs(s)
-///         },
-///     }
-/// )?;
-/// ```
+//! This module contains the *offer* macros
+//! for recursion for roles A, B and C.
+//! They all accept the current session
+//! and the different branches
+//! the block of code that follows
+//! each branch.
+
+#[doc(hidden)]
 #[macro_export]
 macro_rules! offer_aux {
     ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
@@ -90,7 +49,6 @@ macro_rules! offer_aux {
 #[macro_export]
 macro_rules! offer_mpst_a_to_c {
     ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
-
         use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 
         mpstthree::offer_aux!($session, recv_mpst_a_from_c, { $( $pat => $result , )* })
@@ -125,7 +83,6 @@ macro_rules! offer_mpst_a_to_c {
 #[macro_export]
 macro_rules! offer_mpst_b_to_c {
     ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
-
         use mpstthree::functionmpst::recv::recv_mpst_b_from_c;
 
         mpstthree::offer_aux!($session, recv_mpst_b_from_c, { $( $pat => $result , )* })
@@ -160,20 +117,9 @@ macro_rules! offer_mpst_b_to_c {
 #[macro_export]
 macro_rules! offer_mpst_a_to_b {
     ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
-
         use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 
         mpstthree::offer_aux!($session, recv_mpst_a_from_b, { $( $pat => $result , )* })
-
-        // (move || -> Result<_, Box<dyn std::error::Error>> {
-        //     let (l, s) = mpstthree::functionmpst::recv::recv_mpst_a_from_b($session)?;
-        //     mpstthree::binary::cancel(s);
-        //     match l {
-        //         $(
-        //             $pat => { $result },
-        //         )*
-        //     }
-        // })()
     }};
 }
 
@@ -205,7 +151,6 @@ macro_rules! offer_mpst_a_to_b {
 #[macro_export]
 macro_rules! offer_mpst_b_to_a {
     ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
-
         use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 
         mpstthree::offer_aux!($session, recv_mpst_b_from_a, { $( $pat => $result , )* })
@@ -240,7 +185,6 @@ macro_rules! offer_mpst_b_to_a {
 #[macro_export]
 macro_rules! offer_mpst_c_to_b {
     ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
-
         use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
 
         mpstthree::offer_aux!($session, recv_mpst_c_from_b, { $( $pat => $result , )* })
@@ -275,7 +219,6 @@ macro_rules! offer_mpst_c_to_b {
 #[macro_export]
 macro_rules! offer_mpst_c_to_a {
     ($session: expr, { $( $pat: pat => $result: block , )* }) => {{
-
         use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
 
         mpstthree::offer_aux!($session, recv_mpst_c_from_a, { $( $pat => $result , )* })

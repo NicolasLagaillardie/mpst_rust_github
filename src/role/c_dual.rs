@@ -1,3 +1,6 @@
+//! This module contains the required definitions and
+//! functions for the dual of the basic role C.
+
 use crate::role::c::RoleC;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
@@ -15,10 +18,13 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
+/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::c_dual::RoleCDual;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// type NameCDual = RoleCDual<RoleEnd>;
+///
+/// let _ = NameCDual::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleCDual<R>
@@ -26,6 +32,7 @@ where
     R: Role,
     R::Dual: Role,
 {
+    #[doc(hidden)]
     pub sender: Sender<R::Dual>,
 }
 

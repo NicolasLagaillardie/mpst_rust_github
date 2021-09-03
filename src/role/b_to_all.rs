@@ -1,3 +1,8 @@
+//! This module contains the required definitions and
+//! functions for the basic role B when it is making
+//! an internal choice.
+//! Its dual is [RoleAlltoB](crate::role::all_to_b::RoleAlltoB).
+
 use crate::role::all_to_b::RoleAlltoB;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
@@ -16,10 +21,13 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
+/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::b_to_all::RoleBtoAll;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// type NameBtoAllDual = RoleBtoAll<RoleEnd, RoleEnd>;
+///
+/// let _ = NameBtoAllDual::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleBtoAll<R1, R2>
@@ -29,7 +37,9 @@ where
     R1::Dual: Role,
     R2::Dual: Role,
 {
+    #[doc(hidden)]
     pub sender1: Sender<R1::Dual>,
+    #[doc(hidden)]
     pub sender2: Sender<R2::Dual>,
 }
 

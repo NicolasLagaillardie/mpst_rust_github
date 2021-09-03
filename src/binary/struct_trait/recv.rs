@@ -1,3 +1,6 @@
+//! This module contains the definition and associated functions and traits
+//! for the Recv structure.
+
 use crate::binary::struct_trait::get_blocks;
 use crate::binary::struct_trait::send::Send;
 use crate::binary::struct_trait::session::Session;
@@ -15,9 +18,11 @@ where
     T: marker::Send,
     S: Session,
 {
+    #[doc(hidden)]
     pub channel: Receiver<(T, S)>,
 }
 
+#[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct RecvError {
     details: String,
@@ -32,7 +37,7 @@ impl RecvError {
 }
 
 impl fmt::Display for RecvError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Expected `Recv`, found {:?}", self.details)
     }
 }

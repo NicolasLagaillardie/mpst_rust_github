@@ -1,3 +1,7 @@
+//! This module contains the required definitions and
+//! functions for the basic role B.
+//! Its dual is [RoleBDual](crate::role::b_dual::RoleBDual).
+
 use crate::role::b_dual::RoleBDual;
 use crate::role::Role;
 use crossbeam_channel::{bounded, Sender};
@@ -14,10 +18,13 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
+/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// type NameB = RoleB<RoleEnd>;
+///
+/// let _ = NameB::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleB<R>
@@ -25,6 +32,7 @@ where
     R: Role,
     R::Dual: Role,
 {
+    #[doc(hidden)]
     pub sender: Sender<R::Dual>,
 }
 

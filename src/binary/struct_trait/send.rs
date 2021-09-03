@@ -1,3 +1,6 @@
+//! This module contains the definition and associated functions and traits
+//! for the Send structure.
+
 use crate::binary::struct_trait::get_blocks;
 use crate::binary::struct_trait::recv::Recv;
 use crate::binary::struct_trait::session::Session;
@@ -16,9 +19,11 @@ where
     S: Session,
     S::Dual: Session,
 {
+    #[doc(hidden)]
     pub channel: Sender<(T, S::Dual)>,
 }
 
+#[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct SendError {
     details: String,
@@ -33,7 +38,7 @@ impl SendError {
 }
 
 impl fmt::Display for SendError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Expected `Send`, found {:?}", self.details)
     }
 }

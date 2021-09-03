@@ -1,3 +1,20 @@
+#![allow(
+    clippy::cognitive_complexity,
+    clippy::large_enum_variant,
+    clippy::needless_doctest_main
+)]
+#![warn(
+    missing_debug_implementations,
+    missing_docs,
+    rust_2018_idioms,
+    unreachable_pub
+)]
+#![deny(unused_must_use)]
+#![cfg_attr(docsrs, deny(rustdoc::broken_intra_doc_links))]
+#![doc(test(no_crate_inject, attr(deny(warnings, rust_2018_idioms))))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(docsrs, allow(unused_attributes))]
+
 //! [![github]](https://github.com/NicolasLagaillardie/mpst_rust_github)&ensp;[![crates-io]](https://crates.io/crates/mpstthree)&ensp;[![docs-rs]](https://docs.rs/mpstthree)
 //!
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
@@ -6,7 +23,7 @@
 //!
 //! <br>
 //!
-//! Mpstthree (also called Multi-Crusty) is a library to
+//! Mpstthree (also called MultiCrusty) is a library to
 //! write and check communication protocols based on [Multiparty Session Types](https://mrg.doc.ic.ac.uk/publications/a-very-gentle-introduction-to-multiparty-session-types/).
 //!
 //! Currently this library is geared toward use with [Scribble](https://www.scribble.org/)
@@ -14,47 +31,34 @@
 //!
 //! <br>
 
+#[cfg(feature = "binary")]
 pub mod binary;
 
-#[cfg(feature = "binary")]
-pub use self::binary::*;
-
+#[cfg(feature = "role")]
 pub mod role;
 
-#[cfg(feature = "role")]
-pub use self::role::*;
-
+#[cfg(feature = "meshedchannels")]
 pub mod meshedchannels;
 
-#[cfg(feature = "meshedchannels")]
-pub use self::meshedchannels::*;
-
+#[cfg(feature = "functionmpst")]
 pub mod functionmpst;
 
-#[cfg(feature = "functionmpst")]
-pub use self::functionmpst::*;
-
+#[cfg(feature = "checking")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
 pub mod checking;
 
-#[cfg(feature = "checking")]
-pub use self::checking::*;
-
+#[cfg(feature = "macros_simple")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 pub mod macros_simple;
 
-#[cfg(feature = "macros_simple")]
-pub use self::macros_simple::*;
-
+#[cfg(feature = "macros_multiple")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 pub mod macros_multiple;
 
-#[cfg(feature = "macros_multiple")]
-pub use self::macros_multiple::*;
-
+#[cfg(feature = "baking")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
 pub mod baking;
 
-#[cfg(feature = "baking")]
-pub use self::baking::*;
-
-pub mod transport;
-
 #[cfg(feature = "transport")]
-pub use self::transport::*;
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+pub mod transport;

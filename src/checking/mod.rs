@@ -1,5 +1,12 @@
 #![cfg(feature = "checking")]
 
+//! This module contains the macros and the functions for
+//! checking wether a protocol is well written or not,
+//! according to a bottom-up method.
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"checking"` feature.*
+
 use petgraph::Graph;
 
 use std::collections::hash_map::RandomState;
@@ -10,6 +17,7 @@ use std::io::Write;
 use std::process::Command;
 use std::str;
 
+#[doc(hidden)]
 mod aux_checker;
 
 use aux_checker::*;
@@ -50,7 +58,11 @@ use aux_checker::*;
 /// ```
 ///
 /// [`KMC`]: https://github.com/julien-lange/kmc
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"checking"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
 macro_rules! checker_concat {
     (
         $(
