@@ -16,10 +16,13 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
+/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::all_to_a::RoleAlltoA;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// type NameAlltoADual = RoleAlltoA<RoleEnd, RoleEnd>;
+///
+/// let _ = NameAlltoADual::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleAlltoA<R1, R2>

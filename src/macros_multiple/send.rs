@@ -1,6 +1,9 @@
 //! This module contains the macros
 //! for creating send functions for any number
 //! of participants.
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"macros_multiple"` feature.*
 
 /// Shorter way to call the code within the send function instead of having to create the function
 /// itself.
@@ -32,7 +35,11 @@
 ///    let _s = send_mpst!(s, (), RoleB, RoleA, MeshedChannelsThree, 3, 1);
 /// }
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! send_mpst {
     ($session: expr, $payload: expr, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::send_mpst!(
@@ -63,7 +70,6 @@ macro_rules! send_mpst {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_send_mpst_session, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
@@ -76,7 +82,11 @@ macro_rules! send_mpst {
 ///
 /// create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_session {
     ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_send_mpst_session!(
@@ -107,7 +117,6 @@ macro_rules! create_send_mpst_session {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_send_mpst_cancel, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
@@ -120,7 +129,11 @@ macro_rules! create_send_mpst_session {
 ///
 /// create_send_mpst_cancel!(send_cancel_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_cancel {
     ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_send_mpst_cancel!(
@@ -151,7 +164,6 @@ macro_rules! create_send_mpst_cancel {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_normal_role, create_send_check_cancel, create_meshedchannels};
 ///
 /// create_normal_role!(RoleB, RoleBDual);
@@ -165,7 +177,6 @@ macro_rules! create_send_mpst_cancel {
 /// # Compile fail
 ///
 /// ```compile_fail
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_normal_role, create_send_check_cancel, create_meshedchannels};
 ///
 /// create_normal_role!(RoleA, RoleADual);
@@ -175,7 +186,11 @@ macro_rules! create_send_mpst_cancel {
 ///
 /// create_send_check_cancel!(send_cancel_d_to_b, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_check_cancel {
     ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_send_check_cancel!(
@@ -205,8 +220,7 @@ macro_rules! create_send_check_cancel {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_session, create_send_mpst_session_bundle};
+/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_session_bundle};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
@@ -228,7 +242,11 @@ macro_rules! create_send_check_cancel {
 ///    3
 /// );
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_session_bundle {
     ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(
@@ -260,7 +278,6 @@ macro_rules! create_send_mpst_session_bundle {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_cancel_bundle};
 ///
 /// create_multiple_normal_role!(
@@ -283,7 +300,11 @@ macro_rules! create_send_mpst_session_bundle {
 ///    3
 /// );
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_cancel_bundle {
     ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(
@@ -315,7 +336,6 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_normal_role, create_meshedchannels, create_send_check_cancel_bundle};
 ///
 /// create_normal_role!(RoleA, RoleADual);
@@ -337,7 +357,6 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// # Compile fail
 ///
 /// ```compile_fail
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_check_cancel_bundle};
 ///
 /// create_multiple_normal_role!(
@@ -360,7 +379,11 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///    3
 /// );
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_check_cancel_bundle {
     ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(

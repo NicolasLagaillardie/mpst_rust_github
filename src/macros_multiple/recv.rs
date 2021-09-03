@@ -1,6 +1,9 @@
 //! This module contains the macros
 //! for creating receive functions for any number
 //! of participants.
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"macros_multiple"` feature.*
 
 /// Shorter way to call the code within the recv function instead of having to create the function
 /// itself.
@@ -32,7 +35,11 @@
 ///    let (_payload, _s) = recv_mpst!(s, RoleB, RoleA, MeshedChannelsThree, 3, 1)()?;
 /// }
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! recv_mpst {
     ($session: expr, $sender: ident, $receiver: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::recv_mpst!(
@@ -74,7 +81,11 @@ macro_rules! recv_mpst {
 ///
 /// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session {
     ($func_name: ident, $sender: ident, $receiver: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_recv_mpst_session!(
@@ -127,7 +138,11 @@ macro_rules! create_recv_mpst_session {
 ///    3
 /// );
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"macros_multiple"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session_bundle {
     ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(

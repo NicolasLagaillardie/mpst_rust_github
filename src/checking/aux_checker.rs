@@ -12,27 +12,27 @@ type HashMapStrVecOfStr = HashMap<String, VecOfStr>;
 type GraphOfStrStr = Graph<String, String>;
 type VecOfTuple = Vec<(String, usize)>;
 
-/// Clean the provided session, which should be stringified.
-///
-/// From
-///     "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
-///     binary::struct_trait::recv::Recv<checking_recursion::\
-///     Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
-///     ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
-///     struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
-///     End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
-///     mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
-///     ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
-///
-/// to
-///
-/// [
-///     "Recv<Branches0AtoB,End>",
-///     "Recv<i32,Send<i32,End>>",
-///     "RoleC<RoleC<RoleB<RoleEnd>>>",
-///     "RoleA<RoleEnd>",
-///     "RoleA"
-/// ]
+// Clean the provided session, which should be stringified.
+//
+// From
+//     "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+//     binary::struct_trait::recv::Recv<checking_recursion::\
+//     Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
+//     ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
+//     struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
+//     End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
+//     mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
+//     ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
+//
+// to
+//
+// [
+//     "Recv<Branches0AtoB,End>",
+//     "Recv<i32,Send<i32,End>>",
+//     "RoleC<RoleC<RoleB<RoleEnd>>>",
+//     "RoleA<RoleEnd>",
+//     "RoleA"
+// ]
 #[doc(hidden)]
 pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     // The regex expression
@@ -64,11 +64,11 @@ pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     Ok(full_block)
 }
 
-/// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
-///
-/// Remove the unnecessary terms before each :: (such as mpstthree in mpstthree::Session),
-/// and link each new String with its respective role.
-/// Uses the clean_session() function to achieve the result
+// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
+//
+// Remove the unnecessary terms before each :: (such as mpstthree in mpstthree::Session),
+// and link each new String with its respective role.
+// Uses the clean_session() function to achieve the result
 #[doc(hidden)]
 pub(crate) fn clean_sessions(
     sessions: VecOfStr,
@@ -117,21 +117,21 @@ pub(crate) fn clean_sessions(
     Ok((all_sessions, roles))
 }
 
-/// Separate the different _fields_ of a stringified type.
-///
-/// From
-///     "MeshedChannels<Send<Branches0AtoB,End>,Send\
-///     <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
-///     <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
-///
-/// to
-///
-/// [
-///     "Send<Branches0AtoB,End>",
-///     "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
-///     "RoleC<RoleC<RoleBroadcast>>",
-///     "RoleB<RoleEnd>",
-/// ]
+// Separate the different _fields_ of a stringified type.
+//
+// From
+//     "MeshedChannels<Send<Branches0AtoB,End>,Send\
+//     <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
+//     <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
+//
+// to
+//
+// [
+//     "Send<Branches0AtoB,End>",
+//     "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+//     "RoleC<RoleC<RoleBroadcast>>",
+//     "RoleB<RoleEnd>",
+// ]
 #[doc(hidden)]
 pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
     let mut result = Vec::new();
@@ -173,7 +173,7 @@ pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
     Ok(result)
 }
 
-/// Get the head of a Recv/Send session, its payload and its continuation.
+// Get the head of a Recv/Send session, its payload and its continuation.
 #[doc(hidden)]
 pub(crate) fn get_head_payload_continuation(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
     if full_block == "End" {
@@ -189,9 +189,9 @@ pub(crate) fn get_head_payload_continuation(full_block: &str) -> Result<VecOfStr
     }
 }
 
-/// Extract the correct label for a node from the index_node and the depth of the current node.
-///
-/// From [0, 1, 0, 5] and 2 to "0.1.0".
+// Extract the correct label for a node from the index_node and the depth of the current node.
+//
+// From [0, 1, 0, 5] and 2 to "0.1.0".
 #[doc(hidden)]
 pub(crate) fn extract_index_node(
     index_node: &[usize],
@@ -208,7 +208,7 @@ pub(crate) fn extract_index_node(
     ))
 }
 
-/// Switch all Send and Recv at the head of each session
+// Switch all Send and Recv at the head of each session
 #[doc(hidden)]
 pub(crate) fn build_dual(session: &str) -> Result<String, Box<dyn Error>> {
     if session == "End" {
@@ -729,7 +729,7 @@ pub(crate) fn aux_get_graph(
     }
 }
 
-/// Build the digraphs.
+// Build the digraphs.
 #[doc(hidden)]
 pub(crate) fn get_graph_session(
     current_role: &str,
@@ -801,7 +801,7 @@ pub(crate) fn get_graph_session(
     Ok((result, cfsm_result))
 }
 
-//////////////////////////////////
+///////////////////////
 
 #[cfg(test)]
 mod tests {

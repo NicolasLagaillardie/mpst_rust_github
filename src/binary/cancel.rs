@@ -17,7 +17,7 @@ use std::net::{Shutdown, TcpStream};
 /// use mpstthree::role::end::RoleEnd;
 /// use mpstthree::binary::struct_trait::session::Session;
 ///
-/// let (s, s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
 /// cancel(s);
 /// ```
 pub fn cancel<T>(s: T) {
@@ -40,8 +40,8 @@ pub fn cancel<T>(s: T) {
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use std::net::{TcpListener, TcpStream};
 ///
-/// let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-/// let (s, s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+/// let _listener = TcpListener::bind("0.0.0.0:3333").unwrap();
+/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
 /// let stream = TcpStream::connect("localhost:3333").unwrap();
 /// cancel_tcp(s, stream);
 /// ```

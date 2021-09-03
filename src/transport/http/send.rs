@@ -1,6 +1,9 @@
 //! This module contains the functions and macros for
 //! sending a payload
 //! for an HTTP connection, for at least two participants.
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"transport"` feature.*
 
 use crate::binary::struct_trait::{send::Send, session::Session};
 use hyper::client::ResponseFuture;
@@ -13,6 +16,10 @@ use std::panic;
 
 /// Send a value of type `T` over http. Returns the
 /// continuation of the session `S`. May fail.
+///
+/// *This function is available only if MultiCrusty is built with
+/// the `"transport"` feature.*
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 pub fn send_http<T, S>(
     x: T,
     s: Send<T, S>,
@@ -75,7 +82,6 @@ where
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{create_multiple_normal_role, create_send_http_session, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
@@ -88,7 +94,11 @@ where
 ///
 /// create_send_http_session!(send_http_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"transport"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! create_send_http_session {
     ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_send_http_session!(
@@ -118,8 +128,7 @@ macro_rules! create_send_http_session {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_cancel, create_send_mpst_http_bundle};
+/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_http_bundle};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
@@ -141,7 +150,11 @@ macro_rules! create_send_http_session {
 ///    3
 /// );
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"transport"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! create_send_mpst_http_bundle {
     ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(

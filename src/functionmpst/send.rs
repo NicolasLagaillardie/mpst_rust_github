@@ -29,7 +29,6 @@ macro_rules! send_aux_simple {
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_a_to_b;
@@ -43,9 +42,6 @@ macro_rules! send_aux_simple {
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -65,7 +61,7 @@ macro_rules! send_aux_simple {
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = send_mpst_a_to_b(1, sess);
+/// let _s = send_mpst_a_to_b(1, sess);
 /// ```
 pub fn send_mpst_a_to_b<T, S1, S2, R>(
     x: T,
@@ -93,7 +89,6 @@ where
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_b_to_a;
@@ -107,9 +102,6 @@ where
 ///
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -129,7 +121,7 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = send_mpst_b_to_a(1, sess);
+/// let _s = send_mpst_b_to_a(1, sess);
 /// ```
 pub fn send_mpst_b_to_a<T, S1, S2, R>(
     x: T,
@@ -156,7 +148,6 @@ where
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
@@ -171,9 +162,6 @@ where
 ///
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -193,7 +181,7 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = send_mpst_c_to_a(1, sess);
+/// let _s = send_mpst_c_to_a(1, sess);
 /// ```
 pub fn send_mpst_c_to_a<T, S1, S2, R>(
     x: T,
@@ -220,7 +208,6 @@ where
 /// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
@@ -235,9 +222,6 @@ where
 ///
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointA<N> = MeshedChannels<AtoB, AtoC<N>, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -257,7 +241,7 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = send_mpst_a_to_c(1, sess);
+/// let _s = send_mpst_a_to_c(1, sess);
 /// ```
 pub fn send_mpst_a_to_c<T, S1, S2, R>(
     x: T,
@@ -283,7 +267,6 @@ where
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
@@ -299,9 +282,6 @@ where
 ///
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointB<N> = MeshedChannels<BtoA, BtoC<N>, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -321,7 +301,7 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = send_mpst_b_to_c(1, sess);
+/// let _s = send_mpst_b_to_c(1, sess);
 /// ```
 pub fn send_mpst_b_to_c<T, S1, S2, R>(
     x: T,
@@ -347,7 +327,6 @@ where
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
@@ -363,9 +342,6 @@ where
 ///
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointC<N> = MeshedChannels<CtoA, CtoB<N>, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -385,7 +361,7 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// let s = send_mpst_c_to_b(1, sess);
+/// let _s = send_mpst_c_to_b(1, sess);
 /// ```
 pub fn send_mpst_c_to_b<T, S1, S2, R>(
     x: T,

@@ -1,6 +1,9 @@
 //! This module contains the functions and macros for
 //! receiving a payload
 //! for an HTTP connection, for at least two participants.
+//!
+//! *This module is available only if MultiCrusty is built with
+//! the `"transport"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use hyper::client::ResponseFuture;
@@ -12,6 +15,10 @@ use tokio::runtime::Runtime;
 
 /// Send a value of type `T` over http. Returns the
 /// continuation of the session `S`. May fail.
+///
+/// *This function is available only if MultiCrusty is built with
+/// the `"transport"` feature.*
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 pub fn recv_http<T, S>(
     s: Recv<T, S>,
     http: bool,
@@ -64,7 +71,11 @@ where
 ///
 /// create_recv_http_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"transport"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! create_recv_http_session {
     ($func_name: ident, $sender: ident, $receiver: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
         mpst_seq::create_recv_http_session!(
@@ -118,7 +129,11 @@ macro_rules! create_recv_http_session {
 ///    3
 /// );
 /// ```
+///
+/// *This macro is available only if MultiCrusty is built with
+/// the `"transport"` feature.*
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! create_recv_http_session_bundle {
     ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(

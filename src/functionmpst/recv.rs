@@ -52,7 +52,6 @@ macro_rules! recv_all_aux_simple {
 ///
 /// // Creating the binary sessions
 /// type AtoB = Recv<(), End>;
-/// type BtoA = <AtoB as Session>::Dual;
 ///
 /// // Stack
 /// type StackA = RoleB<RoleEnd>;
@@ -61,10 +60,6 @@ macro_rules! recv_all_aux_simple {
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
 /// type NameB = RoleB<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointA = MeshedChannels<AtoB, End, StackA, NameA>;
-/// type EndpointB = MeshedChannels<BtoA, End, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -94,8 +89,8 @@ macro_rules! recv_all_aux_simple {
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// send_mpst_b_to_a((), sess_b);
-/// recv_mpst_a_from_b(sess_a);
+/// let _ = send_mpst_b_to_a((), sess_b);
+/// let _ = recv_mpst_a_from_b(sess_a).unwrap();
 /// ```
 pub fn recv_mpst_a_from_b<T, S1, S2, R>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
@@ -130,7 +125,6 @@ where
 ///
 /// // Creating the binary sessions
 /// type BtoA = Recv<(), End>;
-/// type AtoB = <BtoA as Session>::Dual;
 ///
 /// // Stack
 /// type StackB = RoleA<RoleEnd>;
@@ -139,10 +133,6 @@ where
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
 /// type NameA = RoleA<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointB = MeshedChannels<BtoA, End, StackB, NameB>;
-/// type EndpointA = MeshedChannels<AtoB, End, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -172,8 +162,8 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// send_mpst_a_to_b((), sess_a);
-/// recv_mpst_b_from_a(sess_b);
+/// let _ = send_mpst_a_to_b((), sess_a);
+/// let _ = recv_mpst_b_from_a(sess_b).unwrap();
 /// ```
 pub fn recv_mpst_b_from_a<T, S1, S2, R>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
@@ -208,7 +198,6 @@ where
 ///
 /// // Creating the binary sessions
 /// type CtoA = Recv<(), End>;
-/// type AtoC = <CtoA as Session>::Dual;
 ///
 /// // Stack
 /// type StackC = RoleA<RoleEnd>;
@@ -217,10 +206,6 @@ where
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
 /// type NameA = RoleA<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointC = MeshedChannels<CtoA, End, StackC, NameC>;
-/// type EndpointA = MeshedChannels<End, AtoC, StackA, NameA>;
 ///
 /// // From this point...
 ///
@@ -250,8 +235,8 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// send_mpst_a_to_c((), sess_a);
-/// recv_mpst_c_from_a(sess_c);
+/// let _ = send_mpst_a_to_c((), sess_a);
+/// let _ = recv_mpst_c_from_a(sess_c).unwrap();
 /// ```
 pub fn recv_mpst_c_from_a<T, S1, S2, R>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
@@ -286,7 +271,6 @@ where
 ///
 /// // Creating the binary sessions
 /// type AtoC = Recv<(), End>;
-/// type CtoA = <AtoC as Session>::Dual;
 ///
 /// // Stack
 /// type StackA = RoleC<RoleEnd>;
@@ -295,10 +279,6 @@ where
 /// // Name
 /// type NameA = RoleA<RoleEnd>;
 /// type NameC = RoleC<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointA = MeshedChannels<End, AtoC, StackA, NameA>;
-/// type EndpointC = MeshedChannels<CtoA, End, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -328,8 +308,8 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// send_mpst_c_to_a((), sess_c);
-/// recv_mpst_a_from_c(sess_a);
+/// let _ = send_mpst_c_to_a((), sess_c);
+/// let _ = recv_mpst_a_from_c(sess_a).unwrap();
 /// ```
 pub fn recv_mpst_a_from_c<T, S1, S2, R>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
@@ -364,7 +344,6 @@ where
 ///
 /// // Creating the binary sessions
 /// type BtoC = Recv<(), End>;
-/// type CtoB = <BtoC as Session>::Dual;
 ///
 /// // Stack
 /// type StackB = RoleC<RoleEnd>;
@@ -373,10 +352,6 @@ where
 /// // Name
 /// type NameB = RoleB<RoleEnd>;
 /// type NameC = RoleC<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointB = MeshedChannels<End, BtoC, StackB, NameB>;
-/// type EndpointC = MeshedChannels<End, CtoB, StackC, NameC>;
 ///
 /// // From this point...
 ///
@@ -406,8 +381,8 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// send_mpst_c_to_b((), sess_c);
-/// recv_mpst_b_from_c(sess_b);
+/// let _ = send_mpst_c_to_b((), sess_c);
+/// let _ = recv_mpst_b_from_c(sess_b).unwrap();
 /// ```
 pub fn recv_mpst_b_from_c<T, S1, S2, R>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
@@ -442,7 +417,6 @@ where
 ///
 /// // Creating the binary sessions
 /// type CtoB = Recv<(), End>;
-/// type BtoC = <CtoB as Session>::Dual;
 ///
 /// // Stack
 /// type StackC = RoleB<RoleEnd>;
@@ -451,10 +425,6 @@ where
 /// // Name
 /// type NameC = RoleC<RoleEnd>;
 /// type NameB = RoleB<RoleEnd>;
-///
-/// // Creating the MP sessions
-/// type EndpointC = MeshedChannels<End, CtoB, StackC, NameC>;
-/// type EndpointB = MeshedChannels<End, BtoC, StackB, NameB>;
 ///
 /// // From this point...
 ///
@@ -484,8 +454,8 @@ where
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
 ///
-/// send_mpst_b_to_c((), sess_b);
-/// recv_mpst_c_from_b(sess_c);
+/// let _ = send_mpst_b_to_c((), sess_b);
+/// let _ = recv_mpst_c_from_b(sess_c).unwrap();
 /// ```
 pub fn recv_mpst_c_from_b<T, S1, S2, R>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleB<R>, RoleC<RoleEnd>>,

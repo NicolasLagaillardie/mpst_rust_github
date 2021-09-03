@@ -29,6 +29,7 @@
 /// bundle_impl!(MeshedChannelsThree => A, B, C => fork_mpst);
 /// ```
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
 macro_rules! bundle_impl {
     (
         $meshedchannels_name: ident =>
@@ -51,6 +52,7 @@ macro_rules! bundle_impl {
         );
     };
 }
+
 /// Create a new SessionMST structuren, new roles and the baking environment.
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:
@@ -84,6 +86,7 @@ macro_rules! bundle_impl {
 /// bundle_impl_with_enum!(MeshedChannelsThree => A, B, C => fork_mpst);
 /// ```
 #[macro_export]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
 macro_rules! bundle_impl_with_enum {
     (
         $meshedchannels_name: ident =>
