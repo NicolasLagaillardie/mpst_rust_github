@@ -428,7 +428,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// Available on the *cancel/cancel_8* test.
 ///
 /// ```compile_fail
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, choose_mpst_multi_cancel_to_all};
+/// use mpstthree::{create_multiple_normal_role, choose_mpst_multi_cancel_to_all};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
