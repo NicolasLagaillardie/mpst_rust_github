@@ -16,7 +16,7 @@
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_offer_type_multi, create_meshedchannels};
+/// use mpstthree::{create_meshedchannels, create_offer_type_multi};
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
@@ -27,7 +27,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_type_multi {
-    ($type_name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
         mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $nsessions);
     };
 }
@@ -52,8 +52,8 @@ macro_rules! create_offer_type_multi {
 ///
 /// ```
 /// use mpstthree::{
-///     create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,
-///     create_offer_type_multi, create_meshedchannels,
+///     create_broadcast_role, create_meshedchannels, create_normal_role,
+///     create_offer_mpst_session_multi, create_offer_type_multi,
 /// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
@@ -78,7 +78,15 @@ macro_rules! create_offer_type_multi {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_mpst_session_multi {
-    ($func_name: ident, $type_name: ident, $role: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $type_name:ident,
+        $role:ident,
+        $name:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             $type_name,

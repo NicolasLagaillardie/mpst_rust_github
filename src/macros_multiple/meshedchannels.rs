@@ -25,7 +25,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_meshedchannels {
-    ($meshedchannels_name: ident, $nsessions: literal) => {
+    ($meshedchannels_name:ident, $nsessions:literal) => {
         mpst_seq::create_meshedchannels!($meshedchannels_name, $nsessions);
     };
 }

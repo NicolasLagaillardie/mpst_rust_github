@@ -16,8 +16,7 @@ pub type Choose<S1, S2> = Send<Either<<S1 as Session>::Dual, <S2 as Session>::Du
 pub fn choose_left<'a, S1, S2>(s: Choose<S1, S2>) -> S1
 where
     S1: Session + 'a,
-    S2: Session + 'a,
-{
+    S2: Session + 'a, {
     let (here, there) = S1::new();
     let s = send(Either::Left(there), s);
     cancel(s);
@@ -29,8 +28,7 @@ where
 pub fn choose_right<'a, S1, S2>(s: Choose<S1, S2>) -> S2
 where
     S1: Session + 'a,
-    S2: Session + 'a,
-{
+    S2: Session + 'a, {
     let (here, there) = S2::new();
     let s = send(Either::Right(there), s);
     cancel(s);
@@ -41,7 +39,7 @@ where
 /// `enum`
 #[macro_export]
 macro_rules! choose {
-    ($label: path, $session: expr) => {{
+    ($label:path, $session:expr) => {{
         let (here, there) = <_ as mpstthree::binary::struct_trait::session::Session>::new();
         let s = mpstthree::binary::send::send($label(there), $session);
         mpstthree::binary::cancel::cancel(s);

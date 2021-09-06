@@ -26,8 +26,7 @@ pub fn recv_http<T, S>(
 ) -> Result<(T, S, Response<Body>), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session,
-{
+    S: Session, {
     // Await the response
     let resp = match http {
         true => {
@@ -77,7 +76,14 @@ where
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! create_recv_http_session {
-    ($func_name: ident, $sender: ident, $receiver: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $sender:ident,
+        $receiver:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_recv_http_session!(
             $func_name,
             $sender,
@@ -98,8 +104,8 @@ macro_rules! create_recv_http_session {
 /// * The name of the new *recv* functions
 /// * The name of the senders
 /// * The name of the receiver
-/// * The index of the binary session types that will receive in the MeshedChannels for each specific
-///   role. Index starts at 1.
+/// * The index of the binary session types that will receive in the MeshedChannels for each
+///   specific role. Index starts at 1.
 /// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///

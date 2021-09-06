@@ -44,10 +44,10 @@ use std::error::Error;
 /// let (name_a, _) = NameA::new();
 ///
 /// let sess = MeshedChannels {
-///   session1: channel_ab,
-///   session2: channel_ac,
-///   stack: role_a,
-///   name: name_a,
+///     session1: channel_ab,
+///     session2: channel_ac,
+///     stack: role_a,
+///     name: name_a,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -58,8 +58,7 @@ use std::error::Error;
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn close_mpst<R>(s: MeshedChannels<End, End, RoleEnd, R>) -> Result<(), Box<dyn Error>>
 where
-    R: Role,
-{
+    R: Role, {
     s.session1.sender.send(Signal::Stop).unwrap_or(());
     s.session2.sender.send(Signal::Stop).unwrap_or(());
 

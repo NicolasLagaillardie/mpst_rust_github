@@ -18,9 +18,9 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::role::Role; // Only used for example
 ///
 /// type NameB = RoleB<RoleEnd>;
 ///
@@ -30,8 +30,7 @@ use crossbeam_channel::{bounded, Sender};
 pub struct RoleB<R>
 where
     R: Role,
-    R::Dual: Role,
-{
+    R::Dual: Role, {
     #[doc(hidden)]
     pub sender: Sender<R::Dual>,
 }

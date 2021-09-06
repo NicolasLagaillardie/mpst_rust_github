@@ -3,6 +3,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_create_multi_to_all,
@@ -10,28 +11,12 @@ use mpstthree::{
     create_send_mpst_session_bundle, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use rand::random;
+
 use std::error::Error;
 use std::time::Duration;
 
-// global protocol HandleDNSRequest(role Handler, role Regional) {
-//     rec QueryResolution {
-//         FindNearestZone(DomainName) from Handler to Regional;
-//         choice at Regional {
-//             ZoneResponse(ZonePID) from Regional to Handler;
-//             Handler initiates GetZoneData(Handler, new Data);
-//             continue QueryResolution;
-//         } or {
-//             InvalidZone() from Regional to Handler;
-//         }
-//     }
-// }
-//
-// global protocol GetZoneData(role Handler, role Data) {
-//     ZoneDataRequest() from Handler to Data;
-//     ZoneDataResponse(RRTree) from Data to Handler;
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

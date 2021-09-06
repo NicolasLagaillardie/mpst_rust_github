@@ -10,9 +10,9 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role; // Only used for example
-/// use mpstthree::role::broadcast::RoleBroadcast;
 /// use mpstthree::role::a::RoleA;
+/// use mpstthree::role::broadcast::RoleBroadcast;
+/// use mpstthree::role::Role; // Only used for example
 ///
 /// type BroadcastA = RoleA<RoleBroadcast>;
 ///

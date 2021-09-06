@@ -18,7 +18,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, MeshedChannels<S1, S2, R, N>),
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_aux_simple {
-    ($session: expr, $role: ident, $exclusion: literal) => {
+    ($session:expr, $role:ident, $exclusion:literal) => {
         mpst_seq::recv_aux_simple!($session, $role, $exclusion)
     };
 }
@@ -26,7 +26,7 @@ macro_rules! recv_aux_simple {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_all_aux_simple {
-    ($session: expr, $role: ident, $exclusion: literal) => {
+    ($session:expr, $role:ident, $exclusion:literal) => {
         mpst_seq::recv_all_aux_simple!($session, $role, $exclusion)
     };
 }
@@ -74,17 +74,17 @@ macro_rules! recv_all_aux_simple {
 /// let (name_b, _) = NameB::new();
 ///
 /// let sess_a = MeshedChannels {
-///   session1: channel_ab,
-///   session2: channel_ac,
-///   stack: role_a,
-///   name: name_a,
+///     session1: channel_ab,
+///     session2: channel_ac,
+///     stack: role_a,
+///     name: name_a,
 /// };
 ///
 /// let sess_b = MeshedChannels {
-///   session1: channel_ba,
-///   session2: channel_bc,
-///   stack: role_b,
-///   name: name_b,
+///     session1: channel_ba,
+///     session2: channel_bc,
+///     stack: role_b,
+///     name: name_b,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -99,8 +99,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
-{
+    R: Role, {
     recv_aux_simple!(s, RoleB, 1)()
 }
 
@@ -147,17 +146,17 @@ where
 /// let (name_a, _) = NameA::new();
 ///
 /// let sess_b = MeshedChannels {
-///   session1: channel_ba,
-///   session2: channel_bc,
-///   stack: role_b,
-///   name: name_b,
+///     session1: channel_ba,
+///     session2: channel_bc,
+///     stack: role_b,
+///     name: name_b,
 /// };
 ///
 /// let sess_a = MeshedChannels {
-///   session1: channel_ab,
-///   session2: channel_ac,
-///   stack: role_a,
-///   name: name_a,
+///     session1: channel_ab,
+///     session2: channel_ac,
+///     stack: role_a,
+///     name: name_a,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -172,8 +171,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
-{
+    R: Role, {
     recv_aux_simple!(s, RoleA, 1)()
 }
 
@@ -220,17 +218,17 @@ where
 /// let (name_a, _) = NameA::new();
 ///
 /// let sess_c = MeshedChannels {
-///   session1: channel_ca,
-///   session2: channel_cb,
-///   stack: role_c,
-///   name: name_c,
+///     session1: channel_ca,
+///     session2: channel_cb,
+///     stack: role_c,
+///     name: name_c,
 /// };
 ///
 /// let sess_a = MeshedChannels {
-///   session1: channel_ab,
-///   session2: channel_ac,
-///   stack: role_a,
-///   name: name_a,
+///     session1: channel_ab,
+///     session2: channel_ac,
+///     stack: role_a,
+///     name: name_a,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -245,8 +243,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
-{
+    R: Role, {
     recv_aux_simple!(s, RoleA, 1)()
 }
 
@@ -293,17 +290,17 @@ where
 /// let (name_c, _) = NameC::new();
 ///
 /// let sess_a = MeshedChannels {
-///   session1: channel_ab,
-///   session2: channel_ac,
-///   stack: role_a,
-///   name: name_a,
+///     session1: channel_ab,
+///     session2: channel_ac,
+///     stack: role_a,
+///     name: name_a,
 /// };
 ///
 /// let sess_c = MeshedChannels {
-///   session1: channel_ca,
-///   session2: channel_cb,
-///   stack: role_c,
-///   name: name_c,
+///     session1: channel_ca,
+///     session2: channel_cb,
+///     stack: role_c,
+///     name: name_c,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -318,8 +315,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
-{
+    R: Role, {
     recv_aux_simple!(s, RoleC, 2)()
 }
 
@@ -366,17 +362,17 @@ where
 /// let (name_c, _) = NameC::new();
 ///
 /// let sess_b = MeshedChannels {
-///   session1: channel_ba,
-///   session2: channel_bc,
-///   stack: role_b,
-///   name: name_b,
+///     session1: channel_ba,
+///     session2: channel_bc,
+///     stack: role_b,
+///     name: name_b,
 /// };
 ///
 /// let sess_c = MeshedChannels {
-///   session1: channel_ca,
-///   session2: channel_cb,
-///   stack: role_c,
-///   name: name_c,
+///     session1: channel_ca,
+///     session2: channel_cb,
+///     stack: role_c,
+///     name: name_c,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -391,8 +387,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
-{
+    R: Role, {
     recv_aux_simple!(s, RoleC, 2)()
 }
 
@@ -439,17 +434,17 @@ where
 /// let (name_b, _) = NameB::new();
 ///
 /// let sess_c = MeshedChannels {
-///   session1: channel_ca,
-///   session2: channel_cb,
-///   stack: role_c,
-///   name: name_c,
+///     session1: channel_ca,
+///     session2: channel_cb,
+///     stack: role_c,
+///     name: name_c,
 /// };
 ///
 /// let sess_b = MeshedChannels {
-///   session1: channel_ba,
-///   session2: channel_bc,
-///   stack: role_b,
-///   name: name_b,
+///     session1: channel_ba,
+///     session2: channel_bc,
+///     stack: role_b,
+///     name: name_b,
 /// };
 ///
 /// // ...to this point, should not be written in general. Please look at the *fork* function.
@@ -464,8 +459,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role,
-{
+    R: Role, {
     recv_aux_simple!(s, RoleB, 2)()
 }
 
@@ -473,7 +467,8 @@ where
 // fail. Returns either a pair of the received value and
 // the continuation of the `MeshedChannels<S1, S2, R, N>` or
 // an error. Should not be used as a standalone, but rather
-// with [`offer_mpst_session_to_a_from_b`](crate::functionmpst::offer::offer_mpst_session_to_a_from_b).
+// with [`offer_mpst_session_to_a_from_b`](crate::functionmpst::offer::
+// offer_mpst_session_to_a_from_b).
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_b<T, S1, S2>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
@@ -481,8 +476,7 @@ pub fn recv_mpst_a_all_from_b<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session,
-{
+    S2: Session, {
     recv_all_aux_simple!(s, RoleAlltoB, 1)()
 }
 
@@ -490,7 +484,8 @@ where
 // fail. Returns either a pair of the received value and
 // the continuation of the `MeshedChannels<S1, S2, R, N>` or
 // an error. Should not be used as a standalone, but rather
-// with [`offer_mpst_session_to_a_from_c`](crate::functionmpst::offer::offer_mpst_session_to_a_from_c).
+// with [`offer_mpst_session_to_a_from_c`](crate::functionmpst::offer::
+// offer_mpst_session_to_a_from_c).
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_c<T, S1, S2>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
@@ -498,8 +493,7 @@ pub fn recv_mpst_a_all_from_c<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session,
-{
+    S2: Session, {
     recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
@@ -507,7 +501,8 @@ where
 // fail. Returns either a pair of the received value and
 // the continuation of the `MeshedChannels<S1, S2, R, N>` or
 // an error. Should not be used as a standalone, but rather
-// with [`offer_mpst_session_to_b_from_a`](crate::functionmpst::offer::offer_mpst_session_to_b_from_a).
+// with [`offer_mpst_session_to_b_from_a`](crate::functionmpst::offer::
+// offer_mpst_session_to_b_from_a).
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_a<T, S1, S2>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
@@ -515,8 +510,7 @@ pub fn recv_mpst_b_all_from_a<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session,
-{
+    S2: Session, {
     recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
@@ -524,7 +518,8 @@ where
 // fail. Returns either a pair of the received value and
 // the continuation of the `MeshedChannels<S1, S2, R, N>` or
 // an error. Should not be used as a standalone, but rather
-// with [`offer_mpst_session_to_b_from_c`](crate::functionmpst::offer::offer_mpst_session_to_b_from_c).
+// with [`offer_mpst_session_to_b_from_c`](crate::functionmpst::offer::
+// offer_mpst_session_to_b_from_c).
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_c<T, S1, S2>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
@@ -532,8 +527,7 @@ pub fn recv_mpst_b_all_from_c<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session,
-{
+    S2: Session, {
     recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
@@ -541,7 +535,8 @@ where
 // fail. Returns either a pair of the received value and
 // the continuation of the `MeshedChannels<S1, S2, R, N>` or
 // an error. Should not be used as a standalone, but rather
-// with [`offer_mpst_session_to_c_from_a`](crate::functionmpst::offer::offer_mpst_session_to_c_from_a).
+// with [`offer_mpst_session_to_c_from_a`](crate::functionmpst::offer::
+// offer_mpst_session_to_c_from_a).
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_a<T, S1, S2>(
     s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
@@ -549,8 +544,7 @@ pub fn recv_mpst_c_all_from_a<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session,
-{
+    S2: Session, {
     recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
@@ -558,7 +552,8 @@ where
 // fail. Returns either a pair of the received value and
 // the continuation of the `MeshedChannels<S1, S2, R, N>` or
 // an error. Should not be used as a standalone, but rather
-// with [`offer_mpst_session_to_c_from_b`](crate::functionmpst::offer::offer_mpst_session_to_c_from_b).
+// with [`offer_mpst_session_to_c_from_b`](crate::functionmpst::offer::
+// offer_mpst_session_to_c_from_b).
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_b<T, S1, S2>(
     s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
@@ -566,7 +561,6 @@ pub fn recv_mpst_c_all_from_b<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session,
-{
+    S2: Session, {
     recv_all_aux_simple!(s, RoleAlltoB, 2)()
 }

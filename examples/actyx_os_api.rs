@@ -1,47 +1,20 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
-
 use rand::random;
 
 use std::error::Error;
 use std::marker;
 
+// See the folder scribble_protocols for the Scribble protocol
+
 // Create new MeshedChannels for seven participants
 create_meshedchannels!(MeshedChannelsFour, 4);
-
-// global protocol API(role API, role Controller, role Storage, Role User)
-//     {
-//     Start(int) from Controller to Storage;
-//     Start(int) from Controller to API ;
-//     HardPing() from Storage to Controller;
-//     rec Loop {
-//         Request() from User to API;
-//         GetMode() from API to Controller;
-//         choice at Controller
-//         {
-//             Up() from Controller to API;
-//             Request(int) from API to Storage;
-//             Reponse(int) from Storage to Api;
-//             Response(int) from API to User;
-//             continue Loop;
-//         } or {
-//             Failure() from Controller to API;
-//             Restart() from Controller to Storage();
-//             Failure() from API to User;
-//             continue Loop;
-//         } or {
-//             Stop() from Controller to API;
-//             Stop() from Controller to Storage();
-//             Stop() from API to User;
-//         }
-//     }
-// }
 
 // Create Roles
 create_multiple_normal_role!(

@@ -20,19 +20,13 @@
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{
-///     create_broadcast_role, create_normal_role, create_offer_mpst_session_1
-/// };
+/// use mpstthree::{create_broadcast_role, create_normal_role, create_offer_mpst_session_1};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
-/// create_offer_mpst_session_1!(
-///     offer_mpst_session_c_to_a,
-///     RoleAlltoA,
-///     RoleC
-/// );
+/// create_offer_mpst_session_1!(offer_mpst_session_c_to_a, RoleAlltoA, RoleC);
 /// ```
 ///
 /// [`MeshedChannels`]:.crate::meshedchannels::MeshedChannels.
@@ -42,7 +36,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_offer_mpst_session_1 {
-    ($func_name: ident, $role: ident, $name: ident) => {
+    ($func_name:ident, $role:ident, $name:ident) => {
         mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             OfferMpst,
@@ -70,19 +64,13 @@ macro_rules! create_offer_mpst_session_1 {
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{
-///     create_broadcast_role, create_normal_role, create_offer_mpst_session_2
-/// };
+/// use mpstthree::{create_broadcast_role, create_normal_role, create_offer_mpst_session_2};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
-/// create_offer_mpst_session_2!(
-///     offer_mpst_session_a_to_c,
-///     RoleAlltoC,
-///     RoleA
-/// );
+/// create_offer_mpst_session_2!(offer_mpst_session_a_to_c, RoleAlltoC, RoleA);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
@@ -92,7 +80,7 @@ macro_rules! create_offer_mpst_session_1 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_offer_mpst_session_2 {
-    ($func_name: ident, $role: ident, $name: ident) => {
+    ($func_name:ident, $role:ident, $name:ident) => {
         mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             OfferMpst,

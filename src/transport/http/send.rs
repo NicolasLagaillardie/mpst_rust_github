@@ -31,8 +31,7 @@ pub fn send_http<T, S>(
 ) -> Result<(S, ResponseFuture), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session,
-{
+    S: Session, {
     let (here, there) = S::new();
 
     let respfut = match http {
@@ -100,7 +99,14 @@ where
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! create_send_http_session {
-    ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_send_http_session!(
             $func_name,
             $receiver,
@@ -112,16 +118,16 @@ macro_rules! create_send_http_session {
     };
 }
 
-/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels with
-/// more than 3 participants.
+/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels
+/// with more than 3 participants.
 ///
 /// # Arguments
 ///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the senders
-/// * The index of the binary session types that will receive in the MeshedChannels for this specific
-///   role. Index starts at 1.
+/// * The index of the binary session types that will receive in the MeshedChannels for this
+///   specific role. Index starts at 1.
 /// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///

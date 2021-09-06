@@ -7,34 +7,19 @@ use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use std::error::Error;
 use std::marker;
 use std::thread::{spawn, JoinHandle};
 use std::time::Duration;
 
-// global protocol Fibonacci(role A, role B)
-// {
-//     rec Fib
-//     {
-//         choice at A
-//         {
-//             fibonacci(Long) from A to B;
-//             fibonacci(Long) from B to A;
-//             continue Fib;
-//         }
-//         or
-//         {
-//             stop() from A to B;
-//         }
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

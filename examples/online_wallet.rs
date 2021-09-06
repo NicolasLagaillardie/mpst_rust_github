@@ -10,23 +10,7 @@ use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
 
 use std::error::Error;
 
-// global protocol OnlineWallet(role S, role C, role A) {
-//     login(id: string, pw: string) from C to A;
-//     choice  at A {
-//         login_ok () from A to C, S;
-//         rec  LOOP {
-//             account(balance: int, overdraft: int) from S to C;
-//             choice  at C {  @< amount <= balance+overdraft >
-//                 pay(payee: string, amount: int) from C to S;
-//                 continue  LOOP;
-//             } or {
-//                 quit() from C to S;
-//             }
-//         }
-//     } or {
-//         login_fail(error: string) from A to C, S;
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

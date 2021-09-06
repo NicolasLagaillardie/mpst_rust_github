@@ -64,7 +64,8 @@ pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     Ok(full_block)
 }
 
-// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
+// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective
+// role.
 //
 // Remove the unnecessary terms before each :: (such as mpstthree in mpstthree::Session),
 // and link each new String with its respective role.
@@ -216,16 +217,20 @@ pub(crate) fn build_dual(session: &str) -> Result<String, Box<dyn Error>> {
     } else {
         let all_fields = get_head_payload_continuation(session)?;
         match all_fields[0].as_str() {
-            "Recv" => Ok(format!(
-                "Send<{},{}>",
-                all_fields[1],
-                build_dual(&all_fields[2])?
-            )),
-            "Send" => Ok(format!(
-                "Recv<{},{}>",
-                all_fields[1],
-                build_dual(&all_fields[2])?
-            )),
+            "Recv" => {
+                Ok(format!(
+                    "Send<{},{}>",
+                    all_fields[1],
+                    build_dual(&all_fields[2])?
+                ))
+            }
+            "Send" => {
+                Ok(format!(
+                    "Recv<{},{}>",
+                    all_fields[1],
+                    build_dual(&all_fields[2])?
+                ))
+            }
             _ => panic!("Wrong head"),
         }
     }

@@ -1,4 +1,4 @@
-global protopol SimpleVoting(role VOTER, role SERVER){
+global protocol SimpleVoting(role VOTER, role SERVER){
     Authenticate(String) from VOTER to SERVER;
     choice at SERVER {
         Ok(String) from SERVER to VOTER;

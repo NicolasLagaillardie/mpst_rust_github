@@ -97,12 +97,14 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     });
 
     match thread.join() {
-        Ok(_) => match aux.join() {
-            Ok(_) => Ok(()),
-            Err(e) => {
-                panic!("Error aux: {:?}", e)
+        Ok(_) => {
+            match aux.join() {
+                Ok(_) => Ok(()),
+                Err(e) => {
+                    panic!("Error aux: {:?}", e)
+                }
             }
-        },
+        }
         Err(e) => {
             panic!("Error client: {:?}", e)
         }
@@ -128,17 +130,19 @@ fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
                     stream.shutdown(Shutdown::Both).unwrap_or(());
                     panic!("An error occurred during write")
                 }
-                _ => match index {
-                    i if i + 1 >= SIZE => {
-                        stream.shutdown(Shutdown::Both).unwrap_or(());
-                        index += 1;
-                        false
+                _ => {
+                    match index {
+                        i if i + 1 >= SIZE => {
+                            stream.shutdown(Shutdown::Both).unwrap_or(());
+                            index += 1;
+                            false
+                        }
+                        _ => {
+                            index += 1;
+                            true
+                        }
                     }
-                    _ => {
-                        index += 1;
-                        true
-                    }
-                },
+                }
             }
         }
         Err(_) => {

@@ -11,24 +11,7 @@ use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
-// global protocol TwoBuyer(role A, role C, role S)
-// {
-//     element_1(int) from C to S
-//     element_2(int) from C to S
-
-//     choice at C
-//     {
-//         sum(int) from S to C;
-//         diff() from S to C;
-//         diff() from C to A;
-//     }
-//     or
-//     {
-//         diff(int) from S to C;
-//         diff() from S to C;
-//         diff() from C to A;
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

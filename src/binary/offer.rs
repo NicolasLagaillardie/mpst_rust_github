@@ -23,8 +23,7 @@ where
     S1: Session,
     S2: Session,
     F: FnOnce(S1) -> Result<R, Box<dyn Error + 'a>>,
-    G: FnOnce(S2) -> Result<R, Box<dyn Error + 'a>>,
-{
+    G: FnOnce(S2) -> Result<R, Box<dyn Error + 'a>>, {
     let (e, s) = recv(s)?;
     cancel(s);
     e.either(f, g)

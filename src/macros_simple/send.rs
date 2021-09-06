@@ -34,7 +34,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_send_mpst_session_1 {
-    ($func_name: ident, $receiver: ident, $sender: ident) => {
+    ($func_name:ident, $receiver:ident, $sender:ident) => {
         mpst_seq::create_send_mpst_session!($func_name, $receiver, $sender, MeshedChannels, 3, 1);
     };
 }
@@ -68,7 +68,7 @@ macro_rules! create_send_mpst_session_1 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_send_mpst_session_2 {
-    ($func_name: ident, $receiver: ident, $sender: ident) => {
+    ($func_name:ident, $receiver:ident, $sender:ident) => {
         mpst_seq::create_send_mpst_session!($func_name, $receiver, $sender, MeshedChannels, 3, 2);
     };
 }

@@ -13,7 +13,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 macro_rules! choose_tcp {
-    ($label: path, $session: expr, $data: expr) => {{
+    ($label:path, $session:expr, $data:expr) => {{
         let (here, there) = <_ as Session>::new();
         let s = mpstthree::binary::send::send(($data, $label(there)), $session);
         mpstthree::binary::cancel::cancel(s);

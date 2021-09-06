@@ -3,37 +3,20 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use rand::{random, thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 use std::time::Duration;
 
-// global protocol TwoBuyer(role A, role C, role S)
-// {
-//     empty1(int) from A to S;
-//     empty2(int) from S to A;
-//     empty3(int) from S to C;
-//     empty4(int) from A to C;
-
-//     choice at C
-//     {
-//         ok(int) from C to A;
-//         ok(int) from C to S;
-//         empty5(int) from S to C;
-//     }
-//     or
-//     {
-//         quit() from C to A;
-//         quit() from C to S;
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

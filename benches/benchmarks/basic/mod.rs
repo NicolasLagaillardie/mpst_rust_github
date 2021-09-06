@@ -6,7 +6,7 @@ pub mod dns_imai;
 pub mod fib;
 pub mod o_auth;
 pub mod online_wallet;
-pub mod simple_voting_three;
+pub mod simple_voting;
 pub mod smtp;
 pub mod three_buyer;
 pub mod travel_three;

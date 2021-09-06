@@ -75,33 +75,26 @@ where
 /// type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
 /// type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 ///
-/// fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>>
-/// {
+/// fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 ///     let s = send_mpst_a_to_b(1, s);
 ///     let (_x, s) = recv_mpst_a_from_c(s)?;
 ///     close_mpst(s)
 /// }
 ///
 /// /// Single test for B
-/// fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>>
-/// {
+/// fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 ///     let (_x, s) = recv_mpst_b_from_a(s)?;
 ///     let s = send_mpst_b_to_c(2, s);
 ///     close_mpst(s)
 /// }
 ///
 /// /// Single test for C
-/// fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>>
-/// {
+/// fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 ///     let s = send_mpst_c_to_a(3, s);
 ///     let (_x, s) = recv_mpst_c_from_b(s)?;
 ///     close_mpst(s)
 /// }
-/// let (thread_a, thread_b, thread_c) = fork_mpst(
-///     endpoint_a,
-///     endpoint_b,
-///     endpoint_c,
-/// );
+/// let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 ///
 /// thread_a.join().unwrap();
 /// thread_b.join().unwrap();
@@ -139,8 +132,7 @@ where
             MeshedChannels<<S1 as Session>::Dual, <S2 as Session>::Dual, R2, N2>,
         ) -> Result<(), Box<dyn Error>>
         + marker::Send
-        + 'static,
-{
+        + 'static, {
     let (channel_ab, channel_ba) = S0::new();
     let (channel_ac, channel_ca) = S1::new();
     let (channel_bc, channel_cb) = S2::new();

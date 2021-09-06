@@ -68,9 +68,9 @@ macro_rules! choose_mpst_a {
         $stack_3:ty,
         $receiver_1:ident,
         $receiver_2:ident,
-        $sender: ident,
-        $session: expr,
-        $pat: path
+        $sender:ident,
+        $session:expr,
+        $pat:path
     ) => {{
         let (session_1_2, session_2_1) = <$session_1 as Session>::new();
         let (session_1_3, session_3_1) = <$session_2 as Session>::new();
@@ -129,9 +129,9 @@ macro_rules! choose_mpst_b {
         $stack_3:ty,
         $receiver_1:ident,
         $receiver_2:ident,
-        $sender: ident,
-        $session: expr,
-        $pat: path
+        $sender:ident,
+        $session:expr,
+        $pat:path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_3_1, session_1_3) = <$session_2 as Session>::new();
@@ -190,9 +190,9 @@ macro_rules! choose_mpst_c {
         $stack_3:ty,
         $receiver_1:ident,
         $receiver_2:ident,
-        $sender: ident,
-        $session: expr,
-        $pat: path
+        $sender:ident,
+        $session:expr,
+        $pat:path
     ) => {{
         let (session_2_1, session_1_2) = <$session_1 as Session>::new();
         let (session_3_1, session_1_3) = <$session_2 as Session>::new();
@@ -285,8 +285,7 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a,
-{
+    R5: Role + 'a, {
     choose_mpst_a!(
         S2,
         S3,
@@ -348,8 +347,7 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a,
-{
+    R5: Role + 'a, {
     choose_mpst_a!(
         S4,
         S5,
@@ -410,8 +408,7 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a,
-{
+    R5: Role + 'a, {
     choose_mpst_b!(
         S2,
         S0,
@@ -472,8 +469,7 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a,
-{
+    R5: Role + 'a, {
     choose_mpst_b!(
         S4,
         S1,
@@ -534,8 +530,7 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a,
-{
+    R5: Role + 'a, {
     choose_mpst_c!(
         S0,
         S2,
@@ -596,8 +591,7 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a,
-{
+    R5: Role + 'a, {
     choose_mpst_c!(
         S1,
         S4,

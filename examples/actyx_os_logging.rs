@@ -11,29 +11,10 @@ use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
+// See the folder scribble_protocols for the Scribble protocol
+
 // Create new MeshedChannels for seven participants
 create_meshedchannels!(MeshedChannelsTwo, 2);
-
-// global protocol Logging(role Controller, role Logs)
-// {
-//     Start(int) from Controller to Logs;
-//     rec Loop {
-//         choice at Logs
-//         {
-//             Success(int) from Logs to Controller;
-//             continue Loop;
-//         } or {
-//             Failure(int) from Logs to Controller;
-//             choice at Controller
-//             {
-//                 Restart(int) from Controller to Logs;
-//                 continue Loop;
-//             } or {
-//                 Stop(int) from Controller to Logs;
-//             }
-//         }
-//     }
-// }
 
 // Create Roles
 create_multiple_normal_role!(

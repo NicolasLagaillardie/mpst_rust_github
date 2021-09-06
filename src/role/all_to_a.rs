@@ -16,9 +16,9 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::all_to_a::RoleAlltoA;
 /// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::role::Role; // Only used for example
 ///
 /// type NameAlltoADual = RoleAlltoA<RoleEnd, RoleEnd>;
 ///
@@ -30,8 +30,7 @@ where
     R1: Role,
     R2: Role,
     R1::Dual: Role,
-    R2::Dual: Role,
-{
+    R2::Dual: Role, {
     #[doc(hidden)]
     pub sender1: Sender<R1::Dual>,
     #[doc(hidden)]

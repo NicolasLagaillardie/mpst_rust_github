@@ -3,7 +3,7 @@
 binop_separator = "Front" # "Front", "Back"
 # blank_lines_lower_bound = 1
 # blank_lines_upper_bound = 1
-brace_style = "AlwaysNextLine" # "AlwaysNextLine", "PreferSameLine", "SameLineWhere"
+brace_style = "PreferSameLine" # "AlwaysNextLine", "PreferSameLine", "SameLineWhere"
 # chain_width = 60
 combine_control_expr = false # true, false
 comment_width = 100

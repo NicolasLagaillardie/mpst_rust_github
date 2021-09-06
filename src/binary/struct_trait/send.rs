@@ -17,8 +17,7 @@ pub struct Send<T, S>
 where
     T: marker::Send,
     S: Session,
-    S::Dual: Session,
-{
+    S::Dual: Session, {
     #[doc(hidden)]
     pub channel: Sender<(T, S::Dual)>,
 }

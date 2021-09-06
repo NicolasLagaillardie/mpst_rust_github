@@ -65,7 +65,12 @@ pub mod send;
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! bundle_struct_fork_close_multi {
-    ($func_name_close: ident, $func_name_fork: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    (
+        $func_name_close:ident,
+        $func_name_fork:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal
+    ) => {
         mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
         mpstthree::close_mpst!($func_name_close, $meshedchannels_name, $nsessions);
         mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $nsessions);
@@ -103,7 +108,12 @@ macro_rules! bundle_struct_fork_close_multi {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! bundle_struct_fork_close_multi_cancel {
-    ($func_name_close: ident, $func_name_fork: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    (
+        $func_name_close:ident,
+        $func_name_fork:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal
+    ) => {
         mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
         mpstthree::close_mpst_cancel!($func_name_close, $meshedchannels_name, $nsessions);
         mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $nsessions);

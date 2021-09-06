@@ -15,8 +15,7 @@ type TcpFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
 pub fn fork_with_thread_id<S, P>(p: P) -> (JoinHandle<()>, S::Dual)
 where
     S: Session + 'static,
-    P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
-{
+    P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static, {
     let (there, here) = Session::new();
     let other_thread = spawn(move || {
         panic::set_hook(Box::new(|_info| {
@@ -37,8 +36,7 @@ where
 pub fn fork<S, P>(p: P) -> S::Dual
 where
     S: Session + 'static,
-    P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
-{
+    P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static, {
     fork_with_thread_id(p).1
 }
 
@@ -49,8 +47,7 @@ where
 pub fn fork_tcp<S, P>(p: P, address: &str) -> TcpFork<S::Dual>
 where
     S: Session + 'static,
-    P: FnOnce(S, TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
-{
+    P: FnOnce(S, TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static, {
     let stream = TcpStream::connect(address)?;
     let copy_stream = stream.try_clone()?;
     let (there, here) = Session::new();

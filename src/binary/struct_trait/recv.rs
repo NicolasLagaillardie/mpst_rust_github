@@ -16,8 +16,7 @@ use std::str::FromStr;
 pub struct Recv<T, S>
 where
     T: marker::Send,
-    S: Session,
-{
+    S: Session, {
     #[doc(hidden)]
     pub channel: Receiver<(T, S)>,
 }

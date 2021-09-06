@@ -33,6 +33,8 @@ use mpstthree::choose_mpst_c_to_all;
 use mpstthree::offer_mpst_a_to_c;
 use mpstthree::offer_mpst_b_to_c;
 
+// See the folder scribble_protocols for the Scribble protocol
+
 /// Test our usecase Video Stream
 /// Simple types
 /// Client = C

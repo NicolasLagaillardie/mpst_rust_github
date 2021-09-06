@@ -41,7 +41,15 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! send_mpst {
-    ($session: expr, $payload: expr, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $session:expr,
+        $payload:expr,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::send_mpst!(
             $session,
             $payload,
@@ -88,7 +96,14 @@ macro_rules! send_mpst {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_session {
-    ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_send_mpst_session!(
             $func_name,
             $receiver,
@@ -135,7 +150,14 @@ macro_rules! create_send_mpst_session {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_cancel {
-    ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_send_mpst_cancel!(
             $func_name,
             $receiver,
@@ -164,7 +186,7 @@ macro_rules! create_send_mpst_cancel {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_normal_role, create_send_check_cancel, create_meshedchannels};
+/// use mpstthree::{create_meshedchannels, create_normal_role, create_send_check_cancel};
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_normal_role!(RoleD, RoleDDual);
@@ -177,7 +199,7 @@ macro_rules! create_send_mpst_cancel {
 /// # Compile fail
 ///
 /// ```compile_fail
-/// use mpstthree::{create_normal_role, create_send_check_cancel, create_meshedchannels};
+/// use mpstthree::{create_meshedchannels, create_normal_role, create_send_check_cancel};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleD, RoleDDual);
@@ -192,7 +214,14 @@ macro_rules! create_send_mpst_cancel {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_check_cancel {
-    ($func_name: ident, $receiver: ident, $sender: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_send_check_cancel!(
             $func_name,
             $receiver,
@@ -204,16 +233,16 @@ macro_rules! create_send_check_cancel {
     };
 }
 
-/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels with
-/// more than 3 participants.
+/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels
+/// with more than 3 participants.
 ///
 /// # Arguments
 ///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the senders
-/// * The index of the binary session types that will receive in the MeshedChannels for this specific
-///   role. Index starts at 1.
+/// * The index of the binary session types that will receive in the MeshedChannels for this
+///   specific role. Index starts at 1.
 /// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
@@ -262,16 +291,16 @@ macro_rules! create_send_mpst_session_bundle {
     }
 }
 
-/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels with
-/// more than 3 participants.
+/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels
+/// with more than 3 participants.
 ///
 /// # Arguments
 ///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the senders
-/// * The index of the binary session types that will receive in the MeshedChannels for this specific
-///   role. Index starts at 1.
+/// * The index of the binary session types that will receive in the MeshedChannels for this
+///   specific role. Index starts at 1.
 /// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
@@ -320,16 +349,16 @@ macro_rules! create_send_mpst_cancel_bundle {
     }
 }
 
-/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels with
-/// more than 3 participants.
+/// Creates multiple *send* functions to send from a given binary session type of a MeshedChannels
+/// with more than 3 participants.
 ///
 /// # Arguments
 ///
 /// * The name of the new *send* functions
 /// * The name of the receivers
 /// * The name of the senders
-/// * The index of the binary session types that will receive in the MeshedChannels for this specific
-///   role. Index starts at 2 as 1 is an End.
+/// * The index of the binary session types that will receive in the MeshedChannels for this
+///   specific role. Index starts at 2 as 1 is an End.
 /// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///

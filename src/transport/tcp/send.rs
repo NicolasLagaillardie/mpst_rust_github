@@ -30,8 +30,7 @@ pub fn send_tcp<T, S>(
 ) -> Result<(S, TcpStream), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session,
-{
+    S: Session, {
     let (here, there) = S::new();
     match s.channel.send(((x, *data), there)) {
         Ok(_) => {

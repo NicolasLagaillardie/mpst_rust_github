@@ -24,10 +24,10 @@ parsers:
     branch_detection:
       conditional: yes
       loop: yes
-      method: no
-      macro: no
+      method: yes
+      macro: yes
 
 comment:
   layout: "reach,diff,flags,files,footer"
   behavior: default
-  require_changes: no
+  require_changes: yes
