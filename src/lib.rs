@@ -10,10 +10,12 @@
     unreachable_pub
 )]
 #![deny(unused_must_use)]
-#![cfg_attr(doc_cfg, deny(rustdoc::broken_intra_doc_links))]
-#![doc(test(no_crate_inject, attr(deny(warnings, rust_2018_idioms))))]
 #![cfg_attr(doc_cfg, feature(doc_cfg))]
-#![cfg_attr(doc_cfg, allow(unused_attributes))]
+#![cfg_attr(doc_cfg, deny(rustdoc::broken_intra_doc_links))]
+#![doc(test(
+    no_crate_inject,
+    attr(deny(warnings, rust_2018_idioms, unused_attributes))
+))]
 
 //! [![github]](https://github.com/NicolasLagaillardie/mpst_rust_github)&ensp;[![crates-io]](https://crates.io/crates/mpstthree)&ensp;[![docs-rs]](https://docs.rs/mpstthree)
 //!
