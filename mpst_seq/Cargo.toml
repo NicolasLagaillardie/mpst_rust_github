@@ -15,5 +15,5 @@ exclude = ["mpst_seq_proc/"]
 
 [dependencies]
 proc-macro-hack = "0.5.19"
-mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.11" }
-# mpst-seq-proc = "0.0.11"
+# mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.11" }
+mpst-seq-proc = "0.0.11"

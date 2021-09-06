@@ -163,8 +163,8 @@ debug = true
 ###################################
 
 [dependencies]
-mpst-seq = { path = "mpst_seq", version = "0.0.11" }
-# mpst-seq = "0.0.11"
+# mpst-seq = { path = "mpst_seq", version = "0.0.11" }
+mpst-seq = "0.0.11"
 rand = { version = "0.8.4", optional = true }
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
