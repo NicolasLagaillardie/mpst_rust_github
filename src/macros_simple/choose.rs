@@ -294,7 +294,8 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
             R2: mpstthree::role::Role + 'a,
             R3: mpstthree::role::Role + 'a,
             R4: mpstthree::role::Role + 'a,
-            R5: mpstthree::role::Role + 'a, {
+            R5: mpstthree::role::Role + 'a,
+        {
             mpstthree::create_choose_from_3_to_1_2!(
                 S4,
                 S5,
@@ -400,7 +401,8 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
             R2: mpstthree::role::Role + 'a,
             R3: mpstthree::role::Role + 'a,
             R4: mpstthree::role::Role + 'a,
-            R5: mpstthree::role::Role + 'a, {
+            R5: mpstthree::role::Role + 'a,
+        {
             mpstthree::create_choose_from_3_to_1_2!(
                 S2,
                 S3,
@@ -506,7 +508,8 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
             R2: mpstthree::role::Role + 'a,
             R3: mpstthree::role::Role + 'a,
             R4: mpstthree::role::Role + 'a,
-            R5: mpstthree::role::Role + 'a, {
+            R5: mpstthree::role::Role + 'a,
+        {
             mpstthree::create_choose_from_1_to_2_3!(
                 S2,
                 S3,
@@ -612,7 +615,8 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
             R2: mpstthree::role::Role + 'a,
             R3: mpstthree::role::Role + 'a,
             R4: mpstthree::role::Role + 'a,
-            R5: mpstthree::role::Role + 'a, {
+            R5: mpstthree::role::Role + 'a,
+        {
             mpstthree::create_choose_from_1_to_2_3!(
                 S4,
                 S5,
@@ -718,7 +722,8 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
             R2: mpstthree::role::Role + 'a,
             R3: mpstthree::role::Role + 'a,
             R4: mpstthree::role::Role + 'a,
-            R5: mpstthree::role::Role + 'a, {
+            R5: mpstthree::role::Role + 'a,
+        {
             mpstthree::create_choose_from_2_to_1_3!(
                 S2,
                 S3,
@@ -824,7 +829,8 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
             R2: mpstthree::role::Role + 'a,
             R3: mpstthree::role::Role + 'a,
             R4: mpstthree::role::Role + 'a,
-            R5: mpstthree::role::Role + 'a, {
+            R5: mpstthree::role::Role + 'a,
+        {
             mpstthree::create_choose_from_2_to_1_3!(
                 S4,
                 S5,

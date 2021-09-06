@@ -35,7 +35,8 @@ where
     R1: Role,
     R2: Role,
     R1::Dual: Role,
-    R2::Dual: Role, {
+    R2::Dual: Role,
+{
     #[doc(hidden)]
     pub sender1: Sender<R1::Dual>,
     #[doc(hidden)]

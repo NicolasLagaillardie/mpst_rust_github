@@ -99,7 +99,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     recv_aux_simple!(s, RoleB, 1)()
 }
 
@@ -171,7 +172,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     recv_aux_simple!(s, RoleA, 1)()
 }
 
@@ -243,7 +245,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     recv_aux_simple!(s, RoleA, 1)()
 }
 
@@ -315,7 +318,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     recv_aux_simple!(s, RoleC, 2)()
 }
 
@@ -387,7 +391,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     recv_aux_simple!(s, RoleC, 2)()
 }
 
@@ -459,7 +464,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     recv_aux_simple!(s, RoleB, 2)()
 }
 
@@ -476,7 +482,8 @@ pub fn recv_mpst_a_all_from_b<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session, {
+    S2: Session,
+{
     recv_all_aux_simple!(s, RoleAlltoB, 1)()
 }
 
@@ -493,7 +500,8 @@ pub fn recv_mpst_a_all_from_c<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session, {
+    S2: Session,
+{
     recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
@@ -510,7 +518,8 @@ pub fn recv_mpst_b_all_from_a<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session, {
+    S2: Session,
+{
     recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
@@ -527,7 +536,8 @@ pub fn recv_mpst_b_all_from_c<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session, {
+    S2: Session,
+{
     recv_all_aux_simple!(s, RoleAlltoC, 2)()
 }
 
@@ -544,7 +554,8 @@ pub fn recv_mpst_c_all_from_a<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session, {
+    S2: Session,
+{
     recv_all_aux_simple!(s, RoleAlltoA, 1)()
 }
 
@@ -561,6 +572,7 @@ pub fn recv_mpst_c_all_from_b<T, S1, S2>(
 where
     T: marker::Send,
     S1: Session,
-    S2: Session, {
+    S2: Session,
+{
     recv_all_aux_simple!(s, RoleAlltoB, 2)()
 }

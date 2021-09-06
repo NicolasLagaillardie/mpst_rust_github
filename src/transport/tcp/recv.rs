@@ -30,7 +30,8 @@ pub fn recv_tcp<T, S>(
 ) -> Result<TupleRecv<T, S>, Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     let (v, s) = s.channel.recv()?;
     let mut data = [0_u8; 128];
     let r = match tcp {

@@ -26,7 +26,8 @@ pub fn recv_http<T, S>(
 ) -> Result<(T, S, Response<Body>), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     // Await the response
     let resp = match http {
         true => {

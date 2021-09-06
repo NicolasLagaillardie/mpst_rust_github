@@ -217,20 +217,16 @@ pub(crate) fn build_dual(session: &str) -> Result<String, Box<dyn Error>> {
     } else {
         let all_fields = get_head_payload_continuation(session)?;
         match all_fields[0].as_str() {
-            "Recv" => {
-                Ok(format!(
-                    "Send<{},{}>",
-                    all_fields[1],
-                    build_dual(&all_fields[2])?
-                ))
-            }
-            "Send" => {
-                Ok(format!(
-                    "Recv<{},{}>",
-                    all_fields[1],
-                    build_dual(&all_fields[2])?
-                ))
-            }
+            "Recv" => Ok(format!(
+                "Send<{},{}>",
+                all_fields[1],
+                build_dual(&all_fields[2])?
+            )),
+            "Send" => Ok(format!(
+                "Recv<{},{}>",
+                all_fields[1],
+                build_dual(&all_fields[2])?
+            )),
             _ => panic!("Wrong head"),
         }
     }

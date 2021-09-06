@@ -58,7 +58,8 @@ use std::error::Error;
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 pub fn close_mpst<R>(s: MeshedChannels<End, End, RoleEnd, R>) -> Result<(), Box<dyn Error>>
 where
-    R: Role, {
+    R: Role,
+{
     s.session1.sender.send(Signal::Stop).unwrap_or(());
     s.session2.sender.send(Signal::Stop).unwrap_or(());
 

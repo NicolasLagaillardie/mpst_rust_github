@@ -30,7 +30,8 @@ use crossbeam_channel::{bounded, Sender};
 pub struct RoleB<R>
 where
     R: Role,
-    R::Dual: Role, {
+    R::Dual: Role,
+{
     #[doc(hidden)]
     pub sender: Sender<R::Dual>,
 }

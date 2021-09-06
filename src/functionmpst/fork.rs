@@ -132,7 +132,8 @@ where
             MeshedChannels<<S1 as Session>::Dual, <S2 as Session>::Dual, R2, N2>,
         ) -> Result<(), Box<dyn Error>>
         + marker::Send
-        + 'static, {
+        + 'static,
+{
     let (channel_ab, channel_ba) = S0::new();
     let (channel_ac, channel_ca) = S1::new();
     let (channel_bc, channel_cb) = S2::new();

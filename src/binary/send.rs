@@ -13,7 +13,8 @@ use std::panic;
 pub fn send<T, S>(x: T, s: Send<T, S>) -> S
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     let (here, there) = S::new();
     s.channel.send((x, there)).unwrap_or(());
     here
@@ -24,7 +25,8 @@ where
 pub fn send_canceled<T, S>(x: T, s: Send<T, S>) -> Result<S, Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     let (here, there) = S::new();
     match s.channel.send((x, there)) {
         Ok(_) => Ok(here),

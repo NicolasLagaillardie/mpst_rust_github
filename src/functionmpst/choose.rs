@@ -285,7 +285,8 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a, {
+    R5: Role + 'a,
+{
     choose_mpst_a!(
         S2,
         S3,
@@ -347,7 +348,8 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a, {
+    R5: Role + 'a,
+{
     choose_mpst_a!(
         S4,
         S5,
@@ -408,7 +410,8 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a, {
+    R5: Role + 'a,
+{
     choose_mpst_b!(
         S2,
         S0,
@@ -469,7 +472,8 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a, {
+    R5: Role + 'a,
+{
     choose_mpst_b!(
         S4,
         S1,
@@ -530,7 +534,8 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a, {
+    R5: Role + 'a,
+{
     choose_mpst_c!(
         S0,
         S2,
@@ -591,7 +596,8 @@ where
     R2: Role + 'a,
     R3: Role + 'a,
     R4: Role + 'a,
-    R5: Role + 'a, {
+    R5: Role + 'a,
+{
     choose_mpst_c!(
         S1,
         S4,

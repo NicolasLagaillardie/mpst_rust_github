@@ -71,7 +71,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     send_aux_simple!(s, x, RoleB, 1)
 }
 
@@ -130,7 +131,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     send_aux_simple!(s, x, RoleA, 1)
 }
 
@@ -189,7 +191,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     send_aux_simple!(s, x, RoleA, 1)
 }
 
@@ -248,7 +251,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     send_aux_simple!(s, x, RoleC, 2)
 }
 
@@ -307,7 +311,8 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     send_aux_simple!(s, x, RoleC, 2)
 }
 
@@ -366,6 +371,7 @@ where
     T: marker::Send,
     S1: Session,
     S2: Session,
-    R: Role, {
+    R: Role,
+{
     send_aux_simple!(s, x, RoleB, 2)
 }

@@ -91,7 +91,8 @@ where
     R1: Role,
     R2: Role,
     F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>, {
+    G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+{
     let (e, s) = recv_mpst_a_all_from_b(s)?;
     cancel(s);
     e.either(f, g)
@@ -133,7 +134,8 @@ where
     R1: Role,
     R2: Role,
     F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>, {
+    G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+{
     let (e, s) = recv_mpst_a_all_from_c(s)?;
     cancel(s);
     e.either(f, g)
@@ -175,7 +177,8 @@ where
     R1: Role,
     R2: Role,
     F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>, {
+    G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+{
     let (e, s) = recv_mpst_b_all_from_a(s)?;
     cancel(s);
     e.either(f, g)
@@ -217,7 +220,8 @@ where
     R1: Role,
     R2: Role,
     F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>, {
+    G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+{
     let (e, s) = recv_mpst_b_all_from_c(s)?;
     cancel(s);
     e.either(f, g)
@@ -259,7 +263,8 @@ where
     R1: Role,
     R2: Role,
     F: FnOnce(MeshedChannels<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>, {
+    G: FnOnce(MeshedChannels<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+{
     let (e, s) = recv_mpst_c_all_from_a(s)?;
     cancel(s);
     e.either(f, g)
@@ -301,7 +306,8 @@ where
     R1: Role,
     R2: Role,
     F: FnOnce(MeshedChannels<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>, {
+    G: FnOnce(MeshedChannels<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+{
     let (e, s) = recv_mpst_c_all_from_b(s)?;
     cancel(s);
     e.either(f, g)

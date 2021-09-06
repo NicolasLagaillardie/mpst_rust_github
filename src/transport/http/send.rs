@@ -31,7 +31,8 @@ pub fn send_http<T, S>(
 ) -> Result<(S, ResponseFuture), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     let (here, there) = S::new();
 
     let respfut = match http {

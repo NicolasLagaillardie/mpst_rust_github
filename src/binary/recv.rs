@@ -12,7 +12,8 @@ use std::marker;
 pub fn recv<T, S>(s: Recv<T, S>) -> Result<(T, S), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     let (v, s) = s.channel.recv()?;
     Ok((v, s))
 }

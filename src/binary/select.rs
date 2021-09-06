@@ -46,7 +46,8 @@ impl Error for SelectError {
 pub fn select_mut<T, S>(rs: &mut Vec<Recv<T, S>>) -> Result<(T, S), Box<dyn Error>>
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     if rs.is_empty() {
         Err(Box::new(SelectError::EmptyVec))
     } else {
@@ -87,7 +88,8 @@ type SelectType<T, S> = Result<(T, S), Box<dyn Error>>;
 pub fn select<T, S>(rs: Vec<Recv<T, S>>) -> (SelectType<T, S>, Vec<Recv<T, S>>)
 where
     T: marker::Send,
-    S: Session, {
+    S: Session,
+{
     let mut rs = rs;
     let res = select_mut(&mut rs);
     (res, rs)

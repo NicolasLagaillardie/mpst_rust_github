@@ -77,7 +77,8 @@ where
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role, {
+    N: Role,
+{
     #[doc(hidden)]
     pub session1: S1,
     #[doc(hidden)]
