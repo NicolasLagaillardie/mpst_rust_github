@@ -54,22 +54,22 @@ RUST_BACKTRACE=1 cargo doc --verbose --workspace --all-features
 # cargo build --tests --verbose --all-features
 # cargo build --benches --verbose --all-features
 # cargo run --verbose --all-features
-# find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3} --features="macros rand") done' argv0 {} +
+# find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3} --features="macros") done' argv0 {} +
 
-cargo run --example actyx_os_api --features="macros_multiple rand"
-cargo run --example actyx_os_logging --features="macros_multiple rand"
-cargo run --example distributed_calc --features="macros_multiple rand"
-cargo run --example dns_fowler --features="macros_multiple rand"
-cargo run --example dns_imai --features="macros_multiple rand"
-cargo run --example fib --features="macros_multiple rand"
-cargo run --example o_auth --features="macros_multiple rand"
-cargo run --example o_auth_2 --features="macros_multiple transport rand"
-cargo run --example online_wallet --features="macros_multiple rand"
-cargo run --example simple_voting --features="macros_multiple rand"
-cargo run --example smtp --features="macros_multiple rand"
-cargo run --example three_buyers --features="macros_multiple rand"
-cargo run --example travel_three --features="macros_multiple rand"
-cargo run --example video_stream --features="macros_simple rand"
+cargo run --example actyx_os_api --features="macros_multiple"
+cargo run --example actyx_os_logging --features="macros_multiple"
+cargo run --example distributed_calc --features="macros_multiple"
+cargo run --example dns_fowler --features="macros_multiple"
+cargo run --example dns_imai --features="macros_multiple"
+cargo run --example fib --features="macros_multiple"
+cargo run --example o_auth --features="macros_multiple"
+cargo run --example o_auth_2 --features="macros_multiple transport"
+cargo run --example online_wallet --features="macros_multiple"
+cargo run --example simple_voting --features="macros_multiple"
+cargo run --example smtp --features="macros_multiple"
+cargo run --example three_buyers --features="macros_multiple"
+cargo run --example travel_three --features="macros_multiple"
+cargo run --example video_stream --features="macros_simple"
 
 # cargo test --verbose --all
 # cargo test --verbose --all -- --nocapture

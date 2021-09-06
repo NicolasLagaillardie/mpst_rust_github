@@ -1,7 +1,7 @@
 #![cfg(feature = "checking")]
 
 //! This module contains the macros and the functions for
-//! checking wether a protocol is well written or not,
+//! checking whether a protocol is well written or not,
 //! according to a bottom-up method.
 //!
 //! *This module is available only if MultiCrusty is built with

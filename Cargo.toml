@@ -101,59 +101,59 @@ required-features = ["macros_multiple"]
 
 [[example]]
 name = "actyx_os_api"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "actyx_os_logging"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "distributed_calc"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "dns_fowler"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "dns_imai"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "fib"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "o_auth"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "o_auth_2"
-required-features = ["macros_multiple", "transport", "rand"]
+required-features = ["macros_multiple", "transport"]
 
 [[example]]
 name = "online_wallet"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "simple_voting"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "smtp"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "three_buyers"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "travel_three"
-required-features = ["macros_multiple", "rand"]
+required-features = ["macros_multiple"]
 
 [[example]]
 name = "video_stream"
-required-features = ["macros_simple", "rand"]
+required-features = ["macros_simple"]
 
 ###################################
 
@@ -165,7 +165,6 @@ debug = true
 [dependencies]
 mpst-seq = { path = "mpst_seq", version = "0.0.12" }
 # mpst-seq = "0.0.12"
-rand = { version = "0.8.4", optional = true }
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
 hyper = { version = "0.14.12", features = ["full"], optional = true }

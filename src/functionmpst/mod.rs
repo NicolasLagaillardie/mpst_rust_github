@@ -38,13 +38,14 @@ pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
 
 /// Choose between two sessions `S1` and `S2`. Those
 /// sessions should be [`MeshedChannels`], as requested by functions
-/// such as [`choose_right_mpst_session_c_to_all`]. Implemented using
-/// [`Send`] and [`Either`].
+/// such as [`choose_right_mpst_session_c_to_all`].
+/// Implemented using [`Send`] and [`Either`].
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-/// [`choose_right_mpst_session_c_to_all`]:
-/// crate::functionmpst::choose::choose_right_mpst_session_c_to_all [`Send`]: crate::binary::
-/// struct_trait::send::Send [`Either`]: either::Either
+/// [`choose_right_mpst_session_c_to_all`]: crate::functionmpst\
+/// ::choose::choose_right_mpst_session_c_to_all
+/// [`Send`]: crate::binary::struct_trait::send::Send
+/// [`Either`]: either::Either
 pub type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
         MeshedChannels<
