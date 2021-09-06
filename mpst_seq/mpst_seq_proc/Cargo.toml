@@ -1,6 +1,6 @@
 [package]
 name = "mpst-seq-proc"
-version = "0.0.11"
+version = "0.0.12"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 description = "A library with macro for mpstthree"
 edition = "2018"
