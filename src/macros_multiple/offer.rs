@@ -2,7 +2,7 @@
 //! for creating offer functions for any number
 //! of participants.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"macros_multiple"` feature.*
 
 /// Create the *OfferMpst* type to be used with more than 3 participants.
@@ -22,7 +22,7 @@
 /// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -73,7 +73,7 @@ macro_rules! create_offer_type_multi {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -149,7 +149,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// )?;
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -187,7 +187,7 @@ macro_rules! offer_mpst {
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -244,7 +244,7 @@ macro_rules! offer_cancel_mpst {
 /// })?;
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]

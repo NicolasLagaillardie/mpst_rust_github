@@ -2,7 +2,7 @@
 //! for creating choose functions for any number
 //! of participants.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"macros_multiple"` feature.*
 
 /// Create the *ChooseMpst* type to be used with more than 3 participants.
@@ -22,7 +22,7 @@
 /// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -70,7 +70,7 @@ macro_rules! create_choose_type_multi {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -132,7 +132,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -196,7 +196,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -279,7 +279,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -353,7 +353,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///
 /// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -468,7 +468,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -540,7 +540,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -599,7 +599,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -663,7 +663,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
