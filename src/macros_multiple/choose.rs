@@ -2,7 +2,7 @@
 //! for creating choose functions for any number
 //! of participants.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"macros_multiple"` feature.*
 
 /// Create the *ChooseMpst* type to be used with more than 3 participants.
@@ -22,12 +22,12 @@
 /// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
-    ($type_name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
         mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $nsessions);
     };
 }
@@ -51,7 +51,7 @@ macro_rules! create_choose_type_multi {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_left, create_choose_type_multi,
-///     create_normal_role, create_meshedchannels,
+///     create_meshedchannels, create_normal_role,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
@@ -70,18 +70,18 @@ macro_rules! create_choose_type_multi {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_left {
     (
-        $func_name: ident,
-        $type_name: ident,
-        $role_dual: ident,
-        $name: ident,
-        $meshedchannels_name: ident,
-        $nsessions: literal
+        $func_name:ident,
+        $type_name:ident,
+        $role_dual:ident,
+        $name:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_left!(
             $func_name,
@@ -113,7 +113,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_right, create_choose_type_multi,
-///     create_normal_role, create_meshedchannels,
+///     create_meshedchannels, create_normal_role,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
@@ -132,18 +132,18 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_right {
     (
-        $func_name: ident,
-        $type_name: ident,
-        $role_dual: ident,
-        $name: ident,
-        $meshedchannels_name: ident,
-        $nsessions: literal
+        $func_name:ident,
+        $type_name:ident,
+        $role_dual:ident,
+        $name:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_right!(
             $func_name,
@@ -176,7 +176,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_both, create_choose_type_multi,
-///     create_normal_role, create_meshedchannels,
+///     create_meshedchannels, create_normal_role,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
@@ -196,19 +196,19 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_both {
     (
-        $func_name_left: ident,
-        $func_name_right: ident,
-        $type_name: ident,
-        $role_dual: ident,
-        $name: ident,
-        $meshedchannels_name: ident,
-        $nsessions: literal
+        $func_name_left:ident,
+        $func_name_right:ident,
+        $type_name:ident,
+        $role_dual:ident,
+        $name:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal
     ) => {
         mpstthree::create_choose_mpst_session_multi_left!(
             $func_name_left,
@@ -279,7 +279,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -353,7 +353,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///
 /// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -428,7 +428,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// Available on the *cancel/cancel_8* test.
 ///
 /// ```compile_fail
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, choose_mpst_multi_cancel_to_all};
+/// use mpstthree::{create_multiple_normal_role, choose_mpst_multi_cancel_to_all};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
@@ -468,7 +468,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -540,7 +540,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -599,7 +599,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -663,7 +663,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]

@@ -15,29 +15,7 @@ use std::error::Error;
 use std::marker;
 use std::time::Duration;
 
-// global protocol Proto(role A, role C, role S)
-// {
-//     choice at S
-//     {
-//         login(Int) from S to C;
-//         password(Int) from C to A;
-//         choice at A
-//         {
-//              Auth(Int) from A to S;
-//              Auth(Int) from S to C;
-//         }
-//         or
-//         {
-//              again(Int) from A to S;
-//              again(Int) from S to C;
-//         }
-//     }
-//     or
-//     {
-//         cancel(Int) from S to C;
-//         quit(Int) from C to A;
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

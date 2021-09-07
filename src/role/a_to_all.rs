@@ -21,9 +21,9 @@ use crossbeam_channel::{bounded, Sender};
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role; // Only used for example
 /// use mpstthree::role::a_to_all::RoleAtoAll;
 /// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::role::Role; // Only used for example
 ///
 /// type NameAtoAllDual = RoleAtoAll<RoleEnd, RoleEnd>;
 ///

@@ -3,12 +3,12 @@
 binop_separator = "Front" # "Front", "Back"
 # blank_lines_lower_bound = 1
 # blank_lines_upper_bound = 1
-brace_style = "AlwaysNextLine" # "AlwaysNextLine", "PreferSameLine", "SameLineWhere"
+brace_style = "SameLineWhere" # "AlwaysNextLine", "PreferSameLine", "SameLineWhere"
 # chain_width = 60
 combine_control_expr = false # true, false
 comment_width = 100
 # condense_wildcard_suffixes = false # "true", "false"
-control_brace_style = "AlwaysSameLine" # "AlwaysNextLine", "AlwaysSameLine", "ClosingNextLine"
+control_brace_style = "AlwaysNextLine" # "AlwaysNextLine", "AlwaysSameLine", "ClosingNextLine"
 # edition = "2018"
 # empty_item_single_line = true # true, false
 # enum_discrim_align_threshold = 0

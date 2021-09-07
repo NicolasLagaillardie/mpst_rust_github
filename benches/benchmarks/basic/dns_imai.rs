@@ -3,6 +3,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_create_multi_to_all,
@@ -10,24 +11,12 @@ use mpstthree::{
     create_send_mpst_session_bundle, offer_mpst,
 };
 
-use mpstthree::role::broadcast::RoleBroadcast;
 use rand::random;
+
 use std::error::Error;
 use std::time::Duration;
 
-// explicit global protocol Dns(role Client, role Server, role Other)
-// {
-//     query(Addr, Packet) connect Client to Server;
-
-//     choice at Server {
-//         dummy() connect Server to Other;
-//         answer(Addr, Packet) from Server to Client;
-//     } or {
-//         query(Addr, Packet) connect Server to Other;
-//         answer(Addr, Packet) from Other to Server;
-//         answer(Addr, Packet) from Server to Client;
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

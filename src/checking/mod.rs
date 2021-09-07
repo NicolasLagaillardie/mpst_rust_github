@@ -1,10 +1,10 @@
 #![cfg(feature = "checking")]
 
 //! This module contains the macros and the functions for
-//! checking wether a protocol is well written or not,
+//! checking whether a protocol is well written or not,
 //! according to a bottom-up method.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"checking"` feature.*
 
 use petgraph::Graph;
@@ -32,13 +32,18 @@ use aux_checker::*;
 ///
 /// * \[Optional\] The name of the new file after running the [`KMC`] tool
 /// * Each starting endpoint, separated by a comma
-/// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all the different branches sent.
+/// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all
+///   the different branches sent.
 /// Currently, we do not support parameters for branches with `enum`
 ///
+/// # Example
+///
+/// Assume that there are two choices (Branches0BtoA and Branches0CtoA), each one with two branches
+/// (Video and End). Assume also that the starting Endpoints of the three roles are EndpointAFull,
+/// EndpointCFull and EndpointBFull (the order does not matter). The call for this macro would be as
+/// followed
+///
 /// ```ignore
-/// // Assume that there are two choices (Branches0BtoA and Branches0CtoA), each one with two branches (Video and End).
-/// // Assume also that the starting Endpoints of the three roles are EndpointAFull, EndpointCFull and EndpointBFull
-/// // (the order does not matter). The call for this macro would be as followed
 /// mpstthree::checker_concat!(
 ///     EndpointAFull,
 ///     EndpointCFull,
@@ -59,7 +64,7 @@ use aux_checker::*;
 ///
 /// [`KMC`]: https://github.com/julien-lange/kmc
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"checking"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]

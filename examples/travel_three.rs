@@ -11,32 +11,7 @@ use rand::{random, thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
-// global protocol Booking(role C, role A, role S)
-// {
-//     choice at C
-//     {
-//         choice at C
-//         {
-//             Yes() from C to A;
-//             Yes() from A to S;
-//             Payment(int) from C to S;
-//             Ack() from S to C;
-//         }
-//         or
-//         {
-//             No() from C to A;
-//             No() from A to S;
-//         }
-//         Bye() from C to A;
-//     }
-//     or
-//     {
-//         Query(int) from C to A;
-//         Quote(int) from A to C;
-//         Dummy() from A to S;   // Dummy
-//         do Booking(C, A, S);
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

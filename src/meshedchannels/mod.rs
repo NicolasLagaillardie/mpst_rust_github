@@ -5,11 +5,9 @@
 //!
 //! It contains 4 fields:
 //! - **session1**: contains the first binary session type, which links the participant to the first
-//!   participant in the alphanumerical order. It contains
-//!   [`Session`].
+//!   participant in the alphanumerical order. It contains [`Session`].
 //! - **session2**: contains the second binary session type, which links the participant to the
-//!   second participant in the alphanumerical order. It contains
-//!   [`Session`].
+//!   second participant in the alphanumerical order. It contains [`Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and the others.
 //!   It contains [`Role`].
 //! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
@@ -30,24 +28,22 @@ pub mod impl_c;
 ///
 /// # Arguments
 ///
-/// * The first binary [`session`](crate::binary::struct_trait::session::Session).
-///     It must be filled with [`Send`](crate::binary::struct_trait::send::Send) and/or
-///     [`Recv`](crate::binary::struct_trait::recv::Recv) and end with
-///     [`End`](crate::binary::struct_trait::end::End).
+/// * The first binary [`session`](crate::binary::struct_trait::session::Session). It must be filled
+///   with [`Send`](crate::binary::struct_trait::send::Send) and/or
+///   [`Recv`](crate::binary::struct_trait::recv::Recv) and end with
+///   [`End`](crate::binary::struct_trait::end::End).
 ///
-/// * The second binary [`session`](crate::binary::struct_trait::session::Session).
-///     It must be filled with [`Send`](crate::binary::struct_trait::send::Send) and/or
-///     [`Recv`](crate::binary::struct_trait::recv::Recv) and end with
-///     [`End`](crate::binary::struct_trait::end::End).
+/// * The second binary [`session`](crate::binary::struct_trait::session::Session). It must be
+///   filled with [`Send`](crate::binary::struct_trait::send::Send) and/or
+///   [`Recv`](crate::binary::struct_trait::recv::Recv) and end with
+///   [`End`](crate::binary::struct_trait::end::End).
 ///
-/// * The stack of the MeshedChannels.
-///     It must be filled with a role, such as [`RoleA`](crate::role::a::RoleA) or
-///     [`RoleBtoAll`](crate::role::b_to_all::RoleBtoAll) and end with
-///     [`RoleEnd`](crate::role::end::RoleEnd).
+/// * The stack of the MeshedChannels. It must be filled with a role, such as
+///   [`RoleA`](crate::role::a::RoleA) or [`RoleBtoAll`](crate::role::b_to_all::RoleBtoAll) and end
+///   with [`RoleEnd`](crate::role::end::RoleEnd).
 ///
-/// * The name of the role of the MeshedChannels.
-///     It must be one among: *RoleA<RoleEnd>*, *RoleB<RoleEnd>* or
-///     *RoleC<RoleEnd>*.
+/// * The name of the role of the MeshedChannels. It must be one among: *RoleA<RoleEnd>*,
+///   *RoleB<RoleEnd>* or *RoleC<RoleEnd>*.
 ///
 /// # Example
 ///

@@ -2,7 +2,7 @@
 //! for creating offer functions for any number
 //! of participants.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"macros_multiple"` feature.*
 
 /// Create the *OfferMpst* type to be used with more than 3 participants.
@@ -16,18 +16,18 @@
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_offer_type_multi, create_meshedchannels};
+/// use mpstthree::{create_meshedchannels, create_offer_type_multi};
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_type_multi {
-    ($type_name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
         mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $nsessions);
     };
 }
@@ -52,8 +52,8 @@ macro_rules! create_offer_type_multi {
 ///
 /// ```
 /// use mpstthree::{
-///     create_broadcast_role, create_normal_role, create_offer_mpst_session_multi,
-///     create_offer_type_multi, create_meshedchannels,
+///     create_broadcast_role, create_meshedchannels, create_normal_role,
+///     create_offer_mpst_session_multi, create_offer_type_multi,
 /// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
@@ -73,12 +73,20 @@ macro_rules! create_offer_type_multi {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_mpst_session_multi {
-    ($func_name: ident, $type_name: ident, $role: ident, $name: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $type_name:ident,
+        $role:ident,
+        $name:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_offer_mpst_session_multi!(
             $func_name,
             $type_name,
@@ -141,7 +149,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// )?;
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -179,7 +187,7 @@ macro_rules! offer_mpst {
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -236,7 +244,7 @@ macro_rules! offer_cancel_mpst {
 /// })?;
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]

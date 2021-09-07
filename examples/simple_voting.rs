@@ -11,20 +11,7 @@ use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
-// global protopol SimpleVoting(role VOTER, role SERVER){
-//     Authenticate(String) from VOTER to SERVER;
-//     choice at SERVER {
-//         Ok(String) from SERVER to VOTER;
-//         choice at VOTER {
-//             Yes(String) from VOTER to SERVER;
-//         } or {
-//             No(String) from VOTER to SERVER;
-//         }
-//         Result(Int) from SERVER to VOTER;
-//     } or {
-//         Reject(String) from SERVER to VOTER;
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);

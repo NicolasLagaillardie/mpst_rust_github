@@ -10,10 +10,12 @@
     unreachable_pub
 )]
 #![deny(unused_must_use)]
-#![cfg_attr(docsrs, deny(rustdoc::broken_intra_doc_links))]
-#![doc(test(no_crate_inject, attr(deny(warnings, rust_2018_idioms))))]
-#![cfg_attr(docsrs, feature(doc_cfg))]
-#![cfg_attr(docsrs, allow(unused_attributes))]
+#![cfg_attr(doc_cfg, feature(doc_cfg))]
+#![cfg_attr(doc_cfg, deny(rustdoc::broken_intra_doc_links))]
+#![doc(test(
+    no_crate_inject,
+    attr(deny(warnings, rust_2018_idioms, unused_attributes))
+))]
 
 //! [![github]](https://github.com/NicolasLagaillardie/mpst_rust_github)&ensp;[![crates-io]](https://crates.io/crates/mpstthree)&ensp;[![docs-rs]](https://docs.rs/mpstthree)
 //!
@@ -23,7 +25,7 @@
 //!
 //! <br>
 //!
-//! Mpstthree (also called MultiCrusty) is a library to
+//! Mpstthree (also called mp-anon) is a library to
 //! write and check communication protocols based on [Multiparty Session Types](https://mrg.doc.ic.ac.uk/publications/a-very-gentle-introduction-to-multiparty-session-types/).
 //!
 //! Currently this library is geared toward use with [Scribble](https://www.scribble.org/)

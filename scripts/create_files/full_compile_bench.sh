@@ -10,7 +10,7 @@ sleep 5
 ./scripts/create_files/compile.sh o_auth 100
 ./scripts/create_files/compile.sh o_auth_2 100
 ./scripts/create_files/compile.sh fib 100
-./scripts/create_files/compile.sh simple_voting_three 100
+./scripts/create_files/compile.sh simple_voting 100
 ./scripts/create_files/compile.sh three_buyer 100
 ./scripts/create_files/compile.sh travel_three 100
 ./scripts/create_files/compile.sh actyx_os_logging 100

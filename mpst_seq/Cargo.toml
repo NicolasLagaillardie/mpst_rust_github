@@ -1,6 +1,6 @@
 [package]
 name = "mpst-seq"
-version = "0.0.10"
+version = "0.0.12"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 description = "A library with macro for mpstthree"
 edition = "2018"
@@ -15,5 +15,5 @@ exclude = ["mpst_seq_proc/"]
 
 [dependencies]
 proc-macro-hack = "0.5.19"
-# mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.10" }
-mpst-seq-proc = "0.0.10"
+mpst-seq-proc = { path = "mpst_seq_proc", version = "0.0.12" }
+# mpst-seq-proc = "0.0.12"

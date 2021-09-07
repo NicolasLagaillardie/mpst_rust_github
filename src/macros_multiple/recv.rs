@@ -2,7 +2,7 @@
 //! for creating receive functions for any number
 //! of participants.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"macros_multiple"` feature.*
 
 /// Shorter way to call the code within the recv function instead of having to create the function
@@ -36,12 +36,19 @@
 /// }
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! recv_mpst {
-    ($session: expr, $sender: ident, $receiver: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $session:expr,
+        $sender:ident,
+        $receiver:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::recv_mpst!(
             $session,
             $sender,
@@ -82,12 +89,19 @@ macro_rules! recv_mpst {
 /// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session {
-    ($func_name: ident, $sender: ident, $receiver: ident, $meshedchannels_name: ident, $nsessions: literal, $exclusion: literal) => {
+    (
+        $func_name:ident,
+        $sender:ident,
+        $receiver:ident,
+        $meshedchannels_name:ident,
+        $nsessions:literal,
+        $exclusion:literal
+    ) => {
         mpst_seq::create_recv_mpst_session!(
             $func_name,
             $sender,
@@ -107,8 +121,8 @@ macro_rules! create_recv_mpst_session {
 /// * The name of the new *recv* functions
 /// * The name of the senders
 /// * The name of the receiver
-/// * The index of the binary session types that will receive in the MeshedChannels for each specific
-///   role. Index starts at 1.
+/// * The index of the binary session types that will receive in the MeshedChannels for each
+///   specific role. Index starts at 1.
 /// * The name of the *MeshedChannels* type that will be used
 /// * The number of participants (all together)
 ///
@@ -139,7 +153,7 @@ macro_rules! create_recv_mpst_session {
 /// );
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]

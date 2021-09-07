@@ -8,38 +8,13 @@ use mpstthree::{
 };
 
 use hyper::Request;
+
 use rand::{thread_rng, Rng};
+
 use std::error::Error;
 use std::marker;
 
-// global protocol OAuth(role Auth, role Client, role Server) {
-//     Authorization(Approval) from Client to Auth; // Request Authorization Approval
-//     choice at A
-//     {
-//         Access(Token) from Auth to Client;
-//         rec Loop {
-//             choice at Client { // Client makes a choice
-//                 RequestPicture(Token) from Client to Server; // Client sends a request for a picture, giving its access token
-//                 GetAuth(Token) from Server to Auth; // Server checks the Token with Auth
-//                 SendAuth(Token) from Auth to Server; // Auth answers the check
-//                 choice at S
-//                 {
-//                     SendPicture(Answer) from Server to Client; // Server sends the picture file to the client
-//                     continue Loop; // A Recursive call
-//                 } or {
-//                     SendRefusal(Answer) from Server to Client; // Server sends refusal to the client
-//                     continue Loop; // A Recursive call
-//                 }
-//             } or {
-//                 Close() from Client to Server; // Close the session between Client and Server
-//                 Close() from Server to Auth; // Close the session between Server and Auth
-//             }
-//         }
-//     } or {
-//         Close() from Auth to Client; // Close the session between Client and Auth
-//         Close() from Client to Server; // Close the session between Client and Server
-//     }
-// }
+// See the folder scribble_protocols for the Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

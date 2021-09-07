@@ -41,7 +41,7 @@ where
 /// `enum`
 #[macro_export]
 macro_rules! choose {
-    ($label: path, $session: expr) => {{
+    ($label:path, $session:expr) => {{
         let (here, there) = <_ as mpstthree::binary::struct_trait::session::Session>::new();
         let s = mpstthree::binary::send::send($label(there), $session);
         mpstthree::binary::cancel::cancel(s);

@@ -2,7 +2,7 @@
 //! for creating fork functions for any number
 //! of participants.
 //!
-//! *This module is available only if MultiCrusty is built with
+//! *This module is available only if mp-anon is built with
 //! the `"macros_multiple"` feature.*
 
 /// Creates the _fork_ function to be used with more than 3
@@ -25,12 +25,12 @@
 /// fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if MultiCrusty is built with
+/// *This macro is available only if mp-anon is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! fork_mpst_multi {
-    ($func_name: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($func_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
         mpst_seq::fork_mpst_multi!($func_name, $meshedchannels_name, $nsessions);
     };
 }

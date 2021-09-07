@@ -64,7 +64,8 @@ pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     Ok(full_block)
 }
 
-// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective role.
+// Clean the sessions received and returns a Hashmap of the cleaned sessions and their respective
+// role.
 //
 // Remove the unnecessary terms before each :: (such as mpstthree in mpstthree::Session),
 // and link each new String with its respective role.
