@@ -25,7 +25,7 @@
 //!
 //! <br>
 //!
-//! Mpstthree (also called mp-anon) is a library to
+//! Mpstthree (also called MultiCrusty) is a library to
 //! write and check communication protocols based on [Multiparty Session Types](https://mrg.doc.ic.ac.uk/publications/a-very-gentle-introduction-to-multiparty-session-types/).
 //!
 //! Currently this library is geared toward use with [Scribble](https://www.scribble.org/)

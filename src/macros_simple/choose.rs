@@ -2,7 +2,7 @@
 //! for creating choose functions for three
 //! of participants, whatever are their name.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_simple"` feature.*
 
 // Create the core for the choose_mpst macros
@@ -247,7 +247,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -354,7 +354,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -461,7 +461,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -568,7 +568,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -675,7 +675,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -782,7 +782,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -893,7 +893,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// [create_choose_right_from_2_to_1_and_3]: crate::create_choose_right_from_2_to_1_and_3
 /// [create_choose_left_from_2_to_1_and_3]: crate::create_choose_left_from_2_to_1_and_3
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -968,7 +968,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// [create_choose_right_from_1_to_2_and_3]: crate::create_choose_right_from_1_to_2_and_3
 /// [create_choose_left_from_1_to_2_and_3]: crate::create_choose_left_from_1_to_2_and_3
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -1043,7 +1043,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// [create_choose_right_from_3_to_1_and_2]: crate::create_choose_right_from_3_to_1_and_2
 /// [create_choose_left_from_3_to_1_and_2]: crate::create_choose_left_from_3_to_1_and_2
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -1119,7 +1119,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]

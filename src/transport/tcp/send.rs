@@ -2,7 +2,7 @@
 //! sending a payload
 //! for a TCP connection.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"transport"` feature.*
 
 use crate::binary::struct_trait::{send::Send, session::Session};
@@ -18,7 +18,7 @@ type TcpData = [u8; 128];
 /// Send a value of type `T` over tcp. Returns the
 /// continuation of the session `S`. May fail.
 ///
-/// *This function is available only if mp-anon is built with
+/// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature.*
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 pub fn send_tcp<T, S>(

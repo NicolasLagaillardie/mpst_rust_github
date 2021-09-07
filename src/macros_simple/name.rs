@@ -1,7 +1,7 @@
 //! This module contains the macros
 //! for creating new participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_simple"` feature.*
 
 /// Create a new [`Role`] and its dual.
@@ -21,7 +21,7 @@
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -173,7 +173,7 @@ macro_rules! create_normal_role {
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -202,7 +202,7 @@ macro_rules! create_multiple_normal_role {
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -390,7 +390,7 @@ macro_rules! create_broadcast_role {
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -427,7 +427,7 @@ macro_rules! create_multiple_broadcast_role {
 /// [`Role`]: crate::role::Role
 /// [`create_normal_role`]: crate::create_normal_role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -460,7 +460,7 @@ macro_rules! create_normal_role_short {
 /// [`Role`]: crate::role::Role
 /// [`create_multiple_normal_role`]: crate::create_multiple_normal_role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -497,7 +497,7 @@ macro_rules! create_multiple_normal_role_short {
 /// [`Role`]: crate::role::Role
 /// [`create_broadcast_role`]: crate::create_broadcast_role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -533,7 +533,7 @@ macro_rules! create_broadcast_role_short {
 /// [`Role`]: crate::role::Role
 /// [`create_multiple_broadcast_role_short`]: crate::create_multiple_broadcast_role_short
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]

@@ -2,7 +2,7 @@
 //! receiving a payload
 //! for an HTTP connection, for at least two participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"transport"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
@@ -16,7 +16,7 @@ use tokio::runtime::Runtime;
 /// Send a value of type `T` over http. Returns the
 /// continuation of the session `S`. May fail.
 ///
-/// *This function is available only if mp-anon is built with
+/// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature.*
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 pub fn recv_http<T, S>(
@@ -72,7 +72,7 @@ where
 /// create_recv_http_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"transport"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
@@ -137,7 +137,7 @@ macro_rules! create_recv_http_session {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"transport"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]

@@ -4,7 +4,7 @@
 //! checking whether a protocol is well written or not,
 //! according to a bottom-up method.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"checking"` feature.*
 
 use petgraph::Graph;
@@ -64,7 +64,7 @@ use aux_checker::*;
 ///
 /// [`KMC`]: https://github.com/julien-lange/kmc
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"checking"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
