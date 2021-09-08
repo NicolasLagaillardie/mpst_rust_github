@@ -61,7 +61,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 use mpstthree::functionmpst::close::close_mpst;
 
 // Used for connecting all the roles, represented as MeshedChannels, together
-use mpstthree::functionmpst::fork_mpst;
+use mpstthree::functionmpst::fork::fork_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
@@ -114,7 +114,7 @@ we need to detail the behaviour of the participants with functions that input th
 
 ```rust
 // Function to process Endpoint of A
-fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_from_c(s)?;
 
@@ -122,7 +122,7 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 // Function to process Endpoint of B
-fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
@@ -130,7 +130,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 // Function to process Endpoint of C
-fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_from_b(s)?;
 
@@ -144,7 +144,7 @@ Do not forget to **unwrap()** the returned threads.
 
 ```rust
 // Fork all endpoints
-fn simple_triple_endpoints() {
+fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         endpoint_a,
         endpoint_b,

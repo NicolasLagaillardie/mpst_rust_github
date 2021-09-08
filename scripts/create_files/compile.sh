@@ -5,7 +5,7 @@ set -e
 # Remove previous benchmarks
 rm -rf compile_time/$1*.txt
 
-cargo check --example=$1 || command_failed=1
+cargo check --example=$1 --features="$3" || command_failed=1
 
 if [ ${command_failed:-0} -ne 1 ]
 then
@@ -17,7 +17,7 @@ then
         # Get time
         ts=$(date +%s%N)
         # Run command
-        cargo check --example=$1
+        cargo check --example=$1 --features="$3" 
         # Get difference
         tt=$((($(date +%s%N) - $ts)/1000))
         # Output difference
@@ -32,7 +32,7 @@ then
         # Get time
         ts=$(date +%s%N)
         # Run command
-        cargo build --example=$1
+        cargo build --example=$1 --features="$3" 
         # Get difference
         tt=$((($(date +%s%N) - $ts)/1000))
         # Output difference
@@ -47,7 +47,7 @@ then
         # Get time
         ts=$(date +%s%N)
         # Run command
-        cargo build --release --example=$1
+        cargo build --release --example=$1 --features="$3" 
         # Get difference
         tt=$((($(date +%s%N) - $ts)/1000))
         # Output difference

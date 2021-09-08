@@ -10,7 +10,7 @@ use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
 
 use std::error::Error;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);

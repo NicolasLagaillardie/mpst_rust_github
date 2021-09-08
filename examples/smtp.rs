@@ -14,7 +14,7 @@ use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create new roles
 // normal

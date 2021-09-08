@@ -16,7 +16,7 @@ use std::error::Error;
 use std::marker;
 use std::time::Duration;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for seven participants
 create_meshedchannels!(MeshedChannelsFour, 4);
