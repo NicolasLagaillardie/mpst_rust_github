@@ -1,9 +1,7 @@
-use mpstthree::binary::cancel::cancel_tcp;
-use mpstthree::binary::close::close_tcp;
-use mpstthree::binary::fork::fork_tcp;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::transport::tcp::recv::recv_tcp;
-use mpstthree::transport::tcp::send::send_tcp;
+use mpstthree::transport::tcp::{
+    cancel::cancel_tcp, close::close_tcp, fork::fork_tcp, recv::recv_tcp, send::send_tcp,
+};
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;
@@ -14,13 +12,22 @@ use std::thread::{spawn, JoinHandle};
 type Data = ((), [u8; 128]);
 
 /////////////////////////
+
+// Types
 // A
 #[derive(Debug)]
 enum BinaryA {
     More(Recv<Data, Send<Data, RecursA>>),
     Done(End),
 }
+
 type RecursA = Recv<([u8; 128], BinaryA), End>;
+
+// B
+type RecursB = <RecursA as Session>::Dual;
+
+// Functions
+// A
 fn binary_a_to_b(s: RecursA, stream: TcpStream) -> Result<(), Box<dyn Error>> {
     offer_tcp!(s, {
         BinaryA::Done(s) => {
@@ -35,7 +42,6 @@ fn binary_a_to_b(s: RecursA, stream: TcpStream) -> Result<(), Box<dyn Error>> {
 }
 
 // B
-type RecursB = <RecursA as Session>::Dual;
 fn binary_b_to_a(
     s: Send<Data, Recv<Data, RecursB>>,
     stream: TcpStream,
@@ -64,7 +70,7 @@ fn tcp_client_aux(mut sessions: Vec<RecursB>, stream: TcpStream) -> Result<(), B
         sessions = temp;
     }
 
-    let mut temp = Vec::<mpstthree::binary::struct_trait::end::End>::new();
+    let mut temp = Vec::<End>::new();
 
     for s in sessions {
         temp.push(choose_tcp!(BinaryA::Done, s, [0_u8; 128]));

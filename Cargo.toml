@@ -66,9 +66,19 @@ path = "tests/macros_simple.rs"
 required-features = ["macros_simple"]
 
 [[test]]
-name = "transport"
-path = "tests/transport.rs"
-required-features = ["transport_macros_multiple"]
+name = "transport_udp"
+path = "tests/transport_udp.rs"
+required-features = ["transport_udp"]
+
+[[test]]
+name = "transport_tcp"
+path = "tests/transport_tcp.rs"
+required-features = ["transport_tcp"]
+
+[[test]]
+name = "transport_http"
+path = "tests/transport_http.rs"
+required-features = ["transport_http", "macros_multiple"]
 
 [[test]]
 name = "baking"
@@ -193,7 +203,10 @@ macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
-transport = ["default", "hyper", "hyper-tls", "tokio"]
+transport_tcp = ["default"]
+transport_udp = ["default"]
+transport_http = ["default", "hyper", "hyper-tls", "tokio"]
+transport = ["transport_tcp", "transport_udp", "transport_http"]
 # For test compile examples
 transport_macros_multiple = ["macros_multiple", "transport"]
 full = ["checking", "baking", "transport"]

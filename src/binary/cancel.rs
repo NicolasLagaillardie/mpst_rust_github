@@ -2,7 +2,6 @@
 //! for cancelling binary sessions.
 
 use std::mem;
-use std::net::{Shutdown, TcpStream};
 
 /// Cancels a session. Always succeeds. If the partner calls `recv` or `close` after cancellation,
 /// those calls fail.
@@ -22,31 +21,4 @@ use std::net::{Shutdown, TcpStream};
 /// ```
 pub fn cancel<T>(s: T) {
     mem::drop(s);
-}
-
-/// Cancels a session. Always succeeds. If the partner calls `recv` or `close` after cancellation,
-/// those calls fail. Used for tcp transport.
-///
-/// Drops the session *s* and shutdowns the `TcpStream` *stream*
-///
-/// # Example
-///
-/// ```
-/// use mpstthree::binary::cancel::cancel_tcp;
-/// use mpstthree::binary::struct_trait::end::End;
-/// use mpstthree::binary::struct_trait::session::Session;
-/// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::end::RoleEnd;
-/// use std::net::{TcpListener, TcpStream};
-///
-/// let _listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
-/// let stream = TcpStream::connect("localhost:3333").unwrap();
-/// cancel_tcp(s, stream);
-/// ```
-pub fn cancel_tcp<T>(s: T, stream: TcpStream) {
-    mem::drop(s);
-    stream.shutdown(Shutdown::Both).unwrap();
-    mem::drop(stream);
 }

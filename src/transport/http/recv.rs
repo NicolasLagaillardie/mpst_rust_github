@@ -17,8 +17,11 @@ use tokio::runtime::Runtime;
 /// continuation of the session `S`. May fail.
 ///
 /// *This function is available only if MultiCrusty is built with
-/// the `"transport"` feature.*
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+/// the `"transport"` feature or the `"transport_http"` feature.*
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
 pub fn recv_http<T, S>(
     s: Recv<T, S>,
     http: bool,
@@ -58,7 +61,7 @@ where
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use mpstthree::{create_multiple_normal_role, create_recv_http_session, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
@@ -73,9 +76,12 @@ where
 /// ```
 ///
 /// *This macro is available only if MultiCrusty is built with
-/// the `"transport"` feature.*
+/// the `"transport"` feature or the `"transport_http"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
 macro_rules! create_recv_http_session {
     (
         $func_name:ident,
@@ -112,7 +118,7 @@ macro_rules! create_recv_http_session {
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_recv_http_session_bundle};
 ///
 /// create_multiple_normal_role!(
@@ -138,9 +144,12 @@ macro_rules! create_recv_http_session {
 /// ```
 ///
 /// *This macro is available only if MultiCrusty is built with
-/// the `"transport"` feature.*
+/// the `"transport"` feature or the `"transport_http"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
 macro_rules! create_recv_http_session_bundle {
     ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $nsessions: literal) => {
        $(

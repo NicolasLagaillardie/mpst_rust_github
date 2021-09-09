@@ -294,6 +294,4 @@ pub mod macros_multiple;
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
 pub mod baking;
 
-#[cfg(feature = "transport")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
 pub mod transport;
