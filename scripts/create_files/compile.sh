@@ -9,7 +9,7 @@ cargo check --example=$1 --features="$3" || command_failed=1
 
 if [ ${command_failed:-0} -ne 1 ]
 then
-    # Run over 100 times
+    # Loop
     for i in {1..$2}
     do
         # Remove previous build
@@ -24,8 +24,8 @@ then
         printf "check; $tt\n" >> compile_time/$1.txt
     done
 
-    # Run over 100 times
-    for i in {1..5}
+    # Loop
+    for i in {1..$2}
     do
         # Remove previous build
         cargo clean
@@ -39,8 +39,8 @@ then
         printf "build; $tt\n" >> compile_time/$1.txt
     done
 
-    # Run over 100 times
-    for i in {1..5}
+    # RLoop
+    for i in {1..$2}
     do
         # Remove previous build
         cargo clean
