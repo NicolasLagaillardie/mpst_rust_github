@@ -717,7 +717,7 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
-    recurs_j(s, SIZE)
+    recurs_j(s, LOOPS)
 }
 
 fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
@@ -784,10 +784,10 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring ten cancel protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("ring ten cancel protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }

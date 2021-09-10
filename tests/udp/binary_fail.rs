@@ -8,8 +8,11 @@ use mpstthree::{choose_udp, offer_udp};
 use std::error::Error;
 use std::net::UdpSocket;
 use std::thread::{spawn, JoinHandle};
+use std::time::Duration;
 
 type Data = ((), [u8; 128]);
+
+static LOOPS: i64 = 5;
 
 /////////////////////////
 // Types
@@ -33,7 +36,7 @@ fn binary_a_to_b(s: RecursA, socket: UdpSocket) -> Result<(), Box<dyn Error>> {
         },
         BinaryA::More(s) => {
             let (_payload, s, data, _r, socket) = recv_udp(s, socket, false)?;
-            let (s, socket, _data) = send_udp((), &data, s, socket, false)?;
+            let (s,  _data, socket) = send_udp((), &data, s, socket, false)?;
             binary_a_to_b(s, socket)
         },
     })
@@ -44,9 +47,9 @@ fn binary_b_to_a(
     socket: UdpSocket,
     index: i64,
 ) -> Result<RecursB, Box<dyn Error>> {
-    let (s, socket, _data) = send_udp((), &[0_u8; 128], s, socket, true)?;
+    let (s, _data, socket) = send_udp((), &[0_u8; 128], s, socket, true)?;
     let (_payload, s, _data, _r, socket) = recv_udp(s, socket, true)?;
-    if index >= 2 {
+    if index >= 3 {
         cancel_udp(s, socket);
         panic!("Cancelling B");
     }
@@ -55,7 +58,7 @@ fn binary_b_to_a(
 }
 
 fn udp_client_aux(mut sessions: Vec<RecursB>, socket: UdpSocket) -> Result<(), Box<dyn Error>> {
-    for i in 0..5 {
+    for i in 0..LOOPS {
         let mut temp = Vec::new();
 
         for s in sessions {
@@ -67,7 +70,7 @@ fn udp_client_aux(mut sessions: Vec<RecursB>, socket: UdpSocket) -> Result<(), B
         sessions = temp;
     }
 
-    let mut temp = Vec::<mpstthree::binary::struct_trait::end::End>::new();
+    let mut temp = Vec::<End>::new();
 
     for s in sessions {
         temp.push(choose_udp!(BinaryA::Done, s, [0_u8; 128]));
@@ -84,7 +87,7 @@ fn udp_client() -> Result<(), Box<dyn Error>> {
     let mut sessions = Vec::new();
 
     let (thread, s, socket): (JoinHandle<()>, RecursB, UdpSocket) =
-        fork_udp(binary_a_to_b, "127.0.0.1:34254")?;
+        fork_udp(binary_a_to_b, "127.0.0.1:8081", "127.0.0.1:8080")?;
 
     sessions.push(s);
 
@@ -113,22 +116,16 @@ fn udp_client() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn udp_server(socket: UdpSocket) -> Result<(), Box<dyn Error>> {
-    socket.connect("127.0.0.1:8080")?;
-    loop {
-        let mut buf = [0; 10];
-        match socket.recv(&mut buf) {
-            Ok(_) => {}
-            Err(_) => {
-                break;
-            }
-        };
-        match socket.send(&[0, 1, 2]) {
-            Ok(_) => {}
-            Err(_) => {
-                break;
-            }
-        };
+fn udp_server() -> Result<(), Box<dyn Error>> {
+    let socket = UdpSocket::bind("127.0.0.1:8080")?;
+
+    // Necessary for the cancellation
+    let _ = socket.set_read_timeout(Some(Duration::new(0, 500)))?;
+
+    for _ in 0..LOOPS {
+        let mut buf = [0; 128];
+        println!("recv: {:?}", socket.recv_from(&mut buf)?);
+        println!("send: {:?}", socket.send_to(&[0, 1, 2], "127.0.0.1:8081")?);
     }
 
     // close the socket server
@@ -139,21 +136,21 @@ fn udp_server(socket: UdpSocket) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 pub fn main() {
-    let socket = UdpSocket::bind("127.0.0.1:34254").expect("couldn't bind to address");
-    let server = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match udp_server(socket) {
-            Ok(()) => (),
-            Err(e) => panic!("{:?}", e),
-        }
-    });
     let client = spawn(move || {
         std::panic::set_hook(Box::new(|_info| {
             // do nothing
         }));
         match udp_client() {
+            Ok(()) => (),
+            Err(e) => panic!("{:?}", e),
+        }
+    });
+
+    let server = spawn(move || {
+        std::panic::set_hook(Box::new(|_info| {
+            // do nothing
+        }));
+        match udp_server() {
             Ok(()) => (),
             Err(e) => panic!("{:?}", e),
         }

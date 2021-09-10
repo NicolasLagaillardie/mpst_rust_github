@@ -1155,7 +1155,7 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
-    recurs_k(s, SIZE)
+    recurs_k(s, LOOPS)
 }
 
 fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
@@ -1241,11 +1241,11 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh eleven cancel broadcast protocol MPST {}", SIZE),
+        &format!("mesh eleven cancel broadcast protocol MPST {}", LOOPS),
         |b| b.iter(|| all_mpst()),
     );
 }

@@ -84,7 +84,7 @@ type EndpointB = MeshedChannelsTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE)
+    recurs_a(s, LOOPS)
 }
 
 fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
@@ -143,10 +143,10 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static LOOPS: i64 = 1;
 
 fn ping_pong_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong cancel protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("ping pong cancel protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }

@@ -33,16 +33,10 @@ note: required because it appears within the type `SumOp<i32>`
    |      ^^^^^
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>: Session`
-  --> $DIR/fail.rs:44:1
+  --> $DIR/fail.rs:44:4
    |
-44 | / fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-45 | |     match xs.pop() {
-46 | |         Option::Some(x) if x % 2 == 0 => {
-47 | |             let s = choose!(SumOp::More, s);
-...  |
-64 | |     }
-65 | | }
-   | |_^
+44 | fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+   |    ^^^^^^^^^^^^^^^^^^^^^
    |
    = note: required because of the requirements on the impl of `Session` for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>`
    = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`

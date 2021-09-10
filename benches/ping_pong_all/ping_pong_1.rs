@@ -91,7 +91,7 @@ type EndpointB = MeshedChannelsTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE)
+    recurs_a(s, LOOPS)
 }
 
 fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
@@ -186,7 +186,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     sessions.push(s);
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
@@ -220,7 +220,7 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     let mut threads = Vec::new();
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
             let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
@@ -278,22 +278,22 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static LOOPS: i64 = 1;
 
 fn ping_pong_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("ping pong protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ping_pong_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong protocol binary {}", SIZE), |b| {
+    c.bench_function(&format!("ping pong protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn ping_pong_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong protocol crossbeam {}", SIZE), |b| {
+    c.bench_function(&format!("ping pong protocol crossbeam {}", LOOPS), |b| {
         b.iter(|| all_crossbeam())
     });
 }

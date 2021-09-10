@@ -29,7 +29,7 @@ pub fn send_udp<T, S>(
     s: Send<(T, UdpData), S>,
     socket: UdpSocket,
     udp: bool,
-) -> Result<(S, UdpSocket, usize), Box<dyn Error>>
+) -> Result<(S, usize, UdpSocket), Box<dyn Error>>
 where
     T: marker::Send,
     S: Session,
@@ -39,9 +39,9 @@ where
         Ok(()) => match udp {
             true => {
                 let result = socket.send(data)?;
-                Ok((here, socket, result))
+                Ok((here, result, socket))
             }
-            false => Ok((here, socket, 0)),
+            false => Ok((here, 0, socket)),
         },
         Err(e) => panic!("{}", e.to_string()),
     }

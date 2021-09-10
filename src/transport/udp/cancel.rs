@@ -17,7 +17,7 @@ use std::net::UdpSocket;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::cancel::cancel_udp;
+/// use mpstthree::transport::udp::cancel::cancel_udp;
 /// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use mpstthree::meshedchannels::MeshedChannels;
@@ -25,9 +25,8 @@ use std::net::UdpSocket;
 /// use mpstthree::role::end::RoleEnd;
 /// use std::net::UdpSocket;
 ///
-/// let _listener = UdpSocket::bind("0.0.0.0:3333").unwrap();
+/// let socket = UdpSocket::bind("0.0.0.0:3333").unwrap();
 /// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
-/// socket.connect("localhost:3333").unwrap();
 /// cancel_udp(s, socket);
 /// ```
 ///

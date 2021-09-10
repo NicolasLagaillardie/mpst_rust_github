@@ -957,7 +957,7 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
-    recurs_k(s, SIZE)
+    recurs_k(s, LOOPS)
 }
 
 fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
@@ -1066,7 +1066,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     }
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::Forward, s)).unwrap())
@@ -1101,7 +1101,7 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
     for _ in 0..11 {
         let main = spawn(move || {
-            for _ in 0..SIZE {
+            for _ in 0..LOOPS {
                 let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
                 let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
@@ -1160,22 +1160,22 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring eleven protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("ring eleven protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ring eleven protocol binary {}", SIZE), |b| {
+    c.bench_function(&format!("ring eleven protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("ring eleven protocol crossbeam {}", SIZE), |b| {
+    c.bench_function(&format!("ring eleven protocol crossbeam {}", LOOPS), |b| {
         b.iter(|| all_crossbeam())
     });
 }

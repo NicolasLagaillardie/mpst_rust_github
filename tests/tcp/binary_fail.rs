@@ -58,7 +58,7 @@ fn binary_b_to_a(
 }
 
 fn tcp_client_aux(mut sessions: Vec<RecursB>, stream: TcpStream) -> Result<(), Box<dyn Error>> {
-    for i in 0..SIZE {
+    for i in 0..LOOPS {
         let mut temp = Vec::new();
 
         for s in sessions {
@@ -115,7 +115,7 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     }
 }
 
-static SIZE: i64 = 5;
+static LOOPS: i64 = 5;
 
 /////////////////////////
 
@@ -135,7 +135,7 @@ fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
                     panic!("An error occurred during write")
                 }
                 _ => match index {
-                    i if i + 1 >= SIZE => {
+                    i if i + 1 >= LOOPS => {
                         stream.shutdown(Shutdown::Both).unwrap_or(());
                         index += 1;
                         false

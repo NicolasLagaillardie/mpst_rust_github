@@ -718,7 +718,7 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
-    recurs_i(s, SIZE)
+    recurs_i(s, LOOPS)
 }
 
 fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
@@ -820,7 +820,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     }
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
@@ -855,7 +855,7 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
     for _ in 0..36 {
         let main = spawn(move || {
-            for _ in 0..SIZE {
+            for _ in 0..LOOPS {
                 let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
                 let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
@@ -914,23 +914,23 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 0;
+static LOOPS: i64 = 0;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh nine empty protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("mesh nine empty protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh nine empty protocol binary {}", SIZE), |b| {
+    c.bench_function(&format!("mesh nine empty protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh nine empty protocol crossbeam {}", SIZE),
+        &format!("mesh nine empty protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

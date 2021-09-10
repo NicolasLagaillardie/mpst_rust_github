@@ -98,7 +98,7 @@ type EndpointC = MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE, 1)
+    recurs_a(s, LOOPS, 1)
 }
 
 fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
@@ -230,7 +230,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     }
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::<i64>::More, s)).unwrap())
@@ -251,14 +251,14 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static LOOPS: i64 = 100;
 
 fn fibo_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo MPST {}", SIZE), |b| b.iter(|| all_mpst()));
+    c.bench_function(&format!("Fibo MPST {}", LOOPS), |b| b.iter(|| all_mpst()));
 }
 
 fn fibo_binary(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo binary {}", SIZE), |b| {
+    c.bench_function(&format!("Fibo binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }

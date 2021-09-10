@@ -22,21 +22,21 @@ do
     next=$(($i+1))
     cp benches/ping_pong_all/ping_pong_$i.rs benches/ping_pong_all/ping_pong_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_$next.rs
     sync
     printf 'pub mod ping_pong_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
     printf '\tping_pong_all::ping_pong_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
     #########################
     cp benches/ping_pong_all/ping_pong_cancel_$i.rs benches/ping_pong_all/ping_pong_cancel_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_cancel_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_cancel_$next.rs
     sync
     printf 'pub mod ping_pong_cancel_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
     printf '\tping_pong_all::ping_pong_cancel_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
     #########################
     cp benches/ping_pong_all/ping_pong_cancel_broadcast_$i.rs benches/ping_pong_all/ping_pong_cancel_broadcast_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_cancel_broadcast_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_cancel_broadcast_$next.rs
     sync
     printf 'pub mod ping_pong_cancel_broadcast_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
     printf '\tping_pong_all::ping_pong_cancel_broadcast_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;

@@ -18,7 +18,8 @@ type UdpFork<T> = Result<(JoinHandle<()>, T, UdpSocket), Box<dyn Error>>;
 /// Creates a child process, and a session with two dual
 /// endpoints of type `S` and `S::Dual`. The first endpoint
 /// is given to the child process. Returns the
-/// second endpoint.
+/// second endpoint and the created *bound* and
+/// *connected* socket.
 ///
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_udp"` feature.*
@@ -26,12 +27,13 @@ type UdpFork<T> = Result<(JoinHandle<()>, T, UdpSocket), Box<dyn Error>>;
     doc_cfg,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
-pub fn fork_udp<S, P>(p: P, address: &str) -> UdpFork<S::Dual>
+pub fn fork_udp<S, P>(p: P, bind: &str, connect: &str) -> UdpFork<S::Dual>
 where
     S: Session + 'static,
     P: FnOnce(S, UdpSocket) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    let socket = UdpSocket::bind(address)?;
+    let socket = UdpSocket::bind(bind)?;
+    socket.connect(connect)?;
     let copy_socket = socket.try_clone()?;
     let (there, here) = Session::new();
     let other_thread = spawn(move || {

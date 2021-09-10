@@ -45,7 +45,7 @@ fn main() {
     sessions.push(s);
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
@@ -64,4 +64,4 @@ fn main() {
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static LOOPS: i64 = 1;

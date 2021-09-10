@@ -844,7 +844,7 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
-    recurs_j(s, SIZE)
+    recurs_j(s, LOOPS)
 }
 
 fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
@@ -960,7 +960,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
     }
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             sessions = sessions
                 .into_iter()
                 .map(|s| binary_b_to_a(choose!(BinaryA::More, s)).unwrap())
@@ -995,7 +995,7 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
     for _ in 0..45 {
         let main = spawn(move || {
-            for _ in 0..SIZE {
+            for _ in 0..LOOPS {
                 let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
                 let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
@@ -1054,22 +1054,22 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-static SIZE: i64 = 100;
+static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh ten protocol MPST {}", SIZE), |b| {
+    c.bench_function(&format!("mesh ten protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh ten protocol binary {}", SIZE), |b| {
+    c.bench_function(&format!("mesh ten protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("mesh ten protocol crossbeam {}", SIZE), |b| {
+    c.bench_function(&format!("mesh ten protocol crossbeam {}", LOOPS), |b| {
         b.iter(|| all_crossbeam())
     });
 }
