@@ -41,7 +41,8 @@ where
         Ok(()) => {
             match tcp {
                 true => {
-                    // stream.shutdown(Shutdown::Read)?; // TODO: Force stream to be write only. Needed?
+                    // stream.shutdown(Shutdown::Read)?; // TODO: Force stream to be write only.
+                    // Needed?
                     stream.write_all(data)?;
                     Ok((here, stream))
                 }

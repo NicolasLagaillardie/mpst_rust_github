@@ -73,8 +73,8 @@
 //! use mpstthree::functionmpst::fork::fork_mpst;
 //! ```
 //!
-//! Then, you have to create the **binary session types** defining the interactions for each pair of participants.
-//! Note that each created type can be reused as many time as needed.
+//! Then, you have to create the **binary session types** defining the interactions for each pair of
+//! participants. Note that each created type can be reused as many time as needed.
 //! For our example, we create several times the same binary session type for clarity,
 //! but we could use only two of those types for the whole protocol instead.
 //!
@@ -105,8 +105,8 @@
 //! type StackC = RoleA<RoleB<RoleEnd>>;
 //! ```
 //!
-//! You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels** for each participant.
-//! We also add the names of the related roles.
+//! You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels**
+//! for each participant. We also add the names of the related roles.
 //!
 //! ```ignore
 //! // Creating the MP sessions
@@ -119,7 +119,8 @@
 //! ```
 //!
 //! To run the protocol,
-//! we need to detail the behaviour of the participants with functions that input the **Endpoints** defined above.
+//! we need to detail the behaviour of the participants with functions that input the **Endpoints**
+//! defined above.
 //!
 //! ```ignore
 //! // Function to process Endpoint of A
@@ -254,11 +255,7 @@
 //!
 //! // Fork all endpoints
 //! fn main() {
-//!     let (thread_a, thread_b, thread_c) = fork_mpst(
-//!         endpoint_a,
-//!         endpoint_b,
-//!         endpoint_c,
-//!     );
+//!     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 //!
 //!     thread_a.join().unwrap();
 //!     thread_b.join().unwrap();

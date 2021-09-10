@@ -17,12 +17,12 @@ use std::net::{Shutdown, TcpStream};
 /// # Example
 ///
 /// ```
-/// use mpstthree::transport::tcp::cancel::cancel_tcp;
 /// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::transport::tcp::cancel::cancel_tcp;
 /// use std::net::{TcpListener, TcpStream};
 ///
 /// let _listener = TcpListener::bind("0.0.0.0:3333").unwrap();

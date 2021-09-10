@@ -17,12 +17,12 @@ use std::net::UdpSocket;
 /// # Example
 ///
 /// ```
-/// use mpstthree::transport::udp::cancel::cancel_udp;
 /// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::transport::udp::cancel::cancel_udp;
 /// use std::net::UdpSocket;
 ///
 /// let socket = UdpSocket::bind("0.0.0.0:3333").unwrap();
