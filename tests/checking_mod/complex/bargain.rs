@@ -88,6 +88,8 @@ type EndpointCFull = MeshedChannels<Recurs0CfromA, End, RoleA<RoleEnd>, NameC>;
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         "bargain",
+        1,
+        2,
         EndpointAFull,
         EndpointBFull,
         EndpointCFull,

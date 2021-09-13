@@ -104,6 +104,8 @@ type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         "checking_choice",
+        1,
+        2,
         EndpointAFull<i32>,
         EndpointCFull<i32>,
         EndpointBFull<i32>

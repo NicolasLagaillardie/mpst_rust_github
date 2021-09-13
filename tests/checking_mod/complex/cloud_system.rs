@@ -152,6 +152,8 @@ type EndpointDFull = MeshedChannels<Recurs0DfromA, End, End, RoleA<RoleEnd>, Nam
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         "cloud_system",
+        1,
+        2,
         EndpointAFull,
         EndpointBFull,
         EndpointCFull,

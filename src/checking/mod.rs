@@ -77,6 +77,7 @@ macro_rules! checker_concat {
         {
             mpstthree::checker_concat!(
                 "",
+                0,
                 $(
                     $sessiontype,
                 )+
@@ -85,6 +86,9 @@ macro_rules! checker_concat {
     };
     (
         $name_file: expr,
+        $(
+            $kmc_number: literal,
+        )+
         $(
             $sessiontype: ty
         ),+ $(,)?
@@ -108,8 +112,15 @@ macro_rules! checker_concat {
             let branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
                 std::collections::HashMap::with_hasher(state_branches);
 
+            let mut kmc_numbers = Vec::new();
+
+            $(
+                kmc_numbers.push($kmc_number);
+            )+
+
             mpstthree::checking::checker(
                 $name_file,
+                kmc_numbers,
                 sessions,
                 branches_receivers,
                 branching_sessions,
@@ -134,6 +145,7 @@ macro_rules! checker_concat {
         {
             mpstthree::checker_concat!(
                 "",
+                0,
                 $(
                     $sessiontype,
                 )+
@@ -151,6 +163,9 @@ macro_rules! checker_concat {
     };
     (
         $name_file: expr,
+        $(
+            $kmc_number: literal,
+        )+
         $(
             $sessiontype: ty
         ),+ $(,)?
@@ -210,6 +225,12 @@ macro_rules! checker_concat {
                 index += 1;
             )+
 
+            let mut kmc_numbers = Vec::new();
+
+            $(
+                kmc_numbers.push($kmc_number);
+            )+
+
             // Macro to implement Display for the `enum`
             mpst_seq::checking!(
                 $(
@@ -225,6 +246,7 @@ macro_rules! checker_concat {
             // Create the graphs with the previous inputs
             mpstthree::checking::checker(
                 $name_file,
+                kmc_numbers,
                 sessions,
                 branches_receivers,
                 branching_sessions,
@@ -235,16 +257,11 @@ macro_rules! checker_concat {
 }
 
 // Run the KMC command line
-pub(crate) fn kmc_cli(name_file: &str) -> Result<(), Box<dyn Error>> {
+pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Error>> {
     // Delete previous files
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}_1_kmc.txt",
-        name_file
-    ))
-    .unwrap_or(());
-    remove_file(format!(
-        "../mpst_rust_github/outputs/{}_2_kmc.txt",
-        name_file
+        "../mpst_rust_github/outputs/{}_{}_kmc.txt",
+        name_file, kmc_number,
     ))
     .unwrap_or(());
     remove_file(format!(
@@ -258,39 +275,22 @@ pub(crate) fn kmc_cli(name_file: &str) -> Result<(), Box<dyn Error>> {
     ))
     .unwrap_or(());
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}-ts-1.fsm",
-        name_file
-    ))
-    .unwrap_or(());
-    remove_file(format!(
-        "../mpst_rust_github/outputs/{}-ts-2.fsm",
-        name_file
+        "../mpst_rust_github/outputs/{}-ts-{}.fsm",
+        name_file, kmc_number,
     ))
     .unwrap_or(());
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc_1 = Command::new("./../kmc/KMC")
+    let kmc = Command::new("./../kmc/KMC")
         .arg(format!("cfsm/{}.txt", name_file))
-        .arg("1")
+        .arg(format!("{:?}", kmc_number))
         .arg("--fsm")
         .output()?;
 
     // Write down the stdout of the previous command into
     // a corresponding file in the "outputs" folder
-    let mut kmc_file = File::create(format!("outputs/{}_1_kmc.txt", name_file))?;
-    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_1.stdout)?)?;
-
-    // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc_2 = Command::new("./../kmc/KMC")
-        .arg(format!("cfsm/{}.txt", name_file))
-        .arg("2")
-        .arg("--fsm")
-        .output()?;
-
-    // Write down the stdout of the previous command into
-    // a corresponding file in the "outputs" folder
-    let mut kmc_file = File::create(format!("outputs/{}_2_kmc.txt", name_file))?;
-    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_2.stdout)?)?;
+    let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number,))?;
+    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc.stdout)?)?;
 
     Ok(())
 }
@@ -299,6 +299,7 @@ pub(crate) fn kmc_cli(name_file: &str) -> Result<(), Box<dyn Error>> {
 #[doc(hidden)]
 pub fn checker(
     name_file: &str,
+    kmc_numbers: Vec<i64>,
     sessions: Vec<String>,
     branches_receivers: HashMap<String, HashMap<String, String>>,
     branching_sessions: HashMap<String, String>,
@@ -381,7 +382,9 @@ pub fn checker(
             writeln!(&mut cfsm_file)?;
         }
 
-        kmc_cli(name_file)?;
+        for kmc_number in kmc_numbers {
+            kmc_cli(name_file, kmc_number)?;
+        }
     } else {
         // Get all the graphs and add them to the result Hashmap
         for (role, full_session) in clean_sessions.clone() {

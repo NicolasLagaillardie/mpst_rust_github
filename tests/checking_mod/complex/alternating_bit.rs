@@ -85,6 +85,8 @@ type EndpointBFull = MeshedChannels<Recurs0BfromA, RoleA<RoleEnd>, NameB>;
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         "alternating_bit",
+        1,
+        2,
         EndpointAFull,
         EndpointBFull
         =>

@@ -72,6 +72,8 @@ type EndpointBFull = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 pub fn main() {
     let graphs = mpstthree::checker_concat!(
         "inf_snd_rcv",
+        1,
+        2,
         EndpointAFull,
         EndpointBFull
         =>
