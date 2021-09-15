@@ -1,7 +1,6 @@
 // Test for Macro, exact same as usecase-recursive
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::functionmpst::close::close_mpst;
-use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -12,7 +11,8 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::{
     choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
+    fork_mpst_multi, offer_mpst,
 };
 
 // Create new roles
@@ -35,6 +35,8 @@ create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
 create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
 create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
+
+fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;

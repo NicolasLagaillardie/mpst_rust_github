@@ -33,6 +33,7 @@ use macros::multiple::close::close_mpst_cancel::CloseMpstCancelMacroInput;
 use macros::multiple::close::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
 use macros::multiple::create_meshedchannels::CreateMeshedChannelsMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
+use macros::multiple::fork_mpst_multi_interleaved::ForkMPSTMultiInterleavedMacroInput;
 use macros::multiple::offer::create_offer_mpst_session_multi::OfferMPSTSessionMultiMacroInput;
 use macros::multiple::offer::create_offer_type_multi::OfferTypeMultiMacroInput;
 use macros::multiple::recv::create_recv_http_session::CreateRecvHttpSessionMacroInput;
@@ -519,4 +520,18 @@ pub fn checking(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_checking(input: TokenStream) -> TokenStream {
     checking(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ForkMPSTMultiInterleavedMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
+    fork_mpst_multi_interleaved(input)
 }

@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     close_mpst, create_meshedchannels, create_multiple_normal_role, create_recv_mpst_session,
-    create_send_mpst_session, fork_mpst_multi,
+    create_send_mpst_session, fork_mpst_multi_interleaved,
 };
 use std::error::Error;
 
@@ -28,7 +28,7 @@ create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 5, 3
 
 close_mpst!(close_mpst_multi, MeshedChannels, 5);
 
-fork_mpst_multi!(fork_mpst, MeshedChannels, 5);
+fork_mpst_multi_interleaved!(fork_mpst, MeshedChannels, 5);
 
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
@@ -79,18 +79,5 @@ fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_send() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_b, thread_c, thread_d, thread_e) =
-                fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
-
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-            assert!(thread_d.join().is_ok());
-            assert!(thread_e.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
 }

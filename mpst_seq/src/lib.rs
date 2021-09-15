@@ -28,6 +28,7 @@ pub use mpst_seq_proc::create_send_http_session;
 pub use mpst_seq_proc::create_send_mpst_cancel;
 pub use mpst_seq_proc::create_send_mpst_session;
 pub use mpst_seq_proc::fork_mpst_multi;
+pub use mpst_seq_proc::fork_mpst_multi_interleaved;
 pub use mpst_seq_proc::recv_all_aux_simple;
 pub use mpst_seq_proc::recv_aux_simple;
 pub use mpst_seq_proc::recv_mpst;
@@ -133,3 +134,6 @@ pub use mpst_seq_proc::e_baking_with_enum;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_checking;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_fork_mpst_multi_interleaved;

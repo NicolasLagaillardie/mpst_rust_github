@@ -4,7 +4,6 @@ use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::role::Role;
 use std::error::Error;
 use std::marker;
 
@@ -12,7 +11,8 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::{
     choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
+    fork_mpst_multi_interleaved, offer_mpst,
 };
 
 // Create new roles
@@ -35,6 +35,8 @@ create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
 create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
 create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
+
+fork_mpst_multi_interleaved!(fork_mpst, MeshedChannels, 3);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -98,11 +100,8 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    println!("start auth");
     let (id, s) = recv_mpst_a_from_c(s)?;
-    println!("recv auth");
     let s = send_mpst_a_to_c(id + 1, s);
-    println!("send auth");
 
     authenticator_recurs(s)
 }
@@ -110,19 +109,13 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_a_from_c, {
         Branches0AtoC::End(s) => {
-            println!("close auth");
             close_mpst(s)
         },
         Branches0AtoC::Video(s) => {
-            println!("video auth");
             let (request, s) = recv_mpst_a_from_c(s)?;
-            println!("video recv auth");
             let s = send_mpst_a_to_b(request + 1, s);
-            println!("video send auth");
             let (video, s) = recv_mpst_a_from_b(s)?;
-            println!("video recv auth");
             let s = send_mpst_a_to_c(video + 1, s);
-            println!("video send auth");
             authenticator_recurs(s)
         },
     })
@@ -132,11 +125,8 @@ fn client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
-    println!("start client");
     let s = send_mpst_c_to_a(0, s);
-    println!("send client");
     let (_, s) = recv_mpst_c_from_a(s)?;
-    println!("recv client");
 
     client_recurs(s, xs, 1)
 }
@@ -146,8 +136,6 @@ fn client_recurs(
     mut xs: Vec<i32>,
     index: i32,
 ) -> Result<(), Box<dyn Error>> {
-    println!("index: {:?}", index);
-
     match xs.pop() {
         Option::Some(_) => {
             let s = choose_mpst_to_all!(
@@ -181,56 +169,8 @@ fn client_recurs(
     }
 }
 
-async fn async_authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    async { authenticator(s) }.await
-}
-
-async fn async_server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
-    async { server(s) }.await
-}
-
-async fn async_client(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
-    async { client(s) }.await
-}
-
 /////////////////////////////////////////
 
-#[test]
-pub fn interleaved_main() {
-    let (channel_1_2, channel_2_1) = End::new();
-    let (channel_1_3, channel_3_1) = InitA::<i32>::new();
-    let (channel_2_3, channel_3_2) = RecursBtoC::<i32>::new();
-    let (role_1, _) = StackAInit::new();
-    let (role_2, _) = RoleC::<RoleEnd>::new();
-    let (role_3, _) = StackCFull::new();
-    let (name_1, _) = RoleA::<RoleEnd>::new();
-    let (name_2, _) = RoleB::<RoleEnd>::new();
-    let (name_3, _) = RoleC::<RoleEnd>::new();
-    let meshedchannels_1 = MeshedChannels {
-        session1: channel_1_2,
-        session2: channel_1_3,
-        stack: role_1,
-        name: name_1,
-    };
-    let meshedchannels_2 = MeshedChannels {
-        session1: channel_2_1,
-        session2: channel_2_3,
-        stack: role_2,
-        name: name_2,
-    };
-    let meshedchannels_3 = MeshedChannels {
-        session1: channel_3_1,
-        session2: channel_3_2,
-        stack: role_3,
-        name: name_3,
-    };
-
-    futures::executor::block_on(async {
-        futures::try_join!(
-            async_authenticator(meshedchannels_1),
-            async_server(meshedchannels_2),
-            async_client(meshedchannels_3),
-        )
-        .unwrap();
-    });
+pub fn run_macro_recursive() {
+    fork_mpst(authenticator, server, client);
 }
