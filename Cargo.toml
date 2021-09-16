@@ -203,7 +203,6 @@ hyper-tls = { version = "0.5.0", optional = true }
 tokio = { version = "1.11.0", features = ["full"], optional = true }
 regex = { version = "1.5.4", optional = true }
 petgraph = { version = "0.6.0", optional = true }
-futures = { version = "0.3.17", optional = true }
 
 ###################################
 
@@ -224,7 +223,7 @@ role = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
 # For interleaved sessions
-interleaved = ["default", "futures"]
+interleaved = ["default"]
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
 transport_tcp = ["default"]
