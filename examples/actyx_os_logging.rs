@@ -13,7 +13,7 @@ use std::marker;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-// Create new MeshedChannels for seven participants
+// Create new MeshedChannels for two participants
 create_meshedchannels!(MeshedChannelsTwo, 2);
 
 // Create Roles

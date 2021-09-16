@@ -41,6 +41,104 @@
 //! This protocol can be written as **A!B.A?C.B!C.0**.
 //! To implement this example, first, get the right components from the library.
 //!
+//! Here is the full working example, that is detailed after:
+//!
+//! ```
+//! // Used for the functions that will process the protocol
+//! use std::boxed::Box;
+//! use std::error::Error;
+//!
+//! // Used for creating the types
+//! use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+//! use mpstthree::meshedchannels::MeshedChannels;
+//!
+//! // Used for creating the stack and the name of each role
+//! use mpstthree::role::a::RoleA;
+//! use mpstthree::role::b::RoleB;
+//! use mpstthree::role::c::RoleC;
+//! use mpstthree::role::end::RoleEnd;
+//!
+//! // Used inside the functions which process the protocol for receiving one payload
+//! use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
+//! use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
+//! use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
+//!
+//! // Used inside the functions which process the protocol for sending one payload
+//! use mpstthree::functionmpst::send::send_mpst_a_to_b;
+//! use mpstthree::functionmpst::send::send_mpst_b_to_c;
+//! use mpstthree::functionmpst::send::send_mpst_c_to_a;
+//!
+//! // Used inside the functions which process the protocol for closing the connexion
+//! use mpstthree::functionmpst::close::close_mpst;
+//!
+//! // Used for connecting all the roles, represented as MeshedChannels, together
+//! use mpstthree::functionmpst::fork::fork_mpst;
+//!
+//! // Creating the binary sessions
+//! // for A
+//! type AtoB<N> = Send<N, End>;
+//! type AtoC<N> = Recv<N, End>;
+//!
+//! // for B
+//! type BtoA<N> = Recv<N, End>;
+//! type BtoC<N> = Send<N, End>;
+//!
+//! // for C
+//! type CtoA<N> = Send<N, End>;
+//! type CtoB<N> = Recv<N, End>;
+//!
+//! // Stacks
+//! // for A
+//! type StackA = RoleB<RoleC<RoleEnd>>;
+//! // for B
+//! type StackB = RoleA<RoleC<RoleEnd>>;
+//! // for C
+//! type StackC = RoleA<RoleB<RoleEnd>>;
+//!
+//! // Creating the MP sessions
+//! // for A
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! // for B
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! // for C
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//!
+//! // Function to process Endpoint of A
+//! fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+//!     let s = send_mpst_a_to_b(1, s);
+//!     let (_x, s) = recv_mpst_a_from_c(s)?;
+//!
+//!     close_mpst(s)
+//! }
+//!
+//! // Function to process Endpoint of B
+//! fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+//!     let (_x, s) = recv_mpst_b_from_a(s)?;
+//!     let s = send_mpst_b_to_c(2, s);
+//!
+//!     close_mpst(s)
+//! }
+//!
+//! // Function to process Endpoint of C
+//! fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+//!     let s = send_mpst_c_to_a(3, s);
+//!     let (_x, s) = recv_mpst_c_from_b(s)?;
+//!
+//!     close_mpst(s)
+//! }
+//!
+//! // Fork all endpoints
+//! fn main() {
+//!     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
+//!
+//!     thread_a.join().unwrap();
+//!     thread_b.join().unwrap();
+//!     thread_c.join().unwrap();
+//! }
+//! ```
+//!
+//! Here is the full description. First, you import the correct functions and types.
+//!
 //! ```ignore
 //! // Used for the functions that will process the protocol
 //! use std::boxed::Box;
@@ -167,101 +265,22 @@
 //! }
 //! ```
 //!
-//! Here is the full working example:
+//! The different features available are:
+//!     * `default`: default features, for implementing the basic example above.
+//!     * `macros_simple`: feature for implementing protocols with three participants, whatever are
+//!       their name.
+//!     * `macros_multiple`: feature for implementing protocols with any number of participants.
+//!       Contains `macros_simple`.
+//!     * `baking`: feature for implementing protocols with any number of participants and using
+//!       associated functions instead of functions. Contains `macros_multiple`.
+//!     * `transport_tcp`: feature containing primitives for communicating with TCP.
+//!     * `transport_udp`: feature containing primitives for communicating with UDP.
+//!     * `transport_http`: feature containing primitives for communicating with HTTP/HTTPS.
+//!     * `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
+//!     * `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
+//!     * `full`: feature containing `checking`, `baking` and `transport`.
 //!
-//! ```
-//! // Used for the functions that will process the protocol
-//! use std::boxed::Box;
-//! use std::error::Error;
-//!
-//! // Used for creating the types
-//! use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-//! use mpstthree::meshedchannels::MeshedChannels;
-//!
-//! // Used for creating the stack and the name of each role
-//! use mpstthree::role::a::RoleA;
-//! use mpstthree::role::b::RoleB;
-//! use mpstthree::role::c::RoleC;
-//! use mpstthree::role::end::RoleEnd;
-//!
-//! // Used inside the functions which process the protocol for receiving one payload
-//! use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
-//! use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
-//! use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
-//!
-//! // Used inside the functions which process the protocol for sending one payload
-//! use mpstthree::functionmpst::send::send_mpst_a_to_b;
-//! use mpstthree::functionmpst::send::send_mpst_b_to_c;
-//! use mpstthree::functionmpst::send::send_mpst_c_to_a;
-//!
-//! // Used inside the functions which process the protocol for closing the connexion
-//! use mpstthree::functionmpst::close::close_mpst;
-//!
-//! // Used for connecting all the roles, represented as MeshedChannels, together
-//! use mpstthree::functionmpst::fork::fork_mpst;
-//!
-//! // Creating the binary sessions
-//! // for A
-//! type AtoB<N> = Send<N, End>;
-//! type AtoC<N> = Recv<N, End>;
-//!
-//! // for B
-//! type BtoA<N> = Recv<N, End>;
-//! type BtoC<N> = Send<N, End>;
-//!
-//! // for C
-//! type CtoA<N> = Send<N, End>;
-//! type CtoB<N> = Recv<N, End>;
-//!
-//! // Stacks
-//! // for A
-//! type StackA = RoleB<RoleC<RoleEnd>>;
-//! // for B
-//! type StackB = RoleA<RoleC<RoleEnd>>;
-//! // for C
-//! type StackC = RoleA<RoleB<RoleEnd>>;
-//!
-//! // Creating the MP sessions
-//! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
-//! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
-//! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
-//!
-//! // Function to process Endpoint of A
-//! fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-//!     let s = send_mpst_a_to_b(1, s);
-//!     let (_x, s) = recv_mpst_a_from_c(s)?;
-//!
-//!     close_mpst(s)
-//! }
-//!
-//! // Function to process Endpoint of B
-//! fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-//!     let (_x, s) = recv_mpst_b_from_a(s)?;
-//!     let s = send_mpst_b_to_c(2, s);
-//!
-//!     close_mpst(s)
-//! }
-//!
-//! // Function to process Endpoint of C
-//! fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-//!     let s = send_mpst_c_to_a(3, s);
-//!     let (_x, s) = recv_mpst_c_from_b(s)?;
-//!
-//!     close_mpst(s)
-//! }
-//!
-//! // Fork all endpoints
-//! fn main() {
-//!     let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
-//!
-//!     thread_a.join().unwrap();
-//!     thread_b.join().unwrap();
-//!     thread_c.join().unwrap();
-//! }
-//! ```
+//! [`KMC`]: https://github.com/julien-lange/kmc
 
 #[cfg(feature = "binary")]
 pub mod binary;

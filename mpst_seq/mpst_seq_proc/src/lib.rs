@@ -14,7 +14,9 @@ use functionmpst::send_aux_simple::SendAuxSimpleMacroInput;
 mod macros;
 
 use macros::baking::BakingMacroInput;
+use macros::baking_with_cancel::BakingWithCancelMacroInput;
 use macros::baking_with_enum::BakingWithEnumMacroInput;
+use macros::baking_with_enum_and_cancel::BakingWithEnumAndCancelMacroInput;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShortMacroInput;
 use macros::create_normal_role_short::CreateNormalRoleShortMacroInput;
 use macros::multiple::broadcast_cancel::BroadcastCancelMacroInput;
@@ -549,4 +551,32 @@ pub fn close_mpst_interleaved(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_close_mpst_interleaved(input: TokenStream) -> TokenStream {
     close_mpst_interleaved(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_with_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingWithCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_with_cancel(input: TokenStream) -> TokenStream {
+    baking_with_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingWithEnumAndCancelMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    baking_with_enum_and_cancel(input)
 }

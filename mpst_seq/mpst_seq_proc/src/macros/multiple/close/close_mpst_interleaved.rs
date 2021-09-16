@@ -48,15 +48,15 @@ impl CloseMpstInterleavedMacroInput {
             })
             .collect();
 
-            let role_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
-                .map(|i| {
-                    let temp_name = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
-    
-                    quote! {
-                        #temp_name : mpstthree::role::Role ,
-                    }
-                })
-                .collect();
+        let role_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+            .map(|i| {
+                let temp_name = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+
+                quote! {
+                    #temp_name : mpstthree::role::Role ,
+                }
+            })
+            .collect();
 
         let session_types: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
@@ -88,7 +88,7 @@ impl CloseMpstInterleavedMacroInput {
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("s_{}", i), proc_macro2::Span::call_site());
-                
+
                 let temp_session_send: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
                     .map(|j| {
                         let temp_session =
@@ -98,11 +98,11 @@ impl CloseMpstInterleavedMacroInput {
                         }
                     })
                     .collect();
-            
+
                 quote! {
                     #(
                         #temp_session_send
-                    )*                    
+                    )*
                 }
             })
             .collect();
@@ -111,17 +111,19 @@ impl CloseMpstInterleavedMacroInput {
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("s_{}", i), proc_macro2::Span::call_site());
-                
+
                 let temp_session_recv: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
                     .map(|j| {
-                        let temp_session =
-                            syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                        let temp_session = syn::Ident::new(
+                            &format!("session{}", j),
+                            proc_macro2::Span::call_site(),
+                        );
                         quote! {
                             #temp_ident.#temp_session.receiver.recv()?;
                         }
                     })
                     .collect();
-            
+
                 quote! {
                     #(
                         #temp_session_recv

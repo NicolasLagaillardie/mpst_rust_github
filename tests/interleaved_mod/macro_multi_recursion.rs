@@ -10,9 +10,9 @@ use std::marker;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
-    offer_mpst_interleaved, close_mpst_interleaved, fork_mpst_multi_interleaved
+    choose_mpst_to_all, close_mpst_interleaved, create_multiple_normal_role,
+    create_recv_mpst_session_1, create_recv_mpst_session_2, create_send_mpst_session_1,
+    create_send_mpst_session_2, fork_mpst_multi_interleaved, offer_mpst_interleaved,
 };
 
 // Create new roles
@@ -146,16 +146,16 @@ fn step_two_recurs(
                 RoleC
             );
 
-            let tuple = offer_mpst_interleaved!(
+            let (s_a, s_b) = offer_mpst_interleaved!(
                 s_a,
                 recv_mpst_a_from_c,
                 Branches0AtoC::Video,
                 s_b,
                 recv_mpst_b_from_c,
-                Branches0BtoC::Video,
+                Branches0BtoC::Video
             );
 
-            step_three_recurs(tuple.0, tuple.1, s_c, xs, index)
+            step_three_recurs(s_a, s_b, s_c, xs, index)
         }
         Option::None => {
             let s_c = choose_mpst_to_all!(
@@ -169,16 +169,16 @@ fn step_two_recurs(
 
             assert_eq!(index, 100);
 
-            let tuple = offer_mpst_interleaved!(
+            let (s_a, s_b) = offer_mpst_interleaved!(
                 s_a,
                 recv_mpst_a_from_c,
                 Branches0AtoC::End,
                 s_b,
                 recv_mpst_b_from_c,
-                Branches0BtoC::End,
+                Branches0BtoC::End
             );
 
-            close_mpst_multi(tuple.0, tuple.1, s_c)
+            close_mpst_multi(s_a, s_b, s_c)
         }
     }
 }

@@ -161,7 +161,7 @@ macro_rules! offer_mpst {
             match l {
                 $(
                     $pat => $result,
-                )*
+                )+
             }
         })()
     };
@@ -172,7 +172,7 @@ macro_rules! offer_mpst {
             match l {
                 $(
                     $pat => $result,
-                )*
+                )+
             }
         })()
     };
@@ -200,7 +200,7 @@ macro_rules! offer_cancel_mpst {
             match cont {
                 $(
                     $pat => $result,
-                )*
+                )+
             }
         })()
     };
@@ -212,7 +212,7 @@ macro_rules! offer_cancel_mpst {
             match cont {
                 $(
                     $pat => $result,
-                )*
+                )+
             }
         })()
     };
@@ -259,7 +259,7 @@ macro_rules! offer_http_mpst {
             match l {
                 $(
                     $pat => $result,
-                )*
+                )+
             }
         })()
     };

@@ -144,16 +144,16 @@ fn step_two_recurs(
                 RoleC
             );
 
-            let tuple = offer_mpst_interleaved!(
+            let (s_a, s_b) = offer_mpst_interleaved!(
                 s_a,
                 recv_mpst_a_from_c,
                 Branches0AtoC::Video,
                 s_b,
                 recv_mpst_b_from_c,
-                Branches0BtoC::Video,
+                Branches0BtoC::Video
             );
 
-            step_three_recurs(tuple.0, tuple.1, s_c, xs, index)
+            step_three_recurs(s_a, s_b, s_c, xs, index)
         }
         Option::None => {
             let s_c = choose_mpst_to_all!(
@@ -167,16 +167,16 @@ fn step_two_recurs(
 
             assert_eq!(index, 100);
 
-            let tuple = offer_mpst_interleaved!(
+            let (s_a, s_b) = offer_mpst_interleaved!(
                 s_a,
                 recv_mpst_a_from_c,
                 Branches0AtoC::End,
                 s_b,
                 recv_mpst_b_from_c,
-                Branches0BtoC::End,
+                Branches0BtoC::End
             );
 
-            close_mpst_interleaved(tuple.0, tuple.1, s_c)
+            close_mpst_interleaved(s_a, s_b, s_c)
         }
     }
 }

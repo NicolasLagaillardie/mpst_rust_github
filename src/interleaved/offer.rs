@@ -11,9 +11,9 @@ macro_rules! offer_mpst_interleaved {
     (
         $(
             $session: expr ,
-            $recv_mpst: ident  ,
-            $pat: path,
-        )+
+            $recv_mpst: ident ,
+            $pat: path
+        ),+ $(,)?
     ) => {
         (
             $(
@@ -25,7 +25,26 @@ macro_rules! offer_mpst_interleaved {
                         _ => panic!("Wrong payload"),
                     }
                 },
-            )*
+            )+
+        )
+    };
+    (
+        $(
+            $session: expr ,
+            $pat: path
+        ),+ $(,)?
+    ) => {
+        (
+            $(
+                {
+                    let (l, s) = $session.recv()?;
+                    mpstthree::binary::cancel::cancel(s);
+                    match l {
+                        $pat(s) => s,
+                        _ => panic!("Wrong payload"),
+                    }
+                },
+            )+
         )
     };
 }

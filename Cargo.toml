@@ -123,6 +123,22 @@ name = "actyx_os_logging"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "actyx_os_api_baking"
+required-features = ["baking"]
+
+[[example]]
+name = "actyx_os_logging_baking"
+required-features = ["baking"]
+
+[[example]]
+name = "actyx_os_api_interleaved"
+required-features = ["baking", "interleaved"]
+
+[[example]]
+name = "actyx_os_logging_interleaved"
+required-features = ["baking", "interleaved"]
+
+[[example]]
 name = "distributed_calc"
 required-features = ["macros_multiple"]
 
@@ -207,6 +223,7 @@ meshedchannels = []
 role = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
+# For interleaved sessions
 interleaved = ["default", "futures"]
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]

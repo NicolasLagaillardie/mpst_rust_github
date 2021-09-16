@@ -16,7 +16,7 @@
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 macro_rules! offer_udp {
-    ($session: expr, { $( $pat: pat => $result: expr , )* }) => {
+    ($session: expr, { $( $pat: pat => $result: expr , )+ }) => {
         (move || -> Result<_, _> {
             let ((data, cont), s) = mpstthree::binary::recv::recv($session)?;
             mpstthree::binary::cancel::cancel(s);
@@ -25,7 +25,7 @@ macro_rules! offer_udp {
             match cont {
                 $(
                     $pat => $result,
-                )*
+                )+
             }
         })()
     };
