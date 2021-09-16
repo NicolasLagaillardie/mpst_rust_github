@@ -3,8 +3,8 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_meshedchannels, create_multiple_normal_role, create_recv_mpst_session,
-    create_send_mpst_session, fork_mpst_multi_interleaved,
+    close_mpst_interleaved, create_meshedchannels, create_multiple_normal_role,
+    create_recv_mpst_session, create_send_mpst_session, fork_mpst_multi_interleaved,
 };
 use std::error::Error;
 
@@ -26,7 +26,7 @@ create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 5, 2);
 // Create new recv functions and related types
 create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 5, 3);
 
-close_mpst!(close_mpst_multi, MeshedChannels, 5);
+close_mpst_interleaved!(close_mpst_multi, MeshedChannels, 5);
 
 fork_mpst_multi_interleaved!(fork_mpst, MeshedChannels, 5);
 
@@ -44,40 +44,20 @@ type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
 type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;
 type PawnE = MeshedChannels<End, End, End, End, RoleEnd, NameE>;
 
-fn send_d_to_b(s: SendMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
-    let s = send_mpst_d_to_b(0, s);
-    close_mpst_multi(s)
-}
-
-fn recv_b_to_d(s: RecvMeshedChannelsB<i32>) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
-    let (_, s) = recv_mpst_b_from_d(s)?;
-    close_mpst_multi(s)
-}
-
-fn pawn_a(s: PawnA) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
-    close_mpst_multi(s)
-}
-
-fn pawn_c(s: PawnC) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
-    close_mpst_multi(s)
-}
-
-fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
-    close_mpst_multi(s)
+fn full(
+    s_1: PawnA,
+    s_2: RecvMeshedChannelsB<i32>,
+    s_3: PawnC,
+    s_4: SendMeshedChannelsD<i32>,
+    s_5: PawnE,
+) -> Result<(), Box<dyn Error>> {
+    let s_4 = send_mpst_d_to_b(0, s_4);
+    let (_, s_2) = recv_mpst_b_from_d(s_2)?;
+    close_mpst_multi(s_1, s_2, s_3, s_4, s_5)
 }
 
 ////////////////////////////////////////
 
-pub fn test_new_send() {
-    fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
+pub fn interleaved_main() {
+    assert!(fork_mpst(full).is_ok());
 }

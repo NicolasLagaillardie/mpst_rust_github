@@ -43,7 +43,7 @@ type Choose0fromBtoA = Send<Branches0AtoB, End>;
 
 type InitB = Send<i32, Recv<i32, Choose0fromBtoC>>;
 
-/// Stacks
+// Stacks
 type StackCEnd = RoleEnd;
 type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleB<RoleEnd>>>>>;
 type StackCInit = RoleB<RoleB<RoleB<RoleEnd>>>;
@@ -55,16 +55,16 @@ type StackARecurs = RoleB<RoleEnd>;
 type StackBRecurs = RoleBroadcast;
 type StackBFull = RoleC<RoleC<StackBRecurs>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 
-/// For B
+// For B
 type EndpointBEnd = MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>>;
 type EndpointBFull = MeshedChannels<Choose0fromBtoA, InitB, StackBFull, RoleB<RoleEnd>>;
 
-/// For C
+// For C
 type EndpointCFull = MeshedChannels<End, InitC, StackCInit, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, RoleA<RoleEnd>>;
 
 /////////////////////////////////////////

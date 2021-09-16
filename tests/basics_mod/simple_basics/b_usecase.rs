@@ -59,7 +59,7 @@ type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = <CtoBClose as Session>::Dual;
 type BtoCVideo<N> = <CtoBVideo<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackCEnd = RoleEnd;
 type StackCEndDual = <StackCEnd as Role>::Dual;
 type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleEnd>>>>;
@@ -77,8 +77,8 @@ type StackBVideo = RoleC<RoleC<RoleEnd>>;
 type StackBChoice = RoleBtoAll<StackBVideo, StackBEnd>;
 type StackBFull = RoleC<RoleC<StackBChoice>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type ChooseBtoC<N> = ChooseMpst<
     AtoCVideo<N>,
     BtoCVideo<N>,
@@ -100,7 +100,7 @@ type ChooseBtoA<N> = ChooseMpst<
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
 type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointCVideo<N> = MeshedChannels<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
 type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
@@ -116,7 +116,7 @@ type OfferC<N> = OfferMpst<
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
 type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointAVideo<N> = MeshedChannels<AtoBClose, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
 type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
@@ -131,7 +131,7 @@ type OfferA<N> = OfferMpst<
 >;
 type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_a_from_b(
         s,

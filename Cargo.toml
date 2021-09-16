@@ -90,10 +90,10 @@ name = "extra"
 path = "tests/extra.rs"
 required-features = ["baking"]
 
-# [[test]]
-# name = "macros_interleaved"
-# path = "tests/macros_interleaved.rs"
-# required-features = ["macros_interleaved"]
+[[test]]
+name = "interleaved"
+path = "tests/interleaved.rs"
+required-features = ["interleaved"]
 
 [[test]]
 name = "main"
@@ -207,7 +207,7 @@ meshedchannels = []
 role = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
-macros_interleaved = ["default", "futures"]
+interleaved = ["default", "futures"]
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
 transport_tcp = ["default"]

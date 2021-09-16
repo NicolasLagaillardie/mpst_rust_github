@@ -1,6 +1,7 @@
 // Test for Macro, exact same as usecase-recursive
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::functionmpst::close::close_mpst;
+use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -11,8 +12,7 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::{
     choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
-    fork_mpst_multi, offer_mpst,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
 };
 
 // Create new roles
@@ -35,8 +35,6 @@ create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
 create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
 create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
-
-fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -62,7 +60,7 @@ type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Stacks
+// Stacks
 type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
 type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
@@ -71,21 +69,21 @@ type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 
 type EndpointCRecurs<N> =
     MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branches0BtoC::End(s) => {

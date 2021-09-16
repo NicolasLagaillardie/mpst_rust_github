@@ -31,6 +31,7 @@ use macros::multiple::choose::create_fn_choose_mpst_multi_to_all_bundle::ChooseT
 use macros::multiple::close::close_mpst::CloseMpstMacroInput;
 use macros::multiple::close::close_mpst_cancel::CloseMpstCancelMacroInput;
 use macros::multiple::close::close_mpst_check_cancel::CloseMpstCheckCancelMacroInput;
+use macros::multiple::close::close_mpst_interleaved::CloseMpstInterleavedMacroInput;
 use macros::multiple::create_meshedchannels::CreateMeshedChannelsMacroInput;
 use macros::multiple::fork_mpst_multi::ForkMPSTMultiMacroInput;
 use macros::multiple::fork_mpst_multi_interleaved::ForkMPSTMultiInterleavedMacroInput;
@@ -534,4 +535,18 @@ pub fn fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
     fork_mpst_multi_interleaved(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn close_mpst_interleaved(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CloseMpstInterleavedMacroInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_close_mpst_interleaved(input: TokenStream) -> TokenStream {
+    close_mpst_interleaved(input)
 }

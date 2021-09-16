@@ -48,7 +48,7 @@ type CtoBAdd<N> = <BtoCAdd<N> as Session>::Dual;
 type AtoBNeg<N> = <BtoANeg<N> as Session>::Dual;
 type AtoBAdd<N> = <BtoAAdd<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackOfferB = RoleC<RoleA<RoleEnd>>;
 type StackOfferBDual = <StackOfferB as Role>::Dual;
 type StackFullB = RoleAlltoC<RoleEnd, RoleEnd>;
@@ -60,8 +60,8 @@ type StackOfferA = RoleB<RoleEnd>;
 type StackOfferADual = <StackOfferA as Role>::Dual;
 type StackFullA = RoleAlltoC<RoleEnd, RoleEnd>;
 
-/// Creating the MP sessions
-/// For B
+// Creating the MP sessions
+// For B
 type EndpointBAdd<N> = MeshedChannels<BtoAAdd<N>, BtoCAdd<N>, StackOfferB, RoleB<RoleEnd>>;
 type EndpointBNeg<N> = MeshedChannels<BtoANeg<N>, BtoCNeg<N>, StackOfferB, RoleB<RoleEnd>>;
 
@@ -76,7 +76,7 @@ type OfferB<N> = OfferMpst<
 >;
 type EndpointChoiceB<N> = MeshedChannels<End, OfferB<N>, StackFullB, RoleB<RoleEnd>>;
 
-/// For C
+// For C
 type ChooseCtoB<N> = ChooseMpst<
     AtoBAdd<N>,
     CtoBAdd<N>,
@@ -97,7 +97,7 @@ type ChooseCtoA<N> = ChooseMpst<
 >;
 type EndpointChoiceC<N> = MeshedChannels<ChooseCtoA<N>, ChooseCtoB<N>, StackFullC, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, End, StackOfferA, RoleA<RoleEnd>>;
 type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, End, StackOfferA, RoleA<RoleEnd>>;
 
@@ -105,7 +105,7 @@ type OfferA<N> =
     OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, StackOfferA, StackOfferA, RoleA<RoleEnd>>;
 type EndpointChoiceA<N> = MeshedChannels<End, OfferA<N>, StackFullA, RoleA<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_b_from_c(
         s,

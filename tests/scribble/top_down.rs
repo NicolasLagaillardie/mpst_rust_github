@@ -83,7 +83,7 @@ type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Fu
 
 ///////////////////////////////////////// END
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {

@@ -20,12 +20,12 @@ type BtoC<N> = Send<N, End>;
 type CtoA<N> = <AtoC<N> as Session>::Dual;
 type CtoB<N> = <BtoC<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackA = RoleB<RoleC<RoleEnd>>;
 type StackB = RoleA<RoleC<RoleEnd>>;
 type StackC = RoleA<RoleB<RoleEnd>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
 type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;

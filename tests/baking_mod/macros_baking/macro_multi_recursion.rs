@@ -49,7 +49,7 @@ type Choose0fromCtoB<N> = Send<Branches0BtoD<N>, End>;
 
 type InitD<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Stacks
+// Stacks
 type StackAEnd = RoleEnd;
 type StackAVideo = RoleD<RoleB<RoleB<RoleD<RoleD<RoleEnd>>>>>;
 type StackARecurs = RoleD<RoleEnd>;
@@ -62,8 +62,8 @@ type StackBRecurs = RoleD<RoleEnd>;
 type StackDRecurs = RoleBroadcast;
 type StackDFull = RoleA<RoleA<StackDRecurs>>;
 
-/// Creating the MP sessions
-/// For D
+// Creating the MP sessions
+// For D
 type EndpointDVideo<N> = MeshedChannels<
     <AtoDVideo<N> as Session>::Dual,
     <RecursBtoD<N> as Session>::Dual,
@@ -74,14 +74,14 @@ type EndpointDRecurs<N> =
     MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackDRecurs, NameD>;
 type EndpointDFull<N> = MeshedChannels<InitD<N>, Choose0fromCtoB<N>, StackDFull, NameD>;
 
-/// For A
+// For A
 type EndpointARecurs<N> = MeshedChannels<End, RecursAtoD<N>, StackARecurs, NameA>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 
-/// For B
+// For B
 type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branches0BtoD::End(s) => {

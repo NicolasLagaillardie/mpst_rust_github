@@ -11,10 +11,10 @@ use mpstthree::role::Role;
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 
-/// Stacks
+// Stacks
 type StackA = RoleB<RoleC<RoleEnd>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 type Endpoint<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 
 pub fn meshedchannels_fields() {

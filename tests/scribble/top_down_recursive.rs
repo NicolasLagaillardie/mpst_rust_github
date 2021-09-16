@@ -96,7 +96,7 @@ type EndpointC2<N> =
 
 ///////////////////////////////////////// END
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointB20<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::BYE(s) => {

@@ -10,7 +10,6 @@ pub struct ForkMPSTMultiInterleavedMacroInput {
     func_name: syn::Ident,
     meshedchannels_name: syn::Ident,
     nsessions: u64,
-    // name_functions: Vec<syn::Ident>,
 }
 
 impl Parse for ForkMPSTMultiInterleavedMacroInput {
@@ -22,22 +21,11 @@ impl Parse for ForkMPSTMultiInterleavedMacroInput {
         <Token![,]>::parse(input)?;
 
         let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
-        <Token![,]>::parse(input)?;
-
-        // let name_functions = Vec::new();
-
-        // while input.peek(syn::Ident) {
-        //     name_functions.push(syn::Ident::parse(input)?);
-        //     if input.peek(Token![,]) {
-        //         <Token![,]>::parse(input)?;
-        //     }
-        // }
 
         Ok(ForkMPSTMultiInterleavedMacroInput {
             func_name,
             meshedchannels_name,
             nsessions,
-            // name_functions,
         })
     }
 }
@@ -264,27 +252,6 @@ impl ForkMPSTMultiInterleavedMacroInput {
             })
             .collect();
 
-        let functions: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
-            .map(|i| {
-                let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                quote! {
-                    #temp_ident ,
-                }
-            })
-            .collect();
-
-        let functions_detail: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
-            .map(|i| {
-                let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                let temp_expr = syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                quote! {
-                    #temp_expr : #temp_ident ,
-                }
-            })
-            .collect();
-
         let functions_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
                 let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
@@ -304,22 +271,16 @@ impl ForkMPSTMultiInterleavedMacroInput {
                     })
                     .collect();
 
-                let temp_function =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
                 let temp_role = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
                 let temp_name = syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    #temp_function : FnOnce(
-                        #meshedchannels_name<
-                            #(
-                                #temp_sessions
-                            )*
-                            #temp_role ,
-                            #temp_name
-                        >
-                    ) -> Result<(), Box<dyn std::error::Error>>
-                    + std::marker::Send
-                    + 'static,
+                    #meshedchannels_name<
+                        #(
+                            #temp_sessions
+                        )*
+                        #temp_role ,
+                        #temp_name
+                    >,
                 }
             })
             .collect();
@@ -392,84 +353,19 @@ impl ForkMPSTMultiInterleavedMacroInput {
             })
             .collect();
 
-        let async_functions: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let use_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
             .map(|i| {
-                let temp_name_func =
-                    syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                let temp_name_async_func =
-                    syn::Ident::new(&format!("async_f{}", i), proc_macro2::Span::call_site());
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
-                    .map(|j| {
-                        let temp_ident =
-                            syn::Ident::new(&format!("S{}", j), proc_macro2::Span::call_site());
-                        quote! {
-                            #temp_ident ,
-                        }
-                    })
-                    .collect();
-                let temp_sessions_struct: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
-                    .map(|j| {
-                        let temp_ident = syn::Ident::new(
-                            &format!("S{}: mpstthree::binary::struct_trait::session::Session", j),
-                            proc_macro2::Span::call_site(),
-                        );
-                        quote! {
-                            #temp_ident ,
-                        }
-                    })
-                    .collect();
-                quote! {
-                    async fn #temp_name_async_func<
-                        #(
-                            #temp_sessions
-                        )*
-                        R0,
-                        N0
-                    >(
-                        s:
-                        #meshedchannels_name<
-                            #(
-                                #temp_sessions
-                            )*
-                            R0,
-                            N0,
-                        >
-                    ) -> Result<(), Box<dyn std::error::Error>>
-                    where
-                        #(
-                            #temp_sessions_struct
-                        )*
-                        R0: mpstthree::role::Role,
-                        N0: mpstthree::role::Role,
-                    {
-                        async {
-                            #temp_name_func(s)
-                        }.await
-                    }
-                }
-            })
-            .collect();
-
-        let new_threads: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
-            .map(|i| {
-                let temp_function =
-                    syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
                 let temp_meshedchannels = syn::Ident::new(
                     &format!("meshedchannels_{}", i),
                     proc_macro2::Span::call_site(),
                 );
                 quote! {
-                    async { #temp_function(#temp_meshedchannels) }.await,
+                    #temp_meshedchannels,
                 }
             })
             .collect();
 
         quote! {
-            #(
-                #async_functions
-            )*
-
-
             fn #func_name<
                 #(
                     #sessions
@@ -480,14 +376,10 @@ impl ForkMPSTMultiInterleavedMacroInput {
                 #(
                     #names
                 )*
-                #(
-                    #functions
-                )*
+                F
             >(
-                #(
-                    #functions_detail
-                )*
-            )
+                f: F
+            ) -> Result<(), Box<dyn std::error::Error>>
             where
                 #(
                     #roles_struct
@@ -498,9 +390,13 @@ impl ForkMPSTMultiInterleavedMacroInput {
                 #(
                     #sessions_struct
                 )*
-                #(
-                    #functions_struct
-                )*
+                F : FnOnce(
+                    #(
+                        #functions_struct
+                    )*
+                ) -> Result<(), Box<dyn std::error::Error>>
+                + std::marker::Send
+                + 'static,
             {
                 #(
                     #new_channels
@@ -518,13 +414,11 @@ impl ForkMPSTMultiInterleavedMacroInput {
                     #new_meshedchannels
                 )*
 
-                futures::executor::block_on(async {
-                    futures::try_join!(
-                        #(
-                            #new_threads
-                        )*
-                    ).unwrap();
-                });
+                f(
+                    #(
+                        #use_meshedchannels
+                    )*
+                )
             }
         }
     }

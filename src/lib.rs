@@ -291,8 +291,8 @@ pub mod macros_multiple;
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
 pub mod baking;
 
-#[cfg(feature = "macros_interleaved")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_interleaved")))]
-pub mod macros_interleaved;
+#[cfg(feature = "interleaved")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
+pub mod interleaved;
 
 pub mod transport;
