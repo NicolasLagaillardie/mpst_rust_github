@@ -125,7 +125,7 @@ required-features = []
 [[bench]]
 name = "main"
 harness = false
-required-features = ["macros_multiple"]
+required-features = ["baking_interleaved"]
 
 [[bench]]
 name = "ping_pong"
