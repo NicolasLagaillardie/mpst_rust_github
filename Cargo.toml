@@ -7,7 +7,7 @@ description = "A library implementing Multiparty Session Types for 2 or more par
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT OR Apache-2.0"
-keywords = ["multiparty", "session", "affine"]
+keywords = ["multiparty", "session", "affine", "multicrusty"]
 categories = ["concurrency"]
 exclude = [
     ".travis.yml",
@@ -25,7 +25,12 @@ exclude = [
     "scripts/",
     "example/",
     "outputs/",
+    "cfsm/",
+    "compile_time/",
+    "graphs_bench/",
     "rustfmt_2.toml",
+    "notes.txt",
+    "result.rs",
 ]
 autotests = false
 
