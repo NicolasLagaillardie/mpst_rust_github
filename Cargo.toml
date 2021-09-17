@@ -24,6 +24,7 @@ exclude = [
     ".cargo_vcs_info.json",
     "scripts/",
     "example/",
+    "outputs/",
     "rustfmt_2.toml",
 ]
 autotests = false
