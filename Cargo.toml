@@ -198,7 +198,7 @@ mpst-seq = { path = "mpst_seq", version = "0.0.12" }
 # mpst-seq = "0.0.12"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
-hyper = { version = "0.14.12", features = ["full"], optional = true }
+hyper = { version = "0.14.13", features = ["full"], optional = true }
 hyper-tls = { version = "0.5.0", optional = true }
 tokio = { version = "1.11.0", features = ["full"], optional = true }
 regex = { version = "1.5.4", optional = true }
