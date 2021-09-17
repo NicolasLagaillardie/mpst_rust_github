@@ -57,7 +57,6 @@ pub fn e_send_aux_simple(input: TokenStream) -> TokenStream {
     send_aux_simple(input)
 }
 
-
 //////////////////////////////////////
 
 #[proc_macro]

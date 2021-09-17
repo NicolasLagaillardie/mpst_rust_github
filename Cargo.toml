@@ -28,8 +28,12 @@ autotests = false
 ###################################
 
 [workspace]
-exclude = ["mpst_seq/", "mpst_seq_baking/", 
-    "mpst_seq_checking/","mpst_seq_macros_multiple/"]
+exclude = [
+    "mpst_seq/",
+    "mpst_seq_baking/",
+    "mpst_seq_checking/",
+    "mpst_seq_macros_multiple/",
+]
 
 ###################################
 
