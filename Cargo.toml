@@ -115,27 +115,27 @@ required-features = ["macros_multiple"]
 ###################################
 
 [[example]]
-name = "actyx_os_api"
+name = "circuit_braker"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "actyx_os_logging"
+name = "logging"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "actyx_os_api_baking"
+name = "circuit_braker_baking"
 required-features = ["baking"]
 
 [[example]]
-name = "actyx_os_logging_baking"
+name = "logging_baking"
 required-features = ["baking"]
 
 [[example]]
-name = "actyx_os_api_interleaved"
+name = "circuit_braker_interleaved"
 required-features = ["baking", "interleaved"]
 
 [[example]]
-name = "actyx_os_logging_interleaved"
+name = "logging_interleaved"
 required-features = ["baking", "interleaved"]
 
 [[example]]
