@@ -8,7 +8,6 @@ pub use mpst_seq_proc_macros_multiple::choose_mpst_multi_http_to_all;
 pub use mpst_seq_proc_macros_multiple::close_mpst;
 pub use mpst_seq_proc_macros_multiple::close_mpst_cancel;
 pub use mpst_seq_proc_macros_multiple::close_mpst_check_cancel;
-pub use mpst_seq_proc_macros_multiple::close_mpst_interleaved;
 pub use mpst_seq_proc_macros_multiple::create_broadcast_role_short;
 pub use mpst_seq_proc_macros_multiple::create_choose_mpst_session_multi_left;
 pub use mpst_seq_proc_macros_multiple::create_choose_mpst_session_multi_right;
@@ -26,7 +25,6 @@ pub use mpst_seq_proc_macros_multiple::create_send_http_session;
 pub use mpst_seq_proc_macros_multiple::create_send_mpst_cancel;
 pub use mpst_seq_proc_macros_multiple::create_send_mpst_session;
 pub use mpst_seq_proc_macros_multiple::fork_mpst_multi;
-pub use mpst_seq_proc_macros_multiple::fork_mpst_multi_interleaved;
 pub use mpst_seq_proc_macros_multiple::recv_mpst;
 pub use mpst_seq_proc_macros_multiple::send_cancel;
 pub use mpst_seq_proc_macros_multiple::send_mpst;
@@ -111,9 +109,3 @@ pub use mpst_seq_proc_macros_multiple::e_choose_mpst_create_multi_to_all;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc_macros_multiple::e_checking;
-
-#[proc_macro_hack]
-pub use mpst_seq_proc_macros_multiple::e_fork_mpst_multi_interleaved;
-
-#[proc_macro_hack]
-pub use mpst_seq_proc_macros_multiple::e_close_mpst_interleaved;
