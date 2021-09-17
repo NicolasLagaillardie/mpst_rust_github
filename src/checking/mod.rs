@@ -232,7 +232,7 @@ macro_rules! checker_concat {
             )+
 
             // Macro to implement Display for the `enum`
-            mpst_seq_macros_multiple::checking!(
+            mpst_seq_checking::checking!(
                 $(
                     $(
                         {
