@@ -1,5 +1,4 @@
 pub mod broadcast_cancel;
-pub mod checking;
 pub mod choose;
 pub mod close;
 pub mod create_meshedchannels;

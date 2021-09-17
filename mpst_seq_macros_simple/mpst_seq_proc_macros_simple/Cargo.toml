@@ -1,0 +1,21 @@
+[package]
+name = "mpst-seq-proc-macros-simple"
+version = "0.0.12"
+authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
+description = "A library with macro for mpstthree"
+edition = "2018"
+readme = "README.md"
+repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq_macros_simple/mpst_seq_proc_macros_simple"
+license = "MIT OR Apache-2.0"
+autotests = false
+
+[workspace]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0.76", features = ["extra-traits", "full", "parsing"] }
+quote = "1.0.9"
+proc-macro2 = "1.0.29"
+proc-macro-hack = "0.5.19"

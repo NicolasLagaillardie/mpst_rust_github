@@ -35,7 +35,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_send_mpst_session_1 {
     ($func_name:ident, $receiver:ident, $sender:ident) => {
-        mpst_seq_macros_multiple::create_send_mpst_session!(
+        mpst_seq_macros_simple::create_send_mpst_session!(
             $func_name,
             $receiver,
             $sender,
@@ -76,7 +76,7 @@ macro_rules! create_send_mpst_session_1 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_send_mpst_session_2 {
     ($func_name:ident, $receiver:ident, $sender:ident) => {
-        mpst_seq_macros_multiple::create_send_mpst_session!(
+        mpst_seq_macros_simple::create_send_mpst_session!(
             $func_name,
             $receiver,
             $sender,

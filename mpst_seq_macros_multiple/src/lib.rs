@@ -1,7 +1,6 @@
 use proc_macro_hack::proc_macro_hack;
 
 pub use mpst_seq_proc_macros_multiple::broadcast_cancel;
-pub use mpst_seq_proc_macros_multiple::checking;
 pub use mpst_seq_proc_macros_multiple::choose_mpst_create_multi_to_all;
 pub use mpst_seq_proc_macros_multiple::choose_mpst_multi_cancel_to_all;
 pub use mpst_seq_proc_macros_multiple::choose_mpst_multi_http_to_all;
@@ -106,6 +105,3 @@ pub use mpst_seq_proc_macros_multiple::e_close_mpst_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc_macros_multiple::e_choose_mpst_create_multi_to_all;
-
-#[proc_macro_hack]
-pub use mpst_seq_proc_macros_multiple::e_checking;

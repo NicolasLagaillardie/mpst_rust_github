@@ -10,7 +10,6 @@ mod macros;
 use macros::create_broadcast_role_short::CreateBroadcastRoleShort;
 use macros::create_normal_role_short::CreateNormalRoleShort;
 use macros::multiple::broadcast_cancel::BroadcastCancel;
-use macros::multiple::checking::CheckingInput;
 use macros::multiple::choose::choose_mpst_create_multi_to_all::ChooseMultiCreateToAll;
 use macros::multiple::choose::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAll;
 use macros::multiple::choose::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAll;
@@ -412,18 +411,4 @@ pub fn choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
     choose_mpst_create_multi_to_all(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
-pub fn checking(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as CheckingInput);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_checking(input: TokenStream) -> TokenStream {
-    checking(input)
 }
