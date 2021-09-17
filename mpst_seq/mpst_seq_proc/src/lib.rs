@@ -11,6 +11,10 @@ use functionmpst::recv_all_aux_simple::RecvAllAuxSimple;
 use functionmpst::recv_aux_simple::RecvAuxSimple;
 use functionmpst::send_aux_simple::SendAuxSimple;
 
+mod choose_mpst_multi_to_all;
+
+use choose_mpst_multi_to_all::ChooseMultiToAll;
+
 //////////////////////////////////////
 
 #[proc_macro]
@@ -51,4 +55,19 @@ pub fn send_aux_simple(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_send_aux_simple(input: TokenStream) -> TokenStream {
     send_aux_simple(input)
+}
+
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseMultiToAll);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
+    choose_mpst_multi_to_all(input)
 }

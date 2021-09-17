@@ -14,7 +14,6 @@ use macros::multiple::checking::CheckingInput;
 use macros::multiple::choose::choose_mpst_create_multi_to_all::ChooseMultiCreateToAll;
 use macros::multiple::choose::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAll;
 use macros::multiple::choose::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAll;
-use macros::multiple::choose::choose_mpst_multi_to_all::ChooseMultiToAll;
 use macros::multiple::choose::create_choose_mpst_session_multi_left::ChooseTypeMultiLeft;
 use macros::multiple::choose::create_choose_mpst_session_multi_right::ChooseTypeMultiRight;
 use macros::multiple::choose::create_choose_type_multi::ChooseTypeMulti;
@@ -177,20 +176,6 @@ pub fn create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStream
 #[proc_macro_hack]
 pub fn e_create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStream {
     create_choose_mpst_session_multi_right(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
-pub fn choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ChooseMultiToAll);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
-    choose_mpst_multi_to_all(input)
 }
 
 //////////////////////////////////////

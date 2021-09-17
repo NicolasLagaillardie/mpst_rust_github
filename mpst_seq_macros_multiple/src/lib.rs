@@ -5,7 +5,6 @@ pub use mpst_seq_proc_macros_multiple::checking;
 pub use mpst_seq_proc_macros_multiple::choose_mpst_create_multi_to_all;
 pub use mpst_seq_proc_macros_multiple::choose_mpst_multi_cancel_to_all;
 pub use mpst_seq_proc_macros_multiple::choose_mpst_multi_http_to_all;
-pub use mpst_seq_proc_macros_multiple::choose_mpst_multi_to_all;
 pub use mpst_seq_proc_macros_multiple::close_mpst;
 pub use mpst_seq_proc_macros_multiple::close_mpst_cancel;
 pub use mpst_seq_proc_macros_multiple::close_mpst_check_cancel;
@@ -58,9 +57,6 @@ pub use mpst_seq_proc_macros_multiple::e_create_choose_mpst_session_multi_left;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc_macros_multiple::e_create_choose_mpst_session_multi_right;
-
-#[proc_macro_hack]
-pub use mpst_seq_proc_macros_multiple::e_choose_mpst_multi_to_all;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc_macros_multiple::e_choose_mpst_multi_cancel_to_all;

@@ -14,7 +14,7 @@ macro_rules! choose_aux {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq_macros_multiple::choose_mpst_multi_to_all!(
+        mpst_seq::choose_mpst_multi_to_all!(
             $session ,
             ( $( $label , )+ ) ,
             ( $( $receiver , )+ ) ,
