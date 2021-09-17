@@ -49,7 +49,7 @@ macro_rules! recv_mpst {
         $nsessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq_baking::recv_mpst!(
+        mpst_seq_macros_multiple::recv_mpst!(
             $session,
             $sender,
             $receiver,
@@ -102,7 +102,7 @@ macro_rules! create_recv_mpst_session {
         $nsessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq_baking::create_recv_mpst_session!(
+        mpst_seq_macros_multiple::create_recv_mpst_session!(
             $func_name,
             $sender,
             $receiver,

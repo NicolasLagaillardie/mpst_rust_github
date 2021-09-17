@@ -6,7 +6,7 @@ use syn::{Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct BakingWithEnumMacroInput {
+pub struct BakingWithEnum {
     meshedchannels_name: syn::Ident,
     all_roles: Vec<proc_macro2::TokenStream>,
     number_roles: u64,
@@ -32,7 +32,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStrea
     Ok(result)
 }
 
-impl Parse for BakingWithEnumMacroInput {
+impl Parse for BakingWithEnum {
     fn parse(input: ParseStream) -> Result<Self> {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
@@ -47,7 +47,7 @@ impl Parse for BakingWithEnumMacroInput {
             Vec::new()
         };
 
-        Ok(BakingWithEnumMacroInput {
+        Ok(BakingWithEnum {
             meshedchannels_name,
             all_roles,
             number_roles,
@@ -56,13 +56,13 @@ impl Parse for BakingWithEnumMacroInput {
     }
 }
 
-impl From<BakingWithEnumMacroInput> for proc_macro2::TokenStream {
-    fn from(input: BakingWithEnumMacroInput) -> proc_macro2::TokenStream {
+impl From<BakingWithEnum> for proc_macro2::TokenStream {
+    fn from(input: BakingWithEnum) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl BakingWithEnumMacroInput {
+impl BakingWithEnum {
     /// Create the whole matrix of index according to line and column
     fn diag(&self) -> VecOfTuple {
         let diff = self.number_roles - 1;

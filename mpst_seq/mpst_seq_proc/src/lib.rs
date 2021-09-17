@@ -7,15 +7,15 @@ use syn::parse_macro_input;
 
 mod functionmpst;
 
-use functionmpst::recv_all_aux_simple::RecvAllAuxSimpleMacroInput;
-use functionmpst::recv_aux_simple::RecvAuxSimpleMacroInput;
-use functionmpst::send_aux_simple::SendAuxSimpleMacroInput;
+use functionmpst::recv_all_aux_simple::RecvAllAuxSimple;
+use functionmpst::recv_aux_simple::RecvAuxSimple;
+use functionmpst::send_aux_simple::SendAuxSimple;
 
 //////////////////////////////////////
 
 #[proc_macro]
 pub fn recv_aux_simple(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as RecvAuxSimpleMacroInput);
+    let input = parse_macro_input!(input as RecvAuxSimple);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
@@ -29,7 +29,7 @@ pub fn e_recv_aux_simple(input: TokenStream) -> TokenStream {
 
 #[proc_macro]
 pub fn recv_all_aux_simple(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as RecvAllAuxSimpleMacroInput);
+    let input = parse_macro_input!(input as RecvAllAuxSimple);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
@@ -43,7 +43,7 @@ pub fn e_recv_all_aux_simple(input: TokenStream) -> TokenStream {
 
 #[proc_macro]
 pub fn send_aux_simple(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as SendAuxSimpleMacroInput);
+    let input = parse_macro_input!(input as SendAuxSimple);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }

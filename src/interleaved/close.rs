@@ -44,6 +44,10 @@ where
 #[doc(hidden)]
 macro_rules! close_mpst_interleaved {
     ($func_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq_baking::close_mpst_interleaved!($func_name, $meshedchannels_name, $nsessions);
+        mpst_seq_macros_multiple::close_mpst_interleaved!(
+            $func_name,
+            $meshedchannels_name,
+            $nsessions
+        );
     };
 }

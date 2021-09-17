@@ -433,7 +433,7 @@ macro_rules! create_multiple_broadcast_role {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_role_short {
     ($role_name:ident) => {
-        mpst_seq_baking::create_normal_role_short!($role_name);
+        mpst_seq_macros_multiple::create_normal_role_short!($role_name);
     };
 }
 
@@ -503,7 +503,7 @@ macro_rules! create_multiple_normal_role_short {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_broadcast_role_short {
     ($role_name:ident) => {
-        mpst_seq_baking::create_broadcast_role_short!($role_name);
+        mpst_seq_macros_multiple::create_broadcast_role_short!($role_name);
     };
 }
 

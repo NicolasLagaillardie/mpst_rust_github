@@ -23,14 +23,14 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
 #[derive(Debug)]
-pub struct SendAuxSimpleMacroInput {
+pub struct SendAuxSimple {
     session: syn::Expr,
     payload: syn::Expr,
     role: syn::Ident,
     exclusion: u64,
 }
 
-impl Parse for SendAuxSimpleMacroInput {
+impl Parse for SendAuxSimple {
     fn parse(input: ParseStream) -> Result<Self> {
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
@@ -43,7 +43,7 @@ impl Parse for SendAuxSimpleMacroInput {
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
-        Ok(SendAuxSimpleMacroInput {
+        Ok(SendAuxSimple {
             session,
             payload,
             role,
@@ -52,13 +52,13 @@ impl Parse for SendAuxSimpleMacroInput {
     }
 }
 
-impl From<SendAuxSimpleMacroInput> for proc_macro2::TokenStream {
-    fn from(input: SendAuxSimpleMacroInput) -> proc_macro2::TokenStream {
+impl From<SendAuxSimple> for proc_macro2::TokenStream {
+    fn from(input: SendAuxSimple) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl SendAuxSimpleMacroInput {
+impl SendAuxSimple {
     fn expand(&self) -> proc_macro2::TokenStream {
         let session = self.session.clone();
         let payload = self.payload.clone();

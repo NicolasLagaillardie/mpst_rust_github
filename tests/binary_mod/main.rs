@@ -122,17 +122,17 @@ pub fn ping_works() {
 }
 
 // Test writing a program which duplicates a session.
-// 
+//
 // ```compile_fail
 // assert!(|| -> Result<(), Box<dyn Error>> {
 //     let r1 = fork(move |s1: Se
 //         let s2 = se
 //         close(s2)?;
-//         let s3 = 
-//        
+//         let s3 =
+//
 //     });
-//     let ((), 
-//    
+//     let ((),
+//
 // }()
 // .is_ok());
 /// ```

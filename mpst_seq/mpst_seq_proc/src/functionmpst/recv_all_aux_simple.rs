@@ -24,13 +24,13 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Result, Token};
 
 #[derive(Debug)]
-pub struct RecvAllAuxSimpleMacroInput {
+pub struct RecvAllAuxSimple {
     session: syn::Expr,
     role: syn::Ident,
     exclusion: u64,
 }
 
-impl Parse for RecvAllAuxSimpleMacroInput {
+impl Parse for RecvAllAuxSimple {
     fn parse(input: ParseStream) -> Result<Self> {
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
@@ -40,7 +40,7 @@ impl Parse for RecvAllAuxSimpleMacroInput {
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap(); // Retrive the index
 
-        Ok(RecvAllAuxSimpleMacroInput {
+        Ok(RecvAllAuxSimple {
             session,
             role,
             exclusion,
@@ -48,13 +48,13 @@ impl Parse for RecvAllAuxSimpleMacroInput {
     }
 }
 
-impl From<RecvAllAuxSimpleMacroInput> for proc_macro2::TokenStream {
-    fn from(input: RecvAllAuxSimpleMacroInput) -> proc_macro2::TokenStream {
+impl From<RecvAllAuxSimple> for proc_macro2::TokenStream {
+    fn from(input: RecvAllAuxSimple) -> proc_macro2::TokenStream {
         input.expand()
     }
 }
 
-impl RecvAllAuxSimpleMacroInput {
+impl RecvAllAuxSimple {
     fn expand(&self) -> proc_macro2::TokenStream {
         let session = self.session.clone();
         let role = self.role.clone();
