@@ -124,8 +124,8 @@ fn udp_server() -> Result<(), Box<dyn Error>> {
 
     for _ in 0..LOOPS {
         let mut buf = [0; 128];
-        println!("recv: {:?}", socket.recv_from(&mut buf)?);
-        println!("send: {:?}", socket.send_to(&[0, 1, 2], "127.0.0.1:8081")?);
+        let _ = socket.recv_from(&mut buf)?;
+        let _ = socket.send_to(&[0, 1, 2], "127.0.0.1:8081")?;
     }
 
     // close the socket server
