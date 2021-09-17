@@ -5,7 +5,7 @@
 set -e
 
 rm -rf cfsm/
-cargo clean
+./scripts/clean_all.sh
 
 # echo "cargo fmt started"
 # cargo fmt
