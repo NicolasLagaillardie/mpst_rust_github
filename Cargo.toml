@@ -129,7 +129,7 @@ required-features = ["macros_multiple"]
 ###################################
 
 [[example]]
-name = "circuit_braker"
+name = "circuit_breaker"
 required-features = ["macros_multiple"]
 
 [[example]]
@@ -137,7 +137,7 @@ name = "logging"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "circuit_braker_baking"
+name = "circuit_breaker_baking"
 required-features = ["baking"]
 
 [[example]]
@@ -145,7 +145,7 @@ name = "logging_baking"
 required-features = ["baking"]
 
 [[example]]
-name = "circuit_braker_interleaved"
+name = "circuit_breaker_interleaved"
 required-features = ["baking", "interleaved"]
 
 [[example]]

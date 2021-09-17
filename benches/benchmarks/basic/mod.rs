@@ -1,4 +1,4 @@
-pub mod circuit_braker;
+pub mod circuit_breaker;
 pub mod distributed_calc;
 pub mod dns_fowler;
 pub mod dns_imai;
