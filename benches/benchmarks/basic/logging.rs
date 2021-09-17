@@ -232,8 +232,8 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn actyx_os_logging_main(c: &mut Criterion) {
-    c.bench_function(&format!("Actyx OS Logging"), |b| b.iter(|| all_mpst()));
+fn logging_main(c: &mut Criterion) {
+    c.bench_function(&format!("Logging"), |b| b.iter(|| all_mpst()));
 }
 
 fn long_warmup() -> Criterion {
@@ -241,10 +241,10 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = actyx_os_logging;
+    name = logging;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = actyx_os_logging_main
+    targets = logging_main
 }
 
-criterion_main!(actyx_os_logging);
+criterion_main!(logging);

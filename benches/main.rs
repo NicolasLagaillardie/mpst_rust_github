@@ -52,8 +52,8 @@ criterion_main! {
     // benchmarks::mesh::cancel::mesh_eleven::mesh_eleven,
     // benchmarks::mesh::cancel::mesh_twenty::mesh_twenty,
     // //////////
-    // benchmarks::basic::actyx_os_logging::actyx_os_logging,
-    // benchmarks::basic::actyx_os_api::actyx_os_api,
+    // benchmarks::basic::logging::logging,
+    // benchmarks::basic::circuit_braker::circuit_braker,
     // benchmarks::basic::distributed_calc::distributed_calc,
     // benchmarks::basic::fib::fib,
     // benchmarks::basic::o_auth::o_auth,

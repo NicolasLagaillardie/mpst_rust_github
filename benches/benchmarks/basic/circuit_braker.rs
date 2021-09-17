@@ -401,7 +401,7 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn actyx_os_api_main(c: &mut Criterion) {
+fn circuit_braker_main(c: &mut Criterion) {
     c.bench_function(&format!("Actyx OS API"), |b| b.iter(|| all_mpst()));
 }
 
@@ -410,10 +410,10 @@ fn long_warmup() -> Criterion {
 }
 
 criterion_group! {
-    name = actyx_os_api;
+    name = circuit_braker;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = actyx_os_api_main
+    targets = circuit_braker_main
 }
 
-criterion_main!(actyx_os_api);
+criterion_main!(circuit_braker);
