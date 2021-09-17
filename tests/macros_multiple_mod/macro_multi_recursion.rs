@@ -49,11 +49,11 @@ type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
 type NameD = RoleD<RoleEnd>;
 
-/// Test our usecase
-/// Simple types
-/// Client = C
-/// Authenticator = A
-/// Server = B
+// Test our usecase
+// Simple types
+// Client = C
+// Authenticator = A
+// Server = B
 
 type AtoDClose = End;
 type AtoBClose = End;

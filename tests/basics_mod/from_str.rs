@@ -8,7 +8,7 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
-/// Creating the binary sessions
+// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 

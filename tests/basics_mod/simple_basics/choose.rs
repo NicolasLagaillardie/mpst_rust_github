@@ -32,8 +32,8 @@ use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test a simple storage server, implemented using binary
-/// choice. Simple types
+// Test a simple storage server, implemented using binary
+// choice. Simple types
 type AtoBNeg<N> = Recv<N, End>;
 type AtoBAdd<N> = Recv<N, End>;
 

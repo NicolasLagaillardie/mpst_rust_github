@@ -22,11 +22,11 @@ use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test our usecase
-/// Simple types
-/// Authenticator = C
-/// Server = A
-/// Client = B
+// Test our usecase
+// Simple types
+// Authenticator = C
+// Server = A
+// Client = B
 
 type CtoBClose = End;
 type CtoAClose = End;

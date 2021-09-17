@@ -1,6 +1,6 @@
-/// An example which mixes both the usual way of creating recv/send functions
-/// with create_recv_mpst_session_bundle/create_send_mpst_session_bundle and the short way to
-/// call the code within those functions with recv_mpst/send_mpst
+// An example which mixes both the usual way of creating recv/send functions
+// with create_recv_mpst_session_bundle/create_send_mpst_session_bundle and the short way to
+// call the code within those functions with recv_mpst/send_mpst
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;

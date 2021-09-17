@@ -34,11 +34,11 @@ use mpstthree::offer_mpst_b_to_c;
 
 use petgraph::dot::Dot;
 
-/// Test our usecase
-/// Simple types
-/// Client = C
-/// Authenticator = A
-/// Server = B
+// Test our usecase
+// Simple types
+// Client = C
+// Authenticator = A
+// Server = B
 
 type AtoCClose = End;
 type AtoBClose = End;

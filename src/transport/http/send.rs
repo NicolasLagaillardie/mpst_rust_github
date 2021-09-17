@@ -114,7 +114,7 @@ macro_rules! create_send_http_session {
         $nsessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::create_send_http_session!(
+        mpst_seq_baking::create_send_http_session!(
             $func_name,
             $receiver,
             $sender,

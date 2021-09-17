@@ -15,7 +15,7 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
-/// Creating the binary sessions
+// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 

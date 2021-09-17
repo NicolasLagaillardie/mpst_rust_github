@@ -10,11 +10,11 @@ use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
-/// Test our usecase
-/// Simple types
-/// Client = B
-/// Authenticator = C
-/// Server = A
+// Test our usecase
+// Simple types
+// Client = B
+// Authenticator = C
+// Server = A
 
 type CtoBClose = End;
 type CtoAClose = End;

@@ -40,11 +40,11 @@ use mpstthree::offer_mpst_b_to_c;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-/// Test our usecase Video Stream
-/// Simple types
-/// Client = C
-/// Authenticator = A
-/// Server = B
+// Test our usecase Video Stream
+// Simple types
+// Client = C
+// Authenticator = A
+// Server = B
 
 type AtoCClose = End;
 type AtoBClose = End;

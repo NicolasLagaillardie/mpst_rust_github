@@ -121,20 +121,20 @@ pub fn ping_works() {
     .is_ok());
 }
 
-/// Test writing a program which duplicates a session.
-///
-/// ```compile_fail
-/// assert!(|| -> Result<(), Box<dyn Error>> {
-///     let r1 = fork(move |s1: Send<(), End>| {
-///         let s2 = send((), s1);
-///         close(s2)?;
-///         let s3 = send((), s1);
-///         close(s3)
-///     });
-///     let ((), r2) = recv(r1)?;
-///     close(r2)
-/// }()
-/// .is_ok());
+// Test writing a program which duplicates a session.
+// 
+// ```compile_fail
+// assert!(|| -> Result<(), Box<dyn Error>> {
+//     let r1 = fork(move |s1: Se
+//         let s2 = se
+//         close(s2)?;
+//         let s3 = 
+//        
+//     });
+//     let ((), 
+//    
+// }()
+// .is_ok());
 /// ```
 
 // Test a simple calculator server, implemented using binary

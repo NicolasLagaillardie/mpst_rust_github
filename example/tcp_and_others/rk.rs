@@ -84,15 +84,15 @@ fn rx<R, C>(_role: R, cont: C) -> Rx<R, C> {
     }
 }
 
-/// The local code can use either left or right, which will
-/// in any case consume the Choice.
+// The local code can use either left or right, which will
+// in any case consume the Choice.
 struct MyChoice<C1, C2> {
     left: C1,
     right: C2,
 }
 
-/// This node allows receiving from either R1 or R2,
-/// depending on an external choice
+// This node allows receiving from either R1 or R2,
+// depending on an external choice
 struct TheirChoice<R1, C1, R2, C2> {
     left: C1,
     right: C2,

@@ -28,7 +28,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
     ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $nsessions);
+        mpst_seq_baking::create_choose_type_multi!($type_name, $meshedchannels_name, $nsessions);
     };
 }
 
@@ -83,7 +83,7 @@ macro_rules! create_choose_mpst_session_multi_left {
         $meshedchannels_name:ident,
         $nsessions:literal
     ) => {
-        mpst_seq::create_choose_mpst_session_multi_left!(
+        mpst_seq_baking::create_choose_mpst_session_multi_left!(
             $func_name,
             $type_name,
             $role_dual,
@@ -145,7 +145,7 @@ macro_rules! create_choose_mpst_session_multi_right {
         $meshedchannels_name:ident,
         $nsessions:literal
     ) => {
-        mpst_seq::create_choose_mpst_session_multi_right!(
+        mpst_seq_baking::create_choose_mpst_session_multi_right!(
             $func_name,
             $type_name,
             $role_dual,
@@ -292,7 +292,7 @@ macro_rules! choose_mpst_multi_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_to_all!(
+        mpst_seq_baking::choose_mpst_multi_to_all!(
             $session ,
             ( $( $label , )+ ) ,
             ( $( $receiver , )+ ) ,
@@ -365,7 +365,7 @@ macro_rules! choose_mpst_create_multi_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_create_multi_to_all!(
+        mpst_seq_baking::choose_mpst_create_multi_to_all!(
             $name ,
             ( $( $receiver , )+ ) ,
             $sender ,
@@ -482,7 +482,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_cancel_to_all!(
+        mpst_seq_baking::choose_mpst_multi_cancel_to_all!(
             $session ,
             ( $( $label , )+ ) ,
             ( $( $receiver , )+ ) ,
@@ -553,7 +553,7 @@ macro_rules! choose_mpst_multi_http_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_http_to_all!(
+        mpst_seq_baking::choose_mpst_multi_http_to_all!(
             $session ,
             ( $( $label , )+ ) ,
             ( $( $receiver , )+ ) ,
@@ -614,7 +614,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
+        mpst_seq_baking::create_fn_choose_mpst_multi_to_all_bundle!(
             ( $( $fn_name , )+ ) ,
             ( $( $branch , )+ ) ,
             ( $( $label , )+ ) ,
@@ -679,7 +679,7 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
+        mpst_seq_baking::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
             ( $( $fn_name , )+ ) ,
             ( $( $branch , )+ ) ,
             ( $( $label , )+ ) ,

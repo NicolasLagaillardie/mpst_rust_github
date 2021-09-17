@@ -20,8 +20,8 @@ use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test a simple storage server, implemented using binary
-/// choice. Simple types
+// Test a simple storage server, implemented using binary
+// choice. Simple types
 type BtoCNeg<N> = Recv<N, End>;
 type BtoCAdd<N> = Recv<N, End>;
 
