@@ -3,7 +3,7 @@
 //! for an HTTP connection, for at least two participants.
 //!
 //! *This module is available only if MultiCrusty is built with
-//! the `"transport"` feature.*
+//! the `"transport"` feature or the `"transport_http"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use hyper::client::ResponseFuture;
@@ -91,7 +91,7 @@ macro_rules! create_recv_http_session {
         $nsessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq_macros_multiple::create_recv_http_session!(
+        mpst_seq_http::create_recv_http_session!(
             $func_name,
             $sender,
             $receiver,

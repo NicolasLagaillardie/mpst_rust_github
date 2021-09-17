@@ -19,6 +19,7 @@ exclude = [
     "mpst_seq_checking/",
     "mpst_seq_interleaved/",
     "mpst_seq_macros_simple/",
+    "mpst_seq_http/",
     ".github/",
     ".cargo_vcs_info.json",
     "scripts/",
@@ -37,6 +38,7 @@ exclude = [
     "mpst_seq_macros_multiple/",
     "mpst_seq_interleaved/",
     "mpst_seq_macros_simple/",
+    "mpst_seq_http/",
 ]
 
 ###################################
@@ -218,6 +220,8 @@ mpst-seq-interleaved = { path = "mpst_seq_interleaved", version = "0.0.12", opti
 # mpst-seq-interleaved = "0.0.12"
 mpst-seq-macros-simple = { path = "mpst_seq_macros_simple", version = "0.0.12", optional = true }
 # mpst-seq-macros-simple = "0.0.12"
+mpst-seq-http = { path = "mpst_seq_http", version = "0.0.12", optional = true }
+# mpst-seq-http = "0.0.12"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
 hyper = { version = "0.14.13", features = ["full"], optional = true }
@@ -251,7 +255,7 @@ baking = ["default", "macros_multiple", "mpst-seq-baking"]
 baking_interleaved = ["baking", "interleaved", "mpst-seq-interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
-transport_http = ["default", "hyper", "hyper-tls", "tokio"]
+transport_http = ["default", "hyper", "hyper-tls", "tokio", "mpst-seq-http"]
 transport = ["transport_tcp", "transport_udp", "transport_http"]
 # For test compile examples
 transport_macros_multiple = ["macros_multiple", "transport"]

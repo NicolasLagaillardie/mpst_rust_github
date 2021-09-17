@@ -17,3 +17,9 @@ pub mod recv;
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
 pub mod send;
+
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
+pub mod choose;

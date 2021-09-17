@@ -12,7 +12,6 @@ use macros::create_normal_role_short::CreateNormalRoleShort;
 use macros::multiple::broadcast_cancel::BroadcastCancel;
 use macros::multiple::choose::choose_mpst_create_multi_to_all::ChooseMultiCreateToAll;
 use macros::multiple::choose::choose_mpst_multi_cancel_to_all::ChooseTypeMultiCancelToAll;
-use macros::multiple::choose::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAll;
 use macros::multiple::choose::create_choose_mpst_session_multi_left::ChooseTypeMultiLeft;
 use macros::multiple::choose::create_choose_mpst_session_multi_right::ChooseTypeMultiRight;
 use macros::multiple::choose::create_choose_type_multi::ChooseTypeMulti;
@@ -25,11 +24,9 @@ use macros::multiple::create_meshedchannels::CreateMeshedChannels;
 use macros::multiple::fork_mpst_multi::ForkMPSTMulti;
 use macros::multiple::offer::create_offer_mpst_session_multi::OfferMPSTSessionMulti;
 use macros::multiple::offer::create_offer_type_multi::OfferTypeMulti;
-use macros::multiple::recv::create_recv_http_session::CreateRecvHttpSession;
 use macros::multiple::recv::create_recv_mpst_session::CreateRecvMPSTSession;
 use macros::multiple::recv::recv_mpst::RecvMPST;
 use macros::multiple::send::create_send_check_cancel::CreateSendCheckCancel;
-use macros::multiple::send::create_send_http_session::CreateSendHttpSession;
 use macros::multiple::send::create_send_mpst_cancel::CreateSendMPSTCancel;
 use macros::multiple::send::create_send_mpst_session::CreateSendMPSTSession;
 use macros::multiple::send::send_cancel::SendCancel;
@@ -192,20 +189,6 @@ pub fn e_choose_mpst_multi_cancel_to_all(input: TokenStream) -> TokenStream {
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ChooseTypeMultiHttpToAll);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
-    choose_mpst_multi_http_to_all(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
 pub fn create_fn_choose_mpst_multi_to_all_bundle(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ChooseTypeMultiToAllBundle);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
@@ -290,20 +273,6 @@ pub fn e_create_recv_mpst_session(input: TokenStream) -> TokenStream {
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn create_recv_http_session(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as CreateRecvHttpSession);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_recv_http_session(input: TokenStream) -> TokenStream {
-    create_recv_http_session(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
 pub fn send_mpst(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as SendMPST);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
@@ -327,20 +296,6 @@ pub fn create_send_mpst_session(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_send_mpst_session(input: TokenStream) -> TokenStream {
     create_send_mpst_session(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
-pub fn create_send_http_session(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as CreateSendHttpSession);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_send_http_session(input: TokenStream) -> TokenStream {
-    create_send_http_session(input)
 }
 
 //////////////////////////////////////
