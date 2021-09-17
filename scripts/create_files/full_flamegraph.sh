@@ -12,8 +12,12 @@ cargo flamegraph --example fib -o flamegraphs/flamegraph_fib.svg
 cargo flamegraph --example simple_voting -o flamegraphs/flamegraph_simple_voting.svg
 cargo flamegraph --example three_buyer -o flamegraphs/flamegraph_three_buyer.svg
 cargo flamegraph --example travel_three -o flamegraphs/flamegraph_travel_three.svg
-cargo flamegraph --example actyx_os_logging -o flamegraphs/flamegraph_actyx_os_logging.svg
-cargo flamegraph --example actyx_os_api -o flamegraphs/flamegraph_actyx_os_api.svg
+cargo flamegraph --example logging -o flamegraphs/flamegraph_logging.svg
+cargo flamegraph --example circuit_breaker -o flamegraphs/flamegraph_circuit_breaker.svg
+cargo flamegraph --example logging_baking -o flamegraphs/flamegraph_logging_baking.svg
+cargo flamegraph --example circuit_breaker_baking -o flamegraphs/flamegraph_circuit_breaker_baking.svg
+cargo flamegraph --example logging_interleaved -o flamegraphs/flamegraph_logging_interleaved.svg
+cargo flamegraph --example circuit_breaker_interleavedreaker -o flamegraphs/flamegraph_circuit_breaker_interleaved.svg
 cargo flamegraph --example smtp -o flamegraphs/flamegraph_smtp.svg
 cargo flamegraph --example distributed_calc -o flamegraphs/flamegraph_distributed_calc.svg
 cargo flamegraph --example video_stream -o flamegraphs/flamegraph_video_stream.svg

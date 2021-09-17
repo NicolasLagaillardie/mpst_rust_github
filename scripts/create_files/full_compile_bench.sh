@@ -13,8 +13,12 @@ sleep 2
 ./scripts/create_files/compile.sh simple_voting 5 macros_multiple
 ./scripts/create_files/compile.sh three_buyers 5 macros_multiple
 ./scripts/create_files/compile.sh travel_three 5 macros_multiple
-./scripts/create_files/compile.sh actyx_os_logging 5 macros_multiple
-./scripts/create_files/compile.sh actyx_os_api 5 macros_multiple
+./scripts/create_files/compile.sh logging 5 macros_multiple
+./scripts/create_files/compile.sh circuit_breaker 5 macros_multiple
+./scripts/create_files/compile.sh logging_baking 5 baking
+./scripts/create_files/compile.sh circuit_breaker_baking 5 baking
+./scripts/create_files/compile.sh logging_interleaved 5 baking_interleaved
+./scripts/create_files/compile.sh circuit_breaker_interleaved 5 baking_interleaved
 ./scripts/create_files/compile.sh smtp 5 macros_multiple
 ./scripts/create_files/compile.sh distributed_calc 5 macros_multiple
 ./scripts/create_files/compile.sh video_stream 5 macros_simple

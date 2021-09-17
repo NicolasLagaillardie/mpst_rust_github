@@ -56,8 +56,12 @@ RUST_BACKTRACE=1 cargo doc --verbose --workspace --all-features
 # cargo run --verbose --all-features
 # find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3} --features="macros") done' argv0 {} +
 
-cargo run --example actyx_os_api --features="macros_multiple"
-cargo run --example actyx_os_logging --features="macros_multiple"
+cargo run --example circuit_breaker --features="macros_multiple"
+cargo run --example logging --features="macros_multiple"
+cargo run --example circuit_breaker_baking --features="baking"
+cargo run --example logging_baking --features="baking"
+cargo run --example circuit_breaker_interleaved --features="baking_interleaved"
+cargo run --example logging_interleaved --features="baking_interleaved"
 cargo run --example distributed_calc --features="macros_multiple"
 cargo run --example dns_fowler --features="macros_multiple"
 cargo run --example dns_imai --features="macros_multiple"
