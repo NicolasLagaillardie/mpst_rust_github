@@ -14,7 +14,7 @@ use rand::{thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -209,9 +209,9 @@ fn simple_voting_mpst(c: &mut Criterion) {
     c.bench_function(&format!("Simple voting MPST"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = simple_voting;

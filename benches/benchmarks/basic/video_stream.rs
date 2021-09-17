@@ -12,7 +12,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
+// use std::time::Duration;
 
 use mpstthree::functionmpst::close::close_mpst;
 
@@ -192,9 +192,9 @@ fn video_stream_main(c: &mut Criterion) {
     c.bench_function(&format!("Video stream"), |b| b.iter(|| run_usecase()));
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = video_stream;

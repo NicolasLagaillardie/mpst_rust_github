@@ -54,6 +54,10 @@ criterion_main! {
     // //////////
     // benchmarks::basic::logging::logging,
     // benchmarks::basic::circuit_breaker::circuit_breaker,
+    // benchmarks::basic::logging_baking::logging_baking,
+    // benchmarks::basic::circuit_breaker_baking::circuit_breaker_baking,
+    // benchmarks::basic::logging_interleaved::logging_interleaved,
+    // benchmarks::basic::circuit_breaker_interleaved::circuit_breaker_interleaved,
     // benchmarks::basic::distributed_calc::distributed_calc,
     // benchmarks::basic::fib::fib,
     // benchmarks::basic::o_auth::o_auth,

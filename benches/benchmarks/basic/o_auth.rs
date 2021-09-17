@@ -13,7 +13,7 @@ use mpstthree::{
 use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -306,9 +306,9 @@ fn o_auth_mpst(c: &mut Criterion) {
     c.bench_function(&format!("oAuth MPST"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = o_auth;

@@ -11,7 +11,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
-use std::time::Duration;
+// use std::time::Duration;
 
 // Create the new MeshedChannels for five participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsSix, 6);
@@ -369,9 +369,9 @@ fn ring_protocol_mpst(c: &mut Criterion) {
     );
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(1800, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(1800, 0))
+// }
 
 criterion_group! {
     name = ring_five;

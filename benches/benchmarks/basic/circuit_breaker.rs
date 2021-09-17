@@ -14,7 +14,7 @@ use rand::random;
 
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -405,9 +405,9 @@ fn circuit_breaker_main(c: &mut Criterion) {
     c.bench_function(&format!("Circuit breaker"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(40, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(40, 0))
+// }
 
 criterion_group! {
     name = circuit_breaker;

@@ -18,7 +18,7 @@ use mpstthree::{
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
-use std::time::Duration;
+// use std::time::Duration;
 
 // global protocol ping_pong(role A, role B)
 // {
@@ -298,9 +298,9 @@ fn ping_pong_protocol_crossbeam(c: &mut Criterion) {
     });
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(1800, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(1800, 0))
+// }
 
 criterion_group! {
     name = ping_pong;

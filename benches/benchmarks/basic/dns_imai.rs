@@ -14,7 +14,7 @@ use mpstthree::{
 use rand::random;
 
 use std::error::Error;
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -223,9 +223,9 @@ fn dns_imai_main(c: &mut Criterion) {
     c.bench_function(&format!("DNS Imai"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = dns_imai;

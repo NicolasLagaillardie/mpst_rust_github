@@ -13,7 +13,7 @@ use mpstthree::{
 use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
 
 use std::error::Error;
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -323,9 +323,9 @@ fn online_wallet_main(c: &mut Criterion) {
     c.bench_function(&format!("Online wallet"), |b| b.iter(|| all_mpst()));
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = online_wallet;

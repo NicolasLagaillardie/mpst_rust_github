@@ -17,7 +17,7 @@ use mpstthree::{
 use std::error::Error;
 use std::marker;
 use std::thread::{spawn, JoinHandle};
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -263,9 +263,9 @@ fn fibo_binary(c: &mut Criterion) {
     });
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = fib;

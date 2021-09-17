@@ -14,7 +14,7 @@ use rand::{random, thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
-use std::time::Duration;
+// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -188,9 +188,9 @@ fn distributed_calc_main(c: &mut Criterion) {
     });
 }
 
-fn long_warmup() -> Criterion {
-    Criterion::default().measurement_time(Duration::new(30, 0))
-}
+// fn long_warmup() -> Criterion {
+//     Criterion::default().measurement_time(Duration::new(30, 0))
+// }
 
 criterion_group! {
     name = distributed_calc;
