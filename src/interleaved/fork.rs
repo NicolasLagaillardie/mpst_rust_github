@@ -71,10 +71,6 @@ where
 #[doc(hidden)]
 macro_rules! fork_mpst_multi_interleaved {
     ($func_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::fork_mpst_multi_interleaved!(
-            $func_name,
-            $meshedchannels_name,
-            $nsessions
-        );
+        mpst_seq::fork_mpst_multi_interleaved!($func_name, $meshedchannels_name, $nsessions);
     };
 }

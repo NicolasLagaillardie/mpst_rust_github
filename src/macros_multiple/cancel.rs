@@ -22,13 +22,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! send_cancel {
     ($func_name:ident, $name:ident, $meshedchannels_name:ident, $nsessions:literal, $msg:expr) => {
-        mpst_seq::send_cancel!(
-            $func_name,
-            $name,
-            $meshedchannels_name,
-            $nsessions,
-            $msg
-        );
+        mpst_seq::send_cancel!($func_name, $name, $meshedchannels_name, $nsessions, $msg);
     };
 }
 

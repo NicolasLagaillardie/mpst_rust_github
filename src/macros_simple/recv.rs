@@ -32,14 +32,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_recv_mpst_session_1 {
     ($func_name:ident, $sender:ident, $receiver:ident) => {
-        mpst_seq::create_recv_mpst_session!(
-            $func_name,
-            $sender,
-            $receiver,
-            MeshedChannels,
-            3,
-            1
-        );
+        mpst_seq::create_recv_mpst_session!($func_name, $sender, $receiver, MeshedChannels, 3, 1);
     };
 }
 
@@ -73,13 +66,6 @@ macro_rules! create_recv_mpst_session_1 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_recv_mpst_session_2 {
     ($func_name:ident, $sender:ident, $receiver:ident) => {
-        mpst_seq::create_recv_mpst_session!(
-            $func_name,
-            $sender,
-            $receiver,
-            MeshedChannels,
-            3,
-            2
-        );
+        mpst_seq::create_recv_mpst_session!($func_name, $sender, $receiver, MeshedChannels, 3, 2);
     };
 }

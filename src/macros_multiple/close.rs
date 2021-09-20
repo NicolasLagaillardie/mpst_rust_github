@@ -59,11 +59,7 @@ macro_rules! close_mpst {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! close_mpst_check_cancel {
     ($func_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::close_mpst_check_cancel!(
-            $func_name,
-            $meshedchannels_name,
-            $nsessions
-        );
+        mpst_seq::close_mpst_check_cancel!($func_name, $meshedchannels_name, $nsessions);
     };
 }
 
