@@ -11,7 +11,7 @@ note: return type inferred to be `&RoleB<RoleEnd>` here
    |
 86 |             let (_, s) = recv_mpst!(s, RoleC, RoleB, MeshedChannelsThree, 3, 2)()?;
    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `mpst_seq_macros_multiple::recv_mpst` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `mpst_seq::recv_mpst` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0308]: mismatched types
   --> $DIR/long_simple_three_mpst_short_fail.rs:87:21
@@ -32,4 +32,4 @@ note: return type inferred to be `&RoleB<RoleEnd>` here
 91 | |         },
 92 | |     })
    | |______^
-   = note: this error originates in the macro `mpst_seq_macros_multiple::send_mpst` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `mpst_seq::send_mpst` (in Nightly builds, run with -Z macro-backtrace for more info)

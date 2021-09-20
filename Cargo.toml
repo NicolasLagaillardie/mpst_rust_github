@@ -14,12 +14,6 @@ exclude = [
     "codecov.yml",
     ".gitignore",
     "mpst_seq/",
-    "mpst_seq_baking",
-    "mpst_seq_macros_multiple",
-    "mpst_seq_checking/",
-    "mpst_seq_interleaved/",
-    "mpst_seq_macros_simple/",
-    "mpst_seq_http/",
     ".github/",
     ".cargo_vcs_info.json",
     "scripts/",
@@ -39,12 +33,6 @@ autotests = false
 [workspace]
 exclude = [
     "mpst_seq/",
-    "mpst_seq_baking/",
-    "mpst_seq_checking/",
-    "mpst_seq_macros_multiple/",
-    "mpst_seq_interleaved/",
-    "mpst_seq_macros_simple/",
-    "mpst_seq_http/",
 ]
 
 ###################################
@@ -216,18 +204,6 @@ debug = true
 [dependencies]
 mpst-seq = { path = "mpst_seq", version = "0.0.12" }
 # mpst-seq = "0.0.12"
-mpst-seq-baking = { path = "mpst_seq_baking", version = "0.0.12", optional = true }
-# mpst-seq-baking = "0.0.12"
-mpst-seq-macros-multiple = { path = "mpst_seq_macros_multiple", version = "0.0.12", optional = true }
-# mpst-seq-macros-multiple = "0.0.12"
-mpst-seq-checking = { path = "mpst_seq_checking", version = "0.0.12", optional = true }
-# mpst-seq-checking = "0.0.12"
-mpst-seq-interleaved = { path = "mpst_seq_interleaved", version = "0.0.12", optional = true }
-# mpst-seq-interleaved = "0.0.12"
-mpst-seq-macros-simple = { path = "mpst_seq_macros_simple", version = "0.0.12", optional = true }
-# mpst-seq-macros-simple = "0.0.12"
-mpst-seq-http = { path = "mpst_seq_http", version = "0.0.12", optional = true }
-# mpst-seq-http = "0.0.12"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
 hyper = { version = "0.14.13", features = ["full"], optional = true }
@@ -243,12 +219,6 @@ criterion = { version = "0.3.5", features = ["html_reports"] }
 trybuild = "1.0.45"
 ntest = "0.7.3"
 rand = "0.8.4"
-mpst-seq-baking = { path = "mpst_seq_baking", version = "0.0.12" }
-# mpst-seq-baking = "0.0.12"
-mpst-seq-macros-multiple = { path = "mpst_seq_macros_multiple", version = "0.0.12" }
-# mpst-seq-macros-multiple = "0.0.12"
-mpst-seq-macros-simple = { path = "mpst_seq_macros_simple", version = "0.0.12" }
-# mpst-seq-macros-simple = "0.0.12"
 
 ###################################
 
@@ -258,16 +228,16 @@ binary = []
 functionmpst = []
 meshedchannels = []
 role = []
-macros_simple = ["default", "mpst-seq-macros-simple"]
-macros_multiple = ["default", "macros_simple", "mpst-seq-macros-multiple"]
+macros_simple = ["default"]
+macros_multiple = ["default", "macros_simple"]
 # For interleaved sessions
 interleaved = ["default"]
-checking = ["default", "regex", "petgraph", "mpst-seq-checking"]
-baking = ["default", "macros_multiple", "mpst-seq-baking"]
-baking_interleaved = ["baking", "interleaved", "mpst-seq-interleaved"]
+checking = ["default", "regex", "petgraph"]
+baking = ["default", "macros_multiple"]
+baking_interleaved = ["baking", "interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
-transport_http = ["default", "hyper", "hyper-tls", "tokio", "mpst-seq-http"]
+transport_http = ["default", "hyper", "hyper-tls", "tokio"]
 transport = ["transport_tcp", "transport_udp", "transport_http"]
 # For test compile examples
 transport_macros_multiple = ["macros_multiple", "transport"]

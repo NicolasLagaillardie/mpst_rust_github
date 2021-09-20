@@ -35,7 +35,7 @@ macro_rules! bundle_impl {
         $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)?
     ) => {
-        mpst_seq_baking::baking!(
+        mpst_seq::baking!(
             $meshedchannels_name,
             ( $( $all_roles , )+ )
         );
@@ -45,7 +45,7 @@ macro_rules! bundle_impl {
         $( $all_roles: ident),+ $(,)? =>
         $fork_mpst: ident
     ) => {
-        mpst_seq_baking::baking!(
+        mpst_seq::baking!(
             $meshedchannels_name ,
             ( $( $all_roles , )+ ) ,
             $fork_mpst
@@ -92,7 +92,7 @@ macro_rules! bundle_impl_with_enum {
         $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)?
     ) => {
-        mpst_seq_baking::baking_with_enum!(
+        mpst_seq::baking_with_enum!(
             $meshedchannels_name,
             ( $( $all_roles , )+ )
         );
@@ -102,7 +102,7 @@ macro_rules! bundle_impl_with_enum {
         $( $all_roles: ident),+ $(,)? =>
         $fork_mpst: ident
     ) => {
-        mpst_seq_baking::baking_with_enum!(
+        mpst_seq::baking_with_enum!(
             $meshedchannels_name ,
             ( $( $all_roles , )+ ) ,
             $fork_mpst
@@ -141,7 +141,7 @@ macro_rules! bundle_impl_with_cancel {
         $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)?
     ) => {
-        mpst_seq_baking::baking_with_cancel!(
+        mpst_seq::baking_with_cancel!(
             $meshedchannels_name,
             ( $( $all_roles , )+ )
         );
@@ -151,7 +151,7 @@ macro_rules! bundle_impl_with_cancel {
         $( $all_roles: ident),+ $(,)? =>
         $fork_mpst: ident
     ) => {
-        mpst_seq_baking::baking_with_cancel!(
+        mpst_seq::baking_with_cancel!(
             $meshedchannels_name ,
             ( $( $all_roles , )+ ) ,
             $fork_mpst
@@ -199,7 +199,7 @@ macro_rules! bundle_impl_with_enum_and_cancel {
         $meshedchannels_name: ident =>
         $( $all_roles: ident),+ $(,)?
     ) => {
-        mpst_seq_baking::baking_with_enum_and_cancel!(
+        mpst_seq::baking_with_enum_and_cancel!(
             $meshedchannels_name,
             ( $( $all_roles , )+ )
         );
@@ -209,7 +209,7 @@ macro_rules! bundle_impl_with_enum_and_cancel {
         $( $all_roles: ident),+ $(,)? =>
         $fork_mpst: ident
     ) => {
-        mpst_seq_baking::baking_with_enum_and_cancel!(
+        mpst_seq::baking_with_enum_and_cancel!(
             $meshedchannels_name ,
             ( $( $all_roles , )+ ) ,
             $fork_mpst
