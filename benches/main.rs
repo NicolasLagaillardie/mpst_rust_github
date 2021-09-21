@@ -56,7 +56,7 @@ criterion_main! {
     benchmarks::basic::circuit_breaker::circuit_breaker,
     benchmarks::basic::logging_baking::logging_baking,
     benchmarks::basic::circuit_breaker_baking::circuit_breaker_baking,
-    benchmarks::basic::logging_interleaved::logging_interleaved,
+    benchmarks::basic::logging_solo::logging_solo,
     benchmarks::basic::circuit_breaker_solo::circuit_breaker_solo,
     benchmarks::basic::distributed_calc::distributed_calc,
     benchmarks::basic::fib::fib,
