@@ -177,8 +177,8 @@ fn all_mpst() -> Result<(), Box<dyn std::error::Error>> {
 
 /////////////////////////
 
-fn logging_interleaved_main(c: &mut Criterion) {
-    c.bench_function(&format!("Logging interleaved"), |b| b.iter(|| all_mpst()));
+fn logging_solo_main(c: &mut Criterion) {
+    c.bench_function(&format!("Logging solo"), |b| b.iter(|| all_mpst()));
 }
 
 // fn long_warmup() -> Criterion {
@@ -186,10 +186,10 @@ fn logging_interleaved_main(c: &mut Criterion) {
 // }
 
 criterion_group! {
-    name = logging_interleaved;
+    name = logging_solo;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = logging_interleaved_main
+    targets = logging_solo_main
 }
 
-criterion_main!(logging_interleaved);
+criterion_main!(logging_solo);
