@@ -26,6 +26,6 @@ macro_rules! bundle_struct_fork_close_multi_interleaved {
     ) => {
         mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
         mpstthree::close_mpst_interleaved!($func_name_close, $meshedchannels_name, $nsessions);
-        mpstthree::fork_mpst_multi_interleaved!($func_name_fork, $meshedchannels_name, $nsessions);
+        mpstthree::fork_mpst_multi_solo!($func_name_fork, $meshedchannels_name, $nsessions);
     };
 }

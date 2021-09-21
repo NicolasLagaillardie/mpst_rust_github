@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     close_mpst_interleaved, create_meshedchannels, create_multiple_normal_role,
-    create_recv_mpst_session, create_send_mpst_session, fork_mpst_multi_interleaved,
+    create_recv_mpst_session, create_send_mpst_session, fork_mpst_multi_solo,
 };
 use std::error::Error;
 
@@ -28,7 +28,7 @@ create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 5, 3
 
 close_mpst_interleaved!(close_mpst_multi, MeshedChannels, 5);
 
-fork_mpst_multi_interleaved!(fork_mpst, MeshedChannels, 5);
+fork_mpst_multi_solo!(fork_mpst, MeshedChannels, 5);
 
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;

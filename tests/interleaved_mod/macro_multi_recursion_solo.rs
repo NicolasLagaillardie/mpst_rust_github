@@ -1,7 +1,5 @@
 // Test for Macro, exact same as usecase-recursive
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::interleaved::close::close_mpst_interleaved;
-use mpstthree::interleaved::fork::fork_mpst_interleaved;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -12,9 +10,9 @@ use std::marker;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
-    offer_mpst_interleaved,
+    choose_mpst_to_all, close_mpst_interleaved, create_multiple_normal_role,
+    create_recv_mpst_session_1, create_recv_mpst_session_2, create_send_mpst_session_1,
+    create_send_mpst_session_2, fork_mpst_multi_solo, offer_mpst_interleaved,
 };
 
 // Create new roles
@@ -37,6 +35,10 @@ create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
 create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
 create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
 create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
+
+close_mpst_interleaved!(close_mpst_multi, MeshedChannels, 3);
+
+fork_mpst_multi_solo!(fork_mpst, MeshedChannels, 3);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -176,7 +178,7 @@ fn step_two_recurs(
                 Branches0BtoC::End
             );
 
-            close_mpst_interleaved(s_a, s_b, s_c)
+            close_mpst_multi(s_a, s_b, s_c)
         }
     }
 }
@@ -203,5 +205,5 @@ fn step_three_recurs(
 /////////////////////////////////////////
 
 pub fn interleaved_main() {
-    assert!(fork_mpst_interleaved(step_one).is_ok());
+    assert!(fork_mpst(step_one).is_ok());
 }

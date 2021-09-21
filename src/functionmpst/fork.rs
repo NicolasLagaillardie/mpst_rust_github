@@ -11,7 +11,8 @@ use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
 
 #[doc(hidden)]
-fn fork_simple<S1, S2, R, N, P>(p: P, s: MeshedChannels<S1, S2, R, N>) -> JoinHandle<()>
+// Spawn a thread to run a function `p` which expects a `MeshedChannels` as an input
+pub(crate) fn fork_simple<S1, S2, R, N, P>(p: P, s: MeshedChannels<S1, S2, R, N>) -> JoinHandle<()>
 where
     S1: Session + 'static,
     S2: Session + 'static,

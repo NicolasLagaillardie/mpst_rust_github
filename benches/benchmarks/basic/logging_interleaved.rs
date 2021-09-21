@@ -6,7 +6,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl_with_enum_and_cancel, close_mpst_interleaved, fork_mpst_multi_interleaved,
+    bundle_impl_with_enum_and_cancel, close_mpst_interleaved, fork_mpst_multi_solo,
     offer_mpst_interleaved,
 };
 
@@ -27,7 +27,7 @@ bundle_impl_with_enum_and_cancel!(
 
 close_mpst_interleaved!(close_mpst, MeshedChannelsTwo, 2);
 
-fork_mpst_multi_interleaved!(fork_mpst, MeshedChannelsTwo, 2);
+fork_mpst_multi_solo!(fork_mpst, MeshedChannelsTwo, 2);
 
 // Names
 type NameRoleController = RoleController<RoleEnd>;

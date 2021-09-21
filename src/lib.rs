@@ -10,6 +10,7 @@
     unreachable_pub
 )]
 #![deny(unused_must_use)]
+#![deny(semicolon_in_expressions_from_macros)]
 #![cfg_attr(doc_cfg, feature(doc_cfg))]
 #![cfg_attr(doc_cfg, deny(rustdoc::broken_intra_doc_links))]
 #![doc(test(

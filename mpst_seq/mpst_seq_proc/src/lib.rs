@@ -49,6 +49,7 @@ mod interleaved;
 
 use interleaved::close_mpst_interleaved::CloseMpstInterleaved;
 use interleaved::fork_mpst_multi_interleaved::ForkMPSTMultiInterleaved;
+use interleaved::fork_mpst_multi_solo::ForkMPSTMultiSolo;
 
 mod macros_http;
 
@@ -462,15 +463,15 @@ pub fn e_choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ForkMPSTMultiInterleaved);
+pub fn fork_mpst_multi_solo(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ForkMPSTMultiSolo);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
 
 #[proc_macro_hack]
-pub fn e_fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
-    fork_mpst_multi_interleaved(input)
+pub fn e_fork_mpst_multi_solo(input: TokenStream) -> TokenStream {
+    fork_mpst_multi_solo(input)
 }
 
 //////////////////////////////////////
@@ -597,4 +598,18 @@ pub fn baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
     baking_with_enum_and_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ForkMPSTMultiInterleaved);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
+    fork_mpst_multi_interleaved(input)
 }

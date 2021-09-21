@@ -139,11 +139,15 @@ name = "logging_baking"
 required-features = ["baking"]
 
 [[example]]
-name = "circuit_breaker_interleaved"
+name = "circuit_breaker_solo"
 required-features = ["baking_interleaved"]
 
 [[example]]
-name = "logging_interleaved"
+name = "logging_solo"
+required-features = ["baking_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_interleaved"
 required-features = ["baking_interleaved"]
 
 [[example]]

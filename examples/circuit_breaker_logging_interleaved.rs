@@ -538,7 +538,7 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-pub fn interleaved_main() {
+fn main() {
     let (thread_api, thread_storage, thread_user, thread_logs, thread_controller) = fork_mpst(
         endpoint_api,
         endpoint_storage,
@@ -547,9 +547,9 @@ pub fn interleaved_main() {
         endpoint_controller,
     );
 
-    assert!(thread_api.join().is_ok());
-    assert!(thread_controller.join().is_ok());
-    assert!(thread_storage.join().is_ok());
-    assert!(thread_user.join().is_ok());
-    assert!(thread_logs.join().is_ok());
+    thread_api.join().unwrap();
+    thread_controller.join().unwrap();
+    thread_storage.join().unwrap();
+    thread_user.join().unwrap();
+    thread_logs.join().unwrap();
 }
