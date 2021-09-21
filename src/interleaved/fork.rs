@@ -6,47 +6,10 @@
 
 use std::error::Error;
 use std::marker;
-use std::panic::set_hook;
-use std::thread::{spawn, JoinHandle};
 
 use crate::binary::struct_trait::session::Session;
-use crate::functionmpst::fork::fork_simple;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
-
-#[doc(hidden)]
-// Spawn a thread to run a function `p` which expects two `MeshedChannels` as inputs
-pub(crate) fn fork_simple_interleaved<S1, S2, S3, S4, R1, R2, N1, N2, P>(
-    p: P,
-    s_0: MeshedChannels<S1, S2, R1, N1>,
-    s_1: MeshedChannels<S3, S4, R2, N2>,
-) -> JoinHandle<()>
-where
-    S1: Session + 'static,
-    S2: Session + 'static,
-    S3: Session + 'static,
-    S4: Session + 'static,
-    R1: Role + 'static,
-    R2: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
-    P: FnOnce(
-            MeshedChannels<S1, S2, R1, N1>,
-            MeshedChannels<S3, S4, R2, N2>,
-        ) -> Result<(), Box<dyn Error>>
-        + marker::Send
-        + 'static,
-{
-    spawn(move || {
-        set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match p(s_0, s_1) {
-            Ok(()) => (),
-            Err(e) => panic!("{:?}", e),
-        }
-    })
-}
 
 #[doc(hidden)]
 pub fn fork_mpst_solo<S0, S1, S2, R0, R1, R2, N0, N1, N2, F>(f: F) -> Result<(), Box<dyn Error>>
