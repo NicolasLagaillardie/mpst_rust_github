@@ -1,13 +1,13 @@
 pub mod circuit_breaker;
 pub mod circuit_breaker_baking;
-pub mod circuit_breaker_interleaved;
+pub mod circuit_breaker_solo;
 pub mod distributed_calc;
 pub mod dns_fowler;
 pub mod dns_imai;
 pub mod fib;
 pub mod logging;
 pub mod logging_baking;
-pub mod logging_interleaved;
+pub mod logging_solo;
 pub mod o_auth;
 pub mod online_wallet;
 pub mod simple_voting;

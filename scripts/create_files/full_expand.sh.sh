@@ -18,7 +18,7 @@ cargo expand --example circuit_breaker > expand/circuit_breaker.txt
 cargo expand --example logging_baking > expand/logging_baking.txt
 cargo expand --example circuit_breaker_baking > expand/circuit_breaker_baking.txt
 cargo expand --example logging_interleaved > expand/logging_interleaved.txt
-cargo expand --example circuit_breaker_interleaved > expand/circuit_breaker_interleaved.txt
+cargo expand --example circuit_breaker_logging_interleaved > expand/circuit_breaker_logging_interleaved.txt
 cargo expand --example smtp > expand/smtp.txt
 cargo expand --example distributed_calc > expand/distributed_calc.txt
 cargo expand --example video_stream > expand/video_stream.txt

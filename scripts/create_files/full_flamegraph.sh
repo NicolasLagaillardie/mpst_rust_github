@@ -17,7 +17,7 @@ cargo flamegraph --example circuit_breaker -o flamegraphs/flamegraph_circuit_bre
 cargo flamegraph --example logging_baking -o flamegraphs/flamegraph_logging_baking.svg
 cargo flamegraph --example circuit_breaker_baking -o flamegraphs/flamegraph_circuit_breaker_baking.svg
 cargo flamegraph --example logging_interleaved -o flamegraphs/flamegraph_logging_interleaved.svg
-cargo flamegraph --example circuit_breaker_interleavedreaker -o flamegraphs/flamegraph_circuit_breaker_interleaved.svg
+cargo flamegraph --example circuit_breaker_logging_interleaved -o flamegraphs/flamegraph_circuit_breaker_logging_interleaved.svg
 cargo flamegraph --example smtp -o flamegraphs/flamegraph_smtp.svg
 cargo flamegraph --example distributed_calc -o flamegraphs/flamegraph_distributed_calc.svg
 cargo flamegraph --example video_stream -o flamegraphs/flamegraph_video_stream.svg

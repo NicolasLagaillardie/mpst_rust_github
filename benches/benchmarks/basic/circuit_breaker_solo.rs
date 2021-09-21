@@ -316,7 +316,7 @@ fn all_mpst() -> Result<(), Box<dyn std::error::Error>> {
 
 /////////////////////////
 
-fn circuit_breaker_interleaved_main(c: &mut Criterion) {
+fn circuit_breaker_solo_main(c: &mut Criterion) {
     c.bench_function(&format!("Circuit breaker interleaved"), |b| {
         b.iter(|| all_mpst())
     });
@@ -327,10 +327,10 @@ fn circuit_breaker_interleaved_main(c: &mut Criterion) {
 // }
 
 criterion_group! {
-    name = circuit_breaker_interleaved;
+    name = circuit_breaker_solo;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = circuit_breaker_interleaved_main
+    targets = circuit_breaker_solo_main
 }
 
-criterion_main!(circuit_breaker_interleaved);
+criterion_main!(circuit_breaker_solo);
