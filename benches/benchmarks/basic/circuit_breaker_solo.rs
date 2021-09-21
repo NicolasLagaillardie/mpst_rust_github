@@ -317,9 +317,7 @@ fn all_mpst() -> Result<(), Box<dyn std::error::Error>> {
 /////////////////////////
 
 fn circuit_breaker_solo_main(c: &mut Criterion) {
-    c.bench_function(&format!("Circuit breaker solo"), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(&format!("Circuit breaker solo"), |b| b.iter(|| all_mpst()));
 }
 
 // fn long_warmup() -> Criterion {
