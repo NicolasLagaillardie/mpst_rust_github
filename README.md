@@ -174,33 +174,22 @@ For building the library, run this code.
 cargo build
 ```
 
-### Running
-
-For running the library, run this code.
-
-```sh
-cargo run
-```
-
 ### Run test
 
 For running the tests, run this code.
 
 ```sh
-cargo test
+cargo test --all-features
 ```
 
-Tests are divided into 8 folders:
+### Running
 
-* [unit](tests/unit/) contains unit tests for the library.
-* [basics](tests/basics/) contains the protocol shown in [Examples](#Example), alongside examples with the types and functions directly provided by the library.
-* [basics_macros](tests/basics_macros/) contains protocols with three or more participants using macros.
-* [baking](tests/baking/) contains protocols written with methods instead of functions.
-* [cancel](tests/cancel/) contains protocols written with cancellation.
-* [tcp](tests/tcp/) contains protocols written to work with **TCP** transport.
-* [http](tests/tcp/) contains protocols written to work with **HTTP** transport.
-* [scribble](tests/scribble/) contains protocols generated with Scribble.
-* [infinite_type](tests/infinite_type/) contains protocols that fail because of overflow when evaluated.
+For running an example XXX of the library, run this code.
+
+```sh
+cargo run --example XXX --all-features
+```
+
 
 ## Going further
 

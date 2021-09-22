@@ -42,7 +42,7 @@
 //! This protocol can be written as **A!B.A?C.B!C.0**.
 //! To implement this example, first, get the right components from the library.
 //!
-//! Here is the full working example, that is detailed after:
+//! Here is the full working example, detailed afterwards:
 //!
 //! ```
 //! // Used for the functions that will process the protocol
