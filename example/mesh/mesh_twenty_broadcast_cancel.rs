@@ -4480,25 +4480,25 @@ fn main() {
         endpoint_t,
     );
 
-    thread_central.join().unwrap();
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
-    thread_e.join().unwrap();
-    thread_f.join().unwrap();
-    thread_g.join().unwrap();
-    thread_h.join().unwrap();
-    thread_i.join().unwrap();
-    thread_j.join().unwrap();
-    thread_k.join().unwrap();
-    thread_l.join().unwrap();
-    thread_m.join().unwrap();
-    thread_n.join().unwrap();
-    thread_o.join().unwrap();
-    thread_p.join().unwrap();
-    thread_q.join().unwrap();
-    thread_r.join().unwrap();
-    thread_s.join().unwrap();
-    thread_t.join().unwrap();
+    assert!(thread_central.join().is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
+    assert!(thread_e.join().is_ok());
+    assert!(thread_f.join().is_ok());
+    assert!(thread_g.join().is_ok());
+    assert!(thread_h.join().is_ok());
+    assert!(thread_i.join().is_ok());
+    assert!(thread_j.join().is_ok());
+    assert!(thread_k.join().is_ok());
+    assert!(thread_l.join().is_ok());
+    assert!(thread_m.join().is_ok());
+    assert!(thread_n.join().is_ok());
+    assert!(thread_o.join().is_ok());
+    assert!(thread_p.join().is_ok());
+    assert!(thread_q.join().is_ok());
+    assert!(thread_r.join().is_ok());
+    assert!(thread_s.join().is_ok());
+    assert!(thread_t.join().is_ok());
 }

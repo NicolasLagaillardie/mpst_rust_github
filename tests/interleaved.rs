@@ -2,7 +2,7 @@ mod interleaved_mod;
 
 // Tests for macros with more than two participants
 #[test]
-fn macro_basics() {
+fn interleaved() {
     // Macro multi send-recv
     interleaved_mod::macro_multi_send_recv_meshedchannels_solo::interleaved_main();
 

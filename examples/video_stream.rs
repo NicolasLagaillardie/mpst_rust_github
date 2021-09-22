@@ -170,7 +170,7 @@ fn client_recurs(
 fn main() {
     let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
-    thread_a.join().unwrap();
-    thread_s.join().unwrap();
-    thread_c.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_s.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }

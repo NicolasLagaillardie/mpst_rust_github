@@ -206,7 +206,7 @@ fn main() {
     let (thread_handler, thread_regional, thread_data) =
         fork_mpst(endpoint_data, endpoint_handler, endpoint_regional);
 
-    thread_data.join().unwrap();
-    thread_regional.join().unwrap();
-    thread_handler.join().unwrap();
+    assert!(thread_data.join().is_ok());
+    assert!(thread_regional.join().is_ok());
+    assert!(thread_handler.join().is_ok());
 }

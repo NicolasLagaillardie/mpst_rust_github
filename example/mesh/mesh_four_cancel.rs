@@ -247,8 +247,8 @@ fn main() {
     let (thread_a, thread_b, thread_c, thread_d) =
         fork_mpst(endpoint_a, endpoint_b, endpoint_c, endpoint_d);
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }

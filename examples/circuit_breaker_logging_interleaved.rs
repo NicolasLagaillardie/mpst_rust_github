@@ -337,11 +337,12 @@ fn recurs_controller(
                 Branching0fromCtoU::Close
             );
 
-            let s_circuit_breaker = s_circuit_breaker.send(0)?;
-
-            let s_circuit_breaker = s_circuit_breaker.send(0)?;
-
-            s_circuit_breaker.close()
+            recurs_1_controller_end(
+                s_circuit_breaker,
+                loops_circuit_breaker - 1,
+                s_logging,
+                loops_logging,
+            )
         }
         i if i % 2 == 0 => {
             let s_circuit_breaker: EndpointCBControllerUp<i32> = choose_mpst_controllercb_to_all!(
@@ -369,7 +370,6 @@ fn recurs_controller(
             );
 
             let s_circuit_breaker = s_circuit_breaker.send(random::<i32>())?;
-
             let s_circuit_breaker = s_circuit_breaker.send(random::<i32>())?;
 
             recurs_1_controller(
@@ -414,6 +414,19 @@ fn recurs_2_controller(
 
             let s_logging = s_logging.send(loops_logging - 1)?;
 
+            let (_get_mode, s_circuit_breaker) = s_circuit_breaker.recv()?;
+
+            let s_circuit_breaker: EndpointCBControllerClose<i32> = choose_mpst_controllercb_to_all!(
+                s_circuit_breaker,
+                Branching0fromCtoA::Close,
+                Branching0fromCtoS::Close,
+                Branching0fromCtoU::Close
+            );
+
+            let s_circuit_breaker = s_circuit_breaker.send(random::<i32>())?;
+            let s_circuit_breaker = s_circuit_breaker.send(random::<i32>())?;
+
+            s_circuit_breaker.close()?;
             s_logging.close()
         }
         _ => {
@@ -424,6 +437,61 @@ fn recurs_2_controller(
             let s_logging = s_logging.send(loops_logging - 1)?;
 
             recurs_controller(
+                s_circuit_breaker,
+                loops_circuit_breaker - 1,
+                s_logging,
+                loops_logging - 1,
+            )
+        }
+    }
+}
+
+fn recurs_1_controller_end(
+    s_circuit_breaker: EndpointCBControllerClose<i32>,
+    loops_circuit_breaker: i32,
+    s_logging: EndpointLogController0<i32>,
+    loops_logging: i32,
+) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s_logging, {
+        Branching0fromLtoC::Success(s_logging) => {
+            let (_, s_logging) = s_logging.recv()?;
+            recurs_1_controller_end(s_circuit_breaker, loops_circuit_breaker - 1, s_logging, loops_logging)
+        },
+        Branching0fromLtoC::Failure(s_logging) => {
+            let (_, s_logging) = s_logging.recv()?;
+            recurs_2_controller_end(s_circuit_breaker, loops_circuit_breaker, s_logging, loops_logging)
+        },
+    })
+}
+
+fn recurs_2_controller_end(
+    s_circuit_breaker: EndpointCBControllerClose<i32>,
+    loops_circuit_breaker: i32,
+    s_logging: EndpointLogController1<i32>,
+    loops_logging: i32,
+) -> Result<(), Box<dyn Error>> {
+    match loops_logging {
+        i if i <= 0 => {
+            // Stop
+            let s_logging: EndpointLogController1Stop<i32> =
+                choose_mpst_controllerlog_to_all!(s_logging, Branching1fromCtoL::Stop);
+
+            let s_logging = s_logging.send(loops_logging - 1)?;
+
+            let s_circuit_breaker = s_circuit_breaker.send(random::<i32>())?;
+            let s_circuit_breaker = s_circuit_breaker.send(random::<i32>())?;
+
+            s_circuit_breaker.close()?;
+            s_logging.close()
+        }
+        _ => {
+            // Restart
+            let s_logging: EndpointLogController1Restart<i32> =
+                choose_mpst_controllerlog_to_all!(s_logging, Branching1fromCtoL::Restart);
+
+            let s_logging = s_logging.send(loops_logging - 1)?;
+
+            recurs_1_controller_end(
                 s_circuit_breaker,
                 loops_circuit_breaker - 1,
                 s_logging,
@@ -547,9 +615,9 @@ fn main() {
         endpoint_controller,
     );
 
-    thread_api.join().unwrap();
-    thread_controller.join().unwrap();
-    thread_storage.join().unwrap();
-    thread_user.join().unwrap();
-    thread_logs.join().unwrap();
+    assert!(thread_api.join().is_ok());
+    assert!(thread_controller.join().is_ok());
+    assert!(thread_storage.join().is_ok());
+    assert!(thread_user.join().is_ok());
+    assert!(thread_logs.join().is_ok());
 }

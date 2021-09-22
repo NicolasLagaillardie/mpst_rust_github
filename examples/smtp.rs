@@ -730,6 +730,6 @@ fn endpoint_s_10(s: EndpointS10) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_c, thread_s) = fork_mpst(endpoint_c_0, endpoint_s_0);
 
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
 }

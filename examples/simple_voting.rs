@@ -191,6 +191,6 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_server, thread_voter) = fork_mpst(endpoint_server, endpoint_voter);
 
-    thread_voter.join().unwrap();
-    thread_server.join().unwrap();
+    assert!(thread_voter.join().is_ok());
+    assert!(thread_server.join().is_ok());
 }

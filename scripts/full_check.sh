@@ -6,7 +6,7 @@ set -e
 
 rm -rf cfsm/
 ./scripts/clean_all.sh
-
+#################
 # echo "cargo fmt started"
 # cargo fmt
 # echo "cargo fmt completed"
@@ -69,6 +69,15 @@ cargo check --tests --examples --benches --all --features="transport"
 cargo check --tests --examples --benches --all --features="transport_macros_multiple"
 cargo check --tests --examples --benches --all --features="full"
 cargo check --tests --examples --benches --all --features="macros_multiple checking"
+cargo check --tests --examples --benches --all --all-features
+#################
+# cargo test --verbose --all
+# cargo test --verbose --all -- --nocapture
+RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture
+# RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture --skip kmc
+cargo test --verbose --all --no-default-features --no-run
+# cargo test --verbose --all-features
+# cargo bench --verbose --all
 #################
 cargo run --example circuit_breaker --features="macros_multiple"
 cargo run --example logging --features="macros_multiple"
@@ -90,10 +99,4 @@ cargo run --example three_buyers --features="macros_multiple"
 cargo run --example travel_three --features="macros_multiple"
 cargo run --example video_stream --features="macros_simple"
 #################
-# cargo test --verbose --all
-# cargo test --verbose --all -- --nocapture
-RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture
-# RUST_BACKTRACE=1 cargo test --verbose --all --all-features -- --nocapture --skip kmc
-cargo test --verbose --all --no-default-features --no-run
-# cargo test --verbose --all-features
-# cargo bench --verbose --all
+echo "done"

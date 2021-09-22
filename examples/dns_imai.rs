@@ -197,7 +197,7 @@ fn main() {
     let (thread_other, thread_server, thread_client) =
         fork_mpst(endpoint_client, endpoint_other, endpoint_server);
 
-    thread_client.join().unwrap();
-    thread_server.join().unwrap();
-    thread_other.join().unwrap();
+    assert!(thread_client.join().is_ok());
+    assert!(thread_server.join().is_ok());
+    assert!(thread_other.join().is_ok());
 }
