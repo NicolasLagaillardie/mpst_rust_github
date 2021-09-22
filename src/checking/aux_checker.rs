@@ -36,7 +36,7 @@ type VecOfTuple = Vec<(String, usize)>;
 #[doc(hidden)]
 pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     // The regex expression
-    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)").unwrap();
+    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
     let mut temp = session.replace("&", "");
 
     // Replace with regex expression -> term1::term2::term3 by term3
@@ -340,7 +340,7 @@ pub(crate) fn aux_get_graph(
                 // The left offer
                 let offer_left = clean_session(&offers[1])?;
 
-                let (g, cfsm) = aux_get_graph(
+                let result = aux_get_graph(
                     current_role,
                     offer_left[..(offer_left.len() - 2)].to_vec(),
                     roles,
@@ -356,6 +356,9 @@ pub(crate) fn aux_get_graph(
                     group_branches.clone(),
                     cfsm,
                 )?;
+
+                g = result.0;
+                cfsm = result.1;
 
                 let offer_right = clean_session(&offers[2])?;
 
@@ -382,7 +385,7 @@ pub(crate) fn aux_get_graph(
                 choice_left.push(stack[1].to_string());
                 choice_right.push(stack[2].to_string());
 
-                let (g, cfsm) = aux_get_graph(
+                let result = aux_get_graph(
                     current_role,
                     choice_left,
                     roles,
@@ -398,6 +401,9 @@ pub(crate) fn aux_get_graph(
                     group_branches.clone(),
                     cfsm,
                 )?;
+
+                g = result.0;
+                cfsm = result.1;
 
                 aux_get_graph(
                     current_role,
@@ -527,12 +533,12 @@ pub(crate) fn aux_get_graph(
                                 compare_end.clone(),
                                 depth_level,
                                 index_current_role,
-                                g.clone(),
+                                g,
                                 branches_receivers.clone(),
                                 temp_branches_already_seen.clone(),
                                 branching_sessions.clone(),
                                 group_branches.clone(),
-                                cfsm.clone(),
+                                cfsm,
                             )?;
 
                             g = result.0;
@@ -692,12 +698,12 @@ pub(crate) fn aux_get_graph(
                         compare_end.clone(),
                         depth_level,
                         index_current_role,
-                        g.clone(),
+                        g,
                         branches_receivers.clone(),
                         temp_branches_already_seen.clone(),
                         branching_sessions.clone(),
                         group_branches.clone(),
-                        cfsm.clone(),
+                        cfsm,
                     )?;
 
                     g = result.0;
