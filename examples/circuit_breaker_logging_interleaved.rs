@@ -3,8 +3,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{bundle_impl_with_enum_and_cancel, fork_mpst_multi_interleaved, offer_mpst};
 
-use rand::random;
-use rand::{thread_rng, Rng};
+use rand::{random, thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
@@ -310,14 +309,20 @@ fn endpoint_controller(
     s_circuit_breaker: EndpointCBControllerInit<i32>,
     s_logging: EndpointLogControllerInit<i32>,
 ) -> Result<(), Box<dyn Error>> {
-    let s_circuit_breaker = s_circuit_breaker.send(100)?;
-    let s_circuit_breaker = s_circuit_breaker.send(100)?;
+    let start_circuit_breaker = thread_rng().gen_range(50..100);
+    let s_circuit_breaker = s_circuit_breaker.send(start_circuit_breaker)?;
+    let s_circuit_breaker = s_circuit_breaker.send(start_circuit_breaker)?;
     let (_hard_ping, s_circuit_breaker) = s_circuit_breaker.recv()?;
 
-    let start = thread_rng().gen_range(5..100);
-    let s_logging = s_logging.send(start)?;
+    let start_logging = thread_rng().gen_range(50..100);
+    let s_logging = s_logging.send(start_logging)?;
 
-    recurs_controller(s_circuit_breaker, 100, s_logging, start)
+    recurs_controller(
+        s_circuit_breaker,
+        start_circuit_breaker,
+        s_logging,
+        start_logging,
+    )
 }
 
 fn recurs_controller(
