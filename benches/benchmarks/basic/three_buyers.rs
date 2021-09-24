@@ -195,8 +195,8 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
 
 /////////////////////////
 
-fn three_buyer_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Three buyer MPST"), |b| b.iter(|| all_mpst()));
+fn three_buyers_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("Three buyers MPST"), |b| b.iter(|| all_mpst()));
 }
 
 // fn long_warmup() -> Criterion {
@@ -204,10 +204,10 @@ fn three_buyer_mpst(c: &mut Criterion) {
 // }
 
 criterion_group! {
-    name = three_buyer;
+    name = three_buyers;
     // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = three_buyer_mpst
+    targets = three_buyers_mpst
 }
 
-criterion_main!(three_buyer);
+criterion_main!(three_buyers);

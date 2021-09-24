@@ -9,7 +9,6 @@ use mpstthree::{
 use rand::{random, thread_rng, Rng};
 
 use std::error::Error;
-use std::marker;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -67,48 +66,48 @@ type NameS = RoleS<RoleEnd>;
 
 // Types
 // A
-type Choose0fromCtoA<N> = Send<Branching0fromCtoA<N>, End>;
-type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
+type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
+type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
 
 // A
-enum Branching0fromCtoA<N: marker::Send> {
-    Accept(MeshedChannelsThree<Recv<N, End>, End, RoleC<RoleEnd>, NameA>),
-    Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+enum Branching0fromCtoA {
+    Accept(MeshedChannelsThree<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
+    Quit(MeshedChannelsThree<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
 }
 // S
-enum Branching0fromCtoS<N: marker::Send> {
-    Accept(MeshedChannelsThree<End, Recv<N, Send<N, End>>, TwoRoleC, NameS>),
-    Quit(MeshedChannelsThree<End, End, RoleEnd, NameS>),
+enum Branching0fromCtoS {
+    Accept(MeshedChannelsThree<End, Recv<i32, Send<i32, End>>, TwoRoleC, NameS>),
+    Quit(MeshedChannelsThree<End, Recv<i32, End>, RoleC<RoleEnd>, NameS>),
 }
 type TwoRoleC = RoleC<RoleC<RoleEnd>>;
 
 // Creating the MP sessions
 // A
-type EndpointA<N> = MeshedChannelsThree<
-    Send<N, Recv<Branching0fromCtoA<N>, End>>,
-    Send<N, Recv<N, End>>,
+type EndpointA = MeshedChannelsThree<
+    Send<i32, Recv<Branching0fromCtoA, End>>,
+    Send<i32, Recv<i32, End>>,
     RoleS<RoleS<TwoRoleC>>,
     NameA,
 >;
 
 // C
-type EndpointC<N> = MeshedChannelsThree<
-    Recv<N, Choose0fromCtoA<N>>,
-    Recv<N, Choose0fromCtoS<N>>,
+type EndpointC = MeshedChannelsThree<
+    Recv<i32, Choose0fromCtoA>,
+    Recv<i32, Choose0fromCtoS>,
     RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
 
 // S
-type EndpointS<N> = MeshedChannelsThree<
-    Recv<N, Send<N, End>>,
-    Send<N, Recv<Branching0fromCtoS<N>, End>>,
+type EndpointS = MeshedChannelsThree<
+    Recv<i32, Send<i32, End>>,
+    Send<i32, Recv<Branching0fromCtoS, End>>,
     RoleA<RoleA<RoleC<RoleC<RoleEnd>>>>,
     NameS,
 >;
 
 // Functions
-fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_s(random(), s);
     let (_empty2, s) = recv_mpst_a_from_s(s)?;
     let s = send_mpst_a_to_c(random(), s);
@@ -118,12 +117,13 @@ fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoA::Quit(s) => {
+            let (_ok, s) = recv_mpst_a_from_c(s)?;
             close_mpst_multi(s)
         },
     })
 }
 
-fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let (_empty3, s) = recv_mpst_c_from_s(s)?;
     let (_empty4, s) = recv_mpst_c_from_a(s)?;
 
@@ -132,8 +132,8 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
-            Branching0fromCtoA::<i32>::Accept,
-            Branching0fromCtoS::<i32>::Accept, =>
+            Branching0fromCtoA::Accept,
+            Branching0fromCtoS::Accept, =>
             RoleA,
             RoleS, =>
             RoleC,
@@ -149,19 +149,21 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     } else {
         let s = choose_mpst_multi_to_all!(
             s,
-            Branching0fromCtoA::<i32>::Quit,
-            Branching0fromCtoS::<i32>::Quit, =>
+            Branching0fromCtoA::Quit,
+            Branching0fromCtoS::Quit, =>
             RoleA,
             RoleS, =>
             RoleC,
             MeshedChannelsThree,
             2
         );
+        let s = send_mpst_c_to_s(random(), s);
+        let s = send_mpst_c_to_a(random(), s);
         close_mpst_multi(s)
     }
 }
 
-fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     let (_empty1, s) = recv_mpst_s_from_a(s)?;
     let s = send_mpst_s_to_a(random(), s);
     let s = send_mpst_s_to_c(random(), s);
@@ -172,10 +174,13 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoS::Quit(s) => {
+            let (_ok, s) = recv_mpst_s_from_c(s)?;
             close_mpst_multi(s)
         },
     })
 }
+
+/////////////////////////////////////////
 
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
