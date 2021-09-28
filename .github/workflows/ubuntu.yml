@@ -64,19 +64,19 @@ jobs:
     - name: Check each features
       run: |
         cargo clean
-        cargo check --tests --examples --benches --all --features="default"
-        cargo check --tests --examples --benches --all --features="macros_simple"
-        cargo check --tests --examples --benches --all --features="macros_multiple"
-        cargo check --tests --examples --benches --all --features="checking"
-        cargo check --tests --examples --benches --all --features="baking"
-        cargo check --tests --examples --benches --all --features="baking_interleaved"
-        cargo check --tests --examples --benches --all --features="transport_tcp"
-        cargo check --tests --examples --benches --all --features="transport_udp"
-        cargo check --tests --examples --benches --all --features="transport_http"
-        cargo check --tests --examples --benches --all --features="transport"
-        cargo check --tests --examples --benches --all --features="transport_macros_multiple"
-        cargo check --tests --examples --benches --all --features="full"
-        cargo check --tests --examples --benches --all --features="macros_multiple checking"
+        cargo check --tests --examples --benches --bins --all --features="default"
+        cargo check --tests --examples --benches --bins --all --features="macros_simple"
+        cargo check --tests --examples --benches --bins --all --features="macros_multiple"
+        cargo check --tests --examples --benches --bins --all --features="checking"
+        cargo check --tests --examples --benches --bins --all --features="baking"
+        cargo check --tests --examples --benches --bins --all --features="baking_interleaved"
+        cargo check --tests --examples --benches --bins --all --features="transport_tcp"
+        cargo check --tests --examples --benches --bins --all --features="transport_udp"
+        cargo check --tests --examples --benches --bins --all --features="transport_http"
+        cargo check --tests --examples --benches --bins --all --features="transport"
+        cargo check --tests --examples --benches --bins --all --features="transport_macros_multiple"
+        cargo check --tests --examples --benches --bins --all --features="full"
+        cargo check --tests --examples --benches --bins --all --features="macros_multiple checking"
     - name: Run doc
       run: |
         cargo clean

@@ -56,20 +56,20 @@ RUST_BACKTRACE=1 cargo doc --verbose --workspace --all-features
 # cargo run --verbose --all-features
 # find ./examples/. -type f -exec sh -c 'for example in "$@"; do (cargo run --example ${example:13:-3} --features="macros") done' argv0 {} +
 #################
-cargo check --tests --examples --benches --all --features="default"
-cargo check --tests --examples --benches --all --features="macros_simple"
-cargo check --tests --examples --benches --all --features="macros_multiple"
-cargo check --tests --examples --benches --all --features="checking"
-cargo check --tests --examples --benches --all --features="baking"
-cargo check --tests --examples --benches --all --features="baking_interleaved"
-cargo check --tests --examples --benches --all --features="transport_tcp"
-cargo check --tests --examples --benches --all --features="transport_udp"
-cargo check --tests --examples --benches --all --features="transport_http"
-cargo check --tests --examples --benches --all --features="transport"
-cargo check --tests --examples --benches --all --features="transport_macros_multiple"
-cargo check --tests --examples --benches --all --features="full"
-cargo check --tests --examples --benches --all --features="macros_multiple checking"
-cargo check --tests --examples --benches --all --all-features
+cargo check --tests --examples --benches --bins --all --features="default"
+cargo check --tests --examples --benches --bins --all --features="macros_simple"
+cargo check --tests --examples --benches --bins --all --features="macros_multiple"
+cargo check --tests --examples --benches --bins --all --features="checking"
+cargo check --tests --examples --benches --bins --all --features="baking"
+cargo check --tests --examples --benches --bins --all --features="baking_interleaved"
+cargo check --tests --examples --benches --bins --all --features="transport_tcp"
+cargo check --tests --examples --benches --bins --all --features="transport_udp"
+cargo check --tests --examples --benches --bins --all --features="transport_http"
+cargo check --tests --examples --benches --bins --all --features="transport"
+cargo check --tests --examples --benches --bins --all --features="transport_macros_multiple"
+cargo check --tests --examples --benches --bins --all --features="full"
+cargo check --tests --examples --benches --bins --all --features="macros_multiple checking"
+cargo check --tests --examples --benches --bins --all --all-features
 #################
 # cargo test --verbose --all
 # cargo test --verbose --all -- --nocapture
