@@ -7,7 +7,7 @@ set -e
 sleep 2
 
 ### Basic examples
-./scripts/create_files/compile.sh o_auth 5 macros_multiple
+./scripts/create_files/compile.sh o_auth 5 baking_checking
 ./scripts/create_files/compile.sh o_auth_2 5 transport_macros_multiple
 ./scripts/create_files/compile.sh fib 5 macros_multiple
 ./scripts/create_files/compile.sh simple_voting 5 macros_multiple

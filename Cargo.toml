@@ -28,18 +28,18 @@ exclude = [
 ]
 autotests = false
 
-###################################
+################################### Workspace
 
 [workspace]
 exclude = ["mpst_seq/"]
 
-###################################
+################################### Bin
 
 [[bin]]
 name = "mpst"
 path = "main.rs"
 
-###################################
+################################### Tests
 
 [[test]]
 name = "checking"
@@ -106,7 +106,7 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
-###################################
+################################### Benches
 
 [[bench]]
 name = "main"
@@ -118,7 +118,7 @@ name = "ping_pong"
 harness = false
 required-features = ["macros_multiple"]
 
-###################################
+################################### Examples
 
 [[example]]
 name = "circuit_breaker"
@@ -166,7 +166,7 @@ required-features = ["macros_multiple"]
 
 [[example]]
 name = "o_auth"
-required-features = ["macros_multiple"]
+required-features = ["baking_checking"]
 
 [[example]]
 name = "o_auth_2"
@@ -196,12 +196,12 @@ required-features = ["macros_multiple"]
 name = "video_stream"
 required-features = ["macros_simple"]
 
-###################################
+################################### Profil
 
 [profile.release]
 debug = true
 
-###################################
+################################### Dependencies
 
 [dependencies]
 mpst-seq = { path = "mpst_seq", version = "0.0.12" }
@@ -214,7 +214,7 @@ tokio = { version = "1.12.0", features = ["full"], optional = true }
 regex = { version = "1.5.4", optional = true }
 petgraph = { version = "0.6.0", optional = true }
 
-###################################
+################################### Dev-dependencies
 
 [dev-dependencies]
 criterion = { version = "0.3.5", features = ["html_reports"] }
@@ -222,7 +222,7 @@ trybuild = "1.0.45"
 ntest = "0.7.3"
 rand = "0.8.4"
 
-###################################
+################################### Features
 
 [features]
 default = ["binary", "role", "meshedchannels", "functionmpst"]
@@ -237,6 +237,7 @@ interleaved = ["default"]
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
 baking_interleaved = ["baking", "interleaved"]
+baking_checking = ["baking", "checking"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
 transport_http = ["default", "hyper", "hyper-tls", "tokio"]
@@ -246,7 +247,7 @@ transport_macros_multiple = ["macros_multiple", "transport"]
 full = ["checking", "baking", "transport"]
 
 
-###################################
+################################### Doc handling for all-features
 
 # docs.rs-specific configuration
 [package.metadata.docs.rs]

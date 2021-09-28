@@ -12,6 +12,9 @@ use rand::{random, thread_rng, Rng};
 use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
+// Remark: the protocol cannot be correctly implemented,
+// making it unsafe: the nested protocol with the Handler is implemented along
+// the main one.
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
