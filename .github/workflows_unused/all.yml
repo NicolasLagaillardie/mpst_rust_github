@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Format
-      run: cargo fmt --verbose --all -- --check
+      run: cargo fmt --verbose --workspace -- --check
     - name: Clippy
       run: cargo clippy --verbose -- -D warnings
     - name: Check lib
@@ -39,9 +39,9 @@ jobs:
     - name: Run tests all
       run: cargo test --verbose --all
     - name: Run tests no capture
-      run: cargo test --verbose --all -- --nocapture
+      run: cargo test --verbose --workspace -- --nocapture
     - name: Run tests no features
-      run: cargo test --verbose --all --no-default-features --no-run
+      run: cargo test --verbose --workspace --no-default-features --no-run
     # - name: Run examples
     #   run: ./scripts/create_files/full_examples.sh
     - name: Run benchmarks

@@ -40,7 +40,7 @@ jobs:
     - name: Format
       run: |
         cargo clean
-        cargo fmt --verbose --all -- --check
+        cargo fmt --verbose --workspace -- --check
     - name: Clippy
       run: |
         cargo clean
@@ -48,71 +48,129 @@ jobs:
     - name: Check lib
       run: |
         cargo clean
-        cargo check --verbose --all --all-features
+        cargo check --verbose --workspace --all-features
+    - name: Check bins
+      run: |
+        cargo clean
+        cargo check --bins --verbose --workspace --features="default"
+        cargo check --bins --verbose --workspace --features="macros_simple"
+        cargo check --bins --verbose --workspace --features="macros_multiple"
+        cargo check --bins --verbose --workspace --features="checking"
+        cargo check --bins --verbose --workspace --features="baking"
+        cargo check --bins --verbose --workspace --features="baking_interleaved"
+        cargo check --bins --verbose --workspace --features="transport_tcp"
+        cargo check --bins --verbose --workspace --features="transport_udp"
+        cargo check --bins --verbose --workspace --features="transport_http"
+        cargo check --bins --verbose --workspace --features="transport"
+        cargo check --bins --verbose --workspace --features="transport_macros_multiple"
+        cargo check --bins --verbose --workspace --features="full"
+        cargo check --bins --verbose --workspace --features="macros_multiple checking"
+        cargo check --bins --verbose --workspace --all-features
     - name: Check examples
       run: |
         cargo clean
-        cargo check --examples --verbose --all-features
+        cargo check --examples --verbose --workspace --features="default"
+        cargo check --examples --verbose --workspace --features="macros_simple"
+        cargo check --examples --verbose --workspace --features="macros_multiple"
+        cargo check --examples --verbose --workspace --features="checking"
+        cargo check --examples --verbose --workspace --features="baking"
+        cargo check --examples --verbose --workspace --features="baking_interleaved"
+        cargo check --examples --verbose --workspace --features="transport_tcp"
+        cargo check --examples --verbose --workspace --features="transport_udp"
+        cargo check --examples --verbose --workspace --features="transport_http"
+        cargo check --examples --verbose --workspace --features="transport"
+        cargo check --examples --verbose --workspace --features="transport_macros_multiple"
+        cargo check --examples --verbose --workspace --features="full"
+        cargo check --examples --verbose --workspace --features="macros_multiple checking"
+        cargo check --examples --verbose --workspace --all-features
     - name: Check tests
       run: |
         cargo clean
-        cargo check --tests --verbose --all-features
+        cargo check --tests --verbose --workspace --features="default"
+        cargo check --tests --verbose --workspace --features="macros_simple"
+        cargo check --tests --verbose --workspace --features="macros_multiple"
+        cargo check --tests --verbose --workspace --features="checking"
+        cargo check --tests --verbose --workspace --features="baking"
+        cargo check --tests --verbose --workspace --features="baking_interleaved"
+        cargo check --tests --verbose --workspace --features="transport_tcp"
+        cargo check --tests --verbose --workspace --features="transport_udp"
+        cargo check --tests --verbose --workspace --features="transport_http"
+        cargo check --tests --verbose --workspace --features="transport"
+        cargo check --tests --verbose --workspace --features="transport_macros_multiple"
+        cargo check --tests --verbose --workspace --features="full"
+        cargo check --tests --verbose --workspace --features="macros_multiple checking"
+        cargo check --tests --verbose --workspace --all-features
     - name: Check benches
       run: |
         cargo clean
-        cargo check --benches --verbose --all-features
-    - name: Check each features
-      run: |
-        cargo clean
-        cargo check --tests --examples --benches --bins --all --features="default"
-        cargo check --tests --examples --benches --bins --all --features="macros_simple"
-        cargo check --tests --examples --benches --bins --all --features="macros_multiple"
-        cargo check --tests --examples --benches --bins --all --features="checking"
-        cargo check --tests --examples --benches --bins --all --features="baking"
-        cargo check --tests --examples --benches --bins --all --features="baking_interleaved"
-        cargo check --tests --examples --benches --bins --all --features="transport_tcp"
-        cargo check --tests --examples --benches --bins --all --features="transport_udp"
-        cargo check --tests --examples --benches --bins --all --features="transport_http"
-        cargo check --tests --examples --benches --bins --all --features="transport"
-        cargo check --tests --examples --benches --bins --all --features="transport_macros_multiple"
-        cargo check --tests --examples --benches --bins --all --features="full"
-        cargo check --tests --examples --benches --bins --all --features="macros_multiple checking"
+        cargo check --benches --verbose --workspace --features="default"
+        cargo check --benches --verbose --workspace --features="macros_simple"
+        cargo check --benches --verbose --workspace --features="macros_multiple"
+        cargo check --benches --verbose --workspace --features="checking"
+        cargo check --benches --verbose --workspace --features="baking"
+        cargo check --benches --verbose --workspace --features="baking_interleaved"
+        cargo check --benches --verbose --workspace --features="transport_tcp"
+        cargo check --benches --verbose --workspace --features="transport_udp"
+        cargo check --benches --verbose --workspace --features="transport_http"
+        cargo check --benches --verbose --workspace --features="transport"
+        cargo check --benches --verbose --workspace --features="transport_macros_multiple"
+        cargo check --benches --verbose --workspace --features="full"
+        cargo check --benches --verbose --workspace --features="macros_multiple checking"
+        cargo check --benches --verbose --workspace --all-features
     - name: Run doc
       run: |
         cargo clean
         cargo doc --verbose --workspace --all-features
-    - name: Build lib
+    - name: Check examples
       run: |
         cargo clean
-        cargo build --verbose --all --all-features
-    - name: Build examples
+        cargo check --examples --verbose --workspace --features="default"
+        cargo check --examples --verbose --workspace --features="macros_simple"
+        cargo check --examples --verbose --workspace --features="macros_multiple"
+        cargo check --examples --verbose --workspace --features="checking"
+        cargo check --examples --verbose --workspace --features="baking"
+        cargo check --examples --verbose --workspace --features="baking_interleaved"
+        cargo check --examples --verbose --workspace --features="transport_tcp"
+        cargo check --examples --verbose --workspace --features="transport_udp"
+        cargo check --examples --verbose --workspace --features="transport_http"
+        cargo check --examples --verbose --workspace --features="transport"
+        cargo check --examples --verbose --workspace --features="transport_macros_multiple"
+        cargo check --examples --verbose --workspace --features="full"
+        cargo check --examples --verbose --workspace --features="macros_multiple checking"
+        cargo check --examples --verbose --workspace --all-features
+    - name: Check tests
       run: |
         cargo clean
-        cargo build --examples --verbose --all-features
-    - name: Build tests
-      run: |
-        cargo clean
-        cargo build --tests --verbose --all-features
-    - name: Build benches
-      run: |
-        cargo clean
-        cargo build --benches --verbose --all-features
+        cargo check --tests --verbose --workspace --features="default"
+        cargo check --tests --verbose --workspace --features="macros_simple"
+        cargo check --tests --verbose --workspace --features="macros_multiple"
+        cargo check --tests --verbose --workspace --features="checking"
+        cargo check --tests --verbose --workspace --features="baking"
+        cargo check --tests --verbose --workspace --features="baking_interleaved"
+        cargo check --tests --verbose --workspace --features="transport_tcp"
+        cargo check --tests --verbose --workspace --features="transport_udp"
+        cargo check --tests --verbose --workspace --features="transport_http"
+        cargo check --tests --verbose --workspace --features="transport"
+        cargo check --tests --verbose --workspace --features="transport_macros_multiple"
+        cargo check --tests --verbose --workspace --features="full"
+        cargo check --tests --verbose --workspace --features="macros_multiple checking"
+        cargo check --tests --verbose --workspace --all-features
     - name: Run lib
       run: |
         cargo clean
-        cargo run --verbose --all-features
+        cargo run --verbose --all-features -- --skip kmc
     - name: Run tests all
       run: |
         cargo clean
-        cargo test --verbose --all -- --skip kmc
+        cargo test --verbose --workspace -- --skip kmc
     - name: Run tests no capture
       run: |
         cargo clean
-        cargo test --verbose --all -- --nocapture --skip kmc
+        cargo test --verbose --workspace -- --nocapture --skip kmc
     - name: Run tests no features
       run: |
         cargo clean
-        cargo test --verbose --all --no-default-features --no-run -- --skip kmc
+        cargo test --verbose --workspace --no-default-features --no-run -- --skip kmc
     - name: Run tests all features
       run: |
         cargo clean
@@ -120,4 +178,4 @@ jobs:
     - name: Run benchmarks
       run: |
         cargo clean
-        cargo bench --verbose --all --all-features
+        cargo bench --verbose --workspace --all-features
