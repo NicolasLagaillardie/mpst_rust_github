@@ -8,12 +8,22 @@ readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "multicrusty"]
+documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
+include = [
+    "/benches/**",
+    "/build.rs",
+    "/Cargo.toml",
+    "/LICENSE-APACHE",
+    "/LICENSE-MIT",
+    "/README.md",
+    "/src/**",
+    "/tests/**",
+]
 exclude = [
     ".travis.yml",
     "codecov.yml",
     ".gitignore",
-    "mpst_seq/",
     ".github/",
     ".cargo_vcs_info.json",
     "scripts/",
@@ -31,7 +41,7 @@ autotests = false
 ################################### Workspace
 
 [workspace]
-exclude = ["mpst_seq/"]
+members = ["mpst_seq", "mpst_seq_proc"]
 
 ################################### Bin
 
@@ -214,7 +224,7 @@ tokio = { version = "1.12.0", features = ["full"], optional = true }
 regex = { version = "1.5.4", optional = true }
 petgraph = { version = "0.6.0", optional = true }
 
-################################### Dev-dependencies
+################################### Dev-dependencies for tests/benches
 
 [dev-dependencies]
 criterion = { version = "0.3.5", features = ["html_reports"] }
@@ -246,10 +256,14 @@ transport = ["transport_tcp", "transport_udp", "transport_http"]
 transport_macros_multiple = ["macros_multiple", "transport"]
 full = ["checking", "baking", "transport"]
 
-
 ################################### Doc handling for all-features
 
 # docs.rs-specific configuration
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "doc_cfg"]
+
+################################### Rust playground features
+
+[package.metadata.playground]
+features = ["full", "interleaved"]

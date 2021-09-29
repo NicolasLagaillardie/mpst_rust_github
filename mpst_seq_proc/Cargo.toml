@@ -5,12 +5,20 @@ authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 description = "A library with macro for mpstthree"
 edition = "2018"
 readme = "README.md"
-homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq/mpst_seq_proc"
-repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq/mpst_seq_proc"
+homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq_proc"
+repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq_proc"
 license = "MIT OR Apache-2.0"
 autotests = false
-
-[workspace]
+include = [
+    "/benches/**",
+    "/build.rs",
+    "/Cargo.toml",
+    "/LICENSE-APACHE",
+    "/LICENSE-MIT",
+    "/README.md",
+    "/src/**",
+    "/tests/**",
+]
 
 [lib]
 proc-macro = true
