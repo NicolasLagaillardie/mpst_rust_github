@@ -9,7 +9,6 @@ homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq/"
 license = "MIT OR Apache-2.0"
 autotests = false
-publish = false
 include = [
     "/benches/**",
     "/build.rs",
@@ -23,5 +22,5 @@ include = [
 
 [dependencies]
 proc-macro-hack = "0.5.19"
-mpst-seq-proc = { path = "../mpst_seq_proc", version = "0.0.12" }
+mpst-seq-proc = { path = "../mpst_seq_proc" }
 # mpst-seq-proc = "0.0.12"

@@ -214,7 +214,7 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-mpst-seq = { path = "mpst_seq", version = "0.0.12" }
+mpst-seq = { path = "mpst_seq" }
 # mpst-seq = "0.0.12"
 crossbeam-channel = "0.5.1"
 either = "1.6.1"
