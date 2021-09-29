@@ -1,1 +1,1 @@
-pub mod checking;
+pub mod aux_checking;

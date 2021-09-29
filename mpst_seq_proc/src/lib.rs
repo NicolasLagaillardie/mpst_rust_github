@@ -59,11 +59,11 @@ use macros_http::send::create_send_http_session::CreateSendHttpSession;
 
 mod checking;
 
-use checking::checking::CheckingInput;
+use checking::aux_checking::CheckingInput;
 
 mod baking;
 
-use baking::baking::Baking;
+use baking::baking_basic::Baking;
 use baking::baking_with_cancel::BakingWithCancel;
 use baking::baking_with_enum::BakingWithEnum;
 use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;

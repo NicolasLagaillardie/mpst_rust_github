@@ -18,15 +18,15 @@ bundle_impl_with_enum_and_cancel!(
 );
 
 // Payloads
-struct Start {}
-struct Redirect {}
-struct Login {}
-struct Auth {}
-struct Password {}
-struct Success {}
-struct Token {}
-struct Fail {}
-struct Received {}
+struct Start;
+struct Redirect;
+struct Login;
+struct Auth;
+struct Password;
+struct Success;
+struct Token;
+struct Fail;
+struct Received;
 
 // Names
 type NameA = RoleA<RoleEnd>;

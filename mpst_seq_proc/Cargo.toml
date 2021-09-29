@@ -9,6 +9,7 @@ homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq_proc"
 license = "MIT OR Apache-2.0"
 autotests = false
+publish = false
 include = [
     "/benches/**",
     "/build.rs",

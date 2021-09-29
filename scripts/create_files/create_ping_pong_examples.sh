@@ -50,4 +50,6 @@ done
 
 find example/ping_pong/ -name *.rser -delete
 
-cargo fmt
+cargo fmt --all
+
+echo "done"

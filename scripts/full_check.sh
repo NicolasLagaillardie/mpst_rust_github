@@ -41,7 +41,7 @@ rm -rf cfsm/
 # cargo doc --verbose --workspace --all-features
 # echo "cargo doc completed"
 #################
-cargo fmt --verbose --workspace -- --check
+cargo fmt --verbose --all -- --check
 cargo clippy --all-features --verbose -- -D warnings
 cargo doc --all-features
 RUST_BACKTRACE=1 cargo check --verbose --workspace --all-features

@@ -45,4 +45,6 @@ done
 printf '}' >> benches/ping_pong.rs;
 find benches/ -name *.rser -delete
 
-cargo fmt
+cargo fmt --all
+
+echo "done"
