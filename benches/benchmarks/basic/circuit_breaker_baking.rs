@@ -348,7 +348,7 @@ fn endpoint_user(s: EndpointUserInit<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (thread_api, thread_controller, thread_storage, thread_user) = fork_mpst(
         black_box(endpoint_api),
         black_box(endpoint_controller),
@@ -356,12 +356,10 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         black_box(endpoint_user),
     );
 
-    thread_api.join()?;
-    thread_controller.join()?;
-    thread_storage.join()?;
-    thread_user.join()?;
-
-    Ok(())
+    thread_api.join().unwrap();
+    thread_controller.join().unwrap();
+    thread_storage.join().unwrap();
+    thread_user.join().unwrap();
 }
 
 /////////////////////////

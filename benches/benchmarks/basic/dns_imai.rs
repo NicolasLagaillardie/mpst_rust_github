@@ -203,18 +203,16 @@ fn endpoint_server_recurs(s: EndpointServer, loops: i32) -> Result<(), Box<dyn E
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (thread_other, thread_server, thread_client) = fork_mpst(
         black_box(endpoint_client),
         black_box(endpoint_other),
         black_box(endpoint_server),
     );
 
-    thread_client.join()?;
-    thread_server.join()?;
-    thread_other.join()?;
-
-    Ok(())
+    thread_client.join().unwrap();
+    thread_server.join().unwrap();
+    thread_other.join().unwrap();
 }
 
 /////////////////////////

@@ -1,67 +1,30 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_create_multi_to_all,
-    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
-    create_send_mpst_session_bundle, offer_mpst,
-};
+use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
-// Remark: the protocol cannot be correctly implemented,
-// making it unsafe: the nested protocol with the Handler is implemented along
-// the main one.
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
-
-// Create new Roles
-// normal
-create_multiple_normal_role_short!(Data, Handler, Regional);
-
-// Create new send functions
-// DATA
-create_send_mpst_session_bundle!(
-    send_mpst_data_to_handler, RoleHandler, 1 |
-    send_mpst_data_to_regional, RoleRegional, 2 | =>
-    RoleData, MeshedChannelsThree, 3
-);
-// HANDLER
-create_send_mpst_session_bundle!(
-    send_mpst_handler_to_data, RoleData, 1 |
-    send_mpst_handler_to_regional, RoleRegional, 2 | =>
-    RoleHandler, MeshedChannelsThree, 3
-);
-// REGIONAL
-create_send_mpst_session_bundle!(
-    send_mpst_regional_to_data, RoleData, 1 |
-    send_mpst_regional_to_handler, RoleHandler, 2 | =>
-    RoleRegional, MeshedChannelsThree, 3
+bundle_impl_with_enum_and_cancel!(
+    MeshedChannelsThree =>
+    Data,
+    Handler,
+    Regional =>
+    fork_mpst
 );
 
-// Create new recv functions and related types
-// DATA
-create_recv_mpst_session_bundle!(
-    recv_mpst_data_from_handler, RoleHandler, 1 |
-    recv_mpst_data_from_regional, RoleRegional, 2 | =>
-    RoleData, MeshedChannelsThree, 3
-);
-// HANDLER
-create_recv_mpst_session_bundle!(
-    recv_mpst_handler_from_data, RoleData, 1 |
-    recv_mpst_handler_from_regional, RoleRegional, 2 | =>
-    RoleHandler, MeshedChannelsThree, 3
-);
-// REGIONAL
-create_recv_mpst_session_bundle!(
-    recv_mpst_regional_from_data, RoleData, 1 |
-    recv_mpst_regional_from_handler, RoleHandler, 2 | =>
-    RoleRegional, MeshedChannelsThree, 3
-);
+// Payload types
+struct FindNearestZone;
+struct ZoneResponse;
+struct ZoneDataRequest;
+struct ZoneDataResponse;
+struct InvalidZone;
+struct Received;
 
 // Names
 type NameData = RoleData<RoleEnd>;
@@ -74,103 +37,103 @@ type Choose0fromRegionalToData = Send<Branching0fromRegionalToData, End>;
 type Choose0fromRegionalToHandler = Send<Branching0fromRegionalToHandler, End>;
 // DATA
 enum Branching0fromRegionalToData {
-    Loop(
+    Loops(
         MeshedChannelsThree<
-            Recv<(), Send<i32, End>>,
+            Recv<ZoneDataRequest, Send<ZoneDataResponse, End>>,
             Offer0fromRegionalToData,
             RoleHandler<RoleHandler<RoleRegional<RoleEnd>>>,
             NameData,
         >,
     ),
-    Invalid(MeshedChannelsThree<End, End, RoleEnd, NameData>),
+    Invalid(
+        MeshedChannelsThree<
+            Recv<InvalidZone, Send<Received, End>>,
+            End,
+            RoleHandler<RoleHandler<RoleEnd>>,
+            NameData,
+        >,
+    ),
 }
 type Offer0fromRegionalToData = Recv<Branching0fromRegionalToData, End>;
 // HANDLER
 enum Branching0fromRegionalToHandler {
-    Loop(
+    Loops(
         MeshedChannelsThree<
-            Send<(), Recv<i32, End>>,
-            Recv<i32, Send<i32, Offer0fromRegionalToHandler>>,
+            Send<ZoneDataRequest, Recv<ZoneDataResponse, End>>,
+            Recv<ZoneResponse, Send<FindNearestZone, Offer0fromRegionalToHandler>>,
             RoleRegional<RoleData<RoleData<RoleRegional<RoleRegional<RoleEnd>>>>>,
             NameHandler,
         >,
     ),
-    Invalid(MeshedChannelsThree<End, Recv<(), End>, RoleRegional<RoleEnd>, NameHandler>),
+    Invalid(
+        MeshedChannelsThree<
+            Send<InvalidZone, Recv<Received, End>>,
+            Recv<InvalidZone, End>,
+            RoleRegional<RoleData<RoleData<RoleEnd>>>,
+            NameHandler,
+        >,
+    ),
 }
 type Offer0fromRegionalToHandler = Recv<Branching0fromRegionalToHandler, End>;
 
 // Creating the MP sessions
 // DATA
-type EndpointData = MeshedChannelsThree<
-    End,
-    Recv<Branching0fromRegionalToData, End>,
-    RoleRegional<RoleEnd>,
-    NameData,
->;
+type EndpointData =
+    MeshedChannelsThree<End, Offer0fromRegionalToData, RoleRegional<RoleEnd>, NameData>;
 // HANDLER
 type EndpointHandler = MeshedChannelsThree<
     End,
-    Send<i32, Recv<Branching0fromRegionalToHandler, End>>,
+    Send<FindNearestZone, Offer0fromRegionalToHandler>,
     RoleRegional<RoleRegional<RoleEnd>>,
     NameHandler,
 >;
 // REGIONAL
+type EndpointRegionalInvalid =
+    MeshedChannelsThree<End, Send<InvalidZone, End>, RoleHandler<RoleEnd>, NameRegional>;
+type EndpointRegionalLoops = MeshedChannelsThree<
+    Choose0fromRegionalToData,
+    Send<ZoneResponse, Recv<FindNearestZone, Choose0fromRegionalToHandler>>,
+    RoleHandler<RoleHandler<RoleBroadcast>>,
+    NameRegional,
+>;
 type EndpointRegional = MeshedChannelsThree<
     Choose0fromRegionalToData,
-    Recv<i32, Choose0fromRegionalToHandler>,
+    Recv<FindNearestZone, Choose0fromRegionalToHandler>,
     RoleHandler<RoleBroadcast>,
     NameRegional,
 >;
 
-choose_mpst_create_multi_to_all!(
-    choose_mpst_regional_to_all,
-    RoleData,
-    RoleHandler, =>
-    RoleRegional,
-    MeshedChannelsThree,
-    3
-);
-
 // Functions
 fn endpoint_data(s: EndpointData) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_data_from_regional, {
-        Branching0fromRegionalToData::Loop(s) => {
-
-            let (_, s) = recv_mpst_data_from_handler(s)?;
-
-            let r_r_tree = random::<i32>();
-
-            let s = send_mpst_data_to_handler(r_r_tree, s);
-
+    offer_mpst!(s, {
+        Branching0fromRegionalToData::Loops(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(ZoneDataResponse {})?;
             endpoint_data(s)
         },
         Branching0fromRegionalToData::Invalid(s) => {
-
-            close_mpst_multi(s)
+            let (_, s) = s.recv()?;
+            let s = s.send(Received {})?;
+            s.close()
         },
     })
 }
 
 fn endpoint_handler(s: EndpointHandler) -> Result<(), Box<dyn Error>> {
-    let domain_name = random::<i32>();
+    let s = s.send(FindNearestZone {})?;
 
-    let s = send_mpst_handler_to_regional(domain_name, s);
-
-    offer_mpst!(s, recv_mpst_handler_from_regional, {
-        Branching0fromRegionalToHandler::Loop(s) => {
-
-            let (_, s) = recv_mpst_handler_from_regional(s)?;
-
-            let s = send_mpst_handler_to_data((), s);
-
-            let (_r_r_tree, s) = recv_mpst_handler_from_data(s)?;
-
+    offer_mpst!(s, {
+        Branching0fromRegionalToHandler::Loops(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(ZoneDataRequest {} )?;
+            let (_, s) = s.recv()?;
             endpoint_handler(s)
         },
         Branching0fromRegionalToHandler::Invalid(s) => {
-            let ((), s) = recv_mpst_handler_from_regional(s)?;
-
-            close_mpst_multi(s)
+            let (_, s) = s.recv()?;
+            let s = s.send(InvalidZone {} )?;
+            let (_, s) = s.recv()?;
+            s.close()
         },
     })
 }
@@ -178,34 +141,62 @@ fn endpoint_handler(s: EndpointHandler) -> Result<(), Box<dyn Error>> {
 fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
     let choice = thread_rng().gen_range(1..3);
 
-    let (_domain_name, s) = recv_mpst_regional_from_handler(s)?;
+    let (_, s) = s.recv()?;
 
     if choice == 1 {
-        let s = choose_mpst_regional_to_all!(
+        let s: EndpointRegionalLoops = choose_mpst_regional_to_all!(
             s,
-            Branching0fromRegionalToData::Loop,
-            Branching0fromRegionalToHandler::Loop
+            Branching0fromRegionalToData::Loops,
+            Branching0fromRegionalToHandler::Loops
         );
-
-        let zone_pid = random::<i32>();
-
-        let s = send_mpst_regional_to_handler(zone_pid, s);
-
+        let s = s.send(ZoneResponse {})?;
         endpoint_regional(s)
     } else {
-        let s = choose_mpst_regional_to_all!(
+        let s: EndpointRegionalInvalid = choose_mpst_regional_to_all!(
             s,
             Branching0fromRegionalToData::Invalid,
             Branching0fromRegionalToHandler::Invalid
         );
-
-        let s = send_mpst_regional_to_handler((), s);
-
-        close_mpst_multi(s)
+        let s = s.send(InvalidZone {})?;
+        s.close()
     }
 }
 
+// Check for bottom-up approach
+fn checking() {
+    let _ = mpstthree::checker_concat!(
+        "dns_fowler",
+        1,
+        EndpointHandler,
+        EndpointData,
+        EndpointRegional
+        =>
+        [
+            EndpointRegionalLoops,
+            Branching0fromRegionalToData, Loops,
+            Branching0fromRegionalToHandler, Loops,
+        ],
+        [
+            EndpointRegionalInvalid,
+            Branching0fromRegionalToData, Invalid,
+            Branching0fromRegionalToHandler, Invalid,
+        ]
+    )
+    .unwrap();
+
+    assert_eq!(
+        "CSA: \u{1b}[92mTrue\n\
+        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0m\n",
+        std::fs::read_to_string("outputs/dns_fowler_1_kmc.txt").unwrap()
+    );
+}
+
 fn main() {
+    checking();
+
     let (thread_handler, thread_regional, thread_data) =
         fork_mpst(endpoint_data, endpoint_handler, endpoint_regional);
 

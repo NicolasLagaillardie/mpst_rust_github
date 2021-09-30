@@ -24,7 +24,7 @@ sleep 2
 ./scripts/create_files/compile.sh distributed_calc 5 macros_multiple
 ./scripts/create_files/compile.sh video_stream 5 macros_simple
 ./scripts/create_files/compile.sh online_wallet 5 macros_multiple
-./scripts/create_files/compile.sh dns_fowler 5 macros_multiple
+./scripts/create_files/compile.sh dns_fowler 5 baking_checking
 ./scripts/create_files/compile.sh dns_imai 5 macros_multiple
 
 ### Ping-pong

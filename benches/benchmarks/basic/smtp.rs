@@ -739,13 +739,11 @@ fn endpoint_s_10(s: EndpointS10, loops: i32) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_init), black_box(endpoint_s_init));
 
     thread_c.join().unwrap();
     thread_s.join().unwrap();
-
-    Ok(())
 }
 
 /////////////////////////

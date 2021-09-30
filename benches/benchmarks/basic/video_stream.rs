@@ -172,7 +172,7 @@ fn client_recurs(
 
 /////////////////////////////////////////
 
-pub fn run_usecase() -> Result<(), Box<dyn Error>> {
+fn all_mpst() {
     let (thread_a, thread_s, thread_c) = fork_mpst(
         black_box(authenticator),
         black_box(server),
@@ -182,14 +182,12 @@ pub fn run_usecase() -> Result<(), Box<dyn Error>> {
     thread_a.join().unwrap();
     thread_s.join().unwrap();
     thread_c.join().unwrap();
-
-    Ok(())
 }
 
 /////////////////////////
 
 fn video_stream_main(c: &mut Criterion) {
-    c.bench_function(&format!("Video stream"), |b| b.iter(|| run_usecase()));
+    c.bench_function(&format!("Video stream"), |b| b.iter(|| all_mpst()));
 }
 
 // fn long_warmup() -> Criterion {

@@ -957,7 +957,7 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (
         thread_a,
         thread_b,
@@ -984,19 +984,17 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         black_box(endpoint_k),
     );
 
-    thread_a.join()?;
-    thread_b.join()?;
-    thread_c.join()?;
-    thread_d.join()?;
-    thread_e.join()?;
-    thread_f.join()?;
-    thread_g.join()?;
-    thread_h.join()?;
-    thread_i.join()?;
-    thread_j.join()?;
-    thread_k.join()?;
-
-    Ok(())
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
+    thread_e.join().unwrap();
+    thread_f.join().unwrap();
+    thread_g.join().unwrap();
+    thread_h.join().unwrap();
+    thread_i.join().unwrap();
+    thread_j.join().unwrap();
+    thread_k.join().unwrap();
 }
 
 /////////////////////////

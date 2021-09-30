@@ -635,7 +635,7 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h) =
         fork_mpst(
             black_box(endpoint_a),
@@ -648,16 +648,14 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
             black_box(endpoint_h),
         );
 
-    thread_a.join()?;
-    thread_b.join()?;
-    thread_c.join()?;
-    thread_d.join()?;
-    thread_e.join()?;
-    thread_f.join()?;
-    thread_g.join()?;
-    thread_h.join()?;
-
-    Ok(())
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
+    thread_e.join().unwrap();
+    thread_f.join().unwrap();
+    thread_g.join().unwrap();
+    thread_h.join().unwrap();
 }
 
 /////////////////////////
@@ -688,7 +686,7 @@ fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Erro
     Ok(s)
 }
 
-fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_binaries() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -714,9 +712,7 @@ fn all_binaries() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
-    main.join()?;
-
-    Ok(())
+    main.join().unwrap();
 }
 
 /////////////////////////
@@ -730,7 +726,7 @@ type ReceivingSending = crossbeam_channel::Receiver<Sending>;
 type Receiving = crossbeam_channel::Receiver<()>;
 type Sending = crossbeam_channel::Sender<()>;
 
-fn all_crossbeam() -> Result<(), Box<dyn Error>> {
+fn all_crossbeam() {
     let mut threads = Vec::new();
 
     for _ in 0..28 {
@@ -788,8 +784,6 @@ fn all_crossbeam() -> Result<(), Box<dyn Error>> {
     }
 
     threads.into_iter().for_each(|elt| elt.join().unwrap());
-
-    Ok(())
 }
 
 /////////////////////////

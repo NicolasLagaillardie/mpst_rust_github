@@ -171,8 +171,8 @@ fn rec_loop_1(
 
 /////////////////////////
 
-fn all_mpst() -> Result<(), Box<dyn std::error::Error>> {
-    fork_mpst(black_box(start))
+fn all_mpst() {
+    fork_mpst(black_box(start)).unwrap();
 }
 
 /////////////////////////

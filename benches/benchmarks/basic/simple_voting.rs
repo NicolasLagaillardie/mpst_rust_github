@@ -193,14 +193,12 @@ fn choice_server(s: ChoiceServer<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (thread_server, thread_voter) =
         fork_mpst(black_box(endpoint_server), black_box(endpoint_voter));
 
-    thread_voter.join()?;
-    thread_server.join()?;
-
-    Ok(())
+    thread_voter.join().unwrap();
+    thread_server.join().unwrap();
 }
 
 /////////////////////////

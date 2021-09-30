@@ -239,7 +239,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
+fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_b),
@@ -247,12 +247,10 @@ fn all_mpst() -> Result<(), Box<dyn std::any::Any + std::marker::Send>> {
         black_box(endpoint_d),
     );
 
-    thread_a.join()?;
-    thread_b.join()?;
-    thread_c.join()?;
-    thread_d.join()?;
-
-    Ok(())
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
 }
 
 /////////////////////////

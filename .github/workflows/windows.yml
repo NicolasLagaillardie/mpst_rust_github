@@ -39,19 +39,15 @@ jobs:
     #     ghc GenCFSMs
     - name: Format
       run: |
-        cargo clean
         cargo fmt --verbose --all -- --check
     - name: Clippy
       run: |
-        cargo clean
         cargo clippy --all-features --verbose -- -D warnings
     - name: Check lib
       run: |
-        cargo clean
         cargo check --verbose --workspace --all-features
     - name: Check bins
       run: |
-        cargo clean
         cargo check --bins --verbose --workspace --features="default"
         cargo check --bins --verbose --workspace --features="macros_simple"
         cargo check --bins --verbose --workspace --features="macros_multiple"
@@ -68,7 +64,6 @@ jobs:
         cargo check --bins --verbose --workspace --all-features
     - name: Check examples
       run: |
-        cargo clean
         cargo check --examples --verbose --workspace --features="default"
         cargo check --examples --verbose --workspace --features="macros_simple"
         cargo check --examples --verbose --workspace --features="macros_multiple"
@@ -85,7 +80,6 @@ jobs:
         cargo check --examples --verbose --workspace --all-features
     - name: Check tests
       run: |
-        cargo clean
         cargo check --tests --verbose --workspace --features="default"
         cargo check --tests --verbose --workspace --features="macros_simple"
         cargo check --tests --verbose --workspace --features="macros_multiple"
@@ -102,7 +96,6 @@ jobs:
         cargo check --tests --verbose --workspace --all-features
     - name: Check benches
       run: |
-        cargo clean
         cargo check --benches --verbose --workspace --features="default"
         cargo check --benches --verbose --workspace --features="macros_simple"
         cargo check --benches --verbose --workspace --features="macros_multiple"
@@ -119,11 +112,9 @@ jobs:
         cargo check --benches --verbose --workspace --all-features
     - name: Run doc
       run: |
-        cargo clean
         cargo doc --verbose --workspace --all-features
     - name: Check examples
       run: |
-        cargo clean
         cargo check --examples --verbose --workspace --features="default"
         cargo check --examples --verbose --workspace --features="macros_simple"
         cargo check --examples --verbose --workspace --features="macros_multiple"
@@ -140,7 +131,6 @@ jobs:
         cargo check --examples --verbose --workspace --all-features
     - name: Check tests
       run: |
-        cargo clean
         cargo check --tests --verbose --workspace --features="default"
         cargo check --tests --verbose --workspace --features="macros_simple"
         cargo check --tests --verbose --workspace --features="macros_multiple"
@@ -157,25 +147,19 @@ jobs:
         cargo check --tests --verbose --workspace --all-features
     - name: Run lib
       run: |
-        cargo clean
         cargo run --verbose --all-features -- --skip kmc
     - name: Run tests all
       run: |
-        cargo clean
         cargo test --verbose --workspace -- --skip kmc
     - name: Run tests no capture
       run: |
-        cargo clean
         cargo test --verbose --workspace -- --nocapture --skip kmc
     - name: Run tests no features
       run: |
-        cargo clean
         cargo test --verbose --workspace --no-default-features --no-run -- --skip kmc
     - name: Run tests all features
       run: |
-        cargo clean
         cargo test --verbose --all-features -- --skip kmc
     - name: Run benchmarks
       run: |
-        cargo clean
         cargo bench --verbose --workspace --all-features
