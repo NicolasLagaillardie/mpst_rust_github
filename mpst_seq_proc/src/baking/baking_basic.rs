@@ -654,9 +654,7 @@ impl Baking {
 
                             let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
 
-                            if l == 0 {
-                                panic!("Erratum choose_sessions / left_sessions j = {:?}", j)
-                            };
+                            assert!(!l == 0, "Erratum choose_sessions / left_sessions j = {:?}", j);
 
                             let (_, _, m1) = if j > sender {
                                 self.get_tuple_matrix(&matrix, sender, j - 1)
@@ -685,9 +683,7 @@ impl Baking {
 
                             let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
 
-                            if l == 0 {
-                                panic!("Erratum choose_sessions / right_sessions j = {:?}", j);
-                            };
+                            assert!(!l == 0, "Erratum choose_sessions / right_sessions j = {:?}", j);
 
                             let (_, _, m1) = if j > sender {
                                 self.get_tuple_matrix(&matrix, sender, j - 1)
