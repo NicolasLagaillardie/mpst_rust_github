@@ -42,7 +42,7 @@ jobs:
         cargo fmt --verbose --all -- --check
     - name: Clippy
       run: |
-        cargo clippy --all-features --verbose -- -D warnings
+        cargo clippy --workspace --all-features --verbose -- -D warnings
     - name: Check lib
       run: |
         cargo check --verbose --workspace --all-features
