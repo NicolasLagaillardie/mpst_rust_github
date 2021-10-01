@@ -168,17 +168,7 @@ impl CreateSendCheckCancel {
                     #all_send
                 )*
 
-                let new_stack = {
-                    fn temp<R>(r: #receiver<R>) -> R
-                    where
-                        R: mpstthree::role::Role,
-                    {
-                        let (here, there) = <R as mpstthree::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(s.stack)
-                };
+                let new_stack = s.stack.continuation();
 
                 Ok(
                     #meshedchannels_name {

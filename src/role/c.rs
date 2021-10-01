@@ -74,3 +74,12 @@ impl<R: Role> Role for RoleC<R> {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 }
+
+impl<R: Role> RoleC<R> {
+    /// Return the continuation for RoleC
+    pub fn continuation(&self) -> R {
+        let (here, there) = R::new();
+        self.sender.send(there).unwrap_or(());
+        here
+    }
+}

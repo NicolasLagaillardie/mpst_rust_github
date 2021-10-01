@@ -18,16 +18,16 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, MeshedChannels<S1, S2, R, N>),
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_aux_simple {
-    ($session:expr, $role:ident, $exclusion:literal) => {
-        mpst_seq::recv_aux_simple!($session, $role, $exclusion)
+    ($session:expr, $exclusion:literal) => {
+        mpst_seq::recv_aux_simple!($session, $exclusion)
     };
 }
 
 #[doc(hidden)]
 #[macro_export]
 macro_rules! recv_all_aux_simple {
-    ($session:expr, $role:ident, $exclusion:literal) => {
-        mpst_seq::recv_all_aux_simple!($session, $role, $exclusion)
+    ($session:expr, $exclusion:literal) => {
+        mpst_seq::recv_all_aux_simple!($session, $exclusion)
     };
 }
 
@@ -101,7 +101,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux_simple!(s, RoleB, 1)()
+    recv_aux_simple!(s, 1)()
 }
 
 /// Receive a value of type `T` on B from A. Can fail.
@@ -174,7 +174,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux_simple!(s, RoleA, 1)()
+    recv_aux_simple!(s, 1)()
 }
 
 /// Receive a value of type `T` on C from A. Can fail.
@@ -247,7 +247,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux_simple!(s, RoleA, 1)()
+    recv_aux_simple!(s, 1)()
 }
 
 /// Receive a value of type `T` on A from C. Can fail.
@@ -320,7 +320,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux_simple!(s, RoleC, 2)()
+    recv_aux_simple!(s, 2)()
 }
 
 /// Receive a value of type `T` on B from C. Can fail.
@@ -393,7 +393,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux_simple!(s, RoleC, 2)()
+    recv_aux_simple!(s, 2)()
 }
 
 /// Receive a value of type `T` on C from B. Can fail.
@@ -466,7 +466,7 @@ where
     S2: Session,
     R: Role,
 {
-    recv_aux_simple!(s, RoleB, 2)()
+    recv_aux_simple!(s, 2)()
 }
 
 // Receive a broadcasted value of type `T` on B from A. Can
@@ -484,7 +484,7 @@ where
     S1: Session,
     S2: Session,
 {
-    recv_all_aux_simple!(s, RoleAlltoB, 1)()
+    recv_all_aux_simple!(s, 1)()
 }
 
 // Receive a broadcasted value of type `T` on C from A. Can
@@ -502,7 +502,7 @@ where
     S1: Session,
     S2: Session,
 {
-    recv_all_aux_simple!(s, RoleAlltoC, 2)()
+    recv_all_aux_simple!(s, 2)()
 }
 
 // Receive a broadcasted value of type `T` on A from B. Can
@@ -520,7 +520,7 @@ where
     S1: Session,
     S2: Session,
 {
-    recv_all_aux_simple!(s, RoleAlltoA, 1)()
+    recv_all_aux_simple!(s, 1)()
 }
 
 // Receive a broadcasted value of type `T` on C from A. Can
@@ -538,7 +538,7 @@ where
     S1: Session,
     S2: Session,
 {
-    recv_all_aux_simple!(s, RoleAlltoC, 2)()
+    recv_all_aux_simple!(s, 2)()
 }
 
 // Receive a broadcasted value of type `T` on A from B. Can
@@ -556,7 +556,7 @@ where
     S1: Session,
     S2: Session,
 {
-    recv_all_aux_simple!(s, RoleAlltoA, 1)()
+    recv_all_aux_simple!(s, 1)()
 }
 
 // Receive a broadcasted value of type `T` on B from C. Can
@@ -574,5 +574,5 @@ where
     S1: Session,
     S2: Session,
 {
-    recv_all_aux_simple!(s, RoleAlltoB, 2)()
+    recv_all_aux_simple!(s, 2)()
 }

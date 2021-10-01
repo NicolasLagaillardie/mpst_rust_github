@@ -4,7 +4,6 @@
 //! # Arguments
 //!
 //! * The current session representing the passive role
-//! * The dual of the name of the head of the stack of the active role
 //! * The index of the binary channel among the two of the passive role
 //!
 //! # Example
@@ -16,7 +15,7 @@
 //! // If A is the current receiving role,
 //! // then its binary channel with B is the first
 //! // one.
-//! mpst_seq::recv_all_aux_simple!(s, RoleAlltoB, 1)()
+//! mpst_seq::recv_all_aux_simple!(s, 1)()
 //! ```
 
 use quote::{format_ident, quote};
@@ -26,7 +25,6 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct RecvAllAuxSimple {
     session: syn::Expr,
-    role: syn::Ident,
     exclusion: u64,
 }
 
@@ -35,16 +33,9 @@ impl Parse for RecvAllAuxSimple {
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let role = syn::Ident::parse(input)?; // Retrive the role
-        <Token![,]>::parse(input)?;
-
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap(); // Retrive the index
 
-        Ok(RecvAllAuxSimple {
-            session,
-            role,
-            exclusion,
-        })
+        Ok(RecvAllAuxSimple { session, exclusion })
     }
 }
 
@@ -57,7 +48,6 @@ impl From<RecvAllAuxSimple> for proc_macro2::TokenStream {
 impl RecvAllAuxSimple {
     fn expand(&self) -> proc_macro2::TokenStream {
         let session = self.session.clone();
-        let role = self.role.clone();
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();
@@ -77,18 +67,7 @@ impl RecvAllAuxSimple {
 
                 let (v, new_session) = crate::binary::recv::recv( #session.#recv_session )?;
 
-                let (new_stack_left, _new_stack_right) = { // new_stack_right = new_stack_left
-                    fn temp(r: #role<crate::role::end::RoleEnd, crate::role::end::RoleEnd>)
-                    -> (crate::role::end::RoleEnd, crate::role::end::RoleEnd)
-                    {
-                        let (here1, there1) = <crate::role::end::RoleEnd as crate::role::Role>::new();
-                        let (here2, there2) = <crate::role::end::RoleEnd as crate::role::Role>::new();
-                        r.sender1.send(there1).unwrap_or(());
-                        r.sender2.send(there2).unwrap_or(());
-                        (here1, here2)
-                    }
-                    temp(#session.stack)
-                };
+                let new_stack_left = #session.stack.continuation_left();
 
                 Ok((
                     v,

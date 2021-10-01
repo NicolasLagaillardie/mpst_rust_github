@@ -28,6 +28,9 @@ use aux_checker::*;
 /// properties of the provided protocol. The [`KMC`] repository
 /// must be installed next to the current one.
 ///
+/// /!\ The provided types and enum cannot be checked if they contain
+/// a parameter, such as <N>, as seen in some examples.
+///
 /// # Arguments
 ///
 /// * \[Optional\] The name of the new file after running the [`KMC`] tool

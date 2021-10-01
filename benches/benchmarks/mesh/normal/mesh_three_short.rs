@@ -95,10 +95,10 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoA::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, RoleA, MeshedChannelsThree, 3, 2)()?;
-            let s = send_mpst!(s, (), RoleC, RoleA, MeshedChannelsThree, 3, 2);
-            let (_, s) = recv_mpst!(s, RoleB, RoleA, MeshedChannelsThree, 3, 1)()?;
-            let s = send_mpst!(s, (), RoleB, RoleA, MeshedChannelsThree, 3, 1);
+            let (_, s) = recv_mpst!(s, MeshedChannelsThree, 3, 2)()?;
+            let s = send_mpst!(s, (), MeshedChannelsThree, 3, 2);
+            let (_, s) = recv_mpst!(s, MeshedChannelsThree, 3, 1)()?;
+            let s = send_mpst!(s, (), MeshedChannelsThree, 3, 1);
             endpoint_a(s)
         },
     })
@@ -110,10 +110,10 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             close_mpst_multi(s)
         },
         Branching0fromCtoB::More(s) => {
-            let (_, s) = recv_mpst!(s, RoleC, RoleB, MeshedChannelsThree, 3, 2)()?;
-            let s = send_mpst!(s, (), RoleC, RoleB, MeshedChannelsThree, 3, 2);
-            let s = send_mpst!(s, (), RoleA, RoleB, MeshedChannelsThree, 3, 1);
-            let (_, s) = recv_mpst!(s, RoleA, RoleB, MeshedChannelsThree, 3, 1)()?;
+            let (_, s) = recv_mpst!(s,MeshedChannelsThree, 3, 2)()?;
+            let s = send_mpst!(s, (), MeshedChannelsThree, 3, 2);
+            let s = send_mpst!(s, (), MeshedChannelsThree, 3, 1);
+            let (_, s) = recv_mpst!(s, MeshedChannelsThree, 3, 1)()?;
             endpoint_b(s)
         },
     })
@@ -133,10 +133,10 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
         i => {
             let s = more_from_c_to_all(s);
 
-            let s = send_mpst!(s, (), RoleA, RoleC, MeshedChannelsThree, 3, 1);
-            let (_, s) = recv_mpst!(s, RoleA, RoleC, MeshedChannelsThree, 3, 1)()?;
-            let s = send_mpst!(s, (), RoleB, RoleC, MeshedChannelsThree, 3, 2);
-            let (_, s) = recv_mpst!(s, RoleB, RoleC, MeshedChannelsThree, 3, 2)()?;
+            let s = send_mpst!(s, (), MeshedChannelsThree, 3, 1);
+            let (_, s) = recv_mpst!(s, MeshedChannelsThree, 3, 1)()?;
+            let s = send_mpst!(s, (), MeshedChannelsThree, 3, 2);
+            let (_, s) = recv_mpst!(s, MeshedChannelsThree, 3, 2)()?;
 
             recurs_c(s, i - 1)
         }

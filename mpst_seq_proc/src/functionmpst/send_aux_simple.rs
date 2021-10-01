@@ -5,7 +5,6 @@
 //!
 //! * The current session representing the sender
 //! * The payload to be sent
-//! * The name of the receiver
 //! * The index of the binary channel among the two of the receiver
 //!
 //! # Example
@@ -15,7 +14,7 @@
 //! // A is the sender and x is the payload.
 //! // Then the binary channel of A with B is its first
 //! // channel.
-//! mpst_seq::send_aux_simple!(s, x, RoleB, 1)()
+//! mpst_seq::send_aux_simple!(s, x, 1)()
 //! ```
 
 use quote::{format_ident, quote};
@@ -26,7 +25,6 @@ use syn::{Result, Token};
 pub struct SendAuxSimple {
     session: syn::Expr,
     payload: syn::Expr,
-    role: syn::Ident,
     exclusion: u64,
 }
 
@@ -38,15 +36,11 @@ impl Parse for SendAuxSimple {
         let payload = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let role = syn::Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(SendAuxSimple {
             session,
             payload,
-            role,
             exclusion,
         })
     }
@@ -62,7 +56,6 @@ impl SendAuxSimple {
     fn expand(&self) -> proc_macro2::TokenStream {
         let session = self.session.clone();
         let payload = self.payload.clone();
-        let role = self.role.clone();
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();
@@ -81,17 +74,7 @@ impl SendAuxSimple {
             {
                 let new_session = crate::binary::send::send(#payload,  #session.#recv_session );
 
-                let new_stack = {
-                    fn temp<R>(r: #role<R>) -> R
-                    where
-                        R: crate::role::Role,
-                    {
-                        let (here, there) = <R as crate::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(#session.stack)
-                };
+                let new_stack = #session.stack.continuation();
 
                 crate::meshedchannels::MeshedChannels {
                     #( #all_sessions : #new_sessions , )*

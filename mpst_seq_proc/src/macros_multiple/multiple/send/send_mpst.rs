@@ -5,9 +5,7 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct SendMPST {
     session: syn::Expr,
-    receiver: syn::Ident,
     payload: syn::Expr,
-    sender: syn::Ident,
     meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
@@ -21,12 +19,6 @@ impl Parse for SendMPST {
         let payload = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let receiver = syn::Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let sender = syn::Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
@@ -37,9 +29,7 @@ impl Parse for SendMPST {
 
         Ok(SendMPST {
             session,
-            receiver,
             payload,
-            sender,
             meshedchannels_name,
             nsessions,
             exclusion,
@@ -55,8 +45,6 @@ impl From<SendMPST> for proc_macro2::TokenStream {
 
 impl SendMPST {
     fn expand(&self) -> proc_macro2::TokenStream {
-        let receiver = self.receiver.clone();
-        let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let session = self.session.clone();
         let payload = self.payload.clone();
@@ -99,24 +87,7 @@ impl SendMPST {
                     #all_send
                 )*
 
-                let new_stack = {
-                    fn temp<R>(r: #receiver<R>) -> R
-                    where
-                        R: mpstthree::role::Role,
-                    {
-                        let (here, there) = <R as mpstthree::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(s.stack)
-                };
-
-                {
-                    fn temp(_s: &#sender<mpstthree::role::end::RoleEnd>) -> Result<(), Box<dyn std::error::Error>> {
-                        Ok(())
-                    }
-                    temp(&s.name)
-                }.unwrap();
+                let new_stack = s.stack.continuation();
 
                 #meshedchannels_name {
                     #(

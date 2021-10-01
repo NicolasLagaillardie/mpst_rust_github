@@ -32,7 +32,7 @@
 /// );
 ///
 /// fn main(s: Endpoint) -> Result<(), Box<dyn std::error::Error>> {
-///    let (_payload, _s) = recv_mpst!(s, RoleB, RoleA, MeshedChannelsThree, 3, 1)()?;
+///    let (_payload, _s) = recv_mpst!(s, MeshedChannelsThree, 3, 1)()?;
 /// }
 /// ```
 ///
@@ -43,20 +43,11 @@
 macro_rules! recv_mpst {
     (
         $session:expr,
-        $sender:ident,
-        $receiver:ident,
         $meshedchannels_name:ident,
         $nsessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::recv_mpst!(
-            $session,
-            $sender,
-            $receiver,
-            $meshedchannels_name,
-            $nsessions,
-            $exclusion
-        );
+        mpst_seq::recv_mpst!($session, $meshedchannels_name, $nsessions, $exclusion);
     };
 }
 

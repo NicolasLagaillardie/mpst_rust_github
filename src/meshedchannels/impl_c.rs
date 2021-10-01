@@ -29,7 +29,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 {
     /// Send a payload of type T to role A
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
-        send_aux_simple!(self, payload, RoleA, 1)
+        send_aux_simple!(self, payload, 1)
     }
 }
 
@@ -38,7 +38,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 {
     /// Send a payload of type T to role B
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
-        send_aux_simple!(self, payload, RoleB, 2)
+        send_aux_simple!(self, payload, 2)
     }
 }
 
@@ -47,7 +47,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 {
     /// Receive a payload from role A
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
-        recv_aux_simple!(self, RoleA, 1)()
+        recv_aux_simple!(self, 1)()
     }
 }
 
@@ -56,7 +56,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 {
     /// Receive a payload from role B
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
-        recv_aux_simple!(self, RoleB, 2)()
+        recv_aux_simple!(self, 2)()
     }
 }
 
@@ -65,7 +65,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
 {
     #[doc(hidden)]
     pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
-        recv_all_aux_simple!(self, RoleAlltoA, 1)()
+        recv_all_aux_simple!(self, 1)()
     }
 }
 
@@ -74,7 +74,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
 {
     #[doc(hidden)]
     pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
-        recv_all_aux_simple!(self, RoleAlltoB, 2)()
+        recv_all_aux_simple!(self, 2)()
     }
 }
 
@@ -86,7 +86,8 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
         RoleC<RoleEnd>,
     >
 {
-    /// Receive a binary choice from role A
+    /// Receive a binary choice from role A.
+    /// Be careful: the left and right stacks must be the same.
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
         F: FnOnce(MeshedChannels<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
@@ -106,7 +107,8 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
         RoleC<RoleEnd>,
     >
 {
-    /// Receive a binary choice from role B
+    /// Receive a binary choice from role B.
+    /// Be careful: the left and right stacks must be the same.
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
         F: FnOnce(MeshedChannels<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,

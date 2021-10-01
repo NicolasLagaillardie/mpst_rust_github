@@ -1,7 +1,7 @@
 mod tcp;
 
 #[test]
-fn tcp() {
+fn transport_tcp() {
     tcp::binary::main();
     tcp::binary_fail::main();
 }

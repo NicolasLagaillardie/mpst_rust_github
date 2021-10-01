@@ -217,20 +217,8 @@ impl OfferMPSTSessionMulti {
                 #(
                     #all_recv
                 )*
-                let (new_stack, _) = {
-                    fn temp<R1, R2>(r: #role<R1, R2>) -> (R1, R2)
-                    where
-                        R1: mpstthree::role::Role,
-                        R2: mpstthree::role::Role,
-                    {
-                        let (here1, there1) = <R1 as mpstthree::role::Role>::new();
-                        let (here2, there2) = <R2 as mpstthree::role::Role>::new();
-                        r.sender1.send(there1).unwrap_or(());
-                        r.sender2.send(there2).unwrap_or(());
-                        (here1, here2)
-                    }
-                    temp(s.stack)
-                };
+
+                let new_stack = s.stack.continuation_left();
 
                 let s = #meshedchannels_name {
                     #(

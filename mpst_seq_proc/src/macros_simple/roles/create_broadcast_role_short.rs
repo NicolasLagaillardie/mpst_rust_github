@@ -189,6 +189,40 @@ impl CreateBroadcastRoleShort {
                     )
                 }
             }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Role
+
+            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> #role_to_all_name<R1, R2> {
+                pub fn continuation_left(&self) -> R1 {
+                    let (here, there) = R1::new();
+                    self.sender1.send(there).unwrap_or(());
+                    here
+                }
+
+                pub fn continuation_right(&self) -> R2 {
+                    let (here, there) = R2::new();
+                    self.sender2.send(there).unwrap_or(());
+                    here
+                }
+            }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Dual
+
+            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> #dual_to_all_name<R1, R2> {
+                pub fn continuation_left(&self) -> R1 {
+                    let (here, there) = R1::new();
+                    self.sender1.send(there).unwrap_or(());
+                    here
+                }
+
+                pub fn continuation_right(&self) -> R2 {
+                    let (here, there) = R2::new();
+                    self.sender2.send(there).unwrap_or(());
+                    here
+                }
+            }
         }
     }
 }

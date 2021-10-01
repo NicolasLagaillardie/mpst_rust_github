@@ -275,17 +275,7 @@ impl BakingWithCancel {
                     Box<dyn std::error::Error>
                 > {
                     let new_session = mpstthree::binary::send::send_canceled(payload, self.#new_session)?;
-                    let new_stack = {
-                        fn temp<R>(r: #receiver_ident<R>) -> R
-                        where
-                            R: mpstthree::role::Role,
-                        {
-                            let (here, there) = <R as mpstthree::role::Role>::new();
-                            r.sender.send(there).unwrap_or(());
-                            here
-                        }
-                        temp(self.stack)
-                    };
+                    let new_stack = self.stack.continuation();
                     Ok(
                         #meshedchannels_name {
                             #( #new_sessions )*
@@ -378,17 +368,7 @@ impl BakingWithCancel {
                     Box<dyn std::error::Error>
                 > {
                     let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session)?;
-                    let new_stack = {
-                        fn temp<R>(r: #sender_ident<R>) -> R
-                        where
-                            R: mpstthree::role::Role,
-                        {
-                            let (here, there) = <R as mpstthree::role::Role>::new();
-                            r.sender.send(there).unwrap_or(());
-                            here
-                        }
-                        temp(self.stack)
-                    };
+                    let new_stack = self.stack.continuation();
                     Ok((
                         v,
                         #meshedchannels_name {
@@ -482,16 +462,14 @@ impl BakingWithCancel {
                     Box<dyn std::error::Error>
                 > {
                     let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session)?;
-                    let (here1, there1) = <mpstthree::role::end::RoleEnd as mpstthree::role::Role>::new();
-                    let (_here2, there2) = <mpstthree::role::end::RoleEnd as mpstthree::role::Role>::new();
-                    self.stack.sender1.send(there1).unwrap_or(());
-                    self.stack.sender2.send(there2).unwrap_or(());
+
+                    let new_stack = self.stack.continuation_left();
 
                     Ok((
                         v,
                         #meshedchannels_name {
                             #( #new_sessions )*
-                            stack: here1,
+                            stack: new_stack,
                             name: self.name,
                         }
                     ))
@@ -1439,8 +1417,32 @@ impl BakingWithCancel {
                     )
                 }
             }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Role
+
+            impl<R: mpstthree::role::Role> #role_name<R> {
+                pub fn continuation(&self) -> R {
+                    let (here, there) = R::new();
+                    self.sender.send(there).unwrap_or(());
+                    here
+                }
+            }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Dual
+
+            impl<R: mpstthree::role::Role> #dual_name<R> {
+                pub fn continuation(&self) -> R {
+                    let (here, there) = R::new();
+                    self.sender.send(there).unwrap_or(());
+                    here
+                }
+            }
+
             ////////////////////////////////////////////
             /// The all Role
+
             #[derive(Debug)]
             struct #role_to_all_name<R1, R2>
             where
@@ -1452,8 +1454,10 @@ impl BakingWithCancel {
                 sender1: crossbeam_channel::Sender<R1::Dual>,
                 sender2: crossbeam_channel::Sender<R2::Dual>,
             }
+
             ////////////////////////////////////////////
             /// The all Dual
+
             #[derive(Debug)]
             struct #dual_to_all_name<R1, R2>
             where
@@ -1465,6 +1469,7 @@ impl BakingWithCancel {
                 sender1: crossbeam_channel::Sender<R1::Dual>,
                 sender2: crossbeam_channel::Sender<R2::Dual>,
             }
+
             ////////////////////////////////////////////
             /// The all Role implementation of Role
             impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
@@ -1524,6 +1529,7 @@ impl BakingWithCancel {
                     )
                 }
             }
+
             ////////////////////////////////////////////
             /// The all Dual implementation of Role
             impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
@@ -1581,6 +1587,38 @@ impl BakingWithCancel {
                         <R2 as mpstthree::role::Role>::head_str(),
                         <R2 as mpstthree::role::Role>::tail_str()
                     )
+                }
+            }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Role
+
+            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> #role_to_all_name<R1, R2> {
+                pub fn continuation_left(&self) -> R1 {
+                    let (here, there) = R1::new();
+                    self.sender1.send(there).unwrap_or(());
+                    here
+                }
+                pub fn continuation_right(&self) -> R2 {
+                    let (here, there) = R2::new();
+                    self.sender2.send(there).unwrap_or(());
+                    here
+                }
+            }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Dual
+
+            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> #dual_to_all_name<R1, R2> {
+                pub fn continuation_left(&self) -> R1 {
+                    let (here, there) = R1::new();
+                    self.sender1.send(there).unwrap_or(());
+                    here
+                }
+                pub fn continuation_right(&self) -> R2 {
+                    let (here, there) = R2::new();
+                    self.sender2.send(there).unwrap_or(());
+                    here
                 }
             }
         }

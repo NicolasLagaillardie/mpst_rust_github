@@ -4,7 +4,6 @@
 //! # Arguments
 //!
 //! * The current session representing the receiver
-//! * The name of the sender
 //! * The index of the binary channel among the two of the receiver
 //!
 //! # Example
@@ -14,7 +13,7 @@
 //! // and A is the receiver.
 //! // Then the binary channel of A with B is the first
 //! // one.
-//! mpst_seq::recv_aux_simple!(s, RoleB, 1)()
+//! mpst_seq::recv_aux_simple!(s, 1)()
 //! ```
 
 use quote::{format_ident, quote};
@@ -24,7 +23,6 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct RecvAuxSimple {
     session: syn::Expr,
-    role: syn::Ident,
     exclusion: u64,
 }
 
@@ -33,16 +31,9 @@ impl Parse for RecvAuxSimple {
         let session = syn::Expr::parse(input)?; // Retrive the session
         <Token![,]>::parse(input)?;
 
-        let role = syn::Ident::parse(input)?; // Retrive the role
-        <Token![,]>::parse(input)?;
-
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
-        Ok(RecvAuxSimple {
-            session,
-            role,
-            exclusion,
-        })
+        Ok(RecvAuxSimple { session, exclusion })
     }
 }
 
@@ -55,7 +46,6 @@ impl From<RecvAuxSimple> for proc_macro2::TokenStream {
 impl RecvAuxSimple {
     fn expand(&self) -> proc_macro2::TokenStream {
         let session = self.session.clone();
-        let role = self.role.clone();
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();
@@ -75,17 +65,7 @@ impl RecvAuxSimple {
 
                 let (v, new_session) = crate::binary::recv::recv( #session.#recv_session )?;
 
-                let new_stack = {
-                    fn temp<R>(r: #role<R>) -> R
-                    where
-                        R: crate::role::Role,
-                    {
-                        let (here, there) = <R as crate::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(#session.stack)
-                };
+                let new_stack = #session.stack.continuation();
 
                 Ok((
                     v,

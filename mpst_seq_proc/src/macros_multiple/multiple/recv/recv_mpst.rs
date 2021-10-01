@@ -5,8 +5,6 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct RecvMPST {
     session: syn::Expr,
-    sender: syn::Ident,
-    receiver: syn::Ident,
     meshedchannels_name: syn::Ident,
     nsessions: u64,
     exclusion: u64,
@@ -15,12 +13,6 @@ pub struct RecvMPST {
 impl Parse for RecvMPST {
     fn parse(input: ParseStream) -> Result<Self> {
         let session = syn::Expr::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let sender = syn::Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let receiver = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let meshedchannels_name = syn::Ident::parse(input)?;
@@ -33,8 +25,6 @@ impl Parse for RecvMPST {
 
         Ok(RecvMPST {
             session,
-            sender,
-            receiver,
             meshedchannels_name,
             nsessions,
             exclusion,
@@ -50,8 +40,6 @@ impl From<RecvMPST> for proc_macro2::TokenStream {
 
 impl RecvMPST {
     fn expand(&self) -> proc_macro2::TokenStream {
-        let sender = self.sender.clone();
-        let receiver = self.receiver.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let session = self.session.clone();
 
@@ -93,24 +81,7 @@ impl RecvMPST {
                     #all_recv
                 )*
 
-                let new_stack = {
-                    fn temp<R>(r: #sender<R>) -> R
-                    where
-                        R: mpstthree::role::Role,
-                    {
-                        let (here, there) = <R as mpstthree::role::Role>::new();
-                        r.sender.send(there).unwrap_or(());
-                        here
-                    }
-                    temp(s.stack)
-                };
-
-                {
-                    fn temp(_s: &#receiver<mpstthree::role::end::RoleEnd>) -> Result<(), Box<dyn std::error::Error>> {
-                        Ok(())
-                    }
-                    temp(&s.name)
-                }.unwrap();
+                let new_stack = s.stack.continuation();
 
                 Ok((
                     v,

@@ -45,6 +45,11 @@ pub fn role_end_fields_2() {
 pub fn role_a_fields() {
     let (role_sender, role_receiver) = RoleA::<RoleEnd>::new();
 
+    assert_eq!(
+        role_sender.continuation().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
     // role_sender
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
@@ -64,6 +69,11 @@ pub fn role_a_fields() {
 
 pub fn role_b_fields() {
     let (role_sender, role_receiver) = RoleB::<RoleEnd>::new();
+
+    assert_eq!(
+        role_sender.continuation().self_head_str(),
+        "RoleEnd".to_string()
+    );
 
     // role_sender
     let (here, there) = RoleEnd::new();
@@ -85,6 +95,11 @@ pub fn role_b_fields() {
 pub fn role_c_fields() {
     let (role_sender, role_receiver) = RoleC::<RoleEnd>::new();
 
+    assert_eq!(
+        role_sender.continuation().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
     // role_sender
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
@@ -104,6 +119,16 @@ pub fn role_c_fields() {
 
 pub fn role_a_to_all_fields() {
     let (role_sender_1, role_sender_2) = RoleAtoAll::<RoleEnd, RoleEnd>::new();
+
+    assert_eq!(
+        role_sender_1.continuation_left().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
+    assert_eq!(
+        role_sender_1.continuation_right().self_head_str(),
+        "RoleEnd".to_string()
+    );
 
     // role_sender_1
     let (here1, there1) = RoleEnd::new();
@@ -137,6 +162,16 @@ pub fn role_a_to_all_fields() {
 pub fn role_all_to_a_fields() {
     let (role_sender_1, role_sender_2) = RoleAlltoA::<RoleEnd, RoleEnd>::new();
 
+    assert_eq!(
+        role_sender_1.continuation_left().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
+    assert_eq!(
+        role_sender_1.continuation_right().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
     // role_sender_1
     let (here1, there1) = RoleEnd::new();
     let (here2, there2) = RoleEnd::new();
@@ -168,6 +203,16 @@ pub fn role_all_to_a_fields() {
 
 pub fn role_b_to_all_fields() {
     let (role_sender_1, role_sender_2) = RoleBtoAll::<RoleEnd, RoleEnd>::new();
+
+    assert_eq!(
+        role_sender_1.continuation_left().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
+    assert_eq!(
+        role_sender_1.continuation_right().self_head_str(),
+        "RoleEnd".to_string()
+    );
 
     // role_sender_1
     let (here1, there1) = RoleEnd::new();
@@ -201,6 +246,16 @@ pub fn role_b_to_all_fields() {
 pub fn role_all_to_b_fields() {
     let (role_sender_1, role_sender_2) = RoleAlltoB::<RoleEnd, RoleEnd>::new();
 
+    assert_eq!(
+        role_sender_1.continuation_left().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
+    assert_eq!(
+        role_sender_1.continuation_right().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
     // role_sender_1
     let (here1, there1) = RoleEnd::new();
     let (here2, there2) = RoleEnd::new();
@@ -233,6 +288,16 @@ pub fn role_all_to_b_fields() {
 pub fn role_c_to_all_fields() {
     let (role_sender_1, role_sender_2) = RoleCtoAll::<RoleEnd, RoleEnd>::new();
 
+    assert_eq!(
+        role_sender_1.continuation_left().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
+    assert_eq!(
+        role_sender_1.continuation_right().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
     // role_sender_1
     let (here1, there1) = RoleEnd::new();
     let (here2, there2) = RoleEnd::new();
@@ -264,6 +329,16 @@ pub fn role_c_to_all_fields() {
 
 pub fn role_all_to_c_fields() {
     let (role_sender_1, role_sender_2) = RoleAlltoC::<RoleEnd, RoleEnd>::new();
+
+    assert_eq!(
+        role_sender_1.continuation_left().self_head_str(),
+        "RoleEnd".to_string()
+    );
+
+    assert_eq!(
+        role_sender_1.continuation_right().self_head_str(),
+        "RoleEnd".to_string()
+    );
 
     // role_sender_1
     let (here1, there1) = RoleEnd::new();

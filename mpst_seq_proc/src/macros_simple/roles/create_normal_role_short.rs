@@ -157,6 +157,28 @@ impl CreateNormalRoleShort {
                     )
                 }
             }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Role
+
+            impl<R: mpstthree::role::Role> #role_name<R> {
+                pub fn continuation(&self) -> R {
+                    let (here, there) = R::new();
+                    self.sender.send(there).unwrap_or(());
+                    here
+                }
+            }
+
+            ////////////////////////////////////////////
+            /// The associated functions for Dual
+
+            impl<R: mpstthree::role::Role> #dual_name<R> {
+                pub fn continuation(&self) -> R {
+                    let (here, there) = R::new();
+                    self.sender.send(there).unwrap_or(());
+                    here
+                }
+            }
         }
     }
 }

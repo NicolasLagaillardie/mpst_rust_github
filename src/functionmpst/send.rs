@@ -12,8 +12,8 @@ use std::marker;
 #[doc(hidden)]
 #[macro_export]
 macro_rules! send_aux_simple {
-    ($session:expr, $payload:expr, $role:ident, $exclusion:literal) => {
-        mpst_seq::send_aux_simple!($session, $payload, $role, $exclusion)
+    ($session:expr, $payload:expr, $exclusion:literal) => {
+        mpst_seq::send_aux_simple!($session, $payload, $exclusion)
     };
 }
 
@@ -73,7 +73,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux_simple!(s, x, RoleB, 1)
+    send_aux_simple!(s, x, 1)
 }
 
 /// Send a value of type `T` from B to A. Always succeeds.
@@ -133,7 +133,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux_simple!(s, x, RoleA, 1)
+    send_aux_simple!(s, x, 1)
 }
 
 /// Send a value of type `T` from C to A. Always succeeds.
@@ -193,7 +193,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux_simple!(s, x, RoleA, 1)
+    send_aux_simple!(s, x, 1)
 }
 
 /// Send a value of type `T` from A to C. Always succeeds.
@@ -253,7 +253,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux_simple!(s, x, RoleC, 2)
+    send_aux_simple!(s, x, 2)
 }
 
 /// Send a value of type `T` from B to C. Always succeeds.
@@ -313,7 +313,7 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux_simple!(s, x, RoleC, 2)
+    send_aux_simple!(s, x, 2)
 }
 
 /// Send a value of type `T` from C to B. Always succeeds.
@@ -373,5 +373,5 @@ where
     S2: Session,
     R: Role,
 {
-    send_aux_simple!(s, x, RoleB, 2)
+    send_aux_simple!(s, x, 2)
 }

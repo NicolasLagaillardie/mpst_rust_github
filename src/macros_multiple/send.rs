@@ -32,7 +32,7 @@
 /// );
 ///
 /// fn main(s: Endpoint) {
-///    let _s = send_mpst!(s, (), RoleB, RoleA, MeshedChannelsThree, 3, 1);
+///    let _s = send_mpst!(s, (), MeshedChannelsThree, 3, 1);
 /// }
 /// ```
 ///
@@ -44,8 +44,6 @@ macro_rules! send_mpst {
     (
         $session:expr,
         $payload:expr,
-        $receiver:ident,
-        $sender:ident,
         $meshedchannels_name:ident,
         $nsessions:literal,
         $exclusion:literal
@@ -53,8 +51,6 @@ macro_rules! send_mpst {
         mpst_seq::send_mpst!(
             $session,
             $payload,
-            $receiver,
-            $sender,
             $meshedchannels_name,
             $nsessions,
             $exclusion

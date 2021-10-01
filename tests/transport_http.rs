@@ -4,7 +4,7 @@ use ntest::timeout;
 
 #[test]
 #[timeout(60000)]
-fn http() {
+fn transport_http() {
     http::simple_http_get::main();
     http::simple_http_post::main();
     http::simple_https_get::main();
