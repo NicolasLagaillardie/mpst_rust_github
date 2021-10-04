@@ -31,9 +31,7 @@ pub use mpst_seq_proc::create_offer_type_multi;
 pub use mpst_seq_proc::create_send_check_cancel;
 pub use mpst_seq_proc::create_send_mpst_cancel;
 pub use mpst_seq_proc::fork_mpst_multi;
-pub use mpst_seq_proc::recv_mpst;
 pub use mpst_seq_proc::send_cancel;
-pub use mpst_seq_proc::send_mpst;
 
 //////////////////////////////////////
 
@@ -125,13 +123,7 @@ pub use mpst_seq_proc::e_create_fn_choose_mpst_cancel_multi_to_all_bundle;
 pub use mpst_seq_proc::e_create_offer_type_multi;
 
 #[proc_macro_hack]
-pub use mpst_seq_proc::e_recv_mpst;
-
-#[proc_macro_hack]
 pub use mpst_seq_proc::e_create_send_check_cancel;
-
-#[proc_macro_hack]
-pub use mpst_seq_proc::e_send_mpst;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_create_send_mpst_cancel;

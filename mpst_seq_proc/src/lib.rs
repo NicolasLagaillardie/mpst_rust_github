@@ -39,11 +39,9 @@ use macros_multiple::multiple::close::close_mpst_check_cancel::CloseMpstCheckCan
 use macros_multiple::multiple::create_meshedchannels::CreateMeshedChannels;
 use macros_multiple::multiple::fork_mpst_multi::ForkMPSTMulti;
 use macros_multiple::multiple::offer::create_offer_type_multi::OfferTypeMulti;
-use macros_multiple::multiple::recv::recv_mpst::RecvMPST;
 use macros_multiple::multiple::send::create_send_check_cancel::CreateSendCheckCancel;
 use macros_multiple::multiple::send::create_send_mpst_cancel::CreateSendMPSTCancel;
 use macros_multiple::multiple::send::send_cancel::SendCancel;
-use macros_multiple::multiple::send::send_mpst::SendMPST;
 
 mod interleaved;
 
@@ -360,34 +358,6 @@ pub fn create_offer_type_multi(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_offer_type_multi(input: TokenStream) -> TokenStream {
     create_offer_type_multi(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
-pub fn recv_mpst(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as RecvMPST);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_recv_mpst(input: TokenStream) -> TokenStream {
-    recv_mpst(input)
-}
-
-//////////////////////////////////////
-
-#[proc_macro]
-pub fn send_mpst(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as SendMPST);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_send_mpst(input: TokenStream) -> TokenStream {
-    send_mpst(input)
 }
 
 //////////////////////////////////////
