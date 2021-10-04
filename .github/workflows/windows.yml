@@ -62,22 +62,6 @@ jobs:
         cargo check --bins --verbose --workspace --features="full"
         cargo check --bins --verbose --workspace --features="macros_multiple checking"
         cargo check --bins --verbose --workspace --all-features
-    - name: Check examples
-      run: |
-        cargo check --examples --verbose --workspace --features="default"
-        cargo check --examples --verbose --workspace --features="macros_simple"
-        cargo check --examples --verbose --workspace --features="macros_multiple"
-        cargo check --examples --verbose --workspace --features="checking"
-        cargo check --examples --verbose --workspace --features="baking"
-        cargo check --examples --verbose --workspace --features="baking_interleaved"
-        cargo check --examples --verbose --workspace --features="transport_tcp"
-        cargo check --examples --verbose --workspace --features="transport_udp"
-        cargo check --examples --verbose --workspace --features="transport_http"
-        cargo check --examples --verbose --workspace --features="transport"
-        cargo check --examples --verbose --workspace --features="transport_macros_multiple"
-        cargo check --examples --verbose --workspace --features="full"
-        cargo check --examples --verbose --workspace --features="macros_multiple checking"
-        cargo check --examples --verbose --workspace --all-features
     - name: Check tests
       run: |
         cargo check --tests --verbose --workspace --features="default"
@@ -94,6 +78,22 @@ jobs:
         cargo check --tests --verbose --workspace --features="full"
         cargo check --tests --verbose --workspace --features="macros_multiple checking"
         cargo check --tests --verbose --workspace --all-features
+    - name: Check examples
+      run: |
+        cargo check --examples --verbose --workspace --features="default"
+        cargo check --examples --verbose --workspace --features="macros_simple"
+        cargo check --examples --verbose --workspace --features="macros_multiple"
+        cargo check --examples --verbose --workspace --features="checking"
+        cargo check --examples --verbose --workspace --features="baking"
+        cargo check --examples --verbose --workspace --features="baking_interleaved"
+        cargo check --examples --verbose --workspace --features="transport_tcp"
+        cargo check --examples --verbose --workspace --features="transport_udp"
+        cargo check --examples --verbose --workspace --features="transport_http"
+        cargo check --examples --verbose --workspace --features="transport"
+        cargo check --examples --verbose --workspace --features="transport_macros_multiple"
+        cargo check --examples --verbose --workspace --features="full"
+        cargo check --examples --verbose --workspace --features="macros_multiple checking"
+        cargo check --examples --verbose --workspace --all-features
     - name: Check benches
       run: |
         cargo check --benches --verbose --workspace --features="default"
@@ -113,38 +113,6 @@ jobs:
     - name: Run doc
       run: |
         cargo doc --verbose --workspace --all-features
-    - name: Check examples
-      run: |
-        cargo check --examples --verbose --workspace --features="default"
-        cargo check --examples --verbose --workspace --features="macros_simple"
-        cargo check --examples --verbose --workspace --features="macros_multiple"
-        cargo check --examples --verbose --workspace --features="checking"
-        cargo check --examples --verbose --workspace --features="baking"
-        cargo check --examples --verbose --workspace --features="baking_interleaved"
-        cargo check --examples --verbose --workspace --features="transport_tcp"
-        cargo check --examples --verbose --workspace --features="transport_udp"
-        cargo check --examples --verbose --workspace --features="transport_http"
-        cargo check --examples --verbose --workspace --features="transport"
-        cargo check --examples --verbose --workspace --features="transport_macros_multiple"
-        cargo check --examples --verbose --workspace --features="full"
-        cargo check --examples --verbose --workspace --features="macros_multiple checking"
-        cargo check --examples --verbose --workspace --all-features
-    - name: Check tests
-      run: |
-        cargo check --tests --verbose --workspace --features="default"
-        cargo check --tests --verbose --workspace --features="macros_simple"
-        cargo check --tests --verbose --workspace --features="macros_multiple"
-        cargo check --tests --verbose --workspace --features="checking"
-        cargo check --tests --verbose --workspace --features="baking"
-        cargo check --tests --verbose --workspace --features="baking_interleaved"
-        cargo check --tests --verbose --workspace --features="transport_tcp"
-        cargo check --tests --verbose --workspace --features="transport_udp"
-        cargo check --tests --verbose --workspace --features="transport_http"
-        cargo check --tests --verbose --workspace --features="transport"
-        cargo check --tests --verbose --workspace --features="transport_macros_multiple"
-        cargo check --tests --verbose --workspace --features="full"
-        cargo check --tests --verbose --workspace --features="macros_multiple checking"
-        cargo check --tests --verbose --workspace --all-features
     - name: Run lib
       run: |
         cargo run --verbose --all-features -- --skip kmc
@@ -154,7 +122,7 @@ jobs:
     - name: Run tests no capture
       run: |
         cargo test --verbose --workspace -- --nocapture --skip kmc
-    - name: Run tests no features
+    - name: Run tests no features no run
       run: |
         cargo test --verbose --workspace --no-default-features --no-run -- --skip kmc
     - name: Run tests all features
