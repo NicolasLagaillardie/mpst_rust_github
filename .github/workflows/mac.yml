@@ -45,7 +45,7 @@ jobs:
         cargo clippy --workspace --all-features --verbose -- -D warnings
     - name: Check lib
       run: |
-        cargo check --verbose --workspace --all-features
+        cargo build --verbose --workspace --all-features
     - name: Check bins
       run: |
         cargo check --bins --verbose --workspace --features="default"
