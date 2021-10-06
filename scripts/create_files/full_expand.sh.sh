@@ -11,7 +11,7 @@ cargo expand --example o_auth > expand/o_auth.txt
 cargo expand --example o_auth_2 > expand/o_auth_2.txt
 cargo expand --example fib > expand/fib.txt
 cargo expand --example simple_voting > expand/simple_voting.txt
-cargo expand --example three_buyer > expand/three_buyer.txt
+cargo expand --example three_buyers > expand/three_buyers.txt
 cargo expand --example travel_three > expand/travel_three.txt
 cargo expand --example logging > expand/logging.txt
 cargo expand --example circuit_breaker > expand/circuit_breaker.txt

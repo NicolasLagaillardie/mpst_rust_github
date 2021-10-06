@@ -36,8 +36,8 @@ type NameS = RoleS<RoleEnd>;
 // Types
 
 // A
-type Choose0fromAtoC = <Choice0fromCtoA as Session>::Dual;
-type Choose0fromAtoS = <Choice0fromStoA as Session>::Dual;
+type Choose0fromAtoC = <Offer0fromCtoA as Session>::Dual;
+type Choose0fromAtoS = <Offer0fromStoA as Session>::Dual;
 
 // C
 enum Branching0fromAtoC {
@@ -58,7 +58,7 @@ enum Branching0fromAtoC {
         >,
     ),
 }
-type Choice0fromCtoA = Recv<Branching0fromAtoC, End>;
+type Offer0fromCtoA = Recv<Branching0fromAtoC, End>;
 
 // S
 enum Branching0fromAtoS {
@@ -72,7 +72,7 @@ enum Branching0fromAtoS {
     ),
     Fail(MeshedChannelsThree<End, Recv<Fail, Send<Received, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
 }
-type Choice0fromStoA = Recv<Branching0fromAtoS, End>;
+type Offer0fromStoA = Recv<Branching0fromAtoS, End>;
 
 // Creating the MP sessions
 // A
@@ -92,7 +92,7 @@ type EndpointA = MeshedChannelsThree<
 
 // C
 type EndpointC = MeshedChannelsThree<
-    Send<Login, Recv<Auth, Send<Password, Choice0fromCtoA>>>,
+    Send<Login, Recv<Auth, Send<Password, Offer0fromCtoA>>>,
     Send<Start, Recv<Redirect, End>>,
     RoleS<RoleS<RoleA<RoleA<RoleA<RoleA<RoleEnd>>>>>>,
     NameC,
@@ -100,7 +100,7 @@ type EndpointC = MeshedChannelsThree<
 
 // S
 type EndpointS = MeshedChannelsThree<
-    Choice0fromStoA,
+    Offer0fromStoA,
     Recv<Start, Send<Redirect, End>>,
     RoleC<RoleC<RoleA<RoleEnd>>>,
     NameS,

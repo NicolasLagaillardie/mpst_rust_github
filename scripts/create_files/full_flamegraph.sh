@@ -10,7 +10,7 @@ cargo flamegraph --example o_auth -o flamegraphs/flamegraph_o_auth.svg
 cargo flamegraph --example o_auth_2 -o flamegraphs/flamegraph_o_auth_2.svg
 cargo flamegraph --example fib -o flamegraphs/flamegraph_fib.svg
 cargo flamegraph --example simple_voting -o flamegraphs/flamegraph_simple_voting.svg
-cargo flamegraph --example three_buyer -o flamegraphs/flamegraph_three_buyer.svg
+cargo flamegraph --example three_buyers -o flamegraphs/flamegraph_three_buyer.svg
 cargo flamegraph --example travel_three -o flamegraphs/flamegraph_travel_three.svg
 cargo flamegraph --example logging -o flamegraphs/flamegraph_logging.svg
 cargo flamegraph --example circuit_breaker -o flamegraphs/flamegraph_circuit_breaker.svg
