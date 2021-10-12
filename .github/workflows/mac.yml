@@ -115,19 +115,19 @@ jobs:
         cargo doc --verbose --workspace --all-features
     - name: Run lib
       run: |
-        cargo run --verbose --all-features -- --skip kmc
+        cargo run --verbose --all-features  -- --skip kmc --skip transport_udp
     - name: Run tests all
       run: |
-        cargo test --verbose --workspace -- --skip kmc
+        cargo test --verbose --workspace  -- --skip kmc --skip transport_udp
     - name: Run tests no capture
       run: |
         cargo test --verbose --workspace -- --nocapture --skip kmc
     - name: Run tests no features
       run: |
-        cargo test --verbose --workspace --no-default-features --no-run -- --skip kmc
+        cargo test --verbose --workspace --no-default-features --no-run  -- --skip kmc --skip transport_udp
     - name: Run tests all features
       run: |
-        cargo test --verbose --all-features -- --skip kmc
+        cargo test --verbose --all-features  -- --skip kmc --skip transport_udp
     - name: Run benchmarks
       run: |
         cargo bench --verbose --workspace --all-features
