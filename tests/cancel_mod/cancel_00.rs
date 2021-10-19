@@ -1,10 +1,10 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::role::end::RoleEnd;
+use mpstthree::functionmpst::fork::fork_mpst;
+use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
-use mpstthree::functionmpst::fork::fork_mpst;
-use mpstthree::meshedchannels::MeshedChannels;
+use mpstthree::role::end::RoleEnd;
 
 use rand::random;
 use std::error::Error;
