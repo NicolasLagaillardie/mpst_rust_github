@@ -69,7 +69,7 @@ required-features = ["binary"]
 [[test]]
 name = "cancel"
 path = "tests/cancel.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[test]]
 name = "macros_multiple"

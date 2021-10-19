@@ -2,6 +2,7 @@ mod cancel_mod;
 
 #[test]
 fn canceling() {
+    cancel_mod::cancel_00::main();
     cancel_mod::cancel_01::main();
     cancel_mod::cancel_02::main();
     cancel_mod::cancel_03::main();
@@ -16,4 +17,6 @@ fn canceling() {
     cancel_mod::cancel_12::main();
     cancel_mod::cancel_13::main();
     cancel_mod::cancel_14::main();
+    cancel_mod::cancel_15::main();
+    cancel_mod::cancel_16::main();
 }

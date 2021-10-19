@@ -1287,6 +1287,49 @@ impl BakingWithEnumAndCancel {
         }
     }
 
+    fn expand_cancel(&self) -> proc_macro2::TokenStream {
+        let meshedchannels_name = self.meshedchannels_name.clone();
+
+        let temp_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+            .map(|i| {
+                let temp_session =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                quote! { #temp_session , }
+            })
+            .collect();
+
+        let temp_detail_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+            .map(|i| {
+                let temp_session =
+                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                quote! { #temp_session : mpstthree::binary::struct_trait::session::Session , }
+            })
+            .collect();
+
+        quote! {
+            impl<
+                #(
+                    #temp_detail_types
+                )*
+                R: mpstthree::role::Role,
+                N: mpstthree::role::Role,
+            >
+                #meshedchannels_name<
+                    #(
+                        #temp_types
+                    )*
+                    R,
+                    N
+                >
+            {
+                /// Cancel the session
+                pub fn cancel(self) {
+                    std::mem::drop(self);
+                }
+            }
+        }
+    }
+
     fn expand_role(&self, role: String) -> proc_macro2::TokenStream {
         // role
         let role_name = syn::Ident::new(&format!("Role{}", role), proc_macro2::Span::call_site());
@@ -2228,6 +2271,8 @@ impl BakingWithEnumAndCancel {
 
         let choose_mpst_create_multi_to_all = self.expand_choose_mpst_create_multi_to_all();
 
+        let cancel_method: proc_macro2::TokenStream = self.expand_cancel();
+
         quote! {
             #[must_use]
             #[derive(Debug)]
@@ -2370,6 +2415,8 @@ impl BakingWithEnumAndCancel {
             #( #choose_methods )*
 
             #( #close_methods )*
+
+            #cancel_method
 
             #quote_fork_mpst
 
