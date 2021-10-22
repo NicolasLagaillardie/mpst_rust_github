@@ -489,7 +489,8 @@ macro_rules! choose_mpst_multi_cancel_to_all {
             $broadcaster ,
             $sender ,
             $meshedchannels_name ,
-            $exclusion);
+            $exclusion
+        );
     }
 }
 

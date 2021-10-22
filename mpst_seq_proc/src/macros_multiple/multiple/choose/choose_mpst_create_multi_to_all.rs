@@ -89,7 +89,7 @@ impl ChooseMultiCreateToAll {
                         #sender ,
                         #meshedchannels_name ,
                         #exclusion
-                    );
+                    )
                 }
             }
         }
