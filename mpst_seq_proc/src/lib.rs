@@ -58,6 +58,7 @@ use macros_http::send::create_send_http_session::CreateSendHttpSession;
 mod checking;
 
 use checking::aux_checking::CheckingInput;
+use checking::branching::branching_variants;
 
 mod baking;
 
@@ -582,4 +583,19 @@ pub fn fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
     fork_mpst_multi_interleaved(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro_attribute]
+pub fn branching(args: TokenStream, input: TokenStream) -> TokenStream {
+    let mut out = input.clone();
+
+    let ty = parse_macro_input!(input as syn::Item);
+    assert!(args.is_empty());
+
+    if let Err(e) = branching_variants(ty) {
+        out.extend(TokenStream::from(e.to_compile_error()));
+    }
+    out
 }
