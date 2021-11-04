@@ -115,7 +115,7 @@ jobs:
         cargo doc --verbose --workspace --all-features
     - name: Run lib
       run: |
-        cargo run --verbose --all-targets --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo run --verbose --workspace --all-features -- --skip kmc --skip transport_udp
     - name: Run tests all
       run: |
         cargo test --verbose --lib --workspace -- --skip kmc --skip transport_udp
