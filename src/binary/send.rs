@@ -28,6 +28,11 @@ where
     S: Session,
 {
     let (here, there) = S::new();
-    let _ = s.channel.send((x, there))?;
-    Ok(here)
+    match s.channel.send((x, there)) {
+        Ok(_) => Ok(here),
+        Err(e) => {
+            cancel(s);
+            panic!("{}", e.to_string())
+        }
+    }
 }

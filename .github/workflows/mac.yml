@@ -115,19 +115,45 @@ jobs:
         cargo doc --verbose --workspace --all-features
     - name: Run lib
       run: |
-        cargo run --verbose --all-targets --workspace --all-features  -- --skip kmc --skip transport_udp
+        cargo run --verbose --lib --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo run --verbose --bins --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo run --verbose --tests --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo run --verbose --examples --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo run --verbose --benches --workspace --all-features -- --skip kmc --skip transport_udp
+        # cargo run --verbose --all-targets --workspace --all-features -- --skip kmc --skip transport_udp
     - name: Run tests all
       run: |
-        cargo test --verbose  --all-targets --workspace -- --skip kmc --skip transport_udp
+        cargo test --verbose --lib --workspace -- --skip kmc --skip transport_udp
+        cargo test --verbose --bins --workspace -- --skip kmc --skip transport_udp
+        cargo test --verbose --tests --workspace -- --skip kmc --skip transport_udp
+        cargo test --verbose --examples --workspace -- --skip kmc --skip transport_udp
+        cargo test --verbose --benches --workspace -- --skip kmc --skip transport_udp
+        # cargo test --verbose --all-targets --workspace -- --skip kmc --skip transport_udp
     - name: Run tests no capture
       run: |
-        cargo test --verbose  --all-targets --workspace-- --nocapture --skip kmc
+        cargo test --verbose --lib --workspace -- --nocapture --skip kmc --skip transport_udp
+        cargo test --verbose --bins --workspace -- --nocapture --skip kmc --skip transport_udp
+        cargo test --verbose --tests --workspace -- --nocapture --skip kmc --skip transport_udp
+        cargo test --verbose --examples --workspace -- --nocapture --skip kmc --skip transport_udp
+        cargo test --verbose --benches --workspace -- --nocapture --skip kmc --skip transport_udp
+        # cargo test --verbose --all-targets --workspace -- --nocapture --skip kmc --skip transport_udp
     - name: Run tests no features
       run: |
-        cargo test --verbose  --all-targets --workspace--no-default-features --no-run  -- --skip kmc --skip transport_udp
+        cargo test --verbose --lib --workspace --no-default-features --no-run -- --skip kmc --skip transport_udp
+        cargo test --verbose --bins --workspace --no-default-features --no-run -- --skip kmc --skip transport_udp
+        cargo test --verbose --tests --workspace --no-default-features --no-run -- --skip kmc --skip transport_udp
+        cargo test --verbose --examples --workspace --no-default-features --no-run -- --skip kmc --skip transport_udp
+        cargo test --verbose --benches --workspace --no-default-features --no-run -- --skip kmc --skip transport_udp
+        # cargo test --verbose --all-targets --workspace --no-default-features --no-run -- --skip kmc --skip transport_udp
     - name: Run tests all features
       run: |
-        cargo test --verbose  --all-targets --workspace--all-features  -- --skip kmc --skip transport_udp
+        cargo test --verbose --lib --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo test --verbose --bins --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo test --verbose --tests --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo test --verbose --examples --workspace --all-features -- --skip kmc --skip transport_udp
+        # TODO: test benches does not work with --skip
+        # cargo test --verbose --benches --workspace --all-features -- --skip kmc --skip transport_udp
+        # cargo test --verbose --all-targets --workspace --all-features -- --skip kmc --skip transport_udp
     - name: Run benchmarks
       run: |
-        cargo bench --verbose --workspace --all-features
+        cargo bench --verbose --all-targets --workspace --all-features
