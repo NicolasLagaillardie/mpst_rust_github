@@ -6,7 +6,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
 // Create new MeshedChannels for three participants
-bundle_impl!(MeshedChannels => A, B, C);
+bundle_impl!(MeshedChannels, A, B, C);
 
 // Creating the binary sessions
 type AtoB<N> = Send<N, End>;

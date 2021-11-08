@@ -14,13 +14,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsThree =>
-    Data,
-    Handler,
-    Regional =>
-    fork_mpst
-);
+bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, Data, Handler, Regional);
 
 // Payload types
 struct FindNearestZone;

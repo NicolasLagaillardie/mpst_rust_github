@@ -16,14 +16,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsFour =>
-    Api,
-    Controller,
-    Storage,
-    User =>
-    fork_mpst
-);
+bundle_impl_with_enum_and_cancel!(MeshedChannelsFour, Api, Controller, Storage, User);
 
 // Names
 type NameRoleApi = RoleApi<RoleEnd>;

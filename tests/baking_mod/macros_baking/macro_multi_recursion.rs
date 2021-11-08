@@ -9,7 +9,7 @@ use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(MeshedChannels => A, B, D => fork_mpst);
+bundle_impl!(MeshedChannels, A, B, D);
 
 // Names
 type NameA = RoleA<RoleEnd>;

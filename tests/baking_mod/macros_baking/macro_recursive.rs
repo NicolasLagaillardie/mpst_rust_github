@@ -10,7 +10,7 @@ use rand::{thread_rng, Rng};
 use mpstthree::{bundle_impl, choose_mpst_multi_to_all, offer_mpst};
 
 // Create new roles
-bundle_impl!(MeshedChannels => A, B, C => fork_mpst);
+bundle_impl!(MeshedChannels, A, B, C);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;

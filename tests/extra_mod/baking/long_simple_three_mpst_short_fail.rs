@@ -6,7 +6,7 @@ use mpstthree::{bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mp
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(MeshedChannelsThree => A, B, C => fork_mpst);
+bundle_impl!(MeshedChannelsThree, A, B, C);
 
 // Names
 type NameA = RoleA<RoleEnd>;

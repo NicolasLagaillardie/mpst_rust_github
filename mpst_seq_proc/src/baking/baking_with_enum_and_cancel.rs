@@ -10,7 +10,6 @@ pub struct BakingWithEnumAndCancel {
     meshedchannels_name: syn::Ident,
     all_roles: Vec<proc_macro2::TokenStream>,
     number_roles: u64,
-    fork_mpst: Vec<syn::Ident>,
 }
 
 fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStream>> {
@@ -40,18 +39,10 @@ impl Parse for BakingWithEnumAndCancel {
 
         let number_roles = all_roles.len().to_string().parse::<u64>().unwrap();
 
-        let fork_mpst = if input.peek(Token![,]) {
-            <Token![,]>::parse(input)?;
-            vec![syn::Ident::parse(input)?]
-        } else {
-            Vec::new()
-        };
-
         Ok(BakingWithEnumAndCancel {
             meshedchannels_name,
             all_roles,
             number_roles,
-            fork_mpst,
         })
     }
 }
@@ -1669,11 +1660,6 @@ impl BakingWithEnumAndCancel {
     }
 
     fn expand_fork_mpst(&self) -> proc_macro2::TokenStream {
-        let fork_mpst_name = if let Some(elt) = self.fork_mpst.get(usize::try_from(0).unwrap()) {
-            elt
-        } else {
-            panic!("Error at expand_fork_mpst: not enough elements in fork_mpst")
-        };
         let meshedchannels_name = self.meshedchannels_name.clone();
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
@@ -1923,7 +1909,7 @@ impl BakingWithEnumAndCancel {
             .collect();
 
         quote! {
-            fn #fork_mpst_name<
+            fn fork_mpst<
                 #(
                     #sessions
                 )*
@@ -2059,11 +2045,7 @@ impl BakingWithEnumAndCancel {
         // Get all the roles provided into a Vec
         let all_roles = self.all_roles.clone();
 
-        let quote_fork_mpst = if !self.fork_mpst.is_empty() {
-            self.expand_fork_mpst()
-        } else {
-            quote! {}
-        };
+        let quote_fork_mpst = self.expand_fork_mpst();
 
         let session_types: Vec<syn::Ident> = (1..self.number_roles)
             .map(|i| syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site()))

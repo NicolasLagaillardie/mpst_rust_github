@@ -9,7 +9,7 @@ use std::error::Error;
 // A --> B.B--> C
 
 // Create new MeshedChannels for three participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsThree => A, B, C => fork_mpst);
+bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, B, C);
 
 // Names
 type NameA = RoleA<RoleEnd>;

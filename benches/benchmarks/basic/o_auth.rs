@@ -13,13 +13,7 @@ use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsThree =>
-    A,
-    C,
-    S =>
-    fork_mpst
-);
+bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, C, S);
 
 // Payloads
 struct Start;

@@ -63,6 +63,7 @@ use checking::branching::branching_variants;
 mod baking;
 
 use baking::baking_basic::Baking;
+use baking::baking_interleaved_with_enum_and_cancel::BakingInterleavedWithEnumAndCancel;
 use baking::baking_with_cancel::BakingWithCancel;
 use baking::baking_with_enum::BakingWithEnum;
 use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;
@@ -598,4 +599,18 @@ pub fn branching(args: TokenStream, input: TokenStream) -> TokenStream {
         out.extend(TokenStream::from(e.to_compile_error()));
     }
     out
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingInterleavedWithEnumAndCancel);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    baking_interleaved_with_enum_and_cancel(input)
 }

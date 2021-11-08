@@ -1,7 +1,9 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, fork_mpst_multi_interleaved, offer_mpst};
+use mpstthree::{
+    bundle_impl_interleaved_with_enum_and_cancel, fork_mpst_multi_interleaved, offer_mpst,
+};
 
 use rand::{random, thread_rng, Rng};
 
@@ -11,20 +13,10 @@ use std::marker;
 // CB = circuit breaker
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsFour =>
-    Api,
-    ControllerCB,
-    Storage,
-    User
-);
+bundle_impl_interleaved_with_enum_and_cancel!(MeshedChannelsFour, Api, ControllerCB, Storage, User);
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsTwo =>
-    ControllerLog,
-    Logs
-);
+bundle_impl_interleaved_with_enum_and_cancel!(MeshedChannelsTwo, ControllerLog, Logs);
 
 fork_mpst_multi_interleaved!(fork_mpst, MeshedChannelsFour, 4, 2, MeshedChannelsTwo, 2, 1);
 

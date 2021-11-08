@@ -19,15 +19,11 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsTwo =>
-    Controller,
-    Logs
-);
+bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, Controller, Logs);
 
 close_mpst_interleaved!(close_mpst, MeshedChannelsTwo, 2);
 
-fork_mpst_multi_solo!(fork_mpst, MeshedChannelsTwo, 2);
+fork_mpst_multi_solo!(fork_mpst_solo, MeshedChannelsTwo, 2);
 
 // Names
 type NameRoleController = RoleController<RoleEnd>;
@@ -172,7 +168,7 @@ fn rec_loop_1(
 /////////////////////////
 
 fn all_mpst() {
-    fork_mpst(black_box(start)).unwrap();
+    fork_mpst_solo(black_box(start)).unwrap();
 }
 
 /////////////////////////

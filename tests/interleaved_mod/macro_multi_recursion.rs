@@ -1,7 +1,9 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, fork_mpst_multi_interleaved, offer_mpst};
+use mpstthree::{
+    bundle_impl_interleaved_with_enum_and_cancel, fork_mpst_multi_interleaved, offer_mpst,
+};
 
 use rand::{random, thread_rng, Rng};
 
@@ -11,22 +13,20 @@ use std::marker;
 // CB = circuit breaker
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsFour =>
-    Api,
-    ControllerCB,
-    Storage,
-    User
-);
+bundle_impl_interleaved_with_enum_and_cancel!(MeshedChannelsFour, Api, ControllerCB, Storage, User);
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(
-    MeshedChannelsTwo =>
-    ControllerLog,
-    Logs
-);
+bundle_impl_interleaved_with_enum_and_cancel!(MeshedChannelsTwo, ControllerLog, Logs);
 
-fork_mpst_multi_interleaved!(fork_mpst, MeshedChannelsFour, 4, 2, MeshedChannelsTwo, 2, 1);
+fork_mpst_multi_interleaved!(
+    fork_mpst_interleaved,
+    MeshedChannelsFour,
+    4,
+    2,
+    MeshedChannelsTwo,
+    2,
+    1
+);
 
 // Names
 type NameRoleApi = RoleApi<RoleEnd>;
@@ -612,13 +612,14 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 pub fn interleaved_main() {
-    let (thread_api, thread_storage, thread_user, thread_logs, thread_controller) = fork_mpst(
-        endpoint_api,
-        endpoint_storage,
-        endpoint_user,
-        endpoint_logs,
-        endpoint_controller,
-    );
+    let (thread_api, thread_storage, thread_user, thread_logs, thread_controller) =
+        fork_mpst_interleaved(
+            endpoint_api,
+            endpoint_storage,
+            endpoint_user,
+            endpoint_logs,
+            endpoint_controller,
+        );
 
     assert!(thread_api.join().is_ok());
     assert!(thread_controller.join().is_ok());

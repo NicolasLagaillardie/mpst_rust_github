@@ -7,7 +7,7 @@ error[E0308]: mismatched types
 error[E0599]: no method named `recv` found for struct `MeshedChannelsThree<mpstthree::binary::struct_trait::end::End, mpstthree::binary::struct_trait::send::Send<(), Recv<(), mpstthree::binary::struct_trait::send::Send<Branching0fromCtoB, mpstthree::binary::struct_trait::end::End>>>, RoleB<RoleBroadcast>, RoleC<RoleEnd>>` in the current scope
    --> $DIR/long_simple_three_mpst_short_fail.rs:103:37
     |
-9   | bundle_impl!(MeshedChannelsThree => A, B, C => fork_mpst);
+9   | bundle_impl!(MeshedChannelsThree, A, B, C);
     | ---------------------------------------------------------- method `recv` not found for this
 ...
 103 |             let (_, s) = s.send(()).recv()?;

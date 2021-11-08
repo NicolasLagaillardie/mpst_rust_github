@@ -52,6 +52,7 @@ pub use mpst_seq_proc::checking;
 //////////////////////////////////////
 
 pub use mpst_seq_proc::baking;
+pub use mpst_seq_proc::baking_interleaved_with_enum_and_cancel;
 pub use mpst_seq_proc::baking_with_cancel;
 pub use mpst_seq_proc::baking_with_enum;
 pub use mpst_seq_proc::baking_with_enum_and_cancel;
@@ -177,3 +178,6 @@ pub use mpst_seq_proc::e_baking_with_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_baking_with_enum_and_cancel;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_baking_interleaved_with_enum_and_cancel;
