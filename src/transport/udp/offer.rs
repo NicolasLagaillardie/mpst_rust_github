@@ -26,6 +26,7 @@ macro_rules! offer_udp {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };

@@ -42,6 +42,7 @@ macro_rules! offer {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };

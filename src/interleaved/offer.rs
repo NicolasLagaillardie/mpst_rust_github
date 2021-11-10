@@ -22,7 +22,7 @@ macro_rules! offer_mpst_interleaved {
                     mpstthree::binary::cancel::cancel(s);
                     match l {
                         $pat(s) => s,
-                        _ => panic!("Wrong payload"),
+                        _ => panic!("Unexpected payload") ,
                     }
                 },
             )+

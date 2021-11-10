@@ -26,6 +26,7 @@ macro_rules! offer_tcp {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };

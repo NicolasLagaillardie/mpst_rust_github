@@ -162,6 +162,7 @@ macro_rules! offer_mpst {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
@@ -173,6 +174,7 @@ macro_rules! offer_mpst {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
@@ -201,6 +203,7 @@ macro_rules! offer_cancel_mpst {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
@@ -213,6 +216,7 @@ macro_rules! offer_cancel_mpst {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
@@ -260,6 +264,7 @@ macro_rules! offer_http_mpst {
                 $(
                     $pat => $result,
                 )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
