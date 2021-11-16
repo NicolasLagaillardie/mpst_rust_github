@@ -10,8 +10,6 @@ use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
 use rand::random;
 
 use std::error::Error;
-use std::marker;
-// use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -25,12 +23,12 @@ type NameRoleStorage = RoleStorage<RoleEnd>;
 type NameRoleUser = RoleUser<RoleEnd>;
 
 // RoleApi
-enum Branching0fromCtoA<N: marker::Send> {
+enum Branching0fromCtoA {
     Up(
         MeshedChannelsFour<
-            Recv<N, Send<N, Recurs0fromCtoA<N>>>,
-            Send<N, Recv<N, End>>,
-            Send<N, Recv<N, End>>,
+            Recv<i32, Send<i32, Recurs0fromCtoA>>,
+            Send<i32, Recv<i32, End>>,
+            Send<i32, Recv<i32, End>>,
             RoleController<
                 RoleStorage<
                     RoleStorage<RoleUser<RoleUser<RoleController<RoleController<RoleEnd>>>>>,
@@ -41,34 +39,34 @@ enum Branching0fromCtoA<N: marker::Send> {
     ),
     Down(
         MeshedChannelsFour<
-            Recv<N, Send<N, Recurs0fromCtoA<N>>>,
+            Recv<i32, Send<i32, Recurs0fromCtoA>>,
             End,
-            Send<N, Recv<N, End>>,
+            Send<i32, Recv<i32, End>>,
             RoleController<RoleUser<RoleUser<RoleController<RoleController<RoleEnd>>>>>,
             NameRoleApi,
         >,
     ),
     Close(
         MeshedChannelsFour<
-            Recv<N, End>,
+            Recv<i32, End>,
             End,
-            Send<N, End>,
+            Send<i32, End>,
             RoleController<RoleUser<RoleEnd>>,
             NameRoleApi,
         >,
     ),
 }
-type Recurs0fromCtoA<N> = Recv<Branching0fromCtoA<N>, End>;
+type Recurs0fromCtoA = Recv<Branching0fromCtoA, End>;
 // RoleController
-type Choose0fromCtoA<N> = Send<Branching0fromCtoA<N>, End>;
-type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
-type Choose0fromCtoU<N> = Send<Branching0fromCtoU<N>, End>;
+type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
+type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
+type Choose0fromCtoU = Send<Branching0fromCtoU, End>;
 // RoleStorage
-enum Branching0fromCtoS<N: marker::Send> {
+enum Branching0fromCtoS {
     Up(
         MeshedChannelsFour<
-            Recv<N, Send<N, End>>,
-            Recurs0fromCtoS<N>,
+            Recv<i32, Send<i32, End>>,
+            Recurs0fromCtoS,
             End,
             RoleApi<RoleApi<RoleController<RoleEnd>>>,
             NameRoleStorage,
@@ -77,21 +75,21 @@ enum Branching0fromCtoS<N: marker::Send> {
     Down(
         MeshedChannelsFour<
             End,
-            Recv<N, Recurs0fromCtoS<N>>,
+            Recv<i32, Recurs0fromCtoS>,
             End,
             RoleController<RoleController<RoleEnd>>,
             NameRoleStorage,
         >,
     ),
-    Close(MeshedChannelsFour<End, Recv<N, End>, End, RoleController<RoleEnd>, NameRoleStorage>),
+    Close(MeshedChannelsFour<End, Recv<i32, End>, End, RoleController<RoleEnd>, NameRoleStorage>),
 }
-type Recurs0fromCtoS<N> = Recv<Branching0fromCtoS<N>, End>;
+type Recurs0fromCtoS = Recv<Branching0fromCtoS, End>;
 // RoleUser
-enum Branching0fromCtoU<N: marker::Send> {
+enum Branching0fromCtoU {
     Up(
         MeshedChannelsFour<
-            Recv<N, Send<N, End>>,
-            Recurs0fromCtoU<N>,
+            Recv<i32, Send<i32, End>>,
+            Recurs0fromCtoU,
             End,
             RoleApi<RoleApi<RoleController<RoleEnd>>>,
             NameRoleUser,
@@ -99,83 +97,83 @@ enum Branching0fromCtoU<N: marker::Send> {
     ),
     Down(
         MeshedChannelsFour<
-            Recv<N, Send<N, End>>,
-            Recurs0fromCtoU<N>,
+            Recv<i32, Send<i32, End>>,
+            Recurs0fromCtoU,
             End,
             RoleApi<RoleApi<RoleController<RoleEnd>>>,
             NameRoleUser,
         >,
     ),
-    Close(MeshedChannelsFour<Recv<N, End>, End, End, RoleApi<RoleEnd>, NameRoleUser>),
+    Close(MeshedChannelsFour<Recv<i32, End>, End, End, RoleApi<RoleEnd>, NameRoleUser>),
 }
-type Recurs0fromCtoU<N> = Recv<Branching0fromCtoU<N>, End>;
+type Recurs0fromCtoU = Recv<Branching0fromCtoU, End>;
 
 // Creating the MP sessions
 // RoleApi
-type EndpointApi0<N> = MeshedChannelsFour<
-    Send<N, Recurs0fromCtoA<N>>,
+type EndpointApi0 = MeshedChannelsFour<
+    Send<i32, Recurs0fromCtoA>,
     End,
-    Recv<N, End>,
+    Recv<i32, End>,
     RoleUser<RoleController<RoleController<RoleEnd>>>,
     NameRoleApi,
 >;
-type EndpointApiInit<N> = MeshedChannelsFour<
-    Recv<N, Send<N, Recurs0fromCtoA<N>>>,
+type EndpointApiInit = MeshedChannelsFour<
+    Recv<i32, Send<i32, Recurs0fromCtoA>>,
     End,
-    Recv<N, End>,
+    Recv<i32, End>,
     RoleController<RoleUser<RoleController<RoleController<RoleEnd>>>>,
     NameRoleApi,
 >;
 // RoleController
-type EndpointControllerDown<N> = MeshedChannelsFour<
-    Send<N, Recv<N, Choose0fromCtoA<N>>>,
-    Send<N, Choose0fromCtoS<N>>,
-    Choose0fromCtoU<N>,
+type EndpointControllerDown = MeshedChannelsFour<
+    Send<i32, Recv<i32, Choose0fromCtoA>>,
+    Send<i32, Choose0fromCtoS>,
+    Choose0fromCtoU,
     RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>,
     NameRoleController,
 >;
-type EndpointControllerUp<N> = MeshedChannelsFour<
-    Send<N, Recv<N, Choose0fromCtoA<N>>>,
-    Choose0fromCtoS<N>,
-    Choose0fromCtoU<N>,
+type EndpointControllerUp = MeshedChannelsFour<
+    Send<i32, Recv<i32, Choose0fromCtoA>>,
+    Choose0fromCtoS,
+    Choose0fromCtoU,
     RoleApi<RoleApi<RoleBroadcast>>,
     NameRoleController,
 >;
-type EndpointControllerClose<N> = MeshedChannelsFour<
-    Send<N, End>,
-    Send<N, End>,
+type EndpointControllerClose = MeshedChannelsFour<
+    Send<i32, End>,
+    Send<i32, End>,
     End,
     RoleApi<RoleStorage<RoleEnd>>,
     NameRoleController,
 >;
-type EndpointController0<N> = MeshedChannelsFour<
-    Recv<N, Choose0fromCtoA<N>>,
-    Choose0fromCtoS<N>,
-    Choose0fromCtoU<N>,
+type EndpointController0 = MeshedChannelsFour<
+    Recv<i32, Choose0fromCtoA>,
+    Choose0fromCtoS,
+    Choose0fromCtoU,
     RoleApi<RoleBroadcast>,
     NameRoleController,
 >;
-type EndpointControllerInit<N> = MeshedChannelsFour<
-    Send<N, Recv<N, Choose0fromCtoA<N>>>,
-    Send<N, Recv<N, Choose0fromCtoS<N>>>,
-    Choose0fromCtoU<N>,
+type EndpointControllerInit = MeshedChannelsFour<
+    Send<i32, Recv<i32, Choose0fromCtoA>>,
+    Send<i32, Recv<i32, Choose0fromCtoS>>,
+    Choose0fromCtoU,
     RoleStorage<RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>>,
     NameRoleController,
 >;
 // RoleStorage
-type EndpointStorage0<N> =
-    MeshedChannelsFour<End, Recurs0fromCtoS<N>, End, RoleController<RoleEnd>, NameRoleStorage>;
-type EndpointStorageInit<N> = MeshedChannelsFour<
+type EndpointStorage0 =
+    MeshedChannelsFour<End, Recurs0fromCtoS, End, RoleController<RoleEnd>, NameRoleStorage>;
+type EndpointStorageInit = MeshedChannelsFour<
     End,
-    Recv<N, Send<N, Recurs0fromCtoS<N>>>,
+    Recv<i32, Send<i32, Recurs0fromCtoS>>,
     End,
     RoleController<RoleController<RoleController<RoleEnd>>>,
     NameRoleStorage,
 >;
 // RoleUser
-type EndpointUserInit<N> = MeshedChannelsFour<
-    Send<N, End>,
-    Recurs0fromCtoU<N>,
+type EndpointUserInit = MeshedChannelsFour<
+    Send<i32, End>,
+    Recurs0fromCtoU,
     End,
     RoleApi<RoleController<RoleEnd>>,
     NameRoleUser,
@@ -183,13 +181,13 @@ type EndpointUserInit<N> = MeshedChannelsFour<
 
 /////////////////////////
 
-fn endpoint_api(s: EndpointApiInit<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_api(s: EndpointApiInit) -> Result<(), Box<dyn Error>> {
     let (_start, s) = s.recv()?;
 
     recurs_api(s)
 }
 
-fn recurs_api(s: EndpointApi0<i32>) -> Result<(), Box<dyn Error>> {
+fn recurs_api(s: EndpointApi0) -> Result<(), Box<dyn Error>> {
     let (request, s) = s.recv()?;
 
     let s = s.send(random::<i32>())?;
@@ -226,7 +224,7 @@ fn recurs_api(s: EndpointApi0<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_controller(s: EndpointControllerInit) -> Result<(), Box<dyn Error>> {
     let s = s.send(100)?;
     let s = s.send(100)?;
     let (_hard_ping, s) = s.recv()?;
@@ -234,12 +232,12 @@ fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Err
     recurs_controller(s, 100)
 }
 
-fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
+fn recurs_controller(s: EndpointController0, loops: i32) -> Result<(), Box<dyn Error>> {
     let (_get_mode, s) = s.recv()?;
 
     match loops {
         i if i < 0 => {
-            let s: EndpointControllerClose<i32> = choose_mpst_controller_to_all!(
+            let s: EndpointControllerClose = choose_mpst_controller_to_all!(
                 s,
                 Branching0fromCtoA::Close,
                 Branching0fromCtoS::Close,
@@ -253,7 +251,7 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
             s.close()
         }
         i if i % 2 == 0 => {
-            let s: EndpointControllerUp<i32> = choose_mpst_controller_to_all!(
+            let s: EndpointControllerUp = choose_mpst_controller_to_all!(
                 s,
                 Branching0fromCtoA::Up,
                 Branching0fromCtoS::Up,
@@ -265,7 +263,7 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
             recurs_controller(s, loops - 1)
         }
         _ => {
-            let s: EndpointControllerDown<i32> = choose_mpst_controller_to_all!(
+            let s: EndpointControllerDown = choose_mpst_controller_to_all!(
                 s,
                 Branching0fromCtoA::Down,
                 Branching0fromCtoS::Down,
@@ -281,7 +279,7 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
     }
 }
 
-fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_storage(s: EndpointStorageInit) -> Result<(), Box<dyn Error>> {
     let (_start, s) = s.recv()?;
 
     let s = s.send(random::<i32>())?;
@@ -289,7 +287,7 @@ fn endpoint_storage(s: EndpointStorageInit<i32>) -> Result<(), Box<dyn Error>> {
     recurs_storage(s)
 }
 
-fn recurs_storage(s: EndpointStorage0<i32>) -> Result<(), Box<dyn Error>> {
+fn recurs_storage(s: EndpointStorage0) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromCtoS::Up(s) => {
 
@@ -314,7 +312,7 @@ fn recurs_storage(s: EndpointStorage0<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_user(s: EndpointUserInit<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_user(s: EndpointUserInit) -> Result<(), Box<dyn Error>> {
     let s = s.send(random::<i32>())?;
 
     offer_mpst!(s, {
@@ -357,21 +355,16 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn circuit_breaker_baking_main(c: &mut Criterion) {
+fn circuit_breaker_main(c: &mut Criterion) {
     c.bench_function(&format!("Circuit breaker baking"), |b| {
         b.iter(|| all_mpst())
     });
 }
 
-// fn long_warmup() -> Criterion {
-//     Criterion::default().measurement_time(Duration::new(40, 0))
-// }
-
 criterion_group! {
-    name = circuit_breaker_baking;
-    // config = long_warmup();
+    name = circuit_breaker;
     config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = circuit_breaker_baking_main
+    targets = circuit_breaker_main
 }
 
-criterion_main!(circuit_breaker_baking);
+criterion_main!(circuit_breaker);
