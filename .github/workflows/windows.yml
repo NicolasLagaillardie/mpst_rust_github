@@ -146,9 +146,7 @@ jobs:
         cargo test --verbose --bins --workspace --all-features -- --skip kmc --skip transport_udp
         cargo test --verbose --tests --workspace --all-features -- --skip kmc --skip transport_udp
         cargo test --verbose --examples --workspace --all-features -- --skip kmc --skip transport_udp
-        # TODO: test benches does not work with --skip
-        # cargo test --verbose --benches --workspace --all-features -- --skip kmc --skip transport_udp
-        # cargo test --verbose --all-targets --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo test --verbose --benches --workspace --all-features
     - name: Run benchmarks
       run: |
         cargo bench --verbose --all-targets --workspace --all-features
