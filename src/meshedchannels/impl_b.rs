@@ -64,7 +64,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
     MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>
 {
     #[doc(hidden)]
-    pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
+    pub fn recv_from_all(self) -> ResultType<T, S1, S2, RoleEnd> {
         recv_all_aux_simple!(self, 1)()
     }
 }
@@ -73,7 +73,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
     MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>
 {
     #[doc(hidden)]
-    pub fn recv(self) -> ResultType<T, S1, S2, RoleEnd> {
+    pub fn recv_from_all(self) -> ResultType<T, S1, S2, RoleEnd> {
         recv_all_aux_simple!(self, 2)()
     }
 }
@@ -93,7 +93,7 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
         F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
         G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     {
-        let (e, s) = self.recv()?;
+        let (e, s) = self.recv_from_all()?;
         cancel(s);
         e.either(f, g)
     }
@@ -114,7 +114,7 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
         F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
         G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
     {
-        let (e, s) = self.recv()?;
+        let (e, s) = self.recv_from_all()?;
         cancel(s);
         e.either(f, g)
     }

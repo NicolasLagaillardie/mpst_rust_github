@@ -384,7 +384,7 @@ impl BakingInterleavedWithEnumAndCancel {
                     #receiver_ident<mpstthree::role::end::RoleEnd>
                 >
             {
-                pub fn recv(self) -> Result<(
+                pub fn recv_from_all(self) -> Result<(
                     T,
                     #meshedchannels_name<
                         #( #session_types , )*
@@ -515,7 +515,7 @@ impl BakingInterleavedWithEnumAndCancel {
                         >,
                     ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 {
-                    let (e, s) = self.recv()?;
+                    let (e, s) = self.recv_from_all()?;
                     mpstthree::binary::cancel::cancel(s);
                     e.either(f, g)
                 }

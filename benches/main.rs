@@ -51,6 +51,18 @@ criterion_main! {
     // benchmarks::mesh::cancel::mesh_eleven::mesh_eleven,
     // benchmarks::mesh::cancel::mesh_twenty::mesh_twenty,
     // //////////
+    // benchmarks::mesh::baking_cancel::mesh_two::mesh_two,
+    // benchmarks::mesh::baking_cancel::mesh_three::mesh_three,
+    // benchmarks::mesh::baking_cancel::mesh_four::mesh_four,
+    // benchmarks::mesh::baking_cancel::mesh_five::mesh_five,
+    // benchmarks::mesh::baking_cancel::mesh_six::mesh_six,
+    // benchmarks::mesh::baking_cancel::mesh_seven::mesh_seven,
+    // benchmarks::mesh::baking_cancel::mesh_eight::mesh_eight,
+    // benchmarks::mesh::baking_cancel::mesh_nine::mesh_nine,
+    // benchmarks::mesh::baking_cancel::mesh_ten::mesh_ten,
+    // benchmarks::mesh::baking_cancel::mesh_eleven::mesh_eleven,
+    // benchmarks::mesh::baking_cancel::mesh_twenty::mesh_twenty,
+    // //////////
     benchmarks::basic::logging::logging,
     // benchmarks::basic::circuit_breaker::circuit_breaker,
     // benchmarks::basic::logging_baking::logging_baking,
@@ -115,4 +127,16 @@ criterion_main! {
     // benchmarks::ring::cancel::ring_ten::ring_ten,
     // benchmarks::ring::cancel::ring_eleven::ring_eleven,
     // benchmarks::ring::cancel::ring_twenty::ring_twenty,
+    // //////////
+    // benchmarks::ring::baking_cancel::ring_three::ring_three,
+    // benchmarks::ring::baking_cancel::ring_four::ring_four,
+    // benchmarks::ring::baking_cancel::ring_five::ring_five,
+    // benchmarks::ring::baking_cancel::ring_six::ring_six,
+    // benchmarks::ring::baking_cancel::ring_seven::ring_seven,
+    // benchmarks::ring::baking_cancel::ring_eight::ring_eight,
+    // benchmarks::ring::baking_cancel::ring_nine::ring_nine,
+    // benchmarks::ring::baking_cancel::ring_ten::ring_ten,
+    // benchmarks::ring::baking_cancel::ring_eleven::ring_eleven,
+    // benchmarks::ring::baking_cancel::ring_twenty::ring_twenty,
+    // //////////
 }
