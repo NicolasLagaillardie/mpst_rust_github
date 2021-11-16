@@ -37,17 +37,24 @@ exclude = [
     "result.rs",
 ]
 autotests = false
+autobenches = false
 
 ################################### Workspace
 
 [workspace]
 members = ["mpst_seq", "mpst_seq_proc"]
 
+################################### Lib
+
+[lib]
+bench = false
+
 ################################### Bin
 
 [[bin]]
 name = "mpst"
 path = "main.rs"
+bench = false
 
 ################################### Tests
 
@@ -120,6 +127,16 @@ required-features = []
 
 [[bench]]
 name = "main"
+harness = false
+required-features = ["baking_interleaved"]
+
+[[bench]]
+name = "mesh"
+harness = false
+required-features = ["baking_interleaved"]
+
+[[bench]]
+name = "ring"
 harness = false
 required-features = ["baking_interleaved"]
 
