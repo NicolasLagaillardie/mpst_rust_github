@@ -78,6 +78,7 @@ RUST_BACKTRACE=1 cargo test --verbose --workspace --all-features -- --nocapture
 cargo test --verbose --workspace --no-default-features --no-run
 # cargo test --verbose --all-features
 # cargo bench --verbose --all
+cargo test --all-targets --workspace --all-features
 #################
 cargo run --example circuit_breaker --features="macros_multiple"
 cargo run --example logging --features="macros_multiple"
