@@ -152,10 +152,9 @@ type EndpointS0 = MeshedChannelsThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
-    let ((_id, _pw), s) = recv_mpst_a_from_c(s)?;
+    let ((id, pw), s) = recv_mpst_a_from_c(s)?;
 
-    if 0 == 1 {
-        // actual condition id != pw
+    if id != pw {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromAtoC::Fail,
@@ -215,7 +214,7 @@ fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_s_to_c(random(), s);
+    let s = send_mpst_s_to_c((random::<i32>() as i64, random::<i32>() as i64), s);
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching1fromCtoS::Quit(s) => {
@@ -230,17 +229,8 @@ fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
-    let id: String = rand::thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(1)
-        .map(char::from)
-        .collect();
-
-    let pw: String = rand::thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(1)
-        .map(char::from)
-        .collect();
+    let id = String::from("id");
+    let pw = String::from("pw");
 
     let s = send_mpst_c_to_a((id, pw), s);
 

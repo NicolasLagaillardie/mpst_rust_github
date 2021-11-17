@@ -159,7 +159,7 @@ fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let s = s.send(random())?;
+    let s = s.send((random::<i32>() as i64, random::<i32>() as i64))?;
 
     offer_mpst!(s, {
         Branching1fromCtoS::Quit(s) => {
@@ -174,17 +174,8 @@ fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
-    let id: String = rand::thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(1)
-        .map(char::from)
-        .collect();
-
-    let pw: String = rand::thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(1)
-        .map(char::from)
-        .collect();
+    let id = String::from("id");
+    let pw = String::from("pw");
 
     let s = s.send((id, pw))?;
 

@@ -33,8 +33,8 @@ enum Branching0fromCtoA {
 }
 // S
 enum Branching0fromCtoS {
-    Sum(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
+    Sum(MeshedChannelsThree<End, Send<u32, End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannelsThree<End, Send<u32, End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
@@ -43,16 +43,16 @@ type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<R
 // C
 type EndpointC = MeshedChannelsThree<
     Choose0fromCtoA,
-    Send<i32, Send<i32, Choose0fromCtoS>>,
+    Send<u32, Send<u32, Choose0fromCtoS>>,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCSum = MeshedChannelsThree<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>;
-type EndpointCDiff = MeshedChannelsThree<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>;
+type EndpointCSum = MeshedChannelsThree<End, Recv<u32, End>, RoleS<RoleEnd>, NameC>;
+type EndpointCDiff = MeshedChannelsThree<End, Recv<u32, End>, RoleS<RoleEnd>, NameC>;
 // S
 type EndpointS = MeshedChannelsThree<
     End,
-    Recv<i32, Recv<i32, Recv<Branching0fromCtoS, End>>>,
+    Recv<u32, Recv<u32, Recv<Branching0fromCtoS, End>>>,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,
 >;
@@ -70,8 +70,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random();
-    let elt_2 = random();
+    let elt_1 = random::<i16>() as u32;
+    let elt_2 = random::<i16>() as u32;
     let s = s.send(elt_1)?;
     let s = s.send(elt_2)?;
 
