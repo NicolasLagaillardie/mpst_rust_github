@@ -7,8 +7,6 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
 
-use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
-
 use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -159,7 +157,7 @@ fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let s = s.send((random::<i32>() as i64, random::<i32>() as i64))?;
+    let s = s.send((1, 1))?;
 
     offer_mpst!(s, {
         Branching1fromCtoS::Quit(s) => {
@@ -208,13 +206,9 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
 
             let sum = balance + overdraft;
 
-            let payee: String = rand::thread_rng()
-                .sample_iter(&Alphanumeric)
-                .take(3)
-                .map(char::from)
-                .collect();
+            let payee = String::from("payee");
 
-            let s = s.send((payee, thread_rng().gen_range(1..=sum)))?;
+            let s = s.send((payee, sum))?;
 
             recurs_c(s, loops - 1)
         }
@@ -236,7 +230,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn online_wallet_main(c: &mut Criterion) {
-    c.bench_function(&format!("Online wallet"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&format!("Online wallet baking"), |b| b.iter(|| all_mpst()));
 }
 
 criterion_group! {

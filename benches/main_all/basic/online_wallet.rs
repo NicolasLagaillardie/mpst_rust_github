@@ -214,7 +214,7 @@ fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_s_to_c((random::<i32>() as i64, random::<i32>() as i64), s);
+    let s = send_mpst_s_to_c((random::<i8>() as i64, random::<i8>() as i64), s);
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching1fromCtoS::Quit(s) => {
@@ -278,7 +278,11 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 2
             );
 
-            let sum = balance + overdraft;
+            let sum = if let Some(elt) = balance.checked_add(overdraft) {
+                elt
+            } else {
+                balance
+            };
 
             let payee: String = rand::thread_rng()
                 .sample_iter(&Alphanumeric)

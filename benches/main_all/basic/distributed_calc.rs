@@ -10,7 +10,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
@@ -106,14 +106,10 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random::<i16>() as u32;
-    let elt_2 = random::<i16>() as u32;
-    let s = send_mpst_c_to_s(elt_1, s);
-    let s = send_mpst_c_to_s(elt_2, s);
+    let s = send_mpst_c_to_s(20, s);
+    let s = send_mpst_c_to_s(10, s);
 
-    let choice = thread_rng().gen_range(1..=2);
-
-    if choice != 1 {
+    if thread_rng().gen_range(1..=2) != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Sum,
@@ -125,9 +121,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
             2
         );
 
-        let (sum, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(sum, elt_1 + elt_2);
+        let (_sum, s) = recv_mpst_c_from_s(s)?;
 
         close_mpst_multi(s)
     } else {
@@ -142,9 +136,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
             2
         );
 
-        let (diff, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(diff, elt_1 - elt_2);
+        let (_diff, s) = recv_mpst_c_from_s(s)?;
 
         close_mpst_multi(s)
     }

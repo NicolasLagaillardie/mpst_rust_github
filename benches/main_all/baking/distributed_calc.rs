@@ -7,7 +7,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
@@ -33,8 +33,8 @@ enum Branching0fromCtoA {
 }
 // S
 enum Branching0fromCtoS {
-    Sum(MeshedChannelsThree<End, Send<u32, End>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannelsThree<End, Send<u32, End>, RoleC<RoleEnd>, NameS>),
+    Sum(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
@@ -43,16 +43,16 @@ type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<R
 // C
 type EndpointC = MeshedChannelsThree<
     Choose0fromCtoA,
-    Send<u32, Send<u32, Choose0fromCtoS>>,
+    Send<i32, Send<i32, Choose0fromCtoS>>,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCSum = MeshedChannelsThree<End, Recv<u32, End>, RoleS<RoleEnd>, NameC>;
-type EndpointCDiff = MeshedChannelsThree<End, Recv<u32, End>, RoleS<RoleEnd>, NameC>;
+type EndpointCSum = MeshedChannelsThree<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>;
+type EndpointCDiff = MeshedChannelsThree<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>;
 // S
 type EndpointS = MeshedChannelsThree<
     End,
-    Recv<u32, Recv<u32, Recv<Branching0fromCtoS, End>>>,
+    Recv<i32, Recv<i32, Recv<Branching0fromCtoS, End>>>,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,
 >;
@@ -70,14 +70,10 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random::<i16>() as u32;
-    let elt_2 = random::<i16>() as u32;
-    let s = s.send(elt_1)?;
-    let s = s.send(elt_2)?;
+    let s = s.send(20)?;
+    let s = s.send(10)?;
 
-    let choice = thread_rng().gen_range(1..=2);
-
-    if choice != 1 {
+    if thread_rng().gen_range(1..=2) != 1 {
         let s: EndpointCSum =
             choose_mpst_c_to_all!(s, Branching0fromCtoA::Sum, Branching0fromCtoS::Sum);
 
@@ -125,7 +121,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn distributed_calc_main(c: &mut Criterion) {
-    c.bench_function(&format!("Distributed calculator"), |b| {
+    c.bench_function(&format!("Distributed calculator baking"), |b| {
         b.iter(|| all_mpst())
     });
 }

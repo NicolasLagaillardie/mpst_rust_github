@@ -2,7 +2,7 @@ use criterion::criterion_main;
 
 mod ring_all;
 
-criterion_main!(
+criterion_main! {
     ring_all::empty::ring_two::ring_two,
     // ring_all::empty::ring_three::ring_three,
     // ring_all::empty::ring_four::ring_four,
@@ -61,4 +61,4 @@ criterion_main!(
     // ring_all::baking_cancel::ring_ten::ring_ten,
     // ring_all::baking_cancel::ring_eleven::ring_eleven,
     // ring_all::baking_cancel::ring_twenty::ring_twenty,
-);
+}

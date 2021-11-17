@@ -175,7 +175,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn dns_fowler_main(c: &mut Criterion) {
-    c.bench_function(&format!("DNS Fowler"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&format!("DNS Fowler baking"), |b| b.iter(|| all_mpst()));
 }
 
 // fn long_warmup() -> Criterion {

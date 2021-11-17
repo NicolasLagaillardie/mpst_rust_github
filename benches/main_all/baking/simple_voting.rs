@@ -139,7 +139,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn simple_voting_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Simple voting MPST"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&format!("Simple voting MPST baking"), |b| b.iter(|| all_mpst()));
 }
 
 criterion_group! {
