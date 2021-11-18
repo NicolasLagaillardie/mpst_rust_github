@@ -2,6 +2,8 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
+use mpstthree::checker_concat;
+
 use petgraph::dot::Dot;
 
 // Get roles
@@ -70,7 +72,7 @@ type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, RoleA<RoleE
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         "checking_recursion",
         1,
         2,

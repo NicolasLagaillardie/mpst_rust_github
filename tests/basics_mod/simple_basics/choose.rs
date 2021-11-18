@@ -7,6 +7,8 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 
+use mpstthree::checker_concat;
+
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
@@ -185,8 +187,7 @@ pub fn simple_choice() {
 
 pub fn simple_choice_checker() {
     let graphs =
-        mpstthree::checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>)
-            .unwrap();
+        checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

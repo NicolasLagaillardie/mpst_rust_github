@@ -5,6 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
+use mpstthree::checker_concat;
+
 use std::boxed::Box;
 use std::error::Error;
 
@@ -167,7 +169,7 @@ pub fn run_a_usecase_recursive() {
 }
 
 pub fn run_a_usecase_recursive_checker() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         EndpointAFull,
         EndpointCFull,
         EndpointBFull

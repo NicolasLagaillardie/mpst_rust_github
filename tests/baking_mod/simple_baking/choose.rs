@@ -15,6 +15,8 @@ use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
+use mpstthree::checker_concat;
+
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
@@ -138,8 +140,7 @@ pub fn simple_choice() {
 
 pub fn simple_choice_checker() {
     let graphs =
-        mpstthree::checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>)
-            .unwrap();
+        checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

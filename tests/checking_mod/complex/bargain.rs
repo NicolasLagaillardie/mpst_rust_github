@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
 
 use petgraph::dot::Dot;
 
@@ -86,7 +86,7 @@ type EndpointCFull = MeshedChannels<Recurs0CfromA, End, RoleA<RoleEnd>, NameC>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         "bargain",
         1,
         2,

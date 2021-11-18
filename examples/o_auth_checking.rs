@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
+use mpstthree::{bundle_impl_with_enum_and_cancel, checker_concat, offer_mpst};
 
 use rand::{thread_rng, Rng};
 
@@ -168,7 +168,41 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     })
 }
 
+// Check for bottom-up approach
+fn checking() {
+    let _ = checker_concat!(
+        "o_auth",
+        1,
+        EndpointA,
+        EndpointC,
+        EndpointS
+        =>
+        [
+            EndpointASuccess,
+            Branching0fromAtoC, Success,
+            Branching0fromAtoS, Success,
+        ],
+        [
+            EndpointAFail,
+            Branching0fromAtoC, Fail,
+            Branching0fromAtoS, Fail,
+        ]
+    )
+    .unwrap();
+
+    assert_eq!(
+        "CSA: \u{1b}[92mTrue\n\
+        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0m\n",
+        std::fs::read_to_string("outputs/o_auth_1_kmc.txt").unwrap()
+    );
+}
+
 fn main() {
+    checking();
+
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
     assert!(thread_a.join().is_ok());

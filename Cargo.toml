@@ -181,6 +181,10 @@ required-features = ["macros_multiple"]
 
 [[example]]
 name = "dns_fowler"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking"
 required-features = ["baking_checking"]
 
 [[example]]
@@ -193,6 +197,10 @@ required-features = ["macros_multiple"]
 
 [[example]]
 name = "o_auth"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking"
 required-features = ["baking_checking"]
 
 [[example]]

@@ -6,6 +6,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
+use mpstthree::checker_concat;
+
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_c::RoleAlltoC;
@@ -174,7 +176,7 @@ pub fn double_choice() {
 }
 
 pub fn double_choice_checker() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         EndpointChoiceA<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceB<i32>

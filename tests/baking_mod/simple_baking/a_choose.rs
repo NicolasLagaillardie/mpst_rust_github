@@ -19,6 +19,8 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 
+use mpstthree::checker_concat;
+
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
@@ -178,7 +180,7 @@ pub fn double_choice() {
 }
 
 pub fn double_choice_checker() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         EndpointChoiceA<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceB<i32>

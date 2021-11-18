@@ -18,6 +18,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
+use mpstthree::checker_concat;
+
 use petgraph::dot::Dot;
 
 // Test a simple storage server, implemented using binary
@@ -174,7 +176,7 @@ pub fn double_choice() {
 }
 
 pub fn double_choice_checker() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         EndpointChoiceB<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceA<i32>

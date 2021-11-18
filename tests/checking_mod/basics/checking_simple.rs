@@ -1,6 +1,8 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::meshedchannels::MeshedChannels;
 
+use mpstthree::checker_concat;
+
 use petgraph::dot::Dot;
 
 use mpstthree::role::a::RoleA;
@@ -31,7 +33,7 @@ type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let graphs = checker_concat!(
         "checking_simple",
         1,
         2,

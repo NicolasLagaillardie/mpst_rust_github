@@ -2,10 +2,11 @@ use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 
-use mpstthree::functionmpst::close::close_mpst;
+use mpstthree::checker_concat;
 
 use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
@@ -95,8 +96,7 @@ pub fn simple_triple_endpoints() {
 }
 
 pub fn simple_triple_endpoints_checker() {
-    let graphs =
-        mpstthree::checker_concat!(EndpointB<i32>, EndpointC<i32>, EndpointA<i32>).unwrap();
+    let graphs = checker_concat!(EndpointB<i32>, EndpointC<i32>, EndpointA<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

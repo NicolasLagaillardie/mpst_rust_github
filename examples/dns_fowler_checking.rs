@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
+use mpstthree::{bundle_impl_with_enum_and_cancel, checker_concat, offer_mpst};
 
 use rand::{thread_rng, Rng};
 
@@ -156,7 +156,41 @@ fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
     }
 }
 
+// Check for bottom-up approach
+fn checking() {
+    let _ = checker_concat!(
+        "dns_fowler",
+        1,
+        EndpointHandler,
+        EndpointData,
+        EndpointRegional
+        =>
+        [
+            EndpointRegionalLoops,
+            Branching0fromRegionalToData, Loops,
+            Branching0fromRegionalToHandler, Loops,
+        ],
+        [
+            EndpointRegionalInvalid,
+            Branching0fromRegionalToData, Invalid,
+            Branching0fromRegionalToHandler, Invalid,
+        ]
+    )
+    .unwrap();
+
+    assert_eq!(
+        "CSA: \u{1b}[92mTrue\n\
+        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0m\n",
+        std::fs::read_to_string("outputs/dns_fowler_1_kmc.txt").unwrap()
+    );
+}
+
 fn main() {
+    checking();
+
     let (thread_handler, thread_regional, thread_data) =
         fork_mpst(endpoint_data, endpoint_handler, endpoint_regional);
 

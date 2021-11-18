@@ -20,6 +20,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
+use mpstthree::checker_concat;
+
 use petgraph::dot::Dot;
 
 // Test our usecase
@@ -200,8 +202,7 @@ pub fn run_a_usecase_right() {
 
 pub fn run_a_usecase_checker() {
     let graphs =
-        mpstthree::checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>)
-            .unwrap();
+        checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
