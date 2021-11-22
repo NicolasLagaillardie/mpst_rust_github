@@ -261,6 +261,7 @@ macro_rules! checker_concat {
 
 // Run the KMC command line
 pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Error>> {
+
     // Delete previous files
     remove_file(format!(
         "../mpst_rust_github/outputs/{}_{}_kmc.txt",
@@ -284,16 +285,19 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Er
     .unwrap_or(());
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc = Command::new("./../kmc/KMC")
-        .arg(format!("cfsm/{}.txt", name_file))
+    let kmc = Command::new("cd ../kmc && cabal run KMC")
+        .arg(format!("-- ../mpst_rust_github/cfsm/{}.txt", name_file))
         .arg(format!("{:?}", kmc_number))
         .arg("--fsm")
+        .arg("&& cd ../mpst_rust_github")
         .output()?;
 
     // Write down the stdout of the previous command into
     // a corresponding file in the "outputs" folder
     let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number,))?;
     writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc.stdout)?)?;
+
+    println!("done");
 
     Ok(())
 }

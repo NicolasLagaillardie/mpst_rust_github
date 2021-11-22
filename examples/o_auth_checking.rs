@@ -171,7 +171,7 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 // Check for bottom-up approach
 fn checking() {
     let _ = checker_concat!(
-        "o_auth",
+        "o_auth_checking",
         1,
         EndpointA,
         EndpointC,
@@ -196,7 +196,7 @@ fn checking() {
         \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
         \u{1b}[0m\n",
-        std::fs::read_to_string("outputs/o_auth_1_kmc.txt").unwrap()
+        std::fs::read_to_string("outputs/o_auth_checking_1_kmc.txt").unwrap()
     );
 }
 

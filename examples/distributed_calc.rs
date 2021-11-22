@@ -101,8 +101,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random::<i16>() as u32;
-    let elt_2 = random::<i16>() as u32;
+    let elt_1 = random::<u32>();
+    let elt_2 = random::<u32>();
     let s = send_mpst_c_to_s(elt_1, s);
     let s = send_mpst_c_to_s(elt_2, s);
 
@@ -120,9 +120,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
             2
         );
 
-        let (sum, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(sum, elt_1 + elt_2);
+        let (_sum, s) = recv_mpst_c_from_s(s)?;
 
         close_mpst_multi(s)
     } else {
@@ -137,9 +135,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
             2
         );
 
-        let (diff, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(diff, elt_1 - elt_2);
+        let (_diff, s) = recv_mpst_c_from_s(s)?;
 
         close_mpst_multi(s)
     }
@@ -151,11 +147,21 @@ fn endpoint_s(s: EndpointS<u32>) -> Result<(), Box<dyn Error>> {
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching0fromCtoS::Sum(s) => {
-            let s = send_mpst_s_to_c(elt_1 + elt_2, s);
+            let sum = if let Some(tmp) = elt_1.checked_add(elt_2) {
+                tmp
+            } else {
+                (elt_1 + elt_2)/2
+            };
+            let s = send_mpst_s_to_c(sum,s);
             close_mpst_multi(s)
         },
         Branching0fromCtoS::Diff(s) => {
-            let s = send_mpst_s_to_c(elt_1 - elt_2, s);
+            let diff = if let Some(tmp) = elt_1.checked_sub(elt_2) {
+                tmp
+            } else {
+                (elt_1 - elt_2)/2
+            };
+            let s = send_mpst_s_to_c(diff, s);
             close_mpst_multi(s)
         },
     })
