@@ -46,6 +46,7 @@ where
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }
-        }).unwrap();
+        })
+        .unwrap();
     Ok((other_thread, here, socket))
 }

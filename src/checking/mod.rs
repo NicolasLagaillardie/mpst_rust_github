@@ -261,7 +261,6 @@ macro_rules! checker_concat {
 
 // Run the KMC command line
 pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Error>> {
-
     // Delete previous files
     remove_file(format!(
         "../mpst_rust_github/outputs/{}_{}_kmc.txt",

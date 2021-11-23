@@ -30,7 +30,8 @@ where
                 Ok(()) => (),
                 Err(e) => panic!("{:?}", e),
             }
-        }).unwrap()
+        })
+        .unwrap()
 }
 
 /// Creates and returns a tuple of three child processes for

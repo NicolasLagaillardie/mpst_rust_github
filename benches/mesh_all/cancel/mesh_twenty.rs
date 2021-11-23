@@ -3385,7 +3385,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromTtoA::More(s) => {
             let (_, s) = recv_mpst_a_from_t(s)?;
-            let s = send_mpst_a_to_t((), s)?;            
+            let s = send_mpst_a_to_t((), s)?;
             let (_, s) = recv_mpst_a_from_b(s)?;
             let s = send_mpst_a_to_b((), s)?;
             let (_, s) = recv_mpst_a_from_c(s)?;

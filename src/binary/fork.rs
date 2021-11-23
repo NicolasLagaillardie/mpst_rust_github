@@ -25,7 +25,8 @@ where
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }
-        }).unwrap();
+        })
+        .unwrap();
     (other_thread, here)
 }
 
