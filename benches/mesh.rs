@@ -3,7 +3,7 @@ use criterion::criterion_main;
 mod mesh_all;
 
 criterion_main! {
-    // mesh_all::empty::mesh_two::mesh_two,
+    mesh_all::empty::mesh_two::mesh_two,
     // mesh_all::empty::mesh_three::mesh_three,
     // mesh_all::empty::mesh_four::mesh_four,
     // mesh_all::empty::mesh_five::mesh_five,
@@ -62,7 +62,7 @@ criterion_main! {
     // mesh_all::baking_cancel::mesh_eleven::mesh_eleven,
     // mesh_all::baking_cancel::mesh_twenty::mesh_twenty,
     // //////////
-    mesh_all::baking_cancel_inline::mesh_two::mesh_two,
+    // mesh_all::baking_cancel_inline::mesh_two::mesh_two,
     // mesh_all::baking_cancel_inline::mesh_three::mesh_three,
     // mesh_all::baking_cancel_inline::mesh_four::mesh_four,
     // mesh_all::baking_cancel_inline::mesh_five::mesh_five,
