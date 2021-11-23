@@ -152,40 +152,38 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
-    recurs_d(s, LOOPS)
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_d(temp_s)?;
+    }
+
+    let s = choose_mpst_d_to_all!(
+        temp_s,
+        Branching0fromDtoA::Done,
+        Branching0fromDtoB::Done,
+        Branching0fromDtoC::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_d_to_all!(
-                s,
-                Branching0fromDtoA::Done,
-                Branching0fromDtoB::Done,
-                Branching0fromDtoC::Done
-            );
+fn recurs_d(s: EndpointD) -> Result<EndpointD, Box<dyn Error>> {
+    let s: EndpointMoreD = choose_mpst_d_to_all!(
+        s,
+        Branching0fromDtoA::More,
+        Branching0fromDtoB::More,
+        Branching0fromDtoC::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreD = choose_mpst_d_to_all!(
-                s,
-                Branching0fromDtoA::More,
-                Branching0fromDtoB::More,
-                Branching0fromDtoC::More
-            );
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_d(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -336,21 +334,21 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh four baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh four baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh four baking protocol binary {}", LOOPS),
+        &format!("mesh four baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh four baking protocol crossbeam {}", LOOPS),
+        &format!("mesh four baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

@@ -284,24 +284,27 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
-    recurs_f(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_f(temp_s, i)?;
+    }
+
+    let s = choose_mpst_f_to_all!(
+        temp_s,
+        Branching0fromFtoA::Done,
+        Branching0fromFtoB::Done,
+        Branching0fromFtoC::Done,
+        Branching0fromFtoD::Done,
+        Branching0fromFtoE::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_f(s: EndpointF, index: i64) -> Result<EndpointF, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_f_to_all!(
-                s,
-                Branching0fromFtoA::Done,
-                Branching0fromFtoB::Done,
-                Branching0fromFtoC::Done,
-                Branching0fromFtoD::Done,
-                Branching0fromFtoE::Done
-            );
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardF = choose_mpst_f_to_all!(
                 s,
@@ -314,9 +317,9 @@ fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
 
             let (_, s) = s.recv()?;
 
-            recurs_f(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardF = choose_mpst_f_to_all!(
                 s,
                 Branching0fromFtoA::Backward,
@@ -328,7 +331,7 @@ fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
 
             let s = s.send(())?;
 
-            recurs_f(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -485,20 +488,20 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring six baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("ring six baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ring six baking protocol binary {}", LOOPS), |b| {
+    c.bench_function(&format!("ring six baking inline protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring six baking protocol crossbeam {}", LOOPS),
+        &format!("ring six baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

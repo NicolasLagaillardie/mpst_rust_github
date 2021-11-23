@@ -2456,38 +2456,41 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
-    recurs_t(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_t(temp_s, i)?;
+    }
+
+    let s = choose_mpst_t_to_all!(
+        temp_s,
+        Branching0fromTtoA::Done,
+        Branching0fromTtoB::Done,
+        Branching0fromTtoC::Done,
+        Branching0fromTtoD::Done,
+        Branching0fromTtoE::Done,
+        Branching0fromTtoF::Done,
+        Branching0fromTtoG::Done,
+        Branching0fromTtoH::Done,
+        Branching0fromTtoI::Done,
+        Branching0fromTtoJ::Done,
+        Branching0fromTtoK::Done,
+        Branching0fromTtoL::Done,
+        Branching0fromTtoM::Done,
+        Branching0fromTtoN::Done,
+        Branching0fromTtoO::Done,
+        Branching0fromTtoP::Done,
+        Branching0fromTtoQ::Done,
+        Branching0fromTtoR::Done,
+        Branching0fromTtoS::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_t(s: EndpointT, index: i64) -> Result<EndpointT, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_t_to_all!(
-                s,
-                Branching0fromTtoA::Done,
-                Branching0fromTtoB::Done,
-                Branching0fromTtoC::Done,
-                Branching0fromTtoD::Done,
-                Branching0fromTtoE::Done,
-                Branching0fromTtoF::Done,
-                Branching0fromTtoG::Done,
-                Branching0fromTtoH::Done,
-                Branching0fromTtoI::Done,
-                Branching0fromTtoJ::Done,
-                Branching0fromTtoK::Done,
-                Branching0fromTtoL::Done,
-                Branching0fromTtoM::Done,
-                Branching0fromTtoN::Done,
-                Branching0fromTtoO::Done,
-                Branching0fromTtoP::Done,
-                Branching0fromTtoQ::Done,
-                Branching0fromTtoR::Done,
-                Branching0fromTtoS::Done
-            );
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardT = choose_mpst_t_to_all!(
                 s,
@@ -2514,9 +2517,9 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
 
             let (_, s) = s.recv()?;
 
-            recurs_t(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardT = choose_mpst_t_to_all!(
                 s,
                 Branching0fromTtoA::Backward,
@@ -2542,7 +2545,7 @@ fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
 
             let s = s.send(())?;
 
-            recurs_t(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -2749,21 +2752,21 @@ static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring twenty baking protocol MPST {}", LOOPS),
+        &format!("ring twenty baking inline protocol MPST {}", LOOPS),
         |b| b.iter(|| all_mpst()),
     );
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring twenty baking protocol binary {}", LOOPS),
+        &format!("ring twenty baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring twenty baking protocol crossbeam {}", LOOPS),
+        &format!("ring twenty baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

@@ -790,29 +790,32 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
-    recurs_k(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_k(temp_s, i)?;
+    }
+
+    let s = choose_mpst_k_to_all!(
+        temp_s,
+        Branching0fromKtoA::Done,
+        Branching0fromKtoB::Done,
+        Branching0fromKtoC::Done,
+        Branching0fromKtoD::Done,
+        Branching0fromKtoE::Done,
+        Branching0fromKtoF::Done,
+        Branching0fromKtoG::Done,
+        Branching0fromKtoH::Done,
+        Branching0fromKtoI::Done,
+        Branching0fromKtoJ::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_k(s: EndpointK, index: i64) -> Result<EndpointK, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_k_to_all!(
-                s,
-                Branching0fromKtoA::Done,
-                Branching0fromKtoB::Done,
-                Branching0fromKtoC::Done,
-                Branching0fromKtoD::Done,
-                Branching0fromKtoE::Done,
-                Branching0fromKtoF::Done,
-                Branching0fromKtoG::Done,
-                Branching0fromKtoH::Done,
-                Branching0fromKtoI::Done,
-                Branching0fromKtoJ::Done
-            );
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardK = choose_mpst_k_to_all!(
                 s,
@@ -830,9 +833,9 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
 
             let (_, s) = s.recv()?;
 
-            recurs_k(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardK = choose_mpst_k_to_all!(
                 s,
                 Branching0fromKtoA::Backward,
@@ -849,7 +852,7 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
 
             let s = s.send(())?;
 
-            recurs_k(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -1029,21 +1032,21 @@ static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring eleven baking protocol MPST {}", LOOPS),
+        &format!("ring eleven baking inline protocol MPST {}", LOOPS),
         |b| b.iter(|| all_mpst()),
     );
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring eleven baking protocol binary {}", LOOPS),
+        &format!("ring eleven baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring eleven baking protocol crossbeam {}", LOOPS),
+        &format!("ring eleven baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

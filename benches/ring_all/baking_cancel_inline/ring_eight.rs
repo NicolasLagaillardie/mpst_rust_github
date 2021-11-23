@@ -438,26 +438,29 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
-    recurs_h(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_h(temp_s, i)?;
+    }
+
+    let s = choose_mpst_h_to_all!(
+        temp_s,
+        Branching0fromHtoA::Done,
+        Branching0fromHtoB::Done,
+        Branching0fromHtoC::Done,
+        Branching0fromHtoD::Done,
+        Branching0fromHtoE::Done,
+        Branching0fromHtoF::Done,
+        Branching0fromHtoG::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_h(s: EndpointH, index: i64) -> Result<EndpointH, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_h_to_all!(
-                s,
-                Branching0fromHtoA::Done,
-                Branching0fromHtoB::Done,
-                Branching0fromHtoC::Done,
-                Branching0fromHtoD::Done,
-                Branching0fromHtoE::Done,
-                Branching0fromHtoF::Done,
-                Branching0fromHtoG::Done
-            );
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardH = choose_mpst_h_to_all!(
                 s,
@@ -472,9 +475,9 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
 
             let (_, s) = s.recv()?;
 
-            recurs_h(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardH = choose_mpst_h_to_all!(
                 s,
                 Branching0fromHtoA::Backward,
@@ -488,7 +491,7 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
 
             let s = s.send(())?;
 
-            recurs_h(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -650,21 +653,21 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring eight baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("ring eight baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring eight baking protocol binary {}", LOOPS),
+        &format!("ring eight baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring eight baking protocol crossbeam {}", LOOPS),
+        &format!("ring eight baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

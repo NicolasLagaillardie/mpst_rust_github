@@ -475,60 +475,58 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
-    recurs_i(s, LOOPS)
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_i(temp_s)?;
+    }
+
+    let s = choose_mpst_i_to_all!(
+        temp_s,
+        Branching0fromItoA::Done,
+        Branching0fromItoB::Done,
+        Branching0fromItoC::Done,
+        Branching0fromItoD::Done,
+        Branching0fromItoE::Done,
+        Branching0fromItoF::Done,
+        Branching0fromItoG::Done,
+        Branching0fromItoH::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_i_to_all!(
-                s,
-                Branching0fromItoA::Done,
-                Branching0fromItoB::Done,
-                Branching0fromItoC::Done,
-                Branching0fromItoD::Done,
-                Branching0fromItoE::Done,
-                Branching0fromItoF::Done,
-                Branching0fromItoG::Done,
-                Branching0fromItoH::Done
-            );
+fn recurs_i(s: EndpointI) -> Result<EndpointI, Box<dyn Error>> {
+    let s: EndpointMoreI = choose_mpst_i_to_all!(
+        s,
+        Branching0fromItoA::More,
+        Branching0fromItoB::More,
+        Branching0fromItoC::More,
+        Branching0fromItoD::More,
+        Branching0fromItoE::More,
+        Branching0fromItoF::More,
+        Branching0fromItoG::More,
+        Branching0fromItoH::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreI = choose_mpst_i_to_all!(
-                s,
-                Branching0fromItoA::More,
-                Branching0fromItoB::More,
-                Branching0fromItoC::More,
-                Branching0fromItoD::More,
-                Branching0fromItoE::More,
-                Branching0fromItoF::More,
-                Branching0fromItoG::More,
-                Branching0fromItoH::More
-            );
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_i(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -690,21 +688,21 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh nine baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh nine baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh nine baking protocol binary {}", LOOPS),
+        &format!("mesh nine baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh nine baking protocol crossbeam {}", LOOPS),
+        &format!("mesh nine baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

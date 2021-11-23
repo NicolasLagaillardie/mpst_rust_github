@@ -263,48 +263,46 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
-    recurs_f(s, LOOPS)
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_f(temp_s)?;
+    }
+
+    let s = choose_mpst_f_to_all!(
+        temp_s,
+        Branching0fromFtoA::Done,
+        Branching0fromFtoB::Done,
+        Branching0fromFtoC::Done,
+        Branching0fromFtoD::Done,
+        Branching0fromFtoE::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_f_to_all!(
-                s,
-                Branching0fromFtoA::Done,
-                Branching0fromFtoB::Done,
-                Branching0fromFtoC::Done,
-                Branching0fromFtoD::Done,
-                Branching0fromFtoE::Done
-            );
+fn recurs_f(s: EndpointF) -> Result<EndpointF, Box<dyn Error>> {
+    let s: EndpointMoreF = choose_mpst_f_to_all!(
+        s,
+        Branching0fromFtoA::More,
+        Branching0fromFtoB::More,
+        Branching0fromFtoC::More,
+        Branching0fromFtoD::More,
+        Branching0fromFtoE::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreF = choose_mpst_f_to_all!(
-                s,
-                Branching0fromFtoA::More,
-                Branching0fromFtoB::More,
-                Branching0fromFtoC::More,
-                Branching0fromFtoD::More,
-                Branching0fromFtoE::More
-            );
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_f(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -459,20 +457,20 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh six baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh six baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh six baking protocol binary {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh six baking inline protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh six baking protocol crossbeam {}", LOOPS),
+        &format!("mesh six baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

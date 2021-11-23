@@ -105,26 +105,29 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    recurs_c(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_c(temp_s, i)?;
+    }
+
+    let s = choose_mpst_c_to_all!(temp_s, Branching0fromCtoA::Done, Branching0fromCtoB::Done);
+
+    s.close()
 }
 
 #[inline]
-fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_c(s: EndpointC, index: i64) -> Result<EndpointC, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_c_to_all!(s, Branching0fromCtoA::Done, Branching0fromCtoB::Done);
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardC =
                 choose_mpst_c_to_all!(s, Branching0fromCtoA::Forward, Branching0fromCtoB::Forward);
 
             let (_, s) = s.recv()?;
 
-            recurs_c(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardC = choose_mpst_c_to_all!(
                 s,
                 Branching0fromCtoA::Backward,
@@ -133,7 +136,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
 
             let s = s.send(())?;
 
-            recurs_c(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -284,21 +287,21 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring three baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("ring three baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring three baking protocol binary {}", LOOPS),
+        &format!("ring three baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring three baking protocol crossbeam {}", LOOPS),
+        &format!("ring three baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

@@ -3359,104 +3359,102 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
-    recurs_t(s, LOOPS)
+    let mut temp_s = s;
+    
+    for _ in 1..LOOPS {
+        temp_s = recurs_t(temp_s)?;
+    }
+
+    let s = choose_mpst_t_to_all!(
+        temp_s,
+        Branching0fromTtoA::Done,
+        Branching0fromTtoB::Done,
+        Branching0fromTtoC::Done,
+        Branching0fromTtoD::Done,
+        Branching0fromTtoE::Done,
+        Branching0fromTtoF::Done,
+        Branching0fromTtoG::Done,
+        Branching0fromTtoH::Done,
+        Branching0fromTtoI::Done,
+        Branching0fromTtoJ::Done,
+        Branching0fromTtoK::Done,
+        Branching0fromTtoL::Done,
+        Branching0fromTtoM::Done,
+        Branching0fromTtoN::Done,
+        Branching0fromTtoO::Done,
+        Branching0fromTtoP::Done,
+        Branching0fromTtoQ::Done,
+        Branching0fromTtoR::Done,
+        Branching0fromTtoS::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_t(s: EndpointT, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_t_to_all!(
-                s,
-                Branching0fromTtoA::Done,
-                Branching0fromTtoB::Done,
-                Branching0fromTtoC::Done,
-                Branching0fromTtoD::Done,
-                Branching0fromTtoE::Done,
-                Branching0fromTtoF::Done,
-                Branching0fromTtoG::Done,
-                Branching0fromTtoH::Done,
-                Branching0fromTtoI::Done,
-                Branching0fromTtoJ::Done,
-                Branching0fromTtoK::Done,
-                Branching0fromTtoL::Done,
-                Branching0fromTtoM::Done,
-                Branching0fromTtoN::Done,
-                Branching0fromTtoO::Done,
-                Branching0fromTtoP::Done,
-                Branching0fromTtoQ::Done,
-                Branching0fromTtoR::Done,
-                Branching0fromTtoS::Done
-            );
+fn recurs_t(s: EndpointT) -> Result<EndpointT, Box<dyn Error>> {
+    let s: EndpointMoreT = choose_mpst_t_to_all!(
+        s,
+        Branching0fromTtoA::More,
+        Branching0fromTtoB::More,
+        Branching0fromTtoC::More,
+        Branching0fromTtoD::More,
+        Branching0fromTtoE::More,
+        Branching0fromTtoF::More,
+        Branching0fromTtoG::More,
+        Branching0fromTtoH::More,
+        Branching0fromTtoI::More,
+        Branching0fromTtoJ::More,
+        Branching0fromTtoK::More,
+        Branching0fromTtoL::More,
+        Branching0fromTtoM::More,
+        Branching0fromTtoN::More,
+        Branching0fromTtoO::More,
+        Branching0fromTtoP::More,
+        Branching0fromTtoQ::More,
+        Branching0fromTtoR::More,
+        Branching0fromTtoS::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreT = choose_mpst_t_to_all!(
-                s,
-                Branching0fromTtoA::More,
-                Branching0fromTtoB::More,
-                Branching0fromTtoC::More,
-                Branching0fromTtoD::More,
-                Branching0fromTtoE::More,
-                Branching0fromTtoF::More,
-                Branching0fromTtoG::More,
-                Branching0fromTtoH::More,
-                Branching0fromTtoI::More,
-                Branching0fromTtoJ::More,
-                Branching0fromTtoK::More,
-                Branching0fromTtoL::More,
-                Branching0fromTtoM::More,
-                Branching0fromTtoN::More,
-                Branching0fromTtoO::More,
-                Branching0fromTtoP::More,
-                Branching0fromTtoQ::More,
-                Branching0fromTtoR::More,
-                Branching0fromTtoS::More
-            );
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_t(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -3661,21 +3659,21 @@ static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh twenty baking protocol MPST {}", LOOPS),
+        &format!("mesh twenty baking inline protocol MPST {}", LOOPS),
         |b| b.iter(|| all_mpst()),
     );
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh twenty baking protocol binary {}", LOOPS),
+        &format!("mesh twenty baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh twenty baking protocol crossbeam {}", LOOPS),
+        &format!("mesh twenty baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

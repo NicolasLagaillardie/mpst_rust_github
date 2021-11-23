@@ -763,68 +763,66 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
-    recurs_k(s, LOOPS)
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_k(temp_s)?;
+    }
+
+    let s = choose_mpst_k_to_all!(
+        temp_s,
+        Branching0fromKtoA::Done,
+        Branching0fromKtoB::Done,
+        Branching0fromKtoC::Done,
+        Branching0fromKtoD::Done,
+        Branching0fromKtoE::Done,
+        Branching0fromKtoF::Done,
+        Branching0fromKtoG::Done,
+        Branching0fromKtoH::Done,
+        Branching0fromKtoI::Done,
+        Branching0fromKtoJ::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_k_to_all!(
-                s,
-                Branching0fromKtoA::Done,
-                Branching0fromKtoB::Done,
-                Branching0fromKtoC::Done,
-                Branching0fromKtoD::Done,
-                Branching0fromKtoE::Done,
-                Branching0fromKtoF::Done,
-                Branching0fromKtoG::Done,
-                Branching0fromKtoH::Done,
-                Branching0fromKtoI::Done,
-                Branching0fromKtoJ::Done
-            );
+fn recurs_k(s: EndpointK) -> Result<EndpointK, Box<dyn Error>> {
+    let s: EndpointMoreK = choose_mpst_k_to_all!(
+        s,
+        Branching0fromKtoA::More,
+        Branching0fromKtoB::More,
+        Branching0fromKtoC::More,
+        Branching0fromKtoD::More,
+        Branching0fromKtoE::More,
+        Branching0fromKtoF::More,
+        Branching0fromKtoG::More,
+        Branching0fromKtoH::More,
+        Branching0fromKtoI::More,
+        Branching0fromKtoJ::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreK = choose_mpst_k_to_all!(
-                s,
-                Branching0fromKtoA::More,
-                Branching0fromKtoB::More,
-                Branching0fromKtoC::More,
-                Branching0fromKtoD::More,
-                Branching0fromKtoE::More,
-                Branching0fromKtoF::More,
-                Branching0fromKtoG::More,
-                Branching0fromKtoH::More,
-                Branching0fromKtoI::More,
-                Branching0fromKtoJ::More
-            );
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_k(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -1002,21 +1000,21 @@ static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh eleven baking protocol MPST {}", LOOPS),
+        &format!("mesh eleven baking inline protocol MPST {}", LOOPS),
         |b| b.iter(|| all_mpst()),
     );
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh eleven baking protocol binary {}", LOOPS),
+        &format!("mesh eleven baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh eleven baking protocol crossbeam {}", LOOPS),
+        &format!("mesh eleven baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

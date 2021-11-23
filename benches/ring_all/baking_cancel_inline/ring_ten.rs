@@ -589,28 +589,31 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
-    recurs_j(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_j(temp_s, i)?;
+    }
+
+    let s = choose_mpst_j_to_all!(
+        temp_s,
+        Branching0fromJtoA::Done,
+        Branching0fromJtoB::Done,
+        Branching0fromJtoC::Done,
+        Branching0fromJtoD::Done,
+        Branching0fromJtoE::Done,
+        Branching0fromJtoF::Done,
+        Branching0fromJtoG::Done,
+        Branching0fromJtoH::Done,
+        Branching0fromJtoI::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_j(s: EndpointJ, index: i64) -> Result<EndpointJ, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_j_to_all!(
-                s,
-                Branching0fromJtoA::Done,
-                Branching0fromJtoB::Done,
-                Branching0fromJtoC::Done,
-                Branching0fromJtoD::Done,
-                Branching0fromJtoE::Done,
-                Branching0fromJtoF::Done,
-                Branching0fromJtoG::Done,
-                Branching0fromJtoH::Done,
-                Branching0fromJtoI::Done
-            );
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardJ = choose_mpst_j_to_all!(
                 s,
@@ -627,9 +630,9 @@ fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
 
             let (_, s) = s.recv()?;
 
-            recurs_j(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardJ = choose_mpst_j_to_all!(
                 s,
                 Branching0fromJtoA::Backward,
@@ -645,7 +648,7 @@ fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
 
             let s = s.send(())?;
 
-            recurs_j(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -821,20 +824,20 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring ten baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("ring ten baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ring ten baking protocol binary {}", LOOPS), |b| {
+    c.bench_function(&format!("ring ten baking inline protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring ten baking protocol crossbeam {}", LOOPS),
+        &format!("ring ten baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

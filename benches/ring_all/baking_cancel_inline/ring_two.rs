@@ -60,30 +60,33 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    recurs_b(s, LOOPS)
+    let mut temp_s = s;
+
+    for i in 1..LOOPS {
+        temp_s = recurs_b(temp_s, i)?;
+    }
+
+    let s = choose_mpst_b_to_all!(temp_s, Branching0fromBtoA::Done);
+
+    s.close()
 }
 
 #[inline]
-fn recurs_b(s: EndpointB, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_b(s: EndpointB, index: i64) -> Result<EndpointB, Box<dyn Error>> {
     match index {
-        0 => {
-            let s = choose_mpst_b_to_all!(s, Branching0fromBtoA::Done);
-
-            s.close()
-        }
         i if i % 2 == 0 => {
             let s: EndpointForwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Forward);
 
             let (_, s) = s.recv()?;
 
-            recurs_b(s, i - 1)
+            Ok(s)
         }
-        i => {
+        _ => {
             let s: EndpointBackwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Backward);
 
             let s = s.send(())?;
 
-            recurs_b(s, i - 1)
+            Ok(s)
         }
     }
 }
@@ -229,20 +232,20 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring two baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("ring two baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ring two baking protocol binary {}", LOOPS), |b| {
+    c.bench_function(&format!("ring two baking inline protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring two baking protocol crossbeam {}", LOOPS),
+        &format!("ring two baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

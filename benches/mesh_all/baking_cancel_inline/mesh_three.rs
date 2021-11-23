@@ -94,29 +94,27 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    recurs_c(s, LOOPS)
+    let mut temp_s = s;
+    
+    for _ in 1..LOOPS {
+        temp_s = recurs_c(temp_s)?;
+    }
+
+    let s = choose_mpst_c_to_all!(temp_s, Branching0fromCtoA::Done, Branching0fromCtoB::Done);
+
+    s.close()
 }
 
 #[inline]
-fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_c_to_all!(s, Branching0fromCtoA::Done, Branching0fromCtoB::Done);
+fn recurs_c(s: EndpointC) -> Result<EndpointC, Box<dyn Error>> {
+    let s: EndpointMoreC =
+        choose_mpst_c_to_all!(s, Branching0fromCtoA::More, Branching0fromCtoB::More);
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreC =
-                choose_mpst_c_to_all!(s, Branching0fromCtoA::More, Branching0fromCtoB::More);
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_c(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -265,21 +263,21 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh three baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh three baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh three baking protocol binary {}", LOOPS),
+        &format!("mesh three baking inline protocol binary {}", LOOPS),
         |b| b.iter(|| all_binaries()),
     );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh three baking protocol crossbeam {}", LOOPS),
+        &format!("mesh three baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }

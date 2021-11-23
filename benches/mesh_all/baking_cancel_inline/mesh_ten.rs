@@ -556,64 +556,62 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
-    recurs_j(s, LOOPS)
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_j(temp_s)?;
+    }
+
+    let s = choose_mpst_j_to_all!(
+        temp_s,
+        Branching0fromJtoA::Done,
+        Branching0fromJtoB::Done,
+        Branching0fromJtoC::Done,
+        Branching0fromJtoD::Done,
+        Branching0fromJtoE::Done,
+        Branching0fromJtoF::Done,
+        Branching0fromJtoG::Done,
+        Branching0fromJtoH::Done,
+        Branching0fromJtoI::Done
+    );
+
+    s.close()
 }
 
 #[inline]
-fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_j_to_all!(
-                s,
-                Branching0fromJtoA::Done,
-                Branching0fromJtoB::Done,
-                Branching0fromJtoC::Done,
-                Branching0fromJtoD::Done,
-                Branching0fromJtoE::Done,
-                Branching0fromJtoF::Done,
-                Branching0fromJtoG::Done,
-                Branching0fromJtoH::Done,
-                Branching0fromJtoI::Done
-            );
+fn recurs_j(s: EndpointJ) -> Result<EndpointJ, Box<dyn Error>> {
+    let s: EndpointMoreJ = choose_mpst_j_to_all!(
+        s,
+        Branching0fromJtoA::More,
+        Branching0fromJtoB::More,
+        Branching0fromJtoC::More,
+        Branching0fromJtoD::More,
+        Branching0fromJtoE::More,
+        Branching0fromJtoF::More,
+        Branching0fromJtoG::More,
+        Branching0fromJtoH::More,
+        Branching0fromJtoI::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreJ = choose_mpst_j_to_all!(
-                s,
-                Branching0fromJtoA::More,
-                Branching0fromJtoB::More,
-                Branching0fromJtoC::More,
-                Branching0fromJtoD::More,
-                Branching0fromJtoE::More,
-                Branching0fromJtoF::More,
-                Branching0fromJtoG::More,
-                Branching0fromJtoH::More,
-                Branching0fromJtoI::More
-            );
-
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-
-            recurs_j(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 #[inline]
@@ -787,20 +785,20 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh ten baking protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh ten baking inline protocol MPST {}", LOOPS), |b| {
         b.iter(|| all_mpst())
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh ten baking protocol binary {}", LOOPS), |b| {
+    c.bench_function(&format!("mesh ten baking inline protocol binary {}", LOOPS), |b| {
         b.iter(|| all_binaries())
     });
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh ten baking protocol crossbeam {}", LOOPS),
+        &format!("mesh ten baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(|| all_crossbeam()),
     );
 }
