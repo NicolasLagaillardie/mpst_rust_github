@@ -233,10 +233,14 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromEtoA::More(s) => {
             let (_, s) = recv_mpst_a_from_e(s)?;
-            let s = send_mpst_a_to_e((), s)?;            let (_, s) = recv_mpst_a_from_b(s)?;
-            let s = send_mpst_a_to_b((), s)?;            let (_, s) = recv_mpst_a_from_c(s)?;
-            let s = send_mpst_a_to_c((), s)?;            let (_, s) = recv_mpst_a_from_d(s)?;
-            let s = send_mpst_a_to_d((), s)?;            endpoint_a(s)
+            let s = send_mpst_a_to_e((), s)?;
+            let (_, s) = recv_mpst_a_from_b(s)?;
+            let s = send_mpst_a_to_b((), s)?;
+            let (_, s) = recv_mpst_a_from_c(s)?;
+            let s = send_mpst_a_to_c((), s)?;
+            let (_, s) = recv_mpst_a_from_d(s)?;
+            let s = send_mpst_a_to_d((), s)?;
+            endpoint_a(s)
         },
     })
 }
@@ -248,10 +252,14 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromEtoB::More(s) => {
             let (_, s) = recv_mpst_b_from_e(s)?;
-            let s = send_mpst_b_to_e((), s)?;            let s = send_mpst_b_to_a((), s)?;            let (_, s) = recv_mpst_b_from_a(s)?;
+            let s = send_mpst_b_to_e((), s)?;
+            let s = send_mpst_b_to_a((), s)?;
+            let (_, s) = recv_mpst_b_from_a(s)?;
             let (_, s) = recv_mpst_b_from_c(s)?;
-            let s = send_mpst_b_to_c((), s)?;            let (_, s) = recv_mpst_b_from_d(s)?;
-            let s = send_mpst_b_to_d((), s)?;            endpoint_b(s)
+            let s = send_mpst_b_to_c((), s)?;
+            let (_, s) = recv_mpst_b_from_d(s)?;
+            let s = send_mpst_b_to_d((), s)?;
+            endpoint_b(s)
         },
     })
 }
@@ -263,10 +271,14 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromEtoC::More(s) => {
             let (_, s) = recv_mpst_c_from_e(s)?;
-            let s = send_mpst_c_to_e((), s)?;            let s = send_mpst_c_to_a((), s)?;            let (_, s) = recv_mpst_c_from_a(s)?;
-            let s = send_mpst_c_to_b((), s)?;            let (_, s) = recv_mpst_c_from_b(s)?;
+            let s = send_mpst_c_to_e((), s)?;
+            let s = send_mpst_c_to_a((), s)?;
+            let (_, s) = recv_mpst_c_from_a(s)?;
+            let s = send_mpst_c_to_b((), s)?;
+            let (_, s) = recv_mpst_c_from_b(s)?;
             let (_, s) = recv_mpst_c_from_d(s)?;
-            let s = send_mpst_c_to_d((), s)?;            endpoint_c(s)
+            let s = send_mpst_c_to_d((), s)?;
+            endpoint_c(s)
         },
     })
 }
@@ -278,9 +290,13 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromEtoD::More(s) => {
             let (_, s) = recv_mpst_d_from_e(s)?;
-            let s = send_mpst_d_to_e((), s)?;            let s = send_mpst_d_to_a((), s)?;            let (_, s) = recv_mpst_d_from_a(s)?;
-            let s = send_mpst_d_to_b((), s)?;            let (_, s) = recv_mpst_d_from_b(s)?;
-            let s = send_mpst_d_to_c((), s)?;            let (_, s) = recv_mpst_d_from_c(s)?;
+            let s = send_mpst_d_to_e((), s)?;
+            let s = send_mpst_d_to_a((), s)?;
+            let (_, s) = recv_mpst_d_from_a(s)?;
+            let s = send_mpst_d_to_b((), s)?;
+            let (_, s) = recv_mpst_d_from_b(s)?;
+            let s = send_mpst_d_to_c((), s)?;
+            let (_, s) = recv_mpst_d_from_c(s)?;
             endpoint_d(s)
         },
     })

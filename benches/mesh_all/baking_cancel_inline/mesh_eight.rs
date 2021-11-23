@@ -216,6 +216,7 @@ type EndpointH = MeshedChannelsEight<
     NameH,
 >;
 
+#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoA::Done(s) => {
@@ -241,6 +242,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoB::Done(s) => {
@@ -266,6 +268,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoC::Done(s) => {
@@ -291,6 +294,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoD::Done(s) => {
@@ -316,6 +320,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoE::Done(s) => {
@@ -341,6 +346,7 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoF::Done(s) => {
@@ -366,6 +372,7 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoG::Done(s) => {
@@ -391,10 +398,12 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     recurs_h(s, LOOPS)
 }
 
+#[inline]
 fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
@@ -443,6 +452,7 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
+#[inline]
 fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h) =
         fork_mpst(

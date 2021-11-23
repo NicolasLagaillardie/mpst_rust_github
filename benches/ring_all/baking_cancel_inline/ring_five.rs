@@ -146,6 +146,7 @@ type EndpointE = MeshedChannelsFive<
     NameE,
 >;
 
+#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromEtoA::Done(s) => {
@@ -162,6 +163,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromEtoB::Done(s) => {
@@ -180,6 +182,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromEtoC::Done(s) => {
@@ -198,6 +201,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromEtoD::Done(s) => {
@@ -216,10 +220,12 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     recurs_e(s, LOOPS)
 }
 
+#[inline]
 fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
@@ -262,6 +268,7 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
+#[inline]
 fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e) = fork_mpst(
         black_box(endpoint_a),

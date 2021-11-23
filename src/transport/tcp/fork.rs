@@ -11,7 +11,7 @@ use std::error::Error;
 use std::marker;
 use std::net::TcpStream;
 use std::panic;
-use std::thread::{spawn, JoinHandle};
+use std::thread::{Builder, JoinHandle};
 
 type TcpFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
 
@@ -34,14 +34,16 @@ where
     let stream = TcpStream::connect(address)?;
     let copy_stream = stream.try_clone()?;
     let (there, here) = Session::new();
-    let other_thread = spawn(move || {
-        panic::set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match p(there, copy_stream) {
-            Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
-        }
-    });
+    let other_thread = Builder::new()
+        .name(String::from(address))
+        .spawn(move || {
+            panic::set_hook(Box::new(|_info| {
+                // do nothing
+            }));
+            match p(there, copy_stream) {
+                Ok(()) => (),
+                Err(e) => panic!("{}", e.to_string()),
+            }
+        }).unwrap();
     Ok((other_thread, here, stream))
 }

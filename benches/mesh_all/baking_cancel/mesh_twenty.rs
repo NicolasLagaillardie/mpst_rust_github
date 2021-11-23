@@ -2452,7 +2452,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_a(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
@@ -2500,7 +2501,8 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_b(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
@@ -2548,7 +2550,8 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_c(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
@@ -2596,7 +2599,8 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_d(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
@@ -2644,7 +2648,8 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_e(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
@@ -2692,7 +2697,8 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_f(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
@@ -2740,7 +2746,8 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_g(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
@@ -2788,7 +2795,8 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_h(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
@@ -2836,7 +2844,8 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_i(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
@@ -2884,7 +2893,8 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_j(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
@@ -2932,7 +2942,8 @@ fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_k(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
@@ -2980,7 +2991,8 @@ fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_l(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
@@ -3028,7 +3040,8 @@ fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_m(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
@@ -3076,7 +3089,8 @@ fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_n(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
@@ -3124,7 +3138,8 @@ fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_o(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
@@ -3172,7 +3187,8 @@ fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_p(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
@@ -3220,7 +3236,8 @@ fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_q(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
@@ -3268,7 +3285,8 @@ fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_r(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
@@ -3316,7 +3334,8 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
             let s = s.send(())?;
             let (_, s) = s.recv()?;
             endpoint_s(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {

@@ -178,9 +178,12 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromDtoA::More(s) => {
             let (_, s) = recv_mpst_a_from_d(s)?;
-            let s = send_mpst_a_to_d((), s)?;            let (_, s) = recv_mpst_a_from_b(s)?;
-            let s = send_mpst_a_to_b((), s)?;            let (_, s) = recv_mpst_a_from_c(s)?;
-            let s = send_mpst_a_to_c((), s)?;            endpoint_a(s)
+            let s = send_mpst_a_to_d((), s)?;
+            let (_, s) = recv_mpst_a_from_b(s)?;
+            let s = send_mpst_a_to_b((), s)?;
+            let (_, s) = recv_mpst_a_from_c(s)?;
+            let s = send_mpst_a_to_c((), s)?;
+            endpoint_a(s)
         },
     })
 }
@@ -192,9 +195,12 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromDtoB::More(s) => {
             let (_, s) = recv_mpst_b_from_d(s)?;
-            let s = send_mpst_b_to_d((), s)?;            let s = send_mpst_b_to_a((), s)?;            let (_, s) = recv_mpst_b_from_a(s)?;
+            let s = send_mpst_b_to_d((), s)?;
+            let s = send_mpst_b_to_a((), s)?;
+            let (_, s) = recv_mpst_b_from_a(s)?;
             let (_, s) = recv_mpst_b_from_c(s)?;
-            let s = send_mpst_b_to_c((), s)?;            endpoint_b(s)
+            let s = send_mpst_b_to_c((), s)?;
+            endpoint_b(s)
         },
     })
 }
@@ -206,8 +212,11 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromDtoC::More(s) => {
             let (_, s) = recv_mpst_c_from_d(s)?;
-            let s = send_mpst_c_to_d((), s)?;            let s = send_mpst_c_to_a((), s)?;            let (_, s) = recv_mpst_c_from_a(s)?;
-            let s = send_mpst_c_to_b((), s)?;            let (_, s) = recv_mpst_c_from_b(s)?;
+            let s = send_mpst_c_to_d((), s)?;
+            let s = send_mpst_c_to_a((), s)?;
+            let (_, s) = recv_mpst_c_from_a(s)?;
+            let s = send_mpst_c_to_b((), s)?;
+            let (_, s) = recv_mpst_c_from_b(s)?;
             endpoint_c(s)
         },
     })

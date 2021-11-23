@@ -4,7 +4,7 @@
 use std::error::Error;
 use std::marker;
 use std::panic::set_hook;
-use std::thread::{spawn, JoinHandle};
+use std::thread::{Builder, JoinHandle};
 
 use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
@@ -12,7 +12,7 @@ use crate::role::Role;
 
 #[doc(hidden)]
 // Spawn a thread to run a function `p` which expects a `MeshedChannels` as an input
-fn fork_simple<S1, S2, R, N, P>(p: P, s: MeshedChannels<S1, S2, R, N>) -> JoinHandle<()>
+fn fork_simple<S1, S2, R, N, P>(p: P, s: MeshedChannels<S1, S2, R, N>, name: &str) -> JoinHandle<()>
 where
     S1: Session + 'static,
     S2: Session + 'static,
@@ -20,15 +20,17 @@ where
     N: Role + 'static,
     P: FnOnce(MeshedChannels<S1, S2, R, N>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
-    spawn(move || {
-        set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match p(s) {
-            Ok(()) => (),
-            Err(e) => panic!("{:?}", e),
-        }
-    })
+    Builder::new()
+        .name(String::from(name))
+        .spawn(move || {
+            set_hook(Box::new(|_info| {
+                // do nothing
+            }));
+            match p(s) {
+                Ok(()) => (),
+                Err(e) => panic!("{:?}", e),
+            }
+        }).unwrap()
 }
 
 /// Creates and returns a tuple of three child processes for
@@ -166,5 +168,9 @@ where
         name: name_c,
     };
 
-    (fork_simple(f0, a), fork_simple(f1, b), fork_simple(f2, c))
+    (
+        fork_simple(f0, a, "f0"),
+        fork_simple(f1, b, "f1"),
+        fork_simple(f2, c, "f3"),
+    )
 }

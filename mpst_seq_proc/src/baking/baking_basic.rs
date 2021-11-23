@@ -1846,7 +1846,7 @@ impl Baking {
                     proc_macro2::Span::call_site(),
                 );
                 quote! {
-                    std::thread::spawn(move || {
+                    std::thread::Builder::new().name(String::from(stringify!(#temp_function))).spawn(move || {
                         std::panic::set_hook(Box::new(|_info| {
                             // do nothing
                         }));
@@ -1854,7 +1854,7 @@ impl Baking {
                             Ok(()) => (),
                             Err(e) => panic!("{:?}", e),
                         }
-                    }),
+                    }).unwrap(),
                 }
             })
             .collect();

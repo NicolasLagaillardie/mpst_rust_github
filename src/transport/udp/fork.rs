@@ -11,7 +11,7 @@ use std::error::Error;
 use std::marker;
 use std::net::UdpSocket;
 use std::panic;
-use std::thread::{spawn, JoinHandle};
+use std::thread::{Builder, JoinHandle};
 
 type UdpFork<T> = Result<(JoinHandle<()>, T, UdpSocket), Box<dyn Error>>;
 
@@ -36,14 +36,16 @@ where
     socket.connect(connect)?;
     let copy_socket = socket.try_clone()?;
     let (there, here) = Session::new();
-    let other_thread = spawn(move || {
-        panic::set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match p(there, copy_socket) {
-            Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
-        }
-    });
+    let other_thread = Builder::new()
+        .name(String::from(bind))
+        .spawn(move || {
+            panic::set_hook(Box::new(|_info| {
+                // do nothing
+            }));
+            match p(there, copy_socket) {
+                Ok(()) => (),
+                Err(e) => panic!("{}", e.to_string()),
+            }
+        }).unwrap();
     Ok((other_thread, here, socket))
 }
