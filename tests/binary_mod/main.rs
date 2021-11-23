@@ -314,7 +314,7 @@ pub fn closure_works() {
 
     assert!(|| -> Result<i32, Box<dyn Error>> {
         // Create a closure which uses the session.
-        let f = move |x: i32| -> Result<i32, Box<dyn Error>> {
+        let _f = move |x: i32| -> Result<i32, Box<dyn Error>> {
             let s = choose!(CalcOp::Neg, s);
             let s = send(x, s);
             let (y, s) = recv(s)?;
@@ -323,8 +323,8 @@ pub fn closure_works() {
         };
 
         // Let the closure go out of scope.
-        Err(Box::new(mpsc::RecvError))?;
-        f(5)
+        Err(Box::new(mpsc::RecvError))
+        // f(5)
     }()
     .is_err());
 
