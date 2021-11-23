@@ -421,9 +421,10 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring five baking inline protocol MPST {}", LOOPS), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(
+        &format!("ring five baking inline protocol MPST {}", LOOPS),
+        |b| b.iter(|| all_mpst()),
+    );
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {

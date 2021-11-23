@@ -57,7 +57,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
-    
+
     for _ in 1..LOOPS {
         temp_s = recurs_b(temp_s)?;
     }
@@ -217,15 +217,17 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh two baking inline protocol MPST {}", LOOPS), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(
+        &format!("mesh two baking inline protocol MPST {}", LOOPS),
+        |b| b.iter(|| all_mpst()),
+    );
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh two baking inline protocol binary {}", LOOPS), |b| {
-        b.iter(|| all_binaries())
-    });
+    c.bench_function(
+        &format!("mesh two baking inline protocol binary {}", LOOPS),
+        |b| b.iter(|| all_binaries()),
+    );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {

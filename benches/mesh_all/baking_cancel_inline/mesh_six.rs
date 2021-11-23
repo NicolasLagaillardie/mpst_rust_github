@@ -457,15 +457,17 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh six baking inline protocol MPST {}", LOOPS), |b| {
-        b.iter(|| all_mpst())
-    });
+    c.bench_function(
+        &format!("mesh six baking inline protocol MPST {}", LOOPS),
+        |b| b.iter(|| all_mpst()),
+    );
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh six baking inline protocol binary {}", LOOPS), |b| {
-        b.iter(|| all_binaries())
-    });
+    c.bench_function(
+        &format!("mesh six baking inline protocol binary {}", LOOPS),
+        |b| b.iter(|| all_binaries()),
+    );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {

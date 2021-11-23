@@ -3360,7 +3360,7 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
-    
+
     for _ in 1..LOOPS {
         temp_s = recurs_t(temp_s)?;
     }
