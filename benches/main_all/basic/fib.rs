@@ -250,12 +250,12 @@ fn all_binaries() {
 static LOOPS: i64 = 20;
 
 fn fibo_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo MPST {}", LOOPS), |b| b.iter(|| all_mpst()));
+    c.bench_function(&format!("Fibo MPST {}", LOOPS), |b| b.iter(all_mpst));
 }
 
 fn fibo_binary(c: &mut Criterion) {
     c.bench_function(&format!("Fibo binary {}", LOOPS), |b| {
-        b.iter(|| all_binaries())
+        b.iter(all_binaries)
     });
 }
 

@@ -204,7 +204,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn travel_main(c: &mut Criterion) {
-    c.bench_function(&format!("Travel MPST baking"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"Travel MPST baking".to_string(), |b| b.iter(all_mpst));
 }
 
 criterion_group! {

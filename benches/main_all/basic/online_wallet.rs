@@ -312,7 +312,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn online_wallet_main(c: &mut Criterion) {
-    c.bench_function(&format!("Online wallet"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"Online wallet".to_string(), |b| b.iter(all_mpst));
 }
 
 // fn long_warmup() -> Criterion {

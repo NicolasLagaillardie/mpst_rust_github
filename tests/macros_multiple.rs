@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 mod macros_multiple_mod;
 
 #[test]

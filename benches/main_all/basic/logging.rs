@@ -231,7 +231,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn logging_main(c: &mut Criterion) {
-    c.bench_function(&format!("Logging"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"Logging".to_string(), |b| b.iter(all_mpst));
 }
 
 // fn long_warmup() -> Criterion {

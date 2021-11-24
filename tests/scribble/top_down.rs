@@ -43,8 +43,8 @@ type OrderingA8Full = RoleB<RoleEnd>;
 type EndpointA9 = MeshedChannels<BYEAtoB, End, OrderingA8Full, RoleA<RoleEnd>>;
 
 enum Branches0AtoC<N: marker::Send> {
-    ADD(EndpointA7<N>),
-    BYE(EndpointA9),
+    Add(EndpointA7<N>),
+    Bye(EndpointA9),
 }
 type Choose0forAtoC<N> = Send<Branches0AtoC<N>, End>;
 
@@ -66,8 +66,8 @@ type OrderingB10Full = RoleC<RoleA<RoleEnd>>;
 type EndpointB11 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB10Full, RoleB<RoleEnd>>;
 
 enum Branches0BtoC<N: marker::Send> {
-    ADD(EndpointB9<N>),
-    BYE(EndpointB11),
+    Add(EndpointB9<N>),
+    Bye(EndpointB11),
 }
 type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
@@ -86,15 +86,13 @@ type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Fu
 // Functions related to endpoints
 fn server(s: EndpointB14<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
-        Branches0BtoC::BYE(s) => {
+        Branches0BtoC::Bye(s) => {
             let (x, s) = recv_mpst_b_from_c(s)?;
 
-            assert_eq!(x, ());
-
-            let s = send_mpst_b_to_a((), s);
+            let s = send_mpst_b_to_a(x, s);
             close_mpst(s)
         },
-        Branches0BtoC::ADD(s) => {
+        Branches0BtoC::Add(s) => {
             let (id, s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_a(id + 1, s);
             close_mpst(s)
@@ -106,14 +104,12 @@ fn authenticator(s: EndpointA12<i32>) -> Result<(), Box<dyn Error>> {
     let (_, s) = recv_mpst_a_from_c(s)?;
 
     offer_mpst_a_to_c!(s, {
-        Branches0AtoC::BYE(s) => {
-            let (x, s) = recv_mpst_a_from_b(s)?;
-
-            assert_eq!(x, ());
+        Branches0AtoC::Bye(s) => {
+            let (_x, s) = recv_mpst_a_from_b(s)?;
 
             close_mpst(s)
         },
-        Branches0AtoC::ADD(s) => {
+        Branches0AtoC::Add(s) => {
             let (_, s) = recv_mpst_a_from_b(s)?;
             close_mpst(s)
         },
@@ -127,11 +123,11 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(0, s);
 
     if x == 1 {
-        let s = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
+        let s = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
         let s = send_mpst_c_to_b(1, s);
         close_mpst(s)
     } else {
-        let s = choose_mpst_c_to_all!(s, Branches0AtoC::BYE, Branches0BtoC::BYE);
+        let s = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
         let s = send_mpst_c_to_b((), s);
         close_mpst(s)
     }

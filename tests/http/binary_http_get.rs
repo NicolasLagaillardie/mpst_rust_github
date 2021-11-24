@@ -16,11 +16,11 @@ type ServerMPST<N> = <ClientMPST<N> as Session>::Dual;
 fn client(s: ClientMPST<i32>) -> Result<(), Box<dyn Error>> {
     match fs::read_to_string("imgur.env") {
         Ok(contents) => {
-            let lines: Vec<&str> = contents.split("\n").collect();
+            let lines: Vec<&str> = contents.split('\n').collect();
             let hasher = RandomState::new();
             let mut ids: HashMap<&str, &str> = HashMap::with_hasher(hasher);
             for line in lines {
-                let temp: Vec<&str> = line.split("=").collect();
+                let temp: Vec<&str> = line.split('=').collect();
                 ids.insert(temp[0], temp[1]);
             }
 

@@ -187,7 +187,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn o_auth_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("oAuth MPST baking"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"oAuth MPST baking".to_string(), |b| b.iter(all_mpst));
 }
 
 // fn long_warmup() -> Criterion {

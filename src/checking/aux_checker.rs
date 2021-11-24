@@ -987,11 +987,11 @@ mod tests {
 
     #[test]
     fn test_extract_index_node() {
-        assert_eq!("0.1.4.5", extract_index_node(&vec![0, 1, 4, 5], 3).unwrap());
+        assert_eq!("0.1.4.5", extract_index_node(&[0, 1, 4, 5], 3).unwrap());
 
-        assert_eq!("0.1.4", extract_index_node(&vec![0, 1, 4, 5], 2).unwrap());
+        assert_eq!("0.1.4", extract_index_node(&[0, 1, 4, 5], 2).unwrap());
 
-        assert_eq!("0", extract_index_node(&vec![0, 1, 4, 5], 0).unwrap());
+        assert_eq!("0", extract_index_node(&[0, 1, 4, 5], 0).unwrap());
     }
 
     #[test]

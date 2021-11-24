@@ -1244,7 +1244,7 @@ static LOOPS: i64 = 100;
 fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eleven cancel broadcast protocol MPST {}", LOOPS),
-        |b| b.iter(|| all_mpst()),
+        |b| b.iter(all_mpst),
     );
 }
 

@@ -169,7 +169,7 @@ static LOOPS: i64 = 1;
 fn ping_pong_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("ping pong cancel broadcast protocol MPST {}", LOOPS),
-        |b| b.iter(|| all_mpst()),
+        |b| b.iter(all_mpst),
     );
 }
 

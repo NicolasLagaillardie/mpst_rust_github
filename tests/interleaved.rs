@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 mod interleaved_mod;
 
 // Tests for macros with more than two participants

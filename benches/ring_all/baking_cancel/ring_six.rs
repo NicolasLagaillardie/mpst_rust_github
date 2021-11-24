@@ -478,20 +478,20 @@ static LOOPS: i64 = 100;
 
 fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ring six baking protocol MPST {}", LOOPS), |b| {
-        b.iter(|| all_mpst())
+        b.iter(all_mpst)
     });
 }
 
 fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(&format!("ring six baking protocol binary {}", LOOPS), |b| {
-        b.iter(|| all_binaries())
+        b.iter(all_binaries)
     });
 }
 
 fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("ring six baking protocol crossbeam {}", LOOPS),
-        |b| b.iter(|| all_crossbeam()),
+        |b| b.iter(all_crossbeam),
     );
 }
 

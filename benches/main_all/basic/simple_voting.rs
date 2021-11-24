@@ -204,7 +204,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn simple_voting_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Simple voting MPST"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"Simple voting MPST".to_string(), |b| b.iter(all_mpst));
 }
 
 // fn long_warmup() -> Criterion {

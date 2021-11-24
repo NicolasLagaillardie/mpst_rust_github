@@ -599,14 +599,14 @@ static LOOPS: i64 = 100;
 fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eight baking inline protocol MPST {}", LOOPS),
-        |b| b.iter(|| all_mpst()),
+        |b| b.iter(all_mpst),
     );
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eight baking inline protocol binary {}", LOOPS),
-        |b| b.iter(|| all_binaries()),
+        |b| b.iter(all_binaries),
     );
 }
 

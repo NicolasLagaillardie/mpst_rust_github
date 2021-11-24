@@ -77,8 +77,8 @@ type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<Rol
 type EndpointChoiceB<N> = MeshedChannels<ChooseBtoA<N>, ChooseBtoC, StackFullB, RoleB<RoleEnd>>;
 
 // For C
-type EndpointCAdd = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
-type EndpointCNeg = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
+// type EndpointCAdd = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
+// type EndpointCNeg = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
 
 type OfferCfromB = OfferMpst<End, End, End, End, StackOfferC, StackOfferC, RoleC<RoleEnd>>;
 type EndpointChoiceC = MeshedChannels<End, OfferCfromB, StackFullC, RoleC<RoleEnd>>;
@@ -145,8 +145,8 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
 fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_c_from_b(
         s,
-        |s: EndpointCAdd| close_mpst(s),
-        |s: EndpointCNeg| close_mpst(s),
+        close_mpst,
+        close_mpst,
     )
 }
 

@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 // Unfinished, still in process of adding send_tcp and recv_tcp
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};

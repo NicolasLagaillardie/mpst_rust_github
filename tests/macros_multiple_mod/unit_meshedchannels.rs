@@ -38,8 +38,8 @@ pub fn meshedchannels_fields() {
         .unwrap_or(());
     meshedchannels_1.name.sender.send(there1_name).unwrap_or(());
 
-    assert_eq!(here1_stack.sender.send(RoleEnd::new().1).unwrap_or(()), ());
-    assert_eq!(here1_name.sender.send(()).unwrap_or(()), ());
+    assert!(here1_stack.sender.send(RoleEnd::new().1).is_ok());
+    assert!(here1_name.sender.send(()).is_ok());
 
     // meshedchannels_2
     let (here2_stack, there2_stack) = RoleC::<RoleEnd>::new();
@@ -51,8 +51,8 @@ pub fn meshedchannels_fields() {
         .unwrap_or(());
     meshedchannels_2.name.sender.send(here2_name).unwrap_or(());
 
-    assert_eq!(there2_stack.sender.send(RoleEnd::new().1).unwrap_or(()), ());
-    assert_eq!(there2_name.sender.send(()).unwrap_or(()), ());
+    assert!(there2_stack.sender.send(RoleEnd::new().1).is_ok());
+    assert!(there2_name.sender.send(()).is_ok());
 }
 
 pub fn meshedchannels_methods() {

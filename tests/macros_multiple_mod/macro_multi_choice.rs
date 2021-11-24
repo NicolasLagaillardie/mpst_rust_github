@@ -139,7 +139,7 @@ type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, Name
 
 // For A
 type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
-type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
+// type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
 type OfferA<N> = OfferMpstMultiThree<
     AtoBVideo<N>,
@@ -155,7 +155,7 @@ type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, NameA>;
 
 // For B
 type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
-type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
+// type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
 type OfferB<N> = OfferMpstMultiThree<
     BtoAVideo<N>,
@@ -178,7 +178,7 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         },
-        |s: EndpointBEnd| close_mpst_multi(s),
+        close_mpst_multi,
     )
 }
 
@@ -199,7 +199,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         },
-        |s: EndpointAEnd| close_mpst_multi(s),
+        close_mpst_multi,
     )
 }
 

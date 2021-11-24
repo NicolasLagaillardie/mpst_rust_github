@@ -1314,21 +1314,21 @@ static LOOPS: i64 = 0;
 
 fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("mesh eleven empty protocol MPST {}", LOOPS), |b| {
-        b.iter(|| all_mpst())
+        b.iter(all_mpst)
     });
 }
 
 fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eleven empty protocol binary {}", LOOPS),
-        |b| b.iter(|| all_binaries()),
+        |b| b.iter(all_binaries),
     );
 }
 
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eleven empty protocol crossbeam {}", LOOPS),
-        |b| b.iter(|| all_crossbeam()),
+        |b| b.iter(all_crossbeam),
     );
 }
 

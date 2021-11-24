@@ -23,7 +23,7 @@ pub fn role_a_fields() {
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_sender.self_head_str(), "RoleD".to_string());
     assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
 
@@ -31,7 +31,7 @@ pub fn role_a_fields() {
     let (here, there) = RoleEnd::new();
     role_receiver.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_receiver.self_head_str(), "RoleDDual".to_string());
     assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
@@ -43,7 +43,7 @@ pub fn role_b_fields() {
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_sender.self_head_str(), "RoleE".to_string());
     assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
 
@@ -51,7 +51,7 @@ pub fn role_b_fields() {
     let (here, there) = RoleEnd::new();
     role_receiver.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_receiver.self_head_str(), "RoleEDual".to_string());
     assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
@@ -63,7 +63,7 @@ pub fn role_c_fields() {
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_sender.self_head_str(), "RoleF".to_string());
     assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
 
@@ -71,7 +71,7 @@ pub fn role_c_fields() {
     let (here, there) = RoleEnd::new();
     role_receiver.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_receiver.self_head_str(), "RoleFDual".to_string());
     assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
@@ -85,8 +85,8 @@ pub fn role_a_to_all_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 
     // role_sender_2
     let (here1, there1) = RoleEnd::new();
@@ -94,8 +94,8 @@ pub fn role_a_to_all_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 }
 
 pub fn role_all_to_a_fields() {
@@ -107,8 +107,8 @@ pub fn role_all_to_a_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 
     // role_sender_2
     let (here1, there1) = RoleEnd::new();
@@ -116,8 +116,8 @@ pub fn role_all_to_a_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 }
 
 pub fn role_b_to_all_fields() {
@@ -129,8 +129,8 @@ pub fn role_b_to_all_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 
     // role_sender_2
     let (here1, there1) = RoleEnd::new();
@@ -138,8 +138,8 @@ pub fn role_b_to_all_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 }
 
 pub fn role_all_to_b_fields() {
@@ -151,8 +151,8 @@ pub fn role_all_to_b_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 
     // role_sender_2
     let (here1, there1) = RoleEnd::new();
@@ -160,8 +160,8 @@ pub fn role_all_to_b_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 }
 
 pub fn role_c_to_all_fields() {
@@ -173,8 +173,8 @@ pub fn role_c_to_all_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 
     // role_sender_2
     let (here1, there1) = RoleEnd::new();
@@ -182,8 +182,8 @@ pub fn role_c_to_all_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 }
 
 pub fn role_all_to_c_fields() {
@@ -195,8 +195,8 @@ pub fn role_all_to_c_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 
     // role_sender_2
     let (here1, there1) = RoleEnd::new();
@@ -204,8 +204,8 @@ pub fn role_all_to_c_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
 }
 
 pub fn role_head_str() {

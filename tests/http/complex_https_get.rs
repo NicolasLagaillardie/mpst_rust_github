@@ -9,13 +9,13 @@ use std::fs;
 async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync>> {
     match fs::read_to_string("imgur.env") {
         Ok(contents) => {
-            let lines: Vec<&str> = contents.split("\n").collect();
+            let lines: Vec<&str> = contents.split('\n').collect();
 
             let s = RandomState::new();
             let mut ids: HashMap<&str, &str> = HashMap::with_hasher(s);
 
             for line in lines {
-                let temp: Vec<&str> = line.split("=").collect();
+                let temp: Vec<&str> = line.split('=').collect();
                 ids.insert(temp[0], temp[1]);
             }
 

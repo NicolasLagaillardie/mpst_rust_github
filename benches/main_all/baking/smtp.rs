@@ -599,7 +599,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn smtp_main(c: &mut Criterion) {
-    c.bench_function(&format!("SMTP baking"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"SMTP baking".to_string(), |b| b.iter(all_mpst));
 }
 
 criterion_group! {

@@ -54,7 +54,7 @@ pub fn role_a_fields() {
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_sender.self_head_str(), "RoleA".to_string());
     assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
 
@@ -62,7 +62,7 @@ pub fn role_a_fields() {
     let (here, there) = RoleEnd::new();
     role_receiver.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_receiver.self_head_str(), "RoleADual".to_string());
     assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
@@ -79,7 +79,7 @@ pub fn role_b_fields() {
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_sender.self_head_str(), "RoleB".to_string());
     assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
 
@@ -87,7 +87,7 @@ pub fn role_b_fields() {
     let (here, there) = RoleEnd::new();
     role_receiver.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_receiver.self_head_str(), "RoleBDual".to_string());
     assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
@@ -104,7 +104,7 @@ pub fn role_c_fields() {
     let (here, there) = RoleEnd::new();
     role_sender.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_sender.self_head_str(), "RoleC".to_string());
     assert_eq!(role_sender.self_tail_str(), "RoleEnd<>".to_string());
 
@@ -112,7 +112,7 @@ pub fn role_c_fields() {
     let (here, there) = RoleEnd::new();
     role_receiver.sender.send(there).unwrap_or(());
 
-    assert_eq!(here.sender.send(()).unwrap_or(()), ());
+    assert!(here.sender.send(()).is_ok());
     assert_eq!(role_receiver.self_head_str(), "RoleCDual".to_string());
     assert_eq!(role_receiver.self_tail_str(), "RoleEnd<>".to_string());
 }
@@ -136,8 +136,8 @@ pub fn role_a_to_all_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_1.self_head_str(), "RoleAtoAll".to_string());
     assert_eq!(
         role_sender_1.self_tail_str(),
@@ -150,8 +150,8 @@ pub fn role_a_to_all_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_2.self_head_str(), "RoleAlltoA".to_string());
     assert_eq!(
         role_sender_2.self_tail_str(),
@@ -178,8 +178,8 @@ pub fn role_all_to_a_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_1.self_head_str(), "RoleAlltoA".to_string());
     assert_eq!(
         role_sender_1.self_tail_str(),
@@ -192,8 +192,8 @@ pub fn role_all_to_a_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_2.self_head_str(), "RoleAtoAll".to_string());
     assert_eq!(
         role_sender_2.self_tail_str(),
@@ -220,8 +220,8 @@ pub fn role_b_to_all_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_1.self_head_str(), "RoleBtoAll".to_string());
     assert_eq!(
         role_sender_1.self_tail_str(),
@@ -234,8 +234,8 @@ pub fn role_b_to_all_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_2.self_head_str(), "RoleAlltoB".to_string());
     assert_eq!(
         role_sender_2.self_tail_str(),
@@ -262,8 +262,8 @@ pub fn role_all_to_b_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_1.self_head_str(), "RoleAlltoB".to_string());
     assert_eq!(
         role_sender_1.self_tail_str(),
@@ -276,8 +276,8 @@ pub fn role_all_to_b_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_2.self_head_str(), "RoleBtoAll".to_string());
     assert_eq!(
         role_sender_2.self_tail_str(),
@@ -304,8 +304,8 @@ pub fn role_c_to_all_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_1.self_head_str(), "RoleCtoAll".to_string());
     assert_eq!(
         role_sender_1.self_tail_str(),
@@ -318,8 +318,8 @@ pub fn role_c_to_all_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_2.self_head_str(), "RoleAlltoC".to_string());
     assert_eq!(
         role_sender_2.self_tail_str(),
@@ -346,8 +346,8 @@ pub fn role_all_to_c_fields() {
     role_sender_1.sender1.send(there1).unwrap_or(());
     role_sender_1.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_1.self_head_str(), "RoleAlltoC".to_string());
     assert_eq!(
         role_sender_1.self_tail_str(),
@@ -360,8 +360,8 @@ pub fn role_all_to_c_fields() {
     role_sender_2.sender1.send(there1).unwrap_or(());
     role_sender_2.sender2.send(there2).unwrap_or(());
 
-    assert_eq!(here1.sender.send(()).unwrap_or(()), ());
-    assert_eq!(here2.sender.send(()).unwrap_or(()), ());
+    assert!(here1.sender.send(()).is_ok());
+    assert!(here2.sender.send(()).is_ok());
     assert_eq!(role_sender_2.self_head_str(), "RoleCtoAll".to_string());
     assert_eq!(
         role_sender_2.self_tail_str(),

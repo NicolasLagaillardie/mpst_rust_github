@@ -124,7 +124,7 @@ static LOOPS: i64 = 20;
 
 fn fibo_mpst(c: &mut Criterion) {
     c.bench_function(&format!("Fibo MPST {} baking", LOOPS), |b| {
-        b.iter(|| all_mpst())
+        b.iter(all_mpst)
     });
 }
 

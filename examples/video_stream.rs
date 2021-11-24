@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};

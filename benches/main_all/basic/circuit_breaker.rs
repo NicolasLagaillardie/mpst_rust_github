@@ -400,7 +400,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn circuit_breaker_main(c: &mut Criterion) {
-    c.bench_function(&format!("Circuit breaker"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"Circuit breaker".to_string(), |b| b.iter(all_mpst));
 }
 
 // fn long_warmup() -> Criterion {

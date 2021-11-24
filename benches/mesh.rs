@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 use criterion::criterion_main;
 
 mod mesh_all;

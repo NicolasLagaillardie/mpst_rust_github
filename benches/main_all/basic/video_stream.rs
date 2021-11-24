@@ -187,7 +187,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn video_stream_main(c: &mut Criterion) {
-    c.bench_function(&format!("Video stream"), |b| b.iter(|| all_mpst()));
+    c.bench_function(&"Video stream".to_string(), |b| b.iter(all_mpst));
 }
 
 // fn long_warmup() -> Criterion {

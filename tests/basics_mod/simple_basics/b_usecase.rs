@@ -104,7 +104,7 @@ type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, Role
 
 // For A
 type EndpointCVideo<N> = MeshedChannels<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
-type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
+// type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
 type OfferC<N> = OfferMpst<
     CtoAVideo<N>,
@@ -120,7 +120,7 @@ type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, RoleC<RoleEnd>
 
 // For B
 type EndpointAVideo<N> = MeshedChannels<AtoBClose, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
-type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
+// type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
 type OfferA<N> = OfferMpst<
     AtoBClose,
@@ -143,7 +143,7 @@ fn server(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)
         },
-        |s: EndpointAEnd| close_mpst(s),
+        close_mpst,
     )
 }
 
@@ -164,7 +164,7 @@ fn authenticator(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)
         },
-        |s: EndpointCEnd| close_mpst(s),
+        close_mpst,
     )
 }
 
