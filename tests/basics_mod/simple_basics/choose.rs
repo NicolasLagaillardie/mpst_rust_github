@@ -143,11 +143,7 @@ fn simple_store_client_right(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Erro
 }
 
 fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
-    offer_mpst_session_to_c_from_b(
-        s,
-        close_mpst,
-        close_mpst,
-    )
+    offer_mpst_session_to_c_from_b(s, close_mpst, close_mpst)
 }
 
 /////////////////////////////////////////

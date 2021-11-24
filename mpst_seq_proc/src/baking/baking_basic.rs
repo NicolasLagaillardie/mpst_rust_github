@@ -1995,7 +1995,7 @@ impl Baking {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    if result == "".to_string() {
+                    if result.is_empty() {
                         result = format!(
                             "{}",
                             <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
@@ -2016,7 +2016,7 @@ impl Baking {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
                 quote! {
-                    if result == "".to_string() {
+                    if result.is_empty() {
                         result = format!(
                             "{}<{}>",
                             <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),

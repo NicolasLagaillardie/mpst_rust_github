@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(dead_code, clippy::large_enum_variant)]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 

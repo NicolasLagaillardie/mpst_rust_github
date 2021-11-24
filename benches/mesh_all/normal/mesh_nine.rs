@@ -1,4 +1,3 @@
-
 #![allow(dead_code)]
 
 use crossbeam_channel::bounded;

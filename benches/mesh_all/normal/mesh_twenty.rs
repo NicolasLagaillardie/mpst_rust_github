@@ -1,5 +1,4 @@
-
-#![allow(dead_code)]
+#![allow(dead_code, clippy::large_enum_variant)]
 
 use crossbeam_channel::bounded;
 

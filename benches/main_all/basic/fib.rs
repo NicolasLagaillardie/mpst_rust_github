@@ -254,9 +254,7 @@ fn fibo_mpst(c: &mut Criterion) {
 }
 
 fn fibo_binary(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo binary {}", LOOPS), |b| {
-        b.iter(all_binaries)
-    });
+    c.bench_function(&format!("Fibo binary {}", LOOPS), |b| b.iter(all_binaries));
 }
 
 // fn long_warmup() -> Criterion {
