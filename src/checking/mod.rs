@@ -27,7 +27,7 @@ use aux_checker::*;
 /// a file for running the [`KMC`] tool and checking the
 /// properties of the provided protocol. The [`KMC`] tool
 /// must be installed with `cabal install` and the resulting
-/// binary must be in the _.cabal/bin_ folder.
+/// binary must be in the current repository folder.
 ///
 /// /!\ The provided types and enum cannot be checked if they contain
 /// a parameter, such as <N>, as seen in some examples.
@@ -285,7 +285,7 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Er
     .unwrap_or(());
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc = Command::new("~/.cabal/bin/KMC")
+    let kmc = Command::new("./KMC")
         .arg(format!("cfsm/{}.txt", name_file))
         .arg(format!("{:?}", kmc_number))
         .arg("--fsm")
