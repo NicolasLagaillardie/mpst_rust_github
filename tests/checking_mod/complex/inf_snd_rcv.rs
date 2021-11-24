@@ -162,7 +162,9 @@ pub fn main() {
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 1-exhaustive: \u{1b}[91mFalse\n\
         \u{1b}[0mreduced 1-safe: \u{1b}[91mFalse\n\
-        \u{1b}[0m\n",
+        \u{1b}[0mTraces violating progress: []\n\
+        Traces violating eventual reception: \
+        [0->1!i32<>; 1->0!u32<>, 0->1!i32<>; 1->0!u32<>]\n\n",
         read_to_string("outputs/inf_snd_rcv_1_kmc.txt").unwrap()
     );
 
@@ -171,7 +173,10 @@ pub fn main() {
         \u{1b}[0mBasic: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 2-exhaustive: \u{1b}[91mFalse\n\
         \u{1b}[0mreduced 2-safe: \u{1b}[91mFalse\n\
-        \u{1b}[0m\n",
+        \u{1b}[0mTraces violating progress: []\n\
+        Traces violating eventual reception: \
+        [0->1!i32<>; 1->0!u32<>; 0->1!i32<>; 1->0!u32<>, \
+        0->1!i32<>; 1->0!u32<>; 0->1!i32<>; 1->0!u32<>]\n\n",
         read_to_string("outputs/inf_snd_rcv_2_kmc.txt").unwrap()
     );
 }
