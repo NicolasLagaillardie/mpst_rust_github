@@ -1,11 +1,11 @@
-#![allow(clippy::type_complexity)]
+#![allow(clippy::type_complexity, clippy::too_many_arguments)]
 
 use criterion::criterion_main;
 
 mod mesh_all;
 
 criterion_main! {
-    // mesh_all::empty::mesh_two::mesh_two,
+    mesh_all::empty::mesh_two::mesh_two,
     // mesh_all::empty::mesh_three::mesh_three,
     // mesh_all::empty::mesh_four::mesh_four,
     // mesh_all::empty::mesh_five::mesh_five,
@@ -64,15 +64,15 @@ criterion_main! {
     // mesh_all::baking_cancel::mesh_eleven::mesh_eleven,
     // mesh_all::baking_cancel::mesh_twenty::mesh_twenty,
     // //////////
-    mesh_all::baking_cancel_inline::mesh_two::mesh_two,
-    mesh_all::baking_cancel_inline::mesh_three::mesh_three,
-    mesh_all::baking_cancel_inline::mesh_four::mesh_four,
-    mesh_all::baking_cancel_inline::mesh_five::mesh_five,
-    mesh_all::baking_cancel_inline::mesh_six::mesh_six,
-    mesh_all::baking_cancel_inline::mesh_seven::mesh_seven,
-    mesh_all::baking_cancel_inline::mesh_eight::mesh_eight,
-    mesh_all::baking_cancel_inline::mesh_nine::mesh_nine,
-    mesh_all::baking_cancel_inline::mesh_ten::mesh_ten,
-    mesh_all::baking_cancel_inline::mesh_eleven::mesh_eleven,
-    mesh_all::baking_cancel_inline::mesh_twenty::mesh_twenty,
+    // mesh_all::baking_cancel_inline::mesh_two::mesh_two,
+    // mesh_all::baking_cancel_inline::mesh_three::mesh_three,
+    // mesh_all::baking_cancel_inline::mesh_four::mesh_four,
+    // mesh_all::baking_cancel_inline::mesh_five::mesh_five,
+    // mesh_all::baking_cancel_inline::mesh_six::mesh_six,
+    // mesh_all::baking_cancel_inline::mesh_seven::mesh_seven,
+    // mesh_all::baking_cancel_inline::mesh_eight::mesh_eight,
+    // mesh_all::baking_cancel_inline::mesh_nine::mesh_nine,
+    // mesh_all::baking_cancel_inline::mesh_ten::mesh_ten,
+    // mesh_all::baking_cancel_inline::mesh_eleven::mesh_eleven,
+    // mesh_all::baking_cancel_inline::mesh_twenty::mesh_twenty,
 }
