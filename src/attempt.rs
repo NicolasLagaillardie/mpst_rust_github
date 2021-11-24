@@ -12,20 +12,28 @@
 /// ```
 /// use mpstthree::attempt;
 ///
-/// fn do_step1() -> Result<(), String> { println!("Step 1"); Ok (()) }
-/// fn do_step2() -> Result<(), String> { println!("Step 2"); Err ("Error in step 2".into()) }
-/// fn do_step3() -> Result<(), String> { println!("Step 3"); Ok (()) }
-///
-/// fn main() {
-///    attempt!{{
-///       do_step1();
-///       do_step2();
-///       do_step3();
-///    } catch (e) {
-///       println!("Failed to perform necessary steps: {}", e);
-///    }}
+/// fn do_step1() -> Result<(), String> {
+///     println!("Step 1");
+///     Ok(())
+/// }
+/// fn do_step2() -> Result<(), String> {
+///     println!("Step 2");
+///     Err("Error in step 2".into())
+/// }
+/// fn do_step3() -> Result<(), String> {
+///     println!("Step 3");
+///     Ok(())
 /// }
 ///
+/// fn main() {
+///     attempt! {{
+///        do_step1();
+///        do_step2();
+///        do_step3();
+///     } catch (e) {
+///        println!("Failed to perform necessary steps: {}", e);
+///     }}
+/// }
 /// ```
 #[macro_export]
 macro_rules! attempt { // `try` is a reserved keyword

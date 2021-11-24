@@ -96,7 +96,6 @@ type EndpointC = MeshedChannelsFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>
 type EndpointD =
     MeshedChannelsFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
-#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromDtoA::Done(s) => {
@@ -114,7 +113,6 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromDtoB::Done(s) => {
@@ -132,7 +130,6 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromDtoC::Done(s) => {
@@ -150,7 +147,6 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -168,7 +164,6 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-#[inline]
 fn recurs_d(s: EndpointD) -> Result<EndpointD, Box<dyn Error>> {
     let s: EndpointMoreD = choose_mpst_d_to_all!(
         s,
@@ -186,7 +181,6 @@ fn recurs_d(s: EndpointD) -> Result<EndpointD, Box<dyn Error>> {
     Ok(s)
 }
 
-#[inline]
 fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d) = fork_mpst(
         black_box(endpoint_a),

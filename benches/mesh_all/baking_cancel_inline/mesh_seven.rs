@@ -179,7 +179,6 @@ type EndpointG = MeshedChannelsSeven<
     NameG,
 >;
 
-#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoA::Done(s) => {
@@ -203,7 +202,6 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoB::Done(s) => {
@@ -227,7 +225,6 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoC::Done(s) => {
@@ -251,7 +248,6 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoD::Done(s) => {
@@ -275,7 +271,6 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoE::Done(s) => {
@@ -299,7 +294,6 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoF::Done(s) => {
@@ -323,7 +317,6 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -344,7 +337,6 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-#[inline]
 fn recurs_g(s: EndpointG) -> Result<EndpointG, Box<dyn Error>> {
     let s: EndpointMoreG = choose_mpst_g_to_all!(
         s,
@@ -371,7 +363,6 @@ fn recurs_g(s: EndpointG) -> Result<EndpointG, Box<dyn Error>> {
     Ok(s)
 }
 
-#[inline]
 fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g) = fork_mpst(
         black_box(endpoint_a),

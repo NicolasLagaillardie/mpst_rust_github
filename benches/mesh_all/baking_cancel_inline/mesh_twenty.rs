@@ -2407,7 +2407,6 @@ type EndpointT = MeshedChannelsTwenty<
     NameT,
 >;
 
-#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoA::Done(s) => {
@@ -2457,7 +2456,6 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoB::Done(s) => {
@@ -2507,7 +2505,6 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoC::Done(s) => {
@@ -2557,7 +2554,6 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoD::Done(s) => {
@@ -2607,7 +2603,6 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoE::Done(s) => {
@@ -2657,7 +2652,6 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoF::Done(s) => {
@@ -2707,7 +2701,6 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoG::Done(s) => {
@@ -2757,7 +2750,6 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoH::Done(s) => {
@@ -2807,7 +2799,6 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoI::Done(s) => {
@@ -2857,7 +2848,6 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoJ::Done(s) => {
@@ -2907,7 +2897,6 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoK::Done(s) => {
@@ -2957,7 +2946,6 @@ fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoL::Done(s) => {
@@ -3007,7 +2995,6 @@ fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoM::Done(s) => {
@@ -3057,7 +3044,6 @@ fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoN::Done(s) => {
@@ -3107,7 +3093,6 @@ fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoO::Done(s) => {
@@ -3157,7 +3142,6 @@ fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoP::Done(s) => {
@@ -3207,7 +3191,6 @@ fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoQ::Done(s) => {
@@ -3257,7 +3240,6 @@ fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoR::Done(s) => {
@@ -3307,7 +3289,6 @@ fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromTtoS::Done(s) => {
@@ -3357,7 +3338,6 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -3391,7 +3371,6 @@ fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-#[inline]
 fn recurs_t(s: EndpointT) -> Result<EndpointT, Box<dyn Error>> {
     let s: EndpointMoreT = choose_mpst_t_to_all!(
         s,
@@ -3457,7 +3436,6 @@ fn recurs_t(s: EndpointT) -> Result<EndpointT, Box<dyn Error>> {
     Ok(s)
 }
 
-#[inline]
 fn all_mpst() {
     let (
         thread_a,

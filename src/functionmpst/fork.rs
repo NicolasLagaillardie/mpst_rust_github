@@ -22,6 +22,7 @@ where
 {
     Builder::new()
         .name(String::from(name))
+        .stack_size(32 * 1024 * 1024)
         .spawn(move || {
             set_hook(Box::new(|_info| {
                 // do nothing

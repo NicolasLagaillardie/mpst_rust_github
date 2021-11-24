@@ -284,8 +284,8 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Er
     .unwrap_or(());
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc = Command::new("cd ../kmc && cabal run KMC")
-        .arg(format!("-- ../mpst_rust_github/cfsm/{}.txt", name_file))
+    let kmc = Command::new("./../kmc/KMC")
+        .arg(format!("cfsm/{}.txt", name_file))
         .arg(format!("{:?}", kmc_number))
         .arg("--fsm")
         .arg("&& cd ../mpst_rust_github")
@@ -359,7 +359,7 @@ pub fn checker(
         let mut cfsm_sort = vec![vec!["".to_string()]; roles.len()];
 
         // Get all the graphs and add them to the result Hashmap
-        for (role, full_session) in clean_sessions.clone() {
+        for (role, full_session) in clean_sessions {
             // Get the graph and the cfsm for the current role
             let (graph, cfsm) = get_graph_session(
                 &role,
@@ -393,7 +393,7 @@ pub fn checker(
         }
     } else {
         // Get all the graphs and add them to the result Hashmap
-        for (role, full_session) in clean_sessions.clone() {
+        for (role, full_session) in clean_sessions {
             // Get the graph and the cfsm for the current role
             let (graph, _) = get_graph_session(
                 &role,

@@ -41,7 +41,6 @@ type EndpointBackwardB = MeshedChannelsTwo<Send<(), Choose0fromBtoA>, RoleA<Role
 type EndpointA = MeshedChannelsTwo<RecursAtoB, RoleB<RoleEnd>, NameA>;
 type EndpointB = MeshedChannelsTwo<Choose0fromBtoA, RoleBroadcast, NameB>;
 
-#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromBtoA::Done(s) => {
@@ -58,7 +57,6 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -71,7 +69,6 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-#[inline]
 fn recurs_b(s: EndpointB, index: i64) -> Result<EndpointB, Box<dyn Error>> {
     match index {
         i if i % 2 == 0 => {
@@ -91,7 +88,6 @@ fn recurs_b(s: EndpointB, index: i64) -> Result<EndpointB, Box<dyn Error>> {
     }
 }
 
-#[inline]
 fn all_mpst() {
     let (thread_a, thread_b) = fork_mpst(black_box(endpoint_a), black_box(endpoint_b));
 

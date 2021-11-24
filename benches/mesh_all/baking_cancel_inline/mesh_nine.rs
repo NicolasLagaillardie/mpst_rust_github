@@ -249,7 +249,6 @@ type EndpointI = MeshedChannelsNine<
     NameI,
 >;
 
-#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoA::Done(s) => {
@@ -277,7 +276,6 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoB::Done(s) => {
@@ -305,7 +303,6 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoC::Done(s) => {
@@ -333,7 +330,6 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoD::Done(s) => {
@@ -361,7 +357,6 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoE::Done(s) => {
@@ -389,7 +384,6 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoF::Done(s) => {
@@ -417,7 +411,6 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoG::Done(s) => {
@@ -445,7 +438,6 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromItoH::Done(s) => {
@@ -473,7 +465,6 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     })
 }
 
-#[inline]
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -496,7 +487,6 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-#[inline]
 fn recurs_i(s: EndpointI) -> Result<EndpointI, Box<dyn Error>> {
     let s: EndpointMoreI = choose_mpst_i_to_all!(
         s,
@@ -529,7 +519,6 @@ fn recurs_i(s: EndpointI) -> Result<EndpointI, Box<dyn Error>> {
     Ok(s)
 }
 
-#[inline]
 fn all_mpst() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h, thread_i) =
         fork_mpst(
