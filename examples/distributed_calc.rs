@@ -149,11 +149,11 @@ fn endpoint_s(s: EndpointS<u32>) -> Result<(), Box<dyn Error>> {
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching0fromCtoS::Sum(s) => {
-            let s = send_mpst_s_to_c((elt_1 + elt_2)/2,s);
+            let s = send_mpst_s_to_c(elt_1 + elt_2,s);
             close_mpst_multi(s)
         },
         Branching0fromCtoS::Diff(s) => {
-            let s = send_mpst_s_to_c((elt_1 - elt_2)/2, s);
+            let s = send_mpst_s_to_c(elt_1 - elt_2, s);
             close_mpst_multi(s)
         },
     })
