@@ -200,7 +200,7 @@ fn start(
     let s_storage = s_storage.send(random::<i32>())?;
     let (_, s_controller) = s_controller.recv()?;
 
-    rec_loop(s_api, s_controller, s_storage, s_user, 100)
+    rec_loop(s_api, s_controller, s_storage, s_user, 10)
 }
 
 fn rec_loop(

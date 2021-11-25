@@ -201,7 +201,7 @@ fn start(
     let s_storage = s_storage.send(random::<i32>())?;
     let (_, s_controller) = s_controller.recv()?;
 
-    rec_loop(s_api, s_controller, s_storage, s_user, 100)
+    rec_loop(s_api, s_controller, s_storage, s_user, 10)
 }
 
 fn rec_loop(
@@ -217,7 +217,7 @@ fn rec_loop(
     let (_, s_controller) = s_controller.recv()?;
 
     match loops {
-        i if i < 0 => {
+        i if i <= 0 => {
             let s_controller: EndpointControllerClose<i32> = choose_mpst_controller_to_all!(
                 s_controller,
                 Branching0fromCtoA::Close,
@@ -312,13 +312,8 @@ fn circuit_breaker_solo_main(c: &mut Criterion) {
     c.bench_function(&"Circuit breaker solo".to_string(), |b| b.iter(all_mpst));
 }
 
-// fn long_warmup() -> Criterion {
-//     Criterion::default().measurement_time(Duration::new(40, 0))
-// }
-
 criterion_group! {
     name = circuit_breaker_solo;
-    // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = circuit_breaker_solo_main
 }

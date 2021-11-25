@@ -255,13 +255,8 @@ fn fibo_binary(c: &mut Criterion) {
     c.bench_function(&format!("Fibo binary {}", LOOPS), |b| b.iter(all_binaries));
 }
 
-// fn long_warmup() -> Criterion {
-//     Criterion::default().measurement_time(Duration::new(30, 0))
-// }
-
 criterion_group! {
     name = fib;
-    // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = fibo_mpst, fibo_binary
 }

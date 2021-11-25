@@ -313,13 +313,8 @@ fn online_wallet_main(c: &mut Criterion) {
     c.bench_function(&"Online wallet".to_string(), |b| b.iter(all_mpst));
 }
 
-// fn long_warmup() -> Criterion {
-//     Criterion::default().measurement_time(Duration::new(30, 0))
-// }
-
 criterion_group! {
     name = online_wallet;
-    // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = online_wallet_main
 }

@@ -1174,13 +1174,8 @@ fn ring_protocol_crossbeam(c: &mut Criterion) {
     );
 }
 
-// fn long_warmup() -> Criterion {
-//     Criterion::default().measurement_time(Duration::new(1800, 0))
-// }
-
 criterion_group! {
     name = ring_eleven;
-    // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ring_protocol_mpst, ring_protocol_binary, ring_protocol_crossbeam
 }

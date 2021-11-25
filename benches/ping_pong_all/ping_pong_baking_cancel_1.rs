@@ -99,13 +99,8 @@ fn ping_pong_protocol_mpst(c: &mut Criterion) {
     });
 }
 
-// fn long_warmup() -> Criterion {
-//     Criterion::default().measurement_time(Duration::new(1800, 0))
-// }
-
 criterion_group! {
     name = ping_pong;
-    // config = long_warmup();
     config = Criterion::default().significance_level(0.1).sample_size(10100);
     targets = ping_pong_protocol_mpst
 }
