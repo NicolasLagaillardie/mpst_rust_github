@@ -102,7 +102,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let elt_1 = thread_rng().gen_range(1..=100);
     let elt_2 = thread_rng().gen_range(1..=100);
     let s = send_mpst_c_to_s(elt_1, s);
@@ -114,7 +114,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Sum,
-            Branching0fromCtoS::<u32>::Sum, =>
+            Branching0fromCtoS::<i32>::Sum, =>
             RoleA,
             RoleS, =>
             RoleC,
@@ -129,7 +129,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Diff,
-            Branching0fromCtoS::<u32>::Diff, =>
+            Branching0fromCtoS::<i32>::Diff, =>
             RoleA,
             RoleS, =>
             RoleC,
@@ -143,7 +143,7 @@ fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn endpoint_s(s: EndpointS<u32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
     let (elt_1, s) = recv_mpst_s_from_c(s)?;
     let (elt_2, s) = recv_mpst_s_from_c(s)?;
 
