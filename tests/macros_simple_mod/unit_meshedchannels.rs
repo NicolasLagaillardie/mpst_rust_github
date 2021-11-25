@@ -30,8 +30,8 @@ pub fn meshedchannels_fields() {
         .unwrap_or(());
     meshedchannels_1.name.sender.send(there1_name).unwrap_or(());
 
-    assert!(here1_stack.sender.send(RoleEnd::new().1).is_ok());
-    assert!(here1_name.sender.send(()).is_ok());
+    assert!(here1_stack.sender.send(RoleEnd::new().1).is_err());
+    assert!(here1_name.sender.send(()).is_err());
 
     // meshedchannels_2
     let (here2_stack, there2_stack) = RoleC::<RoleEnd>::new();
@@ -43,8 +43,8 @@ pub fn meshedchannels_fields() {
         .unwrap_or(());
     meshedchannels_2.name.sender.send(here2_name).unwrap_or(());
 
-    assert!(there2_stack.sender.send(RoleEnd::new().1).is_ok());
-    assert!(there2_name.sender.send(()).is_ok());
+    assert!(there2_stack.sender.send(RoleEnd::new().1).is_err());
+    assert!(there2_name.sender.send(()).is_err());
 }
 
 pub fn meshedchannels_methods() {
@@ -65,7 +65,7 @@ pub fn meshedchannels_methods() {
     assert_eq!(AtoC::<i32>::tail_str(), "End<>".to_string());
 
     assert_eq!(End::head_str(), "End".to_string());
-    assert_eq!(End::tail_str(), "".to_string());
+    assert!(End::tail_str().is_empty());
 
     assert_eq!(
         Endpoint::<i32>::head_str(),
@@ -168,9 +168,9 @@ pub fn meshedchannels_self_methods() {
 
     assert_eq!(end_1.self_head_str(), "End".to_string());
 
-    assert_eq!(end_1.self_tail_str(), "".to_string());
+    assert!(end_1.self_tail_str().is_empty());
 
     assert_eq!(end_2.self_head_str(), "End".to_string());
 
-    assert_eq!(end_2.self_tail_str(), "".to_string());
+    assert!(end_2.self_tail_str().is_empty());
 }

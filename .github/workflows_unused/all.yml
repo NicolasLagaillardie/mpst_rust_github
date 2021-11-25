@@ -17,7 +17,7 @@ jobs:
     - name: Format
       run: cargo fmt --verbose --all -- --check
     - name: Clippy
-        cargo clippy --workspace --all-features --verbose -- -D warnings
+      run: cargo clippy --workspace --all-features --all-targets --verbose -- -D warnings
     - name: Check lib
       run: cargo check --verbose --all
     - name: Check examples

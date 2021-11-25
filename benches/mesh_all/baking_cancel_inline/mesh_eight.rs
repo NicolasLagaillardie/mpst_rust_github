@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use crossbeam_channel::bounded;
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
@@ -613,7 +611,7 @@ fn mesh_protocol_binary(c: &mut Criterion) {
 fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eight baking inline protocol crossbeam {}", LOOPS),
-        |b| b.iter(|| all_crossbeam()),
+        |b| b.iter(all_crossbeam),
     );
 }
 

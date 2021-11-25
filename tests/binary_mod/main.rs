@@ -30,7 +30,7 @@ pub fn head_str() {
 }
 
 pub fn tail_str() {
-    assert_eq!(End::tail_str(), "".to_string());
+    assert!(End::tail_str().is_empty());
     assert_eq!(Send::<i32, End>::tail_str(), "End<>".to_string());
     assert_eq!(Recv::<i32, End>::tail_str(), "End<>".to_string());
 }

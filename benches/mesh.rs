@@ -1,4 +1,4 @@
-#![allow(clippy::type_complexity, clippy::too_many_arguments)]
+#![allow(dead_code, clippy::type_complexity, clippy::too_many_arguments)]
 
 use criterion::criterion_main;
 

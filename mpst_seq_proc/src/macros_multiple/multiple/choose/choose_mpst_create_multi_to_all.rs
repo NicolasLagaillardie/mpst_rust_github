@@ -77,6 +77,7 @@ impl ChooseMultiCreateToAll {
         let exclusion = self.exclusion;
 
         quote! {
+            #[allow(unused_macros)]
             macro_rules! #name_macro {
                 (
                     $session: expr,
