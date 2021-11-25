@@ -291,7 +291,7 @@ fn recurs_storage(s: EndpointStorage0) -> Result<(), Box<dyn Error>> {
 
             let (request, s) = s.recv()?;
 
-            let s = s.send(-request)?;
+            let s = s.send(request)?;
 
             recurs_storage(s)
         },

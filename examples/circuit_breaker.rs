@@ -334,7 +334,7 @@ fn recurs_storage(s: EndpointStorage0<i32>) -> Result<(), Box<dyn Error>> {
 
             let (request, s) = recv_storage_from_api(s)?;
 
-            let s = send_storage_to_api(-request, s)?;
+            let s = send_storage_to_api(request, s)?;
 
             recurs_storage(s)
         },

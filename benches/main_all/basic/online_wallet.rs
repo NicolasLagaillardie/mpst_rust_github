@@ -8,7 +8,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
+use rand::{distributions::Alphanumeric, thread_rng, Rng};
 
 use std::error::Error;
 // use std::time::Duration;
@@ -212,7 +212,13 @@ fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_s_to_c((random::<i8>() as i64, random::<i8>() as i64), s);
+    let s = send_mpst_s_to_c(
+        (
+            thread_rng().gen_range(1..=100),
+            thread_rng().gen_range(1..=100),
+        ),
+        s,
+    );
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching1fromCtoS::Quit(s) => {
@@ -276,19 +282,13 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 2
             );
 
-            let sum = if let Some(elt) = balance.checked_add(overdraft) {
-                elt
-            } else {
-                balance
-            };
-
             let payee: String = rand::thread_rng()
                 .sample_iter(&Alphanumeric)
                 .take(3)
                 .map(char::from)
                 .collect();
 
-            let s = send_mpst_c_to_s((payee, thread_rng().gen_range(1..=sum)), s);
+            let s = send_mpst_c_to_s((payee, balance + overdraft), s);
 
             recurs_c(s, loops - 1)
         }

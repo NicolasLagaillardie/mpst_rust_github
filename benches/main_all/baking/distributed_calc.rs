@@ -68,8 +68,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let s = s.send(20)?;
-    let s = s.send(10)?;
+    let s = s.send(thread_rng().gen_range(1..=100))?;
+    let s = s.send(thread_rng().gen_range(1..=100))?;
 
     if thread_rng().gen_range(1..=2) != 1 {
         let s: EndpointCSum =

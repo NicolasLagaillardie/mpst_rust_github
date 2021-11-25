@@ -104,8 +104,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_c_to_s(20, s);
-    let s = send_mpst_c_to_s(10, s);
+    let s = send_mpst_c_to_s(thread_rng().gen_range(1..=100), s);
+    let s = send_mpst_c_to_s(thread_rng().gen_range(1..=100), s);
 
     if thread_rng().gen_range(1..=2) != 1 {
         let s = choose_mpst_multi_to_all!(

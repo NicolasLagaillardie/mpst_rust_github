@@ -8,7 +8,7 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
@@ -103,8 +103,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<u32>) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random::<u32>();
-    let elt_2 = random::<u32>();
+    let elt_1 = thread_rng().gen_range(1..=100);
+    let elt_2 = thread_rng().gen_range(1..=100);
     let s = send_mpst_c_to_s(elt_1, s);
     let s = send_mpst_c_to_s(elt_2, s);
 
@@ -149,21 +149,11 @@ fn endpoint_s(s: EndpointS<u32>) -> Result<(), Box<dyn Error>> {
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching0fromCtoS::Sum(s) => {
-            let sum = if let Some(tmp) = elt_1.checked_add(elt_2) {
-                tmp
-            } else {
-                (elt_1 + elt_2)/2
-            };
-            let s = send_mpst_s_to_c(sum,s);
+            let s = send_mpst_s_to_c((elt_1 + elt_2)/2,s);
             close_mpst_multi(s)
         },
         Branching0fromCtoS::Diff(s) => {
-            let diff = if let Some(tmp) = elt_1.checked_sub(elt_2) {
-                tmp
-            } else {
-                (elt_1 - elt_2)/2
-            };
-            let s = send_mpst_s_to_c(diff, s);
+            let s = send_mpst_s_to_c((elt_1 - elt_2)/2, s);
             close_mpst_multi(s)
         },
     })

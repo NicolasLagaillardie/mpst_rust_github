@@ -10,7 +10,7 @@ fn main() {
                 println!("Successfully connected to server in port 3334");
 
                 // let msg = b"Hello!";
-                let msg = &[random::<u8>() as u8; 128];
+                let msg = &[random::<u8>(); 128];
 
                 stream.write(msg).unwrap();
                 println!("Sent Hello, awaiting reply...");
