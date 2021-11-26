@@ -104,7 +104,6 @@ type EndpointAFull<N> = MeshedChannels<InitA<N>, ChooseAtoC<N>, StackAFull, Role
 
 // For B
 type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>;
-// type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
 
 type OfferB<N> = OfferMpst<
     BtoAVideo<N>,
@@ -120,7 +119,6 @@ type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBFull, RoleB<RoleEnd>
 
 // For C
 type EndpointCVideo<N> = MeshedChannels<CtoAClose, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
-// type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
 type OfferC<N> = OfferMpst<
     CtoAClose,
@@ -262,7 +260,7 @@ pub fn run_a_usecase_right() {
 }
 
 pub fn run_a_usecase_checker() {
-    let graphs =
+    let (graphs, kmc) =
         checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>).unwrap();
 
     ////////////// Test graph A
@@ -330,4 +328,7 @@ pub fn run_a_usecase_checker() {
             0 -> 4 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

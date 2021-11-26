@@ -114,7 +114,6 @@ type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, Role
 
 // For A
 type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
-// type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
 type OfferA<N> = OfferMpst<
     AtoBVideo<N>,
@@ -130,7 +129,6 @@ type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, RoleA<RoleEnd>
 
 // For B
 type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, RoleB<RoleEnd>>;
-// type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
 
 type OfferB<N> = OfferMpst<
     BtoAVideo<N>,

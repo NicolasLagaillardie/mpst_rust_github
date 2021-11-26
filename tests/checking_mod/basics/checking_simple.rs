@@ -33,10 +33,8 @@ type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "checking_simple",
-        1,
-        2,
         EndpointA<i32>,
         EndpointC<i32>,
         EndpointB<i32>
@@ -90,4 +88,7 @@ pub fn main() {
             2 -> 3 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }

@@ -162,7 +162,6 @@ fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
 fn checking() {
     let _ = checker_concat!(
         "dns_fowler",
-        1,
         EndpointHandler,
         EndpointData,
         EndpointRegional

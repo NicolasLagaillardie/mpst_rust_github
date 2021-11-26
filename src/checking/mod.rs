@@ -22,10 +22,16 @@ mod aux_checker;
 
 use aux_checker::*;
 
+type HashGraph = HashMap<String, Graph<String, String>>;
+
 /// The macro that allows to create digraphs from each endpoint,
 /// along with `enum` if needed. You can also provide the name of
 /// a file for running the [`KMC`] tool and checking the
-/// properties of the provided protocol. The [`KMC`] tool
+/// properties of the provided protocol: it will
+/// return the minimal `k` according to this tool if it exists,
+/// and ```None``` if `k` is bigger than 50 or does not exist.
+///
+/// The [`KMC`] tool
 /// must be installed with `cabal install` and the resulting
 /// binary must be in the current repository folder.
 ///
@@ -38,6 +44,7 @@ use aux_checker::*;
 /// * Each starting endpoint, separated by a comma
 /// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all
 ///   the different branches sent.
+///
 /// Currently, we do not support parameters for branches with `enum`
 ///
 /// # Example
@@ -81,7 +88,6 @@ macro_rules! checker_concat {
         {
             mpstthree::checker_concat!(
                 "",
-                0,
                 $(
                     $sessiontype,
                 )+
@@ -90,9 +96,6 @@ macro_rules! checker_concat {
     };
     (
         $name_file: expr,
-        $(
-            $kmc_number: literal,
-        )+
         $(
             $sessiontype: ty
         ),+ $(,)?
@@ -116,15 +119,8 @@ macro_rules! checker_concat {
             let branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
                 std::collections::HashMap::with_hasher(state_branches);
 
-            let mut kmc_numbers = Vec::new();
-
-            $(
-                kmc_numbers.push($kmc_number);
-            )+
-
             mpstthree::checking::checker(
                 $name_file,
-                kmc_numbers,
                 sessions,
                 branches_receivers,
                 branching_sessions,
@@ -149,7 +145,6 @@ macro_rules! checker_concat {
         {
             mpstthree::checker_concat!(
                 "",
-                0,
                 $(
                     $sessiontype,
                 )+
@@ -167,9 +162,6 @@ macro_rules! checker_concat {
     };
     (
         $name_file: expr,
-        $(
-            $kmc_number: literal,
-        )+
         $(
             $sessiontype: ty
         ),+ $(,)?
@@ -229,12 +221,6 @@ macro_rules! checker_concat {
                 index += 1;
             )+
 
-            let mut kmc_numbers = Vec::new();
-
-            $(
-                kmc_numbers.push($kmc_number);
-            )+
-
             // Macro to implement Display for the `enum`
             mpst_seq::checking!(
                 $(
@@ -250,7 +236,6 @@ macro_rules! checker_concat {
             // Create the graphs with the previous inputs
             mpstthree::checking::checker(
                 $name_file,
-                kmc_numbers,
                 sessions,
                 branches_receivers,
                 branching_sessions,
@@ -261,7 +246,7 @@ macro_rules! checker_concat {
 }
 
 // Run the KMC command line
-pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Error>> {
+pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String), Box<dyn Error>> {
     // Delete previous files
     remove_file(format!(
         "../mpst_rust_github/outputs/{}_{}_kmc.txt",
@@ -291,26 +276,56 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i64) -> Result<(), Box<dyn Er
         .arg("--fsm")
         .output()?;
 
-    // Write down the stdout of the previous command into
-    // a corresponding file in the "outputs" folder
-    let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number,))?;
-    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc.stdout)?)?;
+    let stdout = String::from(str::from_utf8(&kmc.stdout)?);
 
-    println!("done");
-
-    Ok(())
+    if stdout
+        == format!(
+            "CSA: \u{1b}[92mTrue\n\
+            \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+            \u{1b}[0mreduced {:?}-exhaustive: \u{1b}[92mTrue\n\
+            \u{1b}[0mreduced {:?}-safe: \u{1b}[92mTrue\n\
+            \u{1b}[0m",
+            kmc_number, kmc_number
+        )
+        || stdout
+            == format!(
+                "CSA: \u{1b}[92mTrue\n\
+                \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+                \u{1b}[0mreduced {:?}-exhaustive: \u{1b}[92mTrue\n\
+                \u{1b}[0mreduced {:?}-safe: \u{1b}[92mTrue\n\
+                \u{1b}[0m\n",
+                kmc_number, kmc_number
+            )
+        || stdout
+            == format!(
+                "CSA: \u{1b}[92mTrue\n\
+                \u{1b}[0mreduced {:?}-OBI: \u{1b}[92mTrue\n\
+                \u{1b}[0mreduced {:?}-SIBI: \u{1b}[92mTrue\n\
+                \u{1b}[0mreduced {:?}-exhaustive: \u{1b}[92mTrue\n\
+                \u{1b}[0mreduced {:?}-safe: \u{1b}[92mTrue\n\
+                \u{1b}[0m",
+                kmc_number, kmc_number, kmc_number, kmc_number
+            )
+    {
+        // Write down the stdout of the previous command into
+        // a corresponding file in the "outputs" folder
+        let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number))?;
+        writeln!(&mut kmc_file, "{}", stdout)?;
+        Ok((true, stdout))
+    } else {
+        Ok((false, stdout))
+    }
 }
 
 // The starting function for extracting the graphs
 #[doc(hidden)]
 pub fn checker(
     name_file: &str,
-    kmc_numbers: Vec<i64>,
     sessions: Vec<String>,
     branches_receivers: HashMap<String, HashMap<String, String>>,
     branching_sessions: HashMap<String, String>,
     group_branches: HashMap<String, i32>,
-) -> Result<HashMap<String, Graph<String, String>>, Box<dyn Error>> {
+) -> Result<(HashGraph, Option<i32>), Box<dyn Error>> {
     // Clean the input sessions and extract the roles
     let (clean_sessions, roles) = clean_sessions(sessions.to_vec())?;
 
@@ -345,7 +360,7 @@ pub fn checker(
 
     // The final result Hashmap
     let state_result = RandomState::new();
-    let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
+    let mut result: HashGraph = HashMap::with_hasher(state_result);
 
     if !name_file.is_empty() {
         // If a name file has been provided
@@ -388,8 +403,22 @@ pub fn checker(
             writeln!(&mut cfsm_file)?;
         }
 
-        for kmc_number in kmc_numbers {
-            kmc_cli(name_file, kmc_number)?;
+        let mut kmc_number = 1;
+        let mut kmc_result = kmc_cli(name_file, kmc_number)?;
+
+        while !kmc_result.0 && kmc_number < 50 {
+            kmc_number += 1;
+            kmc_result = kmc_cli(name_file, kmc_number)?;
+        }
+
+        if kmc_number == 50 {
+            println!(
+                "The protocol does not seem correct. Here is the last output: {:?}",
+                kmc_result.1
+            );
+            Ok((result, None))
+        } else {
+            Ok((result, Some(kmc_number)))
         }
     } else {
         // Get all the graphs and add them to the result Hashmap
@@ -407,7 +436,6 @@ pub fn checker(
             // Insert the graph to the returned result
             result.insert(role.to_string(), graph);
         }
+        Ok((result, None))
     }
-
-    Ok(result)
 }

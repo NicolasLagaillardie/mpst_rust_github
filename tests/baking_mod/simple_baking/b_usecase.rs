@@ -197,7 +197,7 @@ pub fn run_b_usecase_right() {
 }
 
 pub fn run_b_usecase_checker() {
-    let graphs =
+    let (graphs, kmc) =
         checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>).unwrap();
 
     ////////////// Test graph A
@@ -265,4 +265,7 @@ pub fn run_b_usecase_checker() {
             2 -> 8 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

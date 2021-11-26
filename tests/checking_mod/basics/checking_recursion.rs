@@ -72,10 +72,8 @@ type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, RoleA<RoleE
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "checking_recursion",
-        1,
-        2,
         EndpointARecurs,
         EndpointCFull,
         EndpointBFull
@@ -155,4 +153,7 @@ pub fn main() {
             7 -> 2 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }

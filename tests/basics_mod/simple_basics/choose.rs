@@ -39,8 +39,6 @@ use petgraph::dot::Dot;
 type AtoBNeg<N> = Recv<N, End>;
 type AtoBAdd<N> = Recv<N, End>;
 
-// type BtoANeg<N> = Send<N, End>;
-// type BtoAAdd<N> = Send<N, End>;
 type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
 type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
@@ -77,9 +75,6 @@ type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<Rol
 type EndpointChoiceB<N> = MeshedChannels<ChooseBtoA<N>, ChooseBtoC, StackFullB, RoleB<RoleEnd>>;
 
 // For C
-// type EndpointCAdd = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
-// type EndpointCNeg = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
-
 type OfferCfromB = OfferMpst<End, End, End, End, StackOfferC, StackOfferC, RoleC<RoleEnd>>;
 type EndpointChoiceC = MeshedChannels<End, OfferCfromB, StackFullC, RoleC<RoleEnd>>;
 
@@ -182,7 +177,7 @@ pub fn simple_choice() {
 }
 
 pub fn simple_choice_checker() {
-    let graphs =
+    let (graphs, kmc) =
         checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>).unwrap();
 
     ////////////// Test graph A
@@ -234,4 +229,7 @@ pub fn simple_choice_checker() {
             0 -> 2 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

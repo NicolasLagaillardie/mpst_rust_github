@@ -169,7 +169,7 @@ pub fn run_a_usecase_recursive() {
 }
 
 pub fn run_a_usecase_recursive_checker() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         EndpointAFull,
         EndpointCFull,
         EndpointBFull
@@ -249,4 +249,7 @@ pub fn run_a_usecase_recursive_checker() {
             3 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

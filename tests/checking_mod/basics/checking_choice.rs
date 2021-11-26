@@ -104,10 +104,8 @@ type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "checking_choice",
-        1,
-        2,
         EndpointAFull<i32>,
         EndpointCFull<i32>,
         EndpointBFull<i32>
@@ -179,4 +177,7 @@ pub fn main() {
             2 -> 8 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }

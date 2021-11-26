@@ -174,7 +174,6 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 fn checking() {
     let _ = checker_concat!(
         "o_auth_checking",
-        1,
         EndpointA,
         EndpointC,
         EndpointS

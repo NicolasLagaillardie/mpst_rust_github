@@ -96,7 +96,7 @@ pub fn simple_triple_endpoints() {
 }
 
 pub fn simple_triple_endpoints_checker() {
-    let graphs = checker_concat!(EndpointB<i32>, EndpointC<i32>, EndpointA<i32>).unwrap();
+    let (graphs, kmc) = checker_concat!(EndpointB<i32>, EndpointC<i32>, EndpointA<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
@@ -145,4 +145,7 @@ pub fn simple_triple_endpoints_checker() {
             2 -> 3 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

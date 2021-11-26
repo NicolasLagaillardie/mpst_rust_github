@@ -84,10 +84,8 @@ type EndpointBFull = MeshedChannels<Offer0BfromA, RoleA<RoleEnd>, NameB>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "two_peers_branchings_sync",
-        1,
-        2,
         EndpointAFull,
         EndpointBFull
         =>
@@ -181,4 +179,7 @@ pub fn main() {
             0 -> 7 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

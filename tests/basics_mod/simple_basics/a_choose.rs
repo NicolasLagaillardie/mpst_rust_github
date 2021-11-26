@@ -228,7 +228,7 @@ pub fn double_choice() {
 }
 
 pub fn double_choice_checker() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         EndpointChoiceA<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceB<i32>
@@ -292,4 +292,7 @@ pub fn double_choice_checker() {
             5 -> 6 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

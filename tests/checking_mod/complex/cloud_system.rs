@@ -150,10 +150,8 @@ type EndpointDFull = MeshedChannels<Recurs0DfromA, End, End, RoleA<RoleEnd>, Nam
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "cloud_system",
-        1,
-        2,
         EndpointAFull,
         EndpointBFull,
         EndpointCFull,
@@ -275,16 +273,6 @@ pub fn main() {
     ////////////// Test KMC output
     assert_eq!(
         "CSA: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-OBI: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 1-SIBI: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
-        \u{1b}[0m\n",
-        read_to_string("outputs/cloud_system_1_kmc.txt").unwrap()
-    );
-
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 2-OBI: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 2-SIBI: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 2-exhaustive: \u{1b}[92mTrue\n\
@@ -292,4 +280,7 @@ pub fn main() {
         \u{1b}[0m\n",
         read_to_string("outputs/cloud_system_2_kmc.txt").unwrap()
     );
+
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(2));
 }

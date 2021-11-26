@@ -8,7 +8,7 @@ use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_ro
 
 use petgraph::dot::Dot;
 
-use std::fs::read_to_string;
+// use std::fs::read_to_string;
 
 // Create new MeshedChannels
 create_meshedchannels!(MeshedChannels, 2);
@@ -70,10 +70,8 @@ type EndpointBFull = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "inf_snd_rcv",
-        1,
-        2,
         EndpointAFull,
         EndpointBFull
         =>
@@ -157,26 +155,5 @@ pub fn main() {
     );
 
     ////////////// Test KMC output
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\
-        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-exhaustive: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 1-safe: \u{1b}[91mFalse\n\
-        \u{1b}[0mTraces violating progress: []\n\
-        Traces violating eventual reception: \
-        [0->1!i32<>; 1->0!i32<>, 0->1!i32<>; 1->0!i32<>]\n\n",
-        read_to_string("outputs/inf_snd_rcv_1_kmc.txt").unwrap()
-    );
-
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\
-        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 2-exhaustive: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 2-safe: \u{1b}[91mFalse\n\
-        \u{1b}[0mTraces violating progress: []\n\
-        Traces violating eventual reception: \
-        [0->1!i32<>; 1->0!i32<>; 0->1!i32<>; 1->0!i32<>, \
-        0->1!i32<>; 1->0!i32<>; 0->1!i32<>; 1->0!i32<>]\n\n",
-        read_to_string("outputs/inf_snd_rcv_2_kmc.txt").unwrap()
-    );
+    assert_eq!(kmc, None);
 }

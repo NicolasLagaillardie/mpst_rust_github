@@ -83,10 +83,8 @@ type EndpointBFull = MeshedChannels<Recurs0BfromA, RoleA<RoleEnd>, NameB>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "alternating_bit",
-        1,
-        2,
         EndpointAFull,
         EndpointBFull
         =>
@@ -208,12 +206,6 @@ pub fn main() {
         read_to_string("outputs/alternating_bit_1_kmc.txt").unwrap()
     );
 
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\
-        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 2-exhaustive: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 2-safe: \u{1b}[92mTrue\n\
-        \u{1b}[0m\n",
-        read_to_string("outputs/alternating_bit_2_kmc.txt").unwrap()
-    );
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }
