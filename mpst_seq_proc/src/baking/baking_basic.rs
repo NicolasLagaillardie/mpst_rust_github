@@ -2276,6 +2276,22 @@ impl Baking {
 
             #( #close_methods )*
 
+            #[allow(unused_macros)]
+            macro_rules! offer_mpst {
+                ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
+                    (move || -> Result<_, _> {
+                        let (l, s) = $session.recv()?;
+                        mpstthree::binary::cancel::cancel(s);
+                        match l {
+                            $(
+                                $pat => $result,
+                            )+
+                            _ => panic!("Unexpected payload") ,
+                        }
+                    })()
+                };
+            }
+
             #quote_fork_mpst
 
         }

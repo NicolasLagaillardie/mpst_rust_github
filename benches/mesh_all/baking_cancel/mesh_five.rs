@@ -9,7 +9,7 @@ use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, choose, offer, offer_mpst};
+use mpstthree::{bundle_impl_with_enum_and_cancel, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};

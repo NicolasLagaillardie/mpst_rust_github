@@ -2328,6 +2328,23 @@ impl BakingWithCancel {
 
             #cancel_method
 
+            #[allow(unused_macros)]
+            macro_rules! offer_cancel_mpst {
+                ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
+                    (move || -> Result<_, _> {
+                        let ((session1, cont), s) = $session.recv()?;
+                        let s = s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Offer(session1)).unwrap();
+                        mpstthree::binary::cancel::cancel(s);
+                        match cont {
+                            $(
+                                $pat => $result,
+                            )+
+                            _ => panic!("Unexpected payload") ,
+                        }
+                    })()
+                };
+            }
+
             #quote_fork_mpst
 
         }

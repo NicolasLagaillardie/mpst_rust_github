@@ -2029,7 +2029,6 @@ impl BakingInterleavedWithEnumAndCancel {
             #cancel_method
 
             #choose_mpst_create_multi_to_all
-
         }
     }
 }

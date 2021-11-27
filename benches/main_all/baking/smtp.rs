@@ -1,9 +1,9 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, offer_mpst};
 
 use std::error::Error;
 

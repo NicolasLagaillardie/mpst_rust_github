@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl, create_fn_choose_mpst_multi_to_all_bundle, offer_mpst};
+use mpstthree::{bundle_impl, create_fn_choose_mpst_multi_to_all_bundle};
 
 use std::error::Error;
 

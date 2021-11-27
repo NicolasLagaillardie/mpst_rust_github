@@ -2,9 +2,9 @@
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::bundle_impl_with_enum;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum, offer_mpst};
 use std::error::Error;
 use std::marker;
 

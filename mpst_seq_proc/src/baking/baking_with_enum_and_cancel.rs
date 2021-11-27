@@ -2404,6 +2404,22 @@ impl BakingWithEnumAndCancel {
 
             #choose_mpst_create_multi_to_all
 
+            #[allow(unused_macros)]
+            macro_rules! offer_mpst {
+                ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
+                    (move || -> Result<_, _> {
+                        let (l, s) = $session.recv()?;
+                        mpstthree::binary::cancel::cancel(s);
+                        match l {
+                            $(
+                                $pat => $result,
+                            )+
+                            _ => panic!("Unexpected payload") ,
+                        }
+                    })()
+                };
+            }
+
         }
     }
 }
