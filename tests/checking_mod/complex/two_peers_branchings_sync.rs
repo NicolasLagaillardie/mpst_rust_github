@@ -181,5 +181,5 @@ pub fn main() {
     );
 
     ////////////// Test KMC output
-    assert_eq!(kmc, None);
+    assert_eq!(kmc, Some(1));
 }

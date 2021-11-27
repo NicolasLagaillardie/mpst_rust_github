@@ -278,42 +278,14 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
 
     let stdout = String::from(str::from_utf8(&kmc.stdout)?);
 
-    if stdout
-        == format!(
-            "CSA: \u{1b}[92mTrue\n\
-            \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-            \u{1b}[0mreduced {:?}-exhaustive: \u{1b}[92mTrue\n\
-            \u{1b}[0mreduced {:?}-safe: \u{1b}[92mTrue\n\
-            \u{1b}[0m",
-            kmc_number, kmc_number
-        )
-        || stdout
-            == format!(
-                "CSA: \u{1b}[92mTrue\n\
-                \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-                \u{1b}[0mreduced {:?}-exhaustive: \u{1b}[92mTrue\n\
-                \u{1b}[0mreduced {:?}-safe: \u{1b}[92mTrue\n\
-                \u{1b}[0m\n",
-                kmc_number, kmc_number
-            )
-        || stdout
-            == format!(
-                "CSA: \u{1b}[92mTrue\n\
-                \u{1b}[0mreduced {:?}-OBI: \u{1b}[92mTrue\n\
-                \u{1b}[0mreduced {:?}-SIBI: \u{1b}[92mTrue\n\
-                \u{1b}[0mreduced {:?}-exhaustive: \u{1b}[92mTrue\n\
-                \u{1b}[0mreduced {:?}-safe: \u{1b}[92mTrue\n\
-                \u{1b}[0m",
-                kmc_number, kmc_number, kmc_number, kmc_number
-            )
-    {
+    if stdout.contains("False") {
+        Ok((false, stdout))
+    } else {
         // Write down the stdout of the previous command into
         // a corresponding file in the "outputs" folder
         let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number))?;
         writeln!(&mut kmc_file, "{}", stdout)?;
         Ok((true, stdout))
-    } else {
-        Ok((false, stdout))
     }
 }
 
