@@ -1,39 +1,40 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct OfferMPSTSessionMulti {
-    func_name: syn::Ident,
-    type_name: syn::Ident,
-    role: syn::Ident,
-    name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    type_name: Ident,
+    role: Ident,
+    name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
     exclusion: u64,
 }
 
 impl Parse for OfferMPSTSessionMulti {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let type_name = syn::Ident::parse(input)?;
+        let type_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let role = syn::Ident::parse(input)?;
+        let role = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let name = syn::Ident::parse(input)?;
+        let name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(OfferMPSTSessionMulti {
             func_name,
@@ -47,53 +48,53 @@ impl Parse for OfferMPSTSessionMulti {
     }
 }
 
-impl From<OfferMPSTSessionMulti> for proc_macro2::TokenStream {
-    fn from(input: OfferMPSTSessionMulti) -> proc_macro2::TokenStream {
+impl From<OfferMPSTSessionMulti> for TokenStream {
+    fn from(input: OfferMPSTSessionMulti) -> TokenStream {
         input.expand()
     }
 }
 
 impl OfferMPSTSessionMulti {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let type_name = self.type_name.clone();
         let role = self.role.clone();
         let name = self.name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.n_sessions - 1))
+        let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let all_sessions_struct: Vec<proc_macro2::TokenStream> = (1..(2 * self.n_sessions - 1))
+        let all_sessions_struct: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
             })
             .collect();
 
-        let new_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {
                         mpstthree::binary::struct_trait::end::End,
                     }
                 } else {
-                    let temp_all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self
+                    let temp_all_sessions: Vec<TokenStream> = (1..(2 * self
                         .n_sessions
                         - 1))
                         .map(|i| {
                             let temp_ident =
-                                syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                                Ident::new(&format!("S{}", i), Span::call_site());
                             quote! {
                                 #temp_ident ,
                             }
@@ -116,34 +117,34 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let sessions_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions_left: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let sessions_right: Vec<proc_macro2::TokenStream> = (self.n_sessions
+        let sessions_right: Vec<TokenStream> = (self.n_sessions
             ..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let all_recv: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let all_recv: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {}
                 } else {
                     let temp_ident =
-                        syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("session{}", i), Span::call_site());
                     quote! {
                         let (e, new_session) = mpstthree::binary::recv::recv(s.#temp_ident)?;
                     }
@@ -151,10 +152,10 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,

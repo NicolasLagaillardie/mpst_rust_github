@@ -1,23 +1,24 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct CloseMpstCancel {
-    func_name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
 }
 
 impl Parse for CloseMpstCancel {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CloseMpstCancel {
             func_name,
@@ -27,37 +28,37 @@ impl Parse for CloseMpstCancel {
     }
 }
 
-impl From<CloseMpstCancel> for proc_macro2::TokenStream {
-    fn from(input: CloseMpstCancel) -> proc_macro2::TokenStream {
+impl From<CloseMpstCancel> for TokenStream {
+    fn from(input: CloseMpstCancel) -> TokenStream {
         input.expand()
     }
 }
 
 impl CloseMpstCancel {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let session_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|_| {
                 quote! { mpstthree::binary::struct_trait::end::End , }
             })
             .collect();
 
-        let session_send: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let session_send: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     s.#temp_ident.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop)?;
                 }
             })
             .collect();
 
-        let session_recv: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let session_recv: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     s.#temp_ident.receiver.recv()?;
                 }

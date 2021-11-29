@@ -1,26 +1,27 @@
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct ForkMPSTMulti {
-    func_name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
 }
 
 impl Parse for ForkMPSTMulti {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ForkMPSTMulti {
             func_name,
@@ -30,8 +31,8 @@ impl Parse for ForkMPSTMulti {
     }
 }
 
-impl From<ForkMPSTMulti> for proc_macro2::TokenStream {
-    fn from(input: ForkMPSTMulti) -> proc_macro2::TokenStream {
+impl From<ForkMPSTMulti> for TokenStream {
+    fn from(input: ForkMPSTMulti) -> TokenStream {
         input.expand()
     }
 }
@@ -160,126 +161,126 @@ impl ForkMPSTMulti {
         }
     }
 
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
-        let sessions: Vec<proc_macro2::TokenStream> =
+        let sessions: Vec<TokenStream> =
             (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
                 })
                 .collect();
 
-        let sessions_struct: Vec<proc_macro2::TokenStream> =
+        let sessions_struct: Vec<TokenStream> =
             (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                     }
                 })
                 .collect();
 
-        let roles: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let roles: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let roles_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
             })
             .collect();
 
-        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let new_roles: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 let temp_role =
-                    syn::Ident::new(&format!("role_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("role_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_role , _) = #temp_ident::new() ;
                 }
             })
             .collect();
 
-        let names: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let names_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let names_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let new_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = #temp_ident::new() ;
                 }
             })
             .collect();
 
-        let functions: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let functions: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let functions_detail: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let functions_detail: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                let temp_expr = syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_expr = Ident::new(&format!("f{}", i), Span::call_site());
                 quote! {
                     #temp_expr : #temp_ident ,
                 }
             })
             .collect();
 
-        let functions_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let functions_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let temp_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
-                            syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
+                            Ident::new(&format!("S{}", m), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -293,9 +294,9 @@ impl ForkMPSTMulti {
                     .collect();
 
                 let temp_function =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                let temp_role = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
-                let temp_name = syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_role = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_function : FnOnce(
                         #meshedchannels_name<
@@ -312,7 +313,7 @@ impl ForkMPSTMulti {
             })
             .collect();
 
-        let join_handle: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let join_handle: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|_| {
                 quote! {
                     std::thread::JoinHandle<()> ,
@@ -320,20 +321,20 @@ impl ForkMPSTMulti {
             })
             .collect();
 
-        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((self.n_sessions - 1)
+        let new_channels: Vec<TokenStream> = (1..=((self.n_sessions - 1)
             * (self.n_sessions)
             / 2))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
-                let temp_channel_left = syn::Ident::new(
+                let temp_channel_left = Ident::new(
                     &format!("channel_{}_{}", line, column),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_channel_right = syn::Ident::new(
+                let temp_channel_right = Ident::new(
                     &format!("channel_{}_{}", column, line),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let ( #temp_channel_left , #temp_channel_right ) =
@@ -342,23 +343,23 @@ impl ForkMPSTMulti {
             })
             .collect();
 
-        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let new_meshedchannels: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let temp_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
-                        let temp_session = syn::Ident::new(
+                        let temp_session = Ident::new(
                             &format!("session{}", j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         let temp_channel = match line {
-                            m if m == i => syn::Ident::new(
+                            m if m == i => Ident::new(
                                 &format!("channel_{}_{}", line, column),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
-                            _ => syn::Ident::new(
+                            _ => Ident::new(
                                 &format!("channel_{}_{}", column, line),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
                         };
                         quote! {
@@ -367,14 +368,14 @@ impl ForkMPSTMulti {
                     })
                     .collect();
 
-                let temp_meshedchannels = syn::Ident::new(
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 let temp_role =
-                    syn::Ident::new(&format!("role_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("role_{}", i), Span::call_site());
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let #temp_meshedchannels =
                         #meshedchannels_name {
@@ -388,13 +389,13 @@ impl ForkMPSTMulti {
             })
             .collect();
 
-        let new_threads: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let new_threads: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_function =
-                    syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                let temp_meshedchannels = syn::Ident::new(
+                    Ident::new(&format!("f{}", i), Span::call_site());
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(32 * 1024 * 1024).spawn(move || {

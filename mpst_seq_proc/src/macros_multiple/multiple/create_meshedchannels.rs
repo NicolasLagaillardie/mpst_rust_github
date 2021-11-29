@@ -1,19 +1,20 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct CreateMeshedChannels {
-    meshedchannels_name: syn::Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
 }
 
 impl Parse for CreateMeshedChannels {
     fn parse(input: ParseStream) -> Result<Self> {
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CreateMeshedChannels {
             meshedchannels_name,
@@ -22,30 +23,30 @@ impl Parse for CreateMeshedChannels {
     }
 }
 
-impl From<CreateMeshedChannels> for proc_macro2::TokenStream {
-    fn from(input: CreateMeshedChannels) -> proc_macro2::TokenStream {
+impl From<CreateMeshedChannels> for TokenStream {
+    fn from(input: CreateMeshedChannels) -> TokenStream {
         input.expand()
     }
 }
 
 impl CreateMeshedChannels {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let sessions_dual: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions_dual: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     <
                         #temp_ident as mpstthree::binary::struct_trait::session::Session
@@ -54,70 +55,70 @@ impl CreateMeshedChannels {
             })
             .collect();
 
-        let sessions_struct: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
             })
             .collect();
 
-        let sessions_pub: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions_pub: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 let temp_field =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     pub #temp_field :  #temp_ident,
                 }
             })
             .collect();
 
-        let senders_receivers: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let senders_receivers: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_sender =
-                    syn::Ident::new(&format!("sender{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("sender{}", i), Span::call_site());
                 let temp_receiver =
-                    syn::Ident::new(&format!("receiver{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("receiver{}", i), Span::call_site());
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     let ( #temp_sender , #temp_receiver ) = #temp_ident::new();
                 }
             })
             .collect();
 
-        let senders_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let senders_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_sender =
-                    syn::Ident::new(&format!("sender{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("sender{}", i), Span::call_site());
                 let temp_field =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     #temp_field : #temp_sender ,
                 }
             })
             .collect();
 
-        let receivers_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let receivers_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_receiver =
-                    syn::Ident::new(&format!("receiver{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("receiver{}", i), Span::call_site());
                 let temp_field =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     #temp_field : #temp_receiver ,
                 }
             })
             .collect();
 
-        let head_str: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let head_str: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -135,10 +136,10 @@ impl CreateMeshedChannels {
             })
             .collect();
 
-        let tail_str: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let tail_str: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -158,10 +159,10 @@ impl CreateMeshedChannels {
             })
             .collect();
 
-        let stringify: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let stringify: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     stringify!(#temp_ident),
                 }

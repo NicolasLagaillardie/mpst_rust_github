@@ -1,23 +1,24 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct CloseMpstInterleaved {
-    func_name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
 }
 
 impl Parse for CloseMpstInterleaved {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CloseMpstInterleaved {
             func_name,
@@ -27,20 +28,20 @@ impl Parse for CloseMpstInterleaved {
     }
 }
 
-impl From<CloseMpstInterleaved> for proc_macro2::TokenStream {
-    fn from(input: CloseMpstInterleaved) -> proc_macro2::TokenStream {
+impl From<CloseMpstInterleaved> for TokenStream {
+    fn from(input: CloseMpstInterleaved) -> TokenStream {
         input.expand()
     }
 }
 
 impl CloseMpstInterleaved {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let role_names: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let role_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_name = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
 
                 quote! {
                     #temp_name ,
@@ -48,9 +49,9 @@ impl CloseMpstInterleaved {
             })
             .collect();
 
-        let role_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let role_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_name = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
 
                 quote! {
                     #temp_name : mpstthree::role::Role ,
@@ -58,18 +59,18 @@ impl CloseMpstInterleaved {
             })
             .collect();
 
-        let session_types: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let session_types: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_end_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let temp_end_types: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|_| {
                         quote! { mpstthree::binary::struct_trait::end::End , }
                     })
                     .collect();
 
                 let temp_session =
-                    syn::Ident::new(&format!("s_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("s_{}", i), Span::call_site());
 
-                let temp_name = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
 
                 quote! {
                     #temp_session:
@@ -84,15 +85,15 @@ impl CloseMpstInterleaved {
             })
             .collect();
 
-        let session_send: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let session_send: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("s_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("s_{}", i), Span::call_site());
 
-                let temp_session_send: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let temp_session_send: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_session =
-                            syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("session{}", j), Span::call_site());
                         quote! {
                             #temp_ident.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(());
                         }
@@ -107,16 +108,16 @@ impl CloseMpstInterleaved {
             })
             .collect();
 
-        let session_recv: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
+        let session_recv: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("s_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("s_{}", i), Span::call_site());
 
-                let temp_session_recv: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let temp_session_recv: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_session = syn::Ident::new(
+                        let temp_session = Ident::new(
                             &format!("session{}", j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         quote! {
                             #temp_ident.#temp_session.receiver.recv()?;

@@ -1,28 +1,29 @@
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::TokenStream;
 
 #[derive(Debug)]
 pub struct SendCancel {
-    func_name: syn::Ident,
-    name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
     msg: syn::Expr,
 }
 
 impl Parse for SendCancel {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let name = syn::Ident::parse(input)?;
+        let name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
         let msg = syn::Expr::parse(input)?;
@@ -37,14 +38,14 @@ impl Parse for SendCancel {
     }
 }
 
-impl From<SendCancel> for proc_macro2::TokenStream {
-    fn from(input: SendCancel) -> proc_macro2::TokenStream {
+impl From<SendCancel> for TokenStream {
+    fn from(input: SendCancel) -> TokenStream {
         input.expand()
     }
 }
 
 impl SendCancel {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         // Get the basic elements
         let func_name = self.func_name.clone();
         let name = self.name.clone();
@@ -52,7 +53,7 @@ impl SendCancel {
         let msg = self.msg.clone();
 
         // Build the vec with all the types S1,..,SN
-        let session_types: Vec<syn::Ident> = (1..(self.n_sessions - 1))
+        let session_types: Vec<Ident> = (1..(self.n_sessions - 1))
             .map(|i| format_ident!("S{}", i))
             .collect();
 

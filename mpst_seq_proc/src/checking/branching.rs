@@ -1,4 +1,5 @@
 use syn::spanned::Spanned;
+use proc_macro2::{Span};
 
 pub(crate) fn branching_variants(input: syn::Item) -> Result<(), syn::Error> {
     if let syn::Item::Enum(e) = input {
@@ -21,7 +22,7 @@ pub(crate) fn branching_variants(input: syn::Item) -> Result<(), syn::Error> {
         Ok(())
     } else {
         Err(syn::Error::new(
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
             "expected enum or match expression",
         ))
     }

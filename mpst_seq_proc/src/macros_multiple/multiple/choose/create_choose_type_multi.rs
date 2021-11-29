@@ -1,23 +1,24 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct ChooseTypeMulti {
-    type_name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    type_name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
 }
 
 impl Parse for ChooseTypeMulti {
     fn parse(input: ParseStream) -> Result<Self> {
-        let type_name = syn::Ident::parse(input)?;
+        let type_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ChooseTypeMulti {
             type_name,
@@ -27,42 +28,42 @@ impl Parse for ChooseTypeMulti {
     }
 }
 
-impl From<ChooseTypeMulti> for proc_macro2::TokenStream {
-    fn from(input: ChooseTypeMulti) -> proc_macro2::TokenStream {
+impl From<ChooseTypeMulti> for TokenStream {
+    fn from(input: ChooseTypeMulti) -> TokenStream {
         input.expand()
     }
 }
 
 impl ChooseTypeMulti {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let type_name = self.type_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.n_sessions - 1))
+        let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let sessions_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions_left: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let sessions_right: Vec<proc_macro2::TokenStream> = (self.n_sessions
+        let sessions_right: Vec<TokenStream> = (self.n_sessions
             ..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }

@@ -1,11 +1,12 @@
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::TokenStream;
 
 #[derive(Debug)]
 pub struct BroadcastCancel {
     session: syn::Expr,
-    n_sessions: syn::LitInt,
+    n_sessions: LitInt,
 }
 
 impl Parse for BroadcastCancel {
@@ -13,7 +14,7 @@ impl Parse for BroadcastCancel {
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = syn::LitInt::parse(input)?;
+        let n_sessions = LitInt::parse(input)?;
 
         Ok(BroadcastCancel {
             session,
@@ -22,22 +23,22 @@ impl Parse for BroadcastCancel {
     }
 }
 
-impl From<BroadcastCancel> for proc_macro2::TokenStream {
-    fn from(input: BroadcastCancel) -> proc_macro2::TokenStream {
+impl From<BroadcastCancel> for TokenStream {
+    fn from(input: BroadcastCancel) -> TokenStream {
         input.expand()
     }
 }
 
 impl BroadcastCancel {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let session = self.session.clone();
         let n_sessions = (self.n_sessions).base10_parse::<usize>().unwrap();
 
-        let bool_session: Vec<syn::Ident> = (1..n_sessions)
+        let bool_session: Vec<Ident> = (1..n_sessions)
             .map(|i| format_ident!("bool_session{}", i))
             .collect();
 
-        let field_session: Vec<syn::Ident> = (1..n_sessions)
+        let field_session: Vec<Ident> = (1..n_sessions)
             .map(|i| format_ident!("session{}", i))
             .collect();
 

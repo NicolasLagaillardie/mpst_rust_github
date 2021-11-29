@@ -1,37 +1,38 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::Result;
+use syn::{Result, Ident};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct CreateNormalRoleShort {
-    role: syn::Ident,
+    role: Ident,
 }
 
 impl Parse for CreateNormalRoleShort {
     fn parse(input: ParseStream) -> Result<Self> {
-        let role = syn::Ident::parse(input)?;
+        let role = Ident::parse(input)?;
 
         Ok(CreateNormalRoleShort { role })
     }
 }
 
-impl From<CreateNormalRoleShort> for proc_macro2::TokenStream {
-    fn from(input: CreateNormalRoleShort) -> proc_macro2::TokenStream {
+impl From<CreateNormalRoleShort> for TokenStream {
+    fn from(input: CreateNormalRoleShort) -> TokenStream {
         input.expand()
     }
 }
 
 impl CreateNormalRoleShort {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let role = self.role.clone();
 
         // Build the new names
         // role
         let concatenated_role = format!("Role{}", role);
-        let role_name = syn::Ident::new(&concatenated_role, proc_macro2::Span::call_site());
+        let role_name = Ident::new(&concatenated_role, Span::call_site());
         // dual
         let concatenated_dual = format!("Role{}Dual", role);
-        let dual_name = syn::Ident::new(&concatenated_dual, proc_macro2::Span::call_site());
+        let dual_name = Ident::new(&concatenated_dual, Span::call_site());
 
         quote! {
             ////////////////////////////////////////////

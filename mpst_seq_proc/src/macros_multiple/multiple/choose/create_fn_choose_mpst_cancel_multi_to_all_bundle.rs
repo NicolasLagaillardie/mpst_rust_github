@@ -1,28 +1,29 @@
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct ChooseTypeCancelMultiToAllBundle {
-    labels: Vec<proc_macro2::TokenStream>,
-    receivers: Vec<proc_macro2::TokenStream>,
-    fn_names: Vec<proc_macro2::TokenStream>,
-    branches: Vec<proc_macro2::TokenStream>,
-    new_types: Vec<proc_macro2::TokenStream>,
-    sender: syn::Ident,
-    broadcaster: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    labels: Vec<TokenStream>,
+    receivers: Vec<TokenStream>,
+    fn_names: Vec<TokenStream>,
+    branches: Vec<TokenStream>,
+    new_types: Vec<TokenStream>,
+    sender: Ident,
+    broadcaster: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
     n_branches: u64,
     n_labels: u64,
     exclusion: u64,
 }
 
-fn expand_parenthesized(stream: &proc_macro2::TokenStream) -> Vec<proc_macro2::TokenStream> {
-    let mut out: Vec<proc_macro2::TokenStream> = Vec::new();
+fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
+    let mut out: Vec<TokenStream> = Vec::new();
     for tt in stream.clone().into_iter() {
         let elt = match tt {
             proc_macro2::TokenTree::Group(g) => Some(g.stream()),
@@ -40,57 +41,57 @@ impl Parse for ChooseTypeCancelMultiToAllBundle {
         // The names of the functions
         let content_fn_names;
         let _parentheses = syn::parenthesized!(content_fn_names in input);
-        let fn_names = proc_macro2::TokenStream::parse(&content_fn_names)?;
+        let fn_names = TokenStream::parse(&content_fn_names)?;
 
-        let all_fn_names: Vec<proc_macro2::TokenStream> = expand_parenthesized(&fn_names);
+        let all_fn_names: Vec<TokenStream> = expand_parenthesized(&fn_names);
         <Token![,]>::parse(input)?;
 
         // The names of the functions
         let content_branches;
         let _parentheses = syn::parenthesized!(content_branches in input);
-        let branches = proc_macro2::TokenStream::parse(&content_branches)?;
+        let branches = TokenStream::parse(&content_branches)?;
 
-        let all_branches: Vec<proc_macro2::TokenStream> = expand_parenthesized(&branches);
+        let all_branches: Vec<TokenStream> = expand_parenthesized(&branches);
         <Token![,]>::parse(input)?;
 
         // The labels
         let content_labels;
         let _parentheses = syn::parenthesized!(content_labels in input);
-        let labels = proc_macro2::TokenStream::parse(&content_labels)?;
+        let labels = TokenStream::parse(&content_labels)?;
 
-        let all_labels: Vec<proc_macro2::TokenStream> = expand_parenthesized(&labels);
+        let all_labels: Vec<TokenStream> = expand_parenthesized(&labels);
         <Token![,]>::parse(input)?;
 
         // The receivers
         let content_receivers;
         let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = proc_macro2::TokenStream::parse(&content_receivers)?;
+        let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<proc_macro2::TokenStream> = expand_parenthesized(&receivers);
+        let all_receivers: Vec<TokenStream> = expand_parenthesized(&receivers);
         <Token![,]>::parse(input)?;
 
         // The new_types
         let content_new_type;
         let _parentheses = syn::parenthesized!(content_new_type in input);
-        let new_types = proc_macro2::TokenStream::parse(&content_new_type)?;
+        let new_types = TokenStream::parse(&content_new_type)?;
 
-        let all_new_types: Vec<proc_macro2::TokenStream> = expand_parenthesized(&new_types);
+        let all_new_types: Vec<TokenStream> = expand_parenthesized(&new_types);
         <Token![,]>::parse(input)?;
 
         // The sender
-        let sender = syn::Ident::parse(input)?;
+        let sender = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The broadcaster
-        let broadcaster = syn::Ident::parse(input)?;
+        let broadcaster = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The meshedchannels_name
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The index of the sender
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         // The number of receivers
         let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 2;
@@ -128,8 +129,8 @@ impl Parse for ChooseTypeCancelMultiToAllBundle {
     }
 }
 
-impl From<ChooseTypeCancelMultiToAllBundle> for proc_macro2::TokenStream {
-    fn from(input: ChooseTypeCancelMultiToAllBundle) -> proc_macro2::TokenStream {
+impl From<ChooseTypeCancelMultiToAllBundle> for TokenStream {
+    fn from(input: ChooseTypeCancelMultiToAllBundle) -> TokenStream {
         input.expand()
     }
 }
@@ -170,8 +171,8 @@ impl ChooseTypeCancelMultiToAllBundle {
         }
     }
 
-    fn expand(&self) -> proc_macro2::TokenStream {
-        let all_functions: Vec<proc_macro2::TokenStream> = (1..self.n_branches)
+    fn expand(&self) -> TokenStream {
+        let all_functions: Vec<TokenStream> = (1..self.n_branches)
             .map(|i| {
                 let all_labels = self.labels.clone();
                 let all_receivers = self.receivers.clone();
@@ -184,7 +185,7 @@ impl ChooseTypeCancelMultiToAllBundle {
                 let diff = self.n_sessions - 1;
                 let diag = self.diag();
 
-                let send_types: Vec<proc_macro2::TokenStream> = (2..self.n_labels)
+                let send_types: Vec<TokenStream> = (2..self.n_labels)
                     .map(|j| {
                         let temp_label =
                             if let Some(elt) = all_labels.get(usize::try_from(j - 2).unwrap()) {
@@ -205,16 +206,16 @@ impl ChooseTypeCancelMultiToAllBundle {
                     })
                     .collect();
 
-                let new_channels: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1) / 2))
+                let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_diag(&diag, j);
-                        let channel_left = syn::Ident::new(
+                        let channel_left = Ident::new(
                             &format!("channel_{}_{}", line, column),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
-                        let channel_right = syn::Ident::new(
+                        let channel_right = Ident::new(
                             &format!("channel_{}_{}", column, line),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         if j < self.n_sessions {
                             quote! {
@@ -231,19 +232,19 @@ impl ChooseTypeCancelMultiToAllBundle {
                         }
                     })
                     .collect();
-                let new_roles: Vec<proc_macro2::TokenStream> = (2..=self.n_sessions)
+                let new_roles: Vec<TokenStream> = (2..=self.n_sessions)
                     .map(|j| {
                         let temp_ident =
-                            syn::Ident::new(&format!("stack_{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("stack_{}", j), Span::call_site());
                         quote! {
                             let ( #temp_ident , _) = <_ as mpstthree::role::Role>::new();
                         }
                     })
                     .collect();
-                let new_names: Vec<proc_macro2::TokenStream> = (2..self.n_sessions)
+                let new_names: Vec<TokenStream> = (2..self.n_sessions)
                     .map(|j| {
                         let temp_name =
-                            syn::Ident::new(&format!("name_{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("name_{}", j), Span::call_site());
                         let temp_role = if let Some(elt) = all_receivers.get(usize::try_from(j - 2).unwrap()) {
                             elt
                         } else {
@@ -255,13 +256,13 @@ impl ChooseTypeCancelMultiToAllBundle {
                         }
                     })
                     .collect();
-                let new_name_sender = syn::Ident::new(
+                let new_name_sender = Ident::new(
                     &format!("name_{}", self.n_sessions),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let new_stack_sender = syn::Ident::new(
+                let new_stack_sender = Ident::new(
                     &format!("stack_{}", self.n_sessions),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
 
                 let temp_fn_name =
@@ -284,24 +285,24 @@ impl ChooseTypeCancelMultiToAllBundle {
                     } else {
                         panic!("Not enough branches for all_functions")
                     };
-                let all_send: Vec<proc_macro2::TokenStream> = (2..self.n_sessions)
+                let all_send: Vec<TokenStream> = (2..self.n_sessions)
                     .map(|j| {
-                        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                        let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
                             .map(|k| {
                                 let temp = if j >= self.exclusion { j + 1 } else { j };
-                                let temp_ident = syn::Ident::new(
+                                let temp_ident = Ident::new(
                                     &format!("session{}", k),
-                                    proc_macro2::Span::call_site(),
+                                    Span::call_site(),
                                 );
                                 let temp_channel = if k < temp {
-                                    syn::Ident::new(
+                                    Ident::new(
                                         &format!("channel_{}_{}", temp, k),
-                                        proc_macro2::Span::call_site(),
+                                        Span::call_site(),
                                     )
                                 } else {
-                                    syn::Ident::new(
+                                    Ident::new(
                                         &format!("channel_{}_{}", temp, k + 1),
-                                        proc_macro2::Span::call_site(),
+                                        Span::call_site(),
                                     )
                                 };
                                 quote! {
@@ -310,11 +311,11 @@ impl ChooseTypeCancelMultiToAllBundle {
                             })
                             .collect();
                         let temp_name =
-                            syn::Ident::new(&format!("name_{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("name_{}", j), Span::call_site());
                         let temp_stack =
-                            syn::Ident::new(&format!("stack_{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("stack_{}", j), Span::call_site());
                         let temp_session =
-                            syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_label = if let Some(elt) = all_labels.get(usize::try_from(j - 2).unwrap())
                         {
                             elt
@@ -344,19 +345,19 @@ impl ChooseTypeCancelMultiToAllBundle {
                         }
                     })
                     .collect();
-                let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_session =
-                            syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                            Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_channel = if j < self.exclusion {
-                            syn::Ident::new(
+                            Ident::new(
                                 &format!("channel_{}_{}", self.exclusion, j),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             )
                         } else {
-                            syn::Ident::new(
+                            Ident::new(
                                 &format!("channel_{}_{}", self.exclusion, j + 1),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             )
                         };
                         quote! {

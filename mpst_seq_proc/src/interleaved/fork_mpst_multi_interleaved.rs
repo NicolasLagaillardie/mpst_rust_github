@@ -1,42 +1,43 @@
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct ForkMPSTMultiInterleaved {
-    func_name: syn::Ident,
-    meshedchannels_name_one: syn::Ident,
+    func_name: Ident,
+    meshedchannels_name_one: Ident,
     nsessions_one: u64,
     index_tuple_one: u64,
-    meshedchannels_name_two: syn::Ident,
+    meshedchannels_name_two: Ident,
     nsessions_two: u64,
     index_tuple_two: u64,
 }
 
 impl Parse for ForkMPSTMultiInterleaved {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name_one = syn::Ident::parse(input)?;
+        let meshedchannels_name_one = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions_one = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let nsessions_one = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let index_tuple_one = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let index_tuple_one = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name_two = syn::Ident::parse(input)?;
+        let meshedchannels_name_two = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions_two = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let nsessions_two = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let index_tuple_two = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let index_tuple_two = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ForkMPSTMultiInterleaved {
             func_name,
@@ -50,8 +51,8 @@ impl Parse for ForkMPSTMultiInterleaved {
     }
 }
 
-impl From<ForkMPSTMultiInterleaved> for proc_macro2::TokenStream {
-    fn from(input: ForkMPSTMultiInterleaved) -> proc_macro2::TokenStream {
+impl From<ForkMPSTMultiInterleaved> for TokenStream {
+    fn from(input: ForkMPSTMultiInterleaved) -> TokenStream {
         input.expand()
     }
 }
@@ -180,7 +181,7 @@ impl ForkMPSTMultiInterleaved {
         }
     }
 
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let meshedchannels_name_one = self.meshedchannels_name_one.clone();
         let meshedchannels_name_two = self.meshedchannels_name_two.clone();
@@ -194,12 +195,12 @@ impl ForkMPSTMultiInterleaved {
 
         // Generate
         // S0, S1, S2, ...
-        let sessions: Vec<proc_macro2::TokenStream> =
+        let sessions: Vec<TokenStream> =
             (1..=((self.nsessions_one - 1) * (self.nsessions_one) / 2
                 + (self.nsessions_two - 1) * (self.nsessions_two) / 2))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
@@ -210,112 +211,112 @@ impl ForkMPSTMultiInterleaved {
         // S0: Session + `static ,
         // S1: Session + `static ,
         // ... ,
-        let sessions_struct: Vec<proc_macro2::TokenStream> =
+        let sessions_struct: Vec<TokenStream> =
             (1..=((self.nsessions_one - 1) * (self.nsessions_one) / 2
                 + (self.nsessions_two - 1) * (self.nsessions_two) / 2))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                     }
                 })
                 .collect();
 
-        let roles: Vec<proc_macro2::TokenStream> = (1..=sum_nsessions)
+        let roles: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=sum_nsessions)
+        let roles_struct: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
             })
             .collect();
 
-        let new_roles: Vec<proc_macro2::TokenStream> = (1..=sum_nsessions)
+        let new_roles: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 let temp_role =
-                    syn::Ident::new(&format!("role_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("role_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_role , _) = #temp_ident::new() ;
                 }
             })
             .collect();
 
-        let names: Vec<proc_macro2::TokenStream> = (1..=sum_nsessions)
+        let names: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let names_struct: Vec<proc_macro2::TokenStream> = (1..=sum_nsessions)
+        let names_struct: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..=sum_nsessions)
+        let new_names: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = #temp_ident::new() ;
                 }
             })
             .collect();
 
-        let functions: Vec<proc_macro2::TokenStream> = (1..=(sum_nsessions - 2))
+        let functions: Vec<TokenStream> = (1..=(sum_nsessions - 2))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let functions_input_one: Vec<proc_macro2::TokenStream> = (1..self.nsessions_one)
+        let functions_input_one: Vec<TokenStream> = (1..self.nsessions_one)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                let temp_expr = syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_expr = Ident::new(&format!("f{}", i), Span::call_site());
                 quote! {
                     #temp_expr : #temp_ident ,
                 }
             })
             .collect();
 
-        let functions_input_two: Vec<proc_macro2::TokenStream> = (1..self.nsessions_two)
+        let functions_input_two: Vec<TokenStream> = (1..self.nsessions_two)
             .map(|i| {
-                let temp_ident = syn::Ident::new(
+                let temp_ident = Ident::new(
                     &format!("F{}", self.nsessions_one - 1 + i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_expr = syn::Ident::new(
+                let temp_expr = Ident::new(
                     &format!("f{}", self.nsessions_one - 1 + i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     #temp_expr : #temp_ident ,
@@ -323,13 +324,13 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let mut functions_struct_one: Vec<proc_macro2::TokenStream> = (1..=self.nsessions_one)
+        let mut functions_struct_one: Vec<TokenStream> = (1..=self.nsessions_one)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions_one)
+                let temp_sessions: Vec<TokenStream> = (1..self.nsessions_one)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset_one, i, j);
                         let temp_ident =
-                            syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
+                            Ident::new(&format!("S{}", m), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -342,13 +343,13 @@ impl ForkMPSTMultiInterleaved {
                     })
                     .collect();
 
-                    let temp_role = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
-                    let temp_name = syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    let temp_role = Ident::new(&format!("R{}", i), Span::call_site());
+                    let temp_name = Ident::new(&format!("N{}", i), Span::call_site());
 
                 if i != self.index_tuple_one {
                     let offset = if i < self.index_tuple_one { i } else { i - 1 };
                     let temp_function =
-                        syn::Ident::new(&format!("F{}", offset), proc_macro2::Span::call_site());
+                        Ident::new(&format!("F{}", offset), Span::call_site());
                     quote! {
                         #temp_function : FnOnce(
                             #meshedchannels_name_one<
@@ -376,13 +377,13 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let mut functions_struct_two: Vec<proc_macro2::TokenStream> = (1..=self.nsessions_two)
+        let mut functions_struct_two: Vec<TokenStream> = (1..=self.nsessions_two)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions_two)
+                let temp_sessions: Vec<TokenStream> = (1..self.nsessions_two)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset_two, i, j);
                         let temp_ident =
-                            syn::Ident::new(&format!("S{}", ((self.nsessions_one - 1) * (self.nsessions_one) / 2) + m), proc_macro2::Span::call_site());
+                            Ident::new(&format!("S{}", ((self.nsessions_one - 1) * (self.nsessions_one) / 2) + m), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -395,13 +396,13 @@ impl ForkMPSTMultiInterleaved {
                     })
                     .collect();
 
-                    let temp_role = syn::Ident::new(&format!("R{}", self.nsessions_one + i), proc_macro2::Span::call_site());
-                    let temp_name = syn::Ident::new(&format!("N{}", self.nsessions_one + i), proc_macro2::Span::call_site());
+                    let temp_role = Ident::new(&format!("R{}", self.nsessions_one + i), Span::call_site());
+                    let temp_name = Ident::new(&format!("N{}", self.nsessions_one + i), Span::call_site());
 
                 if i != self.index_tuple_two {
                     let offset = if i < self.index_tuple_two { i - 1} else { i - 2 };
                     let temp_function =
-                        syn::Ident::new(&format!("F{}", self.nsessions_one + offset), proc_macro2::Span::call_site());
+                        Ident::new(&format!("F{}", self.nsessions_one + offset), Span::call_site());
                    quote! {
                         #temp_function : FnOnce(
                             #meshedchannels_name_two<
@@ -445,7 +446,7 @@ impl ForkMPSTMultiInterleaved {
             }
         };
 
-        let join_handle: Vec<proc_macro2::TokenStream> = (1..=(sum_nsessions - 1))
+        let join_handle: Vec<TokenStream> = (1..=(sum_nsessions - 1))
             .map(|_| {
                 quote! {
                     std::thread::JoinHandle<()> ,
@@ -453,20 +454,20 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let new_channels_one: Vec<proc_macro2::TokenStream> = (1..=((self.nsessions_one - 1)
+        let new_channels_one: Vec<TokenStream> = (1..=((self.nsessions_one - 1)
             * (self.nsessions_one)
             / 2))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 let (line, column, _) = self.get_tuple_diag(&diag_w_offset_one, i);
-                let temp_channel_left = syn::Ident::new(
+                let temp_channel_left = Ident::new(
                     &format!("channel_{}_{}", line, column),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_channel_right = syn::Ident::new(
+                let temp_channel_right = Ident::new(
                     &format!("channel_{}_{}", column, line),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let ( #temp_channel_left , #temp_channel_right ) =
@@ -475,33 +476,33 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let new_channels_two: Vec<proc_macro2::TokenStream> = (1..=((self.nsessions_two - 1)
+        let new_channels_two: Vec<TokenStream> = (1..=((self.nsessions_two - 1)
             * (self.nsessions_two)
             / 2))
             .map(|i| {
-                let temp_ident = syn::Ident::new(
+                let temp_ident = Ident::new(
                     &format!(
                         "S{}",
                         ((self.nsessions_one - 1) * (self.nsessions_one) / 2) + i
                     ),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 let (line, column, _) = self.get_tuple_diag(&diag_w_offset_two, i);
-                let temp_channel_left = syn::Ident::new(
+                let temp_channel_left = Ident::new(
                     &format!(
                         "channel_{}_{}",
                         self.nsessions_one + line,
                         self.nsessions_one + column
                     ),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_channel_right = syn::Ident::new(
+                let temp_channel_right = Ident::new(
                     &format!(
                         "channel_{}_{}",
                         self.nsessions_one + column,
                         self.nsessions_one + line
                     ),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let ( #temp_channel_left , #temp_channel_right ) =
@@ -510,23 +511,23 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let new_meshedchannels_one: Vec<proc_macro2::TokenStream> = (1..=(self.nsessions_one))
+        let new_meshedchannels_one: Vec<TokenStream> = (1..=(self.nsessions_one))
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions_one)
+                let temp_sessions: Vec<TokenStream> = (1..self.nsessions_one)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix_one, i, j);
-                        let temp_session = syn::Ident::new(
+                        let temp_session = Ident::new(
                             &format!("session{}", j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         let temp_channel = match line {
-                            m if m == i => syn::Ident::new(
+                            m if m == i => Ident::new(
                                 &format!("channel_{}_{}", line, column),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
-                            _ => syn::Ident::new(
+                            _ => Ident::new(
                                 &format!("channel_{}_{}", column, line),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
                         };
                         quote! {
@@ -535,14 +536,14 @@ impl ForkMPSTMultiInterleaved {
                     })
                     .collect();
 
-                let temp_meshedchannels = syn::Ident::new(
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 let temp_role =
-                    syn::Ident::new(&format!("role_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("role_{}", i), Span::call_site());
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let #temp_meshedchannels =
                         #meshedchannels_name_one {
@@ -556,31 +557,31 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let new_meshedchannels_two: Vec<proc_macro2::TokenStream> = (1..=(self.nsessions_two))
+        let new_meshedchannels_two: Vec<TokenStream> = (1..=(self.nsessions_two))
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions_two)
+                let temp_sessions: Vec<TokenStream> = (1..self.nsessions_two)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix_two, i, j);
-                        let temp_session = syn::Ident::new(
+                        let temp_session = Ident::new(
                             &format!("session{}", j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         let temp_channel = match line {
-                            m if m == i => syn::Ident::new(
+                            m if m == i => Ident::new(
                                 &format!(
                                     "channel_{}_{}",
                                     self.nsessions_one + line,
                                     self.nsessions_one + column
                                 ),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
-                            _ => syn::Ident::new(
+                            _ => Ident::new(
                                 &format!(
                                     "channel_{}_{}",
                                     self.nsessions_one + column,
                                     self.nsessions_one + line
                                 ),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
                         };
                         quote! {
@@ -589,17 +590,17 @@ impl ForkMPSTMultiInterleaved {
                     })
                     .collect();
 
-                let temp_meshedchannels = syn::Ident::new(
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", self.nsessions_one + i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_role = syn::Ident::new(
+                let temp_role = Ident::new(
                     &format!("role_{}", self.nsessions_one + i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_name = syn::Ident::new(
+                let temp_name = Ident::new(
                     &format!("name_{}", self.nsessions_one + i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let #temp_meshedchannels =
@@ -614,7 +615,7 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let new_threads: Vec<proc_macro2::TokenStream> = (1..=(sum_nsessions - 2))
+        let new_threads: Vec<TokenStream> = (1..=(sum_nsessions - 2))
             .map(|i| {
                 let offset = if i < self.index_tuple_one {
                     i
@@ -626,10 +627,10 @@ impl ForkMPSTMultiInterleaved {
                     i + 2
                 };
                 let temp_function =
-                    syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                let temp_meshedchannels = syn::Ident::new(
+                    Ident::new(&format!("f{}", i), Span::call_site());
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", offset),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(32 * 1024 * 1024).spawn(move || {
@@ -645,17 +646,17 @@ impl ForkMPSTMultiInterleaved {
             })
             .collect();
 
-        let new_interleaved_thread: proc_macro2::TokenStream = {
-            let temp_meshedchannels_one = syn::Ident::new(
+        let new_interleaved_thread: TokenStream = {
+            let temp_meshedchannels_one = Ident::new(
                 &format!("meshedchannels_{}", self.index_tuple_one),
-                proc_macro2::Span::call_site(),
+                Span::call_site(),
             );
-            let temp_meshedchannels_two = syn::Ident::new(
+            let temp_meshedchannels_two = Ident::new(
                 &format!(
                     "meshedchannels_{}",
                     (self.nsessions_one + self.index_tuple_two)
                 ),
-                proc_macro2::Span::call_site(),
+                Span::call_site(),
             );
 
             quote! {

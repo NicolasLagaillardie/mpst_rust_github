@@ -1,35 +1,36 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct CreateSendMPSTSession {
-    func_name: syn::Ident,
-    receiver: syn::Ident,
-    sender: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    receiver: Ident,
+    sender: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
     exclusion: u64,
 }
 
 impl Parse for CreateSendMPSTSession {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let receiver = syn::Ident::parse(input)?;
+        let receiver = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let sender = syn::Ident::parse(input)?;
+        let sender = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CreateSendMPSTSession {
             func_name,
@@ -42,46 +43,46 @@ impl Parse for CreateSendMPSTSession {
     }
 }
 
-impl From<CreateSendMPSTSession> for proc_macro2::TokenStream {
-    fn from(input: CreateSendMPSTSession) -> proc_macro2::TokenStream {
+impl From<CreateSendMPSTSession> for TokenStream {
+    fn from(input: CreateSendMPSTSession) -> TokenStream {
         input.expand()
     }
 }
 
 impl CreateSendMPSTSession {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let receiver = self.receiver.clone();
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let session_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let session_types_struct: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let session_types_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session ,
                 }
             })
             .collect();
 
-        let all_send: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let all_send: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {}
                 } else {
                     let temp_ident =
-                        syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("session{}", i), Span::call_site());
                     quote! {
                         let new_session = mpstthree::binary::send::send(x, s.#temp_ident);
                     }
@@ -89,10 +90,10 @@ impl CreateSendMPSTSession {
             })
             .collect();
 
-        let send_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let send_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         mpstthree::binary::struct_trait::send::Send<T, #temp_ident >,
@@ -105,10 +106,10 @@ impl CreateSendMPSTSession {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,

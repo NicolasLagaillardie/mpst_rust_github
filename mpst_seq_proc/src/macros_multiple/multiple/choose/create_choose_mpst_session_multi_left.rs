@@ -1,38 +1,39 @@
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::{TokenStream, Span};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct ChooseTypeMultiLeft {
-    func_name: syn::Ident,
-    type_name: syn::Ident,
-    role_dual: syn::Ident,
-    name: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    func_name: Ident,
+    type_name: Ident,
+    role_dual: Ident,
+    name: Ident,
+    meshedchannels_name: Ident,
     n_sessions: u64,
 }
 
 impl Parse for ChooseTypeMultiLeft {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = syn::Ident::parse(input)?;
+        let func_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let type_name = syn::Ident::parse(input)?;
+        let type_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let role_dual = syn::Ident::parse(input)?;
+        let role_dual = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let name = syn::Ident::parse(input)?;
+        let name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ChooseTypeMultiLeft {
             func_name,
@@ -45,8 +46,8 @@ impl Parse for ChooseTypeMultiLeft {
     }
 }
 
-impl From<ChooseTypeMultiLeft> for proc_macro2::TokenStream {
-    fn from(input: ChooseTypeMultiLeft) -> proc_macro2::TokenStream {
+impl From<ChooseTypeMultiLeft> for TokenStream {
+    fn from(input: ChooseTypeMultiLeft) -> TokenStream {
         input.expand()
     }
 }
@@ -128,7 +129,7 @@ impl ChooseTypeMultiLeft {
         }
     }
 
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let type_name = self.type_name.clone();
         let role_dual = self.role_dual.clone();
@@ -137,54 +138,54 @@ impl ChooseTypeMultiLeft {
         let diff = self.n_sessions - 1;
         let (diag, matrix) = self.diag_and_matrix();
 
-        let all_sessions: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1)))
+        let all_sessions: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let all_sessions_struct: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1)))
+        let all_sessions_struct: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session + 'a ,
                 }
             })
             .collect();
 
-        let all_roles: Vec<proc_macro2::TokenStream> = (1..(3 * self.n_sessions))
+        let all_roles: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let all_roles_struct: Vec<proc_macro2::TokenStream> = (1..(3 * self.n_sessions))
+        let all_roles_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'a ,
                 }
             })
             .collect();
 
-        let all_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let all_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let types_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let types_left: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix, i, j);
 
                         let temp_ident =
-                            syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
+                            Ident::new(&format!("S{}", m), Span::call_site());
 
                         if k == i {
                             quote! {
@@ -198,13 +199,13 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
-                let types_right: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let types_right: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix, i, j);
 
-                        let temp_ident = syn::Ident::new(
+                        let temp_ident = Ident::new(
                             &format!("S{}", diff * (diff + 1) / 2 + m),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
 
                         if k == i {
@@ -219,11 +220,11 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
-                let temp_roles: Vec<proc_macro2::TokenStream> = (1..4)
+                let temp_roles: Vec<TokenStream> = (1..4)
                     .map(|j| {
-                        let temp_ident = syn::Ident::new(
+                        let temp_ident = Ident::new(
                             &format!("R{}", 3 * (i - 1) + j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
 
                         quote! {
@@ -248,69 +249,69 @@ impl ChooseTypeMultiLeft {
             })
             .collect();
 
-        let stacks: Vec<proc_macro2::TokenStream> = ((3 * self.n_sessions - 2)
+        let stacks: Vec<TokenStream> = ((3 * self.n_sessions - 2)
             ..(3 * self.n_sessions))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let sessions_struct: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let sessions_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let sum: u64 = (0..i).map(|j| self.n_sessions - 1 - j).sum();
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", sum), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", sum), Span::call_site());
                 quote! {
                     < #temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
                 }
             })
             .collect();
 
-        let role_left = syn::Ident::new(
+        let role_left = Ident::new(
             &format!("R{}", 3 * self.n_sessions - 2),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
-        let stack_left = syn::Ident::new(
+        let stack_left = Ident::new(
             &format!("stack_{}", self.n_sessions),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
-        let name_left = syn::Ident::new(
+        let name_left = Ident::new(
             &format!("name_{}", self.n_sessions),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
-        let new_channels: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1) / 2))
+        let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
             .map(|i| {
                 let (line, column, _) = self.get_tuple_diag(&diag, i);
-                let channel_left = syn::Ident::new(
+                let channel_left = Ident::new(
                     &format!("channel_{}_{}", line, column),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let channel_right = syn::Ident::new(
+                let channel_right = Ident::new(
                     &format!("channel_{}_{}", column, line),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 let temp_session =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     let ( #channel_left , #channel_right ) = #temp_session::new();
                 }
             })
             .collect();
 
-        let new_stacks: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_stacks: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_stack =
-                    syn::Ident::new(&format!("stack_{}", i), proc_macro2::Span::call_site());
-                let temp_role = syn::Ident::new(
+                    Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_role = Ident::new(
                     &format!("R{}", 3 * (i - 1) + 1),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let (_, #temp_stack ) = #temp_role::new();
@@ -318,13 +319,13 @@ impl ChooseTypeMultiLeft {
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
-                let temp_role = syn::Ident::new(
+                    Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_role = Ident::new(
                     &format!("R{}", 3 * (i - 1) + 3),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let ( #temp_name , _) =
@@ -333,25 +334,25 @@ impl ChooseTypeMultiLeft {
             })
             .collect();
 
-        let new_choices: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_choices: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let types_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+                let types_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
 
-                        let temp_session = syn::Ident::new(
+                        let temp_session = Ident::new(
                             &format!("session{}", j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
 
                         let temp_channel = match line {
-                            m if m == i => syn::Ident::new(
+                            m if m == i => Ident::new(
                                 &format!("channel_{}_{}", line, column),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
-                            _ => syn::Ident::new(
+                            _ => Ident::new(
                                 &format!("channel_{}_{}", column, line),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
                         };
 
@@ -362,13 +363,13 @@ impl ChooseTypeMultiLeft {
                     .collect();
 
                 let temp_choice =
-                    syn::Ident::new(&format!("choice_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("choice_{}", i), Span::call_site());
 
                 let temp_stack =
-                    syn::Ident::new(&format!("stack_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("stack_{}", i), Span::call_site());
 
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
 
                 quote! {
                     let #temp_choice = #meshedchannels_name {
@@ -382,14 +383,14 @@ impl ChooseTypeMultiLeft {
             })
             .collect();
 
-        let new_sessions_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_sessions_left: Vec<TokenStream> = (1..self.n_sessions)
                 .map(|i| {
                     let temp_new_session =
-                        syn::Ident::new(&format!("new_session_{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("new_session_{}", i), Span::call_site());
                     let temp_session =
-                        syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("session{}", i), Span::call_site());
                     let temp_choice =
-                        syn::Ident::new(&format!("choice_{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("choice_{}", i), Span::call_site());
                     quote! {
                         let #temp_new_session =
                             mpstthree::binary::send::send(either::Either::Left(#temp_choice), s.#temp_session);
@@ -397,35 +398,35 @@ impl ChooseTypeMultiLeft {
                 })
                 .collect();
 
-        let old_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let old_session_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_new_session = syn::Ident::new(
+                let temp_new_session = Ident::new(
                     &format!("new_session_{}", i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     #temp_session : #temp_new_session ,
                 }
             })
             .collect();
 
-        let new_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
+        let new_session_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let (line, column, _) = self.get_tuple_matrix(&matrix, self.n_sessions, i);
                 let temp_channel = match line {
-                    m if m == i => syn::Ident::new(
+                    m if m == i => Ident::new(
                         &format!("channel_{}_{}", column, line),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     ),
-                    _ => syn::Ident::new(
+                    _ => Ident::new(
                         &format!("channel_{}_{}", line, column),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     ),
                 };
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     #temp_session : #temp_channel ,
                 }

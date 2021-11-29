@@ -19,7 +19,8 @@
 
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, LitInt};
+use proc_macro2::TokenStream;
 
 #[derive(Debug)]
 pub struct SendAuxSimple {
@@ -36,7 +37,7 @@ impl Parse for SendAuxSimple {
         let payload = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(SendAuxSimple {
             session,
@@ -46,14 +47,14 @@ impl Parse for SendAuxSimple {
     }
 }
 
-impl From<SendAuxSimple> for proc_macro2::TokenStream {
-    fn from(input: SendAuxSimple) -> proc_macro2::TokenStream {
+impl From<SendAuxSimple> for TokenStream {
+    fn from(input: SendAuxSimple) -> TokenStream {
         input.expand()
     }
 }
 
 impl SendAuxSimple {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let session = self.session.clone();
         let payload = self.payload.clone();
         let recv_session = format_ident!("session{}", self.exclusion);

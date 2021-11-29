@@ -1,40 +1,41 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::Result;
+use syn::{Result, Ident};
+use proc_macro2::{TokenStream, Span};
 
 #[derive(Debug)]
 pub struct CreateBroadcastRoleShort {
-    role: syn::Ident,
+    role: Ident,
 }
 
 impl Parse for CreateBroadcastRoleShort {
     fn parse(input: ParseStream) -> Result<Self> {
-        let role = syn::Ident::parse(input)?;
+        let role = Ident::parse(input)?;
 
         Ok(CreateBroadcastRoleShort { role })
     }
 }
 
-impl From<CreateBroadcastRoleShort> for proc_macro2::TokenStream {
-    fn from(input: CreateBroadcastRoleShort) -> proc_macro2::TokenStream {
+impl From<CreateBroadcastRoleShort> for TokenStream {
+    fn from(input: CreateBroadcastRoleShort) -> TokenStream {
         input.expand()
     }
 }
 
 impl CreateBroadcastRoleShort {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let role = self.role.clone();
 
         // Build the new names
         // role to all
-        let role_to_all_name = syn::Ident::new(
+        let role_to_all_name = Ident::new(
             &format!("Role{}toAll", role),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
         // dual to all
-        let dual_to_all_name = syn::Ident::new(
+        let dual_to_all_name = Ident::new(
             &format!("RoleAllto{}", role),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
         quote! {

@@ -1,18 +1,19 @@
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident, LitInt};
+use proc_macro2::TokenStream;
 
 #[derive(Debug)]
 pub struct ChooseMultiCreateToAll {
-    name_macro: syn::Ident,
-    receivers: Vec<proc_macro2::TokenStream>,
-    sender: syn::Ident,
-    meshedchannels_name: syn::Ident,
+    name_macro: Ident,
+    receivers: Vec<TokenStream>,
+    sender: Ident,
+    meshedchannels_name: Ident,
     exclusion: u64,
 }
 
-fn expand_parenthesized(stream: &proc_macro2::TokenStream) -> Vec<proc_macro2::TokenStream> {
-    let mut out: Vec<proc_macro2::TokenStream> = Vec::new();
+fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
+    let mut out: Vec<TokenStream> = Vec::new();
     for tt in stream.clone().into_iter() {
         let elt = match tt {
             proc_macro2::TokenTree::Group(g) => Some(g.stream()),
@@ -28,29 +29,29 @@ fn expand_parenthesized(stream: &proc_macro2::TokenStream) -> Vec<proc_macro2::T
 impl Parse for ChooseMultiCreateToAll {
     fn parse(input: ParseStream) -> Result<Self> {
         // The name of the macro
-        let name_macro = syn::Ident::parse(input)?;
+        let name_macro = Ident::parse(input)?;
 
         <Token![,]>::parse(input)?;
 
         // The receivers
         let content_receivers;
         let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = proc_macro2::TokenStream::parse(&content_receivers)?;
+        let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<proc_macro2::TokenStream> = expand_parenthesized(&receivers);
+        let all_receivers: Vec<TokenStream> = expand_parenthesized(&receivers);
 
         <Token![,]>::parse(input)?;
 
         // The sender
-        let sender = syn::Ident::parse(input)?;
+        let sender = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The meshedchannels_name
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The index of the sender
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ChooseMultiCreateToAll {
             name_macro,
@@ -62,14 +63,14 @@ impl Parse for ChooseMultiCreateToAll {
     }
 }
 
-impl From<ChooseMultiCreateToAll> for proc_macro2::TokenStream {
-    fn from(input: ChooseMultiCreateToAll) -> proc_macro2::TokenStream {
+impl From<ChooseMultiCreateToAll> for TokenStream {
+    fn from(input: ChooseMultiCreateToAll) -> TokenStream {
         input.expand()
     }
 }
 
 impl ChooseMultiCreateToAll {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let name_macro = self.name_macro.clone();
         let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();

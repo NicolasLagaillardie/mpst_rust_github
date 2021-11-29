@@ -1,3 +1,4 @@
+use proc_macro2::Span;
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
 use std::collections::hash_map::RandomState;
@@ -68,13 +69,13 @@ impl CheckingInput {
         let mut new_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
 
         for (key, value) in choices {
-            let name_key = syn::Ident::new(&key, proc_macro2::Span::call_site());
-            let fn_key = syn::Ident::new(&key.to_lowercase(), proc_macro2::Span::call_site());
+            let name_key = syn::Ident::new(&key, Span::call_site());
+            let fn_key = syn::Ident::new(&key.to_lowercase(), Span::call_site());
 
             let branches: Vec<proc_macro2::TokenStream> = value
                 .iter()
                 .map(|branch| {
-                    let branch_ident = syn::Ident::new(branch, proc_macro2::Span::call_site());
+                    let branch_ident = syn::Ident::new(branch, Span::call_site());
                     quote! {
                         #name_key::#branch_ident(s) => {
                             write!(
@@ -100,9 +101,9 @@ impl CheckingInput {
 
             let branches_hashmap: Vec<proc_macro2::TokenStream> = value.iter()
             .map(|branch| {
-                let temp = syn::Ident::new(&format!("temp_{}", branch).to_lowercase(), proc_macro2::Span::call_site());
-                let branch_ident = syn::Ident::new(branch, proc_macro2::Span::call_site());
-                let branch_name = syn::Ident::new(&branch.to_lowercase(), proc_macro2::Span::call_site());
+                let temp = syn::Ident::new(&format!("temp_{}", branch).to_lowercase(), Span::call_site());
+                let branch_ident = syn::Ident::new(branch, Span::call_site());
+                let branch_name = syn::Ident::new(&branch.to_lowercase(), Span::call_site());
                 quote! {
                     let #temp =
                         (#name_key::#branch_ident(<_ as mpstthree::binary::struct_trait::session::Session>::new().0))

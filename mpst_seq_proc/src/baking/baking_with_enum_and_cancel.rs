@@ -1,23 +1,24 @@
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, Ident};
+use proc_macro2::{TokenStream, Span};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct BakingWithEnumAndCancel {
-    meshedchannels_name: syn::Ident,
-    all_roles: Vec<proc_macro2::TokenStream>,
+    meshedchannels_name: Ident,
+    all_roles: Vec<TokenStream>,
     number_roles: u64,
 }
 
-fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStream>> {
+fn expand_token_stream(input: ParseStream) -> Result<Vec<TokenStream>> {
     let content;
     let _parentheses = syn::parenthesized!(content in input);
-    let token_stream = proc_macro2::TokenStream::parse(&content)?;
+    let token_stream = TokenStream::parse(&content)?;
 
-    let mut result: Vec<proc_macro2::TokenStream> = Vec::new();
+    let mut result: Vec<TokenStream> = Vec::new();
     for tt in token_stream.into_iter() {
         let elt = match tt {
             proc_macro2::TokenTree::Group(g) => Some(g.stream()),
@@ -33,7 +34,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<proc_macro2::TokenStrea
 
 impl Parse for BakingWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
-        let meshedchannels_name = syn::Ident::parse(input)?;
+        let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
         let all_roles = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
 
@@ -47,8 +48,8 @@ impl Parse for BakingWithEnumAndCancel {
     }
 }
 
-impl From<BakingWithEnumAndCancel> for proc_macro2::TokenStream {
-    fn from(input: BakingWithEnumAndCancel) -> proc_macro2::TokenStream {
+impl From<BakingWithEnumAndCancel> for TokenStream {
+    fn from(input: BakingWithEnumAndCancel) -> TokenStream {
         input.expand()
     }
 }
@@ -190,32 +191,32 @@ impl BakingWithEnumAndCancel {
     /// Expand send methods
     fn expand_send(
         &self,
-        all_roles: Vec<proc_macro2::TokenStream>,
+        all_roles: Vec<TokenStream>,
         sender: u64,
         receiver: u64,
-        session_types: Vec<syn::Ident>,
-        session_types_struct: Vec<proc_macro2::TokenStream>,
-    ) -> proc_macro2::TokenStream {
+        session_types: Vec<Ident>,
+        session_types_struct: Vec<TokenStream>,
+    ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+            Ident::new(&format!("Role{}", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_send")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+                Ident::new(&format!("Role{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_send")
             };
 
-        let send_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let send_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= sender { receiver - 1 } else { receiver };
 
-                let temp_type = syn::Ident::new(&format!("S{}", k), proc_macro2::Span::call_site());
+                let temp_type = Ident::new(&format!("S{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { mpstthree::binary::struct_trait::send::Send<T, #temp_type > ,}
@@ -225,12 +226,12 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= sender { receiver - 1 } else { receiver };
 
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", k), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { #temp_session : new_session , }
@@ -247,7 +248,7 @@ impl BakingWithEnumAndCancel {
         };
 
         let new_session =
-            syn::Ident::new(&format!("session{}", index), proc_macro2::Span::call_site());
+            Ident::new(&format!("session{}", index), Span::call_site());
 
         quote! {
             impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
@@ -282,32 +283,32 @@ impl BakingWithEnumAndCancel {
     /// Expand receive methods
     fn expand_recv(
         &self,
-        all_roles: Vec<proc_macro2::TokenStream>,
+        all_roles: Vec<TokenStream>,
         receiver: u64,
         sender: u64,
-        session_types: Vec<syn::Ident>,
-        session_types_struct: Vec<proc_macro2::TokenStream>,
-    ) -> proc_macro2::TokenStream {
+        session_types: Vec<Ident>,
+        session_types_struct: Vec<TokenStream>,
+    ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+            Ident::new(&format!("Role{}", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_recv")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+                Ident::new(&format!("Role{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_recv")
             };
 
-        let send_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let send_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
 
-                let temp_type = syn::Ident::new(&format!("S{}", k), proc_macro2::Span::call_site());
+                let temp_type = Ident::new(&format!("S{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > ,}
@@ -317,12 +318,12 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
 
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", k), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { #temp_session : new_session , }
@@ -339,7 +340,7 @@ impl BakingWithEnumAndCancel {
         };
 
         let new_session =
-            syn::Ident::new(&format!("session{}", index), proc_macro2::Span::call_site());
+            Ident::new(&format!("session{}", index), Span::call_site());
 
         quote! {
             impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
@@ -376,32 +377,32 @@ impl BakingWithEnumAndCancel {
     /// Expand receive from all methods
     fn expand_recv_from_all(
         &self,
-        all_roles: Vec<proc_macro2::TokenStream>,
+        all_roles: Vec<TokenStream>,
         receiver: u64,
         sender: u64,
-        session_types: Vec<syn::Ident>,
-        session_types_struct: Vec<proc_macro2::TokenStream>,
-    ) -> proc_macro2::TokenStream {
+        session_types: Vec<Ident>,
+        session_types_struct: Vec<TokenStream>,
+    ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            syn::Ident::new(&format!("RoleAllto{}", elt), proc_macro2::Span::call_site())
+            Ident::new(&format!("RoleAllto{}", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_recv_from_all")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+                Ident::new(&format!("Role{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
             };
 
-        let send_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let send_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
 
-                let temp_type = syn::Ident::new(&format!("S{}", k), proc_macro2::Span::call_site());
+                let temp_type = Ident::new(&format!("S{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > ,}
@@ -411,12 +412,12 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
 
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", k), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { #temp_session : new_session , }
@@ -433,7 +434,7 @@ impl BakingWithEnumAndCancel {
         };
 
         let new_session =
-            syn::Ident::new(&format!("session{}", index), proc_macro2::Span::call_site());
+            Ident::new(&format!("session{}", index), Span::call_site());
 
         quote! {
             impl<#( #session_types_struct )* T: std::marker::Send>
@@ -472,52 +473,52 @@ impl BakingWithEnumAndCancel {
     /// Expand offer methods
     fn expand_offer(
         &self,
-        all_roles: Vec<proc_macro2::TokenStream>,
+        all_roles: Vec<TokenStream>,
         sender: u64,
         receiver: u64,
-    ) -> proc_macro2::TokenStream {
+    ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            syn::Ident::new(&format!("RoleAllto{}", elt), proc_macro2::Span::call_site())
+            Ident::new(&format!("RoleAllto{}", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_offer")
         };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+                Ident::new(&format!("Role{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_offer")
             };
 
-        let offer_session_types_struct: Vec<proc_macro2::TokenStream> =
+        let offer_session_types_struct: Vec<TokenStream> =
             (1..(2 * self.number_roles - 1))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
                 })
                 .collect();
 
-        let left_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let left_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_ident , }
             })
             .collect();
 
-        let right_sessions: Vec<proc_macro2::TokenStream> = (self.number_roles
+        let right_sessions: Vec<TokenStream> = (self.number_roles
             ..(2 * self.number_roles - 1))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_ident , }
             })
             .collect();
 
-        let offer_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let offer_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
                 if k == cond {
@@ -585,45 +586,45 @@ impl BakingWithEnumAndCancel {
     /// Expand choose methods
     fn expand_choose(
         &self,
-        all_roles: Vec<proc_macro2::TokenStream>,
+        all_roles: Vec<TokenStream>,
         sender: u64,
-    ) -> proc_macro2::TokenStream {
+    ) -> TokenStream {
         let (diag, matrix) = self.diag_and_matrix();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+            Ident::new(&format!("Role{}", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_choose")
         };
 
         let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            syn::Ident::new(&format!("Role{}toAll", elt), proc_macro2::Span::call_site())
+            Ident::new(&format!("Role{}toAll", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_stack in expand_choose")
         };
 
-        let choose_session_types_struct: Vec<proc_macro2::TokenStream> =
+        let choose_session_types_struct: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * self.number_roles))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
                 })
                 .collect();
 
-        let choose_roles_struct: Vec<proc_macro2::TokenStream> = (1..=(2 * self.number_roles))
+        let choose_roles_struct: Vec<TokenStream> = (1..=(2 * self.number_roles))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! { #temp_ident : mpstthree::role::Role , }
             })
             .collect();
 
-        let choose_sessions: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let choose_sessions: Vec<TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
-                    let left_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+                    let left_sessions: Vec<TokenStream> = (1..self.number_roles)
                         .map(|k| {
 
                             let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
@@ -641,9 +642,9 @@ impl BakingWithEnumAndCancel {
 
                             let (_, _, m) = self.get_tuple_matrix(&matrix, j, k);
 
-                            let temp_ident = syn::Ident::new(
+                            let temp_ident = Ident::new(
                                 &format!("S{}", m),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             );
 
                             if l == j || m1 == m2 {
@@ -654,7 +655,7 @@ impl BakingWithEnumAndCancel {
                         })
                         .collect();
 
-                    let right_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+                    let right_sessions: Vec<TokenStream> = (1..self.number_roles)
                         .map(|k| {
 
                             let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
@@ -674,9 +675,9 @@ impl BakingWithEnumAndCancel {
 
                             let diff = self.number_roles - 1;
 
-                            let temp_ident = syn::Ident::new(
+                            let temp_ident = Ident::new(
                                 &format!("S{}", diff * (diff + 1) / 2 + m),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             );
 
                             if l == j || m1 == m2 {
@@ -688,36 +689,36 @@ impl BakingWithEnumAndCancel {
                         .collect();
 
                     let stack_left = if j > sender {
-                        let temp_ident = syn::Ident::new(
+                        let temp_ident = Ident::new(
                             &format!("R{}", 2 * (j - 1) - 1),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         quote! { #temp_ident , }
                     } else {
-                        let temp_ident = syn::Ident::new(
+                        let temp_ident = Ident::new(
                             &format!("R{}", 2 * (j - 1) + 1),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         quote! { #temp_ident , }
                     };
 
                     let stack_right = if j > sender {
-                        let temp_ident = syn::Ident::new(
+                        let temp_ident = Ident::new(
                             &format!("R{}", 2 * (j - 1)),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         quote! { #temp_ident , }
                     } else {
-                        let temp_ident = syn::Ident::new(
+                        let temp_ident = Ident::new(
                             &format!("R{}", 2 * (j - 1) + 2),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         quote! { #temp_ident , }
                     };
 
                     let receiver_ident =
                         if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                            syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+                            Ident::new(&format!("Role{}", elt), Span::call_site())
                         } else {
                             panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
                         };
@@ -751,17 +752,17 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_stack_sender_left = syn::Ident::new(
+        let new_stack_sender_left = Ident::new(
             &format!("R{}", 2 * self.number_roles - 1),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
-        let new_stack_sender_right = syn::Ident::new(
+        let new_stack_sender_right = Ident::new(
             &format!("R{}", 2 * self.number_roles),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
         let new_stacks_sender = quote! { #new_stack_sender_left , #new_stack_sender_right };
 
-        let choose_left_session: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let choose_left_session: Vec<TokenStream> = (1..=self.number_roles)
             .filter_map(|j| {
                 if j == sender {
                     std::option::Option::None
@@ -772,7 +773,7 @@ impl BakingWithEnumAndCancel {
                         self.get_tuple_matrix(&matrix, sender, j)
                     };
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", m), Span::call_site());
                     std::option::Option::Some(
                         quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
                     )
@@ -780,7 +781,7 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let choose_right_session: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let choose_right_session: Vec<TokenStream> = (1..=self.number_roles)
             .filter_map(|j| {
                 if j == sender {
                     std::option::Option::None
@@ -791,9 +792,9 @@ impl BakingWithEnumAndCancel {
                         self.get_tuple_matrix(&matrix, sender, j)
                     };
                     let diff = self.number_roles - 1;
-                    let temp_ident = syn::Ident::new(
+                    let temp_ident = Ident::new(
                         &format!("S{}", diff * (diff + 1) / 2 + m),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     );
                     std::option::Option::Some(
                         quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
@@ -801,120 +802,120 @@ impl BakingWithEnumAndCancel {
                 }
             })
             .collect();
-        let choose_left_channels: Vec<proc_macro2::TokenStream> =
+        let choose_left_channels: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * self.number_roles / 2))
                 .map(|j| {
                     let (line, column) = self.get_line_column_from_diag(&diag, j);
 
                     let first_channel = if sender != line {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", line, column),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     } else {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", column, line),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     };
 
                     let second_channel = if sender != line {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", column, line),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     } else {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", line, column),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     };
 
                     let temp_session =
-                        syn::Ident::new(&format!("S{}", j), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", j), Span::call_site());
 
                     quote! { let ( #first_channel , #second_channel ) =
                     <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ; }
                 })
                 .collect();
 
-        let choose_right_channels: Vec<proc_macro2::TokenStream> =
+        let choose_right_channels: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * self.number_roles / 2))
                 .map(|j| {
                     let (line, column) = self.get_line_column_from_diag(&diag, j);
                     let diff = self.number_roles - 1;
 
                     let first_channel = if sender != line {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", line, column),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     } else {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", column, line),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     };
 
                     let second_channel = if sender != line {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", column, line),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     } else {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("channel_{}_{}", line, column),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     };
 
-                    let temp_session = syn::Ident::new(
+                    let temp_session = Ident::new(
                         &format!("S{}", diff * (diff + 1) / 2 + j),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     );
 
                     quote! { let ( #first_channel , #second_channel ) = #temp_session::new() ; }
                 })
                 .collect();
 
-        let new_stacks_receivers_left: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_stacks_receivers_left: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
                 let temp_stack =
-                    syn::Ident::new(&format!("stack_{}", j), proc_macro2::Span::call_site());
-                let temp_role = syn::Ident::new(
+                    Ident::new(&format!("stack_{}", j), Span::call_site());
+                let temp_role = Ident::new(
                     &format!("R{}", 2 * (j - 1) + 1),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
             })
             .collect();
 
-        let new_stacks_receivers_right: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_stacks_receivers_right: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
                 let temp_stack =
-                    syn::Ident::new(&format!("stack_{}", j), proc_macro2::Span::call_site());
-                let temp_role = syn::Ident::new(
+                    Ident::new(&format!("stack_{}", j), Span::call_site());
+                let temp_role = Ident::new(
                     &format!("R{}", 2 * (j - 1) + 2),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_names: Vec<TokenStream> = (1..=self.number_roles)
         .map(|j| {
             if sender != j {
 
                 let receiver_ident =
                     if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
-                        syn::Ident::new(&format!("Role{}", elt), proc_macro2::Span::call_site())
+                        Ident::new(&format!("Role{}", elt), Span::call_site())
                     } else {
                         panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                     };
 
                     let new_name =
                         if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
-                            syn::Ident::new(&format!("name_{}", elt), proc_macro2::Span::call_site())
+                            Ident::new(&format!("name_{}", elt), Span::call_site())
                         } else {
                             panic!("Not enough arguments for new_name in new_names in expand_choose")
                         };
@@ -928,25 +929,25 @@ impl BakingWithEnumAndCancel {
         })
         .collect();
 
-        let new_meshedchannels_receivers: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_meshedchannels_receivers: Vec<TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
-                    let new_sessions_receiver: Vec<proc_macro2::TokenStream> = (1..self
+                    let new_sessions_receiver: Vec<TokenStream> = (1..self
                         .number_roles)
                         .map(|k| {
-                            let new_session_receiver = syn::Ident::new(
+                            let new_session_receiver = Ident::new(
                                 &format!("session{}", k),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             );
                             let new_channel_receiver = if j > k {
-                                syn::Ident::new(
+                                Ident::new(
                                     &format!("channel_{}_{}", j, k),
-                                    proc_macro2::Span::call_site(),
+                                    Span::call_site(),
                                 )
                             } else {
-                                syn::Ident::new(
+                                Ident::new(
                                     &format!("channel_{}_{}", j, k + 1),
-                                    proc_macro2::Span::call_site(),
+                                    Span::call_site(),
                                 )
                             };
 
@@ -956,22 +957,22 @@ impl BakingWithEnumAndCancel {
 
                     let new_choice_receiver = if j > sender
                     {
-                        syn::Ident::new(&format!("choice_{}", j - 1), proc_macro2::Span::call_site())
+                        Ident::new(&format!("choice_{}", j - 1), Span::call_site())
                     } else {
-                        syn::Ident::new(&format!("choice_{}", j), proc_macro2::Span::call_site())
+                        Ident::new(&format!("choice_{}", j), Span::call_site())
                     };
 
                     let new_stack_receiver = if j > sender
                     {
-                        syn::Ident::new(&format!("stack_{}", j - 1), proc_macro2::Span::call_site())
+                        Ident::new(&format!("stack_{}", j - 1), Span::call_site())
                     } else {
-                        syn::Ident::new(&format!("stack_{}", j), proc_macro2::Span::call_site())
+                        Ident::new(&format!("stack_{}", j), Span::call_site())
                     };
 
                     let new_name_receiver = if let Some(elt) =
                         all_roles.get(usize::try_from(j - 1).unwrap())
                     {
-                        syn::Ident::new(&format!("name_{}", elt), proc_macro2::Span::call_site())
+                        Ident::new(&format!("name_{}", elt), Span::call_site())
                     } else {
                         panic!("Not enough arguments for new_name_receiver in new_meshedchannels_receivers in expand_choose")
                     };
@@ -993,18 +994,18 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_sessions_sender_left: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessions_sender_left: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender = syn::Ident::new(
+                let new_session_sender = Ident::new(
                     &format!("new_session_{}", j - 1),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
 
                 let new_choice_sender =
-                    syn::Ident::new(&format!("choice_{}", j), proc_macro2::Span::call_site());
+                    Ident::new(&format!("choice_{}", j), Span::call_site());
 
                 let session_sender =
-                    syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", j), Span::call_site());
 
                 quote! {
                     let #new_session_sender = mpstthree::binary::send::send(
@@ -1015,18 +1016,18 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_sessions_sender_right: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let new_sessions_sender_right: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender = syn::Ident::new(
+                let new_session_sender = Ident::new(
                     &format!("new_session_{}", j - 1),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
 
                 let new_choice_sender =
-                    syn::Ident::new(&format!("choice_{}", j), proc_macro2::Span::call_site());
+                    Ident::new(&format!("choice_{}", j), Span::call_site());
 
                 let session_sender =
-                    syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", j), Span::call_site());
 
                 quote! {
                     let #new_session_sender = mpstthree::binary::send::send(
@@ -1037,15 +1038,15 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let old_meshedchannels_sender: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let old_meshedchannels_sender: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender = syn::Ident::new(
+                let new_session_sender = Ident::new(
                     &format!("new_session_{}", j - 1),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
 
                 let session_sender =
-                    syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", j), Span::call_site());
 
                 quote! {
                     #session_sender : #new_session_sender ,
@@ -1053,21 +1054,21 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_meshedchannels_sender: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_meshedchannels_sender: Vec<TokenStream> = (1..=self.number_roles)
             .map(|j| {
                 if sender != j {
                     let new_choice_sender = if j < sender {
-                        syn::Ident::new(&format!("session{}", j), proc_macro2::Span::call_site())
+                        Ident::new(&format!("session{}", j), Span::call_site())
                     } else {
-                        syn::Ident::new(
+                        Ident::new(
                             &format!("session{}", j - 1),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         )
                     };
 
-                    let new_channel_sender = syn::Ident::new(
+                    let new_channel_sender = Ident::new(
                         &format!("channel_{}_{}", sender, j),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     );
 
                     quote! {
@@ -1081,14 +1082,14 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_stack_sender = syn::Ident::new(
+        let new_stack_sender = Ident::new(
             &format!("stack_{}", self.number_roles),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
-        let new_name_sender = syn::Ident::new(
+        let new_name_sender = Ident::new(
             &format!("name_{}", self.number_roles),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
         quote! {
@@ -1216,38 +1217,38 @@ impl BakingWithEnumAndCancel {
 
     fn expand_close(
         &self,
-        all_roles: Vec<proc_macro2::TokenStream>,
+        all_roles: Vec<TokenStream>,
         sender: u64,
-    ) -> proc_macro2::TokenStream {
+    ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             let concatenated_elt = format!("Role{}", elt);
-            syn::Ident::new(&concatenated_elt, proc_macro2::Span::call_site())
+            Ident::new(&concatenated_elt, Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_close")
         };
 
-        let close_session_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let close_session_types: Vec<TokenStream> = (1..self.number_roles)
             .map(|_i| {
                 quote! { mpstthree::binary::struct_trait::end::End, }
             })
             .collect();
 
-        let close_session_send: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let close_session_send: Vec<TokenStream> = (1..self.number_roles)
                 .map(|i| {
-                    let temp_session = syn::Ident::new(
+                    let temp_session = Ident::new(
                         &format!("session{}", i),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     );
                     quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(()); }
                 })
                 .collect();
 
-        let close_session_recv: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let close_session_recv: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! { self.#temp_session.receiver.recv()?; }
             })
             .collect();
@@ -1278,21 +1279,21 @@ impl BakingWithEnumAndCancel {
         }
     }
 
-    fn expand_cancel(&self) -> proc_macro2::TokenStream {
+    fn expand_cancel(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let temp_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let temp_types: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_session , }
             })
             .collect();
 
-        let temp_detail_types: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let temp_detail_types: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_session : mpstthree::binary::struct_trait::session::Session , }
             })
             .collect();
@@ -1321,21 +1322,21 @@ impl BakingWithEnumAndCancel {
         }
     }
 
-    fn expand_role(&self, role: String) -> proc_macro2::TokenStream {
+    fn expand_role(&self, role: String) -> TokenStream {
         // role
-        let role_name = syn::Ident::new(&format!("Role{}", role), proc_macro2::Span::call_site());
+        let role_name = Ident::new(&format!("Role{}", role), Span::call_site());
         // dual
         let dual_name =
-            syn::Ident::new(&format!("Role{}Dual", role), proc_macro2::Span::call_site());
+            Ident::new(&format!("Role{}Dual", role), Span::call_site());
         // role to all
-        let role_to_all_name = syn::Ident::new(
+        let role_to_all_name = Ident::new(
             &format!("Role{}toAll", role),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
         // dual to all
-        let dual_to_all_name = syn::Ident::new(
+        let dual_to_all_name = Ident::new(
             &format!("RoleAllto{}", role),
-            proc_macro2::Span::call_site(),
+            Span::call_site(),
         );
 
         quote! {
@@ -1659,125 +1660,125 @@ impl BakingWithEnumAndCancel {
         }
     }
 
-    fn expand_fork_mpst(&self) -> proc_macro2::TokenStream {
+    fn expand_fork_mpst(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
-        let sessions: Vec<proc_macro2::TokenStream> =
+        let sessions: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * (self.number_roles) / 2))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
                 })
                 .collect();
 
-        let sessions_struct: Vec<proc_macro2::TokenStream> =
+        let sessions_struct: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * (self.number_roles) / 2))
                 .map(|i| {
                     let temp_ident =
-                        syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                        Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                     }
                 })
                 .collect();
 
-        let roles: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let roles: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let roles_struct: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
             })
             .collect();
 
-        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_roles: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("R{}", i), Span::call_site());
                 let temp_role =
-                    syn::Ident::new(&format!("role_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("role_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_role , _) = #temp_ident::new() ;
                 }
             })
             .collect();
 
-        let names: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let names: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let names_struct: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let names_struct: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_names: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("N{}", i), Span::call_site());
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = #temp_ident::new() ;
                 }
             })
             .collect();
 
-        let functions: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let functions: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
             })
             .collect();
 
-        let functions_detail: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let functions_detail: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                let temp_expr = syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_expr = Ident::new(&format!("f{}", i), Span::call_site());
                 quote! {
                     #temp_expr : #temp_ident ,
                 }
             })
             .collect();
 
-        let functions_struct: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let functions_struct: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+                let temp_sessions: Vec<TokenStream> = (1..self.number_roles)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
-                            syn::Ident::new(&format!("S{}", m), proc_macro2::Span::call_site());
+                            Ident::new(&format!("S{}", m), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -1791,9 +1792,9 @@ impl BakingWithEnumAndCancel {
                     .collect();
 
                 let temp_function =
-                    syn::Ident::new(&format!("F{}", i), proc_macro2::Span::call_site());
-                let temp_role = syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
-                let temp_name = syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_role = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_function : FnOnce(
                         #meshedchannels_name<
@@ -1810,7 +1811,7 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let join_handle: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let join_handle: Vec<TokenStream> = (1..=self.number_roles)
             .map(|_| {
                 quote! {
                     std::thread::JoinHandle<()> ,
@@ -1818,20 +1819,20 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((self.number_roles - 1)
+        let new_channels: Vec<TokenStream> = (1..=((self.number_roles - 1)
             * (self.number_roles)
             / 2))
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
-                let temp_channel_left = syn::Ident::new(
+                let temp_channel_left = Ident::new(
                     &format!("channel_{}_{}", line, column),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
-                let temp_channel_right = syn::Ident::new(
+                let temp_channel_right = Ident::new(
                     &format!("channel_{}_{}", column, line),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     let ( #temp_channel_left , #temp_channel_right ) =
@@ -1840,23 +1841,23 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_meshedchannels: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+                let temp_sessions: Vec<TokenStream> = (1..self.number_roles)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
-                        let temp_session = syn::Ident::new(
+                        let temp_session = Ident::new(
                             &format!("session{}", j),
-                            proc_macro2::Span::call_site(),
+                            Span::call_site(),
                         );
                         let temp_channel = match line {
-                            m if m == i => syn::Ident::new(
+                            m if m == i => Ident::new(
                                 &format!("channel_{}_{}", line, column),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
-                            _ => syn::Ident::new(
+                            _ => Ident::new(
                                 &format!("channel_{}_{}", column, line),
-                                proc_macro2::Span::call_site(),
+                                Span::call_site(),
                             ),
                         };
                         quote! {
@@ -1865,14 +1866,14 @@ impl BakingWithEnumAndCancel {
                     })
                     .collect();
 
-                let temp_meshedchannels = syn::Ident::new(
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 let temp_role =
-                    syn::Ident::new(&format!("role_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("role_{}", i), Span::call_site());
                 let temp_name =
-                    syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let #temp_meshedchannels =
                         #meshedchannels_name {
@@ -1886,13 +1887,13 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_threads: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let new_threads: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
                 let temp_function =
-                    syn::Ident::new(&format!("f{}", i), proc_macro2::Span::call_site());
-                let temp_meshedchannels = syn::Ident::new(
+                    Ident::new(&format!("f{}", i), Span::call_site());
+                let temp_meshedchannels = Ident::new(
                     &format!("meshedchannels_{}", i),
-                    proc_macro2::Span::call_site(),
+                    Span::call_site(),
                 );
                 quote! {
                     std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(32 * 1024 * 1024).spawn(move || {
@@ -1970,21 +1971,21 @@ impl BakingWithEnumAndCancel {
         }
     }
 
-    fn expand_choose_mpst_create_multi_to_all(&self) -> proc_macro2::TokenStream {
+    fn expand_choose_mpst_create_multi_to_all(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         // Get all the roles provided into a Vec
         let all_roles = self.all_roles.clone();
 
-        let choose_mpst_create_multi_to_all: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let choose_mpst_create_multi_to_all: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
 
                 let name_macro = if let Some(elt) =
                     all_roles.get(usize::try_from(sender - 1).unwrap())
                 {
-                    syn::Ident::new(
+                    Ident::new(
                         &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     )
                 } else {
                     panic!("Not enough arguments for name in expand_choose_mpst_create_multi_to_all")
@@ -1993,24 +1994,24 @@ impl BakingWithEnumAndCancel {
                 let sender_name = if let Some(elt) =
                     all_roles.get(usize::try_from(sender - 1).unwrap())
                 {
-                    syn::Ident::new(
+                    Ident::new(
                         &format!("Role{}", elt),
-                        proc_macro2::Span::call_site(),
+                        Span::call_site(),
                     )
                 } else {
                     panic!("Not enough arguments for sender_name in expand_choose_mpst_create_multi_to_all")
                 };
 
-                let receivers: Vec<syn::Ident> = (1..=self.number_roles)
+                let receivers: Vec<Ident> = (1..=self.number_roles)
                     .filter_map(|receiver| {
                         if sender != receiver {
                             std::option::Option::Some(
                                 if let Some(elt) =
                                     all_roles.get(usize::try_from(receiver - 1).unwrap())
                                 {
-                                    syn::Ident::new(
+                                    Ident::new(
                                         &format!("Role{}", elt),
-                                        proc_macro2::Span::call_site(),
+                                        Span::call_site(),
                                     )
                                 } else {
                                     panic!("Not enough arguments for receivers in expand_choose_mpst_create_multi_to_all")
@@ -2039,7 +2040,7 @@ impl BakingWithEnumAndCancel {
         }
     }
 
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         // Get all the roles provided into a Vec
@@ -2047,71 +2048,71 @@ impl BakingWithEnumAndCancel {
 
         let quote_fork_mpst = self.expand_fork_mpst();
 
-        let session_types: Vec<syn::Ident> = (1..self.number_roles)
-            .map(|i| syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site()))
+        let session_types: Vec<Ident> = (1..self.number_roles)
+            .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
             .collect();
 
-        let session_types_struct: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let session_types_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
             })
             .collect();
 
-        let session_types_dual_struct: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let session_types_dual_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
             })
             .collect();
 
-        let session_types_pub: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let session_types_pub: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
-                let temp_type = syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { pub #temp_session : #temp_type , }
             })
             .collect();
 
-        let sender_receiver: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let sender_receiver: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_sender =
-                    syn::Ident::new(&format!("sender{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("sender{}", i), Span::call_site());
                 let temp_receiver =
-                    syn::Ident::new(&format!("receiver{}", i), proc_macro2::Span::call_site());
-                let temp_type = syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("receiver{}", i), Span::call_site());
+                let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { let ( #temp_sender , #temp_receiver ) =
                 <#temp_type as mpstthree::binary::struct_trait::session::Session>::new() ; }
             })
             .collect();
 
-        let sender_struct: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let sender_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 let temp_sender =
-                    syn::Ident::new(&format!("sender{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("sender{}", i), Span::call_site());
                 quote! { #temp_session : #temp_sender , }
             })
             .collect();
 
-        let receiver_struct: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let receiver_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 let temp_receiver =
-                    syn::Ident::new(&format!("receiver{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("receiver{}", i), Span::call_site());
                 quote! { #temp_session : #temp_receiver , }
             })
             .collect();
 
-        let head_str: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let head_str: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -2129,10 +2130,10 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let tail_str: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let tail_str: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_ident =
-                    syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -2152,20 +2153,20 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let stringify: Vec<proc_macro2::TokenStream> = (1..self.number_roles)
+        let stringify: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
                 let temp_session =
-                    syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
+                    Ident::new(&format!("session{}", i), Span::call_site());
                 quote! { stringify!( #temp_session ) , }
             })
             .collect();
 
-        let roles_struct: Vec<proc_macro2::TokenStream> = all_roles
+        let roles_struct: Vec<TokenStream> = all_roles
             .iter()
             .map(|i| self.expand_role(format!("{}", i)))
             .collect();
 
-        let send_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
@@ -2185,7 +2186,7 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let recv_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let recv_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
@@ -2205,7 +2206,7 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let recv_from_all_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let recv_from_all_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
@@ -2225,7 +2226,7 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let offer_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let offer_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
@@ -2243,17 +2244,17 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let choose_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let choose_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| self.expand_choose(all_roles.clone(), sender))
             .collect();
 
-        let close_methods: Vec<proc_macro2::TokenStream> = (1..=self.number_roles)
+        let close_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| self.expand_close(all_roles.clone(), sender))
             .collect();
 
         let choose_mpst_create_multi_to_all = self.expand_choose_mpst_create_multi_to_all();
 
-        let cancel_method: proc_macro2::TokenStream = self.expand_cancel();
+        let cancel_method: TokenStream = self.expand_cancel();
 
         quote! {
             #[must_use]

@@ -20,7 +20,8 @@
 
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token};
+use syn::{Result, Token, LitInt};
+use proc_macro2::TokenStream;
 
 #[derive(Debug)]
 pub struct RecvAllAuxSimple {
@@ -33,20 +34,20 @@ impl Parse for RecvAllAuxSimple {
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap(); // Retrive the index
+        let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap(); // Retrive the index
 
         Ok(RecvAllAuxSimple { session, exclusion })
     }
 }
 
-impl From<RecvAllAuxSimple> for proc_macro2::TokenStream {
-    fn from(input: RecvAllAuxSimple) -> proc_macro2::TokenStream {
+impl From<RecvAllAuxSimple> for TokenStream {
+    fn from(input: RecvAllAuxSimple) -> TokenStream {
         input.expand()
     }
 }
 
 impl RecvAllAuxSimple {
-    fn expand(&self) -> proc_macro2::TokenStream {
+    fn expand(&self) -> TokenStream {
         let session = self.session.clone();
         let recv_session = format_ident!("session{}", self.exclusion);
 
