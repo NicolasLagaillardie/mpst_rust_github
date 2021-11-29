@@ -1,7 +1,7 @@
+use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::TokenStream;
+use syn::{Expr, Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct SendCancel {
@@ -9,7 +9,7 @@ pub struct SendCancel {
     name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
-    msg: syn::Expr,
+    msg: Expr,
 }
 
 impl Parse for SendCancel {
@@ -26,7 +26,7 @@ impl Parse for SendCancel {
         let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
-        let msg = syn::Expr::parse(input)?;
+        let msg = Expr::parse(input)?;
 
         Ok(SendCancel {
             func_name,

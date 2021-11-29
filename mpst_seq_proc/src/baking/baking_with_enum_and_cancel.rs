@@ -1,8 +1,8 @@
+use proc_macro2::{Span, TokenStream, TokenTree};
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, Result, Token};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
@@ -21,7 +21,7 @@ fn expand_token_stream(input: ParseStream) -> Result<Vec<TokenStream>> {
     let mut result: Vec<TokenStream> = Vec::new();
     for tt in token_stream.into_iter() {
         let elt = match tt {
-            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+            TokenTree::Group(g) => Some(g.stream()),
             _ => None,
         };
         if let Some(elt_tt) = elt {
@@ -90,9 +90,9 @@ impl BakingWithEnumAndCancel {
                     diag.iter()
                         .filter_map(|(line, column, index)| {
                             if i == *line || i == *column {
-                                std::option::Option::Some((*line, *column, *index))
+                                Some((*line, *column, *index))
                             } else {
-                                std::option::Option::None
+                                None
                             }
                         })
                         .collect()
@@ -137,9 +137,9 @@ impl BakingWithEnumAndCancel {
                         .iter()
                         .filter_map(|(line, column, index)| {
                             if i == *line || i == *column {
-                                std::option::Option::Some((*line, *column, *index))
+                                Some((*line, *column, *index))
                             } else {
-                                std::option::Option::None
+                                None
                             }
                         })
                         .collect()
@@ -230,8 +230,7 @@ impl BakingWithEnumAndCancel {
             .map(|k| {
                 let cond = if k >= sender { receiver - 1 } else { receiver };
 
-                let temp_session =
-                    Ident::new(&format!("session{}", k), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { #temp_session : new_session , }
@@ -247,8 +246,7 @@ impl BakingWithEnumAndCancel {
             receiver
         };
 
-        let new_session =
-            Ident::new(&format!("session{}", index), Span::call_site());
+        let new_session = Ident::new(&format!("session{}", index), Span::call_site());
 
         quote! {
             impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
@@ -322,8 +320,7 @@ impl BakingWithEnumAndCancel {
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
 
-                let temp_session =
-                    Ident::new(&format!("session{}", k), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { #temp_session : new_session , }
@@ -339,8 +336,7 @@ impl BakingWithEnumAndCancel {
             sender
         };
 
-        let new_session =
-            Ident::new(&format!("session{}", index), Span::call_site());
+        let new_session = Ident::new(&format!("session{}", index), Span::call_site());
 
         quote! {
             impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
@@ -416,8 +412,7 @@ impl BakingWithEnumAndCancel {
             .map(|k| {
                 let cond = if k >= receiver { sender - 1 } else { sender };
 
-                let temp_session =
-                    Ident::new(&format!("session{}", k), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", k), Span::call_site());
 
                 if k == cond {
                     quote! { #temp_session : new_session , }
@@ -433,8 +428,7 @@ impl BakingWithEnumAndCancel {
             sender
         };
 
-        let new_session =
-            Ident::new(&format!("session{}", index), Span::call_site());
+        let new_session = Ident::new(&format!("session{}", index), Span::call_site());
 
         quote! {
             impl<#( #session_types_struct )* T: std::marker::Send>
@@ -471,12 +465,7 @@ impl BakingWithEnumAndCancel {
     }
 
     /// Expand offer methods
-    fn expand_offer(
-        &self,
-        all_roles: Vec<TokenStream>,
-        sender: u64,
-        receiver: u64,
-    ) -> TokenStream {
+    fn expand_offer(&self, all_roles: Vec<TokenStream>, sender: u64, receiver: u64) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
@@ -492,28 +481,23 @@ impl BakingWithEnumAndCancel {
                 panic!("Not enough arguments for receiver_ident in expand_offer")
             };
 
-        let offer_session_types_struct: Vec<TokenStream> =
-            (1..(2 * self.number_roles - 1))
-                .map(|i| {
-                    let temp_ident =
-                        Ident::new(&format!("S{}", i), Span::call_site());
-                    quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-                })
-                .collect();
+        let offer_session_types_struct: Vec<TokenStream> = (1..(2 * self.number_roles - 1))
+            .map(|i| {
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
+            })
+            .collect();
 
         let left_sessions: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_ident , }
             })
             .collect();
 
-        let right_sessions: Vec<TokenStream> = (self.number_roles
-            ..(2 * self.number_roles - 1))
+        let right_sessions: Vec<TokenStream> = (self.number_roles..(2 * self.number_roles - 1))
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_ident , }
             })
             .collect();
@@ -584,11 +568,7 @@ impl BakingWithEnumAndCancel {
     }
 
     /// Expand choose methods
-    fn expand_choose(
-        &self,
-        all_roles: Vec<TokenStream>,
-        sender: u64,
-    ) -> TokenStream {
+    fn expand_choose(&self, all_roles: Vec<TokenStream>, sender: u64) -> TokenStream {
         let (diag, matrix) = self.diag_and_matrix();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
@@ -604,19 +584,17 @@ impl BakingWithEnumAndCancel {
             panic!("Not enough arguments for sender_stack in expand_choose")
         };
 
-        let choose_session_types_struct: Vec<TokenStream> =
-            (1..=((self.number_roles - 1) * self.number_roles))
-                .map(|i| {
-                    let temp_ident =
-                        Ident::new(&format!("S{}", i), Span::call_site());
-                    quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-                })
-                .collect();
+        let choose_session_types_struct: Vec<TokenStream> = (1..=((self.number_roles - 1)
+            * self.number_roles))
+            .map(|i| {
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
+            })
+            .collect();
 
         let choose_roles_struct: Vec<TokenStream> = (1..=(2 * self.number_roles))
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
                 quote! { #temp_ident : mpstthree::role::Role , }
             })
             .collect();
@@ -756,16 +734,14 @@ impl BakingWithEnumAndCancel {
             &format!("R{}", 2 * self.number_roles - 1),
             Span::call_site(),
         );
-        let new_stack_sender_right = Ident::new(
-            &format!("R{}", 2 * self.number_roles),
-            Span::call_site(),
-        );
+        let new_stack_sender_right =
+            Ident::new(&format!("R{}", 2 * self.number_roles), Span::call_site());
         let new_stacks_sender = quote! { #new_stack_sender_left , #new_stack_sender_right };
 
         let choose_left_session: Vec<TokenStream> = (1..=self.number_roles)
             .filter_map(|j| {
                 if j == sender {
-                    std::option::Option::None
+                    None
                 } else {
                     let (_, _, m) = if j > sender {
                         self.get_tuple_matrix(&matrix, sender, j - 1)
@@ -774,7 +750,7 @@ impl BakingWithEnumAndCancel {
                     };
                     let temp_ident =
                         Ident::new(&format!("S{}", m), Span::call_site());
-                    std::option::Option::Some(
+                    Some(
                         quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
                     )
                 }
@@ -784,7 +760,7 @@ impl BakingWithEnumAndCancel {
         let choose_right_session: Vec<TokenStream> = (1..=self.number_roles)
             .filter_map(|j| {
                 if j == sender {
-                    std::option::Option::None
+                    None
                 } else {
                     let (_, _, m) = if j > sender {
                         self.get_tuple_matrix(&matrix, sender, j - 1)
@@ -796,7 +772,7 @@ impl BakingWithEnumAndCancel {
                         &format!("S{}", diff * (diff + 1) / 2 + m),
                         Span::call_site(),
                     );
-                    std::option::Option::Some(
+                    Some(
                         quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
                     )
                 }
@@ -808,31 +784,18 @@ impl BakingWithEnumAndCancel {
                     let (line, column) = self.get_line_column_from_diag(&diag, j);
 
                     let first_channel = if sender != line {
-                        Ident::new(
-                            &format!("channel_{}_{}", line, column),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
                     } else {
-                        Ident::new(
-                            &format!("channel_{}_{}", column, line),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
                     };
 
                     let second_channel = if sender != line {
-                        Ident::new(
-                            &format!("channel_{}_{}", column, line),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
                     } else {
-                        Ident::new(
-                            &format!("channel_{}_{}", line, column),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
                     };
 
-                    let temp_session =
-                        Ident::new(&format!("S{}", j), Span::call_site());
+                    let temp_session = Ident::new(&format!("S{}", j), Span::call_site());
 
                     quote! { let ( #first_channel , #second_channel ) =
                     <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ; }
@@ -846,27 +809,15 @@ impl BakingWithEnumAndCancel {
                     let diff = self.number_roles - 1;
 
                     let first_channel = if sender != line {
-                        Ident::new(
-                            &format!("channel_{}_{}", line, column),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
                     } else {
-                        Ident::new(
-                            &format!("channel_{}_{}", column, line),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
                     };
 
                     let second_channel = if sender != line {
-                        Ident::new(
-                            &format!("channel_{}_{}", column, line),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
                     } else {
-                        Ident::new(
-                            &format!("channel_{}_{}", line, column),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
                     };
 
                     let temp_session = Ident::new(
@@ -880,24 +831,16 @@ impl BakingWithEnumAndCancel {
 
         let new_stacks_receivers_left: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let temp_stack =
-                    Ident::new(&format!("stack_{}", j), Span::call_site());
-                let temp_role = Ident::new(
-                    &format!("R{}", 2 * (j - 1) + 1),
-                    Span::call_site(),
-                );
+                let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+                let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 1), Span::call_site());
                 quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
             })
             .collect();
 
         let new_stacks_receivers_right: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let temp_stack =
-                    Ident::new(&format!("stack_{}", j), Span::call_site());
-                let temp_role = Ident::new(
-                    &format!("R{}", 2 * (j - 1) + 2),
-                    Span::call_site(),
-                );
+                let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+                let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 2), Span::call_site());
                 quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
             })
             .collect();
@@ -996,16 +939,12 @@ impl BakingWithEnumAndCancel {
 
         let new_sessions_sender_left: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender = Ident::new(
-                    &format!("new_session_{}", j - 1),
-                    Span::call_site(),
-                );
+                let new_session_sender =
+                    Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-                let new_choice_sender =
-                    Ident::new(&format!("choice_{}", j), Span::call_site());
+                let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
 
-                let session_sender =
-                    Ident::new(&format!("session{}", j), Span::call_site());
+                let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
 
                 quote! {
                     let #new_session_sender = mpstthree::binary::send::send(
@@ -1018,16 +957,12 @@ impl BakingWithEnumAndCancel {
 
         let new_sessions_sender_right: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender = Ident::new(
-                    &format!("new_session_{}", j - 1),
-                    Span::call_site(),
-                );
+                let new_session_sender =
+                    Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-                let new_choice_sender =
-                    Ident::new(&format!("choice_{}", j), Span::call_site());
+                let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
 
-                let session_sender =
-                    Ident::new(&format!("session{}", j), Span::call_site());
+                let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
 
                 quote! {
                     let #new_session_sender = mpstthree::binary::send::send(
@@ -1040,13 +975,10 @@ impl BakingWithEnumAndCancel {
 
         let old_meshedchannels_sender: Vec<TokenStream> = (1..self.number_roles)
             .map(|j| {
-                let new_session_sender = Ident::new(
-                    &format!("new_session_{}", j - 1),
-                    Span::call_site(),
-                );
+                let new_session_sender =
+                    Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-                let session_sender =
-                    Ident::new(&format!("session{}", j), Span::call_site());
+                let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
 
                 quote! {
                     #session_sender : #new_session_sender ,
@@ -1060,16 +992,11 @@ impl BakingWithEnumAndCancel {
                     let new_choice_sender = if j < sender {
                         Ident::new(&format!("session{}", j), Span::call_site())
                     } else {
-                        Ident::new(
-                            &format!("session{}", j - 1),
-                            Span::call_site(),
-                        )
+                        Ident::new(&format!("session{}", j - 1), Span::call_site())
                     };
 
-                    let new_channel_sender = Ident::new(
-                        &format!("channel_{}_{}", sender, j),
-                        Span::call_site(),
-                    );
+                    let new_channel_sender =
+                        Ident::new(&format!("channel_{}_{}", sender, j), Span::call_site());
 
                     quote! {
                         #new_choice_sender : #new_channel_sender,
@@ -1082,15 +1009,10 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_stack_sender = Ident::new(
-            &format!("stack_{}", self.number_roles),
-            Span::call_site(),
-        );
+        let new_stack_sender =
+            Ident::new(&format!("stack_{}", self.number_roles), Span::call_site());
 
-        let new_name_sender = Ident::new(
-            &format!("name_{}", self.number_roles),
-            Span::call_site(),
-        );
+        let new_name_sender = Ident::new(&format!("name_{}", self.number_roles), Span::call_site());
 
         quote! {
             impl<
@@ -1215,11 +1137,7 @@ impl BakingWithEnumAndCancel {
         }
     }
 
-    fn expand_close(
-        &self,
-        all_roles: Vec<TokenStream>,
-        sender: u64,
-    ) -> TokenStream {
+    fn expand_close(&self, all_roles: Vec<TokenStream>, sender: u64) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
         let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
@@ -1247,8 +1165,7 @@ impl BakingWithEnumAndCancel {
 
         let close_session_recv: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! { self.#temp_session.receiver.recv()?; }
             })
             .collect();
@@ -1284,16 +1201,14 @@ impl BakingWithEnumAndCancel {
 
         let temp_types: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_session , }
             })
             .collect();
 
         let temp_detail_types: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_session : mpstthree::binary::struct_trait::session::Session , }
             })
             .collect();
@@ -1326,18 +1241,11 @@ impl BakingWithEnumAndCancel {
         // role
         let role_name = Ident::new(&format!("Role{}", role), Span::call_site());
         // dual
-        let dual_name =
-            Ident::new(&format!("Role{}Dual", role), Span::call_site());
+        let dual_name = Ident::new(&format!("Role{}Dual", role), Span::call_site());
         // role to all
-        let role_to_all_name = Ident::new(
-            &format!("Role{}toAll", role),
-            Span::call_site(),
-        );
+        let role_to_all_name = Ident::new(&format!("Role{}toAll", role), Span::call_site());
         // dual to all
-        let dual_to_all_name = Ident::new(
-            &format!("RoleAllto{}", role),
-            Span::call_site(),
-        );
+        let dual_to_all_name = Ident::new(&format!("RoleAllto{}", role), Span::call_site());
 
         quote! {
             ////////////////////////////////////////////
@@ -1665,22 +1573,19 @@ impl BakingWithEnumAndCancel {
         let (_diag, matrix) = self.diag_and_matrix();
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
-        let sessions: Vec<TokenStream> =
-            (1..=((self.number_roles - 1) * (self.number_roles) / 2))
-                .map(|i| {
-                    let temp_ident =
-                        Ident::new(&format!("S{}", i), Span::call_site());
-                    quote! {
-                        #temp_ident ,
-                    }
-                })
-                .collect();
+        let sessions: Vec<TokenStream> = (1..=((self.number_roles - 1) * (self.number_roles) / 2))
+            .map(|i| {
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                quote! {
+                    #temp_ident ,
+                }
+            })
+            .collect();
 
         let sessions_struct: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * (self.number_roles) / 2))
                 .map(|i| {
-                    let temp_ident =
-                        Ident::new(&format!("S{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                     }
@@ -1689,8 +1594,7 @@ impl BakingWithEnumAndCancel {
 
         let roles: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -1699,8 +1603,7 @@ impl BakingWithEnumAndCancel {
 
         let roles_struct: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
@@ -1709,10 +1612,8 @@ impl BakingWithEnumAndCancel {
 
         let new_roles: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("R{}", i), Span::call_site());
-                let temp_role =
-                    Ident::new(&format!("role_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_role , _) = #temp_ident::new() ;
                 }
@@ -1721,8 +1622,7 @@ impl BakingWithEnumAndCancel {
 
         let names: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("N{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -1731,8 +1631,7 @@ impl BakingWithEnumAndCancel {
 
         let names_struct: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("N{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
@@ -1741,10 +1640,8 @@ impl BakingWithEnumAndCancel {
 
         let new_names: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("N{}", i), Span::call_site());
-                let temp_name =
-                    Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = #temp_ident::new() ;
                 }
@@ -1753,8 +1650,7 @@ impl BakingWithEnumAndCancel {
 
         let functions: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("F{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -1763,8 +1659,7 @@ impl BakingWithEnumAndCancel {
 
         let functions_detail: Vec<TokenStream> = (1..=self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("F{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("F{}", i), Span::call_site());
                 let temp_expr = Ident::new(&format!("f{}", i), Span::call_site());
                 quote! {
                     #temp_expr : #temp_ident ,
@@ -1819,21 +1714,15 @@ impl BakingWithEnumAndCancel {
             })
             .collect();
 
-        let new_channels: Vec<TokenStream> = (1..=((self.number_roles - 1)
-            * (self.number_roles)
+        let new_channels: Vec<TokenStream> = (1..=((self.number_roles - 1) * (self.number_roles)
             / 2))
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 let (line, column, _) = self.get_tuple_diag(&diag_w_offset, i);
-                let temp_channel_left = Ident::new(
-                    &format!("channel_{}_{}", line, column),
-                    Span::call_site(),
-                );
-                let temp_channel_right = Ident::new(
-                    &format!("channel_{}_{}", column, line),
-                    Span::call_site(),
-                );
+                let temp_channel_left =
+                    Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                let temp_channel_right =
+                    Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
                 quote! {
                     let ( #temp_channel_left , #temp_channel_right ) =
                         < #temp_ident as mpstthree::binary::struct_trait::session::Session>::new();
@@ -1846,10 +1735,7 @@ impl BakingWithEnumAndCancel {
                 let temp_sessions: Vec<TokenStream> = (1..self.number_roles)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
-                        let temp_session = Ident::new(
-                            &format!("session{}", j),
-                            Span::call_site(),
-                        );
+                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_channel = match line {
                             m if m == i => Ident::new(
                                 &format!("channel_{}_{}", line, column),
@@ -1866,14 +1752,10 @@ impl BakingWithEnumAndCancel {
                     })
                     .collect();
 
-                let temp_meshedchannels = Ident::new(
-                    &format!("meshedchannels_{}", i),
-                    Span::call_site(),
-                );
-                let temp_role =
-                    Ident::new(&format!("role_{}", i), Span::call_site());
-                let temp_name =
-                    Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_meshedchannels =
+                    Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
+                let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
                     let #temp_meshedchannels =
                         #meshedchannels_name {
@@ -2005,7 +1887,7 @@ impl BakingWithEnumAndCancel {
                 let receivers: Vec<Ident> = (1..=self.number_roles)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            std::option::Option::Some(
+                            Some(
                                 if let Some(elt) =
                                     all_roles.get(usize::try_from(receiver - 1).unwrap())
                                 {
@@ -2018,7 +1900,7 @@ impl BakingWithEnumAndCancel {
                                 }
                             )
                         } else {
-                            std::option::Option::None
+                            None
                         }
                     })
                     .collect();
@@ -2054,8 +1936,7 @@ impl BakingWithEnumAndCancel {
 
         let session_types_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
             })
             .collect();
@@ -2070,8 +1951,7 @@ impl BakingWithEnumAndCancel {
 
         let session_types_pub: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
                 let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { pub #temp_session : #temp_type , }
             })
@@ -2079,10 +1959,8 @@ impl BakingWithEnumAndCancel {
 
         let sender_receiver: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_sender =
-                    Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_receiver =
-                    Ident::new(&format!("receiver{}", i), Span::call_site());
+                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
+                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
                 let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! { let ( #temp_sender , #temp_receiver ) =
                 <#temp_type as mpstthree::binary::struct_trait::session::Session>::new() ; }
@@ -2091,20 +1969,16 @@ impl BakingWithEnumAndCancel {
 
         let sender_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_sender =
-                    Ident::new(&format!("sender{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
                 quote! { #temp_session : #temp_sender , }
             })
             .collect();
 
         let receiver_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_receiver =
-                    Ident::new(&format!("receiver{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
                 quote! { #temp_session : #temp_receiver , }
             })
             .collect();
@@ -2155,8 +2029,7 @@ impl BakingWithEnumAndCancel {
 
         let stringify: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! { stringify!( #temp_session ) , }
             })
             .collect();
@@ -2171,7 +2044,7 @@ impl BakingWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            std::option::Option::Some(self.expand_send(
+                            Some(self.expand_send(
                                 all_roles.clone(),
                                 sender,
                                 receiver,
@@ -2179,7 +2052,7 @@ impl BakingWithEnumAndCancel {
                                 session_types_struct.clone(),
                             ))
                         } else {
-                            std::option::Option::None
+                            None
                         }
                     })
                     .collect()
@@ -2191,7 +2064,7 @@ impl BakingWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            std::option::Option::Some(self.expand_recv(
+                            Some(self.expand_recv(
                                 all_roles.clone(),
                                 receiver,
                                 sender,
@@ -2199,7 +2072,7 @@ impl BakingWithEnumAndCancel {
                                 session_types_struct.clone(),
                             ))
                         } else {
-                            std::option::Option::None
+                            None
                         }
                     })
                     .collect()
@@ -2211,7 +2084,7 @@ impl BakingWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            std::option::Option::Some(self.expand_recv_from_all(
+                            Some(self.expand_recv_from_all(
                                 all_roles.clone(),
                                 receiver,
                                 sender,
@@ -2219,7 +2092,7 @@ impl BakingWithEnumAndCancel {
                                 session_types_struct.clone(),
                             ))
                         } else {
-                            std::option::Option::None
+                            None
                         }
                     })
                     .collect()
@@ -2231,13 +2104,9 @@ impl BakingWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            std::option::Option::Some(self.expand_offer(
-                                all_roles.clone(),
-                                sender,
-                                receiver,
-                            ))
+                            Some(self.expand_offer(all_roles.clone(), sender, receiver))
                         } else {
-                            std::option::Option::None
+                            None
                         }
                     })
                     .collect()

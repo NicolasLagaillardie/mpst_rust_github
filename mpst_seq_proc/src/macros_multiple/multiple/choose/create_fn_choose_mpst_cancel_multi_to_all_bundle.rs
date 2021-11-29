@@ -1,8 +1,8 @@
+use proc_macro2::{Span, TokenStream, TokenTree};
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, LitInt, Result, Token};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
@@ -26,7 +26,7 @@ fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
     let mut out: Vec<TokenStream> = Vec::new();
     for tt in stream.clone().into_iter() {
         let elt = match tt {
-            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+            TokenTree::Group(g) => Some(g.stream()),
             _ => None,
         };
         if let Some(elt_tt) = elt {

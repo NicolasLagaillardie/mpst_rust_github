@@ -1,14 +1,14 @@
+use proc_macro2::{Span, TokenStream, TokenTree};
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::{TokenStream, Span};
+use syn::{Expr, Ident, LitInt, Result, Token};
 
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
 pub struct ChooseTypeMultiCancelToAll {
-    session: syn::Expr,
+    session: Expr,
     labels: Vec<TokenStream>,
     receivers: Vec<TokenStream>,
     broadcaster: Ident,
@@ -22,7 +22,7 @@ fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
     let mut out: Vec<TokenStream> = Vec::new();
     for tt in stream.clone().into_iter() {
         let elt = match tt {
-            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+            TokenTree::Group(g) => Some(g.stream()),
             _ => None,
         };
         if let Some(elt_tt) = elt {
@@ -35,7 +35,7 @@ fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
 impl Parse for ChooseTypeMultiCancelToAll {
     fn parse(input: ParseStream) -> Result<Self> {
         // The session
-        let session = syn::Expr::parse(input)?;
+        let session = Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The labels
@@ -148,14 +148,10 @@ impl ChooseTypeMultiCancelToAll {
         let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
             .map(|i| {
                 let (line, column, _) = self.get_tuple_diag(&diag, i);
-                let channel_left = Ident::new(
-                    &format!("channel_{}_{}", line, column),
-                    Span::call_site(),
-                );
-                let channel_right = Ident::new(
-                    &format!("channel_{}_{}", column, line),
-                    Span::call_site(),
-                );
+                let channel_left =
+                    Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                let channel_right =
+                    Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
                 if i < self.n_sessions {
                     quote! {
                         let ( #channel_left , #channel_right ) =
@@ -175,8 +171,7 @@ impl ChooseTypeMultiCancelToAll {
 
         let new_roles: Vec<TokenStream> = (2..=self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("stack_{}", i), Span::call_site());
                 quote! {
                     let ( #temp_ident , _) = <_ as mpstthree::role::Role>::new();
                 }
@@ -199,15 +194,9 @@ impl ChooseTypeMultiCancelToAll {
             })
             .collect();
 
-        let new_name_sender = Ident::new(
-            &format!("name_{}", self.n_sessions),
-            Span::call_site(),
-        );
+        let new_name_sender = Ident::new(&format!("name_{}", self.n_sessions), Span::call_site());
 
-        let new_stack_sender = Ident::new(
-            &format!("stack_{}", self.n_sessions),
-            Span::call_site(),
-        );
+        let new_stack_sender = Ident::new(&format!("stack_{}", self.n_sessions), Span::call_site());
 
         let all_send: Vec<TokenStream> = (2..self.n_sessions)
             .map(|i| {
@@ -215,21 +204,12 @@ impl ChooseTypeMultiCancelToAll {
                     .map(|j| {
                         let temp = if i >= self.exclusion { i + 1 } else { i };
 
-                        let temp_ident = Ident::new(
-                            &format!("session{}", j),
-                            Span::call_site(),
-                        );
+                        let temp_ident = Ident::new(&format!("session{}", j), Span::call_site());
 
                         let temp_channel = if j < temp {
-                            Ident::new(
-                                &format!("channel_{}_{}", temp, j),
-                                Span::call_site(),
-                            )
+                            Ident::new(&format!("channel_{}_{}", temp, j), Span::call_site())
                         } else {
-                            Ident::new(
-                                &format!("channel_{}_{}", temp, j + 1),
-                                Span::call_site(),
-                            )
+                            Ident::new(&format!("channel_{}_{}", temp, j + 1), Span::call_site())
                         };
 
                         quote! {
@@ -238,14 +218,11 @@ impl ChooseTypeMultiCancelToAll {
                     })
                     .collect();
 
-                let temp_name =
-                    Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
 
-                let temp_stack =
-                    Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
 
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
 
                 let temp_label = if let Some(elt) = all_labels.get(usize::try_from(i - 2).unwrap())
                 {
@@ -279,8 +256,7 @@ impl ChooseTypeMultiCancelToAll {
 
         let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_session =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
                 let temp_channel = if i < self.exclusion {
                     Ident::new(
                         &format!("channel_{}_{}", self.exclusion, i),

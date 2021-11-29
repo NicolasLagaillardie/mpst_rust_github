@@ -1,7 +1,7 @@
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct CreateMeshedChannels {
@@ -35,8 +35,7 @@ impl CreateMeshedChannels {
 
         let sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -45,8 +44,7 @@ impl CreateMeshedChannels {
 
         let sessions_dual: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     <
                         #temp_ident as mpstthree::binary::struct_trait::session::Session
@@ -57,8 +55,7 @@ impl CreateMeshedChannels {
 
         let sessions_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
@@ -67,10 +64,8 @@ impl CreateMeshedChannels {
 
         let sessions_pub: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                let temp_field =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_field = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     pub #temp_field :  #temp_ident,
                 }
@@ -79,12 +74,9 @@ impl CreateMeshedChannels {
 
         let senders_receivers: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_sender =
-                    Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_receiver =
-                    Ident::new(&format!("receiver{}", i), Span::call_site());
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
+                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
                     let ( #temp_sender , #temp_receiver ) = #temp_ident::new();
                 }
@@ -93,10 +85,8 @@ impl CreateMeshedChannels {
 
         let senders_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_sender =
-                    Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_field =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
+                let temp_field = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     #temp_field : #temp_sender ,
                 }
@@ -105,10 +95,8 @@ impl CreateMeshedChannels {
 
         let receivers_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_receiver =
-                    Ident::new(&format!("receiver{}", i), Span::call_site());
-                let temp_field =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
+                let temp_field = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     #temp_field : #temp_receiver ,
                 }
@@ -161,8 +149,7 @@ impl CreateMeshedChannels {
 
         let stringify: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     stringify!(#temp_ident),
                 }

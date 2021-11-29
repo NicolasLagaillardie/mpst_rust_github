@@ -1,7 +1,7 @@
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct CloseMpst {
@@ -57,8 +57,7 @@ impl CloseMpst {
 
         let session_recv: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
                 quote! {
                     s.#temp_ident.receiver.recv()?;
                 }

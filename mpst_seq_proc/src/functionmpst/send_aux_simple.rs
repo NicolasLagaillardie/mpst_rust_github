@@ -17,24 +17,24 @@
 //! mpst_seq::send_aux_simple!(s, x, 1)()
 //! ```
 
+use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, LitInt};
-use proc_macro2::TokenStream;
+use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct SendAuxSimple {
-    session: syn::Expr,
-    payload: syn::Expr,
+    session: Expr,
+    payload: Expr,
     exclusion: u64,
 }
 
 impl Parse for SendAuxSimple {
     fn parse(input: ParseStream) -> Result<Self> {
-        let session = syn::Expr::parse(input)?;
+        let session = Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let payload = syn::Expr::parse(input)?;
+        let payload = Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();

@@ -1,7 +1,7 @@
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct CloseMpstInterleaved {
@@ -67,8 +67,7 @@ impl CloseMpstInterleaved {
                     })
                     .collect();
 
-                let temp_session =
-                    Ident::new(&format!("s_{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("s_{}", i), Span::call_site());
 
                 let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
 
@@ -110,15 +109,11 @@ impl CloseMpstInterleaved {
 
         let session_recv: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("s_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("s_{}", i), Span::call_site());
 
                 let temp_session_recv: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_session = Ident::new(
-                            &format!("session{}", j),
-                            Span::call_site(),
-                        );
+                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
                         quote! {
                             #temp_ident.#temp_session.receiver.recv()?;
                         }

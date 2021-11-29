@@ -1,10 +1,10 @@
 use proc_macro2::Span;
-use proc_macro2::{Ident, TokenStream};
+use proc_macro2::{TokenStream, TokenTree};
 use quote::quote;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use syn::parse::{Parse, ParseStream};
-use syn::Result;
+use syn::{Ident, Result};
 
 #[derive(Debug)]
 pub struct CheckingInput {
@@ -19,7 +19,7 @@ fn attempt_extraction(input: ParseStream) -> Result<Vec<String>> {
     let mut temp_result: Vec<TokenStream> = Vec::new();
     for tt in token_stream.into_iter() {
         let elt = match tt {
-            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+            TokenTree::Group(g) => Some(g.stream()),
             _ => None,
         };
         if let Some(elt_tt) = elt {
@@ -29,7 +29,7 @@ fn attempt_extraction(input: ParseStream) -> Result<Vec<String>> {
 
     let mut result = Vec::new();
     for elt in temp_result {
-        let ident: Ident = syn::parse2(elt)?;
+        let ident: proc_macro2::Ident = syn::parse2(elt)?;
         result.push(ident.to_string());
     }
 
@@ -69,13 +69,13 @@ impl CheckingInput {
         let mut new_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
 
         for (key, value) in choices {
-            let name_key = syn::Ident::new(&key, Span::call_site());
-            let fn_key = syn::Ident::new(&key.to_lowercase(), Span::call_site());
+            let name_key = Ident::new(&key, Span::call_site());
+            let fn_key = Ident::new(&key.to_lowercase(), Span::call_site());
 
             let branches: Vec<proc_macro2::TokenStream> = value
                 .iter()
                 .map(|branch| {
-                    let branch_ident = syn::Ident::new(branch, Span::call_site());
+                    let branch_ident = Ident::new(branch, Span::call_site());
                     quote! {
                         #name_key::#branch_ident(s) => {
                             write!(
@@ -101,9 +101,9 @@ impl CheckingInput {
 
             let branches_hashmap: Vec<proc_macro2::TokenStream> = value.iter()
             .map(|branch| {
-                let temp = syn::Ident::new(&format!("temp_{}", branch).to_lowercase(), Span::call_site());
-                let branch_ident = syn::Ident::new(branch, Span::call_site());
-                let branch_name = syn::Ident::new(&branch.to_lowercase(), Span::call_site());
+                let temp = Ident::new(&format!("temp_{}", branch).to_lowercase(), Span::call_site());
+                let branch_ident = Ident::new(branch, Span::call_site());
+                let branch_name = Ident::new(&branch.to_lowercase(), Span::call_site());
                 quote! {
                     let #temp =
                         (#name_key::#branch_ident(<_ as mpstthree::binary::struct_trait::session::Session>::new().0))

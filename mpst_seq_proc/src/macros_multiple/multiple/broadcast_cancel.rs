@@ -1,17 +1,17 @@
+use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::TokenStream;
+use syn::{Expr, Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct BroadcastCancel {
-    session: syn::Expr,
+    session: Expr,
     n_sessions: LitInt,
 }
 
 impl Parse for BroadcastCancel {
     fn parse(input: ParseStream) -> Result<Self> {
-        let session = syn::Expr::parse(input)?;
+        let session = Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
         let n_sessions = LitInt::parse(input)?;

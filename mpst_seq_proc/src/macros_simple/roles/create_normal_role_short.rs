@@ -1,7 +1,7 @@
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Ident};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, Result};
 
 #[derive(Debug)]
 pub struct CreateNormalRoleShort {

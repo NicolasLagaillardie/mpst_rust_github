@@ -1,5 +1,5 @@
+use proc_macro2::Span;
 use syn::spanned::Spanned;
-use proc_macro2::{Span};
 
 pub(crate) fn branching_variants(input: syn::Item) -> Result<(), syn::Error> {
     if let syn::Item::Enum(e) = input {

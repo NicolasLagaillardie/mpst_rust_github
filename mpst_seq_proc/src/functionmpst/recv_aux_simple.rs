@@ -16,20 +16,20 @@
 //! mpst_seq::recv_aux_simple!(s, 1)()
 //! ```
 
+use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, LitInt};
-use proc_macro2::TokenStream;
+use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct RecvAuxSimple {
-    session: syn::Expr,
+    session: Expr,
     exclusion: u64,
 }
 
 impl Parse for RecvAuxSimple {
     fn parse(input: ParseStream) -> Result<Self> {
-        let session = syn::Expr::parse(input)?; // Retrive the session
+        let session = Expr::parse(input)?; // Retrive the session
         <Token![,]>::parse(input)?;
 
         let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();

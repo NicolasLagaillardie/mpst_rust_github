@@ -1,7 +1,7 @@
+use proc_macro2::{TokenStream, TokenTree};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Token, Ident, LitInt};
-use proc_macro2::TokenStream;
+use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
 pub struct ChooseMultiCreateToAll {
@@ -16,7 +16,7 @@ fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
     let mut out: Vec<TokenStream> = Vec::new();
     for tt in stream.clone().into_iter() {
         let elt = match tt {
-            proc_macro2::TokenTree::Group(g) => Some(g.stream()),
+            TokenTree::Group(g) => Some(g.stream()),
             _ => None,
         };
         if let Some(elt_tt) = elt {

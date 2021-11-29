@@ -1,7 +1,7 @@
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Result, Ident};
-use proc_macro2::{TokenStream, Span};
+use syn::{Ident, Result};
 
 #[derive(Debug)]
 pub struct CreateBroadcastRoleShort {
@@ -28,15 +28,9 @@ impl CreateBroadcastRoleShort {
 
         // Build the new names
         // role to all
-        let role_to_all_name = Ident::new(
-            &format!("Role{}toAll", role),
-            Span::call_site(),
-        );
+        let role_to_all_name = Ident::new(&format!("Role{}toAll", role), Span::call_site());
         // dual to all
-        let dual_to_all_name = Ident::new(
-            &format!("RoleAllto{}", role),
-            Span::call_site(),
-        );
+        let dual_to_all_name = Ident::new(&format!("RoleAllto{}", role), Span::call_site());
 
         quote! {
             ////////////////////////////////////////////
