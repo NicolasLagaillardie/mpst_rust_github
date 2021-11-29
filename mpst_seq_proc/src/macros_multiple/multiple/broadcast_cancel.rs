@@ -5,7 +5,7 @@ use syn::{Result, Token};
 #[derive(Debug)]
 pub struct BroadcastCancel {
     session: syn::Expr,
-    nsessions: syn::LitInt,
+    n_sessions: syn::LitInt,
 }
 
 impl Parse for BroadcastCancel {
@@ -13,9 +13,12 @@ impl Parse for BroadcastCancel {
         let session = syn::Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = syn::LitInt::parse(input)?;
+        let n_sessions = syn::LitInt::parse(input)?;
 
-        Ok(BroadcastCancel { session, nsessions })
+        Ok(BroadcastCancel {
+            session,
+            n_sessions,
+        })
     }
 }
 
@@ -28,13 +31,13 @@ impl From<BroadcastCancel> for proc_macro2::TokenStream {
 impl BroadcastCancel {
     fn expand(&self) -> proc_macro2::TokenStream {
         let session = self.session.clone();
-        let nsessions = (self.nsessions).base10_parse::<usize>().unwrap();
+        let n_sessions = (self.n_sessions).base10_parse::<usize>().unwrap();
 
-        let bool_session: Vec<syn::Ident> = (1..nsessions)
+        let bool_session: Vec<syn::Ident> = (1..n_sessions)
             .map(|i| format_ident!("bool_session{}", i))
             .collect();
 
-        let field_session: Vec<syn::Ident> = (1..nsessions)
+        let field_session: Vec<syn::Ident> = (1..n_sessions)
             .map(|i| format_ident!("session{}", i))
             .collect();
 
@@ -50,8 +53,8 @@ impl BroadcastCancel {
 
                 let (size, mut s) = s.field_names();
 
-                if size.len() != #nsessions - 1 {
-                    panic!("Wrong number for $nsessions: expected {:?}, found {:?}", size.len(), #nsessions)
+                if size.len() != #n_sessions - 1 {
+                    panic!("Wrong number for $n_sessions: expected {:?}, found {:?}", size.len(), #n_sessions)
                 } else {
                     while #( #bool_session || )* false {
                         #(

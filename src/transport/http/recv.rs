@@ -88,7 +88,7 @@ macro_rules! create_recv_http_session {
         $sender:ident,
         $receiver:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_recv_http_session!(
@@ -96,7 +96,7 @@ macro_rules! create_recv_http_session {
             $sender,
             $receiver,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -151,14 +151,14 @@ macro_rules! create_recv_http_session {
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
 macro_rules! create_recv_http_session_bundle {
-    ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(
            mpstthree::create_recv_http_session!(
                $func_name,
                $sender,
                $receiver,
                $meshedchannels_name,
-               $nsessions,
+               $n_sessions,
                $exclusion
             );
         )+

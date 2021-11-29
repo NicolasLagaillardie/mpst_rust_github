@@ -44,7 +44,7 @@ macro_rules! create_recv_mpst_session {
         $sender:ident,
         $receiver:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_recv_mpst_session!(
@@ -52,7 +52,7 @@ macro_rules! create_recv_mpst_session {
             $sender,
             $receiver,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -103,14 +103,14 @@ macro_rules! create_recv_mpst_session {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session_bundle {
-    ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(
             mpstthree::create_recv_mpst_session!(
                 $func_name,
                 $sender,
                 $receiver,
                 $meshedchannels_name,
-                $nsessions,
+                $n_sessions,
                 $exclusion
             );
         )+

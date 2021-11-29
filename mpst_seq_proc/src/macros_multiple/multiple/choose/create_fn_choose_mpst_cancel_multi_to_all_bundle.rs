@@ -93,19 +93,19 @@ impl Parse for ChooseTypeCancelMultiToAllBundle {
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         // The number of receivers
-        let n_sessions = all_receivers.len().to_string().parse::<u64>().unwrap() + 2;
+        let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 2;
 
         // The number of labels
-        let n_branches = all_branches.len().to_string().parse::<u64>().unwrap() + 1;
+        let n_branches = u64::try_from(all_branches.len()).unwrap() + 1;
 
         // The number of functions
-        let n_fn_names = all_fn_names.len().to_string().parse::<u64>().unwrap() + 1;
+        let n_fn_names = u64::try_from(all_fn_names.len()).unwrap() + 1;
 
         // The number of functions
-        let n_new_type = all_new_types.len().to_string().parse::<u64>().unwrap() + 1;
+        let n_new_type = u64::try_from(all_new_types.len()).unwrap() + 1;
 
         // The number of functions
-        let n_labels = all_labels.len().to_string().parse::<u64>().unwrap() + 2;
+        let n_labels = u64::try_from(all_labels.len()).unwrap() + 2;
 
         if n_branches != n_fn_names || n_branches != n_new_type || n_new_type != n_fn_names {
             panic!("The number of new types, functions and branches are not the same")

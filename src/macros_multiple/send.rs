@@ -44,7 +44,7 @@ macro_rules! create_send_mpst_session {
         $receiver:ident,
         $sender:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_send_mpst_session!(
@@ -52,7 +52,7 @@ macro_rules! create_send_mpst_session {
             $receiver,
             $sender,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -98,7 +98,7 @@ macro_rules! create_send_mpst_cancel {
         $receiver:ident,
         $sender:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_send_mpst_cancel!(
@@ -106,7 +106,7 @@ macro_rules! create_send_mpst_cancel {
             $receiver,
             $sender,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -162,7 +162,7 @@ macro_rules! create_send_check_cancel {
         $receiver:ident,
         $sender:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_send_check_cancel!(
@@ -170,7 +170,7 @@ macro_rules! create_send_check_cancel {
             $receiver,
             $sender,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -220,14 +220,14 @@ macro_rules! create_send_check_cancel {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_session_bundle {
-    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(
            mpstthree::create_send_mpst_session!(
                $func_name,
                $receiver,
                $sender,
                $meshedchannels_name,
-               $nsessions,
+               $n_sessions,
                $exclusion
             );
         )+
@@ -278,14 +278,14 @@ macro_rules! create_send_mpst_session_bundle {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_cancel_bundle {
-    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(
            mpstthree::create_send_mpst_cancel!(
             $func_name,
             $receiver,
             $sender,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
             );
         )+
@@ -357,14 +357,14 @@ macro_rules! create_send_mpst_cancel_bundle {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_check_cancel_bundle {
-    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(
            mpstthree::create_send_check_cancel!(
                $func_name,
                $receiver,
                $sender,
                $meshedchannels_name,
-               $nsessions,
+               $n_sessions,
                $exclusion
             );
         )+

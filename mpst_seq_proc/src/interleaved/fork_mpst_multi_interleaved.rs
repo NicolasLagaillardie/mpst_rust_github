@@ -58,8 +58,8 @@ impl From<ForkMPSTMultiInterleaved> for proc_macro2::TokenStream {
 
 impl ForkMPSTMultiInterleaved {
     /// Create the whole matrix of index according to line and column
-    fn diag(&self, nsessions: u64) -> VecOfTuple {
-        let diff = nsessions - 1;
+    fn diag(&self, n_sessions: u64) -> VecOfTuple {
+        let diff = n_sessions - 1;
 
         let mut column = 0;
         let mut line = 0;
@@ -69,7 +69,7 @@ impl ForkMPSTMultiInterleaved {
             .map(|i| {
                 if line == column {
                     column += 1;
-                } else if column >= (nsessions - 1) {
+                } else if column >= (n_sessions - 1) {
                     line += 1;
                     column = line + 1;
                 } else {
@@ -81,13 +81,13 @@ impl ForkMPSTMultiInterleaved {
     }
 
     /// Create the whole matrix of index according to line and column
-    fn diag_and_matrix(&self, nsessions: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
-        let diag = self.diag(nsessions);
+    fn diag_and_matrix(&self, n_sessions: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
+        let diag = self.diag(n_sessions);
 
         // Create the whole matrix
         (
             diag.clone(),
-            (1..=nsessions)
+            (1..=n_sessions)
                 .map(|i| {
                     diag.iter()
                         .filter_map(|(line, column, index)| {
@@ -104,8 +104,8 @@ impl ForkMPSTMultiInterleaved {
     }
 
     /// Create the whole matrix of index according to line and column
-    fn diag_w_offset(&self, nsessions: u64) -> VecOfTuple {
-        let diff = nsessions - 1;
+    fn diag_w_offset(&self, n_sessions: u64) -> VecOfTuple {
+        let diff = n_sessions - 1;
 
         let mut column = 0;
         let mut line = 0;
@@ -115,7 +115,7 @@ impl ForkMPSTMultiInterleaved {
             .map(|i| {
                 if line == column {
                     column += 1;
-                } else if column >= (nsessions - 1) {
+                } else if column >= (n_sessions - 1) {
                     line += 1;
                     column = line + 1;
                 } else {
@@ -127,13 +127,13 @@ impl ForkMPSTMultiInterleaved {
     }
 
     /// Create the whole matrix of index according to line and column
-    fn diag_and_matrix_w_offset(&self, nsessions: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
-        let diag_w_offset = self.diag_w_offset(nsessions);
+    fn diag_and_matrix_w_offset(&self, n_sessions: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
+        let diag_w_offset = self.diag_w_offset(n_sessions);
 
         // Create the whole matrix
         (
             diag_w_offset.clone(),
-            (1..=nsessions)
+            (1..=n_sessions)
                 .map(|i| {
                     diag_w_offset
                         .iter()

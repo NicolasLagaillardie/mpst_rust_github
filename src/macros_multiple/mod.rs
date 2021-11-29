@@ -69,11 +69,11 @@ macro_rules! bundle_struct_fork_close_multi {
         $func_name_close:ident,
         $func_name_fork:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
-        mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
-        mpstthree::close_mpst!($func_name_close, $meshedchannels_name, $nsessions);
-        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $nsessions);
+        mpstthree::create_meshedchannels!($meshedchannels_name, $n_sessions);
+        mpstthree::close_mpst!($func_name_close, $meshedchannels_name, $n_sessions);
+        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -112,10 +112,10 @@ macro_rules! bundle_struct_fork_close_multi_cancel {
         $func_name_close:ident,
         $func_name_fork:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
-        mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
-        mpstthree::close_mpst_cancel!($func_name_close, $meshedchannels_name, $nsessions);
-        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $nsessions);
+        mpstthree::create_meshedchannels!($meshedchannels_name, $n_sessions);
+        mpstthree::close_mpst_cancel!($func_name_close, $meshedchannels_name, $n_sessions);
+        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $n_sessions);
     };
 }

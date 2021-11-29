@@ -37,7 +37,7 @@ impl Parse for BakingWithEnum {
         <Token![,]>::parse(input)?;
         let all_roles = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
 
-        let number_roles = all_roles.len().to_string().parse::<u64>().unwrap();
+        let number_roles = u64::try_from(all_roles.len()).unwrap();
 
         Ok(BakingWithEnum {
             meshedchannels_name,

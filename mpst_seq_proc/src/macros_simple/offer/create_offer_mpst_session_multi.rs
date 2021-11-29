@@ -9,7 +9,7 @@ pub struct OfferMPSTSessionMulti {
     role: syn::Ident,
     name: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
     exclusion: u64,
 }
 
@@ -30,7 +30,7 @@ impl Parse for OfferMPSTSessionMulti {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -41,7 +41,7 @@ impl Parse for OfferMPSTSessionMulti {
             role,
             name,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
             exclusion,
         })
     }
@@ -61,7 +61,7 @@ impl OfferMPSTSessionMulti {
         let name = self.name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.nsessions - 1))
+        let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -71,7 +71,7 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let all_sessions_struct: Vec<proc_macro2::TokenStream> = (1..(2 * self.nsessions - 1))
+        let all_sessions_struct: Vec<proc_macro2::TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -81,7 +81,7 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let new_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {
@@ -89,7 +89,7 @@ impl OfferMPSTSessionMulti {
                     }
                 } else {
                     let temp_all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self
-                        .nsessions
+                        .n_sessions
                         - 1))
                         .map(|i| {
                             let temp_ident =
@@ -116,7 +116,7 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let sessions_left: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let sessions_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -126,8 +126,8 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let sessions_right: Vec<proc_macro2::TokenStream> = (self.nsessions
-            ..(2 * self.nsessions - 1))
+        let sessions_right: Vec<proc_macro2::TokenStream> = (self.n_sessions
+            ..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -137,7 +137,7 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let all_recv: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let all_recv: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {}
@@ -151,7 +151,7 @@ impl OfferMPSTSessionMulti {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());

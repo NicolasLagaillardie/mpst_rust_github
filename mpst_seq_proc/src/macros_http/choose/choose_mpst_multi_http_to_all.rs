@@ -12,7 +12,7 @@ pub struct ChooseTypeMultiHttpToAll {
     receivers: Vec<proc_macro2::TokenStream>,
     sender: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
     exclusion: u64,
 }
 
@@ -66,13 +66,13 @@ impl Parse for ChooseTypeMultiHttpToAll {
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         // The number of receivers
-        let nsessions = all_receivers.len().to_string().parse::<u64>().unwrap() + 1;
+        let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 1;
 
-        if all_receivers.len().to_string().parse::<u64>().unwrap()
-            != all_labels.len().to_string().parse::<u64>().unwrap()
-        {
-            panic!("The number of receivers and labels is not the same")
-        };
+        assert_eq!(
+            all_receivers.len(),
+            all_labels.len(),
+            "We are comparing number of receivers and labels in choose_mpst_multi_http_to_all"
+        );
 
         Ok(ChooseTypeMultiHttpToAll {
             session,
@@ -80,7 +80,7 @@ impl Parse for ChooseTypeMultiHttpToAll {
             receivers: all_receivers,
             sender,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
             exclusion,
         })
     }
@@ -95,7 +95,7 @@ impl From<ChooseTypeMultiHttpToAll> for proc_macro2::TokenStream {
 impl ChooseTypeMultiHttpToAll {
     /// Create the whole matrix of index according to line and column
     fn diag(&self) -> VecOfTuple {
-        let diff = self.nsessions - 1;
+        let diff = self.n_sessions - 1;
 
         let mut column = 0;
         let mut line = 0;
@@ -105,7 +105,7 @@ impl ChooseTypeMultiHttpToAll {
             .map(|i| {
                 if line == column {
                     column += 1;
-                } else if column >= (self.nsessions - 1) {
+                } else if column >= (self.n_sessions - 1) {
                     line += 1;
                     column = line + 1;
                 } else {
@@ -134,7 +134,7 @@ impl ChooseTypeMultiHttpToAll {
         let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
-        let diff = self.nsessions - 1;
+        let diff = self.n_sessions - 1;
         let diag = self.diag();
 
         let new_channels: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1) / 2))
@@ -155,7 +155,7 @@ impl ChooseTypeMultiHttpToAll {
             })
             .collect();
 
-        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("stack_{}", i), proc_macro2::Span::call_site());
@@ -165,7 +165,7 @@ impl ChooseTypeMultiHttpToAll {
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_names: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_name =
                     syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
@@ -182,18 +182,18 @@ impl ChooseTypeMultiHttpToAll {
             .collect();
 
         let new_name_sender = syn::Ident::new(
-            &format!("name_{}", self.nsessions),
+            &format!("name_{}", self.n_sessions),
             proc_macro2::Span::call_site(),
         );
 
         let new_stack_sender = syn::Ident::new(
-            &format!("stack_{}", self.nsessions),
+            &format!("stack_{}", self.n_sessions),
             proc_macro2::Span::call_site(),
         );
 
-        let all_send: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let all_send: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+                let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp = if i >= self.exclusion { i + 1 } else { i };
 
@@ -255,7 +255,7 @@ impl ChooseTypeMultiHttpToAll {
             })
             .collect();
 
-        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_session =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());

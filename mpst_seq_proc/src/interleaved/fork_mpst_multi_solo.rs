@@ -9,7 +9,7 @@ type VecOfTuple = Vec<(u64, u64, u64)>;
 pub struct ForkMPSTMultiSolo {
     func_name: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
 }
 
 impl Parse for ForkMPSTMultiSolo {
@@ -20,12 +20,12 @@ impl Parse for ForkMPSTMultiSolo {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ForkMPSTMultiSolo {
             func_name,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
         })
     }
 }
@@ -39,7 +39,7 @@ impl From<ForkMPSTMultiSolo> for proc_macro2::TokenStream {
 impl ForkMPSTMultiSolo {
     /// Create the whole matrix of index according to line and column
     fn diag(&self) -> VecOfTuple {
-        let diff = self.nsessions - 1;
+        let diff = self.n_sessions - 1;
 
         let mut column = 0;
         let mut line = 0;
@@ -49,7 +49,7 @@ impl ForkMPSTMultiSolo {
             .map(|i| {
                 if line == column {
                     column += 1;
-                } else if column >= (self.nsessions - 1) {
+                } else if column >= (self.n_sessions - 1) {
                     line += 1;
                     column = line + 1;
                 } else {
@@ -67,7 +67,7 @@ impl ForkMPSTMultiSolo {
         // Create the whole matrix
         (
             diag.clone(),
-            (1..=self.nsessions)
+            (1..=self.n_sessions)
                 .map(|i| {
                     diag.iter()
                         .filter_map(|(line, column, index)| {
@@ -85,7 +85,7 @@ impl ForkMPSTMultiSolo {
 
     /// Create the whole matrix of index according to line and column
     fn diag_w_offset(&self) -> VecOfTuple {
-        let diff = self.nsessions - 1;
+        let diff = self.n_sessions - 1;
 
         let mut column = 0;
         let mut line = 0;
@@ -95,7 +95,7 @@ impl ForkMPSTMultiSolo {
             .map(|i| {
                 if line == column {
                     column += 1;
-                } else if column >= (self.nsessions - 1) {
+                } else if column >= (self.n_sessions - 1) {
                     line += 1;
                     column = line + 1;
                 } else {
@@ -113,7 +113,7 @@ impl ForkMPSTMultiSolo {
         // Create the whole matrix
         (
             diag_w_offset.clone(),
-            (1..=self.nsessions)
+            (1..=self.n_sessions)
                 .map(|i| {
                     diag_w_offset
                         .iter()
@@ -167,7 +167,7 @@ impl ForkMPSTMultiSolo {
         let (diag_w_offset, matrix_w_offset) = self.diag_and_matrix_w_offset();
 
         let sessions: Vec<proc_macro2::TokenStream> =
-            (1..=((self.nsessions - 1) * (self.nsessions) / 2))
+            (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -178,7 +178,7 @@ impl ForkMPSTMultiSolo {
                 .collect();
 
         let sessions_struct: Vec<proc_macro2::TokenStream> =
-            (1..=((self.nsessions - 1) * (self.nsessions) / 2))
+            (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -188,7 +188,7 @@ impl ForkMPSTMultiSolo {
                 })
                 .collect();
 
-        let roles: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let roles: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -198,7 +198,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let roles_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -208,7 +208,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let new_roles: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -220,7 +220,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let names: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let names: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
@@ -230,7 +230,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let names_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let names_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
@@ -240,7 +240,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let new_names: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("N{}", i), proc_macro2::Span::call_site());
@@ -252,9 +252,9 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let functions_struct: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let functions_struct: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
@@ -285,8 +285,8 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((self.nsessions - 1)
-            * (self.nsessions)
+        let new_channels: Vec<proc_macro2::TokenStream> = (1..=((self.n_sessions - 1)
+            * (self.n_sessions)
             / 2))
             .map(|i| {
                 let temp_ident =
@@ -307,9 +307,9 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let new_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+                let temp_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
                         let temp_session = syn::Ident::new(
@@ -353,7 +353,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let use_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.nsessions)
+        let use_meshedchannels: Vec<proc_macro2::TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_meshedchannels = syn::Ident::new(
                     &format!("meshedchannels_{}", i),

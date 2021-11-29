@@ -6,7 +6,7 @@ use syn::{Result, Token};
 pub struct ChooseTypeMulti {
     type_name: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
 }
 
 impl Parse for ChooseTypeMulti {
@@ -17,12 +17,12 @@ impl Parse for ChooseTypeMulti {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ChooseTypeMulti {
             type_name,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
         })
     }
 }
@@ -38,7 +38,7 @@ impl ChooseTypeMulti {
         let type_name = self.type_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.nsessions - 1))
+        let all_sessions: Vec<proc_macro2::TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -48,7 +48,7 @@ impl ChooseTypeMulti {
             })
             .collect();
 
-        let sessions_left: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let sessions_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -58,8 +58,8 @@ impl ChooseTypeMulti {
             })
             .collect();
 
-        let sessions_right: Vec<proc_macro2::TokenStream> = (self.nsessions
-            ..(2 * self.nsessions - 1))
+        let sessions_right: Vec<proc_macro2::TokenStream> = (self.n_sessions
+            ..(2 * self.n_sessions - 1))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());

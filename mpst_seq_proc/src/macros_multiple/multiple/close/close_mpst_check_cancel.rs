@@ -6,7 +6,7 @@ use syn::{Result, Token};
 pub struct CloseMpstCheckCancel {
     func_name: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
 }
 
 impl Parse for CloseMpstCheckCancel {
@@ -17,12 +17,12 @@ impl Parse for CloseMpstCheckCancel {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(CloseMpstCheckCancel {
             func_name,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
         })
     }
 }
@@ -38,13 +38,13 @@ impl CloseMpstCheckCancel {
         let func_name = self.func_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let session_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let session_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|_| {
                 quote! { mpstthree::binary::struct_trait::end::End , }
             })
             .collect();
 
-        let session_send: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let session_send: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                 .map(|i| {
                     let temp_ident =
                         syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());
@@ -54,7 +54,7 @@ impl CloseMpstCheckCancel {
                 })
                 .collect();
 
-        let session_recv: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let session_recv: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());

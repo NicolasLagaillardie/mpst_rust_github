@@ -7,7 +7,7 @@ pub struct SendCancel {
     func_name: syn::Ident,
     name: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
     msg: syn::Expr,
 }
 
@@ -22,7 +22,7 @@ impl Parse for SendCancel {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
         let msg = syn::Expr::parse(input)?;
@@ -31,7 +31,7 @@ impl Parse for SendCancel {
             func_name,
             name,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
             msg,
         })
     }
@@ -52,7 +52,7 @@ impl SendCancel {
         let msg = self.msg.clone();
 
         // Build the vec with all the types S1,..,SN
-        let session_types: Vec<syn::Ident> = (1..(self.nsessions - 1))
+        let session_types: Vec<syn::Ident> = (1..(self.n_sessions - 1))
             .map(|i| format_ident!("S{}", i))
             .collect();
 

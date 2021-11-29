@@ -8,7 +8,7 @@ pub struct CreateSendCheckCancel {
     receiver: syn::Ident,
     sender: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
     exclusion: u64,
 }
 
@@ -26,7 +26,7 @@ impl Parse for CreateSendCheckCancel {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
         <Token![,]>::parse(input)?;
 
         let exclusion = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
@@ -36,7 +36,7 @@ impl Parse for CreateSendCheckCancel {
             receiver,
             sender,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
             exclusion,
         })
     }
@@ -55,7 +55,7 @@ impl CreateSendCheckCancel {
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let session_types: Vec<proc_macro2::TokenStream> = (2..self.nsessions)
+        let session_types: Vec<proc_macro2::TokenStream> = (2..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -65,7 +65,7 @@ impl CreateSendCheckCancel {
             })
             .collect();
 
-        let session_types_struct: Vec<proc_macro2::TokenStream> = (2..self.nsessions)
+        let session_types_struct: Vec<proc_macro2::TokenStream> = (2..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -75,7 +75,7 @@ impl CreateSendCheckCancel {
             })
             .collect();
 
-        let all_send: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let all_send: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 if i != self.exclusion {
                     quote! {}
@@ -89,7 +89,7 @@ impl CreateSendCheckCancel {
             })
             .collect();
 
-        let send_types: Vec<proc_macro2::TokenStream> = (2..self.nsessions)
+        let send_types: Vec<proc_macro2::TokenStream> = (2..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("S{}", i), proc_macro2::Span::call_site());
@@ -105,7 +105,7 @@ impl CreateSendCheckCancel {
             })
             .collect();
 
-        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("session{}", i), proc_macro2::Span::call_site());

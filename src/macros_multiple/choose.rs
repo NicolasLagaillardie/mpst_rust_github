@@ -27,8 +27,8 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
-    ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $nsessions);
+    ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
+        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -81,7 +81,7 @@ macro_rules! create_choose_mpst_session_multi_left {
         $role_dual:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_left!(
             $func_name,
@@ -89,7 +89,7 @@ macro_rules! create_choose_mpst_session_multi_left {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
     };
 }
@@ -143,7 +143,7 @@ macro_rules! create_choose_mpst_session_multi_right {
         $role_dual:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_right!(
             $func_name,
@@ -151,7 +151,7 @@ macro_rules! create_choose_mpst_session_multi_right {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
     };
 }
@@ -208,7 +208,7 @@ macro_rules! create_choose_mpst_session_multi_both {
         $role_dual:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
         mpstthree::create_choose_mpst_session_multi_left!(
             $func_name_left,
@@ -216,7 +216,7 @@ macro_rules! create_choose_mpst_session_multi_both {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
 
         mpstthree::create_choose_mpst_session_multi_right!(
@@ -225,7 +225,7 @@ macro_rules! create_choose_mpst_session_multi_both {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
     };
 }

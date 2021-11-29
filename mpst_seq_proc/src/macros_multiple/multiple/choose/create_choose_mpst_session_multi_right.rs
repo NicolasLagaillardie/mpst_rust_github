@@ -12,7 +12,7 @@ pub struct ChooseTypeMultiRight {
     role_dual: syn::Ident,
     name: syn::Ident,
     meshedchannels_name: syn::Ident,
-    nsessions: u64,
+    n_sessions: u64,
 }
 
 impl Parse for ChooseTypeMultiRight {
@@ -32,7 +32,7 @@ impl Parse for ChooseTypeMultiRight {
         let meshedchannels_name = syn::Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
-        let nsessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let n_sessions = (syn::LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         Ok(ChooseTypeMultiRight {
             func_name,
@@ -40,7 +40,7 @@ impl Parse for ChooseTypeMultiRight {
             role_dual,
             name,
             meshedchannels_name,
-            nsessions,
+            n_sessions,
         })
     }
 }
@@ -54,7 +54,7 @@ impl From<ChooseTypeMultiRight> for proc_macro2::TokenStream {
 impl ChooseTypeMultiRight {
     /// Create the whole matrix of index according to line and column
     fn diag(&self) -> VecOfTuple {
-        let diff = self.nsessions - 1;
+        let diff = self.n_sessions - 1;
 
         let mut column = 0;
         let mut line = 0;
@@ -64,7 +64,7 @@ impl ChooseTypeMultiRight {
             .map(|i| {
                 if line == column {
                     column += 1;
-                } else if column >= (self.nsessions - 1) {
+                } else if column >= (self.n_sessions - 1) {
                     line += 1;
                     column = line + 1;
                 } else {
@@ -82,7 +82,7 @@ impl ChooseTypeMultiRight {
         // Create the whole matrix
         (
             diag.clone(),
-            (1..=self.nsessions)
+            (1..=self.n_sessions)
                 .map(|i| {
                     diag.iter()
                         .filter_map(|(line, column, index)| {
@@ -134,7 +134,7 @@ impl ChooseTypeMultiRight {
         let role_dual = self.role_dual.clone();
         let name = self.name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
-        let diff = self.nsessions - 1;
+        let diff = self.n_sessions - 1;
         let (diag, matrix) = self.diag_and_matrix();
 
         let all_sessions: Vec<proc_macro2::TokenStream> = (1..=(diff * (diff + 1)))
@@ -157,7 +157,7 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let all_roles: Vec<proc_macro2::TokenStream> = (1..(3 * self.nsessions))
+        let all_roles: Vec<proc_macro2::TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -167,7 +167,7 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let all_roles_struct: Vec<proc_macro2::TokenStream> = (1..(3 * self.nsessions))
+        let all_roles_struct: Vec<proc_macro2::TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -177,9 +177,9 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let all_types: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let all_types: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let types_left: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+                let types_left: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix, i, j);
 
@@ -198,7 +198,7 @@ impl ChooseTypeMultiRight {
                     })
                     .collect();
 
-                let types_right: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+                let types_right: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (k, _, m) = self.get_tuple_matrix(&matrix, i, j);
 
@@ -248,8 +248,8 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let stacks: Vec<proc_macro2::TokenStream> = ((3 * self.nsessions - 2)
-            ..(3 * self.nsessions))
+        let stacks: Vec<proc_macro2::TokenStream> = ((3 * self.n_sessions - 2)
+            ..(3 * self.n_sessions))
             .map(|i| {
                 let temp_ident =
                     syn::Ident::new(&format!("R{}", i), proc_macro2::Span::call_site());
@@ -259,9 +259,9 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let sessions_struct: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let sessions_struct: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let sum: u64 = (0..i).map(|j| self.nsessions - 1 - j).sum();
+                let sum: u64 = (0..i).map(|j| self.n_sessions - 1 - j).sum();
                 let temp_ident = syn::Ident::new(
                     &format!("S{}", diff * (diff + 1) / 2 + sum),
                     proc_macro2::Span::call_site(),
@@ -273,17 +273,17 @@ impl ChooseTypeMultiRight {
             .collect();
 
         let role_right = syn::Ident::new(
-            &format!("R{}", 3 * self.nsessions - 1),
+            &format!("R{}", 3 * self.n_sessions - 1),
             proc_macro2::Span::call_site(),
         );
 
         let stack_right = syn::Ident::new(
-            &format!("stack_{}", self.nsessions),
+            &format!("stack_{}", self.n_sessions),
             proc_macro2::Span::call_site(),
         );
 
         let name_right = syn::Ident::new(
-            &format!("name_{}", self.nsessions),
+            &format!("name_{}", self.n_sessions),
             proc_macro2::Span::call_site(),
         );
 
@@ -308,7 +308,7 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let new_stacks: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_stacks: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_stack =
                     syn::Ident::new(&format!("stack_{}", i), proc_macro2::Span::call_site());
@@ -322,7 +322,7 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let new_names: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_names: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_name =
                     syn::Ident::new(&format!("name_{}", i), proc_macro2::Span::call_site());
@@ -337,9 +337,9 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let new_choices: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_choices: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let types_sessions: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+                let types_sessions: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
 
@@ -386,7 +386,7 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let new_sessions_right: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_sessions_right: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
                 .map(|i| {
                     let temp_new_session =
                         syn::Ident::new(&format!("new_session_{}", i), proc_macro2::Span::call_site());
@@ -401,7 +401,7 @@ impl ChooseTypeMultiRight {
                 })
                 .collect();
 
-        let old_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let old_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_new_session = syn::Ident::new(
                     &format!("new_session_{}", i),
@@ -415,9 +415,9 @@ impl ChooseTypeMultiRight {
             })
             .collect();
 
-        let new_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.nsessions)
+        let new_session_meshedchannels: Vec<proc_macro2::TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let (line, column, _) = self.get_tuple_matrix(&matrix, self.nsessions, i);
+                let (line, column, _) = self.get_tuple_matrix(&matrix, self.n_sessions, i);
                 let temp_channel = match line {
                     m if m == i => syn::Ident::new(
                         &format!("channel_{}_{}", column, line),
