@@ -2,8 +2,8 @@
 //! sending a payload
 //! for an HTTP connection, for at least two participants.
 //!
-//! *This module is available only if mp-anon is built with
-//! the `"transport"` feature.*
+//! *This module is available only if MultiCrusty is built with
+//! the `"transport"` feature or the `"transport_http"` feature.*
 
 use crate::binary::struct_trait::{send::Send, session::Session};
 use hyper::client::ResponseFuture;
@@ -17,9 +17,12 @@ use std::panic;
 /// Send a value of type `T` over http. Returns the
 /// continuation of the session `S`. May fail.
 ///
-/// *This function is available only if mp-anon is built with
-/// the `"transport"` feature.*
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+/// *This function is available only if MultiCrusty is built with
+/// the `"transport"` feature or the `"transport_http"` feature.*
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
 pub fn send_http<T, S>(
     x: T,
     s: Send<T, S>,
@@ -81,7 +84,7 @@ where
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use mpstthree::{create_multiple_normal_role, create_send_http_session, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
@@ -95,17 +98,20 @@ where
 /// create_send_http_session!(send_http_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
-/// the `"transport"` feature.*
+/// *This macro is available only if MultiCrusty is built with
+/// the `"transport"` feature or the `"transport_http"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
 macro_rules! create_send_http_session {
     (
         $func_name:ident,
         $receiver:ident,
         $sender:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_send_http_session!(
@@ -113,7 +119,7 @@ macro_rules! create_send_http_session {
             $receiver,
             $sender,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -134,7 +140,7 @@ macro_rules! create_send_http_session {
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_http_bundle};
 ///
 /// create_multiple_normal_role!(
@@ -158,19 +164,22 @@ macro_rules! create_send_http_session {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
-/// the `"transport"` feature.*
+/// *This macro is available only if MultiCrusty is built with
+/// the `"transport"` feature or the `"transport_http"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_http")))
+)]
 macro_rules! create_send_mpst_http_bundle {
-    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $nsessions: literal) => {
+    ($( $func_name: ident, $receiver: ident, $exclusion: literal | )+ => $sender: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(
            mpstthree::create_send_http_session!(
                $func_name,
                $receiver,
                $sender,
                $meshedchannels_name,
-               $nsessions,
+               $n_sessions,
                $exclusion
             );
         )+

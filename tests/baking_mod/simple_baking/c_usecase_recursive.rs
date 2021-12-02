@@ -5,6 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
+use mpstthree::checker_concat;
+
 use std::boxed::Box;
 use std::error::Error;
 
@@ -20,11 +22,11 @@ use mpstthree::offer_mpst_b_to_c;
 
 use petgraph::dot::Dot;
 
-/// Test our usecase
-/// Simple types
-/// Client = C
-/// Authenticator = A
-/// Server = B
+// Test our usecase
+// Simple types
+// Client = C
+// Authenticator = A
+// Server = B
 
 type AtoCClose = End;
 type AtoBClose = End;
@@ -53,7 +55,7 @@ type Choose0fromCtoB = Send<Branches0BtoC, End>;
 
 type InitC = Send<i32, Recv<i32, Choose0fromCtoA>>;
 
-/// Stacks
+// Stacks
 type StackAEnd = RoleEnd;
 type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
 type StackARecurs = RoleC<RoleEnd>;
@@ -66,9 +68,9 @@ type StackBRecurs = RoleC<RoleEnd>;
 type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 
-/// For C
+// For C
 type EndpointCEnd = MeshedChannels<End, End, RoleEnd, RoleC<RoleEnd>>;
 type EndpointCVideo = MeshedChannels<
     Send<i32, Recv<i32, Send<Branches0AtoC, End>>>,
@@ -80,14 +82,14 @@ type EndpointCRecurs =
     MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, RoleC<RoleEnd>>;
 type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, RoleA<RoleEnd>>;
 type EndpointAFull = MeshedChannels<End, InitA, StackAInit, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBFull = MeshedChannels<End, RecursBtoC, StackBRecurs, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::End(s) => {
@@ -167,7 +169,7 @@ pub fn run_c_usecase_recursive() {
 }
 
 pub fn run_c_usecase_recursive_checker() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         EndpointAFull,
         EndpointCFull,
         EndpointBFull
@@ -247,4 +249,7 @@ pub fn run_c_usecase_recursive_checker() {
             5 -> 2 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

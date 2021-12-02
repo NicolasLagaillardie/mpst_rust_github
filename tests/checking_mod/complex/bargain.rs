@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
 
 use petgraph::dot::Dot;
 
@@ -86,7 +86,7 @@ type EndpointCFull = MeshedChannels<Recurs0CfromA, End, RoleA<RoleEnd>, NameC>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "bargain",
         EndpointAFull,
         EndpointBFull,
@@ -172,18 +172,14 @@ pub fn main() {
 
     ////////////// Test KMC output
     assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 1-exhaustive: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 1-safe: \
-        \u{1b}[92mTrue\n\u{1b}[0m\n",
+        "CSA: \u{1b}[92mTrue\n\
+        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
+        \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
+        \u{1b}[0m\n",
         read_to_string("outputs/bargain_1_kmc.txt").unwrap()
     );
 
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\u{1b}[0mBasic: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 2-exhaustive: \
-        \u{1b}[92mTrue\n\u{1b}[0mreduced 2-safe: \
-        \u{1b}[92mTrue\n\u{1b}[0m\n",
-        read_to_string("outputs/bargain_2_kmc.txt").unwrap()
-    );
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }

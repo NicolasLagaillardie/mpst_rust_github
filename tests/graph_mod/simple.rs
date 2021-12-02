@@ -10,7 +10,7 @@ use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
-/// Creating the binary sessions
+// Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
 
@@ -20,17 +20,17 @@ type BtoC<N> = Send<N, End>;
 type CtoA<N> = <AtoC<N> as Session>::Dual;
 type CtoB<N> = <BtoC<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackA = RoleB<RoleC<RoleEnd>>;
 type StackB = RoleA<RoleC<RoleEnd>>;
 type StackC = RoleA<RoleB<RoleEnd>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
 type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
 type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
 
-/// Single test for A
+// Single test for A
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = s.send(1).recv()?;
 
@@ -39,7 +39,7 @@ fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-/// Single test for B
+// Single test for B
 fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = s.recv()?;
 
@@ -48,7 +48,7 @@ fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     s.send(2).close()
 }
 
-/// Single test for C
+// Single test for C
 fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = s.send(3).recv()?;
 

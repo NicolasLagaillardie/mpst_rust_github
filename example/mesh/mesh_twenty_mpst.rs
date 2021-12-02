@@ -3418,7 +3418,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_a_from_s(s)?;
             let s = send_mpst_a_to_s((), s);
             endpoint_a(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
@@ -3466,7 +3467,8 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_b_from_s(s)?;
             let s = send_mpst_b_to_s((), s);
             endpoint_b(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
@@ -3514,7 +3516,8 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_c_from_s(s)?;
             let s = send_mpst_c_to_s((), s);
             endpoint_c(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
@@ -3562,7 +3565,8 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_d_from_s(s)?;
             let s = send_mpst_d_to_s((), s);
             endpoint_d(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
@@ -3610,7 +3614,8 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_e_from_s(s)?;
             let s = send_mpst_e_to_s((), s);
             endpoint_e(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
@@ -3658,7 +3663,8 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_f_from_s(s)?;
             let s = send_mpst_f_to_s((), s);
             endpoint_f(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
@@ -3706,7 +3712,8 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_g_from_s(s)?;
             let s = send_mpst_g_to_s((), s);
             endpoint_g(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
@@ -3754,7 +3761,8 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_h_from_s(s)?;
             let s = send_mpst_h_to_s((), s);
             endpoint_h(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
@@ -3802,7 +3810,8 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_i_from_s(s)?;
             let s = send_mpst_i_to_s((), s);
             endpoint_i(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
@@ -3850,7 +3859,8 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_j_from_s(s)?;
             let s = send_mpst_j_to_s((), s);
             endpoint_j(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
@@ -3898,7 +3908,8 @@ fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_k_from_s(s)?;
             let s = send_mpst_k_to_s((), s);
             endpoint_k(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
@@ -3946,7 +3957,8 @@ fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_l_from_s(s)?;
             let s = send_mpst_l_to_s((), s);
             endpoint_l(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
@@ -3994,7 +4006,8 @@ fn endpoint_m(s: EndpointM) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_m_from_s(s)?;
             let s = send_mpst_m_to_s((), s);
             endpoint_m(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
@@ -4042,7 +4055,8 @@ fn endpoint_n(s: EndpointN) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_n_from_s(s)?;
             let s = send_mpst_n_to_s((), s);
             endpoint_n(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
@@ -4090,7 +4104,8 @@ fn endpoint_o(s: EndpointO) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_o_from_s(s)?;
             let s = send_mpst_o_to_s((), s);
             endpoint_o(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
@@ -4138,7 +4153,8 @@ fn endpoint_p(s: EndpointP) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_p_from_s(s)?;
             let s = send_mpst_p_to_s((), s);
             endpoint_p(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
@@ -4186,7 +4202,8 @@ fn endpoint_q(s: EndpointQ) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_q_from_s(s)?;
             let s = send_mpst_q_to_s((), s);
             endpoint_q(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
@@ -4234,7 +4251,8 @@ fn endpoint_r(s: EndpointR) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_r_from_s(s)?;
             let s = send_mpst_r_to_s((), s);
             endpoint_r(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
@@ -4282,7 +4300,8 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
             let s = send_mpst_s_to_r((), s);
             let (_, s) = recv_mpst_s_from_r(s)?;
             endpoint_s(s)
-        }, })
+        },
+    })
 }
 
 fn endpoint_t(s: EndpointT) -> Result<(), Box<dyn Error>> {
@@ -4370,24 +4389,24 @@ fn main() {
         endpoint_o, endpoint_p, endpoint_q, endpoint_r, endpoint_s, endpoint_t,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
-    thread_e.join().unwrap();
-    thread_f.join().unwrap();
-    thread_g.join().unwrap();
-    thread_h.join().unwrap();
-    thread_i.join().unwrap();
-    thread_j.join().unwrap();
-    thread_k.join().unwrap();
-    thread_l.join().unwrap();
-    thread_m.join().unwrap();
-    thread_n.join().unwrap();
-    thread_o.join().unwrap();
-    thread_p.join().unwrap();
-    thread_q.join().unwrap();
-    thread_r.join().unwrap();
-    thread_s.join().unwrap();
-    thread_t.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
+    assert!(thread_e.join().is_ok());
+    assert!(thread_f.join().is_ok());
+    assert!(thread_g.join().is_ok());
+    assert!(thread_h.join().is_ok());
+    assert!(thread_i.join().is_ok());
+    assert!(thread_j.join().is_ok());
+    assert!(thread_k.join().is_ok());
+    assert!(thread_l.join().is_ok());
+    assert!(thread_m.join().is_ok());
+    assert!(thread_n.join().is_ok());
+    assert!(thread_o.join().is_ok());
+    assert!(thread_p.join().is_ok());
+    assert!(thread_q.join().is_ok());
+    assert!(thread_r.join().is_ok());
+    assert!(thread_s.join().is_ok());
+    assert!(thread_t.join().is_ok());
 }

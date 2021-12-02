@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -14,7 +16,7 @@ use rand::{thread_rng, Rng};
 use std::error::Error;
 use std::marker;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
@@ -361,7 +363,7 @@ fn picture_s(s: EndpointSContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
 }

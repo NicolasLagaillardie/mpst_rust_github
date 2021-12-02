@@ -7,33 +7,56 @@ description = "A library implementing Multiparty Session Types for 2 or more par
 readme = "README.md"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT OR Apache-2.0"
-keywords = ["multiparty", "session", "affine"]
+keywords = ["multiparty", "session", "affine", "multicrusty"]
+documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
+include = [
+    "/benches/**",
+    "/build.rs",
+    "/Cargo.toml",
+    "/LICENSE-APACHE",
+    "/LICENSE-MIT",
+    "/README.md",
+    "/src/**",
+    "/tests/**",
+]
 exclude = [
     ".travis.yml",
     "codecov.yml",
     ".gitignore",
-    "mpst_seq/",
     ".github/",
     ".cargo_vcs_info.json",
     "scripts/",
     "example/",
+    "outputs/",
+    "cfsm/",
+    "compile_time/",
+    "graphs_bench/",
     "rustfmt_2.toml",
+    "notes.txt",
+    "result.rs",
 ]
 autotests = false
+autobenches = false
 
-###################################
+################################### Workspace
 
 [workspace]
-exclude = ["mpst_seq/"]
+members = ["mpst_seq", "mpst_seq_proc"]
 
-###################################
+################################### Lib
+
+[lib]
+bench = false
+
+################################### Bin
 
 [[bin]]
 name = "mpst"
 path = "main.rs"
+bench = false
 
-###################################
+################################### Tests
 
 [[test]]
 name = "checking"
@@ -53,7 +76,7 @@ required-features = ["binary"]
 [[test]]
 name = "cancel"
 path = "tests/cancel.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[test]]
 name = "macros_multiple"
@@ -66,9 +89,19 @@ path = "tests/macros_simple.rs"
 required-features = ["macros_simple"]
 
 [[test]]
-name = "transport"
-path = "tests/transport.rs"
-required-features = ["macros_multiple", "transport"]
+name = "transport_udp"
+path = "tests/transport_udp.rs"
+required-features = ["transport_udp"]
+
+[[test]]
+name = "transport_tcp"
+path = "tests/transport_tcp.rs"
+required-features = ["transport_tcp"]
+
+[[test]]
+name = "transport_http"
+path = "tests/transport_http.rs"
+required-features = ["transport_http", "macros_multiple"]
 
 [[test]]
 name = "baking"
@@ -81,31 +114,66 @@ path = "tests/extra.rs"
 required-features = ["baking"]
 
 [[test]]
+name = "interleaved"
+path = "tests/interleaved.rs"
+required-features = ["baking_interleaved"]
+
+[[test]]
 name = "main"
 path = "tests/main.rs"
 required-features = []
 
-###################################
+################################### Benches
 
 [[bench]]
 name = "main"
 harness = false
-required-features = ["macros_multiple"]
+required-features = ["baking_interleaved"]
+
+[[bench]]
+name = "mesh"
+harness = false
+required-features = ["baking_interleaved"]
+
+[[bench]]
+name = "ring"
+harness = false
+required-features = ["baking_interleaved"]
 
 [[bench]]
 name = "ping_pong"
 harness = false
-required-features = ["macros_multiple"]
+required-features = ["baking_interleaved"]
 
-###################################
-
-[[example]]
-name = "actyx_os_api"
-required-features = ["macros_multiple"]
+################################### Examples
 
 [[example]]
-name = "actyx_os_logging"
+name = "circuit_breaker"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "logging"
+required-features = ["macros_multiple"]
+
+[[example]]
+name = "circuit_breaker_baking"
+required-features = ["baking"]
+
+[[example]]
+name = "logging_baking"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_solo"
+required-features = ["baking_interleaved"]
+
+[[example]]
+name = "logging_solo"
+required-features = ["baking_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_interleaved"
+required-features = ["baking_interleaved"]
 
 [[example]]
 name = "distributed_calc"
@@ -113,7 +181,11 @@ required-features = ["macros_multiple"]
 
 [[example]]
 name = "dns_fowler"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking"
+required-features = ["baking_checking"]
 
 [[example]]
 name = "dns_imai"
@@ -125,11 +197,15 @@ required-features = ["macros_multiple"]
 
 [[example]]
 name = "o_auth"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking"
+required-features = ["baking_checking"]
 
 [[example]]
 name = "o_auth_2"
-required-features = ["macros_multiple", "transport"]
+required-features = ["transport_macros_multiple"]
 
 [[example]]
 name = "online_wallet"
@@ -155,33 +231,33 @@ required-features = ["macros_multiple"]
 name = "video_stream"
 required-features = ["macros_simple"]
 
-###################################
+################################### Profil
 
 [profile.release]
 debug = true
 
-###################################
+################################### Dependencies
 
 [dependencies]
-mpst-seq = { path = "mpst_seq", version = "0.0.12" }
-# mpst-seq = "0.0.12"
-crossbeam-channel = "0.5.1"
-either = "1.6.1"
-hyper = { version = "0.14.12", features = ["full"], optional = true }
-hyper-tls = { version = "0.5.0", optional = true }
-tokio = { version = "1.11.0", features = ["full"], optional = true }
-regex = { version = "1.5.4", optional = true }
-petgraph = { version = "0.6.0", optional = true }
+mpst-seq = { path = "mpst_seq" }
+# mpst-seq = "0.1"
+crossbeam-channel = "0.5"
+either = "1.6"
+hyper = { version = "0.14", features = ["full"], optional = true }
+hyper-tls = { version = "0.5", optional = true }
+tokio = { version = "1.12", features = ["full"], optional = true }
+regex = { version = "1.5", optional = true }
+petgraph = { version = "0.6", optional = true }
 
-###################################
+################################### Dev-dependencies for tests/benches
 
 [dev-dependencies]
-criterion = { version = "0.3.5", features = ["html_reports"] }
-trybuild = "1.0.45"
-ntest = "0.7.3"
-rand = "0.8.4"
+criterion = { version = "0.3", features = ["html_reports"] }
+trybuild = "1.0"
+ntest = "0.7"
+rand = "0.8"
 
-###################################
+################################### Features
 
 [features]
 default = ["binary", "role", "meshedchannels", "functionmpst"]
@@ -191,20 +267,28 @@ meshedchannels = []
 role = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
+# For interleaved sessions
+interleaved = ["default"]
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
-transport = ["default", "hyper", "hyper-tls", "tokio"]
+baking_interleaved = ["baking", "interleaved"]
+baking_checking = ["baking", "checking"]
+transport_tcp = ["default"]
+transport_udp = ["default"]
+transport_http = ["default", "hyper", "hyper-tls", "tokio"]
+transport = ["transport_tcp", "transport_udp", "transport_http"]
+# For test compile examples
+transport_macros_multiple = ["macros_multiple", "transport"]
 full = ["checking", "baking", "transport"]
 
-
-###################################
+################################### Doc handling for all-features
 
 # docs.rs-specific configuration
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "doc_cfg"]
 
-###################################
+################################### Rust playground features
 
-[badges]
-maintenance = { status = "actively-developed" }
+[package.metadata.playground]
+features = ["full", "interleaved"]

@@ -1,0 +1,12 @@
+error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::send::Send<i64, mpstthree::binary::struct_trait::recv::Recv<i64, mpstthree::binary::struct_trait::recv::Recv<CalcOp2<N>, mpstthree::binary::struct_trait::end::End>>>: std::marker::Send`
+  --> tests/infinite_type/fail_0.rs:10:10
+   |
+10 |     More(Send<i64, Recv<i64, NiceCalcServer2<N>>>),
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: required because it appears within the type `CalcOp2<N>`
+  --> tests/infinite_type/fail_0.rs:9:6
+   |
+9  | enum CalcOp2<N: marker::Send> {
+   |      ^^^^^^^
+   = note: required because of the requirements on the impl of `Session` for `mpstthree::binary::struct_trait::recv::Recv<CalcOp2<N>, mpstthree::binary::struct_trait::end::End>`

@@ -60,7 +60,7 @@ type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Stacks
+// Stacks
 type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
 type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
@@ -69,21 +69,21 @@ type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 
 type EndpointCRecurs<N> =
     MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, recv_mpst_b_from_c, {
         Branches0BtoC::End(s) => {

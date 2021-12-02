@@ -111,7 +111,7 @@ fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, SIZE)
+    recurs_a(s, LOOPS)
 }
 
 fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
@@ -155,4 +155,4 @@ pub fn main() {
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static LOOPS: i64 = 1;

@@ -5,11 +5,8 @@ use crate::binary::struct_trait::session::Session;
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
-use std::net::TcpStream;
 use std::panic;
-use std::thread::{spawn, JoinHandle};
-
-type TcpFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
+use std::thread::{Builder, JoinHandle};
 
 #[doc(hidden)]
 pub fn fork_with_thread_id<S, P>(p: P) -> (JoinHandle<()>, S::Dual)
@@ -18,15 +15,19 @@ where
     P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
     let (there, here) = Session::new();
-    let other_thread = spawn(move || {
-        panic::set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match p(there) {
-            Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
-        }
-    });
+    let other_thread = Builder::new()
+        .name(String::from("Thread P"))
+        .stack_size(32 * 1024 * 1024)
+        .spawn(move || {
+            panic::set_hook(Box::new(|_info| {
+                // do nothing
+            }));
+            match p(there) {
+                Ok(()) => (),
+                Err(e) => panic!("{}", e.to_string()),
+            }
+        })
+        .unwrap();
     (other_thread, here)
 }
 
@@ -40,28 +41,4 @@ where
     P: FnOnce(S) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
     fork_with_thread_id(p).1
-}
-
-/// Creates a child process, and a session with two dual
-/// endpoints of type `S` and `S::Dual`. The first endpoint
-/// is given to the child process. Returns the
-/// second endpoint.
-pub fn fork_tcp<S, P>(p: P, address: &str) -> TcpFork<S::Dual>
-where
-    S: Session + 'static,
-    P: FnOnce(S, TcpStream) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
-{
-    let stream = TcpStream::connect(address)?;
-    let copy_stream = stream.try_clone()?;
-    let (there, here) = Session::new();
-    let other_thread = spawn(move || {
-        panic::set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match p(there, copy_stream) {
-            Ok(()) => (),
-            Err(e) => panic!("{}", e.to_string()),
-        }
-    });
-    Ok((other_thread, here, stream))
 }

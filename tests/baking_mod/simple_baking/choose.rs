@@ -15,22 +15,22 @@ use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
+use mpstthree::checker_concat;
+
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test a simple storage server, implemented using binary
-/// choice. Simple types
+// Test a simple storage server, implemented using binary
+// choice. Simple types
 type AtoBNeg<N> = Recv<N, End>;
 type AtoBAdd<N> = Recv<N, End>;
 
-// type BtoANeg<N> = Send<N, End>;
-// type BtoAAdd<N> = Send<N, End>;
 type BtoANeg<N> = <AtoBNeg<N> as Session>::Dual;
 type BtoAAdd<N> = <AtoBAdd<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackOfferA = RoleB<RoleEnd>;
 type StackFullA = RoleAlltoB<RoleEnd, RoleEnd>;
 
@@ -40,8 +40,8 @@ type StackFullB = RoleBtoAll<StackChoiceB, StackChoiceB>;
 type StackOfferC = RoleEnd;
 type StackFullC = RoleAlltoB<StackOfferC, StackOfferC>;
 
-/// Creating the MP sessions
-/// For A
+// Creating the MP sessions
+// For A
 type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, End, StackOfferA, RoleA<RoleEnd>>;
 type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, End, StackOfferA, RoleA<RoleEnd>>;
 
@@ -49,7 +49,7 @@ type OfferAfromB<N> =
     OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, StackOfferA, StackOfferA, RoleA<RoleEnd>>;
 type EndpointChoiceA<N> = MeshedChannels<OfferAfromB<N>, End, StackFullA, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type ChooseBtoA<N> = ChooseMpst<
     BtoAAdd<N>,
     End,
@@ -62,14 +62,14 @@ type ChooseBtoA<N> = ChooseMpst<
 type ChooseBtoC = ChooseMpst<End, End, End, End, RoleEnd, RoleEnd, RoleCDual<RoleEnd>>;
 type EndpointChoiceB<N> = MeshedChannels<ChooseBtoA<N>, ChooseBtoC, StackFullB, RoleB<RoleEnd>>;
 
-/// For C
+// For C
 type EndpointCAdd = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
 type EndpointCNeg = MeshedChannels<End, End, StackOfferC, RoleC<RoleEnd>>;
 
 type OfferCfromB = OfferMpst<End, End, End, End, StackOfferC, StackOfferC, RoleC<RoleEnd>>;
 type EndpointChoiceC = MeshedChannels<End, OfferCfromB, StackFullC, RoleC<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
     s.offer(
         |s: EndpointAAdd<i32>| {
@@ -137,9 +137,8 @@ pub fn simple_choice() {
 }
 
 pub fn simple_choice_checker() {
-    let graphs =
-        mpstthree::checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>)
-            .unwrap();
+    let (graphs, kmc) =
+        checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
@@ -190,4 +189,7 @@ pub fn simple_choice_checker() {
             0 -> 2 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

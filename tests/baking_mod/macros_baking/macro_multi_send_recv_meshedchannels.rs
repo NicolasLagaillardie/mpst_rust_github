@@ -6,7 +6,7 @@ use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(MeshedChannels => A, B, C, D, E => fork_mpst);
+bundle_impl!(MeshedChannels, A, B, C, D, E);
 
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;

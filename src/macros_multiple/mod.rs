@@ -10,7 +10,7 @@
 //! [`create_normal_role`]: crate::create_normal_role
 //! [`create_meshedchannels`]: crate::create_meshedchannels
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_multiple"` feature.*
 
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -60,7 +60,7 @@ pub mod send;
 /// [`close_mpst`]: crate::close_mpst
 /// [`fork_mpst_multi`]: crate::fork_mpst_multi
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -69,11 +69,11 @@ macro_rules! bundle_struct_fork_close_multi {
         $func_name_close:ident,
         $func_name_fork:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
-        mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
-        mpstthree::close_mpst!($func_name_close, $meshedchannels_name, $nsessions);
-        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $nsessions);
+        mpstthree::create_meshedchannels!($meshedchannels_name, $n_sessions);
+        mpstthree::close_mpst!($func_name_close, $meshedchannels_name, $n_sessions);
+        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -103,7 +103,7 @@ macro_rules! bundle_struct_fork_close_multi {
 /// [`close_mpst_cancel`]: crate::close_mpst_cancel
 /// [`fork_mpst_multi`]: crate::fork_mpst_multi
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -112,10 +112,10 @@ macro_rules! bundle_struct_fork_close_multi_cancel {
         $func_name_close:ident,
         $func_name_fork:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
-        mpstthree::create_meshedchannels!($meshedchannels_name, $nsessions);
-        mpstthree::close_mpst_cancel!($func_name_close, $meshedchannels_name, $nsessions);
-        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $nsessions);
+        mpstthree::create_meshedchannels!($meshedchannels_name, $n_sessions);
+        mpstthree::close_mpst_cancel!($func_name_close, $meshedchannels_name, $n_sessions);
+        mpstthree::fork_mpst_multi!($func_name_fork, $meshedchannels_name, $n_sessions);
     };
 }

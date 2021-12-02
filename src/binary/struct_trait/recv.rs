@@ -53,8 +53,8 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
-        let (there, here) = Self::Dual::new();
-        (here, there)
+        let (sender, receiver) = Self::Dual::new();
+        (receiver, sender)
     }
 
     #[doc(hidden)]

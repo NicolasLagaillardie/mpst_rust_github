@@ -11,10 +11,14 @@ cargo expand --example o_auth > expand/o_auth.txt
 cargo expand --example o_auth_2 > expand/o_auth_2.txt
 cargo expand --example fib > expand/fib.txt
 cargo expand --example simple_voting > expand/simple_voting.txt
-cargo expand --example three_buyer > expand/three_buyer.txt
+cargo expand --example three_buyers > expand/three_buyers.txt
 cargo expand --example travel_three > expand/travel_three.txt
-cargo expand --example actyx_os_logging > expand/actyx_os_logging.txt
-cargo expand --example actyx_os_api > expand/actyx_os_api.txt
+cargo expand --example logging > expand/logging.txt
+cargo expand --example circuit_breaker > expand/circuit_breaker.txt
+cargo expand --example logging_baking > expand/logging_baking.txt
+cargo expand --example circuit_breaker_baking > expand/circuit_breaker_baking.txt
+cargo expand --example logging_interleaved > expand/logging_interleaved.txt
+cargo expand --example circuit_breaker_logging_interleaved > expand/circuit_breaker_logging_interleaved.txt
 cargo expand --example smtp > expand/smtp.txt
 cargo expand --example distributed_calc > expand/distributed_calc.txt
 cargo expand --example video_stream > expand/video_stream.txt

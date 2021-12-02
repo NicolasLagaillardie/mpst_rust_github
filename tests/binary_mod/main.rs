@@ -30,7 +30,7 @@ pub fn head_str() {
 }
 
 pub fn tail_str() {
-    assert_eq!(End::tail_str(), "".to_string());
+    assert!(End::tail_str().is_empty());
     assert_eq!(Send::<i32, End>::tail_str(), "End<>".to_string());
     assert_eq!(Recv::<i32, End>::tail_str(), "End<>".to_string());
 }
@@ -121,20 +121,20 @@ pub fn ping_works() {
     .is_ok());
 }
 
-/// Test writing a program which duplicates a session.
-///
-/// ```compile_fail
-/// assert!(|| -> Result<(), Box<dyn Error>> {
-///     let r1 = fork(move |s1: Send<(), End>| {
-///         let s2 = send((), s1);
-///         close(s2)?;
-///         let s3 = send((), s1);
-///         close(s3)
-///     });
-///     let ((), r2) = recv(r1)?;
-///     close(r2)
-/// }()
-/// .is_ok());
+// Test writing a program which duplicates a session.
+//
+// ```compile_fail
+// assert!(|| -> Result<(), Box<dyn Error>> {
+//     let r1 = fork(move |s1: Se
+//         let s2 = se
+//         close(s2)?;
+//         let s3 =
+//
+//     });
+//     let ((),
+//
+// }()
+// .is_ok());
 /// ```
 
 // Test a simple calculator server, implemented using binary
@@ -314,7 +314,7 @@ pub fn closure_works() {
 
     assert!(|| -> Result<i32, Box<dyn Error>> {
         // Create a closure which uses the session.
-        let f = move |x: i32| -> Result<i32, Box<dyn Error>> {
+        let _f = move |x: i32| -> Result<i32, Box<dyn Error>> {
             let s = choose!(CalcOp::Neg, s);
             let s = send(x, s);
             let (y, s) = recv(s)?;
@@ -323,8 +323,8 @@ pub fn closure_works() {
         };
 
         // Let the closure go out of scope.
-        Err(Box::new(mpsc::RecvError))?;
-        f(5)
+        Err(Box::new(mpsc::RecvError))
+        // f(5)
     }()
     .is_err());
 
@@ -501,13 +501,3 @@ fn deadlock_new() {
     }()
     .unwrap();
 }
-
-// Bug with the constraint checker.
-#[allow(dead_code)]
-enum CalcOp2<N: marker::Send> {
-    More(Send<i64, Recv<i64, NiceCalcServer2<N>>>),
-    More2(Recv<i64, Send<i64, NiceCalcServer2<N>>>),
-    Stop(Send<i64, End>),
-}
-#[allow(dead_code)]
-type NiceCalcServer2<N> = Recv<CalcOp2<N>, End>;

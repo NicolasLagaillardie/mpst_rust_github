@@ -97,3 +97,19 @@ impl<R1: Role, R2: Role> Role for RoleAtoAll<R1, R2> {
         )
     }
 }
+
+impl<R1: Role, R2: Role> RoleAtoAll<R1, R2> {
+    /// Return the right continuation for RoleAtoAll
+    pub fn continuation_left(&self) -> R1 {
+        let (here, there) = R1::new();
+        self.sender1.send(there).unwrap_or(());
+        here
+    }
+
+    /// Return the left continuation for RoleAtoAll
+    pub fn continuation_right(&self) -> R2 {
+        let (here, there) = R2::new();
+        self.sender2.send(there).unwrap_or(());
+        here
+    }
+}

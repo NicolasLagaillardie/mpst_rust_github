@@ -4,7 +4,7 @@
 //! checking whether a protocol is well written or not,
 //! according to a bottom-up method.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"checking"` feature.*
 
 use petgraph::Graph;
@@ -22,11 +22,21 @@ mod aux_checker;
 
 use aux_checker::*;
 
+type HashGraph = HashMap<String, Graph<String, String>>;
+
 /// The macro that allows to create digraphs from each endpoint,
 /// along with `enum` if needed. You can also provide the name of
 /// a file for running the [`KMC`] tool and checking the
-/// properties of the provided protocol. The [`KMC`] repository
-/// must be installed next to the current one.
+/// properties of the provided protocol: it will
+/// return the minimal `k` according to this tool if it exists,
+/// and ```None``` if `k` is bigger than 50 or does not exist.
+///
+/// The [`KMC`] tool
+/// must be installed with `cabal install` and the resulting
+/// binary must be in the current repository folder.
+///
+/// /!\ The provided types and enum cannot be checked if they contain
+/// a parameter, such as <N>, as seen in some examples.
 ///
 /// # Arguments
 ///
@@ -34,6 +44,7 @@ use aux_checker::*;
 /// * Each starting endpoint, separated by a comma
 /// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all
 ///   the different branches sent.
+///
 /// Currently, we do not support parameters for branches with `enum`
 ///
 /// # Example
@@ -64,7 +75,7 @@ use aux_checker::*;
 ///
 /// [`KMC`]: https://github.com/julien-lange/kmc
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"checking"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
@@ -235,16 +246,11 @@ macro_rules! checker_concat {
 }
 
 // Run the KMC command line
-pub(crate) fn kmc_cli(name_file: &str) -> Result<(), Box<dyn Error>> {
+pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String), Box<dyn Error>> {
     // Delete previous files
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}_1_kmc.txt",
-        name_file
-    ))
-    .unwrap_or(());
-    remove_file(format!(
-        "../mpst_rust_github/outputs/{}_2_kmc.txt",
-        name_file
+        "../mpst_rust_github/outputs/{}_{}_kmc.txt",
+        name_file, kmc_number,
     ))
     .unwrap_or(());
     remove_file(format!(
@@ -258,41 +264,29 @@ pub(crate) fn kmc_cli(name_file: &str) -> Result<(), Box<dyn Error>> {
     ))
     .unwrap_or(());
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}-ts-1.fsm",
-        name_file
-    ))
-    .unwrap_or(());
-    remove_file(format!(
-        "../mpst_rust_github/outputs/{}-ts-2.fsm",
-        name_file
+        "../mpst_rust_github/outputs/{}-ts-{}.fsm",
+        name_file, kmc_number,
     ))
     .unwrap_or(());
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc_1 = Command::new("./../kmc/KMC")
+    let kmc = Command::new("./KMC")
         .arg(format!("cfsm/{}.txt", name_file))
-        .arg("1")
+        .arg(format!("{:?}", kmc_number))
         .arg("--fsm")
         .output()?;
 
-    // Write down the stdout of the previous command into
-    // a corresponding file in the "outputs" folder
-    let mut kmc_file = File::create(format!("outputs/{}_1_kmc.txt", name_file))?;
-    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_1.stdout)?)?;
+    let stdout = String::from(str::from_utf8(&kmc.stdout)?);
 
-    // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc_2 = Command::new("./../kmc/KMC")
-        .arg(format!("cfsm/{}.txt", name_file))
-        .arg("2")
-        .arg("--fsm")
-        .output()?;
-
-    // Write down the stdout of the previous command into
-    // a corresponding file in the "outputs" folder
-    let mut kmc_file = File::create(format!("outputs/{}_2_kmc.txt", name_file))?;
-    writeln!(&mut kmc_file, "{}", str::from_utf8(&kmc_2.stdout)?)?;
-
-    Ok(())
+    if stdout.contains("False") {
+        Ok((false, stdout))
+    } else {
+        // Write down the stdout of the previous command into
+        // a corresponding file in the "outputs" folder
+        let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number))?;
+        writeln!(&mut kmc_file, "{}", stdout)?;
+        Ok((true, stdout))
+    }
 }
 
 // The starting function for extracting the graphs
@@ -303,7 +297,7 @@ pub fn checker(
     branches_receivers: HashMap<String, HashMap<String, String>>,
     branching_sessions: HashMap<String, String>,
     group_branches: HashMap<String, i32>,
-) -> Result<HashMap<String, Graph<String, String>>, Box<dyn Error>> {
+) -> Result<(HashGraph, Option<i32>), Box<dyn Error>> {
     // Clean the input sessions and extract the roles
     let (clean_sessions, roles) = clean_sessions(sessions.to_vec())?;
 
@@ -338,7 +332,7 @@ pub fn checker(
 
     // The final result Hashmap
     let state_result = RandomState::new();
-    let mut result: HashMap<String, Graph<String, String>> = HashMap::with_hasher(state_result);
+    let mut result: HashGraph = HashMap::with_hasher(state_result);
 
     if !name_file.is_empty() {
         // If a name file has been provided
@@ -352,7 +346,7 @@ pub fn checker(
         let mut cfsm_sort = vec![vec!["".to_string()]; roles.len()];
 
         // Get all the graphs and add them to the result Hashmap
-        for (role, full_session) in clean_sessions.clone() {
+        for (role, full_session) in clean_sessions {
             // Get the graph and the cfsm for the current role
             let (graph, cfsm) = get_graph_session(
                 &role,
@@ -381,10 +375,26 @@ pub fn checker(
             writeln!(&mut cfsm_file)?;
         }
 
-        kmc_cli(name_file)?;
+        let mut kmc_number = 1;
+        let mut kmc_result = kmc_cli(name_file, kmc_number)?;
+
+        while !kmc_result.0 && kmc_number < 50 {
+            kmc_number += 1;
+            kmc_result = kmc_cli(name_file, kmc_number)?;
+        }
+
+        if kmc_number == 50 {
+            println!(
+                "The protocol does not seem correct. Here is the last output: {:?}",
+                kmc_result.1
+            );
+            Ok((result, None))
+        } else {
+            Ok((result, Some(kmc_number)))
+        }
     } else {
         // Get all the graphs and add them to the result Hashmap
-        for (role, full_session) in clean_sessions.clone() {
+        for (role, full_session) in clean_sessions {
             // Get the graph and the cfsm for the current role
             let (graph, _) = get_graph_session(
                 &role,
@@ -398,7 +408,6 @@ pub fn checker(
             // Insert the graph to the returned result
             result.insert(role.to_string(), graph);
         }
+        Ok((result, None))
     }
-
-    Ok(result)
 }

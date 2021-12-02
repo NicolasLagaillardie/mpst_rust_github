@@ -2,6 +2,8 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
+use mpstthree::checker_concat;
+
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
@@ -16,11 +18,11 @@ use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test our usecase
-/// Simple types
-/// Authenticator = C
-/// Server = A
-/// Client = B
+// Test our usecase
+// Simple types
+// Authenticator = C
+// Server = A
+// Client = B
 
 type CtoBClose = End;
 type CtoAClose = End;
@@ -35,7 +37,7 @@ type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = <CtoBClose as Session>::Dual;
 type BtoCVideo<N> = <CtoBVideo<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackCEnd = RoleEnd;
 type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleEnd>>>>;
 type StackCVideoDual = <StackCVideo as Role>::Dual;
@@ -51,8 +53,8 @@ type StackBVideo = RoleC<RoleC<RoleEnd>>;
 type StackBChoice = RoleBtoAll<StackBVideo, StackBEnd>;
 type StackBFull = RoleC<RoleC<StackBChoice>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type ChooseBtoC<N> = ChooseMpst<
     AtoCVideo<N>,
     BtoCVideo<N>,
@@ -74,7 +76,7 @@ type ChooseBtoA<N> = ChooseMpst<
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
 type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
 
-/// For A
+// For A
 type OfferC<N> = OfferMpst<
     CtoAVideo<N>,
     CtoBVideo<N>,
@@ -87,7 +89,7 @@ type OfferC<N> = OfferMpst<
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
 type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For B
+// For B
 type OfferA<N> = OfferMpst<
     AtoBClose,
     AtoCVideo<N>,
@@ -102,7 +104,7 @@ type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "checking_choice",
         EndpointAFull<i32>,
         EndpointCFull<i32>,
@@ -175,4 +177,7 @@ pub fn main() {
             2 -> 8 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }

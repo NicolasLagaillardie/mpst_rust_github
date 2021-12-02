@@ -1,6 +1,6 @@
-// Unfinished, still in process of adding send_tcp and recv_tcp
+#![allow(clippy::type_complexity)]
 
-// #![allow(dead_code, unused_imports)]
+// Unfinished, still in process of adding send_tcp and recv_tcp
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -14,7 +14,7 @@ use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create new roles
 // normal
@@ -730,6 +730,6 @@ fn endpoint_s_10(s: EndpointS10) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_c, thread_s) = fork_mpst(endpoint_c_0, endpoint_s_0);
 
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
 }

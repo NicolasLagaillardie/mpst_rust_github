@@ -2,8 +2,8 @@
 //! receiving a payload
 //! for a TCP connection.
 //!
-//! *This module is available only if mp-anon is built with
-//! the `"transport"` feature.*
+//! *This module is available only if MultiCrusty is built with
+//! the `"transport"` feature or the `"transport_tcp"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use std::boxed::Box;
@@ -20,9 +20,12 @@ type TupleRecv<T, S> = (T, S, TcpData, usize, TcpStream);
 /// pair of the received value and the continuation of the
 /// session `S` or an error.
 ///
-/// *This function is available only if mp-anon is built with
-/// the `"transport"` feature.*
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+/// *This function is available only if MultiCrusty is built with
+/// the `"transport"` feature or the `"transport_tcp"` feature.*
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_tcp")))
+)]
 pub fn recv_tcp<T, S>(
     s: Recv<(T, TcpData), S>,
     mut stream: TcpStream,

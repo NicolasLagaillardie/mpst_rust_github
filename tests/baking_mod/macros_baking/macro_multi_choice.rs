@@ -9,7 +9,7 @@ use std::error::Error;
 use mpstthree::bundle_impl;
 
 // Create new roles
-bundle_impl!(MeshedChannels => A, B, D => fork_mpst);
+bundle_impl!(MeshedChannels, A, B, D);
 
 // Those types will be code generated
 type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
@@ -52,7 +52,7 @@ type CtoBClose = <BtoCClose as Session>::Dual;
 type CtoAClose = <AtoCClose as Session>::Dual;
 type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackAEnd = RoleEnd;
 type StackAVideo = RoleD<RoleB<RoleB<RoleD<RoleEnd>>>>;
 type StackAVideoDual = <StackAVideo as Role>::Dual;
@@ -68,8 +68,8 @@ type StackCVideo = RoleA<RoleA<RoleEnd>>;
 type StackCChoice = RoleDtoAll<StackCVideo, StackCEnd>;
 type StackCFull = RoleA<RoleA<StackCChoice>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type ChooseCtoA<N> = ChooseMpstThree<
     BtoAVideo<N>,
     CtoAVideo<N>,
@@ -91,7 +91,7 @@ type ChooseCtoB<N> = ChooseMpstThree<
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
 
-/// For A
+// For A
 type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
 type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
@@ -100,7 +100,7 @@ type OfferA<N> =
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, NameA>;
 
-/// For B
+// For B
 type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
 type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
@@ -108,7 +108,7 @@ type OfferB<N> =
     OfferMpstThree<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, StackBVideo, StackBEnd, NameB>;
 type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     s.offer(
         |s: EndpointBVideo<i32>| {

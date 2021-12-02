@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 mod infinite_type;
 mod scribble;
 
@@ -18,18 +20,8 @@ fn infinite_type_fail() {
     let t = trybuild::TestCases::new();
 
     // Infinite types
-    t.compile_fail("tests/infinite_type/fail.rs");
+    t.compile_fail("tests/infinite_type/fail_0.rs");
+    t.compile_fail("tests/infinite_type/fail_1.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");
     t.compile_fail("tests/infinite_type/fail_3.rs");
-}
-
-#[test]
-fn compile_fail() {
-    let t = trybuild::TestCases::new();
-
-    // Macro multi recursion for shorting
-    t.compile_fail("tests/extra_mod/macros/long_simple_three_mpst_short_fail.rs");
-
-    // Macro multi recursion for shorting
-    t.compile_fail("tests/extra_mod/baking/long_simple_three_mpst_short_fail.rs");
 }

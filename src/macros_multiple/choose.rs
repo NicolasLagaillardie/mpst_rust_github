@@ -2,7 +2,7 @@
 //! for creating choose functions for any number
 //! of participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_multiple"` feature.*
 
 /// Create the *ChooseMpst* type to be used with more than 3 participants.
@@ -22,19 +22,19 @@
 /// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
-    ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $nsessions);
+    ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
+        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
 
 /// Create the *ChooseMpst* function to send a *Choose* left branch to be used with more than 3
 /// participants.
-/// Only works when active role is the last one (TODO: adapt to any index role).
+/// Only works when active role is the last one.
 ///
 /// # Arguments
 ///
@@ -70,7 +70,7 @@ macro_rules! create_choose_type_multi {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -81,7 +81,7 @@ macro_rules! create_choose_mpst_session_multi_left {
         $role_dual:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_left!(
             $func_name,
@@ -89,14 +89,14 @@ macro_rules! create_choose_mpst_session_multi_left {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
     };
 }
 
 /// Create the *ChooseMpst* function to send a *Choose* right branch to be used with more than 3
 /// participants.
-/// Only works when active role is the last one (TODO: adapt to any index role).
+/// Only works when active role is the last one.
 ///
 /// # Arguments
 ///
@@ -132,7 +132,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -143,7 +143,7 @@ macro_rules! create_choose_mpst_session_multi_right {
         $role_dual:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_right!(
             $func_name,
@@ -151,14 +151,14 @@ macro_rules! create_choose_mpst_session_multi_right {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
     };
 }
 
 /// Create the two *ChooseMpst* functions to send a *Choose* on each branch to be used with more
 /// than 3 participants.
-/// Only works when active role is the last one (TODO: adapt to any index role).
+/// Only works when active role is the last one.
 ///
 /// # Arguments
 ///
@@ -196,7 +196,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -208,7 +208,7 @@ macro_rules! create_choose_mpst_session_multi_both {
         $role_dual:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal
+        $n_sessions:literal
     ) => {
         mpstthree::create_choose_mpst_session_multi_left!(
             $func_name_left,
@@ -216,7 +216,7 @@ macro_rules! create_choose_mpst_session_multi_both {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
 
         mpstthree::create_choose_mpst_session_multi_right!(
@@ -225,7 +225,7 @@ macro_rules! create_choose_mpst_session_multi_both {
             $role_dual,
             $name,
             $meshedchannels_name,
-            $nsessions
+            $n_sessions
         );
     };
 }
@@ -279,7 +279,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// }
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -294,8 +294,8 @@ macro_rules! choose_mpst_multi_to_all {
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
             $session ,
-            ( $( $label , )* ) ,
-            ( $( $receiver , )* ) ,
+            ( $( $label , )+ ) ,
+            ( $( $receiver , )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -353,7 +353,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///
 /// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -367,7 +367,7 @@ macro_rules! choose_mpst_create_multi_to_all {
     ) => {
         mpst_seq::choose_mpst_create_multi_to_all!(
             $name ,
-            ( $( $receiver , )* ) ,
+            ( $( $receiver , )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -468,7 +468,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// }
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -484,79 +484,9 @@ macro_rules! choose_mpst_multi_cancel_to_all {
     ) => {
         mpst_seq::choose_mpst_multi_cancel_to_all!(
             $session ,
-            ( $( $label , )* ) ,
-            ( $( $receiver , )* ) ,
+            ( $( $label , )+ ) ,
+            ( $( $receiver , )+ ) ,
             $broadcaster ,
-            $sender ,
-            $meshedchannels_name ,
-            $exclusion);
-    }
-}
-
-/// Choose among different sessions that are provided.
-///
-/// # Arguments
-///
-///  * The session to be used
-///  * The different `enum` variants which represent the different branches to be sent to each
-///    passive role
-///  * The different passive roles
-///  * The name of the sender
-///  * The name of the *MeshedChannels* type that will be used
-///  * The number of participants (all together)
-///
-/// # Example
-///
-/// ```ignore
-/// match xs.pop() {
-///    Option::Some(_) => {
-///        let s = choose_mpst_multi_http_to_all!(
-///            s,
-///            CBranchesAtoC::Video,
-///            CBranchesBtoC::Video, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
-///            MeshedChannels,
-///            3
-///        );
-///        let s = send_http_d_to_a(1, s);
-///        let (_, s) = recv_http_d_to_a(s)?;
-///        client_recurs(s, xs, index + 1)
-///    }
-///    Option::None => {
-///        let s = choose_mpst_multi_http_to_all!(
-///            s,
-///            CBranchesAtoC::End,
-///            CBranchesBtoC::End, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
-///            MeshedChannels,
-///            3
-///        );
-///        close_mpst_multi(s)
-///    }
-/// }
-/// ```
-///
-/// *This macro is available only if mp-anon is built with
-/// the `"macros_multiple"` feature.*
-#[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
-macro_rules! choose_mpst_multi_http_to_all {
-    (
-        $session: expr,
-        $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
-        $sender: ident,
-        $meshedchannels_name: ident,
-        $exclusion: literal
-    ) => {
-        mpst_seq::choose_mpst_multi_http_to_all!(
-            $session ,
-            ( $( $label , )* ) ,
-            ( $( $receiver , )* ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -599,7 +529,7 @@ macro_rules! choose_mpst_multi_http_to_all {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -615,11 +545,11 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $exclusion: literal
     ) => {
         mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
-            ( $( $fn_name , )* ) ,
-            ( $( $branch , )* ) ,
-            ( $( $label , )* ) ,
-            ( $( $receiver , )* ) ,
-            ( $( $new_type , )* ) ,
+            ( $( $fn_name , )+ ) ,
+            ( $( $branch , )+ ) ,
+            ( $( $label , )+ ) ,
+            ( $( $receiver , )+ ) ,
+            ( $( $new_type , )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -663,7 +593,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -680,11 +610,11 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
         $exclusion: literal
     ) => {
         mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
-            ( $( $fn_name , )* ) ,
-            ( $( $branch , )* ) ,
-            ( $( $label , )* ) ,
-            ( $( $receiver , )* ) ,
-            ( $( $new_type , )* ) ,
+            ( $( $fn_name , )+ ) ,
+            ( $( $branch , )+ ) ,
+            ( $( $label , )+ ) ,
+            ( $( $receiver , )+ ) ,
+            ( $( $new_type , )+ ) ,
             $sender ,
             $broadcaster ,
             $meshedchannels_name ,

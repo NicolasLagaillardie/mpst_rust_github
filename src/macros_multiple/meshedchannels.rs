@@ -2,7 +2,7 @@
 //! for creating MeshedChannels for any number
 //! of participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_multiple"` feature.*
 
 /// Creates a MeshedChannels for more than 3 participants.
@@ -20,12 +20,12 @@
 /// create_meshedchannels!(MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_meshedchannels {
-    ($meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::create_meshedchannels!($meshedchannels_name, $nsessions);
+    ($meshedchannels_name:ident, $n_sessions:literal) => {
+        mpst_seq::create_meshedchannels!($meshedchannels_name, $n_sessions);
     };
 }

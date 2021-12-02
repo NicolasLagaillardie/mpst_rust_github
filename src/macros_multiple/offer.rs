@@ -2,7 +2,7 @@
 //! for creating offer functions for any number
 //! of participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_multiple"` feature.*
 
 /// Create the *OfferMpst* type to be used with more than 3 participants.
@@ -22,13 +22,13 @@
 /// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_type_multi {
-    ($type_name:ident, $meshedchannels_name:ident, $nsessions:literal) => {
-        mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $nsessions);
+    ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
+        mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -73,7 +73,7 @@ macro_rules! create_offer_type_multi {
 /// );
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
@@ -84,7 +84,7 @@ macro_rules! create_offer_mpst_session_multi {
         $role:ident,
         $name:ident,
         $meshedchannels_name:ident,
-        $nsessions:literal,
+        $n_sessions:literal,
         $exclusion:literal
     ) => {
         mpst_seq::create_offer_mpst_session_multi!(
@@ -93,7 +93,7 @@ macro_rules! create_offer_mpst_session_multi {
             $role,
             $name,
             $meshedchannels_name,
-            $nsessions,
+            $n_sessions,
             $exclusion
         );
     };
@@ -149,30 +149,32 @@ macro_rules! create_offer_mpst_session_multi {
 /// )?;
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! offer_mpst {
-    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {
             let (l, s) = $recv_mpst($session)?;
             mpstthree::binary::cancel::cancel(s);
             match l {
                 $(
                     $pat => $result,
-                )*
+                )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
-    ($session: expr, { $( $pat: pat => $result: expr, )* }) => {
+    ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {
             let (l, s) = $session.recv()?;
             mpstthree::binary::cancel::cancel(s);
             match l {
                 $(
                     $pat => $result,
-                )*
+                )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
@@ -187,12 +189,12 @@ macro_rules! offer_mpst {
 /// * Each path, which are each variant of the enum which contains the new branches
 /// * The block of code to process each new session
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! offer_cancel_mpst {
-    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {
             let ((session1, cont), s) = $recv_mpst($session)?;
             let s = s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Offer(session1)).unwrap();
@@ -200,19 +202,8 @@ macro_rules! offer_cancel_mpst {
             match cont {
                 $(
                     $pat => $result,
-                )*
-            }
-        })()
-    };
-    ($session: expr, { $( $pat: pat => $result: expr, )* }) => {
-        (move || -> Result<_, _> {
-            let ((session1, cont), s) = $session.recv()?;
-            let s = s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Offer(session1)).unwrap();
-            mpstthree::binary::cancel::cancel(s);
-            match cont {
-                $(
-                    $pat => $result,
-                )*
+                )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };
@@ -244,12 +235,12 @@ macro_rules! offer_cancel_mpst {
 /// })?;
 /// ```
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! offer_http_mpst {
-    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )* }) => {
+    ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {
             let https = hyper_tls::HttpsConnector::new();
             let client = hyper::Client::builder().build::<_, hyper::Body>(https);
@@ -259,7 +250,8 @@ macro_rules! offer_http_mpst {
             match l {
                 $(
                     $pat => $result,
-                )*
+                )+
+                _ => panic!("Unexpected payload") ,
             }
         })()
     };

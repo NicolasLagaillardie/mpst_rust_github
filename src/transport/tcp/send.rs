@@ -2,8 +2,8 @@
 //! sending a payload
 //! for a TCP connection.
 //!
-//! *This module is available only if mp-anon is built with
-//! the `"transport"` feature.*
+//! *This module is available only if MultiCrusty is built with
+//! the `"transport"` feature or the `"transport_tcp"` feature.*
 
 use crate::binary::struct_trait::{send::Send, session::Session};
 use std::boxed::Box;
@@ -16,13 +16,17 @@ use std::panic;
 type TcpData = [u8; 128];
 
 /// Send a value of type `T` over tcp. Returns the
-/// continuation of the session `S`. May fail.
+/// continuation of the session `S` and the continuation
+/// of the TcpStream. May fail.
 ///
-/// *This function is available only if mp-anon is built with
-/// the `"transport"` feature.*
-#[cfg_attr(doc_cfg, doc(cfg(feature = "transport")))]
+/// *This function is available only if MultiCrusty is built with
+/// the `"transport"` feature or the `"transport_tcp"` feature.*
+#[cfg_attr(
+    doc_cfg,
+    doc(cfg(any(feature = "transport", feature = "transport_tcp")))
+)]
 pub fn send_tcp<T, S>(
-    x: T, // Need to force x and data to be of the same type but for choice/offer
+    x: T, // Need to force x and data to be of the same type every time but for choice/offer
     data: &TcpData,
     s: Send<(T, TcpData), S>,
     mut stream: TcpStream,
@@ -34,10 +38,11 @@ where
 {
     let (here, there) = S::new();
     match s.channel.send(((x, *data), there)) {
-        Ok(_) => {
+        Ok(()) => {
             match tcp {
                 true => {
-                    // stream.shutdown(Shutdown::Read)?; // Force stream to be write only. Needed?
+                    // stream.shutdown(Shutdown::Read)?; // TODO: Force stream to be write only.
+                    // Needed?
                     stream.write_all(data)?;
                     Ok((here, stream))
                 }

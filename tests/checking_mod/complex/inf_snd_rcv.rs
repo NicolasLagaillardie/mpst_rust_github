@@ -4,11 +4,11 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
 
 use petgraph::dot::Dot;
 
-use std::fs::read_to_string;
+// use std::fs::read_to_string;
 
 // Create new MeshedChannels
 create_meshedchannels!(MeshedChannels, 2);
@@ -22,8 +22,8 @@ create_multiple_normal_role!(
 // Payload names
 type A = i32;
 type B = i64;
-type C = u32;
-type D = u64;
+type C = i32;
+type D = i64;
 
 // Names
 type NameA = RoleA<RoleEnd>;
@@ -70,7 +70,7 @@ type EndpointBFull = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "inf_snd_rcv",
         EndpointAFull,
         EndpointBFull
@@ -119,9 +119,9 @@ pub fn main() {
             0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
             0 -> 2 [ label = \"\\\"RoleA!RoleB: i64\\\"\" ]\n    \
             2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
-            2 -> 4 [ label = \"\\\"RoleA?RoleB: u64\\\"\" ]\n    \
+            2 -> 4 [ label = \"\\\"RoleA?RoleB: i64\\\"\" ]\n    \
             4 -> 5 [ label = \"\\\"0\\\"\" ]\n    \
-            2 -> 6 [ label = \"\\\"RoleA?RoleB: u32\\\"\" ]\n    \
+            2 -> 6 [ label = \"\\\"RoleA?RoleB: i32\\\"\" ]\n    \
             6 -> 2 [ label = \"\\\"µ\\\"\" ]\n    \
             0 -> 7 [ label = \"\\\"RoleA!RoleB: i32\\\"\" ]\n    \
             7 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
@@ -143,33 +143,17 @@ pub fn main() {
             6 [ label = \"\\\"0.1.1\\\"\" ]\n    \
             7 [ label = \"\\\"0.1\\\"\" ]\n    \
             0 -> 1 [ label = \"\\\"0\\\"\" ]\n    \
-            0 -> 2 [ label = \"\\\"RoleB!RoleA: u64\\\"\" ]\n    \
+            0 -> 2 [ label = \"\\\"RoleB!RoleA: i64\\\"\" ]\n    \
             2 -> 3 [ label = \"\\\"0\\\"\" ]\n    \
             2 -> 4 [ label = \"\\\"RoleB?RoleA: i64\\\"\" ]\n    \
             4 -> 5 [ label = \"\\\"0\\\"\" ]\n    \
             2 -> 6 [ label = \"\\\"RoleB?RoleA: i32\\\"\" ]\n    \
             6 -> 2 [ label = \"\\\"µ\\\"\" ]\n    \
-            0 -> 7 [ label = \"\\\"RoleB!RoleA: u32\\\"\" ]\n    \
+            0 -> 7 [ label = \"\\\"RoleB!RoleA: i32\\\"\" ]\n    \
             7 -> 0 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
 
     ////////////// Test KMC output
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\
-        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 1-exhaustive: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 1-safe: \u{1b}[91mFalse\n\
-        \u{1b}[0m\n",
-        read_to_string("outputs/inf_snd_rcv_1_kmc.txt").unwrap()
-    );
-
-    assert_eq!(
-        "CSA: \u{1b}[92mTrue\n\
-        \u{1b}[0mBasic: \u{1b}[92mTrue\n\
-        \u{1b}[0mreduced 2-exhaustive: \u{1b}[91mFalse\n\
-        \u{1b}[0mreduced 2-safe: \u{1b}[91mFalse\n\
-        \u{1b}[0m\n",
-        read_to_string("outputs/inf_snd_rcv_2_kmc.txt").unwrap()
-    );
+    assert_eq!(kmc, None);
 }

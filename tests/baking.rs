@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 mod baking_mod;
 
 #[test]
@@ -91,7 +93,4 @@ fn macro_baking() {
 
     // Macro multi choice with macro of macro directly in the baking_mod generation
     baking_mod::macros_baking::macro_multi_recursion_short::new_run_usecase_recursive();
-
-    // Macro multi recursion for shorting
-    baking_mod::macros_baking::long_simple_three_mpst_short::main();
 }

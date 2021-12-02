@@ -182,3 +182,10 @@ impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
         (&["session1", "session2"], self)
     }
 }
+
+impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
+    /// Cancel the session
+    pub fn cancel(self) {
+        std::mem::drop(self);
+    }
+}

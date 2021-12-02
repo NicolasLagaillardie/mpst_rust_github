@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -10,7 +12,7 @@ use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
 
 use std::error::Error;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
@@ -86,7 +88,7 @@ type RoleACC = RoleA<RoleC<RoleC<RoleEnd>>>;
 type Recurs0StoA = Recv<Branching0fromAtoS, End>;
 
 enum Branching1fromCtoS {
-    Pay(MeshedChannelsThree<End, Recv<(String, i64), SDoubleRecurs1StoC>, RoleCCC, NameS>),
+    Pay(MeshedChannelsThree<End, Recv<(String, i32), SDoubleRecurs1StoC>, RoleCCC, NameS>),
     Quit(MeshedChannelsThree<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type RoleCCC = RoleC<RoleC<RoleC<RoleEnd>>>;
@@ -98,7 +100,7 @@ enum Branching0fromAtoC {
     Fail(MeshedChannelsThree<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
 }
 type RChoose1fromCtoA = Recv<(), Choose1fromCtoA>;
-type RDoubleChoose1fromCtoS = Recv<(i64, i64), Choose1fromCtoS>;
+type RDoubleChoose1fromCtoS = Recv<(i32, i32), Choose1fromCtoS>;
 type RoleASBroad = RoleA<RoleS<RoleBroadcast>>;
 type Recurs0CtoA = Recv<Branching0fromAtoC, End>;
 
@@ -111,7 +113,7 @@ type EndpointA1 = MeshedChannelsThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
 type EndpointC1 =
     MeshedChannelsThree<Choose1fromCtoA, RDoubleChoose1fromCtoS, RoleS<RoleBroadcast>, NameC>;
 type EndpointS1 = MeshedChannelsThree<End, SDoubleRecurs1StoC, RoleC<RoleC<RoleEnd>>, NameS>;
-type SDoubleRecurs1StoC = Send<(i64, i64), Recurs1StoC>;
+type SDoubleRecurs1StoC = Send<(i32, i32), Recurs1StoC>;
 
 // Step 0
 type EndpointA0 = MeshedChannelsThree<
@@ -203,13 +205,13 @@ fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
-    let id: String = rand::thread_rng()
+    let id: String = thread_rng()
         .sample_iter(&Alphanumeric)
         .take(1)
         .map(char::from)
         .collect();
 
-    let pw: String = rand::thread_rng()
+    let pw: String = thread_rng()
         .sample_iter(&Alphanumeric)
         .take(1)
         .map(char::from)
@@ -224,17 +226,15 @@ fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromAtoC::Login(s) => {
             let (_, s) = recv_mpst_c_from_a(s)?;
-            recurs_c(s)
+            recurs_c(s, 100)
         },
     })
 }
 
-fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
+fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
     let ((balance, overdraft), s) = recv_mpst_c_from_s(s)?;
 
-    let choice = thread_rng().gen_range(1..=2);
-
-    match choice {
+    match loops {
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
@@ -251,7 +251,7 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         }
-        _ => {
+        i => {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromCtoA::Pay,
@@ -263,17 +263,15 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
                 2
             );
 
-            let sum = balance + overdraft;
-
             let payee: String = rand::thread_rng()
                 .sample_iter(&Alphanumeric)
                 .take(3)
                 .map(char::from)
                 .collect();
 
-            let s = send_mpst_c_to_s((payee, thread_rng().gen_range(1..=sum)), s);
+            let s = send_mpst_c_to_s((payee, balance + overdraft), s);
 
-            recurs_c(s)
+            recurs_c(s, i - 1)
         }
     }
 }
@@ -281,7 +279,7 @@ fn recurs_c(s: EndpointC1) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_s, thread_c) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
 }

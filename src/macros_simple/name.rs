@@ -1,7 +1,7 @@
 //! This module contains the macros
 //! for creating new participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_simple"` feature.*
 
 /// Create a new [`Role`] and its dual.
@@ -16,12 +16,13 @@
 /// ```
 /// use mpstthree::create_normal_role;
 ///
-/// create_normal_role!(RoleA, RoleADual);
+/// // Create the roles *A* and *ADual*
+/// create_normal_role!(A, ADual);
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -150,6 +151,28 @@ macro_rules! create_normal_role {
                 )
             }
         }
+
+        ////////////////////////////////////////////
+        /// The associated functions for Role
+
+        impl<R: mpstthree::role::Role> $role_name<R> {
+            pub fn continuation(&self) -> R {
+                let (here, there) = R::new();
+                self.sender.send(there).unwrap_or(());
+                here
+            }
+        }
+
+        ////////////////////////////////////////////
+        /// The associated functions for Dual
+
+        impl<R: mpstthree::role::Role> $dual_name<R> {
+            pub fn continuation(&self) -> R {
+                let (here, there) = R::new();
+                self.sender.send(there).unwrap_or(());
+                here
+            }
+        }
     };
 }
 
@@ -165,15 +188,16 @@ macro_rules! create_normal_role {
 /// ```
 /// use mpstthree::create_multiple_normal_role;
 ///
+/// // Create the roles *A*, *ADual*, *B* and *BDual*
 /// create_multiple_normal_role!(
-///    RoleA, RoleADual |
-///    RoleB, RoleBDual |
+///    A, ADual |
+///    B, BDual |
 /// );
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -197,12 +221,13 @@ macro_rules! create_multiple_normal_role {
 /// ```
 /// use mpstthree::create_broadcast_role;
 ///
-/// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
+/// // Create the roles *AlltoC* and *CtoAll*
+/// create_broadcast_role!(AlltoC, CtoAll);
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -363,6 +388,38 @@ macro_rules! create_broadcast_role {
                 )
             }
         }
+
+        ////////////////////////////////////////////
+        /// The associated functions for Role
+
+        impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> $role_name<R1, R2> {
+            pub fn continuation_left(&self) -> R1 {
+                let (here, there) = R1::new();
+                self.sender1.send(there).unwrap_or(());
+                here
+            }
+            pub fn continuation_right(&self) -> R2 {
+                let (here, there) = R2::new();
+                self.sender2.send(there).unwrap_or(());
+                here
+            }
+        }
+
+        ////////////////////////////////////////////
+        /// The associated functions for Dual
+
+        impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> $dual_name<R1, R2> {
+            pub fn continuation_left(&self) -> R1 {
+                let (here, there) = R1::new();
+                self.sender1.send(there).unwrap_or(());
+                here
+            }
+            pub fn continuation_right(&self) -> R2 {
+                let (here, there) = R2::new();
+                self.sender2.send(there).unwrap_or(());
+                here
+            }
+        }
     };
 }
 
@@ -380,17 +437,18 @@ macro_rules! create_broadcast_role {
 /// ```
 /// use mpstthree::create_multiple_broadcast_role;
 ///
+/// // Create the roles *AlltoC*, *CtoAll*, *AlltoD* and *DtoAll*
 /// create_multiple_broadcast_role!(
-///    RoleAlltoC,
-///    RoleCtoAll |
-///    RoleAlltoD,
-///    RoleDtoAll|
+///    AlltoC,
+///    CtoAll |
+///    AlltoD,
+///    DtoAll|
 /// );
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -421,13 +479,14 @@ macro_rules! create_multiple_broadcast_role {
 /// ```
 /// use mpstthree::create_normal_role_short;
 ///
+/// // Create the roles *RoleA* and *RoleADual*
 /// create_normal_role_short!(A);
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 /// [`create_normal_role`]: crate::create_normal_role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -454,13 +513,15 @@ macro_rules! create_normal_role_short {
 /// ```
 /// use mpstthree::create_multiple_normal_role_short;
 ///
+/// // Create the roles *RoleA*, *RoleB*, *RoleC*,
+/// // *RoleADual*, *RoleBDual* and *RoleCDual*
 /// create_multiple_normal_role_short!(A, B, C);
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 /// [`create_multiple_normal_role`]: crate::create_multiple_normal_role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -491,13 +552,14 @@ macro_rules! create_multiple_normal_role_short {
 /// ```
 /// use mpstthree::create_broadcast_role_short;
 ///
+/// // Create the roles *RoleAtoAll* and *RoleAlltoA*
 /// create_broadcast_role_short!(A);
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 /// [`create_broadcast_role`]: crate::create_broadcast_role
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
@@ -527,13 +589,15 @@ macro_rules! create_broadcast_role_short {
 /// ```
 /// use mpstthree::create_multiple_broadcast_role_short;
 ///
+/// // Create the roles *RoleAtoAll*, *RoleBtoAll*, *RoleCtoAll*,
+/// // *RoleAlltoA*, *RoleAlltoB* and *RoleAlltoC*
 /// create_multiple_broadcast_role_short!(A, B, C);
 /// ```
 ///
 /// [`Role`]: crate::role::Role
 /// [`create_multiple_broadcast_role_short`]: crate::create_multiple_broadcast_role_short
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]

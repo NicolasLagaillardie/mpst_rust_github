@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 mod macros_multiple_mod;
 
 #[test]
@@ -53,9 +55,6 @@ fn macro_basics() {
 
     // Macro multi recursion
     macros_multiple_mod::macro_multi_recursion::new_run_usecase_recursive();
-
-    // Macro multi recursion for shorting
-    macros_multiple_mod::long_simple_three_mpst_short::main();
 
     // Macro recursive
     macros_multiple_mod::macro_recursive::run_macro_recursive();

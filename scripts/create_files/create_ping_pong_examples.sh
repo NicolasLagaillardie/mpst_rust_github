@@ -20,34 +20,36 @@ do
     next=$(($i+1))
     cp example/ping_pong/ping_pong_binary_$i.rs example/ping_pong/ping_pong_binary_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' example/ping_pong/ping_pong_binary_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_binary_$next.rs
     sync
     #########################
     next=$(($i+1))
     cp example/ping_pong/ping_pong_mpst_$i.rs example/ping_pong/ping_pong_mpst_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' example/ping_pong/ping_pong_mpst_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_mpst_$next.rs
     sync
     #########################
     next=$(($i+1))
     cp example/ping_pong/ping_pong_cancel_$i.rs example/ping_pong/ping_pong_cancel_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' example/ping_pong/ping_pong_cancel_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_cancel_$next.rs
     sync
     #########################
     next=$(($i+1))
     cp example/ping_pong/ping_pong_crossbeam_$i.rs example/ping_pong/ping_pong_crossbeam_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' example/ping_pong/ping_pong_crossbeam_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_crossbeam_$next.rs
     sync
     #########################
     next=$(($i+1))
     cp example/ping_pong/ping_pong_broadcast_cancel_$i.rs example/ping_pong/ping_pong_broadcast_cancel_$next.rs
     sync
-    sed -ier 's,static SIZE: i64 = [0-9]\+;,static SIZE: i64 = '"$next"';,g' example/ping_pong/ping_pong_broadcast_cancel_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_broadcast_cancel_$next.rs
     sync
 done
 
 find example/ping_pong/ -name *.rser -delete
 
-cargo fmt
+cargo fmt --all
+
+echo "done"

@@ -1,4 +1,4 @@
-global protocol TwoBuyer(role A, role C, role S)
+global protocol Calc(role A, role C, role S)
 {
     element_1(int) from C to S
     element_2(int) from C to S

@@ -7,10 +7,10 @@ use std::marker;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::{bundle_impl, choose_mpst_multi_to_all, offer_mpst};
+use mpstthree::{bundle_impl, choose_mpst_multi_to_all};
 
 // Create new roles
-bundle_impl!(MeshedChannels => A, B, C => fork_mpst);
+bundle_impl!(MeshedChannels, A, B, C);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -36,7 +36,7 @@ type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Stacks
+// Stacks
 type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
 type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
 
@@ -45,8 +45,8 @@ type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
 type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type EndpointCVideo<N> = MeshedChannels<
     <AtoCVideo<N> as Session>::Dual,
     <RecursBtoC<N> as Session>::Dual,
@@ -57,14 +57,14 @@ type EndpointCRecurs<N> =
     MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branches0BtoC::End(s) => {

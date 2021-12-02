@@ -5,6 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
+use mpstthree::checker_concat;
+
 use std::boxed::Box;
 use std::error::Error;
 
@@ -40,11 +42,11 @@ use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test our usecase
-/// Simple types
-/// Client = C
-/// Authenticator = A
-/// Server = B
+// Test our usecase
+// Simple types
+// Client = C
+// Authenticator = A
+// Server = B
 
 type AtoCClose = End;
 type AtoBClose = End;
@@ -59,7 +61,7 @@ type CtoBClose = <BtoCClose as Session>::Dual;
 type CtoAClose = <AtoCClose as Session>::Dual;
 type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackAEnd = RoleEnd;
 type StackAEndDual = <StackAEnd as Role>::Dual;
 type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleEnd>>>>;
@@ -77,8 +79,8 @@ type StackCVideo = RoleA<RoleA<RoleEnd>>;
 type StackCChoice = RoleCtoAll<StackCVideo, StackCEnd>;
 type StackCFull = RoleA<RoleA<StackCChoice>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type ChooseCtoA<N> = ChooseMpst<
     BtoAVideo<N>,
     CtoAVideo<N>,
@@ -100,9 +102,8 @@ type ChooseCtoB<N> = ChooseMpst<
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
-type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
 type OfferA<N> = OfferMpst<
     AtoBVideo<N>,
@@ -116,9 +117,8 @@ type OfferA<N> = OfferMpst<
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, RoleB<RoleEnd>>;
-type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
 
 type OfferB<N> = OfferMpst<
     BtoAVideo<N>,
@@ -131,7 +131,7 @@ type OfferB<N> = OfferMpst<
 >;
 type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_to_b_from_c(
         s,
@@ -141,7 +141,7 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)
         },
-        |s: EndpointBEnd| close_mpst(s),
+        close_mpst,
     )
 }
 
@@ -162,7 +162,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst(s)
         },
-        |s: EndpointAEnd| close_mpst(s),
+        close_mpst,
     )
 }
 
@@ -260,9 +260,8 @@ pub fn run_c_usecase_right() {
 }
 
 pub fn run_c_usecase_checker() {
-    let graphs =
-        mpstthree::checker_concat!(EndpointBFull<i32>, EndpointAFull<i32>, EndpointCFull<i32>)
-            .unwrap();
+    let (graphs, kmc) =
+        checker_concat!(EndpointBFull<i32>, EndpointAFull<i32>, EndpointCFull<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
@@ -329,4 +328,7 @@ pub fn run_c_usecase_checker() {
             2 -> 6 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

@@ -5,9 +5,10 @@
 ![Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/windows.yml/badge.svg)
 ![Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/mac.yml/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.53+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.56+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
+[![dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
 <!-- [![License: "MIT OR Apache-2.0"](https://img.shields.io/crates/l/mpstthree.svg)](#license) -->
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
@@ -61,7 +62,7 @@ use mpstthree::functionmpst::send::send_mpst_c_to_a;
 use mpstthree::functionmpst::close::close_mpst;
 
 // Used for connecting all the roles, represented as MeshedChannels, together
-use mpstthree::functionmpst::fork_mpst;
+use mpstthree::functionmpst::fork::fork_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
@@ -114,7 +115,7 @@ we need to detail the behaviour of the participants with functions that input th
 
 ```rust
 // Function to process Endpoint of A
-fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_a_to_b(1, s);
     let (x, s) = recv_mpst_a_from_c(s)?;
 
@@ -122,7 +123,7 @@ fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 // Function to process Endpoint of B
-fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
     let (x, s) = recv_mpst_b_from_a(s)?;
     let s = send_mpst_b_to_c(2, s);
 
@@ -130,7 +131,7 @@ fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 // Function to process Endpoint of C
-fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_c_to_a(3, s);
     let (x, s) = recv_mpst_c_from_b(s)?;
 
@@ -144,7 +145,7 @@ Do not forget to **unwrap()** the returned threads.
 
 ```rust
 // Fork all endpoints
-fn simple_triple_endpoints() {
+fn main() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         endpoint_a,
         endpoint_b,
@@ -174,33 +175,21 @@ For building the library, run this code.
 cargo build
 ```
 
-### Running
-
-For running the library, run this code.
-
-```sh
-cargo run
-```
-
 ### Run test
 
 For running the tests, run this code.
 
 ```sh
-cargo test
+cargo test --all-features
 ```
 
-Tests are divided into 8 folders:
+### Running
 
-* [unit](tests/unit/) contains unit tests for the library.
-* [basics](tests/basics/) contains the protocol shown in [Examples](#Example), alongside examples with the types and functions directly provided by the library.
-* [basics_macros](tests/basics_macros/) contains protocols with three or more participants using macros.
-* [baking](tests/baking/) contains protocols written with methods instead of functions.
-* [cancel](tests/cancel/) contains protocols written with cancellation.
-* [tcp](tests/tcp/) contains protocols written to work with **TCP** transport.
-* [http](tests/tcp/) contains protocols written to work with **HTTP** transport.
-* [scribble](tests/scribble/) contains protocols generated with Scribble.
-* [infinite_type](tests/infinite_type/) contains protocols that fail because of overflow when evaluated.
+For running an example XXX of the library, run this code.
+
+```sh
+cargo run --example XXX --all-features
+```
 
 ## Going further
 

@@ -5,6 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
+use mpstthree::checker_concat;
+
 use std::boxed::Box;
 use std::error::Error;
 
@@ -22,11 +24,11 @@ use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test our usecase
-/// Simple types
-/// Authenticator = C
-/// Server = A
-/// Client = B
+// Test our usecase
+// Simple types
+// Authenticator = C
+// Server = A
+// Client = B
 
 type CtoBClose = End;
 type CtoAClose = End;
@@ -41,7 +43,7 @@ type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = <CtoBClose as Session>::Dual;
 type BtoCVideo<N> = <CtoBVideo<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackCEnd = RoleEnd;
 type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleEnd>>>>;
 type StackCVideoDual = <StackCVideo as Role>::Dual;
@@ -57,8 +59,8 @@ type StackBVideo = RoleC<RoleC<RoleEnd>>;
 type StackBChoice = RoleBtoAll<StackBVideo, StackBEnd>;
 type StackBFull = RoleC<RoleC<StackBChoice>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type ChooseBtoC<N> = ChooseMpst<
     AtoCVideo<N>,
     BtoCVideo<N>,
@@ -80,7 +82,7 @@ type ChooseBtoA<N> = ChooseMpst<
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
 type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointCVideo<N> = MeshedChannels<CtoAVideo<N>, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
 type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
 
@@ -96,7 +98,7 @@ type OfferC<N> = OfferMpst<
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
 type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointAVideo<N> = MeshedChannels<AtoBClose, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
 type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
 
@@ -111,7 +113,7 @@ type OfferA<N> = OfferMpst<
 >;
 type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
     s.offer(
         |s: EndpointAVideo<i32>| {
@@ -195,9 +197,8 @@ pub fn run_b_usecase_right() {
 }
 
 pub fn run_b_usecase_checker() {
-    let graphs =
-        mpstthree::checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>)
-            .unwrap();
+    let (graphs, kmc) =
+        checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];
@@ -264,4 +265,7 @@ pub fn run_b_usecase_checker() {
             2 -> 8 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

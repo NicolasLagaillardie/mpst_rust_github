@@ -19,13 +19,15 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
 
+use mpstthree::checker_concat;
+
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
 
 use petgraph::dot::Dot;
 
-/// Test a simple storage server, implemented using binary
-/// choice. Simple types
+// Test a simple storage server, implemented using binary
+// choice. Simple types
 type CtoANeg<N> = Recv<N, End>;
 type CtoAAdd<N> = Recv<N, End>;
 
@@ -38,7 +40,7 @@ type AtoCAdd<N> = <CtoAAdd<N> as Session>::Dual;
 type BtoCNeg<N> = <CtoBNeg<N> as Session>::Dual;
 type BtoCAdd<N> = <CtoBAdd<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackOfferC = RoleA<RoleB<RoleEnd>>;
 type StackOfferCDual = <StackOfferC as Role>::Dual;
 type StackFullC = RoleAlltoA<RoleEnd, RoleEnd>;
@@ -50,8 +52,8 @@ type StackOfferB = RoleC<RoleEnd>;
 type StackOfferBDual = <StackOfferB as Role>::Dual;
 type StackFullB = RoleAlltoA<RoleEnd, RoleEnd>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type EndpointCAdd<N> = MeshedChannels<CtoAAdd<N>, CtoBAdd<N>, StackOfferC, RoleC<RoleEnd>>;
 type EndpointCNeg<N> = MeshedChannels<CtoANeg<N>, CtoBNeg<N>, StackOfferC, RoleC<RoleEnd>>;
 
@@ -66,7 +68,7 @@ type OfferC<N> = OfferMpst<
 >;
 type EndpointChoiceC<N> = MeshedChannels<OfferC<N>, End, StackFullC, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type ChooseAtoC<N> = ChooseMpst<
     AtoCAdd<N>,
     BtoCAdd<N>,
@@ -87,7 +89,7 @@ type ChooseCtoA<N> = ChooseMpst<
 >;
 type EndpointChoiceA<N> = MeshedChannels<ChooseCtoA<N>, ChooseAtoC<N>, StackFullA, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBAdd<N> = MeshedChannels<End, BtoCAdd<N>, StackOfferB, RoleB<RoleEnd>>;
 type EndpointBNeg<N> = MeshedChannels<End, BtoCNeg<N>, StackOfferB, RoleB<RoleEnd>>;
 
@@ -95,7 +97,7 @@ type OfferA<N> =
     OfferMpst<End, BtoCAdd<N>, End, BtoCNeg<N>, StackOfferB, StackOfferB, RoleB<RoleEnd>>;
 type EndpointChoiceB<N> = MeshedChannels<OfferA<N>, End, StackFullB, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
     s.offer(
         |s: EndpointCAdd<i32>| {
@@ -178,7 +180,7 @@ pub fn double_choice() {
 }
 
 pub fn double_choice_checker() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         EndpointChoiceA<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceB<i32>
@@ -242,4 +244,7 @@ pub fn double_choice_checker() {
             5 -> 6 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, None);
 }

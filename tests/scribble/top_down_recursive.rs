@@ -45,8 +45,8 @@ type OrderingA14Full = RoleB<RoleEnd>;
 type EndpointA15 = MeshedChannels<BYEAtoB, End, OrderingA14Full, RoleA<RoleEnd>>;
 
 enum Branches0AtoC<N: marker::Send> {
-    ADD(EndpointA13<N>),
-    BYE(EndpointA15),
+    Add(EndpointA13<N>),
+    Bye(EndpointA15),
 }
 type Choose0forAtoC<N> = Send<Branches0AtoC<N>, End>;
 
@@ -69,8 +69,8 @@ type OrderingB16Full = RoleC<RoleA<RoleEnd>>;
 type EndpointB17 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB16Full, RoleB<RoleEnd>>;
 
 enum Branches0BtoC<N: marker::Send> {
-    ADD(EndpointB15<N>),
-    BYE(EndpointB17),
+    Add(EndpointB15<N>),
+    Bye(EndpointB17),
 }
 type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
@@ -96,15 +96,15 @@ type EndpointC2<N> =
 
 ///////////////////////////////////////// END
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointB20<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
-        Branches0BtoC::BYE(s) => {
+        Branches0BtoC::Bye(s) => {
             let (_, s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_a((), s);
             close_mpst(s)
         },
-        Branches0BtoC::ADD(s) => {
+        Branches0BtoC::Add(s) => {
             let (id, s) = recv_mpst_b_from_c(s)?;
             let s = send_mpst_b_to_a(id + 1, s);
             server(s)
@@ -120,11 +120,11 @@ fn authenticator(s: EndpointA18<i32>) -> Result<(), Box<dyn Error>> {
 
 fn authenticator_recurs(s: EndpointA19<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_a_to_c!(s, {
-        Branches0AtoC::BYE(s) => {
+        Branches0AtoC::Bye(s) => {
             let (_, s) = recv_mpst_a_from_b(s)?;
             close_mpst(s)
         },
-        Branches0AtoC::ADD(s) => {
+        Branches0AtoC::Add(s) => {
             let (_, s) = recv_mpst_a_from_b(s)?;
             authenticator_recurs(s)
         },
@@ -142,11 +142,11 @@ fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>> {
     let x: u32 = rng.gen_range(0..2);
 
     if x == 1 {
-        let s = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
+        let s = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
         let s = send_mpst_c_to_b(1, s);
         client_recurs(s)
     } else {
-        let s = choose_mpst_c_to_all!(s, Branches0AtoC::BYE, Branches0BtoC::BYE);
+        let s = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
         let s = send_mpst_c_to_b((), s);
         close_mpst(s)
     }

@@ -28,6 +28,8 @@ create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 5, 3
 
 close_mpst!(close_mpst_multi, MeshedChannels, 5);
 
+fork_mpst_multi!(fork_mpst, MeshedChannels, 5);
+
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
 type NameC = RoleC<RoleEnd>;
@@ -73,8 +75,6 @@ fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
     assert_eq!(size.len(), 4);
     close_mpst_multi(s)
 }
-
-fork_mpst_multi!(fork_mpst, MeshedChannels, 5);
 
 ////////////////////////////////////////
 

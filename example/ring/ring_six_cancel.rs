@@ -394,10 +394,10 @@ fn main() {
         endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f,
     );
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
-    thread_d.join().unwrap();
-    thread_e.join().unwrap();
-    thread_f.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
+    assert!(thread_e.join().is_ok());
+    assert!(thread_f.join().is_ok());
 }

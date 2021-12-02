@@ -2,6 +2,8 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
+use mpstthree::checker_concat;
+
 use petgraph::dot::Dot;
 
 // Get roles
@@ -10,11 +12,11 @@ use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
-/// Test our usecase
-/// Simple types
-/// Client = B
-/// Authenticator = C
-/// Server = A
+// Test our usecase
+// Simple types
+// Client = B
+// Authenticator = C
+// Server = A
 
 type CtoBClose = End;
 type CtoAClose = End;
@@ -43,7 +45,7 @@ type Choose0fromBtoA = Send<Branches0AtoB, End>;
 
 type InitB = Send<i32, Recv<i32, Choose0fromBtoC>>;
 
-/// Stacks
+// Stacks
 type StackCEnd = RoleEnd;
 type StackCVideo = RoleB<RoleA<RoleA<RoleB<RoleB<RoleEnd>>>>>;
 type StackCInit = RoleB<RoleB<RoleB<RoleEnd>>>;
@@ -55,22 +57,22 @@ type StackARecurs = RoleB<RoleEnd>;
 type StackBRecurs = RoleBroadcast;
 type StackBFull = RoleC<RoleC<StackBRecurs>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 
-/// For B
+// For B
 type EndpointBEnd = MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>>;
 type EndpointBFull = MeshedChannels<Choose0fromBtoA, InitB, StackBFull, RoleB<RoleEnd>>;
 
-/// For C
+// For C
 type EndpointCFull = MeshedChannels<End, InitC, StackCInit, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, RoleA<RoleEnd>>;
 
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "checking_recursion",
         EndpointARecurs,
         EndpointCFull,
@@ -151,4 +153,7 @@ pub fn main() {
             7 -> 2 [ label = \"\\\"µ\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC number
+    assert_eq!(kmc, Some(1));
 }

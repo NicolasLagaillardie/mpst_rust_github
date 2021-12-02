@@ -1,6 +1,9 @@
+#![allow(clippy::type_complexity)]
+
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -8,8 +11,6 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
-
-use mpstthree::functionmpst::close::close_mpst;
 
 // Get roles
 use mpstthree::role::a::RoleA;
@@ -33,13 +34,13 @@ use mpstthree::choose_mpst_c_to_all;
 use mpstthree::offer_mpst_a_to_c;
 use mpstthree::offer_mpst_b_to_c;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
-/// Test our usecase Video Stream
-/// Simple types
-/// Client = C
-/// Authenticator = A
-/// Server = B
+// Test our usecase Video Stream
+// Simple types
+// Client = C
+// Authenticator = A
+// Server = B
 
 type AtoCClose = End;
 type AtoBClose = End;
@@ -68,7 +69,7 @@ type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
 
 type InitC<N> = Send<N, Recv<N, Choose0fromCtoA<N>>>;
 
-/// Stacks
+// Stacks
 type StackAEnd = RoleEnd;
 type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
 type StackARecurs = RoleC<RoleEnd>;
@@ -81,21 +82,21 @@ type StackBRecurs = RoleC<RoleEnd>;
 type StackCRecurs = RoleBroadcast;
 type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
-/// Creating the MP sessions
+// Creating the MP sessions
 
-/// For C
+// For C
 type EndpointCRecurs<N> =
     MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
 
-/// For A
+// For A
 type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, StackARecurs, RoleA<RoleEnd>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
 
-/// For B
+// For B
 type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoC<N>, StackBRecurs, RoleB<RoleEnd>>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_b_to_c!(s, {
         Branches0BtoC::End(s) => {
@@ -170,7 +171,7 @@ fn client_recurs(
 fn main() {
     let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
-    thread_a.join().unwrap();
-    thread_s.join().unwrap();
-    thread_c.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_s.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }

@@ -96,7 +96,7 @@ type CtoBClose = <BtoCClose as Session>::Dual;
 type CtoAClose = <AtoCClose as Session>::Dual;
 type CtoAVideo<N> = <AtoCVideo<N> as Session>::Dual;
 
-/// Stacks
+// Stacks
 type StackAEnd = RoleEnd;
 type StackAEndDual = <StackAEnd as Role>::Dual;
 type StackAVideo = RoleD<RoleB<RoleB<RoleD<RoleEnd>>>>;
@@ -114,8 +114,8 @@ type StackCVideo = RoleA<RoleA<RoleEnd>>;
 type StackCChoice = RoleDtoAll<StackCVideo, StackCEnd>;
 type StackCFull = RoleA<RoleA<StackCChoice>>;
 
-/// Creating the MP sessions
-/// For C
+// Creating the MP sessions
+// For C
 type ChooseCtoA<N> = ChooseMpstThree<
     BtoAVideo<N>,
     CtoAVideo<N>,
@@ -137,9 +137,8 @@ type ChooseCtoB<N> = ChooseMpstThree<
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
 
-/// For A
+// For A
 type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
-type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
 type OfferA<N> = OfferMpstMultiThree<
     AtoBVideo<N>,
@@ -153,9 +152,8 @@ type OfferA<N> = OfferMpstMultiThree<
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
 type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, NameA>;
 
-/// For B
+// For B
 type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
-type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
 type OfferB<N> = OfferMpstMultiThree<
     BtoAVideo<N>,
@@ -168,7 +166,7 @@ type OfferB<N> = OfferMpstMultiThree<
 >;
 type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 
-/// Functions related to endpoints
+// Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     offer_mpst_session_b_to_d(
         s,
@@ -178,7 +176,7 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         },
-        |s: EndpointBEnd| close_mpst_multi(s),
+        close_mpst_multi,
     )
 }
 
@@ -199,7 +197,7 @@ fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         },
-        |s: EndpointAEnd| close_mpst_multi(s),
+        close_mpst_multi,
     )
 }
 

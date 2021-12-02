@@ -15,7 +15,7 @@ fn main() {
     let mut threads = Vec::new();
 
     let main = spawn(move || {
-        for _ in 0..SIZE {
+        for _ in 0..LOOPS {
             let (sender_0, receiver_0) = bounded::<ReceivingSendingReceiving>(1);
             let (sender_4, receiver_4) = bounded::<SendingReceivingSending>(1);
 
@@ -66,9 +66,9 @@ fn main() {
 
     threads.push(main);
 
-    threads.into_iter().for_each(|elt| elt.join().unwrap());
+    threads.into_iter().for_each(|elt| assert!(elt.join().is_ok()));
 }
 
 /////////////////////////
 
-static SIZE: i64 = 1;
+static LOOPS: i64 = 1;

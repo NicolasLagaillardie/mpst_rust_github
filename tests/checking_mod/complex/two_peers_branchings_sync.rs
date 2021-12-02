@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
 
 use petgraph::dot::Dot;
 
@@ -84,7 +84,7 @@ type EndpointBFull = MeshedChannels<Offer0BfromA, RoleA<RoleEnd>, NameB>;
 /////////////////////////////////////////
 
 pub fn main() {
-    let graphs = mpstthree::checker_concat!(
+    let (graphs, kmc) = checker_concat!(
         "two_peers_branchings_sync",
         EndpointAFull,
         EndpointBFull
@@ -179,4 +179,7 @@ pub fn main() {
             0 -> 7 [ label = \"\\\"0\\\"\" ]\n\
         }\n"
     );
+
+    ////////////// Test KMC output
+    assert_eq!(kmc, Some(1));
 }

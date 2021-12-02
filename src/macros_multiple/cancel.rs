@@ -2,7 +2,7 @@
 //! for creating cancellation functions for any number
 //! of participants.
 //!
-//! *This module is available only if mp-anon is built with
+//! *This module is available only if MultiCrusty is built with
 //! the `"macros_multiple"` feature.*
 
 /// Creates a function that will cancel a session and send a `Cancel` signal to the broadcasting
@@ -16,13 +16,13 @@
 /// * The number of participants (all together)
 /// * The message that will be displayed
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! send_cancel {
-    ($func_name:ident, $name:ident, $meshedchannels_name:ident, $nsessions:literal, $msg:expr) => {
-        mpst_seq::send_cancel!($func_name, $name, $meshedchannels_name, $nsessions, $msg);
+    ($func_name:ident, $name:ident, $meshedchannels_name:ident, $n_sessions:literal, $msg:expr) => {
+        mpst_seq::send_cancel!($func_name, $name, $meshedchannels_name, $n_sessions, $msg);
     };
 }
 
@@ -36,12 +36,12 @@ macro_rules! send_cancel {
 /// * The session that will be used
 /// * The number of participants (all together)
 ///
-/// *This macro is available only if mp-anon is built with
+/// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! broadcast_cancel {
-    ($session:expr, $nsessions:literal) => {
-        mpst_seq::broadcast_cancel!($session, $nsessions);
+    ($session:expr, $n_sessions:literal) => {
+        mpst_seq::broadcast_cancel!($session, $n_sessions);
     };
 }

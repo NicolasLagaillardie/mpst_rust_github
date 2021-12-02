@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -6,12 +8,12 @@ use mpstthree::{
     create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
 
-// See the folder scribble_protocols for the Scribble protocol
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
@@ -101,8 +103,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let elt_1 = random();
-    let elt_2 = random();
+    let elt_1 = thread_rng().gen_range(1..=100);
+    let elt_2 = thread_rng().gen_range(1..=100);
     let s = send_mpst_c_to_s(elt_1, s);
     let s = send_mpst_c_to_s(elt_2, s);
 
@@ -120,9 +122,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             2
         );
 
-        let (sum, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(sum, elt_1 + elt_2);
+        let (_sum, s) = recv_mpst_c_from_s(s)?;
 
         close_mpst_multi(s)
     } else {
@@ -137,9 +137,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             2
         );
 
-        let (diff, s) = recv_mpst_c_from_s(s)?;
-
-        assert_eq!(diff, elt_1 - elt_2);
+        let (_diff, s) = recv_mpst_c_from_s(s)?;
 
         close_mpst_multi(s)
     }
@@ -151,7 +149,7 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 
     offer_mpst!(s, recv_mpst_s_from_c, {
         Branching0fromCtoS::Sum(s) => {
-            let s = send_mpst_s_to_c(elt_1 + elt_2, s);
+            let s = send_mpst_s_to_c(elt_1 + elt_2,s);
             close_mpst_multi(s)
         },
         Branching0fromCtoS::Diff(s) => {
@@ -164,7 +162,7 @@ fn endpoint_s(s: EndpointS<i32>) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    assert!(thread_a.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
 }
