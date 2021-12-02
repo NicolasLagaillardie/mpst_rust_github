@@ -239,8 +239,8 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-mpst-seq = { path = "mpst_seq" }
-# mpst-seq = "0.1"
+# mpst-seq = { path = "mpst_seq" }
+mpst-seq = "0.1"
 crossbeam-channel = "0.5"
 either = "1.6"
 hyper = { version = "0.14", features = ["full"], optional = true }
