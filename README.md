@@ -196,6 +196,21 @@ cargo run --example XXX --all-features
 With this library, one can write any protocol with at least two participants and using methods to shorten the writing and checking.
 You can check the tests and examples to have a larger overview of the different possibilities provided by this library.
 
+## Available features
+
+The different features available are:
+
+* `default`: default features, for implementing the basic example above.
+* `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
+* `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
+* `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions.Contains `macros_multiple`.
+* `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+* `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+* `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+* `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
+* `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
+* `full`: feature containing `checking`, `baking` and `transport`.
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
@@ -207,7 +222,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 
 * **Nicolas Lagaillardie** - *Initial work* - [NicolasLagaillardie](https://github.com/NicolasLagaillardie)
-* **Rumyana Neykova** - *Initial work* - [rumineykova](https://github.com/rumineykova)
+* **Rumyana Neykova** - *Initial work* - [RumyanaNeykova](https://github.com/rumineykova)
 * **Nobuko Yoshida** - *Initial work* - [NobukoYoshida](https://github.com/NobukoYoshida)
 
 See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_rust_github/graphs/contributors) who participated in this project.

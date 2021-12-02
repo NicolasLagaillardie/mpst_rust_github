@@ -72,3 +72,5 @@ outputs
 
 save
 KMC
+
+scripts/update.sh
