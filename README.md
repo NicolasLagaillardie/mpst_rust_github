@@ -22,7 +22,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.1.14"
+mpstthree = "0.1.16"
 ```
 
 ## Example
