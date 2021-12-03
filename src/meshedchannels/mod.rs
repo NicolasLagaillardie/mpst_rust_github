@@ -19,6 +19,8 @@
 use crate::binary::struct_trait::session::Session;
 use crate::role::Role;
 
+use std::mem::drop;
+
 pub mod impl_a;
 pub mod impl_b;
 pub mod impl_c;
@@ -186,6 +188,6 @@ impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
 impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
     /// Cancel the session
     pub fn cancel(self) {
-        std::mem::drop(self);
+        drop(self);
     }
 }

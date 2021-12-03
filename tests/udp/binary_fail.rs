@@ -7,6 +7,7 @@ use mpstthree::{choose_udp, offer_udp};
 
 use std::error::Error;
 use std::net::UdpSocket;
+use std::panic::set_hook;
 use std::thread::{spawn, JoinHandle};
 use std::time::Duration;
 
@@ -92,7 +93,7 @@ fn udp_client() -> Result<(), Box<dyn Error>> {
     sessions.push(s);
 
     let aux = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match udp_client_aux(sessions, socket) {
@@ -137,7 +138,7 @@ fn udp_server() -> Result<(), Box<dyn Error>> {
 
 pub fn main() {
     let client = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match udp_client() {
@@ -147,7 +148,7 @@ pub fn main() {
     });
 
     let server = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match udp_server() {
