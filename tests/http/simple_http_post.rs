@@ -1,7 +1,9 @@
 use hyper::{Body, Client, Method, Request, Response, StatusCode};
 
+use std::error::Error;
+
 #[tokio::main]
-async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync>> {
+async fn aux() -> Result<Response<Body>, Box<dyn Error + Send + Sync>> {
     let req = Request::builder()
         .method(Method::POST)
         .uri("http://httpbin.org/post")

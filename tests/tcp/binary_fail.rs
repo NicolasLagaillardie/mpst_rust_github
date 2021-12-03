@@ -7,6 +7,7 @@ use mpstthree::{choose_tcp, offer_tcp};
 use std::error::Error;
 use std::io::{Read, Write};
 use std::net::{Shutdown, TcpListener, TcpStream};
+use std::panic::set_hook;
 use std::thread::{spawn, JoinHandle};
 
 type Data = ((), [u8; 128]);
@@ -93,7 +94,7 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     sessions.push(s);
 
     let aux = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match tcp_client_aux(sessions, stream) {
@@ -182,7 +183,7 @@ fn tcp_server(listener: TcpListener) -> Result<(), Box<dyn Error>> {
 pub fn main() {
     let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
     let server = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match tcp_server(listener) {
@@ -191,7 +192,7 @@ pub fn main() {
         }
     });
     let client = spawn(move || {
-        std::panic::set_hook(Box::new(|_info| {
+        set_hook(Box::new(|_info| {
             // do nothing
         }));
         match tcp_client() {

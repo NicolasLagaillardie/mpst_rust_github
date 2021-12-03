@@ -1,7 +1,9 @@
 use hyper::{Body, Client, Response, StatusCode};
 
+use std::error::Error;
+
 #[tokio::main]
-async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync>> {
+async fn aux() -> Result<Response<Body>, Box<dyn Error + Send + Sync>> {
     let client = Client::new();
 
     let uri = "http://httpbin.org/ip".parse()?;

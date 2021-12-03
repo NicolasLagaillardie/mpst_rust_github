@@ -8,6 +8,7 @@ use mpstthree::{bundle_impl_with_enum_and_cancel, checker_concat};
 use rand::{thread_rng, Rng};
 
 use std::error::Error;
+use std::fs::read_to_string;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -185,7 +186,7 @@ fn checking() {
         \u{1b}[0mreduced 1-exhaustive: \u{1b}[92mTrue\n\
         \u{1b}[0mreduced 1-safe: \u{1b}[92mTrue\n\
         \u{1b}[0m\n",
-        std::fs::read_to_string("outputs/dns_fowler_1_kmc.txt").unwrap()
+        read_to_string("outputs/dns_fowler_1_kmc.txt").unwrap()
     );
 }
 

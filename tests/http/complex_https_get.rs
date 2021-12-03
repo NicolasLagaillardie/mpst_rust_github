@@ -2,11 +2,12 @@ use hyper::{Body, Client, Method, Request, Response};
 use hyper_tls::HttpsConnector;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
+use std::error::Error;
 
 use std::fs;
 
 #[tokio::main]
-async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync>> {
+async fn aux() -> Result<Response<Body>, Box<dyn Error + Send + Sync>> {
     match fs::read_to_string("imgur.env") {
         Ok(contents) => {
             let lines: Vec<&str> = contents.split('\n').collect();
