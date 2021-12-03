@@ -33,7 +33,7 @@ type HashGraph = HashMap<String, Graph<String, String>>;
 ///
 /// The [`KMC`] tool
 /// must be installed with `cabal install` and the resulting
-/// binary must be in the current repository folder.
+/// binary must be added to PATH.
 ///
 /// /!\ The provided types and enum cannot be checked if they contain
 /// a parameter, such as <N>, as seen in some examples.
@@ -270,7 +270,7 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
     .unwrap_or(());
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
-    let kmc = Command::new("./KMC")
+    let kmc = Command::new("KMC")
         .arg(format!("cfsm/{}.txt", name_file))
         .arg(format!("{:?}", kmc_number))
         .arg("--fsm")
