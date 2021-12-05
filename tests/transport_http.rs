@@ -5,7 +5,7 @@ mod http;
 use ntest::timeout;
 
 #[test]
-#[timeout(60000)]
+#[timeout(120000)]
 fn transport_http() {
     http::simple_http_get::main();
     http::simple_http_post::main();
