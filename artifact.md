@@ -347,6 +347,22 @@ scalability of the tool on large examples.
 
 #### Running the entire benchmark set (at least 24 hours)
 
+You will first need to generate all the `ping-pong` protocols
+from 1 loop to 500 loops with the commands:
+
+```sh
+./scripts/create_files/create_ping_pong_examples.sh 500
+./scripts/create_files/create_ping_pong_benches.sh 500
+```
+
+**This needs to be done once.**
+If you want to increase the number of loops,
+you need to delete the generated files
+and reset the file `ping_pong.rs` in the
+folder `benches/`.
+
+Then you can run the script:
+
 ```sh
 ./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
 ```

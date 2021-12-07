@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create the ping_pong files example/ping_pong, for i from 1 to arg
+# Create the ping_pong files examples/ping_pong, for i from 1 to arg
 
 set -e
 
@@ -18,37 +18,21 @@ do
     prog "$((i/$(( $1 / 100 ))))" still working...
     #########################
     next=$(($i+1))
-    cp example/ping_pong/ping_pong_binary_$i.rs example/ping_pong/ping_pong_binary_$next.rs
-    sync
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_binary_$next.rs
-    sync
     #########################
-    next=$(($i+1))
-    cp example/ping_pong/ping_pong_mpst_$i.rs example/ping_pong/ping_pong_mpst_$next.rs
-    sync
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_mpst_$next.rs
-    sync
+    cat examples/ping_pong/ping_pong_binary_$i.rs > examples/ping_pong_binary_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_binary_$next.rs
     #########################
-    next=$(($i+1))
-    cp example/ping_pong/ping_pong_cancel_$i.rs example/ping_pong/ping_pong_cancel_$next.rs
-    sync
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_cancel_$next.rs
-    sync
+    cat examples/ping_pong/ping_pong_mpst_$i.rs > examples/ping_pong_mpst_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_mpst_$next.rs
     #########################
-    next=$(($i+1))
-    cp example/ping_pong/ping_pong_crossbeam_$i.rs example/ping_pong/ping_pong_crossbeam_$next.rs
-    sync
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_crossbeam_$next.rs
-    sync
+    cat examples/ping_pong/ping_pong_cancel_$i.rs > examples/ping_pong_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_cancel_$next.rs
     #########################
-    next=$(($i+1))
-    cp example/ping_pong/ping_pong_broadcast_cancel_$i.rs example/ping_pong/ping_pong_broadcast_cancel_$next.rs
-    sync
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' example/ping_pong/ping_pong_broadcast_cancel_$next.rs
-    sync
+    cat examples/ping_pong/ping_pong_crossbeam_$i.rs > examples/ping_pong_crossbeam_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_crossbeam_$next.rs
+    #########################
+    cat examples/ping_pong/ping_pong_broadcast_cancel_$i.rs > examples/ping_pong_broadcast_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_broadcast_cancel_$next.rs
+    #########################
 done
 
-find example/ping_pong/ -name *.rser -delete
+find examples/ping_pong/ -name *.rser -delete
+find examples/ -name *.rser -delete
 
 cargo fmt --all
 
