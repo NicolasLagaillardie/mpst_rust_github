@@ -1731,7 +1731,7 @@ impl Baking {
                     Span::call_site(),
                 );
                 quote! {
-                    std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(32 * 1024 * 1024).spawn(move || {
+                    std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(64 * 1024 * 1024).spawn(move || {
                         std::panic::set_hook(Box::new(|_info| {
                             // do nothing
                         }));

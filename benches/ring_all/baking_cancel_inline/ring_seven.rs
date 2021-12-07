@@ -264,6 +264,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoB::Done(s) => {
@@ -282,6 +283,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoC::Done(s) => {
@@ -300,6 +302,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoD::Done(s) => {
@@ -318,6 +321,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoE::Done(s) => {
@@ -336,6 +340,7 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromGtoF::Done(s) => {
@@ -354,6 +359,7 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 

@@ -15,8 +15,8 @@ type OrderingA8Full = RoleB<RoleEnd>;
 type EndpointA9 = MeshedChannels<BYEAtoB, End, OrderingA8Full, RoleA<RoleEnd>>;
 
 enum Branches0AtoC {
-    ADD(EndpointA7),
-    BYE(EndpointA9),
+    Add(EndpointA7),
+    Bye(EndpointA9),
 }
 type Choose0forAtoC = Send<Branches0AtoC, End>;
 
@@ -38,8 +38,8 @@ type OrderingB10Full = RoleC<RoleA<RoleEnd>>;
 type EndpointB11 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB10Full, RoleB<RoleEnd>>;
 
 enum Branches0BtoC {
-    ADD(EndpointB9),
-    BYE(EndpointB11),
+    Add(EndpointB9),
+    Bye(EndpointB11),
 }
 type Choose0forBtoC = Send<Branches0BtoC, End>;
 
@@ -65,11 +65,11 @@ type EndpointC7 = MeshedChannels<TestCtoA, Choose0forBtoC, OrderingC6Full, RoleC
 fn endpoint_a(s: EndpointA12) -> Result<(), Box<dyn Error>> {
     let (_, s) = s.recv()?;
     offer_mpst!(s, {
-        Branches0AtoC::ADD(s) => {
+        Branches0AtoC::Add(s) => {
             let (_,s) = s.recv()?;
             s.close()
         },
-        Branches0AtoC::BYE(s) => {
+        Branches0AtoC::Bye(s) => {
             let (_,s) = s.recv()?;
             s.close()
         },
@@ -78,12 +78,12 @@ fn endpoint_a(s: EndpointA12) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_b(s: EndpointB14) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branches0BtoC::ADD(s) => {
+        Branches0BtoC::Add(s) => {
             let (_,s) = s.recv()?;
             let s = s.send(0)?;
             s.close()
         },
-        Branches0BtoC::BYE(s) => {
+        Branches0BtoC::Bye(s) => {
             let (_,s) = s.recv()?;
             let s = s.send(())?;
             s.close()
@@ -99,12 +99,12 @@ fn recurs_c(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
     let s = s.send(0)?;
 
     if loops <= 0 {
-        let s: EndpointC5 = choose_mpst_c_to_all!(s, Branches0AtoC::BYE, Branches0BtoC::BYE);
+        let s: EndpointC5 = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
         let _ = s.send(())?;
 
         Ok(())
     } else {
-        let s: EndpointC3 = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
+        let s: EndpointC3 = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
         let s = s.send(0)?;
 
         s.close()
@@ -135,19 +135,22 @@ fn checking() {
         =>
         [
             EndpointC3,
-            Branches0AtoC, ADD,
-            Branches0BtoC, ADD,
+            Branches0AtoC, Add,
+            Branches0BtoC, Add,
         ],
         [
             EndpointC5,
-            Branches0AtoC, BYE,
-            Branches0BtoC, BYE,
+            Branches0AtoC, Bye,
+            Branches0BtoC, Bye,
         ]
     )
     .unwrap();
 
     println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
+    println!("\n/////////////////////////\n");
     println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
+    println!("\n/////////////////////////\n");
     println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
+    println!("\n/////////////////////////\n");
     println!("min kMC: {:?}", kmc);
 }

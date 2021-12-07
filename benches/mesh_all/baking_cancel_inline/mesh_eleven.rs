@@ -439,6 +439,7 @@ type EndpointK = MeshedChannelsEleven<
     NameK,
 >;
 
+#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoA::Done(s) => {
@@ -470,6 +471,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoB::Done(s) => {
@@ -501,6 +503,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoC::Done(s) => {
@@ -532,6 +535,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoD::Done(s) => {
@@ -563,6 +567,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoE::Done(s) => {
@@ -594,6 +599,7 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoF::Done(s) => {
@@ -625,6 +631,7 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoG::Done(s) => {
@@ -656,6 +663,7 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoH::Done(s) => {
@@ -687,6 +695,7 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoI::Done(s) => {
@@ -718,6 +727,7 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromKtoJ::Done(s) => {
@@ -749,6 +759,7 @@ fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_k(s: EndpointK) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 

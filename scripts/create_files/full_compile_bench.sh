@@ -6,9 +6,9 @@ set -e
 
 sleep 2
 
-### Basic examples
+## Basic examples
 ./scripts/create_files/compile.sh o_auth 5 baking_checking
-./scripts/create_files/compile.sh o_auth_2 5 transport_macros_multiple
+./scripts/create_files/compile.sh o_auth_transport 5 transport_macros_multiple
 ./scripts/create_files/compile.sh fib 5 macros_multiple
 ./scripts/create_files/compile.sh simple_voting 5 macros_multiple
 ./scripts/create_files/compile.sh three_buyers 5 macros_multiple
@@ -27,7 +27,7 @@ sleep 2
 ./scripts/create_files/compile.sh dns_fowler 5 baking_checking
 ./scripts/create_files/compile.sh dns_imai 5 macros_multiple
 
-### Ping-pong
+## Ping-pong
 for i in $(eval echo {1..1})
 do
     ./scripts/create_files/compile.sh ping_pong_binary_$i 5 macros_multiple
@@ -37,11 +37,11 @@ do
     ./scripts/create_files/compile.sh ping_pong_mpst_$i 5 macros_multiple
 done
 
-### Mesh
+## Mesh
 # Two
 ./scripts/create_files/compile.sh mesh_two_binary 5 macros_multiple
 ./scripts/create_files/compile.sh mesh_two_cancel 5 macros_multiple
-./scripts/create_files/compile.sh mesh_three_broadcast_cancel 5 macros_multiple
+./scripts/create_files/compile.sh mesh_two_broadcast_cancel 5 macros_multiple
 ./scripts/create_files/compile.sh mesh_two_crossbeam 5 macros_multiple
 ./scripts/create_files/compile.sh mesh_two_mpst 5 macros_multiple
 
@@ -115,7 +115,7 @@ done
 ./scripts/create_files/compile.sh mesh_twenty_crossbeam 5 macros_multiple
 ./scripts/create_files/compile.sh mesh_twenty_mpst 5 macros_multiple
 
-### Ring
+## Ring
 # Two
 ./scripts/create_files/compile.sh ring_two_binary 5 macros_multiple
 ./scripts/create_files/compile.sh ring_two_cancel 5 macros_multiple

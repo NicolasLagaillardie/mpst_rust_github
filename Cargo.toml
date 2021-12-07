@@ -130,22 +130,27 @@ required-features = []
 [[bench]]
 name = "main"
 harness = false
+required-features = ["baking"]
+
+[[bench]]
+name = "main_interleaved"
+harness = false
 required-features = ["baking_interleaved"]
 
 [[bench]]
 name = "mesh"
 harness = false
-required-features = ["baking_interleaved"]
+required-features = ["baking"]
 
 [[bench]]
 name = "ring"
 harness = false
-required-features = ["baking_interleaved"]
+required-features = ["baking"]
 
 [[bench]]
 name = "ping_pong"
 harness = false
-required-features = ["baking_interleaved"]
+required-features = ["baking"]
 
 ################################### Examples
 
@@ -206,7 +211,7 @@ name = "o_auth_checking"
 required-features = ["baking_checking"]
 
 [[example]]
-name = "o_auth_2"
+name = "o_auth_transport"
 required-features = ["transport_macros_multiple"]
 
 [[example]]
@@ -236,6 +241,10 @@ required-features = ["macros_simple"]
 [[example]]
 name = "adder"
 required-features = ["baking_checking"]
+
+[[example]]
+name = "basic"
+required-features = ["baking"]
 
 ################################### Profil
 

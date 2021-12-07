@@ -7,7 +7,7 @@ set -e
 sleep 5
 
 cargo flamegraph --example o_auth -o flamegraphs/flamegraph_o_auth.svg
-cargo flamegraph --example o_auth_2 -o flamegraphs/flamegraph_o_auth_2.svg
+cargo flamegraph --example o_auth_transport -o flamegraphs/flamegraph_o_auth_transport.svg
 cargo flamegraph --example fib -o flamegraphs/flamegraph_fib.svg
 cargo flamegraph --example simple_voting -o flamegraphs/flamegraph_simple_voting.svg
 cargo flamegraph --example three_buyers -o flamegraphs/flamegraph_three_buyer.svg

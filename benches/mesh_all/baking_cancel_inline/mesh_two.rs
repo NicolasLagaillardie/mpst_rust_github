@@ -51,6 +51,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 

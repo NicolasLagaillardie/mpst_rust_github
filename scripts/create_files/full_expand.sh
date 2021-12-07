@@ -8,7 +8,7 @@ sleep 5
 
 ### Basic examples
 cargo expand --example o_auth > expand/o_auth.txt
-cargo expand --example o_auth_2 > expand/o_auth_2.txt
+cargo expand --example o_auth_transport > expand/o_auth_transport.txt
 cargo expand --example fib > expand/fib.txt
 cargo expand --example simple_voting > expand/simple_voting.txt
 cargo expand --example three_buyers > expand/three_buyers.txt

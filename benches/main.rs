@@ -5,10 +5,9 @@ use criterion::criterion_main;
 mod main_all;
 
 criterion_main! {
+    ////////// Benchmarks using basic functions
     main_all::basic::logging::logging,
     main_all::basic::circuit_breaker::circuit_breaker,
-    main_all::basic::logging_solo::logging_solo,
-    main_all::basic::circuit_breaker_solo::circuit_breaker_solo,
     main_all::basic::distributed_calc::distributed_calc,
     main_all::basic::fib::fib,
     main_all::basic::o_auth::o_auth,
@@ -20,7 +19,7 @@ criterion_main! {
     main_all::basic::video_stream::video_stream,
     main_all::basic::dns_fowler::dns_fowler,
     main_all::basic::dns_imai::dns_imai,
-    //////////
+    ////////// Benchmarks using generated methods
     main_all::baking::logging::logging,
     main_all::baking::circuit_breaker::circuit_breaker,
     main_all::baking::distributed_calc::distributed_calc,

@@ -311,6 +311,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoB::Done(s) => {
@@ -340,6 +341,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoC::Done(s) => {
@@ -369,6 +371,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoD::Done(s) => {
@@ -398,6 +401,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoE::Done(s) => {
@@ -427,6 +431,7 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoF::Done(s) => {
@@ -456,6 +461,7 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoG::Done(s) => {
@@ -485,6 +491,7 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoH::Done(s) => {
@@ -514,6 +521,7 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoI::Done(s) => {
@@ -543,6 +551,7 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
