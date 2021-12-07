@@ -244,7 +244,7 @@ required-features = ["baking_checking"]
 
 [[example]]
 name = "basic"
-required-features = ["baking"]
+required-features = ["baking_checking"]
 
 ################################### Mesh examples
 
