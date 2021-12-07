@@ -362,16 +362,18 @@ in the folder `results/`.
 
 The structure of the `ping_ping_0.csv` file is as follows:
 
-1. Column 1: number of loops
-2. Column 2: average running time
-3. Column 3: average compilation time
+1. Column 1: the type of implementation (AMPST, MPST, binary or crossbeam)
+2. Column 2: number of loops
+3. Column 3: average running time
+4. Column 4: average compilation time
 
 The structure of the `mesh_0.csv` and `ring_0.csv`
 files is as follows:
 
-1. Column 1: number of participants
-2. Column 2: average running time
-3. Column 3: average compilation time
+1. Column 1: the type of implementation (AMPST, MPST, binary or crossbeam)
+2. Column 2: number of participants
+3. Column 3: average running time
+4. Column 4: average compilation time
 
 #### Running a smaller benchmark set
 
