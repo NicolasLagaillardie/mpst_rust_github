@@ -15,8 +15,8 @@ criterion_main! {
     ring_all::empty::ring_eight::ring_eight,
     ring_all::empty::ring_nine::ring_nine,
     ring_all::empty::ring_ten::ring_ten,
-    ring_all::empty::ring_eleven::ring_eleven,
-    ring_all::empty::ring_twenty::ring_twenty,
+    // ring_all::empty::ring_eleven::ring_eleven,
+    // ring_all::empty::ring_twenty::ring_twenty,
     ////////// Benchmarks using basic functions with 100 loops
     ring_all::normal::ring_two::ring_two,
     ring_all::normal::ring_three::ring_three,
@@ -27,8 +27,8 @@ criterion_main! {
     ring_all::normal::ring_eight::ring_eight,
     ring_all::normal::ring_nine::ring_nine,
     ring_all::normal::ring_ten::ring_ten,
-    ring_all::normal::ring_eleven::ring_eleven,
-    ring_all::normal::ring_twenty::ring_twenty,
+    // ring_all::normal::ring_eleven::ring_eleven,
+    // ring_all::normal::ring_twenty::ring_twenty,
     ////////// Benchmarks using cancelling with a monitor to broadcast cancel
     ring_all::cancel_broadcast::ring_three::ring_three,
     ring_all::cancel_broadcast::ring_four::ring_four,
@@ -38,8 +38,8 @@ criterion_main! {
     ring_all::cancel_broadcast::ring_eight::ring_eight,
     ring_all::cancel_broadcast::ring_nine::ring_nine,
     ring_all::cancel_broadcast::ring_ten::ring_ten,
-    ring_all::cancel_broadcast::ring_eleven::ring_eleven,
-    ring_all::cancel_broadcast::ring_twenty::ring_twenty,
+    // ring_all::cancel_broadcast::ring_eleven::ring_eleven,
+    // ring_all::cancel_broadcast::ring_twenty::ring_twenty,
     ////////// Benchmarks using cancelling without a monitor to broadcast cancel using basic functions
     ring_all::cancel::ring_two::ring_two,
     ring_all::cancel::ring_three::ring_three,
@@ -50,8 +50,8 @@ criterion_main! {
     ring_all::cancel::ring_eight::ring_eight,
     ring_all::cancel::ring_nine::ring_nine,
     ring_all::cancel::ring_ten::ring_ten,
-    ring_all::cancel::ring_eleven::ring_eleven,
-    ring_all::cancel::ring_twenty::ring_twenty,
+    // ring_all::cancel::ring_eleven::ring_eleven,
+    // ring_all::cancel::ring_twenty::ring_twenty,
     ////////// Benchmarks using cancelling without a monitor to broadcast cancel using generated methods
     ring_all::baking_cancel::ring_two::ring_two,
     ring_all::baking_cancel::ring_three::ring_three,
@@ -62,8 +62,8 @@ criterion_main! {
     ring_all::baking_cancel::ring_eight::ring_eight,
     ring_all::baking_cancel::ring_nine::ring_nine,
     ring_all::baking_cancel::ring_ten::ring_ten,
-    ring_all::baking_cancel::ring_eleven::ring_eleven,
-    ring_all::baking_cancel::ring_twenty::ring_twenty,
+    // ring_all::baking_cancel::ring_eleven::ring_eleven,
+    // ring_all::baking_cancel::ring_twenty::ring_twenty,
     ////////// Benchmarks using cancelling without a monitor to broadcast cancel using generated methods with inline compilation
     ring_all::baking_cancel_inline::ring_two::ring_two,
     ring_all::baking_cancel_inline::ring_three::ring_three,
@@ -74,6 +74,6 @@ criterion_main! {
     ring_all::baking_cancel_inline::ring_eight::ring_eight,
     ring_all::baking_cancel_inline::ring_nine::ring_nine,
     ring_all::baking_cancel_inline::ring_ten::ring_ten,
-    ring_all::baking_cancel_inline::ring_eleven::ring_eleven,
-    ring_all::baking_cancel_inline::ring_twenty::ring_twenty,
+    // ring_all::baking_cancel_inline::ring_eleven::ring_eleven,
+    // ring_all::baking_cancel_inline::ring_twenty::ring_twenty,
 }
