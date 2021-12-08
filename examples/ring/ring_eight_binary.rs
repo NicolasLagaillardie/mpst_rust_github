@@ -1,5 +1,9 @@
-#![allow(clippy::type_complexity, clippy::too_many_arguments, clippy::large_enum_variant)]
-    
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant
+)]
+
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
