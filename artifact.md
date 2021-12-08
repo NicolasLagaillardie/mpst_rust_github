@@ -16,7 +16,7 @@ We would like you to be able to
 using an 32-cores AMD OpteronTM Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
 with a quota of more than 100.000 files and 100 GB of HDD.
-In addition, the tool need an access to `localhost` for the tests.
+In addition, the tool needs an access to `localhost` for the tests.
 
 ---
 
