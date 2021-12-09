@@ -54,6 +54,26 @@ This string is the one you have to provide when running
 
 Thereafter, we assume that you are in the main directory of the docker file.
 
+To check, build and test `MultiCrusty` with the following commands:
+
+```sh
+cargo check --all-features --lib --workspace # Check only this package's library
+cargo check --all-features --bins --workspace # Check all binaries
+cargo check --all-features --examples --workspace # Check all examples
+cargo check --all-features --tests --workspace # Check all tests
+cargo check --all-features --benches --workspace # Check all benchmarks
+cargo build --all-features --lib --workspace # Build only this package's library
+cargo build --all-features --bins --workspace # Build all binaries
+cargo build --all-features --examples --workspace # Build all examples
+cargo build --all-features --tests --workspace # Build all tests
+cargo build --all-features --benches --workspace # Build all benchmarks
+cargo test --all-features --lib --workspace # Test only this package's library
+cargo test --all-features --bins --workspace # Test all binaries
+cargo test --all-features --examples --workspace # Test all examples
+cargo test --all-features --tests --workspace # Test all tests
+cargo test --all-features --benches --workspace # Test all benchmarks
+```
+
 ## STEP 1: Understanding MultiCrusty
 
 MultiCrusty, the `Rust` library introduced in the paper, has one purpose:
