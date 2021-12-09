@@ -49,12 +49,12 @@ def ping_pong_bench():
     path_file = '/base/estimates.json'
 
     # Lists for plots
-    binary = []
-    mpst = []
-    baking = []
-    crossbeam = []
-    cancel = []
-    broadcast_cancel = []
+    average_binary = []
+    average_mpst = []
+    average_baking = []
+    average_crossbeam = []
+    average_cancel = []
+    average_broadcast_cancel = []
 
     nb_loops_binary = []
     nb_loops_mpst = []
@@ -79,53 +79,53 @@ def ping_pong_bench():
 
             try:
                 if 'binary' in d and 'cancel' not in d:
-                    binary.append(int(test(d))/10**6)
+                    average_binary.append(int(test(d)))
                     nb_loops_binary.append(int(splitted[-1]))
                 elif 'MPST' in d in d:
                     if 'baking' in d:
-                        baking.append(int(test(d))/10**6)
+                        average_baking.append(int(test(d)))
                         nb_loops_baking.append(int(splitted[-1]))
                     elif 'broadcast' in d:
-                        broadcast_cancel.append(int(test(d))/10**6)
+                        average_broadcast_cancel.append(int(test(d)))
                         nb_loops_broadcast_cancel.append(int(splitted[-1]))
                     elif 'cancel' in d:
-                        cancel.append(int(test(d))/10**6)
+                        average_cancel.append(int(test(d)))
                         nb_loops_cancel.append(int(splitted[-1]))
                     else:
-                        mpst.append(int(test(d))/10**6)
+                        average_mpst.append(int(test(d)))
                         nb_loops_mpst.append(int(splitted[-1]))
                 elif 'crossbeam' in d and 'cancel' not in d:
-                    crossbeam.append(int(test(d))/10**6)
+                    average_crossbeam.append(int(test(d)))
                     nb_loops_crossbeam.append(int(splitted[-1]))
             except:
                 print("Missing ", d)
 
     # Sort the lists in pair
-    if nb_loops_binary and binary:
+    if nb_loops_binary and average_binary:
         nb_loops_binary, binary = (list(t)
-                                   for t in zip(*sorted(zip(nb_loops_binary, binary))))
+                                   for t in zip(*sorted(zip(nb_loops_binary, average_binary))))
 
-    if nb_loops_baking and baking:
-        nb_loops_baking, baking = (list(t)
-                                   for t in zip(*sorted(zip(nb_loops_baking, baking))))
+    if nb_loops_baking and average_baking:
+        nb_loops_baking, average_baking = (list(t)
+                                           for t in zip(*sorted(zip(nb_loops_baking, average_baking))))
 
-    if nb_loops_mpst and mpst:
-        nb_loops_mpst, mpst = (list(t)
-                               for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
+    if nb_loops_mpst and average_mpst:
+        nb_loops_mpst, average_mpst = (list(t)
+                                       for t in zip(*sorted(zip(nb_loops_mpst, average_mpst))))
 
-    if nb_loops_crossbeam and crossbeam:
-        nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
-            *sorted(zip(nb_loops_crossbeam, crossbeam))))
+    if nb_loops_crossbeam and average_crossbeam:
+        nb_loops_crossbeam, average_crossbeam = (list(t) for t in zip(
+            *sorted(zip(nb_loops_crossbeam, average_crossbeam))))
 
-    if nb_loops_cancel and cancel:
-        nb_loops_cancel, cancel = (list(t)
-                                   for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
+    if nb_loops_cancel and average_cancel:
+        nb_loops_cancel, average_cancel = (list(t)
+                                           for t in zip(*sorted(zip(nb_loops_cancel, average_cancel))))
 
-    if nb_loops_broadcast_cancel and broadcast_cancel:
-        nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
-                                                       for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
+    if nb_loops_broadcast_cancel and average_broadcast_cancel:
+        nb_loops_broadcast_cancel, average_broadcast_cancel = (list(t)
+                                                               for t in zip(*sorted(zip(nb_loops_broadcast_cancel, average_broadcast_cancel))))
 
-    return {'nb_loops_baking': nb_loops_baking, 'baking': baking, 'nb_loops_mpst': nb_loops_mpst, 'mpst': mpst, 'nb_loops_binary': nb_loops_binary, 'binary': binary, 'nb_loops_crossbeam': nb_loops_crossbeam, 'crossbeam': crossbeam}
+    return {'nb_loops_baking': nb_loops_baking, 'average_baking': average_baking, 'nb_loops_mpst': nb_loops_mpst, 'average_mpst': average_mpst, 'nb_loops_binary': nb_loops_binary, 'average_binary': average_binary, 'nb_loops_crossbeam': nb_loops_crossbeam, 'average_crossbeam': average_crossbeam}
 
 
 def ping_pong_compile():
@@ -238,12 +238,12 @@ def mesh_bench():
                   'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
     # Lists for plots
-    binary = []
-    mpst = []
-    baking = []
-    crossbeam = []
-    cancel = []
-    broadcast_cancel = []
+    average_binary = []
+    average_mpst = []
+    average_baking = []
+    average_crossbeam = []
+    average_cancel = []
+    average_broadcast_cancel = []
 
     nb_participants_mpst = []
     nb_participants_baking = []
@@ -272,53 +272,53 @@ def mesh_bench():
                 # If MPST of binary, append to related lists
                 if 'MPST' in d and str_to_int[splitted[1]] >= 2:
                     if 'baking' in d:
-                        baking.append(int(test(d))/10**6)
+                        average_baking.append(int(test(d)))
                         nb_participants_baking.append(str_to_int[splitted[1]])
                     elif 'broadcast' in d:
-                        broadcast_cancel.append(int(test(d))/10**6)
+                        average_broadcast_cancel.append(int(test(d)))
                         nb_participants_broadcast_cancel.append(
                             str_to_int[splitted[1]])
                     elif 'cancel' in d:
-                        cancel.append(int(test(d))/10**6)
+                        average_cancel.append(int(test(d)))
                         nb_participants_cancel.append(str_to_int[splitted[1]])
                     else:
-                        mpst.append(int(test(d))/10**6)
+                        average_mpst.append(int(test(d)))
                         nb_participants_mpst.append(str_to_int[splitted[1]])
                 elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
-                    binary.append(int(test(d))/10**6)
+                    average_binary.append(int(test(d)))
                     nb_participants_binary.append(str_to_int[splitted[1]])
                 elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
-                    crossbeam.append(int(test(d))/10**6)
+                    average_crossbeam.append(int(test(d)))
                     nb_participants_crossbeam.append(str_to_int[splitted[1]])
             except:
                 print("Missing ", d)
 
     # Sort the lists in pair
-    if nb_participants_mpst and mpst:
-        nb_participants_mpst, mpst = (list(t) for t in zip(
-            *sorted(zip(nb_participants_mpst, mpst))))
+    if nb_participants_mpst and average_mpst:
+        nb_participants_mpst, average_mpst = (list(t) for t in zip(
+            *sorted(zip(nb_participants_mpst, average_mpst))))
 
-    if nb_participants_baking and baking:
-        nb_participants_baking, baking = (list(t) for t in zip(
-            *sorted(zip(nb_participants_baking, baking))))
+    if nb_participants_baking and average_baking:
+        nb_participants_baking, average_baking = (list(t) for t in zip(
+            *sorted(zip(nb_participants_baking, average_baking))))
 
-    if nb_participants_binary and binary:
-        nb_participants_binary, binary = (list(t)
-                                          for t in zip(*sorted(zip(nb_participants_binary, binary))))
+    if nb_participants_binary and average_binary:
+        nb_participants_binary, average_binary = (list(t)
+                                                  for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
 
-    if nb_participants_crossbeam and crossbeam:
-        nb_participants_crossbeam, crossbeam = (list(t)
-                                                for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
+    if nb_participants_crossbeam and average_crossbeam:
+        nb_participants_crossbeam, average_crossbeam = (list(t)
+                                                        for t in zip(*sorted(zip(nb_participants_crossbeam, average_crossbeam))))
 
-    if nb_participants_cancel and cancel:
-        nb_participants_cancel, cancel = (list(t)
-                                          for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+    if nb_participants_cancel and average_cancel:
+        nb_participants_cancel, average_cancel = (list(t)
+                                                  for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
 
-    if nb_participants_broadcast_cancel and broadcast_cancel:
-        nb_participants_broadcast_cancel, broadcast_cancel = (list(t)
-                                                              for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
+    if nb_participants_broadcast_cancel and average_broadcast_cancel:
+        nb_participants_broadcast_cancel, average_broadcast_cancel = (list(t)
+                                                                      for t in zip(*sorted(zip(nb_participants_broadcast_cancel, average_broadcast_cancel))))
 
-    return {'nb_participants_baking': nb_participants_baking, 'baking': baking, 'nb_participants_mpst': nb_participants_mpst, 'mpst': mpst, 'nb_participants_binary': nb_participants_binary, 'binary': binary, 'nb_participants_crossbeam': nb_participants_crossbeam, 'crossbeam': crossbeam}
+    return {'nb_participants_baking': nb_participants_baking, 'average_baking': average_baking, 'nb_participants_mpst': nb_participants_mpst, 'average_mpst': average_mpst, 'nb_participants_binary': nb_participants_binary, 'average_binary': average_binary, 'nb_participants_crossbeam': nb_participants_crossbeam, 'average_crossbeam': average_crossbeam}
 
 
 def mesh_compile():
@@ -366,27 +366,26 @@ def mesh_compile():
                         # If MPST of binary, append to related lists
                 if 'mpst' in d:
                     if 'baking' in d:
-                        average_baking.append(
-                            statistics.mean(build_time)/10**6)
+                        average_baking.append(statistics.mean(build_time))
                         nb_participants_baking.append(str_to_int[name])
                     else:
-                        average_mpst.append(statistics.mean(build_time)/10**6)
+                        average_mpst.append(statistics.mean(build_time))
                         nb_participants_mpst.append(str_to_int[name])
                 elif 'binary' in d:
-                    average_binary.append(statistics.mean(build_time)/10**6)
+                    average_binary.append(statistics.mean(build_time))
                     nb_participants_binary.append(str_to_int[name])
                 elif 'cancel' in d:
                     if 'broadcast' in d:
                         average_cancel_broadcast.append(
-                            statistics.mean(build_time)/10**6)
+                            statistics.mean(build_time))
                         nb_participants_cancel_broadcast.append(
                             str_to_int[name])
                     else:
                         average_cancel.append(
-                            statistics.mean(build_time)/10**6)
+                            statistics.mean(build_time))
                         nb_participants_cancel.append(str_to_int[name])
                 elif 'crossbeam' in d:
-                    average_crossbeam.append(statistics.mean(build_time)/10**6)
+                    average_crossbeam.append(statistics.mean(build_time))
                     nb_participants_crossbeam.append(str_to_int[name])
             except:
                 print('Issue with ', d)
@@ -436,12 +435,12 @@ def ring_bench():
                   'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
     # Lists for plots
-    binary = []
-    mpst = []
-    baking = []
-    crossbeam = []
-    cancel = []
-    broadcast_cancel = []
+    average_binary = []
+    average_mpst = []
+    average_baking = []
+    average_crossbeam = []
+    average_cancel = []
+    average_broadcast_cancel = []
 
     nb_participants_mpst = []
     nb_participants_baking = []
@@ -470,53 +469,53 @@ def ring_bench():
                 # If MPST of binary, append to related lists
                 if 'MPST' in d and str_to_int[splitted[1]] >= 2:
                     if 'baking' in d:
-                        baking.append(int(test(d))/10**6)
+                        average_baking.append(int(test(d)))
                         nb_participants_baking.append(str_to_int[splitted[1]])
                     elif 'broadcast' in d:
-                        broadcast_cancel.append(int(test(d))/10**6)
+                        average_broadcast_cancel.append(int(test(d)))
                         nb_participants_broadcast_cancel.append(
                             str_to_int[splitted[1]])
                     elif 'cancel' in d:
-                        cancel.append(int(test(d))/10**6)
+                        average_cancel.append(int(test(d)))
                         nb_participants_cancel.append(str_to_int[splitted[1]])
                     else:
-                        mpst.append(int(test(d))/10**6)
+                        average_mpst.append(int(test(d)))
                         nb_participants_mpst.append(str_to_int[splitted[1]])
                 elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
-                    binary.append(int(test(d))/10**6)
+                    average_binary.append(int(test(d)))
                     nb_participants_binary.append(str_to_int[splitted[1]])
                 elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
-                    crossbeam.append(int(test(d))/10**6)
+                    average_crossbeam.append(int(test(d)))
                     nb_participants_crossbeam.append(str_to_int[splitted[1]])
             except:
                 print("Missing ", d)
 
     # Sort the lists in pair
-    if nb_participants_mpst and mpst:
-        nb_participants_mpst, mpst = (list(t) for t in zip(
-            *sorted(zip(nb_participants_mpst, mpst))))
+    if nb_participants_mpst and average_mpst:
+        nb_participants_mpst, average_mpst = (list(t) for t in zip(
+            *sorted(zip(nb_participants_mpst, average_mpst))))
 
-    if nb_participants_baking and baking:
-        nb_participants_baking, baking = (list(t) for t in zip(
-            *sorted(zip(nb_participants_baking, baking))))
+    if nb_participants_baking and average_baking:
+        nb_participants_baking, average_baking = (list(t) for t in zip(
+            *sorted(zip(nb_participants_baking, average_baking))))
 
-    if nb_participants_binary and binary:
-        nb_participants_binary, binary = (list(t)
-                                          for t in zip(*sorted(zip(nb_participants_binary, binary))))
+    if nb_participants_binary and average_binary:
+        nb_participants_binary, average_binary = (list(t)
+                                                  for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
 
-    if nb_participants_crossbeam and crossbeam:
-        nb_participants_crossbeam, crossbeam = (list(t)
-                                                for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
+    if nb_participants_crossbeam and average_crossbeam:
+        nb_participants_crossbeam, average_crossbeam = (list(t)
+                                                        for t in zip(*sorted(zip(nb_participants_crossbeam, average_crossbeam))))
 
-    if nb_participants_cancel and cancel:
-        nb_participants_cancel, cancel = (list(t)
-                                          for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+    if nb_participants_cancel and average_cancel:
+        nb_participants_cancel, average_cancel = (list(t)
+                                                  for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
 
-    if nb_participants_broadcast_cancel and broadcast_cancel:
-        nb_participants_broadcast_cancel, broadcast_cancel = (list(t)
-                                                              for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
+    if nb_participants_broadcast_cancel and average_broadcast_cancel:
+        nb_participants_broadcast_cancel, average_broadcast_cancel = (list(t)
+                                                                      for t in zip(*sorted(zip(nb_participants_broadcast_cancel, average_broadcast_cancel))))
 
-    return {'nb_participants_baking': nb_participants_baking, 'baking': baking, 'nb_participants_mpst': nb_participants_mpst, 'mpst': mpst, 'nb_participants_binary': nb_participants_binary, 'binary': binary, 'nb_participants_crossbeam': nb_participants_crossbeam, 'crossbeam': crossbeam}
+    return {'nb_participants_baking': nb_participants_baking, 'average_baking': average_baking, 'nb_participants_mpst': nb_participants_mpst, 'average_mpst': average_mpst, 'nb_participants_binary': nb_participants_binary, 'average_binary': average_binary, 'nb_participants_crossbeam': nb_participants_crossbeam, 'average_crossbeam': average_crossbeam}
 
 
 def ring_compile():
@@ -564,27 +563,27 @@ def ring_compile():
                         # If MPST of binary, append to related lists
                 if 'mpst' in d:
                     if 'baking' in d:
-                        average_mpst.append(statistics.mean(build_time)/10**6)
+                        average_mpst.append(statistics.mean(build_time))
                         nb_participants_mpst.append(str_to_int[name])
                     else:
                         average_baking.append(
-                            statistics.mean(build_time)/10**6)
+                            statistics.mean(build_time))
                         nb_participants_baking.append(str_to_int[name])
                 elif 'binary' in d:
-                    average_binary.append(statistics.mean(build_time)/10**6)
+                    average_binary.append(statistics.mean(build_time))
                     nb_participants_binary.append(str_to_int[name])
                 elif 'cancel' in d:
                     if 'broadcast' in d:
                         average_cancel_broadcast.append(
-                            statistics.mean(build_time)/10**6)
+                            statistics.mean(build_time))
                         nb_participants_cancel_broadcast.append(
                             str_to_int[name])
                     else:
                         average_cancel.append(
-                            statistics.mean(build_time)/10**6)
+                            statistics.mean(build_time))
                         nb_participants_cancel.append(str_to_int[name])
                 elif 'crossbeam' in d:
-                    average_crossbeam.append(statistics.mean(build_time)/10**6)
+                    average_crossbeam.append(statistics.mean(build_time))
                     nb_participants_crossbeam.append(str_to_int[name])
             except:
                 print('Issue with ', d)
@@ -651,8 +650,8 @@ with open(result_folder / result_mesh_file, 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(mesh_bench_lists['crossbeam']):
-            report_file.write(str(mesh_bench_lists['crossbeam'][i]))
+        if i < len(mesh_bench_lists['average_crossbeam']):
+            report_file.write(str(mesh_bench_lists['average_crossbeam'][i]))
         report_file.write('; ')
         if i < len(mesh_compile_lists['average_crossbeam']):
             report_file.write(str(mesh_compile_lists['average_crossbeam'][i]))
@@ -663,8 +662,8 @@ with open(result_folder / result_mesh_file, 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(mesh_bench_lists['binary']):
-            report_file.write(str(mesh_bench_lists['binary'][i]))
+        if i < len(mesh_bench_lists['average_binary']):
+            report_file.write(str(mesh_bench_lists['average_binary'][i]))
         report_file.write('; ')
         if i < len(mesh_compile_lists['average_binary']):
             report_file.write(str(mesh_compile_lists['average_binary'][i]))
@@ -675,8 +674,8 @@ with open(result_folder / result_mesh_file, 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(mesh_bench_lists['mpst']):
-            report_file.write(str(mesh_bench_lists['mpst'][i]))
+        if i < len(mesh_bench_lists['average_mpst']):
+            report_file.write(str(mesh_bench_lists['average_mpst'][i]))
         report_file.write('; ')
         if i < len(mesh_compile_lists['average_mpst']):
             report_file.write(str(mesh_compile_lists['average_mpst'][i]))
@@ -687,8 +686,8 @@ with open(result_folder / result_mesh_file, 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(mesh_bench_lists['baking']):
-            report_file.write(str(mesh_bench_lists['baking'][i]))
+        if i < len(mesh_bench_lists['average_baking']):
+            report_file.write(str(mesh_bench_lists['average_baking'][i]))
         report_file.write('; ')
         if i < len(mesh_compile_lists['average_baking']):
             report_file.write(str(mesh_compile_lists['average_baking'][i]))
@@ -702,8 +701,8 @@ with open('results/ring_' + str(index_ring) + '.csv', 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ring_bench_lists['crossbeam']):
-            report_file.write(str(ring_bench_lists['crossbeam'][i]))
+        if i < len(ring_bench_lists['average_crossbeam']):
+            report_file.write(str(ring_bench_lists['average_crossbeam'][i]))
         report_file.write('; ')
         if i < len(ring_compile_lists['average_crossbeam']):
             report_file.write(str(ring_compile_lists['average_crossbeam'][i]))
@@ -714,8 +713,8 @@ with open('results/ring_' + str(index_ring) + '.csv', 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ring_bench_lists['binary']):
-            report_file.write(str(ring_bench_lists['binary'][i]))
+        if i < len(ring_bench_lists['average_binary']):
+            report_file.write(str(ring_bench_lists['average_binary'][i]))
         report_file.write('; ')
         if i < len(ring_compile_lists['average_binary']):
             report_file.write(str(ring_compile_lists['average_binary'][i]))
@@ -726,8 +725,8 @@ with open('results/ring_' + str(index_ring) + '.csv', 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ring_bench_lists['mpst']):
-            report_file.write(str(ring_bench_lists['mpst'][i]))
+        if i < len(ring_bench_lists['average_mpst']):
+            report_file.write(str(ring_bench_lists['average_mpst'][i]))
         report_file.write('; ')
         if i < len(ring_compile_lists['average_mpst']):
             report_file.write(str(ring_compile_lists['average_mpst'][i]))
@@ -738,8 +737,8 @@ with open('results/ring_' + str(index_ring) + '.csv', 'a') as report_file:
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ring_bench_lists['baking']):
-            report_file.write(str(ring_bench_lists['baking'][i]))
+        if i < len(ring_bench_lists['average_baking']):
+            report_file.write(str(ring_bench_lists['average_baking'][i]))
         report_file.write('; ')
         if i < len(ring_compile_lists['average_baking']):
             report_file.write(str(ring_compile_lists['average_baking'][i]))
@@ -752,8 +751,9 @@ with open('results/ping_pong_' + str(index_ping_pong) + '.csv', 'a') as report_f
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ping_pong_bench_lists['crossbeam']):
-            report_file.write(str(ping_pong_bench_lists['crossbeam'][i]))
+        if i < len(ping_pong_bench_lists['average_crossbeam']):
+            report_file.write(
+                str(ping_pong_bench_lists['average_crossbeam'][i]))
         report_file.write('; ')
         if i < len(ping_pong_compile_lists['average_crossbeam']):
             report_file.write(
@@ -765,8 +765,8 @@ with open('results/ping_pong_' + str(index_ping_pong) + '.csv', 'a') as report_f
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ping_pong_bench_lists['binary']):
-            report_file.write(str(ping_pong_bench_lists['binary'][i]))
+        if i < len(ping_pong_bench_lists['average_binary']):
+            report_file.write(str(ping_pong_bench_lists['average_binary'][i]))
         report_file.write('; ')
         if i < len(ping_pong_compile_lists['average_binary']):
             report_file.write(
@@ -778,8 +778,8 @@ with open('results/ping_pong_' + str(index_ping_pong) + '.csv', 'a') as report_f
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ping_pong_bench_lists['mpst']):
-            report_file.write(str(ping_pong_bench_lists['mpst'][i]))
+        if i < len(ping_pong_bench_lists['average_mpst']):
+            report_file.write(str(ping_pong_bench_lists['average_mpst'][i]))
         report_file.write('; ')
         if i < len(ping_pong_compile_lists['average_mpst']):
             report_file.write(str(ping_pong_compile_lists['average_mpst'][i]))
@@ -790,11 +790,194 @@ with open('results/ping_pong_' + str(index_ping_pong) + '.csv', 'a') as report_f
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
-        if i < len(ping_pong_compile_lists['average_mpst']):
-            report_file.write(str(ping_pong_compile_lists['average_mpst'][i]))
+        if i < len(ping_pong_compile_lists['average_baking']):
+            report_file.write(
+                str(ping_pong_compile_lists['average_baking'][i]))
         report_file.write('; ')
         if i < len(ping_pong_compile_lists['average_baking']):
             report_file.write(
                 str(ping_pong_compile_lists['average_baking'][i]))
         report_file.write('\n')
     report_file.write('\n')
+
+
+# Create figures
+fig_mesh_compile, ax_mesh_compile = plt.subplots()
+fig_mesh_bench, ax_mesh_bench = plt.subplots()
+fig_ring_compile, ax_ring_compile = plt.subplots()
+fig_ring_bench, ax_ring_bench = plt.subplots()
+fig_ping_pong_compile, ax_ping_pong_compile = plt.subplots()
+fig_ping_pong_bench, ax_ping_pong_bench = plt.subplots()
+
+# Set title
+ax_mesh_compile.set_title("Mesh compilation time")
+ax_mesh_bench.set_title("Mesh bench time")
+ax_ring_compile.set_title("Ring compilation time")
+ax_ring_bench.set_title("Ring bench time")
+ax_ping_pong_compile.set_title("Ping pong compilation time")
+ax_ping_pong_bench.set_title("Ping pong bench time")
+
+# Set axis to integers
+# Mesh compile
+ax_mesh_compile.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax_mesh_compile.yaxis.set_major_locator(MaxNLocator(integer=True))
+# Mesh bench
+ax_mesh_bench.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax_mesh_bench.yaxis.set_major_locator(MaxNLocator(integer=True))
+# Ring compile
+ax_ring_compile.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax_ring_compile.yaxis.set_major_locator(MaxNLocator(integer=True))
+# Ring bench
+ax_ring_bench.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax_ring_bench.yaxis.set_major_locator(MaxNLocator(integer=True))
+# Ping_pong compile
+ax_ping_pong_compile.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax_ping_pong_compile.yaxis.set_major_locator(MaxNLocator(integer=True))
+# Ping_pong bench
+ax_ping_pong_bench.xaxis.set_major_locator(MaxNLocator(integer=True))
+ax_ping_pong_bench.yaxis.set_major_locator(MaxNLocator(integer=True))
+
+# Set the axis titles
+ax_mesh_compile.set_xlabel('\# roles')
+ax_mesh_bench.set_xlabel('\# roles')
+ax_ring_compile.set_xlabel('\# roles')
+ax_ring_bench.set_xlabel('\# roles')
+ax_ping_pong_compile.set_xlabel('\# loops')
+ax_ping_pong_bench.set_xlabel('\# loops')
+
+# Set ticks parameters to major/both
+ax_mesh_compile.tick_params(axis='both', which='major')
+ax_mesh_bench.tick_params(axis='both', which='major')
+ax_ring_compile.tick_params(axis='both', which='major')
+ax_ring_bench.tick_params(axis='both', which='major')
+ax_ping_pong_compile.tick_params(axis='both', which='major')
+ax_ping_pong_bench.tick_params(axis='both', which='major')
+
+# Plot the graphs
+# Mesh compile
+# Crossbeam
+if len(mesh_compile_lists['nb_participants_crossbeam']) > 0:
+    ax_mesh_compile.plot(mesh_compile_lists['nb_participants_crossbeam'], mesh_compile_lists['average_crossbeam'], label='Crossbeam',
+                         linestyle='solid', marker='>')
+
+# Binary
+if len(mesh_compile_lists['nb_participants_binary']) > 0:
+    ax_mesh_compile.plot(mesh_compile_lists['nb_participants_binary'], mesh_compile_lists['average_binary'], label='Binary',
+                         linestyle='solid', marker='o')
+
+# MPST
+if len(mesh_compile_lists['nb_participants_mpst']) > 0:
+    ax_mesh_compile.plot(mesh_compile_lists['nb_participants_mpst'], mesh_compile_lists['average_mpst'], label='MPST',
+                         linestyle='solid', marker='d')
+
+# AMPST
+if len(mesh_compile_lists['nb_participants_baking']) > 0:
+    ax_mesh_compile.plot(mesh_compile_lists['nb_participants_baking'], mesh_compile_lists['average_baking'], label='AMPST',
+                         linestyle='solid', marker='*')
+# Mesh bench
+# Crossbeam
+if len(mesh_bench_lists['nb_participants_crossbeam']) > 0:
+    ax_mesh_bench.plot(mesh_bench_lists['nb_participants_crossbeam'], mesh_bench_lists['average_crossbeam'], label='Crossbeam',
+                       linestyle='solid', marker='>')
+
+# Binary
+if len(mesh_bench_lists['nb_participants_binary']) > 0:
+    ax_mesh_bench.plot(mesh_bench_lists['nb_participants_binary'], mesh_bench_lists['average_binary'], label='Binary',
+                       linestyle='solid', marker='o')
+
+# MPST
+if len(mesh_bench_lists['nb_participants_mpst']) > 0:
+    ax_mesh_bench.plot(mesh_bench_lists['nb_participants_mpst'], mesh_bench_lists['average_mpst'], label='MPST',
+                       linestyle='solid', marker='d')
+
+# AMPST
+if len(mesh_bench_lists['nb_participants_baking']) > 0:
+    ax_mesh_bench.plot(mesh_bench_lists['nb_participants_baking'], mesh_bench_lists['average_baking'], label='AMPST',
+                       linestyle='solid', marker='*')
+
+# Ring compile
+# Crossbeam
+if len(ring_compile_lists['nb_participants_crossbeam']) > 0:
+    ax_ring_compile.plot(ring_compile_lists['nb_participants_crossbeam'], ring_compile_lists['average_crossbeam'], label='Crossbeam',
+                         linestyle='solid', marker='>')
+
+# Binary
+if len(ring_compile_lists['nb_participants_binary']) > 0:
+    ax_ring_compile.plot(ring_compile_lists['nb_participants_binary'], ring_compile_lists['average_binary'], label='Binary',
+                         linestyle='solid', marker='o')
+
+# MPST
+if len(ring_compile_lists['nb_participants_mpst']) > 0:
+    ax_ring_compile.plot(ring_compile_lists['nb_participants_mpst'], ring_compile_lists['average_mpst'], label='MPST',
+                         linestyle='solid', marker='d')
+
+# AMPST
+if len(ring_compile_lists['nb_participants_baking']) > 0:
+    ax_ring_compile.plot(ring_compile_lists['nb_participants_baking'], ring_compile_lists['average_baking'], label='AMPST',
+                         linestyle='solid', marker='*')
+
+# Ring bench
+# Crossbeam
+if len(ring_bench_lists['nb_participants_crossbeam']) > 0:
+    ax_ring_bench.plot(ring_bench_lists['nb_participants_crossbeam'], ring_bench_lists['average_crossbeam'], label='Crossbeam',
+                       linestyle='solid', marker='>')
+
+# Binary
+if len(ring_bench_lists['nb_participants_binary']) > 0:
+    ax_ring_bench.plot(ring_bench_lists['nb_participants_binary'], ring_bench_lists['average_binary'], label='Binary',
+                       linestyle='solid', marker='o')
+
+# MPST
+if len(ring_bench_lists['nb_participants_mpst']) > 0:
+    ax_ring_bench.plot(ring_bench_lists['nb_participants_mpst'], ring_bench_lists['average_mpst'], label='MPST',
+                       linestyle='solid', marker='d')
+
+# AMPST
+if len(ring_bench_lists['nb_participants_baking']) > 0:
+    ax_ring_bench.plot(ring_bench_lists['nb_participants_baking'], ring_bench_lists['average_baking'], label='AMPST',
+                       linestyle='solid', marker='*')
+
+# Ping_pong compile
+# Crossbeam
+if len(ping_pong_compile_lists['nb_loops_crossbeam']) > 0:
+    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_crossbeam'], ping_pong_compile_lists['average_crossbeam'], label='Crossbeam',
+                              linestyle='solid', marker='>')
+
+# Binary
+if len(ping_pong_compile_lists['nb_loops_binary']) > 0:
+    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_binary'], ping_pong_compile_lists['average_binary'], label='Binary',
+                              linestyle='solid', marker='o')
+
+# MPST
+if len(ping_pong_compile_lists['nb_loops_mpst']) > 0:
+    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_mpst'], ping_pong_compile_lists['average_mpst'], label='MPST',
+                              linestyle='solid', marker='d')
+
+# AMPST
+if len(ping_pong_compile_lists['nb_loops_baking']) > 0:
+    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_baking'], ping_pong_compile_lists['average_baking'], label='AMPST',
+                              linestyle='solid', marker='*')
+
+# Ping_pong bench
+# Crossbeam
+if len(ping_pong_bench_lists['nb_loops_crossbeam']) > 0:
+    ax_ping_pong_bench.plot(ping_pong_bench_lists['nb_loops_crossbeam'], ping_pong_bench_lists['average_crossbeam'], label='Crossbeam',
+                            linestyle='solid', marker='>')
+
+# Binary
+if len(ping_pong_bench_lists['nb_loops_binary']) > 0:
+    ax_ping_pong_bench.plot(ping_pong_bench_lists['nb_loops_binary'], ping_pong_bench_lists['average_binary'], label='Binary',
+                            linestyle='solid', marker='o')
+
+# MPST
+if len(ping_pong_bench_lists['nb_loops_mpst']) > 0:
+    ax_ping_pong_bench.plot(ping_pong_bench_lists['nb_loops_mpst'], ping_pong_bench_lists['average_mpst'], label='MPST',
+                            linestyle='solid', marker='d')
+
+# AMPST
+if len(ping_pong_bench_lists['nb_loops_baking']) > 0:
+    ax_ping_pong_bench.plot(ping_pong_bench_lists['nb_loops_baking'], ping_pong_bench_lists['average_baking'], label='AMPST',
+                            linestyle='solid', marker='*')
+
+# # function to show the plot
+plt.show()

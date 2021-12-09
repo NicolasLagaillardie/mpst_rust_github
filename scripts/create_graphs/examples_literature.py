@@ -72,7 +72,7 @@ for d in compile_directories:
         # If name looks like the one from what we want
         if compile_file in d:
             try:
-                with open(compile_folder /  d, 'r') as f:
+                with open(compile_folder / d, 'r') as f:
                     lines = [line.rstrip() for line in f]
                     temp_check = []
                     temp_build = []
@@ -85,7 +85,8 @@ for d in compile_directories:
                         elif 'release' in line:
                             temp_release.append(int(line.split('; ')[1]))
 
-                result_file = 'benchmarks_main_from_literature_' + str(index) + '.csv'
+                result_file = 'benchmarks_main_from_literature_' + \
+                    str(index) + '.csv'
 
                 with open(result_folder / result_file, 'a') as report_file:
 
