@@ -353,35 +353,35 @@ name = "mesh_eight_binary"
 path = "examples/mesh/mesh_eight_binary.rs"
 required-features = ["macros_multiple"]
 
-[[example]]
-name = "mesh_nine_crossbeam"
-path = "examples/mesh/mesh_nine_crossbeam.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "mesh_nine_crossbeam"
+# path = "examples/mesh/mesh_nine_crossbeam.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "mesh_nine_mpst"
-path = "examples/mesh/mesh_nine_mpst.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "mesh_nine_mpst"
+# path = "examples/mesh/mesh_nine_mpst.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "mesh_nine_binary"
-path = "examples/mesh/mesh_nine_binary.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "mesh_nine_binary"
+# path = "examples/mesh/mesh_nine_binary.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "mesh_ten_crossbeam"
-path = "examples/mesh/mesh_ten_crossbeam.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "mesh_ten_crossbeam"
+# path = "examples/mesh/mesh_ten_crossbeam.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "mesh_ten_mpst"
-path = "examples/mesh/mesh_ten_mpst.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "mesh_ten_mpst"
+# path = "examples/mesh/mesh_ten_mpst.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "mesh_ten_binary"
-path = "examples/mesh/mesh_ten_binary.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "mesh_ten_binary"
+# path = "examples/mesh/mesh_ten_binary.rs"
+# required-features = ["macros_multiple"]
 
 # [[example]]
 # name = "mesh_eleven_crossbeam"
@@ -520,35 +520,35 @@ name = "ring_eight_binary"
 path = "examples/ring/ring_eight_binary.rs"
 required-features = ["macros_multiple"]
 
-[[example]]
-name = "ring_nine_crossbeam"
-path = "examples/ring/ring_nine_crossbeam.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "ring_nine_crossbeam"
+# path = "examples/ring/ring_nine_crossbeam.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "ring_nine_mpst"
-path = "examples/ring/ring_nine_mpst.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "ring_nine_mpst"
+# path = "examples/ring/ring_nine_mpst.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "ring_nine_binary"
-path = "examples/ring/ring_nine_binary.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "ring_nine_binary"
+# path = "examples/ring/ring_nine_binary.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "ring_ten_crossbeam"
-path = "examples/ring/ring_ten_crossbeam.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "ring_ten_crossbeam"
+# path = "examples/ring/ring_ten_crossbeam.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "ring_ten_mpst"
-path = "examples/ring/ring_ten_mpst.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "ring_ten_mpst"
+# path = "examples/ring/ring_ten_mpst.rs"
+# required-features = ["macros_multiple"]
 
-[[example]]
-name = "ring_ten_binary"
-path = "examples/ring/ring_ten_binary.rs"
-required-features = ["macros_multiple"]
+# [[example]]
+# name = "ring_ten_binary"
+# path = "examples/ring/ring_ten_binary.rs"
+# required-features = ["macros_multiple"]
 
 # [[example]]
 # name = "ring_eleven_crossbeam"

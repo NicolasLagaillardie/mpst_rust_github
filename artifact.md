@@ -34,6 +34,24 @@ During the compilation of the docker file,
 tests are ran for the different tools used in this artifact,
 hence it may take some time to compile.
 
+In the case you want to build the image from source,
+here is the link to the [repository](https://github.com/NicolasLagaillardie/docker_multicrusty/).
+You need `SSH` to be set up.
+The commands to download and build the image are:
+
+```sh
+git clone https://github.com/NicolasLagaillardie/docker_multicrusty/
+cd  docker_multicrusty
+git submodule init
+git submodule update
+docker build . # You may need to `sudo` this command.
+```
+
+The last command, after compiling, will output
+the name of the image as a string of digits and letters.
+This string is the one you have to provide when running
+`docker run -it [the name of the docker file]`.
+
 Thereafter, we assume that you are in the main directory of the docker file.
 
 ## STEP 1: Understanding MultiCrusty

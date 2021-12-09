@@ -5,17 +5,18 @@
 set -e
 
 # progress bar function
-prog() {
-    local w=80 p=$1;  shift
-    # create a string of spaces, then change them to dots
-    printf -v dots "%*s" "$(( $p*$w/100 ))" ""; dots=${dots// /.};
-    # print those dots on a fixed-width space plus the percentage etc. 
-    printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*"; 
-}
+# prog() {
+#     local w=80 p=$1;  shift
+#     # create a string of spaces, then change them to dots
+#     printf -v dots "%*s" "$(( $p*$w/100 ))" ""; dots=${dots// /.};
+#     # print those dots on a fixed-width space plus the percentage etc. 
+#     printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*"; 
+# }
 
 for i in $(eval echo {1..$1})
 do
-    prog "$((i/$(( $1 / 100 ))))" still working...
+    # prog "$((i/$(( $1 / 100 ))))" still working...
+    printf 'Loop created: '"$next"';\n'
     #########################
     next=$(($i+1))
     #########################
