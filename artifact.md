@@ -8,26 +8,25 @@ The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
 
 This artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
-ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, reusable and available badge.
+ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims functional, reusable and available badge.
 
 ## Artifact layout
 
 The artifact (after building the docker image) contains
 
 * The directory `most-rust-github`-- a directory containing the source code of the mp-anon tool
-* `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
-* `most-rust-github/scripts` - the scripts for reproducing the results
-* `most-rust-github/benches` --- the examples for Fig. 9
+  * `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
+  * `most-rust-github/scripts` - the scripts for reproducing the results
+  * `most-rust-github/benches` --- the examples for Fig. 9
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 
 ## Claims about reusability, functionality and availability
-the artifact demonstartes the following claims. 
 
 1. Functionality:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper: 
     
-    -  Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-upapproach. __Check the claim  by__: following [Part II: Step 1](Step1.1)
+    -   Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-upapproach. __Check the claim  by__: following [Part II: Step 1](Step1.1)
     
     -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part I1: Step 1](Step1.1)
     
@@ -42,16 +41,17 @@ the artifact demonstartes the following claims.
     
     2.1. claims on compile-time performance (line 886-892):: 
 
-        -  the more participants there are, the higher is the compilation time for MPST
+    - the more participants there are, the higher is the compilation time for MPST
     
     2.2. claims on run-time performance (line 880-885): 
 
-        -  mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
+    - mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
 
-        -  the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
+    - the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
 
-        -  AMPST can a negligible overhead in comparison to MPST 
-    __Check the claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step2)
+    - AMPST can a negligible overhead in comparison to MPST 
+    
+    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step2)
 3. Reusability: The mp-anon tool can be used to verify your own communication protocols, follow
 the instructions in [Part III](PartIII)
 4. Availability: We agree our artifact to be  published under a Creative Commons license on DARTS. 
@@ -61,10 +61,10 @@ the instructions in [Part III](PartIII)
 To run all benchmarks reported in the paper, the reviewers need:
 
 * a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
-* to enable localhost access (note that when you run a docker image the localhost is enabled by default)
+* to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
 
 Note: The benchmark data in the paper was generated
-using an 32-cores AMD OpteronTM Processor 6282 SE
+using an 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
 with a quota of more than 100.000 files and 100 GB of HDD.
 
@@ -103,20 +103,19 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
 5. You should see in the end of the output after last operation:
 
     ```bash
-    Loaded image: mpanon:artifact
+    Loaded image: mpanon:latest
     ```
 
 6. Run the docker container:
 
     ```bash
-    docker run -it -p mpanon:artifact
+    docker run -it --rm mpanon:latest
     ```
 
 __Note__: You may need to run the above command with sudo
 
-1. The Docker image comes with an installation of vim and nano for editing.
-   If you wish to install additional software for editing or other purposes, you may obtain sudo
-   access with the password `mpanon`.
+1. The Docker image comes with an installation of `vim` and `neovim` for editing.
+   If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `mpanon`.
 2. Thereafter, we assume that you are in the main directory of the docker file.
 
 <!-- For running the docker file on your own machine,
@@ -142,32 +141,30 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 Move to the `mpanon` folder.
 
 ```bash
-cd mpst_rust_github # Move to mpanon's repository
+cd mpst_rust_github
 ```
 
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
 
 ```bash
 ./scripts/top_down.sh
 ```
 
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
+2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
 
 ```bash
 ./scripts/bottom_up.sh
 ```
 
-3. Edit the program and observe the reported errors
+3. Edit the program and observe the reported errors. After each modification, compile the program with `cargo run --example=video_stream --all-features` and observe the reported error.
 
-After each modification, compile the program and observe the reported error.
-
-* Open the VideoStream program in file XXX
+* Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
 Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
-
-* Suggested Modification
+Suggested modifications:
   * swapping lines 104 and 105 (which will lead to a deadlock)
   * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
   * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
+
 
 4. Run the tests to make sure mp-anon is installed and configured correctly
 
@@ -203,12 +200,6 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ## Part II: Step by Step instructions
 
 ### STEP 1: Run the main example (VideoStream) of the paper (Section 2)
-
-Move to the `mpanon` folder.
-
-```bash
-cd mpst_rust_github
-```
 
 1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
 
@@ -562,12 +553,12 @@ cargo run --example="Adder_generated" --features=baking
 ```
 
 __Optional__: Now that your first example works, we can check that it is still
-**safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the 
-previous example, i.e Adder, check [Adder-kmc](Adder-kmc).
+**safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the
+previous example, i.e Adder, check [adder_kmc](adder_kmc).
 
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
 
-__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation. 
+__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
 
 __Note__: If you want to see how bottom-up can be applied to the
 previous example, i.e Adder, check [adder_kmc](adder_kmc).
@@ -701,20 +692,19 @@ four additional parts:
 1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
 
-4️⃣ &nbsp;  Implement the endpoint processes for A, B and C 
+4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` and `C`.
 
 5️⃣ &nbsp; Run the example
 
 ```bash
-cargo run --example=mybasic --features=baking_checking
+cargo run --example=my_basic --features=baking_checking
 ```
-
 
 ## ADDITIONAL INFORMATION
 
 All set-up and benchmark was performed on the following machine:
 
-* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, 
+* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
 OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
 
 The original benchmarks were generated using:
