@@ -45,10 +45,10 @@ the instructions in [Part III](Part III)
 To run all benchmarks reported in the paper, the reviewers need:
 
 * a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
-* to enable localhost access (note that when you run a docker image the localhost is enabled by default)
+* to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
 
 Note: The benchmark data in the paper was generated
-using an 32-cores AMD OpteronTM Processor 6282 SE
+using an 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
 with a quota of more than 100.000 files and 100 GB of HDD.
 
@@ -87,13 +87,13 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
 5. You should see in the end of the output after last operation:
 
     ```bash
-    Loaded image: mpanon:artifact
+    Loaded image: mpanon:latest
     ```
 
 6. Run the docker container:
 
     ```bash
-    docker run -it -p mpanon:artifact
+    docker run -it -p mpanon:latest
     ```
 
 __Note__: You may need to run the above command with sudo
