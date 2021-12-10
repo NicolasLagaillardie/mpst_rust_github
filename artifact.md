@@ -320,7 +320,7 @@ to retrieve results for only one kind of protocols:
 
 ---
 
-## Part III (Optional): Walkthrough tutorial on checking your own protocols with `Mp-anon`
+## Part III (Optional): A Walkthrough tutorial on checking your own protocols with `Mp-anon`
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
