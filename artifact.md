@@ -23,12 +23,24 @@ The artifact (after building the docker image) contains
 Scribble protocols
 
 ## Claims about reusability, functionality and availability
+the artifact demonstartes the following claims. 
 
-We would like you to be able to
+1. Functionality:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper: 
+    
+    1.1. Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-upapproach (demonstarted here in [Part I1: Step 1](Step1.1))
+    
+    1.2.  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper, (demonstarted here in [Part I1: Step 1](Step1.1))
+    
+    1.3.  Observe detected errors due to incompatible types, as explained in Section 2 in the paper (demonstarted here in [Part I1: Step 1](Step1.3))
 
-1. understand how to use the tool to write and verify affine protocols using MPST,
-2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
-3. use the tool to verify your own communication protocols.
+2. Functionality: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
+    2.1 claims expressivity: examples in Table 2 can be expressed using mp-anon. 
+    Table 2 can be reproduces following the instructions in [Part II: Step 2](Step1)
+    2.1 claims performance: 
+    Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step2)
+3. Reusability: The mp-anon tool can be used to verify your own communication protocols, follow
+the instructions in [Part III](Part III)
+4. Availability: We agree our artifact to be  published under a Creative Commons license on DARTS. 
 
 ## Prerequisites
 
