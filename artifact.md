@@ -128,12 +128,15 @@ then:
 ```sh
 cargo test --examples --all-features --workspace # Test all examples
 ```
+The above command may take up to 15 min. 
 
 5. Run the benchmarks from Figure 2
 
 ```sh
 cargo test --benches --all-features --workspace # Test all benchmarks
 ```
+The above command may take up to 15 min. 
+
 __Note__: 
 The commands from steps 3-5 can be ran all together with:
 
