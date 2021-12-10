@@ -28,7 +28,7 @@ cat examples/ping_pong_save/ping_pong_broadcast_cancel_1.rs > examples/ping_pong
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    printf 'Loop created: '"$next"';\n'
+    printf 'Loop created: '"$i"';\n'
     #########################
     next=$(($i+1))
     #########################

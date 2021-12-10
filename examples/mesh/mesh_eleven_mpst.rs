@@ -1,5 +1,9 @@
-#![allow(clippy::type_complexity, clippy::too_many_arguments, clippy::large_enum_variant)]
-    
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant
+)]
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
