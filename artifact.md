@@ -113,6 +113,40 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Part I: Quick Start 
 
+1. Run the tests to make sure mp-anon is installed and configured correctly 
+
+```sh
+cd mpst_rust_github # Move to mpanon's repository
+cargo test --tests --all-features --workspace # Test all tests
+```
+The above command may take up to 15 min. 
+
+2. Run the examples from Table 2
+then:
+
+```sh
+cargo test --examples --all-features --workspace # Test all examples
+```
+The above command may take up to 15 min. 
+
+3. Run the benchmarks from Figure 2
+
+```sh
+cargo test --benches --all-features --workspace # Test all benchmarks
+```
+The above command may take up to 15 min. 
+
+__Note__: 
+The commands from steps 3-5 can be ran all together with:
+
+```bash
+cargo test --all-targets --all-features --workspace # Test everything in the library
+```
+
+## Part II: Step by Step instructions 
+
+### STEP 1: Run the main example (VideoStream) of the paper (Section 2).
+
 1. Check and run the running example from the paper using the top-down approach, VideoStreaming. 
 * execute the following command 
 ```
@@ -136,41 +170,7 @@ Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ult
     *  using another communication primitive, replace s.recv on line 7 with s.send -- compilation errors because type mismatch  
     *  modify the types corresponding to line 7) from XXX (some recv) to YYYsome send) -- mismatch because of duality 
 
-3. Run the tests to make sure mp-anon is installed and configured correctly 
-
-```sh
-cd mpst_rust_github # Move to mpanon's repository
-cargo test --tests --all-features --workspace # Test all tests
-```
-The above command may take up to 15 min. 
-
-4. Run the examples from Table 2
-then:
-
-```sh
-cargo test --examples --all-features --workspace # Test all examples
-```
-The above command may take up to 15 min. 
-
-5. Run the benchmarks from Figure 2
-
-```sh
-cargo test --benches --all-features --workspace # Test all benchmarks
-```
-The above command may take up to 15 min. 
-
-__Note__: 
-The commands from steps 3-5 can be ran all together with:
-
-```bash
-cargo test --all-targets --all-features --workspace # Test everything in the library
-```
-
-## Part II: Step by Step instructions 
-
-## STEP 1: Running the benchmarks
-
-### 1. Running the examples from in Table 2 (examples from the literature)
+### STEP 2: Running the examples from in Table 2 (examples from the literature)
 
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
@@ -232,7 +232,7 @@ Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv
 on top of the existing ones.
 </details> -->
 
-### 2. Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
+### STEP 3: Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
 
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
@@ -320,7 +320,7 @@ to retrieve results for only one kind of protocols:
 
 ---
 
-## STEP 3: Checking your own protocols written with `Mp-anon`
+## Part III (Optional): Walkthrough tutorila on checking your own protocols with `Mp-anon`
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
