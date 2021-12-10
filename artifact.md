@@ -426,15 +426,15 @@ re-generated using the following script:
 ./scripts/examples_literature.sh # Will take at least several dozens of minutes, progress is displayed in the terminal
 ```
 
-which runs our tool on each example listed in Table 2.
+Each command is ran 10 times on each example and the columns display the means
 
-The results will be in the file `results/benchmarks_main_from_literature_0.csv` where:
+The results will be in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
 
-* Column 1: file name,
-* Column 2: **check** time
-* Column 3: **build** time
-* Column 4: **build --release** time
-* Column 5: **run** time
+* Column 1: file name (Example/Endpoint),
+* Column 2: **check** time, the result of ```cargo check``` (Check)
+* Column 3: **build** time, the result of ```cargo build``` (Comp.)
+* Column 4: **build --release** time, the result of ```cargo build --release``` (Rel.)
+* Column 5: **run** time, the result of running ````cargo bench``` (Exec time)
 
 <!-- The columns 2, 3 and 4 gather the time needed for executing the
 respective commands `cargo check`, `cargo build` and `cargo build --release`
@@ -447,7 +447,7 @@ builds the binaries.
 `cargo build --release` builds optimised binaries which are
 faster for running time and usually used for benchmarks.
 Hence, it is faster for checking a `Rust` file
-with `cargo check` than the two others,
+with `cargo check` than the two others,f
 and `cargo build --release` is slower than `cargo build`
 as it optimises the output binaries.
 For higher accuracy and lower variance,
