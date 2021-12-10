@@ -7,16 +7,8 @@
 The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
 
-This artifact contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the
+This artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the
 ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, resusable and available badge.
-
-### Claims about reusability, functionality and availability
-
-We would like you to be able to
-
-1. understand how to use the tool to write and verify affine protocols using MPST,
-2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
-3. use the tool to verify your own communication protocols.
 
 #### Artifact layout
 
@@ -29,6 +21,15 @@ The artifact (after building the docker image) contains
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
+
+## Claims about reusability, functionality and availability
+
+We would like you to be able to
+
+1. understand how to use the tool to write and verify affine protocols using MPST,
+2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
+3. use the tool to verify your own communication protocols.
+
 
 ## Prerequisites
 
