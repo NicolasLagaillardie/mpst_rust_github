@@ -178,9 +178,32 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 
 ## Part II: Step by Step instructions 
 
-## STEP 1: Running the benchmarks
+### STEP 1: Run the main example (VideoStream) of the paper (Section 2).
 
-### 1. Running the examples from in Table 2 (examples from the literature)
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming. 
+* execute the following command 
+```
+```
+
+2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
+* execute the following command 
+```
+cargo run --example=video_stream --all-features
+```
+
+3. Edit the program and observe the reported errors
+
+After each modification, compile the program and observe the reported error. 
+
+* Open the VideoStream program in file XXX
+Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
+
+* Suggested Modification 
+    *  swapping lines 10 and 9 (whcih will lead to a deadlock) 
+    *  using another communication primitive, replace s.recv on line 7 with s.send -- compilation errors because type mismatch  
+    *  modify the types corresponding to line 7) from XXX (some recv) to YYYsome send) -- mismatch because of duality 
+
+### STEP 2: Running the examples from in Table 2 (examples from the literature)
 
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
@@ -242,7 +265,7 @@ Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv
 on top of the existing ones.
 </details> -->
 
-### 2. Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
+### STEP 3: Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
 
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
@@ -330,7 +353,7 @@ to retrieve results for only one kind of protocols:
 
 ---
 
-## STEP 3: Checking your own protocols written with `Mp-anon`
+## Part III (Optional): A Walkthrough tutorial on checking your own protocols with `Mp-anon`
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
@@ -512,105 +535,15 @@ Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool.
 
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
+Here, we use another example to demonstarte the bottom up approach. 
+We will write a simple program that XXX. 
+Create a new file `mybasic` in the folder `examples/`.
 
-The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
-We are not going to introduce how to use it but how `Mpanon` takes advantage
-of it *interactive* mode to check protocols.
+__Note__: If you want to see how bottom-up can be applied to the 
+previous example, i.e Adder, check [Adder-kmc](Adder-kmc).
 
-`Mpanon` uses the macro `checker_concat!` on the types
-to create the communicating automata that the `KMC` tool will be able to read.
-This macro returns two elements within a tuple:
 
-1. the graphs of each participant using the **dot** format
-2. the minimal **k** checked by the protocol
-
-Our theory only supports protocols which have **k=1**,
-but protocols with higher can still be implemented using `Mpanon`.
-Futhermore, we restricted **k** to be lower than **50**:
-any protocol with **k** higher than 50 will be marked as
-incorrect.
-Indeed, the `KMC` tool does not have an automated way of checking
-the minimal **k** of a protocol and `Mpanon`
-checks the protocol for each **k** increasing from 1 to 50.
-
-Now, that you have a better idea of the interactions between those
-two tools, we can improve our `Adder_generated` example to be checked
-by the `KMC` tool using our macro `checker_concat!`.
-For this purpose, append the following lines to our file:
-
-```rust
-
-/////////////////////////
-
-fn checking() {
-    let (graphs, kmc) = mpstthree::checker_concat!(
-        "Adder_checking",
-        EndpointA48,
-        EndpointC13,
-        EndpointB50
-        =>
-        [
-            EndpointC7,
-            Branches0AtoC, ADD,
-            Branches0BtoC, ADD,
-        ],
-        [
-            EndpointC9,
-            Branches0AtoC, BYE,
-            Branches0BtoC, BYE,
-        ]
-    )
-    .unwrap();
-
-    println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
-    println!("\n/////////////////////////\n");
-    println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
-    println!("\n/////////////////////////\n");
-    println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
-    println!("\n/////////////////////////\n");
-    println!("min kMC: {:?}", kmc);
-}
-```
-
-and update the `main()` function by including `checking();` in it:
-
-```rust
-fn main() {
-    checking();
-
-    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
-
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
-}
-```
-
-Now, if you run again the file, it should run correctly:
-
-```bash
-cargo run --example="Adder_generated" --features=baking_checking
-```
-
-Notice the different feature used for compiling the example.
-
-After running the command above, the terminal should display
-four additional parts:
-
-1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
-2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
-
-If you are unsure about either of the above steps,
-the `Rust` code is available in the `adder.rs` file
-located in the `examples/` folder.
-
----
-
-### Your own types written `Mpanon`
-
-Your file should be in the folder `examples/`.
-
-First, import the necessary macros and types from the `Mpanon`:
+1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
 
 ```rust
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
@@ -620,20 +553,22 @@ use mpstthree::role::end::RoleEnd; // The final type for the stacks and the name
 use mpstthree::checker_concat; // Used for checking the protocol
 ```
 
-Then create the **roles** and the **MeshedChannels** types:
+2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
 
 ```rust
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B);
+bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); # generates meshed channels for 3 roles
 ```
 
-Replace `A, B` with the different names
+<!-- Replace `A, B` with the different names
 of the roles you desire.
 They must be in the alphabetical order,
-and a comma at the end is optional.
+and a comma at the end is optional. -->
 The new generated types will be `MeshedChannels`
 and `RoleX` where `X` is the provided name in the macro inputs.
 
-A good practice in `Rust` is to write the simplest types first,
+2️⃣ &nbsp;  Write the **MeshedChannels** types
+
+A good practice is to write the simplest types first,
 and concatenate them into `MeshedChannels`.
 That is why we will first write down the types
 used for representing the roles:
@@ -698,8 +633,10 @@ type EndpointA = MeshedChannels<StartA0, OrderingA0, NameA>;
 type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 ```
 
-Now that we have the types you can check the whole protocol with
-the `checker_concat!` macro:
+3️⃣  &nbsp;  Check that the types are correct 
+
+We can ckech that the written types are compatible using
+the `checker_concat!` macro which translaets the types to Cmmunicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility.
 
 ```rust
 fn main() {
@@ -722,10 +659,27 @@ fn main() {
     println!("min kMC: {:?}", kmc);
 }
 ```
+Run the checker_concat! macro to check if the types are correct
+
+```bash
+cargo run --example=mybasic --features=baking_checking
+```
+
+After running the command above, the terminal should display
+four additional parts:
+
+1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
+2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
+
 
 This example is also in `examples/basic.rs`
 
-Example of running:
+4️⃣ &nbsp;  Implement the endpoint processes for A, B and C 
+
+
+
+5️⃣ &nbsp; Run the example 
+
 
 ```bash
 cargo run --example=basic --features=baking_checking
@@ -796,4 +750,94 @@ cd  mpst_rust_github/
 ```
 </details>
 
+<details>
+<summary> Adder example with kmc <a name="Adder-kmc"></a> </summary> 
 
+<!-- 
+The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
+We are not going to introduce how to use it but how `Mpanon` takes advantage
+of it *interactive* mode to check protocols.
+
+`Mpanon` uses the macro `checker_concat!` on the types
+to create the communicating automata that the `KMC` tool will be able to read.
+This macro returns two elements within a tuple:
+
+1. the graphs of each participant using the **dot** format
+2. the minimal **k** checked by the protocol
+
+Our theory only supports protocols which have **k=1**,
+but protocols with higher can still be implemented using `Mpanon`.
+Futhermore, we restricted **k** to be lower than **50**:
+any protocol with **k** higher than 50 will be marked as
+incorrect.
+Indeed, the `KMC` tool does not have an automated way of checking
+the minimal **k** of a protocol and `Mpanon`
+checks the protocol for each **k** increasing from 1 to 50. -->
+
+Now, that you have a better idea of the interactions between those
+two tools, we can improve our `Adder_generated` example to be checked
+by the `KMC` tool using our macro `checker_concat!`.
+For this purpose, append the following lines to our file:
+
+```rust
+
+/////////////////////////
+
+fn checking() {
+    let (graphs, kmc) = mpstthree::checker_concat!(
+        "Adder_checking",
+        EndpointA48,
+        EndpointC13,
+        EndpointB50
+        =>
+        [
+            EndpointC7,
+            Branches0AtoC, ADD,
+            Branches0BtoC, ADD,
+        ],
+        [
+            EndpointC9,
+            Branches0AtoC, BYE,
+            Branches0BtoC, BYE,
+        ]
+    )
+    .unwrap();
+
+    println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
+    println!("\n/////////////////////////\n");
+    println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
+    println!("\n/////////////////////////\n");
+    println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
+    println!("\n/////////////////////////\n");
+    println!("min kMC: {:?}", kmc);
+}
+```
+
+and update the `main()` function by including `checking();` in it:
+
+```rust
+fn main() {
+    checking();
+
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
+
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+}
+```
+
+Now, if you run again the file, it should run correctly:
+
+```bash
+cargo run --example="Adder_generated" --features=baking_checking
+```
+
+Notice the different feature used for compiling the example.
+
+
+If you are unsure about either of the above steps,
+the `Rust` code is available in the `adder.rs` file
+located in the `examples/` folder.
+
+</details>
