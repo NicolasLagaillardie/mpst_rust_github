@@ -121,6 +121,7 @@ cargo run --example=video_stream --all-features (bottom up)
 cd mpst_rust_github # Move to mpanon's repository
 cargo test --tests --all-features --workspace # Test all tests
 ```
+The above command may take up to 15 min. 
 
 4. Run the examples from Table 2
 then:
