@@ -8,7 +8,7 @@ The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
 
 This artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
-ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, reusable and available badge.
+ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims functional, reusable and available badge.
 
 ## Artifact layout
 
@@ -536,12 +536,12 @@ cargo run --example="Adder_generated" --features=baking
 ```
 
 __Optional__: Now that your first example works, we can check that it is still
-**safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the 
-previous example, i.e Adder, check [Adder-kmc](Adder-kmc).
+**safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the
+previous example, i.e Adder, check [adder_kmc](adder_kmc).
 
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
 
-__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation. 
+__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
 
 __Note__: If you want to see how bottom-up can be applied to the
 previous example, i.e Adder, check [adder_kmc](adder_kmc).
@@ -675,7 +675,7 @@ four additional parts:
 1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
 
-4️⃣ &nbsp;  Implement the endpoint processes for A, B and C 
+4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` and `C`.
 
 5️⃣ &nbsp; Run the example
 
@@ -683,12 +683,11 @@ four additional parts:
 cargo run --example=mybasic --features=baking_checking
 ```
 
-
 ## ADDITIONAL INFORMATION
 
 All set-up and benchmark was performed on the following machine:
 
-* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, 
+* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
 OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
 
 The original benchmarks were generated using:
