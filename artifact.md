@@ -501,7 +501,7 @@ cargo run --example="Adder_generated" --features=baking
 Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool.
 
-### Bottom-up: Write the types in Rust and check them with the kmc tool
+### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
 
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
 We are not going to introduce how to use it but how `Mpanon` takes advantage
