@@ -56,23 +56,51 @@ to test them. -->
 
 ## Getting started
 
-For running the docker file on your own machine,
-assuming you downloaded it and you have Docker installed on your machine:
+For the ECOOP'22 artifact evaluation, please use the docker image provided:
 
-1. open a terminal
+0. [Install docker](https://docs.docker.com/engine/install/) and open the terminal.
+1. Download the artifact file (assume the filename is `artifact.tar.gz`)
+2. Unzip the artifact file.
+    ```bash
+    gunzip artifact.tar.gz
+    ```
+3. You should see the tar file `artifact.tar` after last operation.
+4. Load the docker image
+    ```bash
+    docker load < artifact.tar
+    ```
+5. You should see in the end of the output after last operation:
+    ```
+    Loaded image: mpanon:artifact
+    ```
+6. Run the docker container:
+    ```bash
+    docker run -it -p 3000:3000 mpanon:artifact
+    ```
+__Note__: You may need to run the above command with sudo
+
+7. The Docker image comes with an installation of vim and nano for editing.
+   If you wish to install additional software for editing or other purposes, you may obtain sudo
+   access with the password `mpanon`.
+8. Thereafter, we assume that you are in the main directory of the docker file.
+
+<!-- For running the docker file on your own machine,
+assuming you downloaded it and you have Docker installed on your machine: -->
+
+<!-- 1. open a terminal
 2. move to the folder containing your docker file with `cd`
 3. run the command `docker run -it mpanon`. You may need to `sudo` this command.
 Note: This may take around 30 min to complete
-The password and user in this docker image are both `mpanon`.
+The password and user in this docker image are both `mpanon`.-->
 <!-- During the compilation of the docker file,
 tests are ran for the different tools used in this artifact,
 hence it may take some time to compile. -->
-
+<!--
 The rest of the document is organised as follows: 
 * Quick Start lets you test that all required componenst are installed correctly 
 * Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approach. 
 * Repso
-Thereafter, we assume that you are in the main directory of the docker file.
+Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Quick Start 
 
