@@ -138,35 +138,7 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Part I: Quick Start
 
-Move to the `mpanon` folder.
-
-```bash
-cd mpst_rust_github
-```
-
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
-
-```bash
-./scripts/top_down.sh
-```
-
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
-
-```bash
-./scripts/bottom_up.sh
-```
-
-3. Edit the program and observe the reported errors. After each modification, compile the program with `cargo run --example=video_stream --all-features` and observe the reported error.
-
-* Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
-Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
-Suggested modifications:
-  * swapping lines 104 and 105 (which will lead to a deadlock)
-  * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
-  * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
-
-
-4. Run the tests to make sure mp-anon is installed and configured correctly
+1. Run the tests to make sure mp-anon is installed and configured correctly
 
 ```bash
 cargo test --tests --all-features --workspace # Test all tests
@@ -174,7 +146,7 @@ cargo test --tests --all-features --workspace # Test all tests
 
 The above command may take up to 15 min.
 
-5. Run the examples from Table 2:
+2. Run the examples from Table 2:
 
 ```bash
 cargo test --examples --all-features --workspace # Test all examples
@@ -182,7 +154,7 @@ cargo test --examples --all-features --workspace # Test all examples
 
 The above command may take up to 15 min.
 
-6. Run the benchmarks from Figure 9:
+3. Run the benchmarks from Figure 9:
 
 ```bash
 cargo test --benches --all-features --workspace # Test all benchmarks
