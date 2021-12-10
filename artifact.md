@@ -498,16 +498,16 @@ Now, if you run again the file, it should run correctly:
 cargo run --example="Adder_generated" --features=baking
 ```
 
-Now that your first example works, we can check that it is still
-**safe** using the `KMC` tool.
+__Optional__: Now that your first example works, we can check that it is still
+**safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the 
+previous example, i.e Adder, check [Adder-kmc](Adder-kmc).
 
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
 Here, we use another example to demonstarte the bottom up approach. 
 We will write a simple program that XXX. 
 Create a new file `mybasic` in the folder `examples/`.
 
-__Note__: If you want to see how bottom-up can be applied to the 
-previous example, i.e Adder, check [Adder-kmc](Adder-kmc).
+__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation. 
 
 
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
@@ -639,8 +639,6 @@ four additional parts:
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
 
 
-This example is also in `examples/basic.rs`
-
 4️⃣ &nbsp;  Implement the endpoint processes for A, B and C 
 
 
@@ -649,8 +647,9 @@ This example is also in `examples/basic.rs`
 
 
 ```bash
-cargo run --example=basic --features=baking_checking
+cargo run --example=mybasic --features=baking_checking
 ```
+
 
 ## ADDITIONAL INFORMATION
 
