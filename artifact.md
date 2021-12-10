@@ -103,18 +103,43 @@ The rest of the document is organised as follows:
 Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Quick Start 
+
 1. Check and run the running example from the paper using th ebottom-up approach, VideoStreaming. 
 * execute the following command 
 ```
 TODO: add the command to run video stream 
 ```
 
-2. Check and run the running example from the paper using th ebottom-up approach, VideoStreaming. 
+2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
 * execute the following command 
 ```
-TODO: add the command to run video stream and SCribble gen 
+TODO: add the command to run video stream and Scribble gen 
+
+3. Run all tests to make sure all examples are working on your system
+
+```sh
+cd mpst_rust_github # Move to mpanon's repository
+cargo test --tests --all-features --workspace # Test all tests
 ```
 
+4. Run the examples from Table 2
+then:
+
+```sh
+cargo test --examples --all-features --workspace # Test all examples
+```
+
+5. Run the benchmarks from Figure 2
+
+```sh
+cargo test --benches --all-features --workspace # Test all benchmarks
+```
+__Note__: 
+The commands from steps 3-5 can be ran all together with:
+
+```sh
+cargo test --all-targets --all-features --workspace # Test everything in the library
+```
 
 ## STEP 1: Understanding Mpanon
 
@@ -153,9 +178,16 @@ of the `mpst_rust_github` folder containing `Mpanon`.
 
 Now, you can move into the `mpst_rust_github` folder and
 open this file using your preferred editor program
-before testing the protocol directly with `Mpanon`.
+before testing the protocol directly with `Mpanon`,
+`vim` and `neovim` are already installed.
 
 From this point we assume that you will remain in the `Mpanon` repository.
+
+Check that the generated types are the same as the one provided in
+the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
+up to line 73.
+
+Then, you can run this command to run your example:
 
 ```sh
 cargo run --example="Adder_generated" --features=baking
@@ -171,7 +203,7 @@ This command contains four parts:
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` api only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
-Hereafter, we provide the code to be added to the `Adder_generated.rs`
+Hereafter, we provide the code to be append to the `Adder_generated.rs`
 file to make it work:
 
 ```rust
@@ -305,7 +337,7 @@ checks the protocol for each **k** increasing from 1 to 50.
 Now, that you have a better idea of the interactions between those
 two tools, we can improve our `Adder_generated` example to be checked
 by the `KMC` tool using our macro `checker_concat!`.
-For this purpose, add the following lines to our file:
+For this purpose, append the following lines to our file:
 
 ```rust
 
@@ -439,35 +471,54 @@ on top of the existing ones.
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
 
-#### Running the entire benchmark set (at least 24 hours)
+#### Running a small benchmark set
 
-You will first need to generate all the `ping-pong` protocols
-from 1 loop to 500 loops with the commands:
+You can run a small set of benchmarks by running first:
 
 ```sh
-./scripts/create_files/create_ping_pong_examples.sh 500
-./scripts/create_files/create_ping_pong_benches.sh 500
+./lightweight_library.sh # This will take more less 1 hour
 ```
 
-**This needs to be done once.**
-If you want to increase the number of loops,
-you need to delete the generated files
-and reset the file `ping_pong.rs` in the
-folder `benches/`.
+then by running the command line
 
-You will also need to uncomment the protocols you want
-to benchmark: uncomment the lines you want in the files
-[benches/mesh.rs](benches/mesh.rs), [benches/ring.rs](benches/ring.rs)
-and sections **Mesh examples** and **Ring examples** in [Cargo.toml](Cargo.toml).
-An example of commented and uncommented lines is as follow:
+```sh
+./scripts/ping_pong_mesh_ring.sh
+```
 
-```rust
-////////// Benchmarks using basic functions with zero loops
-mesh_all::empty::mesh_two::mesh_two,
-mesh_all::empty::mesh_three::mesh_three,
-// mesh_all::empty::mesh_four::mesh_four,
-// mesh_all::empty::mesh_five::mesh_five,
-// mesh_all::empty::mesh_six::mesh_six,
+you will be able to get the results
+for `ping_pong` protocols up to 200 loops,
+and `mesh` and `ring` protocols up to _five_ participants.
+
+The `ping_pong_mesh_ring.sh` scripts generate 3 files:
+`ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
+in the folder [results/](results/).
+
+The structure of the `ping_ping_0.csv` file is as follows:
+
+1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
+2. Column 2: number of loops
+3. Column 3: average running time
+4. Column 4: average compilation time
+
+The structure of the `mesh_0.csv` and `ring_0.csv`
+files is as follows:
+
+1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
+2. Column 2: number of participants
+3. Column 3: average running time
+4. Column 4: average compilation time
+
+Be aware that the scripts adds additional `*.csv`files
+on top of the existing ones.
+
+The different graphs are also displayed with `Python matplotlib`.
+
+#### Running the entire benchmark set (at least 24 hours)
+
+You can run a same set of benchmarks than the paper by running first:
+
+```sh
+./full_library.sh
 ```
 
 Then you can run the script:
@@ -481,54 +532,6 @@ and running the whole script took over 24 hours.
 Progress is shown while running each benchmark.
 We propose a similar but smaller set of benchmarks below.
 
-The `ping_pong_mesh_ring.py` scripts generate 3 files:
-`ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
-in the folder `results/`.
-
-The structure of the `ping_ping_0.csv` file is as follows:
-
-1. Column 1: the type of implementation (AMPST, MPST, binary or crossbeam)
-2. Column 2: number of loops
-3. Column 3: average running time
-4. Column 4: average compilation time
-
-The structure of the `mesh_0.csv` and `ring_0.csv`
-files is as follows:
-
-1. Column 1: the type of implementation (AMPST, MPST, binary or crossbeam)
-2. Column 2: number of participants
-3. Column 3: average running time
-4. Column 4: average compilation time
-
-#### Running a smaller benchmark set
-
-You can run a smaller set of benchmarks by commenting
-lines in the files respective
-`ping_pong.rs`, `mesh.rs` and `ring.rs`
-in the folder `benches/` such as:
-
-```rust
-...
-// ping_pong_all::ping_pong_1::ping_pong,
-...
-```
-
-instead of
-
-```rust
-...
-ping_pong_all::ping_pong_1::ping_pong,
-...
-```
-
-then by running again the command line
-
-```sh
-./scripts/ping_pong_mesh_ring.sh
-```
-
-you will be able to get the results
-for the non-documented protocols.
 You can also run one the following scripts
 to retrieve results for only one kind of protocols:
 
@@ -537,9 +540,6 @@ to retrieve results for only one kind of protocols:
 ./scripts/mesh.sh # For mesh protocols
 ./scripts/ring.sh # For ring protocols
 ```
-
-Be aware that the scripts adds additional `*.csv`files
-on top of the existing ones.
 
 ---
 
