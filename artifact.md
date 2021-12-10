@@ -20,9 +20,15 @@ We would like you to be able to
 
 #### Artifact layout 
 
-1. understand how to use the tool to write and verify affine protocols using MPST,
-2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
-3. use the tool to verify your own communication protocols.
+The artifact (after building the docker image) contains
+
+* The directory `most-rust-github`-- a directory containing the source code of the mp-annon tool 
+    *  `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reportes in Fig. 9 and Table 2 in the paper 
+    *  `most-rust-github/scripts` - the scripts for reproducing the results
+    *  `most-rust-github/benches` --- the examples for Fig. 2 
+* The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
+* The directory `scribble-java` that contains the Scribble source code for generating Rust types from 
+Scribble protocols 
 
 ## Prerequisites 
 
@@ -48,7 +54,7 @@ to test them. -->
 
 ---
 
-## Part I: Getting started
+## Getting started
 
 For running the docker file on your own machine,
 assuming you downloaded it and you have Docker installed on your machine:
@@ -56,13 +62,19 @@ assuming you downloaded it and you have Docker installed on your machine:
 1. open a terminal
 2. move to the folder containing your docker file with `cd`
 3. run the command `docker run -it mpanon`. You may need to `sudo` this command.
-
+Note: This may take around 30 min to complete
 The password and user in this docker image are both `mpanon`.
-During the compilation of the docker file,
+<!-- During the compilation of the docker file,
 tests are ran for the different tools used in this artifact,
-hence it may take some time to compile.
+hence it may take some time to compile. -->
 
+The rest of the document is organised as follows: 
+* Quick Start lets you test that all required componenst are installed correctly 
+* Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approach. 
+* Repso
 Thereafter, we assume that you are in the main directory of the docker file.
+
+## Quick Start 
 
 To check, build and test `Mpanon` with the following commands:
 
