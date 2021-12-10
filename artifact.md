@@ -7,15 +7,15 @@
 The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
 
-This artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the
-ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, resusable and available badge.
+This artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
+ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, reusable and available badge.
 
-#### Artifact layout
+## Artifact layout
 
 The artifact (after building the docker image) contains
 
-* The directory `most-rust-github`-- a directory containing the source code of the mp-annon tool
-* `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reportes in Fig. 9 and Table 2 in the paper
+* The directory `most-rust-github`-- a directory containing the source code of the mp-anon tool
+* `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
 * `most-rust-github/scripts` - the scripts for reproducing the results
 * `most-rust-github/benches` --- the examples for Fig. 9
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
@@ -29,7 +29,6 @@ We would like you to be able to
 1. understand how to use the tool to write and verify affine protocols using MPST,
 2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
 3. use the tool to verify your own communication protocols.
-
 
 ## Prerequisites
 
@@ -107,9 +106,9 @@ tests are ran for the different tools used in this artifact,
 hence it may take some time to compile. -->
 <!--
 The rest of the document is organised as follows: 
-* Quick Start lets you test that all required componenst are installed correctly 
+* Quick Start lets you test that all required components are installed correctly 
 * Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approach. 
-* Repso
+* Repo
 Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Part I: Quick Start
@@ -175,32 +174,41 @@ The commands from steps 3-5 can be ran all together with:
 cargo test --all-targets --all-features --workspace # Test everything in the library
 ```
 
-## Part II: Step by Step instructions 
+## Part II: Step by Step instructions
 
-### STEP 1: Run the main example (VideoStream) of the paper (Section 2).
+### STEP 1: Run the main example (VideoStream) of the paper (Section 2)
 
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming. 
-* execute the following command 
-```
+Move to the `mpanon` folder.
+
+```bash
+cd mpst_rust_github
 ```
 
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
-* execute the following command 
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
+
+* execute the following command
+
+```bash
+./scripts/top_down.sh
 ```
-cargo run --example=video_stream --all-features
+
+2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
+
+* execute the following command
+
+```bash
+./scripts/bottom_up.sh
 ```
 
 3. Edit the program and observe the reported errors
 
-After each modification, compile the program and observe the reported error. 
+After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error.
 
-* Open the VideoStream program in file XXX
-Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
-
-* Suggested Modification 
-    *  swapping lines 10 and 9 (whcih will lead to a deadlock) 
-    *  using another communication primitive, replace s.recv on line 7 with s.send -- compilation errors because type mismatch  
-    *  modify the types corresponding to line 7) from XXX (some recv) to YYYsome send) -- mismatch because of duality 
+* Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
+Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon). Suggested modifications:
+  * swapping lines 104 and 105 (which will lead to a deadlock)
+  * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
+  * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
 
 ### STEP 2: Running the examples from in Table 2 (examples from the literature)
 
@@ -221,10 +229,10 @@ Each command is ran 10 times on each example and the columns display the means
 **Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
 
 * Column 1: file name (Example/Endpoint),
-* Column 2: **check** time, the result of ```cargo check``` (Check)
-* Column 3: **build** time, the result of ```cargo build``` (Comp.)
-* Column 4: **build --release** time, the result of ```cargo build --release``` (Rel.)
-* Column 5: **run** time, the result of running ````cargo bench``` (Exec time)
+* Column 2: **check** time, the result of `cargo check` (Check)
+* Column 3: **build** time, the result of `cargo build` (Comp.)
+* Column 4: **build --release** time, the result of `cargo build --release` (Rel.)
+* Column 5: **run** time, the result of running `cargo bench` (Exec time)
 
 <!-- <details>
 <summary>
@@ -264,12 +272,12 @@ Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv
 on top of the existing ones.
 </details> -->
 
-### STEP 3: Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
+### STEP 3: Running benchmarks from Figure 9 (ping-pong, mesh and ring protocols)
 
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
 
-### **Option 1**: Running a small benchmark set
+#### **Option 1**: Running a small benchmark set
 
 You can run a small set of benchmarks:
 
@@ -283,20 +291,18 @@ then by running the command line
 ./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
 ```
 
-The above nechmakrs run a set o fthe becnhmarks from Figure 9. 
-In particualr, `ping_pong` protocols are up to 200 loops,
-and `mesh` and `ring` protocols are up to _five_ participants. 
+The above benchmarks run a set of the benchmarks from Figure 9.
+In particular, `ping_pong` protocols are up to 200 loops,
+and `mesh` and `ring` protocols are up to _five_ participants.
 
-**Results:** After runnign the above scripts, 
-5 graphs will be displays correposning to Figure 9. 
+**Results:** After running the above scripts,
+5 graphs will be displays corresponding to Figure 9.
 
-The graphs are also displayed using `Python matplotlib` and the row data for the graphs  (.csv files)
-is in the [results/](results/) folder.
-
+The graphs are displayed using `Python matplotlib` and the row data for the graphs (.csv files) is in the [results/](results/) folder.
 
 <details>
 <summary>
-Details on the content of the raw .csv files data (optional reading). 
+Details on the content of the raw .csv files data (optional reading).
 </summary>
 
 The `ping_pong_mesh_ring.sh` scripts generate 3 files:
@@ -319,11 +325,10 @@ files is as follows:
 4. Column 4: average compilation time
 
 Be aware that the scripts adds additional `*.csv`files
-on top of the existing ones. 
+on top of the existing ones.
 </details>
 
-
-###  **Option 2**: Running the entire benchmark set (at least 24 hours)
+#### **Option 2**: Running the entire benchmark set (at least 24 hours)
 
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
@@ -352,11 +357,11 @@ to retrieve results for only one kind of protocols:
 
 ---
 
-## Part III (Optional): A Walkthrough tutorial on checking your own protocols with `Mp-anon`
+## Part III (Optional): A walkthrough tutorial on checking your own protocols with `Mp-anon`
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
-(2) your own types written with `Mp-anon` and then ckeded using the kmc tool (bottom-up approach).
+(2) your own types written with `Mp-anon` and then checked using the kmc tool (bottom-up approach).
 
 <!-- Mpanon, the `Rust` library introduced in the paper, has one purpose:
 allow the implementation of affine communication protocols in `Rust`.
@@ -367,16 +372,16 @@ by another tool called `KMC`.
 Those two approaches, respectively `top-down` and `bottom-up` approaches,
 are described separately hereafter. -->
 
-### 3.1 Top-down: Generating Types from Scribble 
+### 3.1 Top-down: Generating Types from Scribble
 
-In the `top-down` approach, protocols written in the protocol description langauge `Scribble` are
+In the `top-down` approach, protocols written in the protocol description language `Scribble` are
 used for generating Mp-anon types.
 
 You can use our implementation of the recursive `Fibonacci` protocol
-provided in the `Scribble` repository as a start. The protocol is located 
+provided in the `Scribble` repository as a start. The protocol is located
 in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr)
 
-1️⃣ &nbsp; Generate Rust Types from Scribble 
+1️⃣ &nbsp; Generate Rust Types from Scribble
 
 ```bash
 cd scribble-java/
@@ -389,16 +394,16 @@ This command outputs the file `Adder_generated.rs` at the root of the `scribble-
 directory.
 
 Below we move the file the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
-of the `mpst_rust_github` folder containing `Mpanon`. 
-```
+of the `mpst_rust_github` folder containing `Mpanon`.
+
+```bash
 cd ..
 mv scribble-java/Adder_generated.rs mpst_rust_github/examples/Adder_generated.rs
 ```
 
-Now, you can move into the `mpst_rust_github` folder and
-open this file using your preferred editor program
-before testing the protocol directly with `Mpanon`,
-`vim` and `neovim` are already installed.
+Now, you can move back into the `mpst_rust_github` folder and
+open the `examples/Adder_generated.rs` file using your preferred editor program
+before testing the protocol directly with `Mpanon`.
 
 ➡️ &nbsp; From this point we assume that you will remain in the `Mpanon` repository.
 
@@ -417,7 +422,7 @@ This command contains four parts:
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
 3. `--example="Adder_generated` for running the specific *example* `Adder_generated`
-4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example. 
+4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example.
 
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` api only generates `Rust` types
@@ -425,7 +430,7 @@ and the `Rust` compiler needs at least a `main` function.
 Hereafter, we provide the code to be append to the `Adder_generated.rs`
 file to make it work:
 
-3️⃣ &nbsp; Implement the endpoint programs for role A, B and C
+3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
 
 ```rust
 
@@ -434,10 +439,10 @@ file to make it work:
 fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
     let (_, s) = s.recv()?;
     offer_mpst!(s, {
-        Branches0AtoC::ADD(s) => {
+        Branches0AtoC::Add(s) => {
             recurs_a(s)
         },
-        Branches0AtoC::BYE(s) => {
+        Branches0AtoC::Bye(s) => {
             let (_,s) = s.recv()?;
             s.close()
         },
@@ -450,7 +455,7 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
         Branches0AtoC::Add(s) => {
             recurs_a(s)
         },
-        Branches0AtoC::BYE(s) => {
+        Branches0AtoC::Bye(s) => {
             let (_,s) = s.recv()?;
             s.close()
         },
@@ -461,12 +466,12 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branches0BtoC::ADD(s) => {
+        Branches0BtoC::Add(s) => {
             let (_,s) = s.recv()?;
             let s = s.send(0)?;
             endpoint_b(s)
         },
-        Branches0BtoC::BYE(s) => {
+        Branches0BtoC::Bye(s) => {
             let (_,s) = s.recv()?;
             let s = s.send(())?;
             s.close()
@@ -483,12 +488,12 @@ fn endpoint_c(s: EndpointC13) -> Result<(), Box<dyn Error>> {
 
 fn recurs_c(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
     if loops <= 0 {
-        let s: EndpointC7 = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
+        let s: EndpointC7 = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
         let s = s.send(0)?;
 
         recurs_c(s, loops - 1)
     } else {
-        let s: EndpointC9 = choose_mpst_c_to_all!(s, Branches0AtoC::BYE, Branches0BtoC::BYE);
+        let s: EndpointC9 = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
         let s = s.send(())?;
 
         s.close()
@@ -534,13 +539,13 @@ Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool.
 
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
-Here, we use another example to demonstarte the bottom up approach. 
-We will write a simple program that XXX. 
-Create a new file `mybasic` in the folder `examples/`.
 
-__Note__: If you want to see how bottom-up can be applied to the 
-previous example, i.e Adder, check [Adder-kmc](Adder-kmc).
+Here, we use another example to demonstrate the bottom up approach.
+We will write a simple program that XXX.
+Create a new file `my_basic` in the folder `examples/`.
 
+__Note__: If you want to see how bottom-up can be applied to the
+previous example, i.e Adder, check [adder_kmc](adder_kmc).
 
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
 
@@ -555,7 +560,7 @@ use mpstthree::checker_concat; // Used for checking the protocol
 2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
 
 ```rust
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); # generates meshed channels for 3 roles
+bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); // generates meshed channels for 3 roles
 ```
 
 <!-- Replace `A, B` with the different names
@@ -632,10 +637,10 @@ type EndpointA = MeshedChannels<StartA0, OrderingA0, NameA>;
 type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 ```
 
-3️⃣  &nbsp;  Check that the types are correct 
+3️⃣  &nbsp;  Check that the types are correct
 
-We can ckech that the written types are compatible using
-the `checker_concat!` macro which translaets the types to Cmmunicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility.
+We can check that the written types are compatible using
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility.
 
 ```rust
 fn main() {
@@ -658,10 +663,11 @@ fn main() {
     println!("min kMC: {:?}", kmc);
 }
 ```
+
 Run the checker_concat! macro to check if the types are correct
 
 ```bash
-cargo run --example=mybasic --features=baking_checking
+cargo run --example=my_basic --features=baking_checking
 ```
 
 After running the command above, the terminal should display
@@ -670,15 +676,11 @@ four additional parts:
 1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
 
-
 This example is also in `examples/basic.rs`
 
-4️⃣ &nbsp;  Implement the endpoint processes for A, B and C 
+4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` and `C`
 
-
-
-5️⃣ &nbsp; Run the example 
-
+5️⃣ &nbsp; Run the example
 
 ```bash
 cargo run --example=basic --features=baking_checking
@@ -710,7 +712,7 @@ The source code is included in the root directory.
 <details>
 <summary> Rust commands on build, test, compile </summary>
 
-Here is a general descitpion of all commpand you can run on build, check and test. 
+Here is a general description of all commands you can run on build, check and test.
  <!-- test `Mpanon` with the following commands: -->
 
 ```bash
@@ -732,8 +734,8 @@ cargo test --all-features --tests --workspace # Test all tests
 cargo test --all-features --benches --workspace # Test all benchmarks
 
 ```
-</details>
 
+</details>
 <details> <summary>  Scribble commands </summary>
 
 Assuming you know how to write `Scribble` protocols,
@@ -747,10 +749,10 @@ cd ..
 mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
 cd  mpst_rust_github/
 ```
-</details>
 
+</details>
 <details>
-<summary> Adder example with kmc <a name="Adder-kmc"></a> </summary> 
+<summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
 
 <!-- 
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
@@ -833,7 +835,6 @@ cargo run --example="Adder_generated" --features=baking_checking
 ```
 
 Notice the different feature used for compiling the example.
-
 
 If you are unsure about either of the above steps,
 the `Rust` code is available in the `adder.rs` file
