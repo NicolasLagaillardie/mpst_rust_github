@@ -8,7 +8,7 @@ The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
 
 This artifact contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the 
-ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. the artifact claims functional, resusable and available badge. 
+ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, resusable and available badge. 
 
 #### Claims about reusability, functionality and availability 
 
