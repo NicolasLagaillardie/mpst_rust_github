@@ -1,5 +1,9 @@
-#![allow(clippy::type_complexity, clippy::too_many_arguments, clippy::large_enum_variant)]
-    
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant
+)]
+
 use crossbeam_channel::bounded;
 
 use std::thread::spawn;

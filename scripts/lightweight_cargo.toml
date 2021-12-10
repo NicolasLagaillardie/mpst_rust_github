@@ -205,8 +205,12 @@ name = "travel_three"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "video_stream"
+name = "video_stream_basic"
 required-features = ["macros_simple"]
+
+[[example]]
+name = "video_stream"
+required-features = ["baking_checking"]
 
 [[example]]
 name = "adder"

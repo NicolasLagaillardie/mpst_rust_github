@@ -7,10 +7,10 @@
 The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
 
-This artifact contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the 
-ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, resusable and available badge. 
+This artifact contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the
+ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. The artifact claims functional, resusable and available badge.
 
-#### Claims about reusability, functionality and availability 
+### Claims about reusability, functionality and availability
 
 We would like you to be able to
 
@@ -18,22 +18,23 @@ We would like you to be able to
 2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
 3. use the tool to verify your own communication protocols.
 
-#### Artifact layout 
+#### Artifact layout
 
 The artifact (after building the docker image) contains
 
-* The directory `most-rust-github`-- a directory containing the source code of the mp-annon tool 
-    *  `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reportes in Fig. 9 and Table 2 in the paper 
-    *  `most-rust-github/scripts` - the scripts for reproducing the results
-    *  `most-rust-github/benches` --- the examples for Fig. 2 
+* The directory `most-rust-github`-- a directory containing the source code of the mp-annon tool
+* `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reportes in Fig. 9 and Table 2 in the paper
+* `most-rust-github/scripts` - the scripts for reproducing the results
+* `most-rust-github/benches` --- the examples for Fig. 2
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
-* The directory `scribble-java` that contains the Scribble source code for generating Rust types from 
-Scribble protocols 
+* The directory `scribble-java` that contains the Scribble source code for generating Rust types from
+Scribble protocols
 
-## Prerequisites 
+## Prerequisites
 
-To run all benchmarks reported in the paper, the reviewers need: 
-* a minumum of 16GB RAM. The library itself is lightweight but the examples and benchmarks pose that requirement. 
+To run all benchmarks reported in the paper, the reviewers need:
+
+* a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
 * to enable localhost access (note that when you run a docker image the localhost is enabled by default)
 
 Note: The benchmark data in the paper was generated
@@ -61,28 +62,36 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
 0. [Install docker](https://docs.docker.com/engine/install/) and open the terminal.
 1. Download the artifact file (assume the filename is `artifact.tar.gz`)
 2. Unzip the artifact file.
+
     ```bash
     gunzip artifact.tar.gz
     ```
+
 3. You should see the tar file `artifact.tar` after last operation.
 4. Load the docker image
+
     ```bash
     docker load < artifact.tar
     ```
+
 5. You should see in the end of the output after last operation:
-    ```
+
+    ```bash
     Loaded image: mpanon:artifact
     ```
+
 6. Run the docker container:
+
     ```bash
     docker run -it -p mpanon:artifact
     ```
+
 __Note__: You may need to run the above command with sudo
 
-7. The Docker image comes with an installation of vim and nano for editing.
+1. The Docker image comes with an installation of vim and nano for editing.
    If you wish to install additional software for editing or other purposes, you may obtain sudo
    access with the password `mpanon`.
-8. Thereafter, we assume that you are in the main directory of the docker file.
+2. Thereafter, we assume that you are in the main directory of the docker file.
 
 <!-- For running the docker file on your own machine,
 assuming you downloaded it and you have Docker installed on your machine: -->
@@ -141,7 +150,7 @@ The above command may take up to 15 min.
 __Note__: 
 The commands from steps 3-5 can be ran all together with:
 
-```sh
+```bash
 cargo test --all-targets --all-features --workspace # Test everything in the library
 ```
 
@@ -355,8 +364,8 @@ up to line 73. -->
 
 2️⃣ &nbsp;Compile the Rust types
 
-```sh
-cargo run --example="Adder_generated" --features=baking
+```bash
+cargo run --example="Adder_generated" --features=backing_checking
 ```
 
 This command contains four parts:
@@ -473,7 +482,7 @@ the macro `bundle_impl_with_enum_and_cancel!`.
 
 Now, if you run again the file, it should run correctly:
 
-```sh
+```bash
 cargo run --example="Adder_generated" --features=baking
 ```
 
@@ -557,7 +566,7 @@ fn main() {
 
 Now, if you run again the file, it should run correctly:
 
-```sh
+```bash
 cargo run --example="Adder_generated" --features=baking_checking
 ```
 
@@ -696,7 +705,7 @@ This example is also in `examples/basic.rs`
 
 Example of running:
 
-```sh
+```bash
 cargo run --example=basic --features=baking_checking
 ```
 
