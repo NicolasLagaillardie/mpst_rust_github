@@ -103,27 +103,18 @@ The rest of the document is organised as follows:
 Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Quick Start 
-
-To check, build and test `Mpanon` with the following commands:
-
-```sh
-cd mpst_rust_github # Move to mpanon's repository
-cargo check --all-features --lib --workspace # Check only this package's library
-cargo check --all-features --bins --workspace # Check all binaries
-cargo check --all-features --examples --workspace # Check all examples
-cargo check --all-features --tests --workspace # Check all tests
-cargo check --all-features --benches --workspace # Check all benchmarks
-cargo build --all-features --lib --workspace # Build only this package's library
-cargo build --all-features --bins --workspace # Build all binaries
-cargo build --all-features --examples --workspace # Build all examples
-cargo build --all-features --tests --workspace # Build all tests
-cargo build --all-features --benches --workspace # Build all benchmarks
-cargo test --all-features --lib --workspace # Test only this package's library
-cargo test --all-features --bins --workspace # Test all binaries
-cargo test --all-features --examples --workspace # Test all examples
-cargo test --all-features --tests --workspace # Test all tests
-cargo test --all-features --benches --workspace # Test all benchmarks
+1. Check and run the running example from the paper using th ebottom-up approach, VideoStreaming. 
+* execute the following command 
 ```
+TODO: add the command to run video stream 
+```
+
+2. Check and run the running example from the paper using th ebottom-up approach, VideoStreaming. 
+* execute the following command 
+```
+TODO: add the command to run video stream and SCribble gen 
+```
+
 
 ## STEP 1: Understanding Mpanon
 
@@ -703,20 +694,17 @@ cargo run --example=basic --features=baking_checking
 
 All set-up and benchmark was performed on the following machine:
 
-* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32
-* 128 GiB memory
-* 100 GB of HDD
-* OS: ubuntu 20.04 LTS (64-bit)
-* Rustup: 1.24.3
-* Rust cargo compiler: 1.56.0
+* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, 
+OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
 
 The original benchmarks were generated using:
 
 * Compile and run: `cargo bench --all-targets --all-features --workspace`
 
+<!-- 
 See main instructions
 ([README.md](README.md))
-for more information.
+for more information. -->
 
 The documentation of `mpanon` can be generated
 with the command `cargo doc --all-features`.
@@ -724,3 +712,24 @@ The generated documentation will be accessible in the file
 [target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
 
 The source code is included in the root directory.
+
+Here is a general descitpion of all commpand you can run on build, check and test. 
+ <!-- test `Mpanon` with the following commands: -->
+
+```sh
+cd mpst_rust_github # Move to mpanon's repository
+cargo check --all-features --lib --workspace # Check only this package's library
+cargo check --all-features --bins --workspace # Check all binaries
+cargo check --all-features --examples --workspace # Check all examples
+cargo check --all-features --tests --workspace # Check all tests
+cargo check --all-features --benches --workspace # Check all benchmarks
+cargo build --all-features --lib --workspace # Build only this package's library
+cargo build --all-features --bins --workspace # Build all binaries
+cargo build --all-features --examples --workspace # Build all examples
+cargo build --all-features --tests --workspace # Build all tests
+cargo build --all-features --benches --workspace # Build all benchmarks
+cargo test --all-features --lib --workspace # Test only this package's library
+cargo test --all-features --bins --workspace # Test all binaries
+cargo test --all-features --examples --workspace # Test all examples
+cargo test --all-features --tests --workspace # Test all tests
+cargo test --all-features --benches --workspace # Test all benchmarks
