@@ -28,14 +28,14 @@ Scribble protocols
     
     -   Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-upapproach. __Check the claim  by__: following [Part II: Step 1](Step1.1)
     
-    -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part I1: Step 1](Step1.1)
+    -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1](Step1.1)
     
     -  Observe detected errors due to incompatible types, as explained in Section 2 in the paper. 
     __Check the claim  by__: following [Part II: Step 1](Step1.3)
 
 2. Functionality: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
     
-    2.1 claims expressiveness (Section 5.2 in the paper)): examples in Table 2 can be expressed using mp-anon. 
+    2.1 claims expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon. 
 
     __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](Step1)
     
