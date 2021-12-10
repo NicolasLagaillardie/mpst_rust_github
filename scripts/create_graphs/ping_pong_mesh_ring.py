@@ -82,7 +82,7 @@ def ping_pong_bench():
                     average_binary.append(int(test(d)))
                     nb_loops_binary.append(int(splitted[-1]))
                 elif 'MPST' in d in d:
-                    if 'baking' in d:
+                    if 'baking' in d and 'inline' not in d:
                         average_baking.append(int(test(d)))
                         nb_loops_baking.append(int(splitted[-1]))
                     elif 'broadcast' in d:
@@ -172,7 +172,7 @@ def ping_pong_compile():
                     # If MPST of binary, append to related lists
 
             if 'mpst' in d:
-                if 'baking' in d:
+                if 'baking' in d and 'inline' not in d:
                     average_baking.append(statistics.mean(build_time))
                     nb_loops_baking.append(int(number))
                 else:
@@ -271,7 +271,7 @@ def mesh_bench():
             try:
                 # If MPST of binary, append to related lists
                 if 'MPST' in d and str_to_int[splitted[1]] >= 2:
-                    if 'baking' in d:
+                    if 'baking' in d and 'inline' not in d:
                         average_baking.append(int(test(d)))
                         nb_participants_baking.append(str_to_int[splitted[1]])
                     elif 'broadcast' in d:
@@ -365,7 +365,7 @@ def mesh_compile():
 
                         # If MPST of binary, append to related lists
                 if 'mpst' in d:
-                    if 'baking' in d:
+                    if 'baking' in d and 'inline' not in d:
                         average_baking.append(statistics.mean(build_time))
                         nb_participants_baking.append(str_to_int[name])
                     else:
@@ -468,7 +468,7 @@ def ring_bench():
             try:
                 # If MPST of binary, append to related lists
                 if 'MPST' in d and str_to_int[splitted[1]] >= 2:
-                    if 'baking' in d:
+                    if 'baking' in d and 'inline' not in d:
                         average_baking.append(int(test(d)))
                         nb_participants_baking.append(str_to_int[splitted[1]])
                     elif 'broadcast' in d:
@@ -562,7 +562,7 @@ def ring_compile():
 
                         # If MPST of binary, append to related lists
                 if 'mpst' in d:
-                    if 'baking' in d:
+                    if 'baking' in d and 'inline' not in d:
                         average_mpst.append(statistics.mean(build_time))
                         nb_participants_mpst.append(str_to_int[name])
                     else:
@@ -806,7 +806,7 @@ fig_mesh_compile, ax_mesh_compile = plt.subplots()
 fig_mesh_bench, ax_mesh_bench = plt.subplots()
 fig_ring_compile, ax_ring_compile = plt.subplots()
 fig_ring_bench, ax_ring_bench = plt.subplots()
-fig_ping_pong_compile, ax_ping_pong_compile = plt.subplots()
+# fig_ping_pong_compile, ax_ping_pong_compile = plt.subplots()
 fig_ping_pong_bench, ax_ping_pong_bench = plt.subplots()
 
 # Set title
@@ -814,7 +814,7 @@ ax_mesh_compile.set_title("Mesh compilation time")
 ax_mesh_bench.set_title("Mesh bench time")
 ax_ring_compile.set_title("Ring compilation time")
 ax_ring_bench.set_title("Ring bench time")
-ax_ping_pong_compile.set_title("Ping pong compilation time")
+# ax_ping_pong_compile.set_title("Ping pong compilation time")
 ax_ping_pong_bench.set_title("Ping pong bench time")
 
 # Set axis to integers
@@ -830,9 +830,9 @@ ax_ring_compile.yaxis.set_major_locator(MaxNLocator(integer=True))
 # Ring bench
 ax_ring_bench.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax_ring_bench.yaxis.set_major_locator(MaxNLocator(integer=True))
-# Ping_pong compile
-ax_ping_pong_compile.xaxis.set_major_locator(MaxNLocator(integer=True))
-ax_ping_pong_compile.yaxis.set_major_locator(MaxNLocator(integer=True))
+# # Ping_pong compile
+# ax_ping_pong_compile.xaxis.set_major_locator(MaxNLocator(integer=True))
+# ax_ping_pong_compile.yaxis.set_major_locator(MaxNLocator(integer=True))
 # Ping_pong bench
 ax_ping_pong_bench.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax_ping_pong_bench.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -842,7 +842,7 @@ ax_mesh_compile.set_xlabel('\# roles')
 ax_mesh_bench.set_xlabel('\# roles')
 ax_ring_compile.set_xlabel('\# roles')
 ax_ring_bench.set_xlabel('\# roles')
-ax_ping_pong_compile.set_xlabel('\# loops')
+# ax_ping_pong_compile.set_xlabel('\# loops')
 ax_ping_pong_bench.set_xlabel('\# loops')
 
 # Set ticks parameters to major/both
@@ -850,7 +850,7 @@ ax_mesh_compile.tick_params(axis='both', which='major')
 ax_mesh_bench.tick_params(axis='both', which='major')
 ax_ring_compile.tick_params(axis='both', which='major')
 ax_ring_bench.tick_params(axis='both', which='major')
-ax_ping_pong_compile.tick_params(axis='both', which='major')
+# ax_ping_pong_compile.tick_params(axis='both', which='major')
 ax_ping_pong_bench.tick_params(axis='both', which='major')
 
 # Plot the graphs
@@ -937,26 +937,26 @@ if len(ring_bench_lists['nb_participants_baking']) > 0:
     ax_ring_bench.plot(ring_bench_lists['nb_participants_baking'], ring_bench_lists['average_baking'], label='AMPST',
                        linestyle='solid', marker='*')
 
-# Ping_pong compile
-# Crossbeam
-if len(ping_pong_compile_lists['nb_loops_crossbeam']) > 0:
-    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_crossbeam'], ping_pong_compile_lists['average_crossbeam'], label='Crossbeam',
-                              linestyle='solid', marker='>')
+# # Ping_pong compile
+# # Crossbeam
+# if len(ping_pong_compile_lists['nb_loops_crossbeam']) > 0:
+#     ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_crossbeam'], ping_pong_compile_lists['average_crossbeam'], label='Crossbeam',
+#                               linestyle='solid', marker='>')
 
-# Binary
-if len(ping_pong_compile_lists['nb_loops_binary']) > 0:
-    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_binary'], ping_pong_compile_lists['average_binary'], label='Binary',
-                              linestyle='solid', marker='o')
+# # Binary
+# if len(ping_pong_compile_lists['nb_loops_binary']) > 0:
+#     ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_binary'], ping_pong_compile_lists['average_binary'], label='Binary',
+#                               linestyle='solid', marker='o')
 
-# MPST
-if len(ping_pong_compile_lists['nb_loops_mpst']) > 0:
-    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_mpst'], ping_pong_compile_lists['average_mpst'], label='MPST',
-                              linestyle='solid', marker='d')
+# # MPST
+# if len(ping_pong_compile_lists['nb_loops_mpst']) > 0:
+#     ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_mpst'], ping_pong_compile_lists['average_mpst'], label='MPST',
+#                               linestyle='solid', marker='d')
 
-# AMPST
-if len(ping_pong_compile_lists['nb_loops_baking']) > 0:
-    ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_baking'], ping_pong_compile_lists['average_baking'], label='AMPST',
-                              linestyle='solid', marker='*')
+# # AMPST
+# if len(ping_pong_compile_lists['nb_loops_baking']) > 0:
+#     ax_ping_pong_compile.plot(ping_pong_compile_lists['nb_loops_baking'], ping_pong_compile_lists['average_baking'], label='AMPST',
+#                               linestyle='solid', marker='*')
 
 # Ping_pong bench
 # Crossbeam

@@ -2,7 +2,11 @@
 
 # Create the ping_pong files examples/ping_pong, for i from 1 to arg
 
+# Stop upon any error
 set -e
+
+# Delete previous ping-pong examples
+rm -rf examples/ping_pong*.rs
 
 # progress bar function
 # prog() {
@@ -13,6 +17,14 @@ set -e
 #     printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*"; 
 # }
 
+# Copy from save
+cat examples/ping_pong_save/ping_pong_binary_1.rs > examples/ping_pong_binary_1.rs
+cat examples/ping_pong_save/ping_pong_mpst_1.rs > examples/ping_pong_mpst_1.rs
+cat examples/ping_pong_save/ping_pong_cancel_1.rs > examples/ping_pong_cancel_1.rs
+cat examples/ping_pong_save/ping_pong_crossbeam_1.rs > examples/ping_pong_crossbeam_1.rs
+cat examples/ping_pong_save/ping_pong_broadcast_cancel_1.rs > examples/ping_pong_broadcast_cancel_1.rs
+
+# Add the next loops
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
@@ -20,15 +32,15 @@ do
     #########################
     next=$(($i+1))
     #########################
-    cat examples/ping_pong/ping_pong_binary_$i.rs > examples/ping_pong_binary_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_binary_$next.rs
+    cat examples/ping_pong_binary_$i.rs > examples/ping_pong_binary_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_binary_$next.rs
     #########################
-    cat examples/ping_pong/ping_pong_mpst_$i.rs > examples/ping_pong_mpst_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_mpst_$next.rs
+    cat examples/ping_pong_mpst_$i.rs > examples/ping_pong_mpst_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_mpst_$next.rs
     #########################
-    cat examples/ping_pong/ping_pong_cancel_$i.rs > examples/ping_pong_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_cancel_$next.rs
+    cat examples/ping_pong_cancel_$i.rs > examples/ping_pong_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_cancel_$next.rs
     #########################
-    cat examples/ping_pong/ping_pong_crossbeam_$i.rs > examples/ping_pong_crossbeam_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_crossbeam_$next.rs
+    cat examples/ping_pong_crossbeam_$i.rs > examples/ping_pong_crossbeam_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_crossbeam_$next.rs
     #########################
-    cat examples/ping_pong/ping_pong_broadcast_cancel_$i.rs > examples/ping_pong_broadcast_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_broadcast_cancel_$next.rs
+    cat examples/ping_pong_broadcast_cancel_$i.rs > examples/ping_pong_broadcast_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' examples/ping_pong_broadcast_cancel_$next.rs
     #########################
 done
 

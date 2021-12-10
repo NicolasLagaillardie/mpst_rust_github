@@ -2,7 +2,11 @@
 
 # Create the ping_pong files from benches/ping_pong_all, for i from 1 to arg
 
+# Stop upon any error
 set -e
+
+# Delete previous ping-pong examples
+rm -rf benches/ping_pong_all/*.rs
 
 # progress bar function
 # prog() {
@@ -13,6 +17,15 @@ set -e
 #     printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*"; 
 # }
 
+# Copy from save
+cat benches/ping_pong_all_save/mod.rs > benches/ping_pong_all/mod.rs
+cat benches/ping_pong_all_save/ping_pong_1.rs > benches/ping_pong_all/ping_pong_1.rs
+cat benches/ping_pong_all_save/ping_pong_baking_cancel_1.rs > benches/ping_pong_all/ping_pong_baking_cancel_1.rs
+cat benches/ping_pong_all_save/ping_pong_cancel_1.rs > benches/ping_pong_all/ping_pong_cancel_1.rs
+cat benches/ping_pong_all_save/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs
+cat benches/ping_pong_all_save/ping_pong.rs > benches/ping_pong.rs
+
+# Remove the last bracket in ping_pong.rs
 sed -ier 's,},,g' benches/ping_pong.rs;
 
 echo "Step 1/2"

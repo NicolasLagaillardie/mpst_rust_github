@@ -7,7 +7,7 @@ set -e
 
 # Compile protocols
 ## Ping-pong
-for i in $(eval echo {1..500})
+for i in $(eval echo {1..$1})
 do
     ./scripts/create_files/compile.sh ping_pong_binary_$i 10 baking
     ./scripts/create_files/compile.sh ping_pong_crossbeam_$i 10 baking
