@@ -112,7 +112,7 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
 * execute the following command 
 ```
-cargo run --example=video_stream --all-features (bottom up)
+cargo run --example=video_stream --all-features
 ```
 
 3. Run the tests to make sure mp-anon is installed and configured correctly 
