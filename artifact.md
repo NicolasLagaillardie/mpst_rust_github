@@ -93,14 +93,13 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
 6. Run the docker container:
 
     ```bash
-    docker run -it -p mpanon:latest
+    docker run -it --rm mpanon:latest
     ```
 
 __Note__: You may need to run the above command with sudo
 
-1. The Docker image comes with an installation of vim and nano for editing.
-   If you wish to install additional software for editing or other purposes, you may obtain sudo
-   access with the password `mpanon`.
+1. The Docker image comes with an installation of `vim` and `neovim` for editing.
+   If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `mpanon`.
 2. Thereafter, we assume that you are in the main directory of the docker file.
 
 <!-- For running the docker file on your own machine,
@@ -126,32 +125,30 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 Move to the `mpanon` folder.
 
 ```bash
-cd mpst_rust_github # Move to mpanon's repository
+cd mpst_rust_github
 ```
 
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
 
 ```bash
 ./scripts/top_down.sh
 ```
 
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
+2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
 
 ```bash
 ./scripts/bottom_up.sh
 ```
 
-3. Edit the program and observe the reported errors
+3. Edit the program and observe the reported errors. After each modification, compile the program with `cargo run --example=video_stream --all-features` and observe the reported error.
 
-After each modification, compile the program and observe the reported error.
-
-* Open the VideoStream program in file XXX
+* Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
 Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
-
-* Suggested Modification
+Suggested modifications:
   * swapping lines 104 and 105 (which will lead to a deadlock)
   * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
   * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
+
 
 4. Run the tests to make sure mp-anon is installed and configured correctly
 
@@ -187,12 +184,6 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ## Part II: Step by Step instructions
 
 ### STEP 1: Run the main example (VideoStream) of the paper (Section 2)
-
-Move to the `mpanon` folder.
-
-```bash
-cd mpst_rust_github
-```
 
 1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
 
