@@ -132,9 +132,9 @@ After each modification, compile the program and observe the reported error.
 Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
 
 * Suggested Modification 
-    *  swapping lines 10 and 9 (whcih will lead to a deadlock)
-    *  using another communication primitive, replace s.recv on line 7 with s.send 
-    *  modify the type from XXX (some recv) to YYYsome send) 
+    *  swapping lines 10 and 9 (whcih will lead to a deadlock) 
+    *  using another communication primitive, replace s.recv on line 7 with s.send -- compilation errors because type mismatch  
+    *  modify the types corresponding to line 7) from XXX (some recv) to YYYsome send) -- mismatch because of duality 
 
 3. Run the tests to make sure mp-anon is installed and configured correctly 
 
