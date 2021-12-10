@@ -5,69 +5,78 @@ use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
 bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C,);
-type ADDAtoB = Recv<i32, End>;
 
-type OrderingA6Full = RoleB<RoleEnd>;
-type EndpointA7 = MeshedChannels<ADDAtoB, End, OrderingA6Full, RoleA<RoleEnd>>;
-type BYEAtoB = Recv<(), End>;
+type AddAtoB = Recv<i32, End>;
 
-type OrderingA8Full = RoleB<RoleEnd>;
-type EndpointA9 = MeshedChannels<BYEAtoB, End, OrderingA8Full, RoleA<RoleEnd>>;
+type OrderingA21 = RoleC<RoleEnd>;
+type OrderingA22Full = RoleB<OrderingA21>;
+type EndpointA23 =
+    MeshedChannels<AddAtoB, Recv<Branches0AtoC, End>, OrderingA22Full, RoleA<RoleEnd>>;
+
+type ByeAtoB = Recv<(), End>;
+
+type OrderingA24Full = RoleB<RoleEnd>;
+type EndpointA25 = MeshedChannels<ByeAtoB, End, OrderingA24Full, RoleA<RoleEnd>>;
 
 enum Branches0AtoC {
-    Add(EndpointA7),
-    Bye(EndpointA9),
+    Add(EndpointA23),
+    Bye(EndpointA25),
 }
 type Choose0forAtoC = Send<Branches0AtoC, End>;
 
 type TestAtoC = Recv<i32, Recv<Branches0AtoC, End>>;
 
-type OrderingA10 = RoleC<RoleEnd>;
-type OrderingA11Full = RoleC<OrderingA10>;
-type EndpointA12 = MeshedChannels<End, TestAtoC, OrderingA11Full, RoleA<RoleEnd>>;
+type OrderingA46 = RoleC<RoleEnd>;
+type OrderingA47Full = RoleC<OrderingA46>;
+type EndpointA48 = MeshedChannels<End, TestAtoC, OrderingA47Full, RoleA<RoleEnd>>;
 
-type ADDBtoA = Send<i32, End>;
-type ADDBtoC = Recv<i32, End>;
+type AddBtoA = Send<i32, End>;
+type AddBtoC = Recv<i32, Recv<Branches0BtoC, End>>;
 
-type OrderingB8Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB9 = MeshedChannels<ADDBtoA, ADDBtoC, OrderingB8Full, RoleB<RoleEnd>>;
-type BYEBtoA = Send<(), End>;
-type BYEBtoC = Recv<(), End>;
+type OrderingB23 = RoleC<RoleEnd>;
+type OrderingB24Full = RoleC<RoleA<OrderingB23>>;
+type EndpointB25 = MeshedChannels<AddBtoA, AddBtoC, OrderingB24Full, RoleB<RoleEnd>>;
 
-type OrderingB10Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB11 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB10Full, RoleB<RoleEnd>>;
+type ByeBtoA = Send<(), End>;
+type ByeBtoC = Recv<(), End>;
+
+type OrderingB26Full = RoleC<RoleA<RoleEnd>>;
+type EndpointB27 = MeshedChannels<ByeBtoA, ByeBtoC, OrderingB26Full, RoleB<RoleEnd>>;
 
 enum Branches0BtoC {
-    Add(EndpointB9),
-    Bye(EndpointB11),
+    Add(EndpointB25),
+    Bye(EndpointB27),
 }
 type Choose0forBtoC = Send<Branches0BtoC, End>;
 
-type OrderingB12 = RoleC<RoleEnd>;
-type OrderingB13Full = OrderingB12;
-type EndpointB14 = MeshedChannels<End, Recv<Branches0BtoC, End>, OrderingB13Full, RoleB<RoleEnd>>;
+type OrderingB48 = RoleC<RoleEnd>;
+type OrderingB49Full = OrderingB48;
+type EndpointB50 = MeshedChannels<End, Recv<Branches0BtoC, End>, OrderingB49Full, RoleB<RoleEnd>>;
 
 type TestCtoA = Send<i32, Choose0forAtoC>;
 
-type BYECtoB = Send<(), End>;
+type ByeCtoB = Send<(), End>;
 
-type OrderingC4Full = RoleB<RoleEnd>;
-type EndpointC5 = MeshedChannels<End, BYECtoB, OrderingC4Full, RoleC<RoleEnd>>;
+type OrderingC8Full = RoleB<RoleEnd>;
+type EndpointC9 = MeshedChannels<End, ByeCtoB, OrderingC8Full, RoleC<RoleEnd>>;
 
-type ADDCtoB = Send<i32, End>;
+type AddCtoB = Send<i32, Choose0forBtoC>;
 
-type OrderingC2Full = RoleB<RoleEnd>;
-type EndpointC3 = MeshedChannels<End, ADDCtoB, OrderingC2Full, RoleC<RoleEnd>>;
+type OrderingC6Full = RoleB<RoleBroadcast>;
+type EndpointC7 = MeshedChannels<Choose0forAtoC, AddCtoB, OrderingC6Full, RoleC<RoleEnd>>;
 
-type OrderingC6Full = RoleA<RoleBroadcast>;
-type EndpointC7 = MeshedChannels<TestCtoA, Choose0forBtoC, OrderingC6Full, RoleC<RoleEnd>>;
+type EndpointC10 = MeshedChannels<Choose0forAtoC, Choose0forBtoC, RoleBroadcast, RoleC<RoleEnd>>;
 
-fn endpoint_a(s: EndpointA12) -> Result<(), Box<dyn Error>> {
+type OrderingC12Full = RoleA<RoleBroadcast>;
+type EndpointC13 = MeshedChannels<TestCtoA, Choose0forBtoC, OrderingC12Full, RoleC<RoleEnd>>;
+
+/////////////////////////
+
+fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
     let (_, s) = s.recv()?;
     offer_mpst!(s, {
         Branches0AtoC::Add(s) => {
-            let (_,s) = s.recv()?;
-            s.close()
+            recurs_a(s)
         },
         Branches0AtoC::Bye(s) => {
             let (_,s) = s.recv()?;
@@ -76,12 +85,27 @@ fn endpoint_a(s: EndpointA12) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_b(s: EndpointB14) -> Result<(), Box<dyn Error>> {
+fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
+    let (_, s) = s.recv()?;
+    offer_mpst!(s, {
+        Branches0AtoC::Add(s) => {
+            recurs_a(s)
+        },
+        Branches0AtoC::Bye(s) => {
+            let (_,s) = s.recv()?;
+            s.close()
+        },
+    })
+}
+
+/////////////////////////
+
+fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branches0BtoC::Add(s) => {
             let (_,s) = s.recv()?;
             let s = s.send(0)?;
-            s.close()
+            endpoint_b(s)
         },
         Branches0BtoC::Bye(s) => {
             let (_,s) = s.recv()?;
@@ -91,21 +115,22 @@ fn endpoint_b(s: EndpointB14) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_c(s: EndpointC7) -> Result<(), Box<dyn Error>> {
+/////////////////////////
+
+fn endpoint_c(s: EndpointC13) -> Result<(), Box<dyn Error>> {
+    let s = s.send(0)?;
     recurs_c(s, 5)
 }
 
-fn recurs_c(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
-    let s = s.send(0)?;
-
+fn recurs_c(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
     if loops <= 0 {
-        let s: EndpointC5 = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
-        let _ = s.send(())?;
-
-        Ok(())
-    } else {
-        let s: EndpointC3 = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
+        let s: EndpointC7 = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
         let s = s.send(0)?;
+
+        recurs_c(s, loops - 1)
+    } else {
+        let s: EndpointC9 = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
+        let s = s.send(())?;
 
         s.close()
     }
@@ -128,18 +153,18 @@ fn main() {
 // Check for bottom-up approach
 fn checking() {
     let (graphs, kmc) = mpstthree::checker_concat!(
-        "adder_checking",
-        EndpointA12,
-        EndpointC7,
-        EndpointB11
+        "Adder_checking",
+        EndpointA48,
+        EndpointC13,
+        EndpointB50
         =>
         [
-            EndpointC3,
+            EndpointC7,
             Branches0AtoC, Add,
             Branches0BtoC, Add,
         ],
         [
-            EndpointC5,
+            EndpointC9,
             Branches0AtoC, Bye,
             Branches0BtoC, Bye,
         ]

@@ -12,11 +12,20 @@ We would like you to be able to
 2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
 3. use the tool to verify your own communication protocols.
 
-/!\ *Bear in mind that the benchmark data in the paper was generated
+/!\ Bear in mind that the benchmark data in the paper was generated
 using an 32-cores AMD OpteronTM Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
 with a quota of more than 100.000 files and 100 GB of HDD.
 In addition, the tool needs an access to `localhost` for the tests.
+
+/!\ To test it on your own computer, it is recommended to have
+16 GB of RAM: the library itself is lightweight,
+but all the examples and the benchmarks are very heavy and
+need more than 16 GB of RAM.
+That is why, we commented the heaviest protocols for a lighter
+Docker image and easier compilation.
+In the next sections, you will be able to uncomment those files
+to test them.
 
 ---
 
@@ -27,36 +36,19 @@ assuming you downloaded it and you have Docker installed on your machine:
 
 1. open a terminal
 2. move to the folder containing your docker file with `cd`
-3. run the command `docker run -it [the name of the docker file]`. You may need to `sudo` this command.
+3. run the command `docker run -it mpanon`. You may need to `sudo` this command.
 
-The password and user in this docker image are both `multicrusty`.
+The password and user in this docker image are both `mpanon`.
 During the compilation of the docker file,
 tests are ran for the different tools used in this artifact,
 hence it may take some time to compile.
 
-In the case you want to build the image from source,
-here is the link to the [repository](https://github.com/NicolasLagaillardie/docker_multicrusty/).
-You need `SSH` to be set up.
-The commands to download and build the image are:
-
-```sh
-git clone https://github.com/NicolasLagaillardie/docker_multicrusty/
-cd  docker_multicrusty
-git submodule init
-git submodule update
-docker build . # You may need to `sudo` this command.
-```
-
-The last command, after compiling, will output
-the name of the image as a string of digits and letters.
-This string is the one you have to provide when running
-`docker run -it [the name of the docker file]`.
-
 Thereafter, we assume that you are in the main directory of the docker file.
 
-To check, build and test `MultiCrusty` with the following commands:
+To check, build and test `Mpanon` with the following commands:
 
 ```sh
+cd mpst_rust_github # Move to mpanon's repository
 cargo check --all-features --lib --workspace # Check only this package's library
 cargo check --all-features --bins --workspace # Check all binaries
 cargo check --all-features --examples --workspace # Check all examples
@@ -74,9 +66,9 @@ cargo test --all-features --tests --workspace # Test all tests
 cargo test --all-features --benches --workspace # Test all benchmarks
 ```
 
-## STEP 1: Understanding MultiCrusty
+## STEP 1: Understanding Mpanon
 
-MultiCrusty, the `Rust` library introduced in the paper, has one purpose:
+Mpanon, the `Rust` library introduced in the paper, has one purpose:
 allow the implementation of affine communication protocols in `Rust`.
 
 Those protocols can be either generated with another tool
@@ -88,7 +80,7 @@ are described separately hereafter.
 ### Top-down
 
 In the `top-down` approach, protocols written with `Scribble` are
-used for generating MultiCrusty types.
+used for generating Mpanon types.
 `Scribble` is currently the most reliable tool when it comes to write
 and check communication protocols.
 
@@ -107,13 +99,13 @@ run the `Scribble` api for `Rust` on the `Fibonacci` protocol written with `Scri
 This command outputs the file `Adder_generated.rs` at the root of the `scribble-java`
 directory.
 We then move this file from the `scribble-java` folder to the `examples` subfolder
-of the `mpst_rust_github` folder containing `MultiCrusty`.
+of the `mpst_rust_github` folder containing `Mpanon`.
 
 Now, you can move into the `mpst_rust_github` folder and
 open this file using your preferred editor program
-before testing the protocol directly with `MultiCrusty`.
+before testing the protocol directly with `Mpanon`.
 
-From this point we assume that you will remain in the `MultiCrusty` repository.
+From this point we assume that you will remain in the `Mpanon` repository.
 
 ```sh
 cargo run --example="Adder_generated" --features=baking
@@ -124,7 +116,7 @@ This command contains four parts:
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
 3. `--example="Adder_generated` for running the specific *example* `Adder_generated`
-4. `--features=baking` for compiling only specific parts of `MultiCrusty` used for the example. This allows faster compilation than compiling the whole library. The different features available are shown in our [README.md](README.md#available-features).
+4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example. This allows faster compilation than compiling the whole library. The different features available are shown in our [README.md](README.md#available-features).
 
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` api only generates `Rust` types
@@ -133,12 +125,27 @@ Hereafter, we provide the code to be added to the `Adder_generated.rs`
 file to make it work:
 
 ```rust
-fn endpoint_a(s: EndpointA12) -> Result<(), Box<dyn Error>> {
+
+/////////////////////////
+
+fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
     let (_, s) = s.recv()?;
     offer_mpst!(s, {
         Branches0AtoC::ADD(s) => {
+            recurs_a(s)
+        },
+        Branches0AtoC::BYE(s) => {
             let (_,s) = s.recv()?;
             s.close()
+        },
+    })
+}
+
+fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
+    let (_, s) = s.recv()?;
+    offer_mpst!(s, {
+        Branches0AtoC::Add(s) => {
+            recurs_a(s)
         },
         Branches0AtoC::BYE(s) => {
             let (_,s) = s.recv()?;
@@ -149,12 +156,12 @@ fn endpoint_a(s: EndpointA12) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn endpoint_b(s: EndpointB14) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branches0BtoC::ADD(s) => {
             let (_,s) = s.recv()?;
             let s = s.send(0)?;
-            s.close()
+            endpoint_b(s)
         },
         Branches0BtoC::BYE(s) => {
             let (_,s) = s.recv()?;
@@ -166,21 +173,20 @@ fn endpoint_b(s: EndpointB14) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn endpoint_c(s: EndpointC7) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(s: EndpointC13) -> Result<(), Box<dyn Error>> {
+    let s = s.send(0)?;
     recurs_c(s, 5)
 }
 
-fn recurs_c(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
-    let s = s.send(0)?;
-
+fn recurs_c(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
     if loops <= 0 {
-        let s: EndpointC5 = choose_mpst_c_to_all!(s, Branches0AtoC::BYE, Branches0BtoC::BYE);
-        let _ = s.send(())?;
-
-        Ok(())
-    } else {
-        let s: EndpointC3 = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
+        let s: EndpointC7 = choose_mpst_c_to_all!(s, Branches0AtoC::ADD, Branches0BtoC::ADD);
         let s = s.send(0)?;
+
+        recurs_c(s, loops - 1)
+    } else {
+        let s: EndpointC9 = choose_mpst_c_to_all!(s, Branches0AtoC::BYE, Branches0BtoC::BYE);
+        let s = s.send(())?;
 
         s.close()
     }
@@ -227,10 +233,10 @@ Now that your first example works, we can check that it is still
 ### Bottom-up
 
 The `KMC` tool has one purpose: check that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
-We are not going to introduce how to use it but how `MultiCrusty` takes advantage
+We are not going to introduce how to use it but how `Mpanon` takes advantage
 of it *interactive* mode to check protocols.
 
-`MultiCrusty` uses the macro `checker_concat!` on the types
+`Mpanon` uses the macro `checker_concat!` on the types
 to create the communicating automata that the `KMC` tool will be able to read.
 This macro returns two elements within a tuple:
 
@@ -238,12 +244,12 @@ This macro returns two elements within a tuple:
 2. the minimal **k** checked by the protocol
 
 Our theory only supports protocols which have **k=1**,
-but protocols with higher can still be implemented using `MultiCrusty`.
+but protocols with higher can still be implemented using `Mpanon`.
 Futhermore, we restricted **k** to be lower than **50**:
 any protocol with **k** higher than 50 will be marked as
 incorrect.
 Indeed, the `KMC` tool does not have an automated way of checking
-the minimal **k** of a protocol and `MultiCrusty`
+the minimal **k** of a protocol and `Mpanon`
 checks the protocol for each **k** increasing from 1 to 50.
 
 Now, that you have a better idea of the interactions between those
@@ -257,18 +263,18 @@ For this purpose, add the following lines to our file:
 
 fn checking() {
     let (graphs, kmc) = mpstthree::checker_concat!(
-        "adder_checking",
-        EndpointA12,
-        EndpointC7,
-        EndpointB11
+        "Adder_checking",
+        EndpointA48,
+        EndpointC13,
+        EndpointB50
         =>
         [
-            EndpointC3,
+            EndpointC7,
             Branches0AtoC, ADD,
             Branches0BtoC, ADD,
         ],
         [
-            EndpointC5,
+            EndpointC9,
             Branches0AtoC, BYE,
             Branches0BtoC, BYE,
         ]
@@ -399,6 +405,21 @@ you need to delete the generated files
 and reset the file `ping_pong.rs` in the
 folder `benches/`.
 
+You will also need to uncomment the protocols you want
+to benchmark: uncomment the lines you want in the files
+[benches/mesh.rs](benches/mesh.rs), [benches/ring.rs](benches/ring.rs)
+and sections **Mesh examples** and **Ring examples** in [Cargo.toml](Cargo.toml).
+An example of commented and uncommented lines is as follow:
+
+```rust
+////////// Benchmarks using basic functions with zero loops
+mesh_all::empty::mesh_two::mesh_two,
+mesh_all::empty::mesh_three::mesh_three,
+// mesh_all::empty::mesh_four::mesh_four,
+// mesh_all::empty::mesh_five::mesh_five,
+// mesh_all::empty::mesh_six::mesh_six,
+```
+
 Then you can run the script:
 
 ```sh
@@ -472,11 +493,11 @@ on top of the existing ones.
 
 ---
 
-## STEP 3: Checking your own protocols written with `MultiCrusty`
+## STEP 3: Checking your own protocols written with `Mpanon`
 
 You can write your own examples using
 (1) generated types from `Scribble` or
-(2) your own types written `MultiCrusty`.
+(2) your own types written `Mpanon`.
 
 ### Generated types from `Scribble`
 
@@ -494,11 +515,11 @@ cd  mpst_rust_github/
 
 then refer to the [top-down](#top-down) section to run your example.
 
-### Your own types written `MultiCrusty`
+### Your own types written `Mpanon`
 
 Your file should be in the folder `examples/`.
 
-First, import the necessary macros and types from the `MultiCrusty`:
+First, import the necessary macros and types from the `Mpanon`:
 
 ```rust
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
@@ -635,8 +656,12 @@ The original benchmarks were generated using:
 * Compile and run: `cargo bench --all-targets --all-features --workspace`
 
 See main instructions
-([README.md](https://github.com/NicolasLagaillardie/mpst_rust_github/blob/master/README.md))
-for more information and the documentation of the library
-[here](https://docs.rs/mpstthree/latest/mpstthree/index.html).
+([README.md](README.md))
+for more information.
+
+The documentation of `mpanon` can be generated
+with the command `cargo doc --all-features`.
+The generated documentation will be accessible in the file
+[target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
 
 The source code is included in the root directory.
