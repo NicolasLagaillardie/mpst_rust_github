@@ -114,8 +114,9 @@ TODO: add the command to run video stream
 * execute the following command 
 ```
 TODO: add the command to run video stream and Scribble gen 
+```
 
-3. Run all tests to make sure all examples are working on your system
+3. Run the tests to make sure mp-anon is installed and configured correctly 
 
 ```sh
 cd mpst_rust_github # Move to mpanon's repository
