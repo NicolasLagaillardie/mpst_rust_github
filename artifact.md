@@ -145,7 +145,165 @@ The commands from steps 3-5 can be ran all together with:
 cargo test --all-targets --all-features --workspace # Test everything in the library
 ```
 
-## Part II: Understanding Mpanon and testing the main claims of the paper
+## Part II: Step by Step instructions 
+
+## STEP 1: Running the benchmarks
+
+### 1. Running the examples from in Table 2 (examples from the literature)
+
+The purpose of these examples is to demonstrate how the tool works on
+existing examples from the literature.
+
+The examples in this table are located in the folder `examples/`
+<!-- and duplicated in the `benches/main_all/baking/` folder. -->
+
+The data for these benchmarks can be re-generated using the following script:
+
+```sh
+./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
+```
+
+Each command is ran 10 times on each example and the columns display the means
+
+**Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
+
+* Column 1: file name (Example/Endpoint),
+* Column 2: **check** time, the result of ```cargo check``` (Check)
+* Column 3: **build** time, the result of ```cargo build``` (Comp.)
+* Column 4: **build --release** time, the result of ```cargo build --release``` (Rel.)
+* Column 5: **run** time, the result of running ````cargo bench``` (Exec time)
+
+<!-- <details>
+<summary>
+Details on difference between the different cargo commands (optional reading)
+</summary>
+The columns 2, 3 and 4 gather the time needed for executing the
+respective commands `cargo check`, `cargo build` and `cargo build --release`
+with the arguments `--example=[name of the file]` and `--features=baking`.
+`cargo check` compiles the provided file and all the required dependencies
+given by the argument `--features=baking` but does not
+build the binaries.
+`cargo build` works the same way than `cargo check` and, in addition,
+builds the binaries.
+`cargo build --release` builds optimised binaries which are
+faster for running time and usually used for benchmarks.
+Hence, it is faster for checking a `Rust` file
+with `cargo check` than the two others,f
+and `cargo build --release` is slower than `cargo build`
+as it optimises the output binaries.
+For higher accuracy and lower variance,
+each command is ran 10 times on each example
+and the columns display the means.
+
+The 5th column runs the command `cargo bench` with the arguments
+`main` and `--features=baking`.
+The first argument is the name of the file containing the files
+to be benchmarked and the second argument is the feature used for
+compiling the benchmarks.
+We use the [criterion](https://crates.io/crates/criterion) `Rust` library
+for running the benchmarks.
+Each benchmark is ran 10.000 times and `criterion` saves the results
+(mean, median, confidence interval, ...) in the `target/criterion/` folder.
+They can be displayed separately by opening the file `index.html` in the
+`target/criterion/report/` folder. 
+
+Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv` files
+on top of the existing ones.
+</details> -->
+
+### 2. Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
+
+The purpose of these set of benchmarks is to demonstrate the
+scalability of the tool on large examples.
+
+### **Option 1**: Running a small benchmark set
+
+You can run a small set of benchmarks:
+
+```sh
+./lightweight_library.sh # Set up
+```
+
+then by running the command line
+
+```sh
+./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
+```
+
+The above nechmakrs run a set o fthe becnhmarks from Figure 9. 
+In particualr, `ping_pong` protocols are up to 200 loops,
+and `mesh` and `ring` protocols are up to _five_ participants. 
+
+**Results:** After runnign the above scripts, 
+5 graphs will be displays correposning to Figure 9. 
+
+The graphs are also displayed using `Python matplotlib` and the row data for the graphs  (.csv files)
+is in the [results/](results/) folder.
+
+
+<details>
+<summary>
+Details on the content of the raw .csv files data (optional reading). 
+</summary>
+
+The `ping_pong_mesh_ring.sh` scripts generate 3 files:
+`ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
+in the folder [results/](results/).
+
+The structure of the `ping_ping_0.csv` file is as follows:
+
+1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
+2. Column 2: number of loops
+3. Column 3: average running time
+4. Column 4: average compilation time
+
+The structure of the `mesh_0.csv` and `ring_0.csv`
+files is as follows:
+
+1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
+2. Column 2: number of participants
+3. Column 3: average running time
+4. Column 4: average compilation time
+
+Be aware that the scripts adds additional `*.csv`files
+on top of the existing ones. 
+</details>
+
+
+###  **Option 2**: Running the entire benchmark set (at least 24 hours)
+
+To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
+
+```sh
+./full_library.sh # set up
+```
+
+Then you can run the script:
+
+```sh
+./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
+```
+
+__Note__: we have executed this script on the high performance computing server,
+and running the whole script took over 24 hours.
+Progress is shown while running each benchmark.
+
+You can also run one the following scripts
+to retrieve results for only one kind of protocols:
+
+```sh
+./scripts/ping_pong.sh # For ping-pong protocols
+./scripts/mesh.sh # For mesh protocols
+./scripts/ring.sh # For ring protocols
+```
+
+---
+
+## STEP 3: Checking your own protocols written with `Mp-anon`
+
+You can write your own examples using
+(1) generated types from `Scribble` (top-down approach) or
+(2) your own types written with `Mp-anon` and then ckeded using the kmc tool (bottom-up approach).
 
 ## STEP 1: Understanding Mpanon
 
@@ -204,7 +362,7 @@ This command contains four parts:
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
 3. `--example="Adder_generated` for running the specific *example* `Adder_generated`
-4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example. This allows faster compilation than compiling the whole library. The different features available are shown in our [README.md](README.md#available-features).
+4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example. 
 
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` api only generates `Rust` types
@@ -413,180 +571,6 @@ located in the `examples/` folder.
 
 ---
 
-## STEP 2: Running the benchmarks
-
-### 1. Running the examples from in Table 2 (examples from the literature)
-
-The purpose of these examples is to demonstrate how the tool works on
-existing examples from the literature.
-
-The examples in this table are located in the folder `examples/`
-<!-- and duplicated in the `benches/main_all/baking/` folder. -->
-
-The data for these benchmarks can be re-generated using the following script:
-
-```sh
-./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
-```
-
-Each command is ran 10 times on each example and the columns display the means
-
-**Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
-
-* Column 1: file name (Example/Endpoint),
-* Column 2: **check** time, the result of ```cargo check``` (Check)
-* Column 3: **build** time, the result of ```cargo build``` (Comp.)
-* Column 4: **build --release** time, the result of ```cargo build --release``` (Rel.)
-* Column 5: **run** time, the result of running ````cargo bench``` (Exec time)
-
-<!-- <details>
-<summary>
-Details on difference between the different cargo commands (optional reading)
-</summary>
-The columns 2, 3 and 4 gather the time needed for executing the
-respective commands `cargo check`, `cargo build` and `cargo build --release`
-with the arguments `--example=[name of the file]` and `--features=baking`.
-`cargo check` compiles the provided file and all the required dependencies
-given by the argument `--features=baking` but does not
-build the binaries.
-`cargo build` works the same way than `cargo check` and, in addition,
-builds the binaries.
-`cargo build --release` builds optimised binaries which are
-faster for running time and usually used for benchmarks.
-Hence, it is faster for checking a `Rust` file
-with `cargo check` than the two others,f
-and `cargo build --release` is slower than `cargo build`
-as it optimises the output binaries.
-For higher accuracy and lower variance,
-each command is ran 10 times on each example
-and the columns display the means.
-
-The 5th column runs the command `cargo bench` with the arguments
-`main` and `--features=baking`.
-The first argument is the name of the file containing the files
-to be benchmarked and the second argument is the feature used for
-compiling the benchmarks.
-We use the [criterion](https://crates.io/crates/criterion) `Rust` library
-for running the benchmarks.
-Each benchmark is ran 10.000 times and `criterion` saves the results
-(mean, median, confidence interval, ...) in the `target/criterion/` folder.
-They can be displayed separately by opening the file `index.html` in the
-`target/criterion/report/` folder. 
-
-Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv` files
-on top of the existing ones.
-</details> -->
-
-### 2. Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
-
-The purpose of these set of benchmarks is to demonstrate the
-scalability of the tool on large examples.
-
-### **Option 1**: Running a small benchmark set
-
-You can run a small set of benchmarks:
-
-```sh
-./lightweight_library.sh # Set up
-```
-
-then by running the command line
-
-```sh
-./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
-```
-
-The above nechmakrs run a set o fthe becnhmarks from Figure 9. 
-In particualr, `ping_pong` protocols are up to 200 loops,
-and `mesh` and `ring` protocols are up to _five_ participants. 
-
-**Results:** After runnign the above scripts, 
-5 graphs will be displays correposning to Figure 9. 
-
-The graphs are also displayed using `Python matplotlib` and the row data for the graphs  (.csv files)
-is in the [results/](results/) folder.
-
-
-<details>
-<summary>
-Details on the content of the raw .csv files data (optional reading). 
-</summary>
-
-The `ping_pong_mesh_ring.sh` scripts generate 3 files:
-`ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
-in the folder [results/](results/).
-
-The structure of the `ping_ping_0.csv` file is as follows:
-
-1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
-2. Column 2: number of loops
-3. Column 3: average running time
-4. Column 4: average compilation time
-
-The structure of the `mesh_0.csv` and `ring_0.csv`
-files is as follows:
-
-1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
-2. Column 2: number of participants
-3. Column 3: average running time
-4. Column 4: average compilation time
-
-Be aware that the scripts adds additional `*.csv`files
-on top of the existing ones. 
-</details>
-
-
-###  **Option 2**: Running the entire benchmark set (at least 24 hours)
-
-To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
-
-```sh
-./full_library.sh # set up
-```
-
-Then you can run the script:
-
-```sh
-./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
-```
-
-__Note__: we have executed this script on the high performance computing server,
-and running the whole script took over 24 hours.
-Progress is shown while running each benchmark.
-
-You can also run one the following scripts
-to retrieve results for only one kind of protocols:
-
-```sh
-./scripts/ping_pong.sh # For ping-pong protocols
-./scripts/mesh.sh # For mesh protocols
-./scripts/ring.sh # For ring protocols
-```
-
----
-
-## STEP 3: Checking your own protocols written with `Mpanon`
-
-You can write your own examples using
-(1) generated types from `Scribble` or
-(2) your own types written `Mpanon`.
-
-### Generated types from `Scribble`
-
-Assuming you know how to write `Scribble` protocols,
-put your own in the folder `../scribble-java/scribble-demos/scrib/fib/`
-and use:
-
-```sh
-cd scribble-java/
-./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/[input file without extension].scr -rustapi [name of the protocol] [output file without extension]
-cd ..
-mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
-cd  mpst_rust_github/
-```
-
-then refer to the [top-down](#top-down) section to run your example.
-
 ### Your own types written `Mpanon`
 
 Your file should be in the folder `examples/`.
@@ -735,6 +719,9 @@ The generated documentation will be accessible in the file
 
 The source code is included in the root directory.
 
+<details>
+<summary> Rust commands on build, test, compile </summary>
+
 Here is a general descitpion of all commpand you can run on build, check and test. 
  <!-- test `Mpanon` with the following commands: -->
 
@@ -755,3 +742,23 @@ cargo test --all-features --bins --workspace # Test all binaries
 cargo test --all-features --examples --workspace # Test all examples
 cargo test --all-features --tests --workspace # Test all tests
 cargo test --all-features --benches --workspace # Test all benchmarks
+
+```
+</details>
+
+<details> <summary>  Scribble commands </summary>
+
+Assuming you know how to write `Scribble` protocols,
+put your own in the folder `../scribble-java/scribble-demos/scrib/fib/`
+and use:
+
+```sh
+cd scribble-java/
+./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/[input file without extension].scr -rustapi [name of the protocol] [output file without extension]
+cd ..
+mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
+cd  mpst_rust_github/
+```
+</details>
+
+
