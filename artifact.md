@@ -17,7 +17,7 @@ The artifact (after building the docker image) contains
 * The directory `most-rust-github`-- a directory containing the source code of the mp-annon tool
 * `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reportes in Fig. 9 and Table 2 in the paper
 * `most-rust-github/scripts` - the scripts for reproducing the results
-* `most-rust-github/benches` --- the examples for Fig. 2
+* `most-rust-github/benches` --- the examples for Fig. 9
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
@@ -134,17 +134,17 @@ cd mpst_rust_github # Move to mpanon's repository
 
 3. Edit the program and observe the reported errors
 
-After each modification, compile the program and observe the reported error. 
+After each modification, compile the program and observe the reported error.
 
 * Open the VideoStream program in file XXX
 Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
 
-* Suggested Modification 
-    *  swapping lines 10 and 9 (whcih will lead to a deadlock) 
-    *  using another communication primitive, replace s.recv on line 7 with s.send -- compilation errors because type mismatch  
-    *  modify the types corresponding to line 7) from XXX (some recv) to YYYsome send) -- mismatch because of duality 
+* Suggested Modification
+  * swapping lines 104 and 105 (which will lead to a deadlock)
+  * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
+  * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
 
-3. Run the tests to make sure mp-anon is installed and configured correctly 
+4. Run the tests to make sure mp-anon is installed and configured correctly
 
 ```bash
 cargo test --tests --all-features --workspace # Test all tests
@@ -152,9 +152,7 @@ cargo test --tests --all-features --workspace # Test all tests
 
 The above command may take up to 15 min.
 
-4. Run the examples from Table 2
-
-then:
+5. Run the examples from Table 2:
 
 ```bash
 cargo test --examples --all-features --workspace # Test all examples
@@ -162,7 +160,7 @@ cargo test --examples --all-features --workspace # Test all examples
 
 The above command may take up to 15 min.
 
-5. Run the benchmarks from Figure 2
+6. Run the benchmarks from Figure 9:
 
 ```bash
 cargo test --benches --all-features --workspace # Test all benchmarks
