@@ -115,6 +115,18 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 cargo run --example=video_stream --all-features
 ```
 
+3. Edit the program and observe the reported errors
+
+After each modification, compile the program and observe the reported error. 
+
+* Open the VideoStream program in file XXX
+Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
+
+* Suggested Modification 
+    *  swapping lines 10 and 9 (whcih will lead to a deadlock)
+    *  using another communication primitive, replace s.recv on line 7 with s.send 
+    *  modify the type from XXX (some recv) to YYYsome send) 
+
 3. Run the tests to make sure mp-anon is installed and configured correctly 
 
 ```sh
