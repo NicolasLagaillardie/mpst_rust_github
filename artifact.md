@@ -436,7 +436,7 @@ The results will be in the file `results/benchmarks_main_from_literature_0.csv` 
 * Column 4: **build --release** time
 * Column 5: **run** time
 
-The columns 2, 3 and 4 gather the time needed for executing the
+<!-- The columns 2, 3 and 4 gather the time needed for executing the
 respective commands `cargo check`, `cargo build` and `cargo build --release`
 with the arguments `--example=[name of the file]` and `--features=baking`.
 `cargo check` compiles the provided file and all the required dependencies
@@ -464,7 +464,7 @@ for running the benchmarks.
 Each benchmark is ran 10.000 times and `criterion` saves the results
 (mean, median, confidence interval, ...) in the `target/criterion/` folder.
 They can be displayed separately by opening the file `index.html` in the
-`target/criterion/report/` folder.
+`target/criterion/report/` folder. -->
 
 Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv`files
 on top of the existing ones.
