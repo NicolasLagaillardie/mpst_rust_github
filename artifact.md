@@ -412,7 +412,7 @@ located in the `examples/` folder.
 
 ## STEP 2: Running the benchmarks
 
-### Results in Table 2 (examples from the literature)
+### 1. Running the example from in Table 2 (examples from the literature)
 
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
@@ -469,12 +469,12 @@ They can be displayed separately by opening the file `index.html` in the
 Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv`files
 on top of the existing ones.
 
-### Results in Figure 9 (ping-pong, mesh and ring protocols)
+### 2. Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
 
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
 
-#### Running a small benchmark set
+#### Option 1: Running a small benchmark set
 
 You can run a small set of benchmarks by running first:
 
@@ -516,7 +516,7 @@ on top of the existing ones.
 
 The different graphs are also displayed with `Python matplotlib`.
 
-#### Running the entire benchmark set (at least 24 hours)
+####  Option 2: Running the entire benchmark set (at least 24 hours)
 
 You can run a same set of benchmarks than the paper by running first:
 
