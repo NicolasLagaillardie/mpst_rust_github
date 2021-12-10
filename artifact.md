@@ -24,21 +24,37 @@ Scribble protocols
 
 ## Claims about reusability, functionality and availability
 
-the artifact demonstrates the following claims.
-
-1. Functionality:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
-    1.1. Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-approach (demonstrated here in [Part I1: Step 1](Step1.1))
-    1.2.  Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper, (demonstrated here in [Part I1: Step 1](Step1.1))
-    1.3.  Observe detected errors due to incompatible types, as explained in Section 2 in the paper (demonstrated here in [Part I1: Step 1](Step1.3))
+1. Functionality:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper: 
+    
+    -   Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-upapproach. __Check the claim  by__: following [Part II: Step 1](Step1.1)
+    
+    -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part I1: Step 1](Step1.1)
+    
+    -  Observe detected errors due to incompatible types, as explained in Section 2 in the paper. 
+    __Check the claim  by__: following [Part II: Step 1](Step1.3)
 
 2. Functionality: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
-    2.1 claims expressivity: examples in Table 2 can be expressed using mp-anon.
-    Table 2 can be reproduces following the instructions in [Part II: Step 2](Step1)
-    2.1 claims performance:
-    Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step2)
+    
+    2.1 claims expressiveness (Section 5.2 in the paper)): examples in Table 2 can be expressed using mp-anon. 
+
+    __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](Step1)
+    
+    2.1. claims on compile-time performance (line 886-892):: 
+
+    - the more participants there are, the higher is the compilation time for MPST
+    
+    2.2. claims on run-time performance (line 880-885): 
+
+    - mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
+
+    - the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
+
+    - AMPST can a negligible overhead in comparison to MPST 
+    
+    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step2)
 3. Reusability: The mp-anon tool can be used to verify your own communication protocols, follow
-the instructions in [Part III](Part III)
-4. Availability: We agree our artifact to be  published under a Creative Commons license on DARTS.
+the instructions in [Part III](PartIII)
+4. Availability: We agree our artifact to be  published under a Creative Commons license on DARTS. 
 
 ## Prerequisites
 
@@ -122,35 +138,7 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Part I: Quick Start
 
-Move to the `mpanon` folder.
-
-```bash
-cd mpst_rust_github
-```
-
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
-
-```bash
-./scripts/top_down.sh
-```
-
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming (will generate the file `video_stream_full` in the folder `examples/`).
-
-```bash
-./scripts/bottom_up.sh
-```
-
-3. Edit the program and observe the reported errors. After each modification, compile the program with `cargo run --example=video_stream --all-features` and observe the reported error.
-
-* Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
-Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
-Suggested modifications:
-  * swapping lines 104 and 105 (which will lead to a deadlock)
-  * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
-  * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
-
-
-4. Run the tests to make sure mp-anon is installed and configured correctly
+1. Run the tests to make sure mp-anon is installed and configured correctly
 
 ```bash
 cargo test --tests --all-features --workspace # Test all tests
@@ -158,7 +146,7 @@ cargo test --tests --all-features --workspace # Test all tests
 
 The above command may take up to 15 min.
 
-5. Run the examples from Table 2:
+2. Run the examples from Table 2:
 
 ```bash
 cargo test --examples --all-features --workspace # Test all examples
@@ -166,7 +154,7 @@ cargo test --examples --all-features --workspace # Test all examples
 
 The above command may take up to 15 min.
 
-6. Run the benchmarks from Figure 9:
+3. Run the benchmarks from Figure 9:
 
 ```bash
 cargo test --benches --all-features --workspace # Test all benchmarks
