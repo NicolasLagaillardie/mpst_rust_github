@@ -75,7 +75,7 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
     ```
 6. Run the docker container:
     ```bash
-    docker run -it -p 3000:3000 mpanon:artifact
+    docker run -it -p mpanon:artifact
     ```
 __Note__: You may need to run the above command with sudo
 
