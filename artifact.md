@@ -1,10 +1,16 @@
 # Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)
 
-## by Nicolas Lagaillardie, Rumyana Neykova and Nobuko Yoshida
-
 ---
+
+## Overview
+
 The purpose of this document is to describe in details the steps
 required to assess the artifact associated to our paper.
+
+This artifact contains (1) the source code for the mp-anon tool -- a tool for safe message-passing prigramming in Rust and (2) all requires scripts and example needed to reproduce the reuslt from the 
+ECOOP submission #12 : Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST). The artifact is submitted as a docker image. the artifact claims functional, resusable and available badge. 
+
+#### Claims about reusability, functionality and availability 
 
 We would like you to be able to
 
@@ -12,11 +18,24 @@ We would like you to be able to
 2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
 3. use the tool to verify your own communication protocols.
 
-/!\ Bear in mind that the benchmark data in the paper was generated
+#### Artifact layout 
+
+1. understand how to use the tool to write and verify affine protocols using MPST,
+2. reproduce our benchmarks (i.e., Table 2 and Figure 9), and
+3. use the tool to verify your own communication protocols.
+
+## Prerequisites 
+
+To run all benchmarks reported in the paper, the reviewers need: 
+* a minumum of 16GB RAM. The library itself is lightweight but the examples and benchmarks pose that requirement. 
+* to enable localhost access (note that when you run a docker image the localhost is enabled by default)
+
+Note: The benchmark data in the paper was generated
 using an 32-cores AMD OpteronTM Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
 with a quota of more than 100.000 files and 100 GB of HDD.
-In addition, the tool needs an access to `localhost` for the tests.
+
+<!-- In addition, the tool needs an access to `localhost` for the tests.
 
 /!\ To test it on your own computer, it is recommended to have
 16 GB of RAM: the library itself is lightweight,
@@ -25,11 +44,11 @@ need more than 16 GB of RAM.
 That is why, we commented the heaviest protocols for a lighter
 Docker image and easier compilation.
 In the next sections, you will be able to uncomment those files
-to test them.
+to test them. -->
 
 ---
 
-## STEP 0: Getting started
+## Part I: Getting started
 
 For running the docker file on your own machine,
 assuming you downloaded it and you have Docker installed on your machine:
