@@ -305,53 +305,55 @@ You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
 (2) your own types written with `Mp-anon` and then ckeded using the kmc tool (bottom-up approach).
 
-## STEP 1: Understanding Mpanon
-
-Mpanon, the `Rust` library introduced in the paper, has one purpose:
+<!-- Mpanon, the `Rust` library introduced in the paper, has one purpose:
 allow the implementation of affine communication protocols in `Rust`.
 
 Those protocols can be either generated with another tool
 called `Scribble` or wrote by the developers and then checked
 by another tool called `KMC`.
 Those two approaches, respectively `top-down` and `bottom-up` approaches,
-are described separately hereafter.
+are described separately hereafter. -->
 
-### Top-down
+### 3.1 Top-down: Generating Types from Scribble 
 
-In the `top-down` approach, protocols written with `Scribble` are
-used for generating Mpanon types.
-`Scribble` is currently the most reliable tool when it comes to write
-and check communication protocols.
+In the `top-down` approach, protocols written in the protocol description langauge `Scribble` are
+used for generating Mp-anon types.
 
 You can use our implementation of the recursive `Fibonacci` protocol
-provided in the `Scribble` repository as a start:
+provided in the `Scribble` repository as a start. The protocol is located 
+in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr)
+
+1️⃣ &nbsp; Generate Rust Types from Scribble 
 
 ```sh
 cd scribble-java/
 ./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/Fib.scr -rustapi Adder Adder_generated
-cd ..
-mv scribble-java/Adder_generated.rs mpst_rust_github/examples/Adder_generated.rs
 ```
 
 In the above example, we move into the `scribble-java` folder and
 run the `Scribble` api for `Rust` on the `Fibonacci` protocol written with `Scribble`.
 This command outputs the file `Adder_generated.rs` at the root of the `scribble-java`
 directory.
-We then move this file from the `scribble-java` folder to the `examples` subfolder
-of the `mpst_rust_github` folder containing `Mpanon`.
+
+Below we move the file the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
+of the `mpst_rust_github` folder containing `Mpanon`. 
+```
+cd ..
+mv scribble-java/Adder_generated.rs mpst_rust_github/examples/Adder_generated.rs
+```
 
 Now, you can move into the `mpst_rust_github` folder and
 open this file using your preferred editor program
 before testing the protocol directly with `Mpanon`,
 `vim` and `neovim` are already installed.
 
-From this point we assume that you will remain in the `Mpanon` repository.
+➡️ &nbsp; From this point we assume that you will remain in the `Mpanon` repository.
 
-Check that the generated types are the same as the one provided in
+<!-- Optional: You can check that the generated types are the same as the one provided in
 the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
-up to line 73.
+up to line 73. -->
 
-Then, you can run this command to run your example:
+2️⃣ &nbsp;Compile the Rust types
 
 ```sh
 cargo run --example="Adder_generated" --features=baking
@@ -369,6 +371,8 @@ This is because the `Scribble` api only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
 Hereafter, we provide the code to be append to the `Adder_generated.rs`
 file to make it work:
+
+3️⃣ &nbsp; Implement the endpoint programs for role A, B and C
 
 ```rust
 
@@ -476,9 +480,9 @@ cargo run --example="Adder_generated" --features=baking
 Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool.
 
-### Bottom-up
+### Bottom-up: Write the types in Rust and check them with the kmc tool
 
-The `KMC` tool has one purpose: check that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
+The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
 We are not going to introduce how to use it but how `Mpanon` takes advantage
 of it *interactive* mode to check protocols.
 
