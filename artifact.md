@@ -111,17 +111,24 @@ The rest of the document is organised as follows:
 * Repso
 Thereafter, we assume that you are in the main directory of the docker file. -->
 
-## Part I: Quick Start 
+## Part I: Quick Start
 
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming. 
-* execute the following command 
-```
+Move to the `mpanon` folder.
+
+```bash
+cd mpst_rust_github # Move to mpanon's repository
 ```
 
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
-* execute the following command 
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
+
+```bash
+./scripts/top_down.sh
 ```
-cargo run --example=video_stream --all-features
+
+2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
+
+```bash
+./scripts/bottom_up.sh
 ```
 
 3. Edit the program and observe the reported errors
@@ -138,28 +145,31 @@ Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ult
 
 3. Run the tests to make sure mp-anon is installed and configured correctly 
 
-```sh
-cd mpst_rust_github # Move to mpanon's repository
+```bash
 cargo test --tests --all-features --workspace # Test all tests
 ```
-The above command may take up to 15 min. 
+
+The above command may take up to 15 min.
 
 4. Run the examples from Table 2
+
 then:
 
-```sh
+```bash
 cargo test --examples --all-features --workspace # Test all examples
 ```
-The above command may take up to 15 min. 
+
+The above command may take up to 15 min.
 
 5. Run the benchmarks from Figure 2
 
-```sh
+```bash
 cargo test --benches --all-features --workspace # Test all benchmarks
 ```
-The above command may take up to 15 min. 
 
-__Note__: 
+The above command may take up to 15 min.
+
+__Note__:
 The commands from steps 3-5 can be ran all together with:
 
 ```bash
@@ -180,7 +190,7 @@ The examples in this table are located in the folder `examples/`
 
 The data for these benchmarks can be re-generated using the following script:
 
-```sh
+```bash
 ./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
 ```
 
@@ -241,13 +251,13 @@ scalability of the tool on large examples.
 
 You can run a small set of benchmarks:
 
-```sh
+```bash
 ./lightweight_library.sh # Set up
 ```
 
 then by running the command line
 
-```sh
+```bash
 ./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
 ```
 
@@ -295,13 +305,13 @@ on top of the existing ones.
 
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
-```sh
+```bash
 ./full_library.sh # set up
 ```
 
 Then you can run the script:
 
-```sh
+```bash
 ./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
 ```
 
@@ -312,7 +322,7 @@ Progress is shown while running each benchmark.
 You can also run one the following scripts
 to retrieve results for only one kind of protocols:
 
-```sh
+```bash
 ./scripts/ping_pong.sh # For ping-pong protocols
 ./scripts/mesh.sh # For mesh protocols
 ./scripts/ring.sh # For ring protocols
@@ -346,7 +356,7 @@ in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribb
 
 1️⃣ &nbsp; Generate Rust Types from Scribble 
 
-```sh
+```bash
 cd scribble-java/
 ./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/Fib.scr -rustapi Adder Adder_generated
 ```
@@ -750,7 +760,7 @@ The source code is included in the root directory.
 Here is a general descitpion of all commpand you can run on build, check and test. 
  <!-- test `Mpanon` with the following commands: -->
 
-```sh
+```bash
 cd mpst_rust_github # Move to mpanon's repository
 cargo check --all-features --lib --workspace # Check only this package's library
 cargo check --all-features --bins --workspace # Check all binaries
@@ -777,7 +787,7 @@ Assuming you know how to write `Scribble` protocols,
 put your own in the folder `../scribble-java/scribble-demos/scrib/fib/`
 and use:
 
-```sh
+```bash
 cd scribble-java/
 ./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/[input file without extension].scr -rustapi [name of the protocol] [output file without extension]
 cd ..

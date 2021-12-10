@@ -11,6 +11,6 @@ cd scribble-java/
 cd ..
 mv scribble-java/video_stream_top_down.rs mpst_rust_github/examples/video_stream_top_down.rs
 cd mpst_rust_github/
-cat scripts/vs_complete.txt > examples/video_stream_top_down.rs
+cat scripts/vs_td.txt > examples/video_stream_full.rs
 cargo fmt
-cargo run --example=video_stream_top_down --features="baking_checking"
+cargo run --example=video_stream_full --features="baking"
