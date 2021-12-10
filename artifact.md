@@ -102,7 +102,7 @@ The rest of the document is organised as follows:
 * Repso
 Thereafter, we assume that you are in the main directory of the docker file. -->
 
-## Quick Start 
+## Part I: Quick Start 
 
 1. Check and run the running example from the paper using th ebottom-up approach, VideoStreaming. 
 * execute the following command 
@@ -141,6 +141,8 @@ The commands from steps 3-5 can be ran all together with:
 ```sh
 cargo test --all-targets --all-features --workspace # Test everything in the library
 ```
+
+## Part II: Understanding Mpanon and testing the main claims of the paper
 
 ## STEP 1: Understanding Mpanon
 
