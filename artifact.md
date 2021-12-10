@@ -22,7 +22,7 @@ The artifact (after building the docker image) contains
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 
-## Claims about reusability, functionality and availability
+## Claims about functionality,reusability and availability
 
 1. Functionality:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper: 
     
