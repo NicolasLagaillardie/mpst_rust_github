@@ -104,10 +104,9 @@ Thereafter, we assume that you are in the main directory of the docker file. -->
 
 ## Part I: Quick Start 
 
-1. Check and run the running example from the paper using th ebottom-up approach, VideoStreaming. 
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming. 
 * execute the following command 
 ```
-TODO: add the command to run video stream 
 ```
 
 2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
