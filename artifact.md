@@ -113,7 +113,7 @@ TODO: add the command to run video stream
 2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming. 
 * execute the following command 
 ```
-TODO: add the command to run video stream and Scribble gen 
+cargo run --example=video_stream --all-features (bottom up)
 ```
 
 3. Run the tests to make sure mp-anon is installed and configured correctly 
