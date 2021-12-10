@@ -415,23 +415,23 @@ located in the `examples/` folder.
 
 ## STEP 2: Running the benchmarks
 
-### 1. Running the example from in Table 2 (examples from the literature)
+### 1. Running the examples from in Table 2 (examples from the literature)
 
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
 
-The examples in this table are located inn the folder `examples/`
-and duplicated in the `benches/main_all/baking/` folder.
-The data for these benchmarks can be
-re-generated using the following script:
+The examples in this table are located in the folder `examples/`
+<!-- and duplicated in the `benches/main_all/baking/` folder. -->
+
+The data for these benchmarks can be re-generated using the following script:
 
 ```sh
-./scripts/examples_literature.sh # Will take at least several dozens of minutes, progress is displayed in the terminal
+./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
 ```
 
 Each command is ran 10 times on each example and the columns display the means
 
-The results will be in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
+**Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
 
 * Column 1: file name (Example/Endpoint),
 * Column 2: **check** time, the result of ```cargo check``` (Check)
@@ -439,7 +439,11 @@ The results will be in the file `results/benchmarks_main_from_literature_0.csv` 
 * Column 4: **build --release** time, the result of ```cargo build --release``` (Rel.)
 * Column 5: **run** time, the result of running ````cargo bench``` (Exec time)
 
-<!-- The columns 2, 3 and 4 gather the time needed for executing the
+<!-- <details>
+<summary>
+Details on difference between the different cargo commands (optional reading)
+</summary>
+The columns 2, 3 and 4 gather the time needed for executing the
 respective commands `cargo check`, `cargo build` and `cargo build --release`
 with the arguments `--example=[name of the file]` and `--features=baking`.
 `cargo check` compiles the provided file and all the required dependencies
@@ -467,33 +471,46 @@ for running the benchmarks.
 Each benchmark is ran 10.000 times and `criterion` saves the results
 (mean, median, confidence interval, ...) in the `target/criterion/` folder.
 They can be displayed separately by opening the file `index.html` in the
-`target/criterion/report/` folder. -->
+`target/criterion/report/` folder. 
 
-Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv`files
+Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv` files
 on top of the existing ones.
+</details> -->
 
 ### 2. Running benchmakrs from Figure 9 (ping-pong, mesh and ring protocols)
 
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
 
-#### Option 1: Running a small benchmark set
+### **Option 1**: Running a small benchmark set
 
-You can run a small set of benchmarks by running first:
+You can run a small set of benchmarks:
 
 ```sh
-./lightweight_library.sh # This will take more less 1 hour
+./lightweight_library.sh # Set up
 ```
 
 then by running the command line
 
 ```sh
-./scripts/ping_pong_mesh_ring.sh
+./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
 ```
 
-you will be able to get the results
-for `ping_pong` protocols up to 200 loops,
-and `mesh` and `ring` protocols up to _five_ participants.
+The above nechmakrs run a set o fthe becnhmarks from Figure 9. 
+In particualr, `ping_pong` protocols are up to 200 loops,
+and `mesh` and `ring` protocols are up to _five_ participants. 
+
+**Results:** After runnign the above scripts, 
+5 graphs will be displays correposning to Figure 9. 
+
+The graphs are also displayed using `Python matplotlib` and the row data for the graphs  (.csv files)
+is in the [results/](results/) folder.
+
+
+<details>
+<summary>
+Details on the content of the raw .csv files data (optional reading). 
+</summary>
 
 The `ping_pong_mesh_ring.sh` scripts generate 3 files:
 `ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
@@ -515,16 +532,16 @@ files is as follows:
 4. Column 4: average compilation time
 
 Be aware that the scripts adds additional `*.csv`files
-on top of the existing ones.
+on top of the existing ones. 
+</details>
 
-The different graphs are also displayed with `Python matplotlib`.
 
-####  Option 2: Running the entire benchmark set (at least 24 hours)
+###  **Option 2**: Running the entire benchmark set (at least 24 hours)
 
-You can run a same set of benchmarks than the paper by running first:
+To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
 ```sh
-./full_library.sh
+./full_library.sh # set up
 ```
 
 Then you can run the script:
@@ -533,10 +550,9 @@ Then you can run the script:
 ./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
 ```
 
-NB: we have executed this script on the high performance computing server,
+__Note__: we have executed this script on the high performance computing server,
 and running the whole script took over 24 hours.
 Progress is shown while running each benchmark.
-We propose a similar but smaller set of benchmarks below.
 
 You can also run one the following scripts
 to retrieve results for only one kind of protocols:
