@@ -799,7 +799,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣  &nbsp;  Check that the types are correct
 
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enough tp guarantee correctness.  
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
 
 ```rust
 fn main() {
@@ -821,7 +821,7 @@ fn main() {
  
    println!("min kMC: {:?}", kmc);
 
-   let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+   // let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
    assert!(thread_a.join().is_ok());
    assert!(thread_b.join().is_ok());
@@ -882,7 +882,9 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 ```
 
  
-5️⃣ &nbsp; Run the example
+5️⃣ &nbsp; Run the example again but uncomment the line 
+ `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+`
 
 ```bash
 cargo run --example=my_basic --features=baking_checking
