@@ -6,8 +6,10 @@
  
 The purpose of this document is to describe in details the steps
 required to assess the artifact associated with our paper.
+
+(!) For better usability, please use the [online](https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d) version of this document
  
-This artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
+The artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
 ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims a functional, reusable and available badge.
  
 ## Artifact layout
@@ -21,7 +23,7 @@ The artifact (after building the docker image) contains
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
- 
+
 ## Claims about functionality, reusability and availability
  
 1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
