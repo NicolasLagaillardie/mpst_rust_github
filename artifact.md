@@ -1,57 +1,57 @@
 # Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)
- 
+
 ---
- 
+
 ## Overview
- 
+
 The purpose of this document is to describe in details the steps
 required to assess the artifact associated with our paper.
 
 (!) For better usability, please use the [online](https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d) version of this document
- 
+
 The artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
 ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims a functional, reusable and available badge.
- 
+
 ## Artifact layout
- 
+
 The artifact (after building the docker image) contains
- 
+
 * The directory `most-rust-github`-- a directory containing the source code of the mp-anon tool
- * `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
- * `most-rust-github/scripts` - the scripts for reproducing the results
- * `most-rust-github/benches` --- the examples for Fig. 9
+  * `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
+  * `most-rust-github/scripts` - the scripts for reproducing the results
+  * `most-rust-github/benches` --- the examples for Fig. 9
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 
 ## Claims about functionality, reusability and availability
- 
+
 1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
   
-   -   Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
-  
-   -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
-  
-   -  Observe detected errors due to incompatible types, as explained in Section 2 in the paper.
+   * Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
+
+   * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
+
+   * Observe detected errors due to incompatible types, as explained in Section 2 in the paper.
    __Check the claim  by__: following [Part II: Step 1.3](#Step1.3)
- 
+
 2. **Functionality**: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
   
    2.1 claims expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon.
- 
+
    __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](#Step2)
   
    2.1. claims on compile-time performance (line 886-892)::
- 
-   - the more participants there are, the higher is the compilation time for MPST
+
+   * the more participants there are, the higher is the compilation time for MPST
   
    2.2. claims on run-time performance (line 880-885):
- 
-   - mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
- 
-   - the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
- 
-   - AMPST can a negligible overhead in comparison to MPST
+
+   * mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
+
+   * the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
+
+   * AMPST can a negligible overhead in comparison to MPST
   
    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](#Step3)
 3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols, follow
@@ -660,6 +660,11 @@ fn main() {
    .unwrap();
  
    println!("min kMC: {:?}", kmc);
+
+   let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+
+   assert!(thread_a.join().is_ok());
+   assert!(thread_b.join().is_ok());
 }
 ```
  
@@ -668,14 +673,53 @@ Run the checker_concat! macro to check if the types are correct
 ```bash
 cargo run --example=my_basic --features=baking_checking
 ```
- 
+
 After running the command above, the terminal should display
 four additional parts:
- 
+
 1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
  
 4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` and `C`.
+
+```rust
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    let (_, s) = s.recv()?;
+    recurs_a(s, 5)
+}
+
+fn recurs_a(s: EndpointALoop, loops: i32) -> Result<(), Box<dyn Error>> {
+    if loops > 0 {
+        let s: EndpointAMore = choose_mpst_a_to_all!(s, Branching0fromAtoB::More);
+
+        let (_, s) = s.recv()?;
+        recurs_a(s, loops - 1)
+    } else {
+        let s: EndpointADone = choose_mpst_a_to_all!(s, Branching0fromAtoB::Done);
+
+        let (_, s) = s.recv()?;
+        s.close()
+    }
+}
+
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    let s = s.send(Request {})?;
+    recurs_b(s)
+}
+
+fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromAtoB::More(s) => {
+            let s = s.send(Response {})?;
+            recurs_b(s)
+        },
+        Branching0fromAtoB::Done(s) => {
+            let s = s.send(Stop {})?;
+            s.close()
+        },
+    })
+}
+```
  
 5️⃣ &nbsp; Run the example
  
