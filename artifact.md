@@ -538,12 +538,168 @@ example, i.e Adder, check [Adder example with kmc in Additional Information](#ad
  
 __Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
  
-__Note__: If you want to see how bottom-up can be applied to the
-previous example, i.e Adder, check [adder_kmc](#adder_kmc).
+</details>
+<details>
+<summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
+ 
+<!--
+The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
+We are not going to introduce how to use it but how `Mpanon` takes advantage
+of it *interactive* mode to check protocols.
+ 
+`Mpanon` uses the macro `checker_concat!` on the types
+to create the communicating automata that the `KMC` tool will be able to read.
+This macro returns two elements within a tuple:
+ 
+1. the graphs of each participant using the **dot** format
+2. the minimal **k** checked by the protocol
+ 
+Our theory only supports protocols which have **k=1**,
+but protocols with higher levels can still be implemented using `Mpanon`.
+Furthermore, we restricted **k** to be lower than **50**:
+any protocol with **k** higher than 50 will be marked as
+incorrect.
+Indeed, the `KMC` tool does not have an automated way of checking
+the minimal **k** of a protocol and `Mpanon`
+checks the protocol for each **k** increasing from 1 to 50. -->
+ 
+Now, that you have a better idea of the interactions between those
+two tools, we can improve our `Adder_generated` example to be checked
+by the `KMC` tool using our macro `checker_concat!`.
+For this purpose, append the following lines to our file:
+ 
+```rust
+ 
+/////////////////////////
+ 
+fn checking() {
+   let (graphs, kmc) = mpstthree::checker_concat!(
+       "Adder_checking",
+       EndpointA48,
+       EndpointC13,
+       EndpointB50
+       =>
+       [
+           EndpointC7,
+           Branches0AtoC, ADD,
+           Branches0BtoC, ADD,
+       ],
+       [
+           EndpointC9,
+           Branches0AtoC, BYE,
+           Branches0BtoC, BYE,
+       ]
+   )
+   .unwrap();
+ 
+   println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
+   println!("\n/////////////////////////\n");
+   println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
+   println!("\n/////////////////////////\n");
+   println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
+   println!("\n/////////////////////////\n");
+   println!("min kMC: {:?}", kmc);
+}
+```
+ 
+and update the `main()` function by including `checking();` in it:
+ 
+```rust
+fn main() {
+   checking();
+ 
+   let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
+ 
+   assert!(thread_a.join().is_ok());
+   assert!(thread_b.join().is_ok());
+   assert!(thread_c.join().is_ok());
+}
+```
+ 
+Now, if you run again the file, it should run correctly:
+ 
+```bash
+cargo run --example="Adder_generated" --features=baking_checking
+```
+ 
+Notice the different features used for compiling the example.
+ 
+If you are unsure about either of the above steps,
+the `Rust` code is available in the `adder.rs` file
+located in the `examples/` folder.
+
+Optional: If you want to practice more with writing  types and programs 
+using mp-anon, and kmc, check teh additioanl example section [here](#example-kmc)
+ 
+</details>
+ 
+## ADDITIONAL INFORMATION
+ 
+All set-up and benchmark was performed on the following machine:
+ 
+* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
+OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
+ 
+The original benchmarks were generated using:
+ 
+* Compile and run: `cargo bench --all-targets --all-features --workspace`
+ 
+<!--
+See main instructions
+([README.md](README.md))
+for more information. -->
+ 
+The documentation of `mpanon` can be generated
+with the command `cargo doc --all-features`.
+The generated documentation will be accessible in the file
+[target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
+ 
+The source code is included in the root directory.
  
 <details>
+<summary> Rust commands on build, test, compile </summary>
+ 
+Here is a general description of all commands you can run on build, check and test.
+<!-- test `Mpanon` with the following commands: -->
+ 
+```bash
+cd mpst_rust_github # Move to mpanon's repository
+cargo check --all-features --lib --workspace # Check only this package's library
+cargo check --all-features --bins --workspace # Check all binaries
+cargo check --all-features --examples --workspace # Check all examples
+cargo check --all-features --tests --workspace # Check all tests
+cargo check --all-features --benches --workspace # Check all benchmarks
+cargo build --all-features --lib --workspace # Build only this package's library
+cargo build --all-features --bins --workspace # Build all binaries
+cargo build --all-features --examples --workspace # Build all examples
+cargo build --all-features --tests --workspace # Build all tests
+cargo build --all-features --benches --workspace # Build all benchmarks
+cargo test --all-features --lib --workspace # Test only this package's library
+cargo test --all-features --bins --workspace # Test all binaries
+cargo test --all-features --examples --workspace # Test all examples
+cargo test --all-features --tests --workspace # Test all tests
+cargo test --all-features --benches --workspace # Test all benchmarks
+ 
+```
+ 
+</details>
+<details> <summary>  Scribble commands </summary>
+ 
+Assuming you know how to write `Scribble` protocols,
+put your own in the folder `../scribble-java/scribble-demos/scrib/fib/`
+and use:
+ 
+```bash
+cd scribble-java/
+./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/[input file without extension].scr -rustapi [name of the protocol] [output file without extension]
+cd ..
+mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
+cd  mpst_rust_github/
+```
+
+<details>
 <summary>
-Follow the steps to implement a simple example with mp-anon and kmc
+Follow the steps to implement a simple example with mp-anon and kmc <a href="example-kmc"></a>
 </summary>
  
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
@@ -728,162 +884,3 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 cargo run --example=my_basic --features=baking_checking
 ```
 </details>
-<br />
- 
-## ADDITIONAL INFORMATION
- 
-All set-up and benchmark was performed on the following machine:
- 
-* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
-OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
- 
-The original benchmarks were generated using:
- 
-* Compile and run: `cargo bench --all-targets --all-features --workspace`
- 
-<!--
-See main instructions
-([README.md](README.md))
-for more information. -->
- 
-The documentation of `mpanon` can be generated
-with the command `cargo doc --all-features`.
-The generated documentation will be accessible in the file
-[target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
- 
-The source code is included in the root directory.
- 
-<details>
-<summary> Rust commands on build, test, compile </summary>
- 
-Here is a general description of all commands you can run on build, check and test.
-<!-- test `Mpanon` with the following commands: -->
- 
-```bash
-cd mpst_rust_github # Move to mpanon's repository
-cargo check --all-features --lib --workspace # Check only this package's library
-cargo check --all-features --bins --workspace # Check all binaries
-cargo check --all-features --examples --workspace # Check all examples
-cargo check --all-features --tests --workspace # Check all tests
-cargo check --all-features --benches --workspace # Check all benchmarks
-cargo build --all-features --lib --workspace # Build only this package's library
-cargo build --all-features --bins --workspace # Build all binaries
-cargo build --all-features --examples --workspace # Build all examples
-cargo build --all-features --tests --workspace # Build all tests
-cargo build --all-features --benches --workspace # Build all benchmarks
-cargo test --all-features --lib --workspace # Test only this package's library
-cargo test --all-features --bins --workspace # Test all binaries
-cargo test --all-features --examples --workspace # Test all examples
-cargo test --all-features --tests --workspace # Test all tests
-cargo test --all-features --benches --workspace # Test all benchmarks
- 
-```
- 
-</details>
-<details> <summary>  Scribble commands </summary>
- 
-Assuming you know how to write `Scribble` protocols,
-put your own in the folder `../scribble-java/scribble-demos/scrib/fib/`
-and use:
- 
-```bash
-cd scribble-java/
-./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/[input file without extension].scr -rustapi [name of the protocol] [output file without extension]
-cd ..
-mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
-cd  mpst_rust_github/
-```
- 
-</details>
-<details>
-<summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
- 
-<!--
-The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
-We are not going to introduce how to use it but how `Mpanon` takes advantage
-of it *interactive* mode to check protocols.
- 
-`Mpanon` uses the macro `checker_concat!` on the types
-to create the communicating automata that the `KMC` tool will be able to read.
-This macro returns two elements within a tuple:
- 
-1. the graphs of each participant using the **dot** format
-2. the minimal **k** checked by the protocol
- 
-Our theory only supports protocols which have **k=1**,
-but protocols with higher levels can still be implemented using `Mpanon`.
-Furthermore, we restricted **k** to be lower than **50**:
-any protocol with **k** higher than 50 will be marked as
-incorrect.
-Indeed, the `KMC` tool does not have an automated way of checking
-the minimal **k** of a protocol and `Mpanon`
-checks the protocol for each **k** increasing from 1 to 50. -->
- 
-Now, that you have a better idea of the interactions between those
-two tools, we can improve our `Adder_generated` example to be checked
-by the `KMC` tool using our macro `checker_concat!`.
-For this purpose, append the following lines to our file:
- 
-```rust
- 
-/////////////////////////
- 
-fn checking() {
-   let (graphs, kmc) = mpstthree::checker_concat!(
-       "Adder_checking",
-       EndpointA48,
-       EndpointC13,
-       EndpointB50
-       =>
-       [
-           EndpointC7,
-           Branches0AtoC, ADD,
-           Branches0BtoC, ADD,
-       ],
-       [
-           EndpointC9,
-           Branches0AtoC, BYE,
-           Branches0BtoC, BYE,
-       ]
-   )
-   .unwrap();
- 
-   println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
-   println!("\n/////////////////////////\n");
-   println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
-   println!("\n/////////////////////////\n");
-   println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
-   println!("\n/////////////////////////\n");
-   println!("min kMC: {:?}", kmc);
-}
-```
- 
-and update the `main()` function by including `checking();` in it:
- 
-```rust
-fn main() {
-   checking();
- 
-   let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
- 
-   assert!(thread_a.join().is_ok());
-   assert!(thread_b.join().is_ok());
-   assert!(thread_c.join().is_ok());
-}
-```
- 
-Now, if you run again the file, it should run correctly:
- 
-```bash
-cargo run --example="Adder_generated" --features=baking_checking
-```
- 
-Notice the different features used for compiling the example.
- 
-If you are unsure about either of the above steps,
-the `Rust` code is available in the `adder.rs` file
-located in the `examples/` folder.
- 
-</details>
- 
-
