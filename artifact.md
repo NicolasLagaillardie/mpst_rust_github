@@ -98,7 +98,7 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
    gunzip artifact.tar.gz
    ```
 
-3. You should see the tar file `artifact.tar` after last operation.
+3. You should see the tar file `artifact.tar` after the last operation.
 4. Load the docker image
 
    ```bash
