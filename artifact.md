@@ -530,7 +530,7 @@ cargo run --example="Adder_generated" --features=baking
  
 __Optional__: Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the
-previous example, i.e Adder, check [Adder example with kmc in Additional Information](#adder_kmc).
+example, i.e Adder, check [Adder example with kmc in Additional Information](#adder_kmc).
 </details>
 <br />
  
@@ -639,7 +639,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣  &nbsp;  Check that the types are correct
  
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility.
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enoigh tp guarantee correctness.  
  
 ```rust
 fn main() {
@@ -676,11 +676,11 @@ cargo run --example=my_basic --features=baking_checking
 
 After running the command above, the terminal should display
 four additional parts:
-
-1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
+ 
+1. the first three ones are the **dot** graphs representing `A`, `B` 
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
  
-4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` and `C`.
+4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B`.
 
 ```rust
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
@@ -720,6 +720,7 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
     })
 }
 ```
+
  
 5️⃣ &nbsp; Run the example
  
