@@ -24,20 +24,20 @@ Scribble protocols
 
 ## Claims about functionality,reusability and availability
 
-1. Functionality:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper: 
+1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper: 
     
     -   Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-upapproach. __Check the claim  by__: following [Part II: Step 1](Step1.1)
     
-    -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1](Step1.1)
+    -  Use the mp-anan to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1](Step1.2)
     
     -  Observe detected errors due to incompatible types, as explained in Section 2 in the paper. 
     __Check the claim  by__: following [Part II: Step 1](Step1.3)
 
-2. Functionality: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
+2. **Functionality**: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
     
     2.1 claims expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon. 
 
-    __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](Step1)
+    __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](Step2)
     
     2.1. claims on compile-time performance (line 886-892):: 
 
@@ -51,10 +51,10 @@ Scribble protocols
 
     - AMPST can a negligible overhead in comparison to MPST 
     
-    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step2)
-3. Reusability: The mp-anon tool can be used to verify your own communication protocols, follow
+    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](Step3)
+3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols, follow
 the instructions in [Part III](PartIII)
-4. Availability: We agree our artifact to be  published under a Creative Commons license on DARTS. 
+4. **Availability**: We agree our artifact to be  published under a Creative Commons license on DARTS. 
 
 ## Prerequisites
 
@@ -346,7 +346,7 @@ to retrieve results for only one kind of protocols:
 
 ---
 
-## Part III (Optional): A walkthrough tutorial on checking your own protocols with `Mp-anon`
+## Part III: A walkthrough tutorial on checking your own protocols with `Mp-anon`
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
