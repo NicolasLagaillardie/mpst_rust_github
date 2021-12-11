@@ -4,7 +4,7 @@
 
 ## Overview
 
-The purpose of this document is to describe in details the steps
+The purpose of this document is to describe in detail the steps
 required to assess the artifact associated with our paper.
 
 (!) For better usability, please use the [online](https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d) version of this document
@@ -16,23 +16,22 @@ ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Mul
 
 The artifact (after building the docker image) contains
 
-* The directory `mpst-rust-github`-- a directory containing the source code of the mp-anon tool
-  * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Figure 9 and Table 2 in the paper
-  * `mpst-rust-github/scripts` -- the scripts for reproducing the results
-  * `mpst-rust-github/benches` -- the examples for Figure 9
+* The directory `mpst_rust_github`-- a directory containing the source code of the mp-anon tool
+  * `mpst_rust_github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Figure 9 and Table 2 in the paper
+  * `mpst_rust_github/scripts` -- the scripts for reproducing the results
+  * `mpst_rust_github/benches` -- the examples for Figure 9
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 * The directory `kmc` that contains the external kmc tool used to verify that mp-anon types written in Rust are compatible
-
 
 ## Claims about functionality, reusability and availability
 
 1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
   
-   * Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. 
+   * Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach.
    __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
 
-   * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. 
+   * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper.
    __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
 
    * Observe detected errors due to incompatible types, as explained in Section 2 (line 221-225) in the paper.
@@ -42,7 +41,7 @@ Scribble protocols
   
    2.1 claim expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon.
 
-   __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](#Step2)
+   __Check the claim  by__: Table 2 can be reproduced following the instructions in [Part II: Step 2](#Step2)
   
    2.1. claims on compile-time performance (line 886-892):
 
@@ -56,14 +55,14 @@ Scribble protocols
 
    * AMPST has a negligible overhead in comparison to MPST
   
-   __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](#Step3)
+   __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduced following the instructions in [Part II: Step 3](#Step3)
 3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols and programs, follow the instructions in [Part III](#PartIII)
-4. **Availability**: We agree our artifact to be  published under a Creative Commons license on DARTS.
+4. **Availability**: We agree our artifact to be published under a Creative Commons license on DARTS.
 
 __Note on performance__: the benchmark data in the paper was generated
 using a 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
-with a quota of more than 100.000 files and 100 GB of HDD. In particualr, measurements in the paper are taken using AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
+with a quota of more than 100.000 files and 100 GB of HDD. In particular, measurements in the paper are taken using AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
 Depending on your test machine, the absolute values of the measurements produced in Part II: Step 2 and Step 3 will differ from the paper. Nevertheless, the claims stated in the paper should be preserved.
 
 ## Prerequisites
@@ -79,7 +78,7 @@ To run all benchmarks reported in the paper, the reviewers need:
 16 GB of RAM: the library itself is lightweight,
 but all the examples and the benchmarks are very heavy and
 need more than 16 GB of RAM.
-That is why, we commented the heaviest protocols for a lighter
+That is why,we commented on the heaviest protocols for a lighter
 Docker image and easier compilation.
 In the next sections, you will be able to uncomment those files
 to test them. -->
@@ -90,7 +89,7 @@ to test them. -->
 
 For the ECOOP'22 artifact evaluation, please use the docker image provided:
 
-0. [Install docker](https://docs.docker.com/engine/install/) and open the terminal.
+0. [Install Docker](https://docs.docker.com/engine/install/) and open the terminal.
 1. Download the artifact file (assume the filename is `artifact.tar.gz`)
 2. Unzip the artifact file.
 
@@ -98,14 +97,14 @@ For the ECOOP'22 artifact evaluation, please use the docker image provided:
    gunzip artifact.tar.gz
    ```
 
-3. You should see the tar file `artifact.tar` after the last operation.
+3. You should see the tar file `artifact.tar` after the previous operation.
 4. Load the docker image
 
    ```bash
    docker load < artifact.tar
    ```
 
-5. You should see in the end of the output after last operation:
+5. You should see at the end of the output after previous operation:
 
    ```bash
    Loaded image: mpanon:latest
@@ -132,12 +131,12 @@ assuming you downloaded it and you have Docker installed on your machine: -->
 Note: This may take around 30 min to complete
 The password and user in this docker image are both `mpanon`.-->
 <!-- During the compilation of the docker file,
-tests are ran for the different tools used in this artifact,
+tests are run for the different tools used in this artifact,
 hence it may take some time to compile. -->
 <!--
 The rest of the document is organised as follows:
 * Quick Start lets you test that all required components are installed correctly
-* Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approach.
+* Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approaches.
 * Repo
 Thereafter, we assume that you are in the main directory of the docker file. -->
 
@@ -168,7 +167,7 @@ cargo test --benches --all-features --workspace # Test all benchmarks
 The above command may take up to 15 min.
 
 __Note__:
-The commands from steps 3-5 can be ran all together with:
+The commands from steps 3-5 can be run all together with:
 
 ```bash
 cargo test --all-targets --all-features --workspace # Test everything in the library
@@ -199,15 +198,16 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 3. Edit the program and observe the reported errors
 <a name="Step1.3"></a>
 
-Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon). 
-After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error. 
+Next, we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
+After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error.
 
 * Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
 
 Suggested modifications:
-  * swap lines 104 and 105 (this can possibly lead to a deadlock) 
-  * use another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
-  * keep the changes from the previous modification and in addition modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
+
+* swap lines 104 and 105 (this can possibly lead to a deadlock)
+* use another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
+* keep the changes from the previous modification and in addition modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
 
 ### STEP 2: Running the examples from Table 2 <a name="Step2"></a>
 
@@ -223,7 +223,7 @@ The data for these benchmarks can be re-generated using the following script:
 ./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
 ```
 
-Each command is ran 10 times on each example and the columns display the means
+Each command is run 10 times on each example and the columns display the means
 
 **Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
 
@@ -237,22 +237,22 @@ Each command is ran 10 times on each example and the columns display the means
 <summary>
 Details on difference between the different cargo commands (optional reading)
 </summary>
-The columns 2, 3 and 4 gather the time needed for executing the
+Columns 2, 3 and 4 gather the time needed for executing the
 respective commands `cargo check`, `cargo build` and `cargo build --release`
 with the arguments `--example=[name of the file]` and `--features=baking`.
 `cargo check` compiles the provided file and all the required dependencies
 given by the argument `--features=baking` but does not
 build the binaries.
-`cargo build` works the same way than `cargo check` and, in addition,
+`cargo build` works the same way as `cargo check` and, in addition,
 builds the binaries.
-`cargo build --release` builds optimised binaries which are
+`cargo build --release` builds optimised binaries that are
 faster for running time and usually used for benchmarks.
 Hence, it is faster for checking a `Rust` file
 with `cargo check` than the two others,f
 and `cargo build --release` is slower than `cargo build`
 as it optimises the output binaries.
 For higher accuracy and lower variance,
-each command is ran 10 times on each example
+each command is run 10 times on each example
 and the columns display the means.
  
 The 5th column runs the command `cargo bench` with the arguments
@@ -262,7 +262,7 @@ to be benchmarked and the second argument is the feature used for
 compiling the benchmarks.
 We use the [criterion](https://crates.io/crates/criterion) `Rust` library
 for running the benchmarks.
-Each benchmark is ran 10.000 times and `criterion` saves the results
+Each benchmark is run 10.000 times and `criterion` saves the results
 (mean, median, confidence interval, ...) in the `target/criterion/` folder.
 They can be displayed separately by opening the file `index.html` in the
 `target/criterion/report/` folder.
@@ -273,19 +273,19 @@ on top of the existing ones.
 
 ### STEP 3: Running benchmarks from Figure 9 (ping-pong, mesh and ring protocols) <a name="Step3"></a>
 
-The purpose of these set of benchmarks is to demonstrate the
+The purpose of this set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
 
 #### **Option 1**: Running a small benchmark set
 
 You can run a small set of the benchmarks since the full benchmark set can take about 24 hours.
-We have prepared a lighter version that should complete in about an hour. 
+We have prepared a lighter version that should complete in about an hour.
 The difference is that  `ping_pong` protocols are run up to 200 loops (and not 500),
-and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_). 
+and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_).
 
-This modifications are enough to start observing the performance trends (refer to claims about functionality in the beginning of this document). 
- 
-To run the lighter benchmark suit: 
+These modifications are enough to start observing the performance trends (refer to claims about functionality at the beginning of this document).
+
+To run the lighter benchmark suit:
 
 ```bash
 ./lightweight_library.sh # Set up
@@ -319,14 +319,14 @@ The structure of the `ping_ping_0.csv` file is as follows:
 4. Column 4: average compilation time
 
 The structure of the `mesh_0.csv` and `ring_0.csv`
-files is as follows:
+files are as follows:
 
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of participants
 3. Column 3: average running time
 4. Column 4: average compilation time
 
-Be aware that the scripts adds additional `*.csv`files
+Be aware that the scripts add additional `*.csv`files
 on top of the existing ones.
 </details>
 
@@ -344,12 +344,12 @@ Then you can run the script:
 ./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
 ```
 
-__Note__: we have executed this script on a high performance computing server,
+__Note__: we have executed this script on a high-performance computing server,
 and running the whole script took over 24 hours.
 Progress is shown while running each benchmark.
 
-You can also run one the following scripts
-to retrieve results for only one kind of protocols:
+You can also run one of the following scripts
+to retrieve results for only one kind of protocol:
 
 ```bash
 ./scripts/ping_pong.sh # For ping-pong protocols
@@ -385,21 +385,21 @@ Follow the steps to implement a simple Adder example with Scribble and mp-anon
 ```
 
 In the above example, we move into the `scribble-java` folder and
-run the `Scribble` api for `Rust` on the `Adder` protocol written with `Scribble`.
+run the `Scribble` API for `Rust` on the `Adder` protocol written with `Scribble`.
 This command outputs the file `Adder_generated.rs` at the root of the `scribble-java` directory.
 Then it moves the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
 of the `mpst_rust_github` folder containing `Mpanon`
-and auto format the file with `cargo fmt`.
+and auto-format the file with `cargo fmt`.
 
 Now, you can open the `examples/Adder_generated.rs` file using your preferred editor program before testing the protocol directly with `Mpanon`.
  
-➡️ &nbsp; From this point we assume that you will remain in the `Mpanon` repository.
+➡️ &nbsp; From this point, we assume that you will remain in the `Mpanon` repository.
 
 <!-- Optional: You can check that the generated types are the same as the one provided in
 the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
 up to line 73. -->
  
-2️⃣ &nbsp;Compile the Rust types
+2️⃣ &nbsp; Compile the Rust types
 
 ```bash
 cargo run --example="Adder_generated" --features=backing_checking
@@ -413,10 +413,10 @@ This command contains four parts:
 4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example.
 
 You will have an error and several warnings when running the previous command.
-This is because the `Scribble` api only generates `Rust` types
+This is because the `Scribble` API only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
 
-Hereafter, we provide the code for the processes that implement the generated types. 
+Hereafter, we provide the code for the processes that implement the generated types.
  
 3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
 
@@ -521,7 +521,7 @@ Now, if you run again the file, it should run correctly:
 ```bash
 cargo run --example="Adder_generated" --features=baking
 ```
-               
+
 </details>
 <br />
 
@@ -536,8 +536,7 @@ cargo run --example="Adder_generated" --features=baking
 
  <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
-We are not going to introduce how to use it but how `Mpanon` takes advantage
-of it *interactive* mode to check protocols. -->
+We are not going to introduce how to use it but how `Mpanon` takes advantage of its *interactive* mode to check protocols. -->
 
 `Mpanon` uses the macro `checker_concat!` on the types
 to rewrite Rust types to communicating finite state machines (CFSM) that the `KMC`checks.
@@ -551,7 +550,7 @@ This macro returns two elements within a tuple:
 2. the minimal **k** checked by the protocol
 
 Our theory only supports protocols which have a bound of **k=1**,
-but protocols with higher levels can still be implemented using `Mpanon`. --> 
+but protocols with higher levels can still be implemented using `Mpanon`. -->
 
 Now, that you have a better idea of the interactions between those
 two tools, we will check the types in the `Adder_generated` example are correct
@@ -620,16 +619,16 @@ the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
 ___Optional__: If you want more practice writing types and programs
-using mp-anon, and kmc, check the additional examples section at the end of the document: 
+using mp-anon, and kmc, check the additional examples section at the end of the document:
 [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
 
 </details>
 
 ## ADDITIONAL INFORMATION
 
-<details> 
+<details>
 <summary> Benchmark setup in the paper </summary>
-All set-up and benchmark was performed on the following machine:
+All set-up and benchmarks were performed on the following machine:
 
 * AMD Opteron<sup>TM</sup> Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
 OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
@@ -724,7 +723,7 @@ bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); // generates meshed cha
 
 <!-- Replace `A, B` with the different names
 of the roles you desire.
-They must be in the alphabetical order,
+They must be in alphabetical order,
 and a comma at the end is optional. -->
 The new generated types will be `MeshedChannels`
 and `RoleX` where `X` is the provided name in the macro inputs.
@@ -882,9 +881,8 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 ```
 
  
-5️⃣ &nbsp; Run the example again but uncomment the line 
- `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
-`
+5️⃣ &nbsp; Run the example again but uncomment the line
+ `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);`
 
 ```bash
 cargo run --example=my_basic --features=baking_checking
