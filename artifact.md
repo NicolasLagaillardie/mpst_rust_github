@@ -70,7 +70,7 @@ Depending on your test machine, the absolute values of the measurements produced
 To run all benchmarks reported in the paper, the reviewers need:
 
 * a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
-* to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
+* to enable localhost access (note that it should be enabled by default unless you disabled it beforehand)
 
 <!-- In addition, the tool needs access to `localhost` for the tests.
  
@@ -78,7 +78,7 @@ To run all benchmarks reported in the paper, the reviewers need:
 16 GB of RAM: the library itself is lightweight,
 but all the examples and the benchmarks are very heavy and
 need more than 16 GB of RAM.
-That is why,we commented on the heaviest protocols for a lighter
+That is why, we commented on the heaviest protocols for a lighter
 Docker image and easier compilation.
 In the next sections, you will be able to uncomment those files
 to test them. -->
@@ -167,7 +167,7 @@ cargo test --benches --all-features --workspace # Test all benchmarks
 The above command may take up to 15 min.
 
 __Note__:
-The commands from steps 3-5 can be run all together with:
+The commands from steps 3-5 can be run altogether with:
 
 ```bash
 cargo test --all-targets --all-features --workspace # Test everything in the library
@@ -205,7 +205,7 @@ After each modification, compile the program with `cargo run --example=video_str
 
 Suggested modifications:
 
-* swap lines 104 and 105 (this can possibly lead to a deadlock)
+* swap lines 104 and 105 (this can lead to a deadlock)
 * use another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
 * keep the changes from the previous modification and in addition modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
 
@@ -549,7 +549,7 @@ This macro returns two elements within a tuple:
 1. the CFSM representation for each type using the **dot** format
 2. the minimal **k** checked by the protocol
 
-Our theory only supports protocols which have a bound of **k=1**,
+Our theory only supports protocols that have a bound of **k=1**,
 but protocols with higher levels can still be implemented using `Mpanon`. -->
 
 Now, that you have a better idea of the interactions between those
@@ -798,7 +798,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣  &nbsp;  Check that the types are correct
 
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
 
 ```rust
 fn main() {
