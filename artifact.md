@@ -16,10 +16,10 @@ ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Mul
 
 The artifact (after building the docker image) contains
 
-* The directory `mpst-rust-github`-- a directory containing the source code of the mp-anon tool
-  * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Figure 9 and Table 2 in the paper
-  * `mpst-rust-github/scripts` -- the scripts for reproducing the results
-  * `mpst-rust-github/benches` -- the examples for Figure 9
+* The directory `mpst_rust_github`-- a directory containing the source code of the mp-anon tool
+  * `mpst_rust_github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Figure 9 and Table 2 in the paper
+  * `mpst_rust_github/scripts` -- the scripts for reproducing the results
+  * `mpst_rust_github/benches` -- the examples for Figure 9
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 * The directory `kmc` that contains the external kmc tool used to verify that mp-anon types written in Rust are compatible
@@ -416,7 +416,7 @@ You will have an error and several warnings when running the previous command.
 This is because the `Scribble` API only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
 
-Hereafter, we provide the code for the processes that implement the generated types. 
+Hereafter, we provide the code for the processes that implement the generated types.
  
 3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
 
@@ -521,7 +521,7 @@ Now, if you run again the file, it should run correctly:
 ```bash
 cargo run --example="Adder_generated" --features=baking
 ```
-               
+
 </details>
 <br />
 
@@ -550,7 +550,7 @@ This macro returns two elements within a tuple:
 2. the minimal **k** checked by the protocol
 
 Our theory only supports protocols which have a bound of **k=1**,
-but protocols with higher levels can still be implemented using `Mpanon`. --> 
+but protocols with higher levels can still be implemented using `Mpanon`. -->
 
 Now, that you have a better idea of the interactions between those
 two tools, we will check the types in the `Adder_generated` example are correct
@@ -619,14 +619,14 @@ the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
 ___Optional__: If you want more practice writing types and programs
-using mp-anon, and kmc, check the additional examples section at the end of the document: 
+using mp-anon, and kmc, check the additional examples section at the end of the document:
 [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
 
 </details>
 
 ## ADDITIONAL INFORMATION
 
-<details> 
+<details>
 <summary> Benchmark setup in the paper </summary>
 All set-up and benchmarks were performed on the following machine:
 
@@ -881,9 +881,8 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 ```
 
  
-5️⃣ &nbsp; Run the example again but uncomment the line 
- `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
-`
+5️⃣ &nbsp; Run the example again but uncomment the line
+ `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);`
 
 ```bash
 cargo run --example=my_basic --features=baking_checking
