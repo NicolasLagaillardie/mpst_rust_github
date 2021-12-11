@@ -291,12 +291,12 @@ then by running the command line
 The above benchmarks run a set of the benchmarks from Figure 9.
 In particular, `ping_pong` protocols are up to 200 loops,
 and `mesh` and `ring` protocols are up to _five_ participants.
- 
+
 **Results:** After running the above scripts,
 5 graphs will be displayed corresponding to Figure 9.
- 
+
 The graphs are displayed using `Python matplotlib` and the row data for the graphs (.csv files) is in the [results/](results/) folder.
- 
+
 <details>
 <summary>
 Details on the content of the raw .csv files data (optional reading).
@@ -342,40 +342,40 @@ Then you can run the script:
 __Note__: we have executed this script on the high performance computing server,
 and running the whole script took over 24 hours.
 Progress is shown while running each benchmark.
- 
+
 You can also run one the following scripts
 to retrieve results for only one kind of protocols:
- 
+
 ```bash
 ./scripts/ping_pong.sh # For ping-pong protocols
 ./scripts/mesh.sh # For mesh protocols
 ./scripts/ring.sh # For ring protocols
 ```
- 
+
 ---
- 
+
 ## Part III: A walkthrough tutorial on checking your own protocols with `Mp-anon` <a name="PartIII"></a>
- 
+
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
 (2) your own types written with `Mp-anon` and then checked using the kmc tool (bottom-up approach).
- 
+
 ### 3.1 Top-down: Generating Types from Scribble
- 
+
 In the `top-down` approach, protocols written in the protocol description language `Scribble` are
 used for generating Mp-anon types.
- 
+
 You can use our implementation of the recursive `Fibonacci` protocol
 provided in the `Scribble` repository as a start. The protocol is located
 in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr)
- 
+
 <details>
 <summary>
 Follow the steps to implement a simple Adder example with Scribble and mp-anon
 </summary>
  
 1️⃣ &nbsp; Generate Rust Types from Scribble
- 
+
 ```bash
 ./scripts/top_down_adder.rs
 ```
@@ -415,7 +415,7 @@ Hereafter, we provide the code to be append to the `Adder_generated.rs`
 file to make it work:
  
 3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
- 
+
 ```rust
 /////////////////////////
  
@@ -493,57 +493,56 @@ fn main() {
    assert!(thread_c.join().is_ok());
 }
 ```
- 
+
 There are four different parts: the first three ones are for
 representing the different roles, `A`, `B` and `C`, involved
 in the protocol and the last one is for linking and running
 them together.
- 
+
 In the first three parts, we are using the primitives
 described in Table 1 of the paper:
- 
+
 1. `send(p)` for sending a payload `p`
 2. `recv()` for receiving a payload
 3. `offer_mpst!` for receiving a choice
 4. `choose_mpst_c_to_all!` for sending a choice
- 
+
 The last part uses `fork_mpst` to fork the different functions together.
- 
+
 All those primitives are generated using
 the macro `bundle_impl_with_enum_and_cancel!`.
- 
+
 Now, if you run again the file, it should run correctly:
- 
+
 ```bash
 cargo run --example="Adder_generated" --features=baking
 ```
- 
+
 __Optional__: Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool.
 </details>
 <br />
- 
+
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
 
- 
 </details>
 <details>
 <summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
- We show how to use the bottom-up approach. 
- The first step in the bottom-up approach to to write the Rust types for the meshed channels. 
- We will use the Adder example from above, since we already have the types and we will only demonstarte here hpw top check them using kmc. 
+ We show how to use the bottom-up approach.
+ The first step in the bottom-up approach to to write the Rust types for the meshed channels.
+ We will use the Adder example from above, since we already have the types and we will only demonstrate here hpw top check them using kmc.
 <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
 We are not going to introduce how to use it but how `Mpanon` takes advantage
 of it *interactive* mode to check protocols. -->
- 
+
 `Mpanon` uses the macro `checker_concat!` on the types
 to create the communicating automata that the `KMC` tool will be able to read.
 This macro returns two elements within a tuple:
- 
+
 1. the graphs of each participant using the **dot** format
 2. the minimal **k** checked by the protocol
- 
+
 <!-- Our theory only supports protocols which have **k=1**,
 but protocols with higher levels can still be implemented using `Mpanon`.
 Furthermore, we restricted **k** to be lower than **50**:
@@ -552,13 +551,13 @@ incorrect.
 Indeed, the `KMC` tool does not have an automated way of checking
 the minimal **k** of a protocol and `Mpanon`
 checks the protocol for each **k** increasing from 1 to 50. --> -->
- 
+
 Now, that you have a better idea of the interactions between those
 two tools, we will check the types in the `Adder_generated` example are correct.  
 using our macro `checker_concat!`.
 
 For this purpose, append the following lines to our file:
- 
+
 ```rust
  
 /////////////////////////
@@ -592,9 +591,9 @@ fn checking() {
    println!("min kMC: {:?}", kmc);
 }
 ```
- 
+
 and update the `main()` function by including `checking();` in it:
- 
+
 ```rust
 fn main() {
    checking();
@@ -606,61 +605,61 @@ fn main() {
    assert!(thread_c.join().is_ok());
 }
 ```
- 
+
 Now, if you run again the file, it should run correctly:
- 
+
 ```bash
 cargo run --example="Adder_generated" --features=baking_checking
 ```
- 
+
 Notice the different features used for compiling the example.
- 
+
 If you are unsure about either of the above steps,
 the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
-___Optional__: If you want to practice more with writing types and programs 
-using mp-anon, and kmc, check teh additioanl example section [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
- 
+___Optional__: If you want to practice more with writing types and programs
+using mp-anon, and kmc, check teh additional example section [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
+
 </details>
- 
+
 ## ADDITIONAL INFORMATION
 
 <details> 
 <summary> Benchmark setup in the paper </summary>
 All set-up and benchmark was performed on the following machine:
- 
-* AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
+
+* AMD Opteron<sup>TM</sup> Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
 OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
- 
+
 The original benchmarks were generated using:
- 
+
 * Compile and run: `cargo bench --all-targets --all-features --workspace`
- 
+
 <!--
 See main instructions
 ([README.md](README.md))
 for more information. -->
 </details>
- 
- <details>
- <summary>
- Generating documentation for mp-anon
- </summary>
+
+<details>
+<summary>
+Generating documentation for mp-anon
+</summary>
 The documentation of `mpanon` can be generated
 with the command `cargo doc --all-features`.
 The generated documentation will be accessible in the file
 [target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
- 
+
 The source code is included in the root directory.
-</details> 
+</details>
 
 <details>
 <summary> Rust commands on build, test, compile </summary>
- 
-Here is a general description of all commands you can run on build, check and test.
+
+Here is a general description of all commands you can run to check, build and test.
 <!-- test `Mpanon` with the following commands: -->
- 
+
 ```bash
 cd mpst_rust_github # Move to mpanon's repository
 cargo check --all-features --lib --workspace # Check only this package's library
@@ -680,14 +679,14 @@ cargo test --all-features --tests --workspace # Test all tests
 cargo test --all-features --benches --workspace # Test all benchmarks
  
 ```
- 
+
 </details>
 <details> <summary>  Scribble commands </summary>
- 
+
 Assuming you know how to write `Scribble` protocols,
 put your own in the folder `../scribble-java/scribble-demos/scrib/fib/`
 and use:
- 
+
 ```bash
 cd scribble-java/
 ./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/[input file without extension].scr -rustapi [name of the protocol] [output file without extension]
@@ -695,6 +694,7 @@ cd ..
 mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
 cd  mpst_rust_github/
 ```
+
 </details>
 
 <details>
@@ -702,10 +702,10 @@ cd  mpst_rust_github/
 A simple example with mp-anon and kmc <a href="example-kmc"></a>
 </summary>
 
-__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation. 
+__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
 
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
- 
+
 ```rust
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
 use mpstthree::bundle_impl_with_enum_and_cancel; // The macro for generating the roles and the MeshedChannels
@@ -719,7 +719,7 @@ use mpstthree::checker_concat; // Used for checking the protocol
 ```rust
 bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); // generates meshed channels for 3 roles
 ```
- 
+
 <!-- Replace `A, B` with the different names
 of the roles you desire.
 They must be in the alphabetical order,
@@ -728,12 +728,12 @@ The new generated types will be `MeshedChannels`
 and `RoleX` where `X` is the provided name in the macro inputs.
  
 2️⃣ &nbsp;  Write the **MeshedChannels** types
- 
+
 A good practice is to write the simplest types first,
 and concatenate them into `MeshedChannels`.
 That is why we will first write down the types
 used for representing the roles:
- 
+
 ```rust
 // Payload types
 struct Request;
@@ -744,9 +744,9 @@ struct Stop;
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
 ```
- 
+
 Then we will write each binary type:
- 
+
 ```rust
 // Binary types for A
 type StartA0 = Recv<Request, Send<Branching0fromAtoB, End>>; // Recv a Request then Send a choice
@@ -774,15 +774,15 @@ enum Branching0fromAtoB {
    Done(MeshedChannels<DoneB1, OrderingDoneB1, NameB>),
 }
 ```
- 
+
 This protocol is recursive as you may have noticed
 with `MoreB1` both inside the `enum` type `Branching0fromAtoB`
 and containing `Recv<Branching0fromAtoB, End>`.
 The two paths are `More` and `Done`.
- 
+
 We are now going to concatenate the previous types
 into `MeshedChannels`:
- 
+
 ```rust
 // Creating the endpoints
 // A
@@ -795,10 +795,10 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 ```
  
 3️⃣  &nbsp;  Check that the types are correct
- 
+
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enoigh tp guarantee correctness.  
- 
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enough tp guarantee correctness.  
+
 ```rust
 fn main() {
    let (_, kmc) = checker_concat!(
@@ -825,17 +825,17 @@ fn main() {
    assert!(thread_b.join().is_ok());
 }
 ```
- 
+
 Run the checker_concat! macro to check if the types are correct
- 
+
 ```bash
 cargo run --example=my_basic --features=baking_checking
 ```
 
 After running the command above, the terminal should display
 four additional parts:
- 
-1. the first three ones are the **dot** graphs representing `A`, `B` 
+
+1. the first three ones are the **dot** graphs representing `A`, `B`
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
  
 4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B`.
@@ -881,8 +881,9 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 
  
 5️⃣ &nbsp; Run the example
- 
+
 ```bash
 cargo run --example=my_basic --features=baking_checking
 ```
+
 </details>
