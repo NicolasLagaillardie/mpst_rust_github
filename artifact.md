@@ -16,11 +16,10 @@ ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Mul
 
 The artifact (after building the docker image) contains
 
-* The directory `mpst_rust_github` -- a directory containing the source code of the mp-anon tool
-  * `mpst_rust_github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
-  * `mpst_rust_github/scripts` -- the scripts for reproducing the results
-  * `mpst_rust_github/benches` -- the examples for Fig. 9
-* The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
+* The directory `mpst-rust-github`-- a directory containing the source code of the mp-anon tool
+  * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
+  * `most-rust-github/scripts` - the scripts for reproducing the results
+  * `most-rust-github/benches` --- the examples for Fig. 9
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible (we use this tool, but this is not a contribution of the paper).
@@ -70,10 +69,8 @@ Depending on your test machine, the absolute values of the measurements produced
 
 To run all benchmarks reported in the paper, the reviewers need:
 
-* a minimum of 16GB RAM and 50 GB of disk space.
-The library itself is lightweight but the examples and benchmarks pose that requirement.
-* to enable localhost access (note that it should be enabled by default, unless
-you disabled it beforehand)
+* a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
+* to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
 
 <!-- In addition, the tool needs access to `localhost` for the tests.
  
@@ -504,7 +501,7 @@ fn main() {
 There are four different parts: the first three ones are for
 representing the different roles, `A`, `B` and `C`, involved
 in the protocol and the last one (the main function) runs
-them together.
+all processes together.
 
 In the first three parts, we are using the primitives
 described in Table 1 of the paper:
@@ -514,7 +511,7 @@ described in Table 1 of the paper:
 3. `offer_mpst!` for receiving a choice
 4. `choose_mpst_c_to_all!` for sending a choice
 
-The last part uses `fork_mpst` to fork the different functions together.
+The main function uses `fork_mpst` to fork the different threads.
 
 All those primitives are generated using
 the macro `bundle_impl_with_enum_and_cancel!`.
@@ -524,9 +521,7 @@ Now, if you run again the file, it should run correctly:
 ```bash
 cargo run --example="Adder_generated" --features=baking
 ```
-
-__Optional__: Now that your first example works, we can check that it is still
-**safe** using the `KMC` tool.
+               
 </details>
 <br />
 
@@ -537,32 +532,31 @@ __Optional__: Now that your first example works, we can check that it is still
 <summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
  We show how to use the bottom-up approach.
  The first step in the bottom-up approach to to write the Rust types for the meshed channels.
- We will use the Adder example from above, since we already have the types and we will only demonstrate here hpw top check them using kmc.
-<!--
+ We will use the Adder example from above, since we already have the types and we will only demonstrate here how to check them using the external kmc.
+
+ <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
 We are not going to introduce how to use it but how `Mpanon` takes advantage of its *interactive* mode to check protocols. -->
 
 `Mpanon` uses the macro `checker_concat!` on the types
-to create the communicating automata that the `KMC` tool will be able to read.
+to rewrite Rust types to communicating finite state machines (CFSM) that the `KMC`checks.
+
+This macro also returns the CFSM (visual) representation for each type using the **dot** format.
+
+<!--
 This macro returns two elements within a tuple:
 
-1. the graphs of each participant using the **dot** format
+1. the CFSM representation for each type using the **dot** format
 2. the minimal **k** checked by the protocol
 
-<!-- Our theory only supports protocols that have **k=1**,
-but protocols with higher levels can still be implemented using `Mpanon`.
-Furthermore, we restricted **k** to be lower than **50**:
-any protocol with **k** higher than 50 will be marked as
-incorrect.
-Indeed, the `KMC` tool does not have an automated way of checking
-the minimal **k** of a protocol and `Mpanon`
-checks the protocol for each **k** increasing from 1 to 50. --> -->
+Our theory only supports protocols which have a bound of **k=1**,
+but protocols with higher levels can still be implemented using `Mpanon`. --> 
 
 Now, that you have a better idea of the interactions between those
-two tools, we will check the types in the `Adder_generated` example are correct.  
+two tools, we will check the types in the `Adder_generated` example are correct
 using our macro `checker_concat!`.
 
-For this purpose, append the following lines to our file:
+For this purpose, append the following lines to the `Adder_generated.rs` file:
 
 ```rust
  
@@ -624,14 +618,15 @@ If you are unsure about either of the above steps,
 the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
-___Optional__: If you want to practice more with writing types and programs
-using mp-anon, and kmc, check the additional example section [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
+___Optional__: If you want more practice writing types and programs
+using mp-anon, and kmc, check the additional examples section at the end of the document: 
+[A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
 
 </details>
 
 ## ADDITIONAL INFORMATION
 
-<details>
+<details> 
 <summary> Benchmark setup in the paper </summary>
 All set-up and benchmarks were performed on the following machine:
 
@@ -803,7 +798,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣  &nbsp;  Check that the types are correct
 
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
 
 ```rust
 fn main() {
@@ -825,7 +820,7 @@ fn main() {
  
    println!("min kMC: {:?}", kmc);
 
-   let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+   // let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
    assert!(thread_a.join().is_ok());
    assert!(thread_b.join().is_ok());
@@ -886,7 +881,9 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 ```
 
  
-5️⃣ &nbsp; Run the example
+5️⃣ &nbsp; Run the example again but uncomment the line 
+ `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+`
 
 ```bash
 cargo run --example=my_basic --features=baking_checking
