@@ -629,7 +629,7 @@ the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
 Optional: If you want to practice more with writing  types and programs 
-using mp-anon, and kmc, check teh additioanl example section [here](#example-kmc)
+using mp-anon, and kmc, check teh additioanl example section [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
  
 </details>
  
@@ -696,10 +696,11 @@ cd ..
 mv scribble-java/[input file without extension].rs mpst_rust_github/examples/[output file without extension].rs
 cd  mpst_rust_github/
 ```
+</details>
 
 <details>
 <summary>
-Follow the steps to implement a simple example with mp-anon and kmc <a href="example-kmc"></a>
+A simple example with mp-anon and kmc <a href="example-kmc"></a>
 </summary>
  
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
