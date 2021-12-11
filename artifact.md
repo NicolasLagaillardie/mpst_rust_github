@@ -634,7 +634,9 @@ using mp-anon, and kmc, check teh additioanl example section [A simple example w
 </details>
  
 ## ADDITIONAL INFORMATION
- 
+
+<details> 
+<summary> Benchmark setup in the paper </summary>
 All set-up and benchmark was performed on the following machine:
  
 * AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD,
@@ -648,14 +650,20 @@ The original benchmarks were generated using:
 See main instructions
 ([README.md](README.md))
 for more information. -->
+</details>
  
+ <details>
+ <summary>
+ Generating documentation for mp-anon
+ </summary>
 The documentation of `mpanon` can be generated
 with the command `cargo doc --all-features`.
 The generated documentation will be accessible in the file
 [target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
  
 The source code is included in the root directory.
- 
+</details> 
+
 <details>
 <summary> Rust commands on build, test, compile </summary>
  
