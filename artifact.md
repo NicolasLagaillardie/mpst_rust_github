@@ -639,7 +639,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣  &nbsp;  Check that the types are correct
  
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility.
+the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not actually need to invoke the kmc tool, since the duality between the types is enoigh tp guarantee correctness.  
  
 ```rust
 fn main() {
