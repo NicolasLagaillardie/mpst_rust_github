@@ -18,8 +18,8 @@ The artifact (after building the docker image) contains
 
 * The directory `mpst-rust-github`-- a directory containing the source code of the mp-anon tool
   * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
-  * `most-rust-github/scripts` - the scripts for reproducing the results
-  * `most-rust-github/benches` --- the examples for Fig. 9
+  * `mpst-rust-github/scripts` - the scripts for reproducing the results
+  * `mpst-rust-github/benches` --- the examples for Fig. 9
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible (we use this tool, but this is not a contribution of the paper) 
