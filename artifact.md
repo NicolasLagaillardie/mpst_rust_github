@@ -178,7 +178,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 
 ### STEP 1: Run the main example (VideoStream) of the paper (Section 2)
 
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
+1. Check and run the running example from the paper using the top-down approach.
 <a name="Step1.1"></a>
 
 * execute the following command
@@ -187,7 +187,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ./scripts/top_down.sh
 ```
 
-2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
+2. Check and run the running example from the paper using the bottom-up approach.
 <a name="Step1.2"></a>
 
 * execute the following command
@@ -199,15 +199,17 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 3. Edit the program and observe the reported errors
 <a name="Step1.3"></a>
 
-After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error.
+Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon). 
+After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error. 
 
 * Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
-Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon). Suggested modifications:
-  * swapping lines 104 and 105 (which will lead to a deadlock)
-  * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
-  * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
 
-### STEP 2: Running the examples from in Table 2 (examples from the literature) <a name="Step2"></a>
+Suggested modifications:
+  * swap lines 104 and 105 (this can possibly lead to a deadlock) 
+  * use another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
+  * keep the changes from the previous modification and in addition modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
+
+### STEP 2: Running the examples from Table 2 <a name="Step2"></a>
 
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
@@ -276,7 +278,14 @@ scalability of the tool on large examples.
 
 #### **Option 1**: Running a small benchmark set
 
-You can run a small set of benchmarks:
+You can run a small set of the benchmarks since the full benchmark set can take about 24 hours.
+We have prepared a lighter version that should complete in about an hour. 
+The difference is that  `ping_pong` protocols are run up to 200 loops (and not 500),
+and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_). 
+
+This modifications are enough to start observing the performance trends (refer to claims about functionality in the beginning of this document). 
+ 
+To run the lighter benchmark suit: 
 
 ```bash
 ./lightweight_library.sh # Set up
@@ -287,10 +296,6 @@ then by running the command line
 ```bash
 ./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
 ```
-
-The above benchmarks run a set of the benchmarks from Figure 9.
-In particular, `ping_pong` protocols are up to 200 loops,
-and `mesh` and `ring` protocols are up to _five_ participants.
 
 **Results:** After running the above scripts,
 5 graphs will be displayed corresponding to Figure 9.
@@ -339,7 +344,7 @@ Then you can run the script:
 ./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
 ```
 
-__Note__: we have executed this script on the high performance computing server,
+__Note__: we have executed this script on a high performance computing server,
 and running the whole script took over 24 hours.
 Progress is shown while running each benchmark.
 
@@ -358,15 +363,14 @@ to retrieve results for only one kind of protocols:
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
-(2) your own types written with `Mp-anon` and then checked using the kmc tool (bottom-up approach).
+(2) your own types written with `Mp-anon` and then check them using the kmc tool (bottom-up approach).
 
 ### 3.1 Top-down: Generating Types from Scribble
 
 In the `top-down` approach, protocols written in the protocol description language `Scribble` are
 used for generating Mp-anon types.
 
-You can use our implementation of the recursive `Fibonacci` protocol
-provided in the `Scribble` repository as a start. The protocol is located
+You can use our implementation of a simple recursive protocol that forwards (adds) a number between three participants. The protocol is provided in the `Scribble` repository as a start. The protocol is located
 in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr)
 
 <details>
@@ -381,9 +385,9 @@ Follow the steps to implement a simple Adder example with Scribble and mp-anon
 ```
 
 In the above example, we move into the `scribble-java` folder and
-run the `Scribble` api for `Rust` on the `Fibonacci` protocol written with `Scribble`.
+run the `Scribble` api for `Rust` on the `Adder` protocol written with `Scribble`.
 This command outputs the file `Adder_generated.rs` at the root of the `scribble-java` directory.
-Then it moves the file the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
+Then it moves the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
 of the `mpst_rust_github` folder containing `Mpanon`
 and auto format the file with `cargo fmt`.
 
@@ -411,8 +415,8 @@ This command contains four parts:
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` api only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
-Hereafter, we provide the code to be append to the `Adder_generated.rs`
-file to make it work:
+
+Hereafter, we provide the code for the processes that implement the generated types. 
  
 3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
 
@@ -496,7 +500,7 @@ fn main() {
 
 There are four different parts: the first three ones are for
 representing the different roles, `A`, `B` and `C`, involved
-in the protocol and the last one is for linking and running
+in the protocol and the last one (the main function) runs
 them together.
 
 In the first three parts, we are using the primitives
