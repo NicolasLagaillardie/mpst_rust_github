@@ -28,7 +28,7 @@ Scribble protocols
 
 1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
   
-   * Use the mp-anan to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
+   * Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
 
    * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
 
@@ -59,20 +59,20 @@ the instructions in [Part III](#PartIII)
 4. **Availability**: We agree our artifact to be  published under a Creative Commons license on DARTS.
 
 __Note on performance__: Measurements in the paper are taken using a machine with AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
-Depending on your test machine, the absolute values of the measurements produced in Part II: Step 2 and Step 3 will differ from the paper. Nevertheless, the claims stated in the paper should be preserved. 
+Depending on your test machine, the absolute values of the measurements produced in Part II: Step 2 and Step 3 will differ from the paper. Nevertheless, the claims stated in the paper should be preserved.
 
 ## Prerequisites
- 
+
 To run all benchmarks reported in the paper, the reviewers need:
- 
+
 * a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
 * to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
- 
+
 Note: The benchmark data in the paper was generated
 using an 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
 machine (the tool makes heavy use of multicore, when available)
 with a quota of more than 100.000 files and 100 GB of HDD.
- 
+
 <!-- In addition, the tool needs access to `localhost` for the tests.
  
 /!\ To test it on your own computer, it is recommended to have
@@ -83,49 +83,49 @@ That is why, we commented the heaviest protocols for a lighter
 Docker image and easier compilation.
 In the next sections, you will be able to uncomment those files
 to test them. -->
- 
+
 ---
- 
+
 ## Getting started
- 
+
 For the ECOOP'22 artifact evaluation, please use the docker image provided:
- 
+
 0. [Install docker](https://docs.docker.com/engine/install/) and open the terminal.
 1. Download the artifact file (assume the filename is `artifact.tar.gz`)
 2. Unzip the artifact file.
- 
+
    ```bash
    gunzip artifact.tar.gz
    ```
- 
+
 3. You should see the tar file `artifact.tar` after last operation.
 4. Load the docker image
- 
+
    ```bash
    docker load < artifact.tar
    ```
- 
+
 5. You should see in the end of the output after last operation:
- 
+
    ```bash
    Loaded image: mpanon:latest
    ```
- 
+
 6. Run the docker container:
- 
+
    ```bash
    docker run -it --rm mpanon:latest
    ```
- 
+
 __Note__: You may need to run the above command with sudo
- 
+
 1. The Docker image comes with an installation of `vim` and `neovim` for editing.
   If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `mpanon`.
 2. Thereafter, we assume that you are in the main directory of the docker file.
- 
+
 <!-- For running the docker file on your own machine,
 assuming you downloaded it and you have Docker installed on your machine: -->
- 
+
 <!-- 1. open a terminal
 2. move to the folder containing your docker file with `cd`
 3. run the command `docker run -it mpanon`. You may need to `sudo` this command.
@@ -140,97 +140,97 @@ The rest of the document is organised as follows:
 * Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approach.
 * Repo
 Thereafter, we assume that you are in the main directory of the docker file. -->
- 
+
 ## Part I: Quick Start
- 
+
 1. Run the tests to make sure mp-anon is installed and configured correctly
- 
+
 ```bash
 cargo test --tests --all-features --workspace # Test all tests
 ```
- 
+
 The above command may take up to 15 min.
- 
+
 2. Run the examples from Table 2:
- 
+
 ```bash
 cargo test --examples --all-features --workspace # Test all examples
 ```
- 
+
 The above command may take up to 15 min.
- 
+
 3. Run the benchmarks from Figure 9:
- 
+
 ```bash
 cargo test --benches --all-features --workspace # Test all benchmarks
 ```
- 
+
 The above command may take up to 15 min.
- 
+
 __Note__:
 The commands from steps 3-5 can be ran all together with:
- 
+
 ```bash
 cargo test --all-targets --all-features --workspace # Test everything in the library
 ```
- 
+
 ## Part II: Step by Step instructions
- 
+
 ### STEP 1: Run the main example (VideoStream) of the paper (Section 2)
- 
+
 1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
 <a name="Step1.1"></a>
- 
+
 * execute the following command
- 
+
 ```bash
 ./scripts/top_down.sh
 ```
- 
+
 2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
 <a name="Step1.2"></a>
- 
+
 * execute the following command
- 
+
 ```bash
 ./scripts/bottom_up.sh
 ```
- 
+
 3. Edit the program and observe the reported errors
 <a name="Step1.3"></a>
- 
+
 After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error.
- 
+
 * Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
 Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon). Suggested modifications:
- * swapping lines 104 and 105 (which will lead to a deadlock)
- * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
- * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
- 
+  * swapping lines 104 and 105 (which will lead to a deadlock)
+  * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
+  * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
+
 ### STEP 2: Running the examples from in Table 2 (examples from the literature) <a name="Step2"></a>
- 
+
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
- 
+
 The examples in this table are located in the folder `examples/`
 <!-- and duplicated in the `benches/main_all/baking/` folder. -->
- 
+
 The data for these benchmarks can be re-generated using the following script:
- 
+
 ```bash
 ./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
 ```
- 
+
 Each command is ran 10 times on each example and the columns display the means
- 
+
 **Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
- 
+
 * Column 1: file name (Example/Endpoint),
 * Column 2: **check** time, the result of `cargo check` (Check)
 * Column 3: **build** time, the result of `cargo build` (Comp.)
 * Column 4: **build --release** time, the result of `cargo build --release` (Rel.)
 * Column 5: **run** time, the result of running `cargo bench` (Exec time)
- 
+
 <!-- <details>
 <summary>
 Details on difference between the different cargo commands (optional reading)
@@ -268,26 +268,26 @@ They can be displayed separately by opening the file `index.html` in the
 Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv` files
 on top of the existing ones.
 </details> -->
- 
+
 ### STEP 3: Running benchmarks from Figure 9 (ping-pong, mesh and ring protocols) <a name="Step3"></a>
- 
+
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
- 
+
 #### **Option 1**: Running a small benchmark set
- 
+
 You can run a small set of benchmarks:
- 
+
 ```bash
 ./lightweight_library.sh # Set up
 ```
- 
+
 then by running the command line
- 
+
 ```bash
 ./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
 ```
- 
+
 The above benchmarks run a set of the benchmarks from Figure 9.
 In particular, `ping_pong` protocols are up to 200 loops,
 and `mesh` and `ring` protocols are up to _five_ participants.
@@ -301,44 +301,44 @@ The graphs are displayed using `Python matplotlib` and the row data for the grap
 <summary>
 Details on the content of the raw .csv files data (optional reading).
 </summary>
- 
+
 The `ping_pong_mesh_ring.sh` scripts generate 3 files:
 `ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
 in the folder [results/](results/).
- 
+
 The structure of the `ping_ping_0.csv` file is as follows:
- 
+
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of loops
 3. Column 3: average running time
 4. Column 4: average compilation time
- 
+
 The structure of the `mesh_0.csv` and `ring_0.csv`
 files is as follows:
- 
+
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of participants
 3. Column 3: average running time
 4. Column 4: average compilation time
- 
+
 Be aware that the scripts adds additional `*.csv`files
 on top of the existing ones.
 </details>
- 
+
 #### **Option 2**: Running the entire benchmark set (at least 24 hours)
- 
+
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
- 
+
 ```bash
 ./full_library.sh # set up
 ```
- 
+
 Then you can run the script:
- 
+
 ```bash
 ./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
 ```
- 
+
 __Note__: we have executed this script on the high performance computing server,
 and running the whole script took over 24 hours.
 Progress is shown while running each benchmark.
@@ -377,46 +377,37 @@ Follow the steps to implement a simple Adder example with Scribble and mp-anon
 1️⃣ &nbsp; Generate Rust Types from Scribble
  
 ```bash
-cd scribble-java/
-./scribble-dist/target/scribblec.sh -ip scribble-demos/scrib/fib/src -d scribble-demos/scrib/fib/src scribble-demos/scrib/fib/src/fib/Fib.scr -rustapi Adder Adder_generated
+./scripts/top_down_adder.rs
 ```
- 
+
 In the above example, we move into the `scribble-java` folder and
 run the `Scribble` api for `Rust` on the `Fibonacci` protocol written with `Scribble`.
-This command outputs the file `Adder_generated.rs` at the root of the `scribble-java`
-directory.
- 
-Below we move the file the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
-of the `mpst_rust_github` folder containing `Mpanon`.
- 
-```bash
-cd ..
-mv scribble-java/Adder_generated.rs mpst_rust_github/examples/Adder_generated.rs
-```
- 
-Now, you can move back into the `mpst_rust_github` folder and
-open the `examples/Adder_generated.rs` file using your preferred editor program
-before testing the protocol directly with `Mpanon`.
+This command outputs the file `Adder_generated.rs` at the root of the `scribble-java` directory.
+Then it moves the file the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
+of the `mpst_rust_github` folder containing `Mpanon`
+and auto format the file with `cargo fmt`.
+
+Now, you can open the `examples/Adder_generated.rs` file using your preferred editor program before testing the protocol directly with `Mpanon`.
  
 ➡️ &nbsp; From this point we assume that you will remain in the `Mpanon` repository.
- 
+
 <!-- Optional: You can check that the generated types are the same as the one provided in
 the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
 up to line 73. -->
  
 2️⃣ &nbsp;Compile the Rust types
- 
+
 ```bash
 cargo run --example="Adder_generated" --features=backing_checking
 ```
- 
+
 This command contains four parts:
- 
+
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
 3. `--example="Adder_generated` for running the specific *example* `Adder_generated`
 4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example.
- 
+
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` api only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
@@ -426,7 +417,6 @@ file to make it work:
 3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
  
 ```rust
- 
 /////////////////////////
  
 fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
