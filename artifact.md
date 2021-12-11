@@ -9,15 +9,15 @@ required to assess the artifact associated with our paper.
 
 (!) For better usability, please use the [online](https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d) version of this document
 
-The artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all requires scripts and example needed to reproduce the results from the
+The artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all required scripts and examples needed to reproduce the results from the
 ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims a functional, reusable and available badge.
 
 ## Artifact layout
 
 The artifact (after building the docker image) contains
 
-* The directory `most-rust-github`-- a directory containing the source code of the mp-anon tool
-  * `most-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
+* The directory `mpst-rust-github`-- a directory containing the source code of the mp-anon tool
+  * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
   * `most-rust-github/scripts` - the scripts for reproducing the results
   * `most-rust-github/benches` --- the examples for Fig. 9
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
