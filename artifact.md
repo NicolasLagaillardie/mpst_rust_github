@@ -529,23 +529,23 @@ cargo run --example="Adder_generated" --features=baking
 ```
  
 __Optional__: Now that your first example works, we can check that it is still
-**safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the
-example, i.e Adder, check [Adder example with kmc in Additional Information](#adder_kmc).
+**safe** using the `KMC` tool.
 </details>
 <br />
  
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
- 
-__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
+
  
 </details>
 <details>
 <summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
- 
+ We show how to use the bottom-up approach. 
+ The first step in the bottom-up approach to to write the Rust types for the meshed channels. 
+ We will use the Adder example from above, since we already have the types and we will only demonstarte here hpw top check them using kmc. 
 <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
 We are not going to introduce how to use it but how `Mpanon` takes advantage
-of it *interactive* mode to check protocols.
+of it *interactive* mode to check protocols. -->
  
 `Mpanon` uses the macro `checker_concat!` on the types
 to create the communicating automata that the `KMC` tool will be able to read.
@@ -554,18 +554,19 @@ This macro returns two elements within a tuple:
 1. the graphs of each participant using the **dot** format
 2. the minimal **k** checked by the protocol
  
-Our theory only supports protocols which have **k=1**,
+<!-- Our theory only supports protocols which have **k=1**,
 but protocols with higher levels can still be implemented using `Mpanon`.
 Furthermore, we restricted **k** to be lower than **50**:
 any protocol with **k** higher than 50 will be marked as
 incorrect.
 Indeed, the `KMC` tool does not have an automated way of checking
 the minimal **k** of a protocol and `Mpanon`
-checks the protocol for each **k** increasing from 1 to 50. -->
+checks the protocol for each **k** increasing from 1 to 50. --> -->
  
 Now, that you have a better idea of the interactions between those
-two tools, we can improve our `Adder_generated` example to be checked
-by the `KMC` tool using our macro `checker_concat!`.
+two tools, we will check the types in the `Adder_generated` example are correct.  
+using our macro `checker_concat!`.
+
 For this purpose, append the following lines to our file:
  
 ```rust
@@ -628,7 +629,7 @@ If you are unsure about either of the above steps,
 the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
-Optional: If you want to practice more with writing  types and programs 
+___Optional__: If you want to practice more with writing types and programs 
 using mp-anon, and kmc, check teh additioanl example section [A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
  
 </details>
@@ -710,7 +711,9 @@ cd  mpst_rust_github/
 <summary>
 A simple example with mp-anon and kmc <a href="example-kmc"></a>
 </summary>
- 
+
+__Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation. 
+
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
  
 ```rust
