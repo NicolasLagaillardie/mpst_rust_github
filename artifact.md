@@ -672,10 +672,10 @@ cargo run --example=my_basic --features=baking_checking
 After running the command above, the terminal should display
 four additional parts:
  
-1. the first three ones are the **dot** graphs representing `A`, `B` and `C`
+1. the first three ones are the **dot** graphs representing `A`, `B` 
 2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
  
-4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` and `C`.
+4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B`.
  
 5️⃣ &nbsp; Run the example
  
