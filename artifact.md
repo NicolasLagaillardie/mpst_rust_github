@@ -530,7 +530,7 @@ cargo run --example="Adder_generated" --features=baking
  
 __Optional__: Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the
-previous example, i.e Adder, check [Adder example with kmc in Additional Information](#adder_kmc).
+example, i.e Adder, check [Adder example with kmc in Additional Information](#adder_kmc).
 </details>
 <br />
  
