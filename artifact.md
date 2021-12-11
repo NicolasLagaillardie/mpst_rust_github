@@ -355,15 +355,6 @@ You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
 (2) your own types written with `Mp-anon` and then checked using the kmc tool (bottom-up approach).
 
-<!-- Mpanon, the `Rust` library introduced in the paper, has one purpose:
-allow the implementation of affine communication protocols in `Rust`.
-
-Those protocols can be either generated with another tool
-called `Scribble` or wrote by the developers and then checked
-by another tool called `KMC`.
-Those two approaches, respectively `top-down` and `bottom-up` approaches,
-are described separately hereafter. -->
-
 ### 3.1 Top-down: Generating Types from Scribble
 
 In the `top-down` approach, protocols written in the protocol description language `Scribble` are
@@ -372,6 +363,11 @@ used for generating Mp-anon types.
 You can use our implementation of the recursive `Fibonacci` protocol
 provided in the `Scribble` repository as a start. The protocol is located
 in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr)
+
+<details>
+<summary>
+Follow the steps to implement a simple Adder example with Scribble and mp-anon
+</summary>
 
 1️⃣ &nbsp; Generate Rust Types from Scribble
 
@@ -530,6 +526,8 @@ cargo run --example="Adder_generated" --features=baking
 __Optional__: Now that your first example works, we can check that it is still
 **safe** using the `KMC` tool. If you want to see how bottom-up can be applied to the
 previous example, i.e Adder, check [adder_kmc](adder_kmc).
+</details>
+<br />
 
 ### 3.2 Bottom-up: Write the types in Rust and check them with the kmc tool
 
@@ -537,6 +535,11 @@ __Need help?__: This example is implemented in `examples/basic.rs`, hence you ca
 
 __Note__: If you want to see how bottom-up can be applied to the
 previous example, i.e Adder, check [adder_kmc](adder_kmc).
+
+<details>
+<summary>
+Follow the steps to implement a simple example with mp-anon and kmc
+</summary>
 
 1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
 
@@ -674,6 +677,8 @@ four additional parts:
 ```bash
 cargo run --example=my_basic --features=baking_checking
 ```
+</details>
+<br />
 
 ## ADDITIONAL INFORMATION
 
