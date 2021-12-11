@@ -171,7 +171,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 
 ## Part II: Step by Step instructions
 
-### STEP 1: Run the main example (VideoStream) of the paper (Section 2)
+### STEP 1: Run the main example (VideoStream) of the paper (Section 2) <a name="Step1"></a>
 
 1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
 
@@ -199,7 +199,7 @@ Next we highlight how concurrency errors are ruled out by mp-anon (i.e., the ult
   * using another communication primitive, replace `let (video, s) = s.recv()?;` on line 106 with `let s = s.send(0)?;` -- compilation errors because type mismatch
   * modify the types at line 17, corresponding to line 106, from `Recv` to `Send` -- mismatch because of duality
 
-### STEP 2: Running the examples from in Table 2 (examples from the literature)
+### STEP 2: Running the examples from in Table 2 (examples from the literature) <a name="Step2"></a>
 
 The purpose of these examples is to demonstrate how the tool works on
 existing examples from the literature.
@@ -261,7 +261,7 @@ Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv
 on top of the existing ones.
 </details> -->
 
-### STEP 3: Running benchmarks from Figure 9 (ping-pong, mesh and ring protocols)
+### STEP 3: Running benchmarks from Figure 9 (ping-pong, mesh and ring protocols) <a name="Step3"></a>
 
 The purpose of these set of benchmarks is to demonstrate the
 scalability of the tool on large examples.
@@ -346,7 +346,7 @@ to retrieve results for only one kind of protocols:
 
 ---
 
-## Part III: A walkthrough tutorial on checking your own protocols with `Mp-anon`
+## Part III: A walkthrough tutorial on checking your own protocols with `Mp-anon` <a name="PartIII"></a>
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
