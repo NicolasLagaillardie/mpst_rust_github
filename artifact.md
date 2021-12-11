@@ -16,10 +16,10 @@ ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Mul
 
 The artifact (after building the docker image) contains
 
-* The directory `mpst-rust-github`-- a directory containing the source code of the mp-anon tool
-  * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
-  * `most-rust-github/scripts` - the scripts for reproducing the results
-  * `most-rust-github/benches` --- the examples for Fig. 9
+* The directory `mpst_rust_github` -- a directory containing the source code of the mp-anon tool
+  * `mpst_rust_github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
+  * `mpst_rust_github/scripts` -- the scripts for reproducing the results
+  * `mpst_rust_github/benches` -- the examples for Fig. 9
 * The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
@@ -49,11 +49,11 @@ Scribble protocols
 
    * mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
 
-   * the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
+   * the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which result in a slowdown when compared with BC. (ping-pong and ring protocol)
 
-   * AMPST can a negligible overhead in comparison to MPST
+   * AMPST has a negligible overhead in comparison to MPST
   
-   __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](#Step3)
+   __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduced following the instructions in [Part II: Step 3](#Step3)
 3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols, follow
 the instructions in [Part III](#PartIII)
 4. **Availability**: We agree our artifact to be  published under a Creative Commons license on DARTS.
@@ -65,8 +65,10 @@ Depending on your test machine, the absolute values of the measurements produced
 
 To run all benchmarks reported in the paper, the reviewers need:
 
-* a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
-* to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
+* a minimum of 16GB RAM and 50 GB of disk space.
+The library itself is lightweight but the examples and benchmarks pose that requirement.
+* to enable localhost access (note that it should be enabled by default, unless
+you disabled it beforehand)
 
 Note: The benchmark data in the paper was generated
 using an 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
@@ -625,7 +627,7 @@ using mp-anon, and kmc, check teh additional example section [A simple example w
 
 ## ADDITIONAL INFORMATION
 
-<details> 
+<details>
 <summary> Benchmark setup in the paper </summary>
 All set-up and benchmark was performed on the following machine:
 
