@@ -534,7 +534,7 @@ previous example, i.e Adder, check [adder_kmc](#adder_kmc).
 __Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
 
 __Note__: If you want to see how bottom-up can be applied to the
-previous example, i.e Adder, check [adder_kmc](adder_kmc).
+previous example, i.e Adder, check [adder_kmc](#adder_kmc).
 
 <details>
 <summary>
