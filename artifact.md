@@ -20,45 +20,50 @@ The artifact (after building the docker image) contains
   * `mpst-rust-github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Fig. 9 and Table 2 in the paper
   * `most-rust-github/scripts` - the scripts for reproducing the results
   * `most-rust-github/benches` --- the examples for Fig. 9
-* The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
+* The directory `kmc` that contains the kmc tool used to verify that mp-anon types written in Rust are compatible (we use this tool, but this is not a contribution of the paper) 
+
 
 ## Claims about functionality, reusability and availability
 
 1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
   
-   * Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
+   * Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach. 
+   __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
 
-   * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
+   * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper. 
+   __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
 
-   * Observe detected errors due to incompatible types, as explained in Section 2 in the paper.
+   * Observe detected errors due to incompatible types, as explained in Section 2 (line 221-225) in the paper.
    __Check the claim  by__: following [Part II: Step 1.3](#Step1.3)
 
 2. **Functionality**: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
   
-   2.1 claims expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon.
+   2.1 claim expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon.
 
    __Check the claim  by__: Table 2 can be reproduces following the instructions in [Part II: Step 2](#Step2)
   
-   2.1. claims on compile-time performance (line 886-892)::
+   2.1. claims on compile-time performance (line 886-892):
 
    * the more participants there are, the higher is the compilation time for MPST
   
    2.2. claims on run-time performance (line 880-885):
 
-   * mp-anon is faster than the BC implementation when there is a large number of interactions and participants (mesh protocol)
+   * mp-anon is faster than the BC implementation when there is a large number of interactions and participants (full-mesh protocol)
 
-   * the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ping-pong and ring protocol)
+   * the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ring protocol)
 
-   * AMPST can a negligible overhead in comparison to MPST
+   * AMPST has a negligible overhead in comparison to MPST
   
    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduces following the instructions in [Part II: Step 3](#Step3)
-3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols, follow
-the instructions in [Part III](#PartIII)
+3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols and programs, follow the instructions in [Part III](#PartIII)
 4. **Availability**: We agree our artifact to be  published under a Creative Commons license on DARTS.
 
-__Note on performance__: Measurements in the paper are taken using a machine with AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
+__Note on performance__: the benchmark data in the paper was generated
+using a 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
+machine (the tool makes heavy use of multicore, when available)
+with a quota of more than 100.000 files and 100 GB of HDD. In particualr, measurements in the paper are taken using AMD Opteron Processor 6282 SE @ 1.30 GHz x 32, 128 GiB memory, 100 GB of HDD, OS: ubuntu 20.04 LTS (64-bit), Rustup: 1.24.3,  Rust cargo compiler: 1.56.0
 Depending on your test machine, the absolute values of the measurements produced in Part II: Step 2 and Step 3 will differ from the paper. Nevertheless, the claims stated in the paper should be preserved.
 
 ## Prerequisites
@@ -67,11 +72,6 @@ To run all benchmarks reported in the paper, the reviewers need:
 
 * a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
 * to enable localhost access (note that it should be enabled by default, unless you disabled it beforehand)
-
-Note: The benchmark data in the paper was generated
-using an 32-cores AMD Opteron<sup>TM</sup> Processor 6282 SE
-machine (the tool makes heavy use of multicore, when available)
-with a quota of more than 100.000 files and 100 GB of HDD.
 
 <!-- In addition, the tool needs access to `localhost` for the tests.
  
