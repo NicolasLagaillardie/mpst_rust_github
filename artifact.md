@@ -171,9 +171,10 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 
 ## Part II: Step by Step instructions
 
-### STEP 1: Run the main example (VideoStream) of the paper (Section 2) <a name="Step1"></a>
+### STEP 1: Run the main example (VideoStream) of the paper (Section 2) 
 
-1. Check and run the running example from the paper using the top-down approach, VideoStreaming.
+1. Check and run the running example from the paper using the top-down approach, VideoStreaming. 
+<a name="Step1.1"></a>
 
 * execute the following command
 
@@ -182,6 +183,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ```
 
 2. Check and run the running example from the paper using the bottom-up approach, VideoStreaming.
+<a name="Step1.2"></a>
 
 * execute the following command
 
@@ -190,6 +192,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ```
 
 3. Edit the program and observe the reported errors
+<a name="Step1.3"></a>
 
 After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking` and observe the reported error.
 
