@@ -174,14 +174,17 @@ required-features = ["baking"]
 
 [[example]]
 name = "circuit_breaker_solo"
+path = "examples/interleaved/circuit_breaker_solo.rs"
 required-features = ["baking_interleaved"]
 
 [[example]]
 name = "logging_solo"
+path = "examples/interleaved/logging_solo.rs"
 required-features = ["baking_interleaved"]
 
 [[example]]
 name = "circuit_breaker_logging_interleaved"
+path = "examples/interleaved/circuit_breaker_logging_interleaved.rs"
 required-features = ["baking_interleaved"]
 
 [[example]]
