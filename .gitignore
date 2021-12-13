@@ -73,7 +73,5 @@ outputs
 save
 KMC
 
-scripts/update.sh
-
 # remove results folder
 results

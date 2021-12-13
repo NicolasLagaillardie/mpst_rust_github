@@ -16,7 +16,7 @@ ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Mul
 
 The artifact (after building the docker image) contains
 
-* The directory `mpst_rust_github`-- a directory containing the source code of the mp-anon tool
+* The directory `mpst_rust_github` -- a directory containing the source code of the mp-anon tool
   * `mpst_rust_github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Figure 9 and Table 2 in the paper
   * `mpst_rust_github/scripts` -- the scripts for reproducing the results
   * `mpst_rust_github/benches` -- the examples for Figure 9
