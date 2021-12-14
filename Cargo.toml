@@ -209,6 +209,10 @@ name = "video_stream_basic"
 required-features = ["macros_simple"]
 
 [[example]]
+name = "video_stream_top_down"
+required-features = ["macros_simple"]
+
+[[example]]
 name = "video_stream"
 required-features = ["baking_checking"]
 
