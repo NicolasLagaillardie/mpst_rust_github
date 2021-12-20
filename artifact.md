@@ -356,11 +356,11 @@ to retrieve results for only one kind of protocol:
 ```bash
 ./scripts/ping_pong.sh # For ping-pong protocols
 ##
-./scripts/mesh_full.sh # For all mesh protocols
-./scripts/ring_full.sh # For all ring protocols
+./scripts/mesh_full.sh # For mesh protocols with full_library.sh
+./scripts/ring_full.sh # For ring protocols with full_library.sh
 ##
-./scripts/mesh_light.sh # For mesh protocols up to five participants
-./scripts/ring_light.sh # For ring protocols up to five participants
+./scripts/mesh_light.sh # For mesh protocols with lightweight_library.sh
+./scripts/ring_light.sh # For ring protocols with lightweight_library.sh
 ```
 
 ---
