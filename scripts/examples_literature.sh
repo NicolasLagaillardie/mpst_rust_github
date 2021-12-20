@@ -22,4 +22,4 @@ set -e
 cargo bench --bench main --all-features -- --verbose
 
 ## Concatenate all results in the results/benchmarks_main_from_literature.csv file
-python scripts/create_graphs/examples_literature.py
+python3 scripts/create_graphs/examples_literature.py

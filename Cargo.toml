@@ -118,13 +118,13 @@ harness = false
 required-features = ["baking"]
 
 [[bench]]
-name = "mesh_light"
+name = "mesh"
 harness = false
 path = "benches/mesh_light.rs"
 required-features = ["baking"]
 
 [[bench]]
-name = "ring_light"
+name = "ring"
 harness = false
 path = "benches/ring_light.rs"
 required-features = ["baking"]

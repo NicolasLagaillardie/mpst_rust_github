@@ -138,13 +138,13 @@ harness = false
 required-features = ["baking_interleaved"]
 
 [[bench]]
-name = "mesh_full"
+name = "mesh"
 harness = false
 path = "benches/mesh_full.rs"
 required-features = ["baking"]
 
 [[bench]]
-name = "ring_full"
+name = "ring"
 harness = false
 path = "benches/ring_full.rs"
 required-features = ["baking"]
