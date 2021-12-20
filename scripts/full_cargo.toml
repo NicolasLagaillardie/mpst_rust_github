@@ -277,6 +277,11 @@ path = "examples/mesh/mesh_two_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "mesh_two_baking_cancel_inline"
+path = "examples/mesh/mesh_two_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "mesh_three_crossbeam"
 path = "examples/mesh/mesh_three_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -290,6 +295,11 @@ required-features = ["macros_multiple"]
 name = "mesh_three_binary"
 path = "examples/mesh/mesh_three_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "mesh_three_baking_cancel_inline"
+path = "examples/mesh/mesh_three_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_four_crossbeam"
@@ -307,6 +317,11 @@ path = "examples/mesh/mesh_four_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "mesh_four_baking_cancel_inline"
+path = "examples/mesh/mesh_four_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "mesh_five_crossbeam"
 path = "examples/mesh/mesh_five_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -320,6 +335,11 @@ required-features = ["macros_multiple"]
 name = "mesh_five_binary"
 path = "examples/mesh/mesh_five_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "mesh_five_baking_cancel_inline"
+path = "examples/mesh/mesh_five_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_six_crossbeam"
@@ -337,6 +357,11 @@ path = "examples/mesh/mesh_six_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "mesh_six_baking_cancel_inline"
+path = "examples/mesh/mesh_six_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "mesh_seven_crossbeam"
 path = "examples/mesh/mesh_seven_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -350,6 +375,11 @@ required-features = ["macros_multiple"]
 name = "mesh_seven_binary"
 path = "examples/mesh/mesh_seven_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "mesh_seven_baking_cancel_inline"
+path = "examples/mesh/mesh_seven_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_eight_crossbeam"
@@ -367,6 +397,11 @@ path = "examples/mesh/mesh_eight_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "mesh_eight_baking_cancel_inline"
+path = "examples/mesh/mesh_eight_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "mesh_nine_crossbeam"
 path = "examples/mesh/mesh_nine_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -380,6 +415,11 @@ required-features = ["macros_multiple"]
 name = "mesh_nine_binary"
 path = "examples/mesh/mesh_nine_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "mesh_nine_baking_cancel_inline"
+path = "examples/mesh/mesh_nine_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_ten_crossbeam"
@@ -397,6 +437,11 @@ path = "examples/mesh/mesh_ten_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "mesh_ten_baking_cancel_inline"
+path = "examples/mesh/mesh_ten_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "mesh_eleven_crossbeam"
 path = "examples/mesh/mesh_eleven_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -412,6 +457,11 @@ path = "examples/mesh/mesh_eleven_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "mesh_eleven_baking_cancel_inline"
+path = "examples/mesh/mesh_eleven_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "mesh_twenty_crossbeam"
 path = "examples/mesh/mesh_twenty_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -425,6 +475,11 @@ required-features = ["macros_multiple"]
 name = "mesh_twenty_binary"
 path = "examples/mesh/mesh_twenty_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "mesh_twenty_baking_cancel_inline"
+path = "examples/mesh/mesh_twenty_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 ################################### Ring examples
 
@@ -444,6 +499,11 @@ path = "examples/ring/ring_two_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "ring_two_baking_cancel_inline"
+path = "examples/ring/ring_two_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "ring_three_crossbeam"
 path = "examples/ring/ring_three_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -457,6 +517,11 @@ required-features = ["macros_multiple"]
 name = "ring_three_binary"
 path = "examples/ring/ring_three_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "ring_three_baking_cancel_inline"
+path = "examples/ring/ring_three_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "ring_four_crossbeam"
@@ -474,6 +539,11 @@ path = "examples/ring/ring_four_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "ring_four_baking_cancel_inline"
+path = "examples/ring/ring_four_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "ring_five_crossbeam"
 path = "examples/ring/ring_five_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -487,6 +557,11 @@ required-features = ["macros_multiple"]
 name = "ring_five_binary"
 path = "examples/ring/ring_five_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "ring_five_baking_cancel_inline"
+path = "examples/ring/ring_five_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "ring_six_crossbeam"
@@ -504,6 +579,11 @@ path = "examples/ring/ring_six_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "ring_six_baking_cancel_inline"
+path = "examples/ring/ring_six_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "ring_seven_crossbeam"
 path = "examples/ring/ring_seven_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -517,6 +597,11 @@ required-features = ["macros_multiple"]
 name = "ring_seven_binary"
 path = "examples/ring/ring_seven_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "ring_seven_baking_cancel_inline"
+path = "examples/ring/ring_seven_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "ring_eight_crossbeam"
@@ -534,6 +619,11 @@ path = "examples/ring/ring_eight_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "ring_eight_baking_cancel_inline"
+path = "examples/ring/ring_eight_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "ring_nine_crossbeam"
 path = "examples/ring/ring_nine_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -547,6 +637,11 @@ required-features = ["macros_multiple"]
 name = "ring_nine_binary"
 path = "examples/ring/ring_nine_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "ring_nine_baking_cancel_inline"
+path = "examples/ring/ring_nine_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "ring_ten_crossbeam"
@@ -564,6 +659,11 @@ path = "examples/ring/ring_ten_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "ring_ten_baking_cancel_inline"
+path = "examples/ring/ring_ten_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "ring_eleven_crossbeam"
 path = "examples/ring/ring_eleven_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -579,6 +679,11 @@ path = "examples/ring/ring_eleven_binary.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
+name = "ring_eleven_baking_cancel_inline"
+path = "examples/ring/ring_eleven_baking_cancel_inline.rs"
+required-features = ["baking"]
+
+[[example]]
 name = "ring_twenty_crossbeam"
 path = "examples/ring/ring_twenty_crossbeam.rs"
 required-features = ["macros_multiple"]
@@ -592,6 +697,11 @@ required-features = ["macros_multiple"]
 name = "ring_twenty_binary"
 path = "examples/ring/ring_twenty_binary.rs"
 required-features = ["macros_multiple"]
+
+[[example]]
+name = "ring_twenty_baking_cancel_inline"
+path = "examples/ring/ring_twenty_baking_cancel_inline.rs"
+required-features = ["baking"]
 
 ################################### Profil
 

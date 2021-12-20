@@ -16,8 +16,8 @@ criterion_main! {
     mesh_all::normal::mesh_four::mesh_four,
     mesh_all::normal::mesh_five::mesh_five,
     ////////// Benchmarks using cancelling without a monitor to broadcast cancel using generated methods with 100 loops
-    mesh_all::baking_cancel::mesh_two::mesh_two,
-    mesh_all::baking_cancel::mesh_three::mesh_three,
-    mesh_all::baking_cancel::mesh_four::mesh_four,
-    mesh_all::baking_cancel::mesh_five::mesh_five,
+    mesh_all::baking_cancel_inline::mesh_two::mesh_two,
+    mesh_all::baking_cancel_inline::mesh_three::mesh_three,
+    mesh_all::baking_cancel_inline::mesh_four::mesh_four,
+    mesh_all::baking_cancel_inline::mesh_five::mesh_five,
 }

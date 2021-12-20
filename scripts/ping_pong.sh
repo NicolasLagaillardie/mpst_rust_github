@@ -6,13 +6,6 @@
 set -e
 
 # Compile protocols
-## Ping-pong
-for i in $(eval echo {1..$1})
-do
-    ./scripts/create_files/compile.sh ping_pong_binary_$i 10 baking
-    ./scripts/create_files/compile.sh ping_pong_crossbeam_$i 10 baking
-    ./scripts/create_files/compile.sh ping_pong_baking_cancel_$i 10 baking
-done
 
 # Run the benchmarks
 cargo bench --bench ping_pong --features="baking"  -- --verbose

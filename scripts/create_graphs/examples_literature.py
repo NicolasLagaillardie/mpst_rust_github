@@ -1,13 +1,9 @@
-from matplotlib.ticker import MaxNLocator
-import matplotlib.pyplot as plt
 import json
 import os
-import matplotlib
 import numpy as np
 import statistics
 import os.path
 from pathlib import Path
-matplotlib.rcParams['text.usetex'] = True
 
 # Path for criterion
 criterion_path = './target/criterion'
@@ -90,15 +86,31 @@ for d in compile_directories:
 
                 with open(result_folder / result_file, 'a') as report_file:
 
-                    report_file.write(compile_file)
-                    report_file.write('; ')
-                    report_file.write(str(statistics.mean(temp_check)))
-                    report_file.write('; ')
-                    report_file.write(str(statistics.mean(temp_build)))
-                    report_file.write('; ')
-                    report_file.write(str(statistics.mean(temp_release)))
-                    report_file.write('; ')
-                    report_file.write(str(bench[compile_file]))
+                    try:
+                        report_file.write(compile_file)
+                        report_file.write('; ')
+                    except:
+                        print('Issue with compilation time of', d)
+                    try:
+                        report_file.write(str(statistics.mean(temp_check)))
+                        report_file.write('; ')
+                    except:
+                        print('Issue with checking time of', d)
+                    try:
+                        report_file.write(str(statistics.mean(temp_build)))
+                        report_file.write('; ')
+                    except:
+                        print('Issue with building time of', d)
+                    try:
+                        report_file.write(str(statistics.mean(temp_release)))
+                        report_file.write('; ')
+                    except:
+                        print('Issue with building --release time of', d)
+                    try:
+                        report_file.write(str(bench[compile_file]))
+                        report_file.write('; ')
+                    except:
+                        print('Issue with benchmarking time of', d)
                     report_file.write('\n')
 
                 print(compile_file + " done")

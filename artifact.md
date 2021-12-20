@@ -288,7 +288,7 @@ These modifications are enough to start observing the performance trends (refer 
 To run the lighter benchmark suit:
 
 ```bash
-./lightweight_library.sh # Set up
+./scripts/lightweight_library.sh # Set up
 ```
 
 then by running the command line
@@ -335,7 +335,7 @@ on top of the existing ones.
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
 ```bash
-./full_library.sh # set up
+./scripts/full_library.sh # set up
 ```
 
 Then you can run the script:
@@ -716,7 +716,7 @@ use mpstthree::checker_concat; // Used for checking the protocol
 ```
  
 2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
- 
+
 ```rust
 bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); // generates meshed channels for 3 roles
 ```
