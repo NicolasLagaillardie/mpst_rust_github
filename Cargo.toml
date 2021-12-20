@@ -5,6 +5,7 @@ authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
+homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "multicrusty"]

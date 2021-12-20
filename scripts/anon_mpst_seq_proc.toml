@@ -1,0 +1,37 @@
+[package]
+name = "mpst-seq-proc"
+version = "0.1.13"
+authors = ["XXX"]
+description = "A library with macro for mpstthree"
+edition = "2018"
+readme = "README.md"
+homepage = "XXX"
+repository = "XXX"
+license = "MIT OR Apache-2.0"
+autotests = false
+include = [
+    "/benches/**",
+    "/build.rs",
+    "/Cargo.toml",
+    "/LICENSE-APACHE",
+    "/LICENSE-MIT",
+    "/README.md",
+    "/src/**",
+    "/tests/**",
+]
+
+[lib]
+proc-macro = true
+
+[[test]]
+name = "tests"
+path = "tests/progress.rs"
+
+[dev-dependencies]
+trybuild = "1.0"
+
+[dependencies]
+syn = { version = "1.0", features = ["extra-traits", "full", "parsing"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+proc-macro-hack = "0.5"
