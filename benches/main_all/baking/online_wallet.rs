@@ -228,7 +228,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn online_wallet_main(c: &mut Criterion) {
-    c.bench_function(&"Online wallet baking".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("Online wallet baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

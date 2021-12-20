@@ -202,7 +202,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn simple_voting_mpst(c: &mut Criterion) {
-    c.bench_function(&"Simple voting MPST".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("Simple voting MPST", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

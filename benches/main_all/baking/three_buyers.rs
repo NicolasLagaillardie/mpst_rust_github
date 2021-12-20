@@ -132,7 +132,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn three_buyers_mpst(c: &mut Criterion) {
-    c.bench_function(&"Three buyers MPST baking".to_string(), |b| {
+    c.bench_function("Three buyers MPST baking", |b| {
         b.iter(all_mpst)
     });
 }

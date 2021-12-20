@@ -163,7 +163,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn video_stream_main(c: &mut Criterion) {
-    c.bench_function(&"Video stream baking".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("Video stream baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

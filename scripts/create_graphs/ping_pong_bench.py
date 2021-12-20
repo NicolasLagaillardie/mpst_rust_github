@@ -65,19 +65,24 @@ for d in directories:
             print("Missing ", d)
 
 # Sort the lists in pair
-nb_loops_binary, binary = (list(t)
-                           for t in zip(*sorted(zip(nb_loops_binary, binary))))
+if len(nb_loops_binary) > 0:
+    nb_loops_binary, binary = (list(t)
+                            for t in zip(*sorted(zip(nb_loops_binary, binary))))
 
-nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
+if len(nb_loops_mpst) > 0:
+    nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
 
-nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
-    *sorted(zip(nb_loops_crossbeam, crossbeam))))
+if len(nb_loops_crossbeam) > 0:
+    nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
+        *sorted(zip(nb_loops_crossbeam, crossbeam))))
 
-nb_loops_cancel, cancel = (list(t)
-                           for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
+if len(nb_loops_cancel) > 0:
+    nb_loops_cancel, cancel = (list(t)
+                            for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
 
-nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
-                                               for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
+if len(nb_loops_broadcast_cancel) > 0:
+    nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
+                                                for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -109,8 +114,8 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# iterations', fontsize=600)
 ax.set_ylabel('Time (ms)', fontsize=500)
+ax.set_xlabel('\# iterations', fontsize=600)
 ax.tick_params(axis='both', which='major', labelsize=500)
 ax.xaxis.set_ticks(np.arange(0, 510, 250))
 ax.yaxis.set_ticks(np.arange(0, 25, 8))

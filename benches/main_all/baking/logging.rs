@@ -176,7 +176,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn logging_main(c: &mut Criterion) {
-    c.bench_function(&"Logging baking".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("Logging baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

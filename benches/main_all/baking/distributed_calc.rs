@@ -119,7 +119,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn distributed_calc_main(c: &mut Criterion) {
-    c.bench_function(&"Distributed calculator baking".to_string(), |b| {
+    c.bench_function("Distributed calculator baking", |b| {
         b.iter(all_mpst)
     });
 }

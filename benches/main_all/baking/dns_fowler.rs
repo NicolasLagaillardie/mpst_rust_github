@@ -173,7 +173,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn dns_fowler_main(c: &mut Criterion) {
-    c.bench_function(&"DNS Fowler baking".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("DNS Fowler baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

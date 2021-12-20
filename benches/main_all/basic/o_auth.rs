@@ -185,7 +185,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn o_auth_mpst(c: &mut Criterion) {
-    c.bench_function(&"oAuth MPST".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("oAuth MPST", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

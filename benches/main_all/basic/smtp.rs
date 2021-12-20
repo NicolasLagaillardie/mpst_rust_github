@@ -747,7 +747,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn smtp_main(c: &mut Criterion) {
-    c.bench_function(&"SMTP".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("SMTP", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

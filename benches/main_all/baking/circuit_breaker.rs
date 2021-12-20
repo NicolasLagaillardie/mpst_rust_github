@@ -354,7 +354,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn circuit_breaker_main(c: &mut Criterion) {
-    c.bench_function(&"Circuit breaker baking".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("Circuit breaker baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

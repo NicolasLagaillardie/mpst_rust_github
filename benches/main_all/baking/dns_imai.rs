@@ -172,7 +172,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn dns_imai_main(c: &mut Criterion) {
-    c.bench_function(&"DNS Imai baking".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("DNS Imai baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

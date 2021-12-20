@@ -201,8 +201,8 @@ pub(crate) fn extract_index_node(
     Ok(format!(
         "{}{}",
         index_node[..depth_level]
-            .to_vec()
-            .into_iter()
+            .iter()
+            .copied()
             .map(|i| format!("{}.", i))
             .collect::<String>(),
         index_node[depth_level]

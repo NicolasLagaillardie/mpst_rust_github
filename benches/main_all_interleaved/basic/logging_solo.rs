@@ -172,7 +172,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn logging_solo_main(c: &mut Criterion) {
-    c.bench_function(&"Logging solo".to_string(), |b| b.iter(all_mpst));
+    c.bench_function("Logging solo", |b| b.iter(all_mpst));
 }
 
 criterion_group! {
