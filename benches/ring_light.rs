@@ -16,8 +16,8 @@ criterion_main! {
     ring_all::normal::ring_four::ring_four,
     ring_all::normal::ring_five::ring_five,
     ////////// Benchmarks using cancelling without a monitor to broadcast cancel using generated methods with 100 loops
-    ring_all::baking_cancel_inline::ring_two::ring_two,
-    ring_all::baking_cancel_inline::ring_three::ring_three,
-    ring_all::baking_cancel_inline::ring_four::ring_four,
-    ring_all::baking_cancel_inline::ring_five::ring_five,
+    ring_all::baking_cancel::ring_two::ring_two,
+    ring_all::baking_cancel::ring_three::ring_three,
+    ring_all::baking_cancel::ring_four::ring_four,
+    ring_all::baking_cancel::ring_five::ring_five,
 }

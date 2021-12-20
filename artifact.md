@@ -280,7 +280,7 @@ scalability of the tool on large examples.
 
 You can run a small set of the benchmarks since the full benchmark set can take about 24 hours.
 We have prepared a lighter version that should complete in about an hour.
-The difference is that  `ping_pong` protocols are run up to 200 loops (and not 500),
+The difference is that  `ping_pong` protocols are run up to 50 loops (and not 500),
 and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_).
 
 These modifications are enough to start observing the performance trends (refer to claims about functionality at the beginning of this document).
@@ -294,13 +294,15 @@ To run the lighter benchmark suit:
 then by running the command line
 
 ```bash
-./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
+./scripts/ping_pong_mesh_ring_light.sh # This will take around 1 hour
 ```
 
 **Results:** After running the above scripts,
 5 graphs will be displayed corresponding to Figure 9.
 
-The graphs are displayed using `Python matplotlib` and the row data for the graphs (.csv files) is in the [results/](results/) folder.
+The graphs are displayed using `Python matplotlib`
+and are saved in the [results/](results/) folder,
+alongside the raw data for the graphs (.csv files).
 
 <details>
 <summary>
@@ -341,7 +343,7 @@ To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 i
 Then you can run the script:
 
 ```bash
-./scripts/ping_pong_mesh_ring.sh # This will take more than 24 hours
+./scripts/ping_pong_mesh_ring_full.sh # This will take more than 24 hours
 ```
 
 __Note__: we have executed this script on a high-performance computing server,
@@ -353,8 +355,12 @@ to retrieve results for only one kind of protocol:
 
 ```bash
 ./scripts/ping_pong.sh # For ping-pong protocols
-./scripts/mesh.sh # For mesh protocols
-./scripts/ring.sh # For ring protocols
+##
+./scripts/mesh_full.sh # For all mesh protocols
+./scripts/ring_full.sh # For all ring protocols
+##
+./scripts/mesh_light.sh # For mesh protocols up to five participants
+./scripts/ring_light.sh # For ring protocols up to five participants
 ```
 
 ---

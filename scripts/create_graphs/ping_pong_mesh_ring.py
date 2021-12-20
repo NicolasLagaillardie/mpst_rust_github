@@ -979,5 +979,12 @@ if len(ping_pong_bench_lists['nb_loops_baking']) > 0:
     ax_ping_pong_bench.plot(ping_pong_bench_lists['nb_loops_baking'], ping_pong_bench_lists['average_baking'], label='AMPST',
                             linestyle='solid', marker='*')
 
-# # function to show the plot
+# save the plot
+index_graphs = 0
+while os.path.isfile('results/graphs_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+plt.savefig('./results/graphs_' + str(index_graphs) + '.pdf')
+
+# show the plot
 plt.show()
