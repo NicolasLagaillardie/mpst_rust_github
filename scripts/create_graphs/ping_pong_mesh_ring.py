@@ -984,7 +984,9 @@ index_graphs = 0
 while os.path.isfile('results/graphs_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
-plt.savefig('./results/graphs_' + str(index_graphs) + '.pdf')
+name_graph = './results/graphs_' + str(index_graphs) + '.pdf'
+
+plt.savefig(name_graph)
 
 # show the plot
 plt.show()
