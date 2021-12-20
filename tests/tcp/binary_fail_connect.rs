@@ -3,8 +3,7 @@ use mpstthree::transport::tcp::{close::close_tcp, fork::fork_tcp, recv::recv_tcp
 use mpstthree::{choose_tcp, offer_tcp};
 
 use std::error::Error;
-use std::io::{Read, Write};
-use std::net::{Shutdown, TcpListener, TcpStream};
+use std::net::TcpStream;
 use std::panic::set_hook;
 use std::thread::{spawn, JoinHandle};
 
@@ -79,7 +78,7 @@ fn tcp_client() -> Result<(), Box<dyn Error>> {
     let mut sessions = Vec::new();
 
     let (thread, s, stream): (JoinHandle<()>, RecursB, TcpStream) =
-        fork_tcp(binary_a_to_b, "localhost:3333")?;
+        fork_tcp(binary_a_to_b, "does_not_exist:3333")?;
 
     sessions.push(s);
 
@@ -110,77 +109,7 @@ static LOOPS: i64 = 5;
 
 /////////////////////////
 
-fn handle_client(mut stream: TcpStream) -> Result<(), Box<dyn Error>> {
-    let mut data = [0_u8; 65535]; // using 50 byte buffer
-    let mut index = 0;
-    while match stream.read(&mut data) {
-        Ok(0) => {
-            stream.shutdown(Shutdown::Both).unwrap_or(());
-            panic!("Buffer size: 0")
-        }
-        Ok(size) => {
-            // echo everything!
-            match stream.write(&data[0..size]) {
-                Ok(0) => {
-                    stream.shutdown(Shutdown::Both).unwrap_or(());
-                    panic!("An error occurred during write")
-                }
-                _ => match index {
-                    i if i + 1 >= LOOPS => {
-                        stream.shutdown(Shutdown::Both).unwrap_or(());
-                        index += 1;
-                        false
-                    }
-                    _ => {
-                        index += 1;
-                        true
-                    }
-                },
-            }
-        }
-        Err(_) => {
-            stream.shutdown(Shutdown::Both).unwrap_or(());
-            panic!("An error occurred during read")
-        }
-    } {}
-
-    Ok(())
-}
-
-/////////////////////////
-
-fn tcp_server(listener: TcpListener) -> Result<(), Box<dyn Error>> {
-    'outer: for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                handle_client(stream)?;
-                break 'outer;
-            }
-            Err(e) => {
-                panic!("Error server: {:?}", e);
-                /* connection failed */
-            }
-        }
-    }
-
-    // close the socket server
-    drop(listener);
-    Ok(())
-}
-
-/////////////////////////
-
 pub fn main() {
-    let listener = TcpListener::bind("localhost:3333").unwrap();
-    let server = spawn(move || {
-        set_hook(Box::new(|_info| {
-            // do nothing
-        }));
-        match tcp_server(listener) {
-            Ok(()) => (),
-            Err(e) => panic!("{:?}", e),
-        }
-    });
     let client = spawn(move || {
         set_hook(Box::new(|_info| {
             // do nothing
@@ -191,6 +120,5 @@ pub fn main() {
         }
     });
 
-    assert!(client.join().is_ok());
-    assert!(server.join().is_ok());
+    assert!(client.join().is_err());
 }

@@ -1,5 +1,4 @@
 #![allow(dead_code, clippy::large_enum_variant)]
-
 #![allow(
     clippy::type_complexity,
     clippy::too_many_arguments,
@@ -7,9 +6,9 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::bundle_impl_with_enum_and_cancel;
 
 use std::error::Error;
 

@@ -132,9 +132,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn three_buyers_mpst(c: &mut Criterion) {
-    c.bench_function("Three buyers MPST baking", |b| {
-        b.iter(all_mpst)
-    });
+    c.bench_function("Three buyers MPST baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

@@ -5,9 +5,9 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::bundle_impl_with_enum_and_cancel;
 
 use std::error::Error;
 
@@ -415,13 +415,7 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<EndpointG, Box<dyn Error>> {
 
 fn main() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g) = fork_mpst(
-        endpoint_a,
-        endpoint_b,
-        endpoint_c,
-        endpoint_d,
-        endpoint_e,
-        endpoint_f,
-        endpoint_g,
+        endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f, endpoint_g,
     );
 
     thread_a.join().unwrap();

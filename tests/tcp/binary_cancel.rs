@@ -181,7 +181,7 @@ fn tcp_server(listener: TcpListener) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 pub fn main() {
-    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
+    let listener = TcpListener::bind("localhost:3333").unwrap();
     let server = spawn(move || {
         set_hook(Box::new(|_info| {
             // do nothing

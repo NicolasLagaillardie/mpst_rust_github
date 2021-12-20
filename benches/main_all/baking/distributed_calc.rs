@@ -119,9 +119,7 @@ fn all_mpst() {
 /////////////////////////
 
 fn distributed_calc_main(c: &mut Criterion) {
-    c.bench_function("Distributed calculator baking", |b| {
-        b.iter(all_mpst)
-    });
+    c.bench_function("Distributed calculator baking", |b| b.iter(all_mpst));
 }
 
 criterion_group! {

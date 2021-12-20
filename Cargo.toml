@@ -91,6 +91,21 @@ path = "tests/macros_simple.rs"
 required-features = ["macros_simple"]
 
 [[test]]
+name = "transport_udp"
+path = "tests/transport_udp.rs"
+required-features = ["transport_udp"]
+
+[[test]]
+name = "transport_tcp"
+path = "tests/transport_tcp.rs"
+required-features = ["transport_tcp"]
+
+[[test]]
+name = "transport_http"
+path = "tests/transport_http.rs"
+required-features = ["transport_http", "macros_multiple"]
+
+[[test]]
 name = "baking"
 path = "tests/baking.rs"
 required-features = ["baking", "checking"]
@@ -118,15 +133,20 @@ harness = false
 required-features = ["baking"]
 
 [[bench]]
-name = "mesh_light"
+name = "main_interleaved"
 harness = false
-path = "benches/mesh_light.rs"
+required-features = ["baking_interleaved"]
+
+[[bench]]
+name = "mesh_full"
+harness = false
+path = "benches/mesh_full.rs"
 required-features = ["baking"]
 
 [[bench]]
-name = "ring_light"
+name = "ring_full"
 harness = false
-path = "benches/ring_light.rs"
+path = "benches/ring_full.rs"
 required-features = ["baking"]
 
 [[bench]]
@@ -151,6 +171,21 @@ required-features = ["baking"]
 [[example]]
 name = "logging_baking"
 required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_solo"
+path = "examples/interleaved/circuit_breaker_solo.rs"
+required-features = ["baking_interleaved"]
+
+[[example]]
+name = "logging_solo"
+path = "examples/interleaved/logging_solo.rs"
+required-features = ["baking_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_interleaved"
+path = "examples/interleaved/circuit_breaker_logging_interleaved.rs"
+required-features = ["baking_interleaved"]
 
 [[example]]
 name = "distributed_calc"

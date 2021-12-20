@@ -13,7 +13,6 @@ use mpstthree::{choose, offer};
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 
-
 // A
 enum BinaryA {
     Forward(Recv<(), Send<(), RecursA>>),
