@@ -89,8 +89,8 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ./scripts/create_files/compile.sh ring_twenty_crossbeam 10 baking
 ./scripts/create_files/compile.sh ring_twenty_baking 10 baking
 
-python3 scripts/create_graphs/ping_pong_mesh_ring.py
-
+./scripts/lightweight_library.sh # Set up
+./scripts/ping_pong_mesh_ring_light.sh
 
 # ./scripts/ping_pong.sh # For ping-pong protocols
 # ##

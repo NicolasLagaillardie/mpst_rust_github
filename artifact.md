@@ -381,23 +381,23 @@ in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribb
 
 <details>
 <summary>
-Follow the steps to implement a simple Adder example with Scribble and mp-anon
+Follow the steps to implement a simple *adder* example with Scribble and mp-anon
 </summary>
  
 1️⃣ &nbsp; Generate Rust Types from Scribble
 
 ```bash
-./scripts/top_down_adder.rs
+./scripts/top_down_adder.sh
 ```
 
 In the above example, we move into the `scribble-java` folder and
 run the `Scribble` API for `Rust` on the `Adder` protocol written with `Scribble`.
-This command outputs the file `Adder_generated.rs` at the root of the `scribble-java` directory.
-Then it moves the file `Adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
+This command outputs the file `adder_generated.rs` at the root of the `scribble-java` directory.
+Then it moves the file `adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
 of the `mpst_rust_github` folder containing `Mpanon`
 and auto-format the file with `cargo fmt`.
 
-Now, you can open the `examples/Adder_generated.rs` file using your preferred editor program before testing the protocol directly with `Mpanon`.
+Now, you can open the `examples/adder_generated.rs` file using your preferred editor program before testing the protocol directly with `Mpanon`.
  
 ➡️ &nbsp; From this point, we assume that you will remain in the `Mpanon` repository.
 
@@ -408,14 +408,14 @@ up to line 73. -->
 2️⃣ &nbsp; Compile the Rust types
 
 ```bash
-cargo run --example="Adder_generated" --features=backing_checking
+cargo run --example="adder_generated" --features=baking
 ```
 
 This command contains four parts:
 
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
-3. `--example="Adder_generated` for running the specific *example* `Adder_generated`
+3. `--example="adder_generated` for running the specific *example* `adder_generated`
 4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example.
 
 You will have an error and several warnings when running the previous command.
@@ -525,7 +525,7 @@ the macro `bundle_impl_with_enum_and_cancel!`.
 Now, if you run again the file, it should run correctly:
 
 ```bash
-cargo run --example="Adder_generated" --features=baking
+cargo run --example="adder_generated" --features=baking
 ```
 
 </details>
@@ -535,7 +535,7 @@ cargo run --example="Adder_generated" --features=baking
 
 </details>
 <details>
-<summary> Adder example with kmc <a name="adder_kmc"></a> </summary>
+<summary> Adder example with kmc <a name="adder"></a> </summary>
  We show how to use the bottom-up approach.
  The first step in the bottom-up approach to to write the Rust types for the meshed channels.
  We will use the Adder example from above, since we already have the types and we will only demonstrate here how to check them using the external kmc.
@@ -559,10 +559,10 @@ Our theory only supports protocols that have a bound of **k=1**,
 but protocols with higher levels can still be implemented using `Mpanon`. -->
 
 Now, that you have a better idea of the interactions between those
-two tools, we will check the types in the `Adder_generated` example are correct
+two tools, we will check the types in the `adder_generated` example are correct
 using our macro `checker_concat!`.
 
-For this purpose, append the following lines to the `Adder_generated.rs` file:
+For this purpose, append the following lines to the `adder_generated.rs` file:
 
 ```rust
  
@@ -570,20 +570,20 @@ For this purpose, append the following lines to the `Adder_generated.rs` file:
  
 fn checking() {
    let (graphs, kmc) = mpstthree::checker_concat!(
-       "Adder_checking",
+       "adder_checking",
        EndpointA48,
        EndpointC13,
        EndpointB50
        =>
        [
            EndpointC7,
-           Branches0AtoC, ADD,
-           Branches0BtoC, ADD,
+           Branches0AtoC, Add,
+           Branches0BtoC, Add,
        ],
        [
            EndpointC9,
-           Branches0AtoC, BYE,
-           Branches0BtoC, BYE,
+           Branches0AtoC, Bye,
+           Branches0BtoC, Bye,
        ]
    )
    .unwrap();
@@ -615,10 +615,10 @@ fn main() {
 Now, if you run again the file, it should run correctly:
 
 ```bash
-cargo run --example="Adder_generated" --features=baking_checking
+cargo run --example="adder_generated" --features=baking_checking
 ```
 
-Notice the different features used for compiling the example.
+Notice the different features used for compiling the example: **baking_checking** instead of **baking**.
 
 If you are unsure about either of the above steps,
 the `Rust` code is available in the `adder.rs` file

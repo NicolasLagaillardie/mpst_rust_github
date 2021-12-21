@@ -253,7 +253,7 @@ name = "video_stream"
 required-features = ["baking_checking"]
 
 [[example]]
-name = "adder_kmc"
+name = "adder"
 required-features = ["baking_checking"]
 
 [[example]]
