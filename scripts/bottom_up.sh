@@ -5,6 +5,6 @@
 # Stop upon any error
 set -e
 
-cat scripts/vs_bu.txt > examples/video_stream_full.rs
+cat scripts/vs_bu.txt > examples/video_stream_generated.rs
 cargo fmt
-cargo run --example=video_stream_full --features="baking_checking"
+cargo run --example=video_stream_generated --features="baking_checking"

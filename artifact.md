@@ -199,9 +199,9 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 <a name="Step1.3"></a>
 
 Next, we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
-After each modification, compile the program with `cargo run --example=video_stream_full --features="baking_checking"` and observe the reported error.
+After each modification, compile the program with `cargo run --example=video_stream_generated --features="baking_checking"` and observe the reported error.
 
-* Open the file [video_stream_full.rs](examples/video_stream_full.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
+* Open the file [video_stream_generated.rs](examples/video_stream_generated.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
 
 Suggested modifications:
 
