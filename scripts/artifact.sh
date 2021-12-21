@@ -10,8 +10,8 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ./scripts/top_down.sh
 ./scripts/bottom_up.sh
 ./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
-./scripts/ping_pong_mesh_ring_light.sh # Set up
-./scripts/ping_pong_mesh_ring.sh # This will take around 1 hour
+./scripts/lightweight_library.sh # Set up
+./scripts/ping_pong_mesh_ring_light.sh # This will take around 1 hour
 ./scripts/full_library.sh # set up
 # ./scripts/ping_pong_mesh_ring_full.sh # This will take more than 24 hours
 
@@ -92,7 +92,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 python3 scripts/create_graphs/ping_pong_mesh_ring.py
 
 
-./scripts/ping_pong.sh # For ping-pong protocols
+# ./scripts/ping_pong.sh # For ping-pong protocols
 # ##
 # ./scripts/mesh_full.sh # For all mesh protocols
 # ./scripts/ring_full.sh # For all ring protocols
