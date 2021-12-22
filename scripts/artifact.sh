@@ -94,10 +94,12 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 
 # ./scripts/ping_pong.sh # For ping-pong protocols
 # ##
-# ./scripts/mesh_full.sh # For all mesh protocols
-# ./scripts/ring_full.sh # For all ring protocols
+./scripts/full_library.sh # set up
+./scripts/mesh_full.sh # For all mesh protocols
+./scripts/ring_full.sh # For all ring protocols
 ##
+./scripts/lightweight_library.sh # Set up
 ./scripts/mesh_light.sh # For mesh protocols up to five participants
 ./scripts/ring_light.sh # For ring protocols up to five participants
 ./scripts/top_down_adder.sh
-# cargo run --example="Adder_generated" --features=backing_checking
+cargo run --example="adder_generated" --features=backing_checking
