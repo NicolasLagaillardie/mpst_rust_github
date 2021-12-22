@@ -99,5 +99,5 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ##
 ./scripts/mesh_light.sh # For mesh protocols up to five participants
 ./scripts/ring_light.sh # For ring protocols up to five participants
-./scripts/top_down_adder.rs
+./scripts/top_down_adder.sh
 # cargo run --example="Adder_generated" --features=backing_checking
