@@ -10,8 +10,8 @@ We thank the reviewer for their detailed comments. We have addressed each proble
 
 ### P1: how to build a docker image
 
-The reviewer is not required to build a docker image, since we provide the docker image itself. The docker image can be loaded following the instructions in the Getting started part  of the readme file.  (https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d#getting-started)
-We encourage the reviewer to use the provided docker image to make sure the correct version of the repository is being tested. 
+The reviewer is not required to build a docker image, since we provide the docker image itself. The docker image can be loaded following the instructions in the Getting started part  of the readme file (https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d#getting-started).
+We kindly suggest the reviewer to use the provided docker image to make sure the correct version of the repository is being tested. 
 
 ### P2: the repository includes a LICENSE file 
 
