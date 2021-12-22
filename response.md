@@ -35,7 +35,7 @@ The reviewers can also modify and make the files executable as follows:
 
 ### P6 Running `./scripts/examples_literature.sh` resulted in the error:
 
-Fixed in the new version. The script was called with the wrong argument
+Fixed in the new version. The script was called with the wrong argument.
 
 ### P7 `./lightweight_library.sh` should be `./scripts/lightweight_library.sh`
 
