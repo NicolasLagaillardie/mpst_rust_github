@@ -322,7 +322,7 @@ on top of the existing ones.
 
 #### **Option 2**: Running the entire benchmark set (at least 24 hours)
 
-This option requires much more than 16 GB of RAM and will fail if RAM is lacking during the process.
+<!-- Note that this option will fail if you have not enough RAM.
 The error displayed in this case will include:
 
 ```bash
@@ -332,6 +332,7 @@ error: could not compile `mpstthree`
 
 (signal 9, SIGKILL: kill)
 ```
+--!>
 
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
