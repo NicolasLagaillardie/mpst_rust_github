@@ -122,25 +122,7 @@ __Note__: You may need to run the above command with sudo
 
 1. The Docker image comes with an installation of `vim` and `neovim` for editing.
   If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `mpanon`.
-2. Thereafter, we assume that you are in the main directory of the docker file.
-
-<!-- For running the docker file on your own machine,
-assuming you downloaded it and you have Docker installed on your machine: -->
-
-<!-- 1. open a terminal
-2. move to the folder containing your docker file with `cd`
-3. run the command `docker run -it mpanon`. You may need to `sudo` this command.
-Note: This may take around 30 min to complete
-The password and user in this docker image are both `mpanon`.-->
-<!-- During the compilation of the docker file,
-tests are run for the different tools used in this artifact,
-hence it may take some time to compile. -->
-<!--
-The rest of the document is organised as follows:
-* Quick Start lets you test that all required components are installed correctly
-* Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approaches.
-* Repo
-Thereafter, we assume that you are in the mpst_rust_github directory of the docker file. -->
+2. Thereafter, we assume that you are in the mpst_rust_github directory of the docker file.
 
 ## Part I: Quick Start
 
