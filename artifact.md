@@ -89,9 +89,11 @@ to test them. -->
 
 For the ECOOP'22 artifact evaluation, please use the docker image provided:
 
-0. [Install Docker](https://docs.docker.com/engine/install/) and open the terminal.
-1. Download the artifact file (assume the filename is `artifact.tar.gz`)
-2. Unzip the artifact file.
+0. [Install Docker](https://docs.docker.com/engine/install/) and open the terminal and configure docker setting.
+__Important__: By Default docker is limited to use only 2GB-4GB RAM,open docker settings and increase the RAM usage to 16GB. 
+See here for instructions 
+2. Download the artifact file (assume the filename is `artifact.tar.gz`)
+3. Unzip the artifact file.
 
    ```bash
    gunzip artifact.tar.gz
@@ -138,7 +140,7 @@ The rest of the document is organised as follows:
 * Quick Start lets you test that all required components are installed correctly
 * Mp-anon in 5 minutes walks you through writing your first program with mp-anon and demonstrates both the bottom-up and top-down approaches.
 * Repo
-Thereafter, we assume that you are in the main directory of the docker file. -->
+Thereafter, we assume that you are in the mpst_rust_github directory of the docker file. -->
 
 ## Part I: Quick Start
 
@@ -167,7 +169,7 @@ cargo test --benches --all-features --workspace # Test all benchmarks
 The above command may take up to 15 min.
 
 __Note__:
-The commands from steps 3-5 can be run altogether with:
+The commands from steps 1-3 can be run altogether with:
 
 ```bash
 cargo test --all-targets --all-features --workspace # Test everything in the library
