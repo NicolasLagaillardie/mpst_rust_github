@@ -209,7 +209,7 @@ The data for these benchmarks can be re-generated using the following script:
 ./scripts/examples_literature.sh # Will take up to one hour, progress is displayed in the terminal
 ```
 
-Each command is run 10 times on each example and the columns display the means in _ns_.
+Each command is run 10 times on each example and the columns display the means in _ms_.
 
 **Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
 
@@ -297,7 +297,7 @@ alongside the raw data for the graphs (.csv files).
 Details on the content of the raw .csv files data (optional reading).
 </summary>
 
-The `ping_pong_mesh_ring.sh` scripts generate 3 files:
+The `ping_pong_mesh_ring_light.sh` and `ping_pong_mesh_ring_full.sh` scripts generate 3 files:
 `ping_ping_0.csv`, `mesh_0.csv` and `ring_0.csv`
 in the folder [results/](results/).
 
@@ -306,7 +306,7 @@ The structure of the `ping_ping_0.csv` file is as follows:
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of loops
 3. Column 3: average running time (in ms)
-4. Column 4: average compilation time (in ns)
+4. Column 4: average compilation time (in ms)
 
 The structure of the `mesh_0.csv` and `ring_0.csv`
 files are as follows:
@@ -314,7 +314,7 @@ files are as follows:
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of participants
 3. Column 3: average running time (in ms)
-4. Column 4: average compilation time (in ns)
+4. Column 4: average compilation time (in ms)
 
 Be aware that the scripts add additional `*.csv` files
 on top of the existing ones.

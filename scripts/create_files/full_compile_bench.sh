@@ -195,4 +195,4 @@ done
 
 # Run the benchmarks
 cargo bench --bench main --features="baking_interleaved" -- --verbose
-cargo bench --bench ping_pong --features="macros_multiple"  -- --verbose
+cargo bench --bench ping_pong --features="macros_multiple" -- --verbose

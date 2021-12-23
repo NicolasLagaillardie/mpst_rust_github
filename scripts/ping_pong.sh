@@ -8,7 +8,7 @@ set -e
 # Compile protocols
 
 # Run the benchmarks
-cargo bench --bench ping_pong --features="baking"  -- --verbose
+cargo bench --bench ping_pong --features="baking" -- --verbose
 
 ## Concatenate all results in the results/ping_pong_mesh_ring.csv file
 python3 scripts/create_graphs/ping_pong_mesh_ring.py

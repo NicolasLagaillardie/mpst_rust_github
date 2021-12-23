@@ -29,7 +29,7 @@ set -e
 ./scripts/create_files/compile.sh ring_five_baking 10 baking
 
 # Run the benchmarks
-cargo bench --bench ring --features="baking"  -- --verbose
+cargo bench --bench ring --features="baking" -- --verbose
 
 ## Concatenate all results in the results/ping_pong_mesh_ring.csv file
 python3 scripts/create_graphs/ping_pong_mesh_ring.py
