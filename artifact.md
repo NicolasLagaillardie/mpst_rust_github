@@ -332,7 +332,8 @@ error: could not compile `mpstthree`
 
 (signal 9, SIGKILL: kill)
 ```
---!>
+-->
+
 
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
