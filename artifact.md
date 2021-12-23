@@ -810,7 +810,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣  &nbsp;  Check that the types are correct
 
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines(CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
+the `checker_concat!` macro which translates the types to Communicating Finite State machines (CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
 
 ```rust
 fn main() {
@@ -848,7 +848,7 @@ cargo run --example=my_basic --features=baking_checking
 After running the command above, the terminal should display
 the output from the kmc tool, which is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
  
-4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B`.
+4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` by adding the following code after the **main** function:
 
 ```rust
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
