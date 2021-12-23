@@ -524,7 +524,7 @@ cargo run --example="adder_generated" --features=baking
 <summary> Adder example with kmc <a name="adder"></a> </summary>
  We show how to use the bottom-up approach.
  The first step in the bottom-up approach to to write the Rust types for the meshed channels.
- We will use the Adder example from above, since we already have the types and we will only demonstrate here how to check them using the external kmc.
+ We will use the Adder example from above, since we already have the types and we will only demonstrate here how to check them using the external kmc tool.
 
  <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
