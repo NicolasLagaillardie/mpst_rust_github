@@ -280,7 +280,7 @@ To run the lighter benchmark suit:
 then by running the command line
 
 ```bash
-./scripts/ping_pong_mesh_ring_light.sh # This will take around 1 hour
+./scripts/ping_pong_mesh_ring_light.sh # This will take up to 3 hours
 ```
 
 **Results:** After running the above scripts,
