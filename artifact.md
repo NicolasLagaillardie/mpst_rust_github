@@ -403,7 +403,7 @@ and auto-format the file with `cargo fmt`.
 
 Now, you can open the `examples/adder_generated.rs` file using your preferred editor program before testing the protocol directly with `Mpanon`.
  
-➡️ &nbsp; From this point, we assume that you will remain in the `Mpanon` repository.
+➡️ &nbsp; From this point, we assume that you will remain in the `Mpanon` repository (the mpst_rust_github folder).
 
 <!-- Optional: You can check that the generated types are the same as the one provided in
 the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
