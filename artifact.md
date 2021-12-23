@@ -214,10 +214,10 @@ Each command is run 10 times on each example and the columns display the means i
 **Results** are outputted in the file `results/benchmarks_main_from_literature_0.csv` where we give in brackets the corresponding names from Table 2 in the paper:
 
 * Column 1: file name (Example/Endpoint),
-* Column 2: **check** time, the result of `cargo check` (Check)
-* Column 3: **build** time, the result of `cargo build` (Comp.)
-* Column 4: **build --release** time, the result of `cargo build --release` (Rel.)
-* Column 5: **run** time, the result of running `cargo bench` (Exec time)
+* Column 2: **check** time in __microseconds__, the result of `cargo check` (Check)
+* Column 3: **build** time in __microseconds__, the result of `cargo build` (Comp.)
+* Column 4: **build --release** time in __microseconds__, the result of `cargo build --release` (Rel.)
+* Column 5: **run** time in __nanoseconds__, the result of running `cargo bench` (Exec time)
 
 <!-- <details>
 <summary>
