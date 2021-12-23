@@ -535,7 +535,7 @@ cargo run --example="adder_generated" --features=baking
 <summary> Adder example with kmc <a name="adder"></a> </summary>
  We show how to use the bottom-up approach.
  The first step in the bottom-up approach to to write the Rust types for the meshed channels.
- We will use the Adder example from above, since we already have the types and we will only demonstrate here how to check them using the external kmc.
+ We will use the Adder example from above, since we already have the types and we will only demonstrate here how to check them using the external kmc tool.
 
  <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
@@ -825,8 +825,8 @@ fn main() {
 
    // let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
-   assert!(thread_a.join().is_ok());
-   assert!(thread_b.join().is_ok());
+   // assert!(thread_a.join().is_ok());
+   // assert!(thread_b.join().is_ok());
 }
 ```
 
@@ -837,10 +837,7 @@ cargo run --example=my_basic --features=baking_checking
 ```
 
 After running the command above, the terminal should display
-four additional parts:
-
-1. the first three ones are the **dot** graphs representing `A`, `B`
-2. the last one is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
+the output from the kmc tool, which is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
  
 4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B`.
 
@@ -882,7 +879,7 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
     })
 }
 ```
-
+Finally, uncomment the last three lines in the main function.  
  
 5️⃣ &nbsp; Run the example again but uncomment the line
  `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);`
