@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::bundle_impl_with_enum_and_cancel;
@@ -118,14 +118,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn distributed_calc_main(c: &mut Criterion) {
+pub fn distributed_calc_main(c: &mut Criterion) {
     c.bench_function("Distributed calculator baking", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = distributed_calc;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = distributed_calc_main
-}
-
-criterion_main!(distributed_calc);

@@ -268,6 +268,8 @@ You can run a small set of the benchmarks since the full benchmark set can take 
 We have prepared a lighter version that should complete in about an hour.
 The difference is that  `ping_pong` protocols are run up to 50 loops (and not 500),
 and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_).
+Each benchmark has a significance of 0.1 and a sample size of 100 in this configuration:
+each protocol is run 100 times.
 
 These modifications are enough to start observing the performance trends (refer to claims about functionality at the beginning of this document).
 
@@ -342,6 +344,8 @@ Then you can run the script:
 ```bash
 ./scripts/ping_pong_mesh_ring_full.sh # This will take more than 24 hours
 ```
+
+Each benchmark has a significance of 0.1 and a sample size of 10000 in this configuration.
 
 __Note__: we have executed this script on a high-performance computing server,
 and running the whole script took over 24 hours.

@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
@@ -247,18 +247,10 @@ fn all_binaries() {
 
 static LOOPS: i64 = 20;
 
-fn fibo_mpst(c: &mut Criterion) {
+pub fn fibo_mpst(c: &mut Criterion) {
     c.bench_function(&format!("Fibo MPST {}", LOOPS), |b| b.iter(all_mpst));
 }
 
-fn fibo_binary(c: &mut Criterion) {
+pub fn fibo_binary(c: &mut Criterion) {
     c.bench_function(&format!("Fibo binary {}", LOOPS), |b| b.iter(all_binaries));
 }
-
-criterion_group! {
-    name = fib;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = fibo_mpst, fibo_binary
-}
-
-criterion_main!(fib);

@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -228,14 +228,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn logging_main(c: &mut Criterion) {
+pub fn logging_main(c: &mut Criterion) {
     c.bench_function("Logging", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = logging;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = logging_main
-}
-
-criterion_main!(logging);

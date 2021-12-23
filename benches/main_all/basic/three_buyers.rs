@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -191,14 +191,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn three_buyers_mpst(c: &mut Criterion) {
+pub fn three_buyers_main(c: &mut Criterion) {
     c.bench_function("Three buyers MPST", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = three_buyers;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = three_buyers_mpst
-}
-
-criterion_main!(three_buyers);

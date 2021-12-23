@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::bundle_impl_with_enum_and_cancel;
@@ -184,14 +184,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn o_auth_mpst(c: &mut Criterion) {
+pub fn o_auth_main(c: &mut Criterion) {
     c.bench_function("oAuth MPST baking", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = o_auth;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = o_auth_mpst
-}
-
-criterion_main!(o_auth);

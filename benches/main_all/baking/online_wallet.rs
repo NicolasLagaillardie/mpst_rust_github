@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::bundle_impl_with_enum_and_cancel;
@@ -227,14 +227,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn online_wallet_main(c: &mut Criterion) {
+pub fn online_wallet_main(c: &mut Criterion) {
     c.bench_function("Online wallet baking", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = online_wallet;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = online_wallet_main
-}
-
-criterion_main!(online_wallet);

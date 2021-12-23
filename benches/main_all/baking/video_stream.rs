@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use rand::{thread_rng, Rng};
 
@@ -162,14 +162,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn video_stream_main(c: &mut Criterion) {
+pub fn video_stream_main(c: &mut Criterion) {
     c.bench_function("Video stream baking", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = video_stream;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = video_stream_main
-}
-
-criterion_main!(video_stream);

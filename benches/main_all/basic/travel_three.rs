@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -269,14 +269,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn travel_main(c: &mut Criterion) {
+pub fn travel_main(c: &mut Criterion) {
     c.bench_function("Travel MPST", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = travel_three;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = travel_main
-}
-
-criterion_main!(travel_three);
