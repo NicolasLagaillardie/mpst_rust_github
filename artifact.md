@@ -314,11 +314,22 @@ files are as follows:
 3. Column 3: average running time
 4. Column 4: average compilation time
 
-Be aware that the scripts add additional `*.csv`files
+Be aware that the scripts add additional `*.csv` files
 on top of the existing ones.
 </details>
 
 #### **Option 2**: Running the entire benchmark set (at least 24 hours)
+
+This option requires much more than 16 GB of RAM and will fail if RAM is lacking during the process.
+The error displayed in this case will include:
+
+```bash
+error: could not compile `mpstthree`
+
+[...]
+
+(signal 9, SIGKILL: kill)
+```
 
 To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
