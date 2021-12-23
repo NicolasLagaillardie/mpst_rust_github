@@ -90,10 +90,10 @@ to test them. -->
 For the ECOOP'22 artifact evaluation, please use the docker image provided:
 
 0. [Install Docker](https://docs.docker.com/engine/install/) and open the terminal and configure docker setting.
-__Important__: By Default docker is limited to use only 2GB-4GB RAM, open docker settings and increase the RAM usage to 16GB. 
+__Important__: By Default docker is limited to use only 2GB-4GB RAM, open docker settings and increase the RAM usage to 16GB.
 See instructions for [MacOS](https://docs.docker.com/desktop/mac/) and [Windows](https://docs.docker.com/desktop/windows/)
-2. Download the artifact file (assume the filename is `artifact.tar.gz`)
-3. Unzip the artifact file.
+1. Download the artifact file (assume the filename is `artifact.tar.gz`)
+2. Unzip the artifact file.
 
    ```bash
    gunzip artifact.tar.gz
@@ -149,7 +149,7 @@ cargo test --benches --all-features --workspace # Test all benchmarks
 ```
 
 The above command may take up to 15 min.
-If your command results in an error (error: could not compile `mpstthree`; signal: 9, SIGKILL: kill), this indicated that you do not have a suficient amount of RAM. Make sure that your docker is configured correctly, i.e open docker settings and increase the RAM usage to 16GB. 
+If your command results in an error (error: could not compile `mpstthree`; signal: 9, SIGKILL: kill), this indicated that you do not have a sufficient amount of RAM. Make sure that your docker is configured correctly, i.e open docker settings and increase the RAM usage to 16GB.
 See instructions for [MacOS](https://docs.docker.com/desktop/mac/) and [Windows](https://docs.docker.com/desktop/windows/).
 
 __Note__:
@@ -716,6 +716,7 @@ use mpstthree::bundle_impl_with_enum_and_cancel; // The macro for generating the
 use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles
 use mpstthree::checker_concat; // Used for checking the protocol
+use std::error::Error; // Used for functions
 ```
  
 2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
@@ -754,28 +755,34 @@ Then we will write each binary type:
 ```rust
 // Binary types for A
 type StartA0 = Recv<Request, Send<Branching0fromAtoB, End>>; // Recv a Request then Send a choice
-type OrderingA0 = RoleB<RoleBroadcast>; // Stack for sending a choice
- 
+type OrderingA0 = RoleB<RoleBroadcast>; // Stack for recv then sending a choice
+
+type LoopA0 = Send<Branching0fromAtoB, End>; // Send a choice
+type OrderingLoopA0 = RoleBroadcast; // Stack for sending a choice
+
 type MoreA1 = Recv<Response, Send<Branching0fromAtoB, End>>; // Recv Response then send a choice
 type OrderingMoreA1 = RoleB<RoleBroadcast>; // Stack for the previous binary type
- 
+
 type DoneA1 = Recv<Stop, End>; // Recv Stop
 type OrderingDoneA1 = RoleB<RoleEnd>; // Stack for the previous binary type
- 
+
 // Binary types for B
 type StartB0 = Send<Request, Recv<Branching0fromAtoB, End>>; // Send a Request then Recv a choice
-type OrderingB0 = RoleA<RoleA<RoleEnd>>; // Stack for receiving a choice from A
- 
+type OrderingB0 = RoleA<RoleA<RoleEnd>>; // Stack for send then receiving a choice from A
+
+type LoopB0 = Recv<Branching0fromAtoB, End>; // Recv a choice
+type OrderingLoopB0 = RoleA<RoleEnd>; // Stack for recv a choice
+
 type MoreB1 = Send<Response, Recv<Branching0fromAtoB, End>>; // Recv Request then Send Response then receive a choice
 type OrderingMoreB1 = RoleA<RoleA<RoleEnd>>; // Stack for the previous binary type
- 
+
 type DoneB1 = Send<Stop, End>; // Send Stop
 type OrderingDoneB1 = RoleA<RoleEnd>; // Stack for the previous binary type
- 
+
 enum Branching0fromAtoB {
-   // Sum type containing the different paths of the choice
-   More(MeshedChannels<MoreB1, OrderingMoreB1, NameB>),
-   Done(MeshedChannels<DoneB1, OrderingDoneB1, NameB>),
+    // Sum type containing the different paths of the choice
+    More(MeshedChannels<MoreB1, OrderingMoreB1, NameB>),
+    Done(MeshedChannels<DoneB1, OrderingDoneB1, NameB>),
 }
 ```
 
@@ -792,9 +799,11 @@ into `MeshedChannels`:
 // A
 type EndpointAMore = MeshedChannels<MoreA1, OrderingMoreA1, NameA>;
 type EndpointADone = MeshedChannels<DoneA1, OrderingDoneA1, NameA>;
+type EndpointALoop = MeshedChannels<LoopA0, OrderingLoopA0, NameA>;
 type EndpointA = MeshedChannels<StartA0, OrderingA0, NameA>;
  
 // B
+type EndpointBLoop = MeshedChannels<LoopB0, OrderingLoopB0, NameB>;
 type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 ```
  
@@ -805,28 +814,28 @@ the `checker_concat!` macro which translates the types to Communicating Finite S
 
 ```rust
 fn main() {
-   let (_, kmc) = checker_concat!(
-       "basic",
-       EndpointA,
-       EndpointB
-       =>
-       [
-           EndpointAMore,
-           Branching0fromAtoB, More,
-       ],
-       [
-           EndpointADone,
-           Branching0fromAtoB, Done,
-       ]
-   )
-   .unwrap();
- 
-   println!("min kMC: {:?}", kmc);
+    let (_, kmc) = checker_concat!(
+        "basic",
+        EndpointA,
+        EndpointB
+        =>
+        [
+            EndpointAMore,
+            Branching0fromAtoB, More,
+        ],
+        [
+            EndpointADone,
+            Branching0fromAtoB, Done,
+        ]
+    )
+    .unwrap();
 
-   // let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+    println!("min kMC: {:?}", kmc);
 
-   // assert!(thread_a.join().is_ok());
-   // assert!(thread_b.join().is_ok());
+    // let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+
+    // assert!(thread_a.join().is_ok());
+    // assert!(thread_b.join().is_ok());
 }
 ```
 
@@ -879,10 +888,10 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
     })
 }
 ```
-Finally, uncomment the last three lines in the main function.  
+
+Finally, uncomment the last three lines in the **main** function by removing the `//` at the beginning of each line.  
  
-5️⃣ &nbsp; Run the example again but uncomment the line
- `let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);`
+5️⃣ &nbsp; Run the example again:
 
 ```bash
 cargo run --example=my_basic --features=baking_checking
