@@ -265,7 +265,7 @@ scalability of the tool on large examples.
 #### **Option 1**: Running a small benchmark set
 
 You can run a small set of the benchmarks since the full benchmark set can take about 24 hours.
-We have prepared a lighter version that should complete in about an hour.
+We have prepared a lighter version that should complete in about an three hours.
 The difference is that  `ping_pong` protocols are run up to 50 loops (and not 500),
 and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_).
 Each benchmark has a significance of 0.1 and a sample size of 100 in this configuration:
@@ -284,20 +284,20 @@ then by running the command line
 ```bash
 ./scripts/ping_pong_mesh_ring_light.sh # This will take up to 3 hours
 ```
-
-**Results:** After running the above scripts, the graphs are saved in the [results/](results/) folder,
+**Results:** After running the above scripts, the graphs are saved in the [results/](results/) folder in the file graphs_0.pdf,
 alongside the raw data for the graphs (.csv files).
 
-Copy the [results/](results/) folder to a local directory so you can open the graphs. 
-For instructions on how to copy a docker fodler to a local folder check [here] (https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0383441)
-Open a terminal, type ```docker ps``` to check the name of the runnign docker container for mpanon:latest. 
-The command should return the id of teh container, let assume it is c4a9485b3222. 
+To open the graphs_0.pdf file, copy the [results/](results/) folder to a local directory on your machine.
+
+For detailed instructions on how to copy a docker folder to a local folder check [here] (https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0383441)
+In short, open a terminal, type ```docker ps``` to check the name of the running docker container for mpanon:latest.
+The command should return the id of the container, let assume it is c4a9485b3222.
 Then given that "Documents/Docker" is a local directory in your system, execute the command:  
 ```
 docker cp c4a9485b3222:"home/mpanon/mpst_rust_github/results" "Documents/Docker"
 ```
-The above will copy the results folder form the docker container to your directory Documents/Docker. 
-Open the file graphs_0.pdf it contains 5 graphs that correspond to the benchmarks from Foigure 9. 
+The above will copy the results folder from the docker container to your directory Documents/Docker.
+Open the file graphs_0.pdf, it will contain 5 graphs that correspond to the graphs displayed in Figure 9. 
 
 <details>
 <summary>
