@@ -289,7 +289,7 @@ alongside the raw data for the graphs (.csv files).
 
 To open the graphs_0.pdf file, copy the [results/](results/) folder to a local directory on your machine.
 
-For detailed instructions on how to copy a docker folder to a local folder check [here] (https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0383441)
+For detailed instructions on how to copy a docker folder to a local folder check [here](https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0383441)
 In short, open a terminal, type ```docker ps``` to check the name of the running docker container for mpanon:latest.
 The command should return the id of the container, let assume it is c4a9485b3222.
 Then given that "Documents/Docker" is a local directory in your system, execute the command:  
