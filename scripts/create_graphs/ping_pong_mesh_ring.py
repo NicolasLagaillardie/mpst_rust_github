@@ -1,4 +1,5 @@
 from matplotlib.ticker import MaxNLocator
+from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 import json
 import os
@@ -29,6 +30,17 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 name_protocols = ['mesh', 'ring', 'ping']
+
+# Save multiple pages
+
+
+def multipage(filename, figs=None, dpi=200):
+    pp = PdfPages(filename)
+    if figs is None:
+        figs = [plt.figure(n) for n in plt.get_fignums()]
+    for fig in figs:
+        fig.savefig(pp, format='pdf')
+    pp.close()
 
 
 def test(path):
@@ -802,12 +814,13 @@ with open('results/ping_pong_' + str(index_ping_pong) + '.csv', 'a') as report_f
 
 
 # Create figures
-fig_mesh_compile, ax_mesh_compile = plt.subplots()
-fig_mesh_bench, ax_mesh_bench = plt.subplots()
-fig_ring_compile, ax_ring_compile = plt.subplots()
-fig_ring_bench, ax_ring_bench = plt.subplots()
-# fig_ping_pong_compile, ax_ping_pong_compile = plt.subplots()
-fig_ping_pong_bench, ax_ping_pong_bench = plt.subplots()
+all_graphs = plt.figure()
+ax_mesh_compile = all_graphs.add_subplot(3, 2, 1)
+ax_mesh_bench = all_graphs.add_subplot(3, 2, 2)
+ax_ring_compile = all_graphs.add_subplot(3, 2, 3)
+ax_ring_bench = all_graphs.add_subplot(3, 2, 4)
+# ax_ping_pong_compile = all_graphs.add_subplot(3,2,5)
+ax_ping_pong_bench = all_graphs.add_subplot(3, 2, 6)
 
 # Set title
 ax_mesh_compile.set_title("Mesh compilation time")
@@ -985,8 +998,10 @@ while os.path.isfile('results/graphs_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
 name_graph = './results/graphs_' + str(index_graphs) + '.pdf'
+name_graph_figure = './results/graphs_figure_' + str(index_graphs) + '.pdf'
 
 plt.savefig(name_graph)
+all_graphs.savefig(name_graph_figure)
 
 # show the plot
 plt.show()
