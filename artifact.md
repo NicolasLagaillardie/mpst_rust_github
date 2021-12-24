@@ -285,12 +285,19 @@ then by running the command line
 ./scripts/ping_pong_mesh_ring_light.sh # This will take up to 3 hours
 ```
 
-**Results:** After running the above scripts,
-5 graphs will be displayed corresponding to Figure 9.
-
-The graphs are displayed using `Python matplotlib`
-and are saved in the [results/](results/) folder,
+**Results:** After running the above scripts, the graphs are saved in the [results/](results/) folder,
 alongside the raw data for the graphs (.csv files).
+
+Copy the [results/](results/) folder to a local directory so you can open the graphs. 
+For instructions on how to copy a docker fodler to a local folder check [here] (https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0383441)
+Open a terminal, type ```docker ps``` to check the name of the runnign docker container for mpanon:latest. 
+The command should return the id of teh container, let assume it is c4a9485b3222. 
+Then given that "Documents/Docker" is a local directory in your system, execute the command:  
+```
+docker cp c4a9485b3222:"home/mpanon/mpst_rust_github/results" "Documents/Docker"
+```
+The above will copy the results folder form the docker container to your directory Documents/Docker. 
+Open the file graphs_0.pdf it contains 5 graphs that correspond to the benchmarks from Foigure 9. 
 
 <details>
 <summary>
@@ -305,16 +312,16 @@ The structure of the `ping_ping_0.csv` file is as follows:
 
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of loops
-3. Column 3: average running time (in ms)
-4. Column 4: average compilation time (in ms)
+3. Column 3: average running time (in nanosecond)
+4. Column 4: average compilation time (in microseconds)
 
 The structure of the `mesh_0.csv` and `ring_0.csv`
 files are as follows:
 
 1. Column 1: the type of implementation (`AMPST`, `MPST`, `binary` or `crossbeam`)
 2. Column 2: number of participants
-3. Column 3: average running time (in ms)
-4. Column 4: average compilation time (in ms)
+3. Column 3: average running time (in nanosecond)
+4. Column 4: average compilation time (in microseconds)
 
 Be aware that the scripts add additional `*.csv` files
 on top of the existing ones.
