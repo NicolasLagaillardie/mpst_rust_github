@@ -265,7 +265,7 @@ scalability of the tool on large examples.
 #### **Option 1**: Running a small benchmark set
 
 You can run a small set of the benchmarks since the full benchmark set can take about 24 hours.
-We have prepared a lighter version that should complete in about an three hours.
+We have prepared a lighter version that should complete in about three hours.
 The difference is that  `ping_pong` protocols are run up to 50 loops (and not 500),
 and `mesh` and `ring` protocols are up to _five_ participants (and not _ten_).
 Each benchmark has a significance of 0.1 and a sample size of 100 in this configuration:
