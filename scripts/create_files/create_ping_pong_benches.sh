@@ -26,14 +26,14 @@ cat benches/ping_pong_all_save/ping_pong_cancel_broadcast_1.rs > benches/ping_po
 cat benches/ping_pong_all_save/ping_pong.rs > benches/ping_pong.rs
 
 # Remove the last bracket in ping_pong.rs
-sed -ier 's,},,g' benches/ping_pong.rs;
+sed -ier 's,}//,,g' benches/ping_pong.rs;
 
 echo "Step 1/2"
 
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    printf 'Loop created: '"$i"';\n'
+    echo -ne "Loop created: $i\r"
     #########################
     next=$(($i+1))
     #########################
@@ -46,26 +46,32 @@ do
     cat benches/ping_pong_all/ping_pong_baking_cancel_$i.rs > benches/ping_pong_all/ping_pong_baking_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_baking_cancel_$next.rs
 done
 
+echo ''
 echo "Step 2/2"
+echo ''
 
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    printf 'Loop created: '"$i"';\n'
+    echo -ne "Loop created: $i\r"
     #########################
     next=$(($i+1))
     #########################
     printf 'pub mod ping_pong_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
-    printf '\tping_pong_all::ping_pong_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
+    printf '\t\tping_pong_all::ping_pong_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
+    #########################
+    printf '\t\tping_pong_all::ping_pong_'"$next"'::ping_pong_protocol_binary,\n' >> benches/ping_pong.rs;
+    #########################
+    printf '\t\tping_pong_all::ping_pong_'"$next"'::ping_pong_protocol_crossbeam,\n' >> benches/ping_pong.rs;
     #########################
     printf 'pub mod ping_pong_cancel_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
-    printf '\tping_pong_all::ping_pong_cancel_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
+    printf '\t\tping_pong_all::ping_pong_cancel_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
     #########################
     printf 'pub mod ping_pong_cancel_broadcast_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
-    printf '\tping_pong_all::ping_pong_cancel_broadcast_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
+    printf '\t\tping_pong_all::ping_pong_cancel_broadcast_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
     #########################
     printf 'pub mod ping_pong_baking_cancel_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
-    printf '\tping_pong_all::ping_pong_baking_cancel_'"$next"'::ping_pong,\n' >> benches/ping_pong.rs;
+    printf '\t\tping_pong_all::ping_pong_baking_cancel_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
 done
 
 printf '}' >> benches/ping_pong.rs;
@@ -73,4 +79,5 @@ find benches/ -name *.rser -delete
 
 cargo fmt --all
 
+echo ''
 echo "done"

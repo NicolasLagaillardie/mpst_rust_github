@@ -1,5 +1,4 @@
 from matplotlib.ticker import MaxNLocator
-from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 import json
 import os
@@ -30,17 +29,6 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 name_protocols = ['mesh', 'ring', 'ping']
-
-# Save multiple pages
-
-
-def multipage(filename, figs=None, dpi=200):
-    pp = PdfPages(filename)
-    if figs is None:
-        figs = [plt.figure(n) for n in plt.get_fignums()]
-    for fig in figs:
-        fig.savefig(pp, format='pdf')
-    pp.close()
 
 
 def test(path):
@@ -822,6 +810,9 @@ ax_ring_bench = all_graphs.add_subplot(3, 2, 4)
 # ax_ping_pong_compile = all_graphs.add_subplot(3,2,5)
 ax_ping_pong_bench = all_graphs.add_subplot(3, 2, 6)
 
+# adjust subplot position
+plt.subplots_adjust(hspace=1)
+
 # Set title
 ax_mesh_compile.set_title("Mesh compilation time")
 ax_mesh_bench.set_title("Mesh bench time")
@@ -992,16 +983,24 @@ if len(ping_pong_bench_lists['nb_loops_baking']) > 0:
     ax_ping_pong_bench.plot(ping_pong_bench_lists['nb_loops_baking'], ping_pong_bench_lists['average_baking'], label='AMPST',
                             linestyle='solid', marker='*')
 
-# save the plot
+# Shrink current axis's height by 10% on the bottom
+box = ax_ping_pong_bench.get_position()
+ax_ping_pong_bench.set_position(
+    [box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.9])
+
+# Put a legend below current axis
+ax_ping_pong_bench.legend(loc='upper center', bbox_to_anchor=(
+    0.5, -0.5), fancybox=True, shadow=True, ncol=5)
+
+# create the name for the new figure
 index_graphs = 0
 while os.path.isfile('results/graphs_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
 name_graph = './results/graphs_' + str(index_graphs) + '.pdf'
-name_graph_figure = './results/graphs_figure_' + str(index_graphs) + '.pdf'
 
+# save the figure
 plt.savefig(name_graph)
-all_graphs.savefig(name_graph_figure)
 
 # show the plot
 plt.show()

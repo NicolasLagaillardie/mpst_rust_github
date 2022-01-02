@@ -4,6 +4,10 @@ use criterion::{criterion_group, criterion_main, Criterion};
 
 mod ping_pong_all;
 
+criterion_main! {
+    ping_pong
+}
+
 criterion_group! {
     name = ping_pong;
     config = Criterion::default().significance_level(0.1).sample_size(1000);
@@ -18,8 +22,4 @@ criterion_group! {
         ping_pong_all::ping_pong_cancel_1::ping_pong_protocol_mpst,
         // Cancel_broadcast
         ping_pong_all::ping_pong_cancel_broadcast_1::ping_pong_protocol_mpst,
-}
-
-criterion_main! {
-    ping_pong
 }
