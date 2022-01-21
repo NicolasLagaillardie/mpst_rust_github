@@ -3,7 +3,7 @@ use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
-bundle_impl_with_enum_and_cancel!(MeshedChannels,A,B,C,);
+bundle_impl_with_enum_and_cancel!(MeshedChannels,A,B,C);
 
 type AddAtoB = Recv<i32,End>;
 

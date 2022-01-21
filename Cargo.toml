@@ -204,6 +204,14 @@ required-features = ["baking_checking"]
 name = "basic"
 required-features = ["baking_checking"]
 
+[[example]]
+name = "servo_8257_original"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed"
+required-features = ["baking_checking"]
+
 ################################### Profil
 
 [profile.release]

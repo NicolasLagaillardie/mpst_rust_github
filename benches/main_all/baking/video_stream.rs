@@ -11,7 +11,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C,);
+bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C);
 
 // See the folder scribble_protocols for the related Scribble protocol
 
