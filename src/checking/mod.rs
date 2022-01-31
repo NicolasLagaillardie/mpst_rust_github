@@ -284,7 +284,7 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
         // Write down the stdout of the previous command into
         // a corresponding file in the "outputs" folder
         let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number))?;
-        writeln!(&mut kmc_file, "{}", stdout)?;
+        writeln!(kmc_file, "{}", stdout)?;
         Ok((true, stdout))
     }
 }
@@ -368,11 +368,11 @@ pub fn checker(
         // Write the cfsm into the file
         for elt_cfsm in cfsm_sort.iter() {
             for elt in elt_cfsm.iter() {
-                writeln!(&mut cfsm_file, "{}", elt)?;
+                writeln!(cfsm_file, "{}", elt)?;
             }
 
             // Add a blank line
-            writeln!(&mut cfsm_file)?;
+            writeln!(&cfsm_file)?;
         }
 
         let mut kmc_number = 1;
