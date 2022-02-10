@@ -9,29 +9,29 @@ required to assess the artifact associated with our paper.
 
 (!) For better usability, please use the [online](https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d) version of this document
 
-The artifact (artifact.tar.gz) contains (1) the source code for the mp-anon tool -- a tool for safe message-passing programming in Rust and (2) all required scripts and examples needed to reproduce the results from the
+The artifact (artifact.tar.gz) contains (1) the source code for the MultiCrusty tool -- a tool for safe message-passing programming in Rust and (2) all required scripts and examples needed to reproduce the results from the
 ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims a functional, reusable and available badge.
 
 ## Artifact layout
 
 The artifact (after building the docker image) contains
 
-* The directory `mpst_rust_github` -- a directory containing the source code of the mp-anon tool
-  * `mpst_rust_github/examples` -- contains many examples implemented using mp-anon, including all examples reported in Figure 9 and Table 2 in the paper
+* The directory `mpst_rust_github` -- a directory containing the source code of the MultiCrusty tool
+  * `mpst_rust_github/examples` -- contains many examples implemented using MultiCrusty, including all examples reported in Figure 9 and Table 2 in the paper
   * `mpst_rust_github/scripts` -- the scripts for reproducing the results
   * `mpst_rust_github/benches` -- the examples for Figure 9
 * The directory `scribble-java` that contains the Scribble source code for generating Rust types from
 Scribble protocols
-* The directory `kmc` that contains the external kmc tool used to verify that mp-anon types written in Rust are compatible
+* The directory `kmc` that contains the external kmc tool used to verify that MultiCrusty types written in Rust are compatible
 
 ## Claims about functionality, reusability and availability
 
-1. **Functionality**:  Mp-anon tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
+1. **Functionality**:  MultiCrusty tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
   
-   * Use the mp-anon to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach.
+   * Use the MultiCrusty to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach.
    __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
 
-   * Use the mp-anon to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper.
+   * Use the MultiCrusty to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper.
    __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
 
    * Observe detected errors due to incompatible types, as explained in Section 2 (line 221-225) in the paper.
@@ -39,7 +39,7 @@ Scribble protocols
 
 2. **Functionality**: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
   
-   2.1 claim expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using mp-anon.
+   2.1 claim expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using MultiCrusty.
 
    __Check the claim  by__: Table 2 can be reproduced following the instructions in [Part II: Step 2](#Step2)
   
@@ -49,14 +49,14 @@ Scribble protocols
   
    2.2. claims on run-time performance (line 880-885):
 
-   * mp-anon is faster than the BC implementation when there is a large number of interactions and participants (full-mesh protocol)
+   * MultiCrusty is faster than the BC implementation when there is a large number of interactions and participants (full-mesh protocol)
 
-   * the worst-case scenario for mp-anon is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ring protocol)
+   * the worst-case scenario for MultiCrusty is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ring protocol)
 
    * AMPST has a negligible overhead in comparison to MPST
   
    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduced following the instructions in [Part II: Step 3](#Step3)
-3. **Reusability**: The mp-anon tool can be used to verify your own communication protocols and programs, follow the instructions in [Part III](#PartIII)
+3. **Reusability**: The MultiCrusty tool can be used to verify your own communication protocols and programs, follow the instructions in [Part III](#PartIII)
 4. **Availability**: We agree our artifact to be published under a Creative Commons license on DARTS.
 
 __Note on performance__: the benchmark data in the paper was generated
@@ -109,24 +109,24 @@ See instructions for [MacOS](https://docs.docker.com/desktop/mac/) and [Windows]
 5. You should see at the end of the output after previous operation:
 
    ```bash
-   Loaded image: mpanon:latest
+   Loaded image: multicrusty:latest
    ```
 
 6. Run the docker container:
 
    ```bash
-   docker run -it --rm mpanon:latest
+   docker run -it --rm multicrusty:latest
    ```
 
 __Note__: You may need to run the above command with sudo
 
 1. The Docker image comes with an installation of `vim` and `neovim` for editing.
-  If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `mpanon`.
+  If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `multicrusty`.
 2. Thereafter, we assume that you are in the mpst_rust_github directory of the docker file.
 
 ## Part I: Quick Start
 
-1. Run the tests to make sure mp-anon is installed and configured correctly
+1. Run the tests to make sure MultiCrusty is installed and configured correctly
 
 ```bash
 cargo test --tests --all-features --workspace # Test all tests
@@ -184,7 +184,7 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 3. Edit the program and observe the reported errors
 <a name="Step1.3"></a>
 
-Next, we highlight how concurrency errors are ruled out by mp-anon (i.e., the ultimate practical purpose of mp-anon).
+Next, we highlight how concurrency errors are ruled out by MultiCrusty (i.e., the ultimate practical purpose of MultiCrusty).
 After each modification, compile the program with `cargo run --example=video_stream_generated --features="baking_checking"` and observe the reported error.
 
 * Open the file [video_stream_generated.rs](examples/video_stream_generated.rs) in the `examples/` folder, containing the _VideoStream_ program, with your favourite text editor.
@@ -291,11 +291,11 @@ To open the graphs_0.pdf file, copy the [results/](results/) folder to a local d
 
 For detailed instructions on how to copy a docker folder to a local folder check [here](https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB0383441).
 
-In short, open a terminal, type ```docker ps``` to check the name of the running docker container for mpanon:latest.
+In short, open a terminal, type ```docker ps``` to check the name of the running docker container for multicrusty:latest.
 The command should return the id of the container, let assume it is c4a9485b3222.
 Then given that "Documents/Docker" is a local directory in your system, execute the command:  
 ```
-docker cp c4a9485b3222:"home/mpanon/mpst_rust_github/results" "Documents/Docker"
+docker cp c4a9485b3222:"home/multicrusty/mpst_rust_github/results" "Documents/Docker"
 ```
 The above will copy the results folder from the docker container to your directory Documents/Docker.
 Open the file graphs_0.pdf, it will contain 5 graphs that correspond to the graphs displayed in Figure 9. 
@@ -375,23 +375,23 @@ to retrieve results for only one kind of protocol:
 
 ---
 
-## Part III: A walkthrough tutorial on checking your own protocols with `Mp-anon` <a name="PartIII"></a>
+## Part III: A walkthrough tutorial on checking your own protocols with `MultiCrusty` <a name="PartIII"></a>
 
 You can write your own examples using
 (1) generated types from `Scribble` (top-down approach) or
-(2) your own types written with `Mp-anon` and then check them using the kmc tool (bottom-up approach).
+(2) your own types written with `MultiCrusty` and then check them using the kmc tool (bottom-up approach).
 
 ### 3.1 Top-down: Generating Types from Scribble
 
 In the `top-down` approach, protocols written in the protocol description language `Scribble` are
-used for generating Mp-anon types.
+used for generating MultiCrusty types.
 
 You can use our implementation of a simple recursive protocol that forwards (adds) a number between three participants. The protocol is provided in the `Scribble` repository as a start. The protocol is located
 in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr)
 
 <details>
 <summary>
-Follow the steps to implement a simple *adder* example with Scribble and mp-anon
+Follow the steps to implement a simple *adder* example with Scribble and MultiCrusty
 </summary>
  
 1️⃣ &nbsp; Generate Rust Types from Scribble
@@ -404,12 +404,12 @@ In the above example, we move into the `scribble-java` folder and
 run the `Scribble` API for `Rust` on the `Adder` protocol written with `Scribble`.
 This command outputs the file `adder_generated.rs` at the root of the `scribble-java` directory.
 Then it moves the file `adder_generated.rs` from the `scribble-java` folder to the `examples` subfolder
-of the `mpst_rust_github` folder containing `Mpanon`
+of the `mpst_rust_github` folder containing `multicrusty`
 and auto-format the file with `cargo fmt`.
 
-Now, you can open the `examples/adder_generated.rs` file using your preferred editor program before testing the protocol directly with `Mpanon`.
+Now, you can open the `examples/adder_generated.rs` file using your preferred editor program before testing the protocol directly with `multicrusty`.
  
-➡️ &nbsp; From this point, we assume that you will remain in the `Mpanon` repository (the mpst_rust_github folder).
+➡️ &nbsp; From this point, we assume that you will remain in the `multicrusty` repository (the mpst_rust_github folder).
 
 <!-- Optional: You can check that the generated types are the same as the one provided in
 the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
@@ -426,7 +426,7 @@ This command contains four parts:
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
 3. `--example="adder_generated` for running the specific *example* `adder_generated`
-4. `--features=baking` for compiling only specific parts of `Mpanon` used for the example.
+4. `--features=baking` for compiling only specific parts of `multicrusty` used for the example.
 
 You will have an error and several warnings when running the previous command.
 This is because the `Scribble` API only generates `Rust` types
@@ -552,9 +552,9 @@ cargo run --example="adder_generated" --features=baking
 
  <!--
 The `KMC` tool checks that a given system of communicating automata is *correct*, i.e., all messages that are sent are received, and no automaton gets permanently stuck in a receiving state.
-We are not going to introduce how to use it but how `Mpanon` takes advantage of its *interactive* mode to check protocols. -->
+We are not going to introduce how to use it but how `multicrusty` takes advantage of its *interactive* mode to check protocols. -->
 
-`Mpanon` uses the macro `checker_concat!` on the types
+`multicrusty` uses the macro `checker_concat!` on the types
 to rewrite Rust types to communicating finite state machines (CFSM) that the `KMC`checks.
 
 This macro also returns the CFSM (visual) representation for each type using the **dot** format.
@@ -566,7 +566,7 @@ This macro returns two elements within a tuple:
 2. the minimal **k** checked by the protocol
 
 Our theory only supports protocols that have a bound of **k=1**,
-but protocols with higher levels can still be implemented using `Mpanon`. -->
+but protocols with higher levels can still be implemented using `multicrusty`. -->
 
 Now, that you have a better idea of the interactions between those
 two tools, we will check the types in the `adder_generated` example are correct
@@ -635,8 +635,8 @@ the `Rust` code is available in the `adder.rs` file
 located in the `examples/` folder.
 
 ___Optional__: If you want more practice writing types and programs
-using mp-anon, and kmc, check the additional examples section at the end of the document:
-[A simple example with mp-anon and kmc in the Additional Information section](#example-kmc)
+using MultiCrusty, and kmc, check the additional examples section at the end of the document:
+[A simple example with MultiCrusty and kmc in the Additional Information section](#example-kmc)
 
 </details>
 
@@ -661,9 +661,9 @@ for more information. -->
 
 <details>
 <summary>
-Generating documentation for mp-anon
+Generating documentation for MultiCrusty
 </summary>
-The documentation of `mpanon` can be generated
+The documentation of `multicrusty` can be generated
 with the command `cargo doc --all-features`.
 The generated documentation will be accessible in the file
 [target/doc/mpstthree/index.html](target/doc/mpstthree/index.html).
@@ -675,10 +675,10 @@ The source code is included in the root directory.
 <summary> Rust commands on build, test, compile </summary>
 
 Here is a general description of all commands you can run to check, build and test.
-<!-- test `Mpanon` with the following commands: -->
+<!-- test `multicrusty` with the following commands: -->
 
 ```bash
-cd mpst_rust_github # Move to mpanon's repository
+cd mpst_rust_github # Move to multicrusty's repository
 cargo check --all-features --lib --workspace # Check only this package's library
 cargo check --all-features --bins --workspace # Check all binaries
 cargo check --all-features --examples --workspace # Check all examples
@@ -716,12 +716,12 @@ cd  mpst_rust_github/
 
 <details>
 <summary>
-A simple example with mp-anon and kmc <a href="example-kmc"></a>
+A simple example with MultiCrusty and kmc <a href="example-kmc"></a>
 </summary>
 
 __Need help?__: This example is implemented in `examples/basic.rs`, hence you can use the file as a reference implementation.
 
-1️⃣ &nbsp; First, import the necessary macros from the `Mpanon` library:
+1️⃣ &nbsp; First, import the necessary macros from the `multicrusty` library:
 
 ```rust
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
