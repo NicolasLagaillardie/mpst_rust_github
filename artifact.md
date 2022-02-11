@@ -10,7 +10,7 @@ required to assess the artifact associated with our paper.
 (!) For better usability, please use the [online](https://gist.github.com/ecoopartifact22/0dd3c058f5599a5e80ed52cb9757e78d) version of this document
 
 The artifact (artifact.tar.gz) contains (1) the source code for the MultiCrusty tool -- a tool for safe message-passing programming in Rust and (2) all required scripts and examples needed to reproduce the results from the
-ECOOP submission #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims a functional, reusable and available badge.
+ECOOP article #12: ***Stay Safe under Panic: Affine Rust Programming with Multiparty Session Types (MPST)***. The artifact is submitted as a docker image. The artifact claims a functional, reusable and available badge.
 
 ## Artifact layout
 
@@ -118,7 +118,7 @@ See instructions for [MacOS](https://docs.docker.com/desktop/mac/) and [Windows]
    docker run -it --rm multicrusty:latest
    ```
 
-__Note__: You may need to run the above command with sudo
+__Note__: You may need to run the above command with `sudo`.
 
 1. The Docker image comes with an installation of `vim` and `neovim` for editing.
   If you wish to install additional software for editing or other purposes, you may obtain sudo access with the password `multicrusty`.

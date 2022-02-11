@@ -368,11 +368,11 @@ pub fn checker(
         // Write the cfsm into the file
         for elt_cfsm in cfsm_sort.iter() {
             for elt in elt_cfsm.iter() {
-                writeln!(&mut cfsm_file, "{}", elt)?;
+                writeln!(cfsm_file, "{}", elt)?;
             }
 
             // Add a blank line
-            writeln!(&mut cfsm_file)?;
+            writeln!(cfsm_file)?;
         }
 
         let mut kmc_number = 1;
