@@ -372,7 +372,7 @@ pub fn checker(
             }
 
             // Add a blank line
-            writeln!(&cfsm_file)?;
+            writeln!(cfsm_file)?;
         }
 
         let mut kmc_number = 1;
