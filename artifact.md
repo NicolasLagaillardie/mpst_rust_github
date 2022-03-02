@@ -911,3 +911,13 @@ cargo run --example=my_basic --features=baking_checking
 ```
 
 </details>
+
+## Acknowledgements
+
+The authors wish to thank Martin vassor for their comments and testing the artifact,
+and the anonymous reviewers for their comments and suggestions.
+
+## Funding
+
+Funding The work is partially supported by VeTSS, EPSRC EP/K011715/1, EP/K034413/1,
+EP/L00058X/1, EP/N027833/1, EP/N028201/1, EP/T006544/1 and EP/T014709/1.
