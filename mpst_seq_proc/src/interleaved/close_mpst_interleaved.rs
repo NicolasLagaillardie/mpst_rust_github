@@ -54,7 +54,7 @@ impl CloseMpstInterleaved {
                 let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
 
                 quote! {
-                    #temp_name : mpstthree::role::Role ,
+                    #temp_name : mpstthree::name::Name ,
                 }
             })
             .collect();

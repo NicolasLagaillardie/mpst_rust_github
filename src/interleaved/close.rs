@@ -8,20 +8,20 @@ use crate::binary::struct_trait::end::End;
 use crate::binary::struct_trait::end::Signal;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::end::RoleEnd;
-use crate::role::Role;
+use crate::name::Name;
 
 use std::error::Error;
 
 #[doc(hidden)]
-pub fn close_mpst_interleaved<R1, R2, R3>(
-    s_1: MeshedChannels<End, End, RoleEnd, R1>,
-    s_2: MeshedChannels<End, End, RoleEnd, R2>,
-    s_3: MeshedChannels<End, End, RoleEnd, R3>,
+pub fn close_mpst_interleaved<N1, N2, N3>(
+    s_1: MeshedChannels<End, End, RoleEnd, N1>,
+    s_2: MeshedChannels<End, End, RoleEnd, N2>,
+    s_3: MeshedChannels<End, End, RoleEnd, N3>,
 ) -> Result<(), Box<dyn Error>>
 where
-    R1: Role,
-    R2: Role,
-    R3: Role,
+    N1: Name,
+    N2: Name,
+    N3: Name,
 {
     s_1.session1.sender.send(Signal::Stop).unwrap_or(());
     s_1.session2.sender.send(Signal::Stop).unwrap_or(());

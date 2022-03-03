@@ -5,16 +5,13 @@ use crate::binary::send::send;
 use crate::binary::struct_trait::session::Session;
 use crate::functionmpst::ChooseMpst;
 use crate::meshedchannels::MeshedChannels;
-use crate::role::a::RoleA;
-use crate::role::a_dual::RoleADual;
+use crate::name::a::NameA;
+use crate::name::b::NameB;
+use crate::name::c::NameC;
+use crate::name::Name;
 use crate::role::a_to_all::RoleAtoAll;
-use crate::role::b::RoleB;
-use crate::role::b_dual::RoleBDual;
 use crate::role::b_to_all::RoleBtoAll;
-use crate::role::c::RoleC;
-use crate::role::c_dual::RoleCDual;
 use crate::role::c_to_all::RoleCtoAll;
-use crate::role::end::RoleEnd;
 use crate::role::Role;
 use either::Either;
 
@@ -23,13 +20,13 @@ type ShortChooseMpstTwo<S0, S1, S3, S5, R0, R1, N0> =
     ChooseMpst<S3, <S0 as Session>::Dual, S5, <S1 as Session>::Dual, R0, R1, N0>;
 
 type ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = MeshedChannels<
-    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleBDual<RoleEnd>>,
-    ShortChooseMpstTwo<S0, S1, S3, S5, R2, R3, RoleCDual<RoleEnd>>,
+    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, NameB>,
+    ShortChooseMpstTwo<S0, S1, S3, S5, R2, R3, NameC>,
     RoleAtoAll<R4, R5>,
-    RoleA<RoleEnd>,
+    NameA,
 >;
 type ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = MeshedChannels<
-    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, RoleADual<RoleEnd>>,
+    ShortChooseMpstOne<S0, S1, S2, S4, R0, R1, NameA>,
     ShortChooseMpstTwo<
         <S3 as Session>::Dual,
         <S5 as Session>::Dual,
@@ -37,13 +34,13 @@ type ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> =
         <S1 as Session>::Dual,
         R2,
         R3,
-        RoleCDual<RoleEnd>,
+        NameC,
     >,
     RoleBtoAll<R4, R5>,
-    RoleB<RoleEnd>,
+    NameB,
 >;
 type ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> = MeshedChannels<
-    ShortChooseMpstOne<S2, S4, S0, S1, R0, R1, RoleADual<RoleEnd>>,
+    ShortChooseMpstOne<S2, S4, S0, S1, R0, R1, NameA>,
     ShortChooseMpstTwo<
         <S3 as Session>::Dual,
         <S5 as Session>::Dual,
@@ -51,10 +48,10 @@ type ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5> =
         <S1 as Session>::Dual,
         R2,
         R3,
-        RoleBDual<RoleEnd>,
+        NameB,
     >,
     RoleCtoAll<R4, R5>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 
 #[doc(hidden)]
@@ -79,9 +76,9 @@ macro_rules! choose_mpst_a {
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) = <$receiver_1 as Name>::Dual::new();
+        let (name_2, _) = <$receiver_2 as Name>::Dual::new();
+        let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {
             session1: session_2_1,
@@ -140,9 +137,9 @@ macro_rules! choose_mpst_b {
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) = <$receiver_1 as Name>::Dual::new();
+        let (name_2, _) = <$receiver_2 as Name>::Dual::new();
+        let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {
             session1: session_1_2,
@@ -201,9 +198,9 @@ macro_rules! choose_mpst_c {
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::Dual::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::Dual::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) = <$receiver_1 as Name>::Dual::new();
+        let (name_2, _) = <$receiver_2 as Name>::Dual::new();
+        let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {
             session1: session_1_2,
@@ -272,7 +269,7 @@ macro_rules! choose_mpst_c {
 /// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> MeshedChannels<S2, S3, R4, RoleA<RoleEnd>>
+) -> MeshedChannels<S2, S3, R4, NameA>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -287,19 +284,7 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    choose_mpst_a!(
-        S2,
-        S3,
-        S0,
-        R0,
-        R2,
-        R4,
-        RoleBDual,
-        RoleCDual,
-        RoleA,
-        s,
-        Either::Left
-    )
+    choose_mpst_a!(S2, S3, S0, R0, R2, R4, NameB, NameC, NameA, s, Either::Left)
 }
 
 /// Given a choice from A, to other processes, between two
@@ -334,7 +319,7 @@ where
 /// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_a_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsAtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> MeshedChannels<S4, S5, R5, RoleA<RoleEnd>>
+) -> MeshedChannels<S4, S5, R5, NameA>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -357,9 +342,9 @@ where
         R1,
         R3,
         R5,
-        RoleBDual,
-        RoleCDual,
-        RoleA,
+        NameB,
+        NameC,
+        NameA,
         s,
         Either::Right
     )
@@ -397,7 +382,7 @@ where
 /// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> MeshedChannels<S2, S3, R4, RoleB<RoleEnd>>
+) -> MeshedChannels<S2, S3, R4, NameB>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -412,19 +397,7 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    choose_mpst_b!(
-        S2,
-        S0,
-        S3,
-        R0,
-        R2,
-        R4,
-        RoleADual,
-        RoleCDual,
-        RoleB,
-        s,
-        Either::Left
-    )
+    choose_mpst_b!(S2, S0, S3, R0, R2, R4, NameA, NameC, NameB, s, Either::Left)
 }
 
 /// Given a choice from B, to other processes, between two
@@ -459,7 +432,7 @@ where
 /// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_b_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsBtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> MeshedChannels<S4, S5, R5, RoleB<RoleEnd>>
+) -> MeshedChannels<S4, S5, R5, NameB>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -481,9 +454,9 @@ where
         R1,
         R3,
         R5,
-        RoleADual,
-        RoleCDual,
-        RoleB,
+        NameA,
+        NameC,
+        NameB,
         s,
         Either::Right
     )
@@ -521,7 +494,7 @@ where
 /// [`Role`]: crate::role::Role
 pub fn choose_left_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> MeshedChannels<S2, S3, R4, RoleC<RoleEnd>>
+) -> MeshedChannels<S2, S3, R4, NameC>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -536,19 +509,7 @@ where
     R4: Role + 'a,
     R5: Role + 'a,
 {
-    choose_mpst_c!(
-        S0,
-        S2,
-        S3,
-        R0,
-        R2,
-        R4,
-        RoleADual,
-        RoleBDual,
-        RoleC,
-        s,
-        Either::Left
-    )
+    choose_mpst_c!(S0, S2, S3, R0, R2, R4, NameA, NameB, NameC, s, Either::Left)
 }
 
 /// Given a choice from C, to other processes, between two
@@ -583,7 +544,7 @@ where
 /// [`Role`]: crate::role::Role
 pub fn choose_right_mpst_session_c_to_all<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
     s: ShortMeshedChannelsCtoAll<S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>,
-) -> MeshedChannels<S4, S5, R5, RoleC<RoleEnd>>
+) -> MeshedChannels<S4, S5, R5, NameC>
 where
     S0: Session + 'a,
     S1: Session + 'a,
@@ -605,9 +566,9 @@ where
         R1,
         R3,
         R5,
-        RoleADual,
-        RoleBDual,
-        RoleC,
+        NameA,
+        NameB,
+        NameC,
         s,
         Either::Right
     )

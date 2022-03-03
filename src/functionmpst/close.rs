@@ -3,8 +3,8 @@
 use crate::binary::struct_trait::end::End;
 use crate::binary::struct_trait::end::Signal;
 use crate::meshedchannels::MeshedChannels;
+use crate::name::Name;
 use crate::role::end::RoleEnd;
-use crate::role::Role;
 use std::error::Error;
 
 /// Closes a [`MeshedChannels`].
@@ -56,9 +56,9 @@ use std::error::Error;
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
-pub fn close_mpst<R>(s: MeshedChannels<End, End, RoleEnd, R>) -> Result<(), Box<dyn Error>>
+pub fn close_mpst<N>(s: MeshedChannels<End, End, RoleEnd, N>) -> Result<(), Box<dyn Error>>
 where
-    R: Role,
+    N: Name,
 {
     s.session1.sender.send(Signal::Stop).unwrap_or(());
     s.session2.sender.send(Signal::Stop).unwrap_or(());

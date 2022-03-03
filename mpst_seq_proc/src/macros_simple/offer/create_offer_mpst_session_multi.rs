@@ -103,9 +103,7 @@ impl OfferMPSTSessionMulti {
                             )*
                             R1,
                             R2,
-                            #name<
-                                mpstthree::role::end::RoleEnd
-                            >
+                            #name
                         >,
                     }
                 }
@@ -175,7 +173,7 @@ impl OfferMPSTSessionMulti {
                         #new_types
                     )*
                     #role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
                 f: F,
                 g: G,
@@ -192,7 +190,7 @@ impl OfferMPSTSessionMulti {
                             #sessions_left
                         )*
                         R1,
-                        #name<mpstthree::role::end::RoleEnd>,
+                        #name,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
@@ -201,7 +199,7 @@ impl OfferMPSTSessionMulti {
                             #sessions_right
                         )*
                         R2,
-                        #name<mpstthree::role::end::RoleEnd>,
+                        #name,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {

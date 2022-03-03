@@ -11,8 +11,9 @@ use std::marker;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    choose_mpst_to_all, create_multiple_normal_role, create_recv_mpst_session_1,
-    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2, offer_mpst,
+    choose_mpst_to_all, create_multiple_normal_name, create_multiple_normal_role,
+    create_recv_mpst_session_1, create_recv_mpst_session_2, create_send_mpst_session_1,
+    create_send_mpst_session_2, offer_mpst,
 };
 
 // Create new roles
@@ -22,19 +23,26 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
+// Create new roles
+create_multiple_normal_name!(
+    NameA,
+    NameB,
+    NameC
+);
+
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);
-create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, RoleA);
-create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, RoleC);
-create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, RoleB);
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
+create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, NameC);
+create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, NameA);
+create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, NameC);
+create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, NameB);
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, NameA);
 
 // Create new recv functions and related types
-create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, RoleC);
-create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
-create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
-create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
-create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
+create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, NameC);
+create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, NameA);
+create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, NameB);
+create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, NameB);
+create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, NameA);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;
@@ -48,12 +56,12 @@ type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
 enum Branches0AtoC<N: marker::Send> {
-    End(MeshedChannels<End, End, RoleEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<End, End, RoleEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>),
 }
 enum Branches0BtoC<N: marker::Send> {
-    End(MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>>),
-    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<End, End, RoleEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, NameB>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoC<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
@@ -73,15 +81,15 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 // For C
 
 type EndpointCRecurs<N> =
-    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
+    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, NameC>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, NameC>;
 
 // For A
-type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
-type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
+type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, NameA>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 
 // For B
-type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, NameB>;
 
 // Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -142,7 +150,7 @@ fn client_recurs(
                 Branches0BtoC::Video, =>
                 RoleA,
                 RoleB, =>
-                RoleC
+                NameC
             );
 
             let s = send_mpst_c_to_a(1, s);
@@ -157,7 +165,7 @@ fn client_recurs(
                 Branches0BtoC::End, =>
                 RoleA,
                 RoleB, =>
-                RoleC
+                NameC
             );
 
             assert_eq!(index, 100);

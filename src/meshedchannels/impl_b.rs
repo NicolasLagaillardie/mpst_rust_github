@@ -7,10 +7,13 @@ use crate::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Ses
 use crate::functionmpst::close::close_mpst;
 use crate::functionmpst::OfferMpst;
 use crate::meshedchannels::MeshedChannels;
+use crate::name::a::NameA;
+use crate::name::b::NameB;
+use crate::name::c::NameC;
+use crate::name::Name;
 use crate::role::a::RoleA;
 use crate::role::all_to_a::RoleAlltoA;
 use crate::role::all_to_c::RoleAlltoC;
-use crate::role::b::RoleB;
 use crate::role::b_to_all::RoleBtoAll;
 use crate::role::c::RoleC;
 use crate::role::end::RoleEnd;
@@ -21,11 +24,11 @@ use either::Either;
 use std::error::Error;
 use std::marker;
 
-type ReturnType<S1, S2, R> = MeshedChannels<S1, S2, R, RoleB<RoleEnd>>;
+type ReturnType<S1, S2, R> = MeshedChannels<S1, S2, R, NameB>;
 type ResultType<T, S1, S2, R> = Result<(T, ReturnType<S1, S2, R>), Box<dyn Error>>;
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    MeshedChannels<Send<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>
+    MeshedChannels<Send<T, S1>, S2, RoleA<R>, NameB>
 {
     /// Send a payload of type T to role A
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
@@ -34,7 +37,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleB<RoleEnd>>
+    MeshedChannels<S1, Send<T, S2>, RoleC<R>, NameB>
 {
     /// Send a payload of type T to role C
     pub fn send(self, payload: T) -> ReturnType<S1, S2, R> {
@@ -43,7 +46,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>
+    MeshedChannels<Recv<T, S1>, S2, RoleA<R>, NameB>
 {
     /// Receive a payload from role A
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
@@ -52,7 +55,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, R: Role, T: marker::Send>
-    MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>
+    MeshedChannels<S1, Recv<T, S2>, RoleC<R>, NameB>
 {
     /// Receive a payload from role C
     pub fn recv(self) -> ResultType<T, S1, S2, R> {
@@ -61,7 +64,7 @@ impl<S1: Session, S2: Session, R: Role, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, T: marker::Send>
-    MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>
+    MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, NameB>
 {
     #[doc(hidden)]
     pub fn recv_from_all(self) -> ResultType<T, S1, S2, RoleEnd> {
@@ -70,7 +73,7 @@ impl<S1: Session, S2: Session, T: marker::Send>
 }
 
 impl<S1: Session, S2: Session, T: marker::Send>
-    MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>
+    MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, NameB>
 {
     #[doc(hidden)]
     pub fn recv_from_all(self) -> ResultType<T, S1, S2, RoleEnd> {
@@ -80,18 +83,18 @@ impl<S1: Session, S2: Session, T: marker::Send>
 
 impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
     MeshedChannels<
-        OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>>,
+        OfferMpst<S1, S2, S3, S4, R1, R2, NameB>,
         End,
         RoleAlltoA<RoleEnd, RoleEnd>,
-        RoleB<RoleEnd>,
+        NameB,
     >
 {
     /// Receive a binary choice from role A.
     /// Be careful: the left and right stacks must be the same.
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
-        F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-        G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        F: FnOnce(MeshedChannels<S1, S2, R1, NameB>) -> Result<U, Box<dyn Error + 'a>>,
+        G: FnOnce(MeshedChannels<S3, S4, R2, NameB>) -> Result<U, Box<dyn Error + 'a>>,
     {
         let (e, s) = self.recv_from_all()?;
         cancel(s);
@@ -102,17 +105,17 @@ impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
 impl<'a, S1: Session, S2: Session, S3: Session, S4: Session, R1: Role, R2: Role>
     MeshedChannels<
         End,
-        OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>>,
+        OfferMpst<S1, S2, S3, S4, R1, R2, NameB>,
         RoleAlltoC<RoleEnd, RoleEnd>,
-        RoleB<RoleEnd>,
+        NameB,
     >
 {
     /// Receive a binary choice from role C.
     /// Be careful: the left and right stacks must be the same.
     pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn Error + 'a>>
     where
-        F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-        G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+        F: FnOnce(MeshedChannels<S1, S2, R1, NameB>) -> Result<U, Box<dyn Error + 'a>>,
+        G: FnOnce(MeshedChannels<S3, S4, R2, NameB>) -> Result<U, Box<dyn Error + 'a>>,
     {
         let (e, s) = self.recv_from_all()?;
         cancel(s);
@@ -142,9 +145,9 @@ macro_rules! choose_aux {
         let (stack_1, _) = <$stack_1 as Role>::new();
         let (stack_2, _) = <$stack_2 as Role>::new();
         let (stack_3, _) = <$stack_3 as Role>::new();
-        let (name_1, _) = <$receiver_1<RoleEnd> as Role>::new();
-        let (name_2, _) = <$receiver_2<RoleEnd> as Role>::new();
-        let (name_3, _) = $sender::<RoleEnd>::new();
+        let (name_1, _) = <$receiver_1 as Name>::new();
+        let (name_2, _) = <$receiver_2 as Name>::new();
+        let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {
             session1: session_1_2,
@@ -198,26 +201,20 @@ impl<
     MeshedChannels<
         Send<
             Either<
-                MeshedChannels<S2, <S0 as Session>::Dual, R0, RoleA<RoleEnd>>,
-                MeshedChannels<S4, <S1 as Session>::Dual, R1, RoleA<RoleEnd>>,
+                MeshedChannels<S2, <S0 as Session>::Dual, R0, NameA>,
+                MeshedChannels<S4, <S1 as Session>::Dual, R1, NameA>,
             >,
             End,
         >,
-        Send<
-            Either<
-                MeshedChannels<S0, S3, R2, RoleC<RoleEnd>>,
-                MeshedChannels<S1, S5, R3, RoleC<RoleEnd>>,
-            >,
-            End,
-        >,
+        Send<Either<MeshedChannels<S0, S3, R2, NameC>, MeshedChannels<S1, S5, R3, NameC>>, End>,
         RoleBtoAll<R4, R5>,
-        RoleB<RoleEnd>,
+        NameB,
     >
 {
     /// Choose the right branch of a binary choice and send it to A and C
     pub fn choose_left(
         self,
-    ) -> MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, R4, RoleB<RoleEnd>> {
+    ) -> MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, R4, NameB> {
         choose_aux!(
             S2,
             S0,
@@ -225,9 +222,9 @@ impl<
             R0,
             R2,
             R4,
-            RoleA,
-            RoleC,
-            RoleB,
+            NameA,
+            NameC,
+            NameB,
             self,
             Either::Left
         )
@@ -236,7 +233,7 @@ impl<
     /// Choose the left branch of a binary choice and send it to A and C
     pub fn choose_right(
         self,
-    ) -> MeshedChannels<<S4 as Session>::Dual, <S5 as Session>::Dual, R5, RoleB<RoleEnd>> {
+    ) -> MeshedChannels<<S4 as Session>::Dual, <S5 as Session>::Dual, R5, NameB> {
         choose_aux!(
             S4,
             S1,
@@ -244,16 +241,16 @@ impl<
             R1,
             R3,
             R5,
-            RoleA,
-            RoleC,
-            RoleB,
+            NameA,
+            NameC,
+            NameB,
             self,
             Either::Right
         )
     }
 }
 
-impl MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>> {
+impl MeshedChannels<End, End, RoleEnd, NameB> {
     /// Close the current connection
     pub fn close(self) -> Result<(), Box<dyn Error>> {
         close_mpst(self)

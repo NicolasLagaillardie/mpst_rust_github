@@ -241,11 +241,12 @@ rand = "0.8"
 ################################### Features
 
 [features]
-default = ["binary", "role", "meshedchannels", "functionmpst"]
+default = ["binary", "role", "name", "meshedchannels", "functionmpst"]
 binary = []
 functionmpst = []
 meshedchannels = []
 role = []
+name = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
 # For interleaved sessions

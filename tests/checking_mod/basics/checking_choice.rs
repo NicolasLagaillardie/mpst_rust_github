@@ -5,13 +5,15 @@ use mpstthree::role::Role;
 use mpstthree::checker_concat;
 
 use mpstthree::role::a::RoleA;
-use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::b_to_all::RoleBtoAll;
 use mpstthree::role::c::RoleC;
-use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
@@ -62,7 +64,7 @@ type ChooseBtoC<N> = ChooseMpst<
     BtoCClose,
     StackCVideoDual,
     StackCEnd,
-    RoleCDual<RoleEnd>,
+    NameC,
 >;
 type ChooseBtoA<N> = ChooseMpst<
     BtoAClose,
@@ -71,10 +73,10 @@ type ChooseBtoA<N> = ChooseMpst<
     CtoAClose,
     StackAVideoDual,
     StackAEnd,
-    RoleADual<RoleEnd>,
+    NameA,
 >;
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
-type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, NameB>;
 
 // For A
 type OfferC<N> = OfferMpst<
@@ -84,10 +86,10 @@ type OfferC<N> = OfferMpst<
     CtoBClose,
     StackCVideo,
     StackCEnd,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
-type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, NameC>;
 
 // For B
 type OfferA<N> = OfferMpst<
@@ -97,9 +99,9 @@ type OfferA<N> = OfferMpst<
     AtoCClose,
     StackAVideo,
     StackAEnd,
-    RoleA<RoleEnd>,
+    NameA,
 >;
-type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, NameA>;
 
 /////////////////////////////////////////
 

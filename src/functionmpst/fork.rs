@@ -8,6 +8,7 @@ use std::thread::{Builder, JoinHandle};
 
 use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
+use crate::name::Name;
 use crate::role::Role;
 
 #[doc(hidden)]
@@ -17,7 +18,7 @@ where
     S1: Session + 'static,
     S2: Session + 'static,
     R: Role + 'static,
-    N: Role + 'static,
+    N: Name + 'static,
     P: FnOnce(MeshedChannels<S1, S2, R, N>) -> Result<(), Box<dyn Error>> + marker::Send + 'static,
 {
     Builder::new()
@@ -124,9 +125,9 @@ where
     R0: Role + 'static,
     R1: Role + 'static,
     R2: Role + 'static,
-    N0: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
+    N0: Name + 'static,
+    N1: Name + 'static,
+    N2: Name + 'static,
     F0: FnOnce(MeshedChannels<S0, S1, R0, N0>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,

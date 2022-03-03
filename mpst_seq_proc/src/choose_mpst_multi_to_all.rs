@@ -172,7 +172,7 @@ impl ChooseMultiToAll {
                 };
                 quote! {
                     let ( #temp_name , _) =
-                        <#temp_role::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        <#temp_role as mpstthree::name::Name>::new();
                 }
             })
             .collect();
@@ -266,7 +266,7 @@ impl ChooseMultiToAll {
                 )*
 
                 let ( #new_name_sender , _) =
-                    <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    <#sender as mpstthree::name::Name>::new();
 
                 let s = #session;
 

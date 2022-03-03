@@ -2,6 +2,9 @@
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
 use crate::meshedchannels::MeshedChannels;
+use crate::name::a::NameA;
+use crate::name::b::NameB;
+use crate::name::c::NameC;
 use crate::role::a::RoleA;
 use crate::role::all_to_a::RoleAlltoA;
 use crate::role::all_to_b::RoleAlltoB;
@@ -46,6 +49,8 @@ macro_rules! recv_all_aux_simple {
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
+/// use crate::name::a::NameA;
+/// use crate::name::b::NameB;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 /// use mpstthree::functionmpst::send::send_mpst_b_to_a;
@@ -56,10 +61,6 @@ macro_rules! recv_all_aux_simple {
 /// // Stack
 /// type StackA = RoleB<RoleEnd>;
 /// type StackB = RoleA<RoleEnd>;
-///
-/// // Name
-/// type NameA = RoleA<RoleEnd>;
-/// type NameB = RoleB<RoleEnd>;
 ///
 /// // From this point...
 ///
@@ -93,8 +94,8 @@ macro_rules! recv_all_aux_simple {
 /// let _ = recv_mpst_a_from_b(sess_a).unwrap();
 /// ```
 pub fn recv_mpst_a_from_b<T, S1, S2, R>(
-    s: MeshedChannels<Recv<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
+    s: MeshedChannels<Recv<T, S1>, S2, RoleB<R>, NameA>,
+) -> ResultBoxError<T, S1, S2, R, NameA>
 where
     T: marker::Send,
     S1: Session,
@@ -166,8 +167,8 @@ where
 /// let _ = recv_mpst_b_from_a(sess_b).unwrap();
 /// ```
 pub fn recv_mpst_b_from_a<T, S1, S2, R>(
-    s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
+    s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, NameB>,
+) -> ResultBoxError<T, S1, S2, R, NameB>
 where
     T: marker::Send,
     S1: Session,
@@ -239,8 +240,8 @@ where
 /// let _ = recv_mpst_c_from_a(sess_c).unwrap();
 /// ```
 pub fn recv_mpst_c_from_a<T, S1, S2, R>(
-    s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
+    s: MeshedChannels<Recv<T, S1>, S2, RoleA<R>, NameC>,
+) -> ResultBoxError<T, S1, S2, R, NameC>
 where
     T: marker::Send,
     S1: Session,
@@ -312,8 +313,8 @@ where
 /// let _ = recv_mpst_a_from_c(sess_a).unwrap();
 /// ```
 pub fn recv_mpst_a_from_c<T, S1, S2, R>(
-    s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleA<RoleEnd>>
+    s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, NameA>,
+) -> ResultBoxError<T, S1, S2, R, NameA>
 where
     T: marker::Send,
     S1: Session,
@@ -385,8 +386,8 @@ where
 /// let _ = recv_mpst_b_from_c(sess_b).unwrap();
 /// ```
 pub fn recv_mpst_b_from_c<T, S1, S2, R>(
-    s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleB<RoleEnd>>
+    s: MeshedChannels<S1, Recv<T, S2>, RoleC<R>, NameB>,
+) -> ResultBoxError<T, S1, S2, R, NameB>
 where
     T: marker::Send,
     S1: Session,
@@ -458,8 +459,8 @@ where
 /// let _ = recv_mpst_c_from_b(sess_c).unwrap();
 /// ```
 pub fn recv_mpst_c_from_b<T, S1, S2, R>(
-    s: MeshedChannels<S1, Recv<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, R, RoleC<RoleEnd>>
+    s: MeshedChannels<S1, Recv<T, S2>, RoleB<R>, NameC>,
+) -> ResultBoxError<T, S1, S2, R, NameC>
 where
     T: marker::Send,
     S1: Session,
@@ -477,8 +478,8 @@ where
 // offer_mpst_session_to_a_from_b).
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_b<T, S1, S2>(
-    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
+    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoB<RoleEnd, RoleEnd>, NameA>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, NameA>
 where
     T: marker::Send,
     S1: Session,
@@ -495,8 +496,8 @@ where
 // offer_mpst_session_to_a_from_c).
 #[doc(hidden)]
 pub fn recv_mpst_a_all_from_c<T, S1, S2>(
-    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleA<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, RoleEnd, RoleA<RoleEnd>>
+    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, NameA>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, NameA>
 where
     T: marker::Send,
     S1: Session,
@@ -513,8 +514,8 @@ where
 // offer_mpst_session_to_b_from_a).
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_a<T, S1, S2>(
-    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
+    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, NameB>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, NameB>
 where
     T: marker::Send,
     S1: Session,
@@ -531,8 +532,8 @@ where
 // offer_mpst_session_to_b_from_c).
 #[doc(hidden)]
 pub fn recv_mpst_b_all_from_c<T, S1, S2>(
-    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, RoleB<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, RoleEnd, RoleB<RoleEnd>>
+    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoC<RoleEnd, RoleEnd>, NameB>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, NameB>
 where
     T: marker::Send,
     S1: Session,
@@ -549,8 +550,8 @@ where
 // offer_mpst_session_to_c_from_a).
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_a<T, S1, S2>(
-    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
+    s: MeshedChannels<Recv<T, S1>, S2, RoleAlltoA<RoleEnd, RoleEnd>, NameC>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, NameC>
 where
     T: marker::Send,
     S1: Session,
@@ -567,8 +568,8 @@ where
 // offer_mpst_session_to_c_from_b).
 #[doc(hidden)]
 pub fn recv_mpst_c_all_from_b<T, S1, S2>(
-    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, RoleC<RoleEnd>>,
-) -> ResultBoxError<T, S1, S2, RoleEnd, RoleC<RoleEnd>>
+    s: MeshedChannels<S1, Recv<T, S2>, RoleAlltoB<RoleEnd, RoleEnd>, NameC>,
+) -> ResultBoxError<T, S1, S2, RoleEnd, NameC>
 where
     T: marker::Send,
     S1: Session,

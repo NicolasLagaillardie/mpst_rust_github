@@ -22,9 +22,9 @@ use crossbeam_channel::{bounded, Sender};
 /// use mpstthree::role::end::RoleEnd;
 /// use mpstthree::role::Role; // Only used for example
 ///
-/// type NameC = RoleC<RoleEnd>;
+/// type StackC = RoleC<RoleEnd>;
 ///
-/// let _ = NameC::new(); // Only used for example
+/// let _ = StackC::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleC<R>

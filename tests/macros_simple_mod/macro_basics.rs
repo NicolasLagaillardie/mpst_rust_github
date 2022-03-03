@@ -5,8 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    create_multiple_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
-    create_send_mpst_session_1, create_send_mpst_session_2,
+    create_multiple_normal_name, create_multiple_normal_role, create_recv_mpst_session_1,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
 };
 use std::error::Error;
 
@@ -17,28 +17,27 @@ create_multiple_normal_role!(
     RoleD, RoleDDual |
 );
 
-type TestA = RoleA<RoleEnd>;
-type TestB = RoleB<RoleEnd>;
-type TestD = RoleD<RoleEnd>;
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameD,);
 
-type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
+type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, NameA, NameD>;
 
-type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
+type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, NameD, NameA>;
 
-type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
+type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, NameA, NameD>;
 
-type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
+type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, NameD, NameA>;
 
 // Create an B dummy
-type Dummy = MeshedChannels<End, End, RoleEnd, TestB>;
+type Dummy = MeshedChannels<End, End, RoleEnd, NameB>;
 
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, RoleD);
-create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, RoleA);
+create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, NameD);
+create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, NameA);
 
 // Create new recv functions
-create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, RoleD);
-create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, RoleA);
+create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, NameD);
+create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, NameA);
 
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendMeshedChannelsA<i32>) -> Result<(), Box<dyn Error>> {

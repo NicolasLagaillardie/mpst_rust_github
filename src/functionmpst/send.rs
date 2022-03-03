@@ -2,10 +2,12 @@
 
 use crate::binary::struct_trait::{send::Send, session::Session};
 use crate::meshedchannels::MeshedChannels;
+use crate::name::a::NameA;
+use crate::name::b::NameB;
+use crate::name::c::NameC;
 use crate::role::a::RoleA;
 use crate::role::b::RoleB;
 use crate::role::c::RoleC;
-use crate::role::end::RoleEnd;
 use crate::role::Role;
 use std::marker;
 
@@ -65,8 +67,8 @@ macro_rules! send_aux_simple {
 /// ```
 pub fn send_mpst_a_to_b<T, S1, S2, R>(
     x: T,
-    s: MeshedChannels<Send<T, S1>, S2, RoleB<R>, RoleA<RoleEnd>>,
-) -> MeshedChannels<S1, S2, R, RoleA<RoleEnd>>
+    s: MeshedChannels<Send<T, S1>, S2, RoleB<R>, NameA>,
+) -> MeshedChannels<S1, S2, R, NameA>
 where
     T: marker::Send,
     S1: Session,
@@ -125,8 +127,8 @@ where
 /// ```
 pub fn send_mpst_b_to_a<T, S1, S2, R>(
     x: T,
-    s: MeshedChannels<Send<T, S1>, S2, RoleA<R>, RoleB<RoleEnd>>,
-) -> MeshedChannels<S1, S2, R, RoleB<RoleEnd>>
+    s: MeshedChannels<Send<T, S1>, S2, RoleA<R>, NameB>,
+) -> MeshedChannels<S1, S2, R, NameB>
 where
     T: marker::Send,
     S1: Session,
@@ -185,8 +187,8 @@ where
 /// ```
 pub fn send_mpst_c_to_a<T, S1, S2, R>(
     x: T,
-    s: MeshedChannels<Send<T, S1>, S2, RoleA<R>, RoleC<RoleEnd>>,
-) -> MeshedChannels<S1, S2, R, RoleC<RoleEnd>>
+    s: MeshedChannels<Send<T, S1>, S2, RoleA<R>, NameC>,
+) -> MeshedChannels<S1, S2, R, NameC>
 where
     T: marker::Send,
     S1: Session,
@@ -245,8 +247,8 @@ where
 /// ```
 pub fn send_mpst_a_to_c<T, S1, S2, R>(
     x: T,
-    s: MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleA<RoleEnd>>,
-) -> MeshedChannels<S1, S2, R, RoleA<RoleEnd>>
+    s: MeshedChannels<S1, Send<T, S2>, RoleC<R>, NameA>,
+) -> MeshedChannels<S1, S2, R, NameA>
 where
     T: marker::Send,
     S1: Session,
@@ -305,8 +307,8 @@ where
 /// ```
 pub fn send_mpst_b_to_c<T, S1, S2, R>(
     x: T,
-    s: MeshedChannels<S1, Send<T, S2>, RoleC<R>, RoleB<RoleEnd>>,
-) -> MeshedChannels<S1, S2, R, RoleB<RoleEnd>>
+    s: MeshedChannels<S1, Send<T, S2>, RoleC<R>, NameB>,
+) -> MeshedChannels<S1, S2, R, NameB>
 where
     T: marker::Send,
     S1: Session,
@@ -365,8 +367,8 @@ where
 /// ```
 pub fn send_mpst_c_to_b<T, S1, S2, R>(
     x: T,
-    s: MeshedChannels<S1, Send<T, S2>, RoleB<R>, RoleC<RoleEnd>>,
-) -> MeshedChannels<S1, S2, R, RoleC<RoleEnd>>
+    s: MeshedChannels<S1, Send<T, S2>, RoleB<R>, NameC>,
+) -> MeshedChannels<S1, S2, R, NameC>
 where
     T: marker::Send,
     S1: Session,

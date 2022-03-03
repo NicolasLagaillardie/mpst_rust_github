@@ -2,9 +2,9 @@ use mpstthree::binary::cancel::cancel;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst_cancel, create_meshedchannels, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session_bundle,
-    fork_mpst_multi,
+    close_mpst_cancel, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_cancel,
+    create_send_mpst_session_bundle, fork_mpst_multi,
 };
 
 use rand::random;
@@ -24,17 +24,25 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
+// Create new roles
+// normal
+create_multiple_normal_name!(
+    NameA,
+    NameB,
+    NameC,
+);
+
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
     send_mpst_a_to_c,
     RoleC,
     2 | =>
-    RoleA,
+    NameA,
     MeshedChannelsThree,
     3
 );
-create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, RoleA, MeshedChannelsThree, 3, 1);
+create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, NameA, MeshedChannelsThree, 3, 1);
 
 // Create new recv functions and related types
 // B
@@ -42,7 +50,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a,
     RoleA,
     1 | =>
-    RoleB,
+    NameB,
     MeshedChannelsThree,
     3
 );
@@ -51,7 +59,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a,
     RoleA,
     1 | =>
-    RoleC,
+    NameC,
     MeshedChannelsThree,
     3
 );

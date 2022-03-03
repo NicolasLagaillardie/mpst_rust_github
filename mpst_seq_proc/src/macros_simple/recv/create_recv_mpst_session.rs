@@ -130,7 +130,7 @@ impl CreateRecvMPSTSession {
                         #send_types
                     )*
                     #sender<R>,
-                    #receiver<mpstthree::role::end::RoleEnd>,
+                    #receiver,
                 >,
             ) -> Result<
                 (
@@ -140,7 +140,7 @@ impl CreateRecvMPSTSession {
                             #session_types
                         )*
                         R,
-                        #receiver<mpstthree::role::end::RoleEnd>,
+                        #receiver,
                     >,
                 ),
                 Box<dyn std::error::Error>,

@@ -199,8 +199,8 @@ impl Baking {
     ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Role{}", elt), Span::call_site())
+        let sender_name_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+            Ident::new(&format!("Name{}", elt), Span::call_site())
         } else {
             panic!("Not enough arguments for sender_ident in expand_send")
         };
@@ -253,13 +253,13 @@ impl Baking {
                 #meshedchannels_name<
                     #( #send_sessions )*
                     #receiver_ident<R>,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
+                    #sender_name_ident
                 >
             {
                 pub fn send(self, payload: T) -> #meshedchannels_name<
                     #( #session_types , )*
                     R,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
+                    #sender_name_ident
                 > {
                     let new_session = mpstthree::binary::send::send(payload, self.#new_session);
                     let new_stack = self.stack.continuation();
@@ -290,9 +290,9 @@ impl Baking {
             panic!("Not enough arguments for sender_ident in expand_recv")
         };
 
-        let receiver_ident =
+        let receiver_name_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
+                Ident::new(&format!("Name{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_recv")
             };
@@ -338,7 +338,7 @@ impl Baking {
                 #meshedchannels_name<
                     #( #send_sessions )*
                     #sender_ident<R>,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                    #receiver_name_ident
                 >
             {
                 pub fn recv(self) -> Result<(
@@ -346,7 +346,7 @@ impl Baking {
                     #meshedchannels_name<
                         #( #session_types , )*
                         R,
-                        #receiver_ident<mpstthree::role::end::RoleEnd>
+                        #receiver_name_ident
                     >),
                     Box<dyn std::error::Error>
                 > {
@@ -382,9 +382,9 @@ impl Baking {
             panic!("Not enough arguments for sender_ident in expand_recv_from_all")
         };
 
-        let receiver_ident =
+        let receiver_name_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
+                Ident::new(&format!("Name{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
             };
@@ -430,7 +430,7 @@ impl Baking {
                 #meshedchannels_name<
                     #( #send_sessions )*
                     #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                    #receiver_name_ident
                 >
             {
                 pub fn recv_from_all(self) -> Result<(
@@ -438,7 +438,7 @@ impl Baking {
                     #meshedchannels_name<
                         #( #session_types , )*
                         mpstthree::role::end::RoleEnd,
-                        #receiver_ident<mpstthree::role::end::RoleEnd>
+                        #receiver_name_ident
                     >),
                     Box<dyn std::error::Error>
                 > {
@@ -469,9 +469,9 @@ impl Baking {
             panic!("Not enough arguments for sender_ident in expand_offer")
         };
 
-        let receiver_ident =
+        let receiver_name_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
+                Ident::new(&format!("Name{}", elt), Span::call_site())
             } else {
                 panic!("Not enough arguments for receiver_ident in expand_offer")
             };
@@ -507,12 +507,12 @@ impl Baking {
                                 #meshedchannels_name<
                                     #( #left_sessions )*
                                     R1,
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                                    #receiver_name_ident
                                 >,
                                 #meshedchannels_name<
                                     #( #right_sessions )*
                                     R2,
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                                    #receiver_name_ident
                                 >
                             >,
                             mpstthree::binary::struct_trait::end::End
@@ -534,7 +534,7 @@ impl Baking {
                 #meshedchannels_name<
                     #( #offer_sessions )*
                     #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>,
+                    #receiver_name_ident,
                 >
             {
                 pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
@@ -543,14 +543,14 @@ impl Baking {
                         #meshedchannels_name<
                             #( #left_sessions )*
                             R1,
-                            #receiver_ident<mpstthree::role::end::RoleEnd>,
+                            #receiver_name_ident,
                         >,
                     ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                     G: FnOnce(
                         #meshedchannels_name<
                             #( #right_sessions )*
                             R2,
-                            #receiver_ident<mpstthree::role::end::RoleEnd>,
+                            #receiver_name_ident,
                         >,
                     ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 {
@@ -567,10 +567,10 @@ impl Baking {
         let (diag, matrix) = self.diag_and_matrix();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Role{}", elt), Span::call_site())
+        let sender_name_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+            Ident::new(&format!("Name{}", elt), Span::call_site())
         } else {
-            panic!("Not enough arguments for sender_ident in expand_choose")
+            panic!("Not enough arguments for sender_name_ident in expand_choose")
         };
 
         let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
@@ -689,11 +689,11 @@ impl Baking {
                         quote! { #temp_ident , }
                     };
 
-                    let receiver_ident =
+                    let receiver_name_ident =
                         if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                            Ident::new(&format!("Role{}", elt), Span::call_site())
+                            Ident::new(&format!("Name{}", elt), Span::call_site())
                         } else {
-                            panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
+                            panic!("Not enough arguments for receiver_name_ident in choose_sessions in expand_choose")
                         };
 
                     quote! {
@@ -704,14 +704,14 @@ impl Baking {
                                         #left_sessions
                                     )*
                                     #stack_left
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                                    #receiver_name_ident
                                 >,
                                 #meshedchannels_name<
                                     #(
                                         #right_sessions
                                     )*
                                     #stack_right
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                                    #receiver_name_ident
                                 >
                             >,
                             mpstthree::binary::struct_trait::end::End,
@@ -773,6 +773,7 @@ impl Baking {
                 }
             })
             .collect();
+
         let choose_left_channels: Vec<TokenStream> =
             (1..=((self.number_roles - 1) * self.number_roles / 2))
                 .map(|j| {
@@ -1025,7 +1026,7 @@ impl Baking {
                     #sender_stack<
                         #new_stacks_sender
                     >,
-                    #sender_ident<mpstthree::role::end::RoleEnd>,
+                    #sender_name_ident,
                 >
             {
                 pub fn choose_left(self) -> #meshedchannels_name<
@@ -1033,7 +1034,7 @@ impl Baking {
                         #choose_left_session
                     )*
                     #new_stack_sender_left ,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
+                    #sender_name_ident
                 >
                 {
                     #(
@@ -1050,7 +1051,7 @@ impl Baking {
                         #new_names
                     )*
 
-                    let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let (#new_name_sender, _) = <#sender_name_ident as mpstthree::name::Name>::new();
 
                     #(
                         #new_meshedchannels_receivers
@@ -1083,7 +1084,7 @@ impl Baking {
                         #choose_right_session
                     )*
                     #new_stack_sender_right ,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
+                    #sender_name_ident
                 >
                 {
                     #(
@@ -1100,7 +1101,7 @@ impl Baking {
                         #new_names
                     )*
 
-                    let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let (#new_name_sender, _) = <#sender_name_ident as mpstthree::name::Name>::new();
 
                     #(
                         #new_meshedchannels_receivers
@@ -1135,11 +1136,11 @@ impl Baking {
     fn expand_close(&self, all_roles: Vec<TokenStream>, sender: u64) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            let concatenated_elt = format!("Role{}", elt);
+        let sender_name_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+            let concatenated_elt = format!("Name{}", elt);
             Ident::new(&concatenated_elt, Span::call_site())
         } else {
-            panic!("Not enough arguments for sender_ident in expand_close")
+            panic!("Not enough arguments for sender_name_ident in expand_close")
         };
 
         let close_session_types: Vec<TokenStream> = (1..self.number_roles)
@@ -1172,7 +1173,7 @@ impl Baking {
                         #close_session_types
                     )*
                     mpstthree::role::end::RoleEnd,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
+                    #sender_name_ident
                 >
             {
                 pub fn close(self) -> Result<(), Box<dyn std::error::Error>> {
@@ -2016,7 +2017,7 @@ impl Baking {
             where
                 #( #session_types_struct )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             {
                 #( #session_types_pub )*
                 pub stack: R,
@@ -2026,7 +2027,7 @@ impl Baking {
             impl<
                 #( #session_types_struct )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
                 #(
                     #session_types , )*
@@ -2037,7 +2038,7 @@ impl Baking {
                 #meshedchannels_name<
                     #( #session_types_dual_struct )*
                     <R as mpstthree::role::Role>::Dual,
-                    <N as mpstthree::role::Role>::Dual,
+                    <N as mpstthree::name::Name>::Dual,
                 >;
 
                 #[doc(hidden)]

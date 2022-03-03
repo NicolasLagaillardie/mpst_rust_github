@@ -1,6 +1,7 @@
-#![cfg(feature = "role")]
+#![cfg(feature = "name")]
 
-//! The main trait used for representing an ordering of a participant.
+//! The main trait used for representing the
+//! name of a participant.
 //!
 //! Every structure that relies on this trait, such as
 //! [`RoleA`] and
@@ -16,25 +17,14 @@
 //! [`RoleB`]: crate::role::b::RoleB
 
 pub mod a;
-pub mod a_dual;
-pub mod a_to_all;
-pub mod all_to_a;
-pub mod all_to_b;
-pub mod all_to_c;
 pub mod b;
-pub mod b_dual;
-pub mod b_to_all;
-pub mod broadcast;
 pub mod c;
-pub mod c_dual;
-pub mod c_to_all;
-pub mod end;
 use std::marker;
 
 /// Trait for session types. Provides duality.
-pub trait Role: marker::Sized + marker::Send {
-    /// The Role type dual to `Self`.
-    type Dual: Role<Dual = Self>;
+pub trait Name: marker::Sized + marker::Send {
+    /// The Name type dual to `Self`.
+    type Dual: Name;
 
     // Creates two new *dual* roles.
     //

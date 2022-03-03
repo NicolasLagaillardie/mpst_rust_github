@@ -1,33 +1,36 @@
 //! This module contains the required definitions and
-//! functions for closing a stack.
-//! Its dual is it self.
+//! functions for the basic name C.
 
-use crate::role::Role;
+use crate::name::Name;
 use crossbeam_channel::{bounded, Receiver, Sender};
 
-/// This structure is used to close an ordering (stack).
+/// Used for indicating that a [`MeshedChannels`] is related to role C.
+///
+/// This `struct` should only be used in the `name` field
+/// of the [`MeshedChannels`] related to C.
+///
+/// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::name::a::NameC;
 /// use mpstthree::role::Role; // Only used for example
 ///
-/// // Creating the binary sessions
-/// type Close = RoleEnd;
+/// type NameOfC = NameC;
 ///
-/// let _ = Close::new(); // Only used for example
+/// let _ = NameC::new(); // Only used for example
 /// ```
 #[derive(Debug)]
-pub struct RoleEnd {
+pub struct NameC {
     #[doc(hidden)]
     pub sender: Sender<()>,
     #[doc(hidden)]
     pub receiver: Receiver<()>,
 }
 
-impl Role for RoleEnd {
-    type Dual = RoleEnd;
+impl Name for NameC {
+    type Dual = NameC;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
@@ -35,11 +38,11 @@ impl Role for RoleEnd {
         let (sender2, receiver2) = bounded::<()>(1);
 
         (
-            RoleEnd {
+            NameC {
                 sender: sender1,
                 receiver: receiver2,
             },
-            RoleEnd {
+            NameC {
                 sender: sender2,
                 receiver: receiver1,
             },
@@ -48,7 +51,7 @@ impl Role for RoleEnd {
 
     #[doc(hidden)]
     fn head_str() -> String {
-        "RoleEnd".to_string()
+        "NameC".to_string()
     }
 
     #[doc(hidden)]
@@ -58,11 +61,26 @@ impl Role for RoleEnd {
 
     #[doc(hidden)]
     fn self_head_str(&self) -> String {
-        "RoleEnd".to_string()
+        "NameC".to_string()
     }
 
     #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         "".to_string()
+    }
+}
+
+#[doc(hidden)]
+impl NameC {
+    #[doc(hidden)]
+    pub fn field_names(self) -> (&'static [&'static str], NameC) {
+        (&["()", "()"], self)
+    }
+}
+
+impl NameC {
+    /// Cancel the session
+    pub fn cancel(self) {
+        drop(self);
     }
 }

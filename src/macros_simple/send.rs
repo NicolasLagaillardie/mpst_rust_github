@@ -12,19 +12,19 @@
 /// # Arguments
 ///
 /// * The name of the new *send* function
-/// * The name of the receiver
+/// * The role of the receiver
 /// * The name of the sender
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_normal_role, create_send_mpst_session_1};
+/// use mpstthree::{create_normal_role, create_send_mpst_session_1, create_normal_name};
 ///
 /// create_normal_role!(RoleA, RoleADual);
-/// create_normal_role!(RoleC, RoleCDual);
+/// create_normal_name!(NameC);
 ///
-/// create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);
+/// create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, NameC);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
@@ -46,19 +46,19 @@ macro_rules! create_send_mpst_session_1 {
 /// # Arguments
 ///
 /// * The name of the new *send* function
-/// * The name of the receiver
+/// * The role of the receiver
 /// * The name of the sender
 ///
 /// # Example
 ///
 /// ```
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_normal_role, create_send_mpst_session_2};
+/// use mpstthree::{create_normal_role, create_send_mpst_session_2, create_normal_name};
 ///
-/// create_normal_role!(RoleA, RoleADual);
+/// create_normal_name!(NameA);
 /// create_normal_role!(RoleC, RoleCDual);
 ///
-/// create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, RoleA);
+/// create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, NameA);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels

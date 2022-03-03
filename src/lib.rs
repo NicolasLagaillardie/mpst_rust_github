@@ -287,6 +287,9 @@ pub mod binary;
 #[cfg(feature = "role")]
 pub mod role;
 
+#[cfg(feature = "name")]
+pub mod name;
+
 #[cfg(feature = "meshedchannels")]
 pub mod meshedchannels;
 

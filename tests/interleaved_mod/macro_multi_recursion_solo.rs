@@ -22,19 +22,26 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
+// Create new roles
+create_multiple_normal_name!(
+    NameA,
+    NameB,
+    NameC,
+);
+
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, RoleC);
-create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, RoleA);
-create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, RoleC);
-create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, RoleB);
-create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, RoleA);
+create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, NameC);
+create_send_mpst_session_2!(send_mpst_a_to_c, RoleC, NameA);
+create_send_mpst_session_2!(send_mpst_c_to_b, RoleB, NameC);
+create_send_mpst_session_1!(send_mpst_b_to_a, RoleA, NameB);
+create_send_mpst_session_1!(send_mpst_a_to_b, RoleB, NameA);
 
 // Create new recv functions and related types
-create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, RoleC);
-create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
-create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, RoleB);
-create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, RoleB);
-create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, RoleA);
+create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, NameC);
+create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, NameA);
+create_recv_mpst_session_2!(recv_mpst_b_from_c, RoleC, NameB);
+create_recv_mpst_session_1!(recv_mpst_b_from_a, RoleA, NameB);
+create_recv_mpst_session_1!(recv_mpst_a_from_b, RoleB, NameA);
 
 close_mpst_interleaved!(close_mpst_multi, MeshedChannels, 3);
 
@@ -50,12 +57,12 @@ type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
 enum Branches0AtoC<N: marker::Send> {
-    End(MeshedChannels<End, End, RoleEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<End, End, RoleEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>),
 }
 enum Branches0BtoC<N: marker::Send> {
-    End(MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>>),
-    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<End, End, RoleEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, NameB>),
 }
 
 // Stacks
@@ -69,19 +76,19 @@ type EndpointCFour<N> = MeshedChannels<
     Send<N, Recv<N, Send<Branches0AtoC<N>, End>>>,
     Send<Branches0BtoC<N>, End>,
     RoleA<RoleA<RoleBroadcast>>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 type EndpointCThree<N> = MeshedChannels<
     Send<Branches0AtoC<N>, End>,
     Send<Branches0BtoC<N>, End>,
     RoleBroadcast,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 type EndpointCOne<N> = MeshedChannels<
     Send<N, Recv<N, Send<Branches0AtoC<N>, End>>>,
     Send<Branches0BtoC<N>, End>,
     RoleA<RoleA<RoleBroadcast>>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 
 // For A
@@ -89,14 +96,14 @@ type EndpointAFour<N> = MeshedChannels<
     Send<N, Recv<N, End>>,
     Recv<N, Send<N, RecursAtoC<N>>>,
     RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>,
-    RoleA<RoleEnd>,
+    NameA,
 >;
 type EndpointAThree<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
 type EndpointAOne<N> = MeshedChannels<
     End,
     Recv<N, Send<N, RecursAtoC<N>>>,
     RoleC<RoleC<RoleC<RoleEnd>>>,
-    RoleA<RoleEnd>,
+    NameA,
 >;
 
 // For B
@@ -104,12 +111,12 @@ type EndpointBFour<N> = MeshedChannels<
     Recv<N, Send<N, End>>,
     Recv<Branches0BtoC<N>, End>,
     RoleA<RoleA<RoleC<RoleEnd>>>,
-    RoleB<RoleEnd>,
+    NameB,
 >;
 type EndpointBThree<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
+    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, NameB>;
 type EndpointBOne<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
+    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, NameB>;
 
 // Functions related to endpoints
 fn step_one(

@@ -13,10 +13,10 @@ use std::mem;
 /// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
+/// use mpstthree::name::a::NameA;
 ///
-/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, NameA>::new();
 /// cancel(s);
 /// ```
 pub fn cancel<T>(s: T) {

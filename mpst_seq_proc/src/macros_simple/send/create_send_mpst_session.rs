@@ -131,14 +131,14 @@ impl CreateSendMPSTSession {
                         #send_types
                     )*
                     #receiver<R>,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >,
             ) -> #meshedchannels_name<
                     #(
                         #session_types
                     )*
                     R,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >
             where
                 T: std::marker::Send,

@@ -9,14 +9,17 @@
 //! - **session2**: contains the second binary session type, which links the participant to the
 //!   second participant in the alphanumerical order. It contains [`Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and the others.
-//!   It contains [`Role`].
-//! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
-//!   `RoleB<RoleEnd>`.
+//!   It contains a [`Role`].
+//! - **name**: contains the name of the participant. It should look like `NameA` or
+//!   `NameB`.
+//!   It contains a [`Name`].
 //!
 //! [`Session`]: crate::binary::struct_trait::session::Session
 //! [`Role`]: crate::role::Role
+//! [`Role`]: crate::name::Name
 
 use crate::binary::struct_trait::session::Session;
+use crate::name::Name;
 use crate::role::Role;
 
 use std::mem::drop;
@@ -79,7 +82,7 @@ where
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
+    N: Name,
 {
     #[doc(hidden)]
     pub session1: S1,
@@ -92,13 +95,8 @@ where
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, S2, R, N> {
-    type Dual = MeshedChannels<
-        <S1 as Session>::Dual,
-        <S2 as Session>::Dual,
-        <R as Role>::Dual,
-        <N as Role>::Dual,
-    >;
+impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, S2, R, N> {
+    type Dual = MeshedChannels<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual, N>;
 
     #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
@@ -106,7 +104,8 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
         let (sender_two, receiver_two) = S2::new();
 
         let (role_one, role_two) = R::new();
-        let (name_one, name_two) = N::new();
+        let (name_one, _) = N::new();
+        let (name_two, _) = N::new();
 
         (
             MeshedChannels {
@@ -131,7 +130,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <S1 as Session>::head_str(),
             <S2 as Session>::head_str(),
             <R as Role>::head_str(),
-            <N as Role>::head_str()
+            <N as Name>::head_str()
         )
     }
 
@@ -145,8 +144,8 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <S2 as Session>::tail_str(),
             <R as Role>::head_str(),
             <R as Role>::tail_str(),
-            <N as Role>::head_str(),
-            <N as Role>::tail_str(),
+            <N as Name>::head_str(),
+            <N as Name>::tail_str(),
         )
     }
 
@@ -157,7 +156,7 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <S1 as Session>::head_str(),
             <S2 as Session>::head_str(),
             <R as Role>::head_str(),
-            <N as Role>::head_str()
+            <N as Name>::head_str()
         )
     }
 
@@ -171,21 +170,21 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <S2 as Session>::tail_str(),
             <R as Role>::head_str(),
             <R as Role>::tail_str(),
-            <N as Role>::head_str(),
-            <N as Role>::tail_str(),
+            <N as Name>::head_str(),
+            <N as Name>::tail_str(),
         )
     }
 }
 
 #[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
+impl<S1: Session, S2: Session, R: Role, N: Name> MeshedChannels<S1, S2, R, N> {
     #[doc(hidden)]
     pub fn field_names(self) -> (&'static [&'static str], MeshedChannels<S1, S2, R, N>) {
         (&["session1", "session2"], self)
     }
 }
 
-impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
+impl<S1: Session, S2: Session, R: Role, N: Name> MeshedChannels<S1, S2, R, N> {
     /// Cancel the session
     pub fn cancel(self) {
         drop(self);

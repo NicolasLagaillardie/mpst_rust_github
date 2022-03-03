@@ -18,6 +18,9 @@ pub mod choose;
 pub mod name;
 
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+pub mod role;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 pub mod offer;
 
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]

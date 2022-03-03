@@ -10,6 +10,7 @@ use std::marker;
 use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
 use crate::role::Role;
+use crate::name::Name;
 
 #[doc(hidden)]
 pub fn fork_mpst_solo<S0, S1, S2, R0, R1, R2, N0, N1, N2, F>(f: F) -> Result<(), Box<dyn Error>>
@@ -20,9 +21,9 @@ where
     R0: Role + 'static,
     R1: Role + 'static,
     R2: Role + 'static,
-    N0: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
+    N0: Name + 'static,
+    N1: Name + 'static,
+    N2: Name + 'static,
     F: FnOnce(
             MeshedChannels<S0, S1, R0, N0>,
             MeshedChannels<<S0 as Session>::Dual, S2, R1, N1>,
