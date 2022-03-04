@@ -6,8 +6,8 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     choose_mpst_multi_to_all, close_mpst, create_broadcast_role, create_meshedchannels,
-    create_multiple_normal_role, create_recv_mpst_session, create_send_mpst_session,
-    fork_mpst_multi, offer_mpst,
+    create_multiple_normal_name, create_multiple_normal_role, create_recv_mpst_session,
+    create_send_mpst_session, fork_mpst_multi, offer_mpst,
 };
 use std::error::Error;
 use std::marker;
@@ -25,29 +25,27 @@ create_multiple_normal_role!(
 // broadcast
 create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameD);
+
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, MeshedChannels, 3, 2);
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 3, 2);
-create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, MeshedChannels, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_d_to_a, RoleA, NameD, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_d, RoleD, NameA, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, NameD, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_b_to_a, RoleA, NameB, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_b, RoleB, NameA, MeshedChannels, 3, 1);
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, MeshedChannels, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, MeshedChannels, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, NameD, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, NameA, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, NameB, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, NameB, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, NameA, MeshedChannels, 3, 1);
 
 close_mpst!(close_mpst_multi, MeshedChannels, 3);
 
 fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Test our usecase
 // Simple types
@@ -166,9 +164,9 @@ fn client_recurs(
                 s,
                 Branches0AtoD::Video,
                 Branches0BtoD::Video, =>
-                RoleA,
-                RoleB, =>
-                RoleD,
+                NameA,
+                NameB, =>
+                NameD,
                 MeshedChannels,
                 3
             );
@@ -183,9 +181,9 @@ fn client_recurs(
                 s,
                 Branches0AtoD::End,
                 Branches0BtoD::End, =>
-                RoleA,
-                RoleB, =>
-                RoleD,
+                NameA,
+                NameB, =>
+                NameD,
                 MeshedChannels,
                 3
             );

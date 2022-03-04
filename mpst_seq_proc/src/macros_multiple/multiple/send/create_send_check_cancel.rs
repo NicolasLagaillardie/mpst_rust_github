@@ -132,7 +132,7 @@ impl CreateSendCheckCancel {
                         #send_types
                     )*
                     #receiver<R>,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >,
             ) -> Result<
                     #meshedchannels_name<
@@ -141,7 +141,7 @@ impl CreateSendCheckCancel {
                             #session_types
                         )*
                         R,
-                        #sender<mpstthree::role::end::RoleEnd>,
+                        #sender,
                     >,
                     std::boxed::Box<dyn std::error::Error>
                 >

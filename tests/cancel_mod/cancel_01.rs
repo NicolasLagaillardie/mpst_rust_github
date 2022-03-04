@@ -2,7 +2,7 @@ use mpstthree::binary::cancel::cancel;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, create_multiple_normal_role_short,
+    bundle_struct_fork_close_multi, create_multiple_normal_name_short, create_multiple_normal_role_short,
     create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session_bundle,
 };
 
@@ -19,15 +19,18 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree
 // normal
 create_multiple_normal_role_short!(A, B, C);
 
+// Create new names
+create_multiple_normal_name_short!(A, B, C);
+
 // Create new send functions
 // A
-create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, RoleA, MeshedChannelsThree, 3, 1);
+create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, NameA, MeshedChannelsThree, 3, 1);
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_c,
     RoleC,
     2 | =>
-    RoleB,
+    NameB,
     MeshedChannelsThree,
     3
 );
@@ -38,7 +41,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a,
     RoleA,
     1 | =>
-    RoleB,
+    NameB,
     MeshedChannelsThree,
     3
 );
@@ -47,15 +50,10 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b,
     RoleB,
     2 | =>
-    RoleC,
+    NameC,
     MeshedChannelsThree,
     3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 type EndpointA = MeshedChannelsThree<Send<i32, End>, End, RoleB<RoleEnd>, NameA>;

@@ -3,8 +3,8 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    close_mpst, create_meshedchannels, create_multiple_normal_role, create_recv_mpst_session,
-    create_send_mpst_session, fork_mpst_multi,create_multiple_normal_name
+    close_mpst, create_meshedchannels, create_multiple_normal_name, create_multiple_normal_role,
+    create_recv_mpst_session, create_send_mpst_session, fork_mpst_multi,
 };
 use std::error::Error;
 
@@ -21,27 +21,21 @@ create_multiple_normal_role!(
 );
 
 // Create new names
-create_multiple_normal_name!(
-    NameA,
-    NameB,
-    NameC,
-    NameD,
-    NameE,
-);
+create_multiple_normal_name!(NameA, NameB, NameC, NameD, NameE);
 
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 5, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, NameD, MeshedChannels, 5, 2);
 
 // Create new recv functions and related types
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 5, 3);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, NameB, MeshedChannels, 5, 3);
 
 close_mpst!(close_mpst_multi, MeshedChannels, 5);
 
 fork_mpst_multi!(fork_mpst, MeshedChannels, 5);
 
-type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
+type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, RoleB<RoleEnd>, NameD>;
 
-type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
+type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, RoleD<RoleEnd>, NameB>;
 
 type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
 type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;

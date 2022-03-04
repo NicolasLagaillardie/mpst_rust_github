@@ -132,9 +132,9 @@ fn step_two_recurs(
                 s_c,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                RoleA,
-                RoleB, =>
-                RoleC
+                NameA,
+                NameB, =>
+                NameC
             );
 
             let (s_a, s_b) = offer_mpst_interleaved!(
@@ -153,9 +153,9 @@ fn step_two_recurs(
                 s_c,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                RoleA,
-                RoleB, =>
-                RoleC
+                NameA,
+                NameB, =>
+                NameC
             );
 
             assert_eq!(index, 100);

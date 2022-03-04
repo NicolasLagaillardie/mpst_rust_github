@@ -171,7 +171,7 @@ impl CreateMeshedChannels {
                     #sessions_struct
                 )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             {
                 #(
                     #sessions_pub
@@ -186,7 +186,7 @@ impl CreateMeshedChannels {
                     #sessions_struct
                 )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
                 #(
                     #sessions
@@ -200,7 +200,7 @@ impl CreateMeshedChannels {
                         #sessions_dual
                     )*
                     <R as mpstthree::role::Role>::Dual,
-                    <N as mpstthree::role::Role>::Dual,
+                    N,
                 >;
 
                 #[doc(hidden)]
@@ -210,7 +210,8 @@ impl CreateMeshedChannels {
                     )*
 
                     let (role_one, role_two) = R::new();
-                    let (name_one, name_two) = N::new();
+                    let (name_one, _) = N::new();
+                    let (name_two, _) = N::new();
 
                     (
                         #meshedchannels_name {
@@ -240,7 +241,7 @@ impl CreateMeshedChannels {
                         "{}\n{}\n{}",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
+                        <N as mpstthree::name::Name>::head_str()
                     )
                 }
 
@@ -255,8 +256,8 @@ impl CreateMeshedChannels {
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
+                        <N as mpstthree::name::Name>::head_str(),
+                        <N as mpstthree::name::Name>::tail_str()
                     )
                 }
 
@@ -270,7 +271,7 @@ impl CreateMeshedChannels {
                         "{}\n{}\n{}",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
+                        <N as mpstthree::name::Name>::head_str()
                     )
                 }
 
@@ -285,8 +286,8 @@ impl CreateMeshedChannels {
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
+                        <N as mpstthree::name::Name>::head_str(),
+                        <N as mpstthree::name::Name>::tail_str()
                     )
                 }
             }
@@ -297,7 +298,7 @@ impl CreateMeshedChannels {
                     #sessions_struct
                 )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             > #meshedchannels_name<
                 #(
                     #sessions

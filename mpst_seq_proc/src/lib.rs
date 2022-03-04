@@ -21,6 +21,7 @@ use macros_simple::offer::create_offer_mpst_session_multi::OfferMPSTSessionMulti
 use macros_simple::recv::create_recv_mpst_session::CreateRecvMPSTSession;
 use macros_simple::roles::create_broadcast_role_short::CreateBroadcastRoleShort;
 use macros_simple::roles::create_normal_role_short::CreateNormalRoleShort;
+use macros_simple::names::create_normal_name_short::CreateNormalNameShort;
 use macros_simple::send::create_send_mpst_session::CreateSendMPSTSession;
 
 mod macros_multiple;
@@ -136,6 +137,20 @@ pub fn create_normal_role_short(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_normal_role_short(input: TokenStream) -> TokenStream {
     create_normal_role_short(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_normal_name_short(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CreateNormalNameShort);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_normal_name_short(input: TokenStream) -> TokenStream {
+    create_normal_name_short(input)
 }
 
 //////////////////////////////////////

@@ -252,7 +252,7 @@ impl ChooseTypeCancelMultiToAllBundle {
                         };
                         quote! {
                             let ( #temp_name , _) =
-                                <#temp_role::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                                #temp_role::new();
                         }
                     })
                     .collect();
@@ -392,15 +392,13 @@ impl ChooseTypeCancelMultiToAllBundle {
                             #new_roles
                         )*
 
-                        let (name_1, _) =
-                            <#broadcaster<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        let (name_1, _) = #broadcaster::new();
 
                         #(
                             #new_names
                         )*
 
-                        let ( #new_name_sender , _) =
-                            <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        let ( #new_name_sender , _) = #sender::new();
 
                         #(
                             #all_send

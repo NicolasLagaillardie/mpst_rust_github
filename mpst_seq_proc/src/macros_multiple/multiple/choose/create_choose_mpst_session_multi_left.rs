@@ -303,8 +303,7 @@ impl ChooseTypeMultiLeft {
                     Span::call_site(),
                 );
                 quote! {
-                    let ( #temp_name , _) =
-                        << #temp_role as mpstthree::role::Role>::Dual as mpstthree::role::Role>::new();
+                    let ( #temp_name , _) = #temp_role::new();
                 }
             })
             .collect();
@@ -414,7 +413,7 @@ impl ChooseTypeMultiLeft {
                         )*
                     >,
 
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
             )
             -> #meshedchannels_name<
@@ -422,7 +421,7 @@ impl ChooseTypeMultiLeft {
                     #sessions_struct
                 )*
                 #role_left ,
-                #name<mpstthree::role::end::RoleEnd>
+                #name
             >
             where
                 #(
@@ -447,7 +446,7 @@ impl ChooseTypeMultiLeft {
                     #new_names
                 )*
 
-                let ( #name_left , _) = <#name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                let ( #name_left , _) = #name::new();
 
                 #(
                     #new_choices

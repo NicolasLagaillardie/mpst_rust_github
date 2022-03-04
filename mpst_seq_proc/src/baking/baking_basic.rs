@@ -199,11 +199,12 @@ impl Baking {
     ) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sender_name_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Name{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_send")
-        };
+        let sender_name_ident =
+            if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+                Ident::new(&format!("Name{}", elt), Span::call_site())
+            } else {
+                panic!("Not enough arguments for sender_ident in expand_send")
+            };
 
         let receiver_ident =
             if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
@@ -567,11 +568,12 @@ impl Baking {
         let (diag, matrix) = self.diag_and_matrix();
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sender_name_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Name{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_name_ident in expand_choose")
-        };
+        let sender_name_ident =
+            if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+                Ident::new(&format!("Name{}", elt), Span::call_site())
+            } else {
+                panic!("Not enough arguments for sender_name_ident in expand_choose")
+            };
 
         let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
             Ident::new(&format!("Role{}toAll", elt), Span::call_site())
@@ -860,7 +862,7 @@ impl Baking {
                         };
 
                 quote! {
-                    let (#new_name, _) = <#receiver_ident<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let (#new_name, _) = #receiver_ident::new();
                 }
             } else {
                 quote! { }
@@ -1136,12 +1138,13 @@ impl Baking {
     fn expand_close(&self, all_roles: Vec<TokenStream>, sender: u64) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
-        let sender_name_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            let concatenated_elt = format!("Name{}", elt);
-            Ident::new(&concatenated_elt, Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_name_ident in expand_close")
-        };
+        let sender_name_ident =
+            if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+                let concatenated_elt = format!("Name{}", elt);
+                Ident::new(&concatenated_elt, Span::call_site())
+            } else {
+                panic!("Not enough arguments for sender_name_ident in expand_close")
+            };
 
         let close_session_types: Vec<TokenStream> = (1..self.number_roles)
             .map(|_i| {
@@ -1522,6 +1525,66 @@ impl Baking {
         }
     }
 
+    fn expand_name(&self, role: String) -> TokenStream {
+        // Name
+        let role_name = Ident::new(&format!("Name{}", role), Span::call_site());
+
+        quote! {
+            ////////////////////////////////////////////
+            /// The Name
+            #[derive(Debug)]
+            struct #role_name
+            {
+                #[doc(hidden)]
+                sender: crossbeam_channel::Sender<()>,
+                #[doc(hidden)]
+                receiver: crossbeam_channel::Receiver<()>,
+            }
+            ////////////////////////////////////////////
+            /// The normal Name implementation of Name
+            impl mpstthree::name::Name for #role_name {
+                type Dual = #role_name;
+
+                #[doc(hidden)]
+                fn new() -> (Self, Self::Dual) {
+                    let (sender1, receiver1) = crossbeam_channel::bounded::<()>(1);
+                    let (sender2, receiver2) = crossbeam_channel::bounded::<()>(1);
+
+                    (
+                        #role_name {
+                            sender: sender1,
+                            receiver: receiver2,
+                        },
+                        #role_name {
+                            sender: sender2,
+                            receiver: receiver1,
+                        },
+                    )
+                }
+
+                #[doc(hidden)]
+                fn head_str() -> String {
+                    String::from(stringify!(#role_name))
+                }
+
+                #[doc(hidden)]
+                fn tail_str() -> String {
+                    "".to_string()
+                }
+
+                #[doc(hidden)]
+                fn self_head_str(&self) -> String {
+                    String::from(stringify!(#role_name))
+                }
+
+                #[doc(hidden)]
+                fn self_tail_str(&self) -> String {
+                    "".to_string()
+                }
+            }
+        }
+    }
+
     fn expand_fork_mpst(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
         let (_diag, matrix) = self.diag_and_matrix();
@@ -1587,7 +1650,7 @@ impl Baking {
             .map(|i| {
                 let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::role::Role + 'static ,
+                    #temp_ident : mpstthree::name::Name + 'static ,
                 }
             })
             .collect();
@@ -1924,6 +1987,11 @@ impl Baking {
             .map(|i| self.expand_role(format!("{}", i)))
             .collect();
 
+        let names_struct: Vec<TokenStream> = all_roles
+            .iter()
+            .map(|i| self.expand_name(format!("{}", i)))
+            .collect();
+
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
                 (1..=self.number_roles)
@@ -2038,7 +2106,7 @@ impl Baking {
                 #meshedchannels_name<
                     #( #session_types_dual_struct )*
                     <R as mpstthree::role::Role>::Dual,
-                    <N as mpstthree::name::Name>::Dual,
+                    N,
                 >;
 
                 #[doc(hidden)]
@@ -2117,7 +2185,7 @@ impl Baking {
             impl<
                     #( #session_types_struct )*
                     R: mpstthree::role::Role,
-                    N: mpstthree::role::Role
+                    N: mpstthree::name::Name
                 > #meshedchannels_name<#( #session_types , )* R, N> {
                 #[doc(hidden)]
                 pub fn field_names(self) ->
@@ -2134,8 +2202,9 @@ impl Baking {
                 }
             }
 
-
             #( #roles_struct )*
+
+            #( #names_struct )*
 
             #( #send_methods )*
 

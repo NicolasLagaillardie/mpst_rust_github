@@ -8,6 +8,8 @@ use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
+use mpstthree::name::a::NameA;
+
 // Creating the binary sessions
 type AtoB<N> = Send<N, End>;
 type AtoC<N> = Recv<N, End>;
@@ -16,7 +18,7 @@ type AtoC<N> = Recv<N, End>;
 type StackA = RoleB<RoleC<RoleEnd>>;
 
 // Creating the MP sessions
-type Endpoint<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type Endpoint<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 
 pub fn binary_sessions() {
     // Test Send and End

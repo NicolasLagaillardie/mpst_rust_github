@@ -16,7 +16,7 @@ type AtoC<N> = Recv<N, End>;
 type StackA = RoleB<RoleC<RoleEnd>>;
 
 // Creating the MP sessions
-type Endpoint<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type Endpoint<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 
 pub fn meshedchannels_fields() {
     let (meshedchannels_1, meshedchannels_2) = Endpoint::<i32>::new();

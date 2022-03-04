@@ -10,9 +10,10 @@ use std::marker;
 use rand::{thread_rng, Rng};
 
 use mpstthree::{
-    choose_mpst_to_all, close_mpst_interleaved, create_multiple_normal_role,
-    create_recv_mpst_session_1, create_recv_mpst_session_2, create_send_mpst_session_1,
-    create_send_mpst_session_2, fork_mpst_multi_solo, offer_mpst_interleaved,
+    choose_mpst_to_all, close_mpst_interleaved, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
+    create_send_mpst_session_1, create_send_mpst_session_2, fork_mpst_multi_solo,
+    offer_mpst_interleaved,
 };
 
 // Create new roles
@@ -22,12 +23,8 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
-// Create new roles
-create_multiple_normal_name!(
-    NameA,
-    NameB,
-    NameC,
-);
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC);
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, NameC);
@@ -78,12 +75,8 @@ type EndpointCFour<N> = MeshedChannels<
     RoleA<RoleA<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCThree<N> = MeshedChannels<
-    Send<Branches0AtoC<N>, End>,
-    Send<Branches0BtoC<N>, End>,
-    RoleBroadcast,
-    NameC,
->;
+type EndpointCThree<N> =
+    MeshedChannels<Send<Branches0AtoC<N>, End>, Send<Branches0BtoC<N>, End>, RoleBroadcast, NameC>;
 type EndpointCOne<N> = MeshedChannels<
     Send<N, Recv<N, Send<Branches0AtoC<N>, End>>>,
     Send<Branches0BtoC<N>, End>,
@@ -98,13 +91,9 @@ type EndpointAFour<N> = MeshedChannels<
     RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>,
     NameA,
 >;
-type EndpointAThree<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
-type EndpointAOne<N> = MeshedChannels<
-    End,
-    Recv<N, Send<N, RecursAtoC<N>>>,
-    RoleC<RoleC<RoleC<RoleEnd>>>,
-    NameA,
->;
+type EndpointAThree<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, NameA>;
+type EndpointAOne<N> =
+    MeshedChannels<End, Recv<N, Send<N, RecursAtoC<N>>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameA>;
 
 // For B
 type EndpointBFour<N> = MeshedChannels<
@@ -113,10 +102,8 @@ type EndpointBFour<N> = MeshedChannels<
     RoleA<RoleA<RoleC<RoleEnd>>>,
     NameB,
 >;
-type EndpointBThree<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, NameB>;
-type EndpointBOne<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, NameB>;
+type EndpointBThree<N> = MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, NameB>;
+type EndpointBOne<N> = MeshedChannels<End, Recv<Branches0BtoC<N>, End>, RoleC<RoleEnd>, NameB>;
 
 // Functions related to endpoints
 fn step_one(
@@ -148,9 +135,9 @@ fn step_two_recurs(
                 s_c,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                RoleA,
-                RoleB, =>
-                RoleC
+                NameA,
+                NameB, =>
+                NameC
             );
 
             let (s_a, s_b) = offer_mpst_interleaved!(
@@ -169,9 +156,9 @@ fn step_two_recurs(
                 s_c,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                RoleA,
-                RoleB, =>
-                RoleC
+                NameA,
+                NameB, =>
+                NameC
             );
 
             assert_eq!(index, 100);

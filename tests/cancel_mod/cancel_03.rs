@@ -4,7 +4,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     close_mpst_cancel, create_meshedchannels, create_multiple_normal_role,
     create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session_bundle,
-    fork_mpst_multi,
+    fork_mpst_multi,create_multiple_normal_name
 };
 
 use rand::random;
@@ -25,15 +25,18 @@ create_multiple_normal_role!(
     RoleD, RoleDDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC, NameD);
+
 // Create new send functions
 // A
-create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, RoleA, MeshedChannelsFour, 4, 1);
+create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, NameA, MeshedChannelsFour, 4, 1);
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_d,
     RoleD,
     3 | =>
-    RoleC,
+    NameC,
     MeshedChannelsFour,
     4
 );
@@ -44,7 +47,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a,
     RoleA,
     1 | =>
-    RoleB,
+    NameB,
     MeshedChannelsFour,
     4
 );
@@ -53,7 +56,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c,
     RoleC,
     3 | =>
-    RoleD,
+    NameD,
     MeshedChannelsFour,
     4
 );
@@ -63,12 +66,6 @@ close_mpst_cancel!(close_mpst_multi, MeshedChannelsFour, 4);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, MeshedChannelsFour, 4);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 type EndpointA = MeshedChannelsFour<Send<i32, End>, End, End, RoleB<RoleEnd>, NameA>;

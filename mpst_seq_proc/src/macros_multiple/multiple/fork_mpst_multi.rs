@@ -227,7 +227,7 @@ impl ForkMPSTMulti {
             .map(|i| {
                 let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
                 quote! {
-                    #temp_ident : mpstthree::role::Role + 'static ,
+                    #temp_ident : mpstthree::name::Name + 'static ,
                 }
             })
             .collect();

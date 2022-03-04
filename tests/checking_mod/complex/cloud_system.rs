@@ -4,7 +4,9 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{
+    checker_concat, create_meshedchannels, create_multiple_normal_name, create_multiple_normal_role,
+};
 
 use petgraph::dot::Dot;
 
@@ -21,6 +23,9 @@ create_multiple_normal_role!(
     RoleD, RoleDDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC, NameD);
+
 // The new types
 
 struct Connect;
@@ -31,12 +36,6 @@ struct SyncLogout;
 struct SyncLog;
 struct Setup;
 struct Log;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 

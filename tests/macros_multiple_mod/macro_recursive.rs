@@ -23,7 +23,7 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
-// Create new roles
+// Create new names
 create_multiple_normal_name!(
     NameA,
     NameB,
@@ -148,8 +148,8 @@ fn client_recurs(
                 s,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                RoleA,
-                RoleB, =>
+                NameA,
+                NameB, =>
                 NameC
             );
 
@@ -163,8 +163,8 @@ fn client_recurs(
                 s,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                RoleA,
-                RoleB, =>
+                NameA,
+                NameB, =>
                 NameC
             );
 

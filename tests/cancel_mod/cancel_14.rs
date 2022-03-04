@@ -3,8 +3,9 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi,
-    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
+    offer_cancel_mpst,
 };
 
 use std::error::Error;
@@ -37,33 +38,32 @@ create_multiple_normal_role!(
     RoleCentral, RoleCentralDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameCentral);
+
 // Create new send functions
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 | =>
-    RoleB, MeshedChannelsThree, 3
+    NameB, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 | =>
-    RoleB, MeshedChannelsThree, 3
+    NameB, MeshedChannelsThree, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 // A
@@ -102,7 +102,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     EndpointDoneA, EndpointForwardA, =>
     Branching0fromAtoB, =>
     RoleB, =>
-    RoleCentral, RoleA, MeshedChannelsThree, 2
+    NameCentral, Name, MeshedChannelsThree, 2
 );
 
 // Functions

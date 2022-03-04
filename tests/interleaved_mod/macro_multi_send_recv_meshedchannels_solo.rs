@@ -34,9 +34,9 @@ close_mpst_interleaved!(close_mpst_multi, MeshedChannels, 5);
 
 fork_mpst_multi_solo!(fork_mpst, MeshedChannels, 5);
 
-type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
+type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, RoleB<RoleEnd>, NameD>;
 
-type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
+type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, RoleD<RoleEnd>, NameB>;
 
 type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
 type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;

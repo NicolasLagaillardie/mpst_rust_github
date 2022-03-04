@@ -63,7 +63,7 @@ impl SendCancel {
                     mpstthree::binary::struct_trait::end::End,
                     #( #session_types , )*
                     R,
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
             ) -> std::result::Result<(), Box<dyn std::error::Error>>
             where

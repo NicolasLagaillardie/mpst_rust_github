@@ -18,15 +18,15 @@ create_multiple_normal_role!(
 );
 
 // Create new names
-create_multiple_normal_name!(NameA, NameB, NameD,);
+create_multiple_normal_name!(NameA, NameB, NameD);
 
-type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, NameA, NameD>;
+type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, RoleA<RoleEnd>, NameD>;
 
-type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, NameD, NameA>;
+type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, RoleD<RoleEnd>, NameA>;
 
-type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, NameA, NameD>;
+type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, RoleA<RoleEnd>, NameD>;
 
-type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, NameD, NameA>;
+type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, RoleD<RoleEnd>, NameA>;
 
 // Create an B dummy
 type Dummy = MeshedChannels<End, End, RoleEnd, NameB>;

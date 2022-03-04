@@ -309,8 +309,7 @@ impl ChooseTypeMultiRight {
                     Span::call_site(),
                 );
                 quote! {
-                    let ( #temp_name , _) =
-                        << #temp_role as mpstthree::role::Role>::Dual as mpstthree::role::Role>::new();
+                    let ( #temp_name , _) = #temp_role::new();
                 }
             })
             .collect();
@@ -420,7 +419,7 @@ impl ChooseTypeMultiRight {
                         )*
                     >,
 
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
             )
             -> #meshedchannels_name<
@@ -428,7 +427,7 @@ impl ChooseTypeMultiRight {
                     #sessions_struct
                 )*
                 #role_right ,
-                #name<mpstthree::role::end::RoleEnd>
+                #name
             >
             where
                 #(
@@ -453,7 +452,7 @@ impl ChooseTypeMultiRight {
                     #new_names
                 )*
 
-                let ( #name_right , _) = <#name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                let ( #name_right , _) = #name::new();
 
                 #(
                     #new_choices

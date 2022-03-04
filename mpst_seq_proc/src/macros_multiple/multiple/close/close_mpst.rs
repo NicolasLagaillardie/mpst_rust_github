@@ -65,16 +65,16 @@ impl CloseMpst {
             .collect();
 
         quote! {
-            fn #func_name<R>(s: #meshedchannels_name<
+            fn #func_name<N>(s: #meshedchannels_name<
                 #(
                     #session_types
                 )*
                 mpstthree::role::end::RoleEnd,
-                R
+                N
             >
             ) -> Result<(), Box<dyn std::error::Error>>
             where
-                R: mpstthree::role::Role,
+                N: mpstthree::name::Name,
             {
                 #(
                     #session_send

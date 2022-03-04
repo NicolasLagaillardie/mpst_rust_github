@@ -3,8 +3,8 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi, choose_mpst_multi_cancel_to_all,
-    create_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
-    offer_cancel_mpst,
+    create_multiple_normal_name, create_multiple_normal_role, create_recv_mpst_session_bundle,
+    create_send_check_cancel_bundle, offer_cancel_mpst,
 };
 
 use std::error::Error;
@@ -14,29 +14,34 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsFour,
 
 // Create new roles
 // normal
-create_normal_role!(RoleA, RoleADual);
-create_normal_role!(RoleB, RoleBDual);
-create_normal_role!(RoleC, RoleCDual);
-create_normal_role!(RoleD, RoleDDual);
+create_multiple_normal_role!(
+    RoleA, RoleADual |
+    RoleB, RoleBDual |
+    RoleC, RoleCDual |
+    RoleD, RoleDDual |
+);
+
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC, NameD);
 
 // Create new send functions
 // B
 create_send_check_cancel_bundle!(
     send_check_b_to_c, RoleC, 2 |
     send_check_b_to_d, RoleD, 3 | =>
-    RoleB, MeshedChannelsFour, 4
+    NameB, MeshedChannelsFour, 4
 );
 // C
 create_send_check_cancel_bundle!(
     send_check_c_to_b, RoleB, 2 |
     send_check_c_to_d, RoleD, 3 | =>
-    RoleC, MeshedChannelsFour, 4
+    NameC, MeshedChannelsFour, 4
 );
 // D
 create_send_check_cancel_bundle!(
     send_check_d_to_b, RoleB, 2 |
     send_check_d_to_c, RoleC, 3 | =>
-    RoleD, MeshedChannelsFour, 4
+    NameD, MeshedChannelsFour, 4
 );
 
 // Create new recv functions and related types
@@ -44,26 +49,20 @@ create_send_check_cancel_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_c, RoleC, 2 |
     recv_mpst_b_from_d, RoleD, 3 | =>
-    RoleB, MeshedChannelsFour, 4
+    NameB, MeshedChannelsFour, 4
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 |
     recv_mpst_c_from_d, RoleD, 3 | =>
-    RoleC, MeshedChannelsFour, 4
+    NameC, MeshedChannelsFour, 4
 );
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_b, RoleB, 2 |
     recv_mpst_d_from_c, RoleC, 3 | =>
-    RoleD, MeshedChannelsFour, 4
+    NameD, MeshedChannelsFour, 4
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 // Send/Recv
@@ -144,8 +143,8 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromDtoC::Done, =>
                 RoleB,
                 RoleC, =>
-                RoleA,
-                RoleD,
+                NameA,
+                NameD,
                 MeshedChannelsFour,
                 4
             );
@@ -159,8 +158,8 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromDtoC::More, =>
                 RoleB,
                 RoleC, =>
-                RoleA,
-                RoleD,
+                NameA,
+                NameD,
                 MeshedChannelsFour,
                 4
             );

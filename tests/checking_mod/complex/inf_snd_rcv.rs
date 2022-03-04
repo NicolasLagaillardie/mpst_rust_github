@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role, create_multiple_normal_name};
 
 use petgraph::dot::Dot;
 
@@ -19,15 +19,14 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB);
+
 // Payload names
 type A = i32;
 type B = i64;
 type C = i32;
 type D = i64;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 

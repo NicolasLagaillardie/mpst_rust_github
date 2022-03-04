@@ -13,6 +13,10 @@ use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
+
 use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
 use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
@@ -39,9 +43,9 @@ type StackB = RoleA<RoleC<RoleEnd>>;
 type StackC = RoleA<RoleB<RoleEnd>>;
 
 // Creating the MP sessions
-type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
-type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
-type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
+type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
+type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 
 // Single test for A
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
