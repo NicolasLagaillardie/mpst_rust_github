@@ -5,6 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
+use mpstthree::name::Name;
+
 use std::error::Error;
 
 use mpstthree::functionmpst::ChooseMpst;
@@ -29,7 +31,7 @@ create_multiple_normal_role!(
 create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 
 // Create new names
-create_multiple_normal_name!(NameA, NameB, NameC,);
+create_multiple_normal_name!(NameA, NameB, NameC);
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, NameC);

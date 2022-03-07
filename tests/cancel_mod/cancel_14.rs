@@ -101,7 +101,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Done, More, =>
     EndpointDoneA, EndpointForwardA, =>
     Branching0fromAtoB, =>
-    RoleB, =>
+    NameB, =>
     NameCentral, NameA, MeshedChannelsThree, 2
 );
 

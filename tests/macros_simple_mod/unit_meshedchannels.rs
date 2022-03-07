@@ -32,7 +32,8 @@ pub fn meshedchannels_fields() {
     meshedchannels_1.name.sender.send(()).unwrap_or(());
 
     assert!(here1_stack.sender.send(RoleEnd::new().1).is_err());
-    assert!(here1_name.sender.send(()).is_err());
+    assert!(here1_name.sender.send(()).is_ok());
+    assert!(there1_name.sender.send(()).is_ok());
 
     // meshedchannels_2
     let (here2_stack, there2_stack) = RoleC::<RoleEnd>::new();
@@ -45,18 +46,19 @@ pub fn meshedchannels_fields() {
     meshedchannels_2.name.sender.send(()).unwrap_or(());
 
     assert!(there2_stack.sender.send(RoleEnd::new().1).is_err());
-    assert!(there2_name.sender.send(()).is_err());
+    assert!(here2_name.sender.send(()).is_ok());
+    assert!(there2_name.sender.send(()).is_ok());
 }
 
 pub fn meshedchannels_methods() {
     assert_eq!(
         Endpoint::<i32>::head_str(),
-        "Send\nRecv\nRoleB\nRoleA".to_string()
+        "Send\nRecv\nRoleB\nNameA".to_string()
     );
 
     assert_eq!(
         Endpoint::<i32>::tail_str(),
-        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nRoleA<RoleEnd<>>".to_string()
+        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nNameA<>".to_string()
     );
 
     assert_eq!(AtoB::<i32>::head_str(), "Send".to_string());
@@ -102,12 +104,12 @@ pub fn meshedchannels_self_methods() {
 
     assert_eq!(
         meshedchannels_1.self_head_str(),
-        "Send\nRecv\nRoleB\nRoleA".to_string()
+        "Send\nRecv\nRoleB\nNameA".to_string()
     );
 
     assert_eq!(
         meshedchannels_2.self_head_str(),
-        "Recv\nSend\nRoleBDual\nRoleADual".to_string()
+        "Recv\nSend\nRoleBDual\nNameA".to_string()
     );
 
     assert_eq!(
@@ -134,12 +136,12 @@ pub fn meshedchannels_self_methods() {
 
     assert_eq!(
         meshedchannels_1.self_tail_str(),
-        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nRoleA<RoleEnd<>>".to_string()
+        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nNameA<>".to_string()
     );
 
     assert_eq!(
         meshedchannels_2.self_tail_str(),
-        "Recv<End<>>\nSend<End<>>\nRoleBDual<RoleCDual<RoleEnd<>>>\nRoleADual<RoleEnd<>>"
+        "Recv<End<>>\nSend<End<>>\nRoleBDual<RoleCDual<RoleEnd<>>>\nNameA<>"
             .to_string()
     );
 

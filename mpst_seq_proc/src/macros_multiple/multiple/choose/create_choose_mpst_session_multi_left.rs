@@ -81,18 +81,33 @@ impl ChooseTypeMultiLeft {
 
         let all_roles: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-                quote! {
-                    #temp_ident ,
+                if i % 3 == 0 {
+                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident ,
+                    }
+                } else {
+                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident ,
+                    }
+
                 }
             })
             .collect();
 
-        let all_roles_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
+        let all_roles_struct_and_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-                quote! {
-                    #temp_ident : mpstthree::role::Role + 'a ,
+                if i % 3 == 0 {
+                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident : mpstthree::name::Name + 'a ,
+                    }
+                } else {
+                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident : mpstthree::role::Role + 'a ,
+                    }
                 }
             })
             .collect();
@@ -139,7 +154,7 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
-                let temp_roles: Vec<TokenStream> = (1..4)
+                let temp_roles: Vec<TokenStream> = (1..3)
                     .map(|j| {
                         let temp_ident = Ident::new(
                             &format!("R{}", 3 * (i - 1) + j),
@@ -152,6 +167,17 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
+                let temp_names: TokenStream = {
+                    let temp_ident = Ident::new(
+                        &format!("N{}", 3 * (i - 1) + 3),
+                        Span::call_site(),
+                    );
+
+                    quote! {
+                        #temp_ident ,
+                    }
+                };
+
                 quote! {
                     #type_name<
                         #(
@@ -163,6 +189,7 @@ impl ChooseTypeMultiLeft {
                         #(
                             #temp_roles
                         )*
+                        #temp_names
                     >,
                 }
             })
@@ -220,7 +247,7 @@ impl ChooseTypeMultiLeft {
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
-                let temp_role = Ident::new(&format!("R{}", 3 * (i - 1) + 3), Span::call_site());
+                let temp_role = Ident::new(&format!("N{}", 3 * (i - 1) + 3), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = #temp_role::new();
                 }
@@ -348,7 +375,7 @@ impl ChooseTypeMultiLeft {
                 )*
 
                 #(
-                    #all_roles_struct
+                    #all_roles_struct_and_struct
                 )*
             {
                 #(
