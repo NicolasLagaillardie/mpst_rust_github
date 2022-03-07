@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateMeshedChannels {
+pub(crate) struct  CreateMeshedChannels {
     meshedchannels_name: Ident,
     n_sessions: u64,
 }
@@ -159,7 +159,7 @@ impl CreateMeshedChannels {
         quote! {
             #[must_use]
             #[derive(Debug)]
-            pub struct #meshedchannels_name<
+            pub(crate) struct  #meshedchannels_name<
                 #(
                     #sessions
                 )*

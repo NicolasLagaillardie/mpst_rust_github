@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct BroadcastCancel {
+pub(crate) struct  BroadcastCancel {
     session: Expr,
     n_sessions: LitInt,
 }

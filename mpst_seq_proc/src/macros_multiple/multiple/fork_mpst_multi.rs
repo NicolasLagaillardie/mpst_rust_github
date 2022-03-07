@@ -7,7 +7,7 @@ use syn::{Ident, LitInt, Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct ForkMPSTMulti {
+pub(crate) struct  ForkMPSTMulti {
     func_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,

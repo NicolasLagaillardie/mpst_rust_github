@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct OfferMPSTSessionMulti {
+pub(crate) struct  OfferMPSTSessionMulti {
     func_name: Ident,
     type_name: Ident,
     role: Ident,

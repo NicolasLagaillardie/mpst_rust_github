@@ -7,7 +7,7 @@ use syn::{Ident, LitInt, Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct ChooseTypeMultiLeft {
+pub(crate) struct  ChooseTypeMultiLeft {
     func_name: Ident,
     type_name: Ident,
     role_dual: Ident,

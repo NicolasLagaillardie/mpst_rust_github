@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct ChooseMultiCreateToAll {
+pub(crate) struct  ChooseMultiCreateToAll {
     name_macro: Ident,
     receivers: Vec<TokenStream>,
     sender: Ident,

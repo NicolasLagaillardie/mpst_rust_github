@@ -23,7 +23,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct SendAuxSimple {
+pub(crate) struct SendAuxSimple {
     session: Expr,
     payload: Expr,
     exclusion: u64,

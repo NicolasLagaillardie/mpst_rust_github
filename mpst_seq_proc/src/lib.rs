@@ -5,6 +5,8 @@ use proc_macro_hack::proc_macro_hack;
 use std::usize;
 use syn::parse_macro_input;
 
+mod common_functions;
+
 mod functionmpst;
 
 use functionmpst::recv_all_aux_simple::RecvAllAuxSimple;

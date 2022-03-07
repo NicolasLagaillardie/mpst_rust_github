@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateSendHttpSession {
+pub(crate) struct CreateSendHttpSession {
     func_name: Ident,
     sender: Ident,
     receiver: Ident,

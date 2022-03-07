@@ -7,7 +7,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 #[derive(Debug)]
-pub struct CheckingInput {
+pub(crate) struct CheckingInput {
     choices: HashMap<String, Vec<String>>,
 }
 

@@ -7,7 +7,7 @@ use syn::{Ident, LitInt, Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct ChooseTypeCancelMultiToAllBundle {
+pub(crate) struct  ChooseTypeCancelMultiToAllBundle {
     labels: Vec<TokenStream>,
     receivers: Vec<TokenStream>,
     fn_names: Vec<TokenStream>,

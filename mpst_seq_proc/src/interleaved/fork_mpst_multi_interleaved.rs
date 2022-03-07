@@ -7,7 +7,7 @@ use syn::{Ident, LitInt, Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct ForkMPSTMultiInterleaved {
+pub(crate) struct ForkMPSTMultiInterleaved {
     func_name: Ident,
     meshedchannels_name_one: Ident,
     nsessions_one: u64,

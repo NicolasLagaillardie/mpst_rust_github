@@ -24,7 +24,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct RecvAllAuxSimple {
+pub(crate) struct RecvAllAuxSimple {
     session: Expr,
     exclusion: u64,
 }

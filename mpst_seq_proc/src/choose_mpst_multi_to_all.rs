@@ -7,7 +7,7 @@ use syn::{Expr, Ident, LitInt, Result, Token};
 type VecOfTuple = Vec<(u64, u64, u64)>;
 
 #[derive(Debug)]
-pub struct ChooseMultiToAll {
+pub(crate) struct  ChooseMultiToAll {
     session: Expr,
     labels: Vec<TokenStream>,
     receivers: Vec<TokenStream>,
