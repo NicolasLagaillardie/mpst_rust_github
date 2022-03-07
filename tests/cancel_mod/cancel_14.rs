@@ -92,7 +92,7 @@ type EndpointForwardA = MeshedChannelsThree<
     NameA,
 >;
 
-type EndpointCentral = MeshedChannelsThree<End, End, RoleEnd, RoleCentral<RoleEnd>>;
+type EndpointCentral = MeshedChannelsThree<End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannelsThree<End, Choose0fromAtoB, RoleBroadcast, NameA>;
 type EndpointB = MeshedChannelsThree<End, RecursBtoA, RoleA<RoleEnd>, NameB>;
 
@@ -102,7 +102,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     EndpointDoneA, EndpointForwardA, =>
     Branching0fromAtoB, =>
     RoleB, =>
-    NameCentral, Name, MeshedChannelsThree, 2
+    NameCentral, NameA, MeshedChannelsThree, 2
 );
 
 // Functions

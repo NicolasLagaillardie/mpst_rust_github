@@ -1,10 +1,11 @@
-use proc_macro2::{Span, TokenStream, TokenTree};
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Expr, Ident, LitInt, Result, Token};
 
-type VecOfTuple = Vec<(u64, u64, u64)>;
+use crate::common_functions::expand::parenthesised::parenthesised;
+use crate::common_functions::maths::{diag, get_tuple_diag};
 
 #[derive(Debug)]
 pub(crate) struct ChooseTypeMultiHttpToAll {
@@ -15,20 +16,6 @@ pub(crate) struct ChooseTypeMultiHttpToAll {
     meshedchannels_name: Ident,
     n_sessions: u64,
     exclusion: u64,
-}
-
-fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
-    let mut out: Vec<TokenStream> = Vec::new();
-    for tt in stream.clone().into_iter() {
-        let elt = match tt {
-            TokenTree::Group(g) => Some(g.stream()),
-            _ => None,
-        };
-        if let Some(elt_tt) = elt {
-            out.push(elt_tt)
-        }
-    }
-    out
 }
 
 impl Parse for ChooseTypeMultiHttpToAll {
@@ -42,7 +29,7 @@ impl Parse for ChooseTypeMultiHttpToAll {
         let _parentheses = syn::parenthesized!(content_labels in input);
         let labels = TokenStream::parse(&content_labels)?;
 
-        let all_labels: Vec<TokenStream> = expand_parenthesized(&labels);
+        let all_labels: Vec<TokenStream> = parenthesised(&labels);
 
         <Token![,]>::parse(input)?;
 
@@ -51,7 +38,7 @@ impl Parse for ChooseTypeMultiHttpToAll {
         let _parentheses = syn::parenthesized!(content_receivers in input);
         let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<TokenStream> = expand_parenthesized(&receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised(&receivers);
 
         <Token![,]>::parse(input)?;
 
@@ -94,41 +81,6 @@ impl From<ChooseTypeMultiHttpToAll> for TokenStream {
 }
 
 impl ChooseTypeMultiHttpToAll {
-    /// Create the whole matrix of index according to line and column
-    fn diag(&self) -> VecOfTuple {
-        let diff = self.n_sessions - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (self.n_sessions - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Return (line, column, index) of diag
-    fn get_tuple_diag(&self, diag: &[(u64, u64, u64)], i: u64) -> (u64, u64, u64) {
-        if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!(
-                "Error at get_tuple_diag for i = {:?} / diag = {:?}",
-                i, diag
-            )
-        }
-    }
-
     fn expand(&self) -> TokenStream {
         let session = self.session.clone();
         let all_labels = self.labels.clone();
@@ -136,11 +88,11 @@ impl ChooseTypeMultiHttpToAll {
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let diff = self.n_sessions - 1;
-        let diag = self.diag();
+        let diag = diag(self.n_sessions);
 
         let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
             .map(|i| {
-                let (line, column, _) = self.get_tuple_diag(&diag, i);
+                let (line, column, _) = get_tuple_diag(&diag, i);
                 let channel_left =
                     Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
                 let channel_right =

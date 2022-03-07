@@ -98,7 +98,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
                 Branching0fromCtoB::Done, =>
-                RoleB, =>
+                NameB, =>
                 RoleA,
                 RoleC,
                 MeshedChannelsThree,
@@ -112,7 +112,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
                 Branching0fromCtoB::More, =>
-                RoleB, =>
+                NameB, =>
                 RoleA,
                 RoleC,
                 MeshedChannelsThree,

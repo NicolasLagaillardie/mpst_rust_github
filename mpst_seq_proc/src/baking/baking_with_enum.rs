@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
-use crate::common_functions::expand::choose::choose;
+use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::offer::offer;
@@ -43,75 +43,6 @@ impl From<BakingWithEnum> for TokenStream {
 }
 
 impl BakingWithEnum {
-    fn expand_choose_mpst_create_multi_to_all(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        // Get all the roles provided into a Vec
-        let all_roles = self.all_roles.clone();
-
-        let choose_mpst_create_multi_to_all: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|sender| {
-
-                let name_macro = if let Some(elt) =
-                    all_roles.get(usize::try_from(sender - 1).unwrap())
-                {
-                    Ident::new(
-                        &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
-                        Span::call_site(),
-                    )
-                } else {
-                    panic!("Not enough arguments for name in expand_choose_mpst_create_multi_to_all")
-                };
-
-                let sender_name = if let Some(elt) =
-                    all_roles.get(usize::try_from(sender - 1).unwrap())
-                {
-                    Ident::new(
-                        &format!("Role{}", elt),
-                        Span::call_site(),
-                    )
-                } else {
-                    panic!("Not enough arguments for sender_name in expand_choose_mpst_create_multi_to_all")
-                };
-
-                let receivers: Vec<Ident> = (1..=self.number_roles)
-                    .filter_map(|receiver| {
-                        if sender != receiver {
-                            Some(
-                                if let Some(elt) =
-                                    all_roles.get(usize::try_from(receiver - 1).unwrap())
-                                {
-                                    Ident::new(
-                                        &format!("Role{}", elt),
-                                        Span::call_site(),
-                                    )
-                                } else {
-                                    panic!("Not enough arguments for receivers in expand_choose_mpst_create_multi_to_all")
-                                }
-                            )
-                        } else {
-                            None
-                        }
-                    })
-                    .collect();
-
-                quote! {
-                    mpstthree::choose_mpst_create_multi_to_all!(
-                        #name_macro ,
-                        #( #receivers , )* =>
-                        #sender_name ,
-                        #meshedchannels_name ,
-                        #sender
-                    );
-                }
-            })
-            .collect();
-
-        quote! {
-            #( #choose_mpst_create_multi_to_all )*
-        }
-    }
-
     fn expand(&self) -> TokenStream {
         let meshedchannels_name = self.meshedchannels_name.clone();
 
@@ -335,7 +266,11 @@ impl BakingWithEnum {
             })
             .collect();
 
-        let choose_mpst_create_multi_to_all = self.expand_choose_mpst_create_multi_to_all();
+        let choose_mpst_create_multi_to_all = choose_mpst_create_multi_to_all(
+            meshedchannels_name.clone(),
+            all_roles.clone(),
+            self.number_roles,
+        );
 
         quote! {
             #[must_use]

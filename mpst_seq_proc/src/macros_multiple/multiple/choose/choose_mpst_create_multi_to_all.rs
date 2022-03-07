@@ -1,29 +1,17 @@
-use proc_macro2::{TokenStream, TokenTree};
+use proc_macro2::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
+use crate::common_functions::expand::parenthesised::parenthesised;
+
 #[derive(Debug)]
-pub(crate) struct  ChooseMultiCreateToAll {
+pub(crate) struct ChooseMultiCreateToAll {
     name_macro: Ident,
     receivers: Vec<TokenStream>,
     sender: Ident,
     meshedchannels_name: Ident,
     exclusion: u64,
-}
-
-fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
-    let mut out: Vec<TokenStream> = Vec::new();
-    for tt in stream.clone().into_iter() {
-        let elt = match tt {
-            TokenTree::Group(g) => Some(g.stream()),
-            _ => None,
-        };
-        if let Some(elt_tt) = elt {
-            out.push(elt_tt)
-        }
-    }
-    out
 }
 
 impl Parse for ChooseMultiCreateToAll {
@@ -38,7 +26,7 @@ impl Parse for ChooseMultiCreateToAll {
         let _parentheses = syn::parenthesized!(content_receivers in input);
         let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<TokenStream> = expand_parenthesized(&receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised(&receivers);
 
         <Token![,]>::parse(input)?;
 
