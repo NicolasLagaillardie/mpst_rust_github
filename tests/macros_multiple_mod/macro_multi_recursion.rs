@@ -1,7 +1,7 @@
 // Test for parametrisation on the number of roles
 use rand::{thread_rng, Rng};
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
@@ -60,9 +60,9 @@ type AtoDVideo<N> = Recv<N, Send<N, RecursAtoD<N>>>;
 
 type InitA<N> = Recv<N, Send<N, RecursAtoD<N>>>;
 
-type BtoAClose = <AtoBClose as Session>::Dual;
+type BtoAClose = End;
 type BtoDClose = End;
-type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+type BtoAVideo<N> = Recv<N, Send<N, End>>;
 
 type RecursAtoD<N> = Recv<Branches0AtoD<N>, End>;
 type RecursBtoD<N> = Recv<Branches0BtoD<N>, End>;

@@ -1,5 +1,5 @@
 // Test for Macro, exact same as usecase-recursive
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
@@ -24,11 +24,7 @@ create_multiple_normal_role!(
 );
 
 // Create new names
-create_multiple_normal_name!(
-    NameA,
-    NameB,
-    NameC
-);
+create_multiple_normal_name!(NameA, NameB, NameC);
 
 // Create new send functions
 create_send_mpst_session_1!(send_mpst_c_to_a, RoleA, NameC);
@@ -50,7 +46,7 @@ type AtoCVideo<N> = Recv<N, Send<N, RecursAtoC<N>>>;
 
 type InitA<N> = Recv<N, Send<N, RecursAtoC<N>>>;
 
-type BtoAVideo<N> = <AtoBVideo<N> as Session>::Dual;
+type BtoAVideo<N> = Recv<N, Send<N, End>>;
 
 type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;

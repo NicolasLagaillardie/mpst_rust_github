@@ -1,4 +1,5 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::name::Name;
 
 use mpstthree::{create_meshedchannels, create_multiple_normal_name, create_multiple_normal_role};
 
@@ -42,8 +43,8 @@ pub fn meshedchannels_fields() {
     meshedchannels_1.name.sender.send(()).unwrap_or(());
 
     assert!(here1_stack.sender.send(RoleEnd::new().1).is_err());
-    assert!(there1_name.sender.send(()).is_err());
-    assert!(here1_name.sender.send(()).is_err());
+    assert!(there1_name.sender.send(()).is_ok());
+    assert!(here1_name.sender.send(()).is_ok());
 
     // meshedchannels_2
     let (here2_stack, there2_stack) = RoleC::<RoleEnd>::new();
@@ -56,19 +57,19 @@ pub fn meshedchannels_fields() {
     meshedchannels_2.name.sender.send(()).unwrap_or(());
 
     assert!(there2_stack.sender.send(RoleEnd::new().1).is_err());
-    assert!(there2_name.sender.send(()).is_err());
-    assert!(here2_name.sender.send(()).is_err());
+    assert!(there2_name.sender.send(()).is_ok());
+    assert!(here2_name.sender.send(()).is_ok());
 }
 
 pub fn meshedchannels_methods() {
     assert_eq!(
         Endpoint::<i32>::head_str(),
-        "Send\nRecv\nRoleB\nRoleA".to_string()
+        "Send\nRecv\nRoleB\nNameA".to_string()
     );
 
     assert_eq!(
         Endpoint::<i32>::tail_str(),
-        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nRoleA<RoleEnd<>>".to_string()
+        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nNameA<>".to_string()
     );
 
     assert_eq!(AtoB::<i32>::head_str(), "Send".to_string());
@@ -87,7 +88,7 @@ pub fn meshedchannels_methods() {
             AtoB::<i32>::head_str(),
             AtoC::<i32>::head_str(),
             StackA::head_str(),
-            RoleA::<RoleEnd>::head_str()
+            NameA::head_str()
         )
     );
 
@@ -101,8 +102,8 @@ pub fn meshedchannels_methods() {
             AtoC::<i32>::tail_str(),
             StackA::head_str(),
             StackA::tail_str(),
-            RoleA::<RoleEnd>::head_str(),
-            RoleA::<RoleEnd>::tail_str()
+            NameA::head_str(),
+            NameA::tail_str()
         )
     );
 }
@@ -114,12 +115,12 @@ pub fn meshedchannels_self_methods() {
 
     assert_eq!(
         meshedchannels_1.self_head_str(),
-        "Send\nRecv\nRoleB\nRoleA".to_string()
+        "Send\nRecv\nRoleB\nNameA".to_string()
     );
 
     assert_eq!(
         meshedchannels_2.self_head_str(),
-        "Recv\nSend\nRoleBDual\nRoleADual".to_string()
+        "Recv\nSend\nRoleBDual\nNameA".to_string()
     );
 
     assert_eq!(
@@ -146,12 +147,12 @@ pub fn meshedchannels_self_methods() {
 
     assert_eq!(
         meshedchannels_1.self_tail_str(),
-        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nRoleA<RoleEnd<>>".to_string()
+        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nNameA<>".to_string()
     );
 
     assert_eq!(
         meshedchannels_2.self_tail_str(),
-        "Recv<End<>>\nSend<End<>>\nRoleBDual<RoleCDual<RoleEnd<>>>\nRoleADual<RoleEnd<>>"
+        "Recv<End<>>\nSend<End<>>\nRoleBDual<RoleCDual<RoleEnd<>>>\nNameA<>"
             .to_string()
     );
 

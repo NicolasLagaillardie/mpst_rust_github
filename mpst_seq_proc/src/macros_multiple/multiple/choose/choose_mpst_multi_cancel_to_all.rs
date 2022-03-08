@@ -141,7 +141,7 @@ impl ChooseTypeMultiCancelToAll {
                     };
                 quote! {
                     let ( #temp_name , _) =
-                        <#temp_role as mpstthree::name::Name>::new();
+                        < #temp_role as mpstthree::name::Name >::new();
                 }
             })
             .collect();
@@ -243,14 +243,14 @@ impl ChooseTypeMultiCancelToAll {
                 )*
 
                 let (name_1, _) =
-                    #broadcaster::new();
+                    < #broadcaster as mpstthree::name::Name >::new();
 
                 #(
                     #new_names
                 )*
 
                 let ( #new_name_sender , _) =
-                    #sender::new();
+                    < #sender as mpstthree::name::Name >::new();
 
                 let mut s = #session;
 

@@ -123,7 +123,7 @@ impl ChooseMultiToAll {
                         panic!("Not enough receivers")
                     };
                 quote! {
-                    let ( #temp_name , _) = #temp_role::new();
+                    let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
                 }
             })
             .collect();
@@ -216,7 +216,7 @@ impl ChooseMultiToAll {
                     #new_names
                 )*
 
-                let ( #new_name_sender , _) = #sender::new();
+                let ( #new_name_sender , _) = < #sender as mpstthree::name::Name >::new();
 
                 let s = #session;
 
