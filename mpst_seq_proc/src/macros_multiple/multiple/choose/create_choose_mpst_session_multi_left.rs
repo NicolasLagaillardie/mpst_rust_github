@@ -229,7 +229,7 @@ impl ChooseTypeMultiLeft {
                     Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
                 let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
-                    let ( #channel_left , #channel_right ) = #temp_session::new();
+                    let ( #channel_left , #channel_right ) = < #temp_session as mpstthree::binary::struct_trait::session::Session >::new();
                 }
             })
             .collect();
@@ -239,7 +239,7 @@ impl ChooseTypeMultiLeft {
                 let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
                 let temp_role = Ident::new(&format!("R{}", 3 * (i - 1) + 1), Span::call_site());
                 quote! {
-                    let (_, #temp_stack ) = #temp_role::new();
+                    let (_, #temp_stack ) = < #temp_role as mpstthree::role::Role >::new();
                 }
             })
             .collect();
@@ -249,7 +249,7 @@ impl ChooseTypeMultiLeft {
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 let temp_role = Ident::new(&format!("N{}", 3 * (i - 1) + 3), Span::call_site());
                 quote! {
-                    let ( #temp_name , _) = #temp_role::new();
+                    let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
                 }
             })
             .collect();
@@ -392,7 +392,7 @@ impl ChooseTypeMultiLeft {
                     #new_names
                 )*
 
-                let ( #name_left , _) = #name::new();
+                let ( #name_left , _) = < #name as mpstthree::name::Name>::new();
 
                 #(
                     #new_choices

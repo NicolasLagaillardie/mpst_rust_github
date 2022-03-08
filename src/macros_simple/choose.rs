@@ -164,9 +164,17 @@ macro_rules! create_choose_from_3_to_1_2 {
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
         let (name_1, _) =
-            <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
+            <
+                <
+                    $name_receiver_1 as mpstthree::name::Name
+                >::Dual as mpstthree::name::Name
+            >::new();
         let (name_2, _) =
-            <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
+            <
+                <
+                    $name_receiver_2 as mpstthree::name::Name
+                >::Dual as mpstthree::name::Name
+            >::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {

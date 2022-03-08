@@ -5,7 +5,6 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
-use mpstthree::name::Name;
 
 use std::error::Error;
 

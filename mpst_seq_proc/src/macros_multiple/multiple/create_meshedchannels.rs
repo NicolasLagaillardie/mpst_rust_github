@@ -78,7 +78,7 @@ impl CreateMeshedChannels {
                 let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
                 let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
-                    let ( #temp_sender , #temp_receiver ) = #temp_ident::new();
+                    let ( #temp_sender , #temp_receiver ) = < #temp_ident as mpstthree::binary::struct_trait::session::Session >::new();
                 }
             })
             .collect();
@@ -209,9 +209,9 @@ impl CreateMeshedChannels {
                         #senders_receivers
                     )*
 
-                    let (role_one, role_two) = R::new();
-                    let (name_one, _) = N::new();
-                    let (name_two, _) = N::new();
+                    let (role_one, role_two) = < R  as mpstthree::role::Role >::new();
+                    let (name_one, _) = < N as mpstthree::name::Name >::new();
+                    let (name_two, _) = < N as mpstthree::name::Name >::new();
 
                     (
                         #meshedchannels_name {
