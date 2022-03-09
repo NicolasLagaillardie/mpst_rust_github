@@ -192,7 +192,7 @@ fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..3);
+    let choice: i32 = thread_rng().gen_range(1..3);
 
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(

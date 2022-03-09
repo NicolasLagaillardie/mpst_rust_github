@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
+    choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle,
+    fork_mpst_multi, offer_mpst,
 };
 
 use rand::random;
@@ -26,26 +27,29 @@ create_multiple_normal_role!(
     User, DualUser |
 );
 
+// Create Names
+create_multiple_normal_name!(NameApi, NameController, NameStorage, NameUser);
+
 // Create send
 create_send_mpst_cancel_bundle!(
     send_api_to_controller, Controller, 1 |
     send_api_to_storage, Storage, 2 |
     send_api_to_user, User, 3 | =>
-    Api, MeshedChannelsFour, 4
+    NameApi, MeshedChannelsFour, 4
 );
 create_send_mpst_cancel_bundle!(
     send_controller_to_api, Api, 1 |
     send_controller_to_storage, Storage, 2 | =>
-    Controller, MeshedChannelsFour, 4
+    NameController, MeshedChannelsFour, 4
 );
 create_send_mpst_cancel_bundle!(
     send_storage_to_api, Api, 1 |
     send_storage_to_controller, Controller, 2 | =>
-    Storage, MeshedChannelsFour, 4
+    NameStorage, MeshedChannelsFour, 4
 );
 create_send_mpst_cancel_bundle!(
     send_user_to_api, Api, 1 | =>
-    User, MeshedChannelsFour, 4
+    NameUser, MeshedChannelsFour, 4
 );
 
 // Create recv
@@ -53,22 +57,22 @@ create_recv_mpst_session_bundle!(
     recv_api_from_controller, Controller, 1 |
     recv_api_from_storage, Storage, 2 |
     recv_api_from_user, User, 3 | =>
-    Api, MeshedChannelsFour, 4
+    NameApi, MeshedChannelsFour, 4
 );
 create_recv_mpst_session_bundle!(
     recv_controller_from_api, Api, 1 |
     recv_controller_from_storage, Storage, 2 | =>
-    Controller, MeshedChannelsFour, 4
+    NameController, MeshedChannelsFour, 4
 );
 create_recv_mpst_session_bundle!(
     recv_storage_from_api, Api, 1 |
     recv_storage_from_controller, Controller, 2 | =>
-    Storage, MeshedChannelsFour, 4
+    NameStorage, MeshedChannelsFour, 4
 );
 create_recv_mpst_session_bundle!(
     recv_user_from_api, Api, 1 |
     recv_user_from_controller, Controller, 2 | =>
-    User, MeshedChannelsFour, 4
+    NameUser, MeshedChannelsFour, 4
 );
 
 // Create close function
@@ -76,12 +80,6 @@ close_mpst!(close_mpst_multi, MeshedChannelsFour, 4);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, MeshedChannelsFour, 4);
-
-// Names
-type NameApi = Api<RoleEnd>;
-type NameController = Controller<RoleEnd>;
-type NameStorage = Storage<RoleEnd>;
-type NameUser = User<RoleEnd>;
 
 // Api
 enum Branching0fromCtoA<N: marker::Send> {
@@ -265,10 +263,10 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Branching0fromCtoA::Close,
                 Branching0fromCtoS::Close,
                 Branching0fromCtoU::Close, =>
-                Api,
-                Storage,
-                User, =>
-                Controller,
+                NameApi,
+                NameStorage,
+                NameUser, =>
+                NameController,
                 MeshedChannelsFour,
                 2
             );
@@ -285,10 +283,10 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Branching0fromCtoA::Up,
                 Branching0fromCtoS::Up,
                 Branching0fromCtoU::Up, =>
-                Api,
-                Storage,
-                User, =>
-                Controller,
+                NameApi,
+                NameStorage,
+                NameUser, =>
+                NameController,
                 MeshedChannelsFour,
                 2
             );
@@ -303,10 +301,10 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Branching0fromCtoA::Down,
                 Branching0fromCtoS::Down,
                 Branching0fromCtoU::Down, =>
-                Api,
-                Storage,
-                User, =>
-                Controller,
+                NameApi,
+                NameStorage,
+                NameUser, =>
+                NameController,
                 MeshedChannelsFour,
                 2
             );

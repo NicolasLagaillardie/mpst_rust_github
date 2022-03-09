@@ -84,7 +84,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let (_empty3, s) = s.recv()?;
     let (_empty4, s) = s.recv()?;
 
-    let choice = thread_rng().gen_range(1..=3);
+    let choice: i32 = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
         let s: EndpointCAccept =

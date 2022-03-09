@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name_short,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_session_bundle, offer_mpst,
 };
 
 use rand::{thread_rng, Rng};
@@ -22,39 +23,37 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree
 // normal
 create_multiple_normal_role_short!(A, C, S);
 
+// Create new names
+create_multiple_normal_name_short!(A, C, S);
+
 // Create new send functions
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
 
 // Types
 // A
@@ -103,21 +102,21 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let elt_1 = thread_rng().gen_range(1..=100);
-    let elt_2 = thread_rng().gen_range(1..=100);
+    let elt_1: i32 = thread_rng().gen_range(1..=100);
+    let elt_2: i32 = thread_rng().gen_range(1..=100);
     let s = send_mpst_c_to_s(elt_1, s);
     let s = send_mpst_c_to_s(elt_2, s);
 
-    let choice = thread_rng().gen_range(1..=2);
+    let choice: i32 = thread_rng().gen_range(1..=2);
 
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Sum,
             Branching0fromCtoS::<i32>::Sum, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
+            NameA,
+            NameS, =>
+            NameC,
             MeshedChannelsThree,
             2
         );
@@ -130,9 +129,9 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoA::Diff,
             Branching0fromCtoS::<i32>::Diff, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
+            NameA,
+            NameS, =>
+            NameC,
             MeshedChannelsThree,
             2
         );

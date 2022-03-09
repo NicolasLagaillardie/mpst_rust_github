@@ -24,11 +24,6 @@ struct Token;
 struct Fail;
 struct Received;
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
-
 // Types
 
 // A
@@ -108,7 +103,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = s.send(Auth {})?;
     let (_, s) = s.recv()?;
 
-    let expected = thread_rng().gen_range(1..=3);
+    let expected: i32 = thread_rng().gen_range(1..=3);
 
     if 1 == expected {
         let s: EndpointASuccess =

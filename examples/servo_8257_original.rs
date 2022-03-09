@@ -34,11 +34,11 @@ type OrderingS = RoleConstellation<RoleConstellation<RoleLayout<RoleEnd>>>;
 
 // MeshedChannels
 
-type EndpointC = MeshedChannels<CtoL, CtoS, OrderingC, NameC>;
+type EndpointC = MeshedChannels<CtoL, CtoS, OrderingC, NameConstellation>;
 
-type EndpointL = MeshedChannels<LtoC, LtoS, OrderingL, NameL>;
+type EndpointL = MeshedChannels<LtoC, LtoS, OrderingL, NameLayout>;
 
-type EndpointS = MeshedChannels<StoC, StoL, OrderingS, NameS>;
+type EndpointS = MeshedChannels<StoC, StoL, OrderingS, NameScript>;
 
 /////////////////////////
 

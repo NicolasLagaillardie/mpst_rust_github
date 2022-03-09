@@ -10,13 +10,12 @@ type AddAtoB = Recv<i32, End>;
 
 type OrderingA21 = RoleC<RoleEnd>;
 type OrderingA22Full = RoleB<OrderingA21>;
-type EndpointA23 =
-    MeshedChannels<AddAtoB, Recv<Branches0AtoC, End>, OrderingA22Full, RoleA<RoleEnd>>;
+type EndpointA23 = MeshedChannels<AddAtoB, Recv<Branches0AtoC, End>, OrderingA22Full, NameA>;
 
 type ByeAtoB = Recv<(), End>;
 
 type OrderingA24Full = RoleB<RoleEnd>;
-type EndpointA25 = MeshedChannels<ByeAtoB, End, OrderingA24Full, RoleA<RoleEnd>>;
+type EndpointA25 = MeshedChannels<ByeAtoB, End, OrderingA24Full, NameA>;
 
 enum Branches0AtoC {
     Add(EndpointA23),
@@ -28,20 +27,20 @@ type TestAtoC = Recv<i32, Recv<Branches0AtoC, End>>;
 
 type OrderingA46 = RoleC<RoleEnd>;
 type OrderingA47Full = RoleC<OrderingA46>;
-type EndpointA48 = MeshedChannels<End, TestAtoC, OrderingA47Full, RoleA<RoleEnd>>;
+type EndpointA48 = MeshedChannels<End, TestAtoC, OrderingA47Full, NameA>;
 
 type AddBtoA = Send<i32, End>;
 type AddBtoC = Recv<i32, Recv<Branches0BtoC, End>>;
 
 type OrderingB23 = RoleC<RoleEnd>;
 type OrderingB24Full = RoleC<RoleA<OrderingB23>>;
-type EndpointB25 = MeshedChannels<AddBtoA, AddBtoC, OrderingB24Full, RoleB<RoleEnd>>;
+type EndpointB25 = MeshedChannels<AddBtoA, AddBtoC, OrderingB24Full, NameB>;
 
 type ByeBtoA = Send<(), End>;
 type ByeBtoC = Recv<(), End>;
 
 type OrderingB26Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB27 = MeshedChannels<ByeBtoA, ByeBtoC, OrderingB26Full, RoleB<RoleEnd>>;
+type EndpointB27 = MeshedChannels<ByeBtoA, ByeBtoC, OrderingB26Full, NameB>;
 
 enum Branches0BtoC {
     Add(EndpointB25),
@@ -51,24 +50,24 @@ type Choose0forBtoC = Send<Branches0BtoC, End>;
 
 type OrderingB48 = RoleC<RoleEnd>;
 type OrderingB49Full = OrderingB48;
-type EndpointB50 = MeshedChannels<End, Recv<Branches0BtoC, End>, OrderingB49Full, RoleB<RoleEnd>>;
+type EndpointB50 = MeshedChannels<End, Recv<Branches0BtoC, End>, OrderingB49Full, NameB>;
 
 type TestCtoA = Send<i32, Choose0forAtoC>;
 
 type ByeCtoB = Send<(), End>;
 
 type OrderingC8Full = RoleB<RoleEnd>;
-type EndpointC9 = MeshedChannels<End, ByeCtoB, OrderingC8Full, RoleC<RoleEnd>>;
+type EndpointC9 = MeshedChannels<End, ByeCtoB, OrderingC8Full, NameC>;
 
 type AddCtoB = Send<i32, Choose0forBtoC>;
 
 type OrderingC6Full = RoleB<RoleBroadcast>;
-type EndpointC7 = MeshedChannels<Choose0forAtoC, AddCtoB, OrderingC6Full, RoleC<RoleEnd>>;
+type EndpointC7 = MeshedChannels<Choose0forAtoC, AddCtoB, OrderingC6Full, NameC>;
 
-type EndpointC10 = MeshedChannels<Choose0forAtoC, Choose0forBtoC, RoleBroadcast, RoleC<RoleEnd>>;
+type EndpointC10 = MeshedChannels<Choose0forAtoC, Choose0forBtoC, RoleBroadcast, NameC>;
 
 type OrderingC12Full = RoleA<RoleBroadcast>;
-type EndpointC13 = MeshedChannels<TestCtoA, Choose0forBtoC, OrderingC12Full, RoleC<RoleEnd>>;
+type EndpointC13 = MeshedChannels<TestCtoA, Choose0forBtoC, OrderingC12Full, NameC>;
 
 /////////////////////////
 

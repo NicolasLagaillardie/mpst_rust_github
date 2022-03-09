@@ -85,7 +85,7 @@ type EndpointServer<N> =
 
 // Functions
 fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
-    let auth = thread_rng().gen_range(1..=2);
+    let auth: i32 = thread_rng().gen_range(1..=2);
 
     let s = send_mpst_voter_to_server(auth, s);
 
@@ -105,7 +105,7 @@ fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
 fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     let (ok, s) = recv_mpst_voter_to_server(s)?;
 
-    let expected = thread_rng().gen_range(1..=2);
+    let expected: i32 = thread_rng().gen_range(1..=2);
 
     if ok == expected {
         let s = choose_mpst_multi_to_all!(
@@ -137,7 +137,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=2);
+    let choice: i32 = thread_rng().gen_range(1..=2);
 
     let (auth, s) = recv_mpst_server_to_voter(s)?;
 

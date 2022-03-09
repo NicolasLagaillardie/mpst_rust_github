@@ -286,12 +286,12 @@ fn endpoint_controller(
     s_circuit_breaker: EndpointCBControllerInit<i32>,
     s_logging: EndpointLogControllerInit<i32>,
 ) -> Result<(), Box<dyn Error>> {
-    let start_circuit_breaker = thread_rng().gen_range(50..100);
+    let start_circuit_breaker: i32 = thread_rng().gen_range(50..100);
     let s_circuit_breaker = s_circuit_breaker.send(start_circuit_breaker)?;
     let s_circuit_breaker = s_circuit_breaker.send(start_circuit_breaker)?;
     let (_hard_ping, s_circuit_breaker) = s_circuit_breaker.recv()?;
 
-    let start_logging = thread_rng().gen_range(50..100);
+    let start_logging: i32 = thread_rng().gen_range(50..100);
     let s_logging = s_logging.send(start_logging)?;
 
     recurs_controller(

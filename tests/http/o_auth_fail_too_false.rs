@@ -240,7 +240,7 @@ fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let new_vec = vec![client.request(req)];
 
     let (pwd, s, _resp) = recv_http_a_to_c(s, false, new_vec)?; // Should fail because false but new_vec not empty
-    let expected = thread_rng().gen_range(1..=3);
+    let expected:i32 = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
         let s = auth_from_a_to_all(s);
@@ -303,7 +303,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn continue_c(s: EndpointCContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=6);
+    let choice:i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = close_from_c_to_all(s);
@@ -367,7 +367,7 @@ fn continue_s(s: EndpointSContinue<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn picture_s(s: EndpointSContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=6);
+    let choice:i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = refusal_from_s_to_all(s);

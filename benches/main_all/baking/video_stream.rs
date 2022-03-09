@@ -36,12 +36,12 @@ type RecursAtoC = Recv<Branches0AtoC, End>;
 type RecursBtoC = Recv<Branches0BtoC, End>;
 
 enum Branches0AtoC {
-    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<AtoBVideo, AtoCVideo, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo, AtoCVideo, StackAVideo, NameA>),
 }
 enum Branches0BtoC {
-    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
-    Video(MeshedChannels<BtoAVideo, RecursBtoC, StackBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo, RecursBtoC, StackBVideo, NameB>),
 }
 type Choose0fromCtoA = Send<Branches0AtoC, End>;
 type Choose0fromCtoB = Send<Branches0BtoC, End>;
@@ -65,21 +65,21 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 
 // For C
 type EndpointCRecurs =
-    MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, RoleC<RoleEnd>>;
+    MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
 type EndpointCVideo = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoB,
     RoleA<RoleA<StackCRecurs>>,
     RoleC<RoleEnd>,
 >;
-type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, RoleC<RoleEnd>>;
+type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, NameC>;
 
 // For A
-type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, RoleA<RoleEnd>>;
-type EndpointAFull = MeshedChannels<End, InitA, StackAInit, RoleA<RoleEnd>>;
+type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, NameA>;
+type EndpointAFull = MeshedChannels<End, InitA, StackAInit, NameA>;
 
 // For B
-type EndpointBRecurs = MeshedChannels<End, RecursBtoC, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBRecurs = MeshedChannels<End, RecursBtoC, StackBRecurs, NameB>;
 
 // Functions related to endpoints
 fn server(s: EndpointBRecurs) -> Result<(), Box<dyn Error>> {

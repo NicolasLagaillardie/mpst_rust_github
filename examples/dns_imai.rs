@@ -5,8 +5,8 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose_mpst_create_multi_to_all,
-    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
-    create_send_mpst_session_bundle, offer_mpst,
+    create_multiple_normal_name_short, create_multiple_normal_role_short,
+    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
 };
 
 use rand::{random, thread_rng, Rng};
@@ -22,46 +22,44 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree
 // normal
 create_multiple_normal_role_short!(Client, Other, Server);
 
+// Create new Names
+create_multiple_normal_name_short!(Client, Other, Server);
+
 // Create new send functions
 // CLIENT
 create_send_mpst_session_bundle!(
     send_mpst_client_to_server, RoleServer, 2 | =>
-    RoleClient, MeshedChannelsThree, 3
+    NameClient, MeshedChannelsThree, 3
 );
 // OTHER
 create_send_mpst_session_bundle!(
     send_mpst_other_to_server, RoleServer, 2 | =>
-    RoleOther, MeshedChannelsThree, 3
+    NameOther, MeshedChannelsThree, 3
 );
 // SERVER
 create_send_mpst_session_bundle!(
     send_mpst_server_to_client, RoleClient, 1 |
     send_mpst_server_to_other, RoleOther, 2 | =>
-    RoleServer, MeshedChannelsThree, 3
+    NameServer, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // CLIENT
 create_recv_mpst_session_bundle!(
     recv_mpst_client_from_server, RoleServer, 2 | =>
-    RoleClient, MeshedChannelsThree, 3
+    NameClient, MeshedChannelsThree, 3
 );
 // OTHER
 create_recv_mpst_session_bundle!(
     recv_mpst_other_from_server, RoleServer, 2 | =>
-    RoleOther, MeshedChannelsThree, 3
+    NameOther, MeshedChannelsThree, 3
 );
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_from_client, RoleClient, 1 |
     recv_mpst_server_from_other, RoleOther, 2 | =>
-    RoleServer, MeshedChannelsThree, 3
+    NameServer, MeshedChannelsThree, 3
 );
-
-// Names
-type NameClient = RoleClient<RoleEnd>;
-type NameOther = RoleOther<RoleEnd>;
-type NameServer = RoleServer<RoleEnd>;
 
 // Types
 // SERVER
@@ -110,9 +108,9 @@ type EndpointServer = MeshedChannelsThree<
 
 choose_mpst_create_multi_to_all!(
     choose_mpst_server_to_all,
-    RoleClient,
-    RoleOther, =>
-    RoleServer,
+    NameClient,
+    NameOther, =>
+    NameServer,
     MeshedChannelsThree,
     3
 );
@@ -158,7 +156,7 @@ fn endpoint_other(s: EndpointOther) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..3);
+    let choice: i32 = thread_rng().gen_range(1..3);
 
     let (address, s) = recv_mpst_server_from_client(s)?;
 

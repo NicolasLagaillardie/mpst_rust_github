@@ -177,8 +177,7 @@ impl ChooseTypeMultiToAllBundle {
                     })
                     .collect();
 
-                // Build let ( name_n , _) =
-                //      <RoleN::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                // Build let ( name_n , _) = <NameN as mpstthree::name::Name>::new();
                 let new_names: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_name =
@@ -191,8 +190,7 @@ impl ChooseTypeMultiToAllBundle {
                             };
                         quote! {
                             let ( #temp_name , _) =
-                                <#temp_role::<mpstthree::role::end::RoleEnd>
-                                    as mpstthree::role::Role>::new();
+                                < #temp_role as mpstthree::name::Name >::new();
                         }
                     })
                     .collect();
@@ -346,7 +344,7 @@ impl ChooseTypeMultiToAllBundle {
                                 #send_types
                             )*
                             mpstthree::role::broadcast::RoleBroadcast,
-                            #sender<mpstthree::role::end::RoleEnd>,
+                            #sender,
                         >
                     ) -> #temp_new_type
                     {
@@ -362,8 +360,7 @@ impl ChooseTypeMultiToAllBundle {
                             #new_names
                         )*
 
-                        let ( #new_name_sender , _) =
-                            <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        let ( #new_name_sender , _) = < #sender as mpstthree::name::Name >::new();
 
                         #(
                             #all_send

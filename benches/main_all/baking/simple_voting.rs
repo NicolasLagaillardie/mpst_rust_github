@@ -52,7 +52,7 @@ type EndpointServer =
 
 // Functions
 fn endpoint_voter(s: EndpointVoter) -> Result<(), Box<dyn Error>> {
-    let auth = thread_rng().gen_range(1..=2);
+    let auth: i32 = thread_rng().gen_range(1..=2);
 
     let s = s.send(auth)?;
 
@@ -72,7 +72,7 @@ fn endpoint_voter(s: EndpointVoter) -> Result<(), Box<dyn Error>> {
 fn choice_voter(s: ChoiceVoter) -> Result<(), Box<dyn Error>> {
     let (ok, s) = s.recv()?;
 
-    let expected = thread_rng().gen_range(1..=2);
+    let expected: i32 = thread_rng().gen_range(1..=2);
 
     if ok == expected {
         let s = choose_mpst_voter_to_all!(s, Branching1fromVtoS::Yes);
@@ -90,7 +90,7 @@ fn choice_voter(s: ChoiceVoter) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=2);
+    let choice: i32 = thread_rng().gen_range(1..=2);
 
     let (auth, s) = s.recv()?;
 

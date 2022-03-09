@@ -127,7 +127,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
     let (_empty3, s) = recv_mpst_c_from_s(s)?;
     let (_empty4, s) = recv_mpst_c_from_a(s)?;
 
-    let choice = thread_rng().gen_range(1..=3);
+    let choice: i32 = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(

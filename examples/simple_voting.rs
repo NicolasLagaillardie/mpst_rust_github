@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name_short,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_session_bundle, offer_mpst,
 };
 
 use rand::{thread_rng, Rng};
@@ -22,33 +23,32 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 
 // normal
 create_multiple_normal_role_short!(Voter, Server);
 
+// normal
+create_multiple_normal_name_short!(Voter, Server);
+
 // Create new send functions
 // SERVER
 create_send_mpst_session_bundle!(
     send_mpst_server_to_voter, RoleVoter, 1 | =>
-    RoleServer, MeshedChannelsTwo, 2
+    NameServer, MeshedChannelsTwo, 2
 );
 // VOTER
 create_send_mpst_session_bundle!(
     send_mpst_voter_to_server, RoleServer, 1 | =>
-    RoleVoter, MeshedChannelsTwo, 2
+    NameVoter, MeshedChannelsTwo, 2
 );
 
 // Create new recv functions and related types
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_to_voter, RoleVoter, 1 | =>
-    RoleServer, MeshedChannelsTwo, 2
+    NameServer, MeshedChannelsTwo, 2
 );
 // VOTER
 create_recv_mpst_session_bundle!(
     recv_mpst_voter_to_server, RoleServer, 1 | =>
-    RoleVoter, MeshedChannelsTwo, 2
+    NameVoter, MeshedChannelsTwo, 2
 );
-
-// Names
-type NameServer = RoleServer<RoleEnd>;
-type NameVoter = RoleVoter<RoleEnd>;
 
 // Types
 // SERVER
@@ -84,7 +84,7 @@ type EndpointServer<N> =
 
 // Functions
 fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
-    let auth = thread_rng().gen_range(1..=2);
+    let auth: i32 = thread_rng().gen_range(1..=2);
 
     let s = send_mpst_voter_to_server(auth, s);
 
@@ -104,14 +104,14 @@ fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
 fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
     let (ok, s) = recv_mpst_voter_to_server(s)?;
 
-    let expected = thread_rng().gen_range(1..=2);
+    let expected: i32 = thread_rng().gen_range(1..=2);
 
     if ok == expected {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromVtoS::<i32>::Yes, =>
-            RoleServer, =>
-            RoleVoter,
+            NameServer, =>
+            NameVoter,
             MeshedChannelsTwo,
             2
         );
@@ -123,8 +123,8 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromVtoS::<i32>::No, =>
-            RoleServer, =>
-            RoleVoter,
+            NameServer, =>
+            NameVoter,
             MeshedChannelsTwo,
             2
         );
@@ -136,7 +136,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=2);
+    let choice: i32 = thread_rng().gen_range(1..=2);
 
     let (auth, s) = recv_mpst_server_to_voter(s)?;
 
@@ -144,8 +144,8 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromStoV::<i32>::Reject, =>
-            RoleVoter, =>
-            RoleServer,
+            NameVoter, =>
+            NameServer,
             MeshedChannelsTwo,
             2
         );
@@ -157,8 +157,8 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromStoV::<i32>::Auth, =>
-            RoleVoter, =>
-            RoleServer,
+            NameVoter, =>
+            NameServer,
             MeshedChannelsTwo,
             2
         );

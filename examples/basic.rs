@@ -14,10 +14,6 @@ struct Request;
 struct Response;
 struct Stop;
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-
 // Types
 // Binary types for A
 type StartA0 = Recv<Request, Send<Branching0fromAtoB, End>>; // Recv a Request then Send a choice

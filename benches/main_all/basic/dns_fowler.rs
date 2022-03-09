@@ -135,7 +135,7 @@ fn endpoint_handler(s: EndpointHandler) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..3);
+    let choice: i32 = thread_rng().gen_range(1..3);
 
     let (_, s) = s.recv()?;
 
