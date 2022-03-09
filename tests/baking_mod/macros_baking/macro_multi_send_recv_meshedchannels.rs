@@ -8,15 +8,9 @@ use std::error::Error;
 // Create new roles
 bundle_impl!(MeshedChannels, A, B, C, D, E);
 
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
+type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, RoleB<RoleEnd>, NameD>;
 
-type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, NameB, NameD>;
-
-type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, NameD, NameB>;
+type RecvMeshedChannelsB<N> = MeshedChannels<End, End, Recv<N, End>, End, RoleD<RoleEnd>, NameB>;
 
 type PawnA = MeshedChannels<End, End, End, End, RoleEnd, NameA>;
 type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;

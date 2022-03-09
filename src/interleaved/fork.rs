@@ -9,8 +9,8 @@ use std::marker;
 
 use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
-use crate::role::Role;
 use crate::name::Name;
+use crate::role::Role;
 
 #[doc(hidden)]
 pub fn fork_mpst_solo<S0, S1, S2, R0, R1, R2, N0, N1, N2, F>(f: F) -> Result<(), Box<dyn Error>>

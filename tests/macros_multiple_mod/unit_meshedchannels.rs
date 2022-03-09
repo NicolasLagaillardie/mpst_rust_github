@@ -152,8 +152,7 @@ pub fn meshedchannels_self_methods() {
 
     assert_eq!(
         meshedchannels_2.self_tail_str(),
-        "Recv<End<>>\nSend<End<>>\nRoleBDual<RoleCDual<RoleEnd<>>>\nNameA<>"
-            .to_string()
+        "Recv<End<>>\nSend<End<>>\nRoleBDual<RoleCDual<RoleEnd<>>>\nNameA<>".to_string()
     );
 
     assert_eq!(

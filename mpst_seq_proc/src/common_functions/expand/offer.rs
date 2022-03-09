@@ -18,7 +18,7 @@ pub(crate) fn offer(
     };
 
     let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-        Ident::new(&format!("Role{}", elt), Span::call_site())
+        Ident::new(&format!("Name{}", elt), Span::call_site())
     } else {
         panic!("Not enough arguments for receiver_ident in expand_offer")
     };
@@ -54,12 +54,12 @@ pub(crate) fn offer(
                             #meshedchannels_name<
                                 #( #left_sessions )*
                                 R1,
-                                #receiver_ident<mpstthree::role::end::RoleEnd>
+                                #receiver_ident
                             >,
                             #meshedchannels_name<
                                 #( #right_sessions )*
                                 R2,
-                                #receiver_ident<mpstthree::role::end::RoleEnd>
+                                #receiver_ident
                             >
                         >,
                         mpstthree::binary::struct_trait::end::End
@@ -81,7 +81,7 @@ pub(crate) fn offer(
             #meshedchannels_name<
                 #( #offer_sessions )*
                 #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                #receiver_ident<mpstthree::role::end::RoleEnd>,
+                #receiver_ident,
             >
         {
             pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
@@ -90,14 +90,14 @@ pub(crate) fn offer(
                     #meshedchannels_name<
                         #( #left_sessions )*
                         R1,
-                        #receiver_ident<mpstthree::role::end::RoleEnd>,
+                        #receiver_ident,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
                     #meshedchannels_name<
                         #( #right_sessions )*
                         R2,
-                        #receiver_ident<mpstthree::role::end::RoleEnd>,
+                        #receiver_ident,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {

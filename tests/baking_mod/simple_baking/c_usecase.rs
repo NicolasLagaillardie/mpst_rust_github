@@ -11,13 +11,15 @@ use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::role::a::RoleA;
-use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_c::RoleAlltoC;
 use mpstthree::role::b::RoleB;
-use mpstthree::role::b_dual::RoleBDual;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::c_to_all::RoleCtoAll;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
@@ -61,57 +63,29 @@ type StackCFull = RoleA<RoleA<StackCChoice>>;
 
 // Creating the MP sessions
 // For C
-type ChooseCtoA<N> = ChooseMpst<
-    BtoAVideo<N>,
-    CtoAVideo<N>,
-    BtoAClose,
-    CtoAClose,
-    StackAVideoDual,
-    StackAEnd,
-    RoleADual<RoleEnd>,
->;
-type ChooseCtoB<N> = ChooseMpst<
-    AtoBVideo<N>,
-    CtoBClose,
-    AtoBClose,
-    CtoBClose,
-    StackBVideoDual,
-    StackBEnd,
-    RoleBDual<RoleEnd>,
->;
+type ChooseCtoA<N> =
+    ChooseMpst<BtoAVideo<N>, CtoAVideo<N>, BtoAClose, CtoAClose, StackAVideoDual, StackAEnd, NameA>;
+type ChooseCtoB<N> =
+    ChooseMpst<AtoBVideo<N>, CtoBClose, AtoBClose, CtoBClose, StackBVideoDual, StackBEnd, NameB>;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
-type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameC>;
 
 // For A
-type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>;
-type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>;
+type EndpointAVideo<N> = MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>;
+type EndpointAEnd = MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>;
 
-type OfferA<N> = OfferMpst<
-    AtoBVideo<N>,
-    AtoCVideo<N>,
-    AtoBClose,
-    AtoCClose,
-    StackAVideo,
-    StackAEnd,
-    RoleA<RoleEnd>,
->;
+type OfferA<N> =
+    OfferMpst<AtoBVideo<N>, AtoCVideo<N>, AtoBClose, AtoCClose, StackAVideo, StackAEnd, NameA>;
 type InitA<N> = Recv<N, Send<N, OfferA<N>>>;
-type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAFull, NameA>;
 
 // For B
-type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, RoleB<RoleEnd>>;
-type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCClose, StackBVideo, NameB>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
-type OfferB<N> = OfferMpst<
-    BtoAVideo<N>,
-    BtoCClose,
-    BtoAClose,
-    BtoCClose,
-    StackBVideo,
-    StackBEnd,
-    RoleB<RoleEnd>,
->;
-type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, RoleB<RoleEnd>>;
+type OfferB<N> =
+    OfferMpst<BtoAVideo<N>, BtoCClose, BtoAClose, BtoCClose, StackBVideo, StackBEnd, NameB>;
+type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 
 // Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {

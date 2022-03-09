@@ -7,10 +7,12 @@ use syn::{Ident, Result, Token};
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
+use crate::common_functions::expand::meshedchannels::meshedchannels;
+use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
 use crate::common_functions::expand::role::role;
-use crate::common_functions::expand::send::send_canceled;
+use crate::common_functions::expand::send::send_basic;
 use crate::common_functions::expand::token_stream::token_stream;
 
 #[derive(Debug)]
@@ -49,7 +51,13 @@ impl BakingWithEnum {
         // Get all the roles provided into a Vec
         let all_roles = self.all_roles.clone();
 
-        let quote_fork_mpst = fork_mpst(meshedchannels_name.clone(), self.number_roles);
+        // Get the meshedchannels structure
+        let meshedchannels_struct = meshedchannels(meshedchannels_name, self.number_roles);
+
+        let names_struct: Vec<TokenStream> =
+            all_roles.iter().map(|i| name(format!("{}", i))).collect();
+
+        let quote_fork_mpst = fork_mpst(self.meshedchannels_name.clone(), self.number_roles);
 
         let session_types: Vec<Ident> = (1..self.number_roles)
             .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
@@ -62,99 +70,6 @@ impl BakingWithEnum {
             })
             .collect();
 
-        let session_types_dual_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
-            })
-            .collect();
-
-        let session_types_pub: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { pub #temp_session : #temp_type , }
-            })
-            .collect();
-
-        let sender_receiver: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-                let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { let ( #temp_sender , #temp_receiver ) =
-                <#temp_type as mpstthree::binary::struct_trait::session::Session>::new() ; }
-            })
-            .collect();
-
-        let sender_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-                quote! { #temp_session : #temp_sender , }
-            })
-            .collect();
-
-        let receiver_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-                quote! { #temp_session : #temp_receiver , }
-            })
-            .collect();
-
-        let head_str: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                quote! {
-                    if result.is_empty() {
-                        result = format!(
-                            "{}",
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
-                        ) ;
-                    } else {
-                        result = format!(
-                            "{}\n{}",
-                            result,
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
-                        );
-                    }
-                }
-            })
-            .collect();
-
-        let tail_str: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                quote! {
-                    if result.is_empty() {
-                        result = format!(
-                            "{}<{}>",
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
-                        ) ;
-                    } else {
-                        result = format!(
-                            "{}\n{}<{}>",
-                            result,
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
-                        ) ;
-                    }
-                }
-            })
-            .collect();
-
-        let stringify: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                quote! { stringify!( #temp_session ) , }
-            })
-            .collect();
-
         let roles_struct: Vec<TokenStream> =
             all_roles.iter().map(|i| role(format!("{}", i))).collect();
 
@@ -163,13 +78,13 @@ impl BakingWithEnum {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            Some(send_canceled(
-                                all_roles.clone(),
+                            Some(send_basic(
+                                self.all_roles.clone(),
                                 sender,
                                 receiver,
                                 session_types.clone(),
                                 session_types_struct.clone(),
-                                meshedchannels_name.clone(),
+                                self.meshedchannels_name.clone(),
                                 self.number_roles,
                             ))
                         } else {
@@ -186,12 +101,12 @@ impl BakingWithEnum {
                     .filter_map(|sender| {
                         if receiver != sender {
                             Some(recv(
-                                all_roles.clone(),
+                                self.all_roles.clone(),
                                 receiver,
                                 sender,
                                 session_types.clone(),
                                 session_types_struct.clone(),
-                                meshedchannels_name.clone(),
+                                self.meshedchannels_name.clone(),
                                 self.number_roles,
                             ))
                         } else {
@@ -208,12 +123,12 @@ impl BakingWithEnum {
                     .filter_map(|sender| {
                         if receiver != sender {
                             Some(recv_from_all(
-                                all_roles.clone(),
+                                self.all_roles.clone(),
                                 receiver,
                                 sender,
                                 session_types.clone(),
                                 session_types_struct.clone(),
-                                meshedchannels_name.clone(),
+                                self.meshedchannels_name.clone(),
                                 self.number_roles,
                             ))
                         } else {
@@ -230,10 +145,10 @@ impl BakingWithEnum {
                     .filter_map(|sender| {
                         if receiver != sender {
                             Some(offer(
-                                all_roles.clone(),
+                                self.all_roles.clone(),
                                 sender,
                                 receiver,
-                                meshedchannels_name.clone(),
+                                self.meshedchannels_name.clone(),
                                 self.number_roles,
                             ))
                         } else {
@@ -247,161 +162,28 @@ impl BakingWithEnum {
         let choose_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
                 choose(
-                    all_roles.clone(),
+                    self.all_roles.clone(),
                     sender,
-                    meshedchannels_name.clone(),
+                    self.meshedchannels_name.clone(),
                     self.number_roles,
                 )
             })
             .collect();
 
-        let close_methods: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|sender| {
-                close(
-                    all_roles.clone(),
-                    sender,
-                    meshedchannels_name.clone(),
-                    self.number_roles,
-                )
-            })
-            .collect();
+        let close_methods: TokenStream = close(self.meshedchannels_name.clone(), self.number_roles);
 
         let choose_mpst_create_multi_to_all = choose_mpst_create_multi_to_all(
-            meshedchannels_name.clone(),
-            all_roles.clone(),
+            self.meshedchannels_name.clone(),
+            self.all_roles.clone(),
             self.number_roles,
         );
 
         quote! {
-            #[must_use]
-            #[derive(Debug)]
-            pub(crate) struct  #meshedchannels_name<
-                #( #session_types , )*
-                R,
-                N
-            >
-            where
-                #( #session_types_struct )*
-                R: mpstthree::role::Role,
-                N: mpstthree::role::Role
-            {
-                #( #session_types_pub )*
-                pub stack: R,
-                pub name: N,
-            }
-            #[doc(hidden)]
-            impl<
-                #( #session_types_struct )*
-                R: mpstthree::role::Role,
-                N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
-                #(
-                    #session_types , )*
-                    R,
-                    N
-                > {
-                type Dual =
-                #meshedchannels_name<
-                    #( #session_types_dual_struct )*
-                    <R as mpstthree::role::Role>::Dual,
-                    <N as mpstthree::role::Role>::Dual,
-                >;
-
-                #[doc(hidden)]
-                fn new() -> (Self, Self::Dual) {
-                    #( #sender_receiver )*
-
-                    let (role_one, role_two) = R::new();
-                    let (name_one, name_two) = N::new();
-                    (
-                        #meshedchannels_name {
-                            #( #sender_struct )*
-                            stack: role_one,
-                            name: name_one,
-                        },
-                        #meshedchannels_name {
-                            #( #receiver_struct )*
-                            stack: role_two,
-                            name: name_two,
-                        }
-                    )
-                }
-
-                #[doc(hidden)]
-                fn head_str() -> String {
-                    let mut result = "".to_string();
-                    #( #head_str )*
-                    format!(
-                        "{}\n{}\n{}",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn tail_str() -> String {
-                    let mut result = "".to_string();
-                    #( #tail_str )*
-                    format!(
-                        "{}\n{}<{}>\n{}<{}>",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn self_head_str(&self) -> String {
-                    let mut result = "".to_string();
-                    #( #head_str )*
-                    format!(
-                        "{}\n{}\n{}",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn self_tail_str(&self) -> String {
-                    let mut result = "".to_string();
-                    #( #tail_str )*
-                    format!(
-                        "{}\n{}<{}>\n{}<{}>",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-            #[doc(hidden)]
-            impl<
-                    #( #session_types_struct )*
-                    R: mpstthree::role::Role,
-                    N: mpstthree::role::Role
-                > #meshedchannels_name<#( #session_types , )* R, N> {
-                #[doc(hidden)]
-                pub fn field_names(self) ->
-                    (
-                        &'static [&'static str],
-                        #meshedchannels_name<#( #session_types , )* R, N>
-                    ) {
-                    (
-                        &[
-                            #( #stringify )*
-                        ],
-                        self
-                    )
-                }
-            }
-
+            #meshedchannels_struct
 
             #( #roles_struct )*
+
+            #( #names_struct )*
 
             #( #send_methods )*
 
@@ -413,7 +195,7 @@ impl BakingWithEnum {
 
             #( #choose_methods )*
 
-            #( #close_methods )*
+            #close_methods
 
             #quote_fork_mpst
 

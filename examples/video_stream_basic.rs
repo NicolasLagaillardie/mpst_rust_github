@@ -6,7 +6,6 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::functionmpst::close::close_mpst;
 use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
-use mpstthree::name::Name;
 use mpstthree::role::broadcast::RoleBroadcast;
 
 use std::boxed::Box;

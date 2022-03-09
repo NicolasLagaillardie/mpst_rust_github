@@ -2,8 +2,9 @@ use mpstthree::binary::cancel::cancel;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, create_multiple_normal_name_short, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_mpst_cancel, create_send_mpst_session_bundle,
+    bundle_struct_fork_close_multi, create_multiple_normal_name_short,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle, create_send_mpst_cancel,
+    create_send_mpst_session_bundle,
 };
 
 use rand::random;

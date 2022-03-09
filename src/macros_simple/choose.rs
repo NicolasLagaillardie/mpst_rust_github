@@ -31,10 +31,8 @@ macro_rules! create_choose_from_1_to_2_3 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) =
-            <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
-        let (name_2, _) =
-            <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
@@ -97,10 +95,8 @@ macro_rules! create_choose_from_2_to_1_3 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) =
-            <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
-        let (name_2, _) =
-            <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
@@ -164,17 +160,9 @@ macro_rules! create_choose_from_3_to_1_2 {
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
         let (name_1, _) =
-            <
-                <
-                    $name_receiver_1 as mpstthree::name::Name
-                >::Dual as mpstthree::name::Name
-            >::new();
+            <<$name_receiver_1 as mpstthree::name::Name>::Dual as mpstthree::name::Name>::new();
         let (name_2, _) =
-            <
-                <
-                    $name_receiver_2 as mpstthree::name::Name
-                >::Dual as mpstthree::name::Name
-            >::new();
+            <<$name_receiver_2 as mpstthree::name::Name>::Dual as mpstthree::name::Name>::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
@@ -269,15 +257,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S0,
-                    S2,
-                    S1,
-                    S4,
-                    R0,
-                    R1,
-                    $name_receiver_1,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S0, S2, S1, S4, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -290,12 +270,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                 $role_broadcast<R4, R5>,
                 $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S4,
-            S5,
-            R5,
-            $name_sender,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S4, S5, R5, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -382,15 +357,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S0,
-                    S2,
-                    S1,
-                    S4,
-                    R0,
-                    R1,
-                    $name_receiver_1,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S0, S2, S1, S4, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -403,12 +370,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                 $role_broadcast<R4, R5>,
                 $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S2,
-            S3,
-            R4,
-            $name_sender,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S2, S3, R4, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -495,15 +457,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $name_receiver_1,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
@@ -516,12 +470,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 $role_broadcast<R4, R5>,
                 $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S2,
-            S3,
-            R4,
-            $name_sender,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S2, S3, R4, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -608,15 +557,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $name_receiver_1,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
@@ -629,12 +570,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 $role_broadcast<R4, R5>,
                 $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S4,
-            S5,
-            R5,
-            $name_sender,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S4, S5, R5, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -721,15 +657,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $name_receiver_1,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -742,12 +670,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                 $role_broadcast<R4, R5>,
                 $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S2,
-            S3,
-            R4,
-            $name_sender,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S2, S3, R4, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -834,15 +757,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $name_receiver_1,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -855,12 +770,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                 $role_broadcast<R4, R5>,
                 $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S4,
-            S5,
-            R5,
-            $name_sender,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S4, S5, R5, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,

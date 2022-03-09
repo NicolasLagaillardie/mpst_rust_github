@@ -2,6 +2,7 @@ use rand::{thread_rng, Rng};
 
 use either::Either;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::name::Name;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;
@@ -21,22 +22,17 @@ type ChooseMpstThree<S0, S1, S2, S3, R0, R1, N0> = Send<
             <S0 as Session>::Dual,
             <S1 as Session>::Dual,
             <R0 as Role>::Dual,
-            <N0 as Role>::Dual,
+            <N0 as Name>::Dual,
         >,
         MeshedChannels<
             <S2 as Session>::Dual,
             <S3 as Session>::Dual,
             <R1 as Role>::Dual,
-            <N0 as Role>::Dual,
+            <N0 as Name>::Dual,
         >,
     >,
     End,
 >;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 type AtoCClose = End;
@@ -77,7 +73,7 @@ type ChooseCtoA<N> = ChooseMpstThree<
     CtoAClose,
     StackAVideoDual,
     StackAEnd,
-    RoleADual<RoleEnd>,
+    NameA,
 >;
 type ChooseCtoB<N> = ChooseMpstThree<
     AtoBVideo<N>,
@@ -86,7 +82,7 @@ type ChooseCtoB<N> = ChooseMpstThree<
     CtoBClose,
     StackBVideoDual,
     StackBEnd,
-    RoleBDual<RoleEnd>,
+    NameB,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;

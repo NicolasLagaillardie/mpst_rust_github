@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 #[derive(Debug)]
-pub(crate) struct  CreateNormalRoleShort {
+pub(crate) struct CreateNormalRoleShort {
     role: Ident,
 }
 

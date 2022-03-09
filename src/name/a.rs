@@ -15,7 +15,7 @@ use crossbeam_channel::{bounded, Receiver, Sender};
 ///
 /// ```
 /// use mpstthree::name::a::NameA;
-/// use mpstthree::role::Role; // Only used for example
+/// use mpstthree::name::Name; // Only used for example
 ///
 /// type NameOfA = NameA;
 ///

@@ -26,11 +26,7 @@ create_multiple_normal_role!(
 
 // Create new roles
 // normal
-create_multiple_normal_name!(
-    NameA,
-    NameB,
-    NameC,
-);
+create_multiple_normal_name!(NameA, NameB, NameC,);
 
 // Create new send functions
 // A
@@ -69,11 +65,6 @@ close_mpst_cancel!(close_mpst_multi, MeshedChannelsThree, 3);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, MeshedChannelsThree, 3);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 type EndpointA = MeshedChannelsThree<Send<i32, End>, Send<i32, End>, RoleB<RoleC<RoleEnd>>, NameA>;

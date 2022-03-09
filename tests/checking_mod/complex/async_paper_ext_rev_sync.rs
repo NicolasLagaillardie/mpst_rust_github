@@ -4,7 +4,9 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role,create_multiple_normal_name};
+use mpstthree::{
+    checker_concat, create_meshedchannels, create_multiple_normal_name, create_multiple_normal_role,
+};
 
 use petgraph::dot::Dot;
 

@@ -3,8 +3,8 @@ use quote::quote;
 use std::convert::TryFrom;
 use syn::Ident;
 
-/// Expand send methods for basic baking
-pub(crate) fn send_basic(
+/// Expand send methods for baking with cancelation
+pub(crate) fn send_canceled(
     all_roles: Vec<TokenStream>,
     sender: u64,
     receiver: u64,
@@ -14,7 +14,7 @@ pub(crate) fn send_basic(
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Role{}", elt), Span::call_site())
+        Ident::new(&format!("Name{}", elt), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_send")
     };
@@ -66,14 +66,14 @@ pub(crate) fn send_basic(
             #meshedchannels_name<
                 #( #send_sessions )*
                 #receiver_ident<R>,
-                #sender_ident<mpstthree::role::end::RoleEnd>
+                #sender_ident
             >
         {
             pub fn send(self, payload: T) -> Result<
                 #meshedchannels_name<
                     #( #session_types , )*
                     R,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
+                    #sender_ident
                 >,
                 Box<dyn std::error::Error>
             > {
@@ -91,8 +91,8 @@ pub(crate) fn send_basic(
     }
 }
 
-/// Expand send methods for baking with cancelation
-pub(crate) fn send_canceled(
+/// Expand send methods for basic baking
+pub(crate) fn send_basic(
     all_roles: Vec<TokenStream>,
     sender: u64,
     receiver: u64,
@@ -102,7 +102,7 @@ pub(crate) fn send_canceled(
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Role{}", elt), Span::call_site())
+        Ident::new(&format!("Name{}", elt), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_send")
     };
@@ -154,13 +154,13 @@ pub(crate) fn send_canceled(
             #meshedchannels_name<
                 #( #send_sessions )*
                 #receiver_ident<R>,
-                #sender_ident<mpstthree::role::end::RoleEnd>
+                #sender_ident
             >
         {
             pub fn send(self, payload: T) -> #meshedchannels_name<
                 #( #session_types , )*
                 R,
-                #sender_ident<mpstthree::role::end::RoleEnd>
+                #sender_ident
             > {
                 let new_session = mpstthree::binary::send::send(payload, self.#new_session);
                 let new_stack = self.stack.continuation();

@@ -30,43 +30,38 @@ create_multiple_normal_role!(
 create_send_mpst_session_bundle!(
     send_mpst_a_to_c, RoleC, 1 |
     send_mpst_a_to_s, RoleS, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_a, RoleA, 1 |
     recv_mpst_s_from_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 // A
@@ -135,9 +130,9 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromAtoC::Fail,
             Branching0fromAtoS::Fail, =>
-            RoleC,
-            RoleS, =>
-            RoleA,
+            NameC,
+            NameS, =>
+            NameA,
             MeshedChannelsThree,
             1
         );
@@ -151,9 +146,9 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromAtoC::Login,
             Branching0fromAtoS::Login, =>
-            RoleC,
-            RoleS, =>
-            RoleA,
+            NameC,
+            NameS, =>
+            NameA,
             MeshedChannelsThree,
             1
         );
@@ -240,9 +235,9 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching1fromCtoA::Quit,
                 Branching1fromCtoS::Quit, =>
-                RoleA,
-                RoleS, =>
-                RoleC,
+                NameA,
+                NameS, =>
+                NameC,
                 MeshedChannelsThree,
                 2
             );
@@ -256,9 +251,9 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching1fromCtoA::Pay,
                 Branching1fromCtoS::Pay, =>
-                RoleA,
-                RoleS, =>
-                RoleC,
+                NameA,
+                NameS, =>
+                NameC,
                 MeshedChannelsThree,
                 2
             );

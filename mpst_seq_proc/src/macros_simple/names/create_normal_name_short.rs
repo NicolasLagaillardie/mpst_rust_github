@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 #[derive(Debug)]
-pub(crate) struct  CreateNormalNameShort {
+pub(crate) struct CreateNormalNameShort {
     name: Ident,
 }
 

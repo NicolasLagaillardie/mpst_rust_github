@@ -19,11 +19,11 @@ use choose_mpst_multi_to_all::ChooseMultiToAll;
 
 mod macros_simple;
 
+use macros_simple::names::create_normal_name_short::CreateNormalNameShort;
 use macros_simple::offer::create_offer_mpst_session_multi::OfferMPSTSessionMulti;
 use macros_simple::recv::create_recv_mpst_session::CreateRecvMPSTSession;
 use macros_simple::roles::create_broadcast_role_short::CreateBroadcastRoleShort;
 use macros_simple::roles::create_normal_role_short::CreateNormalRoleShort;
-use macros_simple::names::create_normal_name_short::CreateNormalNameShort;
 use macros_simple::send::create_send_mpst_session::CreateSendMPSTSession;
 
 mod macros_multiple;

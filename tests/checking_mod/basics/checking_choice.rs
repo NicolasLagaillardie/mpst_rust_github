@@ -57,50 +57,22 @@ type StackBFull = RoleC<RoleC<StackBChoice>>;
 
 // Creating the MP sessions
 // For C
-type ChooseBtoC<N> = ChooseMpst<
-    AtoCVideo<N>,
-    BtoCVideo<N>,
-    AtoCClose,
-    BtoCClose,
-    StackCVideoDual,
-    StackCEnd,
-    NameC,
->;
-type ChooseBtoA<N> = ChooseMpst<
-    BtoAClose,
-    CtoAVideo<N>,
-    BtoAClose,
-    CtoAClose,
-    StackAVideoDual,
-    StackAEnd,
-    NameA,
->;
+type ChooseBtoC<N> =
+    ChooseMpst<AtoCVideo<N>, BtoCVideo<N>, AtoCClose, BtoCClose, StackCVideoDual, StackCEnd, NameC>;
+type ChooseBtoA<N> =
+    ChooseMpst<BtoAClose, CtoAVideo<N>, BtoAClose, CtoAClose, StackAVideoDual, StackAEnd, NameA>;
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
 type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, NameB>;
 
 // For A
-type OfferC<N> = OfferMpst<
-    CtoAVideo<N>,
-    CtoBVideo<N>,
-    CtoAClose,
-    CtoBClose,
-    StackCVideo,
-    StackCEnd,
-    NameC,
->;
+type OfferC<N> =
+    OfferMpst<CtoAVideo<N>, CtoBVideo<N>, CtoAClose, CtoBClose, StackCVideo, StackCEnd, NameC>;
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
 type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, NameC>;
 
 // For B
-type OfferA<N> = OfferMpst<
-    AtoBClose,
-    AtoCVideo<N>,
-    AtoBClose,
-    AtoCClose,
-    StackAVideo,
-    StackAEnd,
-    NameA,
->;
+type OfferA<N> =
+    OfferMpst<AtoBClose, AtoCVideo<N>, AtoBClose, AtoCClose, StackAVideo, StackAEnd, NameA>;
 type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, NameA>;
 
 /////////////////////////////////////////

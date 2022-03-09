@@ -57,11 +57,12 @@ pub mod impl_c;
 ///
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///
-/// use mpstthree::binary::struct_trait::session::Session; // Only used for example
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
+///
+/// use mpstthree::name::a::NameA;
 ///
 /// // Creating the binary sessions
 /// type AtoB<N> = Send<N, End>;
@@ -71,7 +72,7 @@ pub mod impl_c;
 /// type StackA = RoleB<RoleC<RoleEnd>>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 ///
 /// let _ = EndpointA::<i32>::new(); // Only used for example
 /// ```

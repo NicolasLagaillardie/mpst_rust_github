@@ -8,20 +8,19 @@ use mpstthree::bundle_impl;
 // Create new roles
 bundle_impl!(MeshedChannels, A, B, D);
 
-type TestA = RoleA<RoleEnd>;
-type TestB = RoleB<RoleEnd>;
-type TestD = RoleD<RoleEnd>;
+type StackA = RoleA<RoleEnd>;
+type StackD = RoleD<RoleEnd>;
 
-type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
+type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, StackA, NameD>;
 
-type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
+type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, StackD, NameA>;
 
-type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
+type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, StackA, NameD>;
 
-type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
+type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, StackD, NameA>;
 
 // Create an B dummy
-type Dummy = MeshedChannels<End, End, RoleEnd, TestB>;
+type Dummy = MeshedChannels<End, End, RoleEnd, NameB>;
 
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendMeshedChannelsA<i32>) -> Result<(), Box<dyn Error>> {

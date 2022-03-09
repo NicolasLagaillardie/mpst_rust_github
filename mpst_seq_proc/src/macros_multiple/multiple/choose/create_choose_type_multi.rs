@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub(crate) struct  ChooseTypeMulti {
+pub(crate) struct ChooseTypeMulti {
     type_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,

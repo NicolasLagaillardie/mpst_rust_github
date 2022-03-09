@@ -80,8 +80,7 @@ type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
 type OrderingB18 = RoleC<RoleEnd>;
 type OrderingB19Full = OrderingB18;
-type EndpointB20<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, NameB>;
+type EndpointB20<N> = MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, NameB>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
@@ -95,8 +94,7 @@ type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Fu
 
 type EndpointA19<N> = MeshedChannels<End, Recv<Branches0AtoC<N>, End>, OrderingA16, NameA>;
 
-type EndpointC2<N> =
-    MeshedChannels<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleBroadcast, NameC>;
+type EndpointC2<N> = MeshedChannels<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleBroadcast, NameC>;
 
 ///////////////////////////////////////// END
 

@@ -91,7 +91,6 @@ impl ChooseTypeMultiLeft {
                     quote! {
                         #temp_ident ,
                     }
-
                 }
             })
             .collect();

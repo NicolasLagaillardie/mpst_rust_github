@@ -77,8 +77,7 @@ type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
 type OrderingB12 = RoleC<RoleEnd>;
 type OrderingB13Full = OrderingB12;
-type EndpointB14<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB13Full, NameB>;
+type EndpointB14<N> = MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB13Full, NameB>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 

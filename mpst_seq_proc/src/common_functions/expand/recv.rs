@@ -20,7 +20,7 @@ pub(crate) fn recv(
     };
 
     let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-        Ident::new(&format!("Role{}", elt), Span::call_site())
+        Ident::new(&format!("Name{}", elt), Span::call_site())
     } else {
         panic!("Not enough arguments for receiver_ident in expand_recv")
     };
@@ -66,7 +66,7 @@ pub(crate) fn recv(
             #meshedchannels_name<
                 #( #send_sessions )*
                 #sender_ident<R>,
-                #receiver_ident<mpstthree::role::end::RoleEnd>
+                #receiver_ident
             >
         {
             pub fn recv(self) -> Result<(
@@ -74,7 +74,7 @@ pub(crate) fn recv(
                 #meshedchannels_name<
                     #( #session_types , )*
                     R,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                    #receiver_ident
                 >),
                 Box<dyn std::error::Error>
             > {
@@ -110,7 +110,7 @@ pub(crate) fn recv_from_all(
     };
 
     let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-        Ident::new(&format!("Role{}", elt), Span::call_site())
+        Ident::new(&format!("Name{}", elt), Span::call_site())
     } else {
         panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
     };
@@ -156,7 +156,7 @@ pub(crate) fn recv_from_all(
             #meshedchannels_name<
                 #( #send_sessions )*
                 #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                #receiver_ident<mpstthree::role::end::RoleEnd>
+                #receiver_ident
             >
         {
             pub fn recv_from_all(self) -> Result<(
@@ -164,7 +164,7 @@ pub(crate) fn recv_from_all(
                 #meshedchannels_name<
                     #( #session_types , )*
                     mpstthree::role::end::RoleEnd,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                    #receiver_ident
                 >),
                 Box<dyn std::error::Error>
             > {

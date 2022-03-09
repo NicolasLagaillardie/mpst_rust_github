@@ -145,8 +145,8 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromDtoC::Done, =>
                 NameB,
                 NameC, =>
-                RoleA,
-                RoleD,
+                NameA,
+                NameD,
                 MeshedChannelsFour,
                 4
             );
@@ -161,8 +161,8 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromDtoC::More, =>
                 NameB,
                 NameC, =>
-                RoleA,
-                RoleD,
+                NameA,
+                NameD,
                 MeshedChannelsFour,
                 4
             );

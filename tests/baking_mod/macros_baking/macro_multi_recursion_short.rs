@@ -11,11 +11,6 @@ use std::marker;
 // Create new roles
 bundle_impl_with_enum!(MeshedChannels, A, B, D);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-
 // Test our usecase
 // Simple types
 // Client = D

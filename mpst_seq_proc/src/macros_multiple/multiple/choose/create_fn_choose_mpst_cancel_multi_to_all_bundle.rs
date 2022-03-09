@@ -360,7 +360,7 @@ impl ChooseTypeCancelMultiToAllBundle {
                             Some(e) => e,
                             _ => panic!("Error type"),
                         };
-                        
+
                         let s =
                             s.session1.sender.send(
                                 mpstthree::binary::struct_trait::end::Signal::Offer(elt)

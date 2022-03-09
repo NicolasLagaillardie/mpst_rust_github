@@ -13,14 +13,6 @@ struct WebFontLoaded;
 struct GetWebPageLoadState;
 struct OutstandingWebFonts;
 
-// Names
-
-type NameC = RoleConstellation<RoleEnd>;
-
-type NameL = RoleLayout<RoleEnd>;
-
-type NameS = RoleScript<RoleEnd>;
-
 // Binary types
 
 type CtoL = Send<GetWebPageLoadState, Recv<OutstandingWebFonts, End>>;

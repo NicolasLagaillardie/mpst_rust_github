@@ -11,11 +11,6 @@ use std::marker;
 // Create new roles
 bundle_impl!(MeshedChannels, A, B, D);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-
 // Test our usecase
 // Simple types
 // Client = D
@@ -83,8 +78,10 @@ type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB
 
 choose_mpst_create_multi_to_all!(
     choose_mpst_client_to_all,
-    RoleA, RoleB, =>
-    RoleD, MeshedChannels,
+    NameA,
+    NameB, =>
+    NameD,
+    MeshedChannels,
     3
 );
 

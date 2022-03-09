@@ -7,8 +7,8 @@
 use crate::binary::struct_trait::end::End;
 use crate::binary::struct_trait::end::Signal;
 use crate::meshedchannels::MeshedChannels;
-use crate::role::end::RoleEnd;
 use crate::name::Name;
+use crate::role::end::RoleEnd;
 
 use std::error::Error;
 

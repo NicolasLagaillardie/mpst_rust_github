@@ -11,11 +11,6 @@ use std::marker;
 // Create new roles
 bundle_impl!(MeshedChannels, A, B, D);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-
 // Test our usecase
 // Simple types
 // Client = D
@@ -136,8 +131,10 @@ fn client_recurs(
                 s,
                 Branches0AtoD::Video,
                 Branches0BtoD::Video, =>
-                RoleA, RoleB, =>
-                RoleD, MeshedChannels,
+                NameA,
+                NameB, =>
+                NameD,
+                MeshedChannels,
                 3
             );
 
@@ -150,9 +147,9 @@ fn client_recurs(
                 s,
                 Branches0AtoD::End,
                 Branches0BtoD::End, =>
-                RoleA,
-                RoleB, =>
-                RoleD,
+                NameA,
+                NameB, =>
+                NameD,
                 MeshedChannels,
                 3
             );

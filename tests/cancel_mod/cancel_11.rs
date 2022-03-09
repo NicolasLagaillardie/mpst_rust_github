@@ -99,8 +99,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoB::Done, =>
                 NameB, =>
-                RoleA,
-                RoleC,
+                NameA,
+                NameC,
                 MeshedChannelsThree,
                 3
             );
@@ -113,8 +113,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoB::More, =>
                 NameB, =>
-                RoleA,
-                RoleC,
+                NameA,
+                NameC,
                 MeshedChannelsThree,
                 3
             );

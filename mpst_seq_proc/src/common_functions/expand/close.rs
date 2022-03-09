@@ -1,22 +1,9 @@
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
-use std::convert::TryFrom;
 use syn::Ident;
 
 /// Expand close methods
-pub(crate) fn close(
-    all_roles: Vec<TokenStream>,
-    sender: u64,
-    meshedchannels_name: Ident,
-    number_roles: u64,
-) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        let concatenated_elt = format!("Role{}", elt);
-        Ident::new(&concatenated_elt, Span::call_site())
-    } else {
-        panic!("Not enough arguments for sender_ident in expand_close")
-    };
-
+pub(crate) fn close(meshedchannels_name: Ident, number_roles: u64) -> TokenStream {
     let close_session_types: Vec<TokenStream> = (1..number_roles)
         .map(|_i| {
             quote! { mpstthree::binary::struct_trait::end::End, }
@@ -41,13 +28,15 @@ pub(crate) fn close(
         .collect();
 
     quote! {
-        impl
+        impl<
+            N: mpstthree::name::Name
+        >
             #meshedchannels_name<
                 #(
                     #close_session_types
                 )*
                 mpstthree::role::end::RoleEnd,
-                #sender_ident<mpstthree::role::end::RoleEnd>
+                N
             >
         {
             pub fn close(self) -> Result<(), Box<dyn std::error::Error>> {

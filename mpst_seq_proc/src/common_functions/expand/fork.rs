@@ -52,7 +52,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: Ident, number_roles: u64) -> TokenS
             let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
             let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
             quote! {
-                let ( #temp_role , _) = #temp_ident::new() ;
+                let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
             }
         })
         .collect();
@@ -70,7 +70,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: Ident, number_roles: u64) -> TokenS
         .map(|i| {
             let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
             quote! {
-                #temp_ident : mpstthree::role::Role + 'static ,
+                #temp_ident : mpstthree::name::Name + 'static ,
             }
         })
         .collect();
@@ -80,7 +80,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: Ident, number_roles: u64) -> TokenS
             let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
             let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
             quote! {
-                let ( #temp_name , _) = #temp_ident::new() ;
+                let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
             }
         })
         .collect();
@@ -117,7 +117,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: Ident, number_roles: u64) -> TokenS
                             }
                         } else {
                             quote! {
-                                < #temp_ident  as mpstthree::binary::struct_trait::session::Session>::Dual ,
+                                < #temp_ident  as mpstthree::binary::struct_trait::session::Session >::Dual ,
                             }
                         }
                     })
@@ -161,7 +161,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: Ident, number_roles: u64) -> TokenS
                 Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
             quote! {
                 let ( #temp_channel_left , #temp_channel_right ) =
-                    < #temp_ident as mpstthree::binary::struct_trait::session::Session>::new();
+                    < #temp_ident as mpstthree::binary::struct_trait::session::Session >::new();
             }
         })
         .collect();

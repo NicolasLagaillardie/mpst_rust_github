@@ -87,7 +87,7 @@ impl ForkMPSTMultiSolo {
                 let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
                 let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
                 quote! {
-                    let ( #temp_role , _) = #temp_ident::new() ;
+                    let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
                 }
             })
             .collect();
@@ -115,7 +115,7 @@ impl ForkMPSTMultiSolo {
                 let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
-                    let ( #temp_name , _) = #temp_ident::new() ;
+                    let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
                 }
             })
             .collect();

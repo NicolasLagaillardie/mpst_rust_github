@@ -17,7 +17,7 @@ pub(crate) fn choose(
     let (diag, matrix) = diag_and_matrix(number_roles);
 
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Role{}", elt), Span::call_site())
+        Ident::new(&format!("Name{}", elt), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_choose")
     };
@@ -139,7 +139,7 @@ pub(crate) fn choose(
 
                     let receiver_ident =
                         if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                            Ident::new(&format!("Role{}", elt), Span::call_site())
+                            Ident::new(&format!("Name{}", elt), Span::call_site())
                         } else {
                             panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
                         };
@@ -152,14 +152,14 @@ pub(crate) fn choose(
                                         #left_sessions
                                     )*
                                     #stack_left
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                                    #receiver_ident
                                 >,
                                 #meshedchannels_name<
                                     #(
                                         #right_sessions
                                     )*
                                     #stack_right
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
+                                    #receiver_ident
                                 >
                             >,
                             mpstthree::binary::struct_trait::end::End,
@@ -263,7 +263,7 @@ pub(crate) fn choose(
                 Span::call_site(),
             );
 
-            quote! { let ( #first_channel , #second_channel ) = #temp_session::new() ; }
+            quote! { let ( #first_channel , #second_channel ) = < #temp_session as mpstthree::binary::struct_trait::session::Session >::new() ; }
         })
         .collect();
 
@@ -286,26 +286,25 @@ pub(crate) fn choose(
     let new_names: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
             if sender != j {
+                let receiver_ident = if let Some(elt) =
+                    all_roles.get(usize::try_from(j - 1).unwrap())
+                {
+                    Ident::new(&format!("Name{}", elt), Span::call_site())
+                } else {
+                    panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
+                };
 
-                let receiver_ident =
-                    if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
-                        Ident::new(&format!("Role{}", elt), Span::call_site())
-                    } else {
-                        panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
-                    };
-
-                    let new_name =
-                        if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
-                            Ident::new(&format!("name_{}", elt), Span::call_site())
-                        } else {
-                            panic!("Not enough arguments for new_name in new_names in expand_choose")
-                        };
+                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
+                    Ident::new(&format!("name_{}", elt), Span::call_site())
+                } else {
+                    panic!("Not enough arguments for new_name in new_names in expand_choose")
+                };
 
                 quote! {
-                    let (#new_name, _) = <#receiver_ident<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let (#new_name, _) = < #receiver_ident as mpstthree::name::Name >::new();
                 }
             } else {
-                quote! { }
+                quote! {}
             }
         })
         .collect();
@@ -466,7 +465,7 @@ pub(crate) fn choose(
                 #sender_stack<
                     #new_stacks_sender
                 >,
-                #sender_ident<mpstthree::role::end::RoleEnd>,
+                #sender_ident,
             >
         {
             pub fn choose_left(self) -> #meshedchannels_name<
@@ -474,7 +473,7 @@ pub(crate) fn choose(
                     #choose_left_session
                 )*
                 #new_stack_sender_left ,
-                #sender_ident<mpstthree::role::end::RoleEnd>
+                #sender_ident
             >
             {
                 #(
@@ -491,7 +490,7 @@ pub(crate) fn choose(
                     #new_names
                 )*
 
-                let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                let (#new_name_sender, _) = < #sender_ident as mpstthree::name::Name >::new();
 
                 #(
                     #new_meshedchannels_receivers
@@ -524,7 +523,7 @@ pub(crate) fn choose(
                     #choose_right_session
                 )*
                 #new_stack_sender_right ,
-                #sender_ident<mpstthree::role::end::RoleEnd>
+                #sender_ident
             >
             {
                 #(
@@ -541,7 +540,7 @@ pub(crate) fn choose(
                     #new_names
                 )*
 
-                let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                let (#new_name_sender, _) = < #sender_ident as mpstthree::name::Name >::new();
 
                 #(
                     #new_meshedchannels_receivers
@@ -597,7 +596,7 @@ pub(crate) fn choose_mpst_create_multi_to_all(
                 all_roles.get(usize::try_from(sender - 1).unwrap())
             {
                 Ident::new(
-                    &format!("Role{}", elt),
+                    &format!("Name{}", elt),
                     Span::call_site(),
                 )
             } else {
@@ -612,7 +611,7 @@ pub(crate) fn choose_mpst_create_multi_to_all(
                                 all_roles.get(usize::try_from(receiver - 1).unwrap())
                             {
                                 Ident::new(
-                                    &format!("Role{}", elt),
+                                    &format!("Name{}", elt),
                                     Span::call_site(),
                                 )
                             } else {

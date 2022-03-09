@@ -24,7 +24,7 @@ pub(crate) fn cancel(meshedchannels_name: Ident, number_roles: u64) -> TokenStre
                 #temp_detail_types
             )*
             R: mpstthree::role::Role,
-            N: mpstthree::role::Role,
+            N: mpstthree::name::Name,
         >
             #meshedchannels_name<
                 #(

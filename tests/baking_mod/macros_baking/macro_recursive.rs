@@ -24,12 +24,12 @@ type RecursAtoC<N> = Recv<Branches0AtoC<N>, End>;
 type RecursBtoC<N> = Recv<Branches0BtoC<N>, End>;
 
 enum Branches0AtoC<N: marker::Send> {
-    End(MeshedChannels<End, End, RoleEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<End, End, RoleEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo<N>, AtoCVideo<N>, StackAVideo, NameA>),
 }
 enum Branches0BtoC<N: marker::Send> {
-    End(MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>>),
-    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<End, End, RoleEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo<N>, RecursBtoC<N>, StackBVideo, NameB>),
 }
 type Choose0fromCtoA<N> = Send<Branches0AtoC<N>, End>;
 type Choose0fromCtoB<N> = Send<Branches0BtoC<N>, End>;
@@ -51,18 +51,18 @@ type EndpointCVideo<N> = MeshedChannels<
     <AtoCVideo<N> as Session>::Dual,
     <RecursBtoC<N> as Session>::Dual,
     RoleA<RoleA<RoleBroadcast>>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 type EndpointCRecurs<N> =
-    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, RoleC<RoleEnd>>;
+    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoB<N>, StackCRecurs, NameC>;
+type EndpointCFull<N> = MeshedChannels<InitC<N>, Choose0fromCtoB<N>, StackCFull, NameC>;
 
 // For A
-type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, RoleA<RoleEnd>>;
-type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, RoleA<RoleEnd>>;
+type EndpointARecurs<N> = MeshedChannels<End, RecursAtoC<N>, RoleC<RoleEnd>, NameA>;
+type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 
 // For B
-type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<End, RecursBtoC<N>, RoleC<RoleEnd>, NameB>;
 
 // Functions related to endpoints
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -119,9 +119,10 @@ fn client_recurs(
                 s,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                RoleA,
-                RoleB, =>
-                RoleC, MeshedChannels,
+                NameA,
+                NameB, =>
+                NameC,
+                MeshedChannels,
                 3
             );
 
@@ -134,9 +135,10 @@ fn client_recurs(
                 s,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                RoleA,
-                RoleB, =>
-                RoleC, MeshedChannels,
+                NameA,
+                NameB, =>
+                NameC,
+                MeshedChannels,
                 3
             );
 
