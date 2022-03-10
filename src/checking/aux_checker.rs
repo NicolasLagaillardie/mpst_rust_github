@@ -22,7 +22,7 @@ type VecOfTuple = Vec<(String, usize)>;
 //     struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
 //     End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
 //     mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
-//     ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
+//     ::name::a::NameA>"
 //
 // to
 //
@@ -31,7 +31,7 @@ type VecOfTuple = Vec<(String, usize)>;
 //     "Recv<i32,Send<i32,End>>",
 //     "RoleC<RoleC<RoleB<RoleEnd>>>",
 //     "RoleA<RoleEnd>",
-//     "RoleA"
+//     "NameA"
 // ]
 #[doc(hidden)]
 pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
