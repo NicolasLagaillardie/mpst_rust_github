@@ -11,7 +11,7 @@ pub(crate) fn name(role: String) -> TokenStream {
         ////////////////////////////////////////////
         /// The Name
         #[derive(Debug)]
-        struct #name_role
+        pub struct #name_role
         {
             #[doc(hidden)]
             sender: crossbeam_channel::Sender<()>,

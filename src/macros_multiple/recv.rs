@@ -21,17 +21,19 @@
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_multiple_normal_role, create_recv_mpst_session, create_meshedchannels};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_recv_mpst_session, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
+/// 
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
-/// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
+/// create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, NameD, MeshedChannels, 3, 1);
 /// ```
 ///
 /// *This macro is available only if MultiCrusty is built with
@@ -74,13 +76,15 @@ macro_rules! create_recv_mpst_session {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_recv_mpst_session_bundle};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_meshedchannels, create_recv_mpst_session_bundle};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
+/// 
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
@@ -92,7 +96,7 @@ macro_rules! create_recv_mpst_session {
 ///    recv_mpst_d_from_b,
 ///    RoleB,
 ///    2 | =>
-///    RoleD,
+///    NameD,
 ///    MeshedChannels,
 ///    3
 /// );

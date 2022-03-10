@@ -54,10 +54,13 @@ macro_rules! create_offer_type_multi {
 /// use mpstthree::{
 ///     create_broadcast_role, create_meshedchannels, create_normal_role,
 ///     create_offer_mpst_session_multi, create_offer_type_multi,
+///     create_normal_name
 /// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
+/// 
+/// create_normal_name!(NameB);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
@@ -66,7 +69,7 @@ macro_rules! create_offer_type_multi {
 ///     offer_mpst_session_b_to_d,
 ///     OfferMpstThree,
 ///     RoleAlltoD,
-///     RoleB,
+///     NameB,
 ///     MeshedChannels,
 ///     3,
 ///     2

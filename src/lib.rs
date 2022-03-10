@@ -58,6 +58,10 @@
 //! use mpstthree::role::b::RoleB;
 //! use mpstthree::role::c::RoleC;
 //! use mpstthree::role::end::RoleEnd;
+//! 
+//! use mpstthree::name::a::NameA;
+//! use mpstthree::name::b::NameB;
+//! use mpstthree::name::c::NameC;
 //!
 //! // Used inside the functions which process the protocol for receiving one payload
 //! use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
@@ -98,11 +102,11 @@
 //!
 //! // Creating the MP sessions
 //! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 //! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
 //! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //!
 //! // Function to process Endpoint of A
 //! fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -210,11 +214,11 @@
 //! ```ignore
 //! // Creating the MP sessions
 //! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 //! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
 //! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //! ```
 //!
 //! To run the protocol,

@@ -45,12 +45,14 @@ macro_rules! recv_all_aux_simple {
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
-/// use crate::name::a::NameA;
-/// use crate::name::b::NameB;
+/// 
+/// use mpstthree::name::a::NameA;
+/// use mpstthree::name::b::NameB;
 ///
 /// use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 /// use mpstthree::functionmpst::send::send_mpst_b_to_a;
@@ -116,6 +118,7 @@ where
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;

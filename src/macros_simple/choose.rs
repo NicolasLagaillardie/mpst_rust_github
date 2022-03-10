@@ -31,8 +31,8 @@ macro_rules! create_choose_from_1_to_2_3 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
-        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
@@ -95,8 +95,8 @@ macro_rules! create_choose_from_2_to_1_3 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::Dual::new();
-        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::Dual::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
@@ -159,10 +159,8 @@ macro_rules! create_choose_from_3_to_1_2 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) =
-            <<$name_receiver_1 as mpstthree::name::Name>::Dual as mpstthree::name::Name>::new();
-        let (name_2, _) =
-            <<$name_receiver_2 as mpstthree::name::Name>::Dual as mpstthree::name::Name>::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::new();
         let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
@@ -218,10 +216,9 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_right_from_3_to_1_and_2
+///     create_choose_right_from_3_to_1_and_2, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -229,15 +226,21 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_choose_right_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
-///     RoleADual,
-///     RoleBDual,
+///     NameA,
+///     NameB,
 ///     RoleCtoAll,
-///     RoleC
+///     NameC
 /// );
 /// ```
 ///
@@ -318,10 +321,9 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_left_from_3_to_1_and_2
+///     create_choose_left_from_3_to_1_and_2, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -329,15 +331,21 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_choose_left_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
-///     RoleADual,
-///     RoleBDual,
+///     NameA,
+///     NameB,
 ///     RoleCtoAll,
-///     RoleC
+///     NameC
 /// );
 /// ```
 ///
@@ -418,10 +426,9 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_left_from_1_to_2_and_3
+///     create_choose_left_from_1_to_2_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -429,15 +436,21 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_choose_left_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
-///     RoleBDual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleAtoAll,
-///     RoleA
+///     NameA
 /// );
 /// ```
 ///
@@ -518,10 +531,9 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_right_from_1_to_2_and_3
+///     create_choose_right_from_1_to_2_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -529,15 +541,21 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_choose_right_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
-///     RoleBDual,
-///     RoleCDual,
+///     NameB,
+///     NameC,
 ///     RoleAtoAll,
-///     RoleA
+///     NameA
 /// );
 /// ```
 ///
@@ -618,10 +636,9 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_left_from_2_to_1_and_3
+///     create_choose_left_from_2_to_1_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -629,15 +646,21 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_left_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -718,10 +741,9 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_right_from_2_to_1_and_3
+///     create_choose_right_from_2_to_1_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -729,15 +751,21 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_right_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -819,10 +847,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_both_from_2_to_1_and_3
+///     create_choose_both_from_2_to_1_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -830,16 +857,22 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_both_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
 ///     choose_left_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -894,10 +927,9 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_both_from_1_to_2_and_3
+///     create_choose_both_from_1_to_2_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -905,16 +937,22 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_both_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_b_to_all,
 ///     choose_left_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -969,10 +1007,9 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{  
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_both_from_3_to_1_and_2
+///     create_choose_both_from_3_to_1_and_2, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -980,16 +1017,22 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
+/// 
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
 ///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_both_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_b_to_all,
 ///     choose_left_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///

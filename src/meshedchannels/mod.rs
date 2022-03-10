@@ -53,11 +53,10 @@ pub mod impl_c;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 ///
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;

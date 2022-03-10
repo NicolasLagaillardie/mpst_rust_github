@@ -20,7 +20,6 @@ use std::error::Error;
 /// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
 ///
 /// use mpstthree::name::a::NameA;

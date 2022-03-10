@@ -261,6 +261,7 @@ transport_http = ["default", "hyper", "hyper-tls", "tokio"]
 transport = ["transport_tcp", "transport_udp", "transport_http"]
 # For test compile examples
 transport_macros_multiple = ["macros_multiple", "transport"]
+full_without_checking = ["baking", "transport"]
 full = ["checking", "baking", "transport"]
 
 ################################### Doc handling for all-features

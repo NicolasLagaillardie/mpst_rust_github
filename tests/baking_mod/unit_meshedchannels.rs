@@ -4,6 +4,7 @@ use mpstthree::bundle_impl;
 
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
+use mpstthree::name::Name;
 
 // Create new MeshedChannels for three participants
 bundle_impl!(MeshedChannels, A, B, C);
@@ -77,7 +78,7 @@ pub fn meshedchannels_methods() {
             AtoB::<i32>::head_str(),
             AtoC::<i32>::head_str(),
             StackA::head_str(),
-            RoleA::<RoleEnd>::head_str()
+            NameA::head_str()
         )
     );
 
@@ -91,8 +92,8 @@ pub fn meshedchannels_methods() {
             AtoC::<i32>::tail_str(),
             StackA::head_str(),
             StackA::tail_str(),
-            RoleA::<RoleEnd>::head_str(),
-            RoleA::<RoleEnd>::tail_str()
+            NameA::head_str(),
+            NameA::tail_str()
         )
     );
 }

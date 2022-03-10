@@ -15,8 +15,8 @@
 /// ```
 /// use mpstthree::create_normal_name;
 ///
-/// // Create the names *A* and *ADual*
-/// create_normal_name!(A, ADual);
+/// // Create the name *A*
+/// create_normal_name!(A);
 /// ```
 ///
 /// [`Name`]: crate::name::Name
@@ -95,11 +95,8 @@ macro_rules! create_normal_name {
 /// ```
 /// use mpstthree::create_multiple_normal_name;
 ///
-/// // Create the names *A*, *ADual*, *B* and *BDual*
-/// create_multiple_normal_name!(
-///    A, ADual |
-///    B, BDual |
-/// );
+/// // Create the names *A* and *B*
+/// create_multiple_normal_name!(A, B);
 /// ```
 ///
 /// [`Name`]: crate::name::Name

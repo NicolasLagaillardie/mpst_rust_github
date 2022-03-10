@@ -20,13 +20,14 @@
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_broadcast_role, create_normal_role, create_offer_mpst_session_1};
+/// use mpstthree::{create_broadcast_role, create_normal_name, create_normal_role, create_offer_mpst_session_1};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
+/// create_normal_name!(NameC);
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
-/// create_offer_mpst_session_1!(offer_mpst_session_c_to_a, RoleAlltoA, RoleC);
+/// create_offer_mpst_session_1!(offer_mpst_session_c_to_a, RoleAlltoA, NameC);
 /// ```
 ///
 /// [`MeshedChannels`]:.crate::meshedchannels::MeshedChannels.
@@ -64,13 +65,14 @@ macro_rules! create_offer_mpst_session_1 {
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_broadcast_role, create_normal_role, create_offer_mpst_session_2};
+/// use mpstthree::{create_broadcast_role, create_normal_name, create_normal_role, create_offer_mpst_session_2};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
+/// create_normal_name!(NameA);
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
-/// create_offer_mpst_session_2!(offer_mpst_session_a_to_c, RoleAlltoC, RoleA);
+/// create_offer_mpst_session_2!(offer_mpst_session_a_to_c, RoleAlltoC, NameA);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels

@@ -30,7 +30,6 @@ macro_rules! send_aux_simple {
 /// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
 ///
@@ -91,7 +90,6 @@ where
 /// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
 /// 
 /// use mpstthree::name::b::NameB;
@@ -151,7 +149,6 @@ where
 /// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 /// 
 /// use mpstthree::name::c::NameC;
@@ -210,7 +207,6 @@ where
 /// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
 ///
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 /// 
@@ -270,7 +266,6 @@ where
 /// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
 ///
-/// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 ///
@@ -331,7 +326,6 @@ where
 /// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::b::RoleB;
-/// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
 /// 
 /// use mpstthree::name::c::NameC;
