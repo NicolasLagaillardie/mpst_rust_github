@@ -22,11 +22,6 @@ struct ZoneDataResponse;
 struct InvalidZone;
 struct Received;
 
-// Names
-type NameData = RoleData<RoleEnd>;
-type NameHandler = RoleHandler<RoleEnd>;
-type NameRegional = RoleRegional<RoleEnd>;
-
 // Types
 // REGIONAL
 type Choose0fromRegionalToData = Send<Branching0fromRegionalToData, End>;

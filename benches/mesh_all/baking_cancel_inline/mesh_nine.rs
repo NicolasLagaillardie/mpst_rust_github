@@ -18,17 +18,6 @@ use std::thread::{spawn, JoinHandle};
 // Create new roles
 bundle_impl_with_enum_and_cancel!(MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
-type NameF = RoleF<RoleEnd>;
-type NameG = RoleG<RoleEnd>;
-type NameH = RoleH<RoleEnd>;
-type NameI = RoleI<RoleEnd>;
-
 // Types
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;

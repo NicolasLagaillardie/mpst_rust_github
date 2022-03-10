@@ -130,7 +130,7 @@ impl CreateRecvHttpSession {
                         #recv_types
                     )*
                     #sender<R>,
-                    #receiver<mpstthree::role::end::RoleEnd>,
+                    #receiver,
                 >,
                 http: bool,
                 mut resp_future: Vec::<hyper::client::ResponseFuture>,
@@ -142,7 +142,7 @@ impl CreateRecvHttpSession {
                             #session_types
                         )*
                         R,
-                        #receiver<mpstthree::role::end::RoleEnd>,
+                        #receiver,
                     >,
                     hyper::Response<hyper::Body>
                 ),

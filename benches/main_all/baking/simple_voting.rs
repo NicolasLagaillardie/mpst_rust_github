@@ -14,10 +14,6 @@ use std::error::Error;
 // Create new MeshedChannels for four participants
 bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, Voter, Server);
 
-// Names
-type NameServer = RoleServer<RoleEnd>;
-type NameVoter = RoleVoter<RoleEnd>;
-
 // Types
 // SERVER
 type Choose0fromStoV = Send<Branching0fromStoV, End>;

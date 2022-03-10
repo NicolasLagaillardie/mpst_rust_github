@@ -39,29 +39,25 @@ create_multiple_normal_role!(
 // A
 create_send_mpst_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsTwo, 2
+    NameA, MeshedChannelsTwo, 2
 );
 // B
 create_send_mpst_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsTwo, 2
+    NameB, MeshedChannelsTwo, 2
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsTwo, 2
+    NameA, MeshedChannelsTwo, 2
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsTwo, 2
+    NameB, MeshedChannelsTwo, 2
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 // A

@@ -42,28 +42,6 @@ bundle_impl_with_enum_and_cancel!(
     T
 );
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
-type NameF = RoleF<RoleEnd>;
-type NameG = RoleG<RoleEnd>;
-type NameH = RoleH<RoleEnd>;
-type NameI = RoleI<RoleEnd>;
-type NameJ = RoleJ<RoleEnd>;
-type NameK = RoleK<RoleEnd>;
-type NameL = RoleL<RoleEnd>;
-type NameM = RoleM<RoleEnd>;
-type NameN = RoleN<RoleEnd>;
-type NameO = RoleO<RoleEnd>;
-type NameP = RoleP<RoleEnd>;
-type NameQ = RoleQ<RoleEnd>;
-type NameR = RoleR<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
-type NameT = RoleT<RoleEnd>;
-
 // Types
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;

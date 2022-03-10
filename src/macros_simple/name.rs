@@ -31,7 +31,7 @@ macro_rules! create_normal_name {
         /// The Name
 
         #[derive(Debug)]
-        struct $name {
+        pub struct $name {
             #[doc(hidden)]
             sender: crossbeam_channel::Sender<()>,
             #[doc(hidden)]

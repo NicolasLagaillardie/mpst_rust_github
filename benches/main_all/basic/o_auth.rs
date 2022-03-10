@@ -24,11 +24,6 @@ struct Token;
 struct Fail;
 struct Received;
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
-
 // Types
 
 // A

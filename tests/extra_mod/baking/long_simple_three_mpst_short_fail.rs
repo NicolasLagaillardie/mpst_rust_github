@@ -8,11 +8,6 @@ use std::error::Error;
 // Create new roles
 bundle_impl!(MeshedChannelsThree, A, B, C);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-
 // Types
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
@@ -54,8 +49,8 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     Done, More, =>
     EndpointDoneC, EndpointMoreC, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
-    RoleA, RoleB, =>
-    RoleC, MeshedChannelsThree, 3
+    NameA, NameB, =>
+    NameC, MeshedChannelsThree, 3
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

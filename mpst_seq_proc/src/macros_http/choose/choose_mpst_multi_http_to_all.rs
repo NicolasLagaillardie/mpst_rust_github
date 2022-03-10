@@ -123,8 +123,7 @@ impl ChooseTypeMultiHttpToAll {
                     panic!("Not enough receivers")
                 };
                 quote! {
-                    let ( #temp_name , _) =
-                        <#temp_role::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
                 }
             })
             .collect();
@@ -219,8 +218,7 @@ impl ChooseTypeMultiHttpToAll {
                     #new_names
                 )*
 
-                let ( #new_name_sender , _) =
-                    <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                let ( #new_name_sender , _) = < #sender as mpstthree::name::Name>::new();
 
                 let s = #session;
 

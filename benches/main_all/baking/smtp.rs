@@ -12,10 +12,6 @@ use std::error::Error;
 // Create new MeshedChannels for four participants
 bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, C, S);
 
-// Names
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
-
 // Types
 // Step 0
 // C

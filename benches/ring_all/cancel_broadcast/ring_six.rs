@@ -4,8 +4,9 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi,
-    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_name_short,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_check_cancel_bundle, offer_cancel_mpst,
 };
 
 use std::error::Error;
@@ -18,40 +19,43 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsSeven
 // normal
 create_multiple_normal_role_short!(Central, A, B, C, D, E, F);
 
+// Create new names
+create_multiple_normal_name_short!(Central, A, B, C, D, E, F);
+
 // Create new send functions
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsSeven, 7
+    NameA, MeshedChannelsSeven, 7
 );
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
-    RoleB, MeshedChannelsSeven, 7
+    NameB, MeshedChannelsSeven, 7
 );
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
-    RoleC, MeshedChannelsSeven, 7
+    NameC, MeshedChannelsSeven, 7
 );
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 4 |
     send_mpst_d_to_e, RoleE, 5 | =>
-    RoleD, MeshedChannelsSeven, 7
+    NameD, MeshedChannelsSeven, 7
 );
 // E
 create_send_check_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 5 |
     send_mpst_e_to_f, RoleF, 6 | =>
-    RoleE, MeshedChannelsSeven, 7
+    NameE, MeshedChannelsSeven, 7
 );
 // F
 create_send_check_cancel_bundle!(
     send_mpst_f_to_e, RoleE, 6 | =>
-    RoleF, MeshedChannelsSeven, 7
+    NameF, MeshedChannelsSeven, 7
 );
 
 // Create new recv functions and related types
@@ -59,48 +63,40 @@ create_send_check_cancel_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 |
     recv_mpst_a_from_f, RoleF, 6 | =>
-    RoleA, MeshedChannelsSeven, 7
+    NameA, MeshedChannelsSeven, 7
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
     recv_mpst_b_from_c, RoleC, 3 |
     recv_mpst_b_from_f, RoleF, 6 | =>
-    RoleB, MeshedChannelsSeven, 7
+    NameB, MeshedChannelsSeven, 7
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 |
     recv_mpst_c_from_d, RoleD, 4 |
     recv_mpst_c_from_f, RoleF, 6 | =>
-    RoleC, MeshedChannelsSeven, 7
+    NameC, MeshedChannelsSeven, 7
 );
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 4 |
     recv_mpst_d_from_e, RoleE, 5 |
     recv_mpst_d_from_f, RoleF, 6 | =>
-    RoleD, MeshedChannelsSeven, 7
+    NameD, MeshedChannelsSeven, 7
 );
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 5 |
     recv_mpst_e_from_f, RoleF, 6 | =>
-    RoleE, MeshedChannelsSeven, 7
+    NameE, MeshedChannelsSeven, 7
 );
 // F
 create_recv_mpst_session_bundle!(
     recv_mpst_f_from_e, RoleE, 6 | =>
-    RoleF, MeshedChannelsSeven, 7
+    NameF, MeshedChannelsSeven, 7
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
-type NameF = RoleF<RoleEnd>;
 
 // Types
 // A
@@ -278,7 +274,7 @@ type EndpointBackwardF = MeshedChannelsSeven<
 
 // Creating the MP sessions
 type EndpointCentral =
-    MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, RoleCentral<RoleEnd>>;
+    MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannelsSeven<End, End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
 type EndpointB = MeshedChannelsSeven<End, End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
 type EndpointC = MeshedChannelsSeven<End, End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
@@ -304,8 +300,8 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Branching0fromFtoC,
     Branching0fromFtoD,
     Branching0fromFtoE, =>
-    RoleA, RoleB, RoleC, RoleD, RoleE, =>
-    RoleCentral, RoleF, MeshedChannelsSeven, 7
+    NameA, NameB, NameC, NameD, NameE, =>
+    NameCentral, NameF, MeshedChannelsSeven, 7
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {

@@ -28,10 +28,13 @@ macro_rules! send_aux_simple {
 /// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
+///
+/// use mpstthree::name::a::NameA;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_a_to_b;
 ///
@@ -41,9 +44,6 @@ macro_rules! send_aux_simple {
 ///
 /// // Stack
 /// type StackA = RoleB<RoleEnd>;
-///
-/// // Name
-/// type NameA = RoleA<RoleEnd>;
 ///
 /// // From this point...
 ///
@@ -88,10 +88,13 @@ where
 /// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
+/// 
+/// use mpstthree::name::b::NameB;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_b_to_a;
 ///
@@ -101,9 +104,6 @@ where
 ///
 /// // Stack
 /// type StackB = RoleA<RoleEnd>;
-///
-/// // Name
-/// type NameB = RoleB<RoleEnd>;
 ///
 /// // From this point...
 ///
@@ -148,10 +148,13 @@ where
 /// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
+/// 
+/// use mpstthree::name::c::NameC;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_c_to_a;
 ///
@@ -161,9 +164,6 @@ where
 ///
 /// // Stack
 /// type StackC = RoleA<RoleEnd>;
-///
-/// // Name
-/// type NameC = RoleC<RoleEnd>;
 ///
 /// // From this point...
 ///
@@ -208,10 +208,13 @@ where
 /// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
+/// 
+/// use mpstthree::name::a::NameA;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_a_to_c;
 ///
@@ -221,9 +224,6 @@ where
 ///
 /// // Stack
 /// type StackA = RoleC<RoleEnd>;
-///
-/// // Name
-/// type NameA = RoleA<RoleEnd>;
 ///
 /// // From this point...
 ///
@@ -268,10 +268,13 @@ where
 /// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
+///
+/// use mpstthree::name::b::NameB;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_b_to_c;
 ///
@@ -281,9 +284,6 @@ where
 ///
 /// // Stack
 /// type StackB = RoleC<RoleEnd>;
-///
-/// // Name
-/// type NameB = RoleB<RoleEnd>;
 ///
 /// // From this point...
 ///
@@ -328,10 +328,13 @@ where
 /// use mpstthree::binary::struct_trait::{end::End, send::Send, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
+/// 
+/// use mpstthree::name::c::NameC;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_c_to_b;
 ///
@@ -341,9 +344,6 @@ where
 ///
 /// // Stack
 /// type StackC = RoleB<RoleEnd>;
-///
-/// // Name
-/// type NameC = RoleC<RoleEnd>;
 ///
 /// // From this point...
 ///

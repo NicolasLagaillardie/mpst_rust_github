@@ -131,7 +131,7 @@ impl CreateSendHttpSession {
                         #send_types
                     )*
                     #receiver<R>,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >,
                 http: bool,
                 req: hyper::Request<hyper::Body>
@@ -142,7 +142,7 @@ impl CreateSendHttpSession {
                             #session_types
                         )*
                         R,
-                        #sender<mpstthree::role::end::RoleEnd>,
+                        #sender,
                     >,
                     hyper::client::ResponseFuture
                 ),

@@ -12,11 +12,6 @@ use std::error::Error;
 // Create new MeshedChannels for four participants
 bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, B, C);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-
 // Types
 // A
 type Choose0fromAtoB = <RecursBtoA as Session>::Dual;

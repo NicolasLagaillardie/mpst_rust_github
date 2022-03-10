@@ -18,11 +18,6 @@ use std::thread::{spawn, JoinHandle};
 // Create new roles
 bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, B, C);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-
 // Types
 // A
 enum Branching0fromCtoA {

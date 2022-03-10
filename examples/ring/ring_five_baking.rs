@@ -16,13 +16,6 @@ static LOOPS: i64 = 100;
 // Create new roles
 bundle_impl_with_enum_and_cancel!(MeshedChannelsFive, A, B, C, D, E);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
-
 // Types
 // A
 enum Branching0fromEtoA {

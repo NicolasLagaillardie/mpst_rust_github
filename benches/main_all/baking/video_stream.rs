@@ -64,13 +64,12 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 // Creating the MP sessions
 
 // For C
-type EndpointCRecurs =
-    MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
+type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
 type EndpointCVideo = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoB,
     RoleA<RoleA<StackCRecurs>>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, NameC>;
 

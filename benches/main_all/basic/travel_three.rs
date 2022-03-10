@@ -164,9 +164,9 @@ fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoA::<i32>::Select,
                 Branching0fromCtoS::<i32>::Select, =>
-                RoleA,
-                RoleS, =>
-                RoleC,
+                NameA,
+                NameS, =>
+                NameC,
                 MeshedChannelsThree,
                 2
             );
@@ -177,9 +177,9 @@ fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoA::<i32>::Loop,
                 Branching0fromCtoS::<i32>::Loop, =>
-                RoleA,
-                RoleS, =>
-                RoleC,
+                NameA,
+                NameS, =>
+                NameC,
                 MeshedChannelsThree,
                 2
             );
@@ -199,9 +199,9 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromCtoA::<i32>::Yes,
             Branching1fromCtoS::<i32>::Yes, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
+            NameA,
+            NameS, =>
+            NameC,
             MeshedChannelsThree,
             2
         );
@@ -215,9 +215,9 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromCtoA::<i32>::No,
             Branching1fromCtoS::<i32>::No, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
+            NameA,
+            NameS, =>
+            NameC,
             MeshedChannelsThree,
             2
         );

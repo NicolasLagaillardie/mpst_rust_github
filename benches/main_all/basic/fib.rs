@@ -8,8 +8,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer, offer_mpst,
+    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer, offer_mpst,
 };
 
 use std::error::Error;
@@ -30,40 +31,39 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
+// Create new roles
+// normal
+create_multiple_normal_name!(NameA, NameB, NameC);
+
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 |
     send_mpst_a_to_c, RoleC, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsThree, 3
+    NameB, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsThree, 3
+    NameB, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 // A
@@ -106,9 +106,9 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 s,
                 Branching0fromAtoB::<i64>::Done,
                 Branching0fromAtoC::Done, =>
-                RoleB,
-                RoleC, =>
-                RoleA,
+                NameB,
+                NameC, =>
+                NameA,
                 MeshedChannelsThree,
                 1
             );
@@ -120,9 +120,9 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 s,
                 Branching0fromAtoB::<i64>::More,
                 Branching0fromAtoC::More, =>
-                RoleB,
-                RoleC, =>
-                RoleA,
+                NameB,
+                NameC, =>
+                NameA,
                 MeshedChannelsThree,
                 1
             );

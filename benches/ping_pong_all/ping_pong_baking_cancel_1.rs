@@ -28,10 +28,6 @@ use std::error::Error;
 // Create new roles
 bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, A, B);
 
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-
 // Types
 // A
 type Choose0fromAtoB = <RecursBtoA as Session>::Dual;

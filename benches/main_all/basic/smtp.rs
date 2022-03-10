@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer_mpst,
 };
 
 use std::error::Error;
@@ -20,36 +21,35 @@ create_multiple_normal_role!(
     RoleS, RoleSDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameC, NameS);
+
 // Create new send functions
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_s, RoleS, 1 | =>
-    RoleC, MeshedChannelsTwo, 2
+    NameC, MeshedChannelsTwo, 2
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 1 | =>
-    RoleS, MeshedChannelsTwo, 2
+    NameS, MeshedChannelsTwo, 2
 );
 
 // Create new recv functions and related types
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_s, RoleS, 1 | =>
-    RoleC, MeshedChannelsTwo, 2
+    NameC, MeshedChannelsTwo, 2
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_c, RoleC, 1 | =>
-    RoleS, MeshedChannelsTwo, 2
+    NameS, MeshedChannelsTwo, 2
 );
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
-
-// Names
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
 
 // Types
 // Step 0
@@ -216,8 +216,8 @@ fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromCtoS::Quit, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -228,8 +228,8 @@ fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromCtoS::Continue, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -262,8 +262,8 @@ fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching2fromCtoS::Quit, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -274,8 +274,8 @@ fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching2fromCtoS::Continue, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -292,8 +292,8 @@ fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching3fromCtoS::Quit, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -304,8 +304,8 @@ fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching3fromCtoS::Continue, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -336,8 +336,8 @@ fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching5fromCtoS::Quit, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -348,8 +348,8 @@ fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching5fromCtoS::Continue, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -380,8 +380,8 @@ fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching7fromCtoS::Quit, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -392,8 +392,8 @@ fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching7fromCtoS::Continue, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -424,8 +424,8 @@ fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching9fromCtoS::Loop, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -437,8 +437,8 @@ fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching9fromCtoS::Continue, =>
-                RoleS, =>
-                RoleC, MeshedChannelsTwo, 1
+                NameS, =>
+                NameC, MeshedChannelsTwo, 1
             );
 
             let s = send_mpst_c_to_s((), s);
@@ -456,8 +456,8 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::End, =>
-            RoleS, =>
-            RoleC, MeshedChannelsTwo, 1
+            NameS, =>
+            NameC, MeshedChannelsTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -468,8 +468,8 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::Subject, =>
-            RoleS, =>
-            RoleC, MeshedChannelsTwo, 1
+            NameS, =>
+            NameC, MeshedChannelsTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -480,8 +480,8 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::Data, =>
-            RoleS, =>
-            RoleC, MeshedChannelsTwo, 1
+            NameS, =>
+            NameC, MeshedChannelsTwo, 1
         );
 
         let s = send_mpst_c_to_s((), s);
@@ -521,8 +521,8 @@ fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromStoC::Loop, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -534,8 +534,8 @@ fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromStoC::Continue, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -582,8 +582,8 @@ fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching4fromStoC::Loop, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -594,8 +594,8 @@ fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching4fromStoC::Continue, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -626,8 +626,8 @@ fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching6fromStoC::Loop, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -638,8 +638,8 @@ fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching6fromStoC::Continue, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -670,8 +670,8 @@ fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching8fromStoC::Loop, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);
@@ -682,8 +682,8 @@ fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching8fromStoC::Continue, =>
-                RoleC, =>
-                RoleS, MeshedChannelsTwo, 2
+                NameC, =>
+                NameS, MeshedChannelsTwo, 2
             );
 
             let s = send_mpst_s_to_c((), s);

@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi_cancel, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, offer_mpst,
+    bundle_struct_fork_close_multi_cancel, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle,
+    offer_mpst,
 };
 
 use std::error::Error;
@@ -38,33 +39,32 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB);
+
 // Create new send functions
 // A
 create_send_mpst_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsTwo, 2
+    NameA, MeshedChannelsTwo, 2
 );
 // B
 create_send_mpst_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsTwo, 2
+    NameB, MeshedChannelsTwo, 2
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsTwo, 2
+    NameA, MeshedChannelsTwo, 2
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsTwo, 2
+    NameB, MeshedChannelsTwo, 2
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 // A
@@ -91,8 +91,8 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::Done, =>
-                RoleB, =>
-                RoleA,
+                NameB, =>
+                NameA,
                 MeshedChannelsTwo,
                 1
             );
@@ -103,8 +103,8 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::More, =>
-                RoleB, =>
-                RoleA,
+                NameB, =>
+                NameA,
                 MeshedChannelsTwo,
                 1
             );

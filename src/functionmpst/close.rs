@@ -18,9 +18,12 @@ use std::error::Error;
 /// use mpstthree::binary::struct_trait::{end::End, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
 /// use mpstthree::role::Role;
+/// use mpstthree::name::Name;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
+///
+/// use mpstthree::name::a::NameA;
 ///
 /// use mpstthree::functionmpst::close::close_mpst;
 ///
@@ -30,9 +33,6 @@ use std::error::Error;
 ///
 /// // Stack
 /// type StackA = RoleEnd;
-///
-/// // Name
-/// type NameA = RoleA<RoleEnd>;
 ///
 /// // From this point...
 ///

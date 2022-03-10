@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle, fork_mpst_multi, offer_mpst,
+    choose_mpst_multi_to_all, close_mpst, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle,
+    fork_mpst_multi, offer_mpst,
 };
 
 use std::error::Error;
@@ -23,12 +24,15 @@ create_multiple_normal_role!(
     Logs, DualLogs |
 );
 
+// Create Names
+create_multiple_normal_name!(NameController, NameLogs,);
+
 // Create send
 create_send_mpst_cancel_bundle!(
     send_controller_to_logs,
     Logs,
     1 | =>
-    Controller,
+    NameController,
     MeshedChannelsTwo,
     2
 );
@@ -36,7 +40,7 @@ create_send_mpst_cancel_bundle!(
     send_logs_to_controller,
     Controller,
     1 | =>
-    Logs,
+    NameLogs,
     MeshedChannelsTwo,
     2
 );
@@ -46,7 +50,7 @@ create_recv_mpst_session_bundle!(
     recv_controller_from_logs,
     Logs,
     1 | =>
-    Controller,
+    NameController,
     MeshedChannelsTwo,
     2
 );
@@ -54,7 +58,7 @@ create_recv_mpst_session_bundle!(
     recv_logs_from_controller,
     Controller,
     1 | =>
-    Logs,
+    NameLogs,
     MeshedChannelsTwo,
     2
 );
@@ -64,10 +68,6 @@ close_mpst!(close_mpst_multi, MeshedChannelsTwo, 2);
 
 // Create fork function
 fork_mpst_multi!(fork_mpst, MeshedChannelsTwo, 2);
-
-// Names
-type NameController = Controller<RoleEnd>;
-type NameLogs = Logs<RoleEnd>;
 
 // Controller
 enum Branching0fromLtoC<N: marker::Send> {
@@ -131,8 +131,8 @@ fn recurs_1_controller(s: EndpointController1<i32>, loops: i32) -> Result<(), Bo
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromCtoL::Stop, =>
-                Logs, =>
-                Controller,
+                NameLogs, =>
+                NameController,
                 MeshedChannelsTwo,
                 2
             );
@@ -146,8 +146,8 @@ fn recurs_1_controller(s: EndpointController1<i32>, loops: i32) -> Result<(), Bo
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromCtoL::Restart, =>
-                Logs, =>
-                Controller,
+                NameLogs, =>
+                NameController,
                 MeshedChannelsTwo,
                 2
             );
@@ -171,8 +171,8 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromLtoC::Failure, =>
-                Controller, =>
-                Logs,
+                NameController, =>
+                NameLogs,
                 MeshedChannelsTwo,
                 2
             );
@@ -186,8 +186,8 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromLtoC::Success, =>
-                Controller, =>
-                Logs,
+                NameController, =>
+                NameLogs,
                 MeshedChannelsTwo,
                 2
             );
