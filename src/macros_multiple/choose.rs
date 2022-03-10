@@ -56,7 +56,7 @@ macro_rules! create_choose_type_multi {
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -120,7 +120,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -185,7 +185,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -441,7 +441,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,

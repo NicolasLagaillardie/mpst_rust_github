@@ -149,14 +149,10 @@ impl ChooseTypeMultiToAllBundle {
                 let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
                     .map(|j| {
                         let (line, column, _) = get_tuple_diag(&diag, j);
-                        let channel_left = Ident::new(
-                            &format!("channel_{}_{}", line, column),
-                            Span::call_site(),
-                        );
-                        let channel_right = Ident::new(
-                            &format!("channel_{}_{}", column, line),
-                            Span::call_site(),
-                        );
+                        let channel_left =
+                            Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                        let channel_right =
+                            Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
                         quote! {
                             let ( #channel_left , #channel_right ) =
                                 <_ as mpstthree::binary::struct_trait::session::Session>::new();
@@ -167,10 +163,7 @@ impl ChooseTypeMultiToAllBundle {
                 // Build let ( stack_n , _) = <_ as mpstthree::role::Role>::new();
                 let new_roles: Vec<TokenStream> = (1..=self.n_sessions)
                     .map(|j| {
-                        let temp_ident = Ident::new(
-                            &format!("stack_{}", j),
-                            Span::call_site(),
-                        );
+                        let temp_ident = Ident::new(&format!("stack_{}", j), Span::call_site());
                         quote! {
                             let ( #temp_ident , _) = <_ as mpstthree::role::Role>::new();
                         }
@@ -180,8 +173,7 @@ impl ChooseTypeMultiToAllBundle {
                 // Build let ( name_n , _) = <NameN as mpstthree::name::Name>::new();
                 let new_names: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_name =
-                            Ident::new(&format!("name_{}", j), Span::call_site());
+                        let temp_name = Ident::new(&format!("name_{}", j), Span::call_site());
                         let temp_role =
                             if let Some(elt) = all_receivers.get(usize::try_from(j - 1).unwrap()) {
                                 elt
@@ -195,22 +187,15 @@ impl ChooseTypeMultiToAllBundle {
                     })
                     .collect();
 
-                let new_name_sender = Ident::new(
-                    &format!("name_{}", self.n_sessions),
-                    Span::call_site(),
-                );
+                let new_name_sender =
+                    Ident::new(&format!("name_{}", self.n_sessions), Span::call_site());
 
-                let new_stack_sender = Ident::new(
-                    &format!("stack_{}", self.n_sessions),
-                    Span::call_site(),
-                );
+                let new_stack_sender =
+                    Ident::new(&format!("stack_{}", self.n_sessions), Span::call_site());
 
                 let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_session = Ident::new(
-                            &format!("session{}", j),
-                            Span::call_site(),
-                        );
+                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_channel = if j < self.exclusion {
                             Ident::new(
                                 &format!("channel_{}_{}", self.exclusion, j),
@@ -254,10 +239,8 @@ impl ChooseTypeMultiToAllBundle {
                         let sessions_sent: Vec<TokenStream> = (1..self.n_sessions)
                             .map(|k| {
                                 let temp = if j >= self.exclusion { j + 1 } else { j };
-                                let temp_ident = Ident::new(
-                                    &format!("session{}", k),
-                                    Span::call_site(),
-                                );
+                                let temp_ident =
+                                    Ident::new(&format!("session{}", k), Span::call_site());
                                 let temp_channel = if k < temp {
                                     Ident::new(
                                         &format!("channel_{}_{}", temp, k),
@@ -277,10 +260,8 @@ impl ChooseTypeMultiToAllBundle {
 
                         let sessions_returned: Vec<TokenStream> = (1..self.n_sessions)
                             .map(|k| {
-                                let temp_ident = Ident::new(
-                                    &format!("session{}", k),
-                                    Span::call_site(),
-                                );
+                                let temp_ident =
+                                    Ident::new(&format!("session{}", k), Span::call_site());
                                 if j == k {
                                     quote! {
                                         #temp_ident : new_session ,
@@ -293,16 +274,9 @@ impl ChooseTypeMultiToAllBundle {
                             })
                             .collect();
 
-                        let temp_name =
-                            Ident::new(&format!("name_{}", j), Span::call_site());
-                        let temp_stack = Ident::new(
-                            &format!("stack_{}", j),
-                            Span::call_site(),
-                        );
-                        let temp_session = Ident::new(
-                            &format!("session{}", j),
-                            Span::call_site(),
-                        );
+                        let temp_name = Ident::new(&format!("name_{}", j), Span::call_site());
+                        let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_label =
                             if let Some(elt) = all_labels.get(usize::try_from(j - 1).unwrap()) {
                                 elt

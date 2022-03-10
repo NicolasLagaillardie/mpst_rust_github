@@ -1,6 +1,5 @@
 use either::Either;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::name::Name;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;
@@ -18,18 +17,8 @@ type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
 
 type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        MeshedChannels<
-            <S0 as Session>::Dual,
-            <S1 as Session>::Dual,
-            <R0 as Role>::Dual,
-            <N0 as Name>::Dual,
-        >,
-        MeshedChannels<
-            <S2 as Session>::Dual,
-            <S3 as Session>::Dual,
-            <R1 as Role>::Dual,
-            <N0 as Name>::Dual,
-        >,
+        MeshedChannels<<S0 as Session>::Dual, <S1 as Session>::Dual, <R0 as Role>::Dual, N0>,
+        MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, <R1 as Role>::Dual, N0>,
     >,
     End,
 >;

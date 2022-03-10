@@ -28,7 +28,7 @@
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -84,7 +84,7 @@ macro_rules! create_send_mpst_session {
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -137,7 +137,7 @@ macro_rules! create_send_mpst_cancel {
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_normal_role!(RoleD, RoleDDual);
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -152,7 +152,7 @@ macro_rules! create_send_mpst_cancel {
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleD, RoleDDual);
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -207,7 +207,7 @@ macro_rules! create_send_check_cancel {
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -267,7 +267,7 @@ macro_rules! create_send_mpst_session_bundle {
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -325,7 +325,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_normal_role!(RoleD, RoleDDual);
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -350,7 +350,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);

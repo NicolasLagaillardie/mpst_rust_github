@@ -39,33 +39,51 @@ type VecOfTuple = Vec<(String, usize)>;
 pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     println!("Running clean_session");
 
-    // The regex expression
-    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
     let mut temp = session.replace('&', "");
+
+    // The main regex expression
+    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
 
     // Replace with regex expression -> term1::term2::term3 by term3
     for caps in main_re.captures_iter(session) {
         temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
     }
 
+    // The name regex expression
+    let name_re = Regex::new(r"Name([[:alpha:]]+)")?;
+
+    let mut name_temp = temp.clone();
+    let temp_temp = temp.clone();
+
+    // Replace with regex expression -> term1::term2::term3 by term3
+    for caps in name_re.captures_iter(&temp_temp) {
+        name_temp = name_temp.replace(
+            &caps[0],
+            &format!("Role{}<RoleEnd>", caps[caps.len() - 1].to_string()),
+        );
+    }
+
+    println!("New test_temp: {:?}", name_temp.clone());
+
     // Remove whitespaces
-    temp.retain(|c| !c.is_whitespace());
+    name_temp.retain(|c| !c.is_whitespace());
 
     // Get each field of the MeshedChannels
+    let mut full_block = get_blocks(&name_temp)?;
 
-    let mut full_block = get_blocks(&temp)?;
+    // Get the name of the role
+    let name = full_block[full_block.len() - 1]
+        .split(['<', '>'].as_ref())
+        .filter(|s| !s.is_empty())
+        .map(String::from)
+        .collect::<Vec<_>>()[0]
+        .to_string();
 
-    // Get the real name of the role
-    let real_name = full_block[full_block.len() - 1].replacen("Name", "Role", 1);
-
-    // Get the former name of the role
-    let former_name = format!("{}<RoleEnd>", real_name.to_string());
-
-    full_block.remove(full_block.len() - 1);
-    full_block.push(former_name);
-    full_block.push(real_name);
+    full_block.push(name);
 
     println!("Ending clean_session");
+
+    println!("clean_session full_block: {:?}", full_block.clone());
 
     Ok(full_block)
 }
@@ -364,22 +382,34 @@ pub(crate) fn aux_get_graph(
                         // Should be `Either<MC, MC>`
                         let payload_either = &get_head_payload_continuation(session)?[1];
 
+                        println!("aux_get_graph session: {:?}", session.clone());
+
                         // Should be `[Either, MC, MC]`
                         let choices = get_head_payload_continuation(payload_either)?;
+
+                        println!("aux_get_graph choices: {:?}", choices.clone());
 
                         // Split the new session
                         let blocks_left = get_blocks(&choices[1])?;
                         let blocks_right = get_blocks(&choices[2])?;
 
+                        println!("aux_get_graph blocks_left: {:?}", blocks_left.clone());
+                        println!("aux_get_graph blocks_right: {:?}", blocks_right.clone());
+
                         // Get the index of the receiver
                         let receiver =
                             &get_head_payload_continuation(&blocks_left[blocks_left.len() - 1])?[0];
+
+                        println!("aux_get_graph receiver: {:?}", receiver.clone());
+
                         let index_receiver =
                             if let Some(elt) = roles.iter().position(|r| r == receiver) {
                                 elt
                             } else {
                                 panic!("Issue with roles {:?} and receiver {:?}", roles, receiver)
                             };
+
+                        println!("aux_get_graph index_receiver: {:?}", index_receiver.clone());
 
                         // The offset depending on the relative positions of the roles
                         let offset = (index_current_role > index_receiver) as usize;

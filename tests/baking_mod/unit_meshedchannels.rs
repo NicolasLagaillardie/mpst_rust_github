@@ -2,9 +2,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 
 use mpstthree::bundle_impl;
 
+use mpstthree::name::Name;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
-use mpstthree::name::Name;
 
 // Create new MeshedChannels for three participants
 bundle_impl!(MeshedChannels, A, B, C);

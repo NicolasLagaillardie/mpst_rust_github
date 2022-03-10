@@ -226,7 +226,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -331,7 +331,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -436,7 +436,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -541,7 +541,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -646,7 +646,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -751,7 +751,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -857,7 +857,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -937,7 +937,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,
@@ -1017,7 +1017,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///     RoleB, RoleBDual |
 ///     RoleC, RoleCDual |
 /// );
-/// 
+///
 /// create_multiple_normal_name!(
 ///     NameA,
 ///     NameB,

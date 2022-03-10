@@ -19,7 +19,6 @@ pub mod send;
 
 use crate::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use crate::meshedchannels::MeshedChannels;
-use crate::name::Name;
 use crate::role::Role;
 use either::Either;
 
@@ -49,18 +48,8 @@ pub type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
 /// [`Either`]: either::Either
 pub type ChooseMpst<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        MeshedChannels<
-            <S0 as Session>::Dual,
-            <S1 as Session>::Dual,
-            <R0 as Role>::Dual,
-            <N0 as Name>::Dual,
-        >,
-        MeshedChannels<
-            <S2 as Session>::Dual,
-            <S3 as Session>::Dual,
-            <R1 as Role>::Dual,
-            <N0 as Name>::Dual,
-        >,
+        MeshedChannels<<S0 as Session>::Dual, <S1 as Session>::Dual, <R0 as Role>::Dual, N0>,
+        MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, <R1 as Role>::Dual, N0>,
     >,
     End,
 >;

@@ -50,7 +50,7 @@ macro_rules! recv_all_aux_simple {
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::a::NameA;
 /// use mpstthree::name::b::NameB;
 ///
@@ -196,7 +196,7 @@ where
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::a::NameA;
 /// use mpstthree::name::c::NameC;
 ///

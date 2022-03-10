@@ -55,7 +55,7 @@ where
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::a::NameA;
 /// use mpstthree::name::b::NameB;
 /// use mpstthree::name::c::NameC;

@@ -91,7 +91,7 @@ where
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::b::NameB;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_b_to_a;
@@ -150,7 +150,7 @@ where
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::c::NameC;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_c_to_a;
@@ -209,7 +209,7 @@ where
 ///
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::a::NameA;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_a_to_c;
@@ -327,7 +327,7 @@ where
 ///
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::end::RoleEnd;
-/// 
+///
 /// use mpstthree::name::c::NameC;
 ///
 /// use mpstthree::functionmpst::send::send_mpst_c_to_b;

@@ -76,8 +76,8 @@ macro_rules! choose_mpst_a {
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
-        let (name_1, _) = <$receiver_1 as Name>::Dual::new();
-        let (name_2, _) = <$receiver_2 as Name>::Dual::new();
+        let (name_1, _) = <$receiver_1 as Name>::new();
+        let (name_2, _) = <$receiver_2 as Name>::new();
         let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {
@@ -137,8 +137,8 @@ macro_rules! choose_mpst_b {
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
-        let (name_1, _) = <$receiver_1 as Name>::Dual::new();
-        let (name_2, _) = <$receiver_2 as Name>::Dual::new();
+        let (name_1, _) = <$receiver_1 as Name>::new();
+        let (name_2, _) = <$receiver_2 as Name>::new();
         let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {
@@ -198,8 +198,8 @@ macro_rules! choose_mpst_c {
         let (_, stack_1) = <$stack_1>::new();
         let (_, stack_2) = <$stack_2>::new();
         let (stack_3, _) = <$stack_3>::new();
-        let (name_1, _) = <$receiver_1 as Name>::Dual::new();
-        let (name_2, _) = <$receiver_2 as Name>::Dual::new();
+        let (name_1, _) = <$receiver_1 as Name>::new();
+        let (name_2, _) = <$receiver_2 as Name>::new();
         let (name_3, _) = <$sender as Name>::new();
 
         let choice_1 = MeshedChannels {

@@ -115,13 +115,13 @@ impl ChooseTypeMultiHttpToAll {
 
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_name =
-                    Ident::new(&format!("name_{}", i), Span::call_site());
-                let temp_role = if let Some(elt) = all_receivers.get(usize::try_from(i - 1).unwrap()) {
-                    elt
-                } else {
-                    panic!("Not enough receivers")
-                };
+                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_role =
+                    if let Some(elt) = all_receivers.get(usize::try_from(i - 1).unwrap()) {
+                        elt
+                    } else {
+                        panic!("Not enough receivers")
+                    };
                 quote! {
                     let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
                 }

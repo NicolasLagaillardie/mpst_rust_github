@@ -55,11 +55,11 @@ pub fn meshedchannels() {
     let meshedchannels = Endpoint::<i32>::new().0;
 
     assert_eq!(
-        "Send\nRecv\nRoleB\nRoleA".to_string(),
+        "Send\nRecv\nRoleB\nNameA".to_string(),
         meshedchannels.self_head_str()
     );
     assert_eq!(
-        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nRoleA<RoleEnd<>>".to_string(),
+        "Send<End<>>\nRecv<End<>>\nRoleB<RoleC<RoleEnd<>>>\nNameA<>".to_string(),
         meshedchannels.self_tail_str()
     );
 }

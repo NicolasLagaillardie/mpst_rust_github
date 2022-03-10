@@ -17,15 +17,9 @@ bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, Controller, Logs);
 // RoleController
 enum Branching0fromLtoC {
     Success(
-        MeshedChannelsTwo<
-            Recv<i32, Recurs0fromCtoL>,
-            RoleLogs<RoleLogs<RoleEnd>>,
-            NameController,
-        >,
+        MeshedChannelsTwo<Recv<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>,
     ),
-    Failure(
-        MeshedChannelsTwo<Recv<i32, Choose1fromCtoL>, RoleLogs<RoleBroadcast>, NameController>,
-    ),
+    Failure(MeshedChannelsTwo<Recv<i32, Choose1fromCtoL>, RoleLogs<RoleBroadcast>, NameController>),
 }
 
 type Recurs0fromCtoL = Recv<Branching0fromLtoC, End>;
@@ -36,9 +30,7 @@ type Choose1fromCtoL = Send<Branching1fromCtoL, End>;
 type Choose0fromLtoC = Send<Branching0fromLtoC, End>;
 
 enum Branching1fromCtoL {
-    Restart(
-        MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>,
-    ),
+    Restart(MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>),
     Stop(MeshedChannelsTwo<Recv<i32, End>, RoleController<RoleEnd>, NameLogs>),
 }
 
@@ -46,12 +38,10 @@ type Recurs1fromLtoC = Recv<Branching1fromCtoL, End>;
 
 // Creating the MP sessions
 // RoleController
-type EndpointController1Stop =
-    MeshedChannelsTwo<Send<i32, End>, RoleLogs<RoleEnd>, NameController>;
+type EndpointController1Stop = MeshedChannelsTwo<Send<i32, End>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1Restart =
     MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
-type EndpointController0 =
-    MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameController>;
+type EndpointController0 = MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1 = MeshedChannelsTwo<Choose1fromCtoL, RoleBroadcast, NameController>;
 type EndpointControllerInit =
     MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;

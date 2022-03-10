@@ -28,7 +28,7 @@
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
@@ -83,7 +83,7 @@ macro_rules! create_recv_mpst_session {
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
-/// 
+///
 /// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);

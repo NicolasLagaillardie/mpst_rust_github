@@ -59,7 +59,7 @@ macro_rules! create_offer_type_multi {
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
-/// 
+///
 /// create_normal_name!(NameB);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
