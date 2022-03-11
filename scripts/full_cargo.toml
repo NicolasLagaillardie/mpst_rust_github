@@ -1,12 +1,12 @@
 [package]
 name = "mpstthree"
 version = "0.1.16"
-authors = ["XXX"]
+authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
-homepage = "XXX"
-repository = "XXX"
+homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "multicrusty"]
 documentation = "https://docs.rs/mpstthree"
@@ -714,7 +714,7 @@ crossbeam-channel = "0.5"
 either = "1.6"
 hyper = { version = "0.14", features = ["full"], optional = true }
 hyper-tls = { version = "0.5", optional = true }
-tokio = { version = "1.14", features = ["full"], optional = true }
+tokio = { version = "1.17", features = ["full"], optional = true }
 regex = { version = "1.5", optional = true }
 petgraph = { version = "0.6", optional = true }
 
@@ -749,6 +749,7 @@ transport_http = ["default", "hyper", "hyper-tls", "tokio"]
 transport = ["transport_tcp", "transport_udp", "transport_http"]
 # For test compile examples
 transport_macros_multiple = ["macros_multiple", "transport"]
+full_without_checking = ["baking", "transport"]
 full = ["checking", "baking", "transport"]
 
 ################################### Doc handling for all-features
