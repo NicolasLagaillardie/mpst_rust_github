@@ -123,10 +123,10 @@ fn client(s: EndpointCFull) -> Result<(), Box<dyn Error>> {
     let s = s.send(0)?;
     let (_, s) = s.recv()?;
 
-    client_recurs(s, xs, 1)
+    client_recurs(s, xs)
 }
 
-fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>, index: i32) -> Result<(), Box<dyn Error>> {
+fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
             let s: EndpointCVideo =
@@ -135,7 +135,7 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>, index: i32) -> Result<(),
             let s = s.send(1)?;
             let (_, s) = s.recv()?;
 
-            client_recurs(s, xs, index + 1)
+            client_recurs(s, xs)
         }
         Option::None => {
             let s = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
