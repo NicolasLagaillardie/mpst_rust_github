@@ -111,6 +111,11 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
+[[test]]
+name = "timed_binary"
+path = "tests/timed_binary.rs"
+required-features = ["timed_binary"]
+
 ################################### Benches
 
 [[bench]]
@@ -247,6 +252,7 @@ functionmpst = []
 meshedchannels = []
 role = []
 name = []
+timed_binary = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
 # For interleaved sessions

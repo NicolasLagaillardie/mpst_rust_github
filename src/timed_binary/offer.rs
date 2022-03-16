@@ -33,7 +33,7 @@ where
 /// Offer a choice between many different sessions wrapped
 /// in an `enum`
 #[macro_export]
-macro_rules! offer {
+macro_rules! timed_offer {
     ($session: expr, { $( $pat: pat => $result: expr , )+ }) => {
         (move || -> Result<_, _> {
             let (l, s) = mpstthree::binary::recv::recv($session)?;

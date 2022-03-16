@@ -5,7 +5,6 @@ use crate::binary::struct_trait::session::Session;
 use crossbeam_channel::{bounded, Receiver, Sender};
 use std::error::Error;
 use std::fmt;
-use std::str::FromStr;
 
 /// End of communication.
 #[must_use]
@@ -59,12 +58,12 @@ impl Session for End {
     }
 
     #[doc(hidden)]
-    fn self_head_str() -> String {
+    fn self_head_str(&self) -> String {
         "End".to_string()
     }
 
     #[doc(hidden)]
-    fn self_tail_str() -> String {
+    fn self_tail_str(&self) -> String {
         "".to_string()
     }
 }
@@ -92,16 +91,5 @@ impl fmt::Display for EndError {
 impl Error for EndError {
     fn description(&self) -> &str {
         &self.details
-    }
-}
-
-impl FromStr for End {
-    type Err = EndError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "End" => Ok(End::new().0),
-            result => Err(EndError::new(result)),
-        }
     }
 }

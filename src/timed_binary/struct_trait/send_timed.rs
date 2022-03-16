@@ -1,19 +1,23 @@
 //! This module contains the definition and associated functions and traits
 //! for the Send structure.
 
-use crate::binary::struct_trait::get_blocks;
-use crate::binary::struct_trait::recv::Recv;
 use crate::binary::struct_trait::session::Session;
+use crate::timed_binary::struct_trait::recv_timed::RecvTimed;
 use crossbeam_channel::{bounded, Sender};
 use std::error::Error;
 use std::fmt;
 use std::marker;
-use std::str::FromStr;
 
 /// Send `T`, then continue as `S`.
-#[must_use]
+/// 6 additional parameters are present:
+/// * CLOCK: a char to indicate which clock will be tested under the time constraints (in *seconds*)
+/// * START: an i128 which represents the lower bound for the time constraint
+/// * INCLUDE_START: a bool which indicates whether START is included in the bound
+/// * END: an i128 which represents the upper bound for the time constraint
+/// * INCLUDE_END: a bool which indicates whether END is included in the bound
+/// * RESET: a char which whether CLOCK needs to be reset after the send. Currently limited to CLOCK, future feature will use a Vec<char>
 #[derive(Debug)]
-pub struct Send<
+pub struct SendTimed<
     T,
     S,
     const CLOCK: char,
@@ -21,7 +25,7 @@ pub struct Send<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: Vec<char>,
+    const RESET: bool,
 > where
     T: marker::Send,
     S: Session,
@@ -30,31 +34,23 @@ pub struct Send<
     #[doc(hidden)]
     pub channel: Sender<(T, S::Dual)>,
     #[doc(hidden)]
-    pub clock: CLOCK,
+    pub clock: char,
     #[doc(hidden)]
-    pub start: START,
+    pub start: i128,
     #[doc(hidden)]
-    pub include_start: INCLUDE_START,
+    pub include_start: bool,
     #[doc(hidden)]
-    pub end: END,
+    pub end: i128,
     #[doc(hidden)]
-    pub include_end: INCLUDE_END,
+    pub include_end: bool,
     #[doc(hidden)]
-    pub reset: RESET,
+    pub reset: bool,
 }
 
 #[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct SendError {
     details: String,
-}
-
-impl SendError {
-    fn new(details: &str) -> SendError {
-        SendError {
-            details: details.to_string(),
-        }
-    }
 }
 
 impl fmt::Display for SendError {
@@ -69,20 +65,17 @@ impl Error for SendError {
     }
 }
 
-impl<T: marker::Send, S: Session> Session for Send<T, S> {
-    type Dual = Recv<T, S::Dual>;
-
-    #[doc(hidden)]
-    fn new() -> (Self, Self::Dual) {
-        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
-        (Send { channel: sender }, Recv { channel: receiver })
-    }
-
-    #[doc(hidden)]
-    fn clock_str(&self) -> String {
-        String::from(self.clock)
-    }
-
+impl<
+        T: marker::Send,
+        S: Session,
+        const CLOCK: char,
+        const START: i128,
+        const INCLUDE_START: bool,
+        const END: i128,
+        const INCLUDE_END: bool,
+        const RESET: bool,
+    > SendTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>
+{
     #[doc(hidden)]
     fn constraint(&self) -> String {
         if self.start < 0 {
@@ -98,24 +91,58 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
         } else {
             if self.end < 0 {
                 if self.include_start {
-                    format!("{} >= {}", self.clock, self.end)
+                    format!("{} >= {}", self.clock, self.start)
                 } else {
-                    format!("{} > {}", self.clock, self.end)
+                    format!("{} > {}", self.clock, self.start)
                 }
             } else {
-                match (self.include_start, include_end) {
-                    (true, true) => format!("{} >= {} >= {}", self.start, self.clock, self.end),
-                    (true, false) => format!("{} >= {} > {}", self.start, self.clock, self.end),
-                    (false, true) => format!("{} > {} >= {}", self.start, self.clock, self.end),
-                    (false, false) => format!("{} > {} > {}", self.start, self.clock, self.end),
+                match (self.include_start, self.include_end) {
+                    (true, true) => format!("{} <= {} <= {}", self.start, self.clock, self.end),
+                    (true, false) => format!("{} <= {} < {}", self.start, self.clock, self.end),
+                    (false, true) => format!("{} <={} <= {}", self.start, self.clock, self.end),
+                    (false, false) => format!("{}  {} < {}", self.start, self.clock, self.end),
                 }
             }
         }
     }
+}
+
+impl<
+        T: marker::Send,
+        S: Session,
+        const CLOCK: char,
+        const START: i128,
+        const INCLUDE_START: bool,
+        const END: i128,
+        const INCLUDE_END: bool,
+        const RESET: bool,
+    > Session for SendTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>
+{
+    type Dual = RecvTimed<T, S::Dual, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>;
 
     #[doc(hidden)]
-    fn reset_clock(&self) {
-        self.reset.iter().fold(String::new(), |acc, &num| acc + &num.to_string() + ", ")
+    fn new() -> (Self, Self::Dual) {
+        let (sender, receiver) = bounded::<(T, S::Dual)>(1);
+        (
+            SendTimed {
+                channel: sender,
+                clock: CLOCK,
+                start: START,
+                include_start: INCLUDE_START,
+                end: END,
+                include_end: INCLUDE_END,
+                reset: RESET,
+            },
+            RecvTimed {
+                channel: receiver,
+                clock: CLOCK,
+                start: START,
+                include_start: INCLUDE_START,
+                end: END,
+                include_end: INCLUDE_END,
+                reset: RESET,
+            },
+        )
     }
 
     #[doc(hidden)]
@@ -129,32 +156,12 @@ impl<T: marker::Send, S: Session> Session for Send<T, S> {
     }
 
     #[doc(hidden)]
-    fn self_head_str() -> String {
+    fn self_head_str(&self) -> String {
         "Send".to_string()
     }
 
     #[doc(hidden)]
-    fn self_tail_str() -> String {
+    fn self_tail_str(&self) -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
-    }
-}
-
-impl<T: FromStr + marker::Send, S: FromStr + Session> FromStr for Send<T, S>
-where
-    <T as FromStr>::Err: fmt::Debug,
-    <S as FromStr>::Err: fmt::Debug,
-{
-    type Err = SendError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match &s[0..4] {
-            "Send" => {
-                let payload_continuation = get_blocks(s.to_string()).unwrap();
-                let _ = T::from_str(&payload_continuation[0]).unwrap();
-                let _ = S::from_str(&payload_continuation[1]).unwrap();
-                Ok(Send::<T, S>::new().0)
-            }
-            result => Err(SendError::new(result)),
-        }
     }
 }

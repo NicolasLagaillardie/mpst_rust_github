@@ -3,7 +3,6 @@
 //! for the binary sessions.
 
 pub mod end;
-pub mod recv;
-pub mod send;
+pub mod recv_timed;
+pub mod send_timed;
 pub mod session;
-use std::error::Error;

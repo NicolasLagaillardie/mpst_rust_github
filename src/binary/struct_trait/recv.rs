@@ -1,14 +1,12 @@
 //! This module contains the definition and associated functions and traits
 //! for the Recv structure.
 
-use crate::binary::struct_trait::get_blocks;
 use crate::binary::struct_trait::send::Send;
 use crate::binary::struct_trait::session::Session;
 use crossbeam_channel::Receiver;
 use std::error::Error;
 use std::fmt;
 use std::marker;
-use std::str::FromStr;
 
 /// Receive `T`, then continue as `S`.
 #[must_use]
@@ -26,14 +24,6 @@ where
 #[derive(Debug, Clone)]
 pub struct RecvError {
     details: String,
-}
-
-impl RecvError {
-    fn new(details: &str) -> RecvError {
-        RecvError {
-            details: details.to_string(),
-        }
-    }
 }
 
 impl fmt::Display for RecvError {
@@ -75,25 +65,5 @@ impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
-    }
-}
-
-impl<T: FromStr + marker::Send, S: FromStr + Session> FromStr for Recv<T, S>
-where
-    <T as FromStr>::Err: fmt::Debug,
-    <S as FromStr>::Err: fmt::Debug,
-{
-    type Err = RecvError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match &s[0..4] {
-            "Recv" => {
-                let payload_continuation = get_blocks(s.to_string()).unwrap();
-                let _ = T::from_str(&payload_continuation[0]).unwrap();
-                let _ = S::from_str(&payload_continuation[1]).unwrap();
-                Ok(Recv::<T, S>::new().0)
-            }
-            result => Err(RecvError::new(result)),
-        }
     }
 }

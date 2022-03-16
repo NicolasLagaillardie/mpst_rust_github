@@ -40,7 +40,7 @@ where
 /// Choose between many different sessions wrapped in an
 /// `enum`
 #[macro_export]
-macro_rules! choose {
+macro_rules! timed_choose {
     ($label:path, $session:expr) => {{
         let (here, there) = <_ as mpstthree::binary::struct_trait::session::Session>::new();
         let s = mpstthree::binary::send::send($label(there), $session);

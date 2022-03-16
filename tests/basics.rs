@@ -39,13 +39,6 @@ fn unit_tests_basics_roles() {
     basics_mod::unit_roles::role_broadcast_fields_2();
 }
 
-#[test]
-fn from_str() {
-    basics_mod::from_str::binary_sessions();
-    basics_mod::from_str::meshedchannels();
-    basics_mod::from_str::roles();
-}
-
 // Tests for basic functions
 #[test]
 fn simple_basics() {

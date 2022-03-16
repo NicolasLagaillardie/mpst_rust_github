@@ -320,6 +320,9 @@ pub mod baking;
 #[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
 pub mod interleaved;
 
+#[cfg(feature = "timed_binary")]
+pub mod timed_binary;
+
 pub mod transport;
 
 pub mod attempt;
