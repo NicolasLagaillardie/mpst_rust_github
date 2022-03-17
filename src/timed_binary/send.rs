@@ -5,7 +5,7 @@
 
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::session::Session;
-use crate::timed_binary::struct_trait::send_timed::SendTimed;
+use crate::timed_binary::struct_trait::send::SendTimed;
 
 use std::boxed::Box;
 use std::collections::HashMap;

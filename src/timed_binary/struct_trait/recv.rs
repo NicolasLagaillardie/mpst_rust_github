@@ -4,7 +4,7 @@
 //! for the Recv structure.
 
 use crate::binary::struct_trait::session::Session;
-use crate::timed_binary::struct_trait::send_timed::SendTimed;
+use crate::timed_binary::struct_trait::send::SendTimed;
 use crossbeam_channel::Receiver;
 use std::error::Error;
 use std::fmt;

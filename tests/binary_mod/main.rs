@@ -35,6 +35,26 @@ pub fn tail_str() {
     assert_eq!(Recv::<i32, End>::tail_str(), "End<>".to_string());
 }
 
+pub fn self_head_str() {
+    let (end_here, end_there) = End::new();
+    assert_eq!(end_here.self_head_str(), "End".to_string());
+    assert_eq!(end_there.self_head_str(), "End".to_string());
+
+    let (send, recv) = Send::<i32, End>::new();
+    assert_eq!(send.self_head_str(), "Send".to_string());
+    assert_eq!(recv.self_head_str(), "Recv".to_string());
+}
+
+pub fn self_tail_str() {
+    let (end_here, end_there) = End::new();
+    assert!(end_here.self_tail_str().is_empty());
+    assert!(end_there.self_tail_str().is_empty());
+
+    let (send, recv) = Send::<i32, End>::new();
+    assert_eq!(send.self_tail_str(), "End<>".to_string());
+    assert_eq!(recv.self_tail_str(), "End<>".to_string());
+}
+
 pub fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 

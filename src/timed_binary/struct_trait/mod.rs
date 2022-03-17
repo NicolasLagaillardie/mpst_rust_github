@@ -2,5 +2,5 @@
 //! definitions, traits and functions
 //! for the binary sessions.
 
-pub mod recv_timed;
-pub mod send_timed;
+pub mod recv;
+pub mod send;
