@@ -1,3 +1,5 @@
+#![allow(clippy::collapsible_else_if)]
+
 //! This module contains the definition and associated functions and traits
 //! for the Send structure.
 
