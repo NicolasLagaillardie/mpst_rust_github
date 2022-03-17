@@ -11,7 +11,7 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 use std::error::Error;
 use std::marker;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 /// Receive a value of type `T`. Can fail. Returns either a
 /// pair of the received value and the continuation of the
@@ -43,12 +43,18 @@ where
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
                     if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset {
+                        // receive with timeout
+                        let (v, s) = s.channel.recv_timeout(
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        )?;
                         *own_clock = Instant::now();
-                        let (v, s) = s.channel.recv()?;
                         Ok((v, s))
                     // if the clock respects the time constraint and the clock must not be reset
                     } else if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? {
-                        let (v, s) = s.channel.recv()?;
+                        // receive with timeout
+                        let (v, s) = s.channel.recv_timeout(
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        )?;
                         Ok((v, s))
                     // if the clock does not respect the time constraint
                     } else {
@@ -64,12 +70,18 @@ where
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
                     if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset {
+                        // receive with timeout
+                        let (v, s) = s.channel.recv_timeout(
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        )?;
                         *own_clock = Instant::now();
-                        let (v, s) = s.channel.recv()?;
                         Ok((v, s))
                     // if the clock respects the time constraint and the clock must not be reset
                     } else if own_clock.elapsed().as_secs() < u64::try_from(s.end)? {
-                        let (v, s) = s.channel.recv()?;
+                        // receive with timeout
+                        let (v, s) = s.channel.recv_timeout(
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        )?;
                         Ok((v, s))
                     // if the clock does not respect the time constraint
                     } else {
@@ -94,11 +106,13 @@ where
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
                     if own_clock.elapsed().as_secs() >= u64::try_from(s.start)? && s.reset {
-                        *own_clock = Instant::now();
+                        // blocking receive
                         let (v, s) = s.channel.recv()?;
+                        *own_clock = Instant::now();
                         Ok((v, s))
                     // if the clock respects the time constraint and the clock must not be reset
                     } else if own_clock.elapsed().as_secs() >= u64::try_from(s.start)? {
+                        // blocking receive
                         let (v, s) = s.channel.recv()?;
                         Ok((v, s))
                     // if the clock does not respect the time constraint
@@ -115,11 +129,13 @@ where
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
                     if own_clock.elapsed().as_secs() > u64::try_from(s.start)? && s.reset {
-                        *own_clock = Instant::now();
+                        // blocking receive
                         let (v, s) = s.channel.recv()?;
+                        *own_clock = Instant::now();
                         Ok((v, s))
                     // if the clock respects the time constraint and the clock must not be reset
                     } else if own_clock.elapsed().as_secs() > u64::try_from(s.start)? {
+                        // blocking receive
                         let (v, s) = s.channel.recv()?;
                         Ok((v, s))
                     // if the clock does not respect the time constraint
@@ -149,13 +165,19 @@ where
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
                             && s.reset
                         {
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             *own_clock = Instant::now();
-                            let (v, s) = s.channel.recv()?;
                             Ok((v, s))
                         } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
                         {
-                            let (v, s) = s.channel.recv()?;
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             Ok((v, s))
                         } else {
                             panic!("Timeout for clock {}", s.clock);
@@ -171,13 +193,19 @@ where
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
                             && s.reset
                         {
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             *own_clock = Instant::now();
-                            let (v, s) = s.channel.recv()?;
                             Ok((v, s))
                         } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
                         {
-                            let (v, s) = s.channel.recv()?;
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             Ok((v, s))
                         } else {
                             panic!("Timeout for clock {}", s.clock);
@@ -193,13 +221,19 @@ where
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
                             && s.reset
                         {
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             *own_clock = Instant::now();
-                            let (v, s) = s.channel.recv()?;
                             Ok((v, s))
                         } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
                         {
-                            let (v, s) = s.channel.recv()?;
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             Ok((v, s))
                         } else {
                             panic!("Timeout for clock {}", s.clock);
@@ -215,13 +249,19 @@ where
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
                             && s.reset
                         {
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             *own_clock = Instant::now();
-                            let (v, s) = s.channel.recv()?;
                             Ok((v, s))
                         } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
                         {
-                            let (v, s) = s.channel.recv()?;
+                            // receive with timeout
+                            let (v, s) = s.channel.recv_timeout(
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            )?;
                             Ok((v, s))
                         } else {
                             panic!("Timeout for clock {}", s.clock);

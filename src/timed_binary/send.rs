@@ -13,7 +13,7 @@ use std::convert::TryFrom;
 use std::error::Error;
 use std::marker;
 use std::panic;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 /// Send a value of type `T`. Always succeeds. Returns the
 /// continuation of the session `S`.
@@ -46,7 +46,10 @@ where
                     // if the clock respects the time constraint and the clock must be reset
                     if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset {
                         let (here, there) = S::new();
-                        match s.channel.send((x, there)) {
+                        match s.channel.send_timeout(
+                            (x, there),
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        ) {
                             Ok(_) => {
                                 *own_clock = Instant::now();
                                 Ok(here)
@@ -59,7 +62,10 @@ where
                     // if the clock respects the time constraint and the clock must not be reset
                     } else if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? {
                         let (here, there) = S::new();
-                        match s.channel.send((x, there)) {
+                        match s.channel.send_timeout(
+                            (x, there),
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        ) {
                             Ok(_) => Ok(here),
                             Err(e) => {
                                 cancel(s);
@@ -81,7 +87,10 @@ where
                     // if the clock respects the time constraint and the clock must be reset
                     if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset {
                         let (here, there) = S::new();
-                        match s.channel.send((x, there)) {
+                        match s.channel.send_timeout(
+                            (x, there),
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        ) {
                             Ok(_) => {
                                 *own_clock = Instant::now();
                                 Ok(here)
@@ -94,7 +103,10 @@ where
                     // if the clock respects the time constraint and the clock must not be reset
                     } else if own_clock.elapsed().as_secs() < u64::try_from(s.end)? {
                         let (here, there) = S::new();
-                        match s.channel.send((x, there)) {
+                        match s.channel.send_timeout(
+                            (x, there),
+                            Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                        ) {
                             Ok(_) => Ok(here),
                             Err(e) => {
                                 cancel(s);
@@ -208,7 +220,10 @@ where
                             && s.reset
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
@@ -222,7 +237,10 @@ where
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
@@ -244,7 +262,10 @@ where
                             && s.reset
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
@@ -258,7 +279,10 @@ where
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
@@ -280,7 +304,10 @@ where
                             && s.reset
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
@@ -294,7 +321,10 @@ where
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
@@ -316,7 +346,10 @@ where
                             && s.reset
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
@@ -330,7 +363,10 @@ where
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
                         {
                             let (here, there) = S::new();
-                            match s.channel.send((x, there)) {
+                            match s.channel.send_timeout(
+                                (x, there),
+                                Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
+                            ) {
                                 Ok(_) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
