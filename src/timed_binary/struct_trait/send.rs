@@ -79,7 +79,7 @@ impl<
     > SendTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>
 {
     #[doc(hidden)]
-    fn constraint(&self) -> String {
+    pub fn constraint(&self) -> String {
         if self.start < 0 {
             if self.end >= 0 {
                 if self.include_end {
@@ -93,16 +93,16 @@ impl<
         } else {
             if self.end < 0 {
                 if self.include_start {
-                    format!("{} >= {}", self.clock, self.start)
+                    format!("{} <= {}", self.start, self.clock)
                 } else {
-                    format!("{} > {}", self.clock, self.start)
+                    format!("{} < {}", self.start, self.clock)
                 }
             } else {
                 match (self.include_start, self.include_end) {
                     (true, true) => format!("{} <= {} <= {}", self.start, self.clock, self.end),
                     (true, false) => format!("{} <= {} < {}", self.start, self.clock, self.end),
-                    (false, true) => format!("{} <={} <= {}", self.start, self.clock, self.end),
-                    (false, false) => format!("{}  {} < {}", self.start, self.clock, self.end),
+                    (false, true) => format!("{} < {} <= {}", self.start, self.clock, self.end),
+                    (false, false) => format!("{} < {} < {}", self.start, self.clock, self.end),
                 }
             }
         }

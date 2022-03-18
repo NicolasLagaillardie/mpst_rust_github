@@ -28,6 +28,8 @@ use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
 
+// Type to str
+
 pub fn head_str() {
     assert_eq!(
         SendTimed::<i32, End, 'a', 0, true, 1, true, false>::head_str(),
@@ -62,8 +64,58 @@ pub fn self_tail_str() {
     assert_eq!(recv.self_tail_str(), "End<>".to_string());
 }
 
-// Test a simple calculator server, implemented using timed binary
-// choice.
+// Constraints
+
+pub fn constraint_start_excluded() {
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, -1, true, false>::new();
+    assert_eq!(send.constraint(), "5 < a".to_string());
+    assert_eq!(recv.constraint(), "5 < a".to_string());
+}
+
+pub fn constraint_start_included() {
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, -1, true, false>::new();
+    assert_eq!(send.constraint(), "5 <= a".to_string());
+    assert_eq!(recv.constraint(), "5 <= a".to_string());
+}
+
+pub fn constraint_end_excluded() {
+    let (send, recv) = SendTimed::<i32, End, 'a', -1, true, 5, false, false>::new();
+    assert_eq!(send.constraint(), "a < 5".to_string());
+    assert_eq!(recv.constraint(), "a < 5".to_string());
+}
+
+pub fn constraint_end_included() {
+    let (send, recv) = SendTimed::<i32, End, 'a', -1, true, 5, true, false>::new();
+    assert_eq!(send.constraint(), "a <= 5".to_string());
+    assert_eq!(recv.constraint(), "a <= 5".to_string());
+}
+
+pub fn constraint_start_excluded_end_excluded() {
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, 10, false, false>::new();
+    assert_eq!(send.constraint(), "5 < a < 10".to_string());
+    assert_eq!(recv.constraint(), "5 < a < 10".to_string());
+}
+
+pub fn constraint_start_excluded_end_included() {
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, 10, true, false>::new();
+    assert_eq!(send.constraint(), "5 < a <= 10".to_string());
+    assert_eq!(recv.constraint(), "5 < a <= 10".to_string());
+}
+
+pub fn constraint_start_included_end_excluded() {
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, 10, false, false>::new();
+    assert_eq!(send.constraint(), "5 <= a < 10".to_string());
+    assert_eq!(recv.constraint(), "5 <= a < 10".to_string());
+}
+
+pub fn constraint_start_included_end_included() {
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, 10, true, false>::new();
+    assert_eq!(send.constraint(), "5 <= a <= 10".to_string());
+    assert_eq!(recv.constraint(), "5 <= a <= 10".to_string());
+}
+
+// // Test a simple calculator server, implemented using timed binary
+// // choice.
 
 // type NegServer = RecvTimed<i32, Send<i32, End>>;
 // type NegClient = <NegServer as Session>::Dual;

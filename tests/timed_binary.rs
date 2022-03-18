@@ -10,6 +10,14 @@ fn tests_timed_binary() {
     timed_binary_mod::main::tail_str();
     timed_binary_mod::main::self_head_str();
     timed_binary_mod::main::self_tail_str();
+    timed_binary_mod::main::constraint_start_excluded();
+    timed_binary_mod::main::constraint_start_included();
+    timed_binary_mod::main::constraint_end_excluded();
+    timed_binary_mod::main::constraint_end_included();
+    timed_binary_mod::main::constraint_start_excluded_end_excluded();
+    timed_binary_mod::main::constraint_start_excluded_end_included();
+    timed_binary_mod::main::constraint_start_included_end_excluded();
+    timed_binary_mod::main::constraint_start_included_end_included();
     // timed_binary_mod::main::new_types();
     // timed_binary_mod::main::new_types_cancel();
     // timed_binary_mod::main::simple_calc_works();
