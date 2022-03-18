@@ -2,6 +2,90 @@
 //! for sending
 //! a choice for binary sessions.
 
+use crate::binary::cancel::cancel;
+use crate::binary::struct_trait::{end::End, session::Session};
+use crate::timed_binary::send::send;
+use crate::timed_binary::struct_trait::send::SendTimed;
+
+use either::Either;
+
+use std::collections::HashMap;
+use std::time::Instant;
+
+/// Choose between two sessions `S1` and `S2`. Implemented
+/// using `Send` and `Either`.
+pub type ChooseTimed<
+    S1,
+    S2,
+    const CLOCK: char,
+    const START: i128,
+    const INCLUDE_START: bool,
+    const END: i128,
+    const INCLUDE_END: bool,
+    const RESET: bool,
+> = SendTimed<
+    Either<<S1 as Session>::Dual, <S2 as Session>::Dual>,
+    End,
+    CLOCK,
+    START,
+    INCLUDE_START,
+    END,
+    INCLUDE_END,
+    RESET,
+>;
+
+/// Given a choice between sessions `S1` and `S1`, choose
+/// the first option.
+pub fn choose_left<
+    'a,
+    S1,
+    S2,
+    const CLOCK: char,
+    const START: i128,
+    const INCLUDE_START: bool,
+    const END: i128,
+    const INCLUDE_END: bool,
+    const RESET: bool,
+>(
+    all_clocks: &mut HashMap<char, Instant>,
+    s: ChooseTimed<S1, S2, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
+) -> S1
+where
+    S1: Session + 'a,
+    S2: Session + 'a,
+{
+    let (here, there) = S1::new();
+    let s = send(Either::Left(there), all_clocks, s);
+    cancel(s);
+    here
+}
+
+/// Given a choice between sessions `S1` and `S1`, choose
+/// the second option.
+pub fn choose_right<
+    'a,
+    S1,
+    S2,
+    const CLOCK: char,
+    const START: i128,
+    const INCLUDE_START: bool,
+    const END: i128,
+    const INCLUDE_END: bool,
+    const RESET: bool,
+>(
+    all_clocks: &mut HashMap<char, Instant>,
+    s: ChooseTimed<S1, S2, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
+) -> S2
+where
+    S1: Session + 'a,
+    S2: Session + 'a,
+{
+    let (here, there) = S2::new();
+    let s = send(Either::Right(there), all_clocks, s);
+    cancel(s);
+    here
+}
+
 /// Choose between many different sessions wrapped in an
 /// `enum`
 #[macro_export]

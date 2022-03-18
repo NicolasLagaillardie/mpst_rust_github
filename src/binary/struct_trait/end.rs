@@ -2,7 +2,9 @@
 //! for the End structure.
 
 use crate::binary::struct_trait::session::Session;
+
 use crossbeam_channel::{bounded, Receiver, Sender};
+
 use std::error::Error;
 use std::fmt;
 

@@ -14,6 +14,9 @@ use mpstthree::binary::struct_trait::session::*;
 use mpstthree::timed_choose;
 use mpstthree::timed_offer;
 
+use mpstthree::timed_binary::choose::{choose_left, choose_right};
+use mpstthree::timed_binary::fork::fork;
+use mpstthree::timed_binary::offer::offer_either;
 use mpstthree::timed_binary::struct_trait::recv::RecvTimed;
 use mpstthree::timed_binary::struct_trait::send::SendTimed;
 use mpstthree::timed_binary::struct_trait::*;
@@ -21,12 +24,13 @@ use mpstthree::timed_binary::*;
 
 use rand::{thread_rng, Rng};
 use std::boxed::Box;
+use std::collections::HashMap;
 use std::error::Error;
 use std::marker;
 use std::mem;
 use std::sync::mpsc;
 use std::thread;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 // Type to str
 
@@ -114,67 +118,89 @@ pub fn constraint_start_included_end_included() {
     assert_eq!(recv.constraint(), "5 <= a <= 10".to_string());
 }
 
-// // Test a simple calculator server, implemented using timed binary
-// // choice.
+// Test a simple calculator server, implemented using timed binary
+// choice.
 
-// type NegServer = RecvTimed<i32, Send<i32, End>>;
-// type NegClient = <NegServer as Session>::Dual;
+type NegServer = SendTimed<
+    i32,
+    RecvTimed<i32, End, 'a', 5, true, 10, true, false>,
+    'a',
+    5,
+    true,
+    10,
+    true,
+    false,
+>;
+type NegClient = <NegServer as Session>::Dual;
 
-// type AddServer = Recv<i32, Recv<i32, Send<i32, End>>>;
-// type AddClient = <AddServer as Session>::Dual;
+type AddServer = SendTimed<
+    i32,
+    RecvTimed<i32, End, 'a', 5, true, 10, true, false>,
+    'a',
+    5,
+    true,
+    10,
+    true,
+    false,
+>;
+type AddClient = <AddServer as Session>::Dual;
 
-// type SimpleCalcServer = Offer<NegServer, AddServer>;
-// type SimpleCalcClient = <SimpleCalcServer as Session>::Dual;
+type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 15, true, 20, true, false>;
+type SimpleCalcClient = <SimpleCalcServer as Session>::Dual;
 
-// fn simple_calc_server(s: SimpleCalcServer<i32>) -> Result<(), Box<dyn Error>> {
-//     offer_either(
-//         s,
-//         |s: NegServer<i32>| {
-//             let (x, s) = recv(s)?;
-//             let s = send(-x, s);
-//             close(s)
-//         },
-//         |s: AddServer<i32>| {
-//             let (x, s) = recv(s)?;
-//             let (y, s) = recv(s)?;
-//             let s = send(x.wrapping_add(y), s);
-//             close(s)
-//         },
-//     )
-// }
+fn simple_calc_server(
+    s: SimpleCalcServer,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    offer_either(
+        s,
+        |s: NegServer| {
+            let (x, s) = recv(s)?;
+            let s = send(-x, s);
+            close(s)
+        },
+        |s: AddServer| {
+            let (x, s) = recv(s)?;
+            let (y, s) = recv(s)?;
+            let s = send(x.wrapping_add(y), s);
+            close(s)
+        },
+        all_clocks,
+    )
+}
 
-// pub fn simple_calc_works() {
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         let mut rng = thread_rng();
+pub fn simple_calc_works() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        let mut rng = thread_rng();
 
-//         // Test the negation function.
-//         {
-//             let s: SimpleCalcClient<i32> = fork(simple_calc_server);
-//             let x: i32 = rng.gen();
-//             let s = choose_left::<_, AddClient<i32>>(s);
-//             let s = send(x, s);
-//             let (y, s) = recv(s)?;
-//             close(s)?;
-//             assert_eq!(-x, y);
-//         }
+        // Test the negation function.
+        {
+            let s: SimpleCalcClient = fork(simple_calc_server);
+            let x: i32 = rng.gen();
+            let s = choose_left::<_, AddClient>(s);
+            let s = send(x, s);
+            let (y, s) = recv(s)?;
+            close(s)?;
+            assert_eq!(-x, y);
+        }
 
-//         // Test the addition function.
-//         {
-//             let s: SimpleCalcClient<i32> = fork(simple_calc_server);
-//             let x: i32 = rng.gen();
-//             let y: i32 = rng.gen();
-//             let s = choose_right::<NegClient<i32>, _>(s);
-//             let s = send(x, s);
-//             let s = send(y, s);
-//             let (z, s) = recv(s)?;
-//             close(s)?;
-//             assert_eq!(x.wrapping_add(y), z);
-//         }
+        // Test the addition function.
+        {
+            let s: SimpleCalcClient = fork(simple_calc_server);
+            let x: i32 = rng.gen();
+            let y: i32 = rng.gen();
+            let s = choose_right::<NegClient, _>(s);
+            let s = send(x, s);
+            let s = send(y, s);
+            let (z, s) = recv(s)?;
+            close(s)?;
+            assert_eq!(x.wrapping_add(y), z);
+        }
 
-//         Ok(())
-//     }()
-//     .is_ok());
-// }
+        Ok(())
+    }()
+    .is_ok());
+}
 
 // // Test a nice calculator server, implemented using variant
 // // types.

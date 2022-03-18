@@ -3,7 +3,9 @@
 
 use crate::binary::struct_trait::send::Send;
 use crate::binary::struct_trait::session::Session;
+
 use crossbeam_channel::Receiver;
+
 use std::error::Error;
 use std::fmt;
 use std::marker;
