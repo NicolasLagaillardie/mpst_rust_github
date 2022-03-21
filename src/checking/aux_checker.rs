@@ -119,8 +119,6 @@ pub(crate) fn clean_sessions(
 
     // If the number of roles is different from the number of sessions
     if roles.len() != size_sessions {
-        println!("roles: {:?}", roles);
-
         panic!("The numbers of roles and sessions are not equal")
     }
 
@@ -312,8 +310,6 @@ pub(crate) fn aux_get_graph(
                         // Split the new session
                         let blocks_left = get_blocks(&choices[1])?;
                         let blocks_right = get_blocks(&choices[2])?;
-
-                        println!("aux_get_graph blocks_right: {:?}", blocks_right.clone());
 
                         // Get the index of the receiver
                         let receiver =

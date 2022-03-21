@@ -12,10 +12,7 @@ use std::thread::{Builder, JoinHandle};
 use std::time::Instant;
 
 #[doc(hidden)]
-pub fn fork_with_thread_id<'a, S, P>(
-    p: P,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> (JoinHandle<()>, S::Dual)
+pub fn fork_with_thread_id<S, P>(p: P) -> (JoinHandle<()>, S::Dual)
 where
     S: Session + 'static,
     P: FnOnce(S, &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>>
@@ -31,7 +28,9 @@ where
                 // do nothing
             }));
 
-            match p(there, all_clocks) {
+            let mut all_clocks = HashMap::<char, Instant>::new();
+
+            match p(there, &mut all_clocks) {
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }
@@ -44,16 +43,12 @@ where
 /// endpoints of type `S` and `S::Dual`. The first endpoint
 /// is given to the child process. Returns the
 /// second endpoint.
-pub fn fork<S, P>(p: P) -> (S::Dual, HashMap<char, Instant>)
+pub fn fork<S, P>(p: P) -> S::Dual
 where
     S: Session + 'static,
     P: FnOnce(S, &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>>
         + marker::Send
         + 'static,
 {
-    let mut all_clocks: HashMap<char, Instant> = HashMap::<char, Instant>::new();
-    all_clocks.insert('a', Instant::now());
-    all_clocks.insert('b', Instant::now());
-
-    (fork_with_thread_id(p, &mut all_clocks).1, all_clocks)
+    fork_with_thread_id(p).1
 }

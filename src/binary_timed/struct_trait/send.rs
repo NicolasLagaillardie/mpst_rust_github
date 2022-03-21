@@ -4,7 +4,7 @@
 //! for the Send structure.
 
 use crate::binary::struct_trait::session::Session;
-use crate::timed_binary::struct_trait::recv::RecvTimed;
+use crate::binary_timed::struct_trait::recv::RecvTimed;
 use crossbeam_channel::{bounded, Sender};
 use std::error::Error;
 use std::fmt;

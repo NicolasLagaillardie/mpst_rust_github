@@ -5,7 +5,7 @@
 
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::session::Session;
-use crate::timed_binary::struct_trait::send::SendTimed;
+use crate::binary_timed::struct_trait::send::SendTimed;
 
 use std::boxed::Box;
 use std::collections::HashMap;
@@ -205,6 +205,10 @@ where
         } else {
             // if the time constraint does not make sense
             if s.start > s.end {
+                println!(
+                    "Start and End parameters cannot match: start = {} > {} = end",
+                    s.start, s.end
+                );
                 panic!(
                     "Start and End parameters cannot match: start = {} > {} = end",
                     s.start, s.end
@@ -248,6 +252,13 @@ where
                                 }
                             }
                         } else {
+                            println!(
+                                "Send timeout for clock {} : {} / {} / {}",
+                                s.clock,
+                                s.start,
+                                own_clock.elapsed().as_secs(),
+                                s.end
+                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
@@ -290,6 +301,13 @@ where
                                 }
                             }
                         } else {
+                            println!(
+                                "Send timeout for clock {} : {} / {} / {}",
+                                s.clock,
+                                s.start,
+                                own_clock.elapsed().as_secs(),
+                                s.end
+                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
@@ -332,6 +350,13 @@ where
                                 }
                             }
                         } else {
+                            println!(
+                                "Send timeout for clock {} : {} / {} / {}",
+                                s.clock,
+                                s.start,
+                                own_clock.elapsed().as_secs(),
+                                s.end
+                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
@@ -374,6 +399,13 @@ where
                                 }
                             }
                         } else {
+                            println!(
+                                "Send timeout for clock {} : {} / {} / {}",
+                                s.clock,
+                                s.start,
+                                own_clock.elapsed().as_secs(),
+                                s.end
+                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {

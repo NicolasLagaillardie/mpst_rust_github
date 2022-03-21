@@ -4,8 +4,8 @@
 
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::{end::End, session::Session};
-use crate::timed_binary::recv::recv;
-use crate::timed_binary::struct_trait::recv::RecvTimed;
+use crate::binary_timed::recv::recv;
+use crate::binary_timed::struct_trait::recv::RecvTimed;
 
 use either::Either;
 
@@ -50,12 +50,12 @@ pub fn offer_either<
 where
     S1: Session,
     S2: Session,
-    F: FnOnce(S1) -> Result<R, Box<dyn Error + 'a>>,
-    G: FnOnce(S2) -> Result<R, Box<dyn Error + 'a>>,
+    F: FnOnce(&mut HashMap<char, Instant>, S1) -> Result<R, Box<dyn Error + 'a>>,
+    G: FnOnce(&mut HashMap<char, Instant>, S2) -> Result<R, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv(all_clocks, s)?;
     cancel(s);
-    e.either(f, g)
+    e.either_with(all_clocks, f, g)
 }
 
 /// Offer a choice between many different sessions wrapped
@@ -64,7 +64,7 @@ where
 macro_rules! timed_offer {
     ($session: expr, $all_clocks:expr, { $( $pat: pat => $result: expr , )+ }) => {
         (move || -> Result<_, _> {
-            let (l, s) = mpstthree::timed_binary::recv::recv($session, $all_clocks)?;
+            let (l, s) = mpstthree::binary_timed::recv::recv($all_clocks, $session)?;
             mpstthree::binary::cancel::cancel(s);
             match l {
                 $(

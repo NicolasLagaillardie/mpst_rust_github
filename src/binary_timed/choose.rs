@@ -4,12 +4,13 @@
 
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::{end::End, session::Session};
-use crate::timed_binary::send::send;
-use crate::timed_binary::struct_trait::send::SendTimed;
+use crate::binary_timed::send::send;
+use crate::binary_timed::struct_trait::send::SendTimed;
 
 use either::Either;
 
 use std::collections::HashMap;
+use std::error::Error;
 use std::time::Instant;
 
 /// Choose between two sessions `S1` and `S2`. Implemented
@@ -49,15 +50,15 @@ pub fn choose_left<
 >(
     all_clocks: &mut HashMap<char, Instant>,
     s: ChooseTimed<S1, S2, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
-) -> S1
+) -> Result<S1, Box<dyn Error>>
 where
     S1: Session + 'a,
     S2: Session + 'a,
 {
     let (here, there) = S1::new();
-    let s = send(Either::Left(there), all_clocks, s);
+    let s = send(Either::Left(there), all_clocks, s)?;
     cancel(s);
-    here
+    Ok(here)
 }
 
 /// Given a choice between sessions `S1` and `S1`, choose
@@ -75,15 +76,15 @@ pub fn choose_right<
 >(
     all_clocks: &mut HashMap<char, Instant>,
     s: ChooseTimed<S1, S2, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
-) -> S2
+) -> Result<S2, Box<dyn Error>>
 where
     S1: Session + 'a,
     S2: Session + 'a,
 {
     let (here, there) = S2::new();
-    let s = send(Either::Right(there), all_clocks, s);
+    let s = send(Either::Right(there), all_clocks, s)?;
     cancel(s);
-    here
+    Ok(here)
 }
 
 /// Choose between many different sessions wrapped in an
@@ -92,7 +93,7 @@ where
 macro_rules! timed_choose {
     ($label:path, $session:expr, $all_clocks:expr) => {{
         let (here, there) = <_ as mpstthree::binary::struct_trait::session::Session>::new();
-        let s = mpstthree::timed_binary::send_timed::send($label(there), $session, $all_clocks);
+        let s = mpstthree::binary_timed::send_timed::send($label(there), $session, $all_clocks);
         mpstthree::binary::cancel::cancel(s);
         here
     }};

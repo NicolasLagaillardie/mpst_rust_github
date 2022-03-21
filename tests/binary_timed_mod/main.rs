@@ -1,69 +1,66 @@
-use mpstthree::binary::cancel::cancel;
-use mpstthree::binary::choose::*;
+// use mpstthree::binary::cancel::cancel;
+// use mpstthree::binary::choose::*;
 use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::offer::*;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::select::select_mut;
-use mpstthree::binary::send::send;
+// use mpstthree::binary::offer::*;
+// use mpstthree::binary::recv::recv;
+// use mpstthree::binary::select::select_mut;
+// use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::end::*;
-use mpstthree::binary::struct_trait::recv::*;
-use mpstthree::binary::struct_trait::send::*;
+// use mpstthree::binary::struct_trait::recv::*;
+// use mpstthree::binary::struct_trait::send::*;
 use mpstthree::binary::struct_trait::session::*;
-use mpstthree::timed_choose;
-use mpstthree::timed_offer;
+// use mpstthree::timed_choose;
+// use mpstthree::timed_offer;
 
-use mpstthree::timed_binary::choose::{choose_left, choose_right};
-use mpstthree::timed_binary::fork::fork;
-use mpstthree::timed_binary::offer::offer_either;
-use mpstthree::timed_binary::struct_trait::recv::RecvTimed;
-use mpstthree::timed_binary::struct_trait::send::SendTimed;
-use mpstthree::timed_binary::struct_trait::*;
-use mpstthree::timed_binary::*;
+use mpstthree::binary_timed::choose::{choose_left, choose_right};
+use mpstthree::binary_timed::fork::fork;
+use mpstthree::binary_timed::offer::offer_either;
+use mpstthree::binary_timed::offer::OfferTimed;
+use mpstthree::binary_timed::recv::recv;
+use mpstthree::binary_timed::send::send;
+use mpstthree::binary_timed::struct_trait::recv::RecvTimed;
+use mpstthree::binary_timed::struct_trait::send::SendTimed;
 
 use rand::{thread_rng, Rng};
 use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
-use std::marker;
-use std::mem;
-use std::sync::mpsc;
-use std::thread;
-use std::time::Instant;
-
-// Type to str
+// use std::marker;
+// use std::mem;
+// use std::sync::mpsc;
+use std::thread::sleep;
+use std::time::{Duration, Instant};
 
 pub fn head_str() {
     assert_eq!(
-        SendTimed::<i32, End, 'a', 0, true, 1, true, false>::head_str(),
+        SendTimed::<i32, End, 'a', 0, true, 5, true, false>::head_str(),
         "Send".to_string()
     );
     assert_eq!(
-        RecvTimed::<i32, End, 'a', 0, true, 1, true, false>::head_str(),
+        RecvTimed::<i32, End, 'a', 0, true, 5, true, false>::head_str(),
         "Recv".to_string()
     );
 }
 
 pub fn tail_str() {
     assert_eq!(
-        SendTimed::<i32, End, 'a', 0, true, 1, true, false>::tail_str(),
+        SendTimed::<i32, End, 'a', 0, true, 5, true, false>::tail_str(),
         "End<>".to_string()
     );
     assert_eq!(
-        RecvTimed::<i32, End, 'a', 0, true, 1, true, false>::tail_str(),
+        RecvTimed::<i32, End, 'a', 0, true, 5, true, false>::tail_str(),
         "End<>".to_string()
     );
 }
 
 pub fn self_head_str() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 0, true, 1, true, false>::new();
+    let (send, recv) = SendTimed::<i32, End, 'a', 0, true, 5, true, false>::new();
     assert_eq!(send.self_head_str(), "Send".to_string());
     assert_eq!(recv.self_head_str(), "Recv".to_string());
 }
 
 pub fn self_tail_str() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 0, true, 1, true, false>::new();
+    let (send, recv) = SendTimed::<i32, End, 'a', 0, true, 5, true, false>::new();
     assert_eq!(send.self_tail_str(), "End<>".to_string());
     assert_eq!(recv.self_tail_str(), "End<>".to_string());
 }
@@ -71,25 +68,25 @@ pub fn self_tail_str() {
 // Constraints
 
 pub fn constraint_start_excluded() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, -1, true, false>::new();
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, -5, true, false>::new();
     assert_eq!(send.constraint(), "5 < a".to_string());
     assert_eq!(recv.constraint(), "5 < a".to_string());
 }
 
 pub fn constraint_start_included() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, -1, true, false>::new();
+    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, -5, true, false>::new();
     assert_eq!(send.constraint(), "5 <= a".to_string());
     assert_eq!(recv.constraint(), "5 <= a".to_string());
 }
 
 pub fn constraint_end_excluded() {
-    let (send, recv) = SendTimed::<i32, End, 'a', -1, true, 5, false, false>::new();
+    let (send, recv) = SendTimed::<i32, End, 'a', -5, true, 5, false, false>::new();
     assert_eq!(send.constraint(), "a < 5".to_string());
     assert_eq!(recv.constraint(), "a < 5".to_string());
 }
 
 pub fn constraint_end_included() {
-    let (send, recv) = SendTimed::<i32, End, 'a', -1, true, 5, true, false>::new();
+    let (send, recv) = SendTimed::<i32, End, 'a', -5, true, 5, true, false>::new();
     assert_eq!(send.constraint(), "a <= 5".to_string());
     assert_eq!(recv.constraint(), "a <= 5".to_string());
 }
@@ -121,51 +118,51 @@ pub fn constraint_start_included_end_included() {
 // Test a simple calculator server, implemented using timed binary
 // choice.
 
-type NegServer = SendTimed<
-    i32,
-    RecvTimed<i32, End, 'a', 5, true, 10, true, false>,
-    'a',
-    5,
-    true,
-    10,
-    true,
-    false,
->;
+type NegServer =
+    RecvTimed<i32, SendTimed<i32, End, 'a', 4, true, 6, true, false>, 'a', 2, true, 4, true, false>;
 type NegClient = <NegServer as Session>::Dual;
 
-type AddServer = SendTimed<
+type AddServer = RecvTimed<
     i32,
-    RecvTimed<i32, End, 'a', 5, true, 10, true, false>,
+    RecvTimed<i32, SendTimed<i32, End, 'a', 6, true, 8, true, false>, 'a', 4, true, 6, true, false>,
     'a',
-    5,
+    2,
     true,
-    10,
+    4,
     true,
     false,
 >;
 type AddClient = <AddServer as Session>::Dual;
 
-type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 15, true, 20, true, false>;
+type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 0, true, 2, true, false>;
 type SimpleCalcClient = <SimpleCalcServer as Session>::Dual;
 
 fn simple_calc_server(
     s: SimpleCalcServer,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
     offer_either(
-        s,
-        |s: NegServer| {
-            let (x, s) = recv(s)?;
-            let s = send(-x, s);
-            close(s)
-        },
-        |s: AddServer| {
-            let (x, s) = recv(s)?;
-            let (y, s) = recv(s)?;
-            let s = send(x.wrapping_add(y), s);
-            close(s)
-        },
         all_clocks,
+        s,
+        |all_clocks: &mut HashMap<char, Instant>, s: NegServer| {
+            sleep(Duration::from_secs(3));
+            let (x, s) = recv(all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            let s = send(-x, all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            close(s)
+        },
+        |all_clocks: &mut HashMap<char, Instant>, s: AddServer| {
+            sleep(Duration::from_secs(3));
+            let (x, s) = recv(all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            let (y, s) = recv(all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            let s = send(x.wrapping_add(y), all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            close(s)
+        },
     )
 }
 
@@ -176,24 +173,44 @@ pub fn simple_calc_works() {
         // Test the negation function.
         {
             let s: SimpleCalcClient = fork(simple_calc_server);
+
             let x: i32 = rng.gen();
-            let s = choose_left::<_, AddClient>(s);
-            let s = send(x, s);
-            let (y, s) = recv(s)?;
+
+            let mut all_clocks = HashMap::<char, Instant>::new();
+            all_clocks.insert('a', Instant::now());
+
+            let s = choose_left::<_, AddClient, 'a', 0, true, 2, true, false>(&mut all_clocks, s)?;
+            sleep(Duration::from_secs(3));
+            let s = send(x, &mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            let (y, s) = recv(&mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
             close(s)?;
+
             assert_eq!(-x, y);
         }
 
         // Test the addition function.
         {
             let s: SimpleCalcClient = fork(simple_calc_server);
+
             let x: i32 = rng.gen();
             let y: i32 = rng.gen();
-            let s = choose_right::<NegClient, _>(s);
-            let s = send(x, s);
-            let s = send(y, s);
-            let (z, s) = recv(s)?;
+
+            let mut all_clocks = HashMap::<char, Instant>::new();
+            all_clocks.insert('a', Instant::now());
+
+            let s = choose_right::<NegClient, _, 'a', 0, true, 2, true, false>(&mut all_clocks, s)?;
+
+            sleep(Duration::from_secs(3));
+            let s = send(x, &mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            let s = send(y, &mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
+            let (z, s) = recv(&mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
             close(s)?;
+
             assert_eq!(x.wrapping_add(y), z);
         }
 

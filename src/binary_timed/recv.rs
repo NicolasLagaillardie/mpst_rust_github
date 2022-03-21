@@ -4,7 +4,7 @@
 //! a payload for binary sessions.
 
 use crate::binary::struct_trait::session::Session;
-use crate::timed_binary::struct_trait::recv::RecvTimed;
+use crate::binary_timed::struct_trait::recv::RecvTimed;
 
 use std::boxed::Box;
 use std::collections::HashMap;
