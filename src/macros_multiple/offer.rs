@@ -52,9 +52,8 @@ macro_rules! create_offer_type_multi {
 ///
 /// ```
 /// use mpstthree::{
-///     create_broadcast_role, create_meshedchannels, create_normal_role,
+///     create_broadcast_role, create_meshedchannels, create_normal_name, create_normal_role,
 ///     create_offer_mpst_session_multi, create_offer_type_multi,
-///     create_normal_name
 /// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);

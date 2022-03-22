@@ -255,18 +255,20 @@ name = []
 binary_timed = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
-# For interleaved sessions
-interleaved = ["default"]
+interleaved = ["default"] # For interleaved sessions
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
+baking_timed = ["binary_timed"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
 transport_http = ["default", "hyper", "hyper-tls", "tokio"]
 transport = ["transport_tcp", "transport_udp", "transport_http"]
-# For test compile examples
-transport_macros_multiple = ["macros_multiple", "transport"]
+transport_macros_multiple = [
+    "macros_multiple",
+    "transport",
+] # For test compile examples
 full_without_checking = ["baking", "transport"]
 full = ["checking", "baking", "transport"]
 

@@ -17,7 +17,8 @@ use std::marker;
 /// * INCLUDE_START: a bool which indicates whether START is included in the bound
 /// * END: an i128 which represents the upper bound for the time constraint
 /// * INCLUDE_END: a bool which indicates whether END is included in the bound
-/// * RESET: a char which whether CLOCK needs to be reset after the receive. Currently limited to CLOCK, future feature will use a Vec<char>
+/// * RESET: a char which whether CLOCK needs to be reset after the receive. Currently limited to
+///   CLOCK, future feature will use a Vec<char>
 #[derive(Debug)]
 pub struct RecvTimed<
     T,

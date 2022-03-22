@@ -6,8 +6,6 @@ mod binary_timed_mod;
 
 #[test]
 fn tests_binary_timed() {
-    // Tests for sesh
-    // binary_timed_mod::main::ping_works();
     binary_timed_mod::main::head_str();
     binary_timed_mod::main::tail_str();
     binary_timed_mod::main::self_head_str();

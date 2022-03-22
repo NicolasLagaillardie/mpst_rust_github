@@ -133,7 +133,9 @@ macro_rules! create_send_mpst_cancel {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_meshedchannels, create_normal_name, create_normal_role, create_send_check_cancel};
+/// use mpstthree::{
+///     create_meshedchannels, create_normal_name, create_normal_role, create_send_check_cancel,
+/// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_normal_role!(RoleD, RoleDDual);

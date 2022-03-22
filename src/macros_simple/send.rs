@@ -19,7 +19,7 @@
 ///
 /// ```
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_normal_role, create_send_mpst_session_1, create_normal_name};
+/// use mpstthree::{create_normal_name, create_normal_role, create_send_mpst_session_1};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_name!(NameC);
@@ -53,7 +53,7 @@ macro_rules! create_send_mpst_session_1 {
 ///
 /// ```
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_normal_role, create_send_mpst_session_2, create_normal_name};
+/// use mpstthree::{create_normal_name, create_normal_role, create_send_mpst_session_2};
 ///
 /// create_normal_name!(NameA);
 /// create_normal_role!(RoleC, RoleCDual);

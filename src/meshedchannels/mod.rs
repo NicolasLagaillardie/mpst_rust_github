@@ -10,9 +10,8 @@
 //!   second participant in the alphanumerical order. It contains [`Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and the others.
 //!   It contains a [`Role`].
-//! - **name**: contains the name of the participant. It should look like `NameA` or
-//!   `NameB`.
-//!   It contains a [`Name`].
+//! - **name**: contains the name of the participant. It should look like `NameA` or `NameB`. It
+//!   contains a [`Name`].
 //!
 //! [`Session`]: crate::binary::struct_trait::session::Session
 //! [`Role`]: crate::role::Role

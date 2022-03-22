@@ -64,7 +64,8 @@ where
                 } else {
                     panic!("The clock {} is not available in {:?}", s.clock, all_clocks);
                 }
-            // if this upper bound is not included in the time constraint. In this case, we remove one time from the upper bound
+            // if this upper bound is not included in the time constraint. In this case, we remove
+            // one time from the upper bound
             } else {
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
@@ -123,7 +124,8 @@ where
                 } else {
                     panic!("The clock {} is not available in {:?}", s.clock, all_clocks);
                 }
-            // if this lower bound is not included in the time constraint. In this case, we add one unit time from the upper bound
+            // if this lower bound is not included in the time constraint. In this case, we add one
+            // unit time from the upper bound
             } else {
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {

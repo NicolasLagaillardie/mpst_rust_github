@@ -17,8 +17,8 @@ use std::error::Error;
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::end::RoleEnd;
 ///

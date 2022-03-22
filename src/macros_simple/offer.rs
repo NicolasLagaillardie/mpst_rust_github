@@ -20,7 +20,9 @@
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_broadcast_role, create_normal_name, create_normal_role, create_offer_mpst_session_1};
+/// use mpstthree::{
+///     create_broadcast_role, create_normal_name, create_normal_role, create_offer_mpst_session_1,
+/// };
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
@@ -65,7 +67,9 @@ macro_rules! create_offer_mpst_session_1 {
 /// ```
 /// use mpstthree::functionmpst::OfferMpst;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_broadcast_role, create_normal_name, create_normal_role, create_offer_mpst_session_2};
+/// use mpstthree::{
+///     create_broadcast_role, create_normal_name, create_normal_role, create_offer_mpst_session_2,
+/// };
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);

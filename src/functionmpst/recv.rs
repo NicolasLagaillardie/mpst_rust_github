@@ -44,8 +44,8 @@ macro_rules! recv_all_aux_simple {
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
@@ -117,8 +117,8 @@ where
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
@@ -190,8 +190,8 @@ where
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::c::RoleC;
@@ -263,8 +263,8 @@ where
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::c::RoleC;
@@ -336,8 +336,8 @@ where
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
@@ -409,8 +409,8 @@ where
 /// ```
 /// use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::Role;
 /// use mpstthree::name::Name;
+/// use mpstthree::role::Role;
 ///
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
