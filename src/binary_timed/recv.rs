@@ -105,13 +105,13 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() >= u64::try_from(s.start)? && s.reset {
+                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset {
                         // blocking receive
                         let (v, s) = s.channel.recv()?;
                         *own_clock = Instant::now();
                         Ok((v, s))
                     // if the clock respects the time constraint and the clock must not be reset
-                    } else if own_clock.elapsed().as_secs() >= u64::try_from(s.start)? {
+                    } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() {
                         // blocking receive
                         let (v, s) = s.channel.recv()?;
                         Ok((v, s))
@@ -128,13 +128,13 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() > u64::try_from(s.start)? && s.reset {
+                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset {
                         // blocking receive
                         let (v, s) = s.channel.recv()?;
                         *own_clock = Instant::now();
                         Ok((v, s))
                     // if the clock respects the time constraint and the clock must not be reset
-                    } else if own_clock.elapsed().as_secs() > u64::try_from(s.start)? {
+                    } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs() {
                         // blocking receive
                         let (v, s) = s.channel.recv()?;
                         Ok((v, s))

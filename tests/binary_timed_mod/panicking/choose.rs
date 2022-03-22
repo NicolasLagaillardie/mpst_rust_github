@@ -9,11 +9,6 @@ use std::error::Error;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-
-
-
-
-
 pub fn choose_left_upper_timeout_panics() {
     assert!(|| -> Result<(), Box<dyn Error>> {
         // Create the new clock ledger

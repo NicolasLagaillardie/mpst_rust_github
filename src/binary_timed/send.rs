@@ -135,7 +135,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() >= u64::try_from(s.start)? && s.reset {
+                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(_) => {
@@ -148,7 +148,7 @@ where
                             }
                         }
                     // if the clock respects the time constraint and the clock must not be reset
-                    } else if own_clock.elapsed().as_secs() >= u64::try_from(s.start)? {
+                    } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(_) => Ok(here),
@@ -170,7 +170,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() > u64::try_from(s.start)? && s.reset {
+                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(_) => {
@@ -183,7 +183,7 @@ where
                             }
                         }
                     // if the clock respects the time constraint and the clock must not be reset
-                    } else if own_clock.elapsed().as_secs() > u64::try_from(s.start)? {
+                    } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs() {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(_) => Ok(here),
@@ -205,10 +205,6 @@ where
         } else {
             // if the time constraint does not make sense
             if s.start > s.end {
-                println!(
-                    "Start and End parameters cannot match: start = {} > {} = end",
-                    s.start, s.end
-                );
                 panic!(
                     "Start and End parameters cannot match: start = {} > {} = end",
                     s.start, s.end
@@ -252,13 +248,6 @@ where
                                 }
                             }
                         } else {
-                            println!(
-                                "Send timeout for clock {} : {} / {} / {}",
-                                s.clock,
-                                s.start,
-                                own_clock.elapsed().as_secs(),
-                                s.end
-                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
@@ -301,13 +290,6 @@ where
                                 }
                             }
                         } else {
-                            println!(
-                                "Send timeout for clock {} : {} / {} / {}",
-                                s.clock,
-                                s.start,
-                                own_clock.elapsed().as_secs(),
-                                s.end
-                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
@@ -350,13 +332,6 @@ where
                                 }
                             }
                         } else {
-                            println!(
-                                "Send timeout for clock {} : {} / {} / {}",
-                                s.clock,
-                                s.start,
-                                own_clock.elapsed().as_secs(),
-                                s.end
-                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
@@ -399,13 +374,6 @@ where
                                 }
                             }
                         } else {
-                            println!(
-                                "Send timeout for clock {} : {} / {} / {}",
-                                s.clock,
-                                s.start,
-                                own_clock.elapsed().as_secs(),
-                                s.end
-                            );
                             panic!("Timeout for clock {}", s.clock);
                         }
                     } else {
