@@ -18,15 +18,29 @@ fn tests_binary_timed() {
     binary_timed_mod::main::constraint_start_excluded_end_included();
     binary_timed_mod::main::constraint_start_included_end_excluded();
     binary_timed_mod::main::constraint_start_included_end_included();
-    // binary_timed_mod::main::new_types();
-    // binary_timed_mod::main::new_types_cancel();
     binary_timed_mod::main::simple_calc_works();
-    // binary_timed_mod::main::nice_calc_works();
-    // binary_timed_mod::main::cancel_recv_works();
-    // binary_timed_mod::main::cancel_send_works();
-    // binary_timed_mod::main::delegation_works();
-    // binary_timed_mod::main::closure_works();
-    // binary_timed_mod::main::recursion_works();
-    // binary_timed_mod::main::selection_works();
-    // binary_timed_mod::main::cancel_recursion();
+}
+
+#[test]
+#[should_panic]
+fn send_upper_timeout_panics() {
+    binary_timed_mod::main::simple_calc_send_upper_timeout_panics();
+}
+
+#[test]
+#[should_panic]
+fn send_lower_timeout_panics() {
+    binary_timed_mod::main::simple_calc_send_lower_timeout_panics();
+}
+
+#[test]
+#[should_panic]
+fn choose_lower_timeout_panics() {
+    binary_timed_mod::main::simple_calc_choose_lower_timeout_panics();
+}
+
+#[test]
+#[should_panic]
+fn choose_upper_timeout_panics() {
+    binary_timed_mod::main::simple_calc_choose_upper_timeout_panics();
 }

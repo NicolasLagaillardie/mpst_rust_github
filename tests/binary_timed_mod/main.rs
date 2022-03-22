@@ -1,16 +1,6 @@
-// use mpstthree::binary::cancel::cancel;
-// use mpstthree::binary::choose::*;
 use mpstthree::binary::close::close;
-// use mpstthree::binary::offer::*;
-// use mpstthree::binary::recv::recv;
-// use mpstthree::binary::select::select_mut;
-// use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::end::*;
-// use mpstthree::binary::struct_trait::recv::*;
-// use mpstthree::binary::struct_trait::send::*;
 use mpstthree::binary::struct_trait::session::*;
-// use mpstthree::timed_choose;
-// use mpstthree::timed_offer;
 
 use mpstthree::binary_timed::choose::{choose_left, choose_right};
 use mpstthree::binary_timed::fork::fork;
@@ -25,9 +15,6 @@ use rand::{thread_rng, Rng};
 use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
-// use std::marker;
-// use std::mem;
-// use std::sync::mpsc;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
@@ -134,7 +121,7 @@ type AddServer = RecvTimed<
 >;
 type AddClient = <AddServer as Session>::Dual;
 
-type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 0, true, 2, true, false>;
+type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 1, true, 2, true, false>;
 type SimpleCalcClient = <SimpleCalcServer as Session>::Dual;
 
 fn simple_calc_server(
@@ -142,11 +129,12 @@ fn simple_calc_server(
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
+    sleep(Duration::from_secs(1));
     offer_either(
         all_clocks,
         s,
         |all_clocks: &mut HashMap<char, Instant>, s: NegServer| {
-            sleep(Duration::from_secs(3));
+            sleep(Duration::from_secs(2));
             let (x, s) = recv(all_clocks, s)?;
             sleep(Duration::from_secs(2));
             let s = send(-x, all_clocks, s)?;
@@ -154,7 +142,7 @@ fn simple_calc_server(
             close(s)
         },
         |all_clocks: &mut HashMap<char, Instant>, s: AddServer| {
-            sleep(Duration::from_secs(3));
+            sleep(Duration::from_secs(2));
             let (x, s) = recv(all_clocks, s)?;
             sleep(Duration::from_secs(2));
             let (y, s) = recv(all_clocks, s)?;
@@ -179,8 +167,9 @@ pub fn simple_calc_works() {
             let mut all_clocks = HashMap::<char, Instant>::new();
             all_clocks.insert('a', Instant::now());
 
-            let s = choose_left::<_, AddClient, 'a', 0, true, 2, true, false>(&mut all_clocks, s)?;
-            sleep(Duration::from_secs(3));
+            sleep(Duration::from_secs(1));
+            let s = choose_left::<_, AddClient, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
             let s = send(x, &mut all_clocks, s)?;
             sleep(Duration::from_secs(2));
             let (y, s) = recv(&mut all_clocks, s)?;
@@ -200,9 +189,9 @@ pub fn simple_calc_works() {
             let mut all_clocks = HashMap::<char, Instant>::new();
             all_clocks.insert('a', Instant::now());
 
-            let s = choose_right::<NegClient, _, 'a', 0, true, 2, true, false>(&mut all_clocks, s)?;
-
-            sleep(Duration::from_secs(3));
+            sleep(Duration::from_secs(1));
+            let s = choose_right::<NegClient, _, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?;
+            sleep(Duration::from_secs(2));
             let s = send(x, &mut all_clocks, s)?;
             sleep(Duration::from_secs(2));
             let s = send(y, &mut all_clocks, s)?;
@@ -219,305 +208,93 @@ pub fn simple_calc_works() {
     .is_ok());
 }
 
-// // Test a nice calculator server, implemented using variant
-// // types.
+pub fn simple_calc_send_upper_timeout_panics() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        // Create the new clock ledger
+        let mut all_clocks = HashMap::<char, Instant>::new();
+        all_clocks.insert('a', Instant::now());
 
-// enum CalcOp<N: marker::Send> {
-//     Neg(NegServer),
-//     Add(AddServer),
-// }
-// type NiceCalcServer = Recv<CalcOp, End>;
-// type NiceCalcClient = <NiceCalcServer as Session>::Dual;
+        // Create a random payload
+        let mut rng = thread_rng();
+        let x: i32 = rng.gen();
 
-// fn nice_calc_server(s: NiceCalcServer<i32>) -> Result<(), Box<dyn Error>> {
-//     timed_offer!(s, {
-//         CalcOp::Neg(s) => {
-//             let (x, s) = recv(s)?;
-//             let s = send(-x, s);
-//             close(s)
-//         },
-//         CalcOp::Add(s) => {
-//             let (x, s) = recv(s)?;
-//             let (y, s) = recv(s)?;
-//             let s = send(x.wrapping_add(y), s);
-//             close(s)
-//         },
-//     })
-// }
+        // Sleep for 3 seconds to exceed upper timeout
+        sleep(Duration::from_secs(3));
 
-// pub fn nice_calc_works() {
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         // Pick some random numbers.
-//         let mut rng = thread_rng();
+        // Try to send
+        let (sender, _receiver) = SendTimed::<i32, End, 'a', 1, true, 2, true, false>::new();
+        let _s = send(x, &mut all_clocks, sender)?; // will fail
 
-//         // Test the negation function.
-//         {
-//             let s: NiceCalcClient<i32> = fork(nice_calc_server);
-//             let x: i32 = rng.gen();
-//             let s = timed_choose!(CalcOp::Neg, s);
-//             let s = send(x, s);
-//             let (y, s) = recv(s)?;
-//             close(s)?;
-//             assert_eq!(-x, y);
-//         }
+        Ok(())
+    }()
+    .is_err());
+}
 
-//         // Test the addition function.
-//         {
-//             let s: NiceCalcClient<i32> = fork(nice_calc_server);
-//             let x: i32 = rng.gen();
-//             let y: i32 = rng.gen();
-//             let s = timed_choose!(CalcOp::Add, s);
-//             let s = send(x, s);
-//             let s = send(y, s);
-//             let (z, s) = recv(s)?;
-//             close(s)?;
-//             assert_eq!(x.wrapping_add(y), z);
-//         }
+pub fn simple_calc_send_lower_timeout_panics() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        let mut rng = thread_rng();
 
-//         Ok(())
-//     }()
-//     .is_ok());
-// }
+        let s: SimpleCalcClient = fork(simple_calc_server);
 
-// // Test cancellation.
+        let x: i32 = rng.gen();
 
-// pub fn cancel_recv_works() {
-//     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
+        let mut all_clocks = HashMap::<char, Instant>::new();
+        all_clocks.insert('a', Instant::now());
 
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         cancel(s);
-//         Ok(())
-//     }()
-//     .is_ok());
+        sleep(Duration::from_secs(1));
+        let s = choose_left::<_, AddClient, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?;
+        // sleep(Duration::from_secs(2));
+        let s = send(x, &mut all_clocks, s)?; // will fail
+        sleep(Duration::from_secs(2));
+        let (_y, s) = recv(&mut all_clocks, s)?;
+        sleep(Duration::from_secs(2));
+        close(s)
+    }()
+    .is_err());
+}
 
-//     assert!(other_thread.join().is_err());
-// }
+pub fn simple_calc_choose_lower_timeout_panics() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        let mut rng = thread_rng();
 
-// pub fn cancel_send_works() {
-//     let (other_thread, s) = fork_with_thread_id(move |s: Recv<(), End>| {
-//         cancel(s);
-//         Ok(())
-//     });
+        let s: SimpleCalcClient = fork(simple_calc_server);
 
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         let s = send((), s);
-//         close(s)
-//     }()
-//     .is_err());
+        let x: i32 = rng.gen();
 
-//     assert!(other_thread.join().is_ok());
-// }
+        let mut all_clocks = HashMap::<char, Instant>::new();
+        all_clocks.insert('a', Instant::now());
 
-// // Test cancellation of delegation.
+        // sleep(Duration::from_secs(1));
+        let s = choose_left::<_, AddClient, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?; // will fail
+        sleep(Duration::from_secs(3));
+        let s = send(x, &mut all_clocks, s)?;
+        sleep(Duration::from_secs(6));
+        let (_y, s) = recv(&mut all_clocks, s)?;
+        sleep(Duration::from_secs(2));
+        close(s)
+    }()
+    .is_err());
+}
 
-// pub fn delegation_works() {
-//     let (other_thread1, s) = fork_with_thread_id(nice_calc_server);
-//     let (other_thread2, u) = fork_with_thread_id(move |u: Recv<NiceCalcClient<i32>, End>| {
-//         cancel(u);
-//         Ok(())
-//     });
+pub fn simple_calc_choose_upper_timeout_panics() {
+    assert!(|| -> Result<(), Box<dyn Error>> {
+        let mut rng = thread_rng();
 
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         let u = send(s, u);
-//         close(u)
-//     }()
-//     .is_err());
+        let s: SimpleCalcClient = fork(simple_calc_server);
 
-//     assert!(other_thread1.join().is_err());
-//     assert!(other_thread2.join().is_ok());
-// }
+        let x: i32 = rng.gen();
 
-// // Test cancellation of closures.
+        let mut all_clocks = HashMap::<char, Instant>::new();
+        all_clocks.insert('a', Instant::now());
 
-// pub fn closure_works() {
-//     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
-
-//     assert!(|| -> Result<i32, Box<dyn Error>> {
-//         // Create a closure which uses the session.
-//         let _f = move |x: i32| -> Result<i32, Box<dyn Error>> {
-//             let s = timed_choose!(CalcOp::Neg, s);
-//             let s = send(x, s);
-//             let (y, s) = recv(s)?;
-//             close(s)?;
-//             Ok(y)
-//         };
-
-//         // Let the closure go out of scope.
-//         Err(Box::new(mpsc::RecvError))
-//         // f(5)
-//     }()
-//     .is_err());
-
-//     assert!(other_thread.join().is_err());
-// }
-
-// // Test recursive sessions.
-
-// enum SumOp<N: marker::Send> {
-//     More(Recv<i32,  NiceSumServer>),
-//     Done(Send<i32,  End>),
-// }
-// type NiceSumServer = Recv<SumOp, End>;
-// type NiceSumClient = <NiceSumServer as Session>::Dual;
-
-// fn nice_sum_server(s: NiceSumServer<i32>) -> Result<(), Box<dyn Error>> {
-//     nice_sum_server_accum(s, 0)
-// }
-
-// fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Error>> {
-//     timed_offer!(s, {
-//         SumOp::More(s) => {
-//             let (y, s) = recv(s)?;
-//             nice_sum_server_accum(s, x.wrapping_add(y))
-//         },
-//         SumOp::Done(s) => {
-//             let s = send(x, s);
-//             close(s)
-//         },
-//     })
-// }
-
-// fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-//     match xs.pop() {
-//         Option::Some(x) => {
-//             let s = timed_choose!(SumOp::More, s);
-//             let s = send(x, s);
-//             nice_sum_client_accum(s, xs)
-//         }
-//         Option::None => {
-//             let s = timed_choose!(SumOp::Done, s);
-//             let (sum, s) = recv(s)?;
-//             close(s)?;
-//             Ok(sum)
-//         }
-//     }
-// }
-
-// pub fn recursion_works() {
-//     // Pick some random numbers.
-//     let mut rng = thread_rng();
-//     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
-//     let sum1: i32 = xs.iter().fold(0, |sum, &x| sum.wrapping_add(x));
-
-//     let (other_thread, s) = fork_with_thread_id(nice_sum_server);
-
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         let sum2 = nice_sum_client_accum(s, xs)?;
-//         assert_eq!(sum1, sum2);
-//         Ok(())
-//     }()
-//     .is_ok());
-
-//     assert!(other_thread.join().is_ok());
-// }
-
-// pub fn cancel_recursion() {
-//     // Pick some random numbers.
-//     let mut rng = thread_rng();
-//     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
-//     let _sum1: i32 = xs.iter().fold(0, |sum, &x| sum.wrapping_add(x));
-
-//     let (other_thread, s) = fork_with_thread_id(nice_sum_server);
-
-//     assert!(|| -> Result<(), Box<dyn Error>> {
-//         cancel(s);
-//         Ok(())
-//     }()
-//     .is_ok());
-
-//     assert!(other_thread.join().is_err());
-// }
-
-// // Test selection.
-
-// pub fn selection_works() {
-//     let mut other_threads = Vec::new();
-//     let mut rs = Vec::new();
-
-//     for i in 0..10 {
-//         let (other_thread, s) = fork_with_thread_id(move |s: Send<u64, End>| {
-//             sleep(Duration::from_millis(i * 1000));
-//             let s = send(9 - i, s);
-//             close(s)
-//         });
-//         other_threads.push(other_thread);
-//         rs.push(s);
-//     }
-
-//     assert!(
-//         || -> Result<(), Box<dyn Error>> {
-//             let mut current_index = 9;
-//             loop {
-//                 if rs.is_empty() {
-//                     break Ok(());
-//                 } else {
-//                     let (i, r) = select_mut(&mut rs)?;
-//                     close(r)?;
-//                     assert_eq!(current_index, i, "Messages were received out of order.");
-//                     current_index = current_index.overflowing_sub(1).0;
-//                     // decrement
-//                 }
-//             }
-//         }()
-//         .is_ok(),
-//         "Main thread crashed."
-//     );
-
-//     for other_thread in other_threads {
-//         let msg = format!("Thread {:?} crashed.", other_thread);
-//         assert!(other_thread.join().is_ok(), "{}", msg);
-//     }
-// }
-
-// #[allow(dead_code)]
-// fn deadlock_loop() {
-//     let s = fork(move |s: Send<(), End>| {
-//         loop {
-//             // Let's trick the reachability checker
-//             if false {
-//                 break;
-//             }
-//         }
-//         let s = send((), s);
-//         close(s)
-//     });
-
-//     || -> Result<(), Box<dyn Error>> {
-//         let ((), s) = recv(s)?;
-//         close(s)
-//     }()
-//     .unwrap();
-// }
-
-// #[allow(dead_code)]
-// fn deadlock_forget() {
-//     let s = fork(move |s: Send<(), End>| {
-//         mem::forget(s);
-//         Ok(())
-//     });
-
-//     || -> Result<(), Box<dyn Error>> {
-//         let ((), s) = recv(s)?;
-//         close(s)
-//     }()
-//     .unwrap();
-// }
-
-// #[allow(dead_code)]
-// fn deadlock_new() {
-//     let (s1, r1) = <Send<(), End>>::new();
-//     let r2 = fork(move |s2: Send<(), End>| {
-//         let (x, r1) = recv(r1)?;
-//         let s2 = send(x, s2);
-//         close(r1)?;
-//         close(s2)
-//     });
-
-//     || -> Result<(), Box<dyn Error>> {
-//         let (x, r2) = recv(r2)?;
-//         let s1 = send(x, s1);
-//         close(r2)?;
-//         close(s1)
-//     }()
-//     .unwrap();
-// }
+        sleep(Duration::from_secs(3));
+        let s = choose_left::<_, AddClient, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?; // will fail
+        sleep(Duration::from_secs(3));
+        let s = send(x, &mut all_clocks, s)?;
+        sleep(Duration::from_secs(6));
+        let (_y, s) = recv(&mut all_clocks, s)?;
+        sleep(Duration::from_secs(2));
+        close(s)
+    }()
+    .is_err());
+}
