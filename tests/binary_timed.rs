@@ -24,47 +24,59 @@ fn tests_binary_timed() {
 #[test]
 #[should_panic]
 fn send_upper_timeout_panics() {
-    binary_timed_mod::main::send_upper_timeout_panics();
+    binary_timed_mod::panicking::send_upper_timeout_panics();
 }
 
 #[test]
 #[should_panic]
 fn send_lower_timeout_panics() {
-    binary_timed_mod::main::send_lower_timeout_panics();
+    binary_timed_mod::panicking::send_lower_timeout_panics();
 }
 
 #[test]
 #[should_panic]
 fn recv_upper_timeout_panics() {
-    binary_timed_mod::main::recv_upper_timeout_panics();
+    binary_timed_mod::panicking::recv_upper_timeout_panics();
 }
 
 #[test]
 #[should_panic]
 fn recv_lower_timeout_panics() {
-    binary_timed_mod::main::recv_lower_timeout_panics();
+    binary_timed_mod::panicking::recv_lower_timeout_panics();
 }
 
 #[test]
 #[should_panic]
-fn choose_upper_timeout_panics() {
-    binary_timed_mod::main::choose_upper_timeout_panics();
+fn choose_left_upper_timeout_panics() {
+    binary_timed_mod::panicking::choose_left_upper_timeout_panics();
 }
 
 #[test]
 #[should_panic]
-fn choose_lower_timeout_panics() {
-    binary_timed_mod::main::choose_lower_timeout_panics();
+fn choose_left_lower_timeout_panics() {
+    binary_timed_mod::panicking::choose_left_lower_timeout_panics();
+}
+
+#[test]
+#[should_panic]
+fn choose_right_upper_timeout_panics() {
+    binary_timed_mod::panicking::choose_right_upper_timeout_panics();
+}
+
+#[test]
+#[should_panic]
+fn choose_right_lower_timeout_panics() {
+    binary_timed_mod::panicking::choose_right_lower_timeout_panics();
 }
 
 #[test]
 #[should_panic]
 fn offer_upper_timeout_panics() {
-    binary_timed_mod::main::offer_upper_timeout_panics();
+    binary_timed_mod::panicking::offer_upper_timeout_panics();
 }
 
 #[test]
 #[should_panic]
 fn offer_lower_timeout_panics() {
-    binary_timed_mod::main::offer_lower_timeout_panics();
+    binary_timed_mod::panicking::offer_lower_timeout_panics();
 }
