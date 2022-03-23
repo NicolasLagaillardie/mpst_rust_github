@@ -67,7 +67,7 @@ impl CheckingInput {
         let mut new_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
 
         for (key, value) in &self.choices {
-            let name_key = Ident::new(&key, Span::call_site());
+            let name_key = Ident::new(key, Span::call_site());
             let fn_key = Ident::new(&key.to_lowercase(), Span::call_site());
 
             let branches: Vec<proc_macro2::TokenStream> = value

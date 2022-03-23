@@ -5,11 +5,11 @@ use syn::Ident;
 
 /// Expand send methods for basic baking
 pub(crate) fn send_basic(
-    all_roles: &Vec<TokenStream>,
+    all_roles: &[TokenStream],
     sender: u64,
     receiver: u64,
-    session_types: &Vec<Ident>,
-    session_types_struct: &Vec<TokenStream>,
+    session_types: &[Ident],
+    session_types_struct: &[TokenStream],
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
@@ -88,11 +88,11 @@ pub(crate) fn send_basic(
 
 /// Expand send methods for baking with cancelation
 pub(crate) fn send_canceled(
-    all_roles: &Vec<TokenStream>,
+    all_roles: &[TokenStream],
     sender: u64,
     receiver: u64,
-    session_types: &Vec<Ident>,
-    session_types_struct: &Vec<TokenStream>,
+    session_types: &[Ident],
+    session_types_struct: &[TokenStream],
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {

@@ -5,7 +5,7 @@ use syn::Ident;
 
 /// Expand offer methods
 pub(crate) fn offer(
-    all_roles: &Vec<TokenStream>,
+    all_roles: &[TokenStream],
     sender: u64,
     receiver: u64,
     meshedchannels_name: &Ident,
