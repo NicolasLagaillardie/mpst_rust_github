@@ -4,6 +4,7 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
+use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
@@ -12,17 +13,17 @@ use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
 use crate::common_functions::expand::role::role;
-use crate::common_functions::expand::send::send_basic;
+use crate::common_functions::expand::send::send_canceled;
 use crate::common_functions::expand::token_stream::token_stream;
 
 #[derive(Debug)]
-pub(crate) struct BakingWithEnum {
+pub(crate) struct BakingTimedWithEnumAndCancel {
     meshedchannels_name: Ident,
     all_roles: Vec<TokenStream>,
     number_roles: u64,
 }
 
-impl Parse for BakingWithEnum {
+impl Parse for BakingTimedWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
         let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
@@ -30,7 +31,7 @@ impl Parse for BakingWithEnum {
 
         let number_roles = u64::try_from(all_roles.len()).unwrap();
 
-        Ok(BakingWithEnum {
+        Ok(BakingTimedWithEnumAndCancel {
             meshedchannels_name,
             all_roles,
             number_roles,
@@ -38,22 +39,16 @@ impl Parse for BakingWithEnum {
     }
 }
 
-impl From<BakingWithEnum> for TokenStream {
-    fn from(input: BakingWithEnum) -> TokenStream {
+impl From<BakingTimedWithEnumAndCancel> for TokenStream {
+    fn from(input: BakingTimedWithEnumAndCancel) -> TokenStream {
         input.expand()
     }
 }
 
-impl BakingWithEnum {
+impl BakingTimedWithEnumAndCancel {
     fn expand(&self) -> TokenStream {
         // Get the meshedchannels structure
         let meshedchannels_struct = meshedchannels(&self.meshedchannels_name, self.number_roles);
-
-        let names_struct: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| name(format!("{}", i)))
-            .collect();
 
         let quote_fork_mpst = fork_mpst(&self.meshedchannels_name, self.number_roles);
 
@@ -74,12 +69,18 @@ impl BakingWithEnum {
             .map(|i| role(format!("{}", i)))
             .collect();
 
+        let names_struct: Vec<TokenStream> = self
+            .all_roles
+            .iter()
+            .map(|i| name(format!("{}", i)))
+            .collect();
+
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            Some(send_basic(
+                            Some(send_canceled(
                                 &self.all_roles,
                                 sender,
                                 receiver,
@@ -179,6 +180,8 @@ impl BakingWithEnum {
             self.number_roles,
         );
 
+        let cancel_method: TokenStream = cancel(&self.meshedchannels_name, self.number_roles);
+
         quote! {
             #meshedchannels_struct
 
@@ -197,6 +200,8 @@ impl BakingWithEnum {
             #( #choose_methods )*
 
             #close_methods
+
+            #cancel_method
 
             #quote_fork_mpst
 

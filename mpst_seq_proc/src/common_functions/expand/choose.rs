@@ -9,12 +9,12 @@ use crate::common_functions::maths::{
 
 /// Expand choose methods
 pub(crate) fn choose(
-    all_roles: Vec<TokenStream>,
+    all_roles: &Vec<TokenStream>,
     sender: u64,
-    meshedchannels_name: Ident,
+    meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let (diag, matrix) = diag_and_matrix(number_roles);
+    let (matrix, diag) = diag_and_matrix(number_roles);
 
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Name{}", elt), Span::call_site())
@@ -574,8 +574,8 @@ pub(crate) fn choose(
 
 /// Expand choose methods for interleaved sessions
 pub(crate) fn choose_mpst_create_multi_to_all(
-    meshedchannels_name: Ident,
-    all_roles: Vec<TokenStream>,
+    meshedchannels_name: &Ident,
+    all_roles: &Vec<TokenStream>,
     number_roles: u64,
 ) -> TokenStream {
     let choose_mpst_create_multi_to_all: Vec<TokenStream> = (1..=number_roles)

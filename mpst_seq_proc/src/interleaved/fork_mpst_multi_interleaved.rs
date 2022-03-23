@@ -4,7 +4,9 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
-type VecOfTuple = Vec<(u64, u64, u64)>;
+use crate::common_functions::maths::{
+    diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
+};
 
 #[derive(Debug)]
 pub(crate) struct ForkMPSTMultiInterleaved {
@@ -58,140 +60,15 @@ impl From<ForkMPSTMultiInterleaved> for TokenStream {
 }
 
 impl ForkMPSTMultiInterleaved {
-    /// Create the whole matrix of index according to line and column
-    fn diag(&self, n_sessions: u64) -> VecOfTuple {
-        let diff = n_sessions - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (n_sessions - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Create the whole matrix of index according to line and column
-    fn diag_and_matrix(&self, n_sessions: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
-        let diag = self.diag(n_sessions);
-
-        // Create the whole matrix
-        (
-            diag.clone(),
-            (1..=n_sessions)
-                .map(|i| {
-                    diag.iter()
-                        .filter_map(|(line, column, index)| {
-                            if i == *line || i == *column {
-                                Some((*line, *column, *index))
-                            } else {
-                                None
-                            }
-                        })
-                        .collect()
-                })
-                .collect(),
-        )
-    }
-
-    /// Create the whole matrix of index according to line and column
-    fn diag_w_offset(&self, n_sessions: u64) -> VecOfTuple {
-        let diff = n_sessions - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..=(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (n_sessions - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Create the whole matrix of index according to line and column
-    fn diag_and_matrix_w_offset(&self, n_sessions: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
-        let diag_w_offset = self.diag_w_offset(n_sessions);
-
-        // Create the whole matrix
-        (
-            diag_w_offset.clone(),
-            (1..=n_sessions)
-                .map(|i| {
-                    diag_w_offset
-                        .iter()
-                        .filter_map(|(line, column, index)| {
-                            if i == *line || i == *column {
-                                Some((*line, *column, *index))
-                            } else {
-                                None
-                            }
-                        })
-                        .collect()
-                })
-                .collect(),
-        )
-    }
-
-    /// Return (line, column, index) of diag
-    fn get_tuple_diag(&self, diag: &[(u64, u64, u64)], i: u64) -> (u64, u64, u64) {
-        if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!(
-                "Error at get_tuple_diag for i = {:?} / diag = {:?}",
-                i, diag
-            )
-        }
-    }
-
-    /// Return (line, column, index) of matrix
-    fn get_tuple_matrix(&self, matrix: &[VecOfTuple], i: u64, j: u64) -> (u64, u64, u64) {
-        let list: VecOfTuple = if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap()) {
-            temp.to_vec()
-        } else {
-            panic!(
-                "Error at get_tuple_matrix for i = {:?} / matrix = {:?}",
-                i, matrix
-            )
-        };
-
-        if let Some((line, column, index)) = list.get(usize::try_from(j - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!("Error at get_tuple_matrix for i = {:?} and j = {:?} with list = {:?} / matrix = {:?}", i, j, list, matrix)
-        }
-    }
-
     fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let meshedchannels_name_one = self.meshedchannels_name_one.clone();
         let meshedchannels_name_two = self.meshedchannels_name_two.clone();
         let sum_nsessions = self.nsessions_one + self.nsessions_two;
-        let (_diag_one, matrix_one) = self.diag_and_matrix(self.nsessions_one);
-        let (_diag_two, matrix_two) = self.diag_and_matrix(self.nsessions_two);
-        let (diag_w_offset_one, matrix_w_offset_one) =
-            self.diag_and_matrix_w_offset(self.nsessions_one);
-        let (diag_w_offset_two, matrix_w_offset_two) =
-            self.diag_and_matrix_w_offset(self.nsessions_two);
+        let (matrix_one, _diag_one) = diag_and_matrix(self.nsessions_one);
+        let (matrix_two, _diag_two) = diag_and_matrix(self.nsessions_two);
+        let (matrix_w_offset_one, diag_w_offset_one) = diag_and_matrix_w_offset(self.nsessions_one);
+        let (matrix_w_offset_two, diag_w_offset_two) = diag_and_matrix_w_offset(self.nsessions_two);
 
         // Generate
         // S0, S1, S2, ...
@@ -316,7 +193,7 @@ impl ForkMPSTMultiInterleaved {
             .map(|i| {
                 let temp_sessions: Vec<TokenStream> = (1..self.nsessions_one)
                     .map(|j| {
-                        let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset_one, i, j);
+                        let (k, _, m) = get_tuple_matrix(&matrix_w_offset_one, i, j);
                         let temp_ident =
                             Ident::new(&format!("S{}", m), Span::call_site());
                         if k == i {
@@ -369,7 +246,7 @@ impl ForkMPSTMultiInterleaved {
             .map(|i| {
                 let temp_sessions: Vec<TokenStream> = (1..self.nsessions_two)
                     .map(|j| {
-                        let (k, _, m) = self.get_tuple_matrix(&matrix_w_offset_two, i, j);
+                        let (k, _, m) = get_tuple_matrix(&matrix_w_offset_two, i, j);
                         let temp_ident =
                             Ident::new(&format!("S{}", ((self.nsessions_one - 1) * (self.nsessions_one) / 2) + m), Span::call_site());
                         if k == i {
@@ -447,7 +324,7 @@ impl ForkMPSTMultiInterleaved {
             / 2))
             .map(|i| {
                 let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                let (line, column, _) = self.get_tuple_diag(&diag_w_offset_one, i);
+                let (line, column, _) = get_tuple_diag(&diag_w_offset_one, i);
                 let temp_channel_left =
                     Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
                 let temp_channel_right =
@@ -470,7 +347,7 @@ impl ForkMPSTMultiInterleaved {
                     ),
                     Span::call_site(),
                 );
-                let (line, column, _) = self.get_tuple_diag(&diag_w_offset_two, i);
+                let (line, column, _) = get_tuple_diag(&diag_w_offset_two, i);
                 let temp_channel_left = Ident::new(
                     &format!(
                         "channel_{}_{}",
@@ -498,7 +375,7 @@ impl ForkMPSTMultiInterleaved {
             .map(|i| {
                 let temp_sessions: Vec<TokenStream> = (1..self.nsessions_one)
                     .map(|j| {
-                        let (line, column, _) = self.get_tuple_matrix(&matrix_one, i, j);
+                        let (line, column, _) = get_tuple_matrix(&matrix_one, i, j);
                         let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_channel = match line {
                             m if m == i => Ident::new(
@@ -537,7 +414,7 @@ impl ForkMPSTMultiInterleaved {
             .map(|i| {
                 let temp_sessions: Vec<TokenStream> = (1..self.nsessions_two)
                     .map(|j| {
-                        let (line, column, _) = self.get_tuple_matrix(&matrix_two, i, j);
+                        let (line, column, _) = get_tuple_matrix(&matrix_two, i, j);
                         let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
                         let temp_channel = match line {
                             m if m == i => Ident::new(

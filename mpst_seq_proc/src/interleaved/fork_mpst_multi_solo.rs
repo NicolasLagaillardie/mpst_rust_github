@@ -42,8 +42,8 @@ impl ForkMPSTMultiSolo {
     fn expand(&self) -> TokenStream {
         let func_name = self.func_name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
-        let (_diag, matrix) = diag_and_matrix(self.n_sessions);
-        let (diag_w_offset, matrix_w_offset) = diag_and_matrix_w_offset(self.n_sessions);
+        let (matrix, _diag) = diag_and_matrix(self.n_sessions);
+        let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(self.n_sessions);
 
         let sessions: Vec<TokenStream> = (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
             .map(|i| {

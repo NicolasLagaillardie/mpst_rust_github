@@ -26,7 +26,7 @@ impl Parse for ChooseMultiCreateToAll {
         let _parentheses = syn::parenthesized!(content_receivers in input);
         let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<TokenStream> = parenthesised(&receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
 
         <Token![,]>::parse(input)?;
 

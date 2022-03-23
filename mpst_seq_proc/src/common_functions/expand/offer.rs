@@ -5,10 +5,10 @@ use syn::Ident;
 
 /// Expand offer methods
 pub(crate) fn offer(
-    all_roles: Vec<TokenStream>,
+    all_roles: &Vec<TokenStream>,
     sender: u64,
     receiver: u64,
-    meshedchannels_name: Ident,
+    meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {

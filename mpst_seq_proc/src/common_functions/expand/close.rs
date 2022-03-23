@@ -3,7 +3,7 @@ use quote::quote;
 use syn::Ident;
 
 /// Expand close methods
-pub(crate) fn close(meshedchannels_name: Ident, number_roles: u64) -> TokenStream {
+pub(crate) fn close(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let close_session_types: Vec<TokenStream> = (1..number_roles)
         .map(|_i| {
             quote! { mpstthree::binary::struct_trait::end::End, }

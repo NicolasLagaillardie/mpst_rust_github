@@ -26,12 +26,11 @@ pub(crate) fn diag(number_roles: u64) -> VecOfTuple {
 }
 
 /// Create the whole matrix of index according to line and column
-pub(crate) fn diag_and_matrix(number_roles: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
+pub(crate) fn diag_and_matrix(number_roles: u64) -> (Vec<VecOfTuple>, VecOfTuple) {
     let diag = diag(number_roles);
 
     // Create the whole matrix
     (
-        diag.clone(),
         (1..=number_roles)
             .map(|i| {
                 diag.iter()
@@ -45,6 +44,7 @@ pub(crate) fn diag_and_matrix(number_roles: u64) -> (VecOfTuple, Vec<VecOfTuple>
                     .collect()
             })
             .collect(),
+        diag,
     )
 }
 
@@ -103,12 +103,11 @@ pub(crate) fn diag_w_offset(number_roles: u64) -> VecOfTuple {
 }
 
 /// Create the whole matrix of index according to line and column
-pub(crate) fn diag_and_matrix_w_offset(number_roles: u64) -> (VecOfTuple, Vec<VecOfTuple>) {
+pub(crate) fn diag_and_matrix_w_offset(number_roles: u64) -> (Vec<VecOfTuple>, VecOfTuple) {
     let diag_w_offset = diag_w_offset(number_roles);
 
     // Create the whole matrix
     (
-        diag_w_offset.clone(),
         (1..=number_roles)
             .map(|i| {
                 diag_w_offset
@@ -123,6 +122,7 @@ pub(crate) fn diag_and_matrix_w_offset(number_roles: u64) -> (VecOfTuple, Vec<Ve
                     .collect()
             })
             .collect(),
+        diag_w_offset,
     )
 }
 

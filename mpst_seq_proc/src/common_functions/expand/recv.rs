@@ -5,12 +5,12 @@ use syn::Ident;
 
 /// Expand receive methods
 pub(crate) fn recv(
-    all_roles: Vec<TokenStream>,
+    all_roles: &Vec<TokenStream>,
     receiver: u64,
     sender: u64,
-    session_types: Vec<Ident>,
-    session_types_struct: Vec<TokenStream>,
-    meshedchannels_name: Ident,
+    session_types: &Vec<Ident>,
+    session_types_struct: &Vec<TokenStream>,
+    meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
@@ -95,12 +95,12 @@ pub(crate) fn recv(
 
 /// Expand receive from all methods
 pub(crate) fn recv_from_all(
-    all_roles: Vec<TokenStream>,
+    all_roles: &Vec<TokenStream>,
     receiver: u64,
     sender: u64,
-    session_types: Vec<Ident>,
-    session_types_struct: Vec<TokenStream>,
-    meshedchannels_name: Ident,
+    session_types: &Vec<Ident>,
+    session_types_struct: &Vec<TokenStream>,
+    meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {

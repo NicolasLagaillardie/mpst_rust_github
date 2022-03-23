@@ -29,7 +29,7 @@ impl Parse for ChooseMultiToAll {
         let _parentheses = syn::parenthesized!(content_labels in input);
         let labels = TokenStream::parse(&content_labels)?;
 
-        let all_labels: Vec<TokenStream> = parenthesised(&labels);
+        let all_labels: Vec<TokenStream> = parenthesised(labels);
 
         <Token![,]>::parse(input)?;
 
@@ -38,7 +38,7 @@ impl Parse for ChooseMultiToAll {
         let _parentheses = syn::parenthesized!(content_receivers in input);
         let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<TokenStream> = parenthesised(&receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
 
         <Token![,]>::parse(input)?;
 
@@ -83,8 +83,6 @@ impl From<ChooseMultiToAll> for TokenStream {
 impl ChooseMultiToAll {
     fn expand(&self) -> TokenStream {
         let session = self.session.clone();
-        let all_labels = self.labels.clone();
-        let all_receivers = self.receivers.clone();
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let diff = self.n_sessions - 1;
@@ -117,7 +115,7 @@ impl ChooseMultiToAll {
             .map(|i| {
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 let temp_role =
-                    if let Some(elt) = all_receivers.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.receivers.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough receivers")
@@ -158,7 +156,7 @@ impl ChooseMultiToAll {
 
                 let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
 
-                let temp_label = if let Some(elt) = all_labels.get(usize::try_from(i - 1).unwrap())
+                let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 1).unwrap())
                 {
                     elt
                 } else {

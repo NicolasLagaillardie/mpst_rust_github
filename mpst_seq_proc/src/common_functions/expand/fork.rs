@@ -7,9 +7,9 @@ use crate::common_functions::maths::{
 };
 
 /// Expand fork methods
-pub(crate) fn fork_mpst(meshedchannels_name: Ident, number_roles: u64) -> TokenStream {
-    let (_diag, matrix) = diag_and_matrix(number_roles);
-    let (diag_w_offset, matrix_w_offset) = diag_and_matrix_w_offset(number_roles);
+pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
+    let (matrix, _diag) = diag_and_matrix(number_roles);
+    let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(number_roles);
 
     let sessions: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {

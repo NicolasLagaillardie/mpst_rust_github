@@ -3,7 +3,7 @@ use quote::quote;
 use syn::Ident;
 
 /// Expand choose methods
-pub(crate) fn meshedchannels(meshedchannels_name: Ident, number_roles: u64) -> TokenStream {
+pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let session_types: Vec<Ident> = (1..number_roles)
         .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
         .collect();

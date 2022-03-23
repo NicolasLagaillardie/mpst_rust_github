@@ -46,15 +46,10 @@ impl From<Baking> for TokenStream {
 
 impl Baking {
     fn expand(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        // Get all the roles provided into a Vec
-        let all_roles = self.all_roles.clone();
-
         // Get the meshedchannels structure
-        let meshedchannels_struct = meshedchannels(meshedchannels_name, self.number_roles);
+        let meshedchannels_struct = meshedchannels(&self.meshedchannels_name, self.number_roles);
 
-        let quote_fork_mpst = fork_mpst(self.meshedchannels_name.clone(), self.number_roles);
+        let quote_fork_mpst = fork_mpst(&self.meshedchannels_name, self.number_roles);
 
         let session_types: Vec<Ident> = (1..self.number_roles)
             .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
@@ -67,11 +62,17 @@ impl Baking {
             })
             .collect();
 
-        let roles_struct: Vec<TokenStream> =
-            all_roles.iter().map(|i| role(format!("{}", i))).collect();
+        let roles_struct: Vec<TokenStream> = self
+            .all_roles
+            .iter()
+            .map(|i| role(format!("{}", i)))
+            .collect();
 
-        let names_struct: Vec<TokenStream> =
-            all_roles.iter().map(|i| name(format!("{}", i))).collect();
+        let names_struct: Vec<TokenStream> = self
+            .all_roles
+            .iter()
+            .map(|i| name(format!("{}", i)))
+            .collect();
 
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
@@ -79,12 +80,12 @@ impl Baking {
                     .filter_map(|receiver| {
                         if sender != receiver {
                             Some(send_basic(
-                                self.all_roles.clone(),
+                                &self.all_roles,
                                 sender,
                                 receiver,
-                                session_types.clone(),
-                                session_types_struct.clone(),
-                                self.meshedchannels_name.clone(),
+                                &session_types,
+                                &session_types_struct,
+                                &self.meshedchannels_name,
                                 self.number_roles,
                             ))
                         } else {
@@ -101,12 +102,12 @@ impl Baking {
                     .filter_map(|sender| {
                         if receiver != sender {
                             Some(recv(
-                                self.all_roles.clone(),
+                                &self.all_roles,
                                 receiver,
                                 sender,
-                                session_types.clone(),
-                                session_types_struct.clone(),
-                                self.meshedchannels_name.clone(),
+                                &session_types,
+                                &session_types_struct,
+                                &self.meshedchannels_name,
                                 self.number_roles,
                             ))
                         } else {
@@ -123,12 +124,12 @@ impl Baking {
                     .filter_map(|sender| {
                         if receiver != sender {
                             Some(recv_from_all(
-                                self.all_roles.clone(),
+                                &self.all_roles,
                                 receiver,
                                 sender,
-                                session_types.clone(),
-                                session_types_struct.clone(),
-                                self.meshedchannels_name.clone(),
+                                &session_types,
+                                &session_types_struct,
+                                &self.meshedchannels_name,
                                 self.number_roles,
                             ))
                         } else {
@@ -145,10 +146,10 @@ impl Baking {
                     .filter_map(|sender| {
                         if receiver != sender {
                             Some(offer(
-                                self.all_roles.clone(),
+                                &self.all_roles,
                                 sender,
                                 receiver,
-                                self.meshedchannels_name.clone(),
+                                &self.meshedchannels_name,
                                 self.number_roles,
                             ))
                         } else {
@@ -162,15 +163,15 @@ impl Baking {
         let choose_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
                 choose(
-                    self.all_roles.clone(),
+                    &self.all_roles,
                     sender,
-                    self.meshedchannels_name.clone(),
+                    &self.meshedchannels_name,
                     self.number_roles,
                 )
             })
             .collect();
 
-        let close_methods: TokenStream = close(self.meshedchannels_name.clone(), self.number_roles);
+        let close_methods: TokenStream = close(&self.meshedchannels_name, self.number_roles);
 
         quote! {
             #meshedchannels_struct

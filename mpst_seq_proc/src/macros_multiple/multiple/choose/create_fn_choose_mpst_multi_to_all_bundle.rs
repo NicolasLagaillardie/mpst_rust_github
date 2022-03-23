@@ -28,7 +28,7 @@ impl Parse for ChooseTypeMultiToAllBundle {
         let _parentheses = syn::parenthesized!(content_fn_names in input);
         let fn_names = TokenStream::parse(&content_fn_names)?;
 
-        let all_fn_names: Vec<TokenStream> = parenthesised(&fn_names);
+        let all_fn_names: Vec<TokenStream> = parenthesised(fn_names);
         <Token![,]>::parse(input)?;
 
         // The names of the functions
@@ -36,7 +36,7 @@ impl Parse for ChooseTypeMultiToAllBundle {
         let _parentheses = syn::parenthesized!(content_branches in input);
         let branches = TokenStream::parse(&content_branches)?;
 
-        let all_branches: Vec<TokenStream> = parenthesised(&branches);
+        let all_branches: Vec<TokenStream> = parenthesised(branches);
         <Token![,]>::parse(input)?;
 
         // The labels
@@ -44,7 +44,7 @@ impl Parse for ChooseTypeMultiToAllBundle {
         let _parentheses = syn::parenthesized!(content_labels in input);
         let labels = TokenStream::parse(&content_labels)?;
 
-        let all_labels: Vec<TokenStream> = parenthesised(&labels);
+        let all_labels: Vec<TokenStream> = parenthesised(labels);
 
         <Token![,]>::parse(input)?;
 
@@ -53,7 +53,7 @@ impl Parse for ChooseTypeMultiToAllBundle {
         let _parentheses = syn::parenthesized!(content_receivers in input);
         let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<TokenStream> = parenthesised(&receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
 
         <Token![,]>::parse(input)?;
 
@@ -62,7 +62,7 @@ impl Parse for ChooseTypeMultiToAllBundle {
         let _parentheses = syn::parenthesized!(content_new_type in input);
         let new_types = TokenStream::parse(&content_new_type)?;
 
-        let all_new_types: Vec<TokenStream> = parenthesised(&new_types);
+        let all_new_types: Vec<TokenStream> = parenthesised(new_types);
 
         <Token![,]>::parse(input)?;
 
@@ -119,11 +119,7 @@ impl ChooseTypeMultiToAllBundle {
         let all_functions: Vec<TokenStream> = (1..self.n_branches)
             .map(|i| {
                 let all_labels = self.labels.clone();
-                let all_receivers = self.receivers.clone();
-                let all_branches = self.branches.clone();
-                let all_fn_names = self.fn_names.clone();
                 let sender = self.sender.clone();
-                let all_new_types = self.new_types.clone();
                 let meshedchannels_name = self.meshedchannels_name.clone();
                 let diff = self.n_sessions - 1;
                 let diag = diag(self.n_sessions);
@@ -175,7 +171,7 @@ impl ChooseTypeMultiToAllBundle {
                     .map(|j| {
                         let temp_name = Ident::new(&format!("name_{}", j), Span::call_site());
                         let temp_role =
-                            if let Some(elt) = all_receivers.get(usize::try_from(j - 1).unwrap()) {
+                            if let Some(elt) = self.receivers.get(usize::try_from(j - 1).unwrap()) {
                                 elt
                             } else {
                                 panic!("Not enough receivers")
@@ -214,21 +210,21 @@ impl ChooseTypeMultiToAllBundle {
                     .collect();
 
                 let temp_fn_name =
-                    if let Some(elt) = all_fn_names.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.fn_names.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough fn_names")
                     };
 
                 let temp_new_type =
-                    if let Some(elt) = all_new_types.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.new_types.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough new_type")
                     };
 
                 let temp_branches =
-                    if let Some(elt) = all_branches.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.branches.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough branches")

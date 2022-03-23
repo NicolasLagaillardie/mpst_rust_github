@@ -68,14 +68,6 @@ impl Name for NameB {
     }
 }
 
-#[doc(hidden)]
-impl NameB {
-    #[doc(hidden)]
-    pub fn field_names(self) -> (&'static [&'static str], NameB) {
-        (&["()", "()"], self)
-    }
-}
-
 impl NameB {
     /// Cancel the session
     pub fn cancel(self) {

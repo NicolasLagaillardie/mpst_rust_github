@@ -59,7 +59,7 @@ impl ChooseTypeMultiLeft {
         let name = self.name.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
         let diff = self.n_sessions - 1;
-        let (diag, matrix) = diag_and_matrix(self.n_sessions);
+        let (matrix, diag) = diag_and_matrix(self.n_sessions);
 
         let all_sessions: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {

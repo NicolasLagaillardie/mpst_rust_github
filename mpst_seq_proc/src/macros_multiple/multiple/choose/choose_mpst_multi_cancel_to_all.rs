@@ -30,7 +30,7 @@ impl Parse for ChooseTypeMultiCancelToAll {
         let _parentheses = syn::parenthesized!(content_labels in input);
         let labels = TokenStream::parse(&content_labels)?;
 
-        let all_labels: Vec<TokenStream> = parenthesised(&labels);
+        let all_labels: Vec<TokenStream> = parenthesised(labels);
 
         <Token![,]>::parse(input)?;
 
@@ -39,7 +39,7 @@ impl Parse for ChooseTypeMultiCancelToAll {
         let _parentheses = syn::parenthesized!(content_receivers in input);
         let receivers = TokenStream::parse(&content_receivers)?;
 
-        let all_receivers: Vec<TokenStream> = parenthesised(&receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
 
         <Token![,]>::parse(input)?;
 
@@ -89,8 +89,6 @@ impl From<ChooseTypeMultiCancelToAll> for TokenStream {
 impl ChooseTypeMultiCancelToAll {
     fn expand(&self) -> TokenStream {
         let session = self.session.clone();
-        let all_labels = self.labels.clone();
-        let all_receivers = self.receivers.clone();
         let broadcaster = self.broadcaster.clone();
         let sender = self.sender.clone();
         let meshedchannels_name = self.meshedchannels_name.clone();
@@ -134,7 +132,7 @@ impl ChooseTypeMultiCancelToAll {
             .map(|i| {
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 let temp_role =
-                    if let Some(elt) = all_receivers.get(usize::try_from(i - 2).unwrap()) {
+                    if let Some(elt) = self.receivers.get(usize::try_from(i - 2).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough receivers")
@@ -176,7 +174,7 @@ impl ChooseTypeMultiCancelToAll {
 
                 let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
 
-                let temp_label = if let Some(elt) = all_labels.get(usize::try_from(i - 2).unwrap())
+                let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 2).unwrap())
                 {
                     elt
                 } else {
