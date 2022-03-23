@@ -71,6 +71,10 @@ use baking::baking_with_cancel::BakingWithCancel;
 use baking::baking_with_enum::BakingWithEnum;
 use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;
 
+mod baking_timed;
+
+use baking_timed::baking_timed_with_enum_and_cancel::BakingTimedWithEnumAndCancel;
+
 //////////////////////////////////////
 
 #[proc_macro]
@@ -630,4 +634,18 @@ pub fn baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStrea
 #[proc_macro_hack]
 pub fn e_baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
     baking_interleaved_with_enum_and_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingTimedWithEnumAndCancel);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    baking_timed_with_enum_and_cancel(input)
 }

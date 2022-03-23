@@ -5,15 +5,15 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
 use crate::common_functions::expand::cancel::cancel;
-use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
+use crate::common_functions::expand::choose::{choose_mpst_create_multi_to_all, choose_timed};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
 use crate::common_functions::expand::name::name;
-use crate::common_functions::expand::offer::offer;
-use crate::common_functions::expand::recv::{recv, recv_from_all};
+use crate::common_functions::expand::offer::offer_timed;
+use crate::common_functions::expand::recv::{recv_from_all_timed, recv_timed};
 use crate::common_functions::expand::role::role;
-use crate::common_functions::expand::send::send_canceled;
+use crate::common_functions::expand::send::send_timed_canceled;
 use crate::common_functions::expand::token_stream::token_stream;
 
 #[derive(Debug)]
@@ -80,7 +80,7 @@ impl BakingTimedWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            Some(send_canceled(
+                            Some(send_timed_canceled(
                                 &self.all_roles,
                                 sender,
                                 receiver,
@@ -102,7 +102,7 @@ impl BakingTimedWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv(
+                            Some(recv_timed(
                                 &self.all_roles,
                                 receiver,
                                 sender,
@@ -124,7 +124,7 @@ impl BakingTimedWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv_from_all(
+                            Some(recv_from_all_timed(
                                 &self.all_roles,
                                 receiver,
                                 sender,
@@ -146,7 +146,7 @@ impl BakingTimedWithEnumAndCancel {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(offer(
+                            Some(offer_timed(
                                 &self.all_roles,
                                 sender,
                                 receiver,
@@ -163,7 +163,7 @@ impl BakingTimedWithEnumAndCancel {
 
         let choose_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
-                choose(
+                choose_timed(
                     &self.all_roles,
                     sender,
                     &self.meshedchannels_name,

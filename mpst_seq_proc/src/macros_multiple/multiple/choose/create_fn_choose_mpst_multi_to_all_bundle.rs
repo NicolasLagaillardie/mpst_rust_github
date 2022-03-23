@@ -170,12 +170,13 @@ impl ChooseTypeMultiToAllBundle {
                 let new_names: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_name = Ident::new(&format!("name_{}", j), Span::call_site());
-                        let temp_role =
-                            if let Some(elt) = self.receivers.get(usize::try_from(j - 1).unwrap()) {
-                                elt
-                            } else {
-                                panic!("Not enough receivers")
-                            };
+                        let temp_role = if let Some(elt) =
+                            self.receivers.get(usize::try_from(j - 1).unwrap())
+                        {
+                            elt
+                        } else {
+                            panic!("Not enough receivers")
+                        };
                         quote! {
                             let ( #temp_name , _) =
                                 < #temp_role as mpstthree::name::Name >::new();
