@@ -31,7 +31,7 @@ impl From<BroadcastCancel> for TokenStream {
 
 impl BroadcastCancel {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
+        let session = &self.session;
         let n_sessions = (self.n_sessions).base10_parse::<usize>().unwrap();
 
         let bool_session: Vec<Ident> = (1..n_sessions)

@@ -51,10 +51,10 @@ impl From<CreateSendCheckCancel> for TokenStream {
 
 impl CreateSendCheckCancel {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let receiver = self.receiver.clone();
-        let sender = self.sender.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let receiver = &self.receiver;
+        let sender = &self.sender;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let session_types: Vec<TokenStream> = (2..self.n_sessions)
             .map(|i| {

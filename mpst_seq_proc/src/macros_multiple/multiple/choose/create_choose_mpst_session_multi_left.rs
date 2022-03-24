@@ -53,11 +53,11 @@ impl From<ChooseTypeMultiLeft> for TokenStream {
 
 impl ChooseTypeMultiLeft {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let type_name = self.type_name.clone();
-        let role_dual = self.role_dual.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let type_name = &self.type_name;
+        let role_dual = &self.role_dual;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
         let (matrix, diag) = diag_and_matrix(self.n_sessions);
 

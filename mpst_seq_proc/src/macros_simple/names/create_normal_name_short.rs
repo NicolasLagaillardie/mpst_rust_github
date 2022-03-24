@@ -24,7 +24,7 @@ impl From<CreateNormalNameShort> for TokenStream {
 
 impl CreateNormalNameShort {
     fn expand(&self) -> TokenStream {
-        let name = self.name.clone();
+        let name = &self.name;
 
         // Build the new names
         // name

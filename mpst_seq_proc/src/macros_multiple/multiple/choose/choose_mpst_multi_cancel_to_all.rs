@@ -88,10 +88,10 @@ impl From<ChooseTypeMultiCancelToAll> for TokenStream {
 
 impl ChooseTypeMultiCancelToAll {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
-        let broadcaster = self.broadcaster.clone();
-        let sender = self.sender.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let session = &self.session;
+        let broadcaster = &self.broadcaster;
+        let sender = &self.sender;
+        let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
         let diag = diag(self.n_sessions);
 

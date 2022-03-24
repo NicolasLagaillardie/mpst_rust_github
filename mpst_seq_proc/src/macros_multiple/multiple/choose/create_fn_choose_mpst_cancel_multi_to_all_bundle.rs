@@ -126,10 +126,10 @@ impl ChooseTypeCancelMultiToAllBundle {
     fn expand(&self) -> TokenStream {
         let all_functions: Vec<TokenStream> = (1..self.n_branches)
             .map(|i| {
-                let all_labels = self.labels.clone();
-                let sender = self.sender.clone();
-                let broadcaster = self.broadcaster.clone();
-                let meshedchannels_name = self.meshedchannels_name.clone();
+                let all_labels = &self.labels;
+                let sender = &self.sender;
+                let broadcaster = &self.broadcaster;
+                let meshedchannels_name = &self.meshedchannels_name;
                 let diff = self.n_sessions - 1;
                 let diag = diag(self.n_sessions);
 

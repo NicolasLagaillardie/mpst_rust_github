@@ -46,7 +46,7 @@ impl From<RecvAuxSimple> for TokenStream {
 
 impl RecvAuxSimple {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
+        let session = &self.session;
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();

@@ -118,9 +118,9 @@ impl ChooseTypeMultiToAllBundle {
     fn expand(&self) -> TokenStream {
         let all_functions: Vec<TokenStream> = (1..self.n_branches)
             .map(|i| {
-                let all_labels = self.labels.clone();
-                let sender = self.sender.clone();
-                let meshedchannels_name = self.meshedchannels_name.clone();
+                let all_labels = &self.labels;
+                let sender = &self.sender;
+                let meshedchannels_name = &self.meshedchannels_name;
                 let diff = self.n_sessions - 1;
                 let diag = diag(self.n_sessions);
 

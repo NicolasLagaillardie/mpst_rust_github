@@ -36,8 +36,8 @@ impl From<CloseMpstInterleaved> for TokenStream {
 
 impl CloseMpstInterleaved {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let role_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {

@@ -47,10 +47,10 @@ impl From<SendCancel> for TokenStream {
 impl SendCancel {
     fn expand(&self) -> TokenStream {
         // Get the basic elements
-        let func_name = self.func_name.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
-        let msg = self.msg.clone();
+        let func_name = &self.func_name;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
+        let msg = &self.msg;
 
         // Build the vec with all the types S1,..,SN
         let session_types: Vec<Ident> = (1..(self.n_sessions - 1))

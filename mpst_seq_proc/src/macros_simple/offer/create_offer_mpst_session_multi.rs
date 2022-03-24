@@ -56,11 +56,11 @@ impl From<OfferMPSTSessionMulti> for TokenStream {
 
 impl OfferMPSTSessionMulti {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let type_name = self.type_name.clone();
-        let role = self.role.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let type_name = &self.type_name;
+        let role = &self.role;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {

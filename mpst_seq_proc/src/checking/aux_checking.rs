@@ -48,7 +48,7 @@ impl Parse for CheckingInput {
             } else {
                 result[1..].to_vec()
             };
-            choices.insert(result[0].clone(), vec_to_add);
+            choices.insert(result[0].to_string(), vec_to_add);
         }
 
         Ok(CheckingInput { choices })

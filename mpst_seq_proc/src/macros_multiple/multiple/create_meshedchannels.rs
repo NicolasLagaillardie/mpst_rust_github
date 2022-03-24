@@ -31,7 +31,7 @@ impl From<CreateMeshedChannels> for TokenStream {
 
 impl CreateMeshedChannels {
     fn expand(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {

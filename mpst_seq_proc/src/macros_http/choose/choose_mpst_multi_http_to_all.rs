@@ -82,9 +82,9 @@ impl From<ChooseTypeMultiHttpToAll> for TokenStream {
 
 impl ChooseTypeMultiHttpToAll {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
-        let sender = self.sender.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let session = &self.session;
+        let sender = &self.sender;
+        let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
         let diag = diag(self.n_sessions);
 

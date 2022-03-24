@@ -40,8 +40,8 @@ impl From<ForkMPSTMultiSolo> for TokenStream {
 
 impl ForkMPSTMultiSolo {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let meshedchannels_name = &self.meshedchannels_name;
         let (matrix, _diag) = diag_and_matrix(self.n_sessions);
         let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(self.n_sessions);
 

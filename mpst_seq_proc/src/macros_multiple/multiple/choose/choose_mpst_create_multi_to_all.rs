@@ -59,10 +59,10 @@ impl From<ChooseMultiCreateToAll> for TokenStream {
 
 impl ChooseMultiCreateToAll {
     fn expand(&self) -> TokenStream {
-        let name_macro = self.name_macro.clone();
-        let all_receivers = self.receivers.clone();
-        let sender = self.sender.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let name_macro = &self.name_macro;
+        let all_receivers = &self.receivers;
+        let sender = &self.sender;
+        let meshedchannels_name = &self.meshedchannels_name;
         let exclusion = self.exclusion;
 
         quote! {

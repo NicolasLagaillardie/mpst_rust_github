@@ -61,9 +61,9 @@ impl From<ForkMPSTMultiInterleaved> for TokenStream {
 
 impl ForkMPSTMultiInterleaved {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let meshedchannels_name_one = self.meshedchannels_name_one.clone();
-        let meshedchannels_name_two = self.meshedchannels_name_two.clone();
+        let func_name = &self.func_name;
+        let meshedchannels_name_one = &self.meshedchannels_name_one;
+        let meshedchannels_name_two = &self.meshedchannels_name_two;
         let sum_nsessions = self.nsessions_one + self.nsessions_two;
         let (matrix_one, _diag_one) = diag_and_matrix(self.nsessions_one);
         let (matrix_two, _diag_two) = diag_and_matrix(self.nsessions_two);

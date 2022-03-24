@@ -24,7 +24,7 @@ impl From<CreateNormalRoleShort> for TokenStream {
 
 impl CreateNormalRoleShort {
     fn expand(&self) -> TokenStream {
-        let role = self.role.clone();
+        let role = &self.role;
 
         // Build the new names
         // role
