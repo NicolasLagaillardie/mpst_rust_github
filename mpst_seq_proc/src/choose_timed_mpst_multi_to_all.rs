@@ -8,17 +8,16 @@ use crate::common_functions::expand::parenthesised::parenthesised;
 use crate::common_functions::maths::{diag, get_tuple_diag};
 
 #[derive(Debug)]
-pub(crate) struct ChooseTypeMultiCancelToAll {
+pub(crate) struct ChooseTimedMultiToAll {
     session: Expr,
     labels: Vec<TokenStream>,
-    broadcaster: Ident,
     sender: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
     exclusion: u64,
 }
 
-impl Parse for ChooseTypeMultiCancelToAll {
+impl Parse for ChooseTimedMultiToAll {
     fn parse(input: ParseStream) -> Result<Self> {
         // The session
         let session = Expr::parse(input)?;
@@ -43,13 +42,9 @@ impl Parse for ChooseTypeMultiCancelToAll {
         assert_eq!(
             all_receivers.len(),
             all_labels.len(),
-            "We are comparing number of receivers and labels in choose_mpst_multi_cancel_to_all"
+            "We are comparing number of receivers and labels in choose_mpst_multi_to_all"
         );
 
-        <Token![,]>::parse(input)?;
-
-        // The broadcaster
-        let broadcaster = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The sender
@@ -64,12 +59,11 @@ impl Parse for ChooseTypeMultiCancelToAll {
         let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         // The number of receivers
-        let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 2;
+        let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 1;
 
-        Ok(ChooseTypeMultiCancelToAll {
+        Ok(ChooseTimedMultiToAll {
             session,
             labels: all_labels,
-            broadcaster,
             sender,
             meshedchannels_name,
             n_sessions,
@@ -78,16 +72,15 @@ impl Parse for ChooseTypeMultiCancelToAll {
     }
 }
 
-impl From<ChooseTypeMultiCancelToAll> for TokenStream {
-    fn from(input: ChooseTypeMultiCancelToAll) -> TokenStream {
+impl From<ChooseTimedMultiToAll> for TokenStream {
+    fn from(input: ChooseTimedMultiToAll) -> TokenStream {
         input.expand()
     }
 }
 
-impl ChooseTypeMultiCancelToAll {
+impl ChooseTimedMultiToAll {
     fn expand(&self) -> TokenStream {
         let session = &self.session;
-        let broadcaster = &self.broadcaster;
         let sender = &self.sender;
         let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
@@ -100,24 +93,14 @@ impl ChooseTypeMultiCancelToAll {
                     Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
                 let channel_right =
                     Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
-                if i < self.n_sessions {
-                    quote! {
-                        let ( #channel_left , #channel_right ) =
-                            <mpstthree::binary::struct_trait::end::End
-                                as mpstthree::binary::struct_trait::session::Session>::new();
-
-                        temp.push( #channel_left );
-                    }
-                } else {
-                    quote! {
-                        let ( #channel_left , #channel_right ) =
-                            <_ as mpstthree::binary::struct_trait::session::Session>::new();
-                    }
+                quote! {
+                    let ( #channel_left , #channel_right ) =
+                        <_ as mpstthree::binary::struct_trait::session::Session>::new();
                 }
             })
             .collect();
 
-        let new_roles: Vec<TokenStream> = (2..=self.n_sessions)
+        let new_roles: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident = Ident::new(&format!("stack_{}", i), Span::call_site());
                 quote! {
@@ -126,7 +109,7 @@ impl ChooseTypeMultiCancelToAll {
             })
             .collect();
 
-        let new_names: Vec<TokenStream> = (2..self.n_sessions)
+        let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
                 quote! {
@@ -139,7 +122,7 @@ impl ChooseTypeMultiCancelToAll {
 
         let new_stack_sender = Ident::new(&format!("stack_{}", self.n_sessions), Span::call_site());
 
-        let all_send: Vec<TokenStream> = (2..self.n_sessions)
+        let all_send: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
@@ -165,7 +148,7 @@ impl ChooseTypeMultiCancelToAll {
 
                 let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
 
-                let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 2).unwrap())
+                let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 1).unwrap())
                 {
                     elt
                 } else {
@@ -173,24 +156,19 @@ impl ChooseTypeMultiCancelToAll {
                 };
 
                 quote! {
-                    let elt = match temp.pop() {
-                        Some(e) => e,
-                        _ => panic!("Error type"),
-                    };
-
-                    let _  = mpstthree::binary::send::send_canceled(
-                        (
-                            elt,
-                            #temp_label(#meshedchannels_name {
+                    let _ = mpstthree::binary_timed::send::send(
+                        #temp_label(
+                            #meshedchannels_name {
                                 #(
                                     #new_sessions
                                 )*
                                 stack: #temp_stack ,
                                 name: #temp_name ,
                             }
-                        )),
-                        s.#temp_session,
-                    )?;
+                        ),
+                        $all_clocks ,
+                        s.#temp_session ,
+                    );
                 }
             })
             .collect();
@@ -217,31 +195,21 @@ impl ChooseTypeMultiCancelToAll {
 
         quote! {
             {
-                let mut temp = Vec::<mpstthree::binary::struct_trait::end::End>::new();
-
                 #(
                     #new_channels
                 )*
-
-                let (stack_1, _) =
-                    <mpstthree::binary::struct_trait::end::End
-                        as mpstthree::binary::struct_trait::session::Session>::new();
 
                 #(
                     #new_roles
                 )*
 
-                let (name_1, _) =
-                    < #broadcaster as mpstthree::name::Name >::new();
-
                 #(
                     #new_names
                 )*
 
-                let ( #new_name_sender , _) =
-                    < #sender as mpstthree::name::Name >::new();
+                let ( #new_name_sender , _) = < #sender as mpstthree::name::Name >::new();
 
-                let mut s = #session;
+                let s = #session;
 
                 let _ = {
                     fn temp(r: &mpstthree::role::broadcast::RoleBroadcast)
@@ -255,12 +223,6 @@ impl ChooseTypeMultiCancelToAll {
                 #(
                     #all_send
                 )*
-
-                let elt = match temp.pop() {
-                    Some(e) => e,
-                    _ => panic!("Error type"),
-                };
-                let s = s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Offer(elt)).unwrap();
 
                 #meshedchannels_name {
                     #(

@@ -1222,3 +1222,90 @@ pub(crate) fn choose_timed(
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// Expand choose methods for interleaved sessions
+pub(crate) fn choose_timed_mpst_create_multi_to_all(
+    meshedchannels_name: &Ident,
+    all_roles: &[TokenStream],
+    number_roles: u64,
+) -> TokenStream {
+    let choose_timed_mpst_create_multi_to_all: Vec<TokenStream> = (1..=number_roles)
+        .map(|sender| {
+
+            let name_macro = if let Some(elt) =
+                all_roles.get(usize::try_from(sender - 1).unwrap())
+            {
+                Ident::new(
+                    &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
+                    Span::call_site(),
+                )
+            } else {
+                panic!("Not enough arguments for name in expand_choose_mpst_create_multi_to_all")
+            };
+
+            let sender_name = if let Some(elt) =
+                all_roles.get(usize::try_from(sender - 1).unwrap())
+            {
+                Ident::new(
+                    &format!("Name{}", elt),
+                    Span::call_site(),
+                )
+            } else {
+                panic!("Not enough arguments for sender_name in expand_choose_mpst_create_multi_to_all")
+            };
+
+            let receivers: Vec<Ident> = (1..=number_roles)
+                .filter_map(|receiver| {
+                    if sender != receiver {
+                        Some(
+                            if let Some(elt) =
+                                all_roles.get(usize::try_from(receiver - 1).unwrap())
+                            {
+                                Ident::new(
+                                    &format!("Name{}", elt),
+                                    Span::call_site(),
+                                )
+                            } else {
+                                panic!("Not enough arguments for receivers in expand_choose_mpst_create_multi_to_all")
+                            }
+                        )
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
+            quote! {
+                mpstthree::choose_timed_mpst_create_multi_to_all!(
+                    #name_macro ,
+                    #( #receivers , )* =>
+                    #sender_name ,
+                    #meshedchannels_name ,
+                    #sender
+                );
+            }
+        })
+        .collect();
+
+    quote! {
+        #( #choose_timed_mpst_create_multi_to_all )*
+    }
+}

@@ -28,9 +28,9 @@ where
                 // do nothing
             }));
 
-            let mut all_clocks = HashMap::<char, Instant>::new();
+            // let mut all_clocks = HashMap::<char, Instant>::new();
 
-            match p(there, &mut all_clocks) {
+            match p(there, &mut HashMap::<char, Instant>::new()) {
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }

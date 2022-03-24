@@ -90,10 +90,10 @@ where
 /// Choose between many different sessions wrapped in an
 /// `enum`
 #[macro_export]
-macro_rules! timed_choose {
-    ($label:path, $session:expr, $all_clocks:expr) => {{
+macro_rules! choose_timed {
+    ($label:path, $all_clocks:expr, $session:expr) => {{
         let (here, there) = <_ as mpstthree::binary::struct_trait::session::Session>::new();
-        let s = mpstthree::binary_timed::send_timed::send($label(there), $session, $all_clocks);
+        let s = mpstthree::binary_timed::send_timed::send($label(there), $all_clocks, $session);
         mpstthree::binary::cancel::cancel(s);
         here
     }};

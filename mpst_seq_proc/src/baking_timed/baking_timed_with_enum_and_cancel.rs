@@ -5,9 +5,11 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
 use crate::common_functions::expand::cancel::cancel;
-use crate::common_functions::expand::choose::{choose_mpst_create_multi_to_all, choose_timed};
+use crate::common_functions::expand::choose::{
+    choose_timed, choose_timed_mpst_create_multi_to_all,
+};
 use crate::common_functions::expand::close::close;
-use crate::common_functions::expand::fork::fork_mpst;
+use crate::common_functions::expand::fork::fork_timed_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
 use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer_timed;
@@ -50,7 +52,7 @@ impl BakingTimedWithEnumAndCancel {
         // Get the meshedchannels structure
         let meshedchannels_struct = meshedchannels(&self.meshedchannels_name, self.number_roles);
 
-        let quote_fork_mpst = fork_mpst(&self.meshedchannels_name, self.number_roles);
+        let quote_fork_mpst = fork_timed_mpst(&self.meshedchannels_name, self.number_roles);
 
         let session_types: Vec<Ident> = (1..self.number_roles)
             .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
@@ -174,7 +176,7 @@ impl BakingTimedWithEnumAndCancel {
 
         let close_methods: TokenStream = close(&self.meshedchannels_name, self.number_roles);
 
-        let choose_mpst_create_multi_to_all = choose_mpst_create_multi_to_all(
+        let choose_mpst_create_multi_to_all = choose_timed_mpst_create_multi_to_all(
             &self.meshedchannels_name,
             &self.all_roles,
             self.number_roles,

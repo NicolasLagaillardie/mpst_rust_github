@@ -10,7 +10,6 @@ use crate::common_functions::maths::{diag, get_tuple_diag};
 #[derive(Debug)]
 pub(crate) struct ChooseTypeMultiToAllBundle {
     labels: Vec<TokenStream>,
-    receivers: Vec<TokenStream>,
     fn_names: Vec<TokenStream>,
     branches: Vec<TokenStream>,
     new_types: Vec<TokenStream>,
@@ -95,7 +94,6 @@ impl Parse for ChooseTypeMultiToAllBundle {
 
         Ok(ChooseTypeMultiToAllBundle {
             labels: all_labels,
-            receivers: all_receivers,
             fn_names: all_fn_names,
             branches: all_branches,
             new_types: all_new_types,
@@ -170,16 +168,8 @@ impl ChooseTypeMultiToAllBundle {
                 let new_names: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_name = Ident::new(&format!("name_{}", j), Span::call_site());
-                        let temp_role = if let Some(elt) =
-                            self.receivers.get(usize::try_from(j - 1).unwrap())
-                        {
-                            elt
-                        } else {
-                            panic!("Not enough receivers")
-                        };
                         quote! {
-                            let ( #temp_name , _) =
-                                < #temp_role as mpstthree::name::Name >::new();
+                            let ( #temp_name , _) = < _ as mpstthree::name::Name >::new();
                         }
                     })
                     .collect();

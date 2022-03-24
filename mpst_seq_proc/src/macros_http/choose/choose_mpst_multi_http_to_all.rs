@@ -11,7 +11,6 @@ use crate::common_functions::maths::{diag, get_tuple_diag};
 pub(crate) struct ChooseTypeMultiHttpToAll {
     session: Expr,
     labels: Vec<TokenStream>,
-    receivers: Vec<TokenStream>,
     sender: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
@@ -40,6 +39,12 @@ impl Parse for ChooseTypeMultiHttpToAll {
 
         let all_receivers: Vec<TokenStream> = parenthesised(receivers);
 
+        assert_eq!(
+            all_receivers.len(),
+            all_labels.len(),
+            "We are comparing number of receivers and labels in choose_mpst_multi_http_to_all"
+        );
+
         <Token![,]>::parse(input)?;
 
         // The sender
@@ -56,16 +61,9 @@ impl Parse for ChooseTypeMultiHttpToAll {
         // The number of receivers
         let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 1;
 
-        assert_eq!(
-            all_receivers.len(),
-            all_labels.len(),
-            "We are comparing number of receivers and labels in choose_mpst_multi_http_to_all"
-        );
-
         Ok(ChooseTypeMultiHttpToAll {
             session,
             labels: all_labels,
-            receivers: all_receivers,
             sender,
             meshedchannels_name,
             n_sessions,
@@ -114,14 +112,8 @@ impl ChooseTypeMultiHttpToAll {
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
-                let temp_role =
-                    if let Some(elt) = self.receivers.get(usize::try_from(i - 1).unwrap()) {
-                        elt
-                    } else {
-                        panic!("Not enough receivers")
-                    };
                 quote! {
-                    let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
+                    let ( #temp_name , _) = < _ as mpstthree::name::Name >::new();
                 }
             })
             .collect();
