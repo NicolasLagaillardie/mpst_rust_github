@@ -102,7 +102,7 @@ pub(crate) fn offer(
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {
                 let (e, s) = self.recv_from_all()?;
-                mpstthree::binary::cancel::cancel(s);
+                s.cancel();
                 e.either(f, g)
             }
         }
@@ -227,7 +227,7 @@ pub(crate) fn offer_timed(
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {
                 let (e, s) = self.recv_from_all(all_clocks)?;
-                mpstthree::binary::cancel::cancel(s);
+                s.cancel();
                 e.either_with(all_clocks, f, g)
             }
         }

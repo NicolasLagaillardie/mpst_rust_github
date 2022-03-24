@@ -4,6 +4,7 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
+use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
@@ -179,6 +180,8 @@ impl BakingWithEnum {
             self.number_roles,
         );
 
+        let cancel_method: TokenStream = cancel(&self.meshedchannels_name, self.number_roles);
+
         quote! {
             #meshedchannels_struct
 
@@ -202,12 +205,14 @@ impl BakingWithEnum {
 
             #choose_mpst_create_multi_to_all
 
+            #cancel_method
+
             #[allow(unused_macros)]
             macro_rules! offer_mpst {
                 ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
                     (move || -> Result<_, _> {
                         let (l, s) = $session.recv()?;
-                        mpstthree::binary::cancel::cancel(s);
+                        s.cancel();
                         match l {
                             $(
                                 $pat => $result,

@@ -203,7 +203,7 @@ impl BakingWithCancel {
                     (move || -> Result<_, _> {
                         let ((session1, cont), s) = $session.recv()?;
                         let s = s.session1.sender.send(mpstthree::binary::struct_trait::end::Signal::Offer(session1)).unwrap();
-                        mpstthree::binary::cancel::cancel(s);
+                        s.cancel();
                         match cont {
                             $(
                                 $pat => $result,
