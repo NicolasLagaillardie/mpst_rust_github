@@ -62,6 +62,8 @@ pub use mpst_seq_proc::baking_with_enum_and_cancel;
 
 pub use mpst_seq_proc::baking_timed_with_enum_and_cancel;
 
+pub use mpst_seq_proc::choose_timed_mpst_multi_to_all;
+
 //////////////////////////////////////
 
 #[proc_macro_hack]
@@ -194,3 +196,6 @@ pub use mpst_seq_proc::e_baking_interleaved_with_enum_and_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_baking_timed_with_enum_and_cancel;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_choose_timed_mpst_multi_to_all;

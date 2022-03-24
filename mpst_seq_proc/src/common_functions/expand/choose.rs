@@ -1223,24 +1223,6 @@ pub(crate) fn choose_timed(
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /// Expand choose methods for interleaved sessions
 pub(crate) fn choose_timed_mpst_create_multi_to_all(
     meshedchannels_name: &Ident,
@@ -1294,13 +1276,24 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                 .collect();
 
             quote! {
-                mpstthree::choose_timed_mpst_create_multi_to_all!(
-                    #name_macro ,
-                    #( #receivers , )* =>
-                    #sender_name ,
-                    #meshedchannels_name ,
-                    #sender
-                );
+                #[allow(unused_macros)]
+                macro_rules! #name_macro {
+                    (
+                        $session: expr,
+                        $all_clocks: expr,
+                        $( $label: path ),+ $(,)?
+                    ) => {
+                        mpstthree::choose_timed_mpst_multi_to_all!(
+                            $session ,
+                            $all_clocks ,
+                            $( $label , )* =>
+                            #( #receivers , )* =>
+                            #sender_name ,
+                            #meshedchannels_name ,
+                            #sender
+                        )
+                    }
+                }
             }
         })
         .collect();

@@ -10,6 +10,7 @@ use crate::common_functions::maths::{diag, get_tuple_diag};
 #[derive(Debug)]
 pub(crate) struct ChooseTimedMultiToAll {
     session: Expr,
+    all_clocks: Expr,
     labels: Vec<TokenStream>,
     sender: Ident,
     meshedchannels_name: Ident,
@@ -21,6 +22,10 @@ impl Parse for ChooseTimedMultiToAll {
     fn parse(input: ParseStream) -> Result<Self> {
         // The session
         let session = Expr::parse(input)?;
+        <Token![,]>::parse(input)?;
+
+        // The clocks
+        let all_clocks = Expr::parse(input)?;
         <Token![,]>::parse(input)?;
 
         // The labels
@@ -63,6 +68,7 @@ impl Parse for ChooseTimedMultiToAll {
 
         Ok(ChooseTimedMultiToAll {
             session,
+            all_clocks,
             labels: all_labels,
             sender,
             meshedchannels_name,
@@ -81,6 +87,7 @@ impl From<ChooseTimedMultiToAll> for TokenStream {
 impl ChooseTimedMultiToAll {
     fn expand(&self) -> TokenStream {
         let session = &self.session;
+        let all_clocks = &self.all_clocks;
         let sender = &self.sender;
         let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
@@ -166,7 +173,7 @@ impl ChooseTimedMultiToAll {
                                 name: #temp_name ,
                             }
                         ),
-                        $all_clocks ,
+                        #all_clocks ,
                         s.#temp_session ,
                     );
                 }

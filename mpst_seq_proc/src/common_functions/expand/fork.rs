@@ -285,17 +285,6 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /// Expand fork methods
 pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let (matrix, _diag) = diag_and_matrix(number_roles);
@@ -493,26 +482,29 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
         .collect();
 
     let new_threads: Vec<TokenStream> = (1..=number_roles)
-            .map(|i| {
-                let temp_function =
-                    Ident::new(&format!("f{}", i), Span::call_site());
-                let temp_meshedchannels = Ident::new(
-                    &format!("meshedchannels_{}", i),
-                    Span::call_site(),
-                );
-                quote! {
-                    std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(64 * 1024 * 1024).spawn(move || {
-                        std::panic::set_hook(Box::new(|_info| {
-                            // do nothing
-                        }));
-                        match #temp_function(#temp_meshedchannels) {
-                            Ok(()) => (),
-                            Err(e) => panic!("{:?}", e),
-                        }
-                    }).unwrap(),
-                }
-            })
-            .collect();
+        .map(|i| {
+            let temp_function = Ident::new(&format!("f{}", i), Span::call_site());
+            let temp_meshedchannels =
+                Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
+            quote! {
+                std::thread::Builder::new()
+                .name(String::from(stringify!(#temp_function)))
+                .stack_size(64 * 1024 * 1024)
+                .spawn(move || {
+                    std::panic::set_hook(Box::new(|_info| {
+                        // do nothing
+                    }));
+                    match #temp_function(
+                        #temp_meshedchannels,
+                        &mut HashMap::<char, Instant>::new()
+                    ) {
+                        Ok(()) => (),
+                        Err(e) => panic!("{:?}", e),
+                    }
+                }).unwrap(),
+            }
+        })
+        .collect();
 
     quote! {
         fn fork_mpst<
