@@ -17,7 +17,7 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
         ////////////////////////////////////////////
         /// The normal Role
         #[derive(Debug)]
-        struct #role_name<R>
+        pub struct #role_name<R>
         where
             R: mpstthree::role::Role,
             R::Dual: mpstthree::role::Role,
@@ -28,7 +28,7 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
         ////////////////////////////////////////////
         /// The normal Dual
         #[derive(Debug)]
-        struct #dual_name<R>
+        pub struct #dual_name<R>
         where
             R: mpstthree::role::Role,
             R::Dual: mpstthree::role::Role,
@@ -169,7 +169,7 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
         ////////////////////////////////////////////
         /// The all Role
         #[derive(Debug)]
-        struct #role_to_all_name<R1, R2>
+        pub struct #role_to_all_name<R1, R2>
         where
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,
@@ -183,7 +183,7 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
         ////////////////////////////////////////////
         /// The all Dual
         #[derive(Debug)]
-        struct #dual_to_all_name<R1, R2>
+        pub struct #dual_to_all_name<R1, R2>
         where
             R1: mpstthree::role::Role,
             R2: mpstthree::role::Role,

@@ -175,7 +175,7 @@ impl ChooseTimedMultiToAll {
                         ),
                         #all_clocks ,
                         s.#temp_session ,
-                    );
+                    )?;
                 }
             })
             .collect();

@@ -207,15 +207,15 @@ impl BakingTimedWithEnumAndCancel {
 
             #cancel_method
 
-            #quote_fork_mpst
-
             #choose_mpst_create_multi_to_all
+
+            #quote_fork_mpst
 
             #[allow(unused_macros)]
             macro_rules! offer_mpst {
-                ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
+                ($all_clocks:expr, $session: expr, { $( $pat: pat => $result: expr, )+ }) => {
                     (move || -> Result<_, _> {
-                        let (l, s) = $session.recv()?;
+                        let (l, s) = $session.recv($all_clocks)?;
                         s.cancel();
                         match l {
                             $(
