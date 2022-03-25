@@ -203,14 +203,14 @@ pub(crate) fn offer_timed(
             >
         {
             pub fn offer<F, G, U>(
-                all_clocks: &mut HashMap<char, Instant>,
                 self,
+                all_clocks: &mut std::collections::HashMap<char, std::time::Instant>,
                 f: F,
                 g: G
             ) -> Result<U, Box<dyn std::error::Error + 'a>>
             where
                 F: FnOnce(
-                    &mut HashMap<char, Instant>,
+                    &mut std::collections::HashMap<char, std::time::Instant>,
                     #meshedchannels_name<
                         #( #left_sessions )*
                         R1,
@@ -218,7 +218,7 @@ pub(crate) fn offer_timed(
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
-                    &mut HashMap<char, Instant>,
+                    &mut std::collections::HashMap<char, std::time::Instant>,
                     #meshedchannels_name<
                         #( #right_sessions )*
                         R2,

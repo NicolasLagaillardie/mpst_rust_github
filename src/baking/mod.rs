@@ -34,7 +34,7 @@ macro_rules! bundle_impl {
     };
 }
 
-/// Create a new SessionMST structuren, new roles and the baking environment.
+/// Create new SessionMST structures, new roles and the baking environment.
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:
 ///     choose_mpst_x_to_all!(
@@ -102,7 +102,7 @@ macro_rules! bundle_impl_with_cancel {
     };
 }
 
-/// Create a new SessionMST structuren, new roles and the baking environment,
+/// Create new SessionMST structures, new roles and the baking environment,
 /// with `send` functions that can fail.
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:
@@ -141,7 +141,7 @@ macro_rules! bundle_impl_with_enum_and_cancel {
     };
 }
 
-/// Create a new SessionMST structuren, new roles and the baking environment,
+/// Create new SessionMST structures, new roles and the baking environment,
 /// with `send` functions that can fail.
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:

@@ -496,7 +496,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
                     }));
                     match #temp_function(
                         #temp_meshedchannels,
-                        &mut HashMap::<char, Instant>::new()
+                        &mut std::collections::HashMap::<char, std::time::Instant>::new()
                     ) {
                         Ok(()) => (),
                         Err(e) => panic!("{:?}", e),

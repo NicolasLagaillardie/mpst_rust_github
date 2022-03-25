@@ -705,7 +705,9 @@ pub(crate) fn choose_timed(
                             if l == j || m1 == m2 {
                                 quote! { #temp_ident , }
                             } else {
-                                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
+                                quote! {
+                                    <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual ,
+                                }
                             }
                         })
                         .collect();
@@ -738,7 +740,9 @@ pub(crate) fn choose_timed(
                             if l == j || m1 == m2 {
                                 quote! { #temp_ident , }
                             } else {
-                                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
+                                quote! {
+                                    <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual ,
+                                }
                             }
                         })
                         .collect();
@@ -819,45 +823,44 @@ pub(crate) fn choose_timed(
     let new_stacks_sender = quote! { #new_stack_sender_left , #new_stack_sender_right };
 
     let choose_left_session: Vec<TokenStream> = (1..=number_roles)
-            .filter_map(|j| {
-                if j == sender {
-                    None
+        .filter_map(|j| {
+            if j == sender {
+                None
+            } else {
+                let (_, _, m) = if j > sender {
+                    get_tuple_matrix(&matrix, sender, j - 1)
                 } else {
-                    let (_, _, m) = if j > sender {
-                        get_tuple_matrix(&matrix, sender, j - 1)
-                    } else {
-                        get_tuple_matrix(&matrix, sender, j)
-                    };
-                    let temp_ident =
-                        Ident::new(&format!("S{}", m), Span::call_site());
-                    Some(
-                        quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
-                    )
-                }
-            })
-            .collect();
+                    get_tuple_matrix(&matrix, sender, j)
+                };
+                let temp_ident = Ident::new(&format!("S{}", m), Span::call_site());
+                Some(quote! {
+                    <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
+                })
+            }
+        })
+        .collect();
 
     let choose_right_session: Vec<TokenStream> = (1..=number_roles)
-            .filter_map(|j| {
-                if j == sender {
-                    None
+        .filter_map(|j| {
+            if j == sender {
+                None
+            } else {
+                let (_, _, m) = if j > sender {
+                    get_tuple_matrix(&matrix, sender, j - 1)
                 } else {
-                    let (_, _, m) = if j > sender {
-                        get_tuple_matrix(&matrix, sender, j - 1)
-                    } else {
-                        get_tuple_matrix(&matrix, sender, j)
-                    };
-                    let diff = number_roles - 1;
-                    let temp_ident = Ident::new(
-                        &format!("S{}", diff * (diff + 1) / 2 + m),
-                        Span::call_site(),
-                    );
-                    Some(
-                        quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
-                    )
-                }
-            })
-            .collect();
+                    get_tuple_matrix(&matrix, sender, j)
+                };
+                let diff = number_roles - 1;
+                let temp_ident = Ident::new(
+                    &format!("S{}", diff * (diff + 1) / 2 + m),
+                    Span::call_site(),
+                );
+                Some(quote! {
+                    <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
+                })
+            }
+        })
+        .collect();
     let choose_left_channels: Vec<TokenStream> = (1..=((number_roles - 1) * number_roles / 2))
         .map(|j| {
             let (line, column) = get_line_column_from_diag(&diag, j);
@@ -876,8 +879,10 @@ pub(crate) fn choose_timed(
 
             let temp_session = Ident::new(&format!("S{}", j), Span::call_site());
 
-            quote! { let ( #first_channel , #second_channel ) =
-            <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ; }
+            quote! {
+                let ( #first_channel , #second_channel ) =
+                    <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ;
+            }
         })
         .collect();
 
@@ -903,7 +908,10 @@ pub(crate) fn choose_timed(
                 Span::call_site(),
             );
 
-            quote! { let ( #first_channel , #second_channel ) = < #temp_session as mpstthree::binary::struct_trait::session::Session >::new() ; }
+            quote! {
+                let ( #first_channel , #second_channel ) =
+                < #temp_session as mpstthree::binary::struct_trait::session::Session >::new() ;
+            }
         })
         .collect();
 
@@ -1098,7 +1106,7 @@ pub(crate) fn choose_timed(
             )*
             #(
                 #choose_roles_struct
-            )*,
+            )*
             const CLOCK: char,
             const START: i128,
             const INCLUDE_START: bool,
@@ -1118,7 +1126,7 @@ pub(crate) fn choose_timed(
         {
             pub fn choose_left(
                 self,
-                all_clocks: &mut HashMap<char, Instant>
+                all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
             ) -> #meshedchannels_name<
                 #(
                     #choose_left_session
@@ -1169,7 +1177,11 @@ pub(crate) fn choose_timed(
                     name: #new_name_sender,
                 }
             }
-            pub fn choose_right(self) -> #meshedchannels_name<
+
+            pub fn choose_right(
+                self,
+                all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
+            ) -> #meshedchannels_name<
                 #(
                     #choose_right_session
                 )*

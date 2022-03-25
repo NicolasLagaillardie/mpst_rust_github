@@ -274,7 +274,7 @@ pub(crate) fn recv_timed(
         {
             pub fn recv(
                 self,
-                all_clocks: &mut std::collections::HashMap<char, Instant>
+                all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
             ) -> Result<(
                 T,
                 #meshedchannels_name<
@@ -390,7 +390,7 @@ pub(crate) fn recv_from_all_timed(
         {
             pub fn recv_from_all(
                 self,
-                all_clocks: &mut std::collections::HashMap<char, Instant>
+                all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
             ) -> Result<(
                 T,
                 #meshedchannels_name<
