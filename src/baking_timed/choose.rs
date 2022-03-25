@@ -27,7 +27,7 @@
 ///    Option::Some(_) => {
 ///        let s = choose_timed_mpst_multi_to_all!(
 ///            s,
-///            &mut all_clocks, 
+///            &mut all_clocks,
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
 ///            NameA,
@@ -43,7 +43,7 @@
 ///    Option::None => {
 ///        let s = choose_timed_mpst_multi_to_all!(
 ///            s,
-///            &mut all_clocks, 
+///            &mut all_clocks,
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
 ///            NameA,
