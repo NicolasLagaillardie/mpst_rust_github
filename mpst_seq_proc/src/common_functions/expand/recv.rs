@@ -288,7 +288,7 @@ pub(crate) fn recv_timed(
                     all_clocks,
                     self.#new_session
                 )?;
-                let new_stack = self.stack.continuation();
+                let new_stack = self.stack.continuation()?;
                 Ok((
                     v,
                     #meshedchannels_name {
@@ -405,7 +405,7 @@ pub(crate) fn recv_from_all_timed(
                     self.#new_session
                 )?;
 
-                let new_stack = self.stack.continuation_left();
+                let new_stack = self.stack.continuation_left()?;
 
                 Ok((
                     v,

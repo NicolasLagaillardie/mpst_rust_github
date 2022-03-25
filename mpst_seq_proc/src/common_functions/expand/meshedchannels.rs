@@ -130,8 +130,7 @@ pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> 
             R: mpstthree::role::Role,
             N: mpstthree::name::Name
         > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
-            #(
-                #session_types , )*
+            #( #session_types , )*
                 R,
                 N
             > {

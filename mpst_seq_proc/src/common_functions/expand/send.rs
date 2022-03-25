@@ -278,7 +278,7 @@ pub(crate) fn send_timed_canceled(
                     all_clocks,
                     self.#new_session
                 )?;
-                let new_stack = self.stack.continuation();
+                let new_stack = self.stack.continuation()?;
                 Ok(
                     #meshedchannels_name {
                         #( #new_sessions )*

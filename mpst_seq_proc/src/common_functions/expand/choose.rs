@@ -508,7 +508,7 @@ pub(crate) fn choose(
                     name: self.name,
                 };
 
-                mpstthree::binary::cancel::cancel(s);
+                s.cancel();
 
                 #meshedchannels_name {
                     #(
@@ -558,7 +558,7 @@ pub(crate) fn choose(
                     name: self.name,
                 };
 
-                mpstthree::binary::cancel::cancel(s);
+                s.cancel();
 
                 #meshedchannels_name {
                     #(
@@ -1169,7 +1169,7 @@ pub(crate) fn choose_timed(
                     name: self.name,
                 };
 
-                mpstthree::binary::cancel::cancel(s);
+                s.cancel();
 
                 Ok(
                     #meshedchannels_name {
@@ -1227,7 +1227,7 @@ pub(crate) fn choose_timed(
                     name: self.name,
                 };
 
-                mpstthree::binary::cancel::cancel(s);
+                s.cancel();
 
                 Ok(
                     #meshedchannels_name {
