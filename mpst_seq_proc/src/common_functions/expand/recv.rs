@@ -69,7 +69,7 @@ pub(crate) fn recv(
                 #receiver_ident
             >
         {
-            pub fn recv(self) -> Result<(
+            pub fn recv(self) -> std::result::Result<(
                 T,
                 #meshedchannels_name<
                     #( #session_types , )*
@@ -159,7 +159,7 @@ pub(crate) fn recv_from_all(
                 #receiver_ident
             >
         {
-            pub fn recv_from_all(self) -> Result<(
+            pub fn recv_from_all(self) -> std::result::Result<(
                 T,
                 #meshedchannels_name<
                     #( #session_types , )*
@@ -275,7 +275,7 @@ pub(crate) fn recv_timed(
             pub fn recv(
                 self,
                 all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
-            ) -> Result<(
+            ) -> std::result::Result<(
                 T,
                 #meshedchannels_name<
                     #( #session_types , )*
@@ -391,7 +391,7 @@ pub(crate) fn recv_from_all_timed(
             pub fn recv_from_all(
                 self,
                 all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
-            ) -> Result<(
+            ) -> std::result::Result<(
                 T,
                 #meshedchannels_name<
                     #( #session_types , )*

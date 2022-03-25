@@ -212,7 +212,7 @@ impl BakingWithEnumAndCancel {
                 ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
                     (move || -> Result<_, _> {
                         let (l, s) = $session.recv()?;
-                        s.cancel();
+                        mpstthree::binary::cancel::cancel(s);
                         match l {
                             $(
                                 $pat => $result,

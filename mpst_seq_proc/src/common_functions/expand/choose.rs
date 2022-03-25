@@ -508,7 +508,7 @@ pub(crate) fn choose(
                     name: self.name,
                 };
 
-                s.cancel();
+                mpstthree::binary::cancel::cancel(s);
 
                 #meshedchannels_name {
                     #(
@@ -558,7 +558,7 @@ pub(crate) fn choose(
                     name: self.name,
                 };
 
-                s.cancel();
+                mpstthree::binary::cancel::cancel(s);
 
                 #meshedchannels_name {
                     #(
@@ -1035,7 +1035,7 @@ pub(crate) fn choose_timed(
                     either::Either::Left(#new_choice_sender),
                     all_clocks,
                     self.#session_sender
-                );
+                )?;
             }
         })
         .collect();
@@ -1054,7 +1054,7 @@ pub(crate) fn choose_timed(
                     either::Either::Right(#new_choice_sender),
                     all_clocks,
                     self.#session_sender
-                );
+                )?;
             }
         })
         .collect();
@@ -1127,14 +1127,16 @@ pub(crate) fn choose_timed(
             pub fn choose_left(
                 self,
                 all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
-            ) -> #meshedchannels_name<
-                #(
-                    #choose_left_session
-                )*
-                #new_stack_sender_left ,
-                #sender_ident
-            >
-            {
+            ) -> std::result::Result<
+                #meshedchannels_name<
+                    #(
+                        #choose_left_session
+                    )*
+                    #new_stack_sender_left ,
+                    #sender_ident
+                >,
+                Box<dyn std::error::Error>
+            > {
                 #(
                     #choose_left_channels
                 )*
@@ -1167,28 +1169,32 @@ pub(crate) fn choose_timed(
                     name: self.name,
                 };
 
-                s.cancel();
+                mpstthree::binary::cancel::cancel(s);
 
-                #meshedchannels_name {
-                    #(
-                        #new_meshedchannels_sender
-                    )*
-                    stack: #new_stack_sender,
-                    name: #new_name_sender,
-                }
+                Ok(
+                    #meshedchannels_name {
+                        #(
+                            #new_meshedchannels_sender
+                        )*
+                        stack: #new_stack_sender,
+                        name: #new_name_sender,
+                    }
+                )
             }
 
             pub fn choose_right(
                 self,
                 all_clocks: &mut std::collections::HashMap<char, std::time::Instant>
-            ) -> #meshedchannels_name<
-                #(
-                    #choose_right_session
-                )*
-                #new_stack_sender_right ,
-                #sender_ident
-            >
-            {
+            ) ->  std::result::Result<
+                #meshedchannels_name<
+                    #(
+                        #choose_right_session
+                    )*
+                    #new_stack_sender_right ,
+                    #sender_ident
+                >,
+                Box<dyn std::error::Error>
+            > {
                 #(
                     #choose_right_channels
                 )*
@@ -1221,15 +1227,17 @@ pub(crate) fn choose_timed(
                     name: self.name,
                 };
 
-                s.cancel();
+                mpstthree::binary::cancel::cancel(s);
 
-                #meshedchannels_name {
-                    #(
-                        #new_meshedchannels_sender
-                    )*
-                    stack: #new_stack_sender,
-                    name: #new_name_sender,
-                }
+                Ok(
+                    #meshedchannels_name {
+                        #(
+                            #new_meshedchannels_sender
+                        )*
+                        stack: #new_stack_sender,
+                        name: #new_name_sender,
+                    }
+                )
             }
         }
     }

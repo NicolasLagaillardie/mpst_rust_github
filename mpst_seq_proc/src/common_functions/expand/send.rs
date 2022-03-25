@@ -152,7 +152,7 @@ pub(crate) fn send_canceled(
                 #sender_ident
             >
         {
-            pub fn send(self, payload: T) -> Result<
+            pub fn send(self, payload: T) -> std::result::Result<
                 #meshedchannels_name<
                     #( #session_types , )*
                     R,
@@ -265,7 +265,7 @@ pub(crate) fn send_timed_canceled(
                 self,
                 payload: T,
                 all_clocks: &mut std::collections::HashMap<char, std::time::Instant>,
-            ) -> Result<
+            ) -> std::result::Result<
                 #meshedchannels_name<
                     #( #session_types , )*
                     R,

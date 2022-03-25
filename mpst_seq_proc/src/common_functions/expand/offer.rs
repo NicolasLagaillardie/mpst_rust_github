@@ -84,7 +84,7 @@ pub(crate) fn offer(
                 #receiver_ident,
             >
         {
-            pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
+            pub fn offer<F, G, U>(self, f: F, g: G) -> std::result::Result<U, Box<dyn std::error::Error + 'a>>
             where
                 F: FnOnce(
                     #meshedchannels_name<
@@ -92,17 +92,17 @@ pub(crate) fn offer(
                         R1,
                         #receiver_ident,
                     >,
-                ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+                ) -> std::result::Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
                     #meshedchannels_name<
                         #( #right_sessions )*
                         R2,
                         #receiver_ident,
                     >,
-                ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+                ) -> std::result::Result<U, Box<dyn std::error::Error + 'a>>,
             {
                 let (e, s) = self.recv_from_all()?;
-                s.cancel();
+                mpstthree::binary::cancel::cancel(s);
                 e.either(f, g)
             }
         }
@@ -207,7 +207,7 @@ pub(crate) fn offer_timed(
                 all_clocks: &mut std::collections::HashMap<char, std::time::Instant>,
                 f: F,
                 g: G
-            ) -> Result<U, Box<dyn std::error::Error + 'a>>
+            ) -> std::result::Result<U, Box<dyn std::error::Error + 'a>>
             where
                 F: FnOnce(
                     &mut std::collections::HashMap<char, std::time::Instant>,
@@ -216,7 +216,7 @@ pub(crate) fn offer_timed(
                         R1,
                         #receiver_ident,
                     >,
-                ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+                ) -> std::result::Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
                     &mut std::collections::HashMap<char, std::time::Instant>,
                     #meshedchannels_name<
@@ -224,10 +224,10 @@ pub(crate) fn offer_timed(
                         R2,
                         #receiver_ident,
                     >,
-                ) -> Result<U, Box<dyn std::error::Error + 'a>>,
+                ) -> std::result::Result<U, Box<dyn std::error::Error + 'a>>,
             {
                 let (e, s) = self.recv_from_all(all_clocks)?;
-                s.cancel();
+                mpstthree::binary::cancel::cancel(s);
                 e.either_with(all_clocks, f, g)
             }
         }

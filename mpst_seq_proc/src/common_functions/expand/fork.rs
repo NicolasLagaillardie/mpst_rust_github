@@ -136,7 +136,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
                             #temp_role ,
                             #temp_name
                         >
-                    ) -> Result<(), Box<dyn std::error::Error>>
+                    ) -> std::result::Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
                     + 'static,
                 }
@@ -416,7 +416,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
                             #temp_name
                         >,
                         &mut std::collections::HashMap<char, std::time::Instant>
-                    ) -> Result<(), Box<dyn std::error::Error>>
+                    ) -> std::result::Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
                     + 'static,
                 }

@@ -39,7 +39,7 @@ pub(crate) fn close(meshedchannels_name: &Ident, number_roles: u64) -> TokenStre
                 N
             >
         {
-            pub fn close(self) -> Result<(), Box<dyn std::error::Error>> {
+            pub fn close(self) -> std::result::Result<(), Box<dyn std::error::Error>> {
 
                 #(
                     #close_session_send
