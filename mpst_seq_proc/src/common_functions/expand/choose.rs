@@ -603,31 +603,9 @@ pub(crate) fn choose_mpst_create_multi_to_all(
                 panic!("Not enough arguments for sender_name in expand_choose_mpst_create_multi_to_all")
             };
 
-            let receivers: Vec<Ident> = (1..=number_roles)
-                .filter_map(|receiver| {
-                    if sender != receiver {
-                        Some(
-                            if let Some(elt) =
-                                all_roles.get(usize::try_from(receiver - 1).unwrap())
-                            {
-                                Ident::new(
-                                    &format!("Name{}", elt),
-                                    Span::call_site(),
-                                )
-                            } else {
-                                panic!("Not enough arguments for receivers in expand_choose_mpst_create_multi_to_all")
-                            }
-                        )
-                    } else {
-                        None
-                    }
-                })
-                .collect();
-
             quote! {
                 mpstthree::choose_mpst_create_multi_to_all!(
                     #name_macro ,
-                    #( #receivers , )* =>
                     #sender_name ,
                     #meshedchannels_name ,
                     #sender
@@ -1274,27 +1252,6 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                 panic!("Not enough arguments for sender_name in expand_choose_mpst_create_multi_to_all")
             };
 
-            let receivers: Vec<Ident> = (1..=number_roles)
-                .filter_map(|receiver| {
-                    if sender != receiver {
-                        Some(
-                            if let Some(elt) =
-                                all_roles.get(usize::try_from(receiver - 1).unwrap())
-                            {
-                                Ident::new(
-                                    &format!("Name{}", elt),
-                                    Span::call_site(),
-                                )
-                            } else {
-                                panic!("Not enough arguments for receivers in expand_choose_mpst_create_multi_to_all")
-                            }
-                        )
-                    } else {
-                        None
-                    }
-                })
-                .collect();
-
             quote! {
                 #[allow(unused_macros)]
                 macro_rules! #name_macro {
@@ -1307,7 +1264,6 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                             $session ,
                             $all_clocks ,
                             $( $label , )* =>
-                            #( #receivers , )* =>
                             #sender_name ,
                             #meshedchannels_name ,
                             #sender

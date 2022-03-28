@@ -219,7 +219,6 @@ fn endpoint_c_0(s: EndpointC0) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoS::Continue, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -231,7 +230,6 @@ fn endpoint_c_0(s: EndpointC0) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoS::Quit, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -264,7 +262,6 @@ fn endpoint_c_2(s: EndpointC2) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching2fromCtoS::Continue, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -276,7 +273,6 @@ fn endpoint_c_2(s: EndpointC2) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching2fromCtoS::Quit, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -293,7 +289,6 @@ fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching3fromCtoS::Continue, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -304,7 +299,6 @@ fn endpoint_c_3(s: EndpointC3) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching3fromCtoS::Quit, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -336,7 +330,6 @@ fn endpoint_c_5(s: EndpointC5) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching5fromCtoS::Continue, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -347,7 +340,6 @@ fn endpoint_c_5(s: EndpointC5) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching5fromCtoS::Quit, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -379,7 +371,6 @@ fn endpoint_c_7(s: EndpointC7) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching7fromCtoS::Continue, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -390,7 +381,6 @@ fn endpoint_c_7(s: EndpointC7) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching7fromCtoS::Quit, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -422,7 +412,6 @@ fn endpoint_c_9(s: EndpointC9) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching9fromCtoS::Continue, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -436,7 +425,6 @@ fn endpoint_c_9(s: EndpointC9) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching9fromCtoS::Loop, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -454,7 +442,6 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::Data, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -466,7 +453,6 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::Subject, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -478,7 +464,6 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching10fromCtoS::End, =>
-            NameS, =>
             NameC, MeshedChannelsTwo, 1
         );
 
@@ -516,7 +501,6 @@ fn endpoint_s_1(s: EndpointS1) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromStoC::Continue, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -527,7 +511,6 @@ fn endpoint_s_1(s: EndpointS1) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromStoC::Loop, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -576,7 +559,6 @@ fn endpoint_s_4(s: EndpointS4) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching4fromStoC::Continue, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -587,7 +569,6 @@ fn endpoint_s_4(s: EndpointS4) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching4fromStoC::Loop, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -619,7 +600,6 @@ fn endpoint_s_6(s: EndpointS6) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching6fromStoC::Continue, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -630,7 +610,6 @@ fn endpoint_s_6(s: EndpointS6) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching6fromStoC::Loop, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -662,7 +641,6 @@ fn endpoint_s_8(s: EndpointS8) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching8fromStoC::Continue, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 
@@ -673,7 +651,6 @@ fn endpoint_s_8(s: EndpointS8) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching8fromStoC::Loop, =>
-            NameC, =>
             NameS, MeshedChannelsTwo, 2
         );
 

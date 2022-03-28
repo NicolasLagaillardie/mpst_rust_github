@@ -106,8 +106,6 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 s,
                 Branching0fromAtoB::<i64>::Done,
                 Branching0fromAtoC::Done, =>
-                NameB,
-                NameC, =>
                 NameA,
                 MeshedChannelsThree,
                 1
@@ -120,8 +118,6 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 s,
                 Branching0fromAtoB::<i64>::More,
                 Branching0fromAtoC::More, =>
-                NameB,
-                NameC, =>
                 NameA,
                 MeshedChannelsThree,
                 1

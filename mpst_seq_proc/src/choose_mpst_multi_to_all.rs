@@ -32,21 +32,6 @@ impl Parse for ChooseMultiToAll {
 
         <Token![,]>::parse(input)?;
 
-        // The receivers
-        let content_receivers;
-        let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = TokenStream::parse(&content_receivers)?;
-
-        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
-
-        assert_eq!(
-            all_receivers.len(),
-            all_labels.len(),
-            "We are comparing number of receivers and labels in choose_mpst_multi_to_all"
-        );
-
-        <Token![,]>::parse(input)?;
-
         // The sender
         let sender = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
@@ -59,7 +44,7 @@ impl Parse for ChooseMultiToAll {
         let exclusion = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
 
         // The number of receivers
-        let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 1;
+        let n_sessions = u64::try_from(all_labels.len()).unwrap() + 1;
 
         Ok(ChooseMultiToAll {
             session,

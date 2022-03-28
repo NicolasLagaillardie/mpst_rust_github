@@ -10,8 +10,8 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_multiple_normal_name, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
     offer, offer_mpst,
 };
 
@@ -98,7 +98,6 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::Done, =>
-                NameB, =>
                 NameA,
                 MeshedChannelsTwo,
                 1
@@ -110,7 +109,6 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::More, =>
-                NameB, =>
                 NameA,
                 MeshedChannelsTwo,
                 1

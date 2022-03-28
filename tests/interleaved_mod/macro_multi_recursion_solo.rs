@@ -135,8 +135,6 @@ fn step_two_recurs(
                 s_c,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                NameA,
-                NameB, =>
                 NameC
             );
 
@@ -156,8 +154,6 @@ fn step_two_recurs(
                 s_c,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                NameA,
-                NameB, =>
                 NameC
             );
 

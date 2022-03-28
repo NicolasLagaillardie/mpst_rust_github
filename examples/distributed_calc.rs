@@ -114,8 +114,6 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoA::Sum,
             Branching0fromCtoS::<i32>::Sum, =>
-            NameA,
-            NameS, =>
             NameC,
             MeshedChannelsThree,
             2
@@ -129,8 +127,6 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoA::Diff,
             Branching0fromCtoS::<i32>::Diff, =>
-            NameA,
-            NameS, =>
             NameC,
             MeshedChannelsThree,
             2

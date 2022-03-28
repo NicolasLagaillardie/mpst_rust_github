@@ -131,7 +131,6 @@ fn recurs_1_controller(s: EndpointController1<i32>, loops: i32) -> Result<(), Bo
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromCtoL::Stop, =>
-                NameLogs, =>
                 NameController,
                 MeshedChannelsTwo,
                 2
@@ -146,7 +145,6 @@ fn recurs_1_controller(s: EndpointController1<i32>, loops: i32) -> Result<(), Bo
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching1fromCtoL::Restart, =>
-                NameLogs, =>
                 NameController,
                 MeshedChannelsTwo,
                 2
@@ -171,7 +169,6 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromLtoC::Failure, =>
-                NameController, =>
                 NameLogs,
                 MeshedChannelsTwo,
                 2
@@ -186,7 +183,6 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromLtoC::Success, =>
-                NameController, =>
                 NameLogs,
                 MeshedChannelsTwo,
                 2

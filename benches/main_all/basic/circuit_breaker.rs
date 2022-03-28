@@ -264,9 +264,6 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Branching0fromCtoA::Close,
                 Branching0fromCtoS::Close,
                 Branching0fromCtoU::Close, =>
-                NameApi,
-                NameStorage,
-                NameUser, =>
                 NameController,
                 MeshedChannelsFour,
                 2
@@ -284,9 +281,6 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Branching0fromCtoA::Up,
                 Branching0fromCtoS::Up,
                 Branching0fromCtoU::Up, =>
-                NameApi,
-                NameStorage,
-                NameUser, =>
                 NameController,
                 MeshedChannelsFour,
                 2
@@ -302,9 +296,6 @@ fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<
                 Branching0fromCtoA::Down,
                 Branching0fromCtoS::Down,
                 Branching0fromCtoU::Down, =>
-                NameApi,
-                NameStorage,
-                NameUser, =>
                 NameController,
                 MeshedChannelsFour,
                 2

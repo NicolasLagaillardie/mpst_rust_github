@@ -1124,7 +1124,6 @@ macro_rules! choose_mpst_to_all {
     (
         $session: expr ,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
         $name_sender: ident
     ) => {{
         use mpstthree::meshedchannels::MeshedChannels;
@@ -1132,7 +1131,6 @@ macro_rules! choose_mpst_to_all {
         mpstthree::choose_mpst_multi_to_all!(
             $session,
             $( $label , )+ =>
-            $( $receiver , )+ =>
             $name_sender,
             MeshedChannels,
             3

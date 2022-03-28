@@ -259,8 +259,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            s,
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
-///            NameA,
-///            NameB, =>
 ///            NameD,
 ///            MeshedChannels,
 ///            3
@@ -274,8 +272,6 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            s,
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
-///            NameA,
-///            NameB, =>
 ///            NameD,
 ///            MeshedChannels,
 ///            3
@@ -293,7 +289,6 @@ macro_rules! choose_mpst_multi_to_all {
     (
         $session: expr,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
@@ -301,7 +296,6 @@ macro_rules! choose_mpst_multi_to_all {
         mpst_seq::choose_mpst_multi_to_all!(
             $session ,
             ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -366,14 +360,12 @@ macro_rules! choose_mpst_multi_to_all {
 macro_rules! choose_mpst_create_multi_to_all {
     (
         $name: expr,
-        $( $receiver: ident , )+ =>
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_create_multi_to_all!(
             $name ,
-            ( $( $receiver , )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion

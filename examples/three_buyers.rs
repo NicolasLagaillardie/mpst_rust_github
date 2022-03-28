@@ -135,8 +135,6 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoA::Accept,
             Branching0fromCtoS::Accept, =>
-            NameA,
-            NameS, =>
             NameC,
             MeshedChannelsThree,
             2
@@ -152,8 +150,6 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromCtoA::Quit,
             Branching0fromCtoS::Quit, =>
-            NameA,
-            NameS, =>
             NameC,
             MeshedChannelsThree,
             2

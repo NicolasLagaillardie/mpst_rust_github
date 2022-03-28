@@ -134,8 +134,6 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromAtoC::Fail,
             Branching0fromAtoS::Fail, =>
-            NameC,
-            NameS, =>
             NameA,
             MeshedChannelsThree,
             1
@@ -150,8 +148,6 @@ fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromAtoC::Login,
             Branching0fromAtoS::Login, =>
-            NameC,
-            NameS, =>
             NameA,
             MeshedChannelsThree,
             1
@@ -239,8 +235,6 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching1fromCtoA::Quit,
                 Branching1fromCtoS::Quit, =>
-                NameA,
-                NameS, =>
                 NameC,
                 MeshedChannelsThree,
                 2
@@ -255,8 +249,6 @@ fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching1fromCtoA::Pay,
                 Branching1fromCtoS::Pay, =>
-                NameA,
-                NameS, =>
                 NameC,
                 MeshedChannelsThree,
                 2

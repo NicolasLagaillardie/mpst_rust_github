@@ -80,7 +80,6 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::<i64>::Done, =>
-                NameB, =>
                 NameA,
                 MeshedChannelsTwo,
                 1
@@ -92,7 +91,6 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::<i64>::More, =>
-                NameB, =>
                 NameA,
                 MeshedChannelsTwo,
                 1

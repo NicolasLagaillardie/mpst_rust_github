@@ -3,12 +3,9 @@ use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
-use crate::common_functions::expand::parenthesised::parenthesised;
-
 #[derive(Debug)]
 pub(crate) struct ChooseMultiCreateToAll {
     name_macro: Ident,
-    receivers: Vec<TokenStream>,
     sender: Ident,
     meshedchannels_name: Ident,
     exclusion: u64,
@@ -18,15 +15,6 @@ impl Parse for ChooseMultiCreateToAll {
     fn parse(input: ParseStream) -> Result<Self> {
         // The name of the macro
         let name_macro = Ident::parse(input)?;
-
-        <Token![,]>::parse(input)?;
-
-        // The receivers
-        let content_receivers;
-        let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = TokenStream::parse(&content_receivers)?;
-
-        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
 
         <Token![,]>::parse(input)?;
 
@@ -43,7 +31,6 @@ impl Parse for ChooseMultiCreateToAll {
 
         Ok(ChooseMultiCreateToAll {
             name_macro,
-            receivers: all_receivers,
             sender,
             meshedchannels_name,
             exclusion,
@@ -60,7 +47,6 @@ impl From<ChooseMultiCreateToAll> for TokenStream {
 impl ChooseMultiCreateToAll {
     fn expand(&self) -> TokenStream {
         let name_macro = &self.name_macro;
-        let all_receivers = &self.receivers;
         let sender = &self.sender;
         let meshedchannels_name = &self.meshedchannels_name;
         let exclusion = self.exclusion;
@@ -74,8 +60,7 @@ impl ChooseMultiCreateToAll {
                 ) => {
                     mpstthree::choose_mpst_multi_to_all!(
                         $session ,
-                        $( $label , )* =>
-                        #( #all_receivers , )* =>
+                        $( $label , )+ =>
                         #sender ,
                         #meshedchannels_name ,
                         #exclusion

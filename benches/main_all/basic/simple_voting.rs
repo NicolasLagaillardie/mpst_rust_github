@@ -111,7 +111,6 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromVtoS::<i32>::Yes, =>
-            NameServer, =>
             NameVoter,
             MeshedChannelsTwo,
             2
@@ -124,7 +123,6 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromVtoS::<i32>::No, =>
-            NameServer, =>
             NameVoter,
             MeshedChannelsTwo,
             2
@@ -145,7 +143,6 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromStoV::<i32>::Reject, =>
-            NameVoter, =>
             NameServer,
             MeshedChannelsTwo,
             2
@@ -158,7 +155,6 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromStoV::<i32>::Auth, =>
-            NameVoter, =>
             NameServer,
             MeshedChannelsTwo,
             2

@@ -109,8 +109,6 @@ type EndpointServer = MeshedChannelsThree<
 
 choose_mpst_create_multi_to_all!(
     choose_mpst_server_to_all,
-    NameClient,
-    NameOther, =>
     NameServer,
     MeshedChannelsThree,
     3

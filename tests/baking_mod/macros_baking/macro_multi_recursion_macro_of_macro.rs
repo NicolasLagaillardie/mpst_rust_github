@@ -78,8 +78,6 @@ type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB
 
 choose_mpst_create_multi_to_all!(
     choose_mpst_client_to_all,
-    NameA,
-    NameB, =>
     NameD,
     MeshedChannels,
     3

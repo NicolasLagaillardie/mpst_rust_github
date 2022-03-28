@@ -144,8 +144,6 @@ fn client_recurs(
                 s,
                 Branches0AtoC::Video,
                 Branches0BtoC::Video, =>
-                NameA,
-                NameB, =>
                 NameC
             );
 
@@ -159,8 +157,6 @@ fn client_recurs(
                 s,
                 Branches0AtoC::End,
                 Branches0BtoC::End, =>
-                NameA,
-                NameB, =>
                 NameC
             );
 

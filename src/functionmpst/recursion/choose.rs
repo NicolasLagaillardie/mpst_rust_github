@@ -9,15 +9,13 @@ macro_rules! choose_aux {
     (
         $session: expr,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( $label , )+ )
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -68,8 +66,6 @@ macro_rules! choose_mpst_a_to_all {
         mpstthree::choose_aux!(
             $session,
             $( $label , )+ =>
-            NameB,
-            NameC, =>
             NameA,
             MeshedChannels,
             1
@@ -120,8 +116,6 @@ macro_rules! choose_mpst_b_to_all {
         mpstthree::choose_aux!(
             $session,
             $( $label , )+ =>
-            NameA,
-            NameC, =>
             NameB,
             MeshedChannels,
             2
@@ -172,8 +166,6 @@ macro_rules! choose_mpst_c_to_all {
         mpstthree::choose_aux!(
             $session,
             $( $label , )+ =>
-            NameA,
-            NameB, =>
             NameC,
             MeshedChannels,
             3

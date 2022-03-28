@@ -123,6 +123,11 @@ name = "main"
 harness = false
 required-features = ["baking"]
 
+[[bench]]
+name = "ping_pong"
+harness = false
+required-features = ["baking"]
+
 ################################### Basic examples
 
 [[example]]
