@@ -229,7 +229,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
 // Functions
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let (pwd, s, _resp) = recv_http_a_to_c(s, true, Vec::new())?; // Should fail because true but Vec::new()
-    let expected:i32 = thread_rng().gen_range(1..=3);
+    let expected:i32 : i32 = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
         let s = auth_from_a_to_all(s);
@@ -292,7 +292,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn continue_c(s: EndpointCContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice:i32 = thread_rng().gen_range(1..=6);
+    let choice:i32 : i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = close_from_c_to_all(s);
@@ -356,7 +356,7 @@ fn continue_s(s: EndpointSContinue<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn picture_s(s: EndpointSContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice:i32 = thread_rng().gen_range(1..=6);
+    let choice:i32 : i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = refusal_from_s_to_all(s);

@@ -365,12 +365,12 @@ macro_rules! choose_mpst_create_multi_to_all {
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_create_multi_to_all!(
-            $name ,
-            $sender ,
-            $meshedchannels_name ,
+            $name,
+            $sender,
+            $meshedchannels_name,
             $exclusion
         );
-    }
+    };
 }
 
 /// Choose among different sessions that are provided,

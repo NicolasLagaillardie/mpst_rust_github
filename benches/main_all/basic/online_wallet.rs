@@ -209,8 +209,8 @@ fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
     let s = send_mpst_s_to_c(
         (
-            thread_rng().gen_range(1..=100),
-            thread_rng().gen_range(1..=100),
+            thread_rng().gen_range(1..=100) as i64,
+            thread_rng().gen_range(1..=100) as i64,
         ),
         s,
     );

@@ -103,10 +103,12 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_c_to_s(thread_rng().gen_range(1..=100), s);
-    let s = send_mpst_c_to_s(thread_rng().gen_range(1..=100), s);
+    let s = send_mpst_c_to_s(thread_rng().gen_range(1..=100) as i32, s);
+    let s = send_mpst_c_to_s(thread_rng().gen_range(1..=100) as i32, s);
 
-    if thread_rng().gen_range(1..=2) != 1 {
+    let choice: i32 = thread_rng().gen_range(1..=2);
+
+    if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching0fromCtoA::Sum,

@@ -26,6 +26,7 @@ impl Parse for BakingInterleavedWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
         let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
+
         let all_roles = token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
 
         let number_roles = u64::try_from(all_roles.len()).unwrap();

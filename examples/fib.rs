@@ -71,7 +71,9 @@ type EndpointB<N> = MeshedChannelsTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, thread_rng().gen_range(1..20), 1)
+    let choice: i64 = thread_rng().gen_range(1..=20);
+
+    recurs_a(s, choice, 1)
 }
 
 fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {

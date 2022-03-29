@@ -76,12 +76,7 @@ type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 // For B
 type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
-choose_mpst_create_multi_to_all!(
-    choose_mpst_client_to_all,
-    NameD,
-    MeshedChannels,
-    3
-);
+choose_mpst_create_multi_to_all!(choose_mpst_client_to_all, NameD, MeshedChannels, 3);
 
 // Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
