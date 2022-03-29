@@ -15,7 +15,7 @@ macro_rules! choose_aux {
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
             $session ,
-            ( $( $label , )+ )
+            ( $( $label , )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -59,8 +59,6 @@ macro_rules! choose_aux {
 macro_rules! choose_mpst_a_to_all {
     ($session: expr, $( $label: path),+ $(,)? ) => {{
         use mpstthree::name::a::NameA;
-        use mpstthree::name::b::NameB;
-        use mpstthree::name::c::NameC;
         use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_aux!(
@@ -108,9 +106,7 @@ macro_rules! choose_mpst_a_to_all {
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($session: expr,  $( $label: path),+ $(,)? ) => {{
-        use mpstthree::name::a::NameA;
         use mpstthree::name::b::NameB;
-        use mpstthree::name::c::NameC;
         use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_aux!(
@@ -158,8 +154,6 @@ macro_rules! choose_mpst_b_to_all {
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($session: expr,  $( $label: path),+ $(,)? ) => {{
-        use mpstthree::name::a::NameA;
-        use mpstthree::name::b::NameB;
         use mpstthree::name::c::NameC;
         use mpstthree::meshedchannels::MeshedChannels;
 
