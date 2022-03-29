@@ -295,7 +295,7 @@ macro_rules! choose_mpst_multi_to_all {
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
+            ( $( ( $label ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -488,8 +488,8 @@ macro_rules! choose_mpst_multi_cancel_to_all {
     ) => {
         mpst_seq::choose_mpst_multi_cancel_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
             $broadcaster ,
             $sender ,
             $meshedchannels_name ,
@@ -549,11 +549,11 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $exclusion: literal
     ) => {
         mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
-            ( $( $fn_name , )+ ) ,
-            ( $( $branch , )+ ) ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
-            ( $( $new_type , )+ ) ,
+            ( $( ( $fn_name ) )+ ) ,
+            ( $( ( $branch ) )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
+            ( $( ( $new_type ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -614,11 +614,11 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
         $exclusion: literal
     ) => {
         mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
-            ( $( $fn_name , )+ ) ,
-            ( $( $branch , )+ ) ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
-            ( $( $new_type , )+ ) ,
+            ( $( ( $fn_name ) )+ ) ,
+            ( $( ( $branch ) )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
+            ( $( ( $new_type ) )+ ) ,
             $sender ,
             $broadcaster ,
             $meshedchannels_name ,

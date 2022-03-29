@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Expr, Ident, LitInt, Result, Token};
 
-use crate::common_functions::expand::parenthesised::parenthesised;
+use crate::common_functions::expand::parenthesised::parenthesised_groups;
 use crate::common_functions::maths::{diag, get_tuple_diag};
 
 #[derive(Debug)]
@@ -29,12 +29,7 @@ impl Parse for ChooseTimedMultiToAll {
         <Token![,]>::parse(input)?;
 
         // The labels
-        let content_labels;
-        let _parentheses = syn::parenthesized!(content_labels in input);
-        let labels = TokenStream::parse(&content_labels)?;
-
-        let all_labels: Vec<TokenStream> = parenthesised(labels);
-
+        let all_labels: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
         <Token![,]>::parse(input)?;
 
         // The sender

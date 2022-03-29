@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
-use crate::common_functions::expand::parenthesised::parenthesised;
+use crate::common_functions::expand::parenthesised::parenthesised_groups;
 use crate::common_functions::maths::{diag, get_tuple_diag};
 
 #[derive(Debug)]
@@ -25,43 +25,23 @@ pub(crate) struct ChooseTypeCancelMultiToAllBundle {
 impl Parse for ChooseTypeCancelMultiToAllBundle {
     fn parse(input: ParseStream) -> Result<Self> {
         // The names of the functions
-        let content_fn_names;
-        let _parentheses = syn::parenthesized!(content_fn_names in input);
-        let fn_names = TokenStream::parse(&content_fn_names)?;
-
-        let all_fn_names: Vec<TokenStream> = parenthesised(fn_names);
+        let all_fn_names: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
         <Token![,]>::parse(input)?;
 
         // The names of the functions
-        let content_branches;
-        let _parentheses = syn::parenthesized!(content_branches in input);
-        let branches = TokenStream::parse(&content_branches)?;
-
-        let all_branches: Vec<TokenStream> = parenthesised(branches);
+        let all_branches: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
         <Token![,]>::parse(input)?;
 
         // The labels
-        let content_labels;
-        let _parentheses = syn::parenthesized!(content_labels in input);
-        let labels = TokenStream::parse(&content_labels)?;
-
-        let all_labels: Vec<TokenStream> = parenthesised(labels);
+        let all_labels: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
         <Token![,]>::parse(input)?;
 
         // The receivers
-        let content_receivers;
-        let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = TokenStream::parse(&content_receivers)?;
-
-        let all_receivers: Vec<TokenStream> = parenthesised(receivers);
+        let all_receivers: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
         <Token![,]>::parse(input)?;
 
         // The new_types
-        let content_new_type;
-        let _parentheses = syn::parenthesized!(content_new_type in input);
-        let new_types = TokenStream::parse(&content_new_type)?;
-
-        let all_new_types: Vec<TokenStream> = parenthesised(new_types);
+        let all_new_types: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
         <Token![,]>::parse(input)?;
 
         // The sender
