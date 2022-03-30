@@ -28,8 +28,8 @@ macro_rules! bundle_impl {
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking!(
-            $meshedchannels_name,
-            ( $( $all_roles , )+ )
+            $meshedchannels_name ,
+            $( $all_roles , )+
         );
     };
 }
@@ -66,8 +66,8 @@ macro_rules! bundle_impl_with_enum {
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking_with_enum!(
-            $meshedchannels_name,
-            ( $( $all_roles , )+ )
+            $meshedchannels_name ,
+            $( $all_roles , )+
         );
     };
 }
@@ -96,8 +96,8 @@ macro_rules! bundle_impl_with_cancel {
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking_with_cancel!(
-            $meshedchannels_name,
-            ( $( $all_roles , )+ )
+            $meshedchannels_name ,
+            $( $all_roles , )+
         );
     };
 }
@@ -135,8 +135,8 @@ macro_rules! bundle_impl_with_enum_and_cancel {
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking_with_enum_and_cancel!(
-            $meshedchannels_name,
-            ( $( $all_roles , )+ )
+            $meshedchannels_name ,
+            $( $all_roles , )+
         );
     };
 }
@@ -175,8 +175,8 @@ macro_rules! bundle_impl_interleaved_with_enum_and_cancel {
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking_interleaved_with_enum_and_cancel!(
-            $meshedchannels_name,
-            ( $( $all_roles , )+ )
+            $meshedchannels_name ,
+            $( $all_roles , )+
         );
     };
 }

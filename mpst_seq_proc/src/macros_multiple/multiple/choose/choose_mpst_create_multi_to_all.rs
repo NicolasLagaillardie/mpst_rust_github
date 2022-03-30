@@ -15,7 +15,6 @@ impl Parse for ChooseMultiCreateToAll {
     fn parse(input: ParseStream) -> Result<Self> {
         // The name of the macro
         let name_macro = Ident::parse(input)?;
-
         <Token![,]>::parse(input)?;
 
         // The sender
