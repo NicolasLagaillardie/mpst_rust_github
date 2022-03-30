@@ -6,16 +6,12 @@ pub(crate) fn parenthesised(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 
     for tt in stream.into_iter() {
-        match tt {
-            TokenTree::Group(group) => {
-                for elt in group.stream().into_iter() {
-                    match elt {
-                        TokenTree::Ident(i) => result.push(quote! {#i}),
-                        _ => {}
-                    };
+        if let TokenTree::Group(group) = tt {
+            for elt in group.stream().into_iter() {
+                if let TokenTree::Ident(i) = elt {
+                    result.push(quote! {#i});
                 }
             }
-            _ => {}
         }
     }
 
@@ -27,11 +23,12 @@ pub(crate) fn parenthesised_groups(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 
     for tt in stream.into_iter() {
-        match tt {
-            TokenTree::Group(group) => {
-                result.push(group.stream());
+        if let TokenTree::Group(group) = tt {
+            for elt in group.stream().into_iter() {
+                if let TokenTree::Group(i) = elt {
+                    result.push(quote! {#i});
+                }
             }
-            _ => {}
         }
     }
 

@@ -25,23 +25,38 @@ pub(crate) struct ChooseTypeCancelMultiToAllBundle {
 impl Parse for ChooseTypeCancelMultiToAllBundle {
     fn parse(input: ParseStream) -> Result<Self> {
         // The names of the functions
-        let all_fn_names: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
+        let content_fn_names;
+        let _parentheses = syn::parenthesized!(content_fn_names in input);
+        let all_fn_names: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_fn_names)?);
         <Token![,]>::parse(input)?;
 
         // The names of the functions
-        let all_branches: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
+        let content_branches;
+        let _parentheses = syn::parenthesized!(content_branches in input);
+        let all_branches: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_branches)?);
         <Token![,]>::parse(input)?;
 
         // The labels
-        let all_labels: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
+        let content_labels;
+        let _parentheses = syn::parenthesized!(content_labels in input);
+        let all_labels: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_labels)?);
         <Token![,]>::parse(input)?;
 
         // The receivers
-        let all_receivers: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
+        let content_receivers;
+        let _parentheses = syn::parenthesized!(content_receivers in input);
+        let all_receivers: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_receivers)?);
         <Token![,]>::parse(input)?;
 
         // The new_types
-        let all_new_types: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
+        let content_new_types;
+        let _parentheses = syn::parenthesized!(content_new_types in input);
+        let all_new_types: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_new_types)?);
         <Token![,]>::parse(input)?;
 
         // The sender

@@ -29,7 +29,10 @@ impl Parse for ChooseTimedMultiToAll {
         <Token![,]>::parse(input)?;
 
         // The labels
-        let all_labels: Vec<TokenStream> = parenthesised_groups(TokenStream::parse(input)?);
+        let content_labels;
+        let _parentheses = syn::parenthesized!(content_labels in input);
+        let all_labels: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_labels)?);
         <Token![,]>::parse(input)?;
 
         // The sender
