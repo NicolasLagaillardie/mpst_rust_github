@@ -15,10 +15,10 @@ use crate::common_functions::expand::fork::fork_timed_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
 use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer_timed;
+use crate::common_functions::expand::parenthesised::get_all_roles;
 use crate::common_functions::expand::recv::{recv_from_all_timed, recv_timed};
 use crate::common_functions::expand::role_timed::role_timed;
 use crate::common_functions::expand::send::send_timed_canceled;
-use crate::common_functions::expand::token_stream::token_stream;
 
 #[derive(Debug)]
 pub(crate) struct BakingTimedWithEnumAndCancel {
@@ -31,7 +31,8 @@ impl Parse for BakingTimedWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
         let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
-        let all_roles = token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
+
+        let all_roles = get_all_roles(TokenStream::parse(input)?);
 
         let number_roles = u64::try_from(all_roles.len()).unwrap();
 

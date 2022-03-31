@@ -40,8 +40,8 @@ macro_rules! bundle_impl_timed_with_enum_and_cancel {
         $( $all_roles: ident),+ $(,)?
     ) => {
         mpst_seq::baking_timed_with_enum_and_cancel!(
-            $meshedchannels_name,
-            ( $( $all_roles , )+ )
+            $meshedchannels_name ,
+            $( $all_roles , )+
         );
     };
 }

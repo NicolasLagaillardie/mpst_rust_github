@@ -20,6 +20,8 @@ pub(crate) fn parenthesised(stream: TokenStream) -> Vec<TokenStream> {
 pub(crate) fn get_all_roles(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 
+    let cloned_stream = stream.clone();
+
     for elt_stream in stream.into_iter() {
         if let TokenTree::Group(group) = elt_stream {
             for elt_group in group.stream().into_iter() {
@@ -27,6 +29,23 @@ pub(crate) fn get_all_roles(stream: TokenStream) -> Vec<TokenStream> {
                     result.push(quote! {#i});
                 }
             }
+        }
+    }
+
+    if result.is_empty() {
+        get_all_roles_ident(cloned_stream)
+    } else {
+        result
+    }
+}
+
+/// Expand parenthesised blocks
+fn get_all_roles_ident(stream: TokenStream) -> Vec<TokenStream> {
+    let mut result: Vec<TokenStream> = Vec::new();
+
+    for elt_stream in stream.into_iter() {
+        if let TokenTree::Ident(ident) = elt_stream {
+            result.push(quote! {#ident});
         }
     }
 

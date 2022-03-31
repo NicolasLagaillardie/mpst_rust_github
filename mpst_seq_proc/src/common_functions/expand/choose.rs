@@ -1263,7 +1263,7 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                         mpstthree::choose_timed_mpst_multi_to_all!(
                             $session ,
                             $all_clocks ,
-                            $( $label , )* =>
+                            $( $label , )+ =>
                             #sender_name ,
                             #meshedchannels_name ,
                             #sender

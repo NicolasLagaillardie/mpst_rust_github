@@ -116,6 +116,11 @@ name = "binary_timed"
 path = "tests/binary_timed.rs"
 required-features = ["binary_timed"]
 
+[[test]]
+name = "baking_timed"
+path = "tests/baking_timed.rs"
+required-features = ["baking_timed"]
+
 ################################### Benches
 
 [[bench]]

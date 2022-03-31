@@ -60,13 +60,12 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"baking_timed"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "baking_timed")))]
 macro_rules! choose_timed_mpst_multi_to_all {
     (
         $session: expr,
         $all_clocks: expr,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
@@ -74,8 +73,7 @@ macro_rules! choose_timed_mpst_multi_to_all {
         mpst_seq::choose_timed_mpst_multi_to_all!(
             $session ,
             $all_clocks ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion

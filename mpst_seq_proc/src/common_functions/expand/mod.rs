@@ -11,4 +11,3 @@ pub(crate) mod recv;
 pub(crate) mod role;
 pub(crate) mod role_timed;
 pub(crate) mod send;
-pub(crate) mod token_stream;

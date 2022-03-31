@@ -19,6 +19,7 @@ use std::marker;
 /// * INCLUDE_END: a bool which indicates whether END is included in the bound
 /// * RESET: a char which whether CLOCK needs to be reset after the send. Currently limited to
 ///   CLOCK, future feature will use a Vec<char>
+#[must_use]
 #[derive(Debug)]
 pub struct SendTimed<
     T,
