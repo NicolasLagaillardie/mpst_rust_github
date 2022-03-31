@@ -121,7 +121,12 @@ type EndpointBFull = MeshedChannels<End, InitB, StackBRecurs, NameB>;
 
 // Functions related to endpoints
 fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
     sleep(Duration::from_secs(5));
+    println!("pause of {}", 5);
+    if let Some(clock) = all_clocks.get(&'a') {
+        println!("clock {:#?} for C", clock.elapsed().as_secs());
+    }
     offer_mpst!(
             all_clocks,
             s,
@@ -131,10 +136,13 @@ fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
                 },
                 Branches0BtoD::Video(s) => {
                     sleep(Duration::from_secs(3));
+                    println!("pause of {}", 3);
                     let (request, s) = s.recv(all_clocks)?;
                     sleep(Duration::from_secs(2));
+                    println!("pause of {}", 2);
                     let s = s.send(request + 1, all_clocks)?;
                     sleep(Duration::from_secs(4));
+                    println!("pause of {}", 4);
 
                     server_recurs(s, all_clocks)
                 },
@@ -155,10 +163,13 @@ fn server_recurs(
                 },
                 Branches0BtoD::Video(s) => {
                     sleep(Duration::from_secs(3));
+                    println!("pause of {}", 3);
                     let (request, s) = s.recv(all_clocks)?;
                     sleep(Duration::from_secs(2));
+                    println!("pause of {}", 2);
                     let s = s.send(request + 1, all_clocks)?;
                     sleep(Duration::from_secs(4));
+                    println!("pause of {}", 4);
 
                     server_recurs(s, all_clocks)
                 },
@@ -170,11 +181,20 @@ fn authenticator(
     s: EndpointAFull,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
     sleep(Duration::from_secs(1));
+    println!("pause of {}", 1);
+    println!("constraint 2 of {} for A", s.session2.constraint());
+    println!("all_clocks {:#?} for A", all_clocks);
+    if let Some(clock) = all_clocks.get(&'a') {
+        println!("clock {:#?} for A", clock.elapsed().as_secs());
+    }
     let (id, s) = s.recv(all_clocks)?;
     sleep(Duration::from_secs(2));
+    println!("pause of {}", 2);
     let s = s.send(id + 1, all_clocks)?;
     sleep(Duration::from_secs(2));
+    println!("pause of {}", 2);
 
     offer_mpst!(
         all_clocks,
@@ -185,14 +205,19 @@ fn authenticator(
             },
             Branches0AtoD::Video(s) => {
                 sleep(Duration::from_secs(1));
+                println!("pause of {}", 1);
                 let (request, s) = s.recv(all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
                 let s = s.send(request + 1, all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
                 let (video, s) = s.recv(all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
                 let s = s.send(video + 1, all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
 
                 authenticator_recurs(s, all_clocks)
             },
@@ -213,14 +238,19 @@ fn authenticator_recurs(
             },
             Branches0AtoD::Video(s) => {
                 sleep(Duration::from_secs(1));
+                println!("pause of {}", 1);
                 let (request, s) = s.recv(all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
                 let s = s.send(request + 1, all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
                 let (video, s) = s.recv(all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
                 let s = s.send(video + 1, all_clocks)?;
                 sleep(Duration::from_secs(2));
+                println!("pause of {}", 2);
 
                 authenticator_recurs(s, all_clocks)
             },
@@ -231,12 +261,22 @@ fn authenticator_recurs(
 fn client(s: EndpointDFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let mut xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
+    all_clocks.insert('a', Instant::now());
 
     sleep(Duration::from_secs(1));
+    println!("pause of {}", 1);
+    println!("constraint 1 of {} for C", s.session1.constraint());
+    println!("constraint 2 of {} for C", s.session2.constraint());
+    println!("all_clocks {:#?} for C", all_clocks);
+    if let Some(clock) = all_clocks.get(&'a') {
+        println!("clock {:#?} for C", clock.elapsed().as_secs());
+    }
     let s = s.send(0, all_clocks)?;
     sleep(Duration::from_secs(2));
+    println!("pause of {}", 2);
     let (_, s) = s.recv(all_clocks)?;
     sleep(Duration::from_secs(2));
+    println!("pause of {}", 2);
 
     match xs.pop() {
         Option::Some(_) => {
@@ -244,10 +284,13 @@ fn client(s: EndpointDFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::Video, Branches0BtoD::Video);
 
             sleep(Duration::from_secs(1));
+            println!("pause of {}", 1);
             let s = s.send(1, all_clocks)?;
             sleep(Duration::from_secs(6));
+            println!("pause of {}", 6);
             let (_, s) = s.recv(all_clocks)?;
             sleep(Duration::from_secs(2));
+            println!("pause of {}", 2);
 
             client_recurs(s, all_clocks, xs, 2)
         }
@@ -272,10 +315,13 @@ fn client_recurs(
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::Video, Branches0BtoD::Video);
 
             sleep(Duration::from_secs(1));
+            println!("pause of {}", 1);
             let s = s.send(1, all_clocks)?;
             sleep(Duration::from_secs(6));
+            println!("pause of {}", 6);
             let (_, s) = s.recv(all_clocks)?;
             sleep(Duration::from_secs(2));
+            println!("pause of {}", 2);
 
             client_recurs(s, all_clocks, xs, index + 1)
         }
