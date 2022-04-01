@@ -54,7 +54,7 @@ where
                             }
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock respects the time constraint and the clock must not be reset
@@ -66,7 +66,7 @@ where
                             Ok((v, s)) => Ok((v, s)),
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock does not respect the time constraint
@@ -94,7 +94,7 @@ where
                             }
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock respects the time constraint and the clock must not be reset
@@ -106,7 +106,7 @@ where
                             Ok((v, s)) => Ok((v, s)),
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock does not respect the time constraint
@@ -140,7 +140,7 @@ where
                             }
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock respects the time constraint and the clock must not be reset
@@ -150,7 +150,7 @@ where
                             Ok((v, s)) => Ok((v, s)),
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock does not respect the time constraint
@@ -176,7 +176,7 @@ where
                             }
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock respects the time constraint and the clock must not be reset
@@ -186,7 +186,7 @@ where
                             Ok((v, s)) => Ok((v, s)),
                             Err(e) => {
                                 cancel(s);
-                                panic!("{}", e.to_string())
+                                Err(Box::new(e))
                             }
                         }
                     // if the clock does not respect the time constraint
@@ -226,7 +226,7 @@ where
                                 }
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
@@ -239,7 +239,7 @@ where
                                 Ok((v, s)) => Ok((v, s)),
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else {
@@ -266,7 +266,7 @@ where
                                 }
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
@@ -279,7 +279,7 @@ where
                                 Ok((v, s)) => Ok((v, s)),
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else {
@@ -306,7 +306,7 @@ where
                                 }
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
@@ -319,7 +319,7 @@ where
                                 Ok((v, s)) => Ok((v, s)),
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else {
@@ -346,7 +346,7 @@ where
                                 }
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
@@ -359,7 +359,7 @@ where
                                 Ok((v, s)) => Ok((v, s)),
                                 Err(e) => {
                                     cancel(s);
-                                    panic!("{}", e.to_string())
+                                    Err(Box::new(e))
                                 }
                             }
                         } else {

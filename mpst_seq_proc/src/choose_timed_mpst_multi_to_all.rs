@@ -112,7 +112,7 @@ impl ChooseTimedMultiToAll {
 
         let new_stack_sender = Ident::new(&format!("stack_{}", self.n_sessions), Span::call_site());
 
-        let mut all_send: Vec<TokenStream> = (1..(self.n_sessions - 1))
+        let all_send: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
@@ -146,6 +146,10 @@ impl ChooseTimedMultiToAll {
                 };
 
                 quote! {
+                    if s.#temp_session.reset {
+                        clocks_to_reset.push(s.#temp_session.clock.clone());
+                    }
+
                     let _ = mpstthree::binary_timed::send::send_without_reset(
                         #temp_label(
                             #meshedchannels_name {
@@ -162,65 +166,6 @@ impl ChooseTimedMultiToAll {
                 }
             })
             .collect();
-
-        all_send.push({
-            let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
-                .map(|j| {
-                    let temp = if (self.n_sessions - 1) >= self.exclusion {
-                        self.n_sessions
-                    } else {
-                        self.n_sessions - 1
-                    };
-
-                    let temp_ident = Ident::new(&format!("session{}", j), Span::call_site());
-
-                    let temp_channel = if j < temp {
-                        Ident::new(&format!("channel_{}_{}", temp, j), Span::call_site())
-                    } else {
-                        Ident::new(&format!("channel_{}_{}", temp, j + 1), Span::call_site())
-                    };
-
-                    quote! {
-                        #temp_ident : #temp_channel ,
-                    }
-                })
-                .collect();
-
-            let temp_name = Ident::new(&format!("name_{}", self.n_sessions - 1), Span::call_site());
-
-            let temp_stack =
-                Ident::new(&format!("stack_{}", self.n_sessions - 1), Span::call_site());
-
-            let temp_session = Ident::new(
-                &format!("session{}", self.n_sessions - 1),
-                Span::call_site(),
-            );
-
-            let temp_label = if let Some(elt) = self
-                .labels
-                .get(usize::try_from(self.n_sessions - 1 - 1).unwrap())
-            {
-                elt
-            } else {
-                panic!("Not enough labels")
-            };
-
-            quote! {
-                let _ = mpstthree::binary_timed::send::send(
-                    #temp_label(
-                        #meshedchannels_name {
-                            #(
-                                #new_sessions
-                            )*
-                            stack: #temp_stack ,
-                            name: #temp_name ,
-                        }
-                    ),
-                    #all_clocks ,
-                    s.#temp_session ,
-                )?;
-            }
-        });
 
         let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
@@ -269,9 +214,19 @@ impl ChooseTimedMultiToAll {
                     temp(&s.stack)
                 };
 
+                let mut clocks_to_reset: Vec<char> = Vec::new();
+
                 #(
                     #all_send
                 )*
+
+                for clock in clocks_to_reset{
+                    if let Some(own_clock) = #all_clocks.get_mut(&clock) {
+                        *own_clock = std::time::Instant::now();
+                    } else {
+                        panic!("The clock {} is not available in {:?}", clock, #all_clocks);
+                    }
+                }
 
                 #meshedchannels_name {
                     #(

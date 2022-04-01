@@ -125,23 +125,23 @@ fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     sleep(Duration::from_secs(5));
 
     offer_mpst!(
-            all_clocks,
-            s,
-            {
-                Branches0BtoD::End(s) => {
-                    s.close()
-                },
-                Branches0BtoD::Video(s) => {
-                    sleep(Duration::from_secs(3));
-                    let (request, s) = s.recv(all_clocks)?;
-                    sleep(Duration::from_secs(2));
-                    let s = s.send(request + 1, all_clocks)?;
-                    sleep(Duration::from_secs(4));
+        all_clocks,
+        s,
+        {
+            Branches0BtoD::End(s) => {
+                s.close()
+            },
+            Branches0BtoD::Video(s) => {
+                sleep(Duration::from_secs(3));
+                let (request, s) = s.recv(all_clocks)?;
+                sleep(Duration::from_secs(2));
+                let s = s.send(request + 1, all_clocks)?;
+                sleep(Duration::from_secs(4));
 
 
-                    server_recurs(s, all_clocks)
-                },
-            }
+                server_recurs(s, all_clocks)
+            },
+        }
     )
 }
 
@@ -150,23 +150,23 @@ fn server_recurs(
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(
-            all_clocks,
-            s,
-            {
-                Branches0BtoD::End(s) => {
-                    s.close()
-                },
-                Branches0BtoD::Video(s) => {
-                    sleep(Duration::from_secs(3));
-                    let (request, s) = s.recv(all_clocks)?;
-                    sleep(Duration::from_secs(2));
-                    let s = s.send(request + 1, all_clocks)?;
-                    sleep(Duration::from_secs(4));
+        all_clocks,
+        s,
+        {
+            Branches0BtoD::End(s) => {
+                s.close()
+            },
+            Branches0BtoD::Video(s) => {
+                sleep(Duration::from_secs(3));
+                let (request, s) = s.recv(all_clocks)?;
+                sleep(Duration::from_secs(2));
+                let s = s.send(request + 1, all_clocks)?;
+                sleep(Duration::from_secs(4));
 
 
-                    server_recurs(s, all_clocks)
-                },
-            }
+                server_recurs(s, all_clocks)
+            },
+        }
     )
 }
 

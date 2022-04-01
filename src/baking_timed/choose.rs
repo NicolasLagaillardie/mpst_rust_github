@@ -30,8 +30,6 @@
 ///            &mut all_clocks,
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
-///            NameA,
-///            NameB, =>
 ///            NameD,
 ///            MeshedChannels,
 ///            3
@@ -46,8 +44,6 @@
 ///            &mut all_clocks,
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
-///            NameA,
-///            NameB, =>
 ///            NameD,
 ///            MeshedChannels,
 ///            3
