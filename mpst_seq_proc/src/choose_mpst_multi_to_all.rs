@@ -193,7 +193,7 @@ impl ChooseMultiToAll {
                 let s = #session;
 
                 let _ = {
-                    fn temp(r: &mpstthree::role::broadcast::RoleBroadcast)
+                    fn temp(_: &mpstthree::role::broadcast::RoleBroadcast)
                         -> Result<(), Box<dyn std::error::Error>>
                     {
                         Ok(())
