@@ -138,13 +138,8 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
                 Box<dyn std::error::Error>
             > {
                 let (here, there) = R::new();
-                match self.sender.send(there) {
-                    Ok(_) => Ok(here),
-                    Err(e) => {
-                        mpstthree::binary::cancel::cancel(self);
-                        panic!("{}", e.to_string())
-                    }
-                }
+                self.sender.send(there).unwrap_or(());
+                Ok(here)
             }
         }
 
@@ -156,13 +151,8 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
                 Box<dyn std::error::Error>
             > {
                 let (here, there) = R::new();
-                match self.sender.send(there) {
-                    Ok(_) => Ok(here),
-                    Err(e) => {
-                        mpstthree::binary::cancel::cancel(self);
-                        panic!("{}", e.to_string())
-                    }
-                }
+                self.sender.send(there).unwrap_or(());
+                Ok(here)
             }
         }
 
@@ -322,26 +312,16 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
                 Box<dyn std::error::Error>
              > {
                 let (here, there) = R1::new();
-                match self.sender1.send(there) {
-                    Ok(_) => Ok(here),
-                    Err(e) => {
-                        mpstthree::binary::cancel::cancel(self);
-                        panic!("{}", e.to_string())
-                    }
-                }
+                self.sender1.send(there).unwrap_or(());
+                Ok(here)
             }
             pub fn continuation_right(&self) -> std::result::Result<
                 R2,
                 Box<dyn std::error::Error>
             > {
                 let (here, there) = R2::new();
-                match self.sender2.send(there) {
-                    Ok(_) => Ok(here),
-                    Err(e) => {
-                        mpstthree::binary::cancel::cancel(self);
-                        panic!("{}", e.to_string())
-                    }
-                }
+                self.sender2.send(there).unwrap_or(());
+                Ok(here)
             }
         }
 
@@ -353,26 +333,16 @@ pub(crate) fn role_timed(role: String) -> TokenStream {
                 Box<dyn std::error::Error>
             > {
                 let (here, there) = R1::new();
-                match self.sender1.send(there) {
-                    Ok(_) => Ok(here),
-                    Err(e) => {
-                        mpstthree::binary::cancel::cancel(self);
-                        panic!("{}", e.to_string())
-                    }
-                }
+                self.sender1.send(there).unwrap_or(());
+                Ok(here)
             }
             pub fn continuation_right(&self) -> std::result::Result<
                 R2,
                 Box<dyn std::error::Error>
             > {
                 let (here, there) = R2::new();
-                match self.sender2.send(there) {
-                    Ok(_) => Ok(here),
-                    Err(e) => {
-                        mpstthree::binary::cancel::cancel(self);
-                        panic!("{}", e.to_string())
-                    }
-                }
+                self.sender2.send(there).unwrap_or(());
+                Ok(here)
             }
         }
     }

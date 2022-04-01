@@ -50,7 +50,7 @@ where
                             (x, there),
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                         ) {
-                            Ok(_) => {
+                            Ok(()) => {
                                 *own_clock = Instant::now();
                                 Ok(here)
                             }
@@ -66,7 +66,7 @@ where
                             (x, there),
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                         ) {
-                            Ok(_) => Ok(here),
+                            Ok(()) => Ok(here),
                             Err(e) => {
                                 cancel(s);
                                 panic!("{}", e.to_string())
@@ -92,7 +92,7 @@ where
                             (x, there),
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                         ) {
-                            Ok(_) => {
+                            Ok(()) => {
                                 *own_clock = Instant::now();
                                 Ok(here)
                             }
@@ -108,7 +108,7 @@ where
                             (x, there),
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                         ) {
-                            Ok(_) => Ok(here),
+                            Ok(()) => Ok(here),
                             Err(e) => {
                                 cancel(s);
                                 panic!("{}", e.to_string())
@@ -139,7 +139,7 @@ where
                     if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
-                            Ok(_) => {
+                            Ok(()) => {
                                 *own_clock = Instant::now();
                                 Ok(here)
                             }
@@ -152,7 +152,7 @@ where
                     } else if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
-                            Ok(_) => Ok(here),
+                            Ok(()) => Ok(here),
                             Err(e) => {
                                 cancel(s);
                                 panic!("{}", e.to_string())
@@ -175,7 +175,7 @@ where
                     if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
-                            Ok(_) => {
+                            Ok(()) => {
                                 *own_clock = Instant::now();
                                 Ok(here)
                             }
@@ -188,7 +188,7 @@ where
                     } else if u64::try_from(s.start)? < own_clock.elapsed().as_secs() {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
-                            Ok(_) => Ok(here),
+                            Ok(()) => Ok(here),
                             Err(e) => {
                                 cancel(s);
                                 panic!("{}", e.to_string())
@@ -226,7 +226,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => {
+                                Ok(()) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
                                 }
@@ -243,7 +243,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => Ok(here),
+                                Ok(()) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
                                     panic!("{}", e.to_string())
@@ -268,7 +268,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => {
+                                Ok(()) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
                                 }
@@ -285,7 +285,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => Ok(here),
+                                Ok(()) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
                                     panic!("{}", e.to_string())
@@ -310,7 +310,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => {
+                                Ok(()) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
                                 }
@@ -327,7 +327,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => Ok(here),
+                                Ok(()) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
                                     panic!("{}", e.to_string())
@@ -352,7 +352,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => {
+                                Ok(()) => {
                                     *own_clock = Instant::now();
                                     Ok(here)
                                 }
@@ -369,7 +369,7 @@ where
                                 (x, there),
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
-                                Ok(_) => Ok(here),
+                                Ok(()) => Ok(here),
                                 Err(e) => {
                                     cancel(s);
                                     panic!("{}", e.to_string())
