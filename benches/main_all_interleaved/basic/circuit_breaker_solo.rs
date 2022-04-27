@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl_with_enum_and_cancel, close_mpst_interleaved, fork_mpst_multi_solo,
+    baker, close_mpst_interleaved, fork_mpst_multi_solo,
     offer_mpst_interleaved,
 };
 
@@ -17,7 +17,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsFour, Api, Controller, Storage, User);
+baker!("rec_and_cancel", MeshedChannelsFour, Api, Controller, Storage, User);
 
 close_mpst_interleaved!(close_mpst, MeshedChannelsFour, 4);
 

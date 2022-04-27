@@ -28,13 +28,13 @@ pub mod choose;
 /// # Basic example
 ///
 /// ```
-/// use mpstthree::bundle_impl_with_enum;
+/// use mpstthree::baker_timed;
 ///
-/// bundle_impl_with_enum!(MeshedChannelsThree, A, B, C);
+/// baker_timed!(MeshedChannelsThree, A, B, C);
 /// ```
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking_timed")))]
-macro_rules! bundle_impl_timed_with_enum_and_cancel {
+macro_rules! baker_timed {
     (
         $meshedchannels_name: ident,
         $( $all_roles: ident),+ $(,)?

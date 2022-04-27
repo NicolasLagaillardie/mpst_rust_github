@@ -7,14 +7,14 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::bundle_impl_with_enum_and_cancel;
+use mpstthree::baker;
 
 use std::error::Error;
 
 static LOOPS: i64 = 100;
 
 // Create new roles
-bundle_impl_with_enum_and_cancel!(MeshedChannelsTen, A, B, C, D, E, F, G, H, I, J);
+baker!("rec_and_cancel", MeshedChannelsTen, A, B, C, D, E, F, G, H, I, J);
 
 // Types
 // Send/Recv

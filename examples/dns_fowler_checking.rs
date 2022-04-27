@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, checker_concat};
+use mpstthree::{baker, checker_concat};
 
 use rand::{thread_rng, Rng};
 
@@ -13,7 +13,13 @@ use std::fs::read_to_string;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, Data, Handler, Regional);
+baker!(
+    "rec_and_cancel",
+    MeshedChannelsThree,
+    Data,
+    Handler,
+    Regional
+);
 
 // Payload types
 struct FindNearestZone;

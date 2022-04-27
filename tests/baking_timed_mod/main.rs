@@ -3,15 +3,16 @@ use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{end::End, session::Session};
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
-use mpstthree::bundle_impl_timed_with_enum_and_cancel;
+use mpstthree::baker_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
+
 use std::collections::HashMap;
 use std::error::Error;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-bundle_impl_timed_with_enum_and_cancel!(MeshedChannels, A, B, D);
+baker_timed!(MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
@@ -198,7 +199,7 @@ fn authenticator(
                 let (video, s) = s.recv(all_clocks)?;
                 sleep(Duration::from_secs(2));
                 let s = s.send(video + 1, all_clocks)?;
-                sleep(Duration::from_secs(2));
+                sleep(Duration::from_millis(1500));
 
 
                 authenticator_recurs(s, all_clocks)

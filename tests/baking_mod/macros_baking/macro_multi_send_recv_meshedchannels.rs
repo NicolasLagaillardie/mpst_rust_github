@@ -1,12 +1,12 @@
 // Test for parametrisation on the number of roles
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, C, D, E);
+baker!("basic", MeshedChannels, A, B, C, D, E);
 
 type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, RoleB<RoleEnd>, NameD>;
 

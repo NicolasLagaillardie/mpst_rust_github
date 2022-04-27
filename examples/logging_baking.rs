@@ -1,7 +1,7 @@
 #![allow(clippy::type_complexity)]
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -13,7 +13,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, Controller, Logs);
+baker!("rec_and_cancel", MeshedChannelsTwo, Controller, Logs);
 
 // RoleController
 enum Branching0fromLtoC<N: marker::Send> {

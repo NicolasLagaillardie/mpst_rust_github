@@ -6,10 +6,10 @@ use std::error::Error;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::bundle_impl;
+use mpstthree::baker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, C);
+baker!("basic", MeshedChannels, A, B, C);
 
 // Those types will be code generated
 type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =

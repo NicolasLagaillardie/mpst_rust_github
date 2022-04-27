@@ -358,12 +358,7 @@ macro_rules! choose_mpst_multi_to_all {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! choose_mpst_create_multi_to_all {
-    (
-        $name: expr,
-        $sender: ident,
-        $meshedchannels_name: ident,
-        $exclusion: literal
-    ) => {
+    ($name:expr, $sender:ident, $meshedchannels_name:ident, $exclusion:literal) => {
         mpst_seq::choose_mpst_create_multi_to_all!(
             $name,
             $sender,

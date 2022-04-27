@@ -1,15 +1,15 @@
 // Test for parametrisation on the number of roles
 use rand::{thread_rng, Rng};
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::bundle_impl_with_enum;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl_with_enum!(MeshedChannels, A, B, D);
+baker!("recursive", MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types

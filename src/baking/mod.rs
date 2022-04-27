@@ -10,31 +10,22 @@
 ///
 /// # Arguments
 ///
+/// * Type of baker (basic, recursive, cancel, rec_and_cancel, interleaved)
 /// * Name of the new SessionMST
 /// * Names of the new roles. They are called as RoleX where X is the name provided.
 ///
-/// # Basic example
+/// # Basic examples
+///
+/// ## Basic
 ///
 /// ```
-/// use mpstthree::bundle_impl;
+/// use mpstthree::baker;
 ///
-/// bundle_impl!(MeshedChannelsThree, A, B, C);
+/// baker!("basic", MeshedChannelsThree, A, B, C);
 /// ```
-#[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
-macro_rules! bundle_impl {
-    (
-        $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
-    ) => {
-        mpst_seq::baking!(
-            $meshedchannels_name ,
-            $( $all_roles , )+
-        );
-    };
-}
-
-/// Create new SessionMST structures, new roles and the baking environment.
+///
+/// ## Recursive
+///
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:
 ///     choose_mpst_x_to_all!(
@@ -46,64 +37,25 @@ macro_rules! bundle_impl {
 ///     )
 /// This macro creates the related `fork_mpst` function.
 ///
-/// # Arguments
+/// ```
+/// use mpstthree::baker;
 ///
-/// * Name of the new SessionMST
-/// * Names of the new roles. They are called as RoleX where X is the name provided.
+/// baker!("recursive", MeshedChannelsThree, A, B, C);
+/// ```
 ///
-/// # Basic example
+/// ## Cancel
+///
+/// Also creates the primitives to handle an additional monitor that
+/// checks the health of each participant and broadcasts any failure.
 ///
 /// ```
-/// use mpstthree::bundle_impl_with_enum;
+/// use mpstthree::baker;
 ///
-/// bundle_impl_with_enum!(MeshedChannelsThree, A, B, C);
+/// baker!("cancel", MeshedChannelsThree, A, B, C);
 /// ```
-#[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
-macro_rules! bundle_impl_with_enum {
-    (
-        $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
-    ) => {
-        mpst_seq::baking_with_enum!(
-            $meshedchannels_name ,
-            $( $all_roles , )+
-        );
-    };
-}
-
-/// Create a new SessionMST structure, new roles and the baking environment,
-/// with `send` functions that can fail.
-/// This macro creates the related `fork_mpst` function.
 ///
-/// # Arguments
+/// ## Rec and Cancel
 ///
-/// * Name of the new SessionMST
-/// * Names of the new roles. They are called as RoleX where X is the name provided.
-///
-/// # Basic example
-///
-/// ```
-/// use mpstthree::bundle_impl;
-///
-/// bundle_impl!(MeshedChannelsThree, A, B, C);
-/// ```
-#[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
-macro_rules! bundle_impl_with_cancel {
-    (
-        $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
-    ) => {
-        mpst_seq::baking_with_cancel!(
-            $meshedchannels_name ,
-            $( $all_roles , )+
-        );
-    };
-}
-
-/// Create new SessionMST structures, new roles and the baking environment,
-/// with `send` functions that can fail.
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:
 ///     choose_mpst_x_to_all!(
@@ -115,34 +67,14 @@ macro_rules! bundle_impl_with_cancel {
 ///     )
 /// This macro creates the related `fork_mpst` function.
 ///
-/// # Arguments
-///
-/// * Name of the new SessionMST
-/// * Names of the new roles. They are called as RoleX where X is the name provided.
-///
-/// # Basic example
-///
 /// ```
-/// use mpstthree::bundle_impl_with_enum;
+/// use mpstthree::baker;
 ///
-/// bundle_impl_with_enum!(MeshedChannelsThree, A, B, C);
+/// baker!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 /// ```
-#[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
-macro_rules! bundle_impl_with_enum_and_cancel {
-    (
-        $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
-    ) => {
-        mpst_seq::baking_with_enum_and_cancel!(
-            $meshedchannels_name ,
-            $( $all_roles , )+
-        );
-    };
-}
-
-/// Create new SessionMST structures, new roles and the baking environment,
-/// with `send` functions that can fail.
+///
+/// ## Interleaved
+///
 /// Also create the macros needed for choosing branches.
 /// Each macro is linked to a role X and are called as followed:
 ///     choose_mpst_x_to_all!(
@@ -155,22 +87,56 @@ macro_rules! bundle_impl_with_enum_and_cancel {
 /// This macro does NOT create the related `fork_mpst` function
 /// to avoid conflicts for interleaved functions.
 ///
-/// # Arguments
-///
-/// * Name of the new SessionMST
-/// * Names of the new roles. They are called as RoleX where X is the name provided.
-///
-/// # Basic example
-///
 /// ```
-/// use mpstthree::bundle_impl_with_enum;
+/// use mpstthree::baker;
 ///
-/// bundle_impl_with_enum!(MeshedChannelsThree, A, B, C);
+/// baker!("interleaved", MeshedChannelsThree, A, B, C);
 /// ```
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
-macro_rules! bundle_impl_interleaved_with_enum_and_cancel {
+macro_rules! baker {
     (
+        "basic",
+        $meshedchannels_name: ident,
+        $( $all_roles: ident),+ $(,)?
+    ) => {
+        mpst_seq::baking!(
+            $meshedchannels_name ,
+            $( $all_roles , )+
+        );
+    };
+    (
+        "recursive",
+        $meshedchannels_name: ident,
+        $( $all_roles: ident),+ $(,)?
+    ) => {
+        mpst_seq::baking_with_enum!(
+            $meshedchannels_name ,
+            $( $all_roles , )+
+        );
+    };
+    (
+        "cancel",
+        $meshedchannels_name: ident,
+        $( $all_roles: ident),+ $(,)?
+    ) => {
+        mpst_seq::baking_with_cancel!(
+            $meshedchannels_name ,
+            $( $all_roles , )+
+        );
+    };
+    (
+        "rec_and_cancel",
+        $meshedchannels_name: ident,
+        $( $all_roles: ident),+ $(,)?
+    ) => {
+        mpst_seq::baking_with_enum_and_cancel!(
+            $meshedchannels_name ,
+            $( $all_roles , )+
+        );
+    };
+    (
+        "interleaved",
         $meshedchannels_name: ident,
         $( $all_roles: ident),+ $(,)?
     ) => {

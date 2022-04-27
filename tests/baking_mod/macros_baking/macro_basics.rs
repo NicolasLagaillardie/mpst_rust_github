@@ -3,10 +3,10 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
-use mpstthree::bundle_impl;
+use mpstthree::baker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
+baker!("basic", MeshedChannels, A, B, D);
 
 type StackA = RoleA<RoleEnd>;
 type StackD = RoleD<RoleEnd>;

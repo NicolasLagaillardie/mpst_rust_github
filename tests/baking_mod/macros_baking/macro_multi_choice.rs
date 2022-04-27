@@ -6,10 +6,10 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;
 
-use mpstthree::bundle_impl;
+use mpstthree::baker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
+baker!("basic", MeshedChannels, A, B, D);
 
 // Those types will be code generated
 type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =

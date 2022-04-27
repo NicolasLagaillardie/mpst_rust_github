@@ -7,10 +7,10 @@ use std::marker;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::{bundle_impl, choose_mpst_multi_to_all};
+use mpstthree::{baker, choose_mpst_multi_to_all};
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, C);
+baker!("basic", MeshedChannels, A, B, C);
 
 // Types
 type AtoBVideo<N> = Send<N, Recv<N, End>>;

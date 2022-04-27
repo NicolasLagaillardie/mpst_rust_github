@@ -2,8 +2,8 @@ use criterion::{black_box, Criterion};
 
 use rand::{thread_rng, Rng};
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -11,7 +11,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C);
+baker!("rec_and_cancel", MeshedChannels, A, B, C);
 
 // See the folder scribble_protocols for the related Scribble protocol
 

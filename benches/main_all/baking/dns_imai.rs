@@ -1,7 +1,7 @@
 use criterion::{black_box, Criterion};
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -12,7 +12,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, Client, Other, Server);
+baker!("rec_and_cancel", MeshedChannelsThree, Client, Other, Server);
 
 // Types
 // SERVER

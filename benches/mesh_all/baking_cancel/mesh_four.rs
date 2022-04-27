@@ -9,14 +9,14 @@ use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, choose, offer};
+use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-bundle_impl_with_enum_and_cancel!(MeshedChannelsFour, A, B, C, D);
+baker!("rec_and_cancel", MeshedChannelsFour, A, B, C, D);
 
 // Types
 // Send/Recv

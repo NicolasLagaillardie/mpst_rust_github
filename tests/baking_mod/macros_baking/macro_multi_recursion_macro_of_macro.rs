@@ -4,12 +4,12 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl, choose_mpst_create_multi_to_all};
+use mpstthree::{baker, choose_mpst_create_multi_to_all};
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
+baker!("basic", MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
