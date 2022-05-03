@@ -74,9 +74,9 @@ type StoL = RecvTimed<WebFontLoaded, End, 'a', 0, true, 5, true, false>;
 
 // Orderings
 
-type OrderingC = RoleScript<RoleScript<RoleLayout<RoleLayout<RoleEnd>>>>;
+type OrderingC = RoleLayout<RoleLayout<RoleScript<RoleScript<RoleEnd>>>>;
 
-type OrderingL = RoleScript<RoleConstellation<RoleConstellation<RoleEnd>>>;
+type OrderingL = RoleConstellation<RoleConstellation<RoleScript<RoleEnd>>>;
 
 type OrderingS = RoleConstellation<RoleConstellation<RoleLayout<RoleEnd>>>;
 
@@ -95,19 +95,6 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     all_clocks.insert('a', Instant::now());
     sleep(Duration::from_secs(1));
 
-    let s = s.send(GetCurrentState {}, all_clocks)?;
-    println!("send GetCurrentState from C");
-
-    let (_, s) = s.recv(all_clocks)?;
-    println!("recv DocumentLoading on C");
-    println!(
-        "C: Current page loaded at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
-
-    // To "process" the information
-    sleep(Duration::from_secs(1));
-
     let s = s.send(GetWebPageLoadState {}, all_clocks)?;
     println!("send GetWebPageLoadState from C");
 
@@ -122,6 +109,19 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
         all_clocks.get(&'a').unwrap().elapsed().as_secs()
     );
 
+    // To "process" the information
+    sleep(Duration::from_secs(1));
+
+    let s = s.send(GetCurrentState {}, all_clocks)?;
+    println!("send GetCurrentState from C");
+
+    let (_, s) = s.recv(all_clocks)?;
+    println!("recv DocumentLoading on C");
+    println!(
+        "C: Current page loaded at {:?} s",
+        all_clocks.get(&'a').unwrap().elapsed().as_secs()
+    );
+
     s.close()?;
     println!("C closed");
     Ok(())
@@ -133,18 +133,18 @@ fn endpoint_l(s: EndpointL, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     all_clocks.insert('a', Instant::now());
     sleep(Duration::from_secs(1));
 
+    let (_, s) = s.recv(all_clocks)?;
+    println!("recv GetWebPageLoadState on L");
+
+    let s = s.send(OutstandingWebFonts {}, all_clocks)?;
+    println!("send OutstandingWebFonts from L");
+
     let s = s.send(WebFontLoaded {}, all_clocks)?;
     println!("send WebFontLoaded from L");
     println!(
         "L: new font loaded at {:?} s",
         all_clocks.get(&'a').unwrap().elapsed().as_secs()
     );
-
-    let (_, s) = s.recv(all_clocks)?;
-    println!("recv GetWebPageLoadState on L");
-
-    let s = s.send(OutstandingWebFonts {}, all_clocks)?;
-    println!("send OutstandingWebFonts from L");
 
     s.close()?;
     println!("L closed");
@@ -166,13 +166,13 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     let (_, s) = s.recv(all_clocks)?;
     println!("recv WebFontLoaded on S");
 
-    // Simulate new fonts loaded BEFORE the script thread said the page was loaded
+    // Simulate new fonts loaded AFTER the script thread said the page was loaded
     println!("S: WebFontLoaded = false");
     println!(
         "S: starts redrawing the page at {:?} s",
         all_clocks.get(&'a').unwrap().elapsed().as_secs()
     );
-    // sleep(Duration::from_secs(2));
+    sleep(Duration::from_secs(2));
     println!(
         "S: finishes redrawing the page at {:?} s",
         all_clocks.get(&'a').unwrap().elapsed().as_secs()

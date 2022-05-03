@@ -235,6 +235,10 @@ required-features = ["baking_timed"]
 name = "servo_8257_async_working"
 required-features = ["baking_timed"]
 
+[[example]]
+name = "servo_8257_async_fixed"
+required-features = ["baking_timed"]
+
 ################################### Profil
 
 [profile.release]
