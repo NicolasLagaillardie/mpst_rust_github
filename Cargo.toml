@@ -209,7 +209,7 @@ required-features = ["macros_simple"]
 
 [[example]]
 name = "video_stream"
-required-features = ["baking_checking"]
+required-features = [""]
 
 [[example]]
 name = "adder"
