@@ -530,7 +530,7 @@ described in Table 1 of the paper:
 The main function uses `fork_mpst` to fork the different threads.
 
 All those primitives are generated using
-the macro `bundle_impl_with_enum_and_cancel!`.
+the macro `baker!`.
 
 Now, if you run again the file, it should run correctly:
 
@@ -725,7 +725,7 @@ __Need help?__: This example is implemented in `examples/basic.rs`, hence you ca
 
 ```rust
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
-use mpstthree::bundle_impl_with_enum_and_cancel; // The macro for generating the roles and the MeshedChannels
+use mpstthree::baker; // The macro for generating the roles and the MeshedChannels
 use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles
 use mpstthree::checker_concat; // Used for checking the protocol
@@ -735,7 +735,7 @@ use std::error::Error; // Used for functions
 2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
 
 ```rust
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B); // generates meshed channels for 3 roles
+baker!("rec_and_cancel", MeshedChannels, A, B); // generates meshed channels for 3 roles
 ```
 
 <!-- Replace `A, B` with the different names
@@ -911,3 +911,13 @@ cargo run --example=my_basic --features=baking_checking
 ```
 
 </details>
+
+## Acknowledgements
+
+The authors wish to thank Martin vassor for their comments and testing the artifact,
+and the anonymous reviewers for their comments and suggestions.
+
+## Funding
+
+Funding The work is partially supported by VeTSS, EPSRC EP/K011715/1, EP/K034413/1,
+EP/L00058X/1, EP/N027833/1, EP/N028201/1, EP/T006544/1 and EP/T014709/1.
