@@ -1,6 +1,6 @@
 use crossbeam_channel::bounded;
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
@@ -311,6 +311,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoB::Done(s) => {
@@ -340,6 +341,7 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoC::Done(s) => {
@@ -369,6 +371,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoD::Done(s) => {
@@ -398,6 +401,7 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoE::Done(s) => {
@@ -427,6 +431,7 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoF::Done(s) => {
@@ -456,6 +461,7 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoG::Done(s) => {
@@ -485,6 +491,7 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoH::Done(s) => {
@@ -514,6 +521,7 @@ fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromJtoI::Done(s) => {
@@ -543,6 +551,7 @@ fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_j(s: EndpointJ) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -770,31 +779,23 @@ fn all_crossbeam() {
 
 static LOOPS: i64 = 100;
 
-fn mesh_protocol_mpst(c: &mut Criterion) {
+pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh ten baking inline protocol MPST {}", LOOPS),
         |b| b.iter(all_mpst),
     );
 }
 
-fn mesh_protocol_binary(c: &mut Criterion) {
+pub fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh ten baking inline protocol binary {}", LOOPS),
         |b| b.iter(all_binaries),
     );
 }
 
-fn mesh_protocol_crossbeam(c: &mut Criterion) {
+pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh ten baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(all_crossbeam),
     );
 }
-
-criterion_group! {
-    name = mesh_ten;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = mesh_protocol_mpst, mesh_protocol_binary, mesh_protocol_crossbeam
-}
-
-criterion_main!(mesh_ten);

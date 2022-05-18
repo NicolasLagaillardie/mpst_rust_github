@@ -1,10 +1,11 @@
 [package]
 name = "mpstthree"
-version = "0.0.14"
+version = "0.1.16"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
+homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
 license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "multicrusty"]
@@ -19,6 +20,8 @@ include = [
     "/README.md",
     "/src/**",
     "/tests/**",
+    "/examples/**",
+    "main.rs",
 ]
 exclude = [
     ".travis.yml",
@@ -89,21 +92,6 @@ path = "tests/macros_simple.rs"
 required-features = ["macros_simple"]
 
 [[test]]
-name = "transport_udp"
-path = "tests/transport_udp.rs"
-required-features = ["transport_udp"]
-
-[[test]]
-name = "transport_tcp"
-path = "tests/transport_tcp.rs"
-required-features = ["transport_tcp"]
-
-[[test]]
-name = "transport_http"
-path = "tests/transport_http.rs"
-required-features = ["transport_http", "macros_multiple"]
-
-[[test]]
 name = "baking"
 path = "tests/baking.rs"
 required-features = ["baking", "checking"]
@@ -128,24 +116,9 @@ required-features = []
 [[bench]]
 name = "main"
 harness = false
-required-features = ["baking_interleaved"]
+required-features = ["baking"]
 
-[[bench]]
-name = "mesh"
-harness = false
-required-features = ["baking_interleaved"]
-
-[[bench]]
-name = "ring"
-harness = false
-required-features = ["baking_interleaved"]
-
-[[bench]]
-name = "ping_pong"
-harness = false
-required-features = ["baking_interleaved"]
-
-################################### Examples
+################################### Basic examples
 
 [[example]]
 name = "circuit_breaker"
@@ -162,18 +135,6 @@ required-features = ["baking"]
 [[example]]
 name = "logging_baking"
 required-features = ["baking"]
-
-[[example]]
-name = "circuit_breaker_solo"
-required-features = ["baking_interleaved"]
-
-[[example]]
-name = "logging_solo"
-required-features = ["baking_interleaved"]
-
-[[example]]
-name = "circuit_breaker_logging_interleaved"
-required-features = ["baking_interleaved"]
 
 [[example]]
 name = "distributed_calc"
@@ -204,7 +165,7 @@ name = "o_auth_checking"
 required-features = ["baking_checking"]
 
 [[example]]
-name = "o_auth_2"
+name = "o_auth_transport"
 required-features = ["transport_macros_multiple"]
 
 [[example]]
@@ -228,8 +189,28 @@ name = "travel_three"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "video_stream"
+name = "video_stream_basic"
 required-features = ["macros_simple"]
+
+[[example]]
+name = "video_stream"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "adder"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "basic"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_original"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed"
+required-features = ["baking_checking"]
 
 ################################### Profil
 
@@ -245,7 +226,7 @@ crossbeam-channel = "0.5"
 either = "1.6"
 hyper = { version = "0.14", features = ["full"], optional = true }
 hyper-tls = { version = "0.5", optional = true }
-tokio = { version = "1.12", features = ["full"], optional = true }
+tokio = { version = "1.14", features = ["full"], optional = true }
 regex = { version = "1.5", optional = true }
 petgraph = { version = "0.6", optional = true }
 

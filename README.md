@@ -5,7 +5,7 @@
 ![Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/windows.yml/badge.svg)
 ![Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/mac.yml/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.56+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.58+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
 [![dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
@@ -22,7 +22,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.0.14"
+mpstthree = "0.1.16"
 ```
 
 ## Example
@@ -42,47 +42,39 @@ use std::error::Error;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::meshedchannels::MeshedChannels;
 
-// Used for creating the stack and the name of each role
+// Used for creating the stack of each role
 use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
 
-// Used inside the functions which process the protocol for receiving one payload
-use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
-use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
-use mpstthree::functionmpst::recv::recv_mpst_c_from_b;
-
-// Used inside the functions which process the protocol for sending one payload
-use mpstthree::functionmpst::send::send_mpst_a_to_b;
-use mpstthree::functionmpst::send::send_mpst_b_to_c;
-use mpstthree::functionmpst::send::send_mpst_c_to_a;
-
-// Used inside the functions which process the protocol for closing the connexion
-use mpstthree::functionmpst::close::close_mpst;
+// Importing the names of the participants
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 // Used for connecting all the roles, represented as MeshedChannels, together
 use mpstthree::functionmpst::fork::fork_mpst;
 ```
 
 Then, you have to create the **binary session types** defining the interactions for each pair of participants.
-Note that each created type can be reused as many time as needed.
+Note that each created type can be reused as many times as needed.
 For our example, we create several times the same binary session type for clarity,
 but we could use only two of those types for the whole protocol instead.
 
 ```rust
 // Creating the binary sessions
 // for A
-type AtoB<N> = Send<N, End>;
-type AtoC<N> = Recv<N, End>;
+type AtoB = Send<i32, End>;
+type AtoC = Recv<i32, End>;
 
 // for B
-type BtoA<N> = Recv<N, End>;
-type BtoC<N> = Send<N, End>;
+type BtoA = Recv<i32, End>;
+type BtoC = Send<i32, End>;
 
 // for C
-type CtoA<N> = Send<N, End>;
-type CtoB<N> = Recv<N, End>;
+type CtoA = Send<i32, End>;
+type CtoB = Recv<i32, End>;
 ```
 
 Add the **stacks** which give the correct order of the operations for each participant.
@@ -103,11 +95,11 @@ We also add the names of the related roles.
 ```rust
 // Creating the MP sessions
 // for A
-type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+type EndpointA = MeshedChannels<AtoB, AtoC, StackA, NameA>;
 // for B
-type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+type EndpointB = MeshedChannels<BtoA, BtoC, StackB, NameB>;
 // for C
-type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+type EndpointC = MeshedChannels<CtoA, CtoB, StackC, NameC>;
 ```
 
 To run the protocol,
@@ -115,27 +107,27 @@ we need to detail the behaviour of the participants with functions that input th
 
 ```rust
 // Function to process Endpoint of A
-fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_a_to_b(1, s);
-    let (x, s) = recv_mpst_a_from_c(s)?;
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    let s = s.send(1);
+    let (_x, s) = s.recv()?;
 
-    close_mpst(s)
+    s.close()
 }
 
 // Function to process Endpoint of B
-fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
-    let (x, s) = recv_mpst_b_from_a(s)?;
-    let s = send_mpst_b_to_c(2, s);
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    let (_x, s) = s.recv()?;
+    let s = s.send(2);
 
-    close_mpst(s)
+    s.close()
 }
 
 // Function to process Endpoint of C
-fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_c_to_a(3, s);
-    let (x, s) = recv_mpst_c_from_b(s)?;
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+    let s = s.send(3);
+    let (_x, s) = s.recv()?;
 
-    close_mpst(s)
+    s.close()
 }
 ```
 
@@ -156,6 +148,14 @@ fn main() {
     thread_b.join().unwrap();
     thread_c.join().unwrap();
 }
+```
+
+### Running this example
+
+For running this example, assuming it is in the **examples/** folder, use:
+
+```sh
+cargo run --example [name of your example]
 ```
 
 ## Getting started
@@ -180,21 +180,46 @@ cargo build
 For running the tests, run this code.
 
 ```sh
-cargo test --all-features
+cargo test
 ```
 
 ### Running
 
-For running an example XXX of the library, run this code.
+For running an example [XXX] of the library, run this code.
 
 ```sh
-cargo run --example XXX --all-features
+cargo run --example [XXX]
 ```
+
+Depending on the example you would like to run,
+you may have to modify the previous command line into:
+
+```sh
+cargo run --example [XXX] --features="[YYY]"
+```
+
+where [YYY] is one or more of the features
+provided in [Available features](#Available-features) hereafter.
 
 ## Going further
 
 With this library, one can write any protocol with at least two participants and using methods to shorten the writing and checking.
 You can check the tests and examples to have a larger overview of the different possibilities provided by this library.
+
+## Available features
+
+The different features available are:
+
+1. `default`: default features, for implementing the basic example above.
+2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
+3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
+4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
+5. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+7. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+8. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
+9. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
+10. `full`: feature containing `checking`, `baking` and `transport`.
 
 ## Contributing
 
@@ -207,7 +232,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 
 * **Nicolas Lagaillardie** - *Initial work* - [NicolasLagaillardie](https://github.com/NicolasLagaillardie)
-* **Rumyana Neykova** - *Initial work* - [rumineykova](https://github.com/rumineykova)
+* **Rumyana Neykova** - *Initial work* - [RumyanaNeykova](https://github.com/rumineykova)
 * **Nobuko Yoshida** - *Initial work* - [NobukoYoshida](https://github.com/NobukoYoshida)
 
 See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_rust_github/graphs/contributors) who participated in this project.

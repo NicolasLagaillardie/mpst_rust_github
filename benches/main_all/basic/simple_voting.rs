@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -201,14 +201,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn simple_voting_mpst(c: &mut Criterion) {
-    c.bench_function(&"Simple voting MPST".to_string(), |b| b.iter(all_mpst));
+pub fn simple_voting_main(c: &mut Criterion) {
+    c.bench_function("Simple voting MPST", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = simple_voting;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = simple_voting_mpst,
-}
-
-criterion_main!(simple_voting);

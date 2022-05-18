@@ -1,6 +1,6 @@
 use crossbeam_channel::bounded;
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
@@ -272,28 +272,20 @@ fn all_crossbeam() {
 
 static LOOPS: i64 = 1;
 
-fn ping_pong_protocol_mpst(c: &mut Criterion) {
+pub fn ping_pong_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ping pong protocol MPST {}", LOOPS), |b| {
         b.iter(all_mpst)
     });
 }
 
-fn ping_pong_protocol_binary(c: &mut Criterion) {
+pub fn ping_pong_protocol_binary(c: &mut Criterion) {
     c.bench_function(&format!("ping pong protocol binary {}", LOOPS), |b| {
         b.iter(all_binaries)
     });
 }
 
-fn ping_pong_protocol_crossbeam(c: &mut Criterion) {
+pub fn ping_pong_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(&format!("ping pong protocol crossbeam {}", LOOPS), |b| {
         b.iter(all_crossbeam)
     });
 }
-
-criterion_group! {
-    name = ping_pong;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ping_pong_protocol_mpst, ping_pong_protocol_binary, ping_pong_protocol_crossbeam
-}
-
-criterion_main!(ping_pong);

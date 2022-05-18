@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use rand::{thread_rng, Rng};
 
@@ -11,7 +11,7 @@ use std::boxed::Box;
 use std::error::Error;
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C,);
+bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C);
 
 // See the folder scribble_protocols for the related Scribble protocol
 
@@ -162,14 +162,6 @@ fn all_mpst() {
 
 /////////////////////////
 
-fn video_stream_main(c: &mut Criterion) {
-    c.bench_function(&"Video stream baking".to_string(), |b| b.iter(all_mpst));
+pub fn video_stream_main(c: &mut Criterion) {
+    c.bench_function("Video stream baking", |b| b.iter(all_mpst));
 }
-
-criterion_group! {
-    name = video_stream;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = video_stream_main
-}
-
-criterion_main!(video_stream);

@@ -1,6 +1,6 @@
 #![allow(dead_code, clippy::large_enum_variant)]
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -4401,17 +4401,9 @@ fn all_mpst() {
 
 static LOOPS: i64 = 100;
 
-fn mesh_protocol_mpst(c: &mut Criterion) {
+pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh twenty cancel protocol MPST {}", LOOPS),
         |b| b.iter(all_mpst),
     );
 }
-
-criterion_group! {
-    name = mesh_twenty;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = mesh_protocol_mpst
-}
-
-criterion_main!(mesh_twenty);

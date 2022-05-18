@@ -37,7 +37,7 @@ type VecOfTuple = Vec<(String, usize)>;
 pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     // The regex expression
     let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
-    let mut temp = session.replace("&", "");
+    let mut temp = session.replace('&', "");
 
     // Replace with regex expression -> term1::term2::term3 by term3
     for caps in main_re.captures_iter(session) {
@@ -201,8 +201,8 @@ pub(crate) fn extract_index_node(
     Ok(format!(
         "{}{}",
         index_node[..depth_level]
-            .to_vec()
-            .into_iter()
+            .iter()
+            .copied()
             .map(|i| format!("{}.", i))
             .collect::<String>(),
         index_node[depth_level]

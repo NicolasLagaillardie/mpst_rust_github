@@ -1,6 +1,6 @@
 use crossbeam_channel::bounded;
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
@@ -55,6 +55,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
@@ -225,31 +226,23 @@ fn all_crossbeam() {
 
 static LOOPS: i64 = 100;
 
-fn ring_protocol_mpst(c: &mut Criterion) {
+pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("ring two baking inline protocol MPST {}", LOOPS),
         |b| b.iter(all_mpst),
     );
 }
 
-fn ring_protocol_binary(c: &mut Criterion) {
+pub fn ring_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("ring two baking inline protocol binary {}", LOOPS),
         |b| b.iter(all_binaries),
     );
 }
 
-fn ring_protocol_crossbeam(c: &mut Criterion) {
+pub fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("ring two baking inline protocol crossbeam {}", LOOPS),
         |b| b.iter(all_crossbeam),
     );
 }
-
-criterion_group! {
-    name = ring_two;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ring_protocol_mpst, ring_protocol_binary, ring_protocol_crossbeam
-}
-
-criterion_main!(ring_two);

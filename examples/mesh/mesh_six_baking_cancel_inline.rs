@@ -1,0 +1,313 @@
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant
+)]
+
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::bundle_impl_with_enum_and_cancel;
+use mpstthree::role::broadcast::RoleBroadcast;
+use mpstthree::role::end::RoleEnd;
+
+use std::error::Error;
+
+static LOOPS: i64 = 100;
+
+// Create new roles
+bundle_impl_with_enum_and_cancel!(MeshedChannelsSix, A, B, C, D, E, F);
+
+// Names
+type NameA = RoleA<RoleEnd>;
+type NameB = RoleB<RoleEnd>;
+type NameC = RoleC<RoleEnd>;
+type NameD = RoleD<RoleEnd>;
+type NameE = RoleE<RoleEnd>;
+type NameF = RoleF<RoleEnd>;
+
+// Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+type R2D<R> = RoleD<RoleD<R>>;
+type R2E<R> = RoleE<RoleE<R>>;
+type R2F<R> = RoleF<RoleF<R>>;
+// A
+enum Branching0fromFtoA {
+    More(
+        MeshedChannelsSix<
+            RS,
+            RS,
+            RS,
+            RS,
+            Recv<(), Send<(), RecursAtoF>>,
+            R2F<R2B<R2C<R2D<R2E<RoleF<RoleEnd>>>>>>,
+            NameA,
+        >,
+    ),
+    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
+}
+type RecursAtoF = Recv<Branching0fromFtoA, End>;
+// B
+enum Branching0fromFtoB {
+    More(
+        MeshedChannelsSix<
+            SR,
+            RS,
+            RS,
+            RS,
+            Recv<(), Send<(), RecursBtoF>>,
+            R2F<R2A<R2C<R2D<R2E<RoleF<RoleEnd>>>>>>,
+            NameB,
+        >,
+    ),
+    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
+}
+type RecursBtoF = Recv<Branching0fromFtoB, End>;
+// C
+enum Branching0fromFtoC {
+    More(
+        MeshedChannelsSix<
+            SR,
+            SR,
+            RS,
+            RS,
+            Recv<(), Send<(), RecursCtoF>>,
+            R2F<R2A<R2B<R2D<R2E<RoleF<RoleEnd>>>>>>,
+            NameC,
+        >,
+    ),
+    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
+}
+type RecursCtoF = Recv<Branching0fromFtoC, End>;
+// D
+enum Branching0fromFtoD {
+    More(
+        MeshedChannelsSix<
+            SR,
+            SR,
+            SR,
+            RS,
+            Recv<(), Send<(), RecursDtoF>>,
+            R2F<R2A<R2B<R2C<R2E<RoleF<RoleEnd>>>>>>,
+            NameD,
+        >,
+    ),
+    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
+}
+type RecursDtoF = Recv<Branching0fromFtoD, End>;
+// E
+enum Branching0fromFtoE {
+    More(
+        MeshedChannelsSix<
+            SR,
+            SR,
+            SR,
+            SR,
+            Recv<(), Send<(), RecursEtoF>>,
+            R2F<R2A<R2B<R2C<R2D<RoleF<RoleEnd>>>>>>,
+            NameE,
+        >,
+    ),
+    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>),
+}
+type RecursEtoF = Recv<Branching0fromFtoE, End>;
+// F
+type Choose0fromFtoA = Send<Branching0fromFtoA, End>;
+type Choose0fromFtoB = Send<Branching0fromFtoB, End>;
+type Choose0fromFtoC = Send<Branching0fromFtoC, End>;
+type Choose0fromFtoD = Send<Branching0fromFtoD, End>;
+type Choose0fromFtoE = Send<Branching0fromFtoE, End>;
+type EndpointMoreF = MeshedChannelsSix<
+    Send<(), Recv<(), Choose0fromFtoA>>,
+    Send<(), Recv<(), Choose0fromFtoB>>,
+    Send<(), Recv<(), Choose0fromFtoC>>,
+    Send<(), Recv<(), Choose0fromFtoD>>,
+    Send<(), Recv<(), Choose0fromFtoE>>,
+    R2A<R2B<R2C<R2D<R2E<RoleBroadcast>>>>>,
+    NameF,
+>;
+
+// Creating the MP sessions
+type EndpointA = MeshedChannelsSix<End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
+type EndpointB = MeshedChannelsSix<End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
+type EndpointC = MeshedChannelsSix<End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
+type EndpointD = MeshedChannelsSix<End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
+type EndpointE = MeshedChannelsSix<End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
+type EndpointF = MeshedChannelsSix<
+    Choose0fromFtoA,
+    Choose0fromFtoB,
+    Choose0fromFtoC,
+    Choose0fromFtoD,
+    Choose0fromFtoE,
+    RoleBroadcast,
+    NameF,
+>;
+
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromFtoA::Done(s) => {
+            s.close()
+        },
+        Branching0fromFtoA::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            endpoint_a(s)
+        },
+    })
+}
+
+#[inline]
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromFtoB::Done(s) => {
+            s.close()
+        },
+        Branching0fromFtoB::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            endpoint_b(s)
+        },
+    })
+}
+
+#[inline]
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromFtoC::Done(s) => {
+            s.close()
+        },
+        Branching0fromFtoC::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            endpoint_c(s)
+        },
+    })
+}
+
+#[inline]
+fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromFtoD::Done(s) => {
+            s.close()
+        },
+        Branching0fromFtoD::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            endpoint_d(s)
+        },
+    })
+}
+
+#[inline]
+fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromFtoE::Done(s) => {
+            s.close()
+        },
+        Branching0fromFtoE::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            endpoint_e(s)
+        },
+    })
+}
+
+#[inline]
+fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_f(temp_s)?;
+    }
+
+    let s = choose_mpst_f_to_all!(
+        temp_s,
+        Branching0fromFtoA::Done,
+        Branching0fromFtoB::Done,
+        Branching0fromFtoC::Done,
+        Branching0fromFtoD::Done,
+        Branching0fromFtoE::Done
+    );
+
+    s.close()
+}
+
+fn recurs_f(s: EndpointF) -> Result<EndpointF, Box<dyn Error>> {
+    let s: EndpointMoreF = choose_mpst_f_to_all!(
+        s,
+        Branching0fromFtoA::More,
+        Branching0fromFtoB::More,
+        Branching0fromFtoC::More,
+        Branching0fromFtoD::More,
+        Branching0fromFtoE::More
+    );
+
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
+}
+
+fn main() {
+    let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f) = fork_mpst(
+        endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f,
+    );
+
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
+    thread_e.join().unwrap();
+    thread_f.join().unwrap();
+}

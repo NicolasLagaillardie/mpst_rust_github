@@ -17,7 +17,7 @@ where
     let (there, here) = Session::new();
     let other_thread = Builder::new()
         .name(String::from("Thread P"))
-        .stack_size(32 * 1024 * 1024)
+        .stack_size(64 * 1024 * 1024)
         .spawn(move || {
             panic::set_hook(Box::new(|_info| {
                 // do nothing

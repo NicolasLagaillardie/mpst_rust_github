@@ -36,7 +36,7 @@ where
     let (there, here) = Session::new();
     let other_thread = Builder::new()
         .name(String::from(address))
-        .stack_size(32 * 1024 * 1024)
+        .stack_size(64 * 1024 * 1024)
         .spawn(move || {
             panic::set_hook(Box::new(|_info| {
                 // do nothing
@@ -45,7 +45,6 @@ where
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }
-        })
-        .unwrap();
+        })?;
     Ok((other_thread, here, stream))
 }

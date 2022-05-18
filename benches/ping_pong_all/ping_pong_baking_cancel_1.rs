@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::bundle_impl_with_enum_and_cancel;
@@ -93,16 +93,8 @@ fn all_mpst() {
 
 static LOOPS: i64 = 1;
 
-fn ping_pong_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong protocol MPST {}", LOOPS), |b| {
+pub fn ping_pong_protocol_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("ping pong baking protocol MPST {}", LOOPS), |b| {
         b.iter(all_mpst)
     });
 }
-
-criterion_group! {
-    name = ping_pong;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ping_pong_protocol_mpst
-}
-
-criterion_main!(ping_pong);

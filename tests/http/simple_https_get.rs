@@ -1,8 +1,9 @@
 use hyper::{Body, Client, Response, StatusCode};
 use hyper_tls::HttpsConnector;
+use std::error::Error;
 
 #[tokio::main]
-async fn aux() -> Result<Response<Body>, Box<dyn std::error::Error + Send + Sync>> {
+async fn aux() -> Result<Response<Body>, Box<dyn Error + Send + Sync>> {
     let https = HttpsConnector::new();
 
     let client = Client::builder().build::<_, hyper::Body>(https);

@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{black_box, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -782,16 +782,8 @@ fn all_mpst() {
 
 static LOOPS: i64 = 100;
 
-fn ring_protocol_mpst(c: &mut Criterion) {
+pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ring ten cancel protocol MPST {}", LOOPS), |b| {
         b.iter(all_mpst)
     });
 }
-
-criterion_group! {
-    name = ring_ten;
-    config = Criterion::default().significance_level(0.1).sample_size(10100);
-    targets = ring_protocol_mpst
-}
-
-criterion_main!(ring_ten);

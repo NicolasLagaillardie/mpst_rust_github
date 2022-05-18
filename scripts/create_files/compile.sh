@@ -18,7 +18,7 @@ do
     ts=$(date +%s%N)
     # Run command
     cargo check --example=$1 --features="$3" 
-    # Get difference
+    # Get difference in ms
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference
     printf "check; $tt\n" >> compile_time/$1.txt
