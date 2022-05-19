@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct OfferMPSTSessionMulti {
+pub(crate) struct OfferMPSTSessionMulti {
     func_name: Ident,
     type_name: Ident,
     role: Ident,
@@ -56,11 +56,11 @@ impl From<OfferMPSTSessionMulti> for TokenStream {
 
 impl OfferMPSTSessionMulti {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let type_name = self.type_name.clone();
-        let role = self.role.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let type_name = &self.type_name;
+        let role = &self.role;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
@@ -103,9 +103,7 @@ impl OfferMPSTSessionMulti {
                             )*
                             R1,
                             R2,
-                            #name<
-                                mpstthree::role::end::RoleEnd
-                            >
+                            #name
                         >,
                     }
                 }
@@ -175,7 +173,7 @@ impl OfferMPSTSessionMulti {
                         #new_types
                     )*
                     #role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
                 f: F,
                 g: G,
@@ -192,7 +190,7 @@ impl OfferMPSTSessionMulti {
                             #sessions_left
                         )*
                         R1,
-                        #name<mpstthree::role::end::RoleEnd>,
+                        #name,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
@@ -201,7 +199,7 @@ impl OfferMPSTSessionMulti {
                             #sessions_right
                         )*
                         R2,
-                        #name<mpstthree::role::end::RoleEnd>,
+                        #name,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {

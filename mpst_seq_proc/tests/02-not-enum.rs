@@ -29,7 +29,7 @@
 use mpst_seq_proc::branching;
 
 #[branching]
-pub struct Error {
+pub struct  Error {
     kind: ErrorKind,
     message: String,
 }

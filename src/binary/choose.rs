@@ -5,6 +5,7 @@
 use crate::binary::cancel::cancel;
 use crate::binary::send::send;
 use crate::binary::struct_trait::{end::End, send::Send, session::Session};
+
 use either::Either;
 
 /// Choose between two sessions `S1` and `S2`. Implemented

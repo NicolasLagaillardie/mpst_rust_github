@@ -5,8 +5,8 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
-    create_multiple_normal_role_short, create_recv_http_session_bundle,
-    create_send_mpst_http_bundle, offer_http_mpst,
+    create_multiple_normal_name_short, create_multiple_normal_role_short,
+    create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
 };
 
 use hyper::Request;
@@ -25,24 +25,27 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree
 // normal
 create_multiple_normal_role_short!(A, C, S);
 
+// normal
+create_multiple_normal_name_short!(A, C, S);
+
 // Create new send functions
 // A
 create_send_mpst_http_bundle!(
     send_http_a_to_c, RoleC, 1 |
     send_http_a_to_s, RoleS, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_send_mpst_http_bundle!(
     send_http_c_to_a, RoleA, 1 |
     send_http_c_to_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_http_bundle!(
     send_http_s_to_a, RoleA, 1 |
     send_http_s_to_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
@@ -50,25 +53,20 @@ create_send_mpst_http_bundle!(
 create_recv_http_session_bundle!(
     recv_http_a_to_c, RoleC, 1 |
     recv_http_a_to_s, RoleS, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_recv_http_session_bundle!(
     recv_http_c_to_a, RoleA, 1 |
     recv_http_c_to_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_recv_http_session_bundle!(
     recv_http_s_to_a, RoleA, 1 |
     recv_http_s_to_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
 
 // Types
 // S
@@ -189,8 +187,8 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     Auth, Done, =>
     EndpointAAuth<i32>, EndpointADone<i32>, =>
     Branching0fromAtoC::<i32>, Branching0fromAtoS::<i32>, =>
-    RoleC, RoleS, =>
-    RoleA, MeshedChannelsThree, 1
+    NameC, NameS, =>
+    NameA, MeshedChannelsThree, 1
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
@@ -198,8 +196,8 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     Continue, Close, =>
     EndpointCContinue<i32>, EndpointCDone<i32>, =>
     Branching1fromCtoA::<i32>, Branching1fromCtoS::<i32>, =>
-    RoleA, RoleS, =>
-    RoleC, MeshedChannelsThree, 2
+    NameA, NameS, =>
+    NameC, MeshedChannelsThree, 2
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
@@ -207,14 +205,14 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     Picture, Refusal, =>
     EndpointSPicture<i32>, EndpointSRefusal<i32>, =>
     Branching2fromStoA::<i32>, Branching2fromStoC::<i32>, =>
-    RoleA, RoleC, =>
-    RoleS, MeshedChannelsThree, 3
+    NameA, NameC, =>
+    NameS, MeshedChannelsThree, 3
 );
 
 // Functions
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let (pwd, s, _resp) = recv_http_a_to_c(s, false, Vec::new())?;
-    let expected = thread_rng().gen_range(1..=3);
+    let expected: i32 = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
         let s = auth_from_a_to_all(s);
@@ -277,7 +275,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn continue_c(s: EndpointCContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=6);
+    let choice: i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = close_from_c_to_all(s);
@@ -341,7 +339,7 @@ fn continue_s(s: EndpointSContinue<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn picture_s(s: EndpointSContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..=6);
+    let choice: i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = refusal_from_s_to_all(s);

@@ -4,7 +4,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_impl_with_enum_and_cancel, close_mpst_interleaved, fork_mpst_multi_solo,
+    baker, close_mpst_interleaved, fork_mpst_multi_solo,
     offer_mpst_interleaved,
 };
 
@@ -16,15 +16,11 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, Controller, Logs);
+baker!("rec_and_cancel", MeshedChannelsTwo, Controller, Logs);
 
 close_mpst_interleaved!(close_mpst, MeshedChannelsTwo, 2);
 
 fork_mpst_multi_solo!(fork_mpst_solo, MeshedChannelsTwo, 2);
-
-// Names
-type NameRoleController = RoleController<RoleEnd>;
-type NameRoleLogs = RoleLogs<RoleEnd>;
 
 // RoleController
 enum Branching0fromLtoC<N: marker::Send> {
@@ -32,11 +28,11 @@ enum Branching0fromLtoC<N: marker::Send> {
         MeshedChannelsTwo<
             Recv<N, Recurs0fromCtoL<N>>,
             RoleLogs<RoleLogs<RoleEnd>>,
-            NameRoleController,
+            NameController,
         >,
     ),
     Failure(
-        MeshedChannelsTwo<Recv<N, Choose1fromCtoL<N>>, RoleLogs<RoleBroadcast>, NameRoleController>,
+        MeshedChannelsTwo<Recv<N, Choose1fromCtoL<N>>, RoleLogs<RoleBroadcast>, NameController>,
     ),
 }
 
@@ -49,9 +45,9 @@ type Choose0fromLtoC<N> = Send<Branching0fromLtoC<N>, End>;
 
 enum Branching1fromCtoL<N: marker::Send> {
     Restart(
-        MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameRoleLogs>,
+        MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>,
     ),
-    Stop(MeshedChannelsTwo<Recv<N, End>, RoleController<RoleEnd>, NameRoleLogs>),
+    Stop(MeshedChannelsTwo<Recv<N, End>, RoleController<RoleEnd>, NameLogs>),
 }
 
 type Recurs1fromLtoC<N> = Recv<Branching1fromCtoL<N>, End>;
@@ -59,28 +55,28 @@ type Recurs1fromLtoC<N> = Recv<Branching1fromCtoL<N>, End>;
 // Creating the MP sessions
 // RoleController
 type EndpointController1Stop<N> =
-    MeshedChannelsTwo<Send<N, End>, RoleLogs<RoleEnd>, NameRoleController>;
+    MeshedChannelsTwo<Send<N, End>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1Restart<N> =
-    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameRoleController>;
+    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
 type EndpointController0<N> =
-    MeshedChannelsTwo<Recurs0fromCtoL<N>, RoleLogs<RoleEnd>, NameRoleController>;
+    MeshedChannelsTwo<Recurs0fromCtoL<N>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1<N> =
-    MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameRoleController>;
+    MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
 type EndpointControllerInit<N> =
-    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameRoleController>;
+    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
 // RoleLogs
 type EndpointLogs0Success<N> =
-    MeshedChannelsTwo<Send<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameRoleLogs>;
+    MeshedChannelsTwo<Send<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>;
 type EndpointLogs0Failure<N> = MeshedChannelsTwo<
     Send<N, Recurs1fromLtoC<N>>,
     RoleController<RoleController<RoleEnd>>,
-    NameRoleLogs,
+    NameLogs,
 >;
-type EndpointLogs0<N> = MeshedChannelsTwo<Choose0fromLtoC<N>, RoleBroadcast, NameRoleLogs>;
+type EndpointLogs0<N> = MeshedChannelsTwo<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
 type EndpointLogs1<N> =
-    MeshedChannelsTwo<Recurs1fromLtoC<N>, RoleController<RoleEnd>, NameRoleLogs>;
+    MeshedChannelsTwo<Recurs1fromLtoC<N>, RoleController<RoleEnd>, NameLogs>;
 type EndpointLogsInit<N> =
-    MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameRoleLogs>;
+    MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>;
 
 /////////////////////////
 

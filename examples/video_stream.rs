@@ -3,14 +3,14 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, checker_concat};
+use mpstthree::{baker, checker_concat};
 
 use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B, C);
+baker!("rec_and_cancel", MeshedChannels, A, B, C);
 
 type AtoCClose = End;
 type AtoBClose = End;
@@ -27,12 +27,12 @@ type RecursAtoC = Recv<Branches0AtoC, End>;
 type RecursBtoC = Recv<Branches0BtoC, End>;
 
 enum Branches0AtoC {
-    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<AtoBVideo, AtoCVideo, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo, AtoCVideo, StackAVideo, NameA>),
 }
 enum Branches0BtoC {
-    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>),
-    Video(MeshedChannels<BtoAVideo, RecursBtoC, StackBVideo, RoleB<RoleEnd>>),
+    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo, RecursBtoC, StackBVideo, NameB>),
 }
 type Choose0fromCtoA = Send<Branches0AtoC, End>;
 type Choose0fromCtoB = Send<Branches0BtoC, End>;
@@ -55,24 +55,23 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 // Creating the MP sessions
 
 // For C
-type EndpointCEnd = MeshedChannels<End, End, RoleEnd, RoleC<RoleEnd>>;
+type EndpointCEnd = MeshedChannels<End, End, RoleEnd, NameC>;
 type EndpointCVideo = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoB,
     RoleA<RoleA<RoleBroadcast>>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 
-type EndpointCRecurs =
-    MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, RoleC<RoleEnd>>;
-type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, RoleC<RoleEnd>>;
+type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
+type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, NameC>;
 
 // For A
-type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, RoleA<RoleEnd>>;
-type EndpointAFull = MeshedChannels<End, InitA, StackAInit, RoleA<RoleEnd>>;
+type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, NameA>;
+type EndpointAFull = MeshedChannels<End, InitA, StackAInit, NameA>;
 
 // For B
-type EndpointBRecurs = MeshedChannels<End, RecursBtoC, StackBRecurs, RoleB<RoleEnd>>;
+type EndpointBRecurs = MeshedChannels<End, RecursBtoC, StackBRecurs, NameB>;
 
 // Functions related to endpoints
 fn server(s: EndpointBRecurs) -> Result<(), Box<dyn Error>> {
@@ -117,10 +116,10 @@ fn client(s: EndpointCFull) -> Result<(), Box<dyn Error>> {
     let s = s.send(0)?;
     let (_, s) = s.recv()?;
 
-    client_recurs(s, xs, 1)
+    client_recurs(s, xs)
 }
 
-fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>, index: i32) -> Result<(), Box<dyn Error>> {
+fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Error>> {
     match xs.pop() {
         Option::Some(_) => {
             let s: EndpointCVideo =
@@ -129,12 +128,10 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>, index: i32) -> Result<(),
             let s = s.send(1)?;
             let (_, s) = s.recv()?;
 
-            client_recurs(s, xs, index + 1)
+            client_recurs(s, xs)
         }
         Option::None => {
             let s: EndpointCEnd = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
-
-            assert_eq!(index, 100);
 
             s.close()
         }

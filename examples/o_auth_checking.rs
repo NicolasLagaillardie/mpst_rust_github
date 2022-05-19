@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl_with_enum_and_cancel, checker_concat};
+use mpstthree::{baker, checker_concat};
 
 use rand::{thread_rng, Rng};
 
@@ -12,7 +12,7 @@ use std::fs::read_to_string;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, C, S);
+baker!("rec_and_cancel", MeshedChannelsThree, A, C, S);
 
 // Payloads
 struct Start;
@@ -24,11 +24,6 @@ struct Success;
 struct Token;
 struct Fail;
 struct Received;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
 
 // Types
 
@@ -109,7 +104,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = s.send(Auth {})?;
     let (_, s) = s.recv()?;
 
-    let expected = thread_rng().gen_range(1..=3);
+    let expected: i32 = thread_rng().gen_range(1..=3);
 
     if 1 == expected {
         let s: EndpointASuccess =

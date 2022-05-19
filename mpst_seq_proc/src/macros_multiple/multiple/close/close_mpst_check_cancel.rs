@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CloseMpstCheckCancel {
+pub(crate) struct CloseMpstCheckCancel {
     func_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
@@ -36,8 +36,8 @@ impl From<CloseMpstCheckCancel> for TokenStream {
 
 impl CloseMpstCheckCancel {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|_| {
@@ -71,17 +71,17 @@ impl CloseMpstCheckCancel {
             .collect();
 
         quote! {
-            fn #func_name<R>(
+            fn #func_name<N>(
                 s: #meshedchannels_name<
                     #(
                         #session_types
                     )*
                     mpstthree::role::end::RoleEnd,
-                    R
+                    N
                 >
             ) -> Result<(), Box<dyn std::error::Error>>
             where
-                R: mpstthree::role::Role,
+                N: mpstthree::name::Name,
             {
                 #(
                     #session_send

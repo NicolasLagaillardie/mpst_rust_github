@@ -9,13 +9,15 @@ use mpstthree::role::Role;
 use mpstthree::checker_concat;
 
 use mpstthree::role::a::RoleA;
-use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_c::RoleAlltoC;
 use mpstthree::role::b::RoleB;
-use mpstthree::role::b_dual::RoleBDual;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::c_to_all::RoleCtoAll;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
@@ -50,19 +52,12 @@ type StackFullA = RoleAlltoC<RoleEnd, RoleEnd>;
 
 // Creating the MP sessions
 // For B
-type EndpointBAdd<N> = MeshedChannels<BtoAAdd<N>, BtoCAdd<N>, StackOfferB, RoleB<RoleEnd>>;
-type EndpointBNeg<N> = MeshedChannels<BtoANeg<N>, BtoCNeg<N>, StackOfferB, RoleB<RoleEnd>>;
+type EndpointBAdd<N> = MeshedChannels<BtoAAdd<N>, BtoCAdd<N>, StackOfferB, NameB>;
+type EndpointBNeg<N> = MeshedChannels<BtoANeg<N>, BtoCNeg<N>, StackOfferB, NameB>;
 
-type OfferB<N> = OfferMpst<
-    BtoAAdd<N>,
-    BtoCAdd<N>,
-    BtoANeg<N>,
-    BtoCNeg<N>,
-    StackOfferB,
-    StackOfferB,
-    RoleB<RoleEnd>,
->;
-type EndpointChoiceB<N> = MeshedChannels<End, OfferB<N>, StackFullB, RoleB<RoleEnd>>;
+type OfferB<N> =
+    OfferMpst<BtoAAdd<N>, BtoCAdd<N>, BtoANeg<N>, BtoCNeg<N>, StackOfferB, StackOfferB, NameB>;
+type EndpointChoiceB<N> = MeshedChannels<End, OfferB<N>, StackFullB, NameB>;
 
 // For C
 type ChooseCtoB<N> = ChooseMpst<
@@ -72,26 +67,18 @@ type ChooseCtoB<N> = ChooseMpst<
     CtoBNeg<N>,
     StackOfferBDual,
     StackOfferBDual,
-    RoleBDual<RoleEnd>,
+    NameB,
 >;
-type ChooseCtoA<N> = ChooseMpst<
-    BtoAAdd<N>,
-    End,
-    BtoANeg<N>,
-    End,
-    StackOfferADual,
-    StackOfferADual,
-    RoleADual<RoleEnd>,
->;
-type EndpointChoiceC<N> = MeshedChannels<ChooseCtoA<N>, ChooseCtoB<N>, StackFullC, RoleC<RoleEnd>>;
+type ChooseCtoA<N> =
+    ChooseMpst<BtoAAdd<N>, End, BtoANeg<N>, End, StackOfferADual, StackOfferADual, NameA>;
+type EndpointChoiceC<N> = MeshedChannels<ChooseCtoA<N>, ChooseCtoB<N>, StackFullC, NameC>;
 
 // For A
-type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, End, StackOfferA, RoleA<RoleEnd>>;
-type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, End, StackOfferA, RoleA<RoleEnd>>;
+type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, End, StackOfferA, NameA>;
+type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, End, StackOfferA, NameA>;
 
-type OfferA<N> =
-    OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, StackOfferA, StackOfferA, RoleA<RoleEnd>>;
-type EndpointChoiceA<N> = MeshedChannels<End, OfferA<N>, StackFullA, RoleA<RoleEnd>>;
+type OfferA<N> = OfferMpst<AtoBAdd<N>, End, AtoBNeg<N>, End, StackOfferA, StackOfferA, NameA>;
+type EndpointChoiceA<N> = MeshedChannels<End, OfferA<N>, StackFullA, NameA>;
 
 // Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceB<i32>) -> Result<(), Box<dyn Error>> {

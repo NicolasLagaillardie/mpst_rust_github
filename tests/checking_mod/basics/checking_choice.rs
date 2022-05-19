@@ -5,13 +5,15 @@ use mpstthree::role::Role;
 use mpstthree::checker_concat;
 
 use mpstthree::role::a::RoleA;
-use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::b_to_all::RoleBtoAll;
 use mpstthree::role::c::RoleC;
-use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
@@ -55,51 +57,23 @@ type StackBFull = RoleC<RoleC<StackBChoice>>;
 
 // Creating the MP sessions
 // For C
-type ChooseBtoC<N> = ChooseMpst<
-    AtoCVideo<N>,
-    BtoCVideo<N>,
-    AtoCClose,
-    BtoCClose,
-    StackCVideoDual,
-    StackCEnd,
-    RoleCDual<RoleEnd>,
->;
-type ChooseBtoA<N> = ChooseMpst<
-    BtoAClose,
-    CtoAVideo<N>,
-    BtoAClose,
-    CtoAClose,
-    StackAVideoDual,
-    StackAEnd,
-    RoleADual<RoleEnd>,
->;
+type ChooseBtoC<N> =
+    ChooseMpst<AtoCVideo<N>, BtoCVideo<N>, AtoCClose, BtoCClose, StackCVideoDual, StackCEnd, NameC>;
+type ChooseBtoA<N> =
+    ChooseMpst<BtoAClose, CtoAVideo<N>, BtoAClose, CtoAClose, StackAVideoDual, StackAEnd, NameA>;
 type InitB<N> = Send<N, Recv<N, ChooseBtoC<N>>>;
-type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<ChooseBtoA<N>, InitB<N>, StackBFull, NameB>;
 
 // For A
-type OfferC<N> = OfferMpst<
-    CtoAVideo<N>,
-    CtoBVideo<N>,
-    CtoAClose,
-    CtoBClose,
-    StackCVideo,
-    StackCEnd,
-    RoleC<RoleEnd>,
->;
+type OfferC<N> =
+    OfferMpst<CtoAVideo<N>, CtoBVideo<N>, CtoAClose, CtoBClose, StackCVideo, StackCEnd, NameC>;
 type InitC<N> = Recv<N, Send<N, OfferC<N>>>;
-type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, RoleC<RoleEnd>>;
+type EndpointCFull<N> = MeshedChannels<End, InitC<N>, StackCFull, NameC>;
 
 // For B
-type OfferA<N> = OfferMpst<
-    AtoBClose,
-    AtoCVideo<N>,
-    AtoBClose,
-    AtoCClose,
-    StackAVideo,
-    StackAEnd,
-    RoleA<RoleEnd>,
->;
-type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, RoleA<RoleEnd>>;
+type OfferA<N> =
+    OfferMpst<AtoBClose, AtoCVideo<N>, AtoBClose, AtoCClose, StackAVideo, StackAEnd, NameA>;
+type EndpointAFull<N> = MeshedChannels<OfferA<N>, End, StackAFull, NameA>;
 
 /////////////////////////////////////////
 

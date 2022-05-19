@@ -1,22 +1,19 @@
+use mpstthree::baker; /* The macro for generating the roles and the MeshedChannels */
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
-use mpstthree::bundle_impl_with_enum_and_cancel; // The macro for generating the roles and the MeshedChannels
 use mpstthree::checker_concat;
-use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
+use mpstthree::role::broadcast::RoleBroadcast; /* Optional: used only for protocols with
+                                                * choice/offer */
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles // Used for checking the protocol
 
 use std::error::Error;
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(MeshedChannels, A, B);
+baker!("rec_and_cancel", MeshedChannels, A, B);
 
 // Payload types
 struct Request;
 struct Response;
 struct Stop;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 // Binary types for A

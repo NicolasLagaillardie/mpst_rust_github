@@ -5,6 +5,8 @@ use proc_macro_hack::proc_macro_hack;
 use std::usize;
 use syn::parse_macro_input;
 
+mod common_functions;
+
 mod functionmpst;
 
 use functionmpst::recv_all_aux_simple::RecvAllAuxSimple;
@@ -17,6 +19,7 @@ use choose_mpst_multi_to_all::ChooseMultiToAll;
 
 mod macros_simple;
 
+use macros_simple::names::create_normal_name_short::CreateNormalNameShort;
 use macros_simple::offer::create_offer_mpst_session_multi::OfferMPSTSessionMulti;
 use macros_simple::recv::create_recv_mpst_session::CreateRecvMPSTSession;
 use macros_simple::roles::create_broadcast_role_short::CreateBroadcastRoleShort;
@@ -67,6 +70,14 @@ use baking::baking_interleaved_with_enum_and_cancel::BakingInterleavedWithEnumAn
 use baking::baking_with_cancel::BakingWithCancel;
 use baking::baking_with_enum::BakingWithEnum;
 use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;
+
+mod baking_timed;
+
+use baking_timed::baking_timed_with_enum_and_cancel::BakingTimedWithEnumAndCancel;
+
+mod choose_timed_mpst_multi_to_all;
+
+use choose_timed_mpst_multi_to_all::ChooseTimedMultiToAll;
 
 //////////////////////////////////////
 
@@ -136,6 +147,20 @@ pub fn create_normal_role_short(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_create_normal_role_short(input: TokenStream) -> TokenStream {
     create_normal_role_short(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn create_normal_name_short(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CreateNormalNameShort);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_create_normal_name_short(input: TokenStream) -> TokenStream {
+    create_normal_name_short(input)
 }
 
 //////////////////////////////////////
@@ -613,4 +638,32 @@ pub fn baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStrea
 #[proc_macro_hack]
 pub fn e_baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
     baking_interleaved_with_enum_and_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingTimedWithEnumAndCancel);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    baking_timed_with_enum_and_cancel(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseTimedMultiToAll);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
+    choose_timed_mpst_multi_to_all(input)
 }

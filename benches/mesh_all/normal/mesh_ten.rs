@@ -12,7 +12,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, choose, create_fn_choose_mpst_multi_to_all_bundle,
     create_multiple_normal_role_short, create_recv_mpst_session_bundle,
-    create_send_mpst_session_bundle, offer, offer_mpst,
+    create_send_mpst_session_bundle, offer, offer_mpst,create_multiple_normal_name_short
 };
 
 use std::error::Error;
@@ -26,6 +26,9 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTen, 
 // normal
 create_multiple_normal_role_short!(A, B, C, D, E, F, G, H, I, J);
 
+// Create new names
+create_multiple_normal_name_short!(A, B, C, D, E, F, G, H, I, J);
+
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
@@ -38,7 +41,7 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_h, RoleH, 7 |
     send_mpst_a_to_i, RoleI, 8 |
     send_mpst_a_to_j, RoleJ, 9 | =>
-    RoleA, MeshedChannelsTen, 10
+    NameA, MeshedChannelsTen, 10
 );
 // B
 create_send_mpst_session_bundle!(
@@ -51,7 +54,7 @@ create_send_mpst_session_bundle!(
     send_mpst_b_to_h, RoleH, 7 |
     send_mpst_b_to_i, RoleI, 8 |
     send_mpst_b_to_j, RoleJ, 9 | =>
-    RoleB, MeshedChannelsTen, 10
+    NameB, MeshedChannelsTen, 10
 );
 // C
 create_send_mpst_session_bundle!(
@@ -64,7 +67,7 @@ create_send_mpst_session_bundle!(
     send_mpst_c_to_h, RoleH, 7 |
     send_mpst_c_to_i, RoleI, 8 |
     send_mpst_c_to_j, RoleJ, 9 | =>
-    RoleC, MeshedChannelsTen, 10
+    NameC, MeshedChannelsTen, 10
 );
 // D
 create_send_mpst_session_bundle!(
@@ -77,7 +80,7 @@ create_send_mpst_session_bundle!(
     send_mpst_d_to_h, RoleH, 7 |
     send_mpst_d_to_i, RoleI, 8 |
     send_mpst_d_to_j, RoleJ, 9 | =>
-    RoleD, MeshedChannelsTen, 10
+    NameD, MeshedChannelsTen, 10
 );
 // E
 create_send_mpst_session_bundle!(
@@ -90,7 +93,7 @@ create_send_mpst_session_bundle!(
     send_mpst_e_to_h, RoleH, 7 |
     send_mpst_e_to_i, RoleI, 8 |
     send_mpst_e_to_j, RoleJ, 9 | =>
-    RoleE, MeshedChannelsTen, 10
+    NameE, MeshedChannelsTen, 10
 );
 // F
 create_send_mpst_session_bundle!(
@@ -103,7 +106,7 @@ create_send_mpst_session_bundle!(
     send_mpst_f_to_h, RoleH, 7 |
     send_mpst_f_to_i, RoleI, 8 |
     send_mpst_f_to_j, RoleJ, 9 | =>
-    RoleF, MeshedChannelsTen, 10
+    NameF, MeshedChannelsTen, 10
 );
 // G
 create_send_mpst_session_bundle!(
@@ -116,7 +119,7 @@ create_send_mpst_session_bundle!(
     send_mpst_g_to_h, RoleH, 7 |
     send_mpst_g_to_i, RoleI, 8 |
     send_mpst_g_to_j, RoleJ, 9 | =>
-    RoleG, MeshedChannelsTen, 10
+    NameG, MeshedChannelsTen, 10
 );
 // H
 create_send_mpst_session_bundle!(
@@ -129,7 +132,7 @@ create_send_mpst_session_bundle!(
     send_mpst_h_to_g, RoleG, 7 |
     send_mpst_h_to_i, RoleI, 8 |
     send_mpst_h_to_j, RoleJ, 9 | =>
-    RoleH, MeshedChannelsTen, 10
+    NameH, MeshedChannelsTen, 10
 );
 // I
 create_send_mpst_session_bundle!(
@@ -142,7 +145,7 @@ create_send_mpst_session_bundle!(
     send_mpst_i_to_g, RoleG, 7 |
     send_mpst_i_to_h, RoleH, 8 |
     send_mpst_i_to_j, RoleJ, 9 | =>
-    RoleI, MeshedChannelsTen, 10
+    NameI, MeshedChannelsTen, 10
 );
 // J
 create_send_mpst_session_bundle!(
@@ -155,7 +158,7 @@ create_send_mpst_session_bundle!(
     send_mpst_j_to_g, RoleG, 7 |
     send_mpst_j_to_h, RoleH, 8 |
     send_mpst_j_to_i, RoleI, 9 | =>
-    RoleJ, MeshedChannelsTen, 10
+    NameJ, MeshedChannelsTen, 10
 );
 
 // Create new recv functions and related types
@@ -170,7 +173,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_h, RoleH, 7 |
     recv_mpst_a_from_i, RoleI, 8 |
     recv_mpst_a_from_j, RoleJ, 9 | =>
-    RoleA, MeshedChannelsTen, 10
+    NameA, MeshedChannelsTen, 10
 );
 // B
 create_recv_mpst_session_bundle!(
@@ -183,7 +186,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_h, RoleH, 7 |
     recv_mpst_b_from_i, RoleI, 8 |
     recv_mpst_b_from_j, RoleJ, 9 | =>
-    RoleB, MeshedChannelsTen, 10
+    NameB, MeshedChannelsTen, 10
 );
 // C
 create_recv_mpst_session_bundle!(
@@ -196,7 +199,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_h, RoleH, 7 |
     recv_mpst_c_from_i, RoleI, 8 |
     recv_mpst_c_from_j, RoleJ, 9 | =>
-    RoleC, MeshedChannelsTen, 10
+    NameC, MeshedChannelsTen, 10
 );
 // D
 create_recv_mpst_session_bundle!(
@@ -209,7 +212,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_h, RoleH, 7 |
     recv_mpst_d_from_i, RoleI, 8 |
     recv_mpst_d_from_j, RoleJ, 9 | =>
-    RoleD, MeshedChannelsTen, 10
+    NameD, MeshedChannelsTen, 10
 );
 // E
 create_recv_mpst_session_bundle!(
@@ -222,7 +225,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_from_h, RoleH, 7 |
     recv_mpst_e_from_i, RoleI, 8 |
     recv_mpst_e_from_j, RoleJ, 9 | =>
-    RoleE, MeshedChannelsTen, 10
+    NameE, MeshedChannelsTen, 10
 );
 // F
 create_recv_mpst_session_bundle!(
@@ -235,7 +238,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_from_h, RoleH, 7 |
     recv_mpst_f_from_i, RoleI, 8 |
     recv_mpst_f_from_j, RoleJ, 9 | =>
-    RoleF, MeshedChannelsTen, 10
+    NameF, MeshedChannelsTen, 10
 );
 // G
 create_recv_mpst_session_bundle!(
@@ -248,7 +251,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_g_from_h, RoleH, 7 |
     recv_mpst_g_from_i, RoleI, 8 |
     recv_mpst_g_from_j, RoleJ, 9 | =>
-    RoleG, MeshedChannelsTen, 10
+    NameG, MeshedChannelsTen, 10
 );
 // H
 create_recv_mpst_session_bundle!(
@@ -261,7 +264,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_h_from_g, RoleG, 7 |
     recv_mpst_h_from_i, RoleI, 8 |
     recv_mpst_h_from_j, RoleJ, 9 | =>
-    RoleH, MeshedChannelsTen, 10
+    NameH, MeshedChannelsTen, 10
 );
 // I
 create_recv_mpst_session_bundle!(
@@ -274,7 +277,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_i_from_g, RoleG, 7 |
     recv_mpst_i_from_h, RoleH, 8 |
     recv_mpst_i_from_j, RoleJ, 9 | =>
-    RoleI, MeshedChannelsTen, 10
+    NameI, MeshedChannelsTen, 10
 );
 // J
 create_recv_mpst_session_bundle!(
@@ -287,20 +290,8 @@ create_recv_mpst_session_bundle!(
     recv_mpst_j_from_g, RoleG, 7 |
     recv_mpst_j_from_h, RoleH, 8 |
     recv_mpst_j_from_i, RoleI, 9 | =>
-    RoleJ, MeshedChannelsTen, 10
+    NameJ, MeshedChannelsTen, 10
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
-type NameF = RoleF<RoleEnd>;
-type NameG = RoleG<RoleEnd>;
-type NameH = RoleH<RoleEnd>;
-type NameI = RoleI<RoleEnd>;
-type NameJ = RoleJ<RoleEnd>;
 
 // Types
 // Send/Recv
@@ -568,16 +559,16 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     Branching0fromJtoG,
     Branching0fromJtoH,
     Branching0fromJtoI, =>
-    RoleA,
-    RoleB,
-    RoleC,
-    RoleD,
-    RoleE,
-    RoleF,
-    RoleG,
-    RoleH,
-    RoleI, =>
-    RoleJ, MeshedChannelsTen, 10
+    NameA,
+    NameB,
+    NameC,
+    NameD,
+    NameE,
+    NameF,
+    NameG,
+    NameH,
+    NameI, =>
+    NameJ, MeshedChannelsTen, 10
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

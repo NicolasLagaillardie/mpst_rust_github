@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateSendHttpSession {
+pub(crate) struct CreateSendHttpSession {
     func_name: Ident,
     sender: Ident,
     receiver: Ident,
@@ -51,10 +51,10 @@ impl From<CreateSendHttpSession> for TokenStream {
 
 impl CreateSendHttpSession {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let sender = self.sender.clone();
-        let receiver = self.receiver.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let sender = &self.sender;
+        let receiver = &self.receiver;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
@@ -131,7 +131,7 @@ impl CreateSendHttpSession {
                         #send_types
                     )*
                     #receiver<R>,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >,
                 http: bool,
                 req: hyper::Request<hyper::Body>
@@ -142,7 +142,7 @@ impl CreateSendHttpSession {
                             #session_types
                         )*
                         R,
-                        #sender<mpstthree::role::end::RoleEnd>,
+                        #sender,
                     >,
                     hyper::client::ResponseFuture
                 ),

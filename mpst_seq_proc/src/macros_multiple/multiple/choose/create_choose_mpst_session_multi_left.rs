@@ -1,13 +1,12 @@
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
-use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
-type VecOfTuple = Vec<(u64, u64, u64)>;
+use crate::common_functions::maths::{diag_and_matrix, get_tuple_diag, get_tuple_matrix};
 
 #[derive(Debug)]
-pub struct ChooseTypeMultiLeft {
+pub(crate) struct ChooseTypeMultiLeft {
     func_name: Ident,
     type_name: Ident,
     role_dual: Ident,
@@ -53,90 +52,14 @@ impl From<ChooseTypeMultiLeft> for TokenStream {
 }
 
 impl ChooseTypeMultiLeft {
-    /// Create the whole matrix of index according to line and column
-    fn diag(&self) -> VecOfTuple {
-        let diff = self.n_sessions - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (self.n_sessions - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Create the whole matrix of index according to line and column
-    fn diag_and_matrix(&self) -> (VecOfTuple, Vec<VecOfTuple>) {
-        let diag = self.diag();
-
-        // Create the whole matrix
-        (
-            diag.clone(),
-            (1..=self.n_sessions)
-                .map(|i| {
-                    diag.iter()
-                        .filter_map(|(line, column, index)| {
-                            if i == *line || i == *column {
-                                Some((*line, *column, *index))
-                            } else {
-                                None
-                            }
-                        })
-                        .collect()
-                })
-                .collect(),
-        )
-    }
-
-    /// Return (line, column, index) of diag
-    fn get_tuple_diag(&self, diag: &[(u64, u64, u64)], i: u64) -> (u64, u64, u64) {
-        if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!(
-                "Error at get_tuple_diag for i = {:?} / diag = {:?}",
-                i, diag
-            )
-        }
-    }
-
-    /// Return (line, column, index) of matrix
-    fn get_tuple_matrix(&self, matrix: &[VecOfTuple], i: u64, j: u64) -> (u64, u64, u64) {
-        let list: VecOfTuple = if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap()) {
-            temp.to_vec()
-        } else {
-            panic!(
-                "Error at get_tuple_matrix for i = {:?} / matrix = {:?}",
-                i, matrix
-            )
-        };
-
-        if let Some((line, column, index)) = list.get(usize::try_from(j - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!("Error at get_tuple_matrix for i = {:?} and j = {:?} with list = {:?} / matrix = {:?}", i, j, list, matrix)
-        }
-    }
-
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let type_name = self.type_name.clone();
-        let role_dual = self.role_dual.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let type_name = &self.type_name;
+        let role_dual = &self.role_dual;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
-        let (diag, matrix) = self.diag_and_matrix();
+        let (matrix, diag) = diag_and_matrix(self.n_sessions);
 
         let all_sessions: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
@@ -158,18 +81,32 @@ impl ChooseTypeMultiLeft {
 
         let all_roles: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-                quote! {
-                    #temp_ident ,
+                if i % 3 == 0 {
+                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident ,
+                    }
+                } else {
+                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident ,
+                    }
                 }
             })
             .collect();
 
-        let all_roles_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
+        let all_roles_struct_and_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-                quote! {
-                    #temp_ident : mpstthree::role::Role + 'a ,
+                if i % 3 == 0 {
+                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident : mpstthree::name::Name + 'a ,
+                    }
+                } else {
+                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    quote! {
+                        #temp_ident : mpstthree::role::Role + 'a ,
+                    }
                 }
             })
             .collect();
@@ -178,7 +115,7 @@ impl ChooseTypeMultiLeft {
             .map(|i| {
                 let types_left: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let (k, _, m) = self.get_tuple_matrix(&matrix, i, j);
+                        let (k, _, m) = get_tuple_matrix(&matrix, i, j);
 
                         let temp_ident =
                             Ident::new(&format!("S{}", m), Span::call_site());
@@ -197,7 +134,7 @@ impl ChooseTypeMultiLeft {
 
                 let types_right: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let (k, _, m) = self.get_tuple_matrix(&matrix, i, j);
+                        let (k, _, m) = get_tuple_matrix(&matrix, i, j);
 
                         let temp_ident = Ident::new(
                             &format!("S{}", diff * (diff + 1) / 2 + m),
@@ -216,7 +153,7 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
-                let temp_roles: Vec<TokenStream> = (1..4)
+                let temp_roles: Vec<TokenStream> = (1..3)
                     .map(|j| {
                         let temp_ident = Ident::new(
                             &format!("R{}", 3 * (i - 1) + j),
@@ -229,6 +166,17 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
+                let temp_names: TokenStream = {
+                    let temp_ident = Ident::new(
+                        &format!("N{}", 3 * (i - 1) + 3),
+                        Span::call_site(),
+                    );
+
+                    quote! {
+                        #temp_ident ,
+                    }
+                };
+
                 quote! {
                     #type_name<
                         #(
@@ -240,6 +188,7 @@ impl ChooseTypeMultiLeft {
                         #(
                             #temp_roles
                         )*
+                        #temp_names
                     >,
                 }
             })
@@ -272,14 +221,14 @@ impl ChooseTypeMultiLeft {
 
         let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
             .map(|i| {
-                let (line, column, _) = self.get_tuple_diag(&diag, i);
+                let (line, column, _) = get_tuple_diag(&diag, i);
                 let channel_left =
                     Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
                 let channel_right =
                     Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
                 let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
                 quote! {
-                    let ( #channel_left , #channel_right ) = #temp_session::new();
+                    let ( #channel_left , #channel_right ) = < #temp_session as mpstthree::binary::struct_trait::session::Session >::new();
                 }
             })
             .collect();
@@ -289,22 +238,17 @@ impl ChooseTypeMultiLeft {
                 let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
                 let temp_role = Ident::new(&format!("R{}", 3 * (i - 1) + 1), Span::call_site());
                 quote! {
-                    let (_, #temp_stack ) = #temp_role::new();
+                    let (_, #temp_stack ) = < #temp_role as mpstthree::role::Role >::new();
                 }
             })
             .collect();
 
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_name =
-                    Ident::new(&format!("name_{}", i), Span::call_site());
-                let temp_role = Ident::new(
-                    &format!("R{}", 3 * (i - 1) + 3),
-                    Span::call_site(),
-                );
+                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_role = Ident::new(&format!("N{}", 3 * (i - 1) + 3), Span::call_site());
                 quote! {
-                    let ( #temp_name , _) =
-                        << #temp_role as mpstthree::role::Role>::Dual as mpstthree::role::Role>::new();
+                    let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
                 }
             })
             .collect();
@@ -313,7 +257,7 @@ impl ChooseTypeMultiLeft {
             .map(|i| {
                 let types_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let (line, column, _) = self.get_tuple_matrix(&matrix, i, j);
+                        let (line, column, _) = get_tuple_matrix(&matrix, i, j);
 
                         let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
 
@@ -379,7 +323,7 @@ impl ChooseTypeMultiLeft {
 
         let new_session_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let (line, column, _) = self.get_tuple_matrix(&matrix, self.n_sessions, i);
+                let (line, column, _) = get_tuple_matrix(&matrix, self.n_sessions, i);
                 let temp_channel = match line {
                     m if m == i => {
                         Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
@@ -414,7 +358,7 @@ impl ChooseTypeMultiLeft {
                         )*
                     >,
 
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
             )
             -> #meshedchannels_name<
@@ -422,7 +366,7 @@ impl ChooseTypeMultiLeft {
                     #sessions_struct
                 )*
                 #role_left ,
-                #name<mpstthree::role::end::RoleEnd>
+                #name
             >
             where
                 #(
@@ -430,7 +374,7 @@ impl ChooseTypeMultiLeft {
                 )*
 
                 #(
-                    #all_roles_struct
+                    #all_roles_struct_and_struct
                 )*
             {
                 #(
@@ -447,7 +391,7 @@ impl ChooseTypeMultiLeft {
                     #new_names
                 )*
 
-                let ( #name_left , _) = <#name::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                let ( #name_left , _) = < #name as mpstthree::name::Name>::new();
 
                 #(
                     #new_choices

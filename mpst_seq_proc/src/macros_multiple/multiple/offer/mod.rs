@@ -1,1 +1,1 @@
-pub mod create_offer_type_multi;
+pub(crate) mod create_offer_type_multi;

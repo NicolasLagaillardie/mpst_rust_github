@@ -7,7 +7,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 #[derive(Debug)]
-pub struct CheckingInput {
+pub(crate) struct CheckingInput {
     choices: HashMap<String, Vec<String>>,
 }
 
@@ -48,7 +48,7 @@ impl Parse for CheckingInput {
             } else {
                 result[1..].to_vec()
             };
-            choices.insert(result[0].clone(), vec_to_add);
+            choices.insert(result[0].to_string(), vec_to_add);
         }
 
         Ok(CheckingInput { choices })
@@ -63,13 +63,11 @@ impl From<CheckingInput> for TokenStream {
 
 impl CheckingInput {
     fn expand(&self) -> TokenStream {
-        let choices = self.choices.clone();
-
         let mut display: Vec<proc_macro2::TokenStream> = Vec::new();
         let mut new_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
 
-        for (key, value) in choices {
-            let name_key = Ident::new(&key, Span::call_site());
+        for (key, value) in &self.choices {
+            let name_key = Ident::new(key, Span::call_site());
             let fn_key = Ident::new(&key.to_lowercase(), Span::call_site());
 
             let branches: Vec<proc_macro2::TokenStream> = value

@@ -4,8 +4,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
+    create_send_mpst_session_bundle, offer_mpst,
 };
 
 use rand::{random, thread_rng, Rng};
@@ -23,48 +24,46 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree
 // normal
 create_multiple_normal_role_short!(A, C, S);
 
+// Create new names
+create_multiple_normal_name!(NameA, NameC, NameS);
+
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
     send_mpst_a_to_c, RoleC, 1 |
     send_mpst_a_to_s, RoleS, 2 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
-    RoleA, MeshedChannelsThree, 3
+    NameA, MeshedChannelsThree, 3
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_s, RoleS, 2 | =>
-    RoleC, MeshedChannelsThree, 3
+    NameC, MeshedChannelsThree, 3
 );
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_a, RoleA, 1 |
     recv_mpst_s_from_c, RoleC, 2 | =>
-    RoleS, MeshedChannelsThree, 3
+    NameS, MeshedChannelsThree, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
 
 // Types
 // C0
@@ -165,9 +164,7 @@ fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoA::<i32>::Select,
                 Branching0fromCtoS::<i32>::Select, =>
-                RoleA,
-                RoleS, =>
-                RoleC,
+                NameC,
                 MeshedChannelsThree,
                 2
             );
@@ -178,9 +175,7 @@ fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromCtoA::<i32>::Loop,
                 Branching0fromCtoS::<i32>::Loop, =>
-                RoleA,
-                RoleS, =>
-                RoleC,
+                NameC,
                 MeshedChannelsThree,
                 2
             );
@@ -193,16 +188,14 @@ fn endpoint_c(s: EndpointC<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
-    let choice = thread_rng().gen_range(1..3);
+    let choice: i32 = thread_rng().gen_range(1..3);
 
     if choice != 1 {
         let s = choose_mpst_multi_to_all!(
             s,
             Branching1fromCtoA::<i32>::Yes,
             Branching1fromCtoS::<i32>::Yes, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
+            NameC,
             MeshedChannelsThree,
             2
         );
@@ -216,9 +209,7 @@ fn choice_c(s: ChoiceC<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromCtoA::<i32>::No,
             Branching1fromCtoS::<i32>::No, =>
-            RoleA,
-            RoleS, =>
-            RoleC,
+            NameC,
             MeshedChannelsThree,
             2
         );

@@ -5,7 +5,7 @@
 use crate::role::Role;
 use crossbeam_channel::{bounded, Receiver, Sender};
 
-/// This structure is used to close an ordering or a name.
+/// This structure is used to close an ordering (stack).
 ///
 /// # Example
 ///

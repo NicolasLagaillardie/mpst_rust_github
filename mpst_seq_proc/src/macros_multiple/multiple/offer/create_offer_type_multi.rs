@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct OfferTypeMulti {
+pub(crate) struct OfferTypeMulti {
     type_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
@@ -36,8 +36,8 @@ impl From<OfferTypeMulti> for TokenStream {
 
 impl OfferTypeMulti {
     fn expand(&self) -> TokenStream {
-        let type_name = self.type_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let type_name = &self.type_name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {

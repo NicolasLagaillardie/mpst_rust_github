@@ -23,7 +23,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct SendAuxSimple {
+pub(crate) struct SendAuxSimple {
     session: Expr,
     payload: Expr,
     exclusion: u64,
@@ -55,8 +55,8 @@ impl From<SendAuxSimple> for TokenStream {
 
 impl SendAuxSimple {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
-        let payload = self.payload.clone();
+        let session = &self.session;
+        let payload = &self.payload;
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();

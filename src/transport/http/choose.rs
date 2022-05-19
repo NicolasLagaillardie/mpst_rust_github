@@ -70,8 +70,8 @@ macro_rules! choose_mpst_multi_http_to_all {
     ) => {
         mpst_seq::choose_mpst_multi_http_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion

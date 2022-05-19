@@ -8,51 +8,51 @@ use crate::functionmpst::recv::{
 };
 use crate::functionmpst::OfferMpst;
 use crate::meshedchannels::MeshedChannels;
-use crate::role::a::RoleA;
+use crate::name::a::NameA;
+use crate::name::b::NameB;
+use crate::name::c::NameC;
 use crate::role::all_to_a::RoleAlltoA;
 use crate::role::all_to_b::RoleAlltoB;
 use crate::role::all_to_c::RoleAlltoC;
-use crate::role::b::RoleB;
-use crate::role::c::RoleC;
 use crate::role::end::RoleEnd;
 use crate::role::Role;
 use std::error::Error;
 
 type MeshedChannelsToAFromB<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, NameA>,
     S5,
     RoleAlltoB<RoleEnd, RoleEnd>,
-    RoleA<RoleEnd>,
+    NameA,
 >;
 type MeshedChannelsToAFromC<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
     S5,
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleA<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, NameA>,
     RoleAlltoC<RoleEnd, RoleEnd>,
-    RoleA<RoleEnd>,
+    NameA,
 >;
 type MeshedChannelsToBFromA<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, NameB>,
     S5,
     RoleAlltoA<RoleEnd, RoleEnd>,
-    RoleB<RoleEnd>,
+    NameB,
 >;
 type MeshedChannelsToBFromC<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
     S5,
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleB<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, NameB>,
     RoleAlltoC<RoleEnd, RoleEnd>,
-    RoleB<RoleEnd>,
+    NameB,
 >;
 type MeshedChannelsToCFromA<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleC<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, NameC>,
     S5,
     RoleAlltoA<RoleEnd, RoleEnd>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 type MeshedChannelsToCFromB<S1, S2, S3, S4, S5, R1, R2> = MeshedChannels<
     S5,
-    OfferMpst<S1, S2, S3, S4, R1, R2, RoleC<RoleEnd>>,
+    OfferMpst<S1, S2, S3, S4, R1, R2, NameC>,
     RoleAlltoB<RoleEnd, RoleEnd>,
-    RoleC<RoleEnd>,
+    NameC,
 >;
 
 /// Offer a choice to A from B (on its session field related
@@ -90,8 +90,8 @@ where
     S5: Session,
     R1: Role,
     R2: Role,
-    F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    F: FnOnce(MeshedChannels<S1, S2, R1, NameA>) -> Result<U, Box<dyn Error + 'a>>,
+    G: FnOnce(MeshedChannels<S3, S4, R2, NameA>) -> Result<U, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv_mpst_a_all_from_b(s)?;
     cancel(s);
@@ -133,8 +133,8 @@ where
     S5: Session,
     R1: Role,
     R2: Role,
-    F: FnOnce(MeshedChannels<S1, S2, R1, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleA<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    F: FnOnce(MeshedChannels<S1, S2, R1, NameA>) -> Result<U, Box<dyn Error + 'a>>,
+    G: FnOnce(MeshedChannels<S3, S4, R2, NameA>) -> Result<U, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv_mpst_a_all_from_c(s)?;
     cancel(s);
@@ -176,8 +176,8 @@ where
     S5: Session,
     R1: Role,
     R2: Role,
-    F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    F: FnOnce(MeshedChannels<S1, S2, R1, NameB>) -> Result<U, Box<dyn Error + 'a>>,
+    G: FnOnce(MeshedChannels<S3, S4, R2, NameB>) -> Result<U, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv_mpst_b_all_from_a(s)?;
     cancel(s);
@@ -219,8 +219,8 @@ where
     S5: Session,
     R1: Role,
     R2: Role,
-    F: FnOnce(MeshedChannels<S1, S2, R1, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleB<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    F: FnOnce(MeshedChannels<S1, S2, R1, NameB>) -> Result<U, Box<dyn Error + 'a>>,
+    G: FnOnce(MeshedChannels<S3, S4, R2, NameB>) -> Result<U, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv_mpst_b_all_from_c(s)?;
     cancel(s);
@@ -262,8 +262,8 @@ where
     S5: Session,
     R1: Role,
     R2: Role,
-    F: FnOnce(MeshedChannels<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    F: FnOnce(MeshedChannels<S1, S2, R1, NameC>) -> Result<U, Box<dyn Error + 'a>>,
+    G: FnOnce(MeshedChannels<S3, S4, R2, NameC>) -> Result<U, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv_mpst_c_all_from_a(s)?;
     cancel(s);
@@ -305,8 +305,8 @@ where
     S5: Session,
     R1: Role,
     R2: Role,
-    F: FnOnce(MeshedChannels<S1, S2, R1, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
-    G: FnOnce(MeshedChannels<S3, S4, R2, RoleC<RoleEnd>>) -> Result<U, Box<dyn Error + 'a>>,
+    F: FnOnce(MeshedChannels<S1, S2, R1, NameC>) -> Result<U, Box<dyn Error + 'a>>,
+    G: FnOnce(MeshedChannels<S3, S4, R2, NameC>) -> Result<U, Box<dyn Error + 'a>>,
 {
     let (e, s) = recv_mpst_c_all_from_b(s)?;
     cancel(s);

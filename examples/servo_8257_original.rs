@@ -1,9 +1,15 @@
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
-bundle_impl_with_enum_and_cancel!(MeshedChannels, Constellation, Layout, Script);
+baker!(
+    "rec_and_cancel",
+    MeshedChannels,
+    Constellation,
+    Layout,
+    Script
+);
 
 // Payload types
 
@@ -12,14 +18,6 @@ struct DocumentLoading;
 struct WebFontLoaded;
 struct GetWebPageLoadState;
 struct OutstandingWebFonts;
-
-// Names
-
-type NameC = RoleConstellation<RoleEnd>;
-
-type NameL = RoleLayout<RoleEnd>;
-
-type NameS = RoleScript<RoleEnd>;
 
 // Binary types
 
@@ -42,11 +40,11 @@ type OrderingS = RoleConstellation<RoleConstellation<RoleLayout<RoleEnd>>>;
 
 // MeshedChannels
 
-type EndpointC = MeshedChannels<CtoL, CtoS, OrderingC, NameC>;
+type EndpointC = MeshedChannels<CtoL, CtoS, OrderingC, NameConstellation>;
 
-type EndpointL = MeshedChannels<LtoC, LtoS, OrderingL, NameL>;
+type EndpointL = MeshedChannels<LtoC, LtoS, OrderingL, NameLayout>;
 
-type EndpointS = MeshedChannels<StoC, StoL, OrderingS, NameS>;
+type EndpointS = MeshedChannels<StoC, StoL, OrderingS, NameScript>;
 
 /////////////////////////
 

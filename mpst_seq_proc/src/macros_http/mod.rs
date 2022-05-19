@@ -1,3 +1,3 @@
-pub mod choose;
-pub mod recv;
-pub mod send;
+pub(crate) mod choose;
+pub(crate) mod recv;
+pub(crate) mod send;

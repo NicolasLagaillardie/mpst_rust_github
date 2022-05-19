@@ -35,3 +35,4 @@ syn = { version = "1.0", features = ["extra-traits", "full", "parsing"] }
 quote = "1.0"
 proc-macro2 = "1.0"
 proc-macro-hack = "0.5"
+itertools = "0.10.3"

@@ -20,13 +20,13 @@ use std::net::{Shutdown, TcpStream};
 /// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::a::RoleA;
+/// use mpstthree::name::a::NameA;
 /// use mpstthree::role::end::RoleEnd;
 /// use mpstthree::transport::tcp::cancel::cancel_tcp;
 /// use std::net::{TcpListener, TcpStream};
 ///
 /// let _listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, NameA>::new();
 /// let stream = TcpStream::connect("localhost:3333").unwrap();
 /// cancel_tcp(s, stream);
 /// ```

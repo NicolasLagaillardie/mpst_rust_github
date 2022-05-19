@@ -6,7 +6,7 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi,
     create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,create_multiple_normal_name_short
 };
 
 use std::error::Error;
@@ -18,34 +18,37 @@ bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsFive,
 // normal
 create_multiple_normal_role_short!(Central, A, B, C, D);
 
+// Create new names
+create_multiple_normal_name_short!(Central, A, B, C, D);
+
 // Create new send functions
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 |
     send_mpst_a_to_c, RoleC, 3 |
     send_mpst_a_to_d, RoleD, 4 | =>
-    RoleA, MeshedChannelsFive, 5
+    NameA, MeshedChannelsFive, 5
 );
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 |
     send_mpst_b_to_d, RoleD, 4 | =>
-    RoleB, MeshedChannelsFive, 5
+    NameB, MeshedChannelsFive, 5
 );
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_a, RoleA, 2 |
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
-    RoleC, MeshedChannelsFive, 5
+    NameC, MeshedChannelsFive, 5
 );
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_a, RoleA, 2 |
     send_mpst_d_to_b, RoleB, 3 |
     send_mpst_d_to_c, RoleC, 4 | =>
-    RoleD, MeshedChannelsFive, 5
+    NameD, MeshedChannelsFive, 5
 );
 
 // Create new recv functions and related types
@@ -54,35 +57,29 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 |
     recv_mpst_a_from_c, RoleC, 3 |
     recv_mpst_a_from_d, RoleD, 4 | =>
-    RoleA, MeshedChannelsFive, 5
+    NameA, MeshedChannelsFive, 5
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
     recv_mpst_b_from_c, RoleC, 3 |
     recv_mpst_b_from_d, RoleD, 4 | =>
-    RoleB, MeshedChannelsFive, 5
+    NameB, MeshedChannelsFive, 5
 );
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 2 |
     recv_mpst_c_from_b, RoleB, 3 |
     recv_mpst_c_from_d, RoleD, 4 | =>
-    RoleC, MeshedChannelsFive, 5
+    NameC, MeshedChannelsFive, 5
 );
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_a, RoleA, 2 |
     recv_mpst_d_from_b, RoleB, 3 |
     recv_mpst_d_from_c, RoleC, 4 | =>
-    RoleD, MeshedChannelsFive, 5
+    NameD, MeshedChannelsFive, 5
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 // Send/Recv
@@ -153,7 +150,7 @@ type EndpointMoreD = MeshedChannelsFive<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannelsFive<End, End, End, End, RoleEnd, RoleCentral<RoleEnd>>;
+type EndpointCentral = MeshedChannelsFive<End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannelsFive<End, End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
 type EndpointB = MeshedChannelsFive<End, End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = MeshedChannelsFive<End, End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
@@ -167,10 +164,10 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Branching0fromDtoA,
     Branching0fromDtoB,
     Branching0fromDtoC, =>
-    RoleA,
-    RoleB,
-    RoleC, =>
-    RoleCentral, RoleD, MeshedChannelsFive, 5
+    NameA,
+    NameB,
+    NameC, =>
+    NameCentral, NameD, MeshedChannelsFive, 5
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {

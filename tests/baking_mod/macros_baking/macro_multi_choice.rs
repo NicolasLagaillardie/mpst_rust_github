@@ -6,10 +6,10 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;
 
-use mpstthree::bundle_impl;
+use mpstthree::baker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
+baker!("basic", MeshedChannels, A, B, D);
 
 // Those types will be code generated
 type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
@@ -17,26 +17,11 @@ type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
 
 type ChooseMpstThree<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        MeshedChannels<
-            <S0 as Session>::Dual,
-            <S1 as Session>::Dual,
-            <R0 as Role>::Dual,
-            <N0 as Role>::Dual,
-        >,
-        MeshedChannels<
-            <S2 as Session>::Dual,
-            <S3 as Session>::Dual,
-            <R1 as Role>::Dual,
-            <N0 as Role>::Dual,
-        >,
+        MeshedChannels<<S0 as Session>::Dual, <S1 as Session>::Dual, <R0 as Role>::Dual, N0>,
+        MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, <R1 as Role>::Dual, N0>,
     >,
     End,
 >;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 type AtoCClose = End;
@@ -77,7 +62,7 @@ type ChooseCtoA<N> = ChooseMpstThree<
     CtoAClose,
     StackAVideoDual,
     StackAEnd,
-    RoleADual<RoleEnd>,
+    NameA,
 >;
 type ChooseCtoB<N> = ChooseMpstThree<
     AtoBVideo<N>,
@@ -86,7 +71,7 @@ type ChooseCtoB<N> = ChooseMpstThree<
     CtoBClose,
     StackBVideoDual,
     StackBEnd,
-    RoleBDual<RoleEnd>,
+    NameB,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;

@@ -9,6 +9,7 @@ use std::marker;
 
 use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
+use crate::name::Name;
 use crate::role::Role;
 
 #[doc(hidden)]
@@ -20,9 +21,9 @@ where
     R0: Role + 'static,
     R1: Role + 'static,
     R2: Role + 'static,
-    N0: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
+    N0: Name + 'static,
+    N1: Name + 'static,
+    N2: Name + 'static,
     F: FnOnce(
             MeshedChannels<S0, S1, R0, N0>,
             MeshedChannels<<S0 as Session>::Dual, S2, R1, N1>,

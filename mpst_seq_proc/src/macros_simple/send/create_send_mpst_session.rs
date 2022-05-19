@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateSendMPSTSession {
+pub(crate) struct CreateSendMPSTSession {
     func_name: Ident,
     receiver: Ident,
     sender: Ident,
@@ -51,10 +51,10 @@ impl From<CreateSendMPSTSession> for TokenStream {
 
 impl CreateSendMPSTSession {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let receiver = self.receiver.clone();
-        let sender = self.sender.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let receiver = &self.receiver;
+        let sender = &self.sender;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
@@ -131,14 +131,14 @@ impl CreateSendMPSTSession {
                         #send_types
                     )*
                     #receiver<R>,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >,
             ) -> #meshedchannels_name<
                     #(
                         #session_types
                     )*
                     R,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >
             where
                 T: std::marker::Send,

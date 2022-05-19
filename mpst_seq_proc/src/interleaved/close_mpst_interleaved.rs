@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CloseMpstInterleaved {
+pub(crate) struct CloseMpstInterleaved {
     func_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
@@ -36,8 +36,8 @@ impl From<CloseMpstInterleaved> for TokenStream {
 
 impl CloseMpstInterleaved {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let role_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
@@ -54,7 +54,7 @@ impl CloseMpstInterleaved {
                 let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
 
                 quote! {
-                    #temp_name : mpstthree::role::Role ,
+                    #temp_name : mpstthree::name::Name ,
                 }
             })
             .collect();

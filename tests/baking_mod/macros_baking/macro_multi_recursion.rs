@@ -4,17 +4,12 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl, choose_mpst_multi_to_all};
+use mpstthree::{baker, choose_mpst_multi_to_all};
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
+baker!("basic", MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
@@ -136,8 +131,8 @@ fn client_recurs(
                 s,
                 Branches0AtoD::Video,
                 Branches0BtoD::Video, =>
-                RoleA, RoleB, =>
-                RoleD, MeshedChannels,
+                NameD,
+                MeshedChannels,
                 3
             );
 
@@ -150,9 +145,7 @@ fn client_recurs(
                 s,
                 Branches0AtoD::End,
                 Branches0BtoD::End, =>
-                RoleA,
-                RoleB, =>
-                RoleD,
+                NameD,
                 MeshedChannels,
                 3
             );

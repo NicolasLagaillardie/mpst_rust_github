@@ -1,7 +1,7 @@
 use criterion::{black_box, Criterion};
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -12,12 +12,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, C, S);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameS = RoleS<RoleEnd>;
+baker!("rec_and_cancel", MeshedChannelsThree, A, C, S);
 
 // Types
 // A
@@ -84,7 +79,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let (_empty3, s) = s.recv()?;
     let (_empty4, s) = s.recv()?;
 
-    let choice = thread_rng().gen_range(1..=3);
+    let choice: i32 = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
         let s: EndpointCAccept =

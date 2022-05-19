@@ -4,17 +4,12 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl, choose_mpst_create_multi_to_all};
+use mpstthree::{baker, choose_mpst_create_multi_to_all};
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
+baker!("basic", MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
@@ -81,12 +76,7 @@ type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 // For B
 type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
-choose_mpst_create_multi_to_all!(
-    choose_mpst_client_to_all,
-    RoleA, RoleB, =>
-    RoleD, MeshedChannels,
-    3
-);
+choose_mpst_create_multi_to_all!(choose_mpst_client_to_all, NameD, MeshedChannels, 3);
 
 // Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {

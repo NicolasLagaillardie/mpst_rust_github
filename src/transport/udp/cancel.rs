@@ -20,13 +20,13 @@ use std::net::UdpSocket;
 /// use mpstthree::binary::struct_trait::end::End;
 /// use mpstthree::binary::struct_trait::session::Session;
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::role::a::RoleA;
+/// use mpstthree::name::a::NameA;
 /// use mpstthree::role::end::RoleEnd;
 /// use mpstthree::transport::udp::cancel::cancel_udp;
 /// use std::net::UdpSocket;
 ///
 /// let socket = UdpSocket::bind("0.0.0.0:3333").unwrap();
-/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+/// let (s, _s_dual) = MeshedChannels::<End, End, RoleEnd, NameA>::new();
 /// cancel_udp(s, socket);
 /// ```
 ///

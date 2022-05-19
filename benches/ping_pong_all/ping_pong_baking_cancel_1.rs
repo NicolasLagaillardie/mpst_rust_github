@@ -1,7 +1,7 @@
 use criterion::{black_box, Criterion};
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -26,11 +26,7 @@ use std::error::Error;
 // }
 
 // Create new roles
-bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, A, B);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
+baker!("rec_and_cancel", MeshedChannelsTwo, A, B);
 
 // Types
 // A

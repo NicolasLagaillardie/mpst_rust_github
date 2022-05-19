@@ -59,6 +59,10 @@
 //! use mpstthree::role::c::RoleC;
 //! use mpstthree::role::end::RoleEnd;
 //!
+//! use mpstthree::name::a::NameA;
+//! use mpstthree::name::b::NameB;
+//! use mpstthree::name::c::NameC;
+//!
 //! // Used inside the functions which process the protocol for receiving one payload
 //! use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 //! use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
@@ -98,11 +102,11 @@
 //!
 //! // Creating the MP sessions
 //! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 //! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
 //! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //!
 //! // Function to process Endpoint of A
 //! fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -210,11 +214,11 @@
 //! ```ignore
 //! // Creating the MP sessions
 //! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 //! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
 //! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //! ```
 //!
 //! To run the protocol,
@@ -269,15 +273,19 @@
 //! The different features available are:
 //!
 //! 1. `default`: default features, for implementing the basic example above.
-//! 2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
-//! 3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
-//! 4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
-//! 5. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-//! 6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-//! 7. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-//! 8. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
-//! 9. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
-//! 10. `full`: feature containing `checking`, `baking` and `transport`.
+//! 2. `macros_simple`: feature for implementing protocols with three participants, whatever are
+//! their name. 3. `macros_multiple`: feature for implementing protocols with any number of
+//! participants. Contains `macros_simple`. 4. `baking`: feature for implementing protocols with any
+//! number of participants and using associated functions instead of functions. Contains
+//! `macros_multiple`. 5. `transport_tcp`: feature containing primitives for communicating with TCP.
+//! **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+//! 6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires
+//! `openssl`, `pkg-config` and `libssl-dev` installed on your machine**. 7. `transport_http`:
+//! feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`,
+//! `pkg-config` and `libssl-dev` installed on your machine**. 8. `transport`: feature containing
+//! `transport_tcp`, `transport_udp` and `transport_http`. 9. `checking`: feature for the top-down
+//! approach. Needs the [`KMC`] tool. 10. `full`: feature containing `checking`, `baking` and
+//! `transport`.
 //!
 //! [`KMC`]: https://github.com/julien-lange/kmc
 
@@ -286,6 +294,12 @@ pub mod binary;
 
 #[cfg(feature = "role")]
 pub mod role;
+
+#[cfg(feature = "name")]
+pub mod name;
+
+#[cfg(feature = "message")]
+pub mod message;
 
 #[cfg(feature = "meshedchannels")]
 pub mod meshedchannels;
@@ -312,6 +326,12 @@ pub mod baking;
 #[cfg(feature = "interleaved")]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
 pub mod interleaved;
+
+#[cfg(feature = "binary_timed")]
+pub mod binary_timed;
+
+#[cfg(feature = "baking_timed")]
+pub mod baking_timed;
 
 pub mod transport;
 

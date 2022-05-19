@@ -1,15 +1,15 @@
-use proc_macro2::{Span, TokenStream, TokenTree};
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
-type VecOfTuple = Vec<(u64, u64, u64)>;
+use crate::common_functions::expand::parenthesised::parenthesised_groups;
+use crate::common_functions::maths::{diag, get_tuple_diag};
 
 #[derive(Debug)]
-pub struct ChooseTypeCancelMultiToAllBundle {
+pub(crate) struct ChooseTypeCancelMultiToAllBundle {
     labels: Vec<TokenStream>,
-    receivers: Vec<TokenStream>,
     fn_names: Vec<TokenStream>,
     branches: Vec<TokenStream>,
     new_types: Vec<TokenStream>,
@@ -22,60 +22,41 @@ pub struct ChooseTypeCancelMultiToAllBundle {
     exclusion: u64,
 }
 
-fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
-    let mut out: Vec<TokenStream> = Vec::new();
-    for tt in stream.clone().into_iter() {
-        let elt = match tt {
-            TokenTree::Group(g) => Some(g.stream()),
-            _ => None,
-        };
-        if let Some(elt_tt) = elt {
-            out.push(elt_tt)
-        }
-    }
-    out
-}
-
 impl Parse for ChooseTypeCancelMultiToAllBundle {
     fn parse(input: ParseStream) -> Result<Self> {
         // The names of the functions
         let content_fn_names;
         let _parentheses = syn::parenthesized!(content_fn_names in input);
-        let fn_names = TokenStream::parse(&content_fn_names)?;
-
-        let all_fn_names: Vec<TokenStream> = expand_parenthesized(&fn_names);
+        let all_fn_names: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_fn_names)?);
         <Token![,]>::parse(input)?;
 
         // The names of the functions
         let content_branches;
         let _parentheses = syn::parenthesized!(content_branches in input);
-        let branches = TokenStream::parse(&content_branches)?;
-
-        let all_branches: Vec<TokenStream> = expand_parenthesized(&branches);
+        let all_branches: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_branches)?);
         <Token![,]>::parse(input)?;
 
         // The labels
         let content_labels;
         let _parentheses = syn::parenthesized!(content_labels in input);
-        let labels = TokenStream::parse(&content_labels)?;
-
-        let all_labels: Vec<TokenStream> = expand_parenthesized(&labels);
+        let all_labels: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_labels)?);
         <Token![,]>::parse(input)?;
 
         // The receivers
         let content_receivers;
         let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = TokenStream::parse(&content_receivers)?;
-
-        let all_receivers: Vec<TokenStream> = expand_parenthesized(&receivers);
+        let all_receivers: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_receivers)?);
         <Token![,]>::parse(input)?;
 
         // The new_types
-        let content_new_type;
-        let _parentheses = syn::parenthesized!(content_new_type in input);
-        let new_types = TokenStream::parse(&content_new_type)?;
-
-        let all_new_types: Vec<TokenStream> = expand_parenthesized(&new_types);
+        let content_new_types;
+        let _parentheses = syn::parenthesized!(content_new_types in input);
+        let all_new_types: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_new_types)?);
         <Token![,]>::parse(input)?;
 
         // The sender
@@ -114,7 +95,6 @@ impl Parse for ChooseTypeCancelMultiToAllBundle {
 
         Ok(ChooseTypeCancelMultiToAllBundle {
             labels: all_labels,
-            receivers: all_receivers,
             fn_names: all_fn_names,
             branches: all_branches,
             new_types: all_new_types,
@@ -136,54 +116,15 @@ impl From<ChooseTypeCancelMultiToAllBundle> for TokenStream {
 }
 
 impl ChooseTypeCancelMultiToAllBundle {
-    /// Create the whole matrix of index according to line and column
-    fn diag(&self) -> VecOfTuple {
-        let diff = self.n_sessions - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (self.n_sessions - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Return (line, column, index) of diag
-    fn get_tuple_diag(&self, diag: &[(u64, u64, u64)], i: u64) -> (u64, u64, u64) {
-        if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!(
-                "Error at get_tuple_diag for i = {:?} / diag = {:?}",
-                i, diag
-            )
-        }
-    }
-
     fn expand(&self) -> TokenStream {
         let all_functions: Vec<TokenStream> = (1..self.n_branches)
             .map(|i| {
-                let all_labels = self.labels.clone();
-                let all_receivers = self.receivers.clone();
-                let all_branches = self.branches.clone();
-                let all_fn_names = self.fn_names.clone();
-                let sender = self.sender.clone();
-                let broadcaster = self.broadcaster.clone();
-                let all_new_types = self.new_types.clone();
-                let meshedchannels_name = self.meshedchannels_name.clone();
+                let all_labels = &self.labels;
+                let sender = &self.sender;
+                let broadcaster = &self.broadcaster;
+                let meshedchannels_name = &self.meshedchannels_name;
                 let diff = self.n_sessions - 1;
-                let diag = self.diag();
+                let diag = diag(self.n_sessions);
 
                 let send_types: Vec<TokenStream> = (2..self.n_labels)
                     .map(|j| {
@@ -208,7 +149,7 @@ impl ChooseTypeCancelMultiToAllBundle {
 
                 let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
                     .map(|j| {
-                        let (line, column, _) = self.get_tuple_diag(&diag, j);
+                        let (line, column, _) = get_tuple_diag(&diag, j);
                         let channel_left = Ident::new(
                             &format!("channel_{}_{}", line, column),
                             Span::call_site(),
@@ -245,14 +186,8 @@ impl ChooseTypeCancelMultiToAllBundle {
                     .map(|j| {
                         let temp_name =
                             Ident::new(&format!("name_{}", j), Span::call_site());
-                        let temp_role = if let Some(elt) = all_receivers.get(usize::try_from(j - 2).unwrap()) {
-                            elt
-                        } else {
-                            panic!("Not enough receivers for new_names")
-                        };
                         quote! {
-                            let ( #temp_name , _) =
-                                <#temp_role::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                            let ( #temp_name , _) = < _ as mpstthree::name::Name >::new();
                         }
                     })
                     .collect();
@@ -266,21 +201,21 @@ impl ChooseTypeCancelMultiToAllBundle {
                 );
 
                 let temp_fn_name =
-                    if let Some(elt) = all_fn_names.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.fn_names.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough fn_names for all_functions")
                     };
 
                 let temp_new_type =
-                    if let Some(elt) = all_new_types.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.new_types.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough new_type for all_functions")
                     };
 
                 let temp_branches =
-                    if let Some(elt) = all_branches.get(usize::try_from(i - 1).unwrap()) {
+                    if let Some(elt) = self.branches.get(usize::try_from(i - 1).unwrap()) {
                         elt
                     } else {
                         panic!("Not enough branches for all_functions")
@@ -374,7 +309,7 @@ impl ChooseTypeCancelMultiToAllBundle {
                                 #send_types
                             )*
                             mpstthree::role::broadcast::RoleBroadcast,
-                            #sender<mpstthree::role::end::RoleEnd>,
+                            #sender,
                         >
                     ) -> Result< #temp_new_type , Box<dyn std::error::Error>>
                     {
@@ -392,15 +327,13 @@ impl ChooseTypeCancelMultiToAllBundle {
                             #new_roles
                         )*
 
-                        let (name_1, _) =
-                            <#broadcaster<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        let (name_1, _) = < #broadcaster as mpstthree::name::Name >::new();
 
                         #(
                             #new_names
                         )*
 
-                        let ( #new_name_sender , _) =
-                            <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                        let ( #new_name_sender , _) = < #sender as mpstthree::name::Name >::new();
 
                         #(
                             #all_send
@@ -410,6 +343,7 @@ impl ChooseTypeCancelMultiToAllBundle {
                             Some(e) => e,
                             _ => panic!("Error type"),
                         };
+
                         let s =
                             s.session1.sender.send(
                                 mpstthree::binary::struct_trait::end::Signal::Offer(elt)

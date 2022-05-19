@@ -9,15 +9,13 @@ macro_rules! choose_aux {
     (
         $session: expr,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
         mpst_seq::choose_mpst_multi_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -57,22 +55,16 @@ macro_rules! choose_aux {
 ///     }
 /// }
 /// ```
-///
-/// TO TEST
 #[macro_export]
 macro_rules! choose_mpst_a_to_all {
     ($session: expr, $( $label: path),+ $(,)? ) => {{
-        use mpstthree::role::a::RoleA;
-        use mpstthree::role::b::RoleB;
-        use mpstthree::role::c::RoleC;
+        use mpstthree::name::a::NameA;
         use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_aux!(
             $session,
             $( $label , )+ =>
-            RoleB,
-            RoleC, =>
-            RoleA,
+            NameA,
             MeshedChannels,
             1
         )
@@ -114,17 +106,13 @@ macro_rules! choose_mpst_a_to_all {
 #[macro_export]
 macro_rules! choose_mpst_b_to_all {
     ($session: expr,  $( $label: path),+ $(,)? ) => {{
-        use mpstthree::role::a::RoleA;
-        use mpstthree::role::b::RoleB;
-        use mpstthree::role::c::RoleC;
+        use mpstthree::name::b::NameB;
         use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_aux!(
             $session,
             $( $label , )+ =>
-            RoleA,
-            RoleC, =>
-            RoleB,
+            NameB,
             MeshedChannels,
             2
         )
@@ -166,17 +154,13 @@ macro_rules! choose_mpst_b_to_all {
 #[macro_export]
 macro_rules! choose_mpst_c_to_all {
     ($session: expr,  $( $label: path),+ $(,)? ) => {{
-        use mpstthree::role::a::RoleA;
-        use mpstthree::role::b::RoleB;
-        use mpstthree::role::c::RoleC;
+        use mpstthree::name::c::NameC;
         use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_aux!(
             $session,
             $( $label , )+ =>
-            RoleA,
-            RoleB, =>
-            RoleC,
+            NameC,
             MeshedChannels,
             3
         )

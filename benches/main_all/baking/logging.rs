@@ -1,7 +1,7 @@
 use criterion::{black_box, Criterion};
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -12,24 +12,14 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, Controller, Logs);
-
-// Names
-type NameRoleController = RoleController<RoleEnd>;
-type NameRoleLogs = RoleLogs<RoleEnd>;
+baker!("rec_and_cancel", MeshedChannelsTwo, Controller, Logs);
 
 // RoleController
 enum Branching0fromLtoC {
     Success(
-        MeshedChannelsTwo<
-            Recv<i32, Recurs0fromCtoL>,
-            RoleLogs<RoleLogs<RoleEnd>>,
-            NameRoleController,
-        >,
+        MeshedChannelsTwo<Recv<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>,
     ),
-    Failure(
-        MeshedChannelsTwo<Recv<i32, Choose1fromCtoL>, RoleLogs<RoleBroadcast>, NameRoleController>,
-    ),
+    Failure(MeshedChannelsTwo<Recv<i32, Choose1fromCtoL>, RoleLogs<RoleBroadcast>, NameController>),
 }
 
 type Recurs0fromCtoL = Recv<Branching0fromLtoC, End>;
@@ -40,40 +30,36 @@ type Choose1fromCtoL = Send<Branching1fromCtoL, End>;
 type Choose0fromLtoC = Send<Branching0fromLtoC, End>;
 
 enum Branching1fromCtoL {
-    Restart(
-        MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameRoleLogs>,
-    ),
-    Stop(MeshedChannelsTwo<Recv<i32, End>, RoleController<RoleEnd>, NameRoleLogs>),
+    Restart(MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>),
+    Stop(MeshedChannelsTwo<Recv<i32, End>, RoleController<RoleEnd>, NameLogs>),
 }
 
 type Recurs1fromLtoC = Recv<Branching1fromCtoL, End>;
 
 // Creating the MP sessions
 // RoleController
-type EndpointController1Stop =
-    MeshedChannelsTwo<Send<i32, End>, RoleLogs<RoleEnd>, NameRoleController>;
+type EndpointController1Stop = MeshedChannelsTwo<Send<i32, End>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1Restart =
-    MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameRoleController>;
-type EndpointController0 =
-    MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameRoleController>;
-type EndpointController1 = MeshedChannelsTwo<Choose1fromCtoL, RoleBroadcast, NameRoleController>;
+    MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
+type EndpointController0 = MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameController>;
+type EndpointController1 = MeshedChannelsTwo<Choose1fromCtoL, RoleBroadcast, NameController>;
 type EndpointControllerInit =
-    MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameRoleController>;
+    MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
 // RoleLogs
 type EndpointLogs0Success =
-    MeshedChannelsTwo<Send<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameRoleLogs>;
+    MeshedChannelsTwo<Send<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
 type EndpointLogs0Failure = MeshedChannelsTwo<
     Send<i32, Recurs1fromLtoC>,
     RoleController<RoleController<RoleEnd>>,
-    NameRoleLogs,
+    NameLogs,
 >;
-type EndpointLogs0 = MeshedChannelsTwo<Choose0fromLtoC, RoleBroadcast, NameRoleLogs>;
-type EndpointLogs1 = MeshedChannelsTwo<Recurs1fromLtoC, RoleController<RoleEnd>, NameRoleLogs>;
+type EndpointLogs0 = MeshedChannelsTwo<Choose0fromLtoC, RoleBroadcast, NameLogs>;
+type EndpointLogs1 = MeshedChannelsTwo<Recurs1fromLtoC, RoleController<RoleEnd>, NameLogs>;
 type EndpointLogsInit =
-    MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameRoleLogs>;
+    MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit) -> Result<(), Box<dyn Error>> {
-    let start = thread_rng().gen_range(5..100);
+    let start: i32 = thread_rng().gen_range(5..100);
 
     let s = s.send(start)?;
 

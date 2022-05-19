@@ -1,2 +1,2 @@
-pub mod aux_checking;
-pub mod branching;
+pub(crate) mod aux_checking;
+pub(crate) mod branching;

@@ -4,7 +4,9 @@ use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{
+    checker_concat, create_meshedchannels, create_multiple_normal_name, create_multiple_normal_role,
+};
 
 use petgraph::dot::Dot;
 
@@ -20,17 +22,15 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC);
+
 // The new types
 
 struct Haggle;
 struct Price;
 struct Happy;
 struct Info;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 

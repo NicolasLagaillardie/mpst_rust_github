@@ -41,29 +41,25 @@ create_multiple_normal_role!(
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsFour, 3
+    NameA, MeshedChannelsFour, 3
 );
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 | =>
-    RoleB, MeshedChannelsFour, 3
+    NameB, MeshedChannelsFour, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsFour, 3
+    NameA, MeshedChannelsFour, 3
 );
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 | =>
-    RoleB, MeshedChannelsFour, 3
+    NameB, MeshedChannelsFour, 3
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 // A
@@ -83,7 +79,7 @@ type EndpointDoneA = MeshedChannelsFour<End, End, RoleEnd, NameA>;
 type EndpointForwardA =
     MeshedChannelsFour<End, Send<(), Recv<(), Choose0fromAtoB>>, RoleB<RoleB<RoleBroadcast>>, NameA>;
 
-type EndpointCentral = MeshedChannelsFour<End, End, RoleEnd, RoleCentral<RoleEnd>>;
+type EndpointCentral = MeshedChannelsFour<End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannelsFour<End, Choose0fromAtoB, RoleBroadcast, NameA>;
 type EndpointB = MeshedChannelsFour<End, RecursBtoA, RoleA<RoleEnd>, NameB>;
 
@@ -92,8 +88,8 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Done, More, =>
     EndpointDoneA, EndpointForwardA, =>
     Branching0fromAtoB, =>
-    RoleB, =>
-    RoleCentral, RoleA, MeshedChannelsFour, 2
+    NameB, =>
+    NameCentral, NameA, MeshedChannelsFour, 2
 );
 
 // Functions
