@@ -298,6 +298,9 @@ pub mod role;
 #[cfg(feature = "name")]
 pub mod name;
 
+#[cfg(feature = "message")]
+pub mod message;
+
 #[cfg(feature = "meshedchannels")]
 pub mod meshedchannels;
 

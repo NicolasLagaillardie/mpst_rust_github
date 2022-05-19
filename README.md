@@ -210,7 +210,8 @@ You can check the tests and examples to have a larger overview of the different 
 
 The different features available are:
 
-1. `default`: default features, for implementing the basic example above.
+0. `default`: default features, for implementing the basic example above.
+1. `message`: feature for using the _message_ structure provided by the library. 
 2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
 3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
 4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
