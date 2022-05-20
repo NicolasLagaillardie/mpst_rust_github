@@ -210,17 +210,18 @@ You can check the tests and examples to have a larger overview of the different 
 
 The different features available are:
 
-1. `default`: default features, for implementing the basic example above.
+0. `default`: default features, for implementing the basic example above.
+1. `message`: feature for using the _message_ structure provided by the library. 
 2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
 3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
 4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
-4. `baking_timed`: feature for implementing _asynchronous_ _timed_ protocols with any number of participants and using associated functions instead of functions.
-5. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-7. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-8. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
-9. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
-10. `full`: feature containing `checking`, `baking` and `transport`.
+5. `baking_timed`: feature for implementing _asynchronous_ _timed_ protocols with any number of participants and using associated functions instead of functions.
+6. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+7. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+8. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+9. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
+10. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
+11. `full`: feature containing `checking`, `baking` and `transport`.
 
 ## Contributing
 

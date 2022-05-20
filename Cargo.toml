@@ -121,6 +121,11 @@ name = "baking_timed"
 path = "tests/baking_timed.rs"
 required-features = ["baking_timed"]
 
+[[test]]
+name = "baking_message"
+path = "tests/baking_message.rs"
+required-features = ["baking", "message", "checking"]
+
 ################################### Benches
 
 [[bench]]
@@ -209,7 +214,7 @@ required-features = ["macros_simple"]
 
 [[example]]
 name = "video_stream"
-required-features = [""]
+required-features = ["baking_checking"]
 
 [[example]]
 name = "adder"
@@ -274,6 +279,7 @@ functionmpst = []
 meshedchannels = []
 role = []
 name = []
+message = []
 binary_timed = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
