@@ -16,49 +16,60 @@ fn simple_baking() {
     // Simple
     baking_mod::simple_baking::simple::simple_triple_endpoints();
     baking_mod::simple_baking::simple::simple_triple_endpoints_checker();
+    println!("Simple done");
 
     // Choose
     baking_mod::simple_baking::choose::simple_choice();
     baking_mod::simple_baking::choose::simple_choice_checker();
+    println!("Choose done");
 
     // Choose 2 A
     baking_mod::simple_baking::a_choose::double_choice();
     baking_mod::simple_baking::a_choose::double_choice_checker();
+    println!("Choose 2 A done");
 
-    // Choose 2 A
+    // Choose 2 B
     baking_mod::simple_baking::b_choose::double_choice();
     baking_mod::simple_baking::b_choose::double_choice_checker();
+    println!("Choose 2 B done");
 
-    // Choose 2 A
+    // Choose 2 C
     baking_mod::simple_baking::c_choose::double_choice();
     baking_mod::simple_baking::c_choose::double_choice_checker();
+    println!("Choose 2 C done");
 
     // Usecase simple A
     baking_mod::simple_baking::a_usecase::run_a_usecase_left();
     baking_mod::simple_baking::a_usecase::run_a_usecase_right();
     baking_mod::simple_baking::a_usecase::run_a_usecase_checker();
+    println!("Usecase simple A done");
 
     // Usecase simple B
     baking_mod::simple_baking::b_usecase::run_b_usecase_left();
     baking_mod::simple_baking::b_usecase::run_b_usecase_right();
     baking_mod::simple_baking::b_usecase::run_b_usecase_checker();
+    println!("Usecase simple B done");
 
     // Usecase simple C
     baking_mod::simple_baking::c_usecase::run_c_usecase_left();
     baking_mod::simple_baking::c_usecase::run_c_usecase_right();
     baking_mod::simple_baking::c_usecase::run_c_usecase_checker();
+    println!("Usecase simple C done");
 
     // Usecase recursive A
     baking_mod::simple_baking::a_usecase_recursive::run_a_usecase_recursive();
     baking_mod::simple_baking::a_usecase_recursive::run_a_usecase_recursive_checker();
+    println!("Usecase recursive A done");
 
     // Usecase recursive B
     baking_mod::simple_baking::b_usecase_recursive::run_b_usecase_recursive();
     baking_mod::simple_baking::b_usecase_recursive::run_b_usecase_recursive_checker();
+    println!("Usecase recursive B done");
 
     // Usecase recursive C
     baking_mod::simple_baking::c_usecase_recursive::run_c_usecase_recursive();
     baking_mod::simple_baking::c_usecase_recursive::run_c_usecase_recursive_checker();
+    println!("Usecase recursive C done");
 }
 
 // Tests for baking_mod with more than three participants
