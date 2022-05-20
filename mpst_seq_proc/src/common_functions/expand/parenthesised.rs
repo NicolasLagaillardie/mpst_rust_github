@@ -61,6 +61,8 @@ pub(crate) fn parenthesised_groups(stream: TokenStream) -> Vec<TokenStream> {
             for elt in group.stream().into_iter() {
                 if let TokenTree::Group(i) = elt {
                     result.push(quote! {#i});
+                } else if let TokenTree::Ident(i) = elt {
+                    result.push(quote! {#i});
                 }
             }
         }

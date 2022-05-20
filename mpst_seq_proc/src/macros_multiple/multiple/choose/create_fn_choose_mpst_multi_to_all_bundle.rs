@@ -84,7 +84,13 @@ impl Parse for ChooseTypeMultiToAllBundle {
         let n_new_type = u64::try_from(all_new_types.len()).unwrap() + 1;
 
         if n_branches != n_fn_names || n_branches != n_new_type || n_new_type != n_fn_names {
-            panic!("The number of new types, functions and branches are not the same")
+            panic!(
+                "The number of new types, functions and branches are not the same: {} / {} / {} / {}",
+                n_branches,
+                n_fn_names,
+                n_branches,
+                n_new_type,
+            )
         };
 
         Ok(ChooseTypeMultiToAllBundle {

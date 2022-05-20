@@ -92,6 +92,7 @@ impl CheckingInput {
                     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                         match self {
                             #( #branches )*
+                            _ => panic!("The provided variant and enum do not exist"),
                         }
                     }
                 }
