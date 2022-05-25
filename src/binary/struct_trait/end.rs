@@ -5,9 +5,6 @@ use crate::binary::struct_trait::session::Session;
 
 use crossbeam_channel::{bounded, Receiver, Sender};
 
-use std::error::Error;
-use std::fmt;
-
 /// End of communication.
 #[must_use]
 #[derive(Debug)]
@@ -62,23 +59,5 @@ impl Session for End {
 
     fn self_tail_str(&self) -> String {
         "".to_string()
-    }
-}
-
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct EndError {
-    details: String,
-}
-
-impl fmt::Display for EndError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Expected `End`, found {:?}", self.details)
-    }
-}
-
-impl Error for EndError {
-    fn description(&self) -> &str {
-        &self.details
     }
 }

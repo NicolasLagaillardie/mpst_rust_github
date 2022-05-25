@@ -5,9 +5,9 @@
 
 use crate::binary::struct_trait::session::Session;
 use crate::binary_timed::struct_trait::recv::RecvTimed;
+
 use crossbeam_channel::{bounded, Sender};
-use std::error::Error;
-use std::fmt;
+
 use std::marker;
 
 /// Send `T`, then continue as `S`.
@@ -49,24 +49,6 @@ pub struct SendTimed<
     pub include_end: bool,
     #[doc(hidden)]
     pub reset: bool,
-}
-
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct SendError {
-    details: String,
-}
-
-impl fmt::Display for SendError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Expected `Send`, found {:?}", self.details)
-    }
-}
-
-impl Error for SendError {
-    fn description(&self) -> &str {
-        &self.details
-    }
 }
 
 impl<

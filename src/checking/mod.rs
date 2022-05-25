@@ -226,8 +226,8 @@ macro_rules! checker_concat {
                 $(
                     $(
                         {
-                            $choice: ty,
-                            $branch: ident,
+                            $choice,
+                            $branch,
                         }
                     )+
                 )+

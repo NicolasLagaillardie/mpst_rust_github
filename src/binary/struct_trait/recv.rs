@@ -6,8 +6,6 @@ use crate::binary::struct_trait::session::Session;
 
 use crossbeam_channel::Receiver;
 
-use std::error::Error;
-use std::fmt;
 use std::marker;
 
 /// Receive `T`, then continue as `S`.
@@ -20,24 +18,6 @@ where
 {
     #[doc(hidden)]
     pub channel: Receiver<(T, S)>,
-}
-
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct RecvError {
-    details: String,
-}
-
-impl fmt::Display for RecvError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Expected `Recv`, found {:?}", self.details)
-    }
-}
-
-impl Error for RecvError {
-    fn description(&self) -> &str {
-        &self.details
-    }
 }
 
 impl<T: marker::Send, S: Session> Session for Recv<T, S> {

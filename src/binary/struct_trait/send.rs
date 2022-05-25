@@ -6,8 +6,6 @@ use crate::binary::struct_trait::session::Session;
 
 use crossbeam_channel::{bounded, Sender};
 
-use std::error::Error;
-use std::fmt;
 use std::marker;
 
 /// Send `T`, then continue as `S`.
@@ -21,24 +19,6 @@ where
 {
     #[doc(hidden)]
     pub channel: Sender<(T, S::Dual)>,
-}
-
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct SendError {
-    details: String,
-}
-
-impl fmt::Display for SendError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Expected `Send`, found {:?}", self.details)
-    }
-}
-
-impl Error for SendError {
-    fn description(&self) -> &str {
-        &self.details
-    }
 }
 
 impl<T: marker::Send, S: Session> Session for Send<T, S> {

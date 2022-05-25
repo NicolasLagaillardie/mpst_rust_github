@@ -28,7 +28,7 @@ pub struct NameB {
 }
 
 impl Name for NameB {
-    type Dual = NameB;
+    type Dual = Self;
 
     fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<()>(1);

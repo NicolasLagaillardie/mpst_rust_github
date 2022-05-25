@@ -27,7 +27,7 @@ pub struct RoleEnd {
 }
 
 impl Role for RoleEnd {
-    type Dual = RoleEnd;
+    type Dual = Self;
 
     fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<()>(1);

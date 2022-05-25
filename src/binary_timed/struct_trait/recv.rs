@@ -5,9 +5,9 @@
 
 use crate::binary::struct_trait::session::Session;
 use crate::binary_timed::struct_trait::send::SendTimed;
+
 use crossbeam_channel::Receiver;
-use std::error::Error;
-use std::fmt;
+
 use std::marker;
 
 /// Receive `T`, then continue as `S`.
@@ -48,24 +48,6 @@ pub struct RecvTimed<
     pub include_end: bool,
     #[doc(hidden)]
     pub reset: bool,
-}
-
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct RecvError {
-    details: String,
-}
-
-impl fmt::Display for RecvError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Expected `Recv`, found {:?}", self.details)
-    }
-}
-
-impl Error for RecvError {
-    fn description(&self) -> &str {
-        &self.details
-    }
 }
 
 impl<

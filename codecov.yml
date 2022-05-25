@@ -27,7 +27,7 @@ parsers:
       conditional: yes
       loop: yes
       method: yes
-      macro: yes
+      macro: no # Might be changed
 
 comment:
   layout: "reach,diff,flags,files,footer"

@@ -63,6 +63,9 @@ pub(crate) fn parenthesised_groups(stream: TokenStream) -> Vec<TokenStream> {
                     result.push(quote! {#i});
                 } else if let TokenTree::Ident(i) = elt {
                     result.push(quote! {#i});
+                } else {
+                    println!("Unexpected element: {:?}", elt);
+                    panic!("Unexpected element: {:?}", elt);
                 }
             }
         }

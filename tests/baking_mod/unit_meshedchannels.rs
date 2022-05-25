@@ -22,6 +22,9 @@ type Endpoint<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 pub fn meshedchannels_fields() {
     let (meshedchannels_1, meshedchannels_2) = Endpoint::<i32>::new();
 
+    assert_eq!(meshedchannels_1.name.self_head_str(), "NameA".to_string());
+    assert_eq!(meshedchannels_2.name.self_head_str(), "NameA".to_string());
+
     // meshedchannels_1
     let (here1_stack, there1_stack) = RoleC::<RoleEnd>::new();
     let (here1_name, there1_name) = RoleEnd::new();

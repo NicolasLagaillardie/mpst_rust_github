@@ -20,6 +20,7 @@ fn attempt_extraction(input: ParseStream) -> Result<Vec<String>> {
     for tt in token_stream.into_iter() {
         let elt = match tt {
             TokenTree::Group(g) => Some(g.stream()),
+            TokenTree::Ident(g) => Some(quote! { #g }),
             _ => None,
         };
         if let Some(elt_tt) = elt {
@@ -29,8 +30,11 @@ fn attempt_extraction(input: ParseStream) -> Result<Vec<String>> {
 
     let mut result = Vec::new();
     for elt in temp_result {
-        let ident: proc_macro2::Ident = syn::parse2(elt)?;
-        result.push(ident.to_string());
+        // let ident: proc_macro2::Ident = ;
+        if let Ok(temp_ident) = syn::parse2(elt) {
+            let ident: proc_macro2::Ident = temp_ident;
+            result.push(ident.to_string());
+        }
     }
 
     Ok(result)
