@@ -123,28 +123,23 @@ impl<
 {
     type Dual = SendTimed<T, S::Dual, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = Self::Dual::new();
         (receiver, sender)
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "Recv".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "Recv".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }

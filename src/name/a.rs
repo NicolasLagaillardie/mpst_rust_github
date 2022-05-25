@@ -30,7 +30,6 @@ pub struct NameA {
 impl Name for NameA {
     type Dual = NameA;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
@@ -47,22 +46,18 @@ impl Name for NameA {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "NameA".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         "".to_string()
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "NameA".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         "".to_string()
     }

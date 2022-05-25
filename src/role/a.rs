@@ -39,7 +39,6 @@ where
 impl<R: Role> Role for RoleA<R> {
     type Dual = RoleADual<R::Dual>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender_normal, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
@@ -54,22 +53,18 @@ impl<R: Role> Role for RoleA<R> {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "RoleA".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "RoleA".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }

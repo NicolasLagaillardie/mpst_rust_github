@@ -4,6 +4,8 @@ codecov:
 ignore:
   - "mpst_seq/"
   - "mpst_seq_proc/"
+  - "benches/"
+  - "examples/"
 
 coverage:
   precision: 2

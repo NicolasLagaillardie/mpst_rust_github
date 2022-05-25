@@ -32,7 +32,6 @@ pub enum Signal {
 impl Session for End {
     type Dual = End;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<Signal>(1);
         let (sender2, receiver2) = bounded::<Signal>(1);
@@ -49,22 +48,18 @@ impl Session for End {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "End".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         "".to_string()
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "End".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         "".to_string()
     }

@@ -93,11 +93,9 @@ where
     pub name: N,
 }
 
-#[doc(hidden)]
 impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, S2, R, N> {
     type Dual = MeshedChannels<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual, N>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender_one, receiver_one) = S1::new();
         let (sender_two, receiver_two) = S2::new();
@@ -122,7 +120,6 @@ impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, 
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         format!(
             "{}\n{}\n{}\n{}",
@@ -133,7 +130,6 @@ impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, 
         )
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!(
             "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
@@ -148,7 +144,6 @@ impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, 
         )
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         format!(
             "{}\n{}\n{}\n{}",
@@ -159,7 +154,6 @@ impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, 
         )
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!(
             "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",

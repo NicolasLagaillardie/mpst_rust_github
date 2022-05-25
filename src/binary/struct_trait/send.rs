@@ -44,28 +44,23 @@ impl Error for SendError {
 impl<T: marker::Send, S: Session> Session for Send<T, S> {
     type Dual = Recv<T, S::Dual>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
         (Send { channel: sender }, Recv { channel: receiver })
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "Send".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "Send".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }

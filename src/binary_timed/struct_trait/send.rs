@@ -124,7 +124,6 @@ impl<
 {
     type Dual = RecvTimed<T, S::Dual, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = bounded::<(T, S::Dual)>(1);
         (
@@ -149,22 +148,18 @@ impl<
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "Send".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "Send".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }

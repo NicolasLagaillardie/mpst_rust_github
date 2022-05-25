@@ -43,28 +43,23 @@ impl Error for RecvError {
 impl<T: marker::Send, S: Session> Session for Recv<T, S> {
     type Dual = Send<T, S::Dual>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = Self::Dual::new();
         (receiver, sender)
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "Recv".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "Recv".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", S::head_str(), S::tail_str())
     }
