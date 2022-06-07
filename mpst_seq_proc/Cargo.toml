@@ -15,15 +15,14 @@ include = [
     "LICENSE-MIT",
     "README.md",
     "src/",
-    "tests/",
 ]
 
 [lib]
 proc-macro = true
 
-[[test]]
-name = "tests"
-path = "tests/progress.rs"
+# [[test]]
+# name = "tests"
+# path = "tests/progress.rs"
 
 [dev-dependencies]
 trybuild = "1.0"

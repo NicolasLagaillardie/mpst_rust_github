@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.1.16"
+version = "0.1.17"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
@@ -257,8 +257,8 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-# mpst-seq = { path = "mpst_seq" }
-mpst-seq = "0.1"
+mpst-seq = { path = "mpst_seq" }
+# mpst-seq = "0.1"
 crossbeam-channel = "0.5"
 either = "1.6"
 hyper = { version = "0.14", features = ["full"], optional = true }
