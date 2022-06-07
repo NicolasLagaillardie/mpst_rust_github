@@ -11,19 +11,20 @@ license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "multicrusty"]
 documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
-include = [
-    "/benches/**",
-    "/build.rs",
-    "/Cargo.toml",
-    "/LICENSE-APACHE",
-    "/LICENSE-MIT",
-    "/README.md",
-    "/src/**",
-    "/tests/**",
-    "/examples/**",
-    "main.rs",
-]
+# include = [
+#     "/benches/**",
+#     "/build.rs",
+#     "/Cargo.toml",
+#     "/LICENSE-APACHE",
+#     "/LICENSE-MIT",
+#     "/README.md",
+#     "/src/**",
+#     "/tests/**",
+#     "/examples/**",
+#     "main.rs",
+# ]
 exclude = [
+    ".vscode/",
     ".travis.yml",
     "codecov.yml",
     ".gitignore",
@@ -38,6 +39,10 @@ exclude = [
     "rustfmt_2.toml",
     "notes.txt",
     "result.rs",
+    "results/",
+    "save/",
+    "expand/",
+    "target/",
 ]
 autotests = false
 autobenches = false
@@ -252,8 +257,8 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-mpst-seq = { path = "mpst_seq" }
-# mpst-seq = "0.1"
+# mpst-seq = { path = "mpst_seq" }
+mpst-seq = "0.1"
 crossbeam-channel = "0.5"
 either = "1.6"
 hyper = { version = "0.14", features = ["full"], optional = true }
