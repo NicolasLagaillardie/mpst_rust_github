@@ -20,10 +20,6 @@ include = [
 [lib]
 proc-macro = true
 
-# [[test]]
-# name = "tests"
-# path = "tests/progress.rs"
-
 [dev-dependencies]
 trybuild = "1.0.63"
 
