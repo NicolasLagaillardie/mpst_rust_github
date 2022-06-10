@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.1.16"
+version = "0.1.17"
 authors = ["XXX"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"

@@ -25,11 +25,11 @@ proc-macro = true
 # path = "tests/progress.rs"
 
 [dev-dependencies]
-trybuild = "1.0"
+trybuild = "1.0.63"
 
 [dependencies]
-syn = { version = "1.0", features = ["extra-traits", "full", "parsing"] }
-quote = "1.0"
-proc-macro2 = "1.0"
-proc-macro-hack = "0.5"
+syn = { version = "1.0.96", features = ["extra-traits", "full", "parsing"] }
+quote = "1.0.18"
+proc-macro2 = "1.0.39"
+proc-macro-hack = "0.5.19"
 itertools = "0.10.3"
