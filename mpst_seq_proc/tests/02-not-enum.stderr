@@ -1,7 +1,0 @@
-error: expected enum or match expression
-  --> tests/02-not-enum.rs:31:1
-   |
-31 | #[branching]
-   | ^^^^^^^^^^^^
-   |
-   = note: this error originates in the attribute macro `branching` (in Nightly builds, run with -Z macro-backtrace for more info)

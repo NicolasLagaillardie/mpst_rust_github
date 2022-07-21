@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.1.16"
+version = "0.1.17"
 authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
 edition = "2018"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
@@ -11,19 +11,20 @@ license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "multicrusty"]
 documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
-include = [
-    "/benches/**",
-    "/build.rs",
-    "/Cargo.toml",
-    "/LICENSE-APACHE",
-    "/LICENSE-MIT",
-    "/README.md",
-    "/src/**",
-    "/tests/**",
-    "/examples/**",
-    "main.rs",
-]
+# include = [
+#     "/benches/**",
+#     "/build.rs",
+#     "/Cargo.toml",
+#     "/LICENSE-APACHE",
+#     "/LICENSE-MIT",
+#     "/README.md",
+#     "/src/**",
+#     "/tests/**",
+#     "/examples/**",
+#     "main.rs",
+# ]
 exclude = [
+    ".vscode/",
     ".travis.yml",
     "codecov.yml",
     ".gitignore",
@@ -38,6 +39,10 @@ exclude = [
     "rustfmt_2.toml",
     "notes.txt",
     "result.rs",
+    "results/",
+    "save/",
+    "expand/",
+    "target/",
 ]
 autotests = false
 autobenches = false
@@ -271,10 +276,10 @@ protoc-bin-vendored = "3.0"
 ################################### Dev-dependencies for tests/benches
 
 [dev-dependencies]
-criterion = { version = "0.3", features = ["html_reports"] }
-trybuild = "1.0"
-ntest = "0.7"
-rand = "0.8"
+criterion = { version = "0.3.5", features = ["html_reports"] }
+trybuild = "1.0.63"
+ntest = "0.8.1"
+rand = "0.8.5"
 
 ################################### Features
 

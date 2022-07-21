@@ -1,5 +1,0 @@
-error: SomethingFailed should sort before ThatFailed
-  --> $DIR/03-out-of-order.rs:20:5
-   |
-20 |     SomethingFailed,
-   |     ^^^^^^^^^^^^^^^
