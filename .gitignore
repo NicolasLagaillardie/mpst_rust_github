@@ -19,6 +19,7 @@ Cargo.lock
 **/*.rs.bk
 
 .vscode
+.vscode/
 
 # Remove personal notes
 notes.txt
