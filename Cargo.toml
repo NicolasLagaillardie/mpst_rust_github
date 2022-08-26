@@ -249,9 +249,6 @@ required-features = ["baking_timed"]
 name = "servo_8257_async_fixed"
 required-features = ["baking_timed"]
 
-[[example]]
-name = "proto_test"
-
 ################################### Profil
 
 [profile.release]
@@ -264,11 +261,14 @@ mpst-seq = { path = "mpst_seq" }
 # mpst-seq = "0.1"
 crossbeam-channel = "0.5"
 either = "1.6"
+# Extension libraries
 hyper = { version = "0.14", features = ["full"], optional = true }
 hyper-tls = { version = "0.5", optional = true }
 tokio = { version = "1.14", features = ["full"], optional = true }
+# For kMC
 regex = { version = "1.5", optional = true }
 petgraph = { version = "0.6", optional = true }
+# Protobuf libraries
 protobuf = "3.1"
 protobuf-codegen = "3.1"
 protoc-bin-vendored = "3.0"
@@ -308,6 +308,7 @@ transport_macros_multiple = [
     "macros_multiple",
     "transport",
 ] # For test compile examples
+protobuf = []
 full_without_checking = ["baking", "transport"]
 full = ["checking", "baking", "transport"]
 

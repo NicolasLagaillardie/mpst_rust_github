@@ -333,6 +333,10 @@ pub mod binary_timed;
 #[cfg(feature = "baking_timed")]
 pub mod baking_timed;
 
+#[cfg(feature = "transport")]
 pub mod transport;
+
+#[cfg(feature = "protobuf")]
+pub mod protobuf;
 
 pub mod attempt;
