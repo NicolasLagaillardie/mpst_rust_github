@@ -5,6 +5,7 @@
 #[allow(missing_docs)]
 pub mod generated;
 
+/*
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -68,3 +69,4 @@ mod tests {
         );
     }
 }
+*/
