@@ -16,7 +16,19 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
+baker!(
+    "rec_and_cancel",
+    MeshedChannelsNine,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I
+);
 
 // Types
 // A

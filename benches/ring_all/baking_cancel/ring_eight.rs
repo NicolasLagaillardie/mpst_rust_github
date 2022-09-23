@@ -15,7 +15,18 @@ use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
-baker!("rec_and_cancel", MeshedChannelsEight, A, B, C, D, E, F, G, H);
+baker!(
+    "rec_and_cancel",
+    MeshedChannelsEight,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H
+);
 
 // Types
 // A
@@ -48,7 +59,7 @@ enum Branching0fromHtoA {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoH = <Choose0fromHtoA as Session>::Dual;
+type RecursAtoH = Recv<Branching0fromHtoA, End>;
 // B
 enum Branching0fromHtoB {
     Forward(
@@ -79,7 +90,7 @@ enum Branching0fromHtoB {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoH = <Choose0fromHtoB as Session>::Dual;
+type RecursBtoH = Recv<Branching0fromHtoB, End>;
 // C
 enum Branching0fromHtoC {
     Forward(
@@ -110,7 +121,7 @@ enum Branching0fromHtoC {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoH = <Choose0fromHtoC as Session>::Dual;
+type RecursCtoH = Recv<Branching0fromHtoC, End>;
 // D
 enum Branching0fromHtoD {
     Forward(
@@ -141,7 +152,7 @@ enum Branching0fromHtoD {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoH = <Choose0fromHtoD as Session>::Dual;
+type RecursDtoH = Recv<Branching0fromHtoD, End>;
 // E
 enum Branching0fromHtoE {
     Forward(
@@ -172,7 +183,7 @@ enum Branching0fromHtoE {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoH = <Choose0fromHtoE as Session>::Dual;
+type RecursEtoH = Recv<Branching0fromHtoE, End>;
 // F
 enum Branching0fromHtoF {
     Forward(
@@ -203,7 +214,7 @@ enum Branching0fromHtoF {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoH = <Choose0fromHtoF as Session>::Dual;
+type RecursFtoH = Recv<Branching0fromHtoF, End>;
 // G
 enum Branching0fromHtoG {
     Forward(
@@ -234,7 +245,7 @@ enum Branching0fromHtoG {
     ),
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoH = <Choose0fromHtoG as Session>::Dual;
+type RecursGtoH = Recv<Branching0fromHtoG, End>;
 // H
 type Choose0fromHtoA = Send<Branching0fromHtoA, End>;
 type Choose0fromHtoB = Send<Branching0fromHtoB, End>;

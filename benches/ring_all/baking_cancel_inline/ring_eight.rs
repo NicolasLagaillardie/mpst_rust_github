@@ -15,7 +15,18 @@ use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
-baker!("rec_and_cancel", MeshedChannelsEight, A, B, C, D, E, F, G, H);
+baker!(
+    "rec_and_cancel",
+    MeshedChannelsEight,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H
+);
 
 // Types
 // A

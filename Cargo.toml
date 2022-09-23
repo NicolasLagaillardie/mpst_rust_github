@@ -133,15 +133,27 @@ required-features = ["baking", "message", "checking"]
 
 ################################### Benches
 
-[[bench]]
-name = "main"
-harness = false
-required-features = ["baking"]
+# [[bench]]
+# name = "main"
+# harness = false
+# required-features = ["baking"]
+
+# [[bench]]
+# name = "ping_pong"
+# harness = false
+# required-features = ["baking"]
 
 [[bench]]
-name = "ping_pong"
+name = "mesh"
 harness = false
-required-features = ["baking"]
+path = "benches/mesh_timed_affine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring"
+harness = false
+path = "benches/ring_timed_affine.rs"
+required-features = ["full"]
 
 ################################### Basic examples
 
@@ -310,7 +322,7 @@ transport_macros_multiple = [
 ] # For test compile examples
 protobuf = []
 full_without_checking = ["baking", "transport"]
-full = ["checking", "baking", "transport"]
+full = ["checking", "baking", "transport", "baking_timed"]
 
 ################################### Doc handling for all-features
 

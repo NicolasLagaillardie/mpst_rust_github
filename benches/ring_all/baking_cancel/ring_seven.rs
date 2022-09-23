@@ -47,7 +47,7 @@ enum Branching0fromGtoA {
     ),
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoG = <Choose0fromGtoA as Session>::Dual;
+type RecursAtoG = Recv<Branching0fromGtoA, End>;
 // B
 enum Branching0fromGtoB {
     Forward(
@@ -76,7 +76,7 @@ enum Branching0fromGtoB {
     ),
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoG = <Choose0fromGtoB as Session>::Dual;
+type RecursBtoG = Recv<Branching0fromGtoB, End>;
 // C
 enum Branching0fromGtoC {
     Forward(
@@ -105,7 +105,7 @@ enum Branching0fromGtoC {
     ),
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoG = <Choose0fromGtoC as Session>::Dual;
+type RecursCtoG = Recv<Branching0fromGtoC, End>;
 // D
 enum Branching0fromGtoD {
     Forward(
@@ -134,7 +134,7 @@ enum Branching0fromGtoD {
     ),
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoG = <Choose0fromGtoD as Session>::Dual;
+type RecursDtoG = Recv<Branching0fromGtoD, End>;
 // E
 enum Branching0fromGtoE {
     Forward(
@@ -163,7 +163,7 @@ enum Branching0fromGtoE {
     ),
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoG = <Choose0fromGtoE as Session>::Dual;
+type RecursEtoG = Recv<Branching0fromGtoE, End>;
 // F
 enum Branching0fromGtoF {
     Forward(
@@ -192,7 +192,7 @@ enum Branching0fromGtoF {
     ),
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoG = <Choose0fromGtoF as Session>::Dual;
+type RecursFtoG = Recv<Branching0fromGtoF, End>;
 // F
 type Choose0fromGtoA = Send<Branching0fromGtoA, End>;
 type Choose0fromGtoB = Send<Branching0fromGtoB, End>;

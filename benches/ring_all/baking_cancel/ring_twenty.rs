@@ -17,7 +17,7 @@ use std::thread::{spawn, JoinHandle};
 
 // Create new roles
 baker!(
-    "rec_and_cancel", 
+    "rec_and_cancel",
     MeshedChannelsTwenty,
     A,
     B,
@@ -120,7 +120,7 @@ enum Branching0fromTtoA {
         >,
     ),
 }
-type RecursAtoT = <Choose0fromTtoA as Session>::Dual;
+type RecursAtoT = Recv<Branching0fromTtoA, End>;
 // B
 enum Branching0fromTtoB {
     Forward(
@@ -199,7 +199,7 @@ enum Branching0fromTtoB {
         >,
     ),
 }
-type RecursBtoT = <Choose0fromTtoB as Session>::Dual;
+type RecursBtoT = Recv<Branching0fromTtoB, End>;
 // C
 enum Branching0fromTtoC {
     Forward(
@@ -278,7 +278,7 @@ enum Branching0fromTtoC {
         >,
     ),
 }
-type RecursCtoT = <Choose0fromTtoC as Session>::Dual;
+type RecursCtoT = Recv<Branching0fromTtoC, End>;
 // D
 enum Branching0fromTtoD {
     Forward(
@@ -357,7 +357,7 @@ enum Branching0fromTtoD {
         >,
     ),
 }
-type RecursDtoT = <Choose0fromTtoD as Session>::Dual;
+type RecursDtoT = Recv<Branching0fromTtoD, End>;
 // E
 enum Branching0fromTtoE {
     Forward(
@@ -436,7 +436,7 @@ enum Branching0fromTtoE {
         >,
     ),
 }
-type RecursEtoT = <Choose0fromTtoE as Session>::Dual;
+type RecursEtoT = Recv<Branching0fromTtoE, End>;
 // F
 enum Branching0fromTtoF {
     Forward(
@@ -515,7 +515,7 @@ enum Branching0fromTtoF {
         >,
     ),
 }
-type RecursFtoT = <Choose0fromTtoF as Session>::Dual;
+type RecursFtoT = Recv<Branching0fromTtoF, End>;
 // G
 enum Branching0fromTtoG {
     Forward(
@@ -594,7 +594,7 @@ enum Branching0fromTtoG {
         >,
     ),
 }
-type RecursGtoT = <Choose0fromTtoG as Session>::Dual;
+type RecursGtoT = Recv<Branching0fromTtoG, End>;
 // H
 enum Branching0fromTtoH {
     Forward(
@@ -673,7 +673,7 @@ enum Branching0fromTtoH {
         >,
     ),
 }
-type RecursHtoT = <Choose0fromTtoH as Session>::Dual;
+type RecursHtoT = Recv<Branching0fromTtoH, End>;
 // I
 enum Branching0fromTtoI {
     Forward(
@@ -752,7 +752,7 @@ enum Branching0fromTtoI {
         >,
     ),
 }
-type RecursItoT = <Choose0fromTtoI as Session>::Dual;
+type RecursItoT = Recv<Branching0fromTtoI, End>;
 // J
 enum Branching0fromTtoJ {
     Forward(
@@ -831,7 +831,7 @@ enum Branching0fromTtoJ {
         >,
     ),
 }
-type RecursJtoT = <Choose0fromTtoJ as Session>::Dual;
+type RecursJtoT = Recv<Branching0fromTtoJ, End>;
 // K
 enum Branching0fromTtoK {
     Forward(
@@ -910,7 +910,7 @@ enum Branching0fromTtoK {
         >,
     ),
 }
-type RecursKtoT = <Choose0fromTtoK as Session>::Dual;
+type RecursKtoT = Recv<Branching0fromTtoK, End>;
 // L
 enum Branching0fromTtoL {
     Forward(
@@ -989,7 +989,7 @@ enum Branching0fromTtoL {
         >,
     ),
 }
-type RecursLtoT = <Choose0fromTtoL as Session>::Dual;
+type RecursLtoT = Recv<Branching0fromTtoL, End>;
 // M
 enum Branching0fromTtoM {
     Forward(
@@ -1068,7 +1068,7 @@ enum Branching0fromTtoM {
         >,
     ),
 }
-type RecursMtoT = <Choose0fromTtoM as Session>::Dual;
+type RecursMtoT = Recv<Branching0fromTtoM, End>;
 // N
 enum Branching0fromTtoN {
     Forward(
@@ -1147,7 +1147,7 @@ enum Branching0fromTtoN {
         >,
     ),
 }
-type RecursNtoT = <Choose0fromTtoN as Session>::Dual;
+type RecursNtoT = Recv<Branching0fromTtoN, End>;
 // O
 enum Branching0fromTtoO {
     Forward(
@@ -1226,7 +1226,7 @@ enum Branching0fromTtoO {
         >,
     ),
 }
-type RecursOtoT = <Choose0fromTtoO as Session>::Dual;
+type RecursOtoT = Recv<Branching0fromTtoO, End>;
 // P
 enum Branching0fromTtoP {
     Forward(
@@ -1305,7 +1305,7 @@ enum Branching0fromTtoP {
         >,
     ),
 }
-type RecursPtoT = <Choose0fromTtoP as Session>::Dual;
+type RecursPtoT = Recv<Branching0fromTtoP, End>;
 // Q
 enum Branching0fromTtoQ {
     Forward(
@@ -1384,7 +1384,7 @@ enum Branching0fromTtoQ {
         >,
     ),
 }
-type RecursQtoT = <Choose0fromTtoQ as Session>::Dual;
+type RecursQtoT = Recv<Branching0fromTtoQ, End>;
 // R
 enum Branching0fromTtoR {
     Forward(
@@ -1463,7 +1463,7 @@ enum Branching0fromTtoR {
         >,
     ),
 }
-type RecursRtoT = <Choose0fromTtoR as Session>::Dual;
+type RecursRtoT = Recv<Branching0fromTtoR, End>;
 // S
 enum Branching0fromTtoS {
     Forward(
@@ -1542,7 +1542,7 @@ enum Branching0fromTtoS {
         >,
     ),
 }
-type RecursStoT = <Choose0fromTtoS as Session>::Dual;
+type RecursStoT = Recv<Branching0fromTtoS, End>;
 // T
 type Choose0fromTtoA = Send<Branching0fromTtoA, End>;
 type Choose0fromTtoB = Send<Branching0fromTtoB, End>;

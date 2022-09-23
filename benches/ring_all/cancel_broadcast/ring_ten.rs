@@ -527,20 +527,8 @@ type EndpointBackwardJ = MeshedChannelsEleven<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannelsEleven<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RoleEnd,
-    NameCentral,
->;
+type EndpointCentral =
+    MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannelsEleven<
     End,
     End,

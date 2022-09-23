@@ -250,8 +250,7 @@ type EndpointMoreF = MeshedChannelsSeven<
 >;
 
 // Creating the MP sessions
-type EndpointCentral =
-    MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameCentral>;
+type EndpointCentral = MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannelsSeven<End, End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
 type EndpointB = MeshedChannelsSeven<End, End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
 type EndpointC = MeshedChannelsSeven<End, End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;

@@ -19,7 +19,7 @@ use std::thread::{spawn, JoinHandle};
 
 // Create new roles
 baker!(
-    "rec_and_cancel", 
+    "rec_and_cancel",
     MeshedChannelsTwenty,
     A,
     B,

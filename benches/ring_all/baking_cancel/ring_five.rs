@@ -25,7 +25,7 @@ enum Branching0fromEtoA {
     Backward(MeshedChannelsFive<Recv<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoE = <Choose0fromEtoA as Session>::Dual;
+type RecursAtoE = Recv<Branching0fromEtoA, End>;
 // B
 enum Branching0fromEtoB {
     Forward(
@@ -50,7 +50,7 @@ enum Branching0fromEtoB {
     ),
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoE = <Choose0fromEtoB as Session>::Dual;
+type RecursBtoE = Recv<Branching0fromEtoB, End>;
 // C
 enum Branching0fromEtoC {
     Forward(
@@ -75,7 +75,7 @@ enum Branching0fromEtoC {
     ),
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoE = <Choose0fromEtoC as Session>::Dual;
+type RecursCtoE = Recv<Branching0fromEtoC, End>;
 // D
 enum Branching0fromEtoD {
     Forward(
@@ -100,7 +100,7 @@ enum Branching0fromEtoD {
     ),
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoE = <Choose0fromEtoD as Session>::Dual;
+type RecursDtoE = Recv<Branching0fromEtoD, End>;
 // E
 type Choose0fromEtoA = Send<Branching0fromEtoA, End>;
 type Choose0fromEtoB = Send<Branching0fromEtoB, End>;
