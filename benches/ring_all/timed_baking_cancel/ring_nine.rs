@@ -1,33 +1,24 @@
 use criterion::{black_box, Criterion};
 
-use mpstthree::baker;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::baker_timed;
+use mpstthree::binary::struct_trait::end::End;
+use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
+use std::collections::HashMap;
 use std::error::Error;
+use std::time::Instant;
 
 // Create new roles
-baker!(
-    "rec_and_cancel",
-    MeshedChannelsNine,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I
-);
+baker_timed!(MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
 
 // Types
 // A
 enum Branching0fromItoA {
     Forward(
         MeshedChannelsNine<
-            Send<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -41,7 +32,7 @@ enum Branching0fromItoA {
     ),
     Backward(
         MeshedChannelsNine<
-            Recv<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -55,13 +46,13 @@ enum Branching0fromItoA {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoI = Recv<Branching0fromItoA, End>;
+type RecursAtoI = RecvTimed<Branching0fromItoA, End, 'a', 0, true, 1, true, false>;
 // B
 enum Branching0fromItoB {
     Forward(
         MeshedChannelsNine<
-            Recv<(), End>,
-            Send<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -74,8 +65,8 @@ enum Branching0fromItoB {
     ),
     Backward(
         MeshedChannelsNine<
-            Send<(), End>,
-            Recv<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -88,14 +79,14 @@ enum Branching0fromItoB {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoI = Recv<Branching0fromItoB, End>;
+type RecursBtoI = RecvTimed<Branching0fromItoB, End, 'a', 0, true, 1, true, false>;
 // C
 enum Branching0fromItoC {
     Forward(
         MeshedChannelsNine<
             End,
-            Recv<(), End>,
-            Send<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -108,8 +99,8 @@ enum Branching0fromItoC {
     Backward(
         MeshedChannelsNine<
             End,
-            Send<(), End>,
-            Recv<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -121,15 +112,15 @@ enum Branching0fromItoC {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoI = Recv<Branching0fromItoC, End>;
+type RecursCtoI = RecvTimed<Branching0fromItoC, End, 'a', 0, true, 1, true, false>;
 // D
 enum Branching0fromItoD {
     Forward(
         MeshedChannelsNine<
             End,
             End,
-            Recv<(), End>,
-            Send<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -142,8 +133,8 @@ enum Branching0fromItoD {
         MeshedChannelsNine<
             End,
             End,
-            Send<(), End>,
-            Recv<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             End,
@@ -154,7 +145,7 @@ enum Branching0fromItoD {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoI = Recv<Branching0fromItoD, End>;
+type RecursDtoI = RecvTimed<Branching0fromItoD, End, 'a', 0, true, 1, true, false>;
 // E
 enum Branching0fromItoE {
     Forward(
@@ -162,8 +153,8 @@ enum Branching0fromItoE {
             End,
             End,
             End,
-            Recv<(), End>,
-            Send<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             RecursEtoI,
@@ -176,8 +167,8 @@ enum Branching0fromItoE {
             End,
             End,
             End,
-            Send<(), End>,
-            Recv<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             End,
             RecursEtoI,
@@ -187,7 +178,7 @@ enum Branching0fromItoE {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoI = Recv<Branching0fromItoE, End>;
+type RecursEtoI = RecvTimed<Branching0fromItoE, End, 'a', 0, true, 1, true, false>;
 // F
 enum Branching0fromItoF {
     Forward(
@@ -196,8 +187,8 @@ enum Branching0fromItoF {
             End,
             End,
             End,
-            Recv<(), End>,
-            Send<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             RecursFtoI,
             RoleE<RoleG<RoleI<RoleEnd>>>,
@@ -210,8 +201,8 @@ enum Branching0fromItoF {
             End,
             End,
             End,
-            Send<(), End>,
-            Recv<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             End,
             RecursFtoI,
             RoleG<RoleE<RoleI<RoleEnd>>>,
@@ -220,7 +211,7 @@ enum Branching0fromItoF {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoI = Recv<Branching0fromItoF, End>;
+type RecursFtoI = RecvTimed<Branching0fromItoF, End, 'a', 0, true, 1, true, false>;
 // G
 enum Branching0fromItoG {
     Forward(
@@ -230,8 +221,8 @@ enum Branching0fromItoG {
             End,
             End,
             End,
-            Recv<(), End>,
-            Send<(), End>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
             RecursGtoI,
             RoleF<RoleH<RoleI<RoleEnd>>>,
             NameG,
@@ -244,8 +235,8 @@ enum Branching0fromItoG {
             End,
             End,
             End,
-            Send<(), End>,
-            Recv<(), End>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
             RecursGtoI,
             RoleH<RoleF<RoleI<RoleEnd>>>,
             NameG,
@@ -253,7 +244,7 @@ enum Branching0fromItoG {
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoI = Recv<Branching0fromItoG, End>;
+type RecursGtoI = RecvTimed<Branching0fromItoG, End, 'a', 0, true, 1, true, false>;
 // H
 enum Branching0fromItoH {
     Forward(
@@ -264,8 +255,8 @@ enum Branching0fromItoH {
             End,
             End,
             End,
-            Recv<(), End>,
-            Send<(), RecursHtoI>,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), RecursHtoI, 'a', 0, true, 1, true, false>,
             RoleG<RoleI<RoleI<RoleEnd>>>,
             NameH,
         >,
@@ -278,24 +269,24 @@ enum Branching0fromItoH {
             End,
             End,
             End,
-            Send<(), End>,
-            Recv<(), RecursHtoI>,
+            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), RecursHtoI, 'a', 0, true, 1, true, false>,
             RoleI<RoleG<RoleI<RoleEnd>>>,
             NameH,
         >,
     ),
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
-type RecursHtoI = Recv<Branching0fromItoH, End>;
+type RecursHtoI = RecvTimed<Branching0fromItoH, End, 'a', 0, true, 1, true, false>;
 // I
-type Choose0fromItoA = Send<Branching0fromItoA, End>;
-type Choose0fromItoB = Send<Branching0fromItoB, End>;
-type Choose0fromItoC = Send<Branching0fromItoC, End>;
-type Choose0fromItoD = Send<Branching0fromItoD, End>;
-type Choose0fromItoE = Send<Branching0fromItoE, End>;
-type Choose0fromItoF = Send<Branching0fromItoF, End>;
-type Choose0fromItoG = Send<Branching0fromItoG, End>;
-type Choose0fromItoH = Send<Branching0fromItoH, End>;
+type Choose0fromItoA = SendTimed<Branching0fromItoA, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoB = SendTimed<Branching0fromItoB, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoC = SendTimed<Branching0fromItoC, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoD = SendTimed<Branching0fromItoD, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoE = SendTimed<Branching0fromItoE, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoF = SendTimed<Branching0fromItoF, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoG = SendTimed<Branching0fromItoG, End, 'a', 0, true, 1, true, false>;
+type Choose0fromItoH = SendTimed<Branching0fromItoH, End, 'a', 0, true, 1, true, false>;
 type EndpointForwardI = MeshedChannelsNine<
     Choose0fromItoA,
     Choose0fromItoB,
@@ -304,7 +295,7 @@ type EndpointForwardI = MeshedChannelsNine<
     Choose0fromItoE,
     Choose0fromItoF,
     Choose0fromItoG,
-    Recv<(), Choose0fromItoH>,
+    RecvTimed<(), Choose0fromItoH, 'a', 0, true, 1, true, false>,
     RoleH<RoleBroadcast>,
     NameI,
 >;
@@ -316,7 +307,7 @@ type EndpointBackwardI = MeshedChannelsNine<
     Choose0fromItoE,
     Choose0fromItoF,
     Choose0fromItoG,
-    Send<(), Choose0fromItoH>,
+    SendTimed<(), Choose0fromItoH, 'a', 0, true, 1, true, false>,
     RoleH<RoleBroadcast>,
     NameI,
 >;
@@ -351,157 +342,171 @@ type EndpointI = MeshedChannelsNine<
     NameI,
 >;
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoA::Done(s) => {
             s.close()
         },
         Branching0fromItoA::Forward(s) => {
-            let s = s.send(())?;
-            endpoint_a(s)
+            let s = s.send((), all_clocks)?;
+            endpoint_a(s, all_clocks)
         },
         Branching0fromItoA::Backward(s) => {
-            let (_, s) = s.recv()?;
-            endpoint_a(s)
+            let (_, s) = s.recv(all_clocks)?;
+            endpoint_a(s, all_clocks)
         },
     })
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_b(s: EndpointB, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoB::Done(s) => {
             s.close()
         },
         Branching0fromItoB::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_b(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_b(s, all_clocks)
         },
         Branching0fromItoB::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_b(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_b(s, all_clocks)
         },
     })
 }
 
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoC::Done(s) => {
             s.close()
         },
         Branching0fromItoC::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_c(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_c(s, all_clocks)
         },
         Branching0fromItoC::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_c(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_c(s, all_clocks)
         },
     })
 }
 
-fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_d(s: EndpointD, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoD::Done(s) => {
             s.close()
         },
         Branching0fromItoD::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_d(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_d(s, all_clocks)
         },
         Branching0fromItoD::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_d(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_d(s, all_clocks)
         },
     })
 }
 
-fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_e(s: EndpointE, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoE::Done(s) => {
             s.close()
         },
         Branching0fromItoE::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_e(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_e(s, all_clocks)
         },
         Branching0fromItoE::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_e(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_e(s, all_clocks)
         },
     })
 }
 
-fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_f(s: EndpointF, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoF::Done(s) => {
             s.close()
         },
         Branching0fromItoF::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_f(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_f(s, all_clocks)
         },
         Branching0fromItoF::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_f(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_f(s, all_clocks)
         },
     })
 }
 
-fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_g(s: EndpointG, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoG::Done(s) => {
             s.close()
         },
         Branching0fromItoG::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_g(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_g(s, all_clocks)
         },
         Branching0fromItoG::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_g(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_g(s, all_clocks)
         },
     })
 }
 
-fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+fn endpoint_h(s: EndpointH, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    offer_mpst!(s, all_clocks, {
         Branching0fromItoH::Done(s) => {
             s.close()
         },
         Branching0fromItoH::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_h(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_h(s, all_clocks)
         },
         Branching0fromItoH::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
-            endpoint_h(s)
+            let ((), s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            endpoint_h(s, all_clocks)
         },
     })
 }
 
-fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
-    recurs_i(s, LOOPS)
+fn endpoint_i(s: EndpointI, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
+    recurs_i(s, LOOPS, all_clocks)
 }
 
-fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_i(
+    s: EndpointI,
+    index: i64,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
             let s = choose_mpst_i_to_all!(
                 s,
+                all_clocks,
                 Branching0fromItoA::Done,
                 Branching0fromItoB::Done,
                 Branching0fromItoC::Done,
@@ -517,6 +522,7 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
         i if i % 2 == 0 => {
             let s: EndpointForwardI = choose_mpst_i_to_all!(
                 s,
+                all_clocks,
                 Branching0fromItoA::Forward,
                 Branching0fromItoB::Forward,
                 Branching0fromItoC::Forward,
@@ -527,13 +533,14 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromItoH::Forward
             );
 
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv(all_clocks)?;
 
-            recurs_i(s, i - 1)
+            recurs_i(s, i - 1, all_clocks)
         }
         i => {
             let s: EndpointBackwardI = choose_mpst_i_to_all!(
                 s,
+                all_clocks,
                 Branching0fromItoA::Backward,
                 Branching0fromItoB::Backward,
                 Branching0fromItoC::Backward,
@@ -544,9 +551,9 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromItoH::Backward
             );
 
-            let s = s.send(())?;
+            let s = s.send((), all_clocks)?;
 
-            recurs_i(s, i - 1)
+            recurs_i(s, i - 1, all_clocks)
         }
     }
 }

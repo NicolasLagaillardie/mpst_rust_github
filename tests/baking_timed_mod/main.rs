@@ -126,8 +126,8 @@ fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     sleep(Duration::from_secs(5));
 
     offer_mpst!(
-        all_clocks,
         s,
+        all_clocks,
         {
             Branches0BtoD::End(s) => {
                 s.close()
@@ -151,8 +151,8 @@ fn server_recurs(
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(
-        all_clocks,
         s,
+        all_clocks,
         {
             Branches0BtoD::End(s) => {
                 s.close()
@@ -184,8 +184,8 @@ fn authenticator(
     sleep(Duration::from_secs(2));
 
     offer_mpst!(
-        all_clocks,
         s,
+        all_clocks,
         {
             Branches0AtoD::End(s) => {
                 s.close()
@@ -213,8 +213,8 @@ fn authenticator_recurs(
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(
-        all_clocks,
         s,
+        all_clocks,
         {
             Branches0AtoD::End(s) => {
                 s.close()
