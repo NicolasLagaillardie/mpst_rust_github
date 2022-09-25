@@ -4,8 +4,8 @@
     clippy::large_enum_variant
 )]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::baker;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 

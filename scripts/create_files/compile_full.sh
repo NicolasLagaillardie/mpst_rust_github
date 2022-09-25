@@ -39,7 +39,7 @@ do
     printf "build; $tt\n" >> compile_time/$1.txt
 done
 
-# RLoop
+# Loop
 for i in {1..$2}
 do
     # Remove previous build

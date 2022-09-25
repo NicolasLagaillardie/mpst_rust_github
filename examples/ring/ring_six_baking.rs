@@ -4,10 +4,10 @@
     clippy::large_enum_variant
 )]
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::baker;
 
 use std::error::Error;
 
@@ -316,12 +316,7 @@ fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
 
 fn main() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f) = fork_mpst(
-        endpoint_a,
-        endpoint_b,
-        endpoint_c,
-        endpoint_d,
-        endpoint_e,
-        endpoint_f,
+        endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f,
     );
 
     thread_a.join().unwrap();

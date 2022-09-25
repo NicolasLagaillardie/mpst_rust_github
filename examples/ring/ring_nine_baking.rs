@@ -4,17 +4,29 @@
     clippy::large_enum_variant
 )]
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::baker;
 
 use std::error::Error;
 
 static LOOPS: i64 = 100;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
+baker!(
+    "rec_and_cancel",
+    MeshedChannelsNine,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I
+);
 
 // Types
 // A
@@ -548,15 +560,8 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h, thread_i) =
         fork_mpst(
-            endpoint_a,
-            endpoint_b,
-            endpoint_c,
-            endpoint_d,
-            endpoint_e,
-            endpoint_f,
-            endpoint_g,
-            endpoint_h,
-            endpoint_i,
+            endpoint_a, endpoint_b, endpoint_c, endpoint_d, endpoint_e, endpoint_f, endpoint_g,
+            endpoint_h, endpoint_i,
         );
 
     thread_a.join().unwrap();

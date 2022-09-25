@@ -18,76 +18,76 @@ cargo test --all-targets --all-features --workspace # Test everything in the lib
 ## Mesh
 
 ### Six
-./scripts/create_files/compile.sh mesh_six_binary 10 baking
-./scripts/create_files/compile.sh mesh_six_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_six_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_six_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_six_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_six_baking 10 baking
 
 ### Seven
-./scripts/create_files/compile.sh mesh_seven_binary 10 baking
-./scripts/create_files/compile.sh mesh_seven_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_seven_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_seven_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_seven_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_seven_baking 10 baking
 
 ### Eight
-./scripts/create_files/compile.sh mesh_eight_binary 10 baking
-./scripts/create_files/compile.sh mesh_eight_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_eight_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_eight_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_eight_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_eight_baking 10 baking
 
 ### Nine
-./scripts/create_files/compile.sh mesh_nine_binary 10 baking
-./scripts/create_files/compile.sh mesh_nine_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_nine_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_nine_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_nine_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_nine_baking 10 baking
 
 ### Ten
-./scripts/create_files/compile.sh mesh_ten_binary 10 baking
-./scripts/create_files/compile.sh mesh_ten_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_ten_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_ten_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_ten_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_ten_baking 10 baking
 
 ### Eleven
-./scripts/create_files/compile.sh mesh_eleven_binary 10 baking
-./scripts/create_files/compile.sh mesh_eleven_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_eleven_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_eleven_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_eleven_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_eleven_baking 10 baking
 
 ### Twenty
-./scripts/create_files/compile.sh mesh_twenty_binary 10 baking
-./scripts/create_files/compile.sh mesh_twenty_crossbeam 10 baking
-./scripts/create_files/compile.sh mesh_twenty_baking 10 baking
+./scripts/create_files/compile_full.sh mesh_twenty_binary 10 baking
+./scripts/create_files/compile_full.sh mesh_twenty_crossbeam 10 baking
+./scripts/create_files/compile_full.sh mesh_twenty_baking 10 baking
 
 ## Ring
 
 ### Six
-./scripts/create_files/compile.sh ring_six_binary 10 baking
-./scripts/create_files/compile.sh ring_six_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_six_baking 10 baking
+./scripts/create_files/compile_full.sh ring_six_binary 10 baking
+./scripts/create_files/compile_full.sh ring_six_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_six_baking 10 baking
 
 ### Seven
-./scripts/create_files/compile.sh ring_seven_binary 10 baking
-./scripts/create_files/compile.sh ring_seven_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_seven_baking 10 baking
+./scripts/create_files/compile_full.sh ring_seven_binary 10 baking
+./scripts/create_files/compile_full.sh ring_seven_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_seven_baking 10 baking
 
 ### Eight
-./scripts/create_files/compile.sh ring_eight_binary 10 baking
-./scripts/create_files/compile.sh ring_eight_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_eight_baking 10 baking
+./scripts/create_files/compile_full.sh ring_eight_binary 10 baking
+./scripts/create_files/compile_full.sh ring_eight_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_eight_baking 10 baking
 
 ### Nine
-./scripts/create_files/compile.sh ring_nine_binary 10 baking
-./scripts/create_files/compile.sh ring_nine_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_nine_baking 10 baking
+./scripts/create_files/compile_full.sh ring_nine_binary 10 baking
+./scripts/create_files/compile_full.sh ring_nine_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_nine_baking 10 baking
 
 ### Ten
-./scripts/create_files/compile.sh ring_ten_binary 10 baking
-./scripts/create_files/compile.sh ring_ten_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_ten_baking 10 baking
+./scripts/create_files/compile_full.sh ring_ten_binary 10 baking
+./scripts/create_files/compile_full.sh ring_ten_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_ten_baking 10 baking
 
 ### Eleven
-./scripts/create_files/compile.sh ring_eleven_binary 10 baking
-./scripts/create_files/compile.sh ring_eleven_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_eleven_baking 10 baking
+./scripts/create_files/compile_full.sh ring_eleven_binary 10 baking
+./scripts/create_files/compile_full.sh ring_eleven_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_eleven_baking 10 baking
 
 ### Twenty
-./scripts/create_files/compile.sh ring_twenty_binary 10 baking
-./scripts/create_files/compile.sh ring_twenty_crossbeam 10 baking
-./scripts/create_files/compile.sh ring_twenty_baking 10 baking
+./scripts/create_files/compile_full.sh ring_twenty_binary 10 baking
+./scripts/create_files/compile_full.sh ring_twenty_crossbeam 10 baking
+./scripts/create_files/compile_full.sh ring_twenty_baking 10 baking
 
 ./scripts/lightweight_library.sh # Set up
 ./scripts/ping_pong_mesh_ring_light.sh
