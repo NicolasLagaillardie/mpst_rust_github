@@ -481,8 +481,8 @@ tokio = { version = "1.14", features = ["full"], optional = true }
 regex = { version = "1.5", optional = true }
 petgraph = { version = "0.6", optional = true }
 # Protobuf libraries
-protobuf = { version = "3.1", features = ["with-bytes"] }
-protobuf-codegen = "3.1"
+protobuf = { version = "3.2", features = ["with-bytes"] }
+protobuf-codegen = "3.2"
 protoc-bin-vendored = "3.0"
 
 ################################### Dev-dependencies for tests/benches
