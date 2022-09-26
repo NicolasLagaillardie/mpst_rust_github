@@ -1,3 +1,9 @@
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant
+)]
+
 use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
