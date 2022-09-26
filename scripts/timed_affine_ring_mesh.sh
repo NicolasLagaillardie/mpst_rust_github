@@ -108,25 +108,25 @@ cargo clean
 # Run the affine ring benchmarks
 echo "Ring affine bench"
 cargo bench --bench="ring_affine" --features="affine_timed" -- --verbose
-mv target/criterion/ save/criterion/affine_ring/
+mv -f target/criterion/ save/criterion/affine_ring/
 cargo clean
 
 # Run the affine meshbenchmarks
 echo "Mesh affine bench"
 cargo bench --bench="mesh_affine" --features="affine_timed" -- --verbose
-mv target/criterion/ save/criterion/affine_mesh/
+mv -f target/criterion/ save/criterion/affine_mesh/
 cargo clean
 
 # Run the timed ring benchmarks
 echo "Ring timed bench"
 cargo bench --bench="ring_timed" --features="affine_timed" -- --verbose
-mv target/criterion/ save/criterion/timed_ring/
+mv -f target/criterion/ save/criterion/timed_ring/
 cargo clean
 
 # Run the timed meshbenchmarks
 echo "Mesh timed bench"
 cargo bench --bench="mesh_timed" --features="affine_timed" -- --verbose
-mv target/criterion/ save/criterion/timed_mesh/
+mv -f target/criterion/ save/criterion/timed_mesh/
 cargo clean
 
 ## Concatenate all results in the results/ping_pong_mesh_ring.csv file
