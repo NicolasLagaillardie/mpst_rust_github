@@ -136,13 +136,15 @@ def mesh_compile():
                         build_time.append(
                             int(line.split('build; ')[1].split('\n')[0]))
 
-                    # If MPST of binary, append to related lists
-                    if 'baking' in d and 'timed' not in d:
-                        average_baking.append(statistics.mean(build_time)/1000000)
-                        nb_participants_baking.append(str_to_int[name])
-                    elif 'baking' in d and 'timed' in d:
-                        average_timed.append(statistics.mean(build_time)/1000000)
-                        nb_participants_timed.append(str_to_int[name])
+                # If MPST of binary, append to related lists
+                if 'baking' in d and 'timed' not in d:
+                    average_baking.append(
+                        statistics.mean(build_time)/1000000)
+                    nb_participants_baking.append(str_to_int[name])
+                elif 'baking' in d and 'timed' in d:
+                    average_timed.append(
+                        statistics.mean(build_time)/1000000)
+                    nb_participants_timed.append(str_to_int[name])
             except:
                 print('Issue with ', d)
 
@@ -263,13 +265,15 @@ def ring_compile():
                         build_time.append(
                             int(line.split('build; ')[1].split('\n')[0]))
 
-                    # If MPST of binary, append to related lists
-                    if 'baking' in d and 'timed' not in d:
-                        average_baking.append(statistics.mean(build_time)/1000000)
-                        nb_participants_baking.append(str_to_int[name])
-                    elif 'baking' in d and 'timed' in d:
-                        average_timed.append(statistics.mean(build_time)/1000000)
-                        nb_participants_timed.append(str_to_int[name])
+                # If MPST of binary, append to related lists
+                if 'baking' in d and 'timed' not in d:
+                    average_baking.append(
+                        statistics.mean(build_time)/1000000)
+                    nb_participants_baking.append(str_to_int[name])
+                elif 'baking' in d and 'timed' in d:
+                    average_timed.append(
+                        statistics.mean(build_time)/1000000)
+                    nb_participants_timed.append(str_to_int[name])
             except:
                 print('Issue with ', d)
 
@@ -440,58 +444,82 @@ ax_ring_bench.yaxis.set_ticks(
 if len(mesh_compile_lists['nb_participants_baking']) > 0:
     ax_mesh_compile.plot(
         mesh_compile_lists['nb_participants_baking'],
-        mesh_compile_lists['average_baking'], label='AMPST',
-        linestyle='solid', marker='o')
+        mesh_compile_lists['average_baking'],
+        label='AMPST',
+        linestyle='solid',
+        marker='o'
+    )
 # AATMPST
 if len(mesh_compile_lists['nb_participants_timed']) > 0:
     ax_mesh_compile.plot(
         mesh_compile_lists['nb_participants_timed'],
-        mesh_compile_lists['average_timed'], label='AATMPST',
-        linestyle='solid', marker='*')
+        mesh_compile_lists['average_timed'],
+        label='AATMPST',
+        linestyle='solid',
+        marker='*'
+    )
 # Mesh bench
 # AMPST
 if len(mesh_bench_lists['nb_participants_baking']) > 0:
     ax_mesh_bench.plot(
         mesh_bench_lists['nb_participants_baking'],
-        mesh_bench_lists['average_baking'], label='AMPST',
-        linestyle='solid', marker='o')
+        mesh_bench_lists['average_baking'],
+        label='AMPST',
+        linestyle='solid',
+        marker='o'
+    )
 
 # AATMPST
 if len(mesh_bench_lists['nb_participants_timed']) > 0:
     ax_mesh_bench.plot(
         mesh_bench_lists['nb_participants_timed'],
-        mesh_bench_lists['average_timed'], label='AATMPST',
-        linestyle='solid', marker='*')
+        mesh_bench_lists['average_timed'],
+        label='AATMPST',
+        linestyle='solid',
+        marker='*'
+    )
 
 # Ring compile
 # AMPST
 if len(ring_compile_lists['nb_participants_baking']) > 0:
     ax_ring_compile.plot(
         ring_compile_lists['nb_participants_baking'],
-        ring_compile_lists['average_baking'], label='AMPST',
-        linestyle='solid', marker='o')
+        ring_compile_lists['average_baking'],
+        label='AMPST',
+        linestyle='solid',
+        marker='o'
+    )
 
 # AATMPST
 if len(ring_compile_lists['nb_participants_timed']) > 0:
     ax_ring_compile.plot(
         ring_compile_lists['nb_participants_timed'],
-        ring_compile_lists['average_timed'], label='AATMPST',
-        linestyle='solid', marker='*')
+        ring_compile_lists['average_timed'],
+        label='AATMPST',
+        linestyle='solid',
+        marker='*'
+    )
 
 # Ring bench
 # AMPST
 if len(ring_bench_lists['nb_participants_baking']) > 0:
     ax_ring_bench.plot(
         ring_bench_lists['nb_participants_baking'],
-        ring_bench_lists['average_baking'], label='AMPST',
-        linestyle='solid', marker='o')
+        ring_bench_lists['average_baking'],
+        label='AMPST',
+        linestyle='solid',
+        marker='o'
+    )
 
 # AATMPST
 if len(ring_bench_lists['nb_participants_timed']) > 0:
     ax_ring_bench.plot(
         ring_bench_lists['nb_participants_timed'],
-        ring_bench_lists['average_timed'], label='AATMPST',
-        linestyle='solid', marker='*')
+        ring_bench_lists['average_timed'],
+        label='AATMPST',
+        linestyle='solid',
+        marker='*'
+    )
 
 # create the name for the new figure
 index_graphs = 0
