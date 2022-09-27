@@ -370,7 +370,7 @@ with open('results/ring_' + str(index_ring) + '.csv', 'a') as report_file:
     report_file.write('\n')
 
 # Create the figure
-all_graphs = plt.figure(figsize=(20, 6))
+all_graphs = plt.figure(figsize=(20, 5))
 
 # Create the graphs
 ax_mesh_compile = all_graphs.add_subplot(1, 4, 1)
@@ -411,7 +411,7 @@ ax_mesh_compile.yaxis.set_ticks(
         int(min(min(mesh_compile_lists['average_baking']), min(
             mesh_compile_lists['average_timed']))/10)*10-5,
         int(max(max(mesh_compile_lists['average_baking']), max(
-            mesh_compile_lists['average_timed']))/10)*10+5,
+            mesh_compile_lists['average_timed']))/10)*10+15,
         10))
 ax_mesh_bench.tick_params(axis='both', which='major', labelsize=20)
 ax_mesh_bench.yaxis.set_ticks(
@@ -420,7 +420,7 @@ ax_mesh_bench.yaxis.set_ticks(
             mesh_bench_lists['average_timed']))/10)*10-5,
         int(max(max(mesh_bench_lists['average_baking']), max(
             mesh_bench_lists['average_timed']))/10)*10+16,
-        5))
+        4))
 ax_ring_compile.tick_params(axis='both', which='major', labelsize=20)
 ax_ring_compile.yaxis.set_ticks(
     np.arange(
