@@ -71,8 +71,20 @@ type EndpointS0 = MeshedChannels<
 // Step 1
 // C
 enum Branching1fromStoC {
-    Continue(MeshedChannels<RecvTimed<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<RecvTimed<(), RecvTimed<(), Offer1fromStoC>>, ThreeRoleS, NameC>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose2fromCtoS, 'a', 0, true, 1, true, false>,
+            RoleS<RoleBroadcast>,
+            NameC,
+        >,
+    ),
+    Loop(
+        MeshedChannels<
+            RecvTimed<(), RecvTimed<(), Offer1fromStoC, 'a', 0, true, 1, true, false>>,
+            ThreeRoleS,
+            NameC,
+        >,
+    ),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
 type EndpointC1 = MeshedChannels<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
@@ -107,7 +119,13 @@ type EndpointC3 = MeshedChannels<Choose3fromCtoS, RoleBroadcast, NameC>;
 
 // S
 enum Branching3fromCtoS {
-    Continue(MeshedChannels<RecvTimed<(), Choose4fromStoC>, RoleC<RoleBroadcast>, NameS>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose4fromStoC, 'a', 0, true, 1, true, false>,
+            RoleC<RoleBroadcast>,
+            NameS,
+        >,
+    ),
     Quit(MeshedChannels<RecvTimed<(), End, 'a', 0, true, 1, true, false>, RoleC<RoleEnd>, NameS>),
 }
 type Offer3fromCtoS = <Choose3fromCtoS as Session>::Dual;
@@ -116,8 +134,20 @@ type EndpointS3 = MeshedChannels<Offer3fromCtoS, RoleC<RoleEnd>, NameS>;
 // Step 4
 // C
 enum Branching4fromStoC {
-    Continue(MeshedChannels<RecvTimed<(), Choose5fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<RecvTimed<(), Offer4fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose5fromCtoS, 'a', 0, true, 1, true, false>,
+            RoleS<RoleBroadcast>,
+            NameC,
+        >,
+    ),
+    Loop(
+        MeshedChannels<
+            RecvTimed<(), Offer4fromStoC, 'a', 0, true, 1, true, false>,
+            RoleS<RoleS<RoleEnd>>,
+            NameC,
+        >,
+    ),
 }
 type Offer4fromStoC = <Choose4fromStoC as Session>::Dual;
 type EndpointC4 = MeshedChannels<Offer4fromStoC, RoleS<RoleEnd>, NameC>;
@@ -133,7 +163,13 @@ type EndpointC5 = MeshedChannels<Choose5fromCtoS, RoleBroadcast, NameC>;
 
 // S
 enum Branching5fromCtoS {
-    Continue(MeshedChannels<RecvTimed<(), Choose6fromStoC>, RoleC<RoleBroadcast>, NameS>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose6fromStoC, 'a', 0, true, 1, true, false>,
+            RoleC<RoleBroadcast>,
+            NameS,
+        >,
+    ),
     Quit(MeshedChannels<RecvTimed<(), End, 'a', 0, true, 1, true, false>, RoleC<RoleEnd>, NameS>),
 }
 type Offer5fromCtoS = <Choose5fromCtoS as Session>::Dual;
@@ -142,8 +178,20 @@ type EndpointS5 = MeshedChannels<Offer5fromCtoS, RoleC<RoleEnd>, NameS>;
 // Step 6
 // C
 enum Branching6fromStoC {
-    Continue(MeshedChannels<RecvTimed<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<RecvTimed<(), Offer6fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose7fromCtoS, 'a', 0, true, 1, true, false>,
+            RoleS<RoleBroadcast>,
+            NameC,
+        >,
+    ),
+    Loop(
+        MeshedChannels<
+            RecvTimed<(), Offer6fromStoC, 'a', 0, true, 1, true, false>,
+            RoleS<RoleS<RoleEnd>>,
+            NameC,
+        >,
+    ),
 }
 type Offer6fromStoC = <Choose6fromStoC as Session>::Dual;
 type EndpointC6 = MeshedChannels<Offer6fromStoC, RoleS<RoleEnd>, NameC>;
@@ -159,7 +207,13 @@ type EndpointC7 = MeshedChannels<Choose7fromCtoS, RoleBroadcast, NameC>;
 
 // S
 enum Branching7fromCtoS {
-    Continue(MeshedChannels<RecvTimed<(), Choose8fromStoC>, RoleC<RoleBroadcast>, NameS>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose8fromStoC, 'a', 0, true, 1, true, false>,
+            RoleC<RoleBroadcast>,
+            NameS,
+        >,
+    ),
     Quit(MeshedChannels<RecvTimed<(), End, 'a', 0, true, 1, true, false>, RoleC<RoleEnd>, NameS>),
 }
 type Offer7fromCtoS = <Choose7fromCtoS as Session>::Dual;
@@ -168,8 +222,20 @@ type EndpointS7 = MeshedChannels<Offer7fromCtoS, RoleC<RoleEnd>, NameS>;
 // Step 8
 // C
 enum Branching8fromStoC {
-    Continue(MeshedChannels<RecvTimed<(), Choose9fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<RecvTimed<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Continue(
+        MeshedChannels<
+            RecvTimed<(), Choose9fromCtoS, 'a', 0, true, 1, true, false>,
+            RoleS<RoleBroadcast>,
+            NameC,
+        >,
+    ),
+    Loop(
+        MeshedChannels<
+            RecvTimed<(), Choose7fromCtoS, 'a', 0, true, 1, true, false>,
+            RoleS<RoleBroadcast>,
+            NameC,
+        >,
+    ),
 }
 type Offer8fromStoC = <Choose8fromStoC as Session>::Dual;
 type EndpointC8 = MeshedChannels<Offer8fromStoC, RoleS<RoleEnd>, NameC>;

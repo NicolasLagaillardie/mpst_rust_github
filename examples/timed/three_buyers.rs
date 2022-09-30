@@ -51,7 +51,7 @@ enum Branching0fromCtoS {
     Accept(
         MeshedChannels<
             End,
-            RecvTimed<i32, SendTimed<i32, End, 'a', 0, true, 1, true, false>>,
+            RecvTimed<i32, SendTimed<i32, End, 'a', 0, true, 1, true, false>, 'a', 0, true, 1, true, false>,
             TwoRoleC,
             NameS,
         >,
@@ -70,8 +70,8 @@ type TwoRoleC = RoleC<RoleC<RoleEnd>>;
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannels<
-    SendTimed<i32, RecvTimed<Branching0fromCtoA, End, 'a', 0, true, 1, true, false>>,
-    SendTimed<i32, RecvTimed<i32, End, 'a', 0, true, 1, true, false>>,
+    SendTimed<i32, RecvTimed<Branching0fromCtoA, End, 'a', 0, true, 1, true, false>, 'a', 0, true, 1, true, false>,
+    SendTimed<i32, RecvTimed<i32, End, 'a', 0, true, 1, true, false>, 'a', 0, true, 1, true, false>,
     RoleS<RoleS<TwoRoleC>>,
     NameA,
 >;
@@ -105,9 +105,9 @@ type EndpointS = MeshedChannels<
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let s = s.send((), all_clocks)?;
+    let s = s.send(random(), all_clocks)?;
     let (_empty2, s) = s.recv(all_clocks)?;
-    let s = s.send((), all_clocks)?;
+    let s = s.send(random(), all_clocks)?;
     offer_mpst!(s, all_clocks, {
         Branching0fromCtoA::Accept(s) => {
             let (_ok, s) = s.recv(all_clocks)?;
@@ -136,8 +136,8 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
             Branching0fromCtoS::Accept,
         );
 
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
+        let s = s.send(random(), all_clocks)?;
+        let s = s.send(random(), all_clocks)?;
         let (_empty5, s) = s.recv(all_clocks)?;
 
         s.close()
@@ -148,8 +148,8 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
             Branching0fromCtoA::Quit,
             Branching0fromCtoS::Quit,
         );
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
+        let s = s.send(random(), all_clocks)?;
+        let s = s.send(random(), all_clocks)?;
         s.close()
     }
 }
@@ -163,7 +163,7 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     offer_mpst!(s, all_clocks, {
         Branching0fromCtoS::Accept(s) => {
             let (_ok, s) = s.recv(all_clocks)?;
-            let s = s.send((), all_clocks)?;
+            let s = s.send(random(), all_clocks)?;
             s.close()
         },
         Branching0fromCtoS::Quit(s) => {

@@ -42,7 +42,16 @@ enum Branching0fromAtoC {
     Success(
         MeshedChannels<
             RecvTimed<Success, End, 'a', 0, true, 1, true, false>,
-            SendTimed<Success, RecvTimed<Token, End, 'a', 0, true, 1, true, false>>,
+            SendTimed<
+                Success,
+                RecvTimed<Token, End, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+            >,
             RoleA<RoleS<RoleS<RoleEnd>>>,
             NameC,
         >,
@@ -50,7 +59,25 @@ enum Branching0fromAtoC {
     Fail(
         MeshedChannels<
             RecvTimed<Fail, End, 'a', 0, true, 1, true, false>,
-            SendTimed<Fail, RecvTimed<Received, End, 'a', 0, true, 1, true, false>>,
+            SendTimed<
+                Fail,
+                RecvTimed<
+                    Received,
+                    End,
+                    'a',
+                    0,
+                    true,
+                    1,
+                    true,
+                    false,
+                    'a',
+                    0,
+                    true,
+                    1,
+                    true,
+                    false,
+                >,
+            >,
             RoleA<RoleS<RoleS<RoleEnd>>>,
             NameC,
         >,
@@ -62,13 +89,38 @@ type Offer0fromCtoA = RecvTimed<Branching0fromAtoC, End, 'a', 0, true, 1, true, 
 enum Branching0fromAtoS {
     Success(
         MeshedChannels<
-            SendTimed<Token, RecvTimed<Token, End, 'a', 0, true, 1, true, false>>,
-            RecvTimed<Success, SendTimed<Token, End, 'a', 0, true, 1, true, false>>,
+            SendTimed<
+                Token,
+                RecvTimed<Token, End, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+            >,
+            RecvTimed<
+                Success,
+                SendTimed<Token, End, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+            >,
             RoleC<RoleA<RoleA<RoleC<RoleEnd>>>>,
             NameS,
         >,
     ),
-    Fail(MeshedChannels<End, RecvTimed<Fail, SendTimed<Received, End, 'a', 0, true, 1, true, false>>, RoleC<RoleC<RoleEnd>>, NameS>),
+    Fail(
+        MeshedChannels<
+            End,
+            RecvTimed<Fail, SendTimed<Received, End, 'a', 0, true, 1, true, false>>,
+            RoleC<RoleC<RoleEnd>>,
+            NameS,
+        >,
+    ),
 }
 type Offer0fromStoA = RecvTimed<Branching0fromAtoS, End, 'a', 0, true, 1, true, false>;
 
@@ -76,13 +128,41 @@ type Offer0fromStoA = RecvTimed<Branching0fromAtoS, End, 'a', 0, true, 1, true, 
 // A
 type EndpointASuccess = MeshedChannels<
     SendTimed<Success, End, 'a', 0, true, 1, true, false>,
-    RecvTimed<Token, SendTimed<Token, End, 'a', 0, true, 1, true, false>>,
+    RecvTimed<
+        Token,
+        SendTimed<Token, End, 'a', 0, true, 1, true, false>,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
     RoleC<RoleS<RoleS<RoleEnd>>>,
     NameA,
 >;
-type EndpointAFail = MeshedChannels<SendTimed<Fail, End, 'a', 0, true, 1, true, false>, End, RoleC<RoleEnd>, NameA>;
+type EndpointAFail =
+    MeshedChannels<SendTimed<Fail, End, 'a', 0, true, 1, true, false>, End, RoleC<RoleEnd>, NameA>;
 type EndpointA = MeshedChannels<
-    RecvTimed<Login, SendTimed<Auth, RecvTimed<Password, Choose0fromAtoC, 'a', 0, true, 1, true, false>>>,
+    RecvTimed<
+        Login,
+        SendTimed<
+            Auth,
+            RecvTimed<Password, Choose0fromAtoC, 'a', 0, true, 1, true, false>,
+            'a',
+            0,
+            true,
+            1,
+            true,
+            false,
+        >,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
     Choose0fromAtoS,
     RoleC<RoleC<RoleC<RoleBroadcast>>>,
     NameA,
@@ -90,8 +170,35 @@ type EndpointA = MeshedChannels<
 
 // C
 type EndpointC = MeshedChannels<
-    SendTimed<Login, RecvTimed<Auth, SendTimed<Password, Offer0fromCtoA, 'a', 0, true, 1, true, false>>>,
-    SendTimed<Start, RecvTimed<Redirect, End, 'a', 0, true, 1, true, false>>,
+    SendTimed<
+        Login,
+        RecvTimed<
+            Auth,
+            SendTimed<Password, Offer0fromCtoA, 'a', 0, true, 1, true, false>,
+            'a',
+            0,
+            true,
+            1,
+            true,
+            false,
+        >,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
+    SendTimed<
+        Start,
+        RecvTimed<Redirect, End, 'a', 0, true, 1, true, false>,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
     RoleS<RoleS<RoleA<RoleA<RoleA<RoleA<RoleEnd>>>>>>,
     NameC,
 >;
@@ -99,7 +206,16 @@ type EndpointC = MeshedChannels<
 // S
 type EndpointS = MeshedChannels<
     Offer0fromStoA,
-    RecvTimed<Start, SendTimed<Redirect, End, 'a', 0, true, 1, true, false>>,
+    RecvTimed<
+        Start,
+        SendTimed<Redirect, End, 'a', 0, true, 1, true, false>,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
     RoleC<RoleC<RoleA<RoleEnd>>>,
     NameS,
 >;
