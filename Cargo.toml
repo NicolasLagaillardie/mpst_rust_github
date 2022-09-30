@@ -299,6 +299,11 @@ name = "servo_8257_async_fixed"
 path = "examples/timed/servo_8257_async_fixed.rs"
 required-features = ["baking_timed"]
 
+[[example]]
+name = "simple_voting_timed"
+path = "examples/timed/simple_voting.rs"
+required-features = ["baking_timed"]
+
 ################################### Affine Mesh examples
 
 [[example]]
