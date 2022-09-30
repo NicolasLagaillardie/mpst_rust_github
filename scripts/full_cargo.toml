@@ -237,7 +237,7 @@ name = "three_buyers"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "travel_three"
+name = "three_travel"
 required-features = ["macros_multiple"]
 
 [[example]]

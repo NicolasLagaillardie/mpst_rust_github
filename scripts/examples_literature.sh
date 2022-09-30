@@ -8,7 +8,7 @@ set -e
 ## Compile basic examples
 ./scripts/create_files/compile_full.sh three_buyers 10 macros_multiple
 ./scripts/create_files/compile_full.sh distributed_calc 10 macros_multiple
-./scripts/create_files/compile_full.sh travel_three 10 macros_multiple
+./scripts/create_files/compile_full.sh three_travel 10 macros_multiple
 ./scripts/create_files/compile_full.sh simple_voting 10 macros_multiple
 ./scripts/create_files/compile_full.sh online_wallet 10 macros_multiple
 ./scripts/create_files/compile_full.sh fib 10 macros_multiple

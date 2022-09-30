@@ -159,7 +159,7 @@ cargo run --example online_wallet --features="macros_multiple"
 cargo run --example simple_voting --features="macros_multiple"
 cargo run --example smtp --features="macros_multiple"
 cargo run --example three_buyers --features="macros_multiple"
-cargo run --example travel_three --features="macros_multiple"
+cargo run --example three_travel --features="macros_multiple"
 cargo run --example video_stream --features="baking_checking"
 #################
 echo "done"

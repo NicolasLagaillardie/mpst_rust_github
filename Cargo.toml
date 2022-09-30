@@ -250,8 +250,8 @@ path = "examples/affine/three_buyers.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "travel_three"
-path = "examples/affine/travel_three.rs"
+name = "three_travel"
+path = "examples/affine/three_travel.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
@@ -302,6 +302,41 @@ required-features = ["baking_timed"]
 [[example]]
 name = "simple_voting_timed"
 path = "examples/timed/simple_voting.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "distributed_calc_timed"
+path = "examples/timed/distributed_calc.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "fib_timed"
+path = "examples/timed/fib.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "o_auth_timed"
+path = "examples/timed/o_auth.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "online_wallet_timed"
+path = "examples/timed/online_wallet.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "smtp_timed"
+path = "examples/timed/smtp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "three_buyers_timed"
+path = "examples/timed/three_buyers.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "three_travel_timed"
+path = "examples/timed/three_travel.rs"
 required-features = ["baking_timed"]
 
 ################################### Affine Mesh examples

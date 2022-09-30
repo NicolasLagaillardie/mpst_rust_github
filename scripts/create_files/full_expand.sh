@@ -12,7 +12,7 @@ cargo expand --example o_auth_transport > expand/o_auth_transport.txt
 cargo expand --example fib > expand/fib.txt
 cargo expand --example simple_voting > expand/simple_voting.txt
 cargo expand --example three_buyers > expand/three_buyers.txt
-cargo expand --example travel_three > expand/travel_three.txt
+cargo expand --example three_travel > expand/three_travel.txt
 cargo expand --example logging > expand/logging.txt
 cargo expand --example circuit_breaker > expand/circuit_breaker.txt
 cargo expand --example logging_baking > expand/logging_baking.txt

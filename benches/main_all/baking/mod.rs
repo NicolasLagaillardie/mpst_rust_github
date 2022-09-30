@@ -9,5 +9,5 @@ pub mod online_wallet;
 pub mod simple_voting;
 pub mod smtp;
 pub mod three_buyers;
-pub mod travel_three;
+pub mod three_travel;
 pub mod video_stream;

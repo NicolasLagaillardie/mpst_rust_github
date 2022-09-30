@@ -12,7 +12,7 @@ sleep 2
 ./scripts/create_files/compile_full.sh fib 5 macros_multiple
 ./scripts/create_files/compile_full.sh simple_voting 5 macros_multiple
 ./scripts/create_files/compile_full.sh three_buyers 5 macros_multiple
-./scripts/create_files/compile_full.sh travel_three 5 macros_multiple
+./scripts/create_files/compile_full.sh three_travel 5 macros_multiple
 ./scripts/create_files/compile_full.sh logging 5 macros_multiple
 ./scripts/create_files/compile_full.sh circuit_breaker 5 macros_multiple
 ./scripts/create_files/compile_full.sh logging_baking 5 baking
