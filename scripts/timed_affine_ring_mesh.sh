@@ -13,94 +13,94 @@ cargo clean
 ## Mesh
 ### Two
 echo "Mesh two"
-bash ./scripts/create_files/compile_normal.sh mesh_two_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_two_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_two_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_two_baking_timed 100 baking_timed
 
 ### Three
 echo "Mesh three"
-bash ./scripts/create_files/compile_normal.sh mesh_three_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_three_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_three_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_three_baking_timed 100 baking_timed
 
 ### Four
 echo "Mesh four"
-bash ./scripts/create_files/compile_normal.sh mesh_four_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_four_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_four_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_four_baking_timed 100 baking_timed
 
 ### Five
 echo "Mesh five"
-bash ./scripts/create_files/compile_normal.sh mesh_five_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_five_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_five_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_five_baking_timed 100 baking_timed
 
 ### Six
 echo "Mesh six"
-bash ./scripts/create_files/compile_normal.sh mesh_six_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_six_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_six_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_six_baking_timed 100 baking_timed
 
 ### Seven
 echo "Mesh seven"
-bash ./scripts/create_files/compile_normal.sh mesh_seven_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_seven_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_seven_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_seven_baking_timed 100 baking_timed
 
 ### Eight
 echo "Mesh eight"
-bash ./scripts/create_files/compile_normal.sh mesh_eight_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_eight_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_eight_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_eight_baking_timed 100 baking_timed
 
 ### Nine
 echo "Mesh nine"
-bash ./scripts/create_files/compile_normal.sh mesh_nine_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_nine_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_nine_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_nine_baking_timed 100 baking_timed
 
 ### Ten
 echo "Mesh ten"
-bash ./scripts/create_files/compile_normal.sh mesh_ten_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh mesh_ten_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh mesh_ten_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh mesh_ten_baking_timed 100 baking_timed
 
 ## Ring
 ### Two
 echo "Ring two"
-bash ./scripts/create_files/compile_normal.sh ring_two_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_two_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_two_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_two_baking_timed 100 baking_timed
 
 ### Three
 echo "Ring three"
-bash ./scripts/create_files/compile_normal.sh ring_three_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_three_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_three_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_three_baking_timed 100 baking_timed
 
 ### Four
 echo "Ring four"
-bash ./scripts/create_files/compile_normal.sh ring_four_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_four_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_four_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_four_baking_timed 100 baking_timed
 
 ### Five
 echo "Ring five"
-bash ./scripts/create_files/compile_normal.sh ring_five_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_five_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_five_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_five_baking_timed 100 baking_timed
 
 ### Six
 echo "Ring six"
-bash ./scripts/create_files/compile_normal.sh ring_six_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_six_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_six_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_six_baking_timed 100 baking_timed
 
 ### Seven
 echo "Ring seven"
-bash ./scripts/create_files/compile_normal.sh ring_seven_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_seven_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_seven_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_seven_baking_timed 100 baking_timed
 
 ### Eight
 echo "Ring eight"
-bash ./scripts/create_files/compile_normal.sh ring_eight_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_eight_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_eight_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_eight_baking_timed 100 baking_timed
 
 ### Nine
 echo "Ring nine"
-bash ./scripts/create_files/compile_normal.sh ring_nine_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_nine_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_nine_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_nine_baking_timed 100 baking_timed
 
 ### Ten
 echo "Ring ten"
-bash ./scripts/create_files/compile_normal.sh ring_ten_baking 20 baking
-bash ./scripts/create_files/compile_normal.sh ring_ten_baking_timed 20 baking_timed
+bash ./scripts/create_files/compile_normal.sh ring_ten_baking 100 baking
+bash ./scripts/create_files/compile_normal.sh ring_ten_baking_timed 100 baking_timed
 
 ### Clean compiled files
 cargo clean
