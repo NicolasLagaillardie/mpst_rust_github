@@ -171,106 +171,132 @@ required-features = ["baking_timed"]
 
 [[example]]
 name = "circuit_breaker"
+path = "examples/affine/circuit_breaker.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "logging"
+path = "examples/affine/logging.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "circuit_breaker_baking"
+path = "examples/affine/circuit_breaker_baking.rs"
 required-features = ["baking"]
 
 [[example]]
 name = "logging_baking"
+path = "examples/affine/logging_baking.rs"
 required-features = ["baking"]
 
 [[example]]
 name = "distributed_calc"
+path = "examples/affine/distributed_calc.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "dns_fowler"
+path = "examples/affine/dns_fowler.rs"
 required-features = ["baking"]
 
 [[example]]
 name = "dns_fowler_checking"
+path = "examples/affine/dns_fowler_checking.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "dns_imai"
+path = "examples/affine/dns_imai.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "fib"
+path = "examples/affine/fib.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "o_auth"
+path = "examples/affine/o_auth.rs"
 required-features = ["baking"]
 
 [[example]]
 name = "o_auth_checking"
+path = "examples/affine/o_auth_checking.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "o_auth_transport"
+path = "examples/affine/o_auth_transport.rs"
 required-features = ["transport_macros_multiple"]
 
 [[example]]
 name = "online_wallet"
+path = "examples/affine/online_wallet.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "simple_voting"
+path = "examples/affine/simple_voting.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "smtp"
+path = "examples/affine/smtp.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "three_buyers"
+path = "examples/affine/three_buyers.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "travel_three"
+path = "examples/affine/travel_three.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "video_stream_basic"
+path = "examples/affine/video_stream_basic.rs"
 required-features = ["macros_simple"]
 
 [[example]]
 name = "video_stream"
+path = "examples/affine/video_stream.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "adder"
+path = "examples/affine/adder.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "basic"
+path = "examples/affine/basic.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "servo_8257_original"
+path = "examples/affine/servo_8257_original.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "servo_8257_fixed"
+path = "examples/affine/servo_8257_fixed.rs"
 required-features = ["baking_checking"]
 
 [[example]]
 name = "servo_8257_async_failing"
+path = "examples/timed/servo_8257_async_failing.rs"
 required-features = ["baking_timed"]
 
 [[example]]
 name = "servo_8257_async_working"
+path = "examples/timed/servo_8257_async_working.rs"
 required-features = ["baking_timed"]
 
 [[example]]
 name = "servo_8257_async_fixed"
+path = "examples/timed/servo_8257_async_fixed.rs"
 required-features = ["baking_timed"]
 
 ################################### Affine Mesh examples
