@@ -80,7 +80,16 @@ enum Branching1fromStoC {
     ),
     Loop(
         MeshedChannels<
-            RecvTimed<(), RecvTimed<(), Offer1fromStoC, 'a', 0, true, 1, true, false>>,
+            RecvTimed<
+                (),
+                RecvTimed<(), Offer1fromStoC, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+            >,
             ThreeRoleS,
             NameC,
         >,
@@ -102,7 +111,16 @@ type EndpointC2 = MeshedChannels<Choose2fromCtoS, RoleBroadcast, NameC>;
 enum Branching2fromCtoS {
     Continue(
         MeshedChannels<
-            RecvTimed<(), SendTimed<(), Offer3fromCtoS, 'a', 0, true, 1, true, false>>,
+            RecvTimed<
+                (),
+                SendTimed<(), Offer3fromCtoS, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+            >,
             ThreeRoleC,
             NameS,
         >,
@@ -303,7 +321,7 @@ type EndpointS9 = MeshedChannels<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
 // Step 10
 // C
 type Choose10fromCtoS = SendTimed<Branching10fromCtoS, End, 'a', 0, true, 1, true, false>;
-type EndpointC1 = MeshedChannels<Choose10fromCtoS, RoleBroadcast, NameC>;
+type EndpointC10 = MeshedChannels<Choose10fromCtoS, RoleBroadcast, NameC>;
 
 // S
 enum Branching10fromCtoS {
@@ -357,7 +375,7 @@ enum Branching10fromCtoS {
     ),
 }
 type Offer10fromCtoS = <Choose10fromCtoS as Session>::Dual;
-type EndpointS1 = MeshedChannels<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS10 = MeshedChannels<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_c_0(
@@ -371,24 +389,14 @@ fn endpoint_c_0(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching0fromCtoS::Continue, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
         let s = s.send((), all_clocks)?;
 
         endpoint_c_1(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching0fromCtoS::Quit, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Quit);
 
         let s = s.send((), all_clocks)?;
 
@@ -422,24 +430,14 @@ fn endpoint_c_2(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching2fromCtoS::Continue, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching2fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
         let (_, s) = s.recv(all_clocks)?;
 
         endpoint_c_3(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching2fromCtoS::Quit, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching2fromCtoS::Quit);
 
         let s = s.send((), all_clocks)?;
 
@@ -454,23 +452,13 @@ fn endpoint_c_3(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching3fromCtoS::Continue, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching3fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_c_4(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching3fromCtoS::Quit, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching3fromCtoS::Quit);
 
         let s = s.send((), all_clocks)?;
 
@@ -503,23 +491,13 @@ fn endpoint_c_5(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching5fromCtoS::Continue, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching5fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_c_6(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching5fromCtoS::Quit, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching5fromCtoS::Quit);
 
         let s = s.send((), all_clocks)?;
 
@@ -552,23 +530,13 @@ fn endpoint_c_7(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching7fromCtoS::Continue, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching7fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_c_8(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching7fromCtoS::Quit, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching7fromCtoS::Quit);
 
         let s = s.send((), all_clocks)?;
 
@@ -601,26 +569,16 @@ fn endpoint_c_9(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching9fromCtoS::Continue, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching9fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
         let (_, s) = s.recv(all_clocks)?;
         let s = s.send((), all_clocks)?;
         let s = s.send((), all_clocks)?;
 
-        endpoint_c_10(s)
+        endpoint_c_10(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching9fromCtoS::Loop, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching9fromCtoS::Loop);
 
         let s = s.send((), all_clocks)?;
         let (_, s) = s.recv(all_clocks)?;
@@ -630,42 +588,27 @@ fn endpoint_c_9(
 }
 
 fn endpoint_c_10(
-    s: EndpointC1,
+    s: EndpointC10,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     let expected: i32 = thread_rng().gen_range(1..=3);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching10fromCtoS::Data, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::Data);
 
         let s = s.send((), all_clocks)?;
         let s = s.send((), all_clocks)?;
 
-        endpoint_c_10(s)
+        endpoint_c_10(s, all_clocks)
     } else if expected == 2 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching10fromCtoS::Subject, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::Subject);
 
         let s = s.send((), all_clocks)?;
         let s = s.send((), all_clocks)?;
 
-        endpoint_c_10(s)
+        endpoint_c_10(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching10fromCtoS::End, =>
-            NameC, MeshedChannels, 1
-        );
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::End);
 
         let s = s.send((), all_clocks)?;
         let (_, s) = s.recv(all_clocks)?;
@@ -706,23 +649,13 @@ fn endpoint_s_1(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching1fromStoC::Continue, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_s_2(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching1fromStoC::Loop, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Loop);
 
         let s = s.send((), all_clocks)?;
         let s = s.send((), all_clocks)?;
@@ -775,23 +708,13 @@ fn endpoint_s_4(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching4fromStoC::Continue, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching4fromStoC::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_s_5(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching4fromStoC::Loop, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching4fromStoC::Loop);
 
         let s = s.send((), all_clocks)?;
 
@@ -824,23 +747,13 @@ fn endpoint_s_6(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching6fromStoC::Continue, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching6fromStoC::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_s_7(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching6fromStoC::Loop, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching6fromStoC::Loop);
 
         let s = s.send((), all_clocks)?;
 
@@ -873,23 +786,13 @@ fn endpoint_s_8(
     let expected: i32 = thread_rng().gen_range(1..=2);
 
     if expected == 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching8fromStoC::Continue, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching8fromStoC::Continue);
 
         let s = s.send((), all_clocks)?;
 
         endpoint_s_9(s, all_clocks)
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            all_clocks,
-            Branching8fromStoC::Loop, =>
-            NameS, MeshedChannels, 2
-        );
+        let s = choose_mpst_s_to_all!(s, all_clocks, Branching8fromStoC::Loop);
 
         let s = s.send((), all_clocks)?;
 
@@ -914,7 +817,7 @@ fn endpoint_s_9(
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_10(s)
+            endpoint_s_10(s, all_clocks)
         },
     })
 }
@@ -928,13 +831,13 @@ fn endpoint_s_10(
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_10(s)
+            endpoint_s_10(s, all_clocks)
         },
         Branching10fromCtoS::Subject(s) => {
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_10(s)
+            endpoint_s_10(s, all_clocks)
         },
         Branching10fromCtoS::End(s) => {
             let (_, s) = s.recv(all_clocks)?;

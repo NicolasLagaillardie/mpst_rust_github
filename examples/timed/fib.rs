@@ -29,7 +29,16 @@ enum Branching0fromAtoB {
     More(MeshedChannels<RSRecursBtoA, ThreeRoleA, NameB>),
     Done(MeshedChannels<End, RoleEnd, NameB>),
 }
-type RSRecursBtoA = RecvTimed<i32, SendTimed<i32, RecursBtoA, 'a', 0, true, 1, true, false>>;
+type RSRecursBtoA = RecvTimed<
+    i32,
+    SendTimed<i32, RecursBtoA, 'a', 0, true, 1, true, false>,
+    'a',
+    0,
+    true,
+    1,
+    true,
+    false,
+>;
 type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA = RecvTimed<Branching0fromAtoB, End, 'a', 0, true, 1, true, false>;
 
@@ -41,30 +50,30 @@ type EndpointB = MeshedChannels<RecursBtoA, RoleA<RoleEnd>, NameB>;
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let choice: i64 = thread_rng().gen_range(1..=20);
+    let choice: i32 = thread_rng().gen_range(1..=20);
 
     recurs_a(s, choice, 1, all_clocks)
 }
 
 fn recurs_a(
     s: EndpointA,
-    index: i64,
-    old: i64,
+    index: i32,
+    old: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(s, Branching0fromAtoB::Done,);
+            let s = choose_mpst_a_to_all!(s, all_clocks, Branching0fromAtoB::Done);
 
             s.close()
         }
         i => {
-            let s = choose_mpst_multi_to_all!(s, Branching0fromAtoB::More,);
+            let s = choose_mpst_a_to_all!(s, all_clocks, Branching0fromAtoB::More);
 
             let s = s.send(old, all_clocks)?;
             let (new, s) = s.recv(all_clocks)?;
 
-            recurs_a(s, i - 1, new)
+            recurs_a(s, i - 1, new, all_clocks)
         }
     }
 }
@@ -72,12 +81,12 @@ fn recurs_a(
 fn endpoint_b(s: EndpointB, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    recurs_b(s, 0)
+    recurs_b(s, 0, all_clocks)
 }
 
 fn recurs_b(
     s: EndpointB,
-    old: i64,
+    old: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
@@ -89,7 +98,7 @@ fn recurs_b(
         Branching0fromAtoB::More(s) => {
             let (new, s) = s.recv(all_clocks)?;
             let s = s.send(new + old, all_clocks)?;
-            recurs_b(s, new + old)
+            recurs_b(s, new + old, all_clocks)
         },
     })
 }

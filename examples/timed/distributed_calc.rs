@@ -33,8 +33,22 @@ enum Branching0fromCtoA {
 }
 // S
 enum Branching0fromCtoS {
-    Sum(MeshedChannels<End, SendTimed<i32, End, 'a', 0, true, 1, true, false>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannels<End, SendTimed<i32, End, 'a', 0, true, 1, true, false>, RoleC<RoleEnd>, NameS>),
+    Sum(
+        MeshedChannels<
+            End,
+            SendTimed<i32, End, 'a', 0, true, 1, true, false>,
+            RoleC<RoleEnd>,
+            NameS,
+        >,
+    ),
+    Diff(
+        MeshedChannels<
+            End,
+            SendTimed<i32, End, 'a', 0, true, 1, true, false>,
+            RoleC<RoleEnd>,
+            NameS,
+        >,
+    ),
 }
 
 // Creating the MP sessions
@@ -112,22 +126,22 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     let choice: i32 = thread_rng().gen_range(1..=2);
 
     if choice != 1 {
-        let s = choose_mpst_multi_to_all!(
+        let s = choose_mpst_c_to_all!(
             s,
-            all_clocks,        
+            all_clocks,
             Branching0fromCtoA::Sum,
-            Branching0fromCtoS::Sum, 
+            Branching0fromCtoS::Sum,
         );
 
         let (_sum, s) = s.recv(all_clocks)?;
 
         s.close()
     } else {
-        let s = choose_mpst_multi_to_all!(
+        let s = choose_mpst_c_to_all!(
             s,
-            all_clocks,        
+            all_clocks,
             Branching0fromCtoA::Diff,
-            Branching0fromCtoS::Diff, 
+            Branching0fromCtoS::Diff,
         );
 
         let (_diff, s) = s.recv(all_clocks)?;
@@ -144,7 +158,7 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
     offer_mpst!(s, all_clocks, {
         Branching0fromCtoS::Sum(s) => {
-            let s = send_mpst_s_to_c(elt_1 + elt_2,s);
+            let s = s.send(elt_1 + elt_2,all_clocks)?;
             s.close()
         },
         Branching0fromCtoS::Diff(s) => {

@@ -34,15 +34,43 @@ type Recurs1AtoC = RecvTimed<Branching1fromCtoA, End, 'a', 0, true, 1, true, fal
 
 // S
 enum Branching0fromAtoS {
-    Login(MeshedChannels<RecvTimed<(), End, 'a', 0, true, 1, true, false>, SDoubleRecurs1StoC, RoleACC, NameS>),
-    Fail(MeshedChannels<RecvTimed<String, End, 'a', 0, true, 1, true, false>, End, RoleA<RoleEnd>, NameS>),
+    Login(
+        MeshedChannels<
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SDoubleRecurs1StoC,
+            RoleACC,
+            NameS,
+        >,
+    ),
+    Fail(
+        MeshedChannels<
+            RecvTimed<String, End, 'a', 0, true, 1, true, false>,
+            End,
+            RoleA<RoleEnd>,
+            NameS,
+        >,
+    ),
 }
 type RoleACC = RoleA<RoleC<RoleC<RoleEnd>>>;
 type Recurs0StoA = RecvTimed<Branching0fromAtoS, End, 'a', 0, true, 1, true, false>;
 
 enum Branching1fromCtoS {
-    Pay(MeshedChannels<End, RecvTimed<(String, i32), SDoubleRecurs1StoC, 'a', 0, true, 1, true, false>, RoleCCC, NameS>),
-    Quit(MeshedChannels<End, RecvTimed<(), End, 'a', 0, true, 1, true, false>, RoleC<RoleEnd>, NameS>),
+    Pay(
+        MeshedChannels<
+            End,
+            RecvTimed<(String, i32), SDoubleRecurs1StoC, 'a', 0, true, 1, true, false>,
+            RoleCCC,
+            NameS,
+        >,
+    ),
+    Quit(
+        MeshedChannels<
+            End,
+            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            RoleC<RoleEnd>,
+            NameS,
+        >,
+    ),
 }
 type RoleCCC = RoleC<RoleC<RoleC<RoleEnd>>>;
 type Recurs1StoC = RecvTimed<Branching1fromCtoS, End, 'a', 0, true, 1, true, false>;
@@ -50,7 +78,14 @@ type Recurs1StoC = RecvTimed<Branching1fromCtoS, End, 'a', 0, true, 1, true, fal
 // C
 enum Branching0fromAtoC {
     Login(MeshedChannels<RChoose1fromCtoA, RDoubleChoose1fromCtoS, RoleASBroad, NameC>),
-    Fail(MeshedChannels<RecvTimed<String, End, 'a', 0, true, 1, true, false>, End, RoleA<RoleEnd>, NameC>),
+    Fail(
+        MeshedChannels<
+            RecvTimed<String, End, 'a', 0, true, 1, true, false>,
+            End,
+            RoleA<RoleEnd>,
+            NameC,
+        >,
+    ),
 }
 type RChoose1fromCtoA = RecvTimed<(), Choose1fromCtoA, 'a', 0, true, 1, true, false>;
 type RDoubleChoose1fromCtoS = RecvTimed<(i32, i32), Choose1fromCtoS, 'a', 0, true, 1, true, false>;
@@ -61,12 +96,63 @@ type Choose1fromCtoA = SendTimed<Branching1fromCtoA, End, 'a', 0, true, 1, true,
 type Choose1fromCtoS = SendTimed<Branching1fromCtoS, End, 'a', 0, true, 1, true, false>;
 
 // Creating the MP sessions
+// Step 1_1
+type EndpointC1_1Quit =
+    MeshedChannels<End, SendTimed<(), End, 'a', 0, true, 1, true, false>, RoleS<RoleEnd>, NameC>;
+type EndpointC1_1Pay = MeshedChannels<
+    SendTimed<Branching1fromCtoA, End, 'a', 0, true, 1, true, false>,
+    SendTimed<
+        (String, i32),
+        RecvTimed<
+            (i32, i32),
+            SendTimed<Branching1fromCtoS, End, 'a', 0, true, 1, true, false>,
+            'a',
+            0,
+            true,
+            1,
+            true,
+            false,
+        >,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
+    RoleS<RoleS<RoleBroadcast>>,
+    NameC,
+>;
+
 // Step 1
 type EndpointA1 = MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
 type EndpointC1 =
     MeshedChannels<Choose1fromCtoA, RDoubleChoose1fromCtoS, RoleS<RoleBroadcast>, NameC>;
 type EndpointS1 = MeshedChannels<End, SDoubleRecurs1StoC, RoleC<RoleC<RoleEnd>>, NameS>;
 type SDoubleRecurs1StoC = SendTimed<(i32, i32), Recurs1StoC, 'a', 0, true, 1, true, false>;
+
+// Step 0_1
+type EndpointA0_1Fail = MeshedChannels<
+    SendTimed<String, End, 'a', 0, true, 1, true, false>,
+    SendTimed<String, End, 'a', 0, true, 1, true, false>,
+    RoleC<RoleS<RoleEnd>>,
+    NameA,
+>;
+type EndpointA0_1Login = MeshedChannels<
+    SendTimed<
+        (),
+        RecvTimed<Branching1fromCtoA, End, 'a', 0, true, 1, true, false>,
+        'a',
+        0,
+        true,
+        1,
+        true,
+        false,
+    >,
+    SendTimed<(), End, 'a', 0, true, 1, true, false>,
+    RoleC<RoleS<RoleC<RoleEnd>>>,
+    NameA,
+>;
 
 // Step 0
 type EndpointA0 = MeshedChannels<
@@ -75,22 +161,29 @@ type EndpointA0 = MeshedChannels<
     RoleC<RoleBroadcast>,
     NameA,
 >;
-type EndpointC0 =
-    MeshedChannels<SendTimed<(String, String), Recurs0CtoA, 'a', 0, true, 1, true, false>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+type EndpointC0 = MeshedChannels<
+    SendTimed<(String, String), Recurs0CtoA, 'a', 0, true, 1, true, false>,
+    End,
+    RoleA<RoleA<RoleEnd>>,
+    NameC,
+>;
 type EndpointS0 = MeshedChannels<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
-fn endpoint_a(s: EndpointA0, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+fn endpoint_a(
+    s: EndpointA0,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
     let ((id, pw), s) = s.recv(all_clocks)?;
 
     if id != pw {
-        let s = choose_mpst_multi_to_all!(
+        let s: EndpointA0_1Fail = choose_mpst_a_to_all!(
             s,
-            all_clocks,        
+            all_clocks,
             Branching0fromAtoC::Fail,
-            Branching0fromAtoS::Fail, 
+            Branching0fromAtoS::Fail,
         );
 
         let s = s.send("Fail".to_string(), all_clocks)?;
@@ -98,11 +191,11 @@ fn endpoint_a(s: EndpointA0, all_clocks: &mut HashMap<char, Instant>) -> Result<
 
         s.close()
     } else {
-        let s = choose_mpst_multi_to_all!(
+        let s: EndpointA0_1Login = choose_mpst_a_to_all!(
             s,
-            all_clocks,        
+            all_clocks,
             Branching0fromAtoC::Login,
-            Branching0fromAtoS::Login, 
+            Branching0fromAtoS::Login,
         );
 
         let s = s.send((), all_clocks)?;
@@ -123,7 +216,10 @@ fn recurs_a(s: EndpointA1, all_clocks: &mut HashMap<char, Instant>) -> Result<()
     })
 }
 
-fn endpoint_s(s: EndpointS0, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+fn endpoint_s(
+    s: EndpointS0,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
     offer_mpst!(s, all_clocks, {
@@ -153,7 +249,10 @@ fn recurs_s(s: EndpointS1, all_clocks: &mut HashMap<char, Instant>) -> Result<()
     })
 }
 
-fn endpoint_c(s: EndpointC0, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+fn endpoint_c(
+    s: EndpointC0,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
     let id: String = thread_rng()
@@ -182,16 +281,20 @@ fn endpoint_c(s: EndpointC0, all_clocks: &mut HashMap<char, Instant>) -> Result<
     })
 }
 
-fn recurs_c(s: EndpointC1, loops: i32, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
+fn recurs_c(
+    s: EndpointC1,
+    loops: i32,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
     let ((balance, overdraft), s) = s.recv(all_clocks)?;
 
     match loops {
         0 => {
-            let s = choose_mpst_multi_to_all!(
+            let s: EndpointC1_1Quit = choose_mpst_c_to_all!(
                 s,
-                all_clocks,        
+                all_clocks,
                 Branching1fromCtoA::Quit,
-                Branching1fromCtoS::Quit, 
+                Branching1fromCtoS::Quit,
             );
 
             let s = s.send((), all_clocks)?;
@@ -199,11 +302,11 @@ fn recurs_c(s: EndpointC1, loops: i32, all_clocks: &mut HashMap<char, Instant>) 
             s.close()
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
+            let s: EndpointC1_1Pay = choose_mpst_c_to_all!(
                 s,
-                all_clocks,        
+                all_clocks,
                 Branching1fromCtoA::Pay,
-                Branching1fromCtoS::Pay, 
+                Branching1fromCtoS::Pay,
             );
 
             let payee: String = rand::thread_rng()

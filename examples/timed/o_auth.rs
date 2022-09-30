@@ -61,22 +61,13 @@ enum Branching0fromAtoC {
             RecvTimed<Fail, End, 'a', 0, true, 1, true, false>,
             SendTimed<
                 Fail,
-                RecvTimed<
-                    Received,
-                    End,
-                    'a',
-                    0,
-                    true,
-                    1,
-                    true,
-                    false,
-                    'a',
-                    0,
-                    true,
-                    1,
-                    true,
-                    false,
-                >,
+                RecvTimed<Received, End, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
             >,
             RoleA<RoleS<RoleS<RoleEnd>>>,
             NameC,
@@ -116,7 +107,16 @@ enum Branching0fromAtoS {
     Fail(
         MeshedChannels<
             End,
-            RecvTimed<Fail, SendTimed<Received, End, 'a', 0, true, 1, true, false>>,
+            RecvTimed<
+                Fail,
+                SendTimed<Received, End, 'a', 0, true, 1, true, false>,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+            >,
             RoleC<RoleC<RoleEnd>>,
             NameS,
         >,
@@ -224,25 +224,33 @@ type EndpointS = MeshedChannels<
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let (_, s) = s.recv()?;
-    let s = s.send(Auth {})?;
-    let (_, s) = s.recv()?;
+    let (_, s) = s.recv(all_clocks)?;
+    let s = s.send(Auth {}, all_clocks)?;
+    let (_, s) = s.recv(all_clocks)?;
 
     let expected: i32 = thread_rng().gen_range(1..=3);
 
     if 1 == expected {
-        let s: EndpointASuccess =
-            choose_mpst_a_to_all!(s, Branching0fromAtoC::Success, Branching0fromAtoS::Success);
+        let s: EndpointASuccess = choose_mpst_a_to_all!(
+            s,
+            all_clocks,
+            Branching0fromAtoC::Success,
+            Branching0fromAtoS::Success
+        );
 
-        let s = s.send(Success {})?;
-        let (_, s) = s.recv()?;
-        let s = s.send(Token {})?;
+        let s = s.send(Success {}, all_clocks)?;
+        let (_, s) = s.recv(all_clocks)?;
+        let s = s.send(Token {}, all_clocks)?;
         s.close()
     } else {
-        let s: EndpointAFail =
-            choose_mpst_a_to_all!(s, Branching0fromAtoC::Fail, Branching0fromAtoS::Fail);
+        let s: EndpointAFail = choose_mpst_a_to_all!(
+            s,
+            all_clocks,
+            Branching0fromAtoC::Fail,
+            Branching0fromAtoS::Fail
+        );
 
-        let s = s.send(Fail {})?;
+        let s = s.send(Fail {}, all_clocks)?;
         s.close()
     }
 }
@@ -250,23 +258,23 @@ fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let s = s.send(Start {})?;
-    let (_, s) = s.recv()?;
-    let s = s.send(Login {})?;
-    let (_, s) = s.recv()?;
-    let s = s.send(Password {})?;
+    let s = s.send(Start {}, all_clocks)?;
+    let (_, s) = s.recv(all_clocks)?;
+    let s = s.send(Login {}, all_clocks)?;
+    let (_, s) = s.recv(all_clocks)?;
+    let s = s.send(Password {}, all_clocks)?;
 
-    offer_mpst!(s, {
+    offer_mpst!(s, all_clocks, {
         Branching0fromAtoC::Success(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(Success {  })?;
-            let (_,s) = s.recv()?;
+            let (_, s) = s.recv(all_clocks)?;
+            let s = s.send(Success {  }, all_clocks)?;
+            let (_,s) = s.recv(all_clocks)?;
             s.close()
         },
         Branching0fromAtoC::Fail(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(Fail {  })?;
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv(all_clocks)?;
+            let s = s.send(Fail {  }, all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
             s.close()
         },
     })
@@ -275,20 +283,20 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let (_, s) = s.recv()?;
-    let s = s.send(Redirect {})?;
+    let (_, s) = s.recv(all_clocks)?;
+    let s = s.send(Redirect {}, all_clocks)?;
 
-    offer_mpst!(s, {
+    offer_mpst!(s, all_clocks, {
         Branching0fromAtoS::Success(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(Token {  })?;
-            let (_, s) = s.recv()?;
-            let s = s.send(Token {  })?;
+            let (_, s) = s.recv(all_clocks)?;
+            let s = s.send(Token {  }, all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
+            let s = s.send(Token {  }, all_clocks)?;
             s.close()
         },
         Branching0fromAtoS::Fail(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(Received {  })?;
+            let (_, s) = s.recv(all_clocks)?;
+            let s = s.send(Received {  }, all_clocks)?;
             s.close()
         },
     })
