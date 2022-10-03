@@ -10,7 +10,7 @@ cargo check --example=$1 --features="$3" || command_failed=1
 END=$2
 
 # Loop
-for (( c=1; c<=$END; c++ ))
+for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build
     cargo clean

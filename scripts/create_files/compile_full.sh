@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -7,10 +7,12 @@ rm -rf compile_time/$1*.txt
 
 cargo check --example=$1 --features="$3" || command_failed=1
 
+END=$2
+
 # if [ ${command_failed:-0} -ne 1 ]
 # then
 # Loop
-for i in {1..$2}
+for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build
     cargo clean
@@ -25,7 +27,7 @@ do
 done
 
 # Loop
-for i in {1..$2}
+for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build
     cargo clean
@@ -40,7 +42,7 @@ do
 done
 
 # Loop
-for i in {1..$2}
+for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build
     cargo clean
