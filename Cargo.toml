@@ -140,7 +140,7 @@ path = "benches/examples.rs"
 required-features = ["baking"]
 
 [[bench]]
-name = "main_timed"
+name = "examples_timed"
 harness = false
 path = "benches/examples_timed.rs"
 required-features = ["baking_timed"]
@@ -266,6 +266,8 @@ name = "video_stream_basic"
 path = "examples/affine/video_stream_basic.rs"
 required-features = ["macros_simple"]
 
+################################### Checking examples
+
 [[example]]
 name = "video_stream"
 path = "examples/affine/video_stream.rs"
@@ -290,6 +292,8 @@ required-features = ["baking_checking"]
 name = "servo_8257_fixed"
 path = "examples/affine/servo_8257_fixed.rs"
 required-features = ["baking_checking"]
+
+################################### Timed examples
 
 [[example]]
 name = "servo_8257_async_failing"

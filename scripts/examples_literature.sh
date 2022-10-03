@@ -19,7 +19,7 @@ set -e
 ./scripts/create_files/compile_full.sh smtp 10 macros_multiple
 
 ## Run benchmarks
-cargo bench --bench main --all-features -- --verbose
+cargo bench --bench examples --all-features -- --verbose
 
 ## Concatenate all results in the results/benchmarks_main_from_literature.csv file
 python3 scripts/create_graphs/examples_literature.py
