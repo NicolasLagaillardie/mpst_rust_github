@@ -194,7 +194,11 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 ////////////////////////////////////////
 
 fn all_mpst() {
-    let (thread_c, thread_l, thread_s) = fork_mpst(black_box(endpoint_c), black_box(endpoint_l), black_box(endpoint_s));
+    let (thread_c, thread_l, thread_s) = fork_mpst(
+        black_box(endpoint_c),
+        black_box(endpoint_l),
+        black_box(endpoint_s),
+    );
 
     thread_c.join().unwrap();
     thread_l.join().unwrap();

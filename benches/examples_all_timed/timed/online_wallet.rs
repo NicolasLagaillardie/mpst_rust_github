@@ -325,7 +325,11 @@ fn recurs_c(
 }
 
 fn all_mpst() {
-    let (thread_a, thread_s, thread_c) = fork_mpst(black_box(endpoint_a), black_box(endpoint_c), black_box(endpoint_s));
+    let (thread_a, thread_s, thread_c) = fork_mpst(
+        black_box(endpoint_a),
+        black_box(endpoint_c),
+        black_box(endpoint_s),
+    );
 
     thread_a.join().unwrap();
     thread_c.join().unwrap();

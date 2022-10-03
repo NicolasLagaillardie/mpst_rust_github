@@ -12,8 +12,6 @@ use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{thread_rng, Rng};
-
 use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;
@@ -115,5 +113,7 @@ fn all_mpst() {
 static LOOPS: i32 = 20;
 
 pub fn fibo_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Timed Fibo MPST baking {}", LOOPS), |b| b.iter(all_mpst));
+    c.bench_function(&format!("Timed Fibo MPST baking {}", LOOPS), |b| {
+        b.iter(all_mpst)
+    });
 }

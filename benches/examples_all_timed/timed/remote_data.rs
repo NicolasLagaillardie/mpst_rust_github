@@ -245,8 +245,11 @@ fn recurs_server(
 }
 
 fn all_mpst() {
-    let (thread_satellite, thread_sensor, thread_server) =
-        fork_mpst(black_box(endpoint_satellite), black_box(endpoint_sensor), black_box(endpoint_server));
+    let (thread_satellite, thread_sensor, thread_server) = fork_mpst(
+        black_box(endpoint_satellite),
+        black_box(endpoint_sensor),
+        black_box(endpoint_server),
+    );
 
     thread_satellite.join().unwrap();
     thread_sensor.join().unwrap();

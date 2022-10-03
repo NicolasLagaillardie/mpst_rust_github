@@ -134,15 +134,15 @@ required-features = ["baking", "message", "checking"]
 ################################### Benches
 
 [[bench]]
-name = "main"
+name = "examples"
 harness = false
-path = "benches/main.rs"
+path = "benches/examples.rs"
 required-features = ["baking"]
 
 [[bench]]
 name = "main_timed"
 harness = false
-path = "benches/main_timed.rs"
+path = "benches/examples_timed.rs"
 required-features = ["baking_timed"]
 
 # [[bench]]

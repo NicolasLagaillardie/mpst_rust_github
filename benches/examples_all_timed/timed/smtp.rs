@@ -853,7 +853,7 @@ fn endpoint_s_10(
 ///
 
 fn all_mpst() {
-    let (thread_c, thread_s) = fork_mpst(endpoint_c_0, endpoint_s_0);
+    let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_0), black_box(endpoint_s_0));
 
     thread_c.join().unwrap();
     thread_s.join().unwrap();

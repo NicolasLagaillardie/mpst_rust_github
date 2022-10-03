@@ -182,7 +182,8 @@ fn choice_server(
 }
 
 fn all_mpst() {
-    let (thread_server, thread_voter) = fork_mpst(black_box(endpoint_server), black_box(endpoint_voter));
+    let (thread_server, thread_voter) =
+        fork_mpst(black_box(endpoint_server), black_box(endpoint_voter));
 
     thread_voter.join().unwrap();
     thread_server.join().unwrap();
