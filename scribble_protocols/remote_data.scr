@@ -1,0 +1,17 @@
+global protocol API(role Sensor, role Satellite, role Server) {
+    rec Loop {
+        choice at Server
+        {
+            GetData() from Server to Satellite within [0;1] using a without reset;
+            GetData() from Satellite to Sensor within [1;2] using a without reset;
+
+            ForwarddData(int) from Sensor to Satellite within [2;4] using a with reset;
+            ForwarddData(int) from Satellite to Server within [4;6] using a with reset;
+
+            continue Loop
+        } or {
+            Stop() from Server to Satellite within [0;1] using a without reset;
+            Stop() from Satellite to Sensor() within [1;2] using a without reset;
+        }
+    }
+}

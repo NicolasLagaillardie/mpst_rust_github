@@ -97,9 +97,9 @@ type Choose1fromCtoS = SendTimed<Branching1fromCtoS, End, 'a', 0, true, 1, true,
 
 // Creating the MP sessions
 // Step 1_1
-type EndpointC1_1Quit =
+type EndpointC11Quit =
     MeshedChannels<End, SendTimed<(), End, 'a', 0, true, 1, true, false>, RoleS<RoleEnd>, NameC>;
-type EndpointC1_1Pay = MeshedChannels<
+type EndpointC11Pay = MeshedChannels<
     SendTimed<Branching1fromCtoA, End, 'a', 0, true, 1, true, false>,
     SendTimed<
         (String, i32),
@@ -290,7 +290,7 @@ fn recurs_c(
 
     match loops {
         0 => {
-            let s: EndpointC1_1Quit = choose_mpst_c_to_all!(
+            let s: EndpointC11Quit = choose_mpst_c_to_all!(
                 s,
                 all_clocks,
                 Branching1fromCtoA::Quit,
@@ -302,7 +302,7 @@ fn recurs_c(
             s.close()
         }
         i => {
-            let s: EndpointC1_1Pay = choose_mpst_c_to_all!(
+            let s: EndpointC11Pay = choose_mpst_c_to_all!(
                 s,
                 all_clocks,
                 Branching1fromCtoA::Pay,
