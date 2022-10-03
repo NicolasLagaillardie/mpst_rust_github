@@ -184,7 +184,7 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
 ////////////////////////////////////////
 
-pub fn main() {
+fn main() {
     let (thread_c, thread_l, thread_s) = fork_mpst(endpoint_c, endpoint_l, endpoint_s);
 
     assert!(thread_c.join().is_ok());

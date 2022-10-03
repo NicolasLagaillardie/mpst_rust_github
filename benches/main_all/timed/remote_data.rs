@@ -5,6 +5,8 @@
     dead_code
 )]
 
+use criterion::{black_box, Criterion};
+
 use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary::struct_trait::session::Session;
@@ -242,11 +244,17 @@ fn recurs_server(
     }
 }
 
-fn main() {
+fn all_mpst() {
     let (thread_satellite, thread_sensor, thread_server) =
-        fork_mpst(endpoint_satellite, endpoint_sensor, endpoint_server);
+        fork_mpst(black_box(endpoint_satellite), black_box(endpoint_sensor), black_box(endpoint_server));
 
-    println!("thread_satellite: {:?}", thread_satellite.join().is_ok());
-    println!("thread_sensor: {:?}", thread_sensor.join().is_ok());
-    println!("thread_server: {:?}", thread_server.join().is_ok());
+    thread_satellite.join().unwrap();
+    thread_sensor.join().unwrap();
+    thread_server.join().unwrap();
+}
+
+/////////////////////////
+
+pub fn remote_data_main(c: &mut Criterion) {
+    c.bench_function("Timed Remote data", |b| b.iter(all_mpst));
 }

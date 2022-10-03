@@ -1,3 +1,12 @@
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant,
+    dead_code
+)]
+
+use criterion::{black_box, Criterion};
+
 use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
@@ -165,13 +174,13 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     let (_, s) = s.recv(all_clocks)?;
     println!("recv WebFontLoaded on S");
 
-    // Simulate new fonts loaded BEFORE the script thread said the page was loaded
+    // Simulate new fonts loaded AFTER the script thread said the page was loaded
     println!("S: WebFontLoaded = false");
     println!(
         "S: starts redrawing the page at {:?} s",
         all_clocks.get(&'a').unwrap().elapsed().as_secs()
     );
-    // sleep(Duration::from_secs(2));
+    sleep(Duration::from_secs(2));
     println!(
         "S: finishes redrawing the page at {:?} s",
         all_clocks.get(&'a').unwrap().elapsed().as_secs()
@@ -184,10 +193,16 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
 ////////////////////////////////////////
 
-fn main() {
-    let (thread_c, thread_l, thread_s) = fork_mpst(endpoint_c, endpoint_l, endpoint_s);
+fn all_mpst() {
+    let (thread_c, thread_l, thread_s) = fork_mpst(black_box(endpoint_c), black_box(endpoint_l), black_box(endpoint_s));
 
-    assert!(thread_c.join().is_ok());
-    assert!(thread_l.join().is_ok());
-    assert!(thread_s.join().is_ok());
+    thread_c.join().unwrap();
+    thread_l.join().unwrap();
+    thread_s.join().unwrap();
+}
+
+/////////////////////////
+
+pub fn servo_main(c: &mut Criterion) {
+    c.bench_function("Travel Servo", |b| b.iter(all_mpst));
 }

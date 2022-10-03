@@ -136,7 +136,14 @@ required-features = ["baking", "message", "checking"]
 [[bench]]
 name = "main"
 harness = false
+path = "benches/main.rs"
 required-features = ["baking"]
+
+[[bench]]
+name = "main_timed"
+harness = false
+path = "benches/main_timed.rs"
+required-features = ["baking_timed"]
 
 # [[bench]]
 # name = "ping_pong"
