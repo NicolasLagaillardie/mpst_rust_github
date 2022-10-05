@@ -296,6 +296,11 @@ required-features = ["baking_checking"]
 ################################### Timed examples
 
 [[example]]
+name = "servo"
+path = "examples/timed/servo.rs"
+required-features = ["baking_timed"]
+
+[[example]]
 name = "servo_8257_async_failing"
 path = "examples/timed/servo_8257_async_failing.rs"
 required-features = ["baking_timed"]
