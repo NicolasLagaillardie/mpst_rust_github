@@ -134,9 +134,9 @@ required-features = ["baking", "message", "checking"]
 ################################### Benches
 
 [[bench]]
-name = "examples"
+name = "examples_baking"
 harness = false
-path = "benches/examples.rs"
+path = "benches/examples_baking.rs"
 required-features = ["baking"]
 
 [[bench]]
@@ -214,11 +214,6 @@ required-features = ["baking_checking"]
 [[example]]
 name = "dns_imai"
 path = "examples/affine/dns_imai.rs"
-required-features = ["macros_multiple"]
-
-[[example]]
-name = "fib"
-path = "examples/affine/fib.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
@@ -323,11 +318,6 @@ required-features = ["baking_timed"]
 [[example]]
 name = "distributed_calc_timed"
 path = "examples/timed/distributed_calc.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "fib_timed"
-path = "examples/timed/fib.rs"
 required-features = ["baking_timed"]
 
 [[example]]

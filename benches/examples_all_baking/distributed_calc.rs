@@ -63,8 +63,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let s = s.send(thread_rng().gen_range(1..=100) as i32)?;
-    let s = s.send(thread_rng().gen_range(1..=100) as i32)?;
+    let s = s.send(thread_rng().gen_range(1..=100))?;
+    let s = s.send(thread_rng().gen_range(1..=100))?;
 
     let choice: i32 = thread_rng().gen_range(1..=2);
 

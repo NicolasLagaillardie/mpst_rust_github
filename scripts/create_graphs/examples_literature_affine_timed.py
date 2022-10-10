@@ -54,7 +54,10 @@ compilation = {}
 # For each folder in criterion_path
 for d in criterion_directories:
     if d in bench_files:
+        print(d, "is in bench_files")
         bench[translate[d]] = int(test(d))
+    else:
+        print(d, "is not in bench_files")
 
 # Get index of new file
 index = 0
@@ -85,32 +88,62 @@ for d in compile_directories:
                     str(index) + '.csv'
 
                 with open(result_folder / result_file, 'a') as report_file:
+                    report_file.write(compile_file)
+                    report_file.write('; ')
+                    print('Done with compilation time of', d)
+                    report_file.write(str(statistics.mean(temp_check)))
+                    report_file.write('; ')
+                    print('Done with checking time of', d)
+                    report_file.write(str(statistics.mean(temp_build)))
+                    report_file.write('; ')
+                    print('Done with building time of', d)
+                    report_file.write(str(statistics.mean(temp_release)))
+                    report_file.write('; ')
+                    print('Done with building --release time of', d)
+                    report_file.write(str(bench[compile_file]))
+                    report_file.write('; ')
+                    print('Done with benchmarking time of', d)
+                    report_file.write('\n')
 
-                    try:
-                        report_file.write(compile_file)
-                        report_file.write('; ')
-                    except:
-                        print('Issue with compilation time of', d)
-                    try:
-                        report_file.write(str(statistics.mean(temp_check)))
-                        report_file.write('; ')
-                    except:
-                        print('Issue with checking time of', d)
-                    try:
-                        report_file.write(str(statistics.mean(temp_build)))
-                        report_file.write('; ')
-                    except:
-                        print('Issue with building time of', d)
-                    try:
-                        report_file.write(str(statistics.mean(temp_release)))
-                        report_file.write('; ')
-                    except:
-                        print('Issue with building --release time of', d)
-                    try:
-                        report_file.write(str(bench[compile_file]))
-                        report_file.write('; ')
-                    except:
-                        print('Issue with benchmarking time of', d)
+                print(compile_file + " done")
+            except:
+                print('Issue with ', d)
+            break
+        elif compile_file in d and 'timed' in d:
+            try:
+                with open(compile_folder / d, 'r') as f:
+                    lines = [line.rstrip() for line in f]
+                    temp_check = []
+                    temp_build = []
+                    temp_release = []
+                    for line in lines:
+                        if 'check' in line:
+                            temp_check.append(int(line.split('; ')[1]))
+                        elif 'build' in line:
+                            temp_build.append(int(line.split('; ')[1]))
+
+                        elif 'release' in line:
+                            temp_release.append(int(line.split('; ')[1]))
+
+                result_file = 'benchmarks_main_from_literature_' + \
+                    str(index) + '.csv'
+
+                with open(result_folder / result_file, 'a') as report_file:
+                    report_file.write(compile_file)
+                    report_file.write('; ')
+                    print('Done with compilation time of', d)
+                    report_file.write(str(statistics.mean(temp_check)))
+                    report_file.write('; ')
+                    print('Done with checking time of', d)
+                    report_file.write(str(statistics.mean(temp_build)))
+                    report_file.write('; ')
+                    print('Done with building time of', d)
+                    report_file.write(str(statistics.mean(temp_release)))
+                    report_file.write('; ')
+                    print('Done with building --release time of', d)
+                    report_file.write(str(bench[compile_file]))
+                    report_file.write('; ')
+                    print('Done with benchmarking time of', d)
                     report_file.write('\n')
 
                 print(compile_file + " done")
