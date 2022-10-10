@@ -30,7 +30,7 @@ bash ./scripts/create_files/compile_normal.sh servo_8257_async_failing 5 affine_
 ## Run benchmarks
 cargo clean
 
-cargo bench --bench examples --all-features -- --verbose
+cargo bench --bench examples_baking --all-features -- --verbose
 mv -f target/criterion/ save/criterion/examples/
 cargo clean
 

@@ -5,6 +5,8 @@ import statistics
 import os.path
 import matplotlib.pyplot as plt
 from pathlib import Path
+import pandas as pd
+from pandas import Series, DataFrame
 
 # Path for criterion
 criterion_path = './target/criterion'
@@ -29,16 +31,21 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 compile_files = ['three_buyers', 'distributed_calc', 'three_travel',
-                 'simple_voting', 'online_wallet', 'o_auth', 'smtp']
+                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote data', 'servo']
 
 # Expected bench files
 bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wallet baking', 'Simple voting MPST baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking',
-               'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
+               'Timed Remote data', 'Timed Servo', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
 
 # Expected bench files
 translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking':
-             'Timed distributed_calc', 'Timed oAuth MPST baking': 'Timed o_auth', 'Timed Online wallet baking': 'Timed online_wallet', 'Timed Simple voting MPST baking': 'Timed simple_voting', 'Timed SMTP baking': 'Timed smtp', 'Timed Travel MPST baking': 'Timed three_travel', 'Timed Three buyers MPST baking': 'Timed three_buyers'}
+             'Timed distributed_calc', 'Timed Servo': 'servo', 'Timed Remote data': 'remote data', 'Timed oAuth MPST baking': 'Timed o_auth', 'Timed Online wallet baking': 'Timed online_wallet', 'Timed Simple voting MPST baking': 'Timed simple_voting', 'Timed SMTP baking': 'Timed smtp', 'Timed Travel MPST baking': 'Timed three_travel', 'Timed Three buyers MPST baking': 'Timed three_buyers'}
 
+indexing = {'Distributed calculator baking': '0', 'Online wallet baking': '1', 'SMTP baking': '2', 'Simple voting MPST baking': '3', 'Three buyers MPST baking': '4', 'Timed Distributed calculator baking': '0', 'Timed Online wallet baking': '1', 'Timed Remote data': '7',
+            'Timed SMTP baking': '2', 'Timed Servo': '8', 'Timed Simple voting MPST baking': '3', 'Timed Three buyers MPST baking': '4', 'Timed Travel MPST baking': 'Timed 5', 'Timed oAuth MPST baking': '6', 'Travel MPST baking': '5', 'oAuth MPST baking': '6'}
+
+bar_compilation = []
+bar_running = []
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
@@ -153,18 +160,17 @@ for d in compile_directories:
 
 print("Done")
 
-print("Results: ", bench, bench.__len__())
+sorted_translate = dict(sorted(translate.items()))
 
-# running_time_fig = plt.figure()
+running_time_fig = plt.figure()
 
-# running_time = running_time_fig.add_subplot(1, 1, 1)
-# running_time.set_title("Running time", pad=10, fontsize=30)
-# running_time.xaxis.set_major_locator(MaxNLocator(integer=True))
-# running_time.yaxis.set_major_locator(MaxNLocator(integer=True))
-# running_time.set_ylabel('Time (ms)', fontsize=30)
+running_time = running_time_fig.add_subplot(1, 1, 1)
+running_time.set_title("Running time", pad=10, fontsize=30)
+running_time.xaxis.set_major_locator(MaxNLocator(integer=True))
+running_time.yaxis.set_major_locator(MaxNLocator(integer=True))
+running_time.set_ylabel('Time (ms)', fontsize=30)
 
-# running_time.hist()
-
+plt.bar(x, height)
 
 # compilation_time_fig = plt.figure()
 
@@ -175,11 +181,11 @@ print("Results: ", bench, bench.__len__())
 # compilation_time.set_ylabel('Time (ms)', fontsize=30)
 
 
-# # adjust subplot position
-# plt.tight_layout()
+# adjust subplot position
+plt.tight_layout()
 
-# # save the figure
-# # plt.savefig(name_graph)
+# save the figure
+# plt.savefig(name_graph)
 
-# # show the plot
-# plt.show()
+# show the plot
+plt.show()
