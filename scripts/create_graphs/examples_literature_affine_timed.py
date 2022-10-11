@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
 from pandas import Series, DataFrame
+from matplotlib.ticker import MaxNLocator
+import matplotlib.ticker as mticker
 
 # Path for criterion
 criterion_path = './target/criterion'
@@ -31,7 +33,7 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 compile_files = ['three_buyers', 'distributed_calc', 'three_travel',
-                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote data', 'servo']
+                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote_data_timed', 'servo_timed']
 
 # Expected bench files
 bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wallet baking', 'Simple voting MPST baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking',
@@ -39,13 +41,20 @@ bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wal
 
 # Expected bench files
 translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking':
-             'Timed distributed_calc', 'Timed Servo': 'servo', 'Timed Remote data': 'remote data', 'Timed oAuth MPST baking': 'Timed o_auth', 'Timed Online wallet baking': 'Timed online_wallet', 'Timed Simple voting MPST baking': 'Timed simple_voting', 'Timed SMTP baking': 'Timed smtp', 'Timed Travel MPST baking': 'Timed three_travel', 'Timed Three buyers MPST baking': 'Timed three_buyers'}
+             'Timed distributed_calc', 'Timed Servo': 'servo_timed', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'Timed o_auth', 'Timed Online wallet baking': 'Timed online_wallet', 'Timed Simple voting MPST baking': 'Timed simple_voting', 'Timed SMTP baking': 'Timed smtp', 'Timed Travel MPST baking': 'Timed three_travel', 'Timed Three buyers MPST baking': 'Timed three_buyers'}
 
-indexing = {'Distributed calculator baking': '0', 'Online wallet baking': '1', 'SMTP baking': '2', 'Simple voting MPST baking': '3', 'Three buyers MPST baking': '4', 'Timed Distributed calculator baking': '0', 'Timed Online wallet baking': '1', 'Timed Remote data': '7',
-            'Timed SMTP baking': '2', 'Timed Servo': '8', 'Timed Simple voting MPST baking': '3', 'Timed Three buyers MPST baking': '4', 'Timed Travel MPST baking': 'Timed 5', 'Timed oAuth MPST baking': '6', 'Travel MPST baking': '5', 'oAuth MPST baking': '6'}
+# Indexung for bar lists
+index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 7,
+               'Timed SMTP baking': 2, 'Timed Servo': 8, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 'Timed 5', 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
+index_compile = {'distributed_calc': 0, 'online_wallet': 1, 'smtp': 2, 'simple_voting': 3, 'three_buyers': 4, 'distributed_calc_timed': 0, 'online_wallet_timed': 1,
+                 'remote_data_timed': 7, 'smtp_timed': 2, 'servo_timed': 8, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
 
-bar_compilation = []
-bar_running = []
+bar_compilation_baking = [0] * 7
+bar_running_baking = [0] * 7
+
+bar_compilation_timed = [0] * 9
+bar_running_timed = [0] * 9
+
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
@@ -61,7 +70,7 @@ compilation = {}
 # For each folder in criterion_path
 for d in criterion_directories:
     if d in bench_files:
-        print(d, "is in bench_files")
+        # print(d, "is in bench_files")
         bench[translate[d]] = int(test(d))
     else:
         print(d, "is not in bench_files")
@@ -83,36 +92,33 @@ for d in compile_directories:
                     temp_build = []
                     temp_release = []
                     for line in lines:
-                        if 'check' in line:
-                            temp_check.append(int(line.split('; ')[1]))
-                        elif 'build' in line:
+                        if 'build' in line:
                             temp_build.append(int(line.split('; ')[1]))
-
-                        elif 'release' in line:
-                            temp_release.append(int(line.split('; ')[1]))
 
                 result_file = 'benchmarks_main_from_literature_' + \
                     str(index) + '.csv'
 
+                # print("compile_file baking: ", compile_file)
+                # print("index_compile", index_compile[compile_file])
+                bar_compilation_baking[index_compile[compile_file]] = statistics.mean(
+                    temp_build)/1000000
+                # print("done with bar_compilation_baking")
+
                 with open(result_folder / result_file, 'a') as report_file:
                     report_file.write(compile_file)
                     report_file.write('; ')
-                    print('Done with compilation time of', d)
-                    report_file.write(str(statistics.mean(temp_check)))
+                    # print('Done with compilation time of', d)
+                    report_file.write(str(statistics.mean(temp_build)/1000000))
                     report_file.write('; ')
-                    print('Done with checking time of', d)
-                    report_file.write(str(statistics.mean(temp_build)))
+                    # print('Done with building time of', d)
+                    report_file.write(str(bench[compile_file]/1000000))
+                    bar_running_baking[index_compile[compile_file]
+                                       ] = bench[compile_file]/1000000
                     report_file.write('; ')
-                    print('Done with building time of', d)
-                    report_file.write(str(statistics.mean(temp_release)))
-                    report_file.write('; ')
-                    print('Done with building --release time of', d)
-                    report_file.write(str(bench[compile_file]))
-                    report_file.write('; ')
-                    print('Done with benchmarking time of', d)
+                    # print('Done with benchmarking time of', d)
                     report_file.write('\n')
 
-                print(compile_file + " done")
+                # print(compile_file + " done")
             except:
                 print('Issue with ', d)
             break
@@ -124,68 +130,108 @@ for d in compile_directories:
                     temp_build = []
                     temp_release = []
                     for line in lines:
-                        if 'check' in line:
-                            temp_check.append(int(line.split('; ')[1]))
-                        elif 'build' in line:
+                        if 'build' in line:
                             temp_build.append(int(line.split('; ')[1]))
-
-                        elif 'release' in line:
-                            temp_release.append(int(line.split('; ')[1]))
 
                 result_file = 'benchmarks_main_from_literature_' + \
                     str(index) + '.csv'
 
+                # print("compile_file timed: ", compile_file)
+                # print("index_compile", index_compile[compile_file])
+                bar_compilation_timed[index_compile[compile_file]] = statistics.mean(
+                    temp_build)/1000000
+                # print("done with bar_compilation_timed")
+
                 with open(result_folder / result_file, 'a') as report_file:
                     report_file.write(compile_file)
                     report_file.write('; ')
-                    print('Done with compilation time of', d)
-                    report_file.write(str(statistics.mean(temp_check)))
+                    # print('Done with compilation time of', d)
+                    report_file.write(str(statistics.mean(temp_build)/1000000))
                     report_file.write('; ')
-                    print('Done with checking time of', d)
-                    report_file.write(str(statistics.mean(temp_build)))
+                    # print('Done with building time of', d)
+                    report_file.write(str(bench[compile_file]/1000000))
+                    bar_running_timed[index_compile[compile_file]
+                                      ] = bench[compile_file]/1000000
                     report_file.write('; ')
-                    print('Done with building time of', d)
-                    report_file.write(str(statistics.mean(temp_release)))
-                    report_file.write('; ')
-                    print('Done with building --release time of', d)
-                    report_file.write(str(bench[compile_file]))
-                    report_file.write('; ')
-                    print('Done with benchmarking time of', d)
+                    # print('Done with benchmarking time of', d)
                     report_file.write('\n')
 
-                print(compile_file + " done")
+                # print(compile_file + " done")
             except:
                 print('Issue with ', d)
             break
 
-print("Done")
+# print("Done")
 
 sorted_translate = dict(sorted(translate.items()))
 
-running_time_fig = plt.figure()
+# print("bar_compilation_timed", bar_compilation_timed)
+# print("bar_compilation_baking", bar_compilation_baking)
+# print("bar_running_baking", bar_running_baking)
+# print("bar_running_timed", bar_running_timed)
 
-running_time = running_time_fig.add_subplot(1, 1, 1)
+# Setting up the figure
+fig = plt.figure(figsize=(20, 5))
+
+width = 0.3
+
+# Plotting compilation time
+compilation_time = fig.add_subplot(1, 2, 1)
+
+compilation_time.bar(np.arange(len(bar_compilation_baking)) -
+                     width/2, bar_compilation_baking, width=width)
+compilation_time.bar(np.arange(len(bar_compilation_timed)) +
+                     width/2, bar_compilation_timed, width=width)
+
+compilation_time.set_title("Compilation time", pad=10, fontsize=30)
+compilation_time.xaxis.set_major_locator(MaxNLocator(integer=True))
+compilation_time.yaxis.set_major_locator(MaxNLocator(integer=True))
+compilation_time.tick_params(axis='both', which='major', labelsize=20)
+compilation_time.set_ylabel('Time (s)', fontsize=30)
+compilation_time.xaxis.set_ticks([0, 1, 2, 3, 4, 5, 6, 7, 8])
+compilation_time.xaxis.set_ticklabels(
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'])
+
+# Setting the number of ticks
+compilation_time.yaxis.set_ticks(np.arange(0, int(max(
+    max(bar_compilation_timed), max(bar_compilation_baking)))+5, 10), labelsize=20)
+compilation_time.tick_params(labelsize=20)
+
+# Plotting running time
+running_time = fig.add_subplot(1, 2, 2)
+
+running_time.bar(np.arange(len(bar_running_baking)) -
+                 width/2, bar_running_baking, width=width)
+running_time.bar(np.arange(len(bar_running_timed)) +
+                 width/2, bar_running_timed, width=width)
+
 running_time.set_title("Running time", pad=10, fontsize=30)
 running_time.xaxis.set_major_locator(MaxNLocator(integer=True))
 running_time.yaxis.set_major_locator(MaxNLocator(integer=True))
+running_time.tick_params(axis='both', which='major', labelsize=20)
 running_time.set_ylabel('Time (ms)', fontsize=30)
+running_time.xaxis.set_ticks([0, 1, 2, 3, 4, 5, 6, 7, 8])
+running_time.xaxis.set_ticklabels(
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'])
 
-plt.bar(x, height)
-
-# compilation_time_fig = plt.figure()
-
-# compilation_time = compilation_time_fig.add_subplot(1, 1, 1)
-# compilation_time.set_title("Running time", pad=10, fontsize=30)
-# compilation_time.xaxis.set_major_locator(MaxNLocator(integer=True))
-# compilation_time.yaxis.set_major_locator(MaxNLocator(integer=True))
-# compilation_time.set_ylabel('Time (ms)', fontsize=30)
-
+# Setting the number of ticks
+running_time.yaxis.set_ticks(np.arange(0, int(
+    max(max(bar_running_timed), max(bar_running_baking)))+1.5, 0.5), labelsize=20)
+running_time.tick_params(labelsize=20)
 
 # adjust subplot position
 plt.tight_layout()
 
+
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('results/graphs_examples_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './results/graphs_examples_' + str(index_graphs) + '.pdf'
+
 # save the figure
-# plt.savefig(name_graph)
+plt.savefig(name_graph)
 
 # show the plot
 plt.show()

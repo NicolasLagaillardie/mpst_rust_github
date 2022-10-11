@@ -291,7 +291,7 @@ required-features = ["baking_checking"]
 ################################### Timed examples
 
 [[example]]
-name = "servo"
+name = "servo_timed"
 path = "examples/timed/servo.rs"
 required-features = ["baking_timed"]
 
@@ -346,7 +346,7 @@ path = "examples/timed/three_travel.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "remote_data"
+name = "remote_data_timed"
 path = "examples/timed/remote_data.rs"
 required-features = ["baking_timed"]
 

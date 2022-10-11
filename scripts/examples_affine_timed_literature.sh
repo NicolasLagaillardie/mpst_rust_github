@@ -25,7 +25,7 @@ bash ./scripts/create_files/compile_normal.sh smtp_timed 5 affine_timed
 
 ## Compile timed additional examples
 bash ./scripts/create_files/compile_normal.sh remote_data 5 affine_timed
-bash ./scripts/create_files/compile_normal.sh servo_8257_async_failing 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh servo 5 affine_timed
 
 ## Run benchmarks
 cargo clean

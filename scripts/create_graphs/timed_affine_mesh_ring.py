@@ -523,10 +523,10 @@ if len(ring_bench_lists['nb_participants_timed']) > 0:
 
 # create the name for the new figure
 index_graphs = 0
-while os.path.isfile('results/graphs_' + str(index_graphs) + '.pdf'):
+while os.path.isfile('results/graphs_mesh_ring_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
-name_graph = './results/graphs_' + str(index_graphs) + '.pdf'
+name_graph = './results/graphs_mesh_ring_' + str(index_graphs) + '.pdf'
 
 # Put a legend below current axis
 ax_mesh_compile.set_ylabel('Time (s)', fontsize=30)
