@@ -532,7 +532,7 @@ name_graph = './results/graphs_mesh_ring_' + str(index_graphs) + '.pdf'
 ax_mesh_compile.set_ylabel('Time (s)', fontsize=30)
 # ax_mesh_compile.legend(
 #     loc='upper center',
-#     bbox_to_anchor=(0.5, -0.2),
+#     bbox_to_anchor=(0.5, -0.3),
 #     fancybox=True,
 #     shadow=True,
 #     ncol=2,
