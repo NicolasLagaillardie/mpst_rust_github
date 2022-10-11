@@ -12,8 +12,6 @@ use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{distributions::Alphanumeric, random, thread_rng, Rng};
-
 use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;
@@ -99,9 +97,9 @@ type Choose1fromCtoS = SendTimed<Branching1fromCtoS, End, 'a', 0, true, 1, true,
 
 // Creating the MP sessions
 // Step 1_1
-type EndpointC11Quit =
+type EndpointC1Quit =
     MeshedChannels<End, SendTimed<(), End, 'a', 0, true, 1, true, false>, RoleS<RoleEnd>, NameC>;
-type EndpointC11Pay = MeshedChannels<
+type EndpointC1Pay = MeshedChannels<
     SendTimed<Branching1fromCtoA, End, 'a', 0, true, 1, true, false>,
     SendTimed<
         (String, i32),
@@ -237,7 +235,7 @@ fn endpoint_s(
 }
 
 fn recurs_s(s: EndpointS1, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
-    let s = s.send(random(), all_clocks)?;
+    let s = s.send((1, 1), all_clocks)?;
 
     offer_mpst!(s, all_clocks, {
         Branching1fromCtoS::Quit(s) => {
@@ -257,17 +255,8 @@ fn endpoint_c(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let id: String = thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(1)
-        .map(char::from)
-        .collect();
-
-    let pw: String = thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(1)
-        .map(char::from)
-        .collect();
+    let id = String::from("id");
+    let pw = String::from("pw");
 
     let s = s.send((id, pw), all_clocks)?;
 
@@ -292,7 +281,7 @@ fn recurs_c(
 
     match loops {
         0 => {
-            let s: EndpointC11Quit = choose_mpst_c_to_all!(
+            let s: EndpointC1Quit = choose_mpst_c_to_all!(
                 s,
                 all_clocks,
                 Branching1fromCtoA::Quit,
@@ -303,23 +292,21 @@ fn recurs_c(
 
             s.close()
         }
-        i => {
-            let s: EndpointC11Pay = choose_mpst_c_to_all!(
+        _ => {
+            let s: EndpointC1Pay = choose_mpst_c_to_all!(
                 s,
                 all_clocks,
                 Branching1fromCtoA::Pay,
                 Branching1fromCtoS::Pay,
             );
 
-            let payee: String = rand::thread_rng()
-                .sample_iter(&Alphanumeric)
-                .take(3)
-                .map(char::from)
-                .collect();
+            let sum = balance + overdraft;
 
-            let s = s.send((payee, balance + overdraft), all_clocks)?;
+            let payee = String::from("payee");
 
-            recurs_c(s, i - 1, all_clocks)
+            let s = s.send((payee, sum), all_clocks)?;
+
+            recurs_c(s, loops - 1, all_clocks)
         }
     }
 }

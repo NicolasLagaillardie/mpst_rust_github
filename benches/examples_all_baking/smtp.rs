@@ -378,7 +378,6 @@ fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 ///
-
 fn endpoint_s_init(s: EndpointS0) -> Result<(), Box<dyn Error>> {
     endpoint_s_0(s, 100)
 }
@@ -564,19 +563,19 @@ fn endpoint_s_10(s: EndpointS10, loops: i32) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let (_, s) = s.recv()?;
 
-            endpoint_s_10(s, loops -1)
+            endpoint_s_10(s, loops - 1)
         },
         Branching10fromCtoS::Subject(s) => {
             let (_, s) = s.recv()?;
             let (_, s) = s.recv()?;
 
-            endpoint_s_10(s, loops -1)
+            endpoint_s_10(s, loops - 1)
         },
         Branching10fromCtoS::End(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
 
-            endpoint_s_7(s, loops -1)
+            endpoint_s_7(s, loops - 1)
         },
     })
 }

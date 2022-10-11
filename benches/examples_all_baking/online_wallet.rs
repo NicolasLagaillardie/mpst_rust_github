@@ -103,9 +103,9 @@ type EndpointS0 = MeshedChannelsThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
-    let ((_id, _pw), s) = s.recv()?;
+    let ((id, pw), s) = s.recv()?;
 
-    if 0 == 1 {
+    if id != pw {
         // actual condition id != pw
         let s: EndpointA0Fail =
             choose_mpst_a_to_all!(s, Branching0fromAtoC::Fail, Branching0fromAtoS::Fail);

@@ -318,7 +318,7 @@ result_ring_file = 'ring_' + str(index_ring) + '.csv'
 # If they don't exist, skip
 with open(result_folder / result_mesh_file, 'a') as report_file:
     for i, val in enumerate(mesh_bench_lists['nb_participants_baking']):
-        report_file.write('ampst')
+        report_file.write('AMPST')
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
@@ -330,7 +330,7 @@ with open(result_folder / result_mesh_file, 'a') as report_file:
         report_file.write('\n')
     report_file.write('\n')
     for i, val in enumerate(mesh_bench_lists['nb_participants_timed']):
-        report_file.write('aatmpst')
+        report_file.write('ATMP')
         report_file.write('; ')
         report_file.write(str(val))
         report_file.write('; ')
@@ -449,12 +449,12 @@ if len(mesh_compile_lists['nb_participants_baking']) > 0:
         linestyle='solid',
         marker='o'
     )
-# AATMPST
+# ATMP
 if len(mesh_compile_lists['nb_participants_timed']) > 0:
     ax_mesh_compile.plot(
         mesh_compile_lists['nb_participants_timed'],
         mesh_compile_lists['average_timed'],
-        label='AATMPST',
+        label='ATMP',
         linestyle='solid',
         marker='*'
     )
@@ -469,12 +469,12 @@ if len(mesh_bench_lists['nb_participants_baking']) > 0:
         marker='o'
     )
 
-# AATMPST
+# ATMP
 if len(mesh_bench_lists['nb_participants_timed']) > 0:
     ax_mesh_bench.plot(
         mesh_bench_lists['nb_participants_timed'],
         mesh_bench_lists['average_timed'],
-        label='AATMPST',
+        label='ATMP',
         linestyle='solid',
         marker='*'
     )
@@ -490,12 +490,12 @@ if len(ring_compile_lists['nb_participants_baking']) > 0:
         marker='o'
     )
 
-# AATMPST
+# ATMP
 if len(ring_compile_lists['nb_participants_timed']) > 0:
     ax_ring_compile.plot(
         ring_compile_lists['nb_participants_timed'],
         ring_compile_lists['average_timed'],
-        label='AATMPST',
+        label='ATMP',
         linestyle='solid',
         marker='*'
     )
@@ -511,12 +511,12 @@ if len(ring_bench_lists['nb_participants_baking']) > 0:
         marker='o'
     )
 
-# AATMPST
+# ATMP
 if len(ring_bench_lists['nb_participants_timed']) > 0:
     ax_ring_bench.plot(
         ring_bench_lists['nb_participants_timed'],
         ring_bench_lists['average_timed'],
-        label='AATMPST',
+        label='ATMP',
         linestyle='solid',
         marker='*'
     )

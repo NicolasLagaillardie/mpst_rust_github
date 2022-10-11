@@ -9,16 +9,16 @@ criterion_group! {
     config = Criterion::default().significance_level(0.1).sample_size(10000);
     targets =
         ////////// Benchmarks using timed generated methods
-        examples_all_timed::timed::distributed_calc::distributed_calc_main,
-        examples_all_timed::timed::fib::fibo_mpst,
-        examples_all_timed::timed::o_auth::o_auth_main,
-        examples_all_timed::timed::online_wallet::online_wallet_main,
-        examples_all_timed::timed::simple_voting::simple_voting_main,
-        examples_all_timed::timed::smtp::smtp_main,
-        examples_all_timed::timed::three_buyers::three_buyers_main,
-        examples_all_timed::timed::three_travel::travel_main,
-        examples_all_timed::timed::remote_data::remote_data_main,
-        examples_all_timed::timed::servo::servo_main,
+        examples_all_timed::distributed_calc::distributed_calc_main,
+        examples_all_timed::fib::fibo_mpst,
+        examples_all_timed::o_auth::o_auth_main,
+        examples_all_timed::online_wallet::online_wallet_main,
+        examples_all_timed::simple_voting::simple_voting_main,
+        examples_all_timed::smtp::smtp_main,
+        examples_all_timed::three_buyers::three_buyers_main,
+        examples_all_timed::three_travel::travel_main,
+        examples_all_timed::remote_data::remote_data_main,
+        examples_all_timed::servo::servo_main,
 }
 
 criterion_main! {

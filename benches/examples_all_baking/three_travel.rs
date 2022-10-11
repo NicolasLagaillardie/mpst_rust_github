@@ -5,7 +5,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
@@ -93,7 +93,7 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         Branching0fromCtoA::Loop(s) => {
             let (query, s) = s.recv()?;
             let s = s.send(query)?;
-            let s = s.send(random())?;
+            let s = s.send(1)?;
             endpoint_a(s)
         },
     })
@@ -129,7 +129,7 @@ fn endpoint_c(s: EndpointC, loops: i32) -> Result<(), Box<dyn Error>> {
             let s: EndpointCLoop =
                 choose_mpst_c_to_all!(s, Branching0fromCtoA::Loop, Branching0fromCtoS::Loop);
 
-            let s = s.send(random())?;
+            let s = s.send(1)?;
             let (_quote, s) = s.recv()?;
             endpoint_c(s, loops - 1)
         }
@@ -143,8 +143,8 @@ fn choice_c(s: ChoiceC) -> Result<(), Box<dyn Error>> {
         let s: ChoiceCYes =
             choose_mpst_c_to_all!(s, Branching1fromCtoA::Yes, Branching1fromCtoS::Yes);
 
-        let s = s.send(random())?;
-        let s = s.send(random())?;
+        let s = s.send(1)?;
+        let s = s.send(1)?;
         let (_ack, s) = s.recv()?;
         s.close()
     } else {

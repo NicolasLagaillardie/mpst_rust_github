@@ -695,19 +695,19 @@ fn endpoint_s_10(s: EndpointS10, loops: i32) -> Result<(), Box<dyn Error>> {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_10(s, loops -1)
+            endpoint_s_10(s, loops - 1)
         },
         Branching10fromCtoS::Subject(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let (_, s) = recv_mpst_s_from_c(s)?;
 
-            endpoint_s_10(s, loops -1)
+            endpoint_s_10(s, loops - 1)
         },
         Branching10fromCtoS::End(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
             let s = send_mpst_s_to_c((), s);
 
-            endpoint_s_7(s, loops -1)
+            endpoint_s_7(s, loops - 1)
         },
     })
 }

@@ -301,7 +301,7 @@ fn recurs_c(
 
             s.close()
         }
-        i => {
+        _ => {
             let s: EndpointC11Pay = choose_mpst_c_to_all!(
                 s,
                 all_clocks,
@@ -317,7 +317,7 @@ fn recurs_c(
 
             let s = s.send((payee, balance + overdraft), all_clocks)?;
 
-            recurs_c(s, i - 1, all_clocks)
+            recurs_c(s, loops - 1, all_clocks)
         }
     }
 }

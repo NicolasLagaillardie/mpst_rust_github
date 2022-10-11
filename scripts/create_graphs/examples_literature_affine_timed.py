@@ -33,19 +33,19 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 compile_files = ['three_buyers', 'distributed_calc', 'three_travel',
-                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote_data_timed', 'servo_timed']
+                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote_data', 'servo']
 
 # Expected bench files
 bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wallet baking', 'Simple voting MPST baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking',
                'Timed Remote data', 'Timed Servo', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
 
 # Expected bench files
-translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking':
-             'Timed distributed_calc', 'Timed Servo': 'servo_timed', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'Timed o_auth', 'Timed Online wallet baking': 'Timed online_wallet', 'Timed Simple voting MPST baking': 'Timed simple_voting', 'Timed SMTP baking': 'Timed smtp', 'Timed Travel MPST baking': 'Timed three_travel', 'Timed Three buyers MPST baking': 'Timed three_buyers'}
+translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking': 'distributed_calc_timed',
+             'Timed Servo': 'servo_timed', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'o_auth_timed', 'Timed Online wallet baking': 'online_wallet_timed', 'Timed Simple voting MPST baking': 'simple_voting_timed', 'Timed SMTP baking': 'smtp_timed', 'Timed Travel MPST baking': 'three_travel_timed', 'Timed Three buyers MPST baking': 'three_buyers_timed'}
 
 # Indexung for bar lists
 index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 7,
-               'Timed SMTP baking': 2, 'Timed Servo': 8, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 'Timed 5', 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
+               'Timed SMTP baking': 2, 'Timed Servo': 8, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 5, 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
 index_compile = {'distributed_calc': 0, 'online_wallet': 1, 'smtp': 2, 'simple_voting': 3, 'three_buyers': 4, 'distributed_calc_timed': 0, 'online_wallet_timed': 1,
                  'remote_data_timed': 7, 'smtp_timed': 2, 'servo_timed': 8, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
 
@@ -98,8 +98,8 @@ for d in compile_directories:
                 result_file = 'benchmarks_main_from_literature_' + \
                     str(index) + '.csv'
 
-                # print("compile_file baking: ", compile_file)
-                # print("index_compile", index_compile[compile_file])
+                print("compile_file baking: ", compile_file)
+                print("index_compile", index_compile[compile_file])
                 bar_compilation_baking[index_compile[compile_file]] = statistics.mean(
                     temp_build)/1000000
                 # print("done with bar_compilation_baking")
@@ -136,22 +136,22 @@ for d in compile_directories:
                 result_file = 'benchmarks_main_from_literature_' + \
                     str(index) + '.csv'
 
-                # print("compile_file timed: ", compile_file)
-                # print("index_compile", index_compile[compile_file])
-                bar_compilation_timed[index_compile[compile_file]] = statistics.mean(
+                print("compile_file timed: ", compile_file + '_timed')
+                print("index_compile", index_compile[compile_file + '_timed'])
+                bar_compilation_timed[index_compile[compile_file + '_timed']] = statistics.mean(
                     temp_build)/1000000
                 # print("done with bar_compilation_timed")
 
                 with open(result_folder / result_file, 'a') as report_file:
-                    report_file.write(compile_file)
+                    report_file.write(compile_file + '_timed')
                     report_file.write('; ')
                     # print('Done with compilation time of', d)
                     report_file.write(str(statistics.mean(temp_build)/1000000))
                     report_file.write('; ')
                     # print('Done with building time of', d)
-                    report_file.write(str(bench[compile_file]/1000000))
-                    bar_running_timed[index_compile[compile_file]
-                                      ] = bench[compile_file]/1000000
+                    report_file.write(str(bench[compile_file + '_timed']/1000000))
+                    bar_running_timed[index_compile[compile_file + '_timed']
+                                      ] = bench[compile_file + '_timed']/1000000
                     report_file.write('; ')
                     # print('Done with benchmarking time of', d)
                     report_file.write('\n')
@@ -165,10 +165,11 @@ for d in compile_directories:
 
 sorted_translate = dict(sorted(translate.items()))
 
-# print("bar_compilation_timed", bar_compilation_timed)
-# print("bar_compilation_baking", bar_compilation_baking)
-# print("bar_running_baking", bar_running_baking)
-# print("bar_running_timed", bar_running_timed)
+print("bar_compilation_timed", bar_compilation_timed)
+print("bar_compilation_baking", bar_compilation_baking)
+print("bar_running_baking", bar_running_baking)
+print("bar_running_timed", bar_running_timed)
+print("benches", bench)
 
 # Setting up the figure
 fig = plt.figure(figsize=(20, 5))

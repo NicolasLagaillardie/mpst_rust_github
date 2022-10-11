@@ -13,8 +13,6 @@ use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{thread_rng, Rng};
-
 use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;
@@ -380,253 +378,280 @@ type Offer10fromCtoS = <Choose10fromCtoS as Session>::Dual;
 type EndpointS10 = MeshedChannels<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Functions
+fn endpoint_c_init(
+    s: EndpointC0,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    endpoint_c_0(s, 100, all_clocks)
+}
+
 fn endpoint_c_0(
     s: EndpointC0,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
     let (_, s) = s.recv(all_clocks)?;
 
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Quit);
 
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
+            s.close()
+        }
+        _ => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Continue);
 
-        endpoint_c_1(s, all_clocks)
-    } else {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Quit);
+            let s = s.send((), all_clocks)?;
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        s.close()
+            endpoint_c_1(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_c_1(
     s: EndpointC1,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
         Branching1fromStoC::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_2(s, all_clocks)
+            endpoint_c_2(s, loops, all_clocks)
         },
         Branching1fromStoC::Loop(s) => {
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_1(s, all_clocks)
+            endpoint_c_1(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_c_2(
     s: EndpointC2,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching2fromCtoS::Quit);
 
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching2fromCtoS::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-        let (_, s) = s.recv(all_clocks)?;
+            s.close()
+        }
+        _ => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching2fromCtoS::Continue);
 
-        endpoint_c_3(s, all_clocks)
-    } else {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching2fromCtoS::Quit);
+            let s = s.send((), all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        s.close()
+            endpoint_c_3(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_c_3(
     s: EndpointC3,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching3fromCtoS::Quit);
+            let s = s.send((), all_clocks)?;
+            s.close()
+        }
+        _ => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching3fromCtoS::Continue);
 
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching3fromCtoS::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        endpoint_c_4(s, all_clocks)
-    } else {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching3fromCtoS::Quit);
-
-        let s = s.send((), all_clocks)?;
-
-        s.close()
+            endpoint_c_4(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_c_4(
     s: EndpointC4,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
         Branching4fromStoC::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_5(s, all_clocks)
+            endpoint_c_5(s, loops, all_clocks)
         },
         Branching4fromStoC::Loop(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_4(s, all_clocks)
+            endpoint_c_4(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_c_5(
     s: EndpointC5,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching5fromCtoS::Quit);
 
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching5fromCtoS::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
+            s.close()
+        }
+        _ => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching5fromCtoS::Continue);
 
-        endpoint_c_6(s, all_clocks)
-    } else {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching5fromCtoS::Quit);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        s.close()
+            endpoint_c_6(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_c_6(
     s: EndpointC6,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
         Branching6fromStoC::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_7(s, all_clocks)
+            endpoint_c_7(s, loops, all_clocks)
         },
         Branching6fromStoC::Loop(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_6(s, all_clocks)
+            endpoint_c_6(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_c_7(
     s: EndpointC7,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching7fromCtoS::Quit);
 
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching7fromCtoS::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
+            s.close()
+        }
+        _ => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching7fromCtoS::Continue);
 
-        endpoint_c_8(s, all_clocks)
-    } else {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching7fromCtoS::Quit);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        s.close()
+            endpoint_c_8(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_c_8(
     s: EndpointC8,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
         Branching8fromStoC::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_9(s, all_clocks)
+            endpoint_c_9(s, loops, all_clocks)
         },
         Branching8fromStoC::Loop(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_c_7(s, all_clocks)
+            endpoint_c_7(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_c_9(
     s: EndpointC9,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching9fromCtoS::Loop);
 
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching9fromCtoS::Continue);
+            let s = s.send((), all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-        let (_, s) = s.recv(all_clocks)?;
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
+            endpoint_c_9(s, loops, all_clocks)
+        }
+        _ => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branching9fromCtoS::Continue);
 
-        endpoint_c_10(s, all_clocks)
-    } else {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching9fromCtoS::Loop);
+            let s = s.send((), all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
+            let s = s.send((), all_clocks)?;
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-        let (_, s) = s.recv(all_clocks)?;
-
-        endpoint_c_9(s, all_clocks)
+            endpoint_c_10(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_c_10(
     s: EndpointC10,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=3);
-
-    if expected == 1 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::Data);
-
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
-
-        endpoint_c_10(s, all_clocks)
-    } else if expected == 2 {
-        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::Subject);
-
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
-
-        endpoint_c_10(s, all_clocks)
-    } else {
+    if loops == 0 {
         let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::End);
 
         let s = s.send((), all_clocks)?;
         let (_, s) = s.recv(all_clocks)?;
 
-        endpoint_c_7(s, all_clocks)
+        endpoint_c_7(s, loops, all_clocks)
+    } else if loops % 2 == 1 {
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::Subject);
+
+        let s = s.send((), all_clocks)?;
+        let s = s.send((), all_clocks)?;
+
+        endpoint_c_10(s, loops - 1, all_clocks)
+    } else {
+        let s = choose_mpst_c_to_all!(s, all_clocks, Branching10fromCtoS::Data);
+
+        let s = s.send((), all_clocks)?;
+        let s = s.send((), all_clocks)?;
+
+        endpoint_c_10(s, loops - 1, all_clocks)
     }
 }
 
 ///
-
-fn endpoint_s_0(
+fn endpoint_s_init(
     s: EndpointS0,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
+    endpoint_s_0(s, 100, all_clocks)
+}
+
+fn endpoint_s_0(
+    s: EndpointS0,
+    loops: i32,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
     let s = s.send((), all_clocks)?;
 
     offer_mpst!(s, all_clocks, {
@@ -639,35 +664,38 @@ fn endpoint_s_0(
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_1(s, all_clocks)
+            endpoint_s_1(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_s_1(
     s: EndpointS1,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Loop);
 
-    if expected == 1 {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Continue);
+            let s = s.send((), all_clocks)?;
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
+            endpoint_s_1(s, loops, all_clocks)
+        }
+        _ => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Continue);
 
-        endpoint_s_2(s, all_clocks)
-    } else {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Loop);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
-
-        endpoint_s_1(s, all_clocks)
+            endpoint_s_2(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_s_2(
     s: EndpointS2,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
@@ -680,13 +708,14 @@ fn endpoint_s_2(
             let (_, s) = s.recv(all_clocks)?;
             let s = s.send((), all_clocks)?;
 
-            endpoint_s_3(s, all_clocks)
+            endpoint_s_3(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_s_3(
     s: EndpointS3,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
@@ -698,34 +727,37 @@ fn endpoint_s_3(
         Branching3fromCtoS::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_4(s, all_clocks)
+            endpoint_s_4(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_s_4(
     s: EndpointS4,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching4fromStoC::Loop);
 
-    if expected == 1 {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching4fromStoC::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
+            endpoint_s_4(s, loops, all_clocks)
+        }
+        _ => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching4fromStoC::Continue);
 
-        endpoint_s_5(s, all_clocks)
-    } else {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching4fromStoC::Loop);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        endpoint_s_4(s, all_clocks)
+            endpoint_s_5(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_s_5(
     s: EndpointS5,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
@@ -737,34 +769,35 @@ fn endpoint_s_5(
         Branching5fromCtoS::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_6(s, all_clocks)
+            endpoint_s_6(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_s_6(
     s: EndpointS6,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching6fromStoC::Loop);
+            let s = s.send((), all_clocks)?;
+            endpoint_s_6(s, loops, all_clocks)
+        }
+        _ => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching6fromStoC::Continue);
 
-    if expected == 1 {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching6fromStoC::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        endpoint_s_7(s, all_clocks)
-    } else {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching6fromStoC::Loop);
-
-        let s = s.send((), all_clocks)?;
-
-        endpoint_s_6(s, all_clocks)
+            endpoint_s_7(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_s_7(
     s: EndpointS7,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
@@ -776,34 +809,35 @@ fn endpoint_s_7(
         Branching7fromCtoS::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_8(s, all_clocks)
+            endpoint_s_8(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_s_8(
     s: EndpointS8,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    let expected: i32 = thread_rng().gen_range(1..=2);
+    match loops {
+        0 => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching8fromStoC::Loop);
+            let s = s.send((), all_clocks)?;
+            endpoint_s_7(s, loops, all_clocks)
+        }
+        _ => {
+            let s = choose_mpst_s_to_all!(s, all_clocks, Branching8fromStoC::Continue);
 
-    if expected == 1 {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching8fromStoC::Continue);
+            let s = s.send((), all_clocks)?;
 
-        let s = s.send((), all_clocks)?;
-
-        endpoint_s_9(s, all_clocks)
-    } else {
-        let s = choose_mpst_s_to_all!(s, all_clocks, Branching8fromStoC::Loop);
-
-        let s = s.send((), all_clocks)?;
-
-        endpoint_s_7(s, all_clocks)
+            endpoint_s_9(s, loops, all_clocks)
+        }
     }
 }
 
 fn endpoint_s_9(
     s: EndpointS9,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
@@ -811,7 +845,7 @@ fn endpoint_s_9(
             let (_, s) = s.recv(all_clocks)?;
             let s = s.send((), all_clocks)?;
 
-            endpoint_s_9(s, all_clocks)
+            endpoint_s_9(s, loops, all_clocks)
         },
         Branching9fromCtoS::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
@@ -819,13 +853,14 @@ fn endpoint_s_9(
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_10(s, all_clocks)
+            endpoint_s_10(s, loops, all_clocks)
         },
     })
 }
 
 fn endpoint_s_10(
     s: EndpointS10,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
@@ -833,19 +868,19 @@ fn endpoint_s_10(
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_10(s, all_clocks)
+            endpoint_s_10(s, loops - 1, all_clocks)
         },
         Branching10fromCtoS::Subject(s) => {
             let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            endpoint_s_10(s, all_clocks)
+            endpoint_s_10(s, loops - 1, all_clocks)
         },
         Branching10fromCtoS::End(s) => {
             let (_, s) = s.recv(all_clocks)?;
             let s = s.send((), all_clocks)?;
 
-            endpoint_s_7(s, all_clocks)
+            endpoint_s_7(s, loops - 1, all_clocks)
         },
     })
 }
@@ -853,7 +888,7 @@ fn endpoint_s_10(
 ///
 
 fn all_mpst() {
-    let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_0), black_box(endpoint_s_0));
+    let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_init), black_box(endpoint_s_init));
 
     thread_c.join().unwrap();
     thread_s.join().unwrap();
