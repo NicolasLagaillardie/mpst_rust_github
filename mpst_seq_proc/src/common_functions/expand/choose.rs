@@ -445,9 +445,9 @@ pub(crate) fn choose(
         })
         .collect();
 
-    let new_stack_sender = Ident::new(&format!("stack_{}", number_roles), Span::call_site());
+    let new_stack_sender = Ident::new(&format!("stack_{number_roles}"), Span::call_site());
 
-    let new_name_sender = Ident::new(&format!("name_{}", number_roles), Span::call_site());
+    let new_name_sender = Ident::new(&format!("name_{number_roles}"), Span::call_site());
 
     quote! {
         impl<
@@ -1073,9 +1073,9 @@ pub(crate) fn choose_timed(
         })
         .collect();
 
-    let new_stack_sender = Ident::new(&format!("stack_{}", number_roles), Span::call_site());
+    let new_stack_sender = Ident::new(&format!("stack_{number_roles}"), Span::call_site());
 
-    let new_name_sender = Ident::new(&format!("name_{}", number_roles), Span::call_site());
+    let new_name_sender = Ident::new(&format!("name_{number_roles}"), Span::call_site());
 
     quote! {
         impl<

@@ -271,8 +271,8 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
 
     // Run KMC tool, the outputs files of the tool are in the "outputs" folder
     let kmc = Command::new("KMC")
-        .arg(format!("cfsm/{}.txt", name_file))
-        .arg(format!("{:?}", kmc_number))
+        .arg(format!("cfsm/{name_file}.txt"))
+        .arg(format!("{kmc_number:?}"))
         .arg("--fsm")
         .output()?;
 
@@ -283,7 +283,7 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
     } else {
         // Write down the stdout of the previous command into
         // a corresponding file in the "outputs" folder
-        let mut kmc_file = File::create(format!("outputs/{}_{}_kmc.txt", name_file, kmc_number))?;
+        let mut kmc_file = File::create(format!("outputs/{name_file}_{kmc_number}_kmc.txt"))?;
         writeln!(kmc_file, "{}", stdout)?;
         Ok((true, stdout))
     }
@@ -341,7 +341,7 @@ pub fn checker(
         create_dir_all("cfsm")?;
 
         // Create the file
-        let mut cfsm_file = File::create(format!("cfsm/{}.txt", name_file))?;
+        let mut cfsm_file = File::create(format!("cfsm/{name_file}.txt"))?;
 
         let mut cfsm_sort = vec![vec!["".to_string()]; roles.len()];
 
@@ -368,7 +368,7 @@ pub fn checker(
         // Write the cfsm into the file
         for elt_cfsm in cfsm_sort.iter() {
             for elt in elt_cfsm.iter() {
-                writeln!(cfsm_file, "{}", elt)?;
+                writeln!(cfsm_file, "{elt}")?;
             }
 
             // Add a blank line

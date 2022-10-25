@@ -113,9 +113,9 @@ impl ChooseMultiToAll {
                         let temp_ident = Ident::new(&format!("session{j}"), Span::call_site());
 
                         let temp_channel = if j < temp {
-                            Ident::new(&format!("channel_{}_{}", temp, j), Span::call_site())
+                            Ident::new(&format!("channel_{temp}_{j}"), Span::call_site())
                         } else {
-                            Ident::new(&format!("channel_{}_{}", temp, j + 1), Span::call_site())
+                            Ident::new(&format!("channel_{temp}_{}", j + 1), Span::call_site())
                         };
 
                         quote! {
@@ -159,7 +159,7 @@ impl ChooseMultiToAll {
                 let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 let temp_channel = if i < self.exclusion {
                     Ident::new(
-                        &format!("channel_{}_{}", self.exclusion, i),
+                        &format!("channel_{}_{i}", self.exclusion),
                         Span::call_site(),
                     )
                 } else {

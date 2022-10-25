@@ -160,16 +160,16 @@ pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
             result.push(temp.to_string());
             temp = "".to_string();
         } else if i == '<' && index >= 0 {
-            temp = format!("{}{}", temp, i);
+            temp = format!("{temp}{i}");
             index += 1;
         } else if i == '>' && index >= 0 {
-            temp = format!("{}{}", temp, i);
+            temp = format!("{temp}{i}");
             index -= 1;
         } else if i == ',' && index == 0 {
             result.push(temp);
             temp = "".to_string();
         } else if index >= 0 {
-            temp = format!("{}{}", temp, i);
+            temp = format!("{temp}{i}");
         } else if i == '<' {
             index += 1;
         } else if i == '>' {
@@ -217,7 +217,7 @@ pub(crate) fn extract_index_node(
         index_node[..depth_level]
             .iter()
             .copied()
-            .map(|i| format!("{}.", i))
+            .map(|i| format!("{i}."))
             .collect::<String>(),
         index_node[depth_level]
     ))
@@ -478,7 +478,7 @@ pub(crate) fn aux_get_graph(
                 g.add_edge(
                     previous_node,
                     new_node,
-                    format!("{}!{}: {}", current_role, head_stack, &running_session[1]),
+                    format!("{current_role}!{head_stack}: {}", &running_session[1]),
                 );
 
                 cfsm.push((
@@ -599,7 +599,7 @@ pub(crate) fn aux_get_graph(
                     g.add_edge(
                         previous_node,
                         new_node,
-                        format!("{}?{}: {}", current_role, head_stack, &running_session[1]),
+                        format!("{current_role}?{head_stack}: {}", &running_session[1]),
                     );
 
                     cfsm.push((
@@ -668,7 +668,7 @@ pub(crate) fn aux_get_graph(
                         // Update all_choices
                         if let Some(choice) = branches_receivers.get(payload) {
                             for branch in choice.keys() {
-                                all_branches.push(format!("{}::{}", payload, branch));
+                                all_branches.push(format!("{payload}::{branch}"));
                             }
                         } else {
                             panic!("Missing the enum {:?} in branches_receivers", payload)
@@ -830,13 +830,13 @@ pub(crate) fn get_graph_session(
     // Format the tuples into strings and add them to cfsm_result
     let mut clean_cfsm = cfsm
         .iter()
-        .map(|(s, i)| format!("{}{}", s, i))
+        .map(|(s, i)| format!("{s}{i}"))
         .collect::<Vec<String>>();
 
     cfsm_result.append(&mut clean_cfsm);
 
     // The missing strings for ending cfsm
-    cfsm_result.push(format!(".marking {}0", current_role));
+    cfsm_result.push(format!(".marking {current_role}0"));
     cfsm_result.push(".end".to_string());
 
     Ok((result, cfsm_result))
