@@ -230,10 +230,7 @@ impl ChooseTypeMultiToAllBundle {
                                 let temp_ident =
                                     Ident::new(&format!("session{k}"), Span::call_site());
                                 let temp_channel = if k < temp {
-                                    Ident::new(
-                                        &format!("channel_{temp}_{k}"),
-                                        Span::call_site(),
-                                    )
+                                    Ident::new(&format!("channel_{temp}_{k}"), Span::call_site())
                                 } else {
                                     Ident::new(
                                         &format!("channel_{temp}_{}", k + 1),

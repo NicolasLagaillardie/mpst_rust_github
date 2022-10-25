@@ -262,14 +262,10 @@ impl ChooseTypeMultiLeft {
                         let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
 
                         let temp_channel = match line {
-                            m if m == i => Ident::new(
-                                &format!("channel_{line}_{column}"),
-                                Span::call_site(),
-                            ),
-                            _ => Ident::new(
-                                &format!("channel_{column}_{line}"),
-                                Span::call_site(),
-                            ),
+                            m if m == i => {
+                                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
+                            }
+                            _ => Ident::new(&format!("channel_{column}_{line}"), Span::call_site()),
                         };
 
                         quote! {
