@@ -23,7 +23,7 @@ pub(crate) fn choose(
     };
 
     let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Role{}toAll", elt), Span::call_site())
+        Ident::new(&format!("Role{elt}toAll"), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_stack in expand_choose")
     };
@@ -325,7 +325,7 @@ pub(crate) fn choose(
                                 )
                             } else {
                                 Ident::new(
-                                    &format!("channel_{}_{}", j, k + 1),
+                                    &format!("channel_{j}_{}", k + 1),
                                     Span::call_site(),
                                 )
                             };
@@ -585,7 +585,7 @@ pub(crate) fn choose_mpst_create_multi_to_all(
                 all_roles.get(usize::try_from(sender - 1).unwrap())
             {
                 Ident::new(
-                    &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
+                    &format!("choose_mpst_{elt}_to_all").to_lowercase(),
                     Span::call_site(),
                 )
             } else {
@@ -635,7 +635,7 @@ pub(crate) fn choose_timed(
     };
 
     let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Role{}toAll", elt), Span::call_site())
+        Ident::new(&format!("Role{elt}toAll"), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_stack in expand_choose")
     };
@@ -951,7 +951,7 @@ pub(crate) fn choose_timed(
                                 )
                             } else {
                                 Ident::new(
-                                    &format!("channel_{}_{}", j, k + 1),
+                                    &format!("channel_{j}_{}", k + 1),
                                     Span::call_site(),
                                 )
                             };
@@ -1234,7 +1234,7 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                 all_roles.get(usize::try_from(sender - 1).unwrap())
             {
                 Ident::new(
-                    &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
+                    &format!("choose_mpst_{elt}_to_all").to_lowercase(),
                     Span::call_site(),
                 )
             } else {
