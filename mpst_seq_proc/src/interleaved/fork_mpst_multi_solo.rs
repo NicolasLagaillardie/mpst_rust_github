@@ -158,9 +158,9 @@ impl ForkMPSTMultiSolo {
                 let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 let (line, column, _) = get_tuple_diag(&diag_w_offset, i);
                 let temp_channel_left =
-                    Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                    Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
                 let temp_channel_right =
-                    Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
+                    Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
                 quote! {
                     let ( #temp_channel_left , #temp_channel_right ) =
                         < #temp_ident as mpstthree::binary::struct_trait::session::Session>::new();
@@ -176,11 +176,11 @@ impl ForkMPSTMultiSolo {
                         let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                         let temp_channel = match line {
                             m if m == i => Ident::new(
-                                &format!("channel_{}_{}", line, column),
+                                &format!("channel_{line}_{column}"),
                                 Span::call_site(),
                             ),
                             _ => Ident::new(
-                                &format!("channel_{}_{}", column, line),
+                                &format!("channel_{column}_{line}"),
                                 Span::call_site(),
                             ),
                         };

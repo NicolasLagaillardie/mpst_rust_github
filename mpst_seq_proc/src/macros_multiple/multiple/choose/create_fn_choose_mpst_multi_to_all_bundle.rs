@@ -145,9 +145,9 @@ impl ChooseTypeMultiToAllBundle {
                     .map(|j| {
                         let (line, column, _) = get_tuple_diag(&diag, j);
                         let channel_left =
-                            Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                            Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
                         let channel_right =
-                            Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
+                            Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
                         quote! {
                             let ( #channel_left , #channel_right ) =
                                 <_ as mpstthree::binary::struct_trait::session::Session>::new();
@@ -186,7 +186,7 @@ impl ChooseTypeMultiToAllBundle {
                         let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                         let temp_channel = if j < self.exclusion {
                             Ident::new(
-                                &format!("channel_{}_{}", self.exclusion, j),
+                                &format!("channel_{}_{j}", self.exclusion),
                                 Span::call_site(),
                             )
                         } else {
@@ -231,12 +231,12 @@ impl ChooseTypeMultiToAllBundle {
                                     Ident::new(&format!("session{k}"), Span::call_site());
                                 let temp_channel = if k < temp {
                                     Ident::new(
-                                        &format!("channel_{}_{}", temp, k),
+                                        &format!("channel_{temp}_{k}"),
                                         Span::call_site(),
                                     )
                                 } else {
                                     Ident::new(
-                                        &format!("channel_{}_{}", temp, k + 1),
+                                        &format!("channel_{temp}_{}", k + 1),
                                         Span::call_site(),
                                     )
                                 };

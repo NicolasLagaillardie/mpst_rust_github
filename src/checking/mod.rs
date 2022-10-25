@@ -284,7 +284,7 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
         // Write down the stdout of the previous command into
         // a corresponding file in the "outputs" folder
         let mut kmc_file = File::create(format!("outputs/{name_file}_{kmc_number}_kmc.txt"))?;
-        writeln!(kmc_file, "{}", stdout)?;
+        writeln!(kmc_file, "{stdout}")?;
         Ok((true, stdout))
     }
 }

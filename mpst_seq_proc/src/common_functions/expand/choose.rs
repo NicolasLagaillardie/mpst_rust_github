@@ -223,15 +223,15 @@ pub(crate) fn choose(
             let (line, column) = get_line_column_from_diag(&diag, j);
 
             let first_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
             let second_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
             let temp_session = Ident::new(&format!("S{j}"), Span::call_site());
@@ -247,15 +247,15 @@ pub(crate) fn choose(
             let diff = number_roles - 1;
 
             let first_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
             let second_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
             let temp_session = Ident::new(
@@ -320,7 +320,7 @@ pub(crate) fn choose(
                             );
                             let new_channel_receiver = if j > k {
                                 Ident::new(
-                                    &format!("channel_{}_{}", j, k),
+                                    &format!("channel_{j}_{k}"),
                                     Span::call_site(),
                                 )
                             } else {
@@ -432,7 +432,7 @@ pub(crate) fn choose(
                 };
 
                 let new_channel_sender =
-                    Ident::new(&format!("channel_{}_{}", sender, j), Span::call_site());
+                    Ident::new(&format!("channel_{sender}_{j}"), Span::call_site());
 
                 quote! {
                     #new_choice_sender : #new_channel_sender,
@@ -844,15 +844,15 @@ pub(crate) fn choose_timed(
             let (line, column) = get_line_column_from_diag(&diag, j);
 
             let first_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
             let second_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
             let temp_session = Ident::new(&format!("S{j}"), Span::call_site());
@@ -870,15 +870,15 @@ pub(crate) fn choose_timed(
             let diff = number_roles - 1;
 
             let first_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
             let second_channel = if sender != line {
-                Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             } else {
-                Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
+                Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
             let temp_session = Ident::new(
@@ -946,7 +946,7 @@ pub(crate) fn choose_timed(
                             );
                             let new_channel_receiver = if j > k {
                                 Ident::new(
-                                    &format!("channel_{}_{}", j, k),
+                                    &format!("channel_{j}_{k}"),
                                     Span::call_site(),
                                 )
                             } else {
@@ -1060,7 +1060,7 @@ pub(crate) fn choose_timed(
                 };
 
                 let new_channel_sender =
-                    Ident::new(&format!("channel_{}_{}", sender, j), Span::call_site());
+                    Ident::new(&format!("channel_{sender}_{j}"), Span::call_site());
 
                 quote! {
                     #new_choice_sender : #new_channel_sender,

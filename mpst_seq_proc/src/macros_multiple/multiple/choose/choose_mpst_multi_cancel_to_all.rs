@@ -93,9 +93,9 @@ impl ChooseTypeMultiCancelToAll {
             .map(|i| {
                 let (line, column, _) = get_tuple_diag(&diag, i);
                 let channel_left =
-                    Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                    Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
                 let channel_right =
-                    Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
+                    Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
                 if i < self.n_sessions {
                     quote! {
                         let ( #channel_left , #channel_right ) =

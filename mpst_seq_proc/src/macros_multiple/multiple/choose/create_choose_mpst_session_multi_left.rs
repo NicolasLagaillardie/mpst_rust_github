@@ -223,9 +223,9 @@ impl ChooseTypeMultiLeft {
             .map(|i| {
                 let (line, column, _) = get_tuple_diag(&diag, i);
                 let channel_left =
-                    Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                    Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
                 let channel_right =
-                    Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
+                    Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
                 let temp_session = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     let ( #channel_left , #channel_right ) = < #temp_session as mpstthree::binary::struct_trait::session::Session >::new();
@@ -263,11 +263,11 @@ impl ChooseTypeMultiLeft {
 
                         let temp_channel = match line {
                             m if m == i => Ident::new(
-                                &format!("channel_{}_{}", line, column),
+                                &format!("channel_{line}_{column}"),
                                 Span::call_site(),
                             ),
                             _ => Ident::new(
-                                &format!("channel_{}_{}", column, line),
+                                &format!("channel_{column}_{line}"),
                                 Span::call_site(),
                             ),
                         };
@@ -326,9 +326,9 @@ impl ChooseTypeMultiLeft {
                 let (line, column, _) = get_tuple_matrix(&matrix, self.n_sessions, i);
                 let temp_channel = match line {
                     m if m == i => {
-                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
+                        Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
                     }
-                    _ => Ident::new(&format!("channel_{}_{}", line, column), Span::call_site()),
+                    _ => Ident::new(&format!("channel_{line}_{column}"), Span::call_site()),
                 };
                 let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {

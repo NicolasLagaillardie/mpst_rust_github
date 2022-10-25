@@ -157,11 +157,11 @@ impl ChooseTypeCancelMultiToAllBundle {
                     .map(|j| {
                         let (line, column, _) = get_tuple_diag(&diag, j);
                         let channel_left = Ident::new(
-                            &format!("channel_{}_{}", line, column),
+                            &format!("channel_{line}_{column}"),
                             Span::call_site(),
                         );
                         let channel_right = Ident::new(
-                            &format!("channel_{}_{}", column, line),
+                            &format!("channel_{column}_{line}"),
                             Span::call_site(),
                         );
                         if j < self.n_sessions {
@@ -237,12 +237,12 @@ impl ChooseTypeCancelMultiToAllBundle {
                                 );
                                 let temp_channel = if k < temp {
                                     Ident::new(
-                                        &format!("channel_{}_{}", temp, k),
+                                        &format!("channel_{temp}_{k}"),
                                         Span::call_site(),
                                     )
                                 } else {
                                     Ident::new(
-                                        &format!("channel_{}_{}", temp, k + 1),
+                                        &format!("channel_{temp}_{}", k + 1),
                                         Span::call_site(),
                                     )
                                 };
@@ -292,7 +292,7 @@ impl ChooseTypeCancelMultiToAllBundle {
                             Ident::new(&format!("session{j}"), Span::call_site());
                         let temp_channel = if j < self.exclusion {
                             Ident::new(
-                                &format!("channel_{}_{}", self.exclusion, j),
+                                &format!("channel_{}_{j}", self.exclusion),
                                 Span::call_site(),
                             )
                         } else {
