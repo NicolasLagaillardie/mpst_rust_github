@@ -108,5 +108,5 @@ fn checking() {
         petgraph::dot::Dot::new(&graphs["RoleScript"])
     );
     println!("\n/////////////////////////\n");
-    println!("min kMC: {:?}", kmc);
+    println!("min kMC: {kmc:?}");
 }

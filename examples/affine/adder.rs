@@ -176,5 +176,5 @@ fn checking() {
     println!("\n/////////////////////////\n");
     println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
     println!("\n/////////////////////////\n");
-    println!("min kMC: {:?}", kmc);
+    println!("min kMC: {kmc:?}");
 }

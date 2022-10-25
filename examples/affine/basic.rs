@@ -118,5 +118,5 @@ fn main() {
     )
     .unwrap();
 
-    println!("min kMC: {:?}", kmc);
+    println!("min kMC: {kmc:?}");
 }

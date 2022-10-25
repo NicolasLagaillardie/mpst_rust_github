@@ -145,7 +145,7 @@ fn client_recurs(s: EndpointDRecurs, mut xs: Vec<i32>, index: i32) -> Result<(),
 
             let (_, s) = s
                 .send(Message {
-                    label: format!("Loop number {}", index),
+                    label: format!("Loop number {index}"),
                     payload: Some(index),
                 })
                 .recv()?;

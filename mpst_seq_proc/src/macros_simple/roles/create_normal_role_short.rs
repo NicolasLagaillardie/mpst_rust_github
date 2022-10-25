@@ -28,7 +28,7 @@ impl CreateNormalRoleShort {
 
         // Build the new names
         // role
-        let concatenated_role = format!("Role{}", role);
+        let concatenated_role = format!("Role{role}");
         let role_name = Ident::new(&concatenated_role, Span::call_site());
         // dual
         let concatenated_dual = format!("Role{}Dual", role);
