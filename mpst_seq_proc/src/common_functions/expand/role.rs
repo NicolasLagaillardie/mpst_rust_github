@@ -5,13 +5,13 @@ use syn::Ident;
 /// Expand role structures and methods
 pub(crate) fn role(role: String) -> TokenStream {
     // role
-    let role_name = Ident::new(&format!("Role{}", role), Span::call_site());
+    let role_name = Ident::new(&format!("Role{role}"), Span::call_site());
     // dual
     let dual_name = Ident::new(&format!("Role{}Dual", role), Span::call_site());
     // role to all
     let role_to_all_name = Ident::new(&format!("Role{}toAll", role), Span::call_site());
     // dual to all
-    let dual_to_all_name = Ident::new(&format!("RoleAllto{}", role), Span::call_site());
+    let dual_to_all_name = Ident::new(&format!("RoleAllto{role}"), Span::call_site());
 
     quote! {
         ////////////////////////////////////////////

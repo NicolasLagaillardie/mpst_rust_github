@@ -63,7 +63,7 @@ impl ChooseTypeMultiLeft {
 
         let all_sessions: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -72,7 +72,7 @@ impl ChooseTypeMultiLeft {
 
         let all_sessions_struct: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session + 'a ,
                 }
@@ -82,12 +82,12 @@ impl ChooseTypeMultiLeft {
         let all_roles: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 if i % 3 == 0 {
-                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
                 } else {
-                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
@@ -98,12 +98,12 @@ impl ChooseTypeMultiLeft {
         let all_roles_struct_and_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 if i % 3 == 0 {
-                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::name::Name + 'a ,
                     }
                 } else {
-                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::role::Role + 'a ,
                     }
@@ -118,7 +118,7 @@ impl ChooseTypeMultiLeft {
                         let (k, _, m) = get_tuple_matrix(&matrix, i, j);
 
                         let temp_ident =
-                            Ident::new(&format!("S{}", m), Span::call_site());
+                            Ident::new(&format!("S{m}"), Span::call_site());
 
                         if k == i {
                             quote! {
@@ -196,7 +196,7 @@ impl ChooseTypeMultiLeft {
 
         let stacks: Vec<TokenStream> = ((3 * self.n_sessions - 2)..(3 * self.n_sessions))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -206,7 +206,7 @@ impl ChooseTypeMultiLeft {
         let sessions_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let sum: u64 = (0..i).map(|j| self.n_sessions - 1 - j).sum();
-                let temp_ident = Ident::new(&format!("S{}", sum), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{sum}"), Span::call_site());
                 quote! {
                     < #temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
                 }
@@ -226,7 +226,7 @@ impl ChooseTypeMultiLeft {
                     Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
                 let channel_right =
                     Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
-                let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     let ( #channel_left , #channel_right ) = < #temp_session as mpstthree::binary::struct_trait::session::Session >::new();
                 }
@@ -235,7 +235,7 @@ impl ChooseTypeMultiLeft {
 
         let new_stacks: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{i}"), Span::call_site());
                 let temp_role = Ident::new(&format!("R{}", 3 * (i - 1) + 1), Span::call_site());
                 quote! {
                     let (_, #temp_stack ) = < #temp_role as mpstthree::role::Role >::new();
@@ -245,7 +245,7 @@ impl ChooseTypeMultiLeft {
 
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
                 let temp_role = Ident::new(&format!("N{}", 3 * (i - 1) + 3), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
@@ -259,7 +259,7 @@ impl ChooseTypeMultiLeft {
                     .map(|j| {
                         let (line, column, _) = get_tuple_matrix(&matrix, i, j);
 
-                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
 
                         let temp_channel = match line {
                             m if m == i => Ident::new(
@@ -278,11 +278,11 @@ impl ChooseTypeMultiLeft {
                     })
                     .collect();
 
-                let temp_choice = Ident::new(&format!("choice_{}", i), Span::call_site());
+                let temp_choice = Ident::new(&format!("choice_{i}"), Span::call_site());
 
-                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{i}"), Span::call_site());
 
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
 
                 quote! {
                     let #temp_choice = #meshedchannels_name {
@@ -299,11 +299,11 @@ impl ChooseTypeMultiLeft {
         let new_sessions_left: Vec<TokenStream> = (1..self.n_sessions)
                 .map(|i| {
                     let temp_new_session =
-                        Ident::new(&format!("new_session_{}", i), Span::call_site());
+                        Ident::new(&format!("new_session_{i}"), Span::call_site());
                     let temp_session =
-                        Ident::new(&format!("session{}", i), Span::call_site());
+                        Ident::new(&format!("session{i}"), Span::call_site());
                     let temp_choice =
-                        Ident::new(&format!("choice_{}", i), Span::call_site());
+                        Ident::new(&format!("choice_{i}"), Span::call_site());
                     quote! {
                         let #temp_new_session =
                             mpstthree::binary::send::send(either::Either::Left(#temp_choice), s.#temp_session);
@@ -313,8 +313,8 @@ impl ChooseTypeMultiLeft {
 
         let old_session_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_new_session = Ident::new(&format!("new_session_{}", i), Span::call_site());
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_new_session = Ident::new(&format!("new_session_{i}"), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     #temp_session : #temp_new_session ,
                 }
@@ -330,7 +330,7 @@ impl ChooseTypeMultiLeft {
                     }
                     _ => Ident::new(&format!("channel_{}_{}", line, column), Span::call_site()),
                 };
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     #temp_session : #temp_channel ,
                 }

@@ -54,12 +54,12 @@ impl Baking {
         let quote_fork_mpst = fork_mpst(&self.meshedchannels_name, self.number_roles);
 
         let session_types: Vec<Ident> = (1..self.number_roles)
-            .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
+            .map(|i| Ident::new(&format!("S{i}"), Span::call_site()))
             .collect();
 
         let session_types_struct: Vec<TokenStream> = (1..self.number_roles)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
             })
             .collect();
@@ -67,13 +67,13 @@ impl Baking {
         let roles_struct: Vec<TokenStream> = self
             .all_roles
             .iter()
-            .map(|i| role(format!("{}", i)))
+            .map(|i| role(format!("{i}")))
             .collect();
 
         let names_struct: Vec<TokenStream> = self
             .all_roles
             .iter()
-            .map(|i| name(format!("{}", i)))
+            .map(|i| name(format!("{i}")))
             .collect();
 
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)

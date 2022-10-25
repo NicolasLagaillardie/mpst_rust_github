@@ -47,7 +47,7 @@ impl ForkMPSTMultiSolo {
 
         let sessions: Vec<TokenStream> = (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -57,7 +57,7 @@ impl ForkMPSTMultiSolo {
         let sessions_struct: Vec<TokenStream> = (1..=((self.n_sessions - 1) * (self.n_sessions)
             / 2))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
                 }
@@ -66,7 +66,7 @@ impl ForkMPSTMultiSolo {
 
         let roles: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -75,7 +75,7 @@ impl ForkMPSTMultiSolo {
 
         let roles_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::role::Role + 'static ,
                 }
@@ -84,8 +84,8 @@ impl ForkMPSTMultiSolo {
 
         let new_roles: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-                let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
+                let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
                 quote! {
                     let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
                 }
@@ -94,7 +94,7 @@ impl ForkMPSTMultiSolo {
 
         let names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -103,7 +103,7 @@ impl ForkMPSTMultiSolo {
 
         let names_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::name::Name + 'static ,
                 }
@@ -112,8 +112,8 @@ impl ForkMPSTMultiSolo {
 
         let new_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
                 }
@@ -126,7 +126,7 @@ impl ForkMPSTMultiSolo {
                     .map(|j| {
                         let (k, _, m) = get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
-                            Ident::new(&format!("S{}", m), Span::call_site());
+                            Ident::new(&format!("S{m}"), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -139,8 +139,8 @@ impl ForkMPSTMultiSolo {
                     })
                     .collect();
 
-                let temp_role = Ident::new(&format!("R{}", i), Span::call_site());
-                let temp_name = Ident::new(&format!("N{}", i), Span::call_site());
+                let temp_role = Ident::new(&format!("R{i}"), Span::call_site());
+                let temp_name = Ident::new(&format!("N{i}"), Span::call_site());
                 quote! {
                     #meshedchannels_name<
                         #(
@@ -155,7 +155,7 @@ impl ForkMPSTMultiSolo {
 
         let new_channels: Vec<TokenStream> = (1..=((self.n_sessions - 1) * (self.n_sessions) / 2))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 let (line, column, _) = get_tuple_diag(&diag_w_offset, i);
                 let temp_channel_left =
                     Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
@@ -173,7 +173,7 @@ impl ForkMPSTMultiSolo {
                 let temp_sessions: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let (line, column, _) = get_tuple_matrix(&matrix, i, j);
-                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                         let temp_channel = match line {
                             m if m == i => Ident::new(
                                 &format!("channel_{}_{}", line, column),
@@ -191,9 +191,9 @@ impl ForkMPSTMultiSolo {
                     .collect();
 
                 let temp_meshedchannels =
-                    Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
-                let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                    Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
+                let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
                 quote! {
                     let #temp_meshedchannels =
                         #meshedchannels_name {
@@ -210,7 +210,7 @@ impl ForkMPSTMultiSolo {
         let use_meshedchannels: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_meshedchannels =
-                    Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
+                    Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
                 quote! {
                     #temp_meshedchannels,
                 }

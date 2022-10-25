@@ -13,7 +13,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let sessions: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -22,7 +22,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let sessions_struct: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! {
                 #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
             }
@@ -31,7 +31,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let roles: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -40,7 +40,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let roles_struct: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
             quote! {
                 #temp_ident : mpstthree::role::Role + 'static ,
             }
@@ -49,8 +49,8 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let new_roles: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
+            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
             quote! {
                 let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
             }
@@ -59,7 +59,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let names: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -68,7 +68,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let names_struct: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
             quote! {
                 #temp_ident : mpstthree::name::Name + 'static ,
             }
@@ -77,8 +77,8 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let new_names: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
+            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
             quote! {
                 let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
             }
@@ -87,7 +87,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let functions: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("F{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -96,8 +96,8 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let functions_detail: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("F{}", i), Span::call_site());
-            let temp_expr = Ident::new(&format!("f{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
+            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
             quote! {
                 #temp_expr : #temp_ident ,
             }
@@ -110,7 +110,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
                     .map(|j| {
                         let (k, _, m) = get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
-                            Ident::new(&format!("S{}", m), Span::call_site());
+                            Ident::new(&format!("S{m}"), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -124,9 +124,9 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
                     .collect();
 
                 let temp_function =
-                    Ident::new(&format!("F{}", i), Span::call_site());
-                let temp_role = Ident::new(&format!("R{}", i), Span::call_site());
-                let temp_name = Ident::new(&format!("N{}", i), Span::call_site());
+                    Ident::new(&format!("F{i}"), Span::call_site());
+                let temp_role = Ident::new(&format!("R{i}"), Span::call_site());
+                let temp_name = Ident::new(&format!("N{i}"), Span::call_site());
                 quote! {
                     #temp_function : FnOnce(
                         #meshedchannels_name<
@@ -153,7 +153,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let new_channels: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             let (line, column, _) = get_tuple_diag(&diag_w_offset, i);
             let temp_channel_left =
                 Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
@@ -171,7 +171,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
             let temp_sessions: Vec<TokenStream> = (1..number_roles)
                 .map(|j| {
                     let (line, column, _) = get_tuple_matrix(&matrix, i, j);
-                    let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                    let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                     let temp_channel = match line {
                         m if m == i => {
                             Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
@@ -185,9 +185,9 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
                 .collect();
 
             let temp_meshedchannels =
-                Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
+            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
+            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
             quote! {
                 let #temp_meshedchannels =
                     #meshedchannels_name {
@@ -204,9 +204,9 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
     let new_threads: Vec<TokenStream> = (1..=number_roles)
             .map(|i| {
                 let temp_function =
-                    Ident::new(&format!("f{}", i), Span::call_site());
+                    Ident::new(&format!("f{i}"), Span::call_site());
                 let temp_meshedchannels = Ident::new(
-                    &format!("meshedchannels_{}", i),
+                    &format!("meshedchannels_{i}"),
                     Span::call_site(),
                 );
                 quote! {
@@ -292,7 +292,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let sessions: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -301,7 +301,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let sessions_struct: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! {
                 #temp_ident : mpstthree::binary::struct_trait::session::Session + 'static ,
             }
@@ -310,7 +310,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let roles: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -319,7 +319,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let roles_struct: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
             quote! {
                 #temp_ident : mpstthree::role::Role + 'static ,
             }
@@ -328,8 +328,8 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let new_roles: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
+            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
             quote! {
                 let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
             }
@@ -338,7 +338,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let names: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -347,7 +347,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let names_struct: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
             quote! {
                 #temp_ident : mpstthree::name::Name + 'static ,
             }
@@ -356,8 +356,8 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let new_names: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
+            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
             quote! {
                 let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
             }
@@ -366,7 +366,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let functions: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("F{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
             quote! {
                 #temp_ident ,
             }
@@ -375,8 +375,8 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let functions_detail: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("F{}", i), Span::call_site());
-            let temp_expr = Ident::new(&format!("f{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
+            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
             quote! {
                 #temp_expr : #temp_ident ,
             }
@@ -389,7 +389,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
                     .map(|j| {
                         let (k, _, m) = get_tuple_matrix(&matrix_w_offset, i, j);
                         let temp_ident =
-                            Ident::new(&format!("S{}", m), Span::call_site());
+                            Ident::new(&format!("S{m}"), Span::call_site());
                         if k == i {
                             quote! {
                                 #temp_ident ,
@@ -403,9 +403,9 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
                     .collect();
 
                 let temp_function =
-                    Ident::new(&format!("F{}", i), Span::call_site());
-                let temp_role = Ident::new(&format!("R{}", i), Span::call_site());
-                let temp_name = Ident::new(&format!("N{}", i), Span::call_site());
+                    Ident::new(&format!("F{i}"), Span::call_site());
+                let temp_role = Ident::new(&format!("R{i}"), Span::call_site());
+                let temp_name = Ident::new(&format!("N{i}"), Span::call_site());
                 quote! {
                     #temp_function : FnOnce(
                         #meshedchannels_name<
@@ -433,7 +433,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let new_channels: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             let (line, column, _) = get_tuple_diag(&diag_w_offset, i);
             let temp_channel_left =
                 Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
@@ -451,7 +451,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
             let temp_sessions: Vec<TokenStream> = (1..number_roles)
                 .map(|j| {
                     let (line, column, _) = get_tuple_matrix(&matrix, i, j);
-                    let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                    let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                     let temp_channel = match line {
                         m if m == i => {
                             Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
@@ -465,9 +465,9 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
                 .collect();
 
             let temp_meshedchannels =
-                Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{}", i), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
+            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
+            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
             quote! {
                 let #temp_meshedchannels =
                     #meshedchannels_name {
@@ -483,9 +483,9 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let new_threads: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
-            let temp_function = Ident::new(&format!("f{}", i), Span::call_site());
+            let temp_function = Ident::new(&format!("f{i}"), Span::call_site());
             let temp_meshedchannels =
-                Ident::new(&format!("meshedchannels_{}", i), Span::call_site());
+                Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
             quote! {
                 std::thread::Builder::new()
                 .name(String::from(stringify!(#temp_function)))

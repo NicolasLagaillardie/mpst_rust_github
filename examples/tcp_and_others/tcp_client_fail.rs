@@ -21,16 +21,16 @@ fn main() {
                         println!("Reply is ok!: {:?}", &msg);
                     } else {
                         let text = from_utf8(&data).unwrap();
-                        println!("Unexpected reply: {}", text);
+                        println!("Unexpected reply: {text:?}");
                     }
                 }
                 Err(e) => {
-                    println!("Failed to receive data: {}", e);
+                    println!("Failed to receive data: {e:?}");
                 }
             }
         }
         Err(e) => {
-            println!("Failed to connect: {}", e);
+            println!("Failed to connect: {e:?}");
         }
     }
     println!("Terminated.");

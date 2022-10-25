@@ -5,7 +5,7 @@ use syn::Ident;
 /// Expand name methods
 pub(crate) fn name(role: String) -> TokenStream {
     // Name
-    let name_role = Ident::new(&format!("Name{}", role), Span::call_site());
+    let name_role = Ident::new(&format!("Name{role}"), Span::call_site());
 
     quote! {
         ////////////////////////////////////////////

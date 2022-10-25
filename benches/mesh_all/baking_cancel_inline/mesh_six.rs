@@ -445,21 +445,21 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh six baking inline protocol MPST {}", LOOPS),
+        &format!("mesh six baking inline protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
 }
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh six baking inline protocol binary {}", LOOPS),
+        &format!("mesh six baking inline protocol binary {LOOPS}"),
         |b| b.iter(all_binaries),
     );
 }
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh six baking inline protocol crossbeam {}", LOOPS),
+        &format!("mesh six baking inline protocol crossbeam {LOOPS}"),
         |b| b.iter(all_crossbeam),
     );
 }

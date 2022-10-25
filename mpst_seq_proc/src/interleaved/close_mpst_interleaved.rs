@@ -41,7 +41,7 @@ impl CloseMpstInterleaved {
 
         let role_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("R{i}"), Span::call_site());
 
                 quote! {
                     #temp_name ,
@@ -51,7 +51,7 @@ impl CloseMpstInterleaved {
 
         let role_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("R{i}"), Span::call_site());
 
                 quote! {
                     #temp_name : mpstthree::name::Name ,
@@ -67,9 +67,9 @@ impl CloseMpstInterleaved {
                     })
                     .collect();
 
-                let temp_session = Ident::new(&format!("s_{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("s_{i}"), Span::call_site());
 
-                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("R{i}"), Span::call_site());
 
                 quote! {
                     #temp_session:
@@ -87,12 +87,12 @@ impl CloseMpstInterleaved {
         let session_send: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("s_{}", i), Span::call_site());
+                    Ident::new(&format!("s_{i}"), Span::call_site());
 
                 let temp_session_send: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_session =
-                            Ident::new(&format!("session{}", j), Span::call_site());
+                            Ident::new(&format!("session{j}"), Span::call_site());
                         quote! {
                             #temp_ident.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(());
                         }
@@ -109,11 +109,11 @@ impl CloseMpstInterleaved {
 
         let session_recv: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("s_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("s_{i}"), Span::call_site());
 
                 let temp_session_recv: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                         quote! {
                             #temp_ident.#temp_session.receiver.recv()?;
                         }

@@ -31,7 +31,7 @@
 ///        do_step2();
 ///        do_step3();
 ///     } catch (e) {
-///        println!("Failed to perform necessary steps: {}", e);
+///        println!("Failed to perform necessary steps: {e:?}");
 ///     }}
 /// }
 /// ```

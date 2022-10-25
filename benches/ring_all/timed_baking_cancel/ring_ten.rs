@@ -680,7 +680,7 @@ static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("timed ring ten baking protocol MPST {}", LOOPS),
+        &format!("timed ring ten baking protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
 }

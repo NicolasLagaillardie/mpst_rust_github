@@ -17,7 +17,7 @@ pub(crate) fn choose(
     let (matrix, diag) = diag_and_matrix(number_roles);
 
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Name{}", elt), Span::call_site())
+        Ident::new(&format!("Name{elt}"), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_choose")
     };
@@ -30,14 +30,14 @@ pub(crate) fn choose(
 
     let choose_session_types_struct: Vec<TokenStream> = (1..=((number_roles - 1) * number_roles))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
         })
         .collect();
 
     let choose_roles_struct: Vec<TokenStream> = (1..=(2 * number_roles))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::role::Role , }
         })
         .collect();
@@ -64,7 +64,7 @@ pub(crate) fn choose(
                             let (_, _, m) = get_tuple_matrix(&matrix, j, k);
 
                             let temp_ident = Ident::new(
-                                &format!("S{}", m),
+                                &format!("S{m}"),
                                 Span::call_site(),
                             );
 
@@ -139,7 +139,7 @@ pub(crate) fn choose(
 
                     let receiver_ident =
                         if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                            Ident::new(&format!("Name{}", elt), Span::call_site())
+                            Ident::new(&format!("Name{elt}"), Span::call_site())
                         } else {
                             panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
                         };
@@ -189,7 +189,7 @@ pub(crate) fn choose(
                         get_tuple_matrix(&matrix, sender, j)
                     };
                     let temp_ident =
-                        Ident::new(&format!("S{}", m), Span::call_site());
+                        Ident::new(&format!("S{m}"), Span::call_site());
                     Some(
                         quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
                     )
@@ -234,7 +234,7 @@ pub(crate) fn choose(
                 Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
             };
 
-            let temp_session = Ident::new(&format!("S{}", j), Span::call_site());
+            let temp_session = Ident::new(&format!("S{j}"), Span::call_site());
 
             quote! { let ( #first_channel , #second_channel ) =
             <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ; }
@@ -269,7 +269,7 @@ pub(crate) fn choose(
 
     let new_stacks_receivers_left: Vec<TokenStream> = (1..number_roles)
         .map(|j| {
-            let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+            let temp_stack = Ident::new(&format!("stack_{j}"), Span::call_site());
             let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 1), Span::call_site());
             quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
         })
@@ -277,7 +277,7 @@ pub(crate) fn choose(
 
     let new_stacks_receivers_right: Vec<TokenStream> = (1..number_roles)
         .map(|j| {
-            let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+            let temp_stack = Ident::new(&format!("stack_{j}"), Span::call_site());
             let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 2), Span::call_site());
             quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
         })
@@ -289,13 +289,13 @@ pub(crate) fn choose(
                 let receiver_ident = if let Some(elt) =
                     all_roles.get(usize::try_from(j - 1).unwrap())
                 {
-                    Ident::new(&format!("Name{}", elt), Span::call_site())
+                    Ident::new(&format!("Name{elt}"), Span::call_site())
                 } else {
                     panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                 };
 
                 let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                    Ident::new(&format!("name_{}", elt), Span::call_site())
+                    Ident::new(&format!("name_{elt}"), Span::call_site())
                 } else {
                     panic!("Not enough arguments for new_name in new_names in expand_choose")
                 };
@@ -315,7 +315,7 @@ pub(crate) fn choose(
                     let new_sessions_receiver: Vec<TokenStream> = (1..number_roles)
                         .map(|k| {
                             let new_session_receiver = Ident::new(
-                                &format!("session{}", k),
+                                &format!("session{k}"),
                                 Span::call_site(),
                             );
                             let new_channel_receiver = if j > k {
@@ -338,20 +338,20 @@ pub(crate) fn choose(
                     {
                         Ident::new(&format!("choice_{}", j - 1), Span::call_site())
                     } else {
-                        Ident::new(&format!("choice_{}", j), Span::call_site())
+                        Ident::new(&format!("choice_{j}"), Span::call_site())
                     };
 
                     let new_stack_receiver = if j > sender
                     {
                         Ident::new(&format!("stack_{}", j - 1), Span::call_site())
                     } else {
-                        Ident::new(&format!("stack_{}", j), Span::call_site())
+                        Ident::new(&format!("stack_{j}"), Span::call_site())
                     };
 
                     let new_name_receiver = if let Some(elt) =
                         all_roles.get(usize::try_from(j - 1).unwrap())
                     {
-                        Ident::new(&format!("name_{}", elt), Span::call_site())
+                        Ident::new(&format!("name_{elt}"), Span::call_site())
                     } else {
                         panic!("Not enough arguments for new_name_receiver in new_meshedchannels_receivers in expand_choose")
                     };
@@ -378,9 +378,9 @@ pub(crate) fn choose(
             let new_session_sender =
                 Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-            let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
+            let new_choice_sender = Ident::new(&format!("choice_{j}"), Span::call_site());
 
-            let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
+            let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
                 let #new_session_sender = mpstthree::binary::send::send(
@@ -396,9 +396,9 @@ pub(crate) fn choose(
             let new_session_sender =
                 Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-            let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
+            let new_choice_sender = Ident::new(&format!("choice_{j}"), Span::call_site());
 
-            let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
+            let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
                 let #new_session_sender = mpstthree::binary::send::send(
@@ -414,7 +414,7 @@ pub(crate) fn choose(
             let new_session_sender =
                 Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-            let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
+            let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
                 #session_sender : #new_session_sender ,
@@ -426,7 +426,7 @@ pub(crate) fn choose(
         .map(|j| {
             if sender != j {
                 let new_choice_sender = if j < sender {
-                    Ident::new(&format!("session{}", j), Span::call_site())
+                    Ident::new(&format!("session{j}"), Span::call_site())
                 } else {
                     Ident::new(&format!("session{}", j - 1), Span::call_site())
                 };
@@ -596,7 +596,7 @@ pub(crate) fn choose_mpst_create_multi_to_all(
                 all_roles.get(usize::try_from(sender - 1).unwrap())
             {
                 Ident::new(
-                    &format!("Name{}", elt),
+                    &format!("Name{elt}"),
                     Span::call_site(),
                 )
             } else {
@@ -629,7 +629,7 @@ pub(crate) fn choose_timed(
     let (matrix, diag) = diag_and_matrix(number_roles);
 
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("Name{}", elt), Span::call_site())
+        Ident::new(&format!("Name{elt}"), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_choose")
     };
@@ -642,14 +642,14 @@ pub(crate) fn choose_timed(
 
     let choose_session_types_struct: Vec<TokenStream> = (1..=((number_roles - 1) * number_roles))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
         })
         .collect();
 
     let choose_roles_struct: Vec<TokenStream> = (1..=(2 * number_roles))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::role::Role , }
         })
         .collect();
@@ -676,7 +676,7 @@ pub(crate) fn choose_timed(
                             let (_, _, m) = get_tuple_matrix(&matrix, j, k);
 
                             let temp_ident = Ident::new(
-                                &format!("S{}", m),
+                                &format!("S{m}"),
                                 Span::call_site(),
                             );
 
@@ -755,7 +755,7 @@ pub(crate) fn choose_timed(
 
                     let receiver_ident =
                         if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                            Ident::new(&format!("Name{}", elt), Span::call_site())
+                            Ident::new(&format!("Name{elt}"), Span::call_site())
                         } else {
                             panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
                         };
@@ -810,7 +810,7 @@ pub(crate) fn choose_timed(
                 } else {
                     get_tuple_matrix(&matrix, sender, j)
                 };
-                let temp_ident = Ident::new(&format!("S{}", m), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{m}"), Span::call_site());
                 Some(quote! {
                     <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual,
                 })
@@ -855,7 +855,7 @@ pub(crate) fn choose_timed(
                 Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
             };
 
-            let temp_session = Ident::new(&format!("S{}", j), Span::call_site());
+            let temp_session = Ident::new(&format!("S{j}"), Span::call_site());
 
             quote! {
                 let ( #first_channel , #second_channel ) =
@@ -895,7 +895,7 @@ pub(crate) fn choose_timed(
 
     let new_stacks_receivers_left: Vec<TokenStream> = (1..number_roles)
         .map(|j| {
-            let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+            let temp_stack = Ident::new(&format!("stack_{j}"), Span::call_site());
             let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 1), Span::call_site());
             quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
         })
@@ -903,7 +903,7 @@ pub(crate) fn choose_timed(
 
     let new_stacks_receivers_right: Vec<TokenStream> = (1..number_roles)
         .map(|j| {
-            let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
+            let temp_stack = Ident::new(&format!("stack_{j}"), Span::call_site());
             let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 2), Span::call_site());
             quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
         })
@@ -915,13 +915,13 @@ pub(crate) fn choose_timed(
                 let receiver_ident = if let Some(elt) =
                     all_roles.get(usize::try_from(j - 1).unwrap())
                 {
-                    Ident::new(&format!("Name{}", elt), Span::call_site())
+                    Ident::new(&format!("Name{elt}"), Span::call_site())
                 } else {
                     panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                 };
 
                 let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                    Ident::new(&format!("name_{}", elt), Span::call_site())
+                    Ident::new(&format!("name_{elt}"), Span::call_site())
                 } else {
                     panic!("Not enough arguments for new_name in new_names in expand_choose")
                 };
@@ -941,7 +941,7 @@ pub(crate) fn choose_timed(
                     let new_sessions_receiver: Vec<TokenStream> = (1..number_roles)
                         .map(|k| {
                             let new_session_receiver = Ident::new(
-                                &format!("session{}", k),
+                                &format!("session{k}"),
                                 Span::call_site(),
                             );
                             let new_channel_receiver = if j > k {
@@ -964,20 +964,20 @@ pub(crate) fn choose_timed(
                     {
                         Ident::new(&format!("choice_{}", j - 1), Span::call_site())
                     } else {
-                        Ident::new(&format!("choice_{}", j), Span::call_site())
+                        Ident::new(&format!("choice_{j}"), Span::call_site())
                     };
 
                     let new_stack_receiver = if j > sender
                     {
                         Ident::new(&format!("stack_{}", j - 1), Span::call_site())
                     } else {
-                        Ident::new(&format!("stack_{}", j), Span::call_site())
+                        Ident::new(&format!("stack_{j}"), Span::call_site())
                     };
 
                     let new_name_receiver = if let Some(elt) =
                         all_roles.get(usize::try_from(j - 1).unwrap())
                     {
-                        Ident::new(&format!("name_{}", elt), Span::call_site())
+                        Ident::new(&format!("name_{elt}"), Span::call_site())
                     } else {
                         panic!("Not enough arguments for new_name_receiver in new_meshedchannels_receivers in expand_choose")
                     };
@@ -1004,9 +1004,9 @@ pub(crate) fn choose_timed(
             let new_session_sender =
                 Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-            let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
+            let new_choice_sender = Ident::new(&format!("choice_{j}"), Span::call_site());
 
-            let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
+            let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
                 let #new_session_sender = mpstthree::binary_timed::send::send(
@@ -1023,9 +1023,9 @@ pub(crate) fn choose_timed(
             let new_session_sender =
                 Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-            let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
+            let new_choice_sender = Ident::new(&format!("choice_{j}"), Span::call_site());
 
-            let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
+            let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
                 let #new_session_sender = mpstthree::binary_timed::send::send(
@@ -1042,7 +1042,7 @@ pub(crate) fn choose_timed(
             let new_session_sender =
                 Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
 
-            let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
+            let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
                 #session_sender : #new_session_sender ,
@@ -1054,7 +1054,7 @@ pub(crate) fn choose_timed(
         .map(|j| {
             if sender != j {
                 let new_choice_sender = if j < sender {
-                    Ident::new(&format!("session{}", j), Span::call_site())
+                    Ident::new(&format!("session{j}"), Span::call_site())
                 } else {
                     Ident::new(&format!("session{}", j - 1), Span::call_site())
                 };
@@ -1245,7 +1245,7 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                 all_roles.get(usize::try_from(sender - 1).unwrap())
             {
                 Ident::new(
-                    &format!("Name{}", elt),
+                    &format!("Name{elt}"),
                     Span::call_site(),
                 )
             } else {

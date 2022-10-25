@@ -147,7 +147,7 @@ fn rec_test(ch_a: Channel<RoleA>, ch_b: Channel<RoleB>) -> Result<()> {
     loop {
         let p2 = p.send(&ch_a, 42)?;
         let (v, p2) = p2.recv(&ch_b)?;
-        println!("received {}", v);
+        println!("received {v:?}");
         p = p2.rec();
     }
 }
@@ -187,7 +187,7 @@ fn main() -> Result<()> {
     let _end: End = thread_b.join().map_err(|x| anyhow!("{:?}", x))??;
     let _end: End = thread_c.join().map_err(|x| anyhow!("{:?}", x))??;
 
-    println!("result: {}", x);
+    println!("result: {x:?}");
 
     Ok(())
 }

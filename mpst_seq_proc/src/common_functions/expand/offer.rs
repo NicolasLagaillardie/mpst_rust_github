@@ -12,34 +12,34 @@ pub(crate) fn offer(
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("RoleAllto{}", elt), Span::call_site())
+        Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_offer")
     };
 
     let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-        Ident::new(&format!("Name{}", elt), Span::call_site())
+        Ident::new(&format!("Name{elt}"), Span::call_site())
     } else {
         panic!("Not enough arguments for receiver_ident in expand_offer")
     };
 
     let offer_session_types_struct: Vec<TokenStream> = (1..(2 * number_roles - 1))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
         })
         .collect();
 
     let left_sessions: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident , }
         })
         .collect();
 
     let right_sessions: Vec<TokenStream> = (number_roles..(2 * number_roles - 1))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident , }
         })
         .collect();
@@ -118,34 +118,34 @@ pub(crate) fn offer_timed(
     number_roles: u64,
 ) -> TokenStream {
     let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-        Ident::new(&format!("RoleAllto{}", elt), Span::call_site())
+        Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
     } else {
         panic!("Not enough arguments for sender_ident in expand_offer")
     };
 
     let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-        Ident::new(&format!("Name{}", elt), Span::call_site())
+        Ident::new(&format!("Name{elt}"), Span::call_site())
     } else {
         panic!("Not enough arguments for receiver_ident in expand_offer")
     };
 
     let offer_session_types_struct: Vec<TokenStream> = (1..(2 * number_roles - 1))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
         })
         .collect();
 
     let left_sessions: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident , }
         })
         .collect();
 
     let right_sessions: Vec<TokenStream> = (number_roles..(2 * number_roles - 1))
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident , }
         })
         .collect();

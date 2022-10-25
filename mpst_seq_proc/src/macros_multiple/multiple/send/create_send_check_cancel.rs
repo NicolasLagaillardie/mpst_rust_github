@@ -58,7 +58,7 @@ impl CreateSendCheckCancel {
 
         let session_types: Vec<TokenStream> = (2..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -67,7 +67,7 @@ impl CreateSendCheckCancel {
 
         let session_types_struct: Vec<TokenStream> = (2..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session ,
                 }
@@ -79,7 +79,7 @@ impl CreateSendCheckCancel {
                 if i != self.exclusion {
                     quote! {}
                 } else {
-                    let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         let new_session = mpstthree::binary::send::send_canceled(x, s.#temp_ident)?;
                     }
@@ -89,7 +89,7 @@ impl CreateSendCheckCancel {
 
         let send_types: Vec<TokenStream> = (2..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         mpstthree::binary::struct_trait::send::Send<T, #temp_ident >,
@@ -104,7 +104,7 @@ impl CreateSendCheckCancel {
 
         let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,

@@ -41,7 +41,7 @@ impl ChooseTypeMulti {
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -50,7 +50,7 @@ impl ChooseTypeMulti {
 
         let sessions_left: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -59,7 +59,7 @@ impl ChooseTypeMulti {
 
         let sessions_right: Vec<TokenStream> = (self.n_sessions..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }

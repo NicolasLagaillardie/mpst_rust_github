@@ -13,7 +13,7 @@ pub(crate) fn close(meshedchannels_name: &Ident, number_roles: u64) -> TokenStre
     let close_session_send: Vec<TokenStream> = (1..number_roles)
                 .map(|i| {
                     let temp_session = Ident::new(
-                        &format!("session{}", i),
+                        &format!("session{i}"),
                         Span::call_site(),
                     );
                     quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(()); }
@@ -22,7 +22,7 @@ pub(crate) fn close(meshedchannels_name: &Ident, number_roles: u64) -> TokenStre
 
     let close_session_recv: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+            let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
             quote! { self.#temp_session.receiver.recv()?; }
         })
         .collect();

@@ -140,7 +140,7 @@ fn all_mpst() {
 static LOOPS: i64 = 1;
 
 pub fn ping_pong_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong cancel protocol MPST {}", LOOPS), |b| {
+    c.bench_function(&format!("ping pong cancel protocol MPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
 }

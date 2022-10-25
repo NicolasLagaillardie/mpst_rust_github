@@ -284,7 +284,7 @@ static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring four cancel broadcast protocol MPST {}", LOOPS),
+        &format!("ring four cancel broadcast protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
 }

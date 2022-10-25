@@ -95,7 +95,7 @@ impl ChooseTypeMultiHttpToAll {
 
         let new_roles: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("stack_{i}"), Span::call_site());
                 quote! {
                     let ( #temp_ident , _) = <_ as mpstthree::role::Role>::new();
                 }
@@ -104,7 +104,7 @@ impl ChooseTypeMultiHttpToAll {
 
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = < _ as mpstthree::name::Name >::new();
                 }
@@ -121,7 +121,7 @@ impl ChooseTypeMultiHttpToAll {
                     .map(|j| {
                         let temp = if i >= self.exclusion { i + 1 } else { i };
 
-                        let temp_ident = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_ident = Ident::new(&format!("session{j}"), Span::call_site());
 
                         let temp_channel = if j < temp {
                             Ident::new(&format!("channel_{}_{}", temp, j), Span::call_site())
@@ -135,11 +135,11 @@ impl ChooseTypeMultiHttpToAll {
                     })
                     .collect();
 
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
 
-                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{i}"), Span::call_site());
 
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
 
                 let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 1).unwrap())
                 {
@@ -169,7 +169,7 @@ impl ChooseTypeMultiHttpToAll {
 
         let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 let temp_channel = if i < self.exclusion {
                     Ident::new(
                         &format!("channel_{}_{}", self.exclusion, i),

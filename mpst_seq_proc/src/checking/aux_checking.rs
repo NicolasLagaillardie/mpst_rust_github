@@ -107,7 +107,7 @@ impl CheckingInput {
 
             let branches_hashmap: Vec<proc_macro2::TokenStream> = value.iter()
             .map(|branch| {
-                let temp = Ident::new(&format!("temp_{}", branch).to_lowercase(), Span::call_site());
+                let temp = Ident::new(&format!("temp_{branch}").to_lowercase(), Span::call_site());
                 let branch_ident = Ident::new(branch, Span::call_site());
                 let branch_name = Ident::new(&branch.to_lowercase(), Span::call_site());
                 quote! {

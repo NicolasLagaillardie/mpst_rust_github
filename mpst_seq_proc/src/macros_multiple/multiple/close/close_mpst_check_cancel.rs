@@ -48,7 +48,7 @@ impl CloseMpstCheckCancel {
         let session_send: Vec<TokenStream> = (1..self.n_sessions)
                 .map(|i| {
                     let temp_ident =
-                        Ident::new(&format!("session{}", i), Span::call_site());
+                        Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         s.#temp_ident.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(());
                     }
@@ -58,7 +58,7 @@ impl CloseMpstCheckCancel {
         let session_recv: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("session{}", i), Span::call_site());
+                    Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     match s.#temp_ident.receiver.recv() {
                         Ok(mpstthree::binary::struct_trait::end::Signal::Stop) => {},

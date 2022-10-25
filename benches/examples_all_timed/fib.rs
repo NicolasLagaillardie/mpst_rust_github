@@ -113,7 +113,7 @@ fn all_mpst() {
 static LOOPS: i32 = 20;
 
 pub fn fibo_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Timed Fibo MPST baking {}", LOOPS), |b| {
+    c.bench_function(&format!("Timed Fibo MPST baking {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
 }

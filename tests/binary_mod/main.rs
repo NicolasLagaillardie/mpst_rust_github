@@ -464,7 +464,7 @@ pub fn selection_works() {
     );
 
     for other_thread in other_threads {
-        let msg = format!("Thread {:?} crashed.", other_thread);
+        let msg = format!("Thread {other_thread:?} crashed.");
         assert!(other_thread.join().is_ok(), "{}", msg);
     }
 }

@@ -64,7 +64,7 @@ impl OfferMPSTSessionMulti {
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -73,7 +73,7 @@ impl OfferMPSTSessionMulti {
 
         let all_sessions_struct: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
@@ -89,7 +89,7 @@ impl OfferMPSTSessionMulti {
                 } else {
                     let temp_all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
                         .map(|i| {
-                            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                             quote! {
                                 #temp_ident ,
                             }
@@ -112,7 +112,7 @@ impl OfferMPSTSessionMulti {
 
         let sessions_left: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -121,7 +121,7 @@ impl OfferMPSTSessionMulti {
 
         let sessions_right: Vec<TokenStream> = (self.n_sessions..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -133,7 +133,7 @@ impl OfferMPSTSessionMulti {
                 if i != self.exclusion {
                     quote! {}
                 } else {
-                    let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         let (e, new_session) = mpstthree::binary::recv::recv(s.#temp_ident)?;
                     }
@@ -143,7 +143,7 @@ impl OfferMPSTSessionMulti {
 
         let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,

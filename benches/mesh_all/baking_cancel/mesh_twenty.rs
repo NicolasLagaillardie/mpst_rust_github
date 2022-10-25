@@ -3618,21 +3618,21 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh twenty baking protocol MPST {}", LOOPS),
+        &format!("mesh twenty baking protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
 }
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh twenty baking protocol binary {}", LOOPS),
+        &format!("mesh twenty baking protocol binary {LOOPS}"),
         |b| b.iter(all_binaries),
     );
 }
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh twenty baking protocol crossbeam {}", LOOPS),
+        &format!("mesh twenty baking protocol crossbeam {LOOPS}"),
         |b| b.iter(all_crossbeam),
     );
 }

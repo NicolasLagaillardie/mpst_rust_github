@@ -47,7 +47,7 @@ impl CloseMpstCancel {
 
         let session_send: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     s.#temp_ident.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop)?;
                 }
@@ -56,7 +56,7 @@ impl CloseMpstCancel {
 
         let session_recv: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     s.#temp_ident.receiver.recv()?;
                 }

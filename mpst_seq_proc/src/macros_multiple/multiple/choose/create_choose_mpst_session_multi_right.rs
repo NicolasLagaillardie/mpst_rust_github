@@ -63,7 +63,7 @@ impl ChooseTypeMultiRight {
 
         let all_sessions: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -72,7 +72,7 @@ impl ChooseTypeMultiRight {
 
         let all_sessions_struct: Vec<TokenStream> = (1..=(diff * (diff + 1)))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session + 'a ,
                 }
@@ -82,12 +82,12 @@ impl ChooseTypeMultiRight {
         let all_roles: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 if i % 3 == 0 {
-                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
                 } else {
-                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
@@ -98,12 +98,12 @@ impl ChooseTypeMultiRight {
         let all_roles_struct_and_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
                 if i % 3 == 0 {
-                    let temp_ident = Ident::new(&format!("N{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::name::Name + 'a ,
                     }
                 } else {
-                    let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::role::Role + 'a ,
                     }
@@ -118,7 +118,7 @@ impl ChooseTypeMultiRight {
                         let (k, _, m) = get_tuple_matrix(&matrix, i, j);
 
                         let temp_ident =
-                            Ident::new(&format!("S{}", m), Span::call_site());
+                            Ident::new(&format!("S{m}"), Span::call_site());
 
                         if k == i {
                             quote! {
@@ -196,7 +196,7 @@ impl ChooseTypeMultiRight {
 
         let stacks: Vec<TokenStream> = ((3 * self.n_sessions - 2)..(3 * self.n_sessions))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -241,7 +241,7 @@ impl ChooseTypeMultiRight {
 
         let new_stacks: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{i}"), Span::call_site());
                 let temp_role = Ident::new(&format!("R{}", 3 * (i - 1) + 2), Span::call_site());
                 quote! {
                     let (_, #temp_stack ) = < #temp_role as mpstthree::role::Role >::new();
@@ -251,7 +251,7 @@ impl ChooseTypeMultiRight {
 
         let new_names: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
                 let temp_role = Ident::new(&format!("N{}", 3 * (i - 1) + 3), Span::call_site());
                 quote! {
                     let ( #temp_name , _) = < #temp_role as mpstthree::name::Name >::new();
@@ -265,7 +265,7 @@ impl ChooseTypeMultiRight {
                     .map(|j| {
                         let (line, column, _) = get_tuple_matrix(&matrix, i, j);
 
-                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
 
                         let temp_channel = match line {
                             m if m == i => Ident::new(
@@ -284,11 +284,11 @@ impl ChooseTypeMultiRight {
                     })
                     .collect();
 
-                let temp_choice = Ident::new(&format!("choice_{}", i), Span::call_site());
+                let temp_choice = Ident::new(&format!("choice_{i}"), Span::call_site());
 
-                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{i}"), Span::call_site());
 
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
 
                 quote! {
                     let #temp_choice = #meshedchannels_name {
@@ -305,11 +305,11 @@ impl ChooseTypeMultiRight {
         let new_sessions_right: Vec<TokenStream> = (1..self.n_sessions)
                 .map(|i| {
                     let temp_new_session =
-                        Ident::new(&format!("new_session_{}", i), Span::call_site());
+                        Ident::new(&format!("new_session_{i}"), Span::call_site());
                     let temp_session =
-                        Ident::new(&format!("session{}", i), Span::call_site());
+                        Ident::new(&format!("session{i}"), Span::call_site());
                     let temp_choice =
-                        Ident::new(&format!("choice_{}", i), Span::call_site());
+                        Ident::new(&format!("choice_{i}"), Span::call_site());
                     quote! {
                         let #temp_new_session =
                             mpstthree::binary::send::send(either::Either::Right(#temp_choice), s.#temp_session);
@@ -319,8 +319,8 @@ impl ChooseTypeMultiRight {
 
         let old_session_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_new_session = Ident::new(&format!("new_session_{}", i), Span::call_site());
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_new_session = Ident::new(&format!("new_session_{i}"), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     #temp_session : #temp_new_session ,
                 }
@@ -336,7 +336,7 @@ impl ChooseTypeMultiRight {
                     }
                     _ => Ident::new(&format!("channel_{}_{}", line, column), Span::call_site()),
                 };
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     #temp_session : #temp_channel ,
                 }

@@ -5,36 +5,36 @@ use syn::Ident;
 /// Expand choose methods
 pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let session_types: Vec<Ident> = (1..number_roles)
-        .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
+        .map(|i| Ident::new(&format!("S{i}"), Span::call_site()))
         .collect();
 
     let session_types_struct: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
         })
         .collect();
 
     let session_types_pub: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-            let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
+            let temp_type = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { pub #temp_session : #temp_type , }
         })
         .collect();
 
     let session_types_dual_struct: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
         })
         .collect();
 
     let sender_receiver: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-            let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-            let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
+            let temp_sender = Ident::new(&format!("sender{i}"), Span::call_site());
+            let temp_receiver = Ident::new(&format!("receiver{i}"), Span::call_site());
+            let temp_type = Ident::new(&format!("S{i}"), Span::call_site());
             quote! { let ( #temp_sender , #temp_receiver ) =
             <#temp_type as mpstthree::binary::struct_trait::session::Session>::new() ; }
         })
@@ -42,16 +42,16 @@ pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> 
 
     let sender_struct: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-            let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
+            let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
+            let temp_sender = Ident::new(&format!("sender{i}"), Span::call_site());
             quote! { #temp_session : #temp_sender , }
         })
         .collect();
 
     let receiver_struct: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-            let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
+            let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
+            let temp_receiver = Ident::new(&format!("receiver{i}"), Span::call_site());
             quote! { #temp_session : #temp_receiver , }
         })
         .collect();
@@ -59,7 +59,7 @@ pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> 
     let tail_str: Vec<TokenStream> = (1..number_roles)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                    Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -82,7 +82,7 @@ pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> 
     let head_str: Vec<TokenStream> = (1..number_roles)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                    Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -102,7 +102,7 @@ pub(crate) fn meshedchannels(meshedchannels_name: &Ident, number_roles: u64) -> 
 
     let stringify: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
-            let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+            let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
             quote! { stringify!( #temp_session ) , }
         })
         .collect();
