@@ -466,7 +466,15 @@ if len(mesh_bench_lists['nb_participants_baking']) > 0:
         mesh_bench_lists['average_baking'],
         label='AMPST',
         linestyle='solid',
+        color='#1f77b4',
         marker='o'
+    )
+    ax_mesh_bench.fill_between(
+        mesh_bench_lists['nb_participants_baking'],
+        (mesh_bench_lists['average_baking']-0.05*np.std(mesh_bench_lists['average_baking'])*np.mean(np.std(mesh_bench_lists['average_baking']))),
+        (mesh_bench_lists['average_baking']+0.05*np.std(mesh_bench_lists['average_baking'])*np.mean(np.std(mesh_bench_lists['average_baking']))),
+        color='#1f77b4',
+        alpha=0.3
     )
 
 # ATMP
@@ -476,7 +484,15 @@ if len(mesh_bench_lists['nb_participants_timed']) > 0:
         mesh_bench_lists['average_timed'],
         label='ATMP',
         linestyle='solid',
+        color='#ff7f0e',
         marker='*'
+    )
+    ax_mesh_bench.fill_between(
+        mesh_bench_lists['nb_participants_timed'],
+        (mesh_bench_lists['average_timed']-0.05*np.std(mesh_bench_lists['average_timed'])*np.mean(np.std(mesh_bench_lists['average_timed']))),
+        (mesh_bench_lists['average_timed']+0.05*np.std(mesh_bench_lists['average_timed'])*np.mean(np.std(mesh_bench_lists['average_timed']))),
+        color='#ff7f0e',
+        alpha=0.3
     )
 
 # Ring compile
@@ -487,6 +503,7 @@ if len(ring_compile_lists['nb_participants_baking']) > 0:
         ring_compile_lists['average_baking'],
         label='AMPST',
         linestyle='solid',
+        color='#1f77b4',
         marker='o'
     )
 
@@ -497,6 +514,7 @@ if len(ring_compile_lists['nb_participants_timed']) > 0:
         ring_compile_lists['average_timed'],
         label='ATMP',
         linestyle='solid',
+        color='#ff7f0e',
         marker='*'
     )
 
@@ -508,7 +526,15 @@ if len(ring_bench_lists['nb_participants_baking']) > 0:
         ring_bench_lists['average_baking'],
         label='AMPST',
         linestyle='solid',
+        color='#1f77b4',
         marker='o'
+    )
+    ax_ring_bench.fill_between(
+        ring_bench_lists['nb_participants_baking'],
+        (ring_bench_lists['average_baking']-0.05*np.std(ring_bench_lists['average_baking'])*np.mean(np.std(ring_bench_lists['average_baking']))),
+        (ring_bench_lists['average_baking']+0.05*np.std(ring_bench_lists['average_baking'])*np.mean(np.std(ring_bench_lists['average_baking']))),
+        color='#1f77b4',
+        alpha=0.3
     )
 
 # ATMP
@@ -518,7 +544,15 @@ if len(ring_bench_lists['nb_participants_timed']) > 0:
         ring_bench_lists['average_timed'],
         label='ATMP',
         linestyle='solid',
+        color='#ff7f0e',
         marker='*'
+    )
+    ax_ring_bench.fill_between(
+        ring_bench_lists['nb_participants_timed'],
+        (ring_bench_lists['average_timed']-0.05*np.std(ring_bench_lists['average_timed'])*np.mean(np.std(ring_bench_lists['average_timed']))),
+        (ring_bench_lists['average_timed']+0.05*np.std(ring_bench_lists['average_timed'])*np.mean(np.std(ring_bench_lists['average_timed']))),
+        color='#ff7f0e',
+        alpha=0.3
     )
 
 # create the name for the new figure
