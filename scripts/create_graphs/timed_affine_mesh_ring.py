@@ -564,13 +564,13 @@ name_graph = './results/graphs_mesh_ring_' + str(index_graphs) + '.pdf'
 
 # Put a legend below current axis
 ax_mesh_compile.set_ylabel('Time (s)', fontsize=30)
-# ax_mesh_compile.legend(
-#     loc='upper center',
-#     bbox_to_anchor=(0.5, -0.3),
-#     fancybox=True,
-#     shadow=True,
-#     ncol=2,
-#     fontsize=20)
+ax_mesh_compile.legend(
+    loc='best',
+    # bbox_to_anchor=(-0.5, -0.3),
+    fancybox=True,
+    shadow=True,
+    ncol=1,
+    fontsize=20)
 ax_mesh_bench.set_ylabel('Time (ms)', fontsize=30)
 
 # adjust subplot position

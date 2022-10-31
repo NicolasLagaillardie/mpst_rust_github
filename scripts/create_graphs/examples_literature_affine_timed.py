@@ -165,11 +165,11 @@ for d in compile_directories:
 
 sorted_translate = dict(sorted(translate.items()))
 
-print("bar_compilation_timed", bar_compilation_timed)
-print("bar_compilation_baking", bar_compilation_baking)
-print("bar_running_baking", bar_running_baking)
-print("bar_running_timed", bar_running_timed)
-print("benches", bench)
+# print("bar_compilation_timed", bar_compilation_timed)
+# print("bar_compilation_baking", bar_compilation_baking)
+# print("bar_running_baking", bar_running_baking)
+# print("bar_running_timed", bar_running_timed)
+# print("benches", bench)
 
 # Setting up the figure
 fig = plt.figure(figsize=(20, 5))
@@ -220,9 +220,17 @@ running_time.yaxis.set_ticks(np.arange(0, int(
     max(max(bar_running_timed), max(bar_running_baking)))+1.5, 0.5), labelsize=20)
 running_time.tick_params(labelsize=20)
 
+plt.legend(
+    ['AMPST','ATMP'],
+    loc='best',
+    # bbox_to_anchor=(-0.5, -0.3),
+    fancybox=True,
+    shadow=True,
+    ncol=1,
+    fontsize=20)
+
 # adjust subplot position
 plt.tight_layout()
-
 
 # create the name for the new figure
 index_graphs = 0
