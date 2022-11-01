@@ -206,13 +206,13 @@ pub(crate) fn send_timed_canceled(
                 quote! {
                     mpstthree::binary_timed::struct_trait::send::SendTimed<
                         T,
-                        #temp_type,
                         CLOCK,
                         START,
                         INCLUDE_START,
                         END,
                         INCLUDE_END,
-                        RESET
+                        RESET,
+                        #temp_type,
                     > ,
                 }
             } else {

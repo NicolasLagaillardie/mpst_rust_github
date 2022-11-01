@@ -1166,8 +1166,7 @@ fn all_mpst() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh eleven cancel protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
-    );
+    c.bench_function(&format!("mesh eleven cancel protocol MPST {LOOPS}"), |b| {
+        b.iter(all_mpst)
+    });
 }

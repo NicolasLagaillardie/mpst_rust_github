@@ -3617,10 +3617,9 @@ fn all_crossbeam() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh twenty baking protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
-    );
+    c.bench_function(&format!("mesh twenty baking protocol MPST {LOOPS}"), |b| {
+        b.iter(all_mpst)
+    });
 }
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {

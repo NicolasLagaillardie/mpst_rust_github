@@ -408,10 +408,9 @@ pub fn ring_protocol_mpst(c: &mut Criterion) {
 }
 
 pub fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring five baking protocol binary {LOOPS}"),
-        |b| b.iter(all_binaries),
-    );
+    c.bench_function(&format!("ring five baking protocol binary {LOOPS}"), |b| {
+        b.iter(all_binaries)
+    });
 }
 
 pub fn ring_protocol_crossbeam(c: &mut Criterion) {

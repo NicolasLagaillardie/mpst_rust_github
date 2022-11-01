@@ -19,16 +19,16 @@ use std::time::{Duration, Instant};
 /// session `S` or an error.
 pub fn recv<
     T,
-    S,
     const CLOCK: char,
     const START: i128,
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
     const RESET: bool,
+    S,
 >(
     all_clocks: &mut HashMap<char, Instant>,
-    s: RecvTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
+    s: RecvTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>,
 ) -> Result<(T, S), Box<dyn Error>>
 where
     T: marker::Send,

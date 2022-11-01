@@ -939,8 +939,7 @@ pub fn ring_protocol_binary(c: &mut Criterion) {
 }
 
 pub fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring ten empty protocol crossbeam {LOOPS}"),
-        |b| b.iter(all_crossbeam),
-    );
+    c.bench_function(&format!("ring ten empty protocol crossbeam {LOOPS}"), |b| {
+        b.iter(all_crossbeam)
+    });
 }

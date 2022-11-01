@@ -1052,8 +1052,7 @@ pub fn mesh_protocol_binary(c: &mut Criterion) {
 }
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh ten empty protocol crossbeam {LOOPS}"),
-        |b| b.iter(all_crossbeam),
-    );
+    c.bench_function(&format!("mesh ten empty protocol crossbeam {LOOPS}"), |b| {
+        b.iter(all_crossbeam)
+    });
 }

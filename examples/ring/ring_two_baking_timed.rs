@@ -24,30 +24,30 @@ baker_timed!(MeshedChannelsTwo, A, B);
 enum Branching0fromBtoA {
     Forward(
         MeshedChannelsTwo<
-            SendTimed<(), RecursAtoB, 'a', 0, true, 1, true, false>,
+            SendTimed<(), 'a', 0, true, 1, true, false, RecursAtoB>,
             RoleB<RoleB<RoleEnd>>,
             NameA,
         >,
     ),
     Backward(
         MeshedChannelsTwo<
-            RecvTimed<(), RecursAtoB, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, RecursAtoB>,
             RoleB<RoleB<RoleEnd>>,
             NameA,
         >,
     ),
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
-type RecursAtoB = RecvTimed<Branching0fromBtoA, End, 'a', 0, true, 1, true, false>;
+type RecursAtoB = RecvTimed<Branching0fromBtoA, 'a', 0, true, 1, true, false, End>;
 // B
-type Choose0fromBtoA = SendTimed<Branching0fromBtoA, End, 'a', 0, true, 1, true, false>;
+type Choose0fromBtoA = SendTimed<Branching0fromBtoA, 'a', 0, true, 1, true, false, End>;
 type EndpointForwardB = MeshedChannelsTwo<
-    RecvTimed<(), Choose0fromBtoA, 'a', 0, true, 1, true, false>,
+    RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromBtoA>,
     RoleA<RoleBroadcast>,
     NameB,
 >;
 type EndpointBackwardB = MeshedChannelsTwo<
-    SendTimed<(), Choose0fromBtoA, 'a', 0, true, 1, true, false>,
+    SendTimed<(), 'a', 0, true, 1, true, false, Choose0fromBtoA>,
     RoleA<RoleBroadcast>,
     NameB,
 >;

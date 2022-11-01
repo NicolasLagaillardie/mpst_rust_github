@@ -23,8 +23,8 @@ baker_timed!(MeshedChannels, A, C, S);
 
 // Types
 // A
-type Choose0fromCtoA = SendTimed<Branching0fromCtoA, End, 'a', 0, true, 1, true, false>;
-type Choose0fromCtoS = SendTimed<Branching0fromCtoS, End, 'a', 0, true, 1, true, false>;
+type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
+type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 1, true, false, End>;
 
 // A
 enum Branching0fromCtoA {
@@ -36,7 +36,7 @@ enum Branching0fromCtoS {
     Sum(
         MeshedChannels<
             End,
-            SendTimed<i32, End, 'a', 0, true, 1, true, false>,
+            SendTimed<i32, 'a', 0, true, 1, true, false, End>,
             RoleC<RoleEnd>,
             NameS,
         >,
@@ -44,7 +44,7 @@ enum Branching0fromCtoS {
     Diff(
         MeshedChannels<
             End,
-            SendTimed<i32, End, 'a', 0, true, 1, true, false>,
+            SendTimed<i32, 'a', 0, true, 1, true, false, End>,
             RoleC<RoleEnd>,
             NameS,
         >,
@@ -54,7 +54,7 @@ enum Branching0fromCtoS {
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannels<
-    RecvTimed<Branching0fromCtoA, End, 'a', 0, true, 1, true, false>,
+    RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>,
     End,
     RoleC<RoleEnd>,
     NameA,
@@ -64,13 +64,13 @@ type EndpointC = MeshedChannels<
     Choose0fromCtoA,
     SendTimed<
         i32,
-        SendTimed<i32, Choose0fromCtoS, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        SendTimed<i32, 'a', 0, true, 1, true, false, Choose0fromCtoS>,
     >,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
@@ -80,22 +80,22 @@ type EndpointS = MeshedChannels<
     End,
     RecvTimed<
         i32,
-        RecvTimed<
-            i32,
-            RecvTimed<Branching0fromCtoS, End, 'a', 0, true, 1, true, false>,
-            'a',
-            0,
-            true,
-            1,
-            true,
-            false,
-        >,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<
+            i32,
+            'a',
+            0,
+            true,
+            1,
+            true,
+            false,
+            RecvTimed<Branching0fromCtoS, 'a', 0, true, 1, true, false, End>,
+        >,
     >,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,

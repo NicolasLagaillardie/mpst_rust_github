@@ -23,28 +23,28 @@ baker_timed!(MeshedChannels, A, B, D);
 // A
 type InitA = RecvTimed<
     i32,
-    SendTimed<i32, <Choose0fromDtoAOutLoop as Session>::Dual, 'a', 2, true, 4, true, false>,
     'a',
     0,
     true,
     2,
     true,
     false,
+    SendTimed<i32, 'a', 2, true, 4, true, false, <Choose0fromDtoAOutLoop as Session>::Dual>,
 >;
 
 type AtoDClose = End;
 type AtoBClose = End;
 type AtoBVideo =
-    SendTimed<i32, RecvTimed<i32, End, 'a', 4, true, 6, true, false>, 'a', 2, true, 4, true, false>;
+    SendTimed<i32, 'a', 2, true, 4, true, false, RecvTimed<i32, 'a', 4, true, 6, true, false, End>>;
 type AtoDVideo = RecvTimed<
     i32,
-    SendTimed<i32, RecursAtoD, 'a', 6, true, 8, true, false>,
     'a',
     0,
     true,
     2,
     true,
     false,
+    SendTimed<i32, 'a', 6, true, 8, true, false, RecursAtoD>,
 >;
 
 type RecursAtoD = <Choose0fromDtoAInLoop as Session>::Dual;
@@ -69,21 +69,21 @@ enum Branches0BtoD {
 }
 
 // D
-type Choose0fromDtoAInLoop = SendTimed<Branches0AtoD, End, 'a', 8, true, 10, true, true>;
-type Choose0fromDtoBInLoop = SendTimed<Branches0BtoD, End, 'a', 8, true, 10, true, true>;
+type Choose0fromDtoAInLoop = SendTimed<Branches0AtoD, 'a', 8, true, 10, true, true, End>;
+type Choose0fromDtoBInLoop = SendTimed<Branches0BtoD, 'a', 8, true, 10, true, true, End>;
 
-type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, End, 'a', 4, true, 6, true, true>;
-type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, End, 'a', 4, true, 6, true, true>;
+type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, 'a', 4, true, 6, true, true, End>;
+type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, 'a', 4, true, 6, true, true, End>;
 
 type InitD = SendTimed<
     i32,
-    RecvTimed<i32, Choose0fromDtoAOutLoop, 'a', 2, true, 4, true, false>,
     'a',
     0,
     true,
     2,
     true,
     false,
+    RecvTimed<i32, 'a', 2, true, 4, true, false, Choose0fromDtoAOutLoop>,
 >;
 
 // Stacks

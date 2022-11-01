@@ -19,17 +19,17 @@ use std::time::{Duration, Instant};
 /// continuation of the session `S`.
 pub fn send<
     T,
-    S,
     const CLOCK: char,
     const START: i128,
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
     const RESET: bool,
+    S,
 >(
     x: T,
     all_clocks: &mut HashMap<char, Instant>,
-    s: SendTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
+    s: SendTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>,
 ) -> Result<S, Box<dyn Error>>
 where
     T: marker::Send,
@@ -392,17 +392,17 @@ where
 #[doc(hidden)]
 pub fn send_without_reset<
     T,
-    S,
     const CLOCK: char,
     const START: i128,
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
     const RESET: bool,
+    S,
 >(
     x: T,
     all_clocks: &mut HashMap<char, Instant>,
-    s: SendTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
+    s: SendTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>,
 ) -> Result<S, Box<dyn Error>>
 where
     T: marker::Send,

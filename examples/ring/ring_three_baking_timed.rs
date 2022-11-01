@@ -24,7 +24,7 @@ baker_timed!(MeshedChannelsThree, A, B, C);
 enum Branching0fromCtoA {
     Forward(
         MeshedChannelsThree<
-            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), 'a', 0, true, 1, true, false, End>,
             RecursAtoC,
             RoleB<RoleC<RoleEnd>>,
             NameA,
@@ -32,7 +32,7 @@ enum Branching0fromCtoA {
     ),
     Backward(
         MeshedChannelsThree<
-            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
             RecursAtoC,
             RoleB<RoleC<RoleEnd>>,
             NameA,
@@ -40,40 +40,40 @@ enum Branching0fromCtoA {
     ),
     Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
-type RecursAtoC = RecvTimed<Branching0fromCtoA, End, 'a', 0, true, 1, true, false>;
+type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
 // B
 enum Branching0fromCtoB {
     Forward(
         MeshedChannelsThree<
-            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
-            SendTimed<(), RecursBtoC, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
+            SendTimed<(), 'a', 0, true, 1, true, false, RecursBtoC>,
             RoleA<RoleC<RoleC<RoleEnd>>>,
             NameB,
         >,
     ),
     Backward(
         MeshedChannelsThree<
-            SendTimed<(), End, 'a', 0, true, 1, true, false>,
-            RecvTimed<(), RecursBtoC, 'a', 0, true, 1, true, false>,
+            SendTimed<(), 'a', 0, true, 1, true, false, End>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, RecursBtoC>,
             RoleC<RoleA<RoleC<RoleEnd>>>,
             NameB,
         >,
     ),
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
-type RecursBtoC = RecvTimed<Branching0fromCtoB, End, 'a', 0, true, 1, true, false>;
+type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 1, true, false, End>;
 // C
-type Choose0fromCtoA = SendTimed<Branching0fromCtoA, End, 'a', 0, true, 1, true, false>;
-type Choose0fromCtoB = SendTimed<Branching0fromCtoB, End, 'a', 0, true, 1, true, false>;
+type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
+type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 1, true, false, End>;
 type EndpointForwardC = MeshedChannelsThree<
     Choose0fromCtoA,
-    RecvTimed<(), Choose0fromCtoB, 'a', 0, true, 1, true, false>,
+    RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromCtoB>,
     RoleB<RoleBroadcast>,
     NameC,
 >;
 type EndpointBackwardC = MeshedChannelsThree<
     Choose0fromCtoA,
-    SendTimed<(), Choose0fromCtoB, 'a', 0, true, 1, true, false>,
+    SendTimed<(), 'a', 0, true, 1, true, false, Choose0fromCtoB>,
     RoleB<RoleBroadcast>,
     NameC,
 >;

@@ -22,9 +22,9 @@ baker_timed!(MeshedChannelsTen, A, B, C, D, E, F, G, H, I, J);
 // Types
 // SendTimed/RecvTimed
 type RS =
-    RecvTimed<(), SendTimed<(), End, 'a', 0, true, 1, true, false>, 'a', 0, true, 1, true, false>;
+    RecvTimed<(), 'a', 0, true, 1, true, false, SendTimed<(), 'a', 0, true, 1, true, false, End>>;
 type SR =
-    SendTimed<(), RecvTimed<(), End, 'a', 0, true, 1, true, false>, 'a', 0, true, 1, true, false>;
+    SendTimed<(), 'a', 0, true, 1, true, false, RecvTimed<(), 'a', 0, true, 1, true, false, End>>;
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -50,13 +50,13 @@ enum Branching0fromJtoA {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursAtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursAtoJ>,
             >,
             R2J<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameA,
@@ -64,7 +64,7 @@ enum Branching0fromJtoA {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoJ = RecvTimed<Branching0fromJtoA, End, 'a', 0, true, 1, true, false>;
+type RecursAtoJ = RecvTimed<Branching0fromJtoA, 'a', 0, true, 1, true, false, End>;
 // B
 enum Branching0fromJtoB {
     More(
@@ -79,13 +79,13 @@ enum Branching0fromJtoB {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursBtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursBtoJ>,
             >,
             R2J<R2A<R2C<R2D<R2E<R2F<R2G<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameB,
@@ -93,7 +93,7 @@ enum Branching0fromJtoB {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoJ = RecvTimed<Branching0fromJtoB, End, 'a', 0, true, 1, true, false>;
+type RecursBtoJ = RecvTimed<Branching0fromJtoB, 'a', 0, true, 1, true, false, End>;
 // C
 enum Branching0fromJtoC {
     More(
@@ -108,13 +108,13 @@ enum Branching0fromJtoC {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursCtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursCtoJ>,
             >,
             R2J<R2A<R2B<R2D<R2E<R2F<R2G<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameC,
@@ -122,7 +122,7 @@ enum Branching0fromJtoC {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoJ = RecvTimed<Branching0fromJtoC, End, 'a', 0, true, 1, true, false>;
+type RecursCtoJ = RecvTimed<Branching0fromJtoC, 'a', 0, true, 1, true, false, End>;
 // D
 enum Branching0fromJtoD {
     More(
@@ -137,13 +137,13 @@ enum Branching0fromJtoD {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursDtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursDtoJ>,
             >,
             R2J<R2A<R2B<R2C<R2E<R2F<R2G<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameD,
@@ -151,7 +151,7 @@ enum Branching0fromJtoD {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoJ = RecvTimed<Branching0fromJtoD, End, 'a', 0, true, 1, true, false>;
+type RecursDtoJ = RecvTimed<Branching0fromJtoD, 'a', 0, true, 1, true, false, End>;
 // E
 enum Branching0fromJtoE {
     More(
@@ -166,13 +166,13 @@ enum Branching0fromJtoE {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursEtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursEtoJ>,
             >,
             R2J<R2A<R2B<R2C<R2D<R2F<R2G<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameE,
@@ -180,7 +180,7 @@ enum Branching0fromJtoE {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoJ = RecvTimed<Branching0fromJtoE, End, 'a', 0, true, 1, true, false>;
+type RecursEtoJ = RecvTimed<Branching0fromJtoE, 'a', 0, true, 1, true, false, End>;
 // F
 enum Branching0fromJtoF {
     More(
@@ -195,13 +195,13 @@ enum Branching0fromJtoF {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursFtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursFtoJ>,
             >,
             R2J<R2A<R2B<R2C<R2D<R2E<R2G<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameF,
@@ -209,7 +209,7 @@ enum Branching0fromJtoF {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoJ = RecvTimed<Branching0fromJtoF, End, 'a', 0, true, 1, true, false>;
+type RecursFtoJ = RecvTimed<Branching0fromJtoF, 'a', 0, true, 1, true, false, End>;
 // G
 enum Branching0fromJtoG {
     More(
@@ -224,13 +224,13 @@ enum Branching0fromJtoG {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursGtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursGtoJ>,
             >,
             R2J<R2A<R2B<R2C<R2D<R2E<R2F<R2H<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameG,
@@ -238,7 +238,7 @@ enum Branching0fromJtoG {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoJ = RecvTimed<Branching0fromJtoG, End, 'a', 0, true, 1, true, false>;
+type RecursGtoJ = RecvTimed<Branching0fromJtoG, 'a', 0, true, 1, true, false, End>;
 // H
 enum Branching0fromJtoH {
     More(
@@ -253,13 +253,13 @@ enum Branching0fromJtoH {
             RS,
             RecvTimed<
                 (),
-                SendTimed<(), RecursHtoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursHtoJ>,
             >,
             R2J<R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2I<RoleJ<RoleEnd>>>>>>>>>>,
             NameH,
@@ -267,7 +267,7 @@ enum Branching0fromJtoH {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
-type RecursHtoJ = RecvTimed<Branching0fromJtoH, End, 'a', 0, true, 1, true, false>;
+type RecursHtoJ = RecvTimed<Branching0fromJtoH, 'a', 0, true, 1, true, false, End>;
 // I
 enum Branching0fromJtoI {
     More(
@@ -282,13 +282,13 @@ enum Branching0fromJtoI {
             SR,
             RecvTimed<
                 (),
-                SendTimed<(), RecursItoJ, 'a', 0, true, 1, true, false>,
                 'a',
                 0,
                 true,
                 1,
                 true,
                 false,
+                SendTimed<(), 'a', 0, true, 1, true, false, RecursItoJ>,
             >,
             R2J<R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<RoleJ<RoleEnd>>>>>>>>>>,
             NameI,
@@ -296,107 +296,107 @@ enum Branching0fromJtoI {
     ),
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
-type RecursItoJ = RecvTimed<Branching0fromJtoI, End, 'a', 0, true, 1, true, false>;
+type RecursItoJ = RecvTimed<Branching0fromJtoI, 'a', 0, true, 1, true, false, End>;
 // J
-type Choose0fromJtoA = SendTimed<Branching0fromJtoA, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoB = SendTimed<Branching0fromJtoB, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoC = SendTimed<Branching0fromJtoC, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoD = SendTimed<Branching0fromJtoD, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoE = SendTimed<Branching0fromJtoE, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoF = SendTimed<Branching0fromJtoF, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoG = SendTimed<Branching0fromJtoG, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoH = SendTimed<Branching0fromJtoH, End, 'a', 0, true, 1, true, false>;
-type Choose0fromJtoI = SendTimed<Branching0fromJtoI, End, 'a', 0, true, 1, true, false>;
+type Choose0fromJtoA = SendTimed<Branching0fromJtoA, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoB = SendTimed<Branching0fromJtoB, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoC = SendTimed<Branching0fromJtoC, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoD = SendTimed<Branching0fromJtoD, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoE = SendTimed<Branching0fromJtoE, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoF = SendTimed<Branching0fromJtoF, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoG = SendTimed<Branching0fromJtoG, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoH = SendTimed<Branching0fromJtoH, 'a', 0, true, 1, true, false, End>;
+type Choose0fromJtoI = SendTimed<Branching0fromJtoI, 'a', 0, true, 1, true, false, End>;
 type EndpointMoreJ = MeshedChannelsTen<
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoA, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoA>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoB, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoB>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoC, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoC>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoD, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoD>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoE, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoE>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoF, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoF>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoG, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoG>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoH, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoH>,
     >,
     SendTimed<
         (),
-        RecvTimed<(), Choose0fromJtoI, 'a', 0, true, 1, true, false>,
         'a',
         0,
         true,
         1,
         true,
         false,
+        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromJtoI>,
     >,
     R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<R2I<RoleBroadcast>>>>>>>>>,
     NameJ,

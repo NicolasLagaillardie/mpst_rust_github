@@ -25,7 +25,7 @@ pub type OfferTimed<
     const END: i128,
     const INCLUDE_END: bool,
     const RESET: bool,
-> = RecvTimed<Either<S1, S2>, End, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>;
+> = RecvTimed<Either<S1, S2>, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, End>;
 
 /// Offer a choice between two sessions `S1` and `S2`.
 pub fn offer_either<

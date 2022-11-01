@@ -26,13 +26,13 @@ pub type ChooseTimed<
     const RESET: bool,
 > = SendTimed<
     Either<<S1 as Session>::Dual, <S2 as Session>::Dual>,
-    End,
     CLOCK,
     START,
     INCLUDE_START,
     END,
     INCLUDE_END,
     RESET,
+    End,
 >;
 
 /// Given a choice between sessions `S1` and `S1`, choose

@@ -217,13 +217,13 @@ pub(crate) fn recv_timed(
                 quote! {
                     mpstthree::binary_timed::struct_trait::recv::RecvTimed<
                         T,
-                        #temp_type,
                         CLOCK,
                         START,
                         INCLUDE_START,
                         END,
                         INCLUDE_END,
-                        RESET
+                        RESET,
+                        #temp_type,
                     > ,
                 }
             } else {
@@ -334,13 +334,13 @@ pub(crate) fn recv_from_all_timed(
                 quote! {
                     mpstthree::binary_timed::struct_trait::recv::RecvTimed<
                         T,
-                        #temp_type,
                         CLOCK,
                         START,
                         INCLUDE_START,
                         END,
                         INCLUDE_END,
-                        RESET
+                        RESET,
+                        #temp_type,
                     > ,
                 }
             } else {

@@ -23,52 +23,52 @@ struct OutstandingWebFonts;
 
 type CtoL = SendTimed<
     GetWebPageLoadState,
-    RecvTimed<OutstandingWebFonts, End, 'a', 0, true, 1, true, false>,
     'a',
     0,
     true,
     1,
     true,
     false,
+    RecvTimed<OutstandingWebFonts, 'a', 0, true, 1, true, false, End>,
 >;
 type CtoS = SendTimed<
     GetCurrentState,
-    RecvTimed<DocumentLoading, End, 'a', 0, true, 1, true, false>,
     'a',
     0,
     true,
     1,
     true,
     false,
+    RecvTimed<DocumentLoading, 'a', 0, true, 1, true, false, End>,
 >;
 
 //Layout thread
 
 type LtoC = RecvTimed<
     GetWebPageLoadState,
-    SendTimed<OutstandingWebFonts, End, 'a', 0, true, 1, true, false>,
     'a',
     0,
     true,
     1,
     true,
     false,
+    SendTimed<OutstandingWebFonts, 'a', 0, true, 1, true, false, End>,
 >;
-type LtoS = SendTimed<WebFontLoaded, End, 'a', 0, true, 1, true, false>;
+type LtoS = SendTimed<WebFontLoaded, 'a', 0, true, 1, true, false, End>;
 
 // Script thread
 
 type StoC = RecvTimed<
     GetCurrentState,
-    SendTimed<DocumentLoading, End, 'a', 0, true, 1, true, false>,
     'a',
     0,
     true,
     1,
     true,
     false,
+    SendTimed<DocumentLoading, 'a', 0, true, 1, true, false, End>,
 >;
-type StoL = RecvTimed<WebFontLoaded, End, 'a', 0, true, 1, true, false>;
+type StoL = RecvTimed<WebFontLoaded, 'a', 0, true, 1, true, false, End>;
 
 // Orderings
 

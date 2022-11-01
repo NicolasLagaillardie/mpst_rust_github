@@ -1307,10 +1307,9 @@ pub fn mesh_protocol_mpst(c: &mut Criterion) {
 }
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh eleven empty protocol binary {LOOPS}"),
-        |b| b.iter(all_binaries),
-    );
+    c.bench_function(&format!("mesh eleven empty protocol binary {LOOPS}"), |b| {
+        b.iter(all_binaries)
+    });
 }
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {

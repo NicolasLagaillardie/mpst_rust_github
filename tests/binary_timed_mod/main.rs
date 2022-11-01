@@ -19,34 +19,34 @@ use std::time::{Duration, Instant};
 
 pub fn head_str() {
     assert_eq!(
-        SendTimed::<i32, End, 'a', 0, true, 5, true, false>::head_str(),
+        SendTimed::<i32, 'a', 0, true, 5, true, false, End>::head_str(),
         "Send".to_string()
     );
     assert_eq!(
-        RecvTimed::<i32, End, 'a', 0, true, 5, true, false>::head_str(),
+        RecvTimed::<i32, 'a', 0, true, 5, true, false, End>::head_str(),
         "Recv".to_string()
     );
 }
 
 pub fn tail_str() {
     assert_eq!(
-        SendTimed::<i32, End, 'a', 0, true, 5, true, false>::tail_str(),
+        SendTimed::<i32, 'a', 0, true, 5, true, false, End>::tail_str(),
         "End<>".to_string()
     );
     assert_eq!(
-        RecvTimed::<i32, End, 'a', 0, true, 5, true, false>::tail_str(),
+        RecvTimed::<i32, 'a', 0, true, 5, true, false, End>::tail_str(),
         "End<>".to_string()
     );
 }
 
 pub fn self_head_str() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 0, true, 5, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 0, true, 5, true, false, End>::new();
     assert_eq!(send.self_head_str(), "Send".to_string());
     assert_eq!(recv.self_head_str(), "Recv".to_string());
 }
 
 pub fn self_tail_str() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 0, true, 5, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 0, true, 5, true, false, End>::new();
     assert_eq!(send.self_tail_str(), "End<>".to_string());
     assert_eq!(recv.self_tail_str(), "End<>".to_string());
 }
@@ -54,49 +54,49 @@ pub fn self_tail_str() {
 // Constraints
 
 pub fn constraint_start_excluded() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, -5, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, false, -5, true, false, End>::new();
     assert_eq!(send.constraint(), "5 < a".to_string());
     assert_eq!(recv.constraint(), "5 < a".to_string());
 }
 
 pub fn constraint_start_included() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, -5, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, true, -5, true, false, End>::new();
     assert_eq!(send.constraint(), "5 <= a".to_string());
     assert_eq!(recv.constraint(), "5 <= a".to_string());
 }
 
 pub fn constraint_end_excluded() {
-    let (send, recv) = SendTimed::<i32, End, 'a', -5, true, 5, false, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', -5, true, 5, false, false, End>::new();
     assert_eq!(send.constraint(), "a < 5".to_string());
     assert_eq!(recv.constraint(), "a < 5".to_string());
 }
 
 pub fn constraint_end_included() {
-    let (send, recv) = SendTimed::<i32, End, 'a', -5, true, 5, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', -5, true, 5, true, false, End>::new();
     assert_eq!(send.constraint(), "a <= 5".to_string());
     assert_eq!(recv.constraint(), "a <= 5".to_string());
 }
 
 pub fn constraint_start_excluded_end_excluded() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, 10, false, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, false, 10, false, false, End>::new();
     assert_eq!(send.constraint(), "5 < a < 10".to_string());
     assert_eq!(recv.constraint(), "5 < a < 10".to_string());
 }
 
 pub fn constraint_start_excluded_end_included() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, false, 10, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, false, 10, true, false, End>::new();
     assert_eq!(send.constraint(), "5 < a <= 10".to_string());
     assert_eq!(recv.constraint(), "5 < a <= 10".to_string());
 }
 
 pub fn constraint_start_included_end_excluded() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, 10, false, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, true, 10, false, false, End>::new();
     assert_eq!(send.constraint(), "5 <= a < 10".to_string());
     assert_eq!(recv.constraint(), "5 <= a < 10".to_string());
 }
 
 pub fn constraint_start_included_end_included() {
-    let (send, recv) = SendTimed::<i32, End, 'a', 5, true, 10, true, false>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, true, 10, true, false, End>::new();
     assert_eq!(send.constraint(), "5 <= a <= 10".to_string());
     assert_eq!(recv.constraint(), "5 <= a <= 10".to_string());
 }
@@ -105,18 +105,18 @@ pub fn constraint_start_included_end_included() {
 // choice.
 
 type NegServer =
-    RecvTimed<i32, SendTimed<i32, End, 'a', 4, true, 6, true, false>, 'a', 2, true, 4, true, false>;
+    RecvTimed<i32, 'a', 2, true, 4, true, false, SendTimed<i32, 'a', 4, true, 6, true, false, End>>;
 type NegClient = <NegServer as Session>::Dual;
 
 type AddServer = RecvTimed<
     i32,
-    RecvTimed<i32, SendTimed<i32, End, 'a', 6, true, 8, true, false>, 'a', 4, true, 6, true, false>,
     'a',
     2,
     true,
     4,
     true,
     false,
+    RecvTimed<i32, 'a', 4, true, 6, true, false, SendTimed<i32, 'a', 6, true, 8, true, false, End>>,
 >;
 type AddClient = <AddServer as Session>::Dual;
 

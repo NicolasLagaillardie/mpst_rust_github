@@ -23,7 +23,7 @@ baker_timed!(MeshedChannels, A, B);
 
 // Types
 // A
-type Choose0fromAtoB = SendTimed<Branching0fromAtoB, End, 'a', 0, true, 1, true, false>;
+type Choose0fromAtoB = SendTimed<Branching0fromAtoB, 'a', 0, true, 1, true, false, End>;
 // B
 enum Branching0fromAtoB {
     More(MeshedChannels<RSRecursBtoA, ThreeRoleA, NameB>),
@@ -31,16 +31,16 @@ enum Branching0fromAtoB {
 }
 type RSRecursBtoA = RecvTimed<
     i32,
-    SendTimed<i32, RecursBtoA, 'a', 0, true, 1, true, false>,
     'a',
     0,
     true,
     1,
     true,
     false,
+    SendTimed<i32, 'a', 0, true, 1, true, false, RecursBtoA>,
 >;
 type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
-type RecursBtoA = RecvTimed<Branching0fromAtoB, End, 'a', 0, true, 1, true, false>;
+type RecursBtoA = RecvTimed<Branching0fromAtoB, 'a', 0, true, 1, true, false, End>;
 
 // Creating the MP sessions
 type EndpointA = MeshedChannels<Choose0fromAtoB, RoleBroadcast, NameA>;

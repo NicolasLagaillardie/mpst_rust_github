@@ -23,13 +23,13 @@ use std::marker;
 #[derive(Debug)]
 pub struct RecvTimed<
     T,
-    S,
     const CLOCK: char,
     const START: i128,
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
     const RESET: bool,
+    S,
 > where
     T: marker::Send,
     S: Session,
@@ -52,14 +52,14 @@ pub struct RecvTimed<
 
 impl<
         T: marker::Send,
-        S: Session,
         const CLOCK: char,
         const START: i128,
         const INCLUDE_START: bool,
         const END: i128,
         const INCLUDE_END: bool,
         const RESET: bool,
-    > RecvTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>
+        S: Session,
+    > RecvTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>
 {
     #[doc(hidden)]
     pub fn constraint(&self) -> String {
@@ -94,16 +94,16 @@ impl<
 
 impl<
         T: marker::Send,
-        S: Session,
         const CLOCK: char,
         const START: i128,
         const INCLUDE_START: bool,
         const END: i128,
         const INCLUDE_END: bool,
         const RESET: bool,
-    > Session for RecvTimed<T, S, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>
+        S: Session,
+    > Session for RecvTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>
 {
-    type Dual = SendTimed<T, S::Dual, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>;
+    type Dual = SendTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S::Dual>;
 
     fn new() -> (Self, Self::Dual) {
         let (sender, receiver) = Self::Dual::new();

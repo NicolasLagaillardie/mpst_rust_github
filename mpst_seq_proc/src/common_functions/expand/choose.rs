@@ -778,13 +778,13 @@ pub(crate) fn choose_timed(
                                     #receiver_ident
                                 >
                             >,
-                            mpstthree::binary::struct_trait::end::End,
                             CLOCK,
                             START,
                             INCLUDE_START,
                             END,
                             INCLUDE_END,
-                            RESET
+                            RESET,
+                            mpstthree::binary::struct_trait::end::End,
                         >,
                     }
                 } else {

@@ -18,7 +18,7 @@ baker_timed!(MeshedChannelsFour, A, B, C, D);
 enum Branching0fromDtoA {
     Forward(
         MeshedChannelsFour<
-            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), 'a', 0, true, 1, true, false, End>,
             End,
             RecursAtoD,
             RoleB<RoleD<RoleEnd>>,
@@ -27,7 +27,7 @@ enum Branching0fromDtoA {
     ),
     Backward(
         MeshedChannelsFour<
-            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
             End,
             RecursAtoD,
             RoleB<RoleD<RoleEnd>>,
@@ -36,13 +36,13 @@ enum Branching0fromDtoA {
     ),
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoD = RecvTimed<Branching0fromDtoA, End, 'a', 0, true, 1, true, false>;
+type RecursAtoD = RecvTimed<Branching0fromDtoA, 'a', 0, true, 1, true, false, End>;
 // B
 enum Branching0fromDtoB {
     Forward(
         MeshedChannelsFour<
-            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
-            SendTimed<(), End, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
+            SendTimed<(), 'a', 0, true, 1, true, false, End>,
             RecursBtoD,
             RoleA<RoleC<RoleD<RoleEnd>>>,
             NameB,
@@ -50,8 +50,8 @@ enum Branching0fromDtoB {
     ),
     Backward(
         MeshedChannelsFour<
-            SendTimed<(), End, 'a', 0, true, 1, true, false>,
-            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
+            SendTimed<(), 'a', 0, true, 1, true, false, End>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
             RecursBtoD,
             RoleC<RoleA<RoleD<RoleEnd>>>,
             NameB,
@@ -59,14 +59,14 @@ enum Branching0fromDtoB {
     ),
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoD = RecvTimed<Branching0fromDtoB, End, 'a', 0, true, 1, true, false>;
+type RecursBtoD = RecvTimed<Branching0fromDtoB, 'a', 0, true, 1, true, false, End>;
 // C
 enum Branching0fromDtoC {
     Forward(
         MeshedChannelsFour<
             End,
-            RecvTimed<(), End, 'a', 0, true, 1, true, false>,
-            SendTimed<(), RecursCtoD, 'a', 0, true, 1, true, false>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
+            SendTimed<(), 'a', 0, true, 1, true, false, RecursCtoD>,
             RoleB<RoleD<RoleD<RoleEnd>>>,
             NameC,
         >,
@@ -74,30 +74,30 @@ enum Branching0fromDtoC {
     Backward(
         MeshedChannelsFour<
             End,
-            SendTimed<(), End, 'a', 0, true, 1, true, false>,
-            RecvTimed<(), RecursCtoD, 'a', 0, true, 1, true, false>,
+            SendTimed<(), 'a', 0, true, 1, true, false, End>,
+            RecvTimed<(), 'a', 0, true, 1, true, false, RecursCtoD>,
             RoleD<RoleB<RoleD<RoleEnd>>>,
             NameC,
         >,
     ),
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoD = RecvTimed<Branching0fromDtoC, End, 'a', 0, true, 1, true, false>;
+type RecursCtoD = RecvTimed<Branching0fromDtoC, 'a', 0, true, 1, true, false, End>;
 // D
-type Choose0fromDtoA = SendTimed<Branching0fromDtoA, End, 'a', 0, true, 1, true, false>;
-type Choose0fromDtoB = SendTimed<Branching0fromDtoB, End, 'a', 0, true, 1, true, false>;
-type Choose0fromDtoC = SendTimed<Branching0fromDtoC, End, 'a', 0, true, 1, true, false>;
+type Choose0fromDtoA = SendTimed<Branching0fromDtoA, 'a', 0, true, 1, true, false, End>;
+type Choose0fromDtoB = SendTimed<Branching0fromDtoB, 'a', 0, true, 1, true, false, End>;
+type Choose0fromDtoC = SendTimed<Branching0fromDtoC, 'a', 0, true, 1, true, false, End>;
 type EndpointForwardD = MeshedChannelsFour<
     Choose0fromDtoA,
     Choose0fromDtoB,
-    RecvTimed<(), Choose0fromDtoC, 'a', 0, true, 1, true, false>,
+    RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromDtoC>,
     RoleC<RoleBroadcast>,
     NameD,
 >;
 type EndpointBackwardD = MeshedChannelsFour<
     Choose0fromDtoA,
     Choose0fromDtoB,
-    SendTimed<(), Choose0fromDtoC, 'a', 0, true, 1, true, false>,
+    SendTimed<(), 'a', 0, true, 1, true, false, Choose0fromDtoC>,
     RoleC<RoleBroadcast>,
     NameD,
 >;
