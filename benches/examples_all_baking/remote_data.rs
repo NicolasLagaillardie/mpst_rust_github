@@ -218,5 +218,5 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn remote_data_main(c: &mut Criterion) {
-    c.bench_function("Remote data", |b| b.iter(all_mpst));
+    c.bench_function("Remote data baking", |b| b.iter(all_mpst));
 }

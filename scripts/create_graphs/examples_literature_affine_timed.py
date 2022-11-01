@@ -37,20 +37,20 @@ compile_files = ['three_buyers', 'distributed_calc', 'three_travel',
 
 # Expected bench files
 bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wallet baking', 'Simple voting MPST baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking',
-               'Timed Remote data', 'Timed Servo', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
+               'Timed Remote data', 'Timed Servo', 'Servo baking', 'Remote data baking', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
 
 # Expected bench files
 translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking': 'distributed_calc_timed',
-             'Timed Servo': 'servo_timed', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'o_auth_timed', 'Timed Online wallet baking': 'online_wallet_timed', 'Timed Simple voting MPST baking': 'simple_voting_timed', 'Timed SMTP baking': 'smtp_timed', 'Timed Travel MPST baking': 'three_travel_timed', 'Timed Three buyers MPST baking': 'three_buyers_timed'}
+             'Timed Servo': 'servo_timed', 'Servo': 'servo', 'Remote data baking': 'remote_data', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'o_auth_timed', 'Timed Online wallet baking': 'online_wallet_timed', 'Timed Simple voting MPST baking': 'simple_voting_timed', 'Timed SMTP baking': 'smtp_timed', 'Timed Travel MPST baking': 'three_travel_timed', 'Timed Three buyers MPST baking': 'three_buyers_timed'}
 
 # Indexung for bar lists
-index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 7,
-               'Timed SMTP baking': 2, 'Timed Servo': 8, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 5, 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
+index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 7, 'Remote data baking': 7,
+               'Timed SMTP baking': 2, 'Servo': 8, 'Timed Servo': 8, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 5, 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
 index_compile = {'distributed_calc': 0, 'online_wallet': 1, 'smtp': 2, 'simple_voting': 3, 'three_buyers': 4, 'distributed_calc_timed': 0, 'online_wallet_timed': 1,
-                 'remote_data_timed': 7, 'smtp_timed': 2, 'servo_timed': 8, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
+                 'remote_data_timed': 7, 'smtp_timed': 2, 'servo_timed': 8, 'servo': 8, 'remote_data': 7, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
 
-bar_compilation_baking = [0] * 7
-bar_running_baking = [0] * 7
+bar_compilation_baking = [0] * 9
+bar_running_baking = [0] * 9
 
 bar_compilation_timed = [0] * 9
 bar_running_timed = [0] * 9
@@ -149,7 +149,8 @@ for d in compile_directories:
                     report_file.write(str(statistics.mean(temp_build)/1000000))
                     report_file.write('; ')
                     # print('Done with building time of', d)
-                    report_file.write(str(bench[compile_file + '_timed']/1000000))
+                    report_file.write(
+                        str(bench[compile_file + '_timed']/1000000))
                     bar_running_timed[index_compile[compile_file + '_timed']
                                       ] = bench[compile_file + '_timed']/1000000
                     report_file.write('; ')
@@ -221,7 +222,7 @@ running_time.yaxis.set_ticks(np.arange(0, int(
 running_time.tick_params(labelsize=20)
 
 plt.legend(
-    ['AMPST','ATMP'],
+    ['AMPST', 'ATMP'],
     loc='best',
     # bbox_to_anchor=(-0.5, -0.3),
     fancybox=True,

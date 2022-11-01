@@ -116,5 +116,5 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn servo_main(c: &mut Criterion) {
-    c.bench_function("Servo", |b| b.iter(all_mpst));
+    c.bench_function("Servo baking", |b| b.iter(all_mpst));
 }
