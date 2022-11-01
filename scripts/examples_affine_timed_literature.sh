@@ -6,26 +6,25 @@
 set -e
 
 ## Compile basic examples
-bash ./scripts/create_files/compile_normal.sh three_buyers 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh distributed_calc 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh three_travel 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh simple_voting 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh online_wallet 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh o_auth 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh smtp 100 affine_timed
+bash ./scripts/create_files/compile_normal.sh three_buyers 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh distributed_calc 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh three_travel 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh simple_voting 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh online_wallet 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh o_auth 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh remote_data_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh servo_timed 5 affine_timed
 
 ## Compile timed examples
-bash ./scripts/create_files/compile_normal.sh three_buyers_timed 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh distributed_calc_timed 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh three_travel_timed 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh simple_voting_timed 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh online_wallet_timed 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh o_auth_timed 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh smtp_timed 100 affine_timed
-
-## Compile timed additional examples
-bash ./scripts/create_files/compile_normal.sh remote_data 100 affine_timed
-bash ./scripts/create_files/compile_normal.sh servo 100 affine_timed
+bash ./scripts/create_files/compile_normal.sh three_buyers_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh distributed_calc_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh three_travel_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh simple_voting_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh online_wallet_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh o_auth_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh smtp_timed 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh remote_data 5 affine_timed
+bash ./scripts/create_files/compile_normal.sh servo 5 affine_timed
 
 ## Run benchmarks
 cargo clean

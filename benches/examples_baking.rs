@@ -22,6 +22,8 @@ criterion_group! {
         examples_all_baking::video_stream::video_stream_main,
         examples_all_baking::dns_fowler::dns_fowler_main,
         examples_all_baking::dns_imai::dns_imai_main,
+        examples_all_baking::servo::servo_main,
+        examples_all_baking::remote_data::remote_data_main,
 }
 
 criterion_main! {

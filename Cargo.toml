@@ -261,6 +261,16 @@ name = "video_stream_basic"
 path = "examples/affine/video_stream_basic.rs"
 required-features = ["macros_simple"]
 
+[[example]]
+name = "servo"
+path = "examples/affine/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data"
+path = "examples/affine/remote_data.rs"
+required-features = ["baking"]
+
 ################################### Checking examples
 
 [[example]]

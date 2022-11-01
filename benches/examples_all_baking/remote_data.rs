@@ -1,61 +1,35 @@
-#![allow(
-    clippy::type_complexity,
-    clippy::too_many_arguments,
-    clippy::large_enum_variant,
-    dead_code
-)]
+use criterion::{black_box, Criterion};
 
-use mpstthree::baker_timed;
-use mpstthree::binary::struct_trait::end::End;
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::session::Session;
-use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use rand::random;
 
-use std::collections::HashMap;
 use std::error::Error;
-use std::time::Instant;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-baker_timed!(MeshedChannels, Satellite, Sensor, Server);
+baker!("rec_and_cancel", MeshedChannels, Satellite, Sensor, Server);
 
 // Labels
 struct Stop {}
 struct GetData {}
+#[allow(dead_code)]
 struct Data {
     payload: i32,
 }
 
 // Types
 // Satellite
-type OfferFromServertoSatellite =
-    RecvTimed<BranchingFromServertoSatellite, End, 'a', 0, true, 1, true, true>;
+type OfferFromServertoSatellite = Recv<BranchingFromServertoSatellite, End>;
 
-type BinaryDataFromSensortoSatellite = SendTimed<
-    GetData,
-    RecvTimed<Data, End, 'a', 0, true, 1, true, false>,
-    'a',
-    0,
-    true,
-    1,
-    true,
-    false,
->;
-type BinaryDataFromServertoSatellite = RecvTimed<
-    GetData,
-    SendTimed<Data, OfferFromServertoSatellite, 'a', 0, true, 1, true, true>,
-    'a',
-    0,
-    true,
-    1,
-    true,
-    false,
->;
+type BinaryDataFromSensortoSatellite = Send<GetData, Recv<Data, End>>;
+type BinaryDataFromServertoSatellite = Recv<GetData, Send<Data, OfferFromServertoSatellite>>;
 
-type BinaryStopFromSensortoSatellite = SendTimed<Stop, End, 'a', 0, true, 1, true, false>;
-type BinaryStopFromServertoSatellite = RecvTimed<Stop, End, 'a', 0, true, 1, true, false>;
+type BinaryStopFromSensortoSatellite = Send<Stop, End>;
+type BinaryStopFromServertoSatellite = Recv<Stop, End>;
 
 enum BranchingFromServertoSatellite {
     Data(
@@ -77,8 +51,7 @@ enum BranchingFromServertoSatellite {
 }
 
 // Sensor
-type OfferFromServertoSensor =
-    RecvTimed<BranchingFromServertoSensor, End, 'a', 0, true, 1, true, true>;
+type OfferFromServertoSensor = Recv<BranchingFromServertoSensor, End>;
 
 type BinaryDataFromSatellitetoSensor = <BinaryDataFromSensortoSatellite as Session>::Dual;
 
@@ -130,123 +103,114 @@ type EndpointServer1Stop =
     MeshedChannels<BinaryStopFromSatellitetoServer, End, RoleSatellite<RoleEnd>, NameServer>;
 
 // Functions
-// Satellite
-fn endpoint_satellite(
-    s: EndpointSatellite0,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> Result<(), Box<dyn Error>> {
-    all_clocks.insert('a', Instant::now());
 
-    recurs_satellite(s, all_clocks)
+/////////////////////////
+
+// Satellite
+fn endpoint_satellite(s: EndpointSatellite0) -> Result<(), Box<dyn Error>> {
+    recurs_satellite(s)
 }
 
-fn recurs_satellite(
-    s: EndpointSatellite0,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
+fn recurs_satellite(s: EndpointSatellite0) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
         BranchingFromServertoSatellite::Stop(s) => {
-            let (stop, s) = s.recv(all_clocks)?;
-            let s = s.send(stop, all_clocks)?;
+            let (stop, s) = s.recv()?;
+            let s = s.send(stop)?;
 
             s.close()
         },
         BranchingFromServertoSatellite::Data(s) => {
             // Forward get_data signal
-            let (get_data, s) = s.recv(all_clocks)?;
-            let s = s.send(get_data, all_clocks)?;
+            let (get_data, s) = s.recv()?;
+            let s = s.send(get_data)?;
 
             // Forward the data
-            let (data, s) = s.recv(all_clocks)?;
-            let s = s.send(data, all_clocks)?;
+            let (data, s) = s.recv()?;
+            let s = s.send(data)?;
 
-            recurs_satellite(s, all_clocks)
+            recurs_satellite(s)
         },
     })
 }
 
-// Sensor
-fn endpoint_sensor(
-    s: EndpointSensor0,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> Result<(), Box<dyn Error>> {
-    all_clocks.insert('a', Instant::now());
+/////////////////////////
 
-    recurs_sensor(s, all_clocks)
+// Sensor
+fn endpoint_sensor(s: EndpointSensor0) -> Result<(), Box<dyn Error>> {
+    recurs_sensor(s)
 }
 
-fn recurs_sensor(
-    s: EndpointSensor0,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
+fn recurs_sensor(s: EndpointSensor0) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
         BranchingFromServertoSensor::Stop(s) => {
-            let (_stop, s) = s.recv(all_clocks)?;
+            let (_stop, s) = s.recv()?;
 
             s.close()
         },
         BranchingFromServertoSensor::Data(s) => {
             // Get get_data signal
-            let (_get_data, s) = s.recv(all_clocks)?;
+            let (_get_data, s) = s.recv()?;
 
             // Send the data
-            let s = s.send(Data { payload : random::<i32>() }, all_clocks)?;
+            let s = s.send(Data { payload : random::<i32>() })?;
 
-            recurs_sensor(s, all_clocks)
+            recurs_sensor(s)
         },
     })
 }
 
-// Server
-fn endpoint_server(
-    s: EndpointServer0,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> Result<(), Box<dyn Error>> {
-    all_clocks.insert('a', Instant::now());
+/////////////////////////
 
-    recurs_server(s, 100, all_clocks)
+// Server
+fn endpoint_server(s: EndpointServer0) -> Result<(), Box<dyn Error>> {
+    recurs_server(s, 100)
 }
 
-fn recurs_server(
-    s: EndpointServer0,
-    loops: i32,
-    all_clocks: &mut HashMap<char, Instant>,
-) -> Result<(), Box<dyn Error>> {
+fn recurs_server(s: EndpointServer0, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
             let s: EndpointServer1Stop = choose_mpst_server_to_all!(
                 s,
-                all_clocks,
                 BranchingFromServertoSatellite::Stop,
                 BranchingFromServertoSensor::Stop,
             );
 
-            let s = s.send(Stop {}, all_clocks)?;
+            let s = s.send(Stop {})?;
 
             s.close()
         }
         i => {
             let s: EndpointServer1Data = choose_mpst_server_to_all!(
                 s,
-                all_clocks,
                 BranchingFromServertoSatellite::Data,
                 BranchingFromServertoSensor::Data,
             );
 
-            let s = s.send(GetData {}, all_clocks)?;
+            let s = s.send(GetData {})?;
 
-            let (_data, s) = s.recv(all_clocks)?;
+            let (_data, s) = s.recv()?;
 
-            recurs_server(s, i - 1, all_clocks)
+            recurs_server(s, i - 1)
         }
     }
 }
 
-fn main() {
-    let (thread_satellite, thread_sensor, thread_server) =
-        fork_mpst(endpoint_satellite, endpoint_sensor, endpoint_server);
+/////////////////////////
 
-    assert!(thread_satellite.join().is_ok());
-    assert!(thread_sensor.join().is_ok());
-    assert!(thread_server.join().is_ok());
+fn all_mpst() {
+    let (thread_satellite, thread_sensor, thread_server) = fork_mpst(
+        black_box(endpoint_satellite),
+        black_box(endpoint_sensor),
+        black_box(endpoint_server),
+    );
+
+    thread_satellite.join().unwrap();
+    thread_sensor.join().unwrap();
+    thread_server.join().unwrap();
+}
+
+/////////////////////////
+
+pub fn remote_data_main(c: &mut Criterion) {
+    c.bench_function("Remote data", |b| b.iter(all_mpst));
 }
