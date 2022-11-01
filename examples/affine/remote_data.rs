@@ -1,3 +1,10 @@
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant,
+    dead_code
+)]
+
 use mpstthree::baker;
 use mpstthree::binary::struct_trait::session::Session;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
@@ -14,7 +21,6 @@ baker!("rec_and_cancel", MeshedChannels, Satellite, Sensor, Server);
 // Labels
 struct Stop {}
 struct GetData {}
-#[allow(dead_code)]
 struct Data {
     payload: i32,
 }

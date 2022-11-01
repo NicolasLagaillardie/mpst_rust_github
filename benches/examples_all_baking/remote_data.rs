@@ -1,3 +1,10 @@
+#![allow(
+    clippy::type_complexity,
+    clippy::too_many_arguments,
+    clippy::large_enum_variant,
+    dead_code
+)]
+
 use criterion::{black_box, Criterion};
 
 use mpstthree::baker;
@@ -16,7 +23,6 @@ baker!("rec_and_cancel", MeshedChannels, Satellite, Sensor, Server);
 // Labels
 struct Stop {}
 struct GetData {}
-#[allow(dead_code)]
 struct Data {
     payload: i32,
 }
