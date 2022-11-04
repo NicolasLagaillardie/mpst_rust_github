@@ -9,4 +9,4 @@ note: required because it appears within the type `CalcOp2<N>`
    |
 9  | enum CalcOp2<N: marker::Send> {
    |      ^^^^^^^
-   = note: required because of the requirements on the impl of `Session` for `mpstthree::binary::struct_trait::recv::Recv<CalcOp2<N>, mpstthree::binary::struct_trait::end::End>`
+   = note: required for `mpstthree::binary::struct_trait::recv::Recv<CalcOp2<N>, mpstthree::binary::struct_trait::end::End>` to implement `Session`
