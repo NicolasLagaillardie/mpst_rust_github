@@ -2,7 +2,7 @@ use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::Ident;
 
-/// Expand choose methods
+// Expand choose cancel method
 pub(crate) fn cancel(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let temp_types: Vec<TokenStream> = (1..number_roles)
         .map(|i| {

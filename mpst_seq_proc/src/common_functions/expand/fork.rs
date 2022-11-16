@@ -284,7 +284,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
     }
 }
 
-/// Expand fork methods
+/// Expand fork timed methods
 pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let (matrix, _diag) = diag_and_matrix(number_roles);
     let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(number_roles);

@@ -1,4 +1,4 @@
-// #![allow(unused_variables)]
+/// Implementation for the baker_timed!(...)
 
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
@@ -29,11 +29,14 @@ pub(crate) struct BakingTimedWithEnumAndCancel {
 
 impl Parse for BakingTimedWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
+        // Get name of the MeshedChannels
         let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
+        // Get name of the Roles
         let all_roles = get_all_roles(TokenStream::parse(input)?);
 
+        // Compute number of Roles
         let number_roles = u64::try_from(all_roles.len()).unwrap();
 
         Ok(BakingTimedWithEnumAndCancel {

@@ -1,3 +1,5 @@
+/// Implementation for the baker!("basic", ...)
+
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use std::convert::TryFrom;
@@ -25,11 +27,14 @@ pub(crate) struct Baking {
 
 impl Parse for Baking {
     fn parse(input: ParseStream) -> Result<Self> {
+        // Get name of the MeshedChannels
         let meshedchannels_name = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
 
+        // Get name of the Roles
         let all_roles = get_all_roles(TokenStream::parse(input)?);
 
+        // Compute number of Roles
         let number_roles = u64::try_from(all_roles.len()).unwrap();
 
         Ok(Baking {

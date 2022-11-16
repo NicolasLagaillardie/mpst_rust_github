@@ -7,7 +7,7 @@ use crate::common_functions::maths::{
     diag_and_matrix, get_line_column_from_diag, get_tuple_matrix,
 };
 
-/// Expand choose methods
+/// Expand choose left and right methods
 pub(crate) fn choose(
     all_roles: &[TokenStream],
     sender: u64,
@@ -619,7 +619,7 @@ pub(crate) fn choose_mpst_create_multi_to_all(
     }
 }
 
-/// Expand choose methods
+/// Expand choose left and right timed methods
 pub(crate) fn choose_timed(
     all_roles: &[TokenStream],
     sender: u64,
