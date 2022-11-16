@@ -1,11 +1,12 @@
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Ident, LitInt, Result, Token};
+use syn::{Ident, Result};
 
 use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
 };
+use crate::common_functions::parse_stream_sessions;
 
 #[derive(Debug)]
 pub(crate) struct ForkMPSTMultiSolo {
@@ -16,13 +17,7 @@ pub(crate) struct ForkMPSTMultiSolo {
 
 impl Parse for ForkMPSTMultiSolo {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let meshedchannels_name = Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let (func_name, meshedchannels_name, n_sessions) = parse_stream_sessions(input)?;
 
         Ok(ForkMPSTMultiSolo {
             func_name,

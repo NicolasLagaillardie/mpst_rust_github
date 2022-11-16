@@ -1,10 +1,9 @@
-/// Implementation for the baker!("rec_and_cancel", ...)
+//! Implementation for baker!("rec_and_cancel", ...)
 
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
-use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
-use syn::{Ident, Result, Token};
+use syn::{Ident, Result};
 
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
@@ -13,10 +12,10 @@ use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
 use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
-use crate::common_functions::expand::parenthesised::get_all_roles;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
 use crate::common_functions::expand::role::role;
 use crate::common_functions::expand::send::send_canceled;
+use crate::common_functions::parse_stream_roles;
 
 #[derive(Debug)]
 pub(crate) struct BakingWithEnumAndCancel {
@@ -27,15 +26,7 @@ pub(crate) struct BakingWithEnumAndCancel {
 
 impl Parse for BakingWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
-        // Get name of the MeshedChannels
-        let meshedchannels_name = Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        // Get name of the Roles
-        let all_roles = get_all_roles(TokenStream::parse(input)?);
-
-        // Compute number of Roles
-        let number_roles = u64::try_from(all_roles.len()).unwrap();
+        let (meshedchannels_name, all_roles, number_roles) = parse_stream_roles(input)?;
 
         Ok(BakingWithEnumAndCancel {
             meshedchannels_name,

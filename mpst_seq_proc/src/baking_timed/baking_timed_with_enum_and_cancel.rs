@@ -1,4 +1,4 @@
-/// Implementation for the baker_timed!(...)
+//! Implementation for baker_timed!(...)
 
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
