@@ -15,7 +15,7 @@ use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
 use crate::common_functions::expand::role::role;
 use crate::common_functions::expand::send::send_basic;
-use crate::common_functions::parse_stream_roles;
+use crate::common_functions::parsing::parse_stream_roles;
 
 #[derive(Debug)]
 pub(crate) struct BakingWithEnum {

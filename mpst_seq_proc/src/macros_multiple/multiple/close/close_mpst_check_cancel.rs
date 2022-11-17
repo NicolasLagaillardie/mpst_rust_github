@@ -3,7 +3,7 @@ use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
-use crate::common_functions::parse_stream_sessions;
+use crate::common_functions::parsing::parse_stream_sessions;
 
 #[derive(Debug)]
 pub(crate) struct CloseMpstCheckCancel {

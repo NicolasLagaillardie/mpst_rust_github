@@ -6,7 +6,7 @@ use syn::{Ident, Result};
 use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
 };
-use crate::common_functions::parse_stream_sessions;
+use crate::common_functions::parsing::parse_stream_sessions;
 
 #[derive(Debug)]
 pub(crate) struct ForkMPSTMultiSolo {
