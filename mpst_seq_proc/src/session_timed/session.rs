@@ -1,3 +1,5 @@
+#![allow(dead_code, unused_imports)]
+
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use std::{collections::HashSet, mem};
@@ -6,19 +8,24 @@ use syn::{
     GenericParam, Ident, Index, Item, ItemEnum, ItemStruct, ItemType, PathArguments, Result, Type,
 };
 
+// Get HashSet of params of the given type
 fn idents_set<P>(params: &Punctuated<GenericParam, P>) -> HashSet<Ident> {
-    let idents = params.iter().filter_map(|param| match param {
-        GenericParam::Type(ty) => Some(ty.ident.clone()),
-        _ => None,
-    });
-    idents.collect::<HashSet<_>>()
+    params
+        .iter()
+        .filter_map(|param| match param {
+            GenericParam::Type(ty) => Some(ty.ident.clone()),
+            _ => None,
+        })
+        .collect::<HashSet<_>>()
 }
 
+// Extend `right` with `left`, then assign `right` value to `left
 fn punctuated_prepend<T, P: Default>(left: &mut Punctuated<T, P>, mut right: Punctuated<T, P>) {
     right.extend(mem::take(left));
     *left = right;
 }
 
+// Extract types from given type
 fn unroll_type(mut ty: &mut Type) -> &mut Type {
     loop {
         ty = match ty {
@@ -31,6 +38,7 @@ fn unroll_type(mut ty: &mut Type) -> &mut Type {
     ty
 }
 
+// Augment the provided type, and take the excluded types in consideration
 fn augment_type(mut ty: &mut Type, exclude: &HashSet<Ident>) {
     while let Type::Path(path) = unroll_type(ty) {
         if *path == parse_quote!(Self) {
@@ -69,6 +77,7 @@ fn augment_type(mut ty: &mut Type, exclude: &HashSet<Ident>) {
     }
 }
 
+// If session_timed is a type
 fn session_type(mut input: ItemType) -> TokenStream {
     let exclude = idents_set(&input.generics.params);
     punctuated_prepend(
@@ -189,7 +198,7 @@ fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
     Ok(quote!(#input #output))
 }
 
-pub fn session(attr: TokenStream, input: TokenStream) -> Result<TokenStream> {
+pub fn session_timed(attr: TokenStream, input: TokenStream) -> Result<TokenStream> {
     let Nothing = parse2(attr)?;
     match parse2::<Item>(input)? {
         Item::Type(input) => Ok(session_type(input)),

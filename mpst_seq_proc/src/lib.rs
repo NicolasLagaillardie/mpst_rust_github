@@ -79,6 +79,8 @@ mod choose_timed_mpst_multi_to_all;
 
 use choose_timed_mpst_multi_to_all::ChooseTimedMultiToAll;
 
+mod session_timed;
+
 //////////////////////////////////////
 
 #[proc_macro]
