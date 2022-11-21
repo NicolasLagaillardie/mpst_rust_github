@@ -1,11 +1,11 @@
-#![allow(dead_code, unused_imports)]
+#![allow(dead_code)]
 
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use std::{collections::HashSet, mem};
 use syn::{
     parse::Nothing, parse2, parse_quote, punctuated::Punctuated, Error, Fields, GenericArgument,
-    GenericParam, Ident, Index, Item, ItemEnum, ItemStruct, ItemType, PathArguments, Result, Type,
+    GenericParam, Ident, Item, ItemEnum, ItemType, PathArguments, Result, Type,
 };
 
 /// Get HashSet of params of the given type
@@ -107,7 +107,7 @@ fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
     // Get Ident of type
     let ident = &input.ident;
 
-    // Get excluded idents set from generic parameters 
+    // Get excluded idents set from generic parameters
     let exclude = idents_set(&input.generics.params);
 
     // Get genereics of input
@@ -119,7 +119,7 @@ fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
         parse_quote!('__q, '__r, __R: ::rumpsteak::Role + '__r),
     );
 
-    // Split a type's generics into the pieces required for impl'ing a trait for that type 
+    // Split a type's generics into the pieces required for impl'ing a trait for that type
     let (impl_generics, _, _) = generics.split_for_impl();
 
     let mut generics = input.generics.clone();
@@ -130,7 +130,7 @@ fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
         parse_quote!('__q, __R: ::rumpsteak::Role),
     );
 
-    // Split a type's generics into the pieces required for impl'ing a trait for that type 
+    // Split a type's generics into the pieces required for impl'ing a trait for that type
     let (_, ty_generics, where_clause) = generics.split_for_impl();
 
     let mut idents = Vec::with_capacity(input.variants.len());
@@ -184,7 +184,7 @@ fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
         parse_quote!('__r, __R: ::rumpsteak::Role),
     );
 
-    // Split a type's generics into the pieces required for impl'ing a trait for that type 
+    // Split a type's generics into the pieces required for impl'ing a trait for that type
     let (impl_generics, ty_generics, _) = input.generics.split_for_impl();
 
     // Extend where clauses with related impl
