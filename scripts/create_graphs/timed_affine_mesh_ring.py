@@ -408,32 +408,32 @@ ax_ring_bench.set_xlabel('\# roles', fontsize=30)
 ax_mesh_compile.tick_params(axis='both', which='major', labelsize=20)
 ax_mesh_compile.yaxis.set_ticks(
     np.arange(
-        int(min(min(mesh_compile_lists['average_baking']), min(
-            mesh_compile_lists['average_timed']))/10)*10-5,
+        max(0, int(min(min(mesh_compile_lists['average_baking']), min(
+            mesh_compile_lists['average_timed']))/10)*10-5),
         int(max(max(mesh_compile_lists['average_baking']), max(
             mesh_compile_lists['average_timed']))/10)*10+15,
         10))
 ax_mesh_bench.tick_params(axis='both', which='major', labelsize=20)
 ax_mesh_bench.yaxis.set_ticks(
     np.arange(
-        int(min(min(mesh_bench_lists['average_baking']), min(
-            mesh_bench_lists['average_timed']))/10)*10-5,
+        max(0, int(min(min(mesh_bench_lists['average_baking']), min(
+            mesh_bench_lists['average_timed']))/10)*10-5),
         int(max(max(mesh_bench_lists['average_baking']), max(
             mesh_bench_lists['average_timed']))/10)*10+16,
         4))
 ax_ring_compile.tick_params(axis='both', which='major', labelsize=20)
 ax_ring_compile.yaxis.set_ticks(
     np.arange(
-        int(min(min(ring_compile_lists['average_baking']), min(
-            ring_compile_lists['average_timed']))/10)*10-5,
+        max(0, int(min(min(ring_compile_lists['average_baking']), min(
+            ring_compile_lists['average_timed']))/10)*10-5),
         int(max(max(ring_compile_lists['average_baking']), max(
             ring_compile_lists['average_timed']))/10)*10+15,
         2))
 ax_ring_bench.tick_params(axis='both', which='major', labelsize=20)
 ax_ring_bench.yaxis.set_ticks(
     np.arange(
-        int(min(min(ring_bench_lists['average_baking']), min(
-            ring_bench_lists['average_timed']))/10)*10-5,
+        max(0, int(min(min(ring_bench_lists['average_baking']), min(
+            ring_bench_lists['average_timed']))/10)*10-5),
         int(max(max(ring_bench_lists['average_baking']), max(
             ring_bench_lists['average_timed']))/10)*10+3,
         2))
@@ -469,10 +469,18 @@ if len(mesh_bench_lists['nb_participants_baking']) > 0:
         color='#1f77b4',
         marker='o'
     )
+    lower_bound = -0.05*np.std(mesh_bench_lists['average_baking'])*np.mean(
+        np.std(mesh_bench_lists['average_baking']))
+    list_lower_bound = [max(0, i+lower_bound)
+                        for i in mesh_bench_lists['average_baking']]
+    upper_bound = 0.05*np.std(mesh_bench_lists['average_baking']) * np.mean(
+        np.std(mesh_bench_lists['average_baking']))
+    list_upper_bound = [max(0, i+upper_bound)
+                        for i in mesh_bench_lists['average_baking']]
     ax_mesh_bench.fill_between(
         mesh_bench_lists['nb_participants_baking'],
-        (mesh_bench_lists['average_baking']-0.05*np.std(mesh_bench_lists['average_baking'])*np.mean(np.std(mesh_bench_lists['average_baking']))),
-        (mesh_bench_lists['average_baking']+0.05*np.std(mesh_bench_lists['average_baking'])*np.mean(np.std(mesh_bench_lists['average_baking']))),
+        list_lower_bound,
+        list_upper_bound,
         color='#1f77b4',
         alpha=0.3
     )
@@ -487,10 +495,18 @@ if len(mesh_bench_lists['nb_participants_timed']) > 0:
         color='#ff7f0e',
         marker='*'
     )
+    lower_bound = -0.05*np.std(mesh_bench_lists['average_timed'])*np.mean(
+        np.std(mesh_bench_lists['average_timed']))
+    list_lower_bound = [max(0, i+lower_bound)
+                        for i in mesh_bench_lists['average_timed']]
+    upper_bound = 0.05*np.std(mesh_bench_lists['average_timed']) * np.mean(
+        np.std(mesh_bench_lists['average_timed']))
+    list_upper_bound = [max(0, i+upper_bound)
+                        for i in mesh_bench_lists['average_timed']]
     ax_mesh_bench.fill_between(
         mesh_bench_lists['nb_participants_timed'],
-        (mesh_bench_lists['average_timed']-0.05*np.std(mesh_bench_lists['average_timed'])*np.mean(np.std(mesh_bench_lists['average_timed']))),
-        (mesh_bench_lists['average_timed']+0.05*np.std(mesh_bench_lists['average_timed'])*np.mean(np.std(mesh_bench_lists['average_timed']))),
+        list_lower_bound,
+        list_upper_bound,
         color='#ff7f0e',
         alpha=0.3
     )
@@ -529,10 +545,18 @@ if len(ring_bench_lists['nb_participants_baking']) > 0:
         color='#1f77b4',
         marker='o'
     )
+    lower_bound = -0.05*np.std(ring_bench_lists['average_baking'])*np.mean(
+        np.std(ring_bench_lists['average_baking']))
+    list_lower_bound = [max(0, i+lower_bound)
+                        for i in ring_bench_lists['average_baking']]
+    upper_bound = 0.05*np.std(ring_bench_lists['average_baking']) * np.mean(
+        np.std(ring_bench_lists['average_baking']))
+    list_upper_bound = [max(0, i+upper_bound)
+                        for i in ring_bench_lists['average_baking']]
     ax_ring_bench.fill_between(
         ring_bench_lists['nb_participants_baking'],
-        (ring_bench_lists['average_baking']-0.05*np.std(ring_bench_lists['average_baking'])*np.mean(np.std(ring_bench_lists['average_baking']))),
-        (ring_bench_lists['average_baking']+0.05*np.std(ring_bench_lists['average_baking'])*np.mean(np.std(ring_bench_lists['average_baking']))),
+        list_lower_bound,
+        list_upper_bound,
         color='#1f77b4',
         alpha=0.3
     )
@@ -547,10 +571,18 @@ if len(ring_bench_lists['nb_participants_timed']) > 0:
         color='#ff7f0e',
         marker='*'
     )
+    lower_bound = -0.05*np.std(ring_bench_lists['average_timed'])*np.mean(
+        np.std(ring_bench_lists['average_timed']))
+    list_lower_bound = [max(0, i+lower_bound)
+                        for i in ring_bench_lists['average_timed']]
+    upper_bound = 0.05*np.std(ring_bench_lists['average_timed']) * np.mean(
+        np.std(ring_bench_lists['average_timed']))
+    list_upper_bound = [max(0, i+upper_bound)
+                        for i in ring_bench_lists['average_timed']]
     ax_ring_bench.fill_between(
         ring_bench_lists['nb_participants_timed'],
-        (ring_bench_lists['average_timed']-0.05*np.std(ring_bench_lists['average_timed'])*np.mean(np.std(ring_bench_lists['average_timed']))),
-        (ring_bench_lists['average_timed']+0.05*np.std(ring_bench_lists['average_timed'])*np.mean(np.std(ring_bench_lists['average_timed']))),
+        list_lower_bound,
+        list_upper_bound,
         color='#ff7f0e',
         alpha=0.3
     )
