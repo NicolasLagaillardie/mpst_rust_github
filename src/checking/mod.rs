@@ -249,23 +249,19 @@ macro_rules! checker_concat {
 pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String), Box<dyn Error>> {
     // Delete previous files
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}_{}_kmc.txt",
-        name_file, kmc_number,
+        "../mpst_rust_github/outputs/{name_file}_{kmc_number}_kmc.txt"
     ))
     .unwrap_or(());
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}-sync-0norm-system.dot",
-        name_file
+        "../mpst_rust_github/outputs/{name_file}-sync-0norm-system.dot"
     ))
     .unwrap_or(());
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}-sync-0norm-system.png",
-        name_file
+        "../mpst_rust_github/outputs/{name_file}-sync-0norm-system.png"
     ))
     .unwrap_or(());
     remove_file(format!(
-        "../mpst_rust_github/outputs/{}-ts-{}.fsm",
-        name_file, kmc_number,
+        "../mpst_rust_github/outputs/{name_file}-ts-{kmc_number}.fsm"
     ))
     .unwrap_or(());
 
