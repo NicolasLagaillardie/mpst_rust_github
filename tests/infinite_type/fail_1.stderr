@@ -1,4 +1,4 @@
-error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::send::Send<N, Recv<N, Recv<SumOp<N>, mpstthree::binary::struct_trait::end::End>>>: std::marker::Send`
+error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::send::Send<N, Recv<N, Recv<SumOp<N>, ...>>>: std::marker::Send`
   --> tests/infinite_type/fail_1.rs:13:10
    |
 13 |     More(Recv<N, Send<N, NiceSumServer<N>>>),
