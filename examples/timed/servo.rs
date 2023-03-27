@@ -101,8 +101,7 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
     let (_, s) = s.recv(all_clocks)?;
 
-    s.close()?;
-    Ok(())
+    s.close()
 }
 
 /////////////////////////
@@ -116,8 +115,7 @@ fn endpoint_l(s: EndpointL, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
     let s = s.send(OutstandingWebFonts {}, all_clocks)?;
 
-    s.close()?;
-    Ok(())
+    s.close()
 }
 
 /////////////////////////
@@ -130,8 +128,7 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
     let (_, s) = s.recv(all_clocks)?;
 
-    s.close()?;
-    Ok(())
+    s.close()
 }
 
 ////////////////////////////////////////

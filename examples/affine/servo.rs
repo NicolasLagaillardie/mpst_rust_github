@@ -68,8 +68,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 
     let (_, s) = s.recv()?;
 
-    s.close()?;
-    Ok(())
+    s.close()
 }
 
 /////////////////////////
@@ -81,8 +80,7 @@ fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
 
     let s = s.send(OutstandingWebFonts {})?;
 
-    s.close()?;
-    Ok(())
+    s.close()
 }
 
 /////////////////////////
@@ -93,8 +91,7 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 
     let (_, s) = s.recv()?;
 
-    s.close()?;
-    Ok(())
+    s.close()
 }
 
 ////////////////////////////////////////
