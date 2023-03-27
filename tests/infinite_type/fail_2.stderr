@@ -18,7 +18,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::b
    |                       ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
+   = note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
 note: required because it appears within the type `SumOp<i32>`
   --> tests/infinite_type/fail_2.rs:12:6
    |
@@ -37,7 +37,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::b
    |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
+   = note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
 note: required because it appears within the type `SumOp<i32>`
   --> tests/infinite_type/fail_2.rs:12:6
    |
@@ -50,19 +50,13 @@ note: required by a bound in `Recv`
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>: Session`
-  --> tests/infinite_type/fail_2.rs:44:1
+  --> tests/infinite_type/fail_2.rs:44:29
    |
-44 | / fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-45 | |     match xs.pop() {
-46 | |         Option::Some(x) if x % 2 == 0 => {
-47 | |             let s = choose!(SumOp::More, s);
-...  |
-64 | |     }
-65 | | }
-   | |_^
+44 | fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+   |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
+   = note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
 note: required because it appears within the type `SumOp<i32>`
   --> tests/infinite_type/fail_2.rs:12:6
    |

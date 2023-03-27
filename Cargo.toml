@@ -370,6 +370,12 @@ name = "http_timed"
 path = "examples/timed/http.rs"
 required-features = ["baking_timed"]
 
+
+[[example]]
+name = "non_feasible"
+path = "examples/timed/non_feasible.rs"
+required-features = ["baking_timed"]
+
 # # ################################### Affine Mesh examples
 
 # [[example]]

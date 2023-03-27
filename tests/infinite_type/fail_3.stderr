@@ -18,7 +18,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                       ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>>>>`
+   = note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
 note: required because it appears within the type `SumOp`
   --> tests/infinite_type/fail_3.rs:11:6
    |
@@ -37,7 +37,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                             ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>>>>`
+   = note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
 note: required because it appears within the type `SumOp`
   --> tests/infinite_type/fail_3.rs:11:6
    |
@@ -50,19 +50,13 @@ note: required by a bound in `Recv`
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary::struct_trait::end::End>: Session`
-  --> tests/infinite_type/fail_3.rs:39:1
+  --> tests/infinite_type/fail_3.rs:39:29
    |
-39 | / fn nice_sum_client_accum(s: NiceSumClient, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-40 | |     match xs.pop() {
-41 | |         Option::Some(x) => {
-42 | |             let s = choose!(SumOp::More, s);
-...  |
-55 | |     }
-56 | | }
-   | |_^
+39 | fn nice_sum_client_accum(s: NiceSumClient, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+   |                             ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>>>>`
+   = note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
 note: required because it appears within the type `SumOp`
   --> tests/infinite_type/fail_3.rs:11:6
    |

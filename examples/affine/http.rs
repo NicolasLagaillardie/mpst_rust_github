@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(clippy::type_complexity, dead_code)]
 
 use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
