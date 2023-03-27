@@ -365,6 +365,11 @@ name = "remote_data_timed"
 path = "examples/timed/remote_data.rs"
 required-features = ["baking_timed"]
 
+[[example]]
+name = "http_timed"
+path = "examples/timed/http.rs"
+required-features = ["baking_timed"]
+
 # # ################################### Affine Mesh examples
 
 # [[example]]
