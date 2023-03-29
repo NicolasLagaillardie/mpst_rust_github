@@ -17,8 +17,9 @@ criterion_group! {
         examples_all_timed::smtp::smtp_main,
         examples_all_timed::three_buyers::three_buyers_main,
         examples_all_timed::three_travel::travel_main,
-        examples_all_timed::remote_data::remote_data_main,
         examples_all_timed::servo::servo_main,
+        examples_all_timed::remote_data::remote_data_main,
+        examples_all_timed::http::http_main,
 }
 
 criterion_main! {

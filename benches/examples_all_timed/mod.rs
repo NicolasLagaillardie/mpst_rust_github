@@ -1,5 +1,6 @@
 pub mod distributed_calc;
 pub mod fib;
+pub mod http;
 pub mod o_auth;
 pub mod online_wallet;
 pub mod remote_data;

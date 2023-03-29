@@ -1,5 +1,7 @@
 #![allow(clippy::type_complexity, dead_code)]
 
+use criterion::{black_box, Criterion};
+
 use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -1089,16 +1091,22 @@ fn recurs_server(s: RecursServer) -> Result<(), Box<dyn Error>> {
 
 ////////////////////////////////////////
 
-fn main() {
+fn all_mpst() {
     let (thread_client, thread_proxyone, thread_proxytwo, thread_server) = fork_mpst(
-        endpoint_client,
-        endpoint_proxyone,
-        endpoint_proxytwo,
-        endpoint_server,
+        black_box(endpoint_client),
+        black_box(endpoint_proxyone),
+        black_box(endpoint_proxytwo),
+        black_box(endpoint_server),
     );
 
     thread_client.join().unwrap();
     thread_proxyone.join().unwrap();
     thread_proxytwo.join().unwrap();
     thread_server.join().unwrap();
+}
+
+/////////////////////////
+
+pub fn http_main(c: &mut Criterion) {
+    c.bench_function("HTTP baking", |b| b.iter(all_mpst));
 }

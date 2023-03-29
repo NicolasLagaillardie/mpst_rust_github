@@ -33,27 +33,27 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 compile_files = ['three_buyers', 'distributed_calc', 'three_travel',
-                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote_data', 'servo']
+                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote_data', 'servo', 'http']
 
 # Expected bench files
 bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wallet baking', 'Simple voting MPST baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking',
-               'Timed Remote data', 'Timed Servo', 'Servo baking', 'Remote data baking', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
+               'Timed Remote data', 'Timed Servo', 'Timed HTTP', 'HTTP baking', 'Servo baking', 'Remote data baking', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
 
 # Expected bench files
 translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking': 'distributed_calc_timed',
-             'Timed Servo': 'servo_timed', 'Servo': 'servo', 'Remote data baking': 'remote_data', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'o_auth_timed', 'Timed Online wallet baking': 'online_wallet_timed', 'Timed Simple voting MPST baking': 'simple_voting_timed', 'Timed SMTP baking': 'smtp_timed', 'Timed Travel MPST baking': 'three_travel_timed', 'Timed Three buyers MPST baking': 'three_buyers_timed'}
+             'Timed Servo': 'servo_timed', 'HTTP baking': 'http', 'Timed HTTP': 'http_timed', 'Servo baking': 'servo', 'Remote data baking': 'remote_data', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'o_auth_timed', 'Timed Online wallet baking': 'online_wallet_timed', 'Timed Simple voting MPST baking': 'simple_voting_timed', 'Timed SMTP baking': 'smtp_timed', 'Timed Travel MPST baking': 'three_travel_timed', 'Timed Three buyers MPST baking': 'three_buyers_timed'}
 
 # Indexung for bar lists
-index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 7, 'Remote data baking': 7,
-               'Timed SMTP baking': 2, 'Servo': 8, 'Timed Servo': 8, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 5, 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
+index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 8, 'Remote data baking': 8,
+               'Timed SMTP baking': 2, 'Servo baking': 9, 'HTTP': 7, 'Timed HTTP': 7, 'Timed Servo': 9, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 5, 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
 index_compile = {'distributed_calc': 0, 'online_wallet': 1, 'smtp': 2, 'simple_voting': 3, 'three_buyers': 4, 'distributed_calc_timed': 0, 'online_wallet_timed': 1,
-                 'remote_data_timed': 7, 'smtp_timed': 2, 'servo_timed': 8, 'servo': 8, 'remote_data': 7, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
+                 'remote_data_timed': 8, 'smtp_timed': 2, 'http': 7, 'http_timed': 7, 'servo_timed': 9, 'servo': 9, 'remote_data': 8, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
 
-bar_compilation_baking = [0] * 9
-bar_running_baking = [0] * 9
+bar_compilation_baking = [0] * 10
+bar_running_baking = [0] * 10
 
-bar_compilation_timed = [0] * 9
-bar_running_timed = [0] * 9
+bar_compilation_timed = [0] * 10
+bar_running_timed = [0] * 10
 
 
 def test(path):
@@ -173,7 +173,7 @@ sorted_translate = dict(sorted(translate.items()))
 # print("benches", bench)
 
 # Setting up the figure
-fig = plt.figure(figsize=(20, 5))
+fig = plt.figure(figsize=(22, 5))
 
 width = 0.3
 
@@ -190,9 +190,9 @@ compilation_time.xaxis.set_major_locator(MaxNLocator(integer=True))
 compilation_time.yaxis.set_major_locator(MaxNLocator(integer=True))
 compilation_time.tick_params(axis='both', which='major', labelsize=20)
 compilation_time.set_ylabel('Time (s)', fontsize=30)
-compilation_time.xaxis.set_ticks([0, 1, 2, 3, 4, 5, 6, 7, 8])
+compilation_time.xaxis.set_ticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 compilation_time.xaxis.set_ticklabels(
-    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'])
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
 
 # Setting the number of ticks
 compilation_time.yaxis.set_ticks(np.arange(0, int(max(
@@ -212,9 +212,9 @@ running_time.xaxis.set_major_locator(MaxNLocator(integer=True))
 running_time.yaxis.set_major_locator(MaxNLocator(integer=True))
 running_time.tick_params(axis='both', which='major', labelsize=20)
 running_time.set_ylabel('Time (ms)', fontsize=30)
-running_time.xaxis.set_ticks([0, 1, 2, 3, 4, 5, 6, 7, 8])
+running_time.xaxis.set_ticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 running_time.xaxis.set_ticklabels(
-    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'])
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
 
 # Setting the number of ticks
 running_time.yaxis.set_ticks(np.arange(0, int(
