@@ -167,6 +167,16 @@ criterion_group! {
         ring_all::baking_cancel_inline::ring_twenty::ring_protocol_mpst,
         ring_all::baking_cancel_inline::ring_twenty::ring_protocol_binary,
         ring_all::baking_cancel_inline::ring_twenty::ring_protocol_crossbeam,
+        ////////// Benchmarks using timed cancelling without a monitor to broadcast cancel using generated methods with 100 loops
+        ring_all::timed_baking_cancel::ring_two::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_three::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_four::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_five::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_six::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_seven::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_eight::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_nine::ring_protocol_mpst,
+        ring_all::timed_baking_cancel::ring_ten::ring_protocol_mpst,
 }
 
 criterion_main! {
