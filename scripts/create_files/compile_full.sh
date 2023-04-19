@@ -2,6 +2,9 @@
 
 set -e
 
+# Create folder if it does not exist
+mkdir -p compile_time/
+
 # Remove previous benchmarks
 rm -rf compile_time/$1*.txt
 
