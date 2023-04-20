@@ -151,27 +151,15 @@ harness = false
 required-features = ["baking"]
 
 [[bench]]
-name = "mesh_affine"
+name = "mesh_full"
 harness = false
-path = "benches/mesh_affine.rs"
-required-features = ["baking"]
-
-[[bench]]
-name = "ring_affine"
-harness = false
-path = "benches/ring_affine.rs"
-required-features = ["baking"]
-
-[[bench]]
-name = "mesh_timed"
-harness = false
-path = "benches/mesh_timed.rs"
+path = "benches/mesh_full.rs"
 required-features = ["baking_timed"]
 
 [[bench]]
-name = "ring_timed"
+name = "ring_full"
 harness = false
-path = "benches/ring_timed.rs"
+path = "benches/ring_full.rs"
 required-features = ["baking_timed"]
 
 ################################### Basic examples
@@ -425,15 +413,15 @@ name = "mesh_ten_crossbeam"
 path = "examples/mesh/mesh_ten_crossbeam.rs"
 required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "mesh_eleven_crossbeam"
-# path = "examples/mesh/mesh_eleven_crossbeam.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "mesh_eleven_crossbeam"
+path = "examples/mesh/mesh_eleven_crossbeam.rs"
+required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "mesh_twenty_crossbeam"
-# path = "examples/mesh/mesh_twenty_crossbeam.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "mesh_twenty_crossbeam"
+path = "examples/mesh/mesh_twenty_crossbeam.rs"
+required-features = ["macros_multiple"]
 
 ################## Binary
 
@@ -482,15 +470,15 @@ name = "mesh_ten_binary"
 path = "examples/mesh/mesh_ten_binary.rs"
 required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "mesh_eleven_binary"
-# path = "examples/mesh/mesh_eleven_binary.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "mesh_eleven_binary"
+path = "examples/mesh/mesh_eleven_binary.rs"
+required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "mesh_twenty_binary"
-# path = "examples/mesh/mesh_twenty_binary.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "mesh_twenty_binary"
+path = "examples/mesh/mesh_twenty_binary.rs"
+required-features = ["macros_multiple"]
 
 ################## MPST
 
@@ -539,15 +527,15 @@ name = "mesh_ten_mpst"
 path = "examples/mesh/mesh_ten_mpst.rs"
 required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "mesh_eleven_mpst"
-# path = "examples/mesh/mesh_eleven_mpst.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "mesh_eleven_mpst"
+path = "examples/mesh/mesh_eleven_mpst.rs"
+required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "mesh_twenty_mpst"
-# path = "examples/mesh/mesh_twenty_mpst.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "mesh_twenty_mpst"
+path = "examples/mesh/mesh_twenty_mpst.rs"
+required-features = ["macros_multiple"]
 
 ################## Baking
 
@@ -596,15 +584,15 @@ name = "mesh_ten_baking"
 path = "examples/mesh/mesh_ten_baking.rs"
 required-features = ["baking"]
 
-# [[example]]
-# name = "mesh_eleven_baking"
-# path = "examples/mesh/mesh_eleven_baking.rs"
-# required-features = ["baking"]
+[[example]]
+name = "mesh_eleven_baking"
+path = "examples/mesh/mesh_eleven_baking.rs"
+required-features = ["baking"]
 
-# [[example]]
-# name = "mesh_twenty_baking"
-# path = "examples/mesh/mesh_twenty_baking.rs"
-# required-features = ["baking"]
+[[example]]
+name = "mesh_twenty_baking"
+path = "examples/mesh/mesh_twenty_baking.rs"
+required-features = ["baking"]
 
 ################## Timed
 
@@ -702,15 +690,15 @@ name = "ring_ten_crossbeam"
 path = "examples/ring/ring_ten_crossbeam.rs"
 required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "ring_eleven_crossbeam"
-# path = "examples/ring/ring_eleven_crossbeam.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "ring_eleven_crossbeam"
+path = "examples/ring/ring_eleven_crossbeam.rs"
+required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "ring_twenty_crossbeam"
-# path = "examples/ring/ring_twenty_crossbeam.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "ring_twenty_crossbeam"
+path = "examples/ring/ring_twenty_crossbeam.rs"
+required-features = ["macros_multiple"]
 
 ################## Binary
 
@@ -759,15 +747,15 @@ name = "ring_ten_binary"
 path = "examples/ring/ring_ten_binary.rs"
 required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "ring_eleven_binary"
-# path = "examples/ring/ring_eleven_binary.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "ring_eleven_binary"
+path = "examples/ring/ring_eleven_binary.rs"
+required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "ring_twenty_binary"
-# path = "examples/ring/ring_twenty_binary.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "ring_twenty_binary"
+path = "examples/ring/ring_twenty_binary.rs"
+required-features = ["macros_multiple"]
 
 ################## MPST
 
@@ -816,15 +804,15 @@ name = "ring_ten_mpst"
 path = "examples/ring/ring_ten_mpst.rs"
 required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "ring_eleven_mpst"
-# path = "examples/ring/ring_eleven_mpst.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "ring_eleven_mpst"
+path = "examples/ring/ring_eleven_mpst.rs"
+required-features = ["macros_multiple"]
 
-# [[example]]
-# name = "ring_twenty_mpst"
-# path = "examples/ring/ring_twenty_mpst.rs"
-# required-features = ["macros_multiple"]
+[[example]]
+name = "ring_twenty_mpst"
+path = "examples/ring/ring_twenty_mpst.rs"
+required-features = ["macros_multiple"]
 
 ################## Baking
 
@@ -873,15 +861,15 @@ name = "ring_ten_baking"
 path = "examples/ring/ring_ten_baking.rs"
 required-features = ["baking"]
 
-# [[example]]
-# name = "ring_eleven_baking"
-# path = "examples/ring/ring_eleven_baking.rs"
-# required-features = ["baking"]
+[[example]]
+name = "ring_eleven_baking"
+path = "examples/ring/ring_eleven_baking.rs"
+required-features = ["baking"]
 
-# [[example]]
-# name = "ring_twenty_baking"
-# path = "examples/ring/ring_twenty_baking.rs"
-# required-features = ["baking"]
+[[example]]
+name = "ring_twenty_baking"
+path = "examples/ring/ring_twenty_baking.rs"
+required-features = ["baking"]
 
 ################## Timed
 
