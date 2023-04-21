@@ -7,6 +7,7 @@ set -e
 
 ## Clean
 cargo clean
+date
 
 # Compile protocols
 
@@ -75,6 +76,8 @@ bash ./scripts/create_files/compile_full.sh mesh_ten_baking 10 baking
 bash ./scripts/create_files/compile_full.sh mesh_ten_baking_timed 10 baking_timed
 
 ## Ring
+date
+
 ### Two
 echo "Ring two"
 bash ./scripts/create_files/compile_full.sh ring_two_binary 10 baking
@@ -137,48 +140,3 @@ bash ./scripts/create_files/compile_full.sh ring_ten_binary 10 baking
 bash ./scripts/create_files/compile_full.sh ring_ten_crossbeam 10 baking
 bash ./scripts/create_files/compile_full.sh ring_ten_baking 10 baking
 bash ./scripts/create_files/compile_full.sh ring_ten_baking_timed 10 baking_timed
-
-### Clean compiled files
-cargo clean
-
-# Create folders if they do not exist
-mkdir -p save/
-mkdir -p save/criterion/
-
-# Run the affine ping pong benchmarks
-echo "Ping-pong affine bench"
-cargo bench --bench ping_pong --features="baking" -- --verbose
-mkdir -p save/criterion/affine_ping_pong/
-mv -f target/criterion/ save/criterion/affine_ping_pong/
-cargo clean
-
-# Run the affine ring benchmarks
-echo "Ring affine bench"
-cargo bench --bench="ring_affine" --features="affine_timed" -- --verbose
-mkdir -p save/criterion/affine_ping_pong/
-mv -f target/criterion/ save/criterion/affine_ring/
-cargo clean
-
-# Run the affine meshbenchmarks
-echo "Mesh affine bench"
-cargo bench --bench="mesh_affine" --features="affine_timed" -- --verbose
-mkdir -p save/criterion/affine_mesh/
-mv -f target/criterion/ save/criterion/affine_mesh/
-cargo clean
-
-# Run the timed ring benchmarks
-echo "Ring timed bench"
-cargo bench --bench="ring_timed" --features="affine_timed" -- --verbose
-mkdir -p save/criterion/timed_ring/
-mv -f target/criterion/ save/criterion/timed_ring/
-cargo clean
-
-# Run the timed meshbenchmarks
-echo "Mesh timed bench"
-cargo bench --bench="mesh_timed" --features="affine_timed" -- --verbose
-mkdir -p save/criterion/timed_mesh/
-mv -f target/criterion/ save/criterion/timed_mesh/
-cargo clean
-
-## Concatenate all results in the results/ping_pong_mesh_ring.csv file
-# python3 scripts/create_graphs/timed_affine_mesh_ring.py
