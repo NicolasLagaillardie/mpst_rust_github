@@ -13,6 +13,13 @@ date
 mkdir -p save/
 mkdir -p save/criterion/
 
+# Create the new ping_pong benches
+./scripts/create_files/create_ping_pong_benches.sh 1000
+
+# Replace the number of loops to 10000
+sed -ier 's,sample_size([0-9]\+);,sample_size(10000);,g' benches/ping_pong.rs
+rm -rf benches/ping_pong.rser
+
 # Run the affine ping pong benchmarks
 echo "Ping-pong affine bench"
 date
