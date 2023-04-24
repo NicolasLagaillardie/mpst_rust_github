@@ -11,8 +11,8 @@ use std::error::Error;
 pub fn close(s: End) -> Result<(), Box<dyn Error>> {
     s.sender.send(Signal::Stop).unwrap_or(());
     match s.receiver.recv()? {
-        Signal::Stop => {},
-        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+        Signal::Stop => {}
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
     Ok(())
 }

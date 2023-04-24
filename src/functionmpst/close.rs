@@ -63,13 +63,13 @@ where
     s.session2.sender.send(Signal::Stop).unwrap_or(());
 
     match s.session1.receiver.recv()? {
-        Signal::Stop => {},
-        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+        Signal::Stop => {}
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
     match s.session2.receiver.recv()? {
-        Signal::Stop => {},
-        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+        Signal::Stop => {}
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
-    
+
     Ok(())
 }
