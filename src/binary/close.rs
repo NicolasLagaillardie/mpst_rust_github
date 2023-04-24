@@ -10,6 +10,9 @@ use std::error::Error;
 /// fails if the partner has crashed.
 pub fn close(s: End) -> Result<(), Box<dyn Error>> {
     s.sender.send(Signal::Stop).unwrap_or(());
-    s.receiver.recv()?;
+    match s.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
     Ok(())
 }

@@ -30,12 +30,30 @@ where
     s_3.session1.sender.send(Signal::Stop).unwrap_or(());
     s_3.session2.sender.send(Signal::Stop).unwrap_or(());
 
-    s_1.session1.receiver.recv()?;
-    s_1.session2.receiver.recv()?;
-    s_2.session1.receiver.recv()?;
-    s_2.session2.receiver.recv()?;
-    s_3.session1.receiver.recv()?;
-    s_3.session2.receiver.recv()?;
+    match s_1.session1.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
+    match s_1.session2.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
+    match s_2.session1.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
+    match s_2.session2.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
+    match s_3.session1.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
+    match s_3.session2.receiver.recv()? {
+        Signal::Stop => {},
+        err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+    }
 
     Ok(())
 }

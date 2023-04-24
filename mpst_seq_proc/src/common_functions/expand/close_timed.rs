@@ -25,7 +25,12 @@ pub(crate) fn close_timed(meshedchannels_name: &Ident, number_roles: u64) -> Tok
     let close_session_recv: Vec<TokenStream> = (1..number_roles)
         .map(|i| {
             let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
-            quote! { self.#temp_session.receiver.recv()?; }
+            quote! {
+                match self.#temp_session.receiver.recv()? {
+                    mpstthree::binary::struct_trait::end::Signal::Stop => {},
+                    err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err)
+                }
+            }
         })
         .collect();
 
