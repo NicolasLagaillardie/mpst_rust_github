@@ -23,12 +23,12 @@ where
     N2: Name,
     N3: Name,
 {
-    s_1.session1.sender.send(Signal::Stop).unwrap_or(());
-    s_1.session2.sender.send(Signal::Stop).unwrap_or(());
-    s_2.session1.sender.send(Signal::Stop).unwrap_or(());
-    s_2.session2.sender.send(Signal::Stop).unwrap_or(());
-    s_3.session1.sender.send(Signal::Stop).unwrap_or(());
-    s_3.session2.sender.send(Signal::Stop).unwrap_or(());
+    s_1.session1.sender.send(Signal::Stop)?;
+    s_1.session2.sender.send(Signal::Stop)?;
+    s_2.session1.sender.send(Signal::Stop)?;
+    s_2.session2.sender.send(Signal::Stop)?;
+    s_3.session1.sender.send(Signal::Stop)?;
+    s_3.session2.sender.send(Signal::Stop)?;
 
     match s_1.session1.receiver.recv()? {
         Signal::Stop => {}

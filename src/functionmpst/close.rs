@@ -59,8 +59,8 @@ pub fn close_mpst<N>(s: MeshedChannels<End, End, RoleEnd, N>) -> Result<(), Box<
 where
     N: Name,
 {
-    s.session1.sender.send(Signal::Stop).unwrap_or(());
-    s.session2.sender.send(Signal::Stop).unwrap_or(());
+    s.session1.sender.send(Signal::Stop)?;
+    s.session2.sender.send(Signal::Stop)?;
 
     match s.session1.receiver.recv()? {
         Signal::Stop => {}

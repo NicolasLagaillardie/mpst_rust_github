@@ -16,7 +16,7 @@ pub(crate) fn close(meshedchannels_name: &Ident, number_roles: u64) -> TokenStre
                         &format!("session{i}"),
                         Span::call_site(),
                     );
-                    quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(()); }
+                    quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop)?; }
                 })
                 .collect();
 

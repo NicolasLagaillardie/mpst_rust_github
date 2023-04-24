@@ -9,7 +9,7 @@ use std::error::Error;
 /// Closes a session. Synchronises with the partner, and
 /// fails if the partner has crashed.
 pub fn close(s: End) -> Result<(), Box<dyn Error>> {
-    s.sender.send(Signal::Stop).unwrap_or(());
+    s.sender.send(Signal::Stop)?;
     match s.receiver.recv()? {
         Signal::Stop => {}
         err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
