@@ -33,7 +33,7 @@ echo "Step 1/2"
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    echo -ne "Loop created: $i\r"
+    echo -ne "Loop created: $i\n"
     #########################
     next=$(($i+1))
     #########################
@@ -53,7 +53,7 @@ echo ''
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    echo -ne "Loop created: $i\r"
+    echo -ne "Loop created: $i\n"
     #########################
     next=$(($i+1))
     #########################

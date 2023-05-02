@@ -6,7 +6,7 @@ mod examples_all_basic;
 
 mod examples_all_baking;
 
-mod main_all_interleaved;
+mod examples_all_interleaved;
 
 mod examples_all_timed;
 

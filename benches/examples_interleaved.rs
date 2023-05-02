@@ -2,7 +2,7 @@
 
 use criterion::{criterion_group, criterion_main, Criterion};
 
-mod main_all_interleaved;
+mod examples_all_interleaved;
 
 criterion_group! {
     name = main_interleaved;
