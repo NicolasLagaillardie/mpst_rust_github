@@ -13,9 +13,6 @@ date
 mkdir -p save/
 mkdir -p save/criterion/
 
-# Create the new ping_pong benches
-./scripts/create_files/create_ping_pong_benches.sh 500
-
 # Run the full mesh benchmarks
 echo "Mesh full bench"
 date
