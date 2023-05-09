@@ -16,22 +16,10 @@ mkdir -p save/criterion/
 # Create the new ping_pong benches
 ./scripts/create_files/create_ping_pong_benches.sh 500
 
-# Replace the number of loops to 10000
-sed -ier 's,sample_size([0-9]\+);,sample_size(10000);,g' benches/ping_pong.rs
-rm -rf benches/ping_pong.rser
-
-# Run the affine ping pong benchmarks
-echo "Ping-pong affine bench"
-date
-cargo bench --bench ping_pong --features="baking" -- --verbose
-mkdir -p save/criterion/affine_ping_pong/
-mv -f target/criterion/ save/criterion/affine_ping_pong/
-cargo clean
-
 # Run the full mesh benchmarks
 echo "Mesh full bench"
 date
-cargo bench --bench="mesh_full" --features="baking_timed" -- --verbose
+cargo bench --bench="mesh_full" --features="full" -- --verbose
 mkdir -p save/criterion/mesh/
 mv -f target/criterion/ save/criterion/mesh/
 cargo clean
@@ -39,7 +27,7 @@ cargo clean
 # Run the full ring benchmarks
 echo "Ring full bench"
 date
-cargo bench --bench="ring_full" --features="baking_timed" -- --verbose
+cargo bench --bench="ring_full" --features="full" -- --verbose
 mkdir -p save/criterion/ring/
 mv -f target/criterion/ save/criterion/ring/
 cargo clean
@@ -47,7 +35,7 @@ cargo clean
 # Run the baking benchmarks
 echo "Examples full bench"
 date
-cargo bench --bench="examples" --features="baking_timed" -- --verbose
+cargo bench --bench="examples" --features="full" -- --verbose
 mkdir -p save/criterion/examples/
 mv -f target/criterion/ save/criterion/examples/
 cargo clean

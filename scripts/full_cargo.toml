@@ -137,24 +137,19 @@ required-features = []
 name = "examples_full"
 harness = false
 path = "benches/examples_full.rs"
-required-features = ["baking_timed"]
-
-[[bench]]
-name = "ping_pong"
-harness = false
-required-features = ["baking"]
+required-features = ["full"]
 
 [[bench]]
 name = "mesh_full"
 harness = false
 path = "benches/mesh_full.rs"
-required-features = ["baking_timed"]
+required-features = ["full"]
 
 [[bench]]
 name = "ring_full"
 harness = false
 path = "benches/ring_full.rs"
-required-features = ["baking_timed"]
+required-features = ["full"]
 
 ################################### Basic examples
 
