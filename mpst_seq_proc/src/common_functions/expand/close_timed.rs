@@ -56,6 +56,9 @@ pub(crate) fn close_timed(meshedchannels_name: &Ident, number_roles: u64) -> Tok
                     #close_session_recv
                 )*
 
+
+                drop(self);
+
                 Ok(())
             }
         }

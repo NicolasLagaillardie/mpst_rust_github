@@ -71,5 +71,7 @@ where
         err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
 
+    drop(s);
+
     Ok(())
 }

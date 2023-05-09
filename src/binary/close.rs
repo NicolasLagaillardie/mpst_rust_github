@@ -14,5 +14,6 @@ pub fn close(s: End) -> Result<(), Box<dyn Error>> {
         Signal::Stop => {}
         err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
+    drop(s);
     Ok(())
 }

@@ -54,6 +54,8 @@ pub(crate) fn close(meshedchannels_name: &Ident, number_roles: u64) -> TokenStre
                     #close_session_recv
                 )*
 
+                drop(self);
+
                 Ok(())
             }
         }
