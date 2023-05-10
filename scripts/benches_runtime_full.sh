@@ -32,7 +32,7 @@ cargo clean
 # Run the baking benchmarks
 echo "Examples full bench"
 date
-cargo bench --bench="examples" --features="full" -- --verbose
+cargo bench --bench="examples_full" --features="full" -- --verbose
 mkdir -p save/criterion/examples/
 mv -f target/criterion/ save/criterion/examples/
 cargo clean
