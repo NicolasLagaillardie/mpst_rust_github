@@ -14,14 +14,15 @@ baker!("rec_and_cancel", MeshedChannelsTwo, A, B);
 // Types
 // A
 enum Branching0fromBtoA {
-    More(MeshedChannelsTwo<Recv<(), Send<(), RecursAtoB>>, RoleB<RoleB<RoleB<RoleEnd>>>, NameA>),
+    Forward(MeshedChannelsTwo<Send<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
+    Backward(MeshedChannelsTwo<Recv<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
 type RecursAtoB = Recv<Branching0fromBtoA, End>;
-// C
+// B
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
-type EndpointMoreB =
-    MeshedChannelsTwo<Send<(), Recv<(), Choose0fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
+type EndpointForwardB = MeshedChannelsTwo<Recv<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
+type EndpointBackwardB = MeshedChannelsTwo<Send<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
 
 // Creating the MP sessions
 type EndpointA = MeshedChannelsTwo<RecursAtoB, RoleB<RoleEnd>, NameA>;
@@ -32,9 +33,12 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         Branching0fromBtoA::Done(s) => {
             s.close()
         },
-        Branching0fromBtoA::More(s) => {
-            let (_, s) = s.recv()?;
+        Branching0fromBtoA::Forward(s) => {
             let s = s.send(())?;
+            endpoint_a(s)
+        },
+        Branching0fromBtoA::Backward(s) => {
+            let (_, s) = s.recv()?;
             endpoint_a(s)
         },
     })
@@ -51,11 +55,17 @@ fn recurs_b(s: EndpointB, index: i64) -> Result<(), Box<dyn Error>> {
 
             s.close()
         }
+        i if i % 2 == 0 => {
+            let s: EndpointForwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Forward);
+
+            let (_, s) = s.recv()?;
+
+            recurs_b(s, i - 1)
+        }
         i => {
-            let s: EndpointMoreB = choose_mpst_b_to_all!(s, Branching0fromBtoA::More);
+            let s: EndpointBackwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Backward);
 
             let s = s.send(())?;
-            let (_, s) = s.recv()?;
 
             recurs_b(s, i - 1)
         }
@@ -73,8 +83,8 @@ fn all_mpst() {
 
 static LOOPS: i64 = 100;
 
-pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh two baking protocol AMPST {LOOPS}"), |b| {
+pub fn ring_protocol_ampst(c: &mut Criterion) {
+    c.bench_function(&format!("ring two baking protocol AMPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
 }

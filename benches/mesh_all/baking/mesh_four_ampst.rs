@@ -12,30 +12,36 @@ use std::error::Error;
 baker!("rec_and_cancel", MeshedChannelsFour, A, B, C, D);
 
 // Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+type R2D<R> = RoleD<RoleD<R>>;
 // A
 enum Branching0fromDtoA {
-    Forward(MeshedChannelsFour<Send<(), End>, End, RecursAtoD, RoleB<RoleD<RoleEnd>>, NameA>),
-    Backward(MeshedChannelsFour<Recv<(), End>, End, RecursAtoD, RoleB<RoleD<RoleEnd>>, NameA>),
+    More(
+        MeshedChannelsFour<
+            RS,
+            RS,
+            Recv<(), Send<(), RecursAtoD>>,
+            R2D<R2B<R2C<RoleD<RoleEnd>>>>,
+            NameA,
+        >,
+    ),
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoD = Recv<Branching0fromDtoA, End>;
 // B
 enum Branching0fromDtoB {
-    Forward(
+    More(
         MeshedChannelsFour<
-            Recv<(), End>,
-            Send<(), End>,
-            RecursBtoD,
-            RoleA<RoleC<RoleD<RoleEnd>>>,
-            NameB,
-        >,
-    ),
-    Backward(
-        MeshedChannelsFour<
-            Send<(), End>,
-            Recv<(), End>,
-            RecursBtoD,
-            RoleC<RoleA<RoleD<RoleEnd>>>,
+            SR,
+            RS,
+            Recv<(), Send<(), RecursBtoD>>,
+            R2D<R2A<R2C<RoleD<RoleEnd>>>>,
             NameB,
         >,
     ),
@@ -44,21 +50,12 @@ enum Branching0fromDtoB {
 type RecursBtoD = Recv<Branching0fromDtoB, End>;
 // C
 enum Branching0fromDtoC {
-    Forward(
+    More(
         MeshedChannelsFour<
-            End,
-            Recv<(), End>,
-            Send<(), RecursCtoD>,
-            RoleB<RoleD<RoleD<RoleEnd>>>,
-            NameC,
-        >,
-    ),
-    Backward(
-        MeshedChannelsFour<
-            End,
-            Send<(), End>,
-            Recv<(), RecursCtoD>,
-            RoleD<RoleB<RoleD<RoleEnd>>>,
+            SR,
+            SR,
+            Recv<(), Send<(), RecursCtoD>>,
+            R2D<R2A<R2B<RoleD<RoleEnd>>>>,
             NameC,
         >,
     ),
@@ -69,18 +66,11 @@ type RecursCtoD = Recv<Branching0fromDtoC, End>;
 type Choose0fromDtoA = Send<Branching0fromDtoA, End>;
 type Choose0fromDtoB = Send<Branching0fromDtoB, End>;
 type Choose0fromDtoC = Send<Branching0fromDtoC, End>;
-type EndpointForwardD = MeshedChannelsFour<
-    Choose0fromDtoA,
-    Choose0fromDtoB,
-    Recv<(), Choose0fromDtoC>,
-    RoleC<RoleBroadcast>,
-    NameD,
->;
-type EndpointBackwardD = MeshedChannelsFour<
-    Choose0fromDtoA,
-    Choose0fromDtoB,
-    Send<(), Choose0fromDtoC>,
-    RoleC<RoleBroadcast>,
+type EndpointMoreD = MeshedChannelsFour<
+    Send<(), Recv<(), Choose0fromDtoA>>,
+    Send<(), Recv<(), Choose0fromDtoB>>,
+    Send<(), Recv<(), Choose0fromDtoC>>,
+    R2A<R2B<R2C<RoleBroadcast>>>,
     NameD,
 >;
 
@@ -96,12 +86,13 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         Branching0fromDtoA::Done(s) => {
             s.close()
         },
-        Branching0fromDtoA::Forward(s) => {
-            let s = s.send(())?;
-            endpoint_a(s)
-        },
-        Branching0fromDtoA::Backward(s) => {
+        Branching0fromDtoA::More(s) => {
             let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_a(s)
         },
     })
@@ -112,13 +103,12 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         Branching0fromDtoB::Done(s) => {
             s.close()
         },
-        Branching0fromDtoB::Forward(s) => {
-            let ((), s) = s.recv()?;
+        Branching0fromDtoB::More(s) => {
+            let (_, s) = s.recv()?;
             let s = s.send(())?;
-            endpoint_b(s)
-        },
-        Branching0fromDtoB::Backward(s) => {
-            let ((), s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_b(s)
         },
@@ -130,14 +120,13 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
         Branching0fromDtoC::Done(s) => {
             s.close()
         },
-        Branching0fromDtoC::Forward(s) => {
-            let ((), s) = s.recv()?;
+        Branching0fromDtoC::More(s) => {
+            let (_, s) = s.recv()?;
             let s = s.send(())?;
-            endpoint_c(s)
-        },
-        Branching0fromDtoC::Backward(s) => {
-            let ((), s) = s.recv()?;
             let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
             endpoint_c(s)
         },
     })
@@ -159,27 +148,20 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
 
             s.close()
         }
-        i if i % 2 == 0 => {
-            let s: EndpointForwardD = choose_mpst_d_to_all!(
-                s,
-                Branching0fromDtoA::Forward,
-                Branching0fromDtoB::Forward,
-                Branching0fromDtoC::Forward
-            );
-
-            let (_, s) = s.recv()?;
-
-            recurs_d(s, i - 1)
-        }
         i => {
-            let s: EndpointBackwardD = choose_mpst_d_to_all!(
+            let s: EndpointMoreD = choose_mpst_d_to_all!(
                 s,
-                Branching0fromDtoA::Backward,
-                Branching0fromDtoB::Backward,
-                Branching0fromDtoC::Backward
+                Branching0fromDtoA::More,
+                Branching0fromDtoB::More,
+                Branching0fromDtoC::More
             );
 
             let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
 
             recurs_d(s, i - 1)
         }
@@ -204,8 +186,8 @@ fn all_mpst() {
 
 static LOOPS: i64 = 100;
 
-pub fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring four baking protocol AMPST {LOOPS}"), |b| {
+pub fn mesh_protocol_ampst(c: &mut Criterion) {
+    c.bench_function(&format!("mesh four baking protocol AMPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
 }
