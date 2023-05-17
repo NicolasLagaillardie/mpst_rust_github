@@ -15,18 +15,7 @@ use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
-baker!(
-    "recursive",
-    MeshedChannelsEight,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H
-);
+baker!("recursive", MeshedChannelsEight, A, B, C, D, E, F, G, H);
 
 // Types
 // A

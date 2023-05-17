@@ -3,10 +3,7 @@ use criterion::{black_box, Criterion};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    baker, close_mpst_interleaved, fork_mpst_multi_solo,
-    offer_mpst_interleaved,
-};
+use mpstthree::{baker, close_mpst_interleaved, fork_mpst_multi_solo, offer_mpst_interleaved};
 
 use rand::random;
 
@@ -26,11 +23,7 @@ fork_mpst_multi_solo!(fork_mpst_solo, MeshedChannelsTwo, 2);
 // RoleController
 enum Branching0fromLtoC<N: marker::Send> {
     Success(
-        MeshedChannelsTwo<
-            Recv<N, Recurs0fromCtoL<N>>,
-            RoleLogs<RoleLogs<RoleEnd>>,
-            NameController,
-        >,
+        MeshedChannelsTwo<Recv<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>,
     ),
     Failure(
         MeshedChannelsTwo<Recv<N, Choose1fromCtoL<N>>, RoleLogs<RoleBroadcast>, NameController>,
@@ -61,8 +54,7 @@ type EndpointController1Restart<N> =
     MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
 type EndpointController0<N> =
     MeshedChannelsTwo<Recurs0fromCtoL<N>, RoleLogs<RoleEnd>, NameController>;
-type EndpointController1<N> =
-    MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
+type EndpointController1<N> = MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
 type EndpointControllerInit<N> =
     MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
 // RoleLogs
@@ -74,8 +66,7 @@ type EndpointLogs0Failure<N> = MeshedChannelsTwo<
     NameLogs,
 >;
 type EndpointLogs0<N> = MeshedChannelsTwo<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
-type EndpointLogs1<N> =
-    MeshedChannelsTwo<Recurs1fromLtoC<N>, RoleController<RoleEnd>, NameLogs>;
+type EndpointLogs1<N> = MeshedChannelsTwo<Recurs1fromLtoC<N>, RoleController<RoleEnd>, NameLogs>;
 type EndpointLogsInit<N> =
     MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>;
 

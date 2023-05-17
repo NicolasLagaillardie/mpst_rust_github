@@ -572,7 +572,6 @@ pub(crate) fn choose_basic(
     }
 }
 
-
 /// Expand choose left and right methods
 pub(crate) fn choose(
     all_roles: &[TokenStream],

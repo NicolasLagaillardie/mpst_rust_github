@@ -16,19 +16,7 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!(
-    "recursive",
-    MeshedChannelsNine,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I
-);
+baker!("recursive", MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
 
 // Types
 // A

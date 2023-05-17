@@ -102,11 +102,11 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromDtoA::Forward(s) => {
-            let s = s.send(())?;
+            let s = s.send(());
             endpoint_a(s)
         },
         Branching0fromDtoA::Backward(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
             endpoint_a(s)
         },
     })
@@ -118,13 +118,13 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromDtoB::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
         Branching0fromDtoB::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
     })
@@ -136,13 +136,13 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromDtoC::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
         Branching0fromDtoC::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
     })
@@ -172,7 +172,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromDtoC::Forward
             );
 
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
 
             recurs_d(s, i - 1)
         }
@@ -184,7 +184,7 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromDtoC::Backward
             );
 
-            let s = s.send(())?;
+            let s = s.send(());
 
             recurs_d(s, i - 1)
         }

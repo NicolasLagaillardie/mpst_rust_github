@@ -14,20 +14,7 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-baker!(
-    "recursive",
-    MeshedChannelsTen,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I,
-    J
-);
+baker!("recursive", MeshedChannelsTen, A, B, C, D, E, F, G, H, I, J);
 
 // Types
 // Send/Recv

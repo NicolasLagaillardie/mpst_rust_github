@@ -7,7 +7,7 @@ mod ring_all;
 criterion_group! {
     name = ring_full;
     config = Criterion::default().significance_level(0.1).sample_size(10000);
-    targets = 
+    targets =
         ////////// Benchmarks using basic functions with zero loops
         ring_all::empty::ring_two::ring_protocol_mpst,
         ring_all::empty::ring_two::ring_protocol_binary,
