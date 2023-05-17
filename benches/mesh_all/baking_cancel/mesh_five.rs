@@ -16,7 +16,7 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsFive, A, B, C, D, E);
+baker!("recursive", MeshedChannelsFive, A, B, C, D, E);
 
 // Types
 // Send/Recv
@@ -122,14 +122,14 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromEtoA::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_a(s)
         },
     })
@@ -141,14 +141,14 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromEtoB::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
     })
@@ -160,14 +160,14 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromEtoC::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
     })
@@ -179,14 +179,14 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromEtoD::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
             endpoint_d(s)
         },
     })
@@ -218,14 +218,14 @@ fn recurs_e(s: EndpointE, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromEtoD::More,
             );
 
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
 
             recurs_e(s, i - 1)
         }

@@ -16,7 +16,7 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsSix, A, B, C, D, E, F);
+baker!("recursive", MeshedChannelsSix, A, B, C, D, E, F);
 
 // Types
 // Send/Recv
@@ -147,16 +147,16 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromFtoA::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_a(s)
         },
     })
@@ -168,16 +168,16 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromFtoB::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
     })
@@ -189,16 +189,16 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromFtoC::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
     })
@@ -210,16 +210,16 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromFtoD::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let (_, s) = s.recv();
+            let s = s.send(());
             endpoint_d(s)
         },
     })
@@ -231,16 +231,16 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromFtoE::More(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
             endpoint_e(s)
         },
     })
@@ -274,16 +274,16 @@ fn recurs_f(s: EndpointF, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromFtoE::More
             );
 
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
+            let s = s.send(());
+            let (_, s) = s.recv();
 
             recurs_f(s, i - 1)
         }

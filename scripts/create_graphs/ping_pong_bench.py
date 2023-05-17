@@ -18,12 +18,14 @@ path_file = '/base/estimates.json'
 # Lists for plots
 binary = []
 mpst = []
+ampst = []
 crossbeam = []
 cancel = []
 broadcast_cancel = []
 
 nb_loops_binary = []
 nb_loops_mpst = []
+nb_loops_ampst = []
 nb_loops_crossbeam = []
 nb_loops_cancel = []
 nb_loops_broadcast_cancel = []
@@ -45,7 +47,10 @@ for d in directories:
         splitted = d.split(' ')
 
         try:
-            if 'binary' in d and 'cancel' not in d:
+            if 'AMPST' in d:
+                ampst.append(int(test(d))/10**6)
+                nb_loops_ampst.append(int(splitted[-1]))
+            elif 'binary' in d and 'cancel' not in d:
                 binary.append(int(test(d))/10**6)
                 nb_loops_binary.append(int(splitted[-1]))
             elif 'MPST' in d:
@@ -66,23 +71,19 @@ for d in directories:
 
 # Sort the lists in pair
 if len(nb_loops_binary) > 0:
-    nb_loops_binary, binary = (list(t)
-                            for t in zip(*sorted(zip(nb_loops_binary, binary))))
+    nb_loops_binary, binary = (list(t) for t in zip(*sorted(zip(nb_loops_binary, binary))))
 
-if len(nb_loops_mpst) > 0:
-    nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
+if len(nb_loops_ampst) > 0:
+    nb_loops_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_loops_ampst, ampst))))
 
 if len(nb_loops_crossbeam) > 0:
-    nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
-        *sorted(zip(nb_loops_crossbeam, crossbeam))))
+    nb_loops_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_loops_crossbeam, crossbeam))))
 
 if len(nb_loops_cancel) > 0:
-    nb_loops_cancel, cancel = (list(t)
-                            for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
+    nb_loops_cancel, cancel = (list(t) for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
 
 if len(nb_loops_broadcast_cancel) > 0:
-    nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
-                                                for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
+    nb_loops_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(120, 60))
@@ -95,6 +96,10 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 ax.plot(nb_loops_mpst, mpst, label='MPST',
         linestyle='solid', linewidth=5, marker='>', markersize=20)
 
+# Plot the AMPST graph
+ax.plot(nb_loops_ampst, ampst, label='AMPST',
+        linestyle='solid', linewidth=5, marker='*', markersize=20)
+
 # Plot the binary graph
 ax.plot(nb_loops_binary, binary, label='Binary',
         linestyle='solid', linewidth=5, marker='o', markersize=20)
@@ -103,10 +108,10 @@ ax.plot(nb_loops_binary, binary, label='Binary',
 ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
         linestyle='solid', linewidth=5, marker='d', markersize=20)
 
-if len(cancel) > 0:
-    # Plot the cancel graph
-    ax.plot(nb_loops_cancel, cancel, label='AMPST',
-            linestyle='solid', linewidth=5, marker='*', markersize=20)
+# if len(cancel) > 0:
+#     # Plot the cancel graph
+#     ax.plot(nb_loops_cancel, cancel, label='AMPST',
+#             linestyle='solid', linewidth=5, marker='*', markersize=20)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph

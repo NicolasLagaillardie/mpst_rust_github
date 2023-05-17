@@ -16,7 +16,7 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsSeven, A, B, C, D, E, F, G);
+baker!("recursive", MeshedChannelsSeven, A, B, C, D, E, F, G);
 
 // Types
 // A
@@ -245,11 +245,11 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromGtoA::Forward(s) => {
-            let s = s.send(())?;
+            let s = s.send(());
             endpoint_a(s)
         },
         Branching0fromGtoA::Backward(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
             endpoint_a(s)
         },
     })
@@ -261,13 +261,13 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromGtoB::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
         Branching0fromGtoB::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
     })
@@ -279,13 +279,13 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromGtoC::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
         Branching0fromGtoC::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
     })
@@ -297,13 +297,13 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromGtoD::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_d(s)
         },
         Branching0fromGtoD::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_d(s)
         },
     })
@@ -315,13 +315,13 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromGtoE::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_e(s)
         },
         Branching0fromGtoE::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_e(s)
         },
     })
@@ -333,13 +333,13 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromGtoF::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_f(s)
         },
         Branching0fromGtoF::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_f(s)
         },
     })
@@ -375,7 +375,7 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromGtoF::Forward
             );
 
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
 
             recurs_g(s, i - 1)
         }
@@ -390,7 +390,7 @@ fn recurs_g(s: EndpointG, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromGtoF::Backward
             );
 
-            let s = s.send(())?;
+            let s = s.send(());
 
             recurs_g(s, i - 1)
         }

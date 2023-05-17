@@ -483,115 +483,115 @@ required-features = ["baking_timed"]
 # ################## MPST
 
 # [[example]]
-# name = "mesh_two_mpst"
-# path = "examples/mesh/mesh_two_mpst.rs"
+# name = "mesh_two_baking_mpst"
+# path = "examples/mesh/mesh_two_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_three_mpst"
-# path = "examples/mesh/mesh_three_mpst.rs"
+# name = "mesh_three_baking_mpst"
+# path = "examples/mesh/mesh_three_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_four_mpst"
-# path = "examples/mesh/mesh_four_mpst.rs"
+# name = "mesh_four_baking_mpst"
+# path = "examples/mesh/mesh_four_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_five_mpst"
-# path = "examples/mesh/mesh_five_mpst.rs"
+# name = "mesh_five_baking_mpst"
+# path = "examples/mesh/mesh_five_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_six_mpst"
-# path = "examples/mesh/mesh_six_mpst.rs"
+# name = "mesh_six_baking_mpst"
+# path = "examples/mesh/mesh_six_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_seven_mpst"
-# path = "examples/mesh/mesh_seven_mpst.rs"
+# name = "mesh_seven_baking_mpst"
+# path = "examples/mesh/mesh_seven_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_eight_mpst"
-# path = "examples/mesh/mesh_eight_mpst.rs"
+# name = "mesh_eight_baking_mpst"
+# path = "examples/mesh/mesh_eight_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_nine_mpst"
-# path = "examples/mesh/mesh_nine_mpst.rs"
+# name = "mesh_nine_baking_mpst"
+# path = "examples/mesh/mesh_nine_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_ten_mpst"
-# path = "examples/mesh/mesh_ten_mpst.rs"
+# name = "mesh_ten_baking_mpst"
+# path = "examples/mesh/mesh_ten_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_eleven_mpst"
-# path = "examples/mesh/mesh_eleven_mpst.rs"
+# name = "mesh_eleven_baking_mpst"
+# path = "examples/mesh/mesh_eleven_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "mesh_twenty_mpst"
-# path = "examples/mesh/mesh_twenty_mpst.rs"
+# name = "mesh_twenty_baking_mpst"
+# path = "examples/mesh/mesh_twenty_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # ################## Baking
 
 # [[example]]
-# name = "mesh_two_baking"
-# path = "examples/mesh/mesh_two_baking.rs"
+# name = "mesh_two_baking_ampst"
+# path = "examples/mesh/mesh_two_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_three_baking"
-# path = "examples/mesh/mesh_three_baking.rs"
+# name = "mesh_three_baking_ampst"
+# path = "examples/mesh/mesh_three_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_four_baking"
-# path = "examples/mesh/mesh_four_baking.rs"
+# name = "mesh_four_baking_ampst"
+# path = "examples/mesh/mesh_four_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_five_baking"
-# path = "examples/mesh/mesh_five_baking.rs"
+# name = "mesh_five_baking_ampst"
+# path = "examples/mesh/mesh_five_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_six_baking"
-# path = "examples/mesh/mesh_six_baking.rs"
+# name = "mesh_six_baking_ampst"
+# path = "examples/mesh/mesh_six_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_seven_baking"
-# path = "examples/mesh/mesh_seven_baking.rs"
+# name = "mesh_seven_baking_ampst"
+# path = "examples/mesh/mesh_seven_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_eight_baking"
-# path = "examples/mesh/mesh_eight_baking.rs"
+# name = "mesh_eight_baking_ampst"
+# path = "examples/mesh/mesh_eight_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_nine_baking"
-# path = "examples/mesh/mesh_nine_baking.rs"
+# name = "mesh_nine_baking_ampst"
+# path = "examples/mesh/mesh_nine_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_ten_baking"
-# path = "examples/mesh/mesh_ten_baking.rs"
+# name = "mesh_ten_baking_ampst"
+# path = "examples/mesh/mesh_ten_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_eleven_baking"
-# path = "examples/mesh/mesh_eleven_baking.rs"
+# name = "mesh_eleven_baking_ampst"
+# path = "examples/mesh/mesh_eleven_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "mesh_twenty_baking"
-# path = "examples/mesh/mesh_twenty_baking.rs"
+# name = "mesh_twenty_baking_ampst"
+# path = "examples/mesh/mesh_twenty_baking_ampst.rs"
 # required-features = ["baking"]
 
 # ################## Timed
@@ -760,115 +760,115 @@ required-features = ["baking_timed"]
 # ################## MPST
 
 # [[example]]
-# name = "ring_two_mpst"
-# path = "examples/ring/ring_two_mpst.rs"
+# name = "ring_two_baking_mpst"
+# path = "examples/ring/ring_two_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_three_mpst"
-# path = "examples/ring/ring_three_mpst.rs"
+# name = "ring_three_baking_mpst"
+# path = "examples/ring/ring_three_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_four_mpst"
-# path = "examples/ring/ring_four_mpst.rs"
+# name = "ring_four_baking_mpst"
+# path = "examples/ring/ring_four_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_five_mpst"
-# path = "examples/ring/ring_five_mpst.rs"
+# name = "ring_five_baking_mpst"
+# path = "examples/ring/ring_five_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_six_mpst"
-# path = "examples/ring/ring_six_mpst.rs"
+# name = "ring_six_baking_mpst"
+# path = "examples/ring/ring_six_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_seven_mpst"
-# path = "examples/ring/ring_seven_mpst.rs"
+# name = "ring_seven_baking_mpst"
+# path = "examples/ring/ring_seven_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_eight_mpst"
-# path = "examples/ring/ring_eight_mpst.rs"
+# name = "ring_eight_baking_mpst"
+# path = "examples/ring/ring_eight_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_nine_mpst"
-# path = "examples/ring/ring_nine_mpst.rs"
+# name = "ring_nine_baking_mpst"
+# path = "examples/ring/ring_nine_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_ten_mpst"
-# path = "examples/ring/ring_ten_mpst.rs"
+# name = "ring_ten_baking_mpst"
+# path = "examples/ring/ring_ten_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_eleven_mpst"
-# path = "examples/ring/ring_eleven_mpst.rs"
+# name = "ring_eleven_baking_mpst"
+# path = "examples/ring/ring_eleven_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # [[example]]
-# name = "ring_twenty_mpst"
-# path = "examples/ring/ring_twenty_mpst.rs"
+# name = "ring_twenty_baking_mpst"
+# path = "examples/ring/ring_twenty_baking_mpst.rs"
 # required-features = ["macros_multiple"]
 
 # ################## Baking
 
 # [[example]]
-# name = "ring_two_baking"
-# path = "examples/ring/ring_two_baking.rs"
+# name = "ring_two_baking_ampst"
+# path = "examples/ring/ring_two_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_three_baking"
-# path = "examples/ring/ring_three_baking.rs"
+# name = "ring_three_baking_ampst"
+# path = "examples/ring/ring_three_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_four_baking"
-# path = "examples/ring/ring_four_baking.rs"
+# name = "ring_four_baking_ampst"
+# path = "examples/ring/ring_four_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_five_baking"
-# path = "examples/ring/ring_five_baking.rs"
+# name = "ring_five_baking_ampst"
+# path = "examples/ring/ring_five_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_six_baking"
-# path = "examples/ring/ring_six_baking.rs"
+# name = "ring_six_baking_ampst"
+# path = "examples/ring/ring_six_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_seven_baking"
-# path = "examples/ring/ring_seven_baking.rs"
+# name = "ring_seven_baking_ampst"
+# path = "examples/ring/ring_seven_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_eight_baking"
-# path = "examples/ring/ring_eight_baking.rs"
+# name = "ring_eight_baking_ampst"
+# path = "examples/ring/ring_eight_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_nine_baking"
-# path = "examples/ring/ring_nine_baking.rs"
+# name = "ring_nine_baking_ampst"
+# path = "examples/ring/ring_nine_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_ten_baking"
-# path = "examples/ring/ring_ten_baking.rs"
+# name = "ring_ten_baking_ampst"
+# path = "examples/ring/ring_ten_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_eleven_baking"
-# path = "examples/ring/ring_eleven_baking.rs"
+# name = "ring_eleven_baking_ampst"
+# path = "examples/ring/ring_eleven_baking_ampst.rs"
 # required-features = ["baking"]
 
 # [[example]]
-# name = "ring_twenty_baking"
-# path = "examples/ring/ring_twenty_baking.rs"
+# name = "ring_twenty_baking_ampst"
+# path = "examples/ring/ring_twenty_baking_ampst.rs"
 # required-features = ["baking"]
 
 # ################## Timed

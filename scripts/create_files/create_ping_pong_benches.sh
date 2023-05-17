@@ -20,7 +20,8 @@ rm -rf benches/ping_pong_all/*.rs
 # Copy from save
 cat benches/ping_pong_all_save/mod.rs > benches/ping_pong_all/mod.rs
 cat benches/ping_pong_all_save/ping_pong_1.rs > benches/ping_pong_all/ping_pong_1.rs
-cat benches/ping_pong_all_save/ping_pong_baking_cancel_1.rs > benches/ping_pong_all/ping_pong_baking_cancel_1.rs
+cat benches/ping_pong_all_save/ping_pong_baking_mpst_1.rs > benches/ping_pong_all/ping_pong_mpst_cancel_1.rs
+cat benches/ping_pong_all_save/ping_pong_baking_ampst_1.rs > benches/ping_pong_all/ping_pong_baking_ampst_1.rs
 cat benches/ping_pong_all_save/ping_pong_cancel_1.rs > benches/ping_pong_all/ping_pong_cancel_1.rs
 cat benches/ping_pong_all_save/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs
 cat benches/ping_pong_all_save/ping_pong.rs > benches/ping_pong.rs
@@ -43,7 +44,9 @@ do
     #########################
     cat benches/ping_pong_all/ping_pong_cancel_broadcast_$i.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_cancel_broadcast_$next.rs
     #########################
-    cat benches/ping_pong_all/ping_pong_baking_cancel_$i.rs > benches/ping_pong_all/ping_pong_baking_cancel_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_baking_cancel_$next.rs
+    cat benches/ping_pong_all/ping_pong_baking_mpst_$i.rs > benches/ping_pong_all/ping_pong_baking_mpst_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_baking_mpst_$next.rs
+    #########################
+    cat benches/ping_pong_all/ping_pong_baking_ampst_$i.rs > benches/ping_pong_all/ping_pong_baking_ampst_$next.rs && sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_baking_ampst_$next.rs
 done
 
 echo ''
@@ -70,8 +73,11 @@ do
     printf 'pub mod ping_pong_cancel_broadcast_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
     printf '\t\tping_pong_all::ping_pong_cancel_broadcast_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
     #########################
-    printf 'pub mod ping_pong_baking_cancel_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
-    printf '\t\tping_pong_all::ping_pong_baking_cancel_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
+    printf 'pub mod ping_pong_baking_mpst_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
+    printf '\t\tping_pong_all::ping_pong_baking_mpst_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
+    #########################
+    printf 'pub mod ping_pong_baking_ampst_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
+    printf '\t\tping_pong_all::ping_pong_baking_ampst_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
 done
 
 printf '}' >> benches/ping_pong.rs;

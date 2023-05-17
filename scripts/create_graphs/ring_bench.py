@@ -22,12 +22,14 @@ str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
 # Lists for plots
 binary = []
 mpst = []
+ampst = []
 crossbeam = []
 cancel = []
 broadcast_cancel = []
 
-nb_participants_mpst = []
 nb_participants_binary = []
+nb_participants_mpst = []
+nb_participants_ampst = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
 nb_participants_broadcast_cancel = []
@@ -52,7 +54,10 @@ for d in directories_criterion:
 
         try:
             # If MPST of binary, append to related lists
-            if 'MPST' in d and str_to_int[splitted[1]] >= 2:
+            if 'AMPST' in d and str_to_int[splitted[1]] >= 2:
+                ampst.append(int(test(d))/10**6)
+                nb_participants_ampst.append(str_to_int[splitted[1]])
+            elif 'MPST' in d and str_to_int[splitted[1]] >= 2:
                 if 'broadcast' in d:
                     broadcast_cancel.append(int(test(d))/10**6)
                     nb_participants_broadcast_cancel.append(
@@ -76,19 +81,22 @@ for d in directories_criterion:
 nb_participants_mpst, mpst = (list(t) for t in zip(
     *sorted(zip(nb_participants_mpst, mpst))))
 
-nb_participants_binary, binary = (list(t)
-                                  for t in zip(*sorted(zip(nb_participants_binary, binary))))
+nb_participants_ampst, ampst = (list(t) for t in zip(
+    *sorted(zip(nb_participants_ampst, ampst))))
 
-nb_participants_crossbeam, crossbeam = (list(t)
-                                        for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
+nb_participants_binary, binary = (list(t) for t in zip(
+    *sorted(zip(nb_participants_binary, binary))))
+
+nb_participants_crossbeam, crossbeam = (list(t) for t in zip(
+    *sorted(zip(nb_participants_crossbeam, crossbeam))))
 
 if len(cancel) > 0:
-    nb_participants_cancel, cancel = (list(t)
-                                      for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+    nb_participants_cancel, cancel = (list(t) for t in zip(
+        *sorted(zip(nb_participants_cancel, cancel))))
 
 if len(broadcast_cancel) > 0:
-    nb_participants_broadcast_cancel, broadcast_cancel = (list(t)
-                                                          for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
+    nb_participants_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(
+        *sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
 
 # Change size
 # ax = plt.figure(figsize=(50, 50)).gca()
@@ -102,6 +110,10 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 ax.plot(nb_participants_mpst, mpst, label='MPST',
         linestyle='solid', linewidth=20, marker='>', markersize=150)
 
+# Plot the AMPST graph
+ax.plot(nb_participants_ampst, ampst, label='MPST',
+        linestyle='solid', linewidth=20, marker='*', markersize=150)
+
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary',
         linestyle='solid', linewidth=20, marker='o', markersize=150)
@@ -110,10 +122,10 @@ ax.plot(nb_participants_binary, binary, label='Binary',
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
         linestyle='solid', linewidth=20, marker='d', markersize=150)
 
-if len(cancel) > 0:
-    # Plot the cancel graph
-    ax.plot(nb_participants_cancel, cancel, label='Cancel',
-            linestyle='solid', linewidth=20, marker='*', markersize=150)
+# if len(cancel) > 0:
+#     # Plot the cancel graph
+#     ax.plot(nb_participants_cancel, cancel, label='Cancel',
+#             linestyle='solid', linewidth=20, marker='*', markersize=150)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph

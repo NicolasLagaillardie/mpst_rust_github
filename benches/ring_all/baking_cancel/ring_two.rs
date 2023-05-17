@@ -16,7 +16,7 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsTwo, A, B);
+baker!("recursive", MeshedChannelsTwo, A, B);
 
 // Types
 // A
@@ -41,11 +41,11 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromBtoA::Forward(s) => {
-            let s = s.send(())?;
+            let s = s.send(());
             endpoint_a(s)
         },
         Branching0fromBtoA::Backward(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
             endpoint_a(s)
         },
     })
@@ -65,14 +65,14 @@ fn recurs_b(s: EndpointB, index: i64) -> Result<(), Box<dyn Error>> {
         i if i % 2 == 0 => {
             let s: EndpointForwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Forward);
 
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
 
             recurs_b(s, i - 1)
         }
         i => {
             let s: EndpointBackwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Backward);
 
-            let s = s.send(())?;
+            let s = s.send(());
 
             recurs_b(s, i - 1)
         }

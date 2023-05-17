@@ -16,7 +16,7 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 baker!(
-    "rec_and_cancel",
+    "recursive",
     MeshedChannelsEight,
     A,
     B,
@@ -310,11 +310,11 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoA::Forward(s) => {
-            let s = s.send(())?;
+            let s = s.send(());
             endpoint_a(s)
         },
         Branching0fromHtoA::Backward(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
             endpoint_a(s)
         },
     })
@@ -326,13 +326,13 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoB::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
         Branching0fromHtoB::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_b(s)
         },
     })
@@ -344,13 +344,13 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoC::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
         Branching0fromHtoC::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_c(s)
         },
     })
@@ -362,13 +362,13 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoD::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_d(s)
         },
         Branching0fromHtoD::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_d(s)
         },
     })
@@ -380,13 +380,13 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoE::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_e(s)
         },
         Branching0fromHtoE::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_e(s)
         },
     })
@@ -398,13 +398,13 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoF::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_f(s)
         },
         Branching0fromHtoF::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_f(s)
         },
     })
@@ -416,13 +416,13 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branching0fromHtoG::Forward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_g(s)
         },
         Branching0fromHtoG::Backward(s) => {
-            let ((), s) = s.recv()?;
-            let s = s.send(())?;
+            let ((), s) = s.recv();
+            let s = s.send(());
             endpoint_g(s)
         },
     })
@@ -460,7 +460,7 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromHtoG::Forward
             );
 
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
 
             recurs_h(s, i - 1)
         }
@@ -476,7 +476,7 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
                 Branching0fromHtoG::Backward
             );
 
-            let s = s.send(())?;
+            let s = s.send(());
 
             recurs_h(s, i - 1)
         }

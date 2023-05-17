@@ -14,6 +14,7 @@ directories = os.listdir(main_path)
 
 # Lists for plots
 average_mpst = []
+average_ampst = []
 average_binary = []
 average_crossbeam = []
 average_cancel = []
@@ -46,7 +47,10 @@ for d in directories:
                         int(line.split('build; ')[1].split('\n')[0]))
 
                     # If MPST of binary, append to related lists
-            if 'mpst' in d:
+            if 'ampst' in d:
+                average_ampst.append(statistics.mean(build_time)/10**6)
+                nb_participants_ampst.append(str_to_int[name])
+            elif 'mpst' in d:
                 average_mpst.append(statistics.mean(build_time)/10**6)
                 nb_participants_mpst.append(str_to_int[name])
             elif 'binary' in d:
@@ -72,13 +76,20 @@ for d in directories:
 nb_participants_mpst, average_mpst = (list(t) for t in zip(
     *sorted(zip(nb_participants_mpst, average_mpst))))
 
-nb_participants_binary, average_binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
+nb_participants_ampst, average_ampst = (list(t) for t in zip(
+    *sorted(zip(nb_participants_ampst, average_ampst))))
 
-nb_participants_crossbeam, average_crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, average_crossbeam))))
+nb_participants_binary, average_binary = (list(t) for t in zip(
+    *sorted(zip(nb_participants_binary, average_binary))))
 
-nb_participants_cancel, average_cancel = (list(t) for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
+nb_participants_crossbeam, average_crossbeam = (list(t) for t in zip(
+    *sorted(zip(nb_participants_crossbeam, average_crossbeam))))
 
-nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t) for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
+nb_participants_cancel, average_cancel = (list(t) for t in zip(
+    *sorted(zip(nb_participants_cancel, average_cancel))))
+
+nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t) for t in zip(
+    *sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -91,6 +102,10 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 ax.plot(nb_participants_mpst, average_mpst, label='MPST',
         linestyle='solid', linewidth=20, marker='>', markersize=150)
 
+# Plot the AMPST graph
+ax.plot(nb_participants_ampst, average_ampst, label='AMPST',
+        linestyle='solid', linewidth=20, marker='*', markersize=150)
+
 # Plot the binary graph
 ax.plot(nb_participants_binary, average_binary, label='Binary',
         linestyle='solid', linewidth=20, marker='o', markersize=150)
@@ -99,10 +114,10 @@ ax.plot(nb_participants_binary, average_binary, label='Binary',
 ax.plot(nb_participants_crossbeam, average_crossbeam, label='Crossbeam',
         linestyle='solid', linewidth=20, marker='d', markersize=150)
 
-if len(average_cancel) > 0:
-    # Plot the cancel graph
-    ax.plot(nb_participants_cancel, average_cancel, label='Cancel',
-            linestyle='solid', linewidth=20, marker='*', markersize=150)
+# if len(average_cancel) > 0:
+#     # Plot the cancel graph
+#     ax.plot(nb_participants_cancel, average_cancel, label='Cancel',
+#             linestyle='solid', linewidth=20, marker='*', markersize=150)
 
 # ax.plot(nb_participants_cancel_broadcast, average_cancel_broadcast,
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
