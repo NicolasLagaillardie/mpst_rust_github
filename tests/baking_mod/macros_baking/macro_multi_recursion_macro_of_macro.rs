@@ -85,7 +85,7 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branches0BtoD::Video(s) => {
-            let (request, s) = s.recv()?;
+            let (request, s) = s.recv();
             let s = s.send(request + 1);
             server(s)
         },
@@ -93,7 +93,7 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = s.recv()?;
+    let (id, s) = s.recv();
     let s = s.send(id + 1);
 
     authenticator_recurs(s)
@@ -105,8 +105,8 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branches0AtoD::Video(s) => {
-            let (request, s) = s.recv()?;
-            let (video, s) = s.send(request + 1).recv()?;
+            let (request, s) = s.recv();
+            let (video, s) = s.send(request + 1).recv();
             let s = s.send(video + 1);
             authenticator_recurs(s)
         },
@@ -117,7 +117,7 @@ fn client(s: EndpointDFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
-    let (_, s) = s.send(0).recv()?;
+    let (_, s) = s.send(0).recv();
 
     client_recurs(s, xs, 1)
 }
@@ -132,7 +132,7 @@ fn client_recurs(
             let s: EndpointDVideo<i32> =
                 choose_mpst_client_to_all!(s, Branches0AtoD::Video, Branches0BtoD::Video);
 
-            let (_, s) = s.send(1).recv()?;
+            let (_, s) = s.send(1).recv();
 
             client_recurs(s, xs, index + 1)
         }

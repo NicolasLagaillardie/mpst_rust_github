@@ -86,7 +86,7 @@ fn server(s: EndpointBRecurs) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branches0BtoD::Video(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
             let s = s.send(Message {
                 label: "video".to_string(),
                 payload: None,
@@ -97,7 +97,7 @@ fn server(s: EndpointBRecurs) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull) -> Result<(), Box<dyn Error>> {
-    let (id, s) = s.recv()?;
+    let (id, s) = s.recv();
     let s = s.send(id);
 
     authenticator_recurs(s)
@@ -109,11 +109,11 @@ fn authenticator_recurs(s: EndpointARecurs) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branches0AtoD::Video(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = s.recv();
             let (_, s) = s.send(Message {
                 label: "request".to_string(),
                 payload: None,
-            }).recv()?;
+            }).recv();
             let s = s.send(Message {
                 label: "video".to_string(),
                 payload: Some(0),
@@ -132,7 +132,7 @@ fn client(s: EndpointDFull) -> Result<(), Box<dyn Error>> {
             label: String::from("Start"),
             payload: 0,
         })
-        .recv()?;
+        .recv();
 
     client_recurs(s, xs, 1)
 }
@@ -148,7 +148,7 @@ fn client_recurs(s: EndpointDRecurs, mut xs: Vec<i32>, index: i32) -> Result<(),
                     label: format!("Loop number {index}"),
                     payload: Some(index),
                 })
-                .recv()?;
+                .recv();
 
             client_recurs(s, xs, index + 1)
         }

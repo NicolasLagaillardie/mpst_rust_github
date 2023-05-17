@@ -6,13 +6,13 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 use crate::common_functions::expand::cancel::cancel;
-use crate::common_functions::expand::choose::choose;
+use crate::common_functions::expand::choose::choose_basic;
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
 use crate::common_functions::expand::name::name;
-use crate::common_functions::expand::offer::offer;
-use crate::common_functions::expand::recv::{recv, recv_from_all};
+use crate::common_functions::expand::offer::offer_basic;
+use crate::common_functions::expand::recv::{recv_basic, recv_from_all_basic};
 use crate::common_functions::expand::role::role;
 use crate::common_functions::expand::send::send_basic;
 use crate::common_functions::parsing::parse_stream_roles;
@@ -99,7 +99,7 @@ impl Baking {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv(
+                            Some(recv_basic(
                                 &self.all_roles,
                                 receiver,
                                 sender,
@@ -121,7 +121,7 @@ impl Baking {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv_from_all(
+                            Some(recv_from_all_basic(
                                 &self.all_roles,
                                 receiver,
                                 sender,
@@ -143,7 +143,7 @@ impl Baking {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(offer(
+                            Some(offer_basic(
                                 &self.all_roles,
                                 sender,
                                 receiver,
@@ -160,7 +160,7 @@ impl Baking {
 
         let choose_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
-                choose(
+                choose_basic(
                     &self.all_roles,
                     sender,
                     &self.meshedchannels_name,
@@ -198,7 +198,7 @@ impl Baking {
             macro_rules! offer_mpst {
                 ($session: expr, { $( $pat: pat => $result: expr, )+ }) => {
                     (move || -> Result<_, _> {
-                        let (l, s) = $session.recv()?;
+                        let (l, s) = $session.recv();
                         mpstthree::binary::cancel::cancel(s);
                         match l {
                             $(

@@ -1,7 +1,7 @@
 error[E0308]: mismatched types
    --> $DIR/long_simple_three_mpst_short_fail.rs:103:33
     |
-103 |             let (_, s) = s.send(()).recv()?;
+103 |             let (_, s) = s.send(()).recv();
     |                                 ^^ expected enum `Branching0fromCtoA`, found `()`
 
 error[E0599]: no method named `recv` found for struct `MeshedChannelsThree<mpstthree::binary::struct_trait::end::End, mpstthree::binary::struct_trait::send::Send<(), Recv<(), mpstthree::binary::struct_trait::send::Send<Branching0fromCtoB, mpstthree::binary::struct_trait::end::End>>>, RoleB<RoleBroadcast>, RoleC<RoleEnd>>` in the current scope
@@ -10,7 +10,7 @@ error[E0599]: no method named `recv` found for struct `MeshedChannelsThree<mpstt
 9   | baker!("basic", MeshedChannelsThree, A, B, C);
     | ---------------------------------------------------------- method `recv` not found for this
 ...
-103 |             let (_, s) = s.send(()).recv()?;
+103 |             let (_, s) = s.send(()).recv();
     |                                     ^^^^ method not found in `MeshedChannelsThree<mpstthree::binary::struct_trait::end::End, mpstthree::binary::struct_trait::send::Send<(), Recv<(), mpstthree::binary::struct_trait::send::Send<Branching0fromCtoB, mpstthree::binary::struct_trait::end::End>>>, RoleB<RoleBroadcast>, RoleC<RoleEnd>>`
     |
     = note: the method was found for

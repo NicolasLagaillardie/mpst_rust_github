@@ -32,12 +32,12 @@ fn send_d_to_a(s: SendMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recv_a_to_d(s: RecvMeshedChannelsA<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = s.recv()?;
+    let (_, s) = s.recv();
     s.close()
 }
 
 fn recv_d_to_a(s: RecvMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = s.recv()?;
+    let (_, s) = s.recv();
     s.close()
 }
 

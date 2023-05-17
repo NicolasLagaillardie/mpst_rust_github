@@ -61,8 +61,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
                 s.close()
             },
             Branching0fromCtoA::More(s) => {
-                let (_, s) = s.recv()?;
-                let (_, s) = s.send(()).recv()?;
+                let (_, s) = s.recv();
+                let (_, s) = s.send(()).recv();
                 let s = s.send(());
                 endpoint_a(s)
             },
@@ -78,8 +78,8 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
                 s.close()
             },
             Branching0fromCtoB::More(s) => {
-                let (_, s) = s.recv()?;
-                let (_, s) = s.send(()).send(()).recv()?;
+                let (_, s) = s.recv();
+                let (_, s) = s.send(()).send(()).recv();
                 endpoint_b(s)
             },
         }
@@ -94,8 +94,8 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => done_from_c_to_all(s).close(),
         i => {
-            let (_, s) = more_from_c_to_all(s).send(()).recv()?;
-            let (_, s) = s.send(()).recv()?;
+            let (_, s) = more_from_c_to_all(s).send(()).recv();
+            let (_, s) = s.send(()).recv();
 
             recurs_c(s, i - 1)
         }

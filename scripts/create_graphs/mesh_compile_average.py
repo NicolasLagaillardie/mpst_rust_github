@@ -72,17 +72,13 @@ for d in directories:
 nb_participants_mpst, average_mpst = (list(t) for t in zip(
     *sorted(zip(nb_participants_mpst, average_mpst))))
 
-nb_participants_binary, average_binary = (list(t)
-                                          for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
+nb_participants_binary, average_binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, average_binary))))
 
-nb_participants_crossbeam, average_crossbeam = (list(t)
-                                                for t in zip(*sorted(zip(nb_participants_crossbeam, average_crossbeam))))
+nb_participants_crossbeam, average_crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, average_crossbeam))))
 
-nb_participants_cancel, average_cancel = (list(t)
-                                          for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
+nb_participants_cancel, average_cancel = (list(t) for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
 
-nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t)
-                                                              for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
+nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t) for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -112,13 +108,13 @@ if len(average_cancel) > 0:
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=600)
+ax.set_xlabel('\# roles', fontsize=200)
 # ax.set_ylabel('Time (s)', fontsize=600)
-ax.tick_params(axis='both', which='major', labelsize=500)
+ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(35, 58, 10))
+ax.yaxis.set_ticks(np.arange(10, 58, 10))
 ax.set_xlim(2, 10)
-ax.set_ylim(35, 58)
+ax.set_ylim(10, 58)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)

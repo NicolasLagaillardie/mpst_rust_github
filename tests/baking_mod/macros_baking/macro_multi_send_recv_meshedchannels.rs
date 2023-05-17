@@ -21,7 +21,7 @@ fn send_d_to_b(s: SendMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recv_b_to_d(s: RecvMeshedChannelsB<i32>) -> Result<(), Box<dyn Error>> {
-    let (_, s) = s.recv()?;
+    let (_, s) = s.recv();
     s.close()
 }
 

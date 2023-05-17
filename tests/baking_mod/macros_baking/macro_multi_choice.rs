@@ -97,7 +97,7 @@ type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     s.offer(
         |s: EndpointBVideo<i32>| {
-            let (request, s) = s.recv()?;
+            let (request, s) = s.recv();
             s.send(request + 1).close()
         },
         |s: EndpointBEnd| s.close(),
@@ -105,12 +105,12 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = s.recv()?;
+    let (id, s) = s.recv();
 
     s.send(id + 1).offer(
         |s: EndpointAVideo<i32>| {
-            let (request, s) = s.recv()?;
-            let (video, s) = s.send(request + 1).recv()?;
+            let (request, s) = s.recv();
+            let (video, s) = s.send(request + 1).recv();
 
             assert_eq!(request, id + 1);
             assert_eq!(video, id + 3);
@@ -125,11 +125,11 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let (accept, s) = s.send(id).recv()?;
+    let (accept, s) = s.send(id).recv();
 
     assert_eq!(accept, id + 1);
 
-    let (result, s) = s.choose_left().send(accept).recv()?;
+    let (result, s) = s.choose_left().send(accept).recv();
 
     assert_eq!(result, accept + 3);
 
@@ -140,7 +140,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let (accept, s) = s.send(id).recv()?;
+    let (accept, s) = s.send(id).recv();
 
     assert_eq!(accept, id + 1);
 

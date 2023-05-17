@@ -85,7 +85,7 @@ if len(nb_loops_broadcast_cancel) > 0:
                                                 for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
 
 # Change size
-fig, ax = plt.subplots(figsize=(60, 60))
+fig, ax = plt.subplots(figsize=(120, 60))
 plt.gcf().subplots_adjust(bottom=0.27, left=0.25)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -114,13 +114,13 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_ylabel('Time (ms)', fontsize=500)
-ax.set_xlabel('\# iterations', fontsize=600)
-ax.tick_params(axis='both', which='major', labelsize=500)
-ax.xaxis.set_ticks(np.arange(0, 510, 250))
-ax.yaxis.set_ticks(np.arange(0, 25, 8))
+ax.set_ylabel('Time (ms)', fontsize=200)
+ax.set_xlabel('\# iterations', fontsize=200)
+ax.tick_params(axis='both', which='major', labelsize=200)
+ax.xaxis.set_ticks(np.arange(0, 510, 100))
+ax.yaxis.set_ticks(np.arange(0, 13, 4))
 ax.set_xlim(0, 510)
-ax.set_ylim(0, 25)
+ax.set_ylim(0, 12)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
