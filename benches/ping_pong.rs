@@ -16,8 +16,10 @@ criterion_group! {
         ping_pong_all::ping_pong_1::ping_pong_protocol_mpst,
         ping_pong_all::ping_pong_1::ping_pong_protocol_binary,
         ping_pong_all::ping_pong_1::ping_pong_protocol_crossbeam,
+        // Baking
+        ping_pong_all::ping_pong_baking_mpst_1::ping_pong_protocol_mpst,
         // Baking_cancel
-        ping_pong_all::ping_pong_baking_cancel_1::ping_pong_protocol_mpst,
+        ping_pong_all::ping_pong_baking_ampst_1::ping_pong_protocol_ampst,
         // Cancel
         ping_pong_all::ping_pong_cancel_1::ping_pong_protocol_mpst,
         // Cancel_broadcast
