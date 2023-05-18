@@ -21,6 +21,7 @@ average_cancel = []
 average_cancel_broadcast = []
 
 nb_participants_mpst = []
+nb_participants_ampst = []
 nb_participants_binary = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
@@ -47,10 +48,10 @@ for d in directories:
                         int(line.split('build; ')[1].split('\n')[0]))
 
                     # If MPST of binary, append to related lists
-            if 'ampst' in d:
+            if 'baking_ampst' in d:
                 average_ampst.append(statistics.mean(build_time)/10**6)
                 nb_participants_ampst.append(str_to_int[name])
-            elif 'mpst' in d:
+            elif 'baking_mpst' in d:
                 average_mpst.append(statistics.mean(build_time)/10**6)
                 nb_participants_mpst.append(str_to_int[name])
             elif 'binary' in d:
@@ -127,9 +128,9 @@ ax.set_xlabel('\# roles', fontsize=200)
 # ax.set_ylabel('Time (s)', fontsize=600)
 ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(10, 58, 10))
+ax.yaxis.set_ticks(np.arange(10, 50, 15))
 ax.set_xlim(2, 10)
-ax.set_ylim(10, 58)
+ax.set_ylim(10, 45)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)

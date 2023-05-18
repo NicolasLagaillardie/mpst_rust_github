@@ -48,10 +48,10 @@ for d in directories:
                         int(line.split('build; ')[1].split('\n')[0]))
 
                     # If MPST of binary, append to related lists
-            if 'ampst' in d:
+            if 'baking_ampst' in d:
                 average_ampst.append(statistics.mean(build_time)/10**6)
                 nb_participants_ampst.append(str_to_int[name])
-            elif 'mpst' in d:
+            elif 'baking_mpst' in d:
                 average_mpst.append(statistics.mean(build_time)/10**6)
                 nb_participants_mpst.append(str_to_int[name])
             elif 'binary' in d:
@@ -123,13 +123,13 @@ ax.plot(nb_participants_crossbeam, average_crossbeam, label='Crossbeam',
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=600)
-ax.set_ylabel('Time (s)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=500)
+ax.set_xlabel('\# roles', fontsize=200)
+ax.set_ylabel('Time (s)', fontsize=200)
+ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(35, 39.5, 2))
+ax.yaxis.set_ticks(np.arange(14, 23, 2))
 ax.set_xlim(2, 10)
-ax.set_ylim(35, 39.5)
+ax.set_ylim(14, 22)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
