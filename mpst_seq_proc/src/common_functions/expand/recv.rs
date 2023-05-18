@@ -77,7 +77,7 @@ pub(crate) fn recv_basic(
                     #receiver_ident
                 >
             ) {
-                let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session).unwrap();
+                let (v, new_session) = self.#new_session.channel.recv().unwrap();
                 let new_stack = self.stack.continuation();
                 (
                     v,
@@ -167,7 +167,7 @@ pub(crate) fn recv(
                 >),
                 Box<dyn std::error::Error>
             > {
-                let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session)?;
+                let (v, new_session) = self.#new_session.channel.recv()?;
                 let new_stack = self.stack.continuation();
                 Ok((
                     v,
@@ -256,7 +256,7 @@ pub(crate) fn recv_from_all_basic(
                     #receiver_ident
                 >
             ) {
-                let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session).unwrap();
+                let (v, new_session) = self.#new_session.channel.recv().unwrap();
 
                 let new_stack = self.stack.continuation_left();
 
@@ -348,7 +348,7 @@ pub(crate) fn recv_from_all(
                 >),
                 Box<dyn std::error::Error>
             > {
-                let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session)?;
+                let (v, new_session) = self.#new_session.channel.recv()?;
 
                 let new_stack = self.stack.continuation_left();
 

@@ -48,7 +48,7 @@ def test(path):
 # For each folder in main_path_criterion
 for d in directories_criterion:
     # If name looks like the one from what we want
-    if 'ring' in d and ' ' + number_of_loops in d:
+    if 'ring' in d and ' ' + number_of_loops in d and 'timed' not in d and 'inline' not in d:
         # Split the name
         splitted = d.split(' ')
 
@@ -65,13 +65,14 @@ for d in directories_criterion:
                 elif 'cancel' in d:
                     cancel.append(int(test(d))/10**6)
                     nb_participants_cancel.append(str_to_int[splitted[1]])
-                else:
+                elif 'baking' in d:
+                    print(d)
                     mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
-            elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
+            elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
                 binary.append(int(test(d))/10**6)
                 nb_participants_binary.append(str_to_int[splitted[1]])
-            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
+            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
                 crossbeam.append(int(test(d))/10**6)
                 nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
@@ -133,13 +134,13 @@ ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=600)
+ax.set_xlabel('\# roles', fontsize=200)
 # ax.set_ylabel('Time (ms)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=500)
+ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(0, 70, 30))
+ax.yaxis.set_ticks(np.arange(0, 40, 10))
 ax.set_xlim(2, 10)
-ax.set_ylim(0, 64)
+ax.set_ylim(0, 30)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 # maxi1 = max(mpst)
