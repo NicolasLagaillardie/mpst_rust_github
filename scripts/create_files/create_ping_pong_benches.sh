@@ -77,7 +77,7 @@ do
     printf '\t\tping_pong_all::ping_pong_baking_mpst_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
     #########################
     printf 'pub mod ping_pong_baking_ampst_'"$next"';\n' >> benches/ping_pong_all/mod.rs;
-    printf '\t\tping_pong_all::ping_pong_baking_ampst_'"$next"'::ping_pong_protocol_mpst,\n' >> benches/ping_pong.rs;
+    printf '\t\tping_pong_all::ping_pong_baking_ampst_'"$next"'::ping_pong_protocol_ampst,\n' >> benches/ping_pong.rs;
 done
 
 printf '}' >> benches/ping_pong.rs;
