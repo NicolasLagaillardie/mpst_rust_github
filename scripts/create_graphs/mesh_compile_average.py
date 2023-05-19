@@ -86,11 +86,11 @@ nb_participants_binary, average_binary = (list(t) for t in zip(
 nb_participants_crossbeam, average_crossbeam = (list(t) for t in zip(
     *sorted(zip(nb_participants_crossbeam, average_crossbeam))))
 
-nb_participants_cancel, average_cancel = (list(t) for t in zip(
-    *sorted(zip(nb_participants_cancel, average_cancel))))
+# nb_participants_cancel, average_cancel = (list(t) for t in zip(
+#     *sorted(zip(nb_participants_cancel, average_cancel))))
 
-nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t) for t in zip(
-    *sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
+# nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t) for t in zip(
+#     *sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -131,7 +131,6 @@ ax.xaxis.set_ticks(np.arange(2, 11, 2))
 ax.yaxis.set_ticks(np.arange(10, 50, 15))
 ax.set_xlim(2, 10)
 ax.set_ylim(10, 45)
-# ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 

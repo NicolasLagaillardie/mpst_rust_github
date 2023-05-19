@@ -35,7 +35,7 @@ where
     let resp = match http {
         true => {
             let rt = Runtime::new()?;
-            rt.block_on(async move { req.await })?
+            rt.block_on(req)?
         }
         false => Response::default(),
     };

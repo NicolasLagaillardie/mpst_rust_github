@@ -66,7 +66,6 @@ for d in directories_criterion:
                     cancel.append(int(test(d))/10**6)
                     nb_participants_cancel.append(str_to_int[splitted[1]])
                 elif 'baking' in d:
-                    print(d)
                     mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
             elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
@@ -141,7 +140,6 @@ ax.xaxis.set_ticks(np.arange(2, 11, 2))
 ax.yaxis.set_ticks(np.arange(0, 40, 10))
 ax.set_xlim(2, 10)
 ax.set_ylim(0, 30)
-# ax.tick_params(axis='both', which='minor', labelsize=30)
 
 # maxi1 = max(mpst)
 # maxi2 = max(binary)

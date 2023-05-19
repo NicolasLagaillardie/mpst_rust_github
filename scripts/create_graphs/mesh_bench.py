@@ -66,7 +66,6 @@ for d in directories:
                     cancel.append(int(test(d))/10**6)
                     nb_participants_cancel.append(str_to_int[splitted[1]])
                 elif 'baking' in d:
-                    print(d)
                     mpst.append(int(test(d))/10**6)
                     nb_participants_mpst.append(str_to_int[splitted[1]])
             elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
@@ -140,7 +139,6 @@ ax.xaxis.set_ticks(np.arange(2, 11, 2))
 ax.yaxis.set_ticks(np.arange(0, 50, 20))
 ax.set_xlim(2, 10)
 ax.set_ylim(0, 40)
-# ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
