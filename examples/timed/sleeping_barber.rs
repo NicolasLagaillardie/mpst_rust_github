@@ -40,21 +40,12 @@ enum Branching0fromStoB {
         MeshedChannels<
             End,
             End,
-            RecvTimed<
-                Enter,
-                'a',
-                0,
-                true,
-                1,
-                true,
-                false,
-                RecvTimed<Branching1fromRtoB, 'a', 0, true, 1, true, false, End>,
-            >,
-            RoleC<RoleEnd>,
+            RecvTimed<Branching1fromRtoB, 'a', 0, true, 1, true, false, End>,
+            RoleR<RoleEnd>,
             NameB,
         >,
     ),
-    Close(
+    Closed(
         MeshedChannels<
             End,
             RecvTimed<i32, 'a', 0, true, 1, true, false, End>,
@@ -113,27 +104,116 @@ enum Branching1fromRtoB {
     ),
 }
 
-// A
-enum Branching0fromCtoA {
-    Sum(MeshedChannels<End, End, RoleEnd, NameA>),
-    Diff(MeshedChannels<End, End, RoleEnd, NameA>),
+// C
+enum Branching0fromStoC {
+    Available(
+        MeshedChannels<
+            End,
+            End,
+            RecvTimed<Branching1fromRtoC, 'a', 0, true, 1, true, false, End>,
+            RoleR<RoleEnd>,
+            NameC,
+        >,
+    ),
+    Close(MeshedChannels<End, End, End, RoleEnd, NameC>),
+}
+
+enum Branching1fromRtoC {
+    Full(
+        MeshedChannels<
+            End,
+            RecvTimed<Full, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+            RoleR<RoleS<RoleEnd>>,
+            NameC,
+        >,
+    ),
+    Wait(
+        MeshedChannels<
+            RecvTimed<
+                Start,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                RecvTimed<Stop, 'a', 0, true, 1, true, false, End>,
+            >,
+            RecvTimed<Wait, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<
+                Done,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                RecvTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+            >,
+            RoleR<RoleB<RoleB<RoleS<RoleS<RoleEnd>>>>>,
+            NameC,
+        >,
+    ),
+}
+
+// R
+enum Branching0fromStoR {
+    Available(
+        MeshedChannels<
+            SendTimed<Branching1fromRtoB, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching1fromRtoC, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching1fromRtoS, 'a', 0, true, 1, true, false, End>,
+            RoleBroadcast,
+            NameR,
+        >,
+    ),
+    Close(
+        MeshedChannels<
+            SendTimed<Done, 'a', 0, true, 1, true, false, End>,
+            End,
+            RecvTimed<Done, 'a', 0, true, 1, true, false, End>,
+            RoleS<RoleB<RoleEnd>>,
+            NameR,
+        >,
+    ),
 }
 
 // S
-enum Branching0fromCtoS {
-    Sum(
+enum Branching1fromRtoC {
+    Full(
         MeshedChannels<
-            End,
-            SendTimed<i32, 'a', 0, true, 1, true, false, End>,
-            RoleC<RoleEnd>,
+            SendTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<
+                Returned,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                SendTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+            >,
+            SendTimed<Branching0fromStoR, 'a', 0, true, 1, true, false, End>,
+            RoleC<RoleBroadcast>,
             NameS,
         >,
     ),
-    Diff(
+    Wait(
         MeshedChannels<
-            End,
-            SendTimed<i32, 'a', 0, true, 1, true, false, End>,
-            RoleC<RoleEnd>,
+            SendTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<
+                Done,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                SendTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+            >,
+            SendTimed<Branching0fromStoR, 'a', 0, true, 1, true, false, End>,
+            RoleC<RoleBroadcast>,
             NameS,
         >,
     ),
