@@ -8,6 +8,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create new roles
@@ -40,6 +41,7 @@ baker!(
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -61,6 +63,7 @@ type R2Q<R> = RoleQ<RoleQ<R>>;
 type R2R<R> = RoleR<RoleR<R>>;
 type R2S<R> = RoleS<RoleS<R>>;
 type R2T<R> = RoleT<RoleT<R>>;
+
 // A
 enum Branching0fromTtoA {
     More(
@@ -155,6 +158,7 @@ enum Branching0fromTtoA {
     ),
 }
 type RecursAtoT = Recv<Branching0fromTtoA, End>;
+
 // B
 enum Branching0fromTtoB {
     More(
@@ -249,6 +253,7 @@ enum Branching0fromTtoB {
     ),
 }
 type RecursBtoT = Recv<Branching0fromTtoB, End>;
+
 // C
 enum Branching0fromTtoC {
     More(
@@ -343,6 +348,7 @@ enum Branching0fromTtoC {
     ),
 }
 type RecursCtoT = Recv<Branching0fromTtoC, End>;
+
 // D
 enum Branching0fromTtoD {
     More(
@@ -437,6 +443,7 @@ enum Branching0fromTtoD {
     ),
 }
 type RecursDtoT = Recv<Branching0fromTtoD, End>;
+
 // E
 enum Branching0fromTtoE {
     More(
@@ -531,6 +538,7 @@ enum Branching0fromTtoE {
     ),
 }
 type RecursEtoT = Recv<Branching0fromTtoE, End>;
+
 // F
 enum Branching0fromTtoF {
     More(
@@ -625,6 +633,7 @@ enum Branching0fromTtoF {
     ),
 }
 type RecursFtoT = Recv<Branching0fromTtoF, End>;
+
 // G
 enum Branching0fromTtoG {
     More(
@@ -719,6 +728,7 @@ enum Branching0fromTtoG {
     ),
 }
 type RecursGtoT = Recv<Branching0fromTtoG, End>;
+
 // H
 enum Branching0fromTtoH {
     More(
@@ -813,6 +823,7 @@ enum Branching0fromTtoH {
     ),
 }
 type RecursHtoT = Recv<Branching0fromTtoH, End>;
+
 // I
 enum Branching0fromTtoI {
     More(
@@ -907,6 +918,7 @@ enum Branching0fromTtoI {
     ),
 }
 type RecursItoT = Recv<Branching0fromTtoI, End>;
+
 // J
 enum Branching0fromTtoJ {
     More(
@@ -1001,6 +1013,7 @@ enum Branching0fromTtoJ {
     ),
 }
 type RecursJtoT = Recv<Branching0fromTtoJ, End>;
+
 // K
 enum Branching0fromTtoK {
     More(
@@ -1095,6 +1108,7 @@ enum Branching0fromTtoK {
     ),
 }
 type RecursKtoT = Recv<Branching0fromTtoK, End>;
+
 // L
 enum Branching0fromTtoL {
     More(
@@ -1189,6 +1203,7 @@ enum Branching0fromTtoL {
     ),
 }
 type RecursLtoT = Recv<Branching0fromTtoL, End>;
+
 // M
 enum Branching0fromTtoM {
     More(
@@ -1283,6 +1298,7 @@ enum Branching0fromTtoM {
     ),
 }
 type RecursMtoT = Recv<Branching0fromTtoM, End>;
+
 // N
 enum Branching0fromTtoN {
     More(
@@ -1377,6 +1393,7 @@ enum Branching0fromTtoN {
     ),
 }
 type RecursNtoT = Recv<Branching0fromTtoN, End>;
+
 // O
 enum Branching0fromTtoO {
     More(
@@ -1471,6 +1488,7 @@ enum Branching0fromTtoO {
     ),
 }
 type RecursOtoT = Recv<Branching0fromTtoO, End>;
+
 // P
 enum Branching0fromTtoP {
     More(
@@ -1565,6 +1583,7 @@ enum Branching0fromTtoP {
     ),
 }
 type RecursPtoT = Recv<Branching0fromTtoP, End>;
+
 // Q
 enum Branching0fromTtoQ {
     More(
@@ -1659,6 +1678,7 @@ enum Branching0fromTtoQ {
     ),
 }
 type RecursQtoT = Recv<Branching0fromTtoQ, End>;
+
 // R
 enum Branching0fromTtoR {
     More(
@@ -1753,6 +1773,7 @@ enum Branching0fromTtoR {
     ),
 }
 type RecursRtoT = Recv<Branching0fromTtoR, End>;
+
 // S
 enum Branching0fromTtoS {
     More(
@@ -1847,6 +1868,7 @@ enum Branching0fromTtoS {
     ),
 }
 type RecursStoT = Recv<Branching0fromTtoS, End>;
+
 // T
 type Choose0fromTtoA = Send<Branching0fromTtoA, End>;
 type Choose0fromTtoB = Send<Branching0fromTtoB, End>;

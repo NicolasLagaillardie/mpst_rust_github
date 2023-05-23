@@ -23,6 +23,7 @@ enum Branching0fromBtoA {
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
 type RecursAtoB = Recv<Branching0fromBtoA, End>;
+
 // C
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
 type EndpointMoreB =

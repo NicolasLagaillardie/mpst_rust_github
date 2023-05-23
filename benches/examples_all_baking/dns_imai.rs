@@ -18,11 +18,13 @@ baker!("rec_and_cancel", MeshedChannelsThree, Client, Other, Server);
 // SERVER
 type Choose0fromServerToClient = Send<Branching0fromServerToClient, End>;
 type Choose0fromServerToOther = Send<Branching0fromServerToOther, End>;
+
 // CLIENT
 enum Branching0fromServerToClient {
     Dummy(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
     Query(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
 }
+
 // OTHER
 enum Branching0fromServerToOther {
     Dummy(MeshedChannelsThree<End, Recv<(), End>, RoleServer<RoleEnd>, NameOther>),
@@ -44,6 +46,7 @@ type EndpointClient = MeshedChannelsThree<
     RoleServer<RoleServer<RoleEnd>>,
     NameClient,
 >;
+
 // OTHER
 type EndpointOther = MeshedChannelsThree<
     End,
@@ -51,6 +54,7 @@ type EndpointOther = MeshedChannelsThree<
     RoleServer<RoleEnd>,
     NameOther,
 >;
+
 // SERVER
 type EndpointServer = MeshedChannelsThree<
     Recv<i32, Choose0fromServerToClient>,

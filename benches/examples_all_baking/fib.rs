@@ -16,6 +16,7 @@ baker!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 // A
 type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
+
 // B
 enum Branching0fromAtoB {
     More(
@@ -29,6 +30,7 @@ enum Branching0fromAtoB {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
+
 // C
 enum Branching0fromAtoC {
     More(MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>),

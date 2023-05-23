@@ -104,10 +104,12 @@ enum Branching0fromCtoA<N: marker::Send> {
     Close(MeshedChannelsFour<Recv<N, End>, End, Send<N, End>, Controller<User<RoleEnd>>, NameApi>),
 }
 type Recurs0fromCtoA<N> = Recv<Branching0fromCtoA<N>, End>;
+
 // Controller
 type Choose0fromCtoA<N> = Send<Branching0fromCtoA<N>, End>;
 type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
 type Choose0fromCtoU<N> = Send<Branching0fromCtoU<N>, End>;
+
 // Storage
 enum Branching0fromCtoS<N: marker::Send> {
     Up(
@@ -131,6 +133,7 @@ enum Branching0fromCtoS<N: marker::Send> {
     Close(MeshedChannelsFour<End, Recv<N, End>, End, Controller<RoleEnd>, NameStorage>),
 }
 type Recurs0fromCtoS<N> = Recv<Branching0fromCtoS<N>, End>;
+
 // User
 enum Branching0fromCtoU<N: marker::Send> {
     Up(
@@ -171,6 +174,7 @@ type EndpointApiInit<N> = MeshedChannelsFour<
     Controller<User<Controller<Controller<RoleEnd>>>>,
     NameApi,
 >;
+
 // Controller
 type EndpointController0<N> = MeshedChannelsFour<
     Recv<N, Choose0fromCtoA<N>>,
@@ -186,6 +190,7 @@ type EndpointControllerInit<N> = MeshedChannelsFour<
     Storage<Api<Storage<Api<RoleBroadcast>>>>,
     NameController,
 >;
+
 // Storage
 type EndpointStorage0<N> =
     MeshedChannelsFour<End, Recurs0fromCtoS<N>, End, Controller<RoleEnd>, NameStorage>;
@@ -196,6 +201,7 @@ type EndpointStorageInit<N> = MeshedChannelsFour<
     Controller<Controller<Controller<RoleEnd>>>,
     NameStorage,
 >;
+
 // User
 type EndpointUserInit<N> =
     MeshedChannelsFour<Send<N, End>, Recurs0fromCtoU<N>, End, Api<Controller<RoleEnd>>, NameUser>;

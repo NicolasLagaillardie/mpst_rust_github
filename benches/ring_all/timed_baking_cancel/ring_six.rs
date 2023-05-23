@@ -41,6 +41,7 @@ enum Branching0fromFtoA {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoF = RecvTimed<Branching0fromFtoA, 'a', 0, true, 1, true, false, End>;
+
 // B
 enum Branching0fromFtoB {
     Forward(
@@ -68,6 +69,7 @@ enum Branching0fromFtoB {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoF = RecvTimed<Branching0fromFtoB, 'a', 0, true, 1, true, false, End>;
+
 // C
 enum Branching0fromFtoC {
     Forward(
@@ -95,6 +97,7 @@ enum Branching0fromFtoC {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoF = RecvTimed<Branching0fromFtoC, 'a', 0, true, 1, true, false, End>;
+
 // D
 enum Branching0fromFtoD {
     Forward(
@@ -122,6 +125,7 @@ enum Branching0fromFtoD {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoF = RecvTimed<Branching0fromFtoD, 'a', 0, true, 1, true, false, End>;
+
 // E
 enum Branching0fromFtoE {
     Forward(
@@ -149,6 +153,7 @@ enum Branching0fromFtoE {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoF = RecvTimed<Branching0fromFtoE, 'a', 0, true, 1, true, false, End>;
+
 // F
 type Choose0fromFtoA = SendTimed<Branching0fromFtoA, 'a', 0, true, 1, true, false, End>;
 type Choose0fromFtoB = SendTimed<Branching0fromFtoB, 'a', 0, true, 1, true, false, End>;

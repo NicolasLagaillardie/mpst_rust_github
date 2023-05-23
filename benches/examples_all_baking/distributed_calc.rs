@@ -24,6 +24,7 @@ enum Branching0fromCtoA {
     Sum(MeshedChannelsThree<End, End, RoleEnd, NameA>),
     Diff(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
+
 // S
 enum Branching0fromCtoS {
     Sum(MeshedChannelsThree<End, Send<i32, End>, RoleC<RoleEnd>, NameS>),
@@ -33,6 +34,7 @@ enum Branching0fromCtoS {
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<RoleEnd>, NameA>;
+
 // C
 type EndpointC = MeshedChannelsThree<
     Choose0fromCtoA,
@@ -42,6 +44,7 @@ type EndpointC = MeshedChannelsThree<
 >;
 type EndpointCSum = MeshedChannelsThree<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>;
 type EndpointCDiff = MeshedChannelsThree<End, Recv<i32, End>, RoleS<RoleEnd>, NameC>;
+
 // S
 type EndpointS = MeshedChannelsThree<
     End,

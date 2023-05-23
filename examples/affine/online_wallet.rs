@@ -36,12 +36,14 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_s, RoleS, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
@@ -54,12 +56,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_a, RoleA, 1 |

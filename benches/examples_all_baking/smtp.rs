@@ -17,6 +17,7 @@ baker!("rec_and_cancel", MeshedChannelsTwo, C, S);
 // C
 type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
 type EndpointC0 = MeshedChannelsTwo<Recv<(), Choose0fromCtoS>, RoleS<RoleBroadcast>, NameC>;
+
 // S
 enum Branching0fromCtoS {
     Continue(
@@ -37,6 +38,7 @@ enum Branching1fromStoC {
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
 type EndpointC1 = MeshedChannelsTwo<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose1fromStoC = Send<Branching1fromStoC, End>;
 type EndpointS1 = MeshedChannelsTwo<Choose1fromStoC, RoleBroadcast, NameS>;
@@ -45,6 +47,7 @@ type EndpointS1 = MeshedChannelsTwo<Choose1fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose2fromCtoS = Send<Branching2fromCtoS, End>;
 type EndpointC2 = MeshedChannelsTwo<Choose2fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching2fromCtoS {
     Continue(
@@ -59,6 +62,7 @@ type EndpointS2 = MeshedChannelsTwo<Offer2fromCtoS, RoleC<RoleEnd>, NameS>;
 // C
 type Choose3fromCtoS = Send<Branching3fromCtoS, End>;
 type EndpointC3 = MeshedChannelsTwo<Choose3fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching3fromCtoS {
     Continue(MeshedChannelsTwo<Recv<(), Choose4fromStoC>, RoleC<RoleBroadcast>, NameS>),
@@ -75,6 +79,7 @@ enum Branching4fromStoC {
 }
 type Offer4fromStoC = <Choose4fromStoC as Session>::Dual;
 type EndpointC4 = MeshedChannelsTwo<Offer4fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose4fromStoC = Send<Branching4fromStoC, End>;
 type EndpointS4 = MeshedChannelsTwo<Choose4fromStoC, RoleBroadcast, NameS>;
@@ -83,6 +88,7 @@ type EndpointS4 = MeshedChannelsTwo<Choose4fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose5fromCtoS = Send<Branching5fromCtoS, End>;
 type EndpointC5 = MeshedChannelsTwo<Choose5fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching5fromCtoS {
     Continue(MeshedChannelsTwo<Recv<(), Choose6fromStoC>, RoleC<RoleBroadcast>, NameS>),
@@ -99,6 +105,7 @@ enum Branching6fromStoC {
 }
 type Offer6fromStoC = <Choose6fromStoC as Session>::Dual;
 type EndpointC6 = MeshedChannelsTwo<Offer6fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose6fromStoC = Send<Branching6fromStoC, End>;
 type EndpointS6 = MeshedChannelsTwo<Choose6fromStoC, RoleBroadcast, NameS>;
@@ -107,6 +114,7 @@ type EndpointS6 = MeshedChannelsTwo<Choose6fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose7fromCtoS = Send<Branching7fromCtoS, End>;
 type EndpointC7 = MeshedChannelsTwo<Choose7fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching7fromCtoS {
     Continue(MeshedChannelsTwo<Recv<(), Choose8fromStoC>, RoleC<RoleBroadcast>, NameS>),
@@ -123,6 +131,7 @@ enum Branching8fromStoC {
 }
 type Offer8fromStoC = <Choose8fromStoC as Session>::Dual;
 type EndpointC8 = MeshedChannelsTwo<Offer8fromStoC, RoleS<RoleEnd>, NameC>;
+
 // S
 type Choose8fromStoC = Send<Branching8fromStoC, End>;
 type EndpointS8 = MeshedChannelsTwo<Choose8fromStoC, RoleBroadcast, NameS>;
@@ -131,6 +140,7 @@ type EndpointS8 = MeshedChannelsTwo<Choose8fromStoC, RoleBroadcast, NameS>;
 // C
 type Choose9fromCtoS = Send<Branching9fromCtoS, End>;
 type EndpointC9 = MeshedChannelsTwo<Choose9fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching9fromCtoS {
     Continue(
@@ -151,6 +161,7 @@ type EndpointS9 = MeshedChannelsTwo<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
 // C
 type Choose10fromCtoS = Send<Branching10fromCtoS, End>;
 type EndpointC10 = MeshedChannelsTwo<Choose10fromCtoS, RoleBroadcast, NameC>;
+
 // S
 enum Branching10fromCtoS {
     Data(

@@ -39,6 +39,7 @@ enum Branching0fromBtoA {
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
 type RecursAtoB = RecvTimed<Branching0fromBtoA, 'a', 0, true, 1, true, false, End>;
+
 // B
 type Choose0fromBtoA = SendTimed<Branching0fromBtoA, 'a', 0, true, 1, true, false, End>;
 type EndpointForwardB = MeshedChannelsTwo<

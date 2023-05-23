@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -54,6 +55,7 @@ enum Branching0fromJtoA {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoJ = Recv<Branching0fromJtoA, End>;
+
 // B
 enum Branching0fromJtoB {
     Forward(
@@ -89,6 +91,7 @@ enum Branching0fromJtoB {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoJ = Recv<Branching0fromJtoB, End>;
+
 // C
 enum Branching0fromJtoC {
     Forward(
@@ -124,6 +127,7 @@ enum Branching0fromJtoC {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoJ = Recv<Branching0fromJtoC, End>;
+
 // D
 enum Branching0fromJtoD {
     Forward(
@@ -159,6 +163,7 @@ enum Branching0fromJtoD {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoJ = Recv<Branching0fromJtoD, End>;
+
 // E
 enum Branching0fromJtoE {
     Forward(
@@ -194,6 +199,7 @@ enum Branching0fromJtoE {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoJ = Recv<Branching0fromJtoE, End>;
+
 // F
 enum Branching0fromJtoF {
     Forward(
@@ -229,6 +235,7 @@ enum Branching0fromJtoF {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoJ = Recv<Branching0fromJtoF, End>;
+
 // G
 enum Branching0fromJtoG {
     Forward(
@@ -264,6 +271,7 @@ enum Branching0fromJtoG {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoJ = Recv<Branching0fromJtoG, End>;
+
 // H
 enum Branching0fromJtoH {
     Forward(
@@ -299,6 +307,7 @@ enum Branching0fromJtoH {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoJ = Recv<Branching0fromJtoH, End>;
+
 // I
 enum Branching0fromJtoI {
     Forward(
@@ -334,6 +343,7 @@ enum Branching0fromJtoI {
     Done(MeshedChannelsTen<End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoJ = Recv<Branching0fromJtoI, End>;
+
 // J
 type Choose0fromJtoA = Send<Branching0fromJtoA, End>;
 type Choose0fromJtoB = Send<Branching0fromJtoB, End>;

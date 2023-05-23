@@ -16,14 +16,21 @@ use std::error::Error;
 //         choice at A
 //         {
 //             ping(()) from A to B;
+
 //             pong(()) from B to A;
+
 //             continue PP;
+
 //         }
+
 //         or
 //         {
 //             stop() from A to B;
+
 //         }
+
 //     }
+
 // }
 
 // Create the new MeshedChannels for three participants and the close and fork functions
@@ -43,6 +50,7 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
     NameA, MeshedChannelsFour, 3
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 | =>
@@ -55,6 +63,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 | =>
     NameA, MeshedChannelsFour, 3
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 | =>

@@ -33,6 +33,7 @@ struct Received;
 // REGIONAL
 type Choose0fromRegionalToData = Send<Branching0fromRegionalToData, End>;
 type Choose0fromRegionalToHandler = Send<Branching0fromRegionalToHandler, End>;
+
 // DATA
 enum Branching0fromRegionalToData {
     Loops(
@@ -53,6 +54,7 @@ enum Branching0fromRegionalToData {
     ),
 }
 type Offer0fromRegionalToData = Recv<Branching0fromRegionalToData, End>;
+
 // HANDLER
 enum Branching0fromRegionalToHandler {
     Loops(
@@ -78,6 +80,7 @@ type Offer0fromRegionalToHandler = Recv<Branching0fromRegionalToHandler, End>;
 // DATA
 type EndpointData =
     MeshedChannelsThree<End, Offer0fromRegionalToData, RoleRegional<RoleEnd>, NameData>;
+
 // HANDLER
 type EndpointHandler = MeshedChannelsThree<
     End,
@@ -85,6 +88,7 @@ type EndpointHandler = MeshedChannelsThree<
     RoleRegional<RoleRegional<RoleEnd>>,
     NameHandler,
 >;
+
 // REGIONAL
 type EndpointRegionalInvalid =
     MeshedChannelsThree<End, Send<InvalidZone, End>, RoleHandler<RoleEnd>, NameRegional>;

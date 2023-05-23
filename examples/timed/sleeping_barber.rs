@@ -18,14 +18,102 @@ use std::time::Instant;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-// Create the new MeshedChannels for three participants and the close and fork functions
-baker_timed!(MeshedChannels, A, C, S);
+// Generate all structures, methods and macros
+baker_timed!(MeshedChannels, B, C, R, S);
+
+// C is not created when "S introduces C",
+// it exists from the beginning
+
+struct Enter {}
+struct Full {}
+struct Returned {}
+struct Wait {}
+struct Start {}
+struct Stop {}
+struct Next {}
+struct Done {}
 
 // Types
-// A
-type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
-type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 1, true, false, End>;
+// B
+enum Branching0fromStoB {
+    Available(
+        MeshedChannels<
+            End,
+            End,
+            RecvTimed<
+                Enter,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                RecvTimed<Branching1fromRtoB, 'a', 0, true, 1, true, false, End>,
+            >,
+            RoleC<RoleEnd>,
+            NameB,
+        >,
+    ),
+    Close(
+        MeshedChannels<
+            End,
+            RecvTimed<i32, 'a', 0, true, 1, true, false, End>,
+            End,
+            RoleR<RoleEnd>,
+            NameB,
+        >,
+    ),
+}
 
+enum Branching1fromRtoB {
+    Full(
+        MeshedChannels<
+            End,
+            RecvTimed<Wait, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            RoleR<RoleS<RoleEnd>>,
+            NameB,
+        >,
+    ),
+    Wait(
+        MeshedChannels<
+            SendTimed<
+                Start,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                SendTimed<Stop, 'a', 0, true, 1, true, false, End>,
+            >,
+            RecvTimed<
+                Enter,
+                'a',
+                0,
+                true,
+                1,
+                true,
+                false,
+                SendTimed<
+                    Next,
+                    'a',
+                    0,
+                    true,
+                    1,
+                    true,
+                    false,
+                    RecvTimed<Wait, 'a', 0, true, 1, true, false, End>,
+                >,
+            >,
+            RecvTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            RoleR<RoleC<RoleC<RoleR<RoleR<RoleS<RoleEnd>>>>>>,
+            NameB,
+        >,
+    ),
+}
+
+// A
 enum Branching0fromCtoA {
     Sum(MeshedChannels<End, End, RoleEnd, NameA>),
     Diff(MeshedChannels<End, End, RoleEnd, NameA>),

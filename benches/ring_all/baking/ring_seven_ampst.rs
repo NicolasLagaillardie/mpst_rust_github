@@ -6,6 +6,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create new roles
@@ -41,6 +42,7 @@ enum Branching0fromGtoA {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoG = Recv<Branching0fromGtoA, End>;
+
 // B
 enum Branching0fromGtoB {
     Forward(
@@ -70,6 +72,7 @@ enum Branching0fromGtoB {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoG = Recv<Branching0fromGtoB, End>;
+
 // C
 enum Branching0fromGtoC {
     Forward(
@@ -99,6 +102,7 @@ enum Branching0fromGtoC {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoG = Recv<Branching0fromGtoC, End>;
+
 // D
 enum Branching0fromGtoD {
     Forward(
@@ -128,6 +132,7 @@ enum Branching0fromGtoD {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoG = Recv<Branching0fromGtoD, End>;
+
 // E
 enum Branching0fromGtoE {
     Forward(
@@ -157,6 +162,7 @@ enum Branching0fromGtoE {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoG = Recv<Branching0fromGtoE, End>;
+
 // F
 enum Branching0fromGtoF {
     Forward(
@@ -186,6 +192,7 @@ enum Branching0fromGtoF {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoG = Recv<Branching0fromGtoF, End>;
+
 // F
 type Choose0fromGtoA = Send<Branching0fromGtoA, End>;
 type Choose0fromGtoB = Send<Branching0fromGtoB, End>;

@@ -13,6 +13,7 @@ use rand::{thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
+
 // use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -33,6 +34,7 @@ create_send_mpst_session_bundle!(
     send_mpst_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
@@ -45,11 +47,13 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_c, RoleC, 2 | =>
@@ -66,6 +70,7 @@ enum Branching0fromCtoA {
     Sum(MeshedChannelsThree<End, End, RoleEnd, NameA>),
     Diff(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
+
 // S
 enum Branching0fromCtoS<N: marker::Send> {
     Sum(MeshedChannelsThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
@@ -75,6 +80,7 @@ enum Branching0fromCtoS<N: marker::Send> {
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<RoleEnd>, NameA>;
+
 // C
 type EndpointC<N> = MeshedChannelsThree<
     Choose0fromCtoA,
@@ -82,6 +88,7 @@ type EndpointC<N> = MeshedChannelsThree<
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
+
 // S
 type EndpointS<N> = MeshedChannelsThree<
     End,

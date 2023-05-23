@@ -27,114 +27,133 @@ create_send_mpst_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwenty, 20
 );
+
 // B
 create_send_mpst_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 1 |
     send_mpst_b_to_c, RoleC, 2 | =>
     NameB, MeshedChannelsTwenty, 20
 );
+
 // C
 create_send_mpst_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 2 |
     send_mpst_c_to_d, RoleD, 3 | =>
     NameC, MeshedChannelsTwenty, 20
 );
+
 // D
 create_send_mpst_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 3 |
     send_mpst_d_to_e, RoleE, 4 | =>
     NameD, MeshedChannelsTwenty, 20
 );
+
 // E
 create_send_mpst_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 4 |
     send_mpst_e_to_f, RoleF, 5 | =>
     NameE, MeshedChannelsTwenty, 20
 );
+
 // F
 create_send_mpst_cancel_bundle!(
     send_mpst_f_to_e, RoleE, 5 |
     send_mpst_f_to_g, RoleG, 6 | =>
     NameF, MeshedChannelsTwenty, 20
 );
+
 // G
 create_send_mpst_cancel_bundle!(
     send_mpst_g_to_f, RoleF, 6 |
     send_mpst_g_to_h, RoleH, 7 | =>
     NameG, MeshedChannelsTwenty, 20
 );
+
 // H
 create_send_mpst_cancel_bundle!(
     send_mpst_h_to_g, RoleG, 7 |
     send_mpst_h_to_i, RoleI, 8 | =>
     NameH, MeshedChannelsTwenty, 20
 );
+
 // I
 create_send_mpst_cancel_bundle!(
     send_mpst_i_to_h, RoleH, 8 |
     send_mpst_i_to_j, RoleJ, 9 | =>
     NameI, MeshedChannelsTwenty, 20
 );
+
 // J
 create_send_mpst_cancel_bundle!(
     send_mpst_j_to_i, RoleI, 9 |
     send_mpst_j_to_k, RoleK, 10 | =>
     NameJ, MeshedChannelsTwenty, 20
 );
+
 // K
 create_send_mpst_cancel_bundle!(
     send_mpst_k_to_j, RoleJ, 10 |
     send_mpst_k_to_l, RoleL, 11 | =>
     NameK, MeshedChannelsTwenty, 20
 );
+
 // L
 create_send_mpst_cancel_bundle!(
     send_mpst_l_to_k, RoleK, 11 |
     send_mpst_l_to_m, RoleM, 12 | =>
     NameL, MeshedChannelsTwenty, 20
 );
+
 // M
 create_send_mpst_cancel_bundle!(
     send_mpst_m_to_l, RoleL, 12 |
     send_mpst_m_to_n, RoleN, 13 | =>
     NameM, MeshedChannelsTwenty, 20
 );
+
 // N
 create_send_mpst_cancel_bundle!(
     send_mpst_n_to_m, RoleM, 13 |
     send_mpst_n_to_o, RoleO, 14 | =>
     NameN, MeshedChannelsTwenty, 20
 );
+
 // O
 create_send_mpst_cancel_bundle!(
     send_mpst_o_to_n, RoleN, 14 |
     send_mpst_o_to_p, RoleP, 15 | =>
     NameO, MeshedChannelsTwenty, 20
 );
+
 // P
 create_send_mpst_cancel_bundle!(
     send_mpst_p_to_o, RoleO, 15 |
     send_mpst_p_to_q, RoleQ, 16 | =>
     NameP, MeshedChannelsTwenty, 20
 );
+
 // Q
 create_send_mpst_cancel_bundle!(
     send_mpst_q_to_p, RoleP, 16 |
     send_mpst_q_to_r, RoleR, 17 | =>
     NameQ, MeshedChannelsTwenty, 20
 );
+
 // R
 create_send_mpst_cancel_bundle!(
     send_mpst_r_to_q, RoleQ, 17 |
     send_mpst_r_to_s, RoleS, 18 | =>
     NameR, MeshedChannelsTwenty, 20
 );
+
 // S
 create_send_mpst_cancel_bundle!(
     send_mpst_s_to_r, RoleR, 18 |
     send_mpst_s_to_t, RoleT, 19 | =>
     NameS, MeshedChannelsTwenty, 20
 );
+
 // T
 create_send_mpst_cancel_bundle!(
     send_mpst_t_to_s, RoleS, 19 | =>
@@ -148,6 +167,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_t, RoleT, 19 | =>
     NameA, MeshedChannelsTwenty, 20
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 |
@@ -155,6 +175,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_t, RoleT, 19 | =>
     NameB, MeshedChannelsTwenty, 20
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 |
@@ -162,6 +183,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_t, RoleT, 19 | =>
     NameC, MeshedChannelsTwenty, 20
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 3 |
@@ -169,6 +191,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_t, RoleT, 19 | =>
     NameD, MeshedChannelsTwenty, 20
 );
+
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 4 |
@@ -176,6 +199,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_from_t, RoleT, 19 | =>
     NameE, MeshedChannelsTwenty, 20
 );
+
 // F
 create_recv_mpst_session_bundle!(
     recv_mpst_f_from_e, RoleE, 5 |
@@ -183,6 +207,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_from_t, RoleT, 19 | =>
     NameF, MeshedChannelsTwenty, 20
 );
+
 // G
 create_recv_mpst_session_bundle!(
     recv_mpst_g_from_f, RoleF, 6 |
@@ -190,6 +215,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_g_from_t, RoleT, 19 | =>
     NameG, MeshedChannelsTwenty, 20
 );
+
 // H
 create_recv_mpst_session_bundle!(
     recv_mpst_h_from_g, RoleG, 7 |
@@ -197,6 +223,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_h_from_t, RoleT, 19 | =>
     NameH, MeshedChannelsTwenty, 20
 );
+
 // I
 create_recv_mpst_session_bundle!(
     recv_mpst_i_from_h, RoleH, 8 |
@@ -204,6 +231,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_i_from_t, RoleT, 19 | =>
     NameI, MeshedChannelsTwenty, 20
 );
+
 // J
 create_recv_mpst_session_bundle!(
     recv_mpst_j_from_i, RoleI, 9 |
@@ -211,6 +239,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_j_from_t, RoleT, 19 | =>
     NameJ, MeshedChannelsTwenty, 20
 );
+
 // K
 create_recv_mpst_session_bundle!(
     recv_mpst_k_from_j, RoleJ, 10 |
@@ -218,6 +247,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_k_from_t, RoleT, 19 | =>
     NameK, MeshedChannelsTwenty, 20
 );
+
 // L
 create_recv_mpst_session_bundle!(
     recv_mpst_l_from_k, RoleK, 11 |
@@ -225,6 +255,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_l_from_t, RoleT, 19 | =>
     NameL, MeshedChannelsTwenty, 20
 );
+
 // M
 create_recv_mpst_session_bundle!(
     recv_mpst_m_from_l, RoleL, 12 |
@@ -232,6 +263,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_m_from_t, RoleT, 19 | =>
     NameM, MeshedChannelsTwenty, 20
 );
+
 // N
 create_recv_mpst_session_bundle!(
     recv_mpst_n_from_m, RoleM, 13 |
@@ -239,6 +271,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_n_from_t, RoleT, 19 | =>
     NameN, MeshedChannelsTwenty, 20
 );
+
 // O
 create_recv_mpst_session_bundle!(
     recv_mpst_o_from_n, RoleN, 14 |
@@ -246,6 +279,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_o_from_t, RoleT, 19 | =>
     NameO, MeshedChannelsTwenty, 20
 );
+
 // P
 create_recv_mpst_session_bundle!(
     recv_mpst_p_from_o, RoleO, 15 |
@@ -253,6 +287,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_p_from_t, RoleT, 19 | =>
     NameP, MeshedChannelsTwenty, 20
 );
+
 // Q
 create_recv_mpst_session_bundle!(
     recv_mpst_q_from_p, RoleP, 16 |
@@ -260,6 +295,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_q_from_t, RoleT, 19 | =>
     NameQ, MeshedChannelsTwenty, 20
 );
+
 // R
 create_recv_mpst_session_bundle!(
     recv_mpst_r_from_q, RoleQ, 17 |
@@ -267,12 +303,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_r_from_t, RoleT, 19 | =>
     NameR, MeshedChannelsTwenty, 20
 );
+
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_r, RoleR, 18 |
     recv_mpst_s_from_t, RoleT, 19 | =>
     NameS, MeshedChannelsTwenty, 20
 );
+
 // T
 create_recv_mpst_session_bundle!(
     recv_mpst_t_from_s, RoleS, 19 | =>
@@ -359,6 +397,7 @@ enum Branching0fromTtoA {
     ),
 }
 type RecursAtoT = <Choose0fromTtoA as Session>::Dual;
+
 // B
 enum Branching0fromTtoB {
     Forward(
@@ -438,6 +477,7 @@ enum Branching0fromTtoB {
     ),
 }
 type RecursBtoT = <Choose0fromTtoB as Session>::Dual;
+
 // C
 enum Branching0fromTtoC {
     Forward(
@@ -517,6 +557,7 @@ enum Branching0fromTtoC {
     ),
 }
 type RecursCtoT = <Choose0fromTtoC as Session>::Dual;
+
 // D
 enum Branching0fromTtoD {
     Forward(
@@ -596,6 +637,7 @@ enum Branching0fromTtoD {
     ),
 }
 type RecursDtoT = <Choose0fromTtoD as Session>::Dual;
+
 // E
 enum Branching0fromTtoE {
     Forward(
@@ -675,6 +717,7 @@ enum Branching0fromTtoE {
     ),
 }
 type RecursEtoT = <Choose0fromTtoE as Session>::Dual;
+
 // F
 enum Branching0fromTtoF {
     Forward(
@@ -754,6 +797,7 @@ enum Branching0fromTtoF {
     ),
 }
 type RecursFtoT = <Choose0fromTtoF as Session>::Dual;
+
 // G
 enum Branching0fromTtoG {
     Forward(
@@ -833,6 +877,7 @@ enum Branching0fromTtoG {
     ),
 }
 type RecursGtoT = <Choose0fromTtoG as Session>::Dual;
+
 // H
 enum Branching0fromTtoH {
     Forward(
@@ -912,6 +957,7 @@ enum Branching0fromTtoH {
     ),
 }
 type RecursHtoT = <Choose0fromTtoH as Session>::Dual;
+
 // I
 enum Branching0fromTtoI {
     Forward(
@@ -991,6 +1037,7 @@ enum Branching0fromTtoI {
     ),
 }
 type RecursItoT = <Choose0fromTtoI as Session>::Dual;
+
 // J
 enum Branching0fromTtoJ {
     Forward(
@@ -1070,6 +1117,7 @@ enum Branching0fromTtoJ {
     ),
 }
 type RecursJtoT = <Choose0fromTtoJ as Session>::Dual;
+
 // K
 enum Branching0fromTtoK {
     Forward(
@@ -1149,6 +1197,7 @@ enum Branching0fromTtoK {
     ),
 }
 type RecursKtoT = <Choose0fromTtoK as Session>::Dual;
+
 // L
 enum Branching0fromTtoL {
     Forward(
@@ -1228,6 +1277,7 @@ enum Branching0fromTtoL {
     ),
 }
 type RecursLtoT = <Choose0fromTtoL as Session>::Dual;
+
 // M
 enum Branching0fromTtoM {
     Forward(
@@ -1307,6 +1357,7 @@ enum Branching0fromTtoM {
     ),
 }
 type RecursMtoT = <Choose0fromTtoM as Session>::Dual;
+
 // N
 enum Branching0fromTtoN {
     Forward(
@@ -1386,6 +1437,7 @@ enum Branching0fromTtoN {
     ),
 }
 type RecursNtoT = <Choose0fromTtoN as Session>::Dual;
+
 // O
 enum Branching0fromTtoO {
     Forward(
@@ -1465,6 +1517,7 @@ enum Branching0fromTtoO {
     ),
 }
 type RecursOtoT = <Choose0fromTtoO as Session>::Dual;
+
 // P
 enum Branching0fromTtoP {
     Forward(
@@ -1544,6 +1597,7 @@ enum Branching0fromTtoP {
     ),
 }
 type RecursPtoT = <Choose0fromTtoP as Session>::Dual;
+
 // Q
 enum Branching0fromTtoQ {
     Forward(
@@ -1623,6 +1677,7 @@ enum Branching0fromTtoQ {
     ),
 }
 type RecursQtoT = <Choose0fromTtoQ as Session>::Dual;
+
 // R
 enum Branching0fromTtoR {
     Forward(
@@ -1702,6 +1757,7 @@ enum Branching0fromTtoR {
     ),
 }
 type RecursRtoT = <Choose0fromTtoR as Session>::Dual;
+
 // S
 enum Branching0fromTtoS {
     Forward(
@@ -1781,6 +1837,7 @@ enum Branching0fromTtoS {
     ),
 }
 type RecursStoT = <Choose0fromTtoS as Session>::Dual;
+
 // T
 type Choose0fromTtoA = Send<Branching0fromTtoA, End>;
 type Choose0fromTtoB = Send<Branching0fromTtoB, End>;

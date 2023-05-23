@@ -45,6 +45,7 @@ type EndpointController0 = MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>,
 type EndpointController1 = MeshedChannelsTwo<Choose1fromCtoL, RoleBroadcast, NameController>;
 type EndpointControllerInit =
     MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
+
 // RoleLogs
 type EndpointLogs0Success =
     MeshedChannelsTwo<Send<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;

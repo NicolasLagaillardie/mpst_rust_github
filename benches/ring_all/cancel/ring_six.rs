@@ -10,6 +10,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create the new MeshedChannels for six participants and the close and fork functions
@@ -28,30 +29,35 @@ create_send_mpst_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsSix, 6
 );
+
 // B
 create_send_mpst_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 1 |
     send_mpst_b_to_c, RoleC, 2 | =>
     NameB, MeshedChannelsSix, 6
 );
+
 // C
 create_send_mpst_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 2 |
     send_mpst_c_to_d, RoleD, 3 | =>
     NameC, MeshedChannelsSix, 6
 );
+
 // D
 create_send_mpst_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 3 |
     send_mpst_d_to_e, RoleE, 4 | =>
     NameD, MeshedChannelsSix, 6
 );
+
 // E
 create_send_mpst_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 4 |
     send_mpst_e_to_f, RoleF, 5 | =>
     NameE, MeshedChannelsSix, 6
 );
+
 // F
 create_send_mpst_cancel_bundle!(
     send_mpst_f_to_e, RoleE, 5 | =>
@@ -65,6 +71,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_f, RoleF, 5 | =>
     NameA, MeshedChannelsSix, 6
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 |
@@ -72,6 +79,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_f, RoleF, 5 | =>
     NameB, MeshedChannelsSix, 6
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 |
@@ -79,6 +87,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_f, RoleF, 5 | =>
     NameC, MeshedChannelsSix, 6
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 3 |
@@ -86,12 +95,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_f, RoleF, 5 | =>
     NameD, MeshedChannelsSix, 6
 );
+
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 4 |
     recv_mpst_e_from_f, RoleF, 5 | =>
     NameE, MeshedChannelsSix, 6
 );
+
 // F
 create_recv_mpst_session_bundle!(
     recv_mpst_f_from_e, RoleE, 5 | =>
@@ -110,6 +121,7 @@ enum Branching0fromFtoA {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoF = <Choose0fromFtoA as Session>::Dual;
+
 // B
 enum Branching0fromFtoB {
     Forward(
@@ -137,6 +149,7 @@ enum Branching0fromFtoB {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoF = <Choose0fromFtoB as Session>::Dual;
+
 // C
 enum Branching0fromFtoC {
     Forward(
@@ -164,6 +177,7 @@ enum Branching0fromFtoC {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoF = <Choose0fromFtoC as Session>::Dual;
+
 // D
 enum Branching0fromFtoD {
     Forward(
@@ -191,6 +205,7 @@ enum Branching0fromFtoD {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoF = <Choose0fromFtoD as Session>::Dual;
+
 // E
 enum Branching0fromFtoE {
     Forward(
@@ -218,6 +233,7 @@ enum Branching0fromFtoE {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoF = <Choose0fromFtoE as Session>::Dual;
+
 // F
 type Choose0fromFtoA = Send<Branching0fromFtoA, End>;
 type Choose0fromFtoB = Send<Branching0fromFtoB, End>;

@@ -9,6 +9,7 @@ use rand::random;
 
 use std::error::Error;
 use std::marker;
+
 // use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -57,6 +58,7 @@ type EndpointController0<N> =
 type EndpointController1<N> = MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
 type EndpointControllerInit<N> =
     MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
+
 // RoleLogs
 type EndpointLogs0Success<N> =
     MeshedChannelsTwo<Send<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>;

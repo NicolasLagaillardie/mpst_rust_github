@@ -20,6 +20,7 @@ baker!("recursive", MeshedChannelsEight, A, B, C, D, E, F, G, H);
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -29,6 +30,7 @@ type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 type R2G<R> = RoleG<RoleG<R>>;
 type R2H<R> = RoleH<RoleH<R>>;
+
 // A
 enum Branching0fromHtoA {
     More(
@@ -47,6 +49,7 @@ enum Branching0fromHtoA {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoH = Recv<Branching0fromHtoA, End>;
+
 // B
 enum Branching0fromHtoB {
     More(
@@ -65,6 +68,7 @@ enum Branching0fromHtoB {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoH = Recv<Branching0fromHtoB, End>;
+
 // C
 enum Branching0fromHtoC {
     More(
@@ -83,6 +87,7 @@ enum Branching0fromHtoC {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoH = Recv<Branching0fromHtoC, End>;
+
 // D
 enum Branching0fromHtoD {
     More(
@@ -101,6 +106,7 @@ enum Branching0fromHtoD {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoH = Recv<Branching0fromHtoD, End>;
+
 // E
 enum Branching0fromHtoE {
     More(
@@ -119,6 +125,7 @@ enum Branching0fromHtoE {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoH = Recv<Branching0fromHtoE, End>;
+
 // F
 enum Branching0fromHtoF {
     More(
@@ -137,6 +144,7 @@ enum Branching0fromHtoF {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoH = Recv<Branching0fromHtoF, End>;
+
 // G
 enum Branching0fromHtoG {
     More(
@@ -155,6 +163,7 @@ enum Branching0fromHtoG {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoH = Recv<Branching0fromHtoG, End>;
+
 // H
 type Choose0fromHtoA = Send<Branching0fromHtoA, End>;
 type Choose0fromHtoB = Send<Branching0fromHtoB, End>;

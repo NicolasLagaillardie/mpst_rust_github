@@ -32,12 +32,14 @@ create_send_mpst_http_bundle!(
     send_http_a_to_s, RoleS, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_send_mpst_http_bundle!(
     send_http_c_to_a, RoleA, 1 |
     send_http_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_send_mpst_http_bundle!(
     send_http_s_to_a, RoleA, 1 |
@@ -52,12 +54,14 @@ create_recv_http_session_bundle!(
     recv_http_a_to_s, RoleS, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_http_session_bundle!(
     recv_http_c_to_a, RoleA, 1 |
     recv_http_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_recv_http_session_bundle!(
     recv_http_s_to_a, RoleA, 1 |
@@ -72,12 +76,14 @@ type Choose2fromStoC<N> = Send<Branching2fromStoC<N>, End>;
 
 type Choice0fromAtoS<N> = <Choose0fromAtoS<N> as Session>::Dual;
 type Choice1fromCtoS<N> = <Choose1fromCtoS<N> as Session>::Dual;
+
 // C
 type Choose1fromCtoA<N> = Send<Branching1fromCtoA<N>, End>;
 type Choose1fromCtoS<N> = Send<Branching1fromCtoS<N>, End>;
 
 type Choice0fromAtoC<N> = <Choose0fromAtoC<N> as Session>::Dual;
 type Choice2fromStoC<N> = <Choose2fromStoC<N> as Session>::Dual;
+
 // A
 type Choose0fromAtoC<N> = Send<Branching0fromAtoC<N>, End>;
 type Choose0fromAtoS<N> = Send<Branching0fromAtoS<N>, End>;
@@ -192,9 +198,11 @@ type EndpointA<N> = MeshedChannelsThree<
     RoleC<RoleBroadcast>,
     NameA,
 >;
+
 // C
 type EndpointC<N> =
     MeshedChannelsThree<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+
 // S
 type EndpointS<N> = MeshedChannelsThree<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;
 

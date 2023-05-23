@@ -11,6 +11,7 @@ use mpstthree::{
 
 use std::error::Error;
 use std::marker;
+
 // use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -95,6 +96,7 @@ type EndpointController0<N> = MeshedChannelsTwo<Recurs0fromCtoL<N>, Logs<RoleEnd
 type EndpointController1<N> = MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
 type EndpointControllerInit<N> =
     MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, Logs<Logs<RoleEnd>>, NameController>;
+
 // Logs
 type EndpointLogs0<N> = MeshedChannelsTwo<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
 type EndpointLogs1<N> = MeshedChannelsTwo<Recurs1fromLtoC<N>, Controller<RoleEnd>, NameLogs>;

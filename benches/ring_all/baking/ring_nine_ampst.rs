@@ -6,6 +6,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create new roles
@@ -57,6 +58,7 @@ enum Branching0fromItoA {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoI = Recv<Branching0fromItoA, End>;
+
 // B
 enum Branching0fromItoB {
     Forward(
@@ -90,6 +92,7 @@ enum Branching0fromItoB {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoI = Recv<Branching0fromItoB, End>;
+
 // C
 enum Branching0fromItoC {
     Forward(
@@ -123,6 +126,7 @@ enum Branching0fromItoC {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoI = Recv<Branching0fromItoC, End>;
+
 // D
 enum Branching0fromItoD {
     Forward(
@@ -156,6 +160,7 @@ enum Branching0fromItoD {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoI = Recv<Branching0fromItoD, End>;
+
 // E
 enum Branching0fromItoE {
     Forward(
@@ -189,6 +194,7 @@ enum Branching0fromItoE {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoI = Recv<Branching0fromItoE, End>;
+
 // F
 enum Branching0fromItoF {
     Forward(
@@ -222,6 +228,7 @@ enum Branching0fromItoF {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoI = Recv<Branching0fromItoF, End>;
+
 // G
 enum Branching0fromItoG {
     Forward(
@@ -255,6 +262,7 @@ enum Branching0fromItoG {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoI = Recv<Branching0fromItoG, End>;
+
 // H
 enum Branching0fromItoH {
     Forward(
@@ -288,6 +296,7 @@ enum Branching0fromItoH {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoI = Recv<Branching0fromItoH, End>;
+
 // I
 type Choose0fromItoA = Send<Branching0fromItoA, End>;
 type Choose0fromItoB = Send<Branching0fromItoB, End>;

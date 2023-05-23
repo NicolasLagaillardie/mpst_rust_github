@@ -29,6 +29,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_a_to_d, RoleD, 3 | =>
     NameA, MeshedChannelsFour, 4
 );
+
 // B
 create_send_mpst_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 1 |
@@ -36,6 +37,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_b_to_d, RoleD, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_send_mpst_cancel_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
@@ -43,6 +45,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_c_to_d, RoleD, 3 | =>
     NameC, MeshedChannelsFour, 4
 );
+
 // D
 create_send_mpst_cancel_bundle!(
     send_mpst_d_to_a, RoleA, 1 |
@@ -59,6 +62,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_d, RoleD, 3 | =>
     NameA, MeshedChannelsFour, 4
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 |
@@ -66,6 +70,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_d, RoleD, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
@@ -73,6 +78,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_d, RoleD, 3 | =>
     NameC, MeshedChannelsFour, 4
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_a, RoleA, 1 |
@@ -85,11 +91,13 @@ create_recv_mpst_session_bundle!(
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
+
 // A
 enum Branching0fromDtoA {
     More(
@@ -104,6 +112,7 @@ enum Branching0fromDtoA {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoD = Recv<Branching0fromDtoA, End>;
+
 // B
 enum Branching0fromDtoB {
     More(
@@ -118,6 +127,7 @@ enum Branching0fromDtoB {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = Recv<Branching0fromDtoB, End>;
+
 // C
 enum Branching0fromDtoC {
     More(
@@ -132,6 +142,7 @@ enum Branching0fromDtoC {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoD = Recv<Branching0fromDtoC, End>;
+
 // D
 type Choose0fromDtoA = Send<Branching0fromDtoA, End>;
 type Choose0fromDtoB = Send<Branching0fromDtoB, End>;

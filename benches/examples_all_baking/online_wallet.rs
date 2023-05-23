@@ -52,6 +52,7 @@ enum Branching1fromCtoS {
 }
 
 type Recurs1StoC = Recv<Branching1fromCtoS, End>;
+
 // C
 enum Branching0fromAtoC {
     Login(
@@ -86,6 +87,7 @@ type EndpointC1Pay = MeshedChannelsThree<
 >;
 type EndpointS1 =
     MeshedChannelsThree<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
+
 // Step 0
 type EndpointA0 = MeshedChannelsThree<
     Recv<(String, String), Choose0fromAtoC>,

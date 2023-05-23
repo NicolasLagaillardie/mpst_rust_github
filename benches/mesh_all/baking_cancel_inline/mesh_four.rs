@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -22,11 +23,13 @@ baker!("rec_and_cancel", MeshedChannelsFour, A, B, C, D);
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
+
 // A
 enum Branching0fromDtoA {
     More(
@@ -41,6 +44,7 @@ enum Branching0fromDtoA {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoD = Recv<Branching0fromDtoA, End>;
+
 // B
 enum Branching0fromDtoB {
     More(
@@ -55,6 +59,7 @@ enum Branching0fromDtoB {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = Recv<Branching0fromDtoB, End>;
+
 // C
 enum Branching0fromDtoC {
     More(
@@ -69,6 +74,7 @@ enum Branching0fromDtoC {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoD = Recv<Branching0fromDtoC, End>;
+
 // D
 type Choose0fromDtoA = Send<Branching0fromDtoA, End>;
 type Choose0fromDtoB = Send<Branching0fromDtoB, End>;

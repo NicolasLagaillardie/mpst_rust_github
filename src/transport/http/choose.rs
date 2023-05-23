@@ -36,6 +36,7 @@
 ///        let (_, s) = recv_http_d_to_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_http_to_all!(
 ///            s,

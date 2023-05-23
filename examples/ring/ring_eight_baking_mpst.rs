@@ -47,6 +47,7 @@ enum Branching0fromHtoA {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoH = Recv<Branching0fromHtoA, End>;
+
 // B
 enum Branching0fromHtoB {
     Forward(
@@ -78,6 +79,7 @@ enum Branching0fromHtoB {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoH = Recv<Branching0fromHtoB, End>;
+
 // C
 enum Branching0fromHtoC {
     Forward(
@@ -109,6 +111,7 @@ enum Branching0fromHtoC {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoH = Recv<Branching0fromHtoC, End>;
+
 // D
 enum Branching0fromHtoD {
     Forward(
@@ -140,6 +143,7 @@ enum Branching0fromHtoD {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoH = Recv<Branching0fromHtoD, End>;
+
 // E
 enum Branching0fromHtoE {
     Forward(
@@ -171,6 +175,7 @@ enum Branching0fromHtoE {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoH = Recv<Branching0fromHtoE, End>;
+
 // F
 enum Branching0fromHtoF {
     Forward(
@@ -202,6 +207,7 @@ enum Branching0fromHtoF {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoH = Recv<Branching0fromHtoF, End>;
+
 // G
 enum Branching0fromHtoG {
     Forward(
@@ -233,6 +239,7 @@ enum Branching0fromHtoG {
     Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoH = Recv<Branching0fromHtoG, End>;
+
 // H
 type Choose0fromHtoA = Send<Branching0fromHtoA, End>;
 type Choose0fromHtoB = Send<Branching0fromHtoB, End>;

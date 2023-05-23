@@ -1,5 +1,5 @@
 global protocol SleepingBarber(role barber as B, role selector as S, role room as R) {
-    rec L {
+    rec Loop {
         choice at S {
             par {
                 S introduces C;
@@ -8,20 +8,21 @@ global protocol SleepingBarber(role barber as B, role selector as S, role room a
             choice at R {
                 full() from R to C;
                 returned() from C to S ;
-                continue L ;
+                wait() from R to B ;
+                continue Loop ;
+            } or {
+                wait() from R to C ;
+                enter() from R to B ;
+                start() from B to C ;
+                stop() from B to C ;
+                done() from C to S ;
+                next() from B to R ;
+                wait() from R to B ;
+                continue Loop ;
             }
         } or {
-            wait() from R to C ;
-            enter() from R to B ;
-            start() from B to C ;
-            stop() from B to C ;
-            done() from C to S ;
-            next() from B to R ;
+            done() from S to R ;
+            done() from R to B ;
         }
-        wait() from R to B ;
-        continue L ;
-    } or {
-        done() from S to R ;
-        done() from R to B ;
     }
 }

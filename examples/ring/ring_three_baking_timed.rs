@@ -41,6 +41,7 @@ enum Branching0fromCtoA {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
+
 // B
 enum Branching0fromCtoB {
     Forward(
@@ -62,6 +63,7 @@ enum Branching0fromCtoB {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 1, true, false, End>;
+
 // C
 type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
 type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 1, true, false, End>;

@@ -28,6 +28,7 @@ type RS<S> =
 // C0
 type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
 type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 1, true, false, End>;
+
 // C1
 type Choose1fromCtoA = SendTimed<Branching1fromCtoA, 'a', 0, true, 1, true, false, End>;
 type Choose1fromCtoS = SendTimed<Branching1fromCtoS, 'a', 0, true, 1, true, false, End>;

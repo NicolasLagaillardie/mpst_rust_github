@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -22,6 +23,7 @@ baker!("recursive", MeshedChannelsSeven, A, B, C, D, E, F, G);
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -30,6 +32,7 @@ type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 type R2G<R> = RoleG<RoleG<R>>;
+
 // A
 enum Branching0fromGtoA {
     More(
@@ -47,6 +50,7 @@ enum Branching0fromGtoA {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoG = Recv<Branching0fromGtoA, End>;
+
 // B
 enum Branching0fromGtoB {
     More(
@@ -64,6 +68,7 @@ enum Branching0fromGtoB {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoG = Recv<Branching0fromGtoB, End>;
+
 // C
 enum Branching0fromGtoC {
     More(
@@ -81,6 +86,7 @@ enum Branching0fromGtoC {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoG = Recv<Branching0fromGtoC, End>;
+
 // D
 enum Branching0fromGtoD {
     More(
@@ -98,6 +104,7 @@ enum Branching0fromGtoD {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoG = Recv<Branching0fromGtoD, End>;
+
 // E
 enum Branching0fromGtoE {
     More(
@@ -115,6 +122,7 @@ enum Branching0fromGtoE {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoG = Recv<Branching0fromGtoE, End>;
+
 // F
 enum Branching0fromGtoF {
     More(
@@ -132,6 +140,7 @@ enum Branching0fromGtoF {
     Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoG = Recv<Branching0fromGtoF, End>;
+
 // F
 type Choose0fromGtoA = Send<Branching0fromGtoA, End>;
 type Choose0fromGtoB = Send<Branching0fromGtoB, End>;

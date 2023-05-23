@@ -38,6 +38,7 @@
 ///        let (_, s) = s.recv(all_clocks)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_timed_mpst_multi_to_all!(
 ///            s,

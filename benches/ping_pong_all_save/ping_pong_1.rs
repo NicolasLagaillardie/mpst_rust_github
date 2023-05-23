@@ -17,6 +17,7 @@ use mpstthree::{
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // global protocol ping_pong(role A, role B)
@@ -26,14 +27,21 @@ use std::thread::{spawn, JoinHandle};
 //         choice at A
 //         {
 //             ping(()) from A to B;
+
 //             pong(()) from B to A;
+
 //             continue PP;
+
 //         }
+
 //         or
 //         {
 //             stop() from A to B;
+
 //         }
+
 //     }
+
 // }
 
 // Create the new MeshedChannels for three participants and the close and fork functions
@@ -55,6 +63,7 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
+
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
@@ -67,6 +76,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
@@ -76,6 +86,7 @@ create_recv_mpst_session_bundle!(
 // Types
 // A
 type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
+
 // B
 enum Branching0fromAtoB {
     More(MeshedChannelsTwo<Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),

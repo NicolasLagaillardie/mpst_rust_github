@@ -11,6 +11,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create the new MeshedChannels for five participants and the close and fork functions
@@ -32,6 +33,7 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_e, RoleE, 5 | =>
     NameA, MeshedChannelsSix, 6
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
@@ -40,6 +42,7 @@ create_send_check_cancel_bundle!(
     send_mpst_b_to_e, RoleE, 5 | =>
     NameB, MeshedChannelsSix, 6
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_a, RoleA, 2 |
@@ -48,6 +51,7 @@ create_send_check_cancel_bundle!(
     send_mpst_c_to_e, RoleE, 5 | =>
     NameC, MeshedChannelsSix, 6
 );
+
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_a, RoleA, 2 |
@@ -56,6 +60,7 @@ create_send_check_cancel_bundle!(
     send_mpst_d_to_e, RoleE, 5 | =>
     NameD, MeshedChannelsSix, 6
 );
+
 // E
 create_send_check_cancel_bundle!(
     send_mpst_e_to_a, RoleA, 2 |
@@ -74,6 +79,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_e, RoleE, 5 | =>
     NameA, MeshedChannelsSix, 6
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
@@ -82,6 +88,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_e, RoleE, 5 | =>
     NameB, MeshedChannelsSix, 6
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 2 |
@@ -90,6 +97,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_e, RoleE, 5 | =>
     NameC, MeshedChannelsSix, 6
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_a, RoleA, 2 |
@@ -98,6 +106,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_e, RoleE, 5 | =>
     NameD, MeshedChannelsSix, 6
 );
+
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_a, RoleA, 2 |
@@ -111,12 +120,14 @@ create_recv_mpst_session_bundle!(
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
+
 // A
 enum Branching0fromEtoA {
     More(
@@ -133,6 +144,7 @@ enum Branching0fromEtoA {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoE = Recv<(End, Branching0fromEtoA), End>;
+
 // B
 enum Branching0fromEtoB {
     More(
@@ -149,6 +161,7 @@ enum Branching0fromEtoB {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoE = Recv<(End, Branching0fromEtoB), End>;
+
 // C
 enum Branching0fromEtoC {
     More(
@@ -165,6 +178,7 @@ enum Branching0fromEtoC {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoE = Recv<(End, Branching0fromEtoC), End>;
+
 // D
 enum Branching0fromEtoD {
     More(
@@ -181,6 +195,7 @@ enum Branching0fromEtoD {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoE = Recv<(End, Branching0fromEtoD), End>;
+
 // E
 type Choose0fromEtoA = <RecursAtoE as Session>::Dual;
 type Choose0fromEtoB = <RecursBtoE as Session>::Dual;

@@ -35,6 +35,7 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
+
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
@@ -47,6 +48,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
@@ -56,6 +58,7 @@ create_recv_mpst_session_bundle!(
 // Types
 // A
 type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
+
 // B
 enum Branching0fromAtoB<N: marker::Send> {
     More(MeshedChannelsTwo<RSRecursBtoA<N>, ThreeRoleA, NameB>),

@@ -24,6 +24,7 @@ baker_timed!(MeshedChannels, A, B);
 // Types
 // A
 type Choose0fromAtoB = SendTimed<Branching0fromAtoB, 'a', 0, true, 1, true, false, End>;
+
 // B
 enum Branching0fromAtoB {
     More(MeshedChannels<RSRecursBtoA, ThreeRoleA, NameB>),

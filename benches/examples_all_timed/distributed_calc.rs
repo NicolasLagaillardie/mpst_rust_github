@@ -33,6 +33,7 @@ enum Branching0fromCtoA {
     Sum(MeshedChannels<End, End, RoleEnd, NameA>),
     Diff(MeshedChannels<End, End, RoleEnd, NameA>),
 }
+
 // S
 enum Branching0fromCtoS {
     Sum(
@@ -61,6 +62,7 @@ type EndpointA = MeshedChannels<
     RoleC<RoleEnd>,
     NameA,
 >;
+
 // C
 type EndpointC = MeshedChannels<
     Choose0fromCtoA,
@@ -77,6 +79,7 @@ type EndpointC = MeshedChannels<
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
+
 // S
 type EndpointS = MeshedChannels<
     End,

@@ -30,6 +30,7 @@ create_send_check_cancel_bundle!(
     send_check_b_to_c, RoleC, 2 | =>
     NameB, MeshedChannelsThree, 3
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_check_c_to_b, RoleB, 2 | =>
@@ -42,6 +43,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_c, RoleC, 2 | =>
     NameB, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 | =>
@@ -63,6 +65,7 @@ enum Branching0fromCtoB {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = Recv<(End, Branching0fromCtoB), End>;
+
 // D
 type Choose0fromCtoA = End;
 type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>; // TODO: Remove the need of tuple with an End which is forwaded to A

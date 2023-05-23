@@ -24,6 +24,7 @@ enum Branching0fromCtoA {
     Accept(MeshedChannelsThree<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
     Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
+
 // S
 enum Branching0fromCtoS {
     Accept(MeshedChannelsThree<End, Recv<i32, Send<i32, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
@@ -38,6 +39,7 @@ type EndpointA = MeshedChannelsThree<
     RoleS<RoleS<RoleC<RoleC<RoleEnd>>>>,
     NameA,
 >;
+
 // C
 type EndpointC = MeshedChannelsThree<
     Recv<i32, Choose0fromCtoA>,
@@ -51,6 +53,7 @@ type EndpointCAccept = MeshedChannelsThree<
     RoleA<RoleS<RoleS<RoleEnd>>>,
     NameC,
 >;
+
 // S
 type EndpointS = MeshedChannelsThree<
     Recv<i32, Send<i32, End>>,

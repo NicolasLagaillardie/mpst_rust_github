@@ -28,12 +28,14 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
     NameA, MeshedChannelsFour, 4
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 | =>
@@ -47,12 +49,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 3 | =>
     NameA, MeshedChannelsFour, 4
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
     recv_mpst_b_from_c, RoleC, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 | =>
@@ -67,6 +71,7 @@ enum Branching0fromCtoA {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = <Choose0fromCtoA as Session>::Dual;
+
 // B
 enum Branching0fromCtoB {
     Forward(
@@ -90,6 +95,7 @@ enum Branching0fromCtoB {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = <Choose0fromCtoB as Session>::Dual;
+
 // C
 type Choose0fromCtoA = Send<(End, Branching0fromCtoA), End>;
 type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>;

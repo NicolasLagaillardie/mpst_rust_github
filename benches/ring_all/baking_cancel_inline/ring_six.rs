@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -30,6 +31,7 @@ enum Branching0fromFtoA {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoF = <Choose0fromFtoA as Session>::Dual;
+
 // B
 enum Branching0fromFtoB {
     Forward(
@@ -57,6 +59,7 @@ enum Branching0fromFtoB {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoF = <Choose0fromFtoB as Session>::Dual;
+
 // C
 enum Branching0fromFtoC {
     Forward(
@@ -84,6 +87,7 @@ enum Branching0fromFtoC {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoF = <Choose0fromFtoC as Session>::Dual;
+
 // D
 enum Branching0fromFtoD {
     Forward(
@@ -111,6 +115,7 @@ enum Branching0fromFtoD {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoF = <Choose0fromFtoD as Session>::Dual;
+
 // E
 enum Branching0fromFtoE {
     Forward(
@@ -138,6 +143,7 @@ enum Branching0fromFtoE {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoF = <Choose0fromFtoE as Session>::Dual;
+
 // F
 type Choose0fromFtoA = Send<Branching0fromFtoA, End>;
 type Choose0fromFtoB = Send<Branching0fromFtoB, End>;

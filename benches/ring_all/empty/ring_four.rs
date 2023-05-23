@@ -17,6 +17,7 @@ use mpstthree::{
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create the new MeshedChannels for four participants and the close and fork functions
@@ -35,18 +36,21 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsFour, 4
 );
+
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 |
     send_mpst_b_to_c, RoleC, 2 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_b, RoleB, 2 |
     send_mpst_c_to_d, RoleD, 3 | =>
     NameC, MeshedChannelsFour, 4
 );
+
 // D
 create_send_mpst_session_bundle!(
     send_mpst_d_to_c, RoleC, 3 | =>
@@ -60,6 +64,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_d, RoleD, 3 | =>
     NameA, MeshedChannelsFour, 4
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 |
@@ -67,12 +72,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_d, RoleD, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 |
     recv_mpst_c_from_d, RoleD, 3 | =>
     NameC, MeshedChannelsFour, 4
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 3 | =>
@@ -87,6 +94,7 @@ enum Branching0fromDtoA {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoD = <Choose0fromDtoA as Session>::Dual;
+
 // B
 enum Branching0fromDtoB {
     Forward(
@@ -110,6 +118,7 @@ enum Branching0fromDtoB {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = <Choose0fromDtoB as Session>::Dual;
+
 // C
 enum Branching0fromDtoC {
     Forward(
@@ -133,6 +142,7 @@ enum Branching0fromDtoC {
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoD = <Choose0fromDtoC as Session>::Dual;
+
 // D
 type Choose0fromDtoA = Send<Branching0fromDtoA, End>;
 type Choose0fromDtoB = Send<Branching0fromDtoB, End>;

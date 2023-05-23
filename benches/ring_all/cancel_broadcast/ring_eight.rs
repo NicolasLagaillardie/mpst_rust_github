@@ -11,6 +11,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create the new MeshedChannels for eight participants and the close and fork functions
@@ -29,42 +30,49 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
     NameA, MeshedChannelsNine, 9
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
     NameB, MeshedChannelsNine, 9
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
     NameC, MeshedChannelsNine, 9
 );
+
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 4 |
     send_mpst_d_to_e, RoleE, 5 | =>
     NameD, MeshedChannelsNine, 9
 );
+
 // E
 create_send_check_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 5 |
     send_mpst_e_to_f, RoleF, 6 | =>
     NameE, MeshedChannelsNine, 9
 );
+
 // F
 create_send_check_cancel_bundle!(
     send_mpst_f_to_e, RoleE, 6 |
     send_mpst_f_to_g, RoleG, 7 | =>
     NameF, MeshedChannelsNine, 9
 );
+
 // G
 create_send_check_cancel_bundle!(
     send_mpst_g_to_f, RoleF, 7 |
     send_mpst_g_to_h, RoleH, 8 | =>
     NameG, MeshedChannelsNine, 9
 );
+
 // H
 create_send_check_cancel_bundle!(
     send_mpst_h_to_g, RoleG, 8 | =>
@@ -78,6 +86,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_h, RoleH, 8 | =>
     NameA, MeshedChannelsNine, 9
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
@@ -85,6 +94,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_h, RoleH, 8 | =>
     NameB, MeshedChannelsNine, 9
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 |
@@ -92,6 +102,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_h, RoleH, 8 | =>
     NameC, MeshedChannelsNine, 9
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 4 |
@@ -99,6 +110,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_h, RoleH, 8 | =>
     NameD, MeshedChannelsNine, 9
 );
+
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 5 |
@@ -106,6 +118,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_from_h, RoleH, 8 | =>
     NameE, MeshedChannelsNine, 9
 );
+
 // F
 create_recv_mpst_session_bundle!(
     recv_mpst_f_from_e, RoleE, 6 |
@@ -113,12 +126,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_from_h, RoleH, 8 | =>
     NameF, MeshedChannelsNine, 9
 );
+
 // G
 create_recv_mpst_session_bundle!(
     recv_mpst_g_from_f, RoleF, 7 |
     recv_mpst_g_from_h, RoleH, 8 | =>
     NameG, MeshedChannelsNine, 9
 );
+
 // H
 create_recv_mpst_session_bundle!(
     recv_mpst_h_from_g, RoleG, 8 | =>
@@ -159,6 +174,7 @@ enum Branching0fromHtoA {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoH = <Choose0fromHtoA as Session>::Dual;
+
 // B
 enum Branching0fromHtoB {
     Forward(
@@ -192,6 +208,7 @@ enum Branching0fromHtoB {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoH = <Choose0fromHtoB as Session>::Dual;
+
 // C
 enum Branching0fromHtoC {
     Forward(
@@ -225,6 +242,7 @@ enum Branching0fromHtoC {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoH = <Choose0fromHtoC as Session>::Dual;
+
 // D
 enum Branching0fromHtoD {
     Forward(
@@ -258,6 +276,7 @@ enum Branching0fromHtoD {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoH = <Choose0fromHtoD as Session>::Dual;
+
 // E
 enum Branching0fromHtoE {
     Forward(
@@ -291,6 +310,7 @@ enum Branching0fromHtoE {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoH = <Choose0fromHtoE as Session>::Dual;
+
 // F
 enum Branching0fromHtoF {
     Forward(
@@ -324,6 +344,7 @@ enum Branching0fromHtoF {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoH = <Choose0fromHtoF as Session>::Dual;
+
 // G
 enum Branching0fromHtoG {
     Forward(
@@ -357,6 +378,7 @@ enum Branching0fromHtoG {
     Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoH = <Choose0fromHtoG as Session>::Dual;
+
 // H
 type Choose0fromHtoA = Send<(End, Branching0fromHtoA), End>;
 type Choose0fromHtoB = Send<(End, Branching0fromHtoB), End>;

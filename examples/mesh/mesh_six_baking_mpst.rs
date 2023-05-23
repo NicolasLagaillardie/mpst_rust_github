@@ -20,6 +20,7 @@ baker!("recursive", MeshedChannelsSix, A, B, C, D, E, F);
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -27,6 +28,7 @@ type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
+
 // A
 enum Branching0fromFtoA {
     More(
@@ -43,6 +45,7 @@ enum Branching0fromFtoA {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoF = Recv<Branching0fromFtoA, End>;
+
 // B
 enum Branching0fromFtoB {
     More(
@@ -59,6 +62,7 @@ enum Branching0fromFtoB {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoF = Recv<Branching0fromFtoB, End>;
+
 // C
 enum Branching0fromFtoC {
     More(
@@ -75,6 +79,7 @@ enum Branching0fromFtoC {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoF = Recv<Branching0fromFtoC, End>;
+
 // D
 enum Branching0fromFtoD {
     More(
@@ -91,6 +96,7 @@ enum Branching0fromFtoD {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoF = Recv<Branching0fromFtoD, End>;
+
 // E
 enum Branching0fromFtoE {
     More(
@@ -107,6 +113,7 @@ enum Branching0fromFtoE {
     Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoF = Recv<Branching0fromFtoE, End>;
+
 // F
 type Choose0fromFtoA = Send<Branching0fromFtoA, End>;
 type Choose0fromFtoB = Send<Branching0fromFtoB, End>;

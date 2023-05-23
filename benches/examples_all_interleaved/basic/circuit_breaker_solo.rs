@@ -9,6 +9,7 @@ use rand::random;
 
 use std::error::Error;
 use std::marker;
+
 // use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -62,10 +63,12 @@ enum Branching0fromCtoA<N: marker::Send> {
     ),
 }
 type Recurs0fromCtoA<N> = Recv<Branching0fromCtoA<N>, End>;
+
 // RoleController
 type Choose0fromCtoA<N> = Send<Branching0fromCtoA<N>, End>;
 type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
 type Choose0fromCtoU<N> = Send<Branching0fromCtoU<N>, End>;
+
 // RoleStorage
 enum Branching0fromCtoS<N: marker::Send> {
     Up(
@@ -89,6 +92,7 @@ enum Branching0fromCtoS<N: marker::Send> {
     Close(MeshedChannelsFour<End, Recv<N, End>, End, RoleController<RoleEnd>, NameStorage>),
 }
 type Recurs0fromCtoS<N> = Recv<Branching0fromCtoS<N>, End>;
+
 // RoleUser
 enum Branching0fromCtoU<N: marker::Send> {
     Up(
@@ -129,6 +133,7 @@ type EndpointApiInit<N> = MeshedChannelsFour<
     RoleController<RoleUser<RoleController<RoleController<RoleEnd>>>>,
     NameApi,
 >;
+
 // RoleController
 type EndpointControllerDown<N> = MeshedChannelsFour<
     Send<N, Recv<N, Choose0fromCtoA<N>>>,
@@ -165,6 +170,7 @@ type EndpointControllerInit<N> = MeshedChannelsFour<
     RoleStorage<RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>>,
     NameController,
 >;
+
 // RoleStorage
 type EndpointStorage0<N> =
     MeshedChannelsFour<End, Recurs0fromCtoS<N>, End, RoleController<RoleEnd>, NameStorage>;
@@ -175,6 +181,7 @@ type EndpointStorageInit<N> = MeshedChannelsFour<
     RoleController<RoleController<RoleController<RoleEnd>>>,
     NameStorage,
 >;
+
 // RoleUser
 type EndpointUserInit<N> = MeshedChannelsFour<
     Send<N, End>,

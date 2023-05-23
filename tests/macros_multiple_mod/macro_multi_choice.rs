@@ -22,6 +22,7 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
     RoleD, RoleDDual |
 );
+
 // broadcast
 create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 

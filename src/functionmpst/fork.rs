@@ -90,6 +90,7 @@ where
 ///     let (_x, s) = recv_mpst_a_from_c(s)?;
 ///     close_mpst(s)
 /// }
+
 ///
 /// /// Single test for B
 /// fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
@@ -97,6 +98,7 @@ where
 ///     let s = send_mpst_b_to_c(2, s);
 ///     close_mpst(s)
 /// }
+
 ///
 /// /// Single test for C
 /// fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
@@ -104,6 +106,7 @@ where
 ///     let (_x, s) = recv_mpst_c_from_b(s)?;
 ///     close_mpst(s)
 /// }
+
 /// let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 ///
 /// thread_a.join().unwrap();

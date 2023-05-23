@@ -32,6 +32,7 @@ create_send_mpst_session_bundle!(
     send_mpst_server_to_voter, RoleVoter, 1 | =>
     NameServer, MeshedChannelsTwo, 2
 );
+
 // VOTER
 create_send_mpst_session_bundle!(
     send_mpst_voter_to_server, RoleServer, 1 | =>
@@ -44,6 +45,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_server_to_voter, RoleVoter, 1 | =>
     NameServer, MeshedChannelsTwo, 2
 );
+
 // VOTER
 create_recv_mpst_session_bundle!(
     recv_mpst_voter_to_server, RoleServer, 1 | =>
@@ -53,6 +55,7 @@ create_recv_mpst_session_bundle!(
 // Types
 // SERVER
 type Choose0fromStoV<N> = Send<Branching0fromStoV<N>, End>;
+
 // VOTER
 type Choose1fromVtoS<N> = <Choice1fromStoV<N> as Session>::Dual;
 
@@ -61,6 +64,7 @@ enum Branching0fromStoV<N: marker::Send> {
     Auth(MeshedChannelsTwo<Recv<N, Choose1fromVtoS<N>>, RoleServer<RoleBroadcast>, NameVoter>),
     Reject(MeshedChannelsTwo<Recv<N, End>, RoleServer<RoleEnd>, NameVoter>),
 }
+
 // SERVER
 enum Branching1fromVtoS<N: marker::Send> {
     Yes(MeshedChannelsTwo<Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
@@ -77,6 +81,7 @@ type EndpointVoter<N> = MeshedChannelsTwo<
     RoleServer<RoleServer<RoleEnd>>,
     NameVoter,
 >;
+
 // SERVER
 type ChoiceServer<N> = MeshedChannelsTwo<Choice1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
 type EndpointServer<N> =

@@ -1100,6 +1100,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///         let (_, s) = recv_mpst_c_from_a(s)?;
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_to_all!(
 ///             s,

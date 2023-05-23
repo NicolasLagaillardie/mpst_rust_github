@@ -27,60 +27,70 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
     NameA, MeshedChannelsTwelve, 12
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
     NameB, MeshedChannelsTwelve, 12
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
     NameC, MeshedChannelsTwelve, 12
 );
+
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 4 |
     send_mpst_d_to_e, RoleE, 5 | =>
     NameD, MeshedChannelsTwelve, 12
 );
+
 // E
 create_send_check_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 5 |
     send_mpst_e_to_f, RoleF, 6 | =>
     NameE, MeshedChannelsTwelve, 12
 );
+
 // F
 create_send_check_cancel_bundle!(
     send_mpst_f_to_e, RoleE, 6 |
     send_mpst_f_to_g, RoleG, 7 | =>
     NameF, MeshedChannelsTwelve, 12
 );
+
 // G
 create_send_check_cancel_bundle!(
     send_mpst_g_to_f, RoleF, 7 |
     send_mpst_g_to_h, RoleH, 8 | =>
     NameG, MeshedChannelsTwelve, 12
 );
+
 // H
 create_send_check_cancel_bundle!(
     send_mpst_h_to_g, RoleG, 8 |
     send_mpst_h_to_i, RoleI, 9 | =>
     NameH, MeshedChannelsTwelve, 12
 );
+
 // I
 create_send_check_cancel_bundle!(
     send_mpst_i_to_h, RoleH, 9 |
     send_mpst_i_to_j, RoleJ, 10 | =>
     NameI, MeshedChannelsTwelve, 12
 );
+
 // J
 create_send_check_cancel_bundle!(
     send_mpst_j_to_i, RoleI, 10 |
     send_mpst_j_to_k, RoleK, 11 | =>
     NameJ, MeshedChannelsTwelve, 12
 );
+
 // K
 create_send_check_cancel_bundle!(
     send_mpst_k_to_j, RoleJ, 11 | =>
@@ -94,6 +104,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_k, RoleK, 11 | =>
     NameA, MeshedChannelsTwelve, 12
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
@@ -101,6 +112,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_k, RoleK, 11 | =>
     NameB, MeshedChannelsTwelve, 12
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 |
@@ -108,6 +120,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_k, RoleK, 11 | =>
     NameC, MeshedChannelsTwelve, 12
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 4 |
@@ -115,6 +128,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_k, RoleK, 11 | =>
     NameD, MeshedChannelsTwelve, 12
 );
+
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 5 |
@@ -122,6 +136,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_from_k, RoleK, 11 | =>
     NameE, MeshedChannelsTwelve, 12
 );
+
 // F
 create_recv_mpst_session_bundle!(
     recv_mpst_f_from_e, RoleE, 6 |
@@ -129,6 +144,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_from_k, RoleK, 11 | =>
     NameF, MeshedChannelsTwelve, 12
 );
+
 // G
 create_recv_mpst_session_bundle!(
     recv_mpst_g_from_f, RoleF, 7 |
@@ -136,6 +152,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_g_from_k, RoleK, 11 | =>
     NameG, MeshedChannelsTwelve, 12
 );
+
 // H
 create_recv_mpst_session_bundle!(
     recv_mpst_h_from_g, RoleG, 8 |
@@ -143,6 +160,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_h_from_k, RoleK, 11 | =>
     NameH, MeshedChannelsTwelve, 12
 );
+
 // I
 create_recv_mpst_session_bundle!(
     recv_mpst_i_from_h, RoleH, 9 |
@@ -150,12 +168,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_i_from_k, RoleK, 11 | =>
     NameI, MeshedChannelsTwelve, 12
 );
+
 // J
 create_recv_mpst_session_bundle!(
     recv_mpst_j_from_i, RoleI, 10 |
     recv_mpst_j_from_k, RoleK, 11 | =>
     NameJ, MeshedChannelsTwelve, 12
 );
+
 // K
 create_recv_mpst_session_bundle!(
     recv_mpst_k_from_j, RoleJ, 11 | =>
@@ -202,6 +222,7 @@ enum Branching0fromKtoA {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoK = <Choose0fromKtoA as Session>::Dual;
+
 // B
 enum Branching0fromKtoB {
     Forward(
@@ -241,6 +262,7 @@ enum Branching0fromKtoB {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoK = <Choose0fromKtoB as Session>::Dual;
+
 // C
 enum Branching0fromKtoC {
     Forward(
@@ -280,6 +302,7 @@ enum Branching0fromKtoC {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoK = <Choose0fromKtoC as Session>::Dual;
+
 // D
 enum Branching0fromKtoD {
     Forward(
@@ -319,6 +342,7 @@ enum Branching0fromKtoD {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoK = <Choose0fromKtoD as Session>::Dual;
+
 // E
 enum Branching0fromKtoE {
     Forward(
@@ -358,6 +382,7 @@ enum Branching0fromKtoE {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoK = <Choose0fromKtoE as Session>::Dual;
+
 // F
 enum Branching0fromKtoF {
     Forward(
@@ -397,6 +422,7 @@ enum Branching0fromKtoF {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoK = <Choose0fromKtoF as Session>::Dual;
+
 // G
 enum Branching0fromKtoG {
     Forward(
@@ -436,6 +462,7 @@ enum Branching0fromKtoG {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoK = <Choose0fromKtoG as Session>::Dual;
+
 // H
 enum Branching0fromKtoH {
     Forward(
@@ -475,6 +502,7 @@ enum Branching0fromKtoH {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoK = <Choose0fromKtoH as Session>::Dual;
+
 // I
 enum Branching0fromKtoI {
     Forward(
@@ -514,6 +542,7 @@ enum Branching0fromKtoI {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoK = <Choose0fromKtoI as Session>::Dual;
+
 // J
 enum Branching0fromKtoJ {
     Forward(
@@ -553,6 +582,7 @@ enum Branching0fromKtoJ {
     Done(MeshedChannelsTwelve<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
 type RecursJtoK = <Choose0fromKtoJ as Session>::Dual;
+
 // K
 type Choose0fromKtoA = Send<(End, Branching0fromKtoA), End>;
 type Choose0fromKtoB = Send<(End, Branching0fromKtoB), End>;

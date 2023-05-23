@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -36,6 +37,7 @@ baker!(
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -48,6 +50,7 @@ type R2H<R> = RoleH<RoleH<R>>;
 type R2I<R> = RoleI<RoleI<R>>;
 type R2J<R> = RoleJ<RoleJ<R>>;
 type R2K<R> = RoleK<RoleK<R>>;
+
 // A
 enum Branching0fromKtoA {
     More(
@@ -69,6 +72,7 @@ enum Branching0fromKtoA {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoK = Recv<Branching0fromKtoA, End>;
+
 // B
 enum Branching0fromKtoB {
     More(
@@ -90,6 +94,7 @@ enum Branching0fromKtoB {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoK = Recv<Branching0fromKtoB, End>;
+
 // C
 enum Branching0fromKtoC {
     More(
@@ -111,6 +116,7 @@ enum Branching0fromKtoC {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoK = Recv<Branching0fromKtoC, End>;
+
 // D
 enum Branching0fromKtoD {
     More(
@@ -132,6 +138,7 @@ enum Branching0fromKtoD {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoK = Recv<Branching0fromKtoD, End>;
+
 // E
 enum Branching0fromKtoE {
     More(
@@ -153,6 +160,7 @@ enum Branching0fromKtoE {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoK = Recv<Branching0fromKtoE, End>;
+
 // F
 enum Branching0fromKtoF {
     More(
@@ -174,6 +182,7 @@ enum Branching0fromKtoF {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoK = Recv<Branching0fromKtoF, End>;
+
 // G
 enum Branching0fromKtoG {
     More(
@@ -195,6 +204,7 @@ enum Branching0fromKtoG {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoK = Recv<Branching0fromKtoG, End>;
+
 // H
 enum Branching0fromKtoH {
     More(
@@ -216,6 +226,7 @@ enum Branching0fromKtoH {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoK = Recv<Branching0fromKtoH, End>;
+
 // I
 enum Branching0fromKtoI {
     More(
@@ -237,6 +248,7 @@ enum Branching0fromKtoI {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoK = Recv<Branching0fromKtoI, End>;
+
 // J
 enum Branching0fromKtoJ {
     More(
@@ -258,6 +270,7 @@ enum Branching0fromKtoJ {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
 type RecursJtoK = Recv<Branching0fromKtoJ, End>;
+
 // K
 type Choose0fromKtoA = Send<Branching0fromKtoA, End>;
 type Choose0fromKtoB = Send<Branching0fromKtoB, End>;

@@ -13,6 +13,7 @@ use rand::{random, thread_rng, Rng};
 
 use std::error::Error;
 use std::marker;
+
 // use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -34,12 +35,14 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_s, RoleS, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_a, RoleA, 1 |
     send_mpst_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
@@ -52,12 +55,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 |
     recv_mpst_c_from_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_a, RoleA, 1 |
@@ -69,6 +74,7 @@ create_recv_mpst_session_bundle!(
 // C0
 type Choose0fromCtoA<N> = Send<Branching0fromCtoA<N>, End>;
 type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
+
 // C1
 type Choose1fromCtoA<N> = <Choice1fromCtoA<N> as Session>::Dual;
 type Choose1fromCtoS<N> = <Choice1fromCtoS<N> as Session>::Dual;
@@ -91,6 +97,7 @@ enum Branching1fromCtoA<N: marker::Send> {
     No(MeshedChannelsThree<Recv<N, End>, Send<N, End>, RoleC<RoleS<RoleEnd>>, NameA>),
 }
 type Choice1fromCtoA<N> = Recv<Branching1fromCtoA<N>, End>;
+
 // S
 enum Branching0fromCtoS<N: marker::Send> {
     Select(MeshedChannelsThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>),
@@ -114,10 +121,12 @@ type Choice1fromCtoS<N> = Recv<Branching1fromCtoS<N>, End>;
 // A
 type ChoiceA<N> = MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
 type EndpointA<N> = MeshedChannelsThree<Choice0fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
+
 // C
 type ChoiceC<N> = MeshedChannelsThree<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
 type EndpointC<N> =
     MeshedChannelsThree<Choose0fromCtoA<N>, Choose0fromCtoS<N>, RoleBroadcast, NameC>;
+
 // S
 type ChoiceS<N> = MeshedChannelsThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;
 type EndpointS<N> = MeshedChannelsThree<End, Choice0fromCtoS<N>, RoleC<RoleEnd>, NameS>;

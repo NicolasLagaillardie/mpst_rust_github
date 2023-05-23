@@ -267,6 +267,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///        let (_, s) = recv_mpst_d_from_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_to_all!(
 ///            s,
@@ -337,6 +338,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_client_to_all!(
 ///             s,
@@ -401,6 +403,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///        let (_, s) = recv_mpst_d_from_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
@@ -451,6 +454,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///        );
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,

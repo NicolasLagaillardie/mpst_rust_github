@@ -3,8 +3,8 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     bundle_struct_fork_close_multi, create_fn_choose_mpst_multi_to_all_bundle,
-    create_multiple_normal_role_short, create_recv_http_session_bundle,
-    create_send_mpst_http_bundle, offer_http_mpst,create_multiple_normal_name_short
+    create_multiple_normal_name_short, create_multiple_normal_role_short,
+    create_recv_http_session_bundle, create_send_mpst_http_bundle, offer_http_mpst,
 };
 
 use hyper::Request;
@@ -33,12 +33,14 @@ create_send_mpst_http_bundle!(
     send_http_a_to_s, RoleS, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_send_mpst_http_bundle!(
     send_http_c_to_a, RoleA, 1 |
     send_http_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_send_mpst_http_bundle!(
     send_http_s_to_a, RoleA, 1 |
@@ -53,12 +55,14 @@ create_recv_http_session_bundle!(
     recv_http_a_to_s, RoleS, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_http_session_bundle!(
     recv_http_c_to_a, RoleA, 1 |
     recv_http_c_to_s, RoleS, 2 | =>
     NameC, MeshedChannelsThree, 3
 );
+
 // S
 create_recv_http_session_bundle!(
     recv_http_s_to_a, RoleA, 1 |
@@ -73,12 +77,14 @@ type Choose2fromStoC<N> = Send<Branching2fromStoC<N>, End>;
 
 type Choice0fromAtoS<N> = <Choose0fromAtoS<N> as Session>::Dual;
 type Choice1fromCtoS<N> = <Choose1fromCtoS<N> as Session>::Dual;
+
 // C
 type Choose1fromCtoA<N> = Send<Branching1fromCtoA<N>, End>;
 type Choose1fromCtoS<N> = Send<Branching1fromCtoS<N>, End>;
 
 type Choice0fromAtoC<N> = <Choose0fromAtoC<N> as Session>::Dual;
 type Choice2fromStoC<N> = <Choose2fromStoC<N> as Session>::Dual;
+
 // A
 type Choose0fromAtoC<N> = Send<Branching0fromAtoC<N>, End>;
 type Choose0fromAtoS<N> = Send<Branching0fromAtoS<N>, End>;
@@ -193,9 +199,11 @@ type EndpointA<N> = MeshedChannelsThree<
     RoleC<RoleBroadcast>,
     NameA,
 >;
+
 // C
 type EndpointC<N> =
     MeshedChannelsThree<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+
 // S
 type EndpointS<N> = MeshedChannelsThree<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;
 
@@ -229,7 +237,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
 // Functions
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
     let (pwd, s, _resp) = recv_http_a_to_c(s, true, Vec::new())?; // Should fail because true but Vec::new()
-    let expected:i32 : i32 = thread_rng().gen_range(1..=3);
+    let expected: i32 = thread_rng().gen_range(1..=3);
 
     if pwd == expected {
         let s = auth_from_a_to_all(s);
@@ -292,7 +300,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn continue_c(s: EndpointCContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice:i32 : i32 = thread_rng().gen_range(1..=6);
+    let choice: i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = close_from_c_to_all(s);
@@ -356,7 +364,7 @@ fn continue_s(s: EndpointSContinue<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn picture_s(s: EndpointSContinueLoop<i32>) -> Result<(), Box<dyn Error>> {
-    let choice:i32 : i32 = thread_rng().gen_range(1..=6);
+    let choice: i32 = thread_rng().gen_range(1..=6);
 
     if choice == 1 {
         let s = refusal_from_s_to_all(s);

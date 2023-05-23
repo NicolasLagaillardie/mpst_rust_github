@@ -31,12 +31,14 @@ create_send_check_cancel_bundle!(
     send_check_b_to_d, RoleD, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_check_c_to_b, RoleB, 2 |
     send_check_c_to_d, RoleD, 3 | =>
     NameC, MeshedChannelsFour, 4
 );
+
 // D
 create_send_check_cancel_bundle!(
     send_check_d_to_b, RoleB, 2 |
@@ -51,12 +53,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_d, RoleD, 3 | =>
     NameB, MeshedChannelsFour, 4
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 2 |
     recv_mpst_c_from_d, RoleD, 3 | =>
     NameC, MeshedChannelsFour, 4
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_b, RoleB, 2 |
@@ -70,22 +74,26 @@ send_cancel!(cancel_mpst, NameB, MeshedChannelsFour, 4, "Session dropped");
 // Send/Recv
 type RS<S> = Recv<(), Send<(), S>>;
 type SR<S> = Send<(), Recv<(), S>>;
+
 // Roles
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
+
 // B
 enum Branching0fromDtoB {
     More(MeshedChannelsFour<End, SR<End>, RS<RecursBtoD>, R2D<R2C<RoleD<RoleEnd>>>, NameB>),
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = Recv<(End, Branching0fromDtoB), End>;
+
 // C
 enum Branching0fromDtoC {
     More(MeshedChannelsFour<End, RS<End>, RS<RecursCtoD>, R2D<R2B<RoleD<RoleEnd>>>, NameC>),
     Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoD = Recv<(End, Branching0fromDtoC), End>;
+
 // D
 type Choose0fromDtoA = End;
 type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>; // TODO: Remove the need of tuple with a

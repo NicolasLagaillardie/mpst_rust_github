@@ -115,6 +115,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of B
 //! fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
@@ -123,6 +124,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of C
 //! fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
@@ -131,6 +133,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Fork all endpoints
 //! fn main() {
@@ -140,6 +143,7 @@
 //!     thread_b.join().unwrap();
 //!     thread_c.join().unwrap();
 //! }
+
 //! ```
 //!
 //! Here is the full description. First, you import the correct functions and types.
@@ -233,6 +237,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of B
 //! fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
@@ -241,6 +246,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of C
 //! fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
@@ -249,6 +255,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //! ```
 //!
 //! In the end, you have to link/fork the threads,
@@ -268,6 +275,7 @@
 //!     thread_b.join().unwrap();
 //!     thread_c.join().unwrap();
 //! }
+
 //! ```
 //!
 //! The different features available are:

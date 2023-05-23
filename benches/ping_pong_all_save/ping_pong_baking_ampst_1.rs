@@ -6,6 +6,7 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // global protocol ping_pong(role A, role B)
@@ -15,14 +16,21 @@ use std::error::Error;
 //         choice at A
 //         {
 //             ping(()) from A to B;
+
 //             pong(()) from B to A;
+
 //             continue PP;
+
 //         }
+
 //         or
 //         {
 //             stop() from A to B;
+
 //         }
+
 //     }
+
 // }
 
 // Create new roles
@@ -31,6 +39,7 @@ baker!("rec_and_cancel", MeshedChannelsTwo, A, B);
 // Types
 // A
 type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
+
 // B
 enum Branching0fromAtoB {
     More(MeshedChannelsTwo<Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),

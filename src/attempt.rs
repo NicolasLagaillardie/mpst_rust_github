@@ -16,6 +16,7 @@
 ///     println!("Step 1");
 ///     Ok(())
 /// }
+
 /// fn do_step2() -> Result<(), String> {
 ///     println!("Step 2");
 ///     Err("Error in step 2".into())

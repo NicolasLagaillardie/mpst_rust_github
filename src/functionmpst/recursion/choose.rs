@@ -45,6 +45,7 @@ macro_rules! choose_aux {
 ///         let (_, s) = recv_mpst_a_from_b(s)?;
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_a_to_all!(
 ///             s,
@@ -93,6 +94,7 @@ macro_rules! choose_mpst_a_to_all {
 ///         let (_, s) = recv_mpst_b_from_a(s)?;
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_b_to_all!(
 ///             s,
@@ -141,6 +143,7 @@ macro_rules! choose_mpst_b_to_all {
 ///         let (_, s) = recv_mpst_c_from_a(s)?;
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_c_to_all!(
 ///             s,

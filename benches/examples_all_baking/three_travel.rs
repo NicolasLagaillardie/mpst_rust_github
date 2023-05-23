@@ -18,6 +18,7 @@ baker!("rec_and_cancel", MeshedChannelsThree, A, C, S);
 // C0
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
+
 // C1
 type Choose1fromCtoA = <Choice1fromCtoA as Session>::Dual;
 type Choose1fromCtoS = <Choice1fromCtoS as Session>::Dual;
@@ -40,6 +41,7 @@ enum Branching1fromCtoA {
     No(MeshedChannelsThree<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
 }
 type Choice1fromCtoA = Recv<Branching1fromCtoA, End>;
+
 // S
 enum Branching0fromCtoS {
     Select(MeshedChannelsThree<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>),
@@ -63,6 +65,7 @@ type Choice1fromCtoS = Recv<Branching1fromCtoS, End>;
 // A
 type ChoiceA = MeshedChannelsThree<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>;
 type EndpointA = MeshedChannelsThree<Choice0fromCtoA, End, RoleC<RoleEnd>, NameA>;
+
 // C
 type ChoiceC = MeshedChannelsThree<Choose1fromCtoA, Choose1fromCtoS, RoleBroadcast, NameC>;
 type ChoiceCYes = MeshedChannelsThree<
@@ -79,6 +82,7 @@ type EndpointCLoop = MeshedChannelsThree<
     RoleA<RoleA<RoleBroadcast>>,
     NameC,
 >;
+
 // S
 type ChoiceS = MeshedChannelsThree<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>;
 type EndpointS = MeshedChannelsThree<End, Choice0fromCtoS, RoleC<RoleEnd>, NameS>;

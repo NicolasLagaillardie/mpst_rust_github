@@ -27,18 +27,21 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
     NameA, MeshedChannelsFive, 5
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
     NameB, MeshedChannelsFive, 5
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
     NameC, MeshedChannelsFive, 5
 );
+
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 4 | =>
@@ -52,6 +55,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_d, RoleD, 4 | =>
     NameA, MeshedChannelsFive, 5
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
@@ -59,12 +63,14 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_d, RoleD, 4 | =>
     NameB, MeshedChannelsFive, 5
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 |
     recv_mpst_c_from_d, RoleD, 4 | =>
     NameC, MeshedChannelsFive, 5
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 4 | =>
@@ -79,6 +85,7 @@ enum Branching0fromDtoA {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoD = <Choose0fromDtoA as Session>::Dual;
+
 // B
 enum Branching0fromDtoB {
     Forward(
@@ -104,6 +111,7 @@ enum Branching0fromDtoB {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = <Choose0fromDtoB as Session>::Dual;
+
 // C
 enum Branching0fromDtoC {
     Forward(
@@ -129,6 +137,7 @@ enum Branching0fromDtoC {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoD = <Choose0fromDtoC as Session>::Dual;
+
 // D
 type Choose0fromDtoA = Send<(End, Branching0fromDtoA), End>;
 type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>;

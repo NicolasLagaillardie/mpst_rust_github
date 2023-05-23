@@ -31,6 +31,7 @@ create_multiple_normal_name!(NameA, NameB, NameC, NameD);
 // Create new send functions
 // A
 create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, NameA, MeshedChannelsFour, 4, 1);
+
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_d,
@@ -51,6 +52,7 @@ create_recv_mpst_session_bundle!(
     MeshedChannelsFour,
     4
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c,

@@ -128,6 +128,7 @@ macro_rules! create_offer_mpst_session_multi {
 ///             authenticator_recurs(s)
 ///         },
 ///     }
+
 /// )?;
 /// ```
 ///
@@ -148,6 +149,7 @@ macro_rules! create_offer_mpst_session_multi {
 ///             authenticator_recurs(s)
 ///         },
 ///     }
+
 /// )?;
 /// ```
 ///

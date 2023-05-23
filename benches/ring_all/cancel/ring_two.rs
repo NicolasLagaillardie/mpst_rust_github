@@ -10,6 +10,7 @@ use mpstthree::{
 };
 
 use std::error::Error;
+
 // use std::time::Duration;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
@@ -28,6 +29,7 @@ create_send_mpst_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
+
 // B
 create_send_mpst_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
@@ -40,6 +42,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
@@ -54,6 +57,7 @@ enum Branching0fromBtoA {
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
 type RecursAtoB = <Choose0fromBtoA as Session>::Dual;
+
 // B
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
 type EndpointDoneB = MeshedChannelsTwo<End, RoleEnd, NameB>;

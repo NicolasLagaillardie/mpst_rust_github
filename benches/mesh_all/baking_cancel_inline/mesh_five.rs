@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -22,12 +23,14 @@ baker!("rec_and_cancel", MeshedChannelsFive, A, B, C, D, E);
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
+
 // A
 enum Branching0fromEtoA {
     More(
@@ -43,6 +46,7 @@ enum Branching0fromEtoA {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoE = Recv<Branching0fromEtoA, End>;
+
 // B
 enum Branching0fromEtoB {
     More(
@@ -58,6 +62,7 @@ enum Branching0fromEtoB {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoE = Recv<Branching0fromEtoB, End>;
+
 // C
 enum Branching0fromEtoC {
     More(
@@ -73,6 +78,7 @@ enum Branching0fromEtoC {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoE = Recv<Branching0fromEtoC, End>;
+
 // D
 enum Branching0fromEtoD {
     More(
@@ -88,6 +94,7 @@ enum Branching0fromEtoD {
     Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoE = Recv<Branching0fromEtoD, End>;
+
 // E
 type Choose0fromEtoA = Send<Branching0fromEtoA, End>;
 type Choose0fromEtoB = Send<Branching0fromEtoB, End>;

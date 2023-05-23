@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -70,6 +71,7 @@ enum Branching0fromKtoA {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoK = <Choose0fromKtoA as Session>::Dual;
+
 // B
 enum Branching0fromKtoB {
     Forward(
@@ -107,6 +109,7 @@ enum Branching0fromKtoB {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoK = <Choose0fromKtoB as Session>::Dual;
+
 // C
 enum Branching0fromKtoC {
     Forward(
@@ -144,6 +147,7 @@ enum Branching0fromKtoC {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoK = <Choose0fromKtoC as Session>::Dual;
+
 // D
 enum Branching0fromKtoD {
     Forward(
@@ -181,6 +185,7 @@ enum Branching0fromKtoD {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoK = <Choose0fromKtoD as Session>::Dual;
+
 // E
 enum Branching0fromKtoE {
     Forward(
@@ -218,6 +223,7 @@ enum Branching0fromKtoE {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoK = <Choose0fromKtoE as Session>::Dual;
+
 // F
 enum Branching0fromKtoF {
     Forward(
@@ -255,6 +261,7 @@ enum Branching0fromKtoF {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoK = <Choose0fromKtoF as Session>::Dual;
+
 // G
 enum Branching0fromKtoG {
     Forward(
@@ -292,6 +299,7 @@ enum Branching0fromKtoG {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoK = <Choose0fromKtoG as Session>::Dual;
+
 // H
 enum Branching0fromKtoH {
     Forward(
@@ -329,6 +337,7 @@ enum Branching0fromKtoH {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoK = <Choose0fromKtoH as Session>::Dual;
+
 // I
 enum Branching0fromKtoI {
     Forward(
@@ -366,6 +375,7 @@ enum Branching0fromKtoI {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoK = <Choose0fromKtoI as Session>::Dual;
+
 // J
 enum Branching0fromKtoJ {
     Forward(
@@ -403,6 +413,7 @@ enum Branching0fromKtoJ {
     Done(MeshedChannelsEleven<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
 type RecursJtoK = <Choose0fromKtoJ as Session>::Dual;
+
 // K
 type Choose0fromKtoA = Send<Branching0fromKtoA, End>;
 type Choose0fromKtoB = Send<Branching0fromKtoB, End>;

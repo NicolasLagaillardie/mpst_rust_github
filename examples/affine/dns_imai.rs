@@ -31,11 +31,13 @@ create_send_mpst_session_bundle!(
     send_mpst_client_to_server, RoleServer, 2 | =>
     NameClient, MeshedChannelsThree, 3
 );
+
 // OTHER
 create_send_mpst_session_bundle!(
     send_mpst_other_to_server, RoleServer, 2 | =>
     NameOther, MeshedChannelsThree, 3
 );
+
 // SERVER
 create_send_mpst_session_bundle!(
     send_mpst_server_to_client, RoleClient, 1 |
@@ -49,11 +51,13 @@ create_recv_mpst_session_bundle!(
     recv_mpst_client_from_server, RoleServer, 2 | =>
     NameClient, MeshedChannelsThree, 3
 );
+
 // OTHER
 create_recv_mpst_session_bundle!(
     recv_mpst_other_from_server, RoleServer, 2 | =>
     NameOther, MeshedChannelsThree, 3
 );
+
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_from_client, RoleClient, 1 |
@@ -65,11 +69,13 @@ create_recv_mpst_session_bundle!(
 // SERVER
 type Choose0fromServerToClient = Send<Branching0fromServerToClient, End>;
 type Choose0fromServerToOther = Send<Branching0fromServerToOther, End>;
+
 // CLIENT
 enum Branching0fromServerToClient {
     Dummy(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
     Query(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
 }
+
 // OTHER
 enum Branching0fromServerToOther {
     Dummy(MeshedChannelsThree<End, Recv<(), End>, RoleServer<RoleEnd>, NameOther>),
@@ -91,6 +97,7 @@ type EndpointClient = MeshedChannelsThree<
     RoleServer<RoleServer<RoleEnd>>,
     NameClient,
 >;
+
 // OTHER
 type EndpointOther = MeshedChannelsThree<
     End,
@@ -98,6 +105,7 @@ type EndpointOther = MeshedChannelsThree<
     RoleServer<RoleEnd>,
     NameOther,
 >;
+
 // SERVER
 type EndpointServer = MeshedChannelsThree<
     Recv<i32, Choose0fromServerToClient>,

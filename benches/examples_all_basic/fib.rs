@@ -16,6 +16,7 @@ use mpstthree::{
 use std::error::Error;
 use std::marker;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // See the folder scribble_protocols for the related Scribble protocol
@@ -42,6 +43,7 @@ create_send_mpst_session_bundle!(
     send_mpst_a_to_c, RoleC, 2 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
@@ -54,11 +56,13 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
     NameA, MeshedChannelsThree, 3
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
     NameB, MeshedChannelsThree, 3
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 | =>
@@ -69,6 +73,7 @@ create_recv_mpst_session_bundle!(
 // A
 type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
 type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
+
 // B
 enum Branching0fromAtoB<N: marker::Send> {
     More(
@@ -82,6 +87,7 @@ enum Branching0fromAtoB<N: marker::Send> {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
+
 // C
 enum Branching0fromAtoC {
     More(MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>),

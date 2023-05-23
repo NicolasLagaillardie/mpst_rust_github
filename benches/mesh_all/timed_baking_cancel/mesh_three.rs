@@ -19,10 +19,12 @@ type RS =
     RecvTimed<(), 'a', 0, true, 1, true, false, SendTimed<(), 'a', 0, true, 1, true, false, End>>;
 type SR =
     SendTimed<(), 'a', 0, true, 1, true, false, RecvTimed<(), 'a', 0, true, 1, true, false, End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
+
 // A
 enum Branching0fromCtoA {
     More(
@@ -45,6 +47,7 @@ enum Branching0fromCtoA {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
+
 // B
 enum Branching0fromCtoB {
     More(
@@ -67,6 +70,7 @@ enum Branching0fromCtoB {
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 1, true, false, End>;
+
 // C
 type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>;
 type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 1, true, false, End>;

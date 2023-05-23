@@ -13,6 +13,7 @@ use mpstthree::{baker, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
+
 // use std::time::Duration;
 
 // Create new roles
@@ -25,6 +26,7 @@ enum Branching0fromBtoA {
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
 type RecursAtoB = Recv<Branching0fromBtoA, End>;
+
 // C
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
 type EndpointMoreB =

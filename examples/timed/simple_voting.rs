@@ -21,6 +21,7 @@ baker_timed!(MeshedChannels, Voter, Server);
 // Types
 // SERVER
 type Choose0fromStoV = SendTimed<Branching0fromStoV, 'a', 0, true, 1, true, false, End>;
+
 // VOTER
 type Choose1fromVtoS = SendTimed<Branching1fromVtoS, 'a', 0, true, 1, true, false, End>;
 
@@ -41,6 +42,7 @@ enum Branching0fromStoV {
         >,
     ),
 }
+
 // SERVER
 enum Branching1fromVtoS {
     Yes(
@@ -81,6 +83,7 @@ type EndpointVoter = MeshedChannels<
     RoleServer<RoleServer<RoleEnd>>,
     NameVoter,
 >;
+
 // SERVER
 type ChoiceServer = MeshedChannels<Choice1fromStoV, RoleVoter<RoleEnd>, NameServer>;
 type EndpointServer = MeshedChannels<
