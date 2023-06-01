@@ -28,7 +28,7 @@ pub struct SendTimed<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
     S,
 > where
     T: marker::Send,
@@ -48,7 +48,7 @@ pub struct SendTimed<
     #[doc(hidden)]
     pub include_end: bool,
     #[doc(hidden)]
-    pub reset: bool,
+    pub reset: char,
 }
 
 impl<
@@ -58,7 +58,7 @@ impl<
         const INCLUDE_START: bool,
         const END: i128,
         const INCLUDE_END: bool,
-        const RESET: bool,
+        const RESET: char,
         S: Session,
     > SendTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>
 {
@@ -100,7 +100,7 @@ impl<
         const INCLUDE_START: bool,
         const END: i128,
         const INCLUDE_END: bool,
-        const RESET: bool,
+        const RESET: char,
         S: Session,
     > Session for SendTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>
 {

@@ -444,7 +444,7 @@ pub(crate) fn recv_timed(
             const INCLUDE_START: bool,
             const END: i128,
             const INCLUDE_END: bool,
-            const RESET: bool,
+            const RESET: char,
         >
             #meshedchannels_name<
                 #( #send_sessions )*
@@ -560,7 +560,7 @@ pub(crate) fn recv_from_all_timed(
             const INCLUDE_START: bool,
             const END: i128,
             const INCLUDE_END: bool,
-            const RESET: bool,
+            const RESET: char,
         >
             #meshedchannels_name<
                 #( #send_sessions )*

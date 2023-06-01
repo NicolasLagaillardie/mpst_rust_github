@@ -19,34 +19,34 @@ use std::time::{Duration, Instant};
 
 pub fn head_str() {
     assert_eq!(
-        SendTimed::<i32, 'a', 0, true, 5, true, false, End>::head_str(),
+        SendTimed::<i32, 'a', 0, true, 5, true, ' ', End>::head_str(),
         "Send".to_string()
     );
     assert_eq!(
-        RecvTimed::<i32, 'a', 0, true, 5, true, false, End>::head_str(),
+        RecvTimed::<i32, 'a', 0, true, 5, true, ' ', End>::head_str(),
         "Recv".to_string()
     );
 }
 
 pub fn tail_str() {
     assert_eq!(
-        SendTimed::<i32, 'a', 0, true, 5, true, false, End>::tail_str(),
+        SendTimed::<i32, 'a', 0, true, 5, true, ' ', End>::tail_str(),
         "End<>".to_string()
     );
     assert_eq!(
-        RecvTimed::<i32, 'a', 0, true, 5, true, false, End>::tail_str(),
+        RecvTimed::<i32, 'a', 0, true, 5, true, ' ', End>::tail_str(),
         "End<>".to_string()
     );
 }
 
 pub fn self_head_str() {
-    let (send, recv) = SendTimed::<i32, 'a', 0, true, 5, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 0, true, 5, true, ' ', End>::new();
     assert_eq!(send.self_head_str(), "Send".to_string());
     assert_eq!(recv.self_head_str(), "Recv".to_string());
 }
 
 pub fn self_tail_str() {
-    let (send, recv) = SendTimed::<i32, 'a', 0, true, 5, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 0, true, 5, true, ' ', End>::new();
     assert_eq!(send.self_tail_str(), "End<>".to_string());
     assert_eq!(recv.self_tail_str(), "End<>".to_string());
 }
@@ -54,49 +54,49 @@ pub fn self_tail_str() {
 // Constraints
 
 pub fn constraint_start_excluded() {
-    let (send, recv) = SendTimed::<i32, 'a', 5, false, -5, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, false, -5, true, ' ', End>::new();
     assert_eq!(send.constraint(), "5 < a".to_string());
     assert_eq!(recv.constraint(), "5 < a".to_string());
 }
 
 pub fn constraint_start_included() {
-    let (send, recv) = SendTimed::<i32, 'a', 5, true, -5, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, true, -5, true, ' ', End>::new();
     assert_eq!(send.constraint(), "5 <= a".to_string());
     assert_eq!(recv.constraint(), "5 <= a".to_string());
 }
 
 pub fn constraint_end_excluded() {
-    let (send, recv) = SendTimed::<i32, 'a', -5, true, 5, false, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', -5, true, 5, false, ' ', End>::new();
     assert_eq!(send.constraint(), "a < 5".to_string());
     assert_eq!(recv.constraint(), "a < 5".to_string());
 }
 
 pub fn constraint_end_included() {
-    let (send, recv) = SendTimed::<i32, 'a', -5, true, 5, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', -5, true, 5, true, ' ', End>::new();
     assert_eq!(send.constraint(), "a <= 5".to_string());
     assert_eq!(recv.constraint(), "a <= 5".to_string());
 }
 
 pub fn constraint_start_excluded_end_excluded() {
-    let (send, recv) = SendTimed::<i32, 'a', 5, false, 10, false, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, false, 10, false, ' ', End>::new();
     assert_eq!(send.constraint(), "5 < a < 10".to_string());
     assert_eq!(recv.constraint(), "5 < a < 10".to_string());
 }
 
 pub fn constraint_start_excluded_end_included() {
-    let (send, recv) = SendTimed::<i32, 'a', 5, false, 10, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, false, 10, true, ' ', End>::new();
     assert_eq!(send.constraint(), "5 < a <= 10".to_string());
     assert_eq!(recv.constraint(), "5 < a <= 10".to_string());
 }
 
 pub fn constraint_start_included_end_excluded() {
-    let (send, recv) = SendTimed::<i32, 'a', 5, true, 10, false, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, true, 10, false, ' ', End>::new();
     assert_eq!(send.constraint(), "5 <= a < 10".to_string());
     assert_eq!(recv.constraint(), "5 <= a < 10".to_string());
 }
 
 pub fn constraint_start_included_end_included() {
-    let (send, recv) = SendTimed::<i32, 'a', 5, true, 10, true, false, End>::new();
+    let (send, recv) = SendTimed::<i32, 'a', 5, true, 10, true, ' ', End>::new();
     assert_eq!(send.constraint(), "5 <= a <= 10".to_string());
     assert_eq!(recv.constraint(), "5 <= a <= 10".to_string());
 }
@@ -105,7 +105,7 @@ pub fn constraint_start_included_end_included() {
 // choice.
 
 type NegServer =
-    RecvTimed<i32, 'a', 2, true, 4, true, false, SendTimed<i32, 'a', 4, true, 6, true, false, End>>;
+    RecvTimed<i32, 'a', 2, true, 4, true, ' ', SendTimed<i32, 'a', 4, true, 6, true, ' ', End>>;
 type NegClient = <NegServer as Session>::Dual;
 
 type AddServer = RecvTimed<
@@ -115,12 +115,12 @@ type AddServer = RecvTimed<
     true,
     4,
     true,
-    false,
-    RecvTimed<i32, 'a', 4, true, 6, true, false, SendTimed<i32, 'a', 6, true, 8, true, false, End>>,
+    ' ',
+    RecvTimed<i32, 'a', 4, true, 6, true, ' ', SendTimed<i32, 'a', 6, true, 8, true, ' ', End>>,
 >;
 type AddClient = <AddServer as Session>::Dual;
 
-type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 1, true, 2, true, false>;
+type SimpleCalcServer = OfferTimed<NegServer, AddServer, 'a', 1, true, 2, true, ' '>;
 type SimpleCalcClient = <SimpleCalcServer as Session>::Dual;
 
 fn simple_calc_server(
@@ -167,7 +167,7 @@ pub fn simple_calc_works() {
             all_clocks.insert('a', Instant::now());
 
             sleep(Duration::from_secs(1));
-            let s = choose_left::<_, AddClient, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?;
+            let s = choose_left::<_, AddClient, 'a', 1, true, 2, true, ' '>(&mut all_clocks, s)?;
             sleep(Duration::from_secs(2));
             let s = send(x, &mut all_clocks, s)?;
             sleep(Duration::from_secs(2));
@@ -189,7 +189,7 @@ pub fn simple_calc_works() {
             all_clocks.insert('a', Instant::now());
 
             sleep(Duration::from_secs(1));
-            let s = choose_right::<NegClient, _, 'a', 1, true, 2, true, false>(&mut all_clocks, s)?;
+            let s = choose_right::<NegClient, _, 'a', 1, true, 2, true, ' '>(&mut all_clocks, s)?;
             sleep(Duration::from_secs(2));
             let s = send(x, &mut all_clocks, s)?;
             sleep(Duration::from_secs(2));

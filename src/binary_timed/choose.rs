@@ -23,7 +23,7 @@ pub type ChooseTimed<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
 > = SendTimed<
     Either<<S1 as Session>::Dual, <S2 as Session>::Dual>,
     CLOCK,
@@ -46,7 +46,7 @@ pub fn choose_left<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
 >(
     all_clocks: &mut HashMap<char, Instant>,
     s: ChooseTimed<S1, S2, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,
@@ -72,7 +72,7 @@ pub fn choose_right<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
 >(
     all_clocks: &mut HashMap<char, Instant>,
     s: ChooseTimed<S1, S2, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET>,

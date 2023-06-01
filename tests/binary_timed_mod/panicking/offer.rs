@@ -21,8 +21,8 @@ pub fn offer_upper_timeout_panics() {
         sleep(Duration::from_secs(1));
 
         // Send
-        let (sender, receiver) = ChooseTimed::<End, End, 'a', 1, true, 2, true, false>::new();
-        let _ = choose_left::<End, End, 'a', 1, true, 2, true, false>(&mut all_clocks, sender)?; // will fail
+        let (sender, receiver) = ChooseTimed::<End, End, 'a', 1, true, 2, true, ' '>::new();
+        let _ = choose_left::<End, End, 'a', 1, true, 2, true, ' '>(&mut all_clocks, sender)?; // will fail
 
         // Sleep for 3 seconds to exceed upper timeout
         sleep(Duration::from_secs(3));
@@ -47,8 +47,8 @@ pub fn offer_lower_timeout_panics() {
         sleep(Duration::from_secs(1));
 
         // Send
-        let (sender, receiver) = ChooseTimed::<End, End, 'a', 1, true, 2, true, false>::new();
-        let _ = choose_left::<End, End, 'a', 1, true, 2, true, false>(&mut all_clocks, sender)?; // will fail
+        let (sender, receiver) = ChooseTimed::<End, End, 'a', 1, true, 2, true, ' '>::new();
+        let _ = choose_left::<End, End, 'a', 1, true, 2, true, ' '>(&mut all_clocks, sender)?; // will fail
 
         // reset clock 'a' to exceed lower timeout
         let clock_a = all_clocks.get_mut(&'a').unwrap();

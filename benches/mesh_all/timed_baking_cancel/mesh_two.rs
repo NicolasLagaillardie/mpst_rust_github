@@ -25,8 +25,8 @@ enum Branching0fromBtoA {
                 true,
                 1,
                 true,
-                false,
-                SendTimed<(), 'a', 0, true, 1, true, false, RecursAtoB>,
+                ' ',
+                SendTimed<(), 'a', 0, true, 1, true, ' ', RecursAtoB>,
             >,
             RoleB<RoleB<RoleB<RoleEnd>>>,
             NameA,
@@ -34,10 +34,10 @@ enum Branching0fromBtoA {
     ),
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
-type RecursAtoB = RecvTimed<Branching0fromBtoA, 'a', 0, true, 1, true, false, End>;
+type RecursAtoB = RecvTimed<Branching0fromBtoA, 'a', 0, true, 1, true, ' ', End>;
 
 // C
-type Choose0fromBtoA = SendTimed<Branching0fromBtoA, 'a', 0, true, 1, true, false, End>;
+type Choose0fromBtoA = SendTimed<Branching0fromBtoA, 'a', 0, true, 1, true, ' ', End>;
 type EndpointMoreB = MeshedChannelsTwo<
     SendTimed<
         (),
@@ -46,8 +46,8 @@ type EndpointMoreB = MeshedChannelsTwo<
         true,
         1,
         true,
-        false,
-        RecvTimed<(), 'a', 0, true, 1, true, false, Choose0fromBtoA>,
+        ' ',
+        RecvTimed<(), 'a', 0, true, 1, true, ' ', Choose0fromBtoA>,
     >,
     RoleA<RoleA<RoleBroadcast>>,
     NameB,

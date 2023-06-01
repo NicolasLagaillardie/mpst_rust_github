@@ -28,7 +28,7 @@ pub struct RecvTimed<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
     S,
 > where
     T: marker::Send,
@@ -47,7 +47,7 @@ pub struct RecvTimed<
     #[doc(hidden)]
     pub include_end: bool,
     #[doc(hidden)]
-    pub reset: bool,
+    pub reset: char,
 }
 
 impl<
@@ -57,7 +57,7 @@ impl<
         const INCLUDE_START: bool,
         const END: i128,
         const INCLUDE_END: bool,
-        const RESET: bool,
+        const RESET: char,
         S: Session,
     > RecvTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>
 {
@@ -99,7 +99,7 @@ impl<
         const INCLUDE_START: bool,
         const END: i128,
         const INCLUDE_END: bool,
-        const RESET: bool,
+        const RESET: char,
         S: Session,
     > Session for RecvTimed<T, CLOCK, START, INCLUDE_START, END, INCLUDE_END, RESET, S>
 {

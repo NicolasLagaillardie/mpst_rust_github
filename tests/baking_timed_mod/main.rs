@@ -28,14 +28,14 @@ type InitA = RecvTimed<
     true,
     2,
     true,
-    false,
-    SendTimed<i32, 'a', 2, true, 4, true, false, <Choose0fromDtoAOutLoop as Session>::Dual>,
+    ' ',
+    SendTimed<i32, 'a', 2, true, 4, true, ' ', <Choose0fromDtoAOutLoop as Session>::Dual>,
 >;
 
 type AtoDClose = End;
 type AtoBClose = End;
 type AtoBVideo =
-    SendTimed<i32, 'a', 2, true, 4, true, false, RecvTimed<i32, 'a', 4, true, 6, true, false, End>>;
+    SendTimed<i32, 'a', 2, true, 4, true, ' ', RecvTimed<i32, 'a', 4, true, 6, true, ' ', End>>;
 type AtoDVideo = RecvTimed<
     i32,
     'a',
@@ -43,8 +43,8 @@ type AtoDVideo = RecvTimed<
     true,
     2,
     true,
-    false,
-    SendTimed<i32, 'a', 6, true, 8, true, false, RecursAtoD>,
+    ' ',
+    SendTimed<i32, 'a', 6, true, 8, true, ' ', RecursAtoD>,
 >;
 
 type RecursAtoD = <Choose0fromDtoAInLoop as Session>::Dual;
@@ -69,11 +69,11 @@ enum Branches0BtoD {
 }
 
 // D
-type Choose0fromDtoAInLoop = SendTimed<Branches0AtoD, 'a', 8, true, 10, true, true, End>;
-type Choose0fromDtoBInLoop = SendTimed<Branches0BtoD, 'a', 8, true, 10, true, true, End>;
+type Choose0fromDtoAInLoop = SendTimed<Branches0AtoD, 'a', 8, true, 10, true, 'a', End>;
+type Choose0fromDtoBInLoop = SendTimed<Branches0BtoD, 'a', 8, true, 10, true, 'a', End>;
 
-type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, 'a', 4, true, 6, true, true, End>;
-type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, 'a', 4, true, 6, true, true, End>;
+type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, 'a', 4, true, 6, true, 'a', End>;
+type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, 'a', 4, true, 6, true, 'a', End>;
 
 type InitD = SendTimed<
     i32,
@@ -82,8 +82,8 @@ type InitD = SendTimed<
     true,
     2,
     true,
-    false,
-    RecvTimed<i32, 'a', 2, true, 4, true, false, Choose0fromDtoAOutLoop>,
+    ' ',
+    RecvTimed<i32, 'a', 2, true, 4, true, ' ', Choose0fromDtoAOutLoop>,
 >;
 
 // Stacks

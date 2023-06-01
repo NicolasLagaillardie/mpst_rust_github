@@ -146,7 +146,7 @@ impl ChooseTimedMultiToAll {
                 };
 
                 quote! {
-                    if s.#temp_session.reset {
+                    if s.#temp_session.reset == ' ' {
                         clocks_to_reset.push(s.#temp_session.clock.clone());
                     }
 

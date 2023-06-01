@@ -20,23 +20,23 @@ baker_timed!(MeshedChannels, Voter, Server);
 
 // Types
 // SERVER
-type Choose0fromStoV = SendTimed<Branching0fromStoV, 'a', 0, true, 1, true, false, End>;
+type Choose0fromStoV = SendTimed<Branching0fromStoV, 'a', 0, true, 1, true, ' ', End>;
 
 // VOTER
-type Choose1fromVtoS = SendTimed<Branching1fromVtoS, 'a', 0, true, 1, true, false, End>;
+type Choose1fromVtoS = SendTimed<Branching1fromVtoS, 'a', 0, true, 1, true, ' ', End>;
 
 // VOTER
 enum Branching0fromStoV {
     Auth(
         MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, false, Choose1fromVtoS>,
+            RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose1fromVtoS>,
             RoleServer<RoleBroadcast>,
             NameVoter,
         >,
     ),
     Reject(
         MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
             RoleServer<RoleEnd>,
             NameVoter,
         >,
@@ -47,25 +47,25 @@ enum Branching0fromStoV {
 enum Branching1fromVtoS {
     Yes(
         MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
             RoleVoter<RoleEnd>,
             NameServer,
         >,
     ),
     No(
         MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
             RoleVoter<RoleEnd>,
             NameServer,
         >,
     ),
 }
-type Choice1fromStoV = RecvTimed<Branching1fromVtoS, 'a', 0, true, 1, true, false, End>;
+type Choice1fromStoV = RecvTimed<Branching1fromVtoS, 'a', 0, true, 1, true, ' ', End>;
 
 // Creating the MP sessions
 // VOTER
 type ChoiceVoter = MeshedChannels<
-    RecvTimed<i32, 'a', 0, true, 1, true, false, Choose1fromVtoS>,
+    RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose1fromVtoS>,
     RoleServer<RoleBroadcast>,
     NameVoter,
 >;
@@ -77,8 +77,8 @@ type EndpointVoter = MeshedChannels<
         true,
         1,
         true,
-        false,
-        RecvTimed<Branching0fromStoV, 'a', 0, true, 1, true, false, End>,
+        ' ',
+        RecvTimed<Branching0fromStoV, 'a', 0, true, 1, true, ' ', End>,
     >,
     RoleServer<RoleServer<RoleEnd>>,
     NameVoter,
@@ -87,7 +87,7 @@ type EndpointVoter = MeshedChannels<
 // SERVER
 type ChoiceServer = MeshedChannels<Choice1fromStoV, RoleVoter<RoleEnd>, NameServer>;
 type EndpointServer = MeshedChannels<
-    RecvTimed<i32, 'a', 0, true, 1, true, false, Choose0fromStoV>,
+    RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromStoV>,
     RoleVoter<RoleBroadcast>,
     NameServer,
 >;

@@ -24,7 +24,7 @@ pub fn recv<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
     S,
 >(
     all_clocks: &mut HashMap<char, Instant>,
@@ -43,7 +43,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset {
+                    if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset == ' ' {
                         // receive with timeout
                         match s.channel.recv_timeout(
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
@@ -83,7 +83,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset {
+                    if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset == ' ' {
                         // receive with timeout
                         match s.channel.recv_timeout(
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
@@ -131,7 +131,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset {
+                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset == ' ' {
                         // blocking receive
                         match s.channel.recv() {
                             Ok((v, s)) => {
@@ -167,7 +167,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset {
+                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset == ' ' {
                         // blocking receive
                         match s.channel.recv() {
                             Ok((v, s)) => {
@@ -214,7 +214,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             // receive with timeout
                             match s.channel.recv_timeout(
@@ -254,7 +254,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             // receive with timeout
                             match s.channel.recv_timeout(
@@ -294,7 +294,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             // receive with timeout
                             match s.channel.recv_timeout(
@@ -334,7 +334,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             // receive with timeout
                             match s.channel.recv_timeout(

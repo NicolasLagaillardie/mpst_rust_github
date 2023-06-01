@@ -1655,7 +1655,7 @@ pub(crate) fn choose_timed(
             const INCLUDE_START: bool,
             const END: i128,
             const INCLUDE_END: bool,
-            const RESET: bool,
+            const RESET: char,
         >
             #meshedchannels_name<
                 #(

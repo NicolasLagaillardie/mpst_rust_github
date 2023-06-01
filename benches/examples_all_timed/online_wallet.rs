@@ -23,20 +23,20 @@ baker_timed!(MeshedChannels, A, C, S);
 
 // Types
 // A
-type Choose0fromAtoS = SendTimed<Branching0fromAtoS, 'a', 0, true, 1, true, false, End>;
-type Choose0fromAtoC = SendTimed<Branching0fromAtoC, 'a', 0, true, 1, true, false, End>;
+type Choose0fromAtoS = SendTimed<Branching0fromAtoS, 'a', 0, true, 1, true, ' ', End>;
+type Choose0fromAtoC = SendTimed<Branching0fromAtoC, 'a', 0, true, 1, true, ' ', End>;
 
 enum Branching1fromCtoA {
     Pay(MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
     Quit(MeshedChannels<End, End, RoleEnd, NameA>),
 }
-type Recurs1AtoC = RecvTimed<Branching1fromCtoA, 'a', 0, true, 1, true, false, End>;
+type Recurs1AtoC = RecvTimed<Branching1fromCtoA, 'a', 0, true, 1, true, ' ', End>;
 
 // S
 enum Branching0fromAtoS {
     Login(
         MeshedChannels<
-            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
+            RecvTimed<(), 'a', 0, true, 1, true, ' ', End>,
             SDoubleRecurs1StoC,
             RoleACC,
             NameS,
@@ -44,7 +44,7 @@ enum Branching0fromAtoS {
     ),
     Fail(
         MeshedChannels<
-            RecvTimed<String, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<String, 'a', 0, true, 1, true, ' ', End>,
             End,
             RoleA<RoleEnd>,
             NameS,
@@ -52,13 +52,13 @@ enum Branching0fromAtoS {
     ),
 }
 type RoleACC = RoleA<RoleC<RoleC<RoleEnd>>>;
-type Recurs0StoA = RecvTimed<Branching0fromAtoS, 'a', 0, true, 1, true, false, End>;
+type Recurs0StoA = RecvTimed<Branching0fromAtoS, 'a', 0, true, 1, true, ' ', End>;
 
 enum Branching1fromCtoS {
     Pay(
         MeshedChannels<
             End,
-            RecvTimed<(String, i32), 'a', 0, true, 1, true, false, SDoubleRecurs1StoC>,
+            RecvTimed<(String, i32), 'a', 0, true, 1, true, ' ', SDoubleRecurs1StoC>,
             RoleCCC,
             NameS,
         >,
@@ -66,41 +66,41 @@ enum Branching1fromCtoS {
     Quit(
         MeshedChannels<
             End,
-            RecvTimed<(), 'a', 0, true, 1, true, false, End>,
+            RecvTimed<(), 'a', 0, true, 1, true, ' ', End>,
             RoleC<RoleEnd>,
             NameS,
         >,
     ),
 }
 type RoleCCC = RoleC<RoleC<RoleC<RoleEnd>>>;
-type Recurs1StoC = RecvTimed<Branching1fromCtoS, 'a', 0, true, 1, true, false, End>;
+type Recurs1StoC = RecvTimed<Branching1fromCtoS, 'a', 0, true, 1, true, ' ', End>;
 
 // C
 enum Branching0fromAtoC {
     Login(MeshedChannels<RChoose1fromCtoA, RDoubleChoose1fromCtoS, RoleASBroad, NameC>),
     Fail(
         MeshedChannels<
-            RecvTimed<String, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<String, 'a', 0, true, 1, true, ' ', End>,
             End,
             RoleA<RoleEnd>,
             NameC,
         >,
     ),
 }
-type RChoose1fromCtoA = RecvTimed<(), 'a', 0, true, 1, true, false, Choose1fromCtoA>;
-type RDoubleChoose1fromCtoS = RecvTimed<(i32, i32), 'a', 0, true, 1, true, false, Choose1fromCtoS>;
+type RChoose1fromCtoA = RecvTimed<(), 'a', 0, true, 1, true, ' ', Choose1fromCtoA>;
+type RDoubleChoose1fromCtoS = RecvTimed<(i32, i32), 'a', 0, true, 1, true, ' ', Choose1fromCtoS>;
 type RoleASBroad = RoleA<RoleS<RoleBroadcast>>;
-type Recurs0CtoA = RecvTimed<Branching0fromAtoC, 'a', 0, true, 1, true, false, End>;
+type Recurs0CtoA = RecvTimed<Branching0fromAtoC, 'a', 0, true, 1, true, ' ', End>;
 
-type Choose1fromCtoA = SendTimed<Branching1fromCtoA, 'a', 0, true, 1, true, false, End>;
-type Choose1fromCtoS = SendTimed<Branching1fromCtoS, 'a', 0, true, 1, true, false, End>;
+type Choose1fromCtoA = SendTimed<Branching1fromCtoA, 'a', 0, true, 1, true, ' ', End>;
+type Choose1fromCtoS = SendTimed<Branching1fromCtoS, 'a', 0, true, 1, true, ' ', End>;
 
 // Creating the MP sessions
 // Step 1_1
 type EndpointC1Quit =
-    MeshedChannels<End, SendTimed<(), 'a', 0, true, 1, true, false, End>, RoleS<RoleEnd>, NameC>;
+    MeshedChannels<End, SendTimed<(), 'a', 0, true, 1, true, ' ', End>, RoleS<RoleEnd>, NameC>;
 type EndpointC1Pay = MeshedChannels<
-    SendTimed<Branching1fromCtoA, 'a', 0, true, 1, true, false, End>,
+    SendTimed<Branching1fromCtoA, 'a', 0, true, 1, true, ' ', End>,
     SendTimed<
         (String, i32),
         'a',
@@ -108,7 +108,7 @@ type EndpointC1Pay = MeshedChannels<
         true,
         1,
         true,
-        false,
+        ' ',
         RecvTimed<
             (i32, i32),
             'a',
@@ -116,8 +116,8 @@ type EndpointC1Pay = MeshedChannels<
             true,
             1,
             true,
-            false,
-            SendTimed<Branching1fromCtoS, 'a', 0, true, 1, true, false, End>,
+            ' ',
+            SendTimed<Branching1fromCtoS, 'a', 0, true, 1, true, ' ', End>,
         >,
     >,
     RoleS<RoleS<RoleBroadcast>>,
@@ -129,12 +129,12 @@ type EndpointA1 = MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
 type EndpointC1 =
     MeshedChannels<Choose1fromCtoA, RDoubleChoose1fromCtoS, RoleS<RoleBroadcast>, NameC>;
 type EndpointS1 = MeshedChannels<End, SDoubleRecurs1StoC, RoleC<RoleC<RoleEnd>>, NameS>;
-type SDoubleRecurs1StoC = SendTimed<(i32, i32), 'a', 0, true, 1, true, false, Recurs1StoC>;
+type SDoubleRecurs1StoC = SendTimed<(i32, i32), 'a', 0, true, 1, true, ' ', Recurs1StoC>;
 
 // Step 0_1
 type EndpointA0_1Fail = MeshedChannels<
-    SendTimed<String, 'a', 0, true, 1, true, false, End>,
-    SendTimed<String, 'a', 0, true, 1, true, false, End>,
+    SendTimed<String, 'a', 0, true, 1, true, ' ', End>,
+    SendTimed<String, 'a', 0, true, 1, true, ' ', End>,
     RoleC<RoleS<RoleEnd>>,
     NameA,
 >;
@@ -146,23 +146,23 @@ type EndpointA0_1Login = MeshedChannels<
         true,
         1,
         true,
-        false,
-        RecvTimed<Branching1fromCtoA, 'a', 0, true, 1, true, false, End>,
+        ' ',
+        RecvTimed<Branching1fromCtoA, 'a', 0, true, 1, true, ' ', End>,
     >,
-    SendTimed<(), 'a', 0, true, 1, true, false, End>,
+    SendTimed<(), 'a', 0, true, 1, true, ' ', End>,
     RoleC<RoleS<RoleC<RoleEnd>>>,
     NameA,
 >;
 
 // Step 0
 type EndpointA0 = MeshedChannels<
-    RecvTimed<(String, String), 'a', 0, true, 1, true, false, Choose0fromAtoC>,
+    RecvTimed<(String, String), 'a', 0, true, 1, true, ' ', Choose0fromAtoC>,
     Choose0fromAtoS,
     RoleC<RoleBroadcast>,
     NameA,
 >;
 type EndpointC0 = MeshedChannels<
-    SendTimed<(String, String), 'a', 0, true, 1, true, false, Recurs0CtoA>,
+    SendTimed<(String, String), 'a', 0, true, 1, true, ' ', Recurs0CtoA>,
     End,
     RoleA<RoleA<RoleEnd>>,
     NameC,

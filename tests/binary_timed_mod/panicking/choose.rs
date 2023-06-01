@@ -19,8 +19,8 @@ pub fn choose_left_upper_timeout_panics() {
         sleep(Duration::from_secs(3));
 
         // Send
-        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, false>::new();
-        let _ = choose_left::<End, End, 'a', 1, true, 2, true, false>(&mut all_clocks, sender)?; // will fail
+        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, ' '>::new();
+        let _ = choose_left::<End, End, 'a', 1, true, 2, true, ' '>(&mut all_clocks, sender)?; // will fail
 
         Ok(())
     }()
@@ -37,8 +37,8 @@ pub fn choose_left_lower_timeout_panics() {
         sleep(Duration::from_secs(0));
 
         // Send
-        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, false>::new();
-        let _ = choose_left::<End, End, 'a', 1, true, 2, true, false>(&mut all_clocks, sender)?; // will fail
+        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, ' '>::new();
+        let _ = choose_left::<End, End, 'a', 1, true, 2, true, ' '>(&mut all_clocks, sender)?; // will fail
 
         Ok(())
     }()
@@ -55,8 +55,8 @@ pub fn choose_right_upper_timeout_panics() {
         sleep(Duration::from_secs(3));
 
         // Send
-        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, false>::new();
-        let _ = choose_right::<End, End, 'a', 1, true, 2, true, false>(&mut all_clocks, sender)?; // will fail
+        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, ' '>::new();
+        let _ = choose_right::<End, End, 'a', 1, true, 2, true, ' '>(&mut all_clocks, sender)?; // will fail
 
         Ok(())
     }()
@@ -73,8 +73,8 @@ pub fn choose_right_lower_timeout_panics() {
         sleep(Duration::from_secs(0));
 
         // Send
-        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, false>::new();
-        let _ = choose_right::<End, End, 'a', 1, true, 2, true, false>(&mut all_clocks, sender)?; // will fail
+        let (sender, _) = ChooseTimed::<End, End, 'a', 1, true, 2, true, ' '>::new();
+        let _ = choose_right::<End, End, 'a', 1, true, 2, true, ' '>(&mut all_clocks, sender)?; // will fail
 
         Ok(())
     }()

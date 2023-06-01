@@ -253,7 +253,7 @@ pub(crate) fn send_timed_canceled(
             const INCLUDE_START: bool,
             const END: i128,
             const INCLUDE_END: bool,
-            const RESET: bool,
+            const RESET: char,
         >
             #meshedchannels_name<
                 #( #send_sessions )*

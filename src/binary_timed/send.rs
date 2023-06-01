@@ -24,7 +24,7 @@ pub fn send<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
     S,
 >(
     x: T,
@@ -44,7 +44,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset {
+                    if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset == ' ' {
                         let (here, there) = S::new();
                         match s.channel.send_timeout(
                             (x, there),
@@ -86,7 +86,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset {
+                    if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset == ' ' {
                         let (here, there) = S::new();
                         match s.channel.send_timeout(
                             (x, there),
@@ -136,7 +136,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset {
+                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset == ' ' {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(()) => {
@@ -172,7 +172,7 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset {
+                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset == ' ' {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(()) => {
@@ -219,7 +219,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -261,7 +261,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -303,7 +303,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -345,7 +345,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
-                            && s.reset
+                            && s.reset == ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -397,7 +397,7 @@ pub fn send_without_reset<
     const INCLUDE_START: bool,
     const END: i128,
     const INCLUDE_END: bool,
-    const RESET: bool,
+    const RESET: char,
     S,
 >(
     x: T,

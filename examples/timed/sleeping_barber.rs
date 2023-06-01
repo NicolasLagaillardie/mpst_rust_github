@@ -40,7 +40,7 @@ enum Branching0fromStoB {
         MeshedChannels<
             End,
             End,
-            RecvTimed<Branching1fromRtoB, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Branching1fromRtoB, 'a', 0, true, 1, true, ' ', End>,
             RoleR<RoleEnd>,
             NameB,
         >,
@@ -48,7 +48,7 @@ enum Branching0fromStoB {
     Closed(
         MeshedChannels<
             End,
-            RecvTimed<i32, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
             End,
             RoleR<RoleEnd>,
             NameB,
@@ -60,8 +60,8 @@ enum Branching1fromRtoB {
     Full(
         MeshedChannels<
             End,
-            RecvTimed<Wait, 'a', 0, true, 1, true, false, End>,
-            RecvTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Wait, 'a', 0, true, 1, true, ' ', End>,
+            RecvTimed<Branching0fromStoB, 'a', 0, true, 1, true, ' ', End>,
             RoleR<RoleS<RoleEnd>>,
             NameB,
         >,
@@ -75,8 +75,8 @@ enum Branching1fromRtoB {
                 true,
                 1,
                 true,
-                false,
-                SendTimed<Stop, 'a', 0, true, 1, true, false, End>,
+                ' ',
+                SendTimed<Stop, 'a', 0, true, 1, true, ' ', End>,
             >,
             RecvTimed<
                 Enter,
@@ -85,7 +85,7 @@ enum Branching1fromRtoB {
                 true,
                 1,
                 true,
-                false,
+                ' ',
                 SendTimed<
                     Next,
                     'a',
@@ -93,11 +93,11 @@ enum Branching1fromRtoB {
                     true,
                     1,
                     true,
-                    false,
-                    RecvTimed<Wait, 'a', 0, true, 1, true, false, End>,
+                    ' ',
+                    RecvTimed<Wait, 'a', 0, true, 1, true, ' ', End>,
                 >,
             >,
-            RecvTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Branching0fromStoB, 'a', 0, true, 1, true, ' ', End>,
             RoleR<RoleC<RoleC<RoleR<RoleR<RoleS<RoleEnd>>>>>>,
             NameB,
         >,
@@ -110,7 +110,7 @@ enum Branching0fromStoC {
         MeshedChannels<
             End,
             End,
-            RecvTimed<Branching1fromRtoC, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Branching1fromRtoC, 'a', 0, true, 1, true, ' ', End>,
             RoleR<RoleEnd>,
             NameC,
         >,
@@ -122,8 +122,8 @@ enum Branching1fromRtoC {
     Full(
         MeshedChannels<
             End,
-            RecvTimed<Full, 'a', 0, true, 1, true, false, End>,
-            RecvTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Full, 'a', 0, true, 1, true, ' ', End>,
+            RecvTimed<Branching0fromStoC, 'a', 0, true, 1, true, ' ', End>,
             RoleR<RoleS<RoleEnd>>,
             NameC,
         >,
@@ -137,10 +137,10 @@ enum Branching1fromRtoC {
                 true,
                 1,
                 true,
-                false,
-                RecvTimed<Stop, 'a', 0, true, 1, true, false, End>,
+                ' ',
+                RecvTimed<Stop, 'a', 0, true, 1, true, ' ', End>,
             >,
-            RecvTimed<Wait, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Wait, 'a', 0, true, 1, true, ' ', End>,
             RecvTimed<
                 Done,
                 'a',
@@ -148,8 +148,8 @@ enum Branching1fromRtoC {
                 true,
                 1,
                 true,
-                false,
-                RecvTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+                ' ',
+                RecvTimed<Branching0fromStoC, 'a', 0, true, 1, true, ' ', End>,
             >,
             RoleR<RoleB<RoleB<RoleS<RoleS<RoleEnd>>>>>,
             NameC,
@@ -161,18 +161,18 @@ enum Branching1fromRtoC {
 enum Branching0fromStoR {
     Available(
         MeshedChannels<
-            SendTimed<Branching1fromRtoB, 'a', 0, true, 1, true, false, End>,
-            SendTimed<Branching1fromRtoC, 'a', 0, true, 1, true, false, End>,
-            SendTimed<Branching1fromRtoS, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching1fromRtoB, 'a', 0, true, 1, true, ' ', End>,
+            SendTimed<Branching1fromRtoC, 'a', 0, true, 1, true, ' ', End>,
+            SendTimed<Branching1fromRtoS, 'a', 0, true, 1, true, ' ', End>,
             RoleBroadcast,
             NameR,
         >,
     ),
     Close(
         MeshedChannels<
-            SendTimed<Done, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Done, 'a', 0, true, 1, true, ' ', End>,
             End,
-            RecvTimed<Done, 'a', 0, true, 1, true, false, End>,
+            RecvTimed<Done, 'a', 0, true, 1, true, ' ', End>,
             RoleS<RoleB<RoleEnd>>,
             NameR,
         >,
@@ -183,7 +183,7 @@ enum Branching0fromStoR {
 enum Branching1fromRtoC {
     Full(
         MeshedChannels<
-            SendTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching0fromStoB, 'a', 0, true, 1, true, ' ', End>,
             RecvTimed<
                 Returned,
                 'a',
@@ -191,17 +191,17 @@ enum Branching1fromRtoC {
                 true,
                 1,
                 true,
-                false,
-                SendTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+                ' ',
+                SendTimed<Branching0fromStoC, 'a', 0, true, 1, true, ' ', End>,
             >,
-            SendTimed<Branching0fromStoR, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching0fromStoR, 'a', 0, true, 1, true, ' ', End>,
             RoleC<RoleBroadcast>,
             NameS,
         >,
     ),
     Wait(
         MeshedChannels<
-            SendTimed<Branching0fromStoB, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching0fromStoB, 'a', 0, true, 1, true, ' ', End>,
             RecvTimed<
                 Done,
                 'a',
@@ -209,10 +209,10 @@ enum Branching1fromRtoC {
                 true,
                 1,
                 true,
-                false,
-                SendTimed<Branching0fromStoC, 'a', 0, true, 1, true, false, End>,
+                ' ',
+                SendTimed<Branching0fromStoC, 'a', 0, true, 1, true, ' ', End>,
             >,
-            SendTimed<Branching0fromStoR, 'a', 0, true, 1, true, false, End>,
+            SendTimed<Branching0fromStoR, 'a', 0, true, 1, true, ' ', End>,
             RoleC<RoleBroadcast>,
             NameS,
         >,
@@ -222,7 +222,7 @@ enum Branching1fromRtoC {
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannels<
-    RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, false, End>,
+    RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>,
     End,
     RoleC<RoleEnd>,
     NameA,
@@ -238,8 +238,8 @@ type EndpointC = MeshedChannels<
         true,
         1,
         true,
-        false,
-        SendTimed<i32, 'a', 0, true, 1, true, false, Choose0fromCtoS>,
+        ' ',
+        SendTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromCtoS>,
     >,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
@@ -255,7 +255,7 @@ type EndpointS = MeshedChannels<
         true,
         1,
         true,
-        false,
+        ' ',
         RecvTimed<
             i32,
             'a',
@@ -263,8 +263,8 @@ type EndpointS = MeshedChannels<
             true,
             1,
             true,
-            false,
-            RecvTimed<Branching0fromCtoS, 'a', 0, true, 1, true, false, End>,
+            ' ',
+            RecvTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ', End>,
         >,
     >,
     RoleC<RoleC<RoleC<RoleEnd>>>,
