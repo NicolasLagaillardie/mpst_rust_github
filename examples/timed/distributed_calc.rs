@@ -34,20 +34,10 @@ enum Branching0fromCtoA {
 // S
 enum Branching0fromCtoS {
     Sum(
-        MeshedChannels<
-            End,
-            SendTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
+        MeshedChannels<End, SendTimed<i32, 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
     ),
     Diff(
-        MeshedChannels<
-            End,
-            SendTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
+        MeshedChannels<End, SendTimed<i32, 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
     ),
 }
 

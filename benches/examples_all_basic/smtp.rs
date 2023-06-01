@@ -737,6 +737,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn smtp_main(c: &mut Criterion) {
+pub fn smtp(c: &mut Criterion) {
     c.bench_function("SMTP", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = smtp,
+}
+
+criterion_main! {
+    bench
 }

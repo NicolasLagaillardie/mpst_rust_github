@@ -220,6 +220,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn dns_imai_main(c: &mut Criterion) {
+pub fn dns_imai(c: &mut Criterion) {
     c.bench_function("DNS Imai", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = dns_imai,
+}
+
+criterion_main! {
+    bench
 }

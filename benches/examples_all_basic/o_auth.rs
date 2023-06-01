@@ -179,6 +179,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn o_auth_main(c: &mut Criterion) {
+pub fn o_auth(c: &mut Criterion) {
     c.bench_function("oAuth MPST", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = o_auth,
+}
+
+criterion_main! {
+    bench
 }

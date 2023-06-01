@@ -217,6 +217,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn remote_data_main(c: &mut Criterion) {
+pub fn remote_data(c: &mut Criterion) {
     c.bench_function("Remote data baking", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = remote_data,
+}
+
+criterion_main! {
+    bench
 }

@@ -203,6 +203,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn simple_voting_main(c: &mut Criterion) {
+pub fn simple_voting(c: &mut Criterion) {
     c.bench_function("Simple voting MPST", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = simple_voting,
+}
+
+criterion_main! {
+    bench
 }

@@ -178,7 +178,7 @@ fn all_mpst() {
 }
 
 /////////////////////////
-// A
+
 enum BinaryA<N: marker::Send> {
     More(Recv<N, Send<N, RecursA<N>>>),
     Done(End),

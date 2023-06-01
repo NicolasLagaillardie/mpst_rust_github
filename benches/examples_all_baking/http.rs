@@ -1107,6 +1107,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn http_main(c: &mut Criterion) {
+pub fn http(c: &mut Criterion) {
     c.bench_function("HTTP baking", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = http,
+}
+
+criterion_main! {
+    bench
 }

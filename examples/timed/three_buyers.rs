@@ -29,20 +29,10 @@ type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ',
 // A
 enum Branching0fromCtoA {
     Accept(
-        MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-            End,
-            RoleC<RoleEnd>,
-            NameA,
-        >,
+        MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, End, RoleC<RoleEnd>, NameA>,
     ),
     Quit(
-        MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-            End,
-            RoleC<RoleEnd>,
-            NameA,
-        >,
+        MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, End, RoleC<RoleEnd>, NameA>,
     ),
 }
 
@@ -66,12 +56,7 @@ enum Branching0fromCtoS {
         >,
     ),
     Quit(
-        MeshedChannels<
-            End,
-            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
+        MeshedChannels<End, RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
     ),
 }
 type TwoRoleC = RoleC<RoleC<RoleEnd>>;

@@ -128,16 +128,7 @@ type Offer0fromStoA = RecvTimed<Branching0fromAtoS, 'a', 0, true, 1, true, ' ', 
 // A
 type EndpointASuccess = MeshedChannels<
     SendTimed<Success, 'a', 0, true, 1, true, ' ', End>,
-    RecvTimed<
-        Token,
-        'a',
-        0,
-        true,
-        1,
-        true,
-        ' ',
-        SendTimed<Token, 'a', 0, true, 1, true, ' ', End>,
-    >,
+    RecvTimed<Token, 'a', 0, true, 1, true, ' ', SendTimed<Token, 'a', 0, true, 1, true, ' ', End>>,
     RoleC<RoleS<RoleS<RoleEnd>>>,
     NameA,
 >;

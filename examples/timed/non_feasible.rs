@@ -107,7 +107,7 @@ enum RequestByClientToProxyOne {
         MeshedChannels<
             RecvTimed<Close, 'a', 0, true, 1, true, ' ', End>, // Receive Close from Client
             SendTimed<Close, 'a', 0, true, 1, true, ' ', End>, // Forward Close to ProxyTwo
-            End,                                                 // No communication with Server
+            End,                                               // No communication with Server
             RoleClient<RoleProxyTwo<RoleEnd>>,
             NameProxyOne,
         >,
@@ -118,7 +118,7 @@ enum RequestByClientToProxyOne {
 enum RequestByClientToProxyTwo {
     RequestGet(
         MeshedChannels<
-            End,                                                      // No communication with Client
+            End,                                                    // No communication with Client
             RecvTimed<RequestGet, 'a', 0, true, 1, true, ' ', End>, // Receive request from ProxyOne
             SendTimed<
                 RequestGet,
@@ -136,7 +136,7 @@ enum RequestByClientToProxyTwo {
     ),
     RequestPut(
         MeshedChannels<
-            End,                                                      // No communication with Client
+            End,                                                    // No communication with Client
             RecvTimed<RequestPut, 'a', 0, true, 1, true, ' ', End>, // Receive request from ProxyOne
             SendTimed<
                 RequestPut,
@@ -154,7 +154,7 @@ enum RequestByClientToProxyTwo {
     ),
     RequestPost(
         MeshedChannels<
-            End,                                                       // No communication with Client
+            End,                                                     // No communication with Client
             RecvTimed<RequestPost, 'a', 0, true, 1, true, ' ', End>, // Receive request from ProxyOne
             SendTimed<
                 RequestPost,
@@ -172,7 +172,7 @@ enum RequestByClientToProxyTwo {
     ),
     Close(
         MeshedChannels<
-            End,                                                 // No communication with Client
+            End,                                               // No communication with Client
             RecvTimed<Close, 'a', 0, true, 1, true, ' ', End>, // Receive Close from ProxyOne
             SendTimed<Close, 'a', 0, true, 1, true, ' ', End>, // Forward Close to Server
             RoleProxyOne<RoleServer<RoleEnd>>,
@@ -291,8 +291,8 @@ enum OpenTCPConnectionByServerToClient {
     Fail(
         MeshedChannels<
             RecvTimed<Fail, 'a', 0, true, 1, true, ' ', End>, // RecvTimed Fail from ProxyOne
-            End,                                                // No communication with ProxyTwo
-            End,                                                // No communication with Server
+            End,                                              // No communication with ProxyTwo
+            End,                                              // No communication with Server
             RoleProxyOne<RoleEnd>,
             NameClient,
         >,
@@ -323,7 +323,7 @@ enum OpenTCPConnectionByServerToProxyOne {
         MeshedChannels<
             SendTimed<Fail, 'a', 0, true, 1, true, ' ', End>, // Forward Fail to Client
             RecvTimed<Fail, 'a', 0, true, 1, true, ' ', End>, // RecvTimed Fail from ProxyTwo
-            End,                                                // End connection
+            End,                                              // End connection
             RoleProxyTwo<RoleClient<RoleEnd>>,
             NameProxyOne,
         >,
@@ -341,7 +341,7 @@ enum OpenTCPConnectionByServerToProxyOne {
                 RecvTimed<RequestByClientToProxyOne, 'a', 0, true, 1, true, ' ', End>,
             >, // Forward Success to Client and receive choice
             RecvTimed<Success, 'a', 0, true, 1, true, ' ', End>, // Receive choice from ProxyTwo
-            End,                                                   // No communication with Server
+            End,                                                 // No communication with Server
             RoleProxyTwo<RoleClient<RoleClient<RoleEnd>>>,
             NameProxyOne,
         >,
@@ -352,7 +352,7 @@ enum OpenTCPConnectionByServerToProxyOne {
 enum OpenTCPConnectionByServerToProxyTwo {
     Fail(
         MeshedChannels<
-            End,                                                // No communication with Client
+            End,                                              // No communication with Client
             SendTimed<Fail, 'a', 0, true, 1, true, ' ', End>, // Forward Fail from Server
             RecvTimed<Fail, 'a', 0, true, 1, true, ' ', End>, // RecvTimed Fail from Server
             RoleServer<RoleProxyOne<RoleEnd>>,
@@ -444,7 +444,7 @@ enum ResponseByServerToProxyOne {
                 RecvTimed<RequestByClientToProxyOne, 'a', 0, true, 1, true, ' ', End>,
             >, // Forward Response200 to Client ProxyOne and receive choice
             RecvTimed<Response200, 'a', 0, true, 1, true, ' ', End>, // Receive Response200 from ProxyTwo
-            End, // No communication with Server
+            End,                                                     // No communication with Server
             RoleProxyTwo<RoleClient<RoleClient<RoleEnd>>>,
             NameProxyOne,
         >,
@@ -462,7 +462,7 @@ enum ResponseByServerToProxyOne {
                 RecvTimed<RequestByClientToProxyOne, 'a', 0, true, 1, true, ' ', End>,
             >, // Forward Response404 to Client ProxyOne and receive choice
             RecvTimed<Response404, 'a', 0, true, 1, true, ' ', End>, // Receive Response404 from ProxyTwo
-            End, // No communication with Server
+            End,                                                     // No communication with Server
             RoleProxyTwo<RoleClient<RoleClient<RoleEnd>>>,
             NameProxyOne,
         >,
@@ -480,7 +480,7 @@ enum ResponseByServerToProxyOne {
                 RecvTimed<RequestByClientToProxyOne, 'a', 0, true, 1, true, ' ', End>,
             >, // Forward Response418 to Client ProxyOne and receive choice
             RecvTimed<Response418, 'a', 0, true, 1, true, ' ', End>, // Receive Response418 from ProxyTwo
-            End, // No communication with Server
+            End,                                                     // No communication with Server
             RoleProxyTwo<RoleClient<RoleClient<RoleEnd>>>,
             NameProxyOne,
         >,

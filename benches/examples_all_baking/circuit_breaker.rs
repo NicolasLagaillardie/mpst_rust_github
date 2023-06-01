@@ -360,6 +360,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn circuit_breaker_main(c: &mut Criterion) {
+pub fn circuit_breaker(c: &mut Criterion) {
     c.bench_function("Circuit breaker baking", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = circuit_breaker,
+}
+
+criterion_main! {
+    bench
 }

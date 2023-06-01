@@ -674,6 +674,7 @@ fn all_mpst() {
 }
 
 /////////////////////////
+
 // A
 enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),

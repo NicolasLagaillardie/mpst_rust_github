@@ -160,6 +160,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn logging_solo_main(c: &mut Criterion) {
+pub fn logging_solo(c: &mut Criterion) {
     c.bench_function("Logging solo", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = logging_solo,
+}
+
+criterion_main! {
+    bench
 }

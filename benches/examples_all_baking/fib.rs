@@ -120,3 +120,16 @@ static LOOPS: i64 = 20;
 pub fn fibo_mpst(c: &mut Criterion) {
     c.bench_function(&format!("Fibo MPST baking {LOOPS}"), |b| b.iter(all_mpst));
 }
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = fibo_mpst,
+}
+
+criterion_main! {
+    bench
+}
+

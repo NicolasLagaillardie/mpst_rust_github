@@ -190,6 +190,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn video_stream_main(c: &mut Criterion) {
+pub fn video_stream(c: &mut Criterion) {
     c.bench_function("Video stream", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = video_stream,
+}
+
+criterion_main! {
+    bench
 }

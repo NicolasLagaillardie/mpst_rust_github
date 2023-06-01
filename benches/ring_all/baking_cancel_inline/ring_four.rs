@@ -218,6 +218,7 @@ fn all_mpst() {
 }
 
 /////////////////////////
+
 // A
 enum BinaryA {
     Forward(Recv<(), Send<(), RecursA>>),

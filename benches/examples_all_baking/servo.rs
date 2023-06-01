@@ -112,6 +112,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn servo_main(c: &mut Criterion) {
+pub fn servo(c: &mut Criterion) {
     c.bench_function("Servo baking", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = servo,
+}
+
+criterion_main! {
+    bench
 }

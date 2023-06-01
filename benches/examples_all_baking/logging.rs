@@ -162,6 +162,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn logging_main(c: &mut Criterion) {
+pub fn logging(c: &mut Criterion) {
     c.bench_function("Logging baking", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = logging,
+}
+
+criterion_main! {
+    bench
 }

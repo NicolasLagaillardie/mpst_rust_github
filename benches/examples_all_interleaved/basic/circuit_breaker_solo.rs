@@ -313,6 +313,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn circuit_breaker_solo_main(c: &mut Criterion) {
+pub fn circuit_breaker_solo(c: &mut Criterion) {
     c.bench_function("Circuit breaker solo", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = circuit_breaker_solo,
+}
+
+criterion_main! {
+    bench
 }

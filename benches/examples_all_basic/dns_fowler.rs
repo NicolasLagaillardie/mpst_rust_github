@@ -177,6 +177,18 @@ fn all_mpst() {
 
 /////////////////////////
 
-pub fn dns_fowler_main(c: &mut Criterion) {
+pub fn dns_fowler(c: &mut Criterion) {
     c.bench_function("DNS Fowler", |b| b.iter(all_mpst));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = dns_fowler,
+}
+
+criterion_main! {
+    bench
 }
