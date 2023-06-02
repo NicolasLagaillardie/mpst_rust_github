@@ -16,8 +16,6 @@ use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 
-
-
 // A
 enum BinaryA {
     Forward(Recv<(), Send<(), RecursA>>),
@@ -78,17 +76,11 @@ fn all_binaries() {
 
 static LOOPS: i64 = 100;
 
-
-
 pub fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring four baking protocol binary {LOOPS}"),
-        |b| b.iter(all_binaries)
-    );
+    c.bench_function(&format!("ring four baking protocol binary {LOOPS}"), |b| {
+        b.iter(all_binaries)
+    });
 }
-
-
-
 
 /////////////////////////
 
@@ -101,5 +93,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-
-

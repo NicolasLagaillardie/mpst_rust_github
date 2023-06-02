@@ -16,7 +16,6 @@ use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 
-
 // A
 enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),
@@ -77,15 +76,12 @@ fn all_binaries() {
 
 static LOOPS: i64 = 100;
 
-
-
 pub fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh three baking inline protocol binary {LOOPS}"),
         |b| b.iter(all_binaries),
     );
 }
-
 
 /////////////////////////
 
@@ -98,5 +94,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-
-

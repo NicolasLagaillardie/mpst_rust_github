@@ -16,7 +16,6 @@ use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 
-
 type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
 type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
 
@@ -97,7 +96,6 @@ pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     );
 }
 
-
 /////////////////////////
 
 criterion_group! {
@@ -109,4 +107,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

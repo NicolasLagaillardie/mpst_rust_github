@@ -341,14 +341,10 @@ fn all_mpst() {
 static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring five cancel protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst)
-    );
+    c.bench_function(&format!("ring five cancel protocol MPST {LOOPS}"), |b| {
+        b.iter(all_mpst)
+    });
 }
-
-
-
 
 /////////////////////////
 
@@ -361,4 +357,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

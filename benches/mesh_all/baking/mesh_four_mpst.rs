@@ -200,14 +200,10 @@ fn all_mpst() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh four baking protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst)
-    );
+    c.bench_function(&format!("mesh four baking protocol MPST {LOOPS}"), |b| {
+        b.iter(all_mpst)
+    });
 }
-
-
-
 
 /////////////////////////
 
@@ -221,8 +217,6 @@ criterion_main! {
     bench
 }
 
-
-
 /////////////////////////
 
 criterion_group! {
@@ -234,4 +228,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

@@ -20,8 +20,6 @@ use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 
-
-
 type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
 type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
 
@@ -95,15 +93,12 @@ fn all_crossbeam() {
 
 static LOOPS: i64 = 0;
 
-
-
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh four empty protocol crossbeam {LOOPS}"),
         |b| b.iter(all_crossbeam),
     );
 }
-
 
 /////////////////////////
 
@@ -116,4 +111,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

@@ -64,12 +64,7 @@ enum Branching1fromCtoS {
         >,
     ),
     Quit(
-        MeshedChannels<
-            End,
-            RecvTimed<(), 'a', 0, true, 1, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
+        MeshedChannels<End, RecvTimed<(), 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
     ),
 }
 type RoleCCC = RoleC<RoleC<RoleC<RoleEnd>>>;

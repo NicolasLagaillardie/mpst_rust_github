@@ -937,21 +937,15 @@ fn all_mpst() {
     thread_j.join().unwrap();
 }
 
-
-
 /////////////////////////
 
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh ten protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst)
-    );
+    c.bench_function(&format!("mesh ten protocol MPST {LOOPS}"), |b| {
+        b.iter(all_mpst)
+    });
 }
-
-
-
 
 /////////////////////////
 
@@ -964,5 +958,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-
-

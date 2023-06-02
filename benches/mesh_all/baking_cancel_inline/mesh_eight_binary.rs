@@ -16,7 +16,6 @@ use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 
-
 // A
 enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),
@@ -83,7 +82,6 @@ pub fn mesh_protocol_binary(c: &mut Criterion) {
         |b| b.iter(all_binaries),
     );
 }
-
 
 /////////////////////////
 

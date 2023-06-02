@@ -116,7 +116,6 @@ pub fn mesh_protocol_mpst(c: &mut Criterion) {
     );
 }
 
-
 /////////////////////////
 
 criterion_group! {
@@ -128,4 +127,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

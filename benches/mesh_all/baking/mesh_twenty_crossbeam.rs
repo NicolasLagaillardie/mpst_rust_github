@@ -91,14 +91,12 @@ fn all_crossbeam() {
 
 static LOOPS: i64 = 100;
 
-
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh twenty baking protocol crossbeam {LOOPS}"),
         |b| b.iter(all_crossbeam),
     );
 }
-
 
 /////////////////////////
 
@@ -111,4 +109,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

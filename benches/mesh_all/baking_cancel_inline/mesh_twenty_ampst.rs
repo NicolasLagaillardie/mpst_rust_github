@@ -3534,7 +3534,6 @@ pub fn mesh_protocol_mpst(c: &mut Criterion) {
     );
 }
 
-
 /////////////////////////
 
 criterion_group! {

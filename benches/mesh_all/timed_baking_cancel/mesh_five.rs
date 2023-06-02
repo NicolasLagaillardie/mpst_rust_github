@@ -15,10 +15,8 @@ baker_timed!(MeshedChannelsFive, A, B, C, D, E);
 
 // Types
 // SendTimed/RecvTimed
-type RS =
-    RecvTimed<(), 'a', 0, true, 1, true, ' ', SendTimed<(), 'a', 0, true, 1, true, ' ', End>>;
-type SR =
-    SendTimed<(), 'a', 0, true, 1, true, ' ', RecvTimed<(), 'a', 0, true, 1, true, ' ', End>>;
+type RS = RecvTimed<(), 'a', 0, true, 1, true, ' ', SendTimed<(), 'a', 0, true, 1, true, ' ', End>>;
+type SR = SendTimed<(), 'a', 0, true, 1, true, ' ', RecvTimed<(), 'a', 0, true, 1, true, ' ', End>>;
 
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
@@ -345,7 +343,6 @@ pub fn mesh_protocol_mpst(c: &mut Criterion) {
     );
 }
 
-
 /////////////////////////
 
 criterion_group! {
@@ -357,4 +354,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

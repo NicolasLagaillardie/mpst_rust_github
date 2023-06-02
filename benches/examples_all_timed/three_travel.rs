@@ -104,17 +104,8 @@ type RolesAC = RoleA<RoleC<RoleEnd>>;
 type Choice0fromCtoS = RecvTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ', End>;
 
 enum Branching1fromCtoS {
-    Yes(
-        MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, RS<End>, RolesACC, NameS>,
-    ),
-    No(
-        MeshedChannels<
-            RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-            End,
-            RoleA<RoleEnd>,
-            NameS,
-        >,
-    ),
+    Yes(MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, RS<End>, RolesACC, NameS>),
+    No(MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, End, RoleA<RoleEnd>, NameS>),
 }
 type RolesACC = RoleA<RoleC<RoleC<RoleEnd>>>;
 type Choice1fromCtoS = RecvTimed<Branching1fromCtoS, 'a', 0, true, 1, true, ' ', End>;

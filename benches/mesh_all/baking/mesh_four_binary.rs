@@ -79,14 +79,10 @@ fn all_binaries() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh four baking protocol binary {LOOPS}"),
-        |b| b.iter(all_binaries)
-    );
+    c.bench_function(&format!("mesh four baking protocol binary {LOOPS}"), |b| {
+        b.iter(all_binaries)
+    });
 }
-
-
-
 
 /////////////////////////
 
@@ -100,8 +96,6 @@ criterion_main! {
     bench
 }
 
-
-
 /////////////////////////
 
 criterion_group! {
@@ -113,4 +107,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

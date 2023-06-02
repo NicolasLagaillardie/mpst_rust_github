@@ -612,70 +612,70 @@ required-features = ["full"]
 [[bench]]
 name = "ring_three_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_three_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_three.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_four_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_four_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_four.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_five_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_five_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_five.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_six_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_six_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_six.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_seven_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_seven_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_seven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_eight_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_eight_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_eight.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_nine_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_nine_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_nine.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_ten_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_ten_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_ten.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_eleven_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_eleven_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_eleven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_twenty_mpst_cancel_broadcast"
 harness = false
-path = "benches/ring_all/cancel_broadcast/ring_twenty_mpst.rs"
+path = "benches/ring_all/cancel_broadcast/ring_twenty.rs"
 required-features = ["full"]
 
 ######### Cancel
@@ -683,77 +683,77 @@ required-features = ["full"]
 [[bench]]
 name = "ring_two_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_two_mpst.rs"
+path = "benches/ring_all/cancel/ring_two.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_three_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_three_mpst.rs"
+path = "benches/ring_all/cancel/ring_three.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_four_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_four_mpst.rs"
+path = "benches/ring_all/cancel/ring_four.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_five_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_five_mpst.rs"
+path = "benches/ring_all/cancel/ring_five.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_six_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_six_mpst.rs"
+path = "benches/ring_all/cancel/ring_six.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_seven_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_seven_mpst.rs"
+path = "benches/ring_all/cancel/ring_seven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_eight_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_eight_mpst.rs"
+path = "benches/ring_all/cancel/ring_eight.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_nine_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_nine_mpst.rs"
+path = "benches/ring_all/cancel/ring_nine.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_ten_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_ten_mpst.rs"
+path = "benches/ring_all/cancel/ring_ten.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_eleven_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_eleven_mpst.rs"
+path = "benches/ring_all/cancel/ring_eleven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_twenty_mpst_cancel"
 harness = false
-path = "benches/ring_all/cancel/ring_twenty_mpst.rs"
+path = "benches/ring_all/cancel/ring_twenty.rs"
 required-features = ["full"]
 
 ######### Baking
@@ -766,9 +766,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_two_ampst_ampst_baking"
+name = "ring_two_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_two_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_two_ampst.rs"
 required-features = ["full"]
 
 
@@ -794,9 +794,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_three_ampst_ampst_baking"
+name = "ring_three_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_three_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_three_ampst.rs"
 required-features = ["full"]
 
 
@@ -822,9 +822,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_four_ampst_ampst_baking"
+name = "ring_four_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_four_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_four_ampst.rs"
 required-features = ["full"]
 
 
@@ -850,9 +850,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_five_ampst_ampst_baking"
+name = "ring_five_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_five_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_five_ampst.rs"
 required-features = ["full"]
 
 
@@ -878,9 +878,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_six_ampst_ampst_baking"
+name = "ring_six_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_six_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_six_ampst.rs"
 required-features = ["full"]
 
 
@@ -906,9 +906,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_seven_ampst_ampst_baking"
+name = "ring_seven_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_seven_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_seven_ampst.rs"
 required-features = ["full"]
 
 
@@ -934,9 +934,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_eight_ampst_ampst_baking"
+name = "ring_eight_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_eight_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_eight_ampst.rs"
 required-features = ["full"]
 
 
@@ -962,9 +962,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_nine_ampst_ampst_baking"
+name = "ring_nine_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_nine_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_nine_ampst.rs"
 required-features = ["full"]
 
 
@@ -990,9 +990,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "ring_ten_ampst_ampst_baking"
+name = "ring_ten_ampst_baking"
 harness = false
-path = "benches/ring_all/baking/ring_ten_ampst_ampst.rs"
+path = "benches/ring_all/baking/ring_ten_ampst.rs"
 required-features = ["full"]
 
 
@@ -1056,7 +1056,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_two_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_two_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_two_ampst.rs"
 required-features = ["full"]
 
 
@@ -1077,7 +1077,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_three_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_three_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_three_ampst.rs"
 required-features = ["full"]
 
 
@@ -1098,7 +1098,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_four_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_four_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_four_ampst.rs"
 required-features = ["full"]
 
 
@@ -1119,7 +1119,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_five_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_five_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_five_ampst.rs"
 required-features = ["full"]
 
 
@@ -1140,7 +1140,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_six_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_six_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_six_ampst.rs"
 required-features = ["full"]
 
 
@@ -1161,7 +1161,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_seven_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_seven_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_seven_ampst.rs"
 required-features = ["full"]
 
 
@@ -1182,7 +1182,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_eight_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_eight_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_eight_ampst.rs"
 required-features = ["full"]
 
 
@@ -1203,7 +1203,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_nine_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_nine_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_nine_ampst.rs"
 required-features = ["full"]
 
 
@@ -1224,7 +1224,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_ten_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_ten_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_ten_ampst.rs"
 required-features = ["full"]
 
 
@@ -1245,7 +1245,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_eleven_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_eleven_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_eleven_ampst.rs"
 required-features = ["full"]
 
 
@@ -1266,7 +1266,7 @@ required-features = ["full"]
 [[bench]]
 name = "ring_twenty_mpst_baking_cancel_inline"
 harness = false
-path = "benches/ring_all/baking_cancel_inline/ring_twenty_mpst.rs"
+path = "benches/ring_all/baking_cancel_inline/ring_twenty_ampst.rs"
 required-features = ["full"]
 
 
@@ -1288,63 +1288,63 @@ required-features = ["full"]
 [[bench]]
 name = "ring_two_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_two_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_two.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_three_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_three_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_three.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_four_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_four_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_four.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_five_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_five_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_five.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_six_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_six_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_six.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_seven_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_seven_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_seven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_eight_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_eight_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_eight.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_nine_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_nine_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_nine.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "ring_ten_mpst_timed_baking_cancel"
 harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_ten_mpst.rs"
+path = "benches/ring_all/timed_baking_cancel/ring_ten.rs"
 required-features = ["full"]
 
 ################## Mesh
@@ -1818,70 +1818,70 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_three_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_three_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_three.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_four_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_four_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_four.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_five_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_five_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_five.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_six_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_six_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_six.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_seven_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_seven_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_seven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_eight_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_eight_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_eight.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_nine_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_nine_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_nine.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_ten_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_ten_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_ten.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_eleven_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_eleven_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_eleven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_twenty_mpst_cancel_broadcast"
 harness = false
-path = "benches/mesh_all/cancel_broadcast/mesh_twenty_mpst.rs"
+path = "benches/mesh_all/cancel_broadcast/mesh_twenty.rs"
 required-features = ["full"]
 
 ######### Cancel
@@ -1889,77 +1889,77 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_two_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_two_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_two.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_three_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_three_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_three.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_four_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_four_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_four.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_five_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_five_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_five.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_six_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_six_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_six.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_seven_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_seven_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_seven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_eight_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_eight_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_eight.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_nine_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_nine_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_nine.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_ten_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_ten_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_ten.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_eleven_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_eleven_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_eleven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_twenty_mpst_cancel"
 harness = false
-path = "benches/mesh_all/cancel/mesh_twenty_mpst.rs"
+path = "benches/mesh_all/cancel/mesh_twenty.rs"
 required-features = ["full"]
 
 ######### Baking
@@ -1972,9 +1972,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_two_ampst_ampst_baking"
+name = "mesh_two_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_two_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_two_ampst.rs"
 required-features = ["full"]
 
 
@@ -2000,9 +2000,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_three_ampst_ampst_baking"
+name = "mesh_three_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_three_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_three_ampst.rs"
 required-features = ["full"]
 
 
@@ -2028,9 +2028,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_four_ampst_ampst_baking"
+name = "mesh_four_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_four_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_four_ampst.rs"
 required-features = ["full"]
 
 
@@ -2056,9 +2056,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_five_ampst_ampst_baking"
+name = "mesh_five_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_five_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_five_ampst.rs"
 required-features = ["full"]
 
 
@@ -2084,9 +2084,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_six_ampst_ampst_baking"
+name = "mesh_six_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_six_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_six_ampst.rs"
 required-features = ["full"]
 
 
@@ -2112,9 +2112,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_seven_ampst_ampst_baking"
+name = "mesh_seven_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_seven_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_seven_ampst.rs"
 required-features = ["full"]
 
 
@@ -2140,9 +2140,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_eight_ampst_ampst_baking"
+name = "mesh_eight_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_eight_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_eight_ampst.rs"
 required-features = ["full"]
 
 
@@ -2168,9 +2168,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_nine_ampst_ampst_baking"
+name = "mesh_nine_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_nine_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_nine_ampst.rs"
 required-features = ["full"]
 
 
@@ -2196,9 +2196,9 @@ required-features = ["full"]
 
 
 [[bench]]
-name = "mesh_ten_ampst_ampst_baking"
+name = "mesh_ten_ampst_baking"
 harness = false
-path = "benches/mesh_all/baking/mesh_ten_ampst_ampst.rs"
+path = "benches/mesh_all/baking/mesh_ten_ampst.rs"
 required-features = ["full"]
 
 
@@ -2262,7 +2262,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_two_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_two_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_two_ampst.rs"
 required-features = ["full"]
 
 
@@ -2283,7 +2283,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_three_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_three_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_three_ampst.rs"
 required-features = ["full"]
 
 
@@ -2304,7 +2304,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_four_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_four_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_four_ampst.rs"
 required-features = ["full"]
 
 
@@ -2325,7 +2325,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_five_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_five_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_five_ampst.rs"
 required-features = ["full"]
 
 
@@ -2346,7 +2346,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_six_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_six_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_six_ampst.rs"
 required-features = ["full"]
 
 
@@ -2367,7 +2367,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_seven_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_seven_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_seven_ampst.rs"
 required-features = ["full"]
 
 
@@ -2388,7 +2388,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_eight_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_eight_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_eight_ampst.rs"
 required-features = ["full"]
 
 
@@ -2409,7 +2409,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_nine_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_nine_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_nine_ampst.rs"
 required-features = ["full"]
 
 
@@ -2430,7 +2430,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_ten_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_ten_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_ten_ampst.rs"
 required-features = ["full"]
 
 
@@ -2451,7 +2451,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_eleven_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_eleven_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_eleven_ampst.rs"
 required-features = ["full"]
 
 
@@ -2472,7 +2472,7 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_twenty_mpst_baking_cancel_inline"
 harness = false
-path = "benches/mesh_all/baking_cancel_inline/mesh_twenty_mpst.rs"
+path = "benches/mesh_all/baking_cancel_inline/mesh_twenty_ampst.rs"
 required-features = ["full"]
 
 
@@ -2494,63 +2494,63 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_two_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_two_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_two.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_three_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_three_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_three.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_four_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_four_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_four.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_five_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_five_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_five.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_six_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_six_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_six.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_seven_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_seven_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_seven.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_eight_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_eight_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_eight.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_nine_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_nine_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_nine.rs"
 required-features = ["full"]
 
 
 [[bench]]
 name = "mesh_ten_mpst_timed_baking_cancel"
 harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_ten_mpst.rs"
+path = "benches/mesh_all/timed_baking_cancel/mesh_ten.rs"
 required-features = ["full"]
 
 

@@ -604,8 +604,6 @@ fn all_mpst() {
     thread_i.join().unwrap();
 }
 
-
-
 /////////////////////////
 
 static LOOPS: i64 = 100;
@@ -616,7 +614,6 @@ pub fn ring_protocol_mpst(c: &mut Criterion) {
         |b| b.iter(all_mpst),
     );
 }
-
 
 /////////////////////////
 
@@ -629,4 +626,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-
