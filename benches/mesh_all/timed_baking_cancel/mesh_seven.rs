@@ -506,7 +506,7 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("timed mesh seven baking protocol MPST {LOOPS}"),
+        &format!("timed mesh seven baking protocol ATMP {LOOPS}"),
         |b| b.iter(all_mpst),
     );
 }
