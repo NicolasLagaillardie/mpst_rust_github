@@ -97,7 +97,24 @@ static LOOPS: i64 = 0;
 
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("mesh two empty protocol crossbeam {LOOPS}"), |b| {
-        b.iter(all_crossbeam)
-    });
+    c.bench_function(
+        &format!("mesh two empty protocol crossbeam {LOOPS}"),
+        |b| b.iter(all_crossbeam)
+    );
 }
+
+
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_crossbeam,
+}
+
+criterion_main! {
+    bench
+}
+

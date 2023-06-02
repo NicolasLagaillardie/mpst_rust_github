@@ -82,15 +82,28 @@ fn all_binaries() {
 
 static LOOPS: i64 = 100;
 
-pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh five protocol MPST {LOOPS}"), |b| {
-        b.iter(all_mpst)
-    });
-}
+
 
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh five protocol binary {LOOPS}"), |b| {
-        b.iter(all_binaries)
-    });
+    c.bench_function(
+        &format!("mesh five protocol binary {LOOPS}"),
+        |b| b.iter(all_binaries)
+    );
 }
+
+
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_binary,
+}
+
+criterion_main! {
+    bench
+}
+

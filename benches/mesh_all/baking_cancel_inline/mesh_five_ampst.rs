@@ -267,3 +267,17 @@ pub fn mesh_protocol_mpst(c: &mut Criterion) {
         |b| b.iter(all_mpst),
     );
 }
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_mpst,
+}
+
+criterion_main! {
+    bench
+}
+

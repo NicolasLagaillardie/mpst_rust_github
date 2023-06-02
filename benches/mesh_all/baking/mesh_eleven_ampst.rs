@@ -865,7 +865,24 @@ fn all_mpst() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_ampst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh eleven baking protocol AMPST {LOOPS}"), |b| {
-        b.iter(all_mpst)
-    });
+    c.bench_function(
+        &format!("mesh eleven baking protocol AMPST {LOOPS}"),
+        |b| b.iter(all_mpst)
+    );
 }
+
+
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_ampst,
+}
+
+criterion_main! {
+    bench
+}
+

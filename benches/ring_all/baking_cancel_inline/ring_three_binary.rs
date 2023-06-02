@@ -85,3 +85,17 @@ pub fn ring_protocol_binary(c: &mut Criterion) {
         |b| b.iter(all_binaries),
     );
 }
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = ring_protocol_binary,
+}
+
+criterion_main! {
+    bench
+}
+

@@ -17,7 +17,18 @@ use std::thread::{spawn, JoinHandle};
 // use std::time::Duration;
 
 // Create new roles
-baker!("recursive", MeshedChannelsEight, A, B, C, D, E, F, G, H);
+baker!(
+    "rec_and_cancel",
+    MeshedChannelsEight,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H
+);
 
 // Types
 // Send/Recv
@@ -214,231 +225,237 @@ type EndpointH = MeshedChannelsEight<
     NameH,
 >;
 
+#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoA::Done(s) => {
             s.close()
         },
         Branching0fromHtoA::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_a(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoB::Done(s) => {
             s.close()
         },
         Branching0fromHtoB::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_b(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoC::Done(s) => {
             s.close()
         },
         Branching0fromHtoC::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_c(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoD::Done(s) => {
             s.close()
         },
         Branching0fromHtoD::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_d(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoE::Done(s) => {
             s.close()
         },
         Branching0fromHtoE::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_e(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoF::Done(s) => {
             s.close()
         },
         Branching0fromHtoF::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let (_, s) = s.recv();
-            let s = s.send(());
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_f(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branching0fromHtoG::Done(s) => {
             s.close()
         },
         Branching0fromHtoG::More(s) => {
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
             endpoint_g(s)
         },
     })
 }
 
+#[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
-    recurs_h(s, LOOPS)
+    let mut temp_s = s;
+
+    for _ in 1..LOOPS {
+        temp_s = recurs_h(temp_s)?;
+    }
+
+    let s = choose_mpst_h_to_all!(
+        temp_s,
+        Branching0fromHtoA::Done,
+        Branching0fromHtoB::Done,
+        Branching0fromHtoC::Done,
+        Branching0fromHtoD::Done,
+        Branching0fromHtoE::Done,
+        Branching0fromHtoF::Done,
+        Branching0fromHtoG::Done
+    );
+
+    s.close()
 }
 
-fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_h_to_all!(
-                s,
-                Branching0fromHtoA::Done,
-                Branching0fromHtoB::Done,
-                Branching0fromHtoC::Done,
-                Branching0fromHtoD::Done,
-                Branching0fromHtoE::Done,
-                Branching0fromHtoF::Done,
-                Branching0fromHtoG::Done
-            );
+fn recurs_h(s: EndpointH) -> Result<EndpointH, Box<dyn Error>> {
+    let s: EndpointMoreH = choose_mpst_h_to_all!(
+        s,
+        Branching0fromHtoA::More,
+        Branching0fromHtoB::More,
+        Branching0fromHtoC::More,
+        Branching0fromHtoD::More,
+        Branching0fromHtoE::More,
+        Branching0fromHtoF::More,
+        Branching0fromHtoG::More
+    );
 
-            s.close()
-        }
-        i => {
-            let s: EndpointMoreH = choose_mpst_h_to_all!(
-                s,
-                Branching0fromHtoA::More,
-                Branching0fromHtoB::More,
-                Branching0fromHtoC::More,
-                Branching0fromHtoD::More,
-                Branching0fromHtoE::More,
-                Branching0fromHtoF::More,
-                Branching0fromHtoG::More
-            );
-
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-            let s = s.send(());
-            let (_, s) = s.recv();
-
-            recurs_h(s, i - 1)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 fn all_mpst() {
@@ -464,18 +481,17 @@ fn all_mpst() {
     thread_h.join().unwrap();
 }
 
+
 /////////////////////////
 
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh eight baking protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst)
+        &format!("mesh eight baking inline protocol MPST {LOOPS}"),
+        |b| b.iter(all_mpst),
     );
 }
-
-
 
 
 /////////////////////////
@@ -489,3 +505,4 @@ criterion_group! {
 criterion_main! {
     bench
 }
+

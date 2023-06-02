@@ -20,43 +20,38 @@ use std::thread::{spawn, JoinHandle};
 baker!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 
 // Types
+// Send/Recv
+type RS = Recv<(), Send<(), End>>;
+type SR = Send<(), Recv<(), End>>;
+
+// Roles
+type R2A<R> = RoleA<RoleA<R>>;
+type R2B<R> = RoleB<RoleB<R>>;
+type R2C<R> = RoleC<RoleC<R>>;
+
 // A
 enum Branching0fromCtoA {
-    Forward(MeshedChannelsThree<Send<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
-    Backward(MeshedChannelsThree<Recv<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
+    More(MeshedChannelsThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
     Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
-type RecursAtoC = <Choose0fromCtoA as Session>::Dual;
+type RecursAtoC = Recv<Branching0fromCtoA, End>;
 
 // B
 enum Branching0fromCtoB {
-    Forward(
-        MeshedChannelsThree<
-            Recv<(), End>,
-            Send<(), RecursBtoC>,
-            RoleA<RoleC<RoleC<RoleEnd>>>,
-            NameB,
-        >,
-    ),
-    Backward(
-        MeshedChannelsThree<
-            Send<(), End>,
-            Recv<(), RecursBtoC>,
-            RoleC<RoleA<RoleC<RoleEnd>>>,
-            NameB,
-        >,
-    ),
+    More(MeshedChannelsThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
-type RecursBtoC = <Choose0fromCtoB as Session>::Dual;
+type RecursBtoC = Recv<Branching0fromCtoB, End>;
 
 // C
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
-type EndpointForwardC =
-    MeshedChannelsThree<Choose0fromCtoA, Recv<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
-type EndpointBackwardC =
-    MeshedChannelsThree<Choose0fromCtoA, Send<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
+type EndpointMoreC = MeshedChannelsThree<
+    Send<(), Recv<(), Choose0fromCtoA>>,
+    Send<(), Recv<(), Choose0fromCtoB>>,
+    R2A<R2B<RoleBroadcast>>,
+    NameC,
+>;
 
 // Creating the MP sessions
 type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
@@ -68,12 +63,11 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         Branching0fromCtoA::Done(s) => {
             s.close()
         },
-        Branching0fromCtoA::Forward(s) => {
-            let s = s.send(())?;
-            endpoint_a(s)
-        },
-        Branching0fromCtoA::Backward(s) => {
+        Branching0fromCtoA::More(s) => {
             let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_a(s)
         },
     })
@@ -85,14 +79,11 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         Branching0fromCtoB::Done(s) => {
             s.close()
         },
-        Branching0fromCtoB::Forward(s) => {
-            let ((), s) = s.recv()?;
+        Branching0fromCtoB::More(s) => {
+            let (_, s) = s.recv()?;
             let s = s.send(())?;
-            endpoint_b(s)
-        },
-        Branching0fromCtoB::Backward(s) => {
-            let ((), s) = s.recv()?;
             let s = s.send(())?;
+            let (_, s) = s.recv()?;
             endpoint_b(s)
         },
     })
@@ -102,8 +93,8 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
-    for i in 1..LOOPS {
-        temp_s = recurs_c(temp_s, i)?;
+    for _ in 1..LOOPS {
+        temp_s = recurs_c(temp_s)?;
     }
 
     let s = choose_mpst_c_to_all!(temp_s, Branching0fromCtoA::Done, Branching0fromCtoB::Done);
@@ -111,28 +102,15 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-fn recurs_c(s: EndpointC, index: i64) -> Result<EndpointC, Box<dyn Error>> {
-    match index {
-        i if i % 2 == 0 => {
-            let s: EndpointForwardC =
-                choose_mpst_c_to_all!(s, Branching0fromCtoA::Forward, Branching0fromCtoB::Forward);
+fn recurs_c(s: EndpointC) -> Result<EndpointC, Box<dyn Error>> {
+    let s: EndpointMoreC =
+        choose_mpst_c_to_all!(s, Branching0fromCtoA::More, Branching0fromCtoB::More);
 
-            let (_, s) = s.recv()?;
-
-            Ok(s)
-        }
-        _ => {
-            let s: EndpointBackwardC = choose_mpst_c_to_all!(
-                s,
-                Branching0fromCtoA::Backward,
-                Branching0fromCtoB::Backward
-            );
-
-            let s = s.send(())?;
-
-            Ok(s)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 fn all_mpst() {
@@ -147,15 +125,27 @@ fn all_mpst() {
     thread_c.join().unwrap();
 }
 
-
 /////////////////////////
 
 static LOOPS: i64 = 100;
 
-pub fn ring_protocol_mpst(c: &mut Criterion) {
+pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring three baking inline protocol MPST {LOOPS}"),
+        &format!("mesh three baking inline protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
+}
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_mpst,
+}
+
+criterion_main! {
+    bench
 }
 

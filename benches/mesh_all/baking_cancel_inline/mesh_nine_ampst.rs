@@ -19,7 +19,7 @@ use std::thread::{spawn, JoinHandle};
 // Create new roles
 baker!(
     "rec_and_cancel",
-    MeshedChannelsEight,
+    MeshedChannelsNine,
     A,
     B,
     C,
@@ -27,7 +27,8 @@ baker!(
     E,
     F,
     G,
-    H
+    H,
+    I
 );
 
 // Types
@@ -44,194 +45,228 @@ type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
 type R2G<R> = RoleG<RoleG<R>>;
 type R2H<R> = RoleH<RoleH<R>>;
+type R2I<R> = RoleI<RoleI<R>>;
 
 // A
-enum Branching0fromHtoA {
+enum Branching0fromItoA {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             RS,
             RS,
             RS,
             RS,
             RS,
             RS,
-            Recv<(), Send<(), RecursAtoH>>,
-            R2H<R2B<R2C<R2D<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursAtoI>>,
+            R2I<R2B<R2C<R2D<R2E<R2F<R2G<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameA,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
-type RecursAtoH = Recv<Branching0fromHtoA, End>;
+type RecursAtoI = Recv<Branching0fromItoA, End>;
 
 // B
-enum Branching0fromHtoB {
+enum Branching0fromItoB {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             SR,
             RS,
             RS,
             RS,
             RS,
             RS,
-            Recv<(), Send<(), RecursBtoH>>,
-            R2H<R2A<R2C<R2D<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursBtoI>>,
+            R2I<R2A<R2C<R2D<R2E<R2F<R2G<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameB,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
-type RecursBtoH = Recv<Branching0fromHtoB, End>;
+type RecursBtoI = Recv<Branching0fromItoB, End>;
 
 // C
-enum Branching0fromHtoC {
+enum Branching0fromItoC {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             SR,
             SR,
             RS,
             RS,
             RS,
             RS,
-            Recv<(), Send<(), RecursCtoH>>,
-            R2H<R2A<R2B<R2D<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursCtoI>>,
+            R2I<R2A<R2B<R2D<R2E<R2F<R2G<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameC,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
-type RecursCtoH = Recv<Branching0fromHtoC, End>;
+type RecursCtoI = Recv<Branching0fromItoC, End>;
 
 // D
-enum Branching0fromHtoD {
+enum Branching0fromItoD {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             SR,
             SR,
             SR,
             RS,
             RS,
             RS,
-            Recv<(), Send<(), RecursDtoH>>,
-            R2H<R2A<R2B<R2C<R2E<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursDtoI>>,
+            R2I<R2A<R2B<R2C<R2E<R2F<R2G<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameD,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
-type RecursDtoH = Recv<Branching0fromHtoD, End>;
+type RecursDtoI = Recv<Branching0fromItoD, End>;
 
 // E
-enum Branching0fromHtoE {
+enum Branching0fromItoE {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             SR,
             SR,
             SR,
             SR,
             RS,
             RS,
-            Recv<(), Send<(), RecursEtoH>>,
-            R2H<R2A<R2B<R2C<R2D<R2F<R2G<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursEtoI>>,
+            R2I<R2A<R2B<R2C<R2D<R2F<R2G<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameE,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameE>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
-type RecursEtoH = Recv<Branching0fromHtoE, End>;
+type RecursEtoI = Recv<Branching0fromItoE, End>;
 
 // F
-enum Branching0fromHtoF {
+enum Branching0fromItoF {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             SR,
             SR,
             SR,
             SR,
             SR,
             RS,
-            Recv<(), Send<(), RecursFtoH>>,
-            R2H<R2A<R2B<R2C<R2D<R2E<R2G<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursFtoI>>,
+            R2I<R2A<R2B<R2C<R2D<R2E<R2G<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameF,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameF>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
-type RecursFtoH = Recv<Branching0fromHtoF, End>;
+type RecursFtoI = Recv<Branching0fromItoF, End>;
 
 // G
-enum Branching0fromHtoG {
+enum Branching0fromItoG {
     More(
-        MeshedChannelsEight<
+        MeshedChannelsNine<
             SR,
             SR,
             SR,
             SR,
             SR,
             SR,
-            Recv<(), Send<(), RecursGtoH>>,
-            R2H<R2A<R2B<R2C<R2D<R2E<R2F<RoleH<RoleEnd>>>>>>>>,
+            RS,
+            Recv<(), Send<(), RecursGtoI>>,
+            R2I<R2A<R2B<R2C<R2D<R2E<R2F<R2H<RoleI<RoleEnd>>>>>>>>>,
             NameG,
         >,
     ),
-    Done(MeshedChannelsEight<End, End, End, End, End, End, End, RoleEnd, NameG>),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
-type RecursGtoH = Recv<Branching0fromHtoG, End>;
+type RecursGtoI = Recv<Branching0fromItoG, End>;
 
 // H
-type Choose0fromHtoA = Send<Branching0fromHtoA, End>;
-type Choose0fromHtoB = Send<Branching0fromHtoB, End>;
-type Choose0fromHtoC = Send<Branching0fromHtoC, End>;
-type Choose0fromHtoD = Send<Branching0fromHtoD, End>;
-type Choose0fromHtoE = Send<Branching0fromHtoE, End>;
-type Choose0fromHtoF = Send<Branching0fromHtoF, End>;
-type Choose0fromHtoG = Send<Branching0fromHtoG, End>;
-type EndpointMoreH = MeshedChannelsEight<
-    Send<(), Recv<(), Choose0fromHtoA>>,
-    Send<(), Recv<(), Choose0fromHtoB>>,
-    Send<(), Recv<(), Choose0fromHtoC>>,
-    Send<(), Recv<(), Choose0fromHtoD>>,
-    Send<(), Recv<(), Choose0fromHtoE>>,
-    Send<(), Recv<(), Choose0fromHtoF>>,
-    Send<(), Recv<(), Choose0fromHtoG>>,
-    R2A<R2B<R2C<R2D<R2E<R2F<R2G<RoleBroadcast>>>>>>>,
-    NameH,
+enum Branching0fromItoH {
+    More(
+        MeshedChannelsNine<
+            SR,
+            SR,
+            SR,
+            SR,
+            SR,
+            SR,
+            SR,
+            Recv<(), Send<(), RecursHtoI>>,
+            R2I<R2A<R2B<R2C<R2D<R2E<R2F<R2G<RoleI<RoleEnd>>>>>>>>>,
+            NameH,
+        >,
+    ),
+    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameH>),
+}
+type RecursHtoI = Recv<Branching0fromItoH, End>;
+
+// I
+type Choose0fromItoA = Send<Branching0fromItoA, End>;
+type Choose0fromItoB = Send<Branching0fromItoB, End>;
+type Choose0fromItoC = Send<Branching0fromItoC, End>;
+type Choose0fromItoD = Send<Branching0fromItoD, End>;
+type Choose0fromItoE = Send<Branching0fromItoE, End>;
+type Choose0fromItoF = Send<Branching0fromItoF, End>;
+type Choose0fromItoG = Send<Branching0fromItoG, End>;
+type Choose0fromItoH = Send<Branching0fromItoH, End>;
+type EndpointMoreI = MeshedChannelsNine<
+    Send<(), Recv<(), Choose0fromItoA>>,
+    Send<(), Recv<(), Choose0fromItoB>>,
+    Send<(), Recv<(), Choose0fromItoC>>,
+    Send<(), Recv<(), Choose0fromItoD>>,
+    Send<(), Recv<(), Choose0fromItoE>>,
+    Send<(), Recv<(), Choose0fromItoF>>,
+    Send<(), Recv<(), Choose0fromItoG>>,
+    Send<(), Recv<(), Choose0fromItoH>>,
+    R2A<R2B<R2C<R2D<R2E<R2F<R2G<R2H<RoleBroadcast>>>>>>>>,
+    NameI,
 >;
 
 // Creating the MP sessions
 type EndpointA =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursAtoH, RoleH<RoleEnd>, NameA>;
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursAtoI, RoleI<RoleEnd>, NameA>;
 type EndpointB =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursBtoH, RoleH<RoleEnd>, NameB>;
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursBtoI, RoleI<RoleEnd>, NameB>;
 type EndpointC =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursCtoH, RoleH<RoleEnd>, NameC>;
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursCtoI, RoleI<RoleEnd>, NameC>;
 type EndpointD =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursDtoH, RoleH<RoleEnd>, NameD>;
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursDtoI, RoleI<RoleEnd>, NameD>;
 type EndpointE =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursEtoH, RoleH<RoleEnd>, NameE>;
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursEtoI, RoleI<RoleEnd>, NameE>;
 type EndpointF =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursFtoH, RoleH<RoleEnd>, NameF>;
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursFtoI, RoleI<RoleEnd>, NameF>;
 type EndpointG =
-    MeshedChannelsEight<End, End, End, End, End, End, RecursGtoH, RoleH<RoleEnd>, NameG>;
-type EndpointH = MeshedChannelsEight<
-    Choose0fromHtoA,
-    Choose0fromHtoB,
-    Choose0fromHtoC,
-    Choose0fromHtoD,
-    Choose0fromHtoE,
-    Choose0fromHtoF,
-    Choose0fromHtoG,
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursGtoI, RoleI<RoleEnd>, NameG>;
+type EndpointH =
+    MeshedChannelsNine<End, End, End, End, End, End, End, RecursHtoI, RoleI<RoleEnd>, NameH>;
+type EndpointI = MeshedChannelsNine<
+    Choose0fromItoA,
+    Choose0fromItoB,
+    Choose0fromItoC,
+    Choose0fromItoD,
+    Choose0fromItoE,
+    Choose0fromItoF,
+    Choose0fromItoG,
+    Choose0fromItoH,
     RoleBroadcast,
-    NameH,
+    NameI,
 >;
 
-#[inline]
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoA::Done(s) => {
+        Branching0fromItoA::Done(s) => {
             s.close()
         },
-        Branching0fromHtoA::More(s) => {
+        Branching0fromItoA::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
@@ -254,14 +289,16 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoB::Done(s) => {
+        Branching0fromItoB::Done(s) => {
             s.close()
         },
-        Branching0fromHtoB::More(s) => {
+        Branching0fromItoB::More(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
@@ -280,16 +317,18 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoC::Done(s) => {
+        Branching0fromItoC::Done(s) => {
             s.close()
         },
-        Branching0fromHtoC::More(s) => {
+        Branching0fromItoC::More(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
@@ -306,10 +345,10 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoD::Done(s) => {
+        Branching0fromItoD::Done(s) => {
             s.close()
         },
-        Branching0fromHtoD::More(s) => {
+        Branching0fromItoD::More(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let s = s.send(())?;
@@ -318,6 +357,8 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
@@ -332,10 +373,10 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoE::Done(s) => {
+        Branching0fromItoE::Done(s) => {
             s.close()
         },
-        Branching0fromHtoE::More(s) => {
+        Branching0fromItoE::More(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let s = s.send(())?;
@@ -346,6 +387,8 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
@@ -358,10 +401,10 @@ fn endpoint_e(s: EndpointE) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoF::Done(s) => {
+        Branching0fromItoF::Done(s) => {
             s.close()
         },
-        Branching0fromHtoF::More(s) => {
+        Branching0fromItoF::More(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let s = s.send(())?;
@@ -374,6 +417,8 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             endpoint_f(s)
@@ -384,10 +429,10 @@ fn endpoint_f(s: EndpointF) -> Result<(), Box<dyn Error>> {
 #[inline]
 fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
-        Branching0fromHtoG::Done(s) => {
+        Branching0fromItoG::Done(s) => {
             s.close()
         },
-        Branching0fromHtoG::More(s) => {
+        Branching0fromItoG::More(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let s = s.send(())?;
@@ -402,6 +447,8 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
             let (_, s) = s.recv()?;
             let s = s.send(())?;
             let (_, s) = s.recv()?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_g(s)
         },
     })
@@ -409,38 +456,70 @@ fn endpoint_g(s: EndpointG) -> Result<(), Box<dyn Error>> {
 
 #[inline]
 fn endpoint_h(s: EndpointH) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromItoH::Done(s) => {
+            s.close()
+        },
+        Branching0fromItoH::More(s) => {
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            let s = s.send(())?;
+            let (_, s) = s.recv()?;
+            endpoint_h(s)
+        },
+    })
+}
+
+#[inline]
+fn endpoint_i(s: EndpointI) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
     for _ in 1..LOOPS {
-        temp_s = recurs_h(temp_s)?;
+        temp_s = recurs_i(temp_s)?;
     }
 
-    let s = choose_mpst_h_to_all!(
+    let s = choose_mpst_i_to_all!(
         temp_s,
-        Branching0fromHtoA::Done,
-        Branching0fromHtoB::Done,
-        Branching0fromHtoC::Done,
-        Branching0fromHtoD::Done,
-        Branching0fromHtoE::Done,
-        Branching0fromHtoF::Done,
-        Branching0fromHtoG::Done
+        Branching0fromItoA::Done,
+        Branching0fromItoB::Done,
+        Branching0fromItoC::Done,
+        Branching0fromItoD::Done,
+        Branching0fromItoE::Done,
+        Branching0fromItoF::Done,
+        Branching0fromItoG::Done,
+        Branching0fromItoH::Done
     );
 
     s.close()
 }
 
-fn recurs_h(s: EndpointH) -> Result<EndpointH, Box<dyn Error>> {
-    let s: EndpointMoreH = choose_mpst_h_to_all!(
+fn recurs_i(s: EndpointI) -> Result<EndpointI, Box<dyn Error>> {
+    let s: EndpointMoreI = choose_mpst_i_to_all!(
         s,
-        Branching0fromHtoA::More,
-        Branching0fromHtoB::More,
-        Branching0fromHtoC::More,
-        Branching0fromHtoD::More,
-        Branching0fromHtoE::More,
-        Branching0fromHtoF::More,
-        Branching0fromHtoG::More
+        Branching0fromItoA::More,
+        Branching0fromItoB::More,
+        Branching0fromItoC::More,
+        Branching0fromItoD::More,
+        Branching0fromItoE::More,
+        Branching0fromItoF::More,
+        Branching0fromItoG::More,
+        Branching0fromItoH::More
     );
 
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
     let s = s.send(())?;
     let (_, s) = s.recv()?;
     let s = s.send(())?;
@@ -459,7 +538,7 @@ fn recurs_h(s: EndpointH) -> Result<EndpointH, Box<dyn Error>> {
 }
 
 fn all_mpst() {
-    let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h) =
+    let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h, thread_i) =
         fork_mpst(
             black_box(endpoint_a),
             black_box(endpoint_b),
@@ -469,6 +548,7 @@ fn all_mpst() {
             black_box(endpoint_f),
             black_box(endpoint_g),
             black_box(endpoint_h),
+            black_box(endpoint_i),
         );
 
     thread_a.join().unwrap();
@@ -479,8 +559,8 @@ fn all_mpst() {
     thread_f.join().unwrap();
     thread_g.join().unwrap();
     thread_h.join().unwrap();
+    thread_i.join().unwrap();
 }
-
 
 /////////////////////////
 
@@ -488,7 +568,21 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh eight baking inline protocol MPST {LOOPS}"),
+        &format!("mesh nine baking inline protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
 }
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_mpst,
+}
+
+criterion_main! {
+    bench
+}
+

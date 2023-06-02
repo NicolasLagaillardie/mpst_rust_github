@@ -1049,8 +1049,25 @@ fn all_mpst() {
 static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring eleven protocol MPST {LOOPS}"), |b| {
-        b.iter(all_mpst)
-    });
+    c.bench_function(
+        &format!("ring eleven protocol MPST {LOOPS}"),
+        |b| b.iter(all_mpst)
+    );
 }
+
+
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = ring_protocol_mpst,
+}
+
+criterion_main! {
+    bench
+}
+
 

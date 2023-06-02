@@ -97,7 +97,24 @@ static LOOPS: i64 = 0;
 
 
 pub fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("ring ten empty protocol crossbeam {LOOPS}"), |b| {
-        b.iter(all_crossbeam)
-    });
+    c.bench_function(
+        &format!("ring ten empty protocol crossbeam {LOOPS}"),
+        |b| b.iter(all_crossbeam)
+    );
 }
+
+
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = ring_protocol_crossbeam,
+}
+
+criterion_main! {
+    bench
+}
+

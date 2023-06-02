@@ -22,16 +22,15 @@ baker!("rec_and_cancel", MeshedChannelsTwo, A, B);
 // Types
 // A
 enum Branching0fromBtoA {
-    Forward(MeshedChannelsTwo<Send<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
-    Backward(MeshedChannelsTwo<Recv<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
+    More(MeshedChannelsTwo<Recv<(), Send<(), RecursAtoB>>, RoleB<RoleB<RoleB<RoleEnd>>>, NameA>),
     Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
 }
-type RecursAtoB = <Choose0fromBtoA as Session>::Dual;
+type RecursAtoB = Recv<Branching0fromBtoA, End>;
 
-// B
+// C
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
-type EndpointForwardB = MeshedChannelsTwo<Recv<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
-type EndpointBackwardB = MeshedChannelsTwo<Send<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
+type EndpointMoreB =
+    MeshedChannelsTwo<Send<(), Recv<(), Choose0fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
 
 // Creating the MP sessions
 type EndpointA = MeshedChannelsTwo<RecursAtoB, RoleB<RoleEnd>, NameA>;
@@ -42,12 +41,9 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
         Branching0fromBtoA::Done(s) => {
             s.close()
         },
-        Branching0fromBtoA::Forward(s) => {
-            let s = s.send(())?;
-            endpoint_a(s)
-        },
-        Branching0fromBtoA::Backward(s) => {
+        Branching0fromBtoA::More(s) => {
             let (_, s) = s.recv()?;
+            let s = s.send(())?;
             endpoint_a(s)
         },
     })
@@ -57,8 +53,8 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     let mut temp_s = s;
 
-    for i in 1..LOOPS {
-        temp_s = recurs_b(temp_s, i)?;
+    for _ in 1..LOOPS {
+        temp_s = recurs_b(temp_s)?;
     }
 
     let s = choose_mpst_b_to_all!(temp_s, Branching0fromBtoA::Done);
@@ -66,23 +62,12 @@ fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     s.close()
 }
 
-fn recurs_b(s: EndpointB, index: i64) -> Result<EndpointB, Box<dyn Error>> {
-    match index {
-        i if i % 2 == 0 => {
-            let s: EndpointForwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Forward);
+fn recurs_b(s: EndpointB) -> Result<EndpointB, Box<dyn Error>> {
+    let s: EndpointMoreB = choose_mpst_b_to_all!(s, Branching0fromBtoA::More);
 
-            let (_, s) = s.recv()?;
-
-            Ok(s)
-        }
-        _ => {
-            let s: EndpointBackwardB = choose_mpst_b_to_all!(s, Branching0fromBtoA::Backward);
-
-            let s = s.send(())?;
-
-            Ok(s)
-        }
-    }
+    let s = s.send(())?;
+    let (_, s) = s.recv()?;
+    Ok(s)
 }
 
 fn all_mpst() {
@@ -92,15 +77,27 @@ fn all_mpst() {
     thread_b.join().unwrap();
 }
 
-
 /////////////////////////
 
 static LOOPS: i64 = 100;
 
-pub fn ring_protocol_mpst(c: &mut Criterion) {
+pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring two baking inline protocol MPST {LOOPS}"),
+        &format!("mesh two baking inline protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
+}
+
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = mesh_protocol_mpst,
+}
+
+criterion_main! {
+    bench
 }
 
