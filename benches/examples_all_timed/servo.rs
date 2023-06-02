@@ -1,7 +1,7 @@
 #![allow(
     clippy::type_complexity,
     clippy::too_many_arguments,
-    clippy::large_enum_variant,
+    clippy::large_enum_variant
 )]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};

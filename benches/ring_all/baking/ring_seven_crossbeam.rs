@@ -4,21 +4,11 @@
     clippy::too_many_arguments
 )]
 
+use criterion::{criterion_group, criterion_main, Criterion};
+
+use std::thread::spawn;
+
 use crossbeam_channel::bounded;
-
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, choose, offer};
-
-use std::error::Error;
-use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 

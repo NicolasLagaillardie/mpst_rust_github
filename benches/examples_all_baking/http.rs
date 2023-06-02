@@ -1,4 +1,4 @@
-#![allow(clippy::type_complexity)]
+#![allow(clippy::type_complexity, dead_code)]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
