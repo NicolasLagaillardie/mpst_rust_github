@@ -2,10 +2,9 @@
     clippy::type_complexity,
     clippy::too_many_arguments,
     clippy::large_enum_variant,
-    dead_code
 )]
 
-use criterion::{black_box, Criterion};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;

@@ -1,6 +1,10 @@
+#![allow(clippy::large_enum_variant, clippy::type_complexity, clippy::too_many_arguments)]
+
 use crossbeam_channel::bounded;
 
-use criterion::{black_box, Criterion};
+
+
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;

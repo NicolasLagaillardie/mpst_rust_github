@@ -1,5 +1,6 @@
 #![allow(dead_code, clippy::type_complexity, clippy::too_many_arguments)]
 
+
 use criterion::{criterion_group, criterion_main, Criterion};
 
 mod mesh_all;

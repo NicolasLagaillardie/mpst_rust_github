@@ -1,4 +1,10 @@
-use criterion::{black_box, Criterion};
+#![allow(
+    clippy::large_enum_variant,
+    clippy::type_complexity,
+    clippy::too_many_arguments
+)]
+
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
@@ -196,18 +202,6 @@ pub fn mesh_protocol_ampst(c: &mut Criterion) {
     c.bench_function(&format!("mesh four baking protocol AMPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
-}
-
-/////////////////////////
-
-criterion_group! {
-    name = bench;
-    config = Criterion::default().significance_level(0.1).sample_size(10000);
-    targets = mesh_protocol_ampst,
-}
-
-criterion_main! {
-    bench
 }
 
 /////////////////////////

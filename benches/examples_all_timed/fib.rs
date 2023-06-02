@@ -4,7 +4,7 @@
     clippy::large_enum_variant
 )]
 
-use criterion::{black_box, Criterion};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
@@ -113,8 +113,20 @@ fn all_mpst() {
 
 static LOOPS: i32 = 20;
 
-pub fn fibo_mpst(c: &mut Criterion) {
+pub fn fib(c: &mut Criterion) {
     c.bench_function(&format!("Timed Fibo MPST baking {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    targets = fib,
+}
+
+criterion_main! {
+    bench
 }

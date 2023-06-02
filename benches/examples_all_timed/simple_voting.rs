@@ -4,7 +4,7 @@
     clippy::large_enum_variant
 )]
 
-use criterion::{black_box, Criterion};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;

@@ -1,6 +1,12 @@
+#![allow(
+    clippy::large_enum_variant,
+    clippy::type_complexity,
+    clippy::too_many_arguments
+)]
+
 use crossbeam_channel::bounded;
 
-use criterion::{black_box, Criterion};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
@@ -648,18 +654,6 @@ pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("mesh ten baking protocol MPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
-}
-
-/////////////////////////
-
-criterion_group! {
-    name = bench;
-    config = Criterion::default().significance_level(0.1).sample_size(10000);
-    targets = mesh_protocol_mpst,
-}
-
-criterion_main! {
-    bench
 }
 
 /////////////////////////

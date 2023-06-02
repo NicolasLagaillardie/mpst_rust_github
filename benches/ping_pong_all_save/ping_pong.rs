@@ -1,5 +1,6 @@
 #![allow(clippy::type_complexity)]
 
+
 use criterion::{criterion_group, criterion_main, Criterion};
 
 mod ping_pong_all;
