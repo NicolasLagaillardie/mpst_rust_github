@@ -44,14 +44,16 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset == ' ' {
+                    if own_clock.elapsed().as_secs() <= u64::try_from(s.end)? && s.reset != ' ' {
                         let (here, there) = S::new();
                         match s.channel.send_timeout(
                             (x, there),
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                         ) {
                             Ok(()) => {
-                                *own_clock = Instant::now();
+                                let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                *clock_to_reset = Instant::now();
                                 Ok(here)
                             }
                             Err(e) => {
@@ -86,14 +88,16 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset == ' ' {
+                    if own_clock.elapsed().as_secs() < u64::try_from(s.end)? && s.reset != ' ' {
                         let (here, there) = S::new();
                         match s.channel.send_timeout(
                             (x, there),
                             Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                         ) {
                             Ok(()) => {
-                                *own_clock = Instant::now();
+                                let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                *clock_to_reset = Instant::now();
                                 Ok(here)
                             }
                             Err(e) => {
@@ -136,11 +140,13 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset == ' ' {
+                    if u64::try_from(s.start)? <= own_clock.elapsed().as_secs() && s.reset != ' ' {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(()) => {
-                                *own_clock = Instant::now();
+                                let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                *clock_to_reset = Instant::now();
                                 Ok(here)
                             }
                             Err(e) => {
@@ -172,11 +178,13 @@ where
                 // if the clock is available among all clocks
                 if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                     // if the clock respects the time constraint and the clock must be reset
-                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset == ' ' {
+                    if u64::try_from(s.start)? < own_clock.elapsed().as_secs() && s.reset != ' ' {
                         let (here, there) = S::new();
                         match s.channel.send((x, there)) {
                             Ok(()) => {
-                                *own_clock = Instant::now();
+                                let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                *clock_to_reset = Instant::now();
                                 Ok(here)
                             }
                             Err(e) => {
@@ -219,7 +227,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
-                            && s.reset == ' '
+                            && s.reset != ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -227,7 +235,9 @@ where
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
                                 Ok(()) => {
-                                    *own_clock = Instant::now();
+                                    let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                    *clock_to_reset = Instant::now();
                                     Ok(here)
                                 }
                                 Err(e) => {
@@ -261,7 +271,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? <= own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
-                            && s.reset == ' '
+                            && s.reset != ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -269,7 +279,9 @@ where
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
                                 Ok(()) => {
-                                    *own_clock = Instant::now();
+                                    let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                    *clock_to_reset = Instant::now();
                                     Ok(here)
                                 }
                                 Err(e) => {
@@ -303,7 +315,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() <= u64::try_from(s.end)?
-                            && s.reset == ' '
+                            && s.reset != ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -311,7 +323,9 @@ where
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
                                 Ok(()) => {
-                                    *own_clock = Instant::now();
+                                    let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                    *clock_to_reset = Instant::now();
                                     Ok(here)
                                 }
                                 Err(e) => {
@@ -345,7 +359,7 @@ where
                     if let Some(own_clock) = all_clocks.get_mut(&s.clock) {
                         if u64::try_from(s.start)? < own_clock.elapsed().as_secs()
                             && own_clock.elapsed().as_secs() < u64::try_from(s.end)?
-                            && s.reset == ' '
+                            && s.reset != ' '
                         {
                             let (here, there) = S::new();
                             match s.channel.send_timeout(
@@ -353,7 +367,9 @@ where
                                 Duration::from_secs(u64::try_from(s.end)?) - own_clock.elapsed(),
                             ) {
                                 Ok(()) => {
-                                    *own_clock = Instant::now();
+                                    let clock_to_reset = all_clocks.get_mut(&s.reset).unwrap();
+
+                                    *clock_to_reset = Instant::now();
                                     Ok(here)
                                 }
                                 Err(e) => {

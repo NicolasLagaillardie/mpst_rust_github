@@ -146,8 +146,8 @@ impl ChooseTimedMultiToAll {
                 };
 
                 quote! {
-                    if s.#temp_session.reset == ' ' {
-                        clocks_to_reset.push(s.#temp_session.clock.clone());
+                    if s.#temp_session.reset != ' ' {
+                        clocks_to_reset.push(s.#temp_session.reset.clone());
                     }
 
                     let _ = mpstthree::binary_timed::send::send_without_reset(
