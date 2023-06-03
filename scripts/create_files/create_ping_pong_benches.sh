@@ -113,7 +113,7 @@ do
     #########################
     sed -ier 's,ping_pong_mod_[0-9]\+,ping_pong_mod_'"$next"',g' benches/ping_pong_mod_$next.rs
     #########################
-    sed -ier 's,################## Ping-Pong,################## Ping-Pong\n\n[[bench]]\nname = "'ping_pong_"$next"'"\nharness = false\npath = "'benches/ping_pong_mod_"$next".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_"$next"'"\nharness = false\npath = "'benches/ping_pong_mod_"$next".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 done
 
 find benches/ -name *.rser -delete
