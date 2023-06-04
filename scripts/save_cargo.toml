@@ -158,10 +158,10 @@ protoc-bin-vendored = "3.0"
 ################################### Dev-dependencies for tests/benches
 
 [dev-dependencies]
-criterion = { version = "0.5.1", features = ["html_reports"] }
-trybuild = "1.0.63"
-ntest = "0.9.0"
-rand = "0.8.5"
+criterion = { version = "0.5", features = ["html_reports"] }
+trybuild = "1.0"
+ntest = "0.9"
+rand = "0.8"
 
 ################################### Features
 
@@ -176,7 +176,7 @@ message = []
 binary_timed = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
-interleaved = ["default"] # For interleaved sessions
+interleaved = ["baking"] # For interleaved sessions
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
 baking_timed = ["binary_timed"]

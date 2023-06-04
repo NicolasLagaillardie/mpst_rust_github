@@ -1,0 +1,97 @@
+error[E0072]: recursive type `Test0` has infinite size
+  --> tests/infinite_type/infinite_size.rs:47:1
+   |
+47 | enum Test0 {
+   | ^^^^^^^^^^
+48 |     End(End),
+49 |     Branch(Recv<Test0, End>),
+   |                 ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+49 |     Branch(Recv<Box<Test0>, End>),
+   |                 ++++     +
+
+error[E0072]: recursive type `Test1` has infinite size
+  --> tests/infinite_type/infinite_size.rs:51:1
+   |
+51 | enum Test1 {
+   | ^^^^^^^^^^
+52 |     End(End),
+53 |     Branch(Recv<i32, Recv<Test1, End>>),
+   |                           ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+53 |     Branch(Recv<i32, Recv<Box<Test1>, End>>),
+   |                           ++++     +
+
+error[E0072]: recursive type `Test2` has infinite size
+  --> tests/infinite_type/infinite_size.rs:55:1
+   |
+55 | enum Test2 {
+   | ^^^^^^^^^^
+56 |     End(End),
+57 |     Branch(Send<i32, Recv<Test2, End>>),
+   |                           ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+57 |     Branch(Send<i32, Recv<Box<Test2>, End>>),
+   |                           ++++     +
+
+error[E0072]: recursive type `Test3` has infinite size
+  --> tests/infinite_type/infinite_size.rs:59:1
+   |
+59 | enum Test3 {
+   | ^^^^^^^^^^
+60 |     End(End),
+61 |     Branch(Recv<i32, Send<i32, Recv<Test3, End>>>),
+   |                                     ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+61 |     Branch(Recv<i32, Send<i32, Recv<Box<Test3>, End>>>),
+   |                                     ++++     +
+
+error[E0072]: recursive type `Test4` has infinite size
+  --> tests/infinite_type/infinite_size.rs:63:1
+   |
+63 | enum Test4 {
+   | ^^^^^^^^^^
+64 |     End(End),
+65 |     Branch(Send<i32, Send<i32, Recv<Test4, End>>>),
+   |                                     ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+65 |     Branch(Send<i32, Send<i32, Recv<Box<Test4>, End>>>),
+   |                                     ++++     +
+
+error[E0072]: recursive type `Test5` has infinite size
+  --> tests/infinite_type/infinite_size.rs:67:1
+   |
+67 | enum Test5 {
+   | ^^^^^^^^^^
+68 |     End(End),
+69 |     Branch(Recv<i32, Recv<i32, Recv<Test5, End>>>),
+   |                                     ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+69 |     Branch(Recv<i32, Recv<i32, Recv<Box<Test5>, End>>>),
+   |                                     ++++     +
+
+error[E0072]: recursive type `Test6` has infinite size
+  --> tests/infinite_type/infinite_size.rs:71:1
+   |
+71 | enum Test6 {
+   | ^^^^^^^^^^
+72 |     End(End),
+73 |     Branch(Send<i32, Recv<i32, Recv<Test6, End>>>),
+   |                                     ----- recursive without indirection
+   |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+   |
+73 |     Branch(Send<i32, Recv<i32, Recv<Box<Test6>, End>>>),
+   |                                     ++++     +

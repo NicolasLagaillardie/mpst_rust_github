@@ -2490,7 +2490,9 @@ harness = false
 path = "benches/mesh_all/timed_baking_cancel/mesh_ten.rs"
 required-features = ["full"]
 
-################################### Basic examples
+################################### Examples
+
+######### Affine
 
 [[example]]
 name = "circuit_breaker"
@@ -2592,7 +2594,7 @@ name = "http"
 path = "examples/affine/http.rs"
 required-features = ["baking"]
 
-################################### Checking examples
+######### Checking
 
 [[example]]
 name = "video_stream"
@@ -2619,7 +2621,30 @@ name = "servo_8257_fixed"
 path = "examples/affine/servo_8257_fixed.rs"
 required-features = ["baking_checking"]
 
-################################### Timed examples
+######### Interleaved
+
+[[example]]
+name = "circuit_breaker_logging"
+path = "examples/interleaved/circuit_breaker_logging.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "circuit_breaker_solo"
+path = "examples/interleaved/circuit_breaker_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "logging_solo"
+path = "examples/interleaved/logging_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "sleeping_barber"
+path = "examples/interleaved/sleeping_barber.rs"
+required-features = ["interleaved"]
+
+
+######### Timed
 
 [[example]]
 name = "servo_timed"
@@ -3272,10 +3297,10 @@ protoc-bin-vendored = "3.0"
 ################################### Dev-dependencies for tests/benches
 
 [dev-dependencies]
-criterion = { version = "0.5.1", features = ["html_reports"] }
-trybuild = "1.0.63"
-ntest = "0.9.0"
-rand = "0.8.5"
+criterion = { version = "0.5", features = ["html_reports"] }
+trybuild = "1.0"
+ntest = "0.9"
+rand = "0.8"
 
 ################################### Features
 
@@ -3290,7 +3315,7 @@ message = []
 binary_timed = []
 macros_simple = ["default"]
 macros_multiple = ["default", "macros_simple"]
-interleaved = ["default"] # For interleaved sessions
+interleaved = ["baking"] # For interleaved sessions
 checking = ["default", "regex", "petgraph"]
 baking = ["default", "macros_multiple"]
 baking_timed = ["binary_timed"]

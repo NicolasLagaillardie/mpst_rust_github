@@ -11,30 +11,14 @@ date
 
 # Create folders if they do not exist
 mkdir -p save/
-mkdir -p save/criterion/
+mkdir -p save/
 
-# Run the full mesh benchmarks
+# Run all mesh benchmarks
 echo "Mesh full bench"
 date
-cargo bench --bench="mesh_full" --features="full" -- --verbose
-mkdir -p save/criterion/mesh/
-mv -f target/criterion/ save/criterion/mesh/
-cargo clean
-
-# Run the full ring benchmarks
-echo "Ring full bench"
-date
-cargo bench --bench="ring_full" --features="full" -- --verbose
-mkdir -p save/criterion/ring/
-mv -f target/criterion/ save/criterion/ring/
-cargo clean
-
-# Run the baking benchmarks
-echo "Examples full bench"
-date
-cargo bench --bench="examples_full" --features="full" -- --verbose
-mkdir -p save/criterion/examples/
-mv -f target/criterion/ save/criterion/examples/
+cargo bench --bench=benches --all-features -- --verbose
+mkdir -p save/criterion/
+mv -f target/criterion/ save/
 cargo clean
 
 ## Concatenate all results in the results/ping_pong_mesh_ring.csv file

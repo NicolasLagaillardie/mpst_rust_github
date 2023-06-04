@@ -1,6 +1,6 @@
-use mpstthree::binary::struct_trait::end::*;
-use mpstthree::binary::struct_trait::recv::*;
-use mpstthree::binary::struct_trait::send::*;
+use mpstthree::binary::struct_trait::end::End;
+use mpstthree::binary::struct_trait::recv::Recv;
+use mpstthree::binary::struct_trait::send::Send;
 
 use std::marker;
 

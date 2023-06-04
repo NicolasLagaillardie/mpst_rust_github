@@ -3,9 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    baker, fork_mpst_multi_interleaved, offer_mpst,
-};
+use mpstthree::{baker, fork_mpst_multi_interleaved, offer_mpst};
 
 use rand::{random, thread_rng, Rng};
 
@@ -15,7 +13,14 @@ use std::marker;
 // CB = circuit breaker
 
 // Create new MeshedChannels for four participants
-baker!("interleaved", MeshedChannelsFour, Api, ControllerCB, Storage, User);
+baker!(
+    "interleaved",
+    MeshedChannelsFour,
+    Api,
+    ControllerCB,
+    Storage,
+    User
+);
 
 // Create new MeshedChannels for two participants
 baker!("interleaved", MeshedChannelsTwo, ControllerLog, Logs);
@@ -121,11 +126,7 @@ enum Branching0fromLtoC<N: marker::Send> {
         >,
     ),
     Failure(
-        MeshedChannelsTwo<
-            Recv<N, Choose1fromCtoL<N>>,
-            RoleLogs<RoleBroadcast>,
-            NameControllerLog,
-        >,
+        MeshedChannelsTwo<Recv<N, Choose1fromCtoL<N>>, RoleLogs<RoleBroadcast>, NameControllerLog>,
     ),
 }
 
@@ -138,11 +139,7 @@ type Choose0fromLtoC<N> = Send<Branching0fromLtoC<N>, End>;
 
 enum Branching1fromCtoL<N: marker::Send> {
     Restart(
-        MeshedChannelsTwo<
-            Recv<N, Choose0fromLtoC<N>>,
-            RoleControllerLog<RoleBroadcast>,
-            NameLogs,
-        >,
+        MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleControllerLog<RoleBroadcast>, NameLogs>,
     ),
     Stop(MeshedChannelsTwo<Recv<N, End>, RoleControllerLog<RoleEnd>, NameLogs>),
 }
@@ -204,20 +201,14 @@ type EndpointCBControllerInit<N> = MeshedChannelsFour<
 >;
 type EndpointLogController1Stop<N> =
     MeshedChannelsTwo<Send<N, End>, RoleLogs<RoleEnd>, NameControllerLog>;
-type EndpointLogController1Restart<N> = MeshedChannelsTwo<
-    Send<N, Recurs0fromCtoL<N>>,
-    RoleLogs<RoleLogs<RoleEnd>>,
-    NameControllerLog,
->;
+type EndpointLogController1Restart<N> =
+    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameControllerLog>;
 type EndpointLogController0<N> =
     MeshedChannelsTwo<Recurs0fromCtoL<N>, RoleLogs<RoleEnd>, NameControllerLog>;
 type EndpointLogController1<N> =
     MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameControllerLog>;
-type EndpointLogControllerInit<N> = MeshedChannelsTwo<
-    Send<N, Recurs0fromCtoL<N>>,
-    RoleLogs<RoleLogs<RoleEnd>>,
-    NameControllerLog,
->;
+type EndpointLogControllerInit<N> =
+    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameControllerLog>;
 
 // RoleStorage
 type EndpointStorage0<N> =
@@ -248,8 +239,7 @@ type EndpointLogs0Failure<N> = MeshedChannelsTwo<
     NameLogs,
 >;
 type EndpointLogs0<N> = MeshedChannelsTwo<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
-type EndpointLogs1<N> =
-    MeshedChannelsTwo<Recurs1fromLtoC<N>, RoleControllerLog<RoleEnd>, NameLogs>;
+type EndpointLogs1<N> = MeshedChannelsTwo<Recurs1fromLtoC<N>, RoleControllerLog<RoleEnd>, NameLogs>;
 type EndpointLogsInit<N> =
     MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, RoleControllerLog<RoleBroadcast>, NameLogs>;
 
@@ -302,12 +292,12 @@ fn endpoint_controller(
     s_circuit_breaker: EndpointCBControllerInit<i32>,
     s_logging: EndpointLogControllerInit<i32>,
 ) -> Result<(), Box<dyn Error>> {
-    let start_circuit_breaker:i32 : i32 = thread_rng().gen_range(50..100);
+    let start_circuit_breaker: i32 = thread_rng().gen_range(50..100);
     let s_circuit_breaker = s_circuit_breaker.send(start_circuit_breaker)?;
     let s_circuit_breaker = s_circuit_breaker.send(start_circuit_breaker)?;
     let (_hard_ping, s_circuit_breaker) = s_circuit_breaker.recv()?;
 
-    let start_logging:i32 : i32 = thread_rng().gen_range(50..100);
+    let start_logging: i32 = thread_rng().gen_range(50..100);
     let s_logging = s_logging.send(start_logging)?;
 
     recurs_controller(

@@ -1,0 +1,37 @@
+error[E0275]: overflow evaluating the requirement `Send<i32, Send<i32, Recv<Test4, End>>>: std::marker::Send`
+  --> tests/infinite_type/overflow_evaluation_double_trouble.rs:70:12
+   |
+70 |     Branch(Send<i32, Send<i32, Recv<Test4, End>>>),
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: required because it appears within the type `Test4`
+  --> tests/infinite_type/overflow_evaluation_double_trouble.rs:68:6
+   |
+68 | enum Test4 {
+   |      ^^^^^
+note: required for `Recv<Test4, End>` to implement `Session`
+  --> tests/infinite_type/overflow_evaluation_double_trouble.rs:43:35
+   |
+43 | impl<T: marker::Send, S: Session> Session for Recv<T, S> {
+   |         ------------              ^^^^^^^     ^^^^^^^^^^
+   |         |
+   |         unsatisfied trait bound introduced here
+
+error[E0275]: overflow evaluating the requirement `Send<i32, Recv<i32, Recv<Test6, End>>>: std::marker::Send`
+  --> tests/infinite_type/overflow_evaluation_double_trouble.rs:78:12
+   |
+78 |     Branch(Send<i32, Recv<i32, Recv<Test6, End>>>),
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: required because it appears within the type `Test6`
+  --> tests/infinite_type/overflow_evaluation_double_trouble.rs:76:6
+   |
+76 | enum Test6 {
+   |      ^^^^^
+note: required for `Recv<Test6, End>` to implement `Session`
+  --> tests/infinite_type/overflow_evaluation_double_trouble.rs:43:35
+   |
+43 | impl<T: marker::Send, S: Session> Session for Recv<T, S> {
+   |         ------------              ^^^^^^^     ^^^^^^^^^^
+   |         |
+   |         unsatisfied trait bound introduced here
