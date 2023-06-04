@@ -231,7 +231,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "mesh_two_baking_mpst"
 path = "examples/mesh/mesh_two_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_two_binary"
@@ -251,7 +251,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "mesh_three_baking_mpst"
 path = "examples/mesh/mesh_three_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_three_binary"
@@ -271,7 +271,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "mesh_four_baking_mpst"
 path = "examples/mesh/mesh_four_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_four_binary"
@@ -291,7 +291,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "mesh_five_baking_mpst"
 path = "examples/mesh/mesh_five_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "mesh_five_binary"
@@ -313,7 +313,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "ring_two_baking_mpst"
 path = "examples/ring/ring_two_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "ring_two_binary"
@@ -333,7 +333,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "ring_three_baking_mpst"
 path = "examples/ring/ring_three_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "ring_three_binary"
@@ -353,7 +353,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "ring_four_baking_mpst"
 path = "examples/ring/ring_four_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "ring_four_binary"
@@ -373,7 +373,7 @@ required-features = ["macros_multiple"]
 [[example]]
 name = "ring_five_baking_mpst"
 path = "examples/ring/ring_five_baking_mpst.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "ring_five_binary"

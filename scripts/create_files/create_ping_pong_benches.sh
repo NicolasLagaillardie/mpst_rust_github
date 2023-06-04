@@ -40,9 +40,6 @@ cat benches/ping_pong_all_save/ping_pong_cancel_1.rs > benches/ping_pong_all/pin
 cat benches/ping_pong_all_save/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs
 cat benches/ping_pong_all_save/ping_pong_mod_1.rs > benches/ping_pong_mod_1.rs
 
-# # Remove the last bracket in ping_pong.rs
-# sed -ier 's,}//,,g' benches/ping_pong.rs;
-
 echo "Step 1/2"
 
 # Copy ping_pong benches i and create ping_pong benches i+1
