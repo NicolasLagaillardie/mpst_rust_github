@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 cargo clean
 rustup update
 cargo install-update -a
