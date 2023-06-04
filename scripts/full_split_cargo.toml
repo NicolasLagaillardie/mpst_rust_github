@@ -136,13 +136,6 @@ required-features = []
 ################## Ping-Pong
 
 ######### Ping-Pong start
-
-[[bench]]
-name = "ping_pong_1"
-harness = false
-path = "benches/ping_pong_mod_1.rs"
-required-features = ["full"]
-
 ######### Ping-Pong end
 
 ################## Examples
