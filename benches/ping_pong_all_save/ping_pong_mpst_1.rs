@@ -1,24 +1,17 @@
 #![allow(clippy::type_complexity)]
 
-use crossbeam_channel::bounded;
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use criterion::{black_box, criterion_group, criterion_main,Criterion};
-
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_name,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name,
     create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
-    offer, offer_mpst,
+    offer_mpst,
 };
 
 use std::error::Error;
-use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 

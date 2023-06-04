@@ -78,12 +78,13 @@ echo "Step 2/2"
 echo ''
 
 # Modify Cargo.toml
-for i in $(eval echo {1..$1})
+for i in $(eval echo {0..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    echo -ne "Loop created: $i\n"
     #########################
     next=$(($i+1))
+    #########################
+    echo -ne "Loop created: $next\n"
     ######################### Crossbeam
     sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_crossbeam_"$next"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_crossbeam_"$next".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
     ######################### Binary
