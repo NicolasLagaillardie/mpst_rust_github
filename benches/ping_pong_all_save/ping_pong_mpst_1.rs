@@ -1,22 +1,29 @@
 #![allow(clippy::type_complexity)]
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use crossbeam_channel::bounded;
 
+use criterion::{black_box, criterion_group, criterion_main,Criterion};
+
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi_cancel, choose_mpst_multi_to_all, create_multiple_normal_name,
-    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_cancel_bundle,
-    offer_mpst,
+    bundle_struct_fork_close_multi, choose, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer, offer_mpst,
 };
 
 use std::error::Error;
+use std::thread::{spawn, JoinHandle};
 
 // use std::time::Duration;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi_cancel!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
 
 // Create new roles
 // normal
@@ -30,13 +37,13 @@ create_multiple_normal_name!(NameA, NameB);
 
 // Create new send functions
 // A
-create_send_mpst_cancel_bundle!(
+create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
     NameA, MeshedChannelsTwo, 2
 );
 
 // B
-create_send_mpst_cancel_bundle!(
+create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
     NameB, MeshedChannelsTwo, 2
 );
@@ -96,7 +103,7 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
                 1
             );
 
-            let s = send_mpst_a_to_b((), s)?;
+            let s = send_mpst_a_to_b((), s);
             let ((), s) = recv_mpst_a_from_b(s)?;
 
             recurs_a(s, i - 1)
@@ -111,7 +118,7 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromAtoB::More(s) => {
             let ((), s) = recv_mpst_b_from_a(s)?;
-            let s = send_mpst_b_to_a((), s)?;
+            let s = send_mpst_b_to_a((), s);
             recurs_b(s)
         },
     })
@@ -128,8 +135,8 @@ fn all_mpst() {
 
 static LOOPS: i64 = 1;
 
-pub fn ping_pong_protocol_mpst_cancel(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong cancel protocol MPST {LOOPS}"), |b| {
+pub fn ping_pong_protocol_mpst(c: &mut Criterion) {
+    c.bench_function(&format!("ping pong protocol MPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
 }
@@ -139,7 +146,7 @@ pub fn ping_pong_protocol_mpst_cancel(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.1).sample_size(1000);
-    targets = ping_pong_protocol_mpst_cancel
+    targets = ping_pong_protocol_mpst
 }
 
 criterion_main! {

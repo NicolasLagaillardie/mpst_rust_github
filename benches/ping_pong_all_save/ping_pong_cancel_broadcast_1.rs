@@ -1,4 +1,6 @@
-use criterion::{black_box, Criterion};
+#![allow(clippy::type_complexity)]
+
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -13,30 +15,6 @@ use mpstthree::{
 use std::error::Error;
 
 // use std::time::Duration;
-
-// global protocol ping_pong(role A, role B)
-// {
-//     rec PP
-//     {
-//         choice at A
-//         {
-//             ping(()) from A to B;
-
-//             pong(()) from B to A;
-
-//             continue PP;
-
-//         }
-
-//         or
-//         {
-//             stop() from A to B;
-
-//         }
-
-//     }
-
-// }
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
@@ -175,9 +153,21 @@ fn all_mpst() {
 
 static LOOPS: i64 = 1;
 
-pub fn ping_pong_protocol_mpst(c: &mut Criterion) {
+pub fn ping_pong_protocol_mpst_cancel_broadcast(c: &mut Criterion) {
     c.bench_function(
         &format!("ping pong cancel broadcast protocol MPST {LOOPS}"),
         |b| b.iter(all_mpst),
     );
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(1000);
+    targets = ping_pong_protocol_mpst_cancel_broadcast
+}
+
+criterion_main! {
+    bench
 }

@@ -1,4 +1,6 @@
-use criterion::{black_box, Criterion};
+#![allow(clippy::type_complexity)]
+
+use criterion::{black_box, criterion_group, criterion_main,Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::baker;
@@ -8,30 +10,6 @@ use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
 // use std::time::Duration;
-
-// global protocol ping_pong(role A, role B)
-// {
-//     rec PP
-//     {
-//         choice at A
-//         {
-//             ping(()) from A to B;
-
-//             pong(()) from B to A;
-
-//             continue PP;
-
-//         }
-
-//         or
-//         {
-//             stop() from A to B;
-
-//         }
-
-//     }
-
-// }
 
 // Create new roles
 baker!("recursive", MeshedChannelsTwo, A, B);
@@ -98,8 +76,20 @@ fn all_mpst() {
 
 static LOOPS: i64 = 1;
 
-pub fn ping_pong_protocol_mpst(c: &mut Criterion) {
+pub fn ping_pong_protocol_baking_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ping pong baking protocol MPST {LOOPS}"), |b| {
         b.iter(all_mpst)
     });
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.1).sample_size(1000);
+    targets = ping_pong_protocol_baking_mpst
+}
+
+criterion_main! {
+    bench
 }
