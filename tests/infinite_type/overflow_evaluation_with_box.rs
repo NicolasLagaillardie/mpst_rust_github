@@ -45,56 +45,56 @@ impl Session for End {
 
 // enum
 enum Test0 {
-    End(End),
-    Branch(Recv<Test0, End>),
+    End(Box<End>),
+    Branch(Box<Recv<Test0, End>>),
 }
 enum Test1 {
-    End(End),
-    Branch(Recv<i32, Recv<Test1, End>>),
+    End(Box<End>),
+    Branch(Box<Recv<i32, Recv<Test1, End>>>),
 }
 enum Test2 {
-    End(End),
-    Branch(Recv<i32, Send<Test2, End>>),
+    End(Box<End>),
+    Branch(Box<Recv<i32, Send<Test2, End>>>),
 }
 enum Test3 {
-    End(End),
-    Branch(Send<i32, Recv<Test3, End>>),
+    End(Box<End>),
+    Branch(Box<Send<i32, Recv<Test3, End>>>),
 }
 enum Test4 {
-    End(End),
-    Branch(Send<i32, Send<Test4, End>>),
+    End(Box<End>),
+    Branch(Box<Send<i32, Send<Test4, End>>>),
 }
 enum Test5 {
-    End(End),
-    Branch(Recv<i32, Recv<i32, Recv<Test5, End>>>),
+    End(Box<End>),
+    Branch(Box<Recv<i32, Recv<i32, Recv<Test5, End>>>>),
 }
 enum Test6 {
-    End(End),
-    Branch(Recv<i32, Recv<i32, Send<Test6, End>>>),
+    End(Box<End>),
+    Branch(Box<Recv<i32, Recv<i32, Send<Test6, End>>>>),
 }
 enum Test7 {
-    End(End),
-    Branch(Recv<i32, Send<i32, Recv<Test7, End>>>),
+    End(Box<End>),
+    Branch(Box<Recv<i32, Send<i32, Recv<Test7, End>>>>),
 }
 enum Test8 {
-    End(End),
-    Branch(Recv<i32, Send<i32, Send<Test8, End>>>),
+    End(Box<End>),
+    Branch(Box<Recv<i32, Send<i32, Send<Test8, End>>>>),
 }
 enum Test9 {
-    End(End),
-    Branch(Send<i32, Recv<i32, Recv<Test9, End>>>),
+    End(Box<End>),
+    Branch(Box<Send<i32, Recv<i32, Recv<Test9, End>>>>),
 }
 enum Test10 {
-    End(End),
-    Branch(Send<i32, Recv<i32, Send<Test10, End>>>),
+    End(Box<End>),
+    Branch(Box<Send<i32, Recv<i32, Send<Test10, End>>>>),
 }
 enum Test11 {
-    End(End),
-    Branch(Send<i32, Send<i32, Recv<Test11, End>>>),
+    End(Box<End>),
+    Branch(Box<Send<i32, Send<i32, Recv<Test11, End>>>>),
 }
 enum Test12 {
-    End(End),
-    Branch(Send<i32, Send<i32, Send<Test12, End>>>),
+    End(Box<End>),
+    Branch(Box<Send<i32, Send<i32, Send<Test12, End>>>>),
 }
 
 fn main() {}

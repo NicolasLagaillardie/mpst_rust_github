@@ -58,7 +58,7 @@ cg_diff.txt
 
 # Expand
 /expand
-test.rs
+examples/test.rs
 
 # WIP
 /wip
