@@ -38,6 +38,7 @@ cat benches/ping_pong_all_save/ping_pong_binary_1.rs > benches/ping_pong_all/pin
 cat benches/ping_pong_all_save/ping_pong_mpst_1.rs > benches/ping_pong_all/ping_pong_mpst_1.rs
 cat benches/ping_pong_all_save/ping_pong_baking_mpst_1.rs > benches/ping_pong_all/ping_pong_baking_mpst_1.rs
 cat benches/ping_pong_all_save/ping_pong_baking_ampst_1.rs > benches/ping_pong_all/ping_pong_baking_ampst_1.rs
+cat benches/ping_pong_all_save/ping_pong_baking_timed_1.rs > benches/ping_pong_all/ping_pong_baking_timed_1.rs
 cat benches/ping_pong_all_save/ping_pong_cancel_1.rs > benches/ping_pong_all/ping_pong_cancel_1.rs
 cat benches/ping_pong_all_save/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs
 
@@ -65,6 +66,9 @@ do
     ######################### Baking AMPST
     cat benches/ping_pong_all/ping_pong_baking_ampst_$i.rs > benches/ping_pong_all/ping_pong_baking_ampst_$next.rs
     sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_baking_ampst_$next.rs
+    ######################### Baking AMPST
+    cat benches/ping_pong_all/ping_pong_baking_timed_$i.rs > benches/ping_pong_all/ping_pong_baking_timed_$next.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_baking_timed_$next.rs
     ######################### Cancel
     cat benches/ping_pong_all/ping_pong_cancel_$i.rs > benches/ping_pong_all/ping_pong_cancel_$next.rs
     sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_cancel_$next.rs
@@ -95,6 +99,8 @@ do
     sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_mpst_"$next"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_mpst_"$next".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
     ######################### Baking AMPST
     sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_ampst_"$next"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_ampst_"$next".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
+    ######################### Baking AMPST
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed_"$next"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_timed_"$next".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
     ######################### Cancel
     sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_cancel_"$next"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_cancel_"$next".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
     ######################### Cancel Broadcast
