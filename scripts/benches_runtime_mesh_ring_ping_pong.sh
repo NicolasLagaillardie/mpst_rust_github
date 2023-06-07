@@ -19,6 +19,7 @@ mkdir -p save/mesh/
 cargo bench --bench="mesh_*" --all-features -- --verbose
 find . -name "*.svg" -delete
 mv -f target/criterion/* save/mesh/
+echo "Mesh full bench weight"
 du -s -m
 cargo clean
 
@@ -29,6 +30,7 @@ mkdir -p save/ring/
 cargo bench --bench="ring_*" --all-features -- --verbose
 find . -name "*.svg" -delete
 mv -f target/criterion/* save/ring/
+echo "Ring full bench weight"
 du -s -m
 cargo clean
 
@@ -39,6 +41,7 @@ mkdir -p save/ping_pong/
 cargo bench --bench="ping_pong_*" --all-features -- --verbose
 find . -name "*.svg" -delete
 mv -f target/criterion/* save/ping_pong/
+echo "Ping-pong full bench weight"
 du -s -m
 cargo clean
 

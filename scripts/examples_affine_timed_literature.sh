@@ -63,6 +63,7 @@ cargo bench --bench="examples_*" --all-features -- --verbose
 mkdir -p save/examples/
 find . -name "*.svg" -delete
 mv -f target/criterion/* save/examples/
+echo "Examples full bench weight"
 du -s -m
 cargo clean
 
