@@ -3270,12 +3270,12 @@ name = "ring_ten_baking_timed"
 path = "examples/ring/ring_ten_baking_timed.rs"
 required-features = ["baking_timed"]
 
-################################### Example Test
+# ################################### Example Test
 
-[[example]]
-name = "test"
-path = "examples/test.rs"
-required-features = ["full"]
+# [[example]]
+# name = "test"
+# path = "examples/test.rs"
+# required-features = ["full"]
 
 ################################### Profil
 
