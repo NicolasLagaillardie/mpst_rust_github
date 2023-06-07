@@ -131,13 +131,6 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
-# ################################### Example
-
-[[example]]
-name = "sleeping_barber"
-path = "examples/interleaved/sleeping_barber.rs"
-required-features = ["interleaved"]
-
 ################################### Profil
 
 [profile.release]

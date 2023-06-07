@@ -30,6 +30,7 @@ fork_mpst_multi_interleaved!(
 
 // Number of seats
 static SEATS: usize = 3;
+static LOOPS: usize = 100;
 
 // Struct for labels
 struct Full;
@@ -369,9 +370,7 @@ fn endpoint_shop(
     s_shop_barber: EndpointShopBarber0,
     s_shop_client: EndpointShopClient0,
 ) -> Result<(), Box<dyn Error>> {
-    let loops: usize = thread_rng().gen_range(50..100);
-
-    recurs_0_shop(s_shop_barber, s_shop_client, loops, 0)
+    recurs_0_shop(s_shop_barber, s_shop_client, LOOPS, 0)
 }
 
 fn recurs_0_shop(
