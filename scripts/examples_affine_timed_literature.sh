@@ -59,7 +59,7 @@ bash ./scripts/create_files/compile_normal.sh non_feasible 10 baking_timed
 ## Run benchmarks
 cargo clean
 echo "Examples full bench"
-cargo bench --bench="examples_*" --all-features -- --verbose
+cargo bench --bench="example_*" --all-features -- --verbose
 mkdir -p save/examples/
 find . -name "*.svg" -delete
 mv -f target/criterion/* save/examples/
