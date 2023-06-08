@@ -17,7 +17,7 @@ then
 fi
 
 # Create folder if not present
-mkdird -p benches/ping_pong_all/
+mkdir -p benches/ping_pong_all/
 
 # Delete previous ping-pong benches
 rm -rf benches/ping_pong_all/*.rs
