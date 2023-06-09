@@ -19,10 +19,10 @@ pub mod offer;
 #[doc(hidden)]
 macro_rules! bundle_struct_fork_close_multi_interleaved {
     (
-        $func_name_close:ident,
-        $func_name_fork:ident,
-        $meshedchannels_name:ident,
-        $n_sessions:literal
+        $func_name_close: ident,
+        $func_name_fork: ident,
+        $meshedchannels_name: ident,
+        $n_sessions: literal
     ) => {
         mpstthree::create_meshedchannels!($meshedchannels_name, $n_sessions);
         mpstthree::close_mpst_interleaved!($func_name_close, $meshedchannels_name, $n_sessions);

@@ -75,22 +75,25 @@
 ///
 /// ## Interleaved
 ///
-/// Also create the macros needed for choosing branches.
-/// Each macro is linked to a role X and are called as followed:
-///     choose_mpst_x_to_all!(
-///         s, # the current session
-///         enum_1::variant_1, # the first branch for the first passive role
-///         enum_2::variant_2, # the first branch for the second passive role
-///         ...
-///         enum_n::variant_n, # the first branch for the n-th passive role
-///     ).
-/// This macro does NOT create the related `fork_mpst` function
-/// to avoid conflicts for interleaved functions.
+/// Also create the macros needed for interleaved sessions
+/// (sessions where one participant is involved in two different
+/// protocols)
 ///
 /// ```
 /// use mpstthree::baker;
 ///
-/// baker!("interleaved", MeshedChannelsThree, A, B, C);
+/// baker!(
+///     "interleaved",
+///     MeshedChannelsBarber,
+///     Barber,
+///     ShopBarber,
+///     2,
+///     MeshedChannelsClient,
+///     Client,
+///     ShopClient,
+///     2,
+///     fork_mpst
+/// );
 /// ```
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
@@ -98,7 +101,7 @@ macro_rules! baker {
     (
         "basic",
         $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
+        $( $all_roles: ident ),+ $(,)?
     ) => {
         mpst_seq::baking!(
             $meshedchannels_name ,
@@ -108,7 +111,7 @@ macro_rules! baker {
     (
         "recursive",
         $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
+        $( $all_roles: ident ),+ $(,)?
     ) => {
         mpst_seq::baking_with_enum!(
             $meshedchannels_name ,
@@ -118,7 +121,7 @@ macro_rules! baker {
     (
         "cancel",
         $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
+        $( $all_roles: ident ),+ $(,)?
     ) => {
         mpst_seq::baking_with_cancel!(
             $meshedchannels_name ,
@@ -128,7 +131,7 @@ macro_rules! baker {
     (
         "rec_and_cancel",
         $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
+        $( $all_roles: ident ),+ $(,)?
     ) => {
         mpst_seq::baking_with_enum_and_cancel!(
             $meshedchannels_name ,
@@ -137,12 +140,22 @@ macro_rules! baker {
     };
     (
         "interleaved",
-        $meshedchannels_name: ident,
-        $( $all_roles: ident),+ $(,)?
+        $meshedchannels_name_one: ident,
+        $( $all_roles_one: ident , )+
+        $index_tuple_one: literal,
+        $meshedchannels_name_two: ident,
+        $( $all_roles_two: ident , )+
+        $index_tuple_two: literal,
+        $func_name: ident
     ) => {
         mpst_seq::baking_interleaved_with_enum_and_cancel!(
-            $meshedchannels_name ,
-            $( $all_roles , )+
+            $meshedchannels_name_one ,
+            ( $( ( $all_roles_one ) )+ ) ,
+            $index_tuple_one ,
+            $meshedchannels_name_two ,
+            ( $( ( $all_roles_two ) )+ ) ,
+            $index_tuple_two ,
+            $func_name
         );
     };
 }

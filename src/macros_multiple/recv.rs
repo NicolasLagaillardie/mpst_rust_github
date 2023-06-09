@@ -42,12 +42,12 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session {
     (
-        $func_name:ident,
-        $sender:ident,
-        $receiver:ident,
-        $meshedchannels_name:ident,
-        $n_sessions:literal,
-        $exclusion:literal
+        $func_name: ident,
+        $sender: ident,
+        $receiver: ident,
+        $meshedchannels_name: ident,
+        $n_sessions: literal,
+        $exclusion: literal
     ) => {
         mpst_seq::create_recv_mpst_session!(
             $func_name,

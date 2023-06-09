@@ -132,9 +132,9 @@ macro_rules! choose_aux {
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
-        $receiver_1:ident,
-        $receiver_2:ident,
-        $sender:ident,
+        $receiver_1: ident,
+        $receiver_2: ident,
+        $sender: ident,
         $session:expr,
         $pat:path
     ) => {{

@@ -12,9 +12,7 @@ cargo check --example=$1 --features="$3" || command_failed=1
 
 END=$2
 
-# if [ ${command_failed:-0} -ne 1 ]
-# then
-# Loop
+# Loop check
 for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build
@@ -29,7 +27,7 @@ do
     printf "check; $tt\n" >> compile_time/$1.txt
 done
 
-# Loop
+# Loop build
 for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build
@@ -44,7 +42,7 @@ do
     printf "build; $tt\n" >> compile_time/$1.txt
 done
 
-# Loop
+# Loop build --release
 for (( i=1; i<=$END; i++ ))
 do
     # Remove previous build

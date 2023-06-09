@@ -69,7 +69,7 @@ where
 #[macro_export]
 #[doc(hidden)]
 macro_rules! fork_mpst_multi_solo {
-    ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
+    ($func_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
         mpst_seq::fork_mpst_multi_solo!($func_name, $meshedchannels_name, $n_sessions);
     };
 }
@@ -79,13 +79,13 @@ macro_rules! fork_mpst_multi_solo {
 // Indexes start at one
 macro_rules! fork_mpst_multi_interleaved {
     (
-        $func_name:ident,
-        $meshedchannels_name_one:ident,
-        $nsessions_one:literal,
-        $index_tuple_one:literal,
-        $meshedchannels_name_two:ident,
-        $nsessions_two:literal,
-        $index_tuple_two:literal
+        $func_name: ident,
+        $meshedchannels_name_one: ident,
+        $nsessions_one: literal,
+        $index_tuple_one: literal,
+        $meshedchannels_name_two: ident,
+        $nsessions_two: literal,
+        $index_tuple_two: literal
     ) => {
         mpst_seq::fork_mpst_multi_interleaved!(
             $func_name,

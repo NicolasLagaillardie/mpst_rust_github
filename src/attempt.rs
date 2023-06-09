@@ -38,7 +38,7 @@
 /// ```
 #[macro_export]
 macro_rules! attempt { // `try` is a reserved keyword
-    (@recurse ($a:expr) { } catch ($e:ident) $b:block) => {
+    (@recurse ($a:expr) { } catch ($e: ident) $b:block) => {
        if let Err ($e) = $a $b
     };
     (@recurse ($a:expr) { $e:expr; $($tail:tt)* } $($handler:tt)*) => {

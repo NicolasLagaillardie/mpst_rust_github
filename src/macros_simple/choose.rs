@@ -16,9 +16,9 @@ macro_rules! create_choose_from_1_to_2_3 {
         $role_1:ty,
         $role_2:ty,
         $role_3:ty,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $name_sender:ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $name_sender: ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -80,9 +80,9 @@ macro_rules! create_choose_from_2_to_1_3 {
         $role_1:ty,
         $role_2:ty,
         $role_3:ty,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $name_sender:ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $name_sender: ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -144,9 +144,9 @@ macro_rules! create_choose_from_3_to_1_2 {
         $role_1:ty,
         $role_2:ty,
         $role_3:ty,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $name_sender:ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $name_sender: ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -252,11 +252,11 @@ macro_rules! create_choose_from_3_to_1_2 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     (
-        $func_name:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
@@ -357,11 +357,11 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     (
-        $func_name:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
@@ -462,11 +462,11 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     (
-        $func_name:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
@@ -567,11 +567,11 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     (
-        $func_name:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
@@ -672,11 +672,11 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     (
-        $func_name:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
@@ -777,11 +777,11 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     (
-        $func_name:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
@@ -886,12 +886,12 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
-        $func_name_right:ident,
-        $func_name_left:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name_right: ident,
+        $func_name_left: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         mpstthree::create_choose_right_from_2_to_1_and_3!(
             $func_name_right,
@@ -966,12 +966,12 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
-        $func_name_right:ident,
-        $func_name_left:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name_right: ident,
+        $func_name_left: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         mpstthree::create_choose_right_from_1_to_2_and_3!(
             $func_name_right,
@@ -1046,12 +1046,12 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
-        $func_name_right:ident,
-        $func_name_left:ident,
-        $name_receiver_1:ident,
-        $name_receiver_2:ident,
-        $role_broadcast:ident,
-        $name_sender:ident
+        $func_name_right: ident,
+        $func_name_left: ident,
+        $name_receiver_1: ident,
+        $name_receiver_2: ident,
+        $role_broadcast: ident,
+        $name_sender: ident
     ) => {
         mpstthree::create_choose_right_from_3_to_1_and_2!(
             $func_name_right,

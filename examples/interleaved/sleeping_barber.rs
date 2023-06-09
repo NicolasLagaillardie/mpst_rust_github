@@ -6,26 +6,23 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, fork_mpst_multi_interleaved, offer_mpst};
+use mpstthree::{baker, offer_mpst};
 
 use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
-// Create new MeshedChannels for four participants
-baker!("interleaved", MeshedChannelsBarber, Barber, ShopBarber);
-
-// Create new MeshedChannels for two participants
-baker!("interleaved", MeshedChannelsClient, Client, ShopClient);
-
-fork_mpst_multi_interleaved!(
-    fork_mpst,
+baker!(
+    "interleaved",
     MeshedChannelsBarber,
-    2,
+    Barber,
+    ShopBarber,
     2,
     MeshedChannelsClient,
+    Client,
+    ShopClient,
     2,
-    2
+    fork_mpst
 );
 
 // Number of seats

@@ -84,12 +84,12 @@ where
 )]
 macro_rules! create_recv_http_session {
     (
-        $func_name:ident,
-        $sender:ident,
-        $receiver:ident,
-        $meshedchannels_name:ident,
-        $n_sessions:literal,
-        $exclusion:literal
+        $func_name: ident,
+        $sender: ident,
+        $receiver: ident,
+        $meshedchannels_name: ident,
+        $n_sessions: literal,
+        $exclusion: literal
     ) => {
         mpst_seq::create_recv_http_session!(
             $func_name,

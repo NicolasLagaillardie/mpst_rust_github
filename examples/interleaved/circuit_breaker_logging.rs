@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, fork_mpst_multi_interleaved, offer_mpst};
+use mpstthree::{baker, offer_mpst};
 
 use rand::{random, thread_rng, Rng};
 
@@ -12,20 +12,20 @@ use std::marker;
 
 // CB = circuit breaker
 
-// Create new MeshedChannels for four participants
 baker!(
     "interleaved",
     MeshedChannelsFour,
     Api,
     ControllerCB,
     Storage,
-    User
+    User,
+    2,
+    MeshedChannelsTwo,
+    ControllerLog,
+    Logs,
+    1,
+    fork_mpst
 );
-
-// Create new MeshedChannels for two participants
-baker!("interleaved", MeshedChannelsTwo, ControllerLog, Logs);
-
-fork_mpst_multi_interleaved!(fork_mpst, MeshedChannelsFour, 4, 2, MeshedChannelsTwo, 2, 1);
 
 // RoleApi
 enum Branching0fromCtoA<N: marker::Send> {

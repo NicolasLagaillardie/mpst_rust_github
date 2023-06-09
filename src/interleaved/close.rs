@@ -61,7 +61,7 @@ where
 #[macro_export]
 #[doc(hidden)]
 macro_rules! close_mpst_interleaved {
-    ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
+    ($func_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
         mpst_seq::close_mpst_interleaved!($func_name, $meshedchannels_name, $n_sessions);
     };
 }
