@@ -50,7 +50,7 @@ impl ForkMPSTMulti {
 
         let roles = create_roles(1, self.n_sessions);
 
-        let roles_struct = create_role_structs(1, self.n_sessions);
+        let role_structs = create_role_structs(1, self.n_sessions);
 
         let new_roles = create_new_roles(1, self.n_sessions);
 
@@ -161,7 +161,7 @@ impl ForkMPSTMulti {
             )
             where
                 #(
-                    #roles_struct
+                    #role_structs
                 )*
                 #(
                     #names_struct

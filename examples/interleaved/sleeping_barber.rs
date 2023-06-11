@@ -1,5 +1,3 @@
-/////// CANNOT BE IMPLEMENTED: OVERFLOW EVALUATION!!!!11!111!!!
-
 #![allow(clippy::type_complexity)]
 #![recursion_limit = "256"]
 

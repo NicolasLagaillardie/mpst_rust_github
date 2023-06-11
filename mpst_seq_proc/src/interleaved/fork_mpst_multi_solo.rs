@@ -68,7 +68,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let roles_struct: Vec<TokenStream> = (1..=self.n_sessions)
+        let role_structs: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                 quote! {
@@ -225,7 +225,7 @@ impl ForkMPSTMultiSolo {
             ) -> Result<(), Box<dyn std::error::Error>>
             where
                 #(
-                    #roles_struct
+                    #role_structs
                 )*
                 #(
                     #names_struct

@@ -1,4 +1,4 @@
-//! Implementation for baker!("interleaved", ...)
+//! Implementation for baker!("timed_interleaved", ...)
 
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
@@ -6,6 +6,9 @@ use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
+use crate::common_functions::expand::aux_baking::{
+    create_role_structs, create_session_type_structs, create_session_types,
+};
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
@@ -14,7 +17,6 @@ use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::parenthesised::parenthesised_groups;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
-use crate::common_functions::expand::role::role;
 use crate::common_functions::expand::send::send_canceled;
 use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
@@ -113,27 +115,16 @@ impl BakingTimedInterleavedWithEnumAndCancel {
         let meshedchannels_struct_one =
             meshedchannels(&self.meshedchannels_name_one, self.number_roles_one);
 
+        let session_types_one = create_session_types(1, self.number_roles_one);
+
+        let session_types_struct_one = create_session_type_structs(1, self.number_roles_one);
+
+        let roles_struct_one = create_role_structs(&self.all_roles_one);
+
         let names_struct_one: Vec<TokenStream> = self
             .all_roles_one
             .iter()
             .map(|i| name(format!("{i}")))
-            .collect();
-
-        let session_types_one: Vec<Ident> = (1..self.number_roles_one)
-            .map(|i| Ident::new(&format!("S{i}"), Span::call_site()))
-            .collect();
-
-        let session_types_struct_one: Vec<TokenStream> = (1..self.number_roles_one)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
-
-        let roles_struct_one: Vec<TokenStream> = self
-            .all_roles_one
-            .iter()
-            .map(|i| role(format!("{i}")))
             .collect();
 
         let send_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
@@ -249,27 +240,16 @@ impl BakingTimedInterleavedWithEnumAndCancel {
         let meshedchannels_struct_two =
             meshedchannels(&self.meshedchannels_name_two, self.number_roles_two);
 
+        let session_types_two = create_session_types(1, self.number_roles_two);
+
+        let session_types_struct_two = create_session_type_structs(1, self.number_roles_two);
+
+        let roles_struct_two = create_role_structs(&self.all_roles_two);
+
         let names_struct_two: Vec<TokenStream> = self
             .all_roles_two
             .iter()
             .map(|i| name(format!("{i}")))
-            .collect();
-
-        let session_types_two: Vec<Ident> = (1..self.number_roles_two)
-            .map(|i| Ident::new(&format!("S{i}"), Span::call_site()))
-            .collect();
-
-        let session_types_struct_two: Vec<TokenStream> = (1..self.number_roles_two)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
-
-        let roles_struct_two: Vec<TokenStream> = self
-            .all_roles_two
-            .iter()
-            .map(|i| role(format!("{i}")))
             .collect();
 
         let send_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
@@ -430,7 +410,7 @@ impl BakingTimedInterleavedWithEnumAndCancel {
             })
             .collect();
 
-        let roles_struct: Vec<TokenStream> = (1..=sum_nsessions)
+        let role_structs: Vec<TokenStream> = (1..=sum_nsessions)
             .map(|i| {
                 let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                 quote! {
@@ -924,7 +904,7 @@ impl BakingTimedInterleavedWithEnumAndCancel {
             )
             where
                 #(
-                    #roles_struct
+                    #role_structs
                 )*
                 #(
                     #names_struct

@@ -65,7 +65,7 @@ impl BakingTimedWithEnumAndCancel {
 
         let session_types_struct = create_session_type_structs(1, self.number_roles);
 
-        let roles_struct: Vec<TokenStream> = self
+        let role_structs: Vec<TokenStream> = self
             .all_roles
             .iter()
             .map(|i| role_timed(format!("{i}")))
@@ -189,7 +189,7 @@ impl BakingTimedWithEnumAndCancel {
         quote! {
             #meshedchannels_struct
 
-            #( #roles_struct )*
+            #( #role_structs )*
 
             #( #names_struct )*
 
