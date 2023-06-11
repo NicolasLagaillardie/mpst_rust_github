@@ -5,7 +5,7 @@ use syn::Ident;
 use crate::common_functions::maths::{get_tuple_diag, get_tuple_matrix};
 
 /// Create sessions
-pub(crate) fn create_session(from: u64, to: u64) -> Vec<TokenStream> {
+pub(crate) fn create_sessions(from: u64, to: u64) -> Vec<TokenStream> {
     (from..=to)
         .map(|i| {
             let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());

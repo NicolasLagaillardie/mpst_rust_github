@@ -6,7 +6,7 @@ use syn::{Ident, Result};
 use crate::common_functions::expand::aux_fork::{
     create_function_details, create_functions, create_join_handle, create_name_structs,
     create_names, create_new_channels, create_new_meshedchannels, create_new_names,
-    create_new_roles, create_role_structs, create_roles, create_session, create_session_structs,
+    create_new_roles, create_role_structs, create_roles, create_session_structs, create_sessions,
 };
 use crate::common_functions::maths::{diag_and_matrix, diag_and_matrix_w_offset, get_tuple_matrix};
 use crate::common_functions::parsing::parse_stream_sessions;
@@ -43,7 +43,7 @@ impl ForkMPSTMulti {
         let (matrix, _diag) = diag_and_matrix(self.n_sessions);
         let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(self.n_sessions);
 
-        let sessions = create_session(1, (self.n_sessions - 1) * (self.n_sessions) / 2);
+        let sessions = create_sessions(1, (self.n_sessions - 1) * (self.n_sessions) / 2);
 
         let sessions_struct =
             create_session_structs(1, (self.n_sessions - 1) * (self.n_sessions) / 2);

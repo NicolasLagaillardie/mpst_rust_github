@@ -6,7 +6,7 @@ use syn::Ident;
 use crate::common_functions::expand::aux_fork::{
     create_function_details, create_functions, create_join_handle, create_name_structs,
     create_names, create_new_channels, create_new_meshedchannels, create_new_names,
-    create_new_roles, create_role_structs, create_roles, create_session, create_session_structs,
+    create_new_roles, create_role_structs, create_roles, create_session_structs, create_sessions,
 };
 use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
@@ -17,7 +17,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
     let (matrix, _diag) = diag_and_matrix(number_roles);
     let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(number_roles);
 
-    let sessions = create_session(1, (number_roles - 1) * (number_roles) / 2);
+    let sessions = create_sessions(1, (number_roles - 1) * (number_roles) / 2);
 
     let session_structs = create_session_structs(1, (number_roles - 1) * (number_roles) / 2);
 
@@ -172,7 +172,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
     let (matrix, _diag) = diag_and_matrix(number_roles);
     let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(number_roles);
 
-    let sessions = create_session(1, (number_roles - 1) * (number_roles) / 2);
+    let sessions = create_sessions(1, (number_roles - 1) * (number_roles) / 2);
 
     let session_structs = create_session_structs(1, (number_roles - 1) * (number_roles) / 2);
 
@@ -344,7 +344,7 @@ pub(crate) fn fork_interleaved_mpst(
 
     // Generate
     // S0, S1, S2, ...
-    let sessions = create_session(
+    let sessions = create_sessions(
         1,
         (number_roles_one - 1) * (number_roles_one) / 2
             + (number_roles_two - 1) * (number_roles_two) / 2,

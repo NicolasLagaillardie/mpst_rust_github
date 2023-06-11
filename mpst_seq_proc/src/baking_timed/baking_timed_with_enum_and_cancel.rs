@@ -1,11 +1,14 @@
 //! Implementation for baker_timed!(...)
 
-use proc_macro2::{Span, TokenStream};
+use proc_macro2::TokenStream;
 use quote::quote;
 use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
+use crate::common_functions::expand::aux_baking::{
+    create_session_type_structs, create_session_types,
+};
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{
     choose_timed, choose_timed_mpst_create_multi_to_all,
@@ -58,16 +61,9 @@ impl BakingTimedWithEnumAndCancel {
         // Get the meshedchannels structure
         let meshedchannels_struct = meshedchannels(&self.meshedchannels_name, self.number_roles);
 
-        let session_types: Vec<Ident> = (1..self.number_roles)
-            .map(|i| Ident::new(&format!("S{i}"), Span::call_site()))
-            .collect();
+        let session_types = create_session_types(1, self.number_roles);
 
-        let session_types_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
+        let session_types_struct = create_session_type_structs(1, self.number_roles);
 
         let roles_struct: Vec<TokenStream> = self
             .all_roles
