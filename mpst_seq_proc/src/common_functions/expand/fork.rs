@@ -795,7 +795,6 @@ pub(crate) fn fork_interleaved_mpst(
        }
 }
 
-
 /// Expand fork timed interleaved methods
 pub(crate) fn fork_timed_interleaved_mpst(
     func_name: &Ident,
@@ -900,7 +899,8 @@ pub(crate) fn fork_timed_interleaved_mpst(
                             )*
                             #temp_role ,
                             #temp_name
-                        >
+                        >,
+                        &mut std::collections::HashMap<char, std::time::Instant>,
                     ) -> Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
                     + 'static,
@@ -953,7 +953,8 @@ pub(crate) fn fork_timed_interleaved_mpst(
                             )*
                             #temp_role ,
                             #temp_name
-                        >
+                        >,
+                        &mut std::collections::HashMap<char, std::time::Instant>,
                     ) -> Result<(), Box<dyn std::error::Error>>
                     + std::marker::Send
                     + 'static,
@@ -980,8 +981,10 @@ pub(crate) fn fork_timed_interleaved_mpst(
 
         quote! {
             FInterleaved : FnOnce(
-                #temp_meshedchannels_name_one ,
-                #temp_meshedchannels_name_two ,
+                #temp_meshedchannels_name_one,
+                &mut std::collections::HashMap<char, std::time::Instant>,
+                #temp_meshedchannels_name_two,
+                &mut std::collections::HashMap<char, std::time::Instant>,
             ) -> Result<(), Box<dyn std::error::Error>>
             + std::marker::Send
             + 'static,
@@ -1148,7 +1151,10 @@ pub(crate) fn fork_timed_interleaved_mpst(
                     std::panic::set_hook(Box::new(|_info| {
                         // do nothing
                     }));
-                    match #temp_function(#temp_meshedchannels) {
+                    match #temp_function(
+                        #temp_meshedchannels,
+                        &mut std::collections::HashMap::<char, std::time::Instant>::new()
+                    ) {
                         Ok(()) => (),
                         Err(e) => panic!("{:?}", e),
                     }
@@ -1177,7 +1183,9 @@ pub(crate) fn fork_timed_interleaved_mpst(
                 }));
                 match f_interleaved(
                     #temp_meshedchannels_one,
-                    #temp_meshedchannels_two
+                    &mut std::collections::HashMap::<char, std::time::Instant>::new(),
+                    #temp_meshedchannels_two,
+                    &mut std::collections::HashMap::<char, std::time::Instant>::new(),
                 ) {
                     Ok(()) => (),
                     Err(e) => panic!("{:?}", e),
