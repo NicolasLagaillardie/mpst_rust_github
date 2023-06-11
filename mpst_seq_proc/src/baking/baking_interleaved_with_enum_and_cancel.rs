@@ -372,7 +372,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
             #choose_mpst_create_multi_to_all_one
 
-        // Create the second MeshedChannel structure and related methods and macros
+            // Create the second MeshedChannel structure and related methods and macros
             #meshedchannels_struct_two
 
             #( #roles_struct_two )*
@@ -395,6 +395,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
             #choose_mpst_create_multi_to_all_two
 
+            // Create the fork function
             #quote_fork_mpst
         }
     }
