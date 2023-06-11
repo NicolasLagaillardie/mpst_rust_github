@@ -8,7 +8,6 @@ use crate::common_functions::expand::session::{
     create_names, create_new_channels, create_new_meshedchannels, create_new_names,
     create_new_roles, create_role_structs, create_roles, create_session, create_session_structs,
 };
-
 use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
 };
@@ -663,21 +662,19 @@ pub(crate) fn fork_interleaved_mpst(
         .map(|i| {
             let offset = if i < index_tuple_one {
                 i
-            } else if i >= index_tuple_one
-                && i < number_roles_one - 1 + index_tuple_two
-            {
+            } else if i >= index_tuple_one && i < number_roles_one - 1 + index_tuple_two {
                 i + 1
             } else {
                 i + 2
             };
-            let temp_function =
-                Ident::new(&format!("f{i}"), Span::call_site());
-            let temp_meshedchannels = Ident::new(
-                &format!("meshedchannels_{offset}"),
-                Span::call_site(),
-            );
+            let temp_function = Ident::new(&format!("f{i}"), Span::call_site());
+            let temp_meshedchannels =
+                Ident::new(&format!("meshedchannels_{offset}"), Span::call_site());
             quote! {
-                std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(64 * 1024 * 1024).spawn(move || {
+                std::thread::Builder::new()
+                .name(String::from(stringify!(#temp_function)))
+                .stack_size(64 * 1024 * 1024)
+                .spawn(move || {
                     std::panic::set_hook(Box::new(|_info| {
                         // do nothing
                     }));
@@ -701,7 +698,10 @@ pub(crate) fn fork_interleaved_mpst(
         );
 
         quote! {
-            std::thread::Builder::new().name(String::from("Interleaved thread")).stack_size(64 * 1024 * 1024).spawn(move || {
+            std::thread::Builder::new()
+            .name(String::from("Interleaved thread"))
+            .stack_size(64 * 1024 * 1024)
+            .spawn(move || {
                 std::panic::set_hook(Box::new(|_info| {
                     // do nothing
                 }));
