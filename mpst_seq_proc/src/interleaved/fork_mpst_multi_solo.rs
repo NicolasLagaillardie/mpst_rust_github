@@ -96,7 +96,7 @@ impl ForkMPSTMultiSolo {
             })
             .collect();
 
-        let names_struct: Vec<TokenStream> = (1..=self.n_sessions)
+        let name_structs: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                 quote! {
@@ -228,7 +228,7 @@ impl ForkMPSTMultiSolo {
                     #role_structs
                 )*
                 #(
-                    #names_struct
+                    #name_structs
                 )*
                 #(
                     #sessions_struct

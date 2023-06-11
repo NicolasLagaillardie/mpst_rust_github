@@ -6,14 +6,13 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 use crate::common_functions::expand::aux_baking::{
-    create_role_structs, create_session_type_structs, create_session_types,
+    create_name_structs, create_role_structs, create_session_type_structs, create_session_types,
 };
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
-use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
 use crate::common_functions::expand::send::send_canceled;
@@ -57,11 +56,7 @@ impl BakingWithEnumAndCancel {
 
         let role_structs = create_role_structs(&self.all_roles);
 
-        let names_struct: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| name(format!("{i}")))
-            .collect();
+        let name_structs = create_name_structs(&self.all_roles);
 
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
@@ -175,7 +170,7 @@ impl BakingWithEnumAndCancel {
 
             #( #role_structs )*
 
-            #( #names_struct )*
+            #( #name_structs )*
 
             #( #send_methods )*
 

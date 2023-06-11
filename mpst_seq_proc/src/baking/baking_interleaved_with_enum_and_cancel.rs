@@ -7,14 +7,13 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 use crate::common_functions::expand::aux_baking::{
-    create_role_structs, create_session_type_structs, create_session_types,
+    create_name_structs, create_role_structs, create_session_type_structs, create_session_types,
 };
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_interleaved_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
-use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::parenthesised::parenthesised_groups;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
@@ -106,11 +105,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
         let roles_struct_one = create_role_structs(&self.all_roles_one);
 
-        let names_struct_one: Vec<TokenStream> = self
-            .all_roles_one
-            .iter()
-            .map(|i| name(format!("{i}")))
-            .collect();
+        let names_struct_one = create_name_structs(&self.all_roles_one);
 
         let send_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
             .map(|sender| {
@@ -231,11 +226,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
         let roles_struct_two = create_role_structs(&self.all_roles_two);
 
-        let names_struct_two: Vec<TokenStream> = self
-            .all_roles_two
-            .iter()
-            .map(|i| name(format!("{i}")))
-            .collect();
+        let names_struct_two = create_name_structs(&self.all_roles_two);
 
         let send_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
             .map(|sender| {

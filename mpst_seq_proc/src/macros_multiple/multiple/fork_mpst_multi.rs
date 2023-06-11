@@ -56,7 +56,7 @@ impl ForkMPSTMulti {
 
         let names = create_names(1, self.n_sessions);
 
-        let names_struct = create_name_structs(1, self.n_sessions);
+        let name_structs = create_name_structs(1, self.n_sessions);
 
         let new_names = create_new_names(1, self.n_sessions);
 
@@ -164,7 +164,7 @@ impl ForkMPSTMulti {
                     #role_structs
                 )*
                 #(
-                    #names_struct
+                    #name_structs
                 )*
                 #(
                     #sessions_struct

@@ -6,14 +6,13 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 use crate::common_functions::expand::aux_baking::{
-    create_role_structs, create_session_type_structs, create_session_types,
+    create_name_structs, create_role_structs, create_session_type_structs, create_session_types,
 };
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::choose;
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
-use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer;
 use crate::common_functions::expand::recv::{recv, recv_from_all};
 use crate::common_functions::expand::send::send_canceled;
@@ -49,12 +48,6 @@ impl BakingWithCancel {
         // Get the meshedchannels structure
         let meshedchannels_struct = meshedchannels(&self.meshedchannels_name, self.number_roles);
 
-        let names_struct: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| name(format!("{i}")))
-            .collect();
-
         let quote_fork_mpst = fork_mpst(&self.meshedchannels_name, self.number_roles);
 
         let session_types = create_session_types(1, self.number_roles);
@@ -62,6 +55,8 @@ impl BakingWithCancel {
         let session_types_struct = create_session_type_structs(1, self.number_roles);
 
         let role_structs = create_role_structs(&self.all_roles);
+
+        let name_structs = create_name_structs(&self.all_roles);
 
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
@@ -169,7 +164,7 @@ impl BakingWithCancel {
 
             #( #role_structs )*
 
-            #( #names_struct )*
+            #( #name_structs )*
 
             #( #send_methods )*
 

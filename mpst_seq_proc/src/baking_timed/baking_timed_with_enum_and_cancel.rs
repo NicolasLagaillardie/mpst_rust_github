@@ -7,7 +7,8 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 
 use crate::common_functions::expand::aux_baking::{
-    create_session_type_structs, create_session_types,
+    create_name_structs, create_session_type_structs, create_session_types,
+    create_timed_role_structs,
 };
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::{
@@ -16,11 +17,9 @@ use crate::common_functions::expand::choose::{
 use crate::common_functions::expand::close_timed::close_timed;
 use crate::common_functions::expand::fork::fork_timed_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
-use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer_timed;
 use crate::common_functions::expand::parenthesised::get_all_roles;
 use crate::common_functions::expand::recv::{recv_from_all_timed, recv_timed};
-use crate::common_functions::expand::role_timed::role_timed;
 use crate::common_functions::expand::send::send_timed_canceled;
 
 #[derive(Debug)]
@@ -65,17 +64,9 @@ impl BakingTimedWithEnumAndCancel {
 
         let session_types_struct = create_session_type_structs(1, self.number_roles);
 
-        let role_structs: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| role_timed(format!("{i}")))
-            .collect();
+        let role_structs = create_timed_role_structs(&self.all_roles);
 
-        let names_struct: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| name(format!("{i}")))
-            .collect();
+        let name_structs = create_name_structs(&self.all_roles);
 
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
@@ -191,7 +182,7 @@ impl BakingTimedWithEnumAndCancel {
 
             #( #role_structs )*
 
-            #( #names_struct )*
+            #( #name_structs )*
 
             #( #send_methods )*
 
