@@ -4,9 +4,10 @@ use std::convert::TryFrom;
 use syn::Ident;
 
 use crate::common_functions::expand::aux_fork::{
-    create_function_details, create_functions, create_join_handle, create_name_structs,
-    create_names, create_new_channels, create_new_meshedchannels, create_new_names,
-    create_new_roles, create_role_structs, create_roles, create_session_structs, create_sessions,
+    create_function_details, create_functions, create_functions_input_one, create_join_handle,
+    create_name_structs, create_names, create_new_channels, create_new_meshedchannels,
+    create_new_names, create_new_roles, create_role_structs, create_roles, create_session_structs,
+    create_sessions,
 };
 use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
@@ -374,15 +375,7 @@ pub(crate) fn fork_interleaved_mpst(
 
     let functions = create_functions(1, sum_nsessions - 2);
 
-    let functions_input_one: Vec<TokenStream> = (1..number_roles_one)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
-            quote! {
-                #temp_expr : #temp_ident ,
-            }
-        })
-        .collect();
+    let functions_input_one = create_functions_input_one(1, number_roles_one);
 
     let functions_input_two: Vec<TokenStream> = (1..number_roles_two)
         .map(|i| {
@@ -843,15 +836,7 @@ pub(crate) fn fork_timed_interleaved_mpst(
 
     let functions = create_functions(1, sum_nsessions - 2);
 
-    let functions_input_one: Vec<TokenStream> = (1..number_roles_one)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
-            quote! {
-                #temp_expr : #temp_ident ,
-            }
-        })
-        .collect();
+    let functions_input_one = create_functions_input_one(1, number_roles_one);
 
     let functions_input_two: Vec<TokenStream> = (1..number_roles_two)
         .map(|i| {

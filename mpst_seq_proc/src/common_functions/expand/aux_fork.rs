@@ -201,3 +201,18 @@ pub(crate) fn create_new_meshedchannels(
         })
         .collect()
 }
+
+////////////////// For interleaved functions
+
+/// Create functions_input_one
+pub(crate) fn create_functions_input_one(from: u64, to: u64) -> Vec<TokenStream> {
+    (from..to)
+        .map(|i| {
+            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
+            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
+            quote! {
+                #temp_expr : #temp_ident ,
+            }
+        })
+        .collect()
+}
