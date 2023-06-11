@@ -20,10 +20,6 @@ use crate::common_functions::maths::{
     diag_and_matrix, diag_and_matrix_w_offset, get_tuple_diag, get_tuple_matrix,
 };
 
-
-
-
-
 // use crate::common_functions::expand::choose::{
 //     choose_timed, choose_timed_mpst_create_multi_to_all,
 // };
@@ -36,9 +32,6 @@ use crate::common_functions::maths::{
 // use crate::common_functions::expand::recv::{recv_from_all_timed, recv_timed};
 // use crate::common_functions::expand::role_timed::role_timed;
 // use crate::common_functions::expand::send::send_timed_canceled;
-
-
-
 
 #[derive(Debug)]
 pub(crate) struct BakingTimedInterleavedWithEnumAndCancel {
@@ -802,12 +795,9 @@ impl BakingTimedInterleavedWithEnumAndCancel {
                 } else {
                     i + 2
                 };
-                let temp_function =
-                    Ident::new(&format!("f{i}"), Span::call_site());
-                let temp_meshedchannels = Ident::new(
-                    &format!("meshedchannels_{offset}"),
-                    Span::call_site(),
-                );
+                let temp_function = Ident::new(&format!("f{i}"), Span::call_site());
+                let temp_meshedchannels =
+                    Ident::new(&format!("meshedchannels_{offset}"), Span::call_site());
                 quote! {
                     std::thread::Builder::new()
                     .name(String::from(stringify!(#temp_function)))

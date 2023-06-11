@@ -3,7 +3,7 @@ use quote::quote;
 use std::convert::TryFrom;
 use syn::Ident;
 
-use crate::common_functions::expand::session::{
+use crate::common_functions::expand::aux_fork::{
     create_function_details, create_functions, create_join_handle, create_name_structs,
     create_names, create_new_channels, create_new_meshedchannels, create_new_names,
     create_new_roles, create_role_structs, create_roles, create_session, create_session_structs,
