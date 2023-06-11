@@ -94,8 +94,9 @@ pub(crate) fn create_new_names(from: u64, to: u64) -> Vec<TokenStream> {
     (from..=to)
         .map(|i| {
             let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
+            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
             quote! {
-                #temp_ident : mpstthree::name::Name + 'static ,
+                let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
             }
         })
         .collect()
