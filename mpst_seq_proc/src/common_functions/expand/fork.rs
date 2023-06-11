@@ -18,75 +18,23 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 
     let sessions = create_session(1, (number_roles - 1) * (number_roles) / 2);
 
-    let sessions_struct = create_session_struct(1, (number_roles - 1) * (number_roles) / 2);
+    let session_structs = create_session_structs(1, (number_roles - 1) * (number_roles) / 2);
 
     let roles = create_roles(1, number_roles);
 
-    let roles_struct: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
-            quote! {
-                #temp_ident : mpstthree::role::Role + 'static ,
-            }
-        })
-        .collect();
+    let role_structs = create_role_structs(1, number_roles);
 
-    let new_roles: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
-            quote! {
-                let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
-            }
-        })
-        .collect();
+    let new_roles = create_new_roles(1, number_roles);
 
-    let names: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            quote! {
-                #temp_ident ,
-            }
-        })
-        .collect();
+    let names = create_names(1, number_roles);
 
-    let names_struct: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            quote! {
-                #temp_ident : mpstthree::name::Name + 'static ,
-            }
-        })
-        .collect();
+    let name_structs = create_name_structs(1, number_roles);
 
-    let new_names: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
-            quote! {
-                let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
-            }
-        })
-        .collect();
+    let new_names = create_new_names(1, number_roles);
 
-    let functions: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            quote! {
-                #temp_ident ,
-            }
-        })
-        .collect();
+    let functions = create_functions(1, number_roles);
 
-    let functions_detail: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
-            quote! {
-                #temp_expr : #temp_ident ,
-            }
-        })
-        .collect();
+    let functions_details = create_function_details(1, number_roles);
 
     let functions_struct: Vec<TokenStream> = (1..=number_roles)
             .map(|i| {
@@ -127,84 +75,34 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
             })
             .collect();
 
-    let join_handle: Vec<TokenStream> = (1..=number_roles)
-        .map(|_| {
-            quote! {
-                std::thread::JoinHandle<()> ,
-            }
-        })
-        .collect();
+    let join_handle = create_join_handle(1, number_roles);
 
-    let new_channels: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-            let (line, column, _) = get_tuple_diag(&diag_w_offset, i);
-            let temp_channel_left =
-                Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
-            let temp_channel_right =
-                Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
-            quote! {
-                let ( #temp_channel_left , #temp_channel_right ) =
-                    < #temp_ident as mpstthree::binary::struct_trait::session::Session >::new();
-            }
-        })
-        .collect();
+    let new_channels =
+        create_new_channels(1, (number_roles - 1) * (number_roles) / 2, &diag_w_offset);
 
-    let new_meshedchannels: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_sessions: Vec<TokenStream> = (1..number_roles)
-                .map(|j| {
-                    let (line, column, _) = get_tuple_matrix(&matrix, i, j);
-                    let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                    let temp_channel = match line {
-                        m if m == i => {
-                            Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
-                        }
-                        _ => Ident::new(&format!("channel_{column}_{line}"), Span::call_site()),
-                    };
-                    quote! {
-                        #temp_session : #temp_channel ,
-                    }
-                })
-                .collect();
-
-            let temp_meshedchannels = Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
-            quote! {
-                let #temp_meshedchannels =
-                    #meshedchannels_name {
-                        #(
-                            #temp_sessions
-                        )*
-                        stack: #temp_role ,
-                        name: #temp_name ,
-                    };
-            }
-        })
-        .collect();
+    let new_meshedchannels =
+        create_new_meshedchannels(1, number_roles, meshedchannels_name, &matrix);
 
     let new_threads: Vec<TokenStream> = (1..=number_roles)
-            .map(|i| {
-                let temp_function =
-                    Ident::new(&format!("f{i}"), Span::call_site());
-                let temp_meshedchannels = Ident::new(
-                    &format!("meshedchannels_{i}"),
-                    Span::call_site(),
-                );
-                quote! {
-                    std::thread::Builder::new().name(String::from(stringify!(#temp_function))).stack_size(64 * 1024 * 1024).spawn(move || {
-                        std::panic::set_hook(Box::new(|_info| {
-                            // do nothing
-                        }));
-                        match #temp_function(#temp_meshedchannels) {
-                            Ok(()) => (),
-                            Err(e) => panic!("{:?}", e),
-                        }
-                    }).unwrap(),
-                }
-            })
-            .collect();
+        .map(|i| {
+            let temp_function = Ident::new(&format!("f{i}"), Span::call_site());
+            let temp_meshedchannels = Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
+            quote! {
+                std::thread::Builder::new()
+                .name(String::from(stringify!(#temp_function)))
+                .stack_size(64 * 1024 * 1024)
+                .spawn(move || {
+                    std::panic::set_hook(Box::new(|_info| {
+                        // do nothing
+                    }));
+                    match #temp_function(#temp_meshedchannels) {
+                        Ok(()) => (),
+                        Err(e) => panic!("{:?}", e),
+                    }
+                }).unwrap(),
+            }
+        })
+        .collect();
 
     quote! {
         fn fork_mpst<
@@ -222,7 +120,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
             )*
         >(
             #(
-                #functions_detail
+                #functions_details
             )*
         ) -> (
             #(
@@ -231,13 +129,13 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
         )
         where
             #(
-                #roles_struct
+                #role_structs
             )*
             #(
-                #names_struct
+                #name_structs
             )*
             #(
-                #sessions_struct
+                #session_structs
             )*
             #(
                 #functions_struct
@@ -275,75 +173,23 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
 
     let sessions = create_session(1, (number_roles - 1) * (number_roles) / 2);
 
-    let sessions_struct = create_session_struct(1, (number_roles - 1) * (number_roles) / 2);
+    let session_structs = create_session_structs(1, (number_roles - 1) * (number_roles) / 2);
 
     let roles = create_roles(1, number_roles);
 
-    let roles_struct: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
-            quote! {
-                #temp_ident : mpstthree::role::Role + 'static ,
-            }
-        })
-        .collect();
+    let role_structs = create_role_structs(1, number_roles);
 
-    let new_roles: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
-            quote! {
-                let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
-            }
-        })
-        .collect();
+    let new_roles = create_new_roles(1, number_roles);
 
-    let names: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            quote! {
-                #temp_ident ,
-            }
-        })
-        .collect();
+    let names = create_names(1, number_roles);
 
-    let names_struct: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            quote! {
-                #temp_ident : mpstthree::name::Name + 'static ,
-            }
-        })
-        .collect();
+    let name_structs = create_name_structs(1, number_roles);
 
-    let new_names: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
-            quote! {
-                let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
-            }
-        })
-        .collect();
+    let new_names = create_new_names(1, number_roles);
 
-    let functions: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            quote! {
-                #temp_ident ,
-            }
-        })
-        .collect();
+    let functions = create_functions(1, number_roles);
 
-    let functions_detail: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            let temp_expr = Ident::new(&format!("f{i}"), Span::call_site());
-            quote! {
-                #temp_expr : #temp_ident ,
-            }
-        })
-        .collect();
+    let functions_details = create_function_details(1, number_roles);
 
     let functions_struct: Vec<TokenStream> = (1..=number_roles)
             .map(|i| {
@@ -385,62 +231,13 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
             })
             .collect();
 
-    let join_handle: Vec<TokenStream> = (1..=number_roles)
-        .map(|_| {
-            quote! {
-                std::thread::JoinHandle<()> ,
-            }
-        })
-        .collect();
+    let join_handle = create_join_handle(1, number_roles);
 
-    let new_channels: Vec<TokenStream> = (1..=((number_roles - 1) * (number_roles) / 2))
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-            let (line, column, _) = get_tuple_diag(&diag_w_offset, i);
-            let temp_channel_left =
-                Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
-            let temp_channel_right =
-                Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
-            quote! {
-                let ( #temp_channel_left , #temp_channel_right ) =
-                    < #temp_ident as mpstthree::binary::struct_trait::session::Session >::new();
-            }
-        })
-        .collect();
+    let new_channels =
+        create_new_channels(1, (number_roles - 1) * (number_roles) / 2, &diag_w_offset);
 
-    let new_meshedchannels: Vec<TokenStream> = (1..=number_roles)
-        .map(|i| {
-            let temp_sessions: Vec<TokenStream> = (1..number_roles)
-                .map(|j| {
-                    let (line, column, _) = get_tuple_matrix(&matrix, i, j);
-                    let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                    let temp_channel = match line {
-                        m if m == i => {
-                            Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
-                        }
-                        _ => Ident::new(&format!("channel_{column}_{line}"), Span::call_site()),
-                    };
-                    quote! {
-                        #temp_session : #temp_channel ,
-                    }
-                })
-                .collect();
-
-            let temp_meshedchannels = Ident::new(&format!("meshedchannels_{i}"), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
-            quote! {
-                let #temp_meshedchannels =
-                    #meshedchannels_name {
-                        #(
-                            #temp_sessions
-                        )*
-                        stack: #temp_role ,
-                        name: #temp_name ,
-                    };
-            }
-        })
-        .collect();
+    let new_meshedchannels =
+        create_new_meshedchannels(1, number_roles, meshedchannels_name, &matrix);
 
     let new_threads: Vec<TokenStream> = (1..=number_roles)
         .map(|i| {
@@ -482,7 +279,7 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
             )*
         >(
             #(
-                #functions_detail
+                #functions_details
             )*
         ) -> (
             #(
@@ -491,13 +288,13 @@ pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) ->
         )
         where
             #(
-                #roles_struct
+                #role_structs
             )*
             #(
-                #names_struct
+                #name_structs
             )*
             #(
-                #sessions_struct
+                #session_structs
             )*
             #(
                 #functions_struct
@@ -556,7 +353,7 @@ pub(crate) fn fork_interleaved_mpst(
     // S0: Session + `static ,
     // S1: Session + `static ,
     // ... ,
-    let sessions_struct = create_session_struct(
+    let session_structs = create_session_structs(
         1,
         (number_roles_one - 1) * (number_roles_one) / 2
             + (number_roles_two - 1) * (number_roles_two) / 2,
@@ -564,61 +361,17 @@ pub(crate) fn fork_interleaved_mpst(
 
     let roles = create_roles(1, sum_nsessions);
 
-    let roles_struct: Vec<TokenStream> = (1..=sum_nsessions)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
-            quote! {
-                #temp_ident : mpstthree::role::Role + 'static ,
-            }
-        })
-        .collect();
+    let role_structs = create_role_structs(1, sum_nsessions);
 
-    let new_roles: Vec<TokenStream> = (1..=sum_nsessions)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
-            let temp_role = Ident::new(&format!("role_{i}"), Span::call_site());
-            quote! {
-                let ( #temp_role , _) = < #temp_ident as mpstthree::role::Role >::new() ;
-            }
-        })
-        .collect();
+    let new_roles = create_new_roles(1, sum_nsessions);
 
-    let names: Vec<TokenStream> = (1..=sum_nsessions)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            quote! {
-                #temp_ident ,
-            }
-        })
-        .collect();
+    let names = create_names(1, sum_nsessions);
 
-    let names_struct: Vec<TokenStream> = (1..=sum_nsessions)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            quote! {
-                #temp_ident : mpstthree::name::Name + 'static ,
-            }
-        })
-        .collect();
+    let name_structs = create_name_structs(1, sum_nsessions);
 
-    let new_names: Vec<TokenStream> = (1..=sum_nsessions)
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
-            let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
-            quote! {
-                let ( #temp_name , _) = < #temp_ident as mpstthree::name::Name >::new() ;
-            }
-        })
-        .collect();
+    let new_names = create_new_names(1, sum_nsessions);
 
-    let functions: Vec<TokenStream> = (1..=(sum_nsessions - 2))
-        .map(|i| {
-            let temp_ident = Ident::new(&format!("F{i}"), Span::call_site());
-            quote! {
-                #temp_ident ,
-            }
-        })
-        .collect();
+    let functions = create_functions(1, sum_nsessions - 2);
 
     let functions_input_one: Vec<TokenStream> = (1..number_roles_one)
         .map(|i| {
@@ -992,13 +745,13 @@ pub(crate) fn fork_interleaved_mpst(
                )
                where
                    #(
-                       #roles_struct
+                       #role_structs
                    )*
                    #(
-                       #names_struct
+                       #name_structs
                    )*
                    #(
-                       #sessions_struct
+                       #session_structs
                    )*
                    #(
                        #functions_struct_one
