@@ -394,6 +394,7 @@ impl BakingTimedInterleavedWithEnumAndCancel {
 
             #close_methods_two
 
+            // Create common functions and macros
             #cancel_method_two
 
             #choose_mpst_create_multi_to_all_two
