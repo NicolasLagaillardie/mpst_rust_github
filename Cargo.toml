@@ -131,6 +131,13 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
+# ################################### Profil
+
+[[example]]
+name = "timed_sleeping_barber"
+path = "examples/timed/sleeping_barber.rs"
+required-features = ["full"]
+
 ################################### Profil
 
 [profile.release]

@@ -2715,6 +2715,11 @@ name = "non_feasible"
 path = "examples/timed/non_feasible.rs"
 required-features = ["baking_timed"]
 
+[[example]]
+name = "timed_sleeping_barber"
+path = "examples/interleaved/sleeping_barber.rs"
+required-features = ["timed_interleaved"]
+
 ################################### Mesh examples
 
 ################## Crossbeam

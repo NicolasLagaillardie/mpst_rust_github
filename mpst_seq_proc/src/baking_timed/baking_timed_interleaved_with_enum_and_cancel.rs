@@ -401,6 +401,22 @@ impl BakingTimedInterleavedWithEnumAndCancel {
             // Create the fork function
             #quote_fork_mpst
 
+            #[allow(unused_macros)]
+            macro_rules! offer_mpst {
+                ($session: expr, $all_clocks:expr, { $( $pat: pat => $result: expr, )+ }) => {
+                    (move || -> Result<_, _> {
+                        let (l, s) = $session.recv($all_clocks)?;
+                        s.cancel();
+                        match l {
+                            $(
+                                $pat => $result,
+                            )+
+                            _ => panic!("Unexpected payload") ,
+                        }
+                    })()
+                };
+            }
+
         }
     }
 }

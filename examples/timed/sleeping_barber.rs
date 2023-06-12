@@ -1,11 +1,11 @@
 #![allow(clippy::type_complexity)]
 #![recursion_limit = "256"]
 
+use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, session::Session};
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, offer_mpst};
 
 use rand::{thread_rng, Rng};
 
@@ -336,69 +336,95 @@ fn recurs_0_barber(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    offer_mpst!(s, all_clocks, {
-        Branching0fromShopBarberToBarber::Done(s) => {
-            s.close()
-        },
-        Branching0fromShopBarberToBarber::Available(s) => {
-
-            let s = s.send(Available {  }, all_clocks)?;
-
-            recurs_1_barber(s, all_clocks)
-        },
-    })
+    recurs_1_barber(s, all_clocks)
 }
 fn recurs_1_barber(
+    s: EndpointBarber0,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching0fromShopBarberToBarber::Done(s) => {
+                s.close()
+            },
+            Branching0fromShopBarberToBarber::Available(s) => {
+
+                let s = s.send(Available {  }, all_clocks)?;
+
+                recurs_2_barber(s, all_clocks)
+            },
+        }
+    )
+}
+fn recurs_2_barber(
     s: EndpointBarber1,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching1fromShopBarberToBarber::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching1fromShopBarberToBarber::Available(s) => {
 
-            let (_customer, s) = s.recv(all_clocks)?;
+                let (_customer, s) = s.recv(all_clocks)?;
 
-            recurs_2_barber(s, all_clocks)
-        },
-    })
+                recurs_3_barber(s, all_clocks)
+            },
+        }
+    )
 }
-fn recurs_2_barber(
+fn recurs_3_barber(
     s: EndpointBarber2,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching2fromShopBarberToBarber::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching2fromShopBarberToBarber::Available(s) => {
 
-            let (_description, s) = s.recv(all_clocks)?;
+                let (_description, s) = s.recv(all_clocks)?;
 
-            recurs_3_barber(s, all_clocks)
-        },
-    })
+                recurs_4_barber(s, all_clocks)
+            },
+        }
+    )
 }
-fn recurs_3_barber(
+fn recurs_4_barber(
     s: EndpointBarber3,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching3fromShopBarberToBarber::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching3fromShopBarberToBarber::Available(s) => {
 
-            let s = s.send(Haircut {  }, all_clocks)?;
+                let s = s.send(Haircut {  }, all_clocks)?;
 
-            recurs_4_barber(s, all_clocks)
-        },
-    })
+                recurs_5_barber(s, all_clocks)
+            },
+        }
+    )
 }
-fn recurs_4_barber(
+fn recurs_5_barber(
     s: EndpointBarber4,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching4fromShopBarberToBarber::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching4fromShopBarberToBarber::Available(s) => {
 
-            let (_pay, s) = s.recv(all_clocks)?;
+                let (_pay, s) = s.recv(all_clocks)?;
 
-            recurs_0_barber(s, all_clocks)
-        },
-    })
+                recurs_1_barber(s, all_clocks)
+            },
+        }
+    )
 }
 
 // Shop
@@ -434,7 +460,7 @@ fn recurs_0_shop(
         i if i == 0 => {
             let s_shop_barber: EndpointShopBarberDone = choose_mpst_shopbarber_to_all!(
                 s_shop_barber,
-                all_clocks,
+                all_clocks_one,
                 Branching0fromShopBarberToBarber::Done,
             );
 
@@ -442,7 +468,7 @@ fn recurs_0_shop(
 
             let s_shop_client: EndpointShopClientDone = choose_mpst_shopclient_to_all!(
                 s_shop_client,
-                all_clocks,
+                all_clocks_two,
                 Branching0fromShopClientToClient::Done,
             );
 
@@ -453,18 +479,18 @@ fn recurs_0_shop(
             if thread_rng().gen_range(1..=10) == 1 && number_clients < SEATS {
                 let s_shop_barber: EndpointShopBarberAvailabe = choose_mpst_shopbarber_to_all!(
                     s_shop_barber,
-                    all_clocks,
+                    all_clocks_one,
                     Branching0fromShopBarberToBarber::Available,
                 );
 
                 let s_shop_client: EndpointShopClientSeat = choose_mpst_shopclient_to_all!(
                     s_shop_client,
-                    all_clocks,
+                    all_clocks_two,
                     Branching0fromShopClientToClient::Available,
                 );
 
-                let s_shop_client = s_shop_client.send(Seat {}, all_clocks)?;
-                let (_available, s_shop_barber) = s_shop_barber.recv(all_clocks)?;
+                let s_shop_client = s_shop_client.send(Seat {}, all_clocks_two)?;
+                let (_available, s_shop_barber) = s_shop_barber.recv(all_clocks_one)?;
 
                 recurs_1_shop(
                     s_shop_barber,
@@ -477,11 +503,11 @@ fn recurs_0_shop(
             } else {
                 let s_shop_client: EndpointShopClientFull = choose_mpst_shopclient_to_all!(
                     s_shop_client,
-                    all_clocks,
+                    all_clocks_two,
                     Branching0fromShopClientToClient::Full,
                 );
 
-                let s_shop_client = s_shop_client.send(Full {}, all_clocks)?;
+                let s_shop_client = s_shop_client.send(Full {}, all_clocks_two)?;
 
                 recurs_0_shop(
                     s_shop_barber,
@@ -506,18 +532,18 @@ fn recurs_1_shop(
 ) -> Result<(), Box<dyn Error>> {
     let s_shop_barber: EndpointShopBarberCustomer = choose_mpst_shopbarber_to_all!(
         s_shop_barber,
-        all_clocks,
+        all_clocks_one,
         Branching1fromShopBarberToBarber::Available
     );
 
     let s_shop_client: EndpointShopClientReady = choose_mpst_shopclient_to_all!(
         s_shop_client,
-        all_clocks,
+        all_clocks_two,
         Branching1fromShopClientToClient::Available
     );
 
-    let s_shop_client = s_shop_client.send(Ready {}, all_clocks)?;
-    let s_shop_barber = s_shop_barber.send(Customer {}, all_clocks)?;
+    let s_shop_client = s_shop_client.send(Ready {}, all_clocks_two)?;
+    let s_shop_barber = s_shop_barber.send(Customer {}, all_clocks_one)?;
 
     recurs_2_shop(
         s_shop_barber,
@@ -539,19 +565,19 @@ fn recurs_2_shop(
 ) -> Result<(), Box<dyn Error>> {
     let s_shop_barber: EndpointShopBarberDescription = choose_mpst_shopbarber_to_all!(
         s_shop_barber,
-        all_clocks,
+        all_clocks_one,
         Branching2fromShopBarberToBarber::Available
     );
 
     let s_shop_client: EndpointShopClientDescription = choose_mpst_shopclient_to_all!(
         s_shop_client,
-        all_clocks,
+        all_clocks_two,
         Branching2fromShopClientToClient::Available
     );
 
     // Decription
-    let (description, s_shop_client) = s_shop_client.recv(all_clocks)?;
-    let s_shop_barber = s_shop_barber.send(description, all_clocks)?;
+    let (description, s_shop_client) = s_shop_client.recv(all_clocks_two)?;
+    let s_shop_barber = s_shop_barber.send(description, all_clocks_one)?;
 
     recurs_3_shop(
         s_shop_barber,
@@ -573,19 +599,19 @@ fn recurs_3_shop(
 ) -> Result<(), Box<dyn Error>> {
     let s_shop_barber: EndpointShopBarberHaircut = choose_mpst_shopbarber_to_all!(
         s_shop_barber,
-        all_clocks,
+        all_clocks_one,
         Branching3fromShopBarberToBarber::Available
     );
 
     let s_shop_client: EndpointShopClientHaircut = choose_mpst_shopclient_to_all!(
         s_shop_client,
-        all_clocks,
+        all_clocks_two,
         Branching3fromShopClientToClient::Available
     );
 
     // Haircut
-    let (haircut, s_shop_barber) = s_shop_barber.recv(all_clocks)?;
-    let s_shop_client = s_shop_client.send(haircut, all_clocks)?;
+    let (haircut, s_shop_barber) = s_shop_barber.recv(all_clocks_one)?;
+    let s_shop_client = s_shop_client.send(haircut, all_clocks_two)?;
 
     recurs_4_shop(
         s_shop_barber,
@@ -607,19 +633,19 @@ fn recurs_4_shop(
 ) -> Result<(), Box<dyn Error>> {
     let s_shop_barber: EndpointShopBarberPay = choose_mpst_shopbarber_to_all!(
         s_shop_barber,
-        all_clocks,
+        all_clocks_one,
         Branching4fromShopBarberToBarber::Available
     );
 
     let s_shop_client: EndpointShopClientPay = choose_mpst_shopclient_to_all!(
         s_shop_client,
-        all_clocks,
+        all_clocks_two,
         Branching4fromShopClientToClient::Available
     );
 
     // Pay
-    let (pay, s_shop_client) = s_shop_client.recv(all_clocks)?;
-    let s_shop_barber = s_shop_barber.send(pay, all_clocks)?;
+    let (pay, s_shop_client) = s_shop_client.recv(all_clocks_two)?;
+    let s_shop_barber = s_shop_barber.send(pay, all_clocks_one)?;
 
     recurs_0_shop(
         s_shop_barber,
@@ -638,74 +664,100 @@ fn recurs_0_client(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    offer_mpst!(s, all_clocks, {
-        Branching0fromShopClientToClient::Done(s) => {
-            s.close()
-        },
-        Branching0fromShopClientToClient::Full(s) => {
-            let (_full, s) = s.recv(all_clocks)?;
-
-            recurs_0_client(s, all_clocks)
-        },
-        Branching0fromShopClientToClient::Available(s) => {
-
-            let (_seat, s) = s.recv(all_clocks)?;
-
-            recurs_1_client(s, all_clocks)
-        },
-    })
+    recurs_1_client(s, all_clocks)
 }
 fn recurs_1_client(
+    s: EndpointClient0,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching0fromShopClientToClient::Done(s) => {
+                s.close()
+            },
+            Branching0fromShopClientToClient::Full(s) => {
+                let (_full, s) = s.recv(all_clocks)?;
+
+                recurs_1_client(s, all_clocks)
+            },
+            Branching0fromShopClientToClient::Available(s) => {
+
+                let (_seat, s) = s.recv(all_clocks)?;
+
+                recurs_2_client(s, all_clocks)
+            },
+        }
+    )
+}
+fn recurs_2_client(
     s: EndpointClient1,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching1fromShopClientToClient::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching1fromShopClientToClient::Available(s) => {
 
-            let (_ready, s) = s.recv(all_clocks)?;
+                let (_ready, s) = s.recv(all_clocks)?;
 
-            recurs_2_client(s, all_clocks)
-        },
-    })
+                recurs_3_client(s, all_clocks)
+            },
+        }
+    )
 }
-fn recurs_2_client(
+fn recurs_3_client(
     s: EndpointClient2,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching2fromShopClientToClient::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching2fromShopClientToClient::Available(s) => {
 
-            let s = s.send(Description {  }, all_clocks)?;
+                let s = s.send(Description {  }, all_clocks)?;
 
-            recurs_3_client(s, all_clocks)
-        },
-    })
+                recurs_4_client(s, all_clocks)
+            },
+        }
+    )
 }
-fn recurs_3_client(
+fn recurs_4_client(
     s: EndpointClient3,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching3fromShopClientToClient::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching3fromShopClientToClient::Available(s) => {
 
-            let (_haircut, s) = s.recv(all_clocks)?;
+                let (_haircut, s) = s.recv(all_clocks)?;
 
-            recurs_4_client(s, all_clocks)
-        },
-    })
+                recurs_5_client(s, all_clocks)
+            },
+        }
+    )
 }
-fn recurs_4_client(
+fn recurs_5_client(
     s: EndpointClient4,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, all_clocks, {
-        Branching4fromShopClientToClient::Available(s) => {
+    offer_mpst!(
+        s,
+        all_clocks,
+        {
+            Branching4fromShopClientToClient::Available(s) => {
 
-            let s = s.send(Pay {  }, all_clocks)?;
+                let s = s.send(Pay {  }, all_clocks)?;
 
-            recurs_0_client(s, all_clocks)
-        },
-    })
+                recurs_1_client(s, all_clocks)
+            },
+        }
+    )
 }
 
 /////////////////////////
