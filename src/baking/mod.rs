@@ -158,4 +158,24 @@ macro_rules! baker {
             $func_name
         );
     };
+    (
+        "timed_interleaved",
+        $meshedchannels_name_one: ident,
+        $( $all_roles_one: ident , )+
+        $index_tuple_one: literal,
+        $meshedchannels_name_two: ident,
+        $( $all_roles_two: ident , )+
+        $index_tuple_two: literal,
+        $func_name: ident
+    ) => {
+        mpst_seq::baking_timed_interleaved_with_enum_and_cancel!(
+            $meshedchannels_name_one ,
+            ( $( ( $all_roles_one ) )+ ) ,
+            $index_tuple_one ,
+            $meshedchannels_name_two ,
+            ( $( ( $all_roles_two ) )+ ) ,
+            $index_tuple_two ,
+            $func_name
+        );
+    };
 }

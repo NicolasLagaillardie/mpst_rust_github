@@ -72,6 +72,7 @@ use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;
 
 mod baking_timed;
 
+use baking_timed::baking_timed_interleaved_with_enum_and_cancel::BakingTimedInterleavedWithEnumAndCancel;
 use baking_timed::baking_timed_with_enum_and_cancel::BakingTimedWithEnumAndCancel;
 
 mod choose_timed_mpst_multi_to_all;
@@ -653,4 +654,18 @@ pub fn choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
     choose_timed_mpst_multi_to_all(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingTimedInterleavedWithEnumAndCancel);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    baking_timed_interleaved_with_enum_and_cancel(input)
 }
