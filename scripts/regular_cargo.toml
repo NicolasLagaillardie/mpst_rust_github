@@ -969,7 +969,7 @@ baking = ["default", "macros_multiple"]
 baking_timed = ["binary_timed"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
-baking_timed_interleaved = ["baking_timed", "baking_interleaved"]
+baking_timed_interleaved = ["baking_timed", "interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
 transport_http = ["default", "hyper", "hyper-tls", "tokio"]
@@ -980,8 +980,8 @@ transport_macros_multiple = [
 ] # For test compile examples
 protobuf = []
 affine_timed = ["baking", "baking_timed"]
-full_without_checking = ["baking", "transport", "baking_interleaved"]
-full = ["baking_checking", "transport", "baking_timed", "baking_interleaved"]
+full_without_checking = ["baking", "transport", "interleaved"]
+full = ["baking_checking", "transport", "baking_timed", "interleaved"]
 
 ################################### Doc handling for all-features
 
