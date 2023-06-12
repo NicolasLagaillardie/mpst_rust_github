@@ -1,19 +1,20 @@
 //! Implementation for baker!("basic", ...)
 
-use proc_macro2::{Span, TokenStream};
+use proc_macro2::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
+use crate::common_functions::expand::aux_baking::{
+    create_name_structs, create_role_structs, create_session_type_structs, create_session_types,
+};
 use crate::common_functions::expand::cancel::cancel;
 use crate::common_functions::expand::choose::choose_basic;
 use crate::common_functions::expand::close::close;
 use crate::common_functions::expand::fork::fork_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
-use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::offer::offer_basic;
 use crate::common_functions::expand::recv::{recv_basic, recv_from_all_basic};
-use crate::common_functions::expand::role::role;
 use crate::common_functions::expand::send::send_basic;
 use crate::common_functions::parsing::parse_stream_roles;
 
@@ -49,28 +50,14 @@ impl Baking {
 
         let quote_fork_mpst = fork_mpst(&self.meshedchannels_name, self.number_roles);
 
-        let session_types: Vec<Ident> = (1..self.number_roles)
-            .map(|i| Ident::new(&format!("S{i}"), Span::call_site()))
-            .collect();
+        let session_types = create_session_types(1, self.number_roles);
 
-        let session_types_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
+        let session_types_struct: Vec<TokenStream> =
+            create_session_type_structs(1, self.number_roles);
 
-        let roles_struct: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| role(format!("{i}")))
-            .collect();
+        let role_structs = create_role_structs(&self.all_roles);
 
-        let names_struct: Vec<TokenStream> = self
-            .all_roles
-            .iter()
-            .map(|i| name(format!("{i}")))
-            .collect();
+        let name_structs = create_name_structs(&self.all_roles);
 
         let send_methods: Vec<TokenStream> = (1..=self.number_roles)
             .map(|sender| {
@@ -176,9 +163,9 @@ impl Baking {
         quote! {
             #meshedchannels_struct
 
-            #( #roles_struct )*
+            #( #role_structs )*
 
-            #( #names_struct )*
+            #( #name_structs )*
 
             #( #send_methods )*
 

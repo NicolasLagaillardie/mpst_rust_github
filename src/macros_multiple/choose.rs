@@ -27,7 +27,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
-    ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
+    ($type_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
         mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
@@ -78,12 +78,12 @@ macro_rules! create_choose_type_multi {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_left {
     (
-        $func_name:ident,
-        $type_name:ident,
-        $role_dual:ident,
-        $name:ident,
-        $meshedchannels_name:ident,
-        $n_sessions:literal
+        $func_name: ident,
+        $type_name: ident,
+        $role_dual: ident,
+        $name: ident,
+        $meshedchannels_name: ident,
+        $n_sessions: literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_left!(
             $func_name,
@@ -142,12 +142,12 @@ macro_rules! create_choose_mpst_session_multi_left {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_right {
     (
-        $func_name:ident,
-        $type_name:ident,
-        $role_dual:ident,
-        $name:ident,
-        $meshedchannels_name:ident,
-        $n_sessions:literal
+        $func_name: ident,
+        $type_name: ident,
+        $role_dual: ident,
+        $name: ident,
+        $meshedchannels_name: ident,
+        $n_sessions: literal
     ) => {
         mpst_seq::create_choose_mpst_session_multi_right!(
             $func_name,
@@ -208,13 +208,13 @@ macro_rules! create_choose_mpst_session_multi_right {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_both {
     (
-        $func_name_left:ident,
-        $func_name_right:ident,
-        $type_name:ident,
-        $role_dual:ident,
-        $name:ident,
-        $meshedchannels_name:ident,
-        $n_sessions:literal
+        $func_name_left: ident,
+        $func_name_right: ident,
+        $type_name: ident,
+        $role_dual: ident,
+        $name: ident,
+        $meshedchannels_name: ident,
+        $n_sessions: literal
     ) => {
         mpstthree::create_choose_mpst_session_multi_left!(
             $func_name_left,
@@ -360,7 +360,7 @@ macro_rules! choose_mpst_multi_to_all {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! choose_mpst_create_multi_to_all {
-    ($name:expr, $sender:ident, $meshedchannels_name:ident, $exclusion:literal) => {
+    ($name:expr, $sender: ident, $meshedchannels_name: ident, $exclusion: literal) => {
         mpst_seq::choose_mpst_create_multi_to_all!(
             $name,
             $sender,

@@ -1,3 +1,5 @@
+pub(crate) mod aux_baking;
+pub(crate) mod aux_fork;
 pub(crate) mod cancel;
 pub(crate) mod choose;
 pub(crate) mod close;

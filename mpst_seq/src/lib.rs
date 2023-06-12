@@ -37,7 +37,6 @@ pub use mpst_seq_proc::send_cancel;
 //////////////////////////////////////
 
 pub use mpst_seq_proc::close_mpst_interleaved;
-pub use mpst_seq_proc::fork_mpst_multi_interleaved;
 pub use mpst_seq_proc::fork_mpst_multi_solo;
 
 //////////////////////////////////////
@@ -60,6 +59,7 @@ pub use mpst_seq_proc::baking_with_enum_and_cancel;
 
 //////////////////////////////////////
 
+pub use mpst_seq_proc::baking_timed_interleaved_with_enum_and_cancel;
 pub use mpst_seq_proc::baking_timed_with_enum_and_cancel;
 
 pub use mpst_seq_proc::choose_timed_mpst_multi_to_all;
@@ -156,9 +156,6 @@ pub use mpst_seq_proc::e_fork_mpst_multi_solo;
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_close_mpst_interleaved;
 
-#[proc_macro_hack]
-pub use mpst_seq_proc::e_fork_mpst_multi_interleaved;
-
 //////////////////////////////////////
 
 #[proc_macro_hack]
@@ -196,6 +193,9 @@ pub use mpst_seq_proc::e_baking_interleaved_with_enum_and_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_baking_timed_with_enum_and_cancel;
+
+#[proc_macro_hack]
+pub use mpst_seq_proc::e_baking_timed_interleaved_with_enum_and_cancel;
 
 #[proc_macro_hack]
 pub use mpst_seq_proc::e_choose_timed_mpst_multi_to_all;

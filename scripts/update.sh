@@ -12,78 +12,82 @@ cargo +nightly clippy --all-targets --all-features --workspace
 # Test everything
 echo "Testing features"
 #
-echo "default"
+echo "Testing default"
 cargo test --all-targets --verbose --workspace --features="default"
 cargo clean
 #
-echo "macros_simple"
+echo "Testing macros_simple"
 cargo test --all-targets --verbose --workspace --features="macros_simple"
 cargo clean
 #
-echo "macros_multiple"
+echo "Testing macros_multiple"
 cargo test --all-targets --verbose --workspace --features="macros_multiple"
 cargo clean
 #
-echo "interleaved"
+echo "Testing interleaved"
 cargo test --all-targets --verbose --workspace --features="interleaved"
 cargo clean
 #
-echo "checking"
+echo "Testing checking"
 cargo test --all-targets --verbose --workspace --features="checking"
 cargo clean
 #
-echo "macros_multiple checking"
+echo "Testing macros_multiple checking"
 cargo test --all-targets --verbose --workspace --features="macros_multiple checking"
 cargo clean
 #
-echo "baking"
+echo "Testing baking"
 cargo test --all-targets --verbose --workspace --features="baking"
 cargo clean
 #
-echo "baking_timed"
+echo "Testing baking_timed"
 cargo test --all-targets --verbose --workspace --features="baking_timed"
 cargo clean
 #
-echo "baking_interleaved"
+echo "Testing baking_interleaved"
 cargo test --all-targets --verbose --workspace --features="baking_interleaved"
 cargo clean
 #
-echo "baking_checking"
+echo "Testing baking_timed_interleaved"
+cargo test --all-targets --verbose --workspace --features="baking_timed_interleaved"
+cargo clean
+#
+echo "Testing baking_checking"
 cargo test --all-targets --verbose --workspace --features="baking_checking"
 cargo clean
 #
-echo "transport_tcp"
+echo "Testing transport_tcp"
 cargo test --all-targets --verbose --workspace --features="transport_tcp"
 cargo clean
 #
-echo "transport_udp"
+echo "Testing transport_udp"
 cargo test --all-targets --verbose --workspace --features="transport_udp"
 cargo clean
 #
-echo "transport_http"
+echo "Testing transport_http"
 cargo test --all-targets --verbose --workspace --features="transport_http"
 cargo clean
 #
-echo "transport"
+echo "Testing transport"
 cargo test --all-targets --verbose --workspace --features="transport"
 cargo clean
 #
-echo "transport_macros_multiple"
+echo "Testing transport_macros_multiple"
 cargo test --all-targets --verbose --workspace --features="transport_macros_multiple"
 cargo clean
 #
-echo "affine_timed"
+echo "Testing affine_timed"
 cargo test --all-targets --verbose --workspace --features="affine_timed"
 cargo clean
 #
-echo "full_without_checking"
+echo "Testing full_without_checking"
 cargo test --all-targets --verbose --workspace --features="full_without_checking"
 cargo clean
 #
-echo "full"
+echo "Testing full"
 cargo test --all-targets --verbose --workspace --features="full"
 cargo clean
 #
-echo "all-features"
+echo "Testing all-features"
 cargo test --all-targets --verbose --workspace --all-features
 cargo clean

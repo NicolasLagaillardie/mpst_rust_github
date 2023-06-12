@@ -27,7 +27,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_role {
-    ($role_name:ident, $dual_name:ident) => {
+    ($role_name: ident, $dual_name: ident) => {
         ////////////////////////////////////////////
         /// The Role
 
@@ -233,7 +233,7 @@ macro_rules! create_multiple_normal_role {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_broadcast_role {
-    ($role_name:ident, $dual_name:ident) => {
+    ($role_name: ident, $dual_name: ident) => {
         ////////////////////////////////////////////
         /// The Role
 
@@ -492,7 +492,7 @@ macro_rules! create_multiple_broadcast_role {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_role_short {
-    ($role_name:ident) => {
+    ($role_name: ident) => {
         mpst_seq::create_normal_role_short!($role_name);
     };
 }
@@ -565,7 +565,7 @@ macro_rules! create_multiple_normal_role_short {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_broadcast_role_short {
-    ($role_name:ident) => {
+    ($role_name: ident) => {
         mpst_seq::create_broadcast_role_short!($role_name);
     };
 }

@@ -1,4 +1,4 @@
-//! Implementation for baker!("interleaved", ...)
+//! Implementation for baker!("timed_interleaved", ...)
 
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -7,20 +7,23 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 use crate::common_functions::expand::aux_baking::{
-    create_name_structs, create_role_structs, create_session_type_structs, create_session_types,
+    create_name_structs, create_session_type_structs, create_session_types,
+    create_timed_role_structs,
 };
 use crate::common_functions::expand::cancel::cancel;
-use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
-use crate::common_functions::expand::close::close;
-use crate::common_functions::expand::fork::fork_interleaved_mpst;
+use crate::common_functions::expand::choose::{
+    choose_timed, choose_timed_mpst_create_multi_to_all,
+};
+use crate::common_functions::expand::close_timed::close_timed;
+use crate::common_functions::expand::fork::fork_timed_interleaved_mpst;
 use crate::common_functions::expand::meshedchannels::meshedchannels;
-use crate::common_functions::expand::offer::offer;
+use crate::common_functions::expand::offer::offer_timed;
 use crate::common_functions::expand::parenthesised::parenthesised_groups;
-use crate::common_functions::expand::recv::{recv, recv_from_all};
-use crate::common_functions::expand::send::send_canceled;
+use crate::common_functions::expand::recv::{recv_from_all_timed, recv_timed};
+use crate::common_functions::expand::send::send_timed_canceled;
 
 #[derive(Debug)]
-pub(crate) struct BakingInterleavedWithEnumAndCancel {
+pub(crate) struct BakingTimedInterleavedWithEnumAndCancel {
     // For the first session
     meshedchannels_name_one: Ident,
     all_roles_one: Vec<TokenStream>,
@@ -35,7 +38,7 @@ pub(crate) struct BakingInterleavedWithEnumAndCancel {
     func_name: Ident,
 }
 
-impl Parse for BakingInterleavedWithEnumAndCancel {
+impl Parse for BakingTimedInterleavedWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
         // Get name of the first MeshedChannels
         let meshedchannels_name_one = Ident::parse(input)?;
@@ -73,7 +76,7 @@ impl Parse for BakingInterleavedWithEnumAndCancel {
 
         let func_name = Ident::parse(input)?;
 
-        Ok(BakingInterleavedWithEnumAndCancel {
+        Ok(BakingTimedInterleavedWithEnumAndCancel {
             meshedchannels_name_one,
             all_roles_one,
             number_roles_one,
@@ -87,13 +90,13 @@ impl Parse for BakingInterleavedWithEnumAndCancel {
     }
 }
 
-impl From<BakingInterleavedWithEnumAndCancel> for TokenStream {
-    fn from(input: BakingInterleavedWithEnumAndCancel) -> TokenStream {
+impl From<BakingTimedInterleavedWithEnumAndCancel> for TokenStream {
+    fn from(input: BakingTimedInterleavedWithEnumAndCancel) -> TokenStream {
         input.expand()
     }
 }
 
-impl BakingInterleavedWithEnumAndCancel {
+impl BakingTimedInterleavedWithEnumAndCancel {
     fn expand(&self) -> TokenStream {
         // Create the first MeshedChannel structure and related methods and macros
         let meshedchannels_struct_one =
@@ -103,7 +106,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
         let session_types_struct_one = create_session_type_structs(1, self.number_roles_one);
 
-        let roles_struct_one = create_role_structs(&self.all_roles_one);
+        let roles_struct_one = create_timed_role_structs(&self.all_roles_one);
 
         let names_struct_one = create_name_structs(&self.all_roles_one);
 
@@ -112,7 +115,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_one)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            Some(send_canceled(
+                            Some(send_timed_canceled(
                                 &self.all_roles_one,
                                 sender,
                                 receiver,
@@ -134,7 +137,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_one)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv(
+                            Some(recv_timed(
                                 &self.all_roles_one,
                                 receiver,
                                 sender,
@@ -156,7 +159,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_one)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv_from_all(
+                            Some(recv_from_all_timed(
                                 &self.all_roles_one,
                                 receiver,
                                 sender,
@@ -178,7 +181,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_one)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(offer(
+                            Some(offer_timed(
                                 &self.all_roles_one,
                                 sender,
                                 receiver,
@@ -195,7 +198,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
         let choose_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
             .map(|sender| {
-                choose(
+                choose_timed(
                     &self.all_roles_one,
                     sender,
                     &self.meshedchannels_name_one,
@@ -205,9 +208,9 @@ impl BakingInterleavedWithEnumAndCancel {
             .collect();
 
         let close_methods_one: TokenStream =
-            close(&self.meshedchannels_name_one, self.number_roles_one);
+            close_timed(&self.meshedchannels_name_one, self.number_roles_one);
 
-        let choose_mpst_create_multi_to_all_one = choose_mpst_create_multi_to_all(
+        let choose_mpst_create_multi_to_all_one = choose_timed_mpst_create_multi_to_all(
             &self.meshedchannels_name_one,
             &self.all_roles_one,
             self.number_roles_one,
@@ -224,7 +227,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
         let session_types_struct_two = create_session_type_structs(1, self.number_roles_two);
 
-        let roles_struct_two = create_role_structs(&self.all_roles_two);
+        let roles_struct_two = create_timed_role_structs(&self.all_roles_two);
 
         let names_struct_two = create_name_structs(&self.all_roles_two);
 
@@ -233,7 +236,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_two)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            Some(send_canceled(
+                            Some(send_timed_canceled(
                                 &self.all_roles_two,
                                 sender,
                                 receiver,
@@ -255,7 +258,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_two)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv(
+                            Some(recv_timed(
                                 &self.all_roles_two,
                                 receiver,
                                 sender,
@@ -277,7 +280,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_two)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(recv_from_all(
+                            Some(recv_from_all_timed(
                                 &self.all_roles_two,
                                 receiver,
                                 sender,
@@ -299,7 +302,7 @@ impl BakingInterleavedWithEnumAndCancel {
                 (1..=self.number_roles_two)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(offer(
+                            Some(offer_timed(
                                 &self.all_roles_two,
                                 sender,
                                 receiver,
@@ -316,7 +319,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
         let choose_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
             .map(|sender| {
-                choose(
+                choose_timed(
                     &self.all_roles_two,
                     sender,
                     &self.meshedchannels_name_two,
@@ -326,9 +329,9 @@ impl BakingInterleavedWithEnumAndCancel {
             .collect();
 
         let close_methods_two: TokenStream =
-            close(&self.meshedchannels_name_two, self.number_roles_two);
+            close_timed(&self.meshedchannels_name_two, self.number_roles_two);
 
-        let choose_mpst_create_multi_to_all_two = choose_mpst_create_multi_to_all(
+        let choose_mpst_create_multi_to_all_two = choose_timed_mpst_create_multi_to_all(
             &self.meshedchannels_name_two,
             &self.all_roles_two,
             self.number_roles_two,
@@ -338,7 +341,7 @@ impl BakingInterleavedWithEnumAndCancel {
             cancel(&self.meshedchannels_name_two, self.number_roles_two);
 
         // Create the fork function elemental blocks
-        let quote_fork_mpst = fork_interleaved_mpst(
+        let quote_fork_mpst = fork_timed_interleaved_mpst(
             &self.func_name,
             &self.meshedchannels_name_one,
             self.number_roles_one,
@@ -397,6 +400,7 @@ impl BakingInterleavedWithEnumAndCancel {
 
             // Create the fork function
             #quote_fork_mpst
+
         }
     }
 }

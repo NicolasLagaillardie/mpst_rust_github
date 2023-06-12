@@ -49,7 +49,6 @@ use macros_multiple::multiple::send::send_cancel::SendCancel;
 mod interleaved;
 
 use interleaved::close_mpst_interleaved::CloseMpstInterleaved;
-use interleaved::fork_mpst_multi_interleaved::ForkMPSTMultiInterleaved;
 use interleaved::fork_mpst_multi_solo::ForkMPSTMultiSolo;
 
 mod macros_http;
@@ -73,6 +72,7 @@ use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;
 
 mod baking_timed;
 
+use baking_timed::baking_timed_interleaved_with_enum_and_cancel::BakingTimedInterleavedWithEnumAndCancel;
 use baking_timed::baking_timed_with_enum_and_cancel::BakingTimedWithEnumAndCancel;
 
 mod choose_timed_mpst_multi_to_all;
@@ -601,20 +601,6 @@ pub fn e_baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
 
 //////////////////////////////////////
 
-#[proc_macro]
-pub fn fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ForkMPSTMultiInterleaved);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_fork_mpst_multi_interleaved(input: TokenStream) -> TokenStream {
-    fork_mpst_multi_interleaved(input)
-}
-
-//////////////////////////////////////
-
 #[proc_macro_attribute]
 pub fn branching(args: TokenStream, input: TokenStream) -> TokenStream {
     let mut out = input.clone();
@@ -668,4 +654,18 @@ pub fn choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
 #[proc_macro_hack]
 pub fn e_choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
     choose_timed_mpst_multi_to_all(input)
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingTimedInterleavedWithEnumAndCancel);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+#[proc_macro_hack]
+pub fn e_baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    baking_timed_interleaved_with_enum_and_cancel(input)
 }

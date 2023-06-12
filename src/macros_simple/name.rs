@@ -26,7 +26,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_name {
-    ($name:ident) => {
+    ($name: ident) => {
         ////////////////////////////////////////////
         /// The Name
 
@@ -142,7 +142,7 @@ macro_rules! create_multiple_normal_name {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_name_short {
-    ($name:ident) => {
+    ($name: ident) => {
         mpst_seq::create_normal_name_short!($name);
     };
 }
