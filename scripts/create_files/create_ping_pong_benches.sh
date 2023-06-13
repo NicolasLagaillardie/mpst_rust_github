@@ -51,9 +51,9 @@ echo "Step 1/2"
 for i in $(eval echo {1..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    echo -ne "Loop created: $i\n"
-    #########################
     next=$(($i+1))
+    #########################
+    echo -ne "Loop created: $next\n"
     ######################### Crossbeam
     cat benches/ping_pong_all/ping_pong_crossbeam_$i.rs > benches/ping_pong_all/ping_pong_crossbeam_$next.rs
     sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$next"';,g' benches/ping_pong_all/ping_pong_crossbeam_$next.rs
@@ -88,7 +88,6 @@ echo ''
 for i in $(eval echo {0..$1})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
-    #########################
     next=$(($i+1))
     #########################
     echo -ne "Loop created: $next\n"

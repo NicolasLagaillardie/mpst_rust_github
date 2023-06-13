@@ -55,6 +55,7 @@ bash ./scripts/create_files/compile_full.sh three_travel_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh remote_data_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh http_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh non_feasible 10 baking_timed
+bash ./scripts/create_files/compile_full.sh timed_sleeping_barber 10 timed_interleaved
 
 ## Run benchmarks
 cargo clean

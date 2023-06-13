@@ -136,6 +136,55 @@ required-features = []
 ################## Ping-Pong
 
 ######### Ping-Pong start
+
+[[bench]]
+name = "ping_pong_cancel_broadcast_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_cancel_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_cancel_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_baking_timed_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_baking_timed_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_baking_ampst_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_baking_ampst_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_baking_mpst_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_baking_mpst_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_mpst_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_mpst_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_binary_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_binary_1.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ping_pong_crossbeam_1"
+harness = false
+path = "benches/ping_pong_all/ping_pong_crossbeam_1.rs"
+required-features = ["full"]
+
 ######### Ping-Pong end
 
 ################## Examples
@@ -2715,6 +2764,11 @@ name = "non_feasible"
 path = "examples/timed/non_feasible.rs"
 required-features = ["baking_timed"]
 
+[[example]]
+name = "timed_sleeping_barber"
+path = "examples/timed/sleeping_barber.rs"
+required-features = ["baking_timed_interleaved"]
+
 ################################### Mesh examples
 
 ################## Crossbeam
@@ -3327,6 +3381,7 @@ baking = ["default", "macros_multiple"]
 baking_timed = ["binary_timed"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
+baking_timed_interleaved = ["baking_timed", "interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
 transport_http = ["default", "hyper", "hyper-tls", "tokio"]
@@ -3337,8 +3392,8 @@ transport_macros_multiple = [
 ] # For test compile examples
 protobuf = []
 affine_timed = ["baking", "baking_timed"]
-full_without_checking = ["baking", "transport", "baking_interleaved"]
-full = ["baking_checking", "transport", "baking_timed", "baking_interleaved"]
+full_without_checking = ["baking", "transport", "interleaved"]
+full = ["baking_checking", "transport", "baking_timed", "interleaved"]
 
 ################################### Doc handling for all-features
 
