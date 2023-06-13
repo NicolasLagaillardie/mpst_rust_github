@@ -15,6 +15,7 @@ directories = os.listdir(main_path)
 # Lists for plots
 average_mpst = []
 average_ampst = []
+average_atmp = []
 average_binary = []
 average_crossbeam = []
 average_cancel = []
@@ -22,6 +23,7 @@ average_cancel_broadcast = []
 
 nb_participants_mpst = []
 nb_participants_ampst = []
+nb_participants_atmp = []
 nb_participants_binary = []
 nb_participants_crossbeam = []
 nb_participants_cancel = []
@@ -54,6 +56,9 @@ for d in directories:
             elif 'baking_mpst' in d:
                 average_mpst.append(statistics.mean(build_time)/10**6)
                 nb_participants_mpst.append(str_to_int[name])
+            elif 'baking_atmp' in d:
+                average_atmp.append(statistics.mean(build_time)/10**6)
+                nb_participants_atmp.append(str_to_int[name])
             elif 'binary' in d:
                 average_binary.append(statistics.mean(build_time)/10**6)
                 nb_participants_binary.append(str_to_int[name])
@@ -80,6 +85,9 @@ nb_participants_mpst, average_mpst = (list(t) for t in zip(
 nb_participants_ampst, average_ampst = (list(t) for t in zip(
     *sorted(zip(nb_participants_ampst, average_ampst))))
 
+nb_participants_atmp, average_atmp = (list(t) for t in zip(
+    *sorted(zip(nb_participants_atmp, average_atmp))))
+
 nb_participants_binary, average_binary = (list(t) for t in zip(
     *sorted(zip(nb_participants_binary, average_binary))))
 
@@ -99,26 +107,30 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the MPST graph
-ax.plot(nb_participants_mpst, average_mpst, label='MPST',
-        linestyle='solid', linewidth=20, marker='>', markersize=150)
-
-# Plot the AMPST graph
-ax.plot(nb_participants_ampst, average_ampst, label='AMPST',
-        linestyle='solid', linewidth=20, marker='*', markersize=150)
+# Plot the crossbeam graph
+ax.plot(nb_participants_crossbeam, average_crossbeam, label='Crossbeam',
+        linestyle='solid', linewidth=20, marker='P', markersize=70)
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, average_binary, label='Binary',
-        linestyle='solid', linewidth=20, marker='o', markersize=150)
+        linestyle='solid', linewidth=20, marker='o', markersize=70)
 
-# Plot the crossbeam graph
-ax.plot(nb_participants_crossbeam, average_crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=20, marker='d', markersize=150)
+# Plot the MPST graph
+ax.plot(nb_participants_mpst, average_mpst, label='MPST',
+        linestyle='solid', linewidth=20, marker='*', markersize=70)
+
+# Plot the AMPST graph
+ax.plot(nb_participants_ampst, average_ampst, label='AMPST',
+        linestyle='solid', linewidth=20, marker='v', markersize=70)
+
+# Plot the AMPST graph
+ax.plot(nb_participants_atmp, average_atmp, label='ATMP',
+        linestyle='solid', linewidth=20, marker='^', markersize=70)
 
 # if len(average_cancel) > 0:
 #     # Plot the cancel graph
 #     ax.plot(nb_participants_cancel, average_cancel, label='Cancel',
-#             linestyle='solid', linewidth=20, marker='*', markersize=150)
+#             linestyle='solid', linewidth=20, marker='*', markersize=70)
 
 # ax.plot(nb_participants_cancel_broadcast, average_cancel_broadcast,
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
@@ -128,9 +140,9 @@ ax.set_xlabel('\# roles', fontsize=200)
 # ax.set_ylabel('Time (s)', fontsize=600)
 ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(10, 50, 15))
-ax.set_xlim(2, 10)
-ax.set_ylim(10, 45)
+ax.yaxis.set_ticks(np.arange(17, 28, 5))
+ax.set_xlim(2, 8)
+ax.set_ylim(17, 27)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 

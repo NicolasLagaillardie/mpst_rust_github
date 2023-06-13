@@ -1355,48 +1355,48 @@ required-features = ["baking"]
 ################## Timed
 
 [[example]]
-name = "mesh_two_baking_timed"
-path = "examples/mesh/mesh_two_baking_timed.rs"
+name = "mesh_two_baking_atmp"
+path = "examples/mesh/mesh_two_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_three_baking_timed"
-path = "examples/mesh/mesh_three_baking_timed.rs"
+name = "mesh_three_baking_atmp"
+path = "examples/mesh/mesh_three_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_four_baking_timed"
-path = "examples/mesh/mesh_four_baking_timed.rs"
+name = "mesh_four_baking_atmp"
+path = "examples/mesh/mesh_four_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_five_baking_timed"
-path = "examples/mesh/mesh_five_baking_timed.rs"
+name = "mesh_five_baking_atmp"
+path = "examples/mesh/mesh_five_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_six_baking_timed"
-path = "examples/mesh/mesh_six_baking_timed.rs"
+name = "mesh_six_baking_atmp"
+path = "examples/mesh/mesh_six_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_seven_baking_timed"
-path = "examples/mesh/mesh_seven_baking_timed.rs"
+name = "mesh_seven_baking_atmp"
+path = "examples/mesh/mesh_seven_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_eight_baking_timed"
-path = "examples/mesh/mesh_eight_baking_timed.rs"
+name = "mesh_eight_baking_atmp"
+path = "examples/mesh/mesh_eight_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_nine_baking_timed"
-path = "examples/mesh/mesh_nine_baking_timed.rs"
+name = "mesh_nine_baking_atmp"
+path = "examples/mesh/mesh_nine_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "mesh_ten_baking_timed"
-path = "examples/mesh/mesh_ten_baking_timed.rs"
+name = "mesh_ten_baking_atmp"
+path = "examples/mesh/mesh_ten_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 ################################### Ring examples
@@ -1472,48 +1472,48 @@ required-features = ["baking"]
 ################## Timed
 
 [[example]]
-name = "ring_two_baking_timed"
-path = "examples/ring/ring_two_baking_timed.rs"
+name = "ring_two_baking_atmp"
+path = "examples/ring/ring_two_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_three_baking_timed"
-path = "examples/ring/ring_three_baking_timed.rs"
+name = "ring_three_baking_atmp"
+path = "examples/ring/ring_three_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_four_baking_timed"
-path = "examples/ring/ring_four_baking_timed.rs"
+name = "ring_four_baking_atmp"
+path = "examples/ring/ring_four_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_five_baking_timed"
-path = "examples/ring/ring_five_baking_timed.rs"
+name = "ring_five_baking_atmp"
+path = "examples/ring/ring_five_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_six_baking_timed"
-path = "examples/ring/ring_six_baking_timed.rs"
+name = "ring_six_baking_atmp"
+path = "examples/ring/ring_six_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_seven_baking_timed"
-path = "examples/ring/ring_seven_baking_timed.rs"
+name = "ring_seven_baking_atmp"
+path = "examples/ring/ring_seven_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_eight_baking_timed"
-path = "examples/ring/ring_eight_baking_timed.rs"
+name = "ring_eight_baking_atmp"
+path = "examples/ring/ring_eight_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_nine_baking_timed"
-path = "examples/ring/ring_nine_baking_timed.rs"
+name = "ring_nine_baking_atmp"
+path = "examples/ring/ring_nine_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "ring_ten_baking_timed"
-path = "examples/ring/ring_ten_baking_timed.rs"
+name = "ring_ten_baking_atmp"
+path = "examples/ring/ring_ten_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 ################################### Profil

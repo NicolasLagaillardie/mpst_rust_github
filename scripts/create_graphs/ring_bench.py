@@ -20,17 +20,19 @@ str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
               'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
 
 # Lists for plots
+crossbeam = []
 binary = []
 mpst = []
 ampst = []
-crossbeam = []
+atmp = []
 cancel = []
 broadcast_cancel = []
 
+nb_participants_crossbeam = []
 nb_participants_binary = []
 nb_participants_mpst = []
 nb_participants_ampst = []
-nb_participants_crossbeam = []
+nb_participants_atmp = []
 nb_participants_cancel = []
 nb_participants_broadcast_cancel = []
 
@@ -54,7 +56,10 @@ for d in directories_criterion:
 
         try:
             # If MPST of binary, append to related lists
-            if 'AMPST' in d and str_to_int[splitted[1]] >= 2:
+            if 'ATMP' in d and str_to_int[splitted[1]] >= 2:
+                atmp.append(int(test(d))/10**6)
+                nb_participants_atmp.append(str_to_int[splitted[1]])
+            elif 'AMPST' in d and str_to_int[splitted[1]] >= 2:
                 ampst.append(int(test(d))/10**6)
                 nb_participants_ampst.append(str_to_int[splitted[1]])
             elif 'MPST' in d and str_to_int[splitted[1]] >= 2:
@@ -78,25 +83,30 @@ for d in directories_criterion:
             print("Missing ", d)
 
 # Sort the lists in pair
-nb_participants_mpst, mpst = (list(t) for t in zip(
-    *sorted(zip(nb_participants_mpst, mpst))))
+if nb_participants_crossbeam and crossbeam:
+    nb_participants_crossbeam, binary = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
-nb_participants_ampst, ampst = (list(t) for t in zip(
-    *sorted(zip(nb_participants_ampst, ampst))))
+if nb_participants_crossbeam and crossbeam:
+    nb_participants_crossbeam, binary = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
+    
 
-nb_participants_binary, binary = (list(t) for t in zip(
-    *sorted(zip(nb_participants_binary, binary))))
+if nb_participants_binary and binary:
+    nb_participants_binary, binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, binary))))
 
-nb_participants_crossbeam, crossbeam = (list(t) for t in zip(
-    *sorted(zip(nb_participants_crossbeam, crossbeam))))
+if nb_participants_mpst and mpst:
+    nb_participants_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_participants_mpst, mpst))))
 
-if len(cancel) > 0:
-    nb_participants_cancel, cancel = (list(t) for t in zip(
-        *sorted(zip(nb_participants_cancel, cancel))))
+if nb_participants_ampst and ampst:
+    nb_participants_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_participants_ampst, ampst))))
 
-if len(broadcast_cancel) > 0:
-    nb_participants_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(
-        *sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
+if nb_participants_atmp and atmp:
+    nb_participants_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_participants_atmp, atmp))))
+
+if nb_participants_cancel and cancel:
+    nb_participants_cancel, cancel = (list(t) for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+
+if nb_participants_broadcast_cancel and broadcast_cancel:
+    nb_participants_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
 
 # Change size
 # ax = plt.figure(figsize=(50, 50)).gca()
@@ -107,20 +117,19 @@ ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=20, marker='>', markersize=150)
-
-# Plot the AMPST graph
-ax.plot(nb_participants_ampst, ampst, label='MPST',
-        linestyle='solid', linewidth=20, marker='*', markersize=150)
+ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70)
 
 # Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary',
-        linestyle='solid', linewidth=20, marker='o', markersize=150)
+ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70)
 
-# Plot the crossbeam graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=20, marker='d', markersize=150)
+# Plot the MPST graph
+ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70)
+
+# Plot the AMPST graph
+ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70)
+
+# Plot the ATMP graph
+ax.plot(nb_participants_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70)
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -137,9 +146,9 @@ ax.set_xlabel('\# roles', fontsize=200)
 # ax.set_ylabel('Time (ms)', fontsize=500)
 ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(0, 40, 10))
+ax.yaxis.set_ticks(np.arange(0, 40, 4))
 ax.set_xlim(2, 10)
-ax.set_ylim(0, 30)
+ax.set_ylim(0, 13)
 
 # maxi1 = max(mpst)
 # maxi2 = max(binary)

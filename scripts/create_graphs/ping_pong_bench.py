@@ -19,6 +19,7 @@ path_file = '/base/estimates.json'
 binary = []
 mpst = []
 ampst = []
+atmp = []
 crossbeam = []
 cancel = []
 broadcast_cancel = []
@@ -26,6 +27,7 @@ broadcast_cancel = []
 nb_loops_binary = []
 nb_loops_mpst = []
 nb_loops_ampst = []
+nb_loops_atmp = []
 nb_loops_crossbeam = []
 nb_loops_cancel = []
 nb_loops_broadcast_cancel = []
@@ -47,7 +49,10 @@ for d in directories:
         splitted = d.split(' ')
 
         try:
-            if 'AMPST' in d:
+            if 'ATMP' in d:
+                atmp.append(int(test(d))/10**6)
+                nb_loops_atmp.append(int(splitted[-1]))
+            elif 'AMPST' in d:
                 ampst.append(int(test(d))/10**6)
                 nb_loops_ampst.append(int(splitted[-1]))
             elif 'binary' in d and 'cancel' not in d:
@@ -73,8 +78,14 @@ for d in directories:
 if len(nb_loops_binary) > 0:
     nb_loops_binary, binary = (list(t) for t in zip(*sorted(zip(nb_loops_binary, binary))))
 
+if len(nb_loops_mpst) > 0:
+    nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
+
 if len(nb_loops_ampst) > 0:
     nb_loops_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_loops_ampst, ampst))))
+
+if len(nb_loops_atmp) > 0:
+    nb_loops_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_loops_atmp, atmp))))
 
 if len(nb_loops_crossbeam) > 0:
     nb_loops_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_loops_crossbeam, crossbeam))))
@@ -93,20 +104,19 @@ ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the MPST graph
-ax.plot(nb_loops_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=5, marker='>', markersize=20)
-
-# Plot the AMPST graph
-ax.plot(nb_loops_ampst, ampst, label='AMPST',
-        linestyle='solid', linewidth=5, marker='*', markersize=20)
+ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70)
 
 # Plot the binary graph
-ax.plot(nb_loops_binary, binary, label='Binary',
-        linestyle='solid', linewidth=5, marker='o', markersize=20)
+ax.plot(nb_loops_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70)
 
-# Plot the crossbeam graph
-ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=5, marker='d', markersize=20)
+# Plot the MPST graph
+ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70)
+
+# Plot the AMPST graph
+ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70)
+
+# Plot the ATMP graph
+ax.plot(nb_loops_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70)
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -119,12 +129,11 @@ ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_ylabel('Time (ms)', fontsize=200)
 ax.set_xlabel('\# iterations', fontsize=200)
 ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(0, 510, 100))
 ax.yaxis.set_ticks(np.arange(0, 13, 4))
-ax.set_xlim(0, 510)
+ax.set_xlim(0, 500)
 ax.set_ylim(0, 12)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
