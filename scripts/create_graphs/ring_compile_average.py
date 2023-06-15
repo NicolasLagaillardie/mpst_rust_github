@@ -13,13 +13,13 @@ main_path = './compile_time'
 directories = os.listdir(main_path)
 
 # Lists for plots
-average_mpst = []
-average_ampst = []
-average_atmp = []
-average_binary = []
-average_crossbeam = []
-average_cancel = []
-average_cancel_broadcast = []
+mpst = []
+ampst = []
+atmp = []
+binary = []
+crossbeam = []
+cancel = []
+cancel_broadcast = []
 
 nb_participants_mpst = []
 nb_participants_ampst = []
@@ -51,27 +51,27 @@ for d in directories:
 
                     # If MPST of binary, append to related lists
             if 'baking_ampst' in d:
-                average_ampst.append(statistics.mean(build_time)/10**6)
+                ampst.append(statistics.mean(build_time)/10**6)
                 nb_participants_ampst.append(str_to_int[name])
             elif 'baking_mpst' in d:
-                average_mpst.append(statistics.mean(build_time)/10**6)
+                mpst.append(statistics.mean(build_time)/10**6)
                 nb_participants_mpst.append(str_to_int[name])
             elif 'baking_atmp' in d:
-                average_atmp.append(statistics.mean(build_time)/10**6)
+                atmp.append(statistics.mean(build_time)/10**6)
                 nb_participants_atmp.append(str_to_int[name])
             elif 'binary' in d:
-                average_binary.append(statistics.mean(build_time)/10**6)
+                binary.append(statistics.mean(build_time)/10**6)
                 nb_participants_binary.append(str_to_int[name])
             elif 'cancel' in d:
                 if 'broadcast' in d:
-                    average_cancel_broadcast.append(
+                    cancel_broadcast.append(
                         statistics.mean(build_time)/10**6)
                     nb_participants_cancel_broadcast.append(str_to_int[name])
                 else:
-                    average_cancel.append(statistics.mean(build_time)/10**6)
+                    cancel.append(statistics.mean(build_time)/10**6)
                     nb_participants_cancel.append(str_to_int[name])
             elif 'crossbeam' in d:
-                average_crossbeam.append(statistics.mean(build_time)/10**6)
+                crossbeam.append(statistics.mean(build_time)/10**6)
                 nb_participants_crossbeam.append(str_to_int[name])
         except:
             print('Issue with ', d)
@@ -79,26 +79,26 @@ for d in directories:
         file.close()
 
 # Sort the lists in pair
-nb_participants_mpst, average_mpst = (list(t) for t in zip(
-    *sorted(zip(nb_participants_mpst, average_mpst))))
+if nb_participants_crossbeam and crossbeam:
+    nb_participants_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
-nb_participants_ampst, average_ampst = (list(t) for t in zip(
-    *sorted(zip(nb_participants_ampst, average_ampst))))
+if nb_participants_binary and binary:
+    nb_participants_binary, binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, binary))))
 
-nb_participants_atmp, average_atmp = (list(t) for t in zip(
-    *sorted(zip(nb_participants_atmp, average_atmp))))
+if nb_participants_mpst and mpst:
+    nb_participants_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_participants_mpst, mpst))))
 
-nb_participants_binary, average_binary = (list(t) for t in zip(
-    *sorted(zip(nb_participants_binary, average_binary))))
+if nb_participants_ampst and ampst:
+    nb_participants_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_participants_ampst, ampst))))
 
-nb_participants_crossbeam, average_crossbeam = (list(t) for t in zip(
-    *sorted(zip(nb_participants_crossbeam, average_crossbeam))))
+if nb_participants_atmp and atmp:
+    nb_participants_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_participants_atmp, atmp))))
 
-# nb_participants_cancel, average_cancel = (list(t)
-#                                           for t in zip(*sorted(zip(nb_participants_cancel, average_cancel))))
+# nb_participants_cancel, cancel = (list(t)
+#                                           for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
 
-# nb_participants_cancel_broadcast, average_cancel_broadcast = (list(t)
-#                                                               for t in zip(*sorted(zip(nb_participants_cancel_broadcast, average_cancel_broadcast))))
+# nb_participants_cancel_broadcast, cancel_broadcast = (list(t)
+#                                                               for t in zip(*sorted(zip(nb_participants_cancel_broadcast, cancel_broadcast))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -108,41 +108,34 @@ ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the crossbeam graph
-ax.plot(nb_participants_crossbeam, average_crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=20, marker='P', markersize=70)
+ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
 # Plot the binary graph
-ax.plot(nb_participants_binary, average_binary, label='Binary',
-        linestyle='solid', linewidth=20, marker='o', markersize=70)
+ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
 # Plot the MPST graph
-ax.plot(nb_participants_mpst, average_mpst, label='MPST',
-        linestyle='solid', linewidth=20, marker='*', markersize=70)
+ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_ampst, average_ampst, label='AMPST',
-        linestyle='solid', linewidth=20, marker='v', markersize=70)
+ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#d62728')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_atmp, average_atmp, label='ATMP',
-        linestyle='solid', linewidth=20, marker='^', markersize=70)
+ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#9467bd')
 
-# if len(average_cancel) > 0:
+# if len(cancel) > 0:
 #     # Plot the cancel graph
-#     ax.plot(nb_participants_cancel, average_cancel, label='Cancel',
-#             linestyle='solid', linewidth=20, marker='*', markersize=150)
+#     ax.plot(nb_participants_cancel, cancel, label='Cancel', linestyle='solid', linewidth=20, marker='*', markersize=150)
 
-# ax.plot(nb_participants_cancel_broadcast, average_cancel_broadcast,
-#         label="Broadcast cancel", linestyle='dotted', linewidth=5)
+# ax.plot(nb_participants_cancel_broadcast, cancel_broadcast, label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=200)
+ax.set_xlabel('\# roles', fontsize=500)
 # ax.set_ylabel('Time (s)', fontsize=200)
-ax.tick_params(axis='both', which='major', labelsize=200)
-ax.xaxis.set_ticks(np.arange(2, 11, 2))
+ax.tick_params(axis='both', which='major', labelsize=500)
+ax.xaxis.set_ticks(np.arange(2, 11, 3))
 ax.yaxis.set_ticks(np.arange(18, 25, 1))
 ax.set_xlim(2, 8)
-ax.set_ylim(18, 21)
+ax.set_ylim(18.5, 21)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
@@ -163,6 +156,9 @@ for label in ax.yaxis.get_majorticklabels():
 
 # show a legend on the plot
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
+
+# Tight layout
+plt.tight_layout()
 
 # Save fig
 plt.savefig(main_path + '/graphAverageCompileRing.pdf')

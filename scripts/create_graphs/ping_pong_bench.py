@@ -75,25 +75,25 @@ for d in directories:
             print("Missing ", d)
 
 # Sort the lists in pair
-if len(nb_loops_binary) > 0:
-    nb_loops_binary, binary = (list(t) for t in zip(*sorted(zip(nb_loops_binary, binary))))
-
-if len(nb_loops_mpst) > 0:
-    nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
-
-if len(nb_loops_ampst) > 0:
-    nb_loops_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_loops_ampst, ampst))))
-
-if len(nb_loops_atmp) > 0:
-    nb_loops_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_loops_atmp, atmp))))
-
-if len(nb_loops_crossbeam) > 0:
+if nb_loops_crossbeam and crossbeam:
     nb_loops_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_loops_crossbeam, crossbeam))))
 
-if len(nb_loops_cancel) > 0:
+if nb_loops_binary and binary:
+    nb_loops_binary, binary = (list(t) for t in zip(*sorted(zip(nb_loops_binary, binary))))
+
+if nb_loops_mpst and mpst:
+    nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
+
+if nb_loops_ampst and ampst:
+    nb_loops_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_loops_ampst, ampst))))
+
+if nb_loops_atmp and atmp:
+    nb_loops_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_loops_atmp, atmp))))
+
+if nb_loops_cancel and cancel:
     nb_loops_cancel, cancel = (list(t) for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
 
-if len(nb_loops_broadcast_cancel) > 0:
+if nb_loops_broadcast_cancel and broadcast_cancel:
     nb_loops_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
 
 # Change size
@@ -103,20 +103,20 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.25)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the MPST graph
-ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70)
+# Plot the Crossbeam graph
+ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
 # Plot the binary graph
-ax.plot(nb_loops_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70)
+ax.plot(nb_loops_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
 # Plot the MPST graph
-ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70)
+ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70)
+ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_loops_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70)
+ax.plot(nb_loops_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -139,7 +139,7 @@ ax.set_ylim(0, 12)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
-# apply offset transform to all x ticklabels.
+# apply offset transform to all x tick labels.
 for label in ax.xaxis.get_majorticklabels():
     label.set_transform(label.get_transform() + offset_x)
 
@@ -182,6 +182,9 @@ for label in ax.yaxis.get_majorticklabels():
 # ax.legend(bbox_to_anchor=(0.25, 0.80), loc="center", prop={'size': 150}, markerscale=3)
 # ax.legend(bbox_to_anchor=(0.5, 1.08), loc="center",
 #           prop={'size': 200}, markerscale=5, ncol=4)
+
+# Tight layout
+plt.tight_layout()
 
 # Save fig
 plt.savefig('./graphs_bench/graphPingPong.pdf')

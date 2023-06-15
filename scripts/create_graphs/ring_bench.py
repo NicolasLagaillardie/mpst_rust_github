@@ -84,11 +84,7 @@ for d in directories_criterion:
 
 # Sort the lists in pair
 if nb_participants_crossbeam and crossbeam:
-    nb_participants_crossbeam, binary = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
-
-if nb_participants_crossbeam and crossbeam:
-    nb_participants_crossbeam, binary = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
-    
+    nb_participants_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
 if nb_participants_binary and binary:
     nb_participants_binary, binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, binary))))
@@ -116,20 +112,20 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the MPST graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70)
+# Plot the Crossbeam graph
+ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
 # Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70)
+ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
 # Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70)
+ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70)
+ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_participants_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70)
+ax.plot(nb_participants_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -142,13 +138,13 @@ ax.plot(nb_participants_ampst, ampst, label='ATMP', linestyle='solid', linewidth
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=200)
+ax.set_xlabel('\# roles', fontsize=500)
 # ax.set_ylabel('Time (ms)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=200)
-ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(0, 40, 4))
-ax.set_xlim(2, 10)
-ax.set_ylim(0, 13)
+ax.tick_params(axis='both', which='major', labelsize=500)
+ax.xaxis.set_ticks(np.arange(2, 11, 3))
+ax.yaxis.set_ticks(np.arange(0, 40, 3))
+ax.set_xlim(2, 8)
+ax.set_ylim(0, 9)
 
 # maxi1 = max(mpst)
 # maxi2 = max(binary)
@@ -193,6 +189,9 @@ for label in ax.yaxis.get_majorticklabels():
 
 # show a legend on the plot
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
+
+# Tight layout
+plt.tight_layout()
 
 # Save fig
 plt.savefig('./graphs_bench/graphRing'+number_of_loops+'.pdf')

@@ -83,11 +83,7 @@ for d in directories:
 
 # Sort the lists in pair
 if nb_participants_crossbeam and crossbeam:
-    nb_participants_crossbeam, binary = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
-
-if nb_participants_crossbeam and crossbeam:
-    nb_participants_crossbeam, binary = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
-    
+    nb_participants_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
 if nb_participants_binary and binary:
     nb_participants_binary, binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, binary))))
@@ -114,29 +110,29 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the crossbeam graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70)
+# Plot the Crossbeam graph
+ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
 # Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70)
+ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
 # Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70)
+ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70)
+ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_participants_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70)
+ax.plot(nb_participants_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=200)
+ax.set_xlabel('\# roles', fontsize=500)
 # ax.set_ylabel('Time (ms)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=200)
-ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(0, 20, 5))
+ax.tick_params(axis='both', which='major', labelsize=500)
+ax.xaxis.set_ticks(np.arange(2, 21, 3))
+ax.yaxis.set_ticks(np.arange(0, 30, 6))
 ax.set_xlim(2, 8)
-ax.set_ylim(0, 15)
+ax.set_ylim(0, 12)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
@@ -179,8 +175,11 @@ for label in ax.yaxis.get_majorticklabels():
 # plt.title('MPST vs binary along number of participants for ' +
 #           number_of_loops + ' loops')
 
-# show a legend on the plot
-# ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
+# # show a legend on the plot
+# ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 200})
+
+# Tight layout
+plt.tight_layout()
 
 # Save fig
 plt.savefig('./graphs_bench/graphMesh'+number_of_loops+'.pdf')
