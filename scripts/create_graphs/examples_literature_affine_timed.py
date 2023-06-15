@@ -84,7 +84,7 @@ while os.path.isfile('results/benchmarks_main_from_literature_' + str(index) + '
 for d in compile_directories:
     for compile_file in compile_files:
         # If name looks like the one from what we want
-        if compile_file in d and 'timed' not in d:
+        if compile_file in d and 'timed' not in d and 'checking' not in d and 'transport' not in d:
             try:
                 with open(compile_folder / d, 'r') as f:
                     lines = [line.rstrip() for line in f]
@@ -161,6 +161,8 @@ for d in compile_directories:
             except:
                 print('Issue with ', d)
             break
+    else:
+        print("Issue with ", d)
 
 # print("Done")
 
@@ -181,9 +183,9 @@ width = 0.3
 compilation_time = fig.add_subplot(1, 2, 1)
 
 compilation_time.bar(np.arange(len(bar_compilation_baking)) -
-                     width/2, bar_compilation_baking, width=width)
+                     width/2, bar_compilation_baking, width=width, color='#d62728')
 compilation_time.bar(np.arange(len(bar_compilation_timed)) +
-                     width/2, bar_compilation_timed, width=width)
+                     width/2, bar_compilation_timed, width=width, color='#9467bd')
 
 compilation_time.set_title("Compilation time", pad=10, fontsize=30)
 compilation_time.xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -195,17 +197,17 @@ compilation_time.xaxis.set_ticklabels(
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
 
 # Setting the number of ticks
-compilation_time.yaxis.set_ticks(np.arange(0, int(max(
-    max(bar_compilation_timed), max(bar_compilation_baking)))+5, 10), labelsize=20)
-compilation_time.tick_params(labelsize=20)
+# compilation_time.yaxis.set_ticks(np.arange(0, int(max(
+#     max(bar_compilation_timed), max(bar_compilation_baking)))+5, 10), labelsize=20)
+# compilation_time.tick_params(labelsize=20)
 
 # Plotting running time
 running_time = fig.add_subplot(1, 2, 2)
 
 running_time.bar(np.arange(len(bar_running_baking)) -
-                 width/2, bar_running_baking, width=width)
+                 width/2, bar_running_baking, width=width, color='#d62728')
 running_time.bar(np.arange(len(bar_running_timed)) +
-                 width/2, bar_running_timed, width=width)
+                 width/2, bar_running_timed, width=width, color='#9467bd')
 
 running_time.set_title("Running time", pad=10, fontsize=30)
 running_time.xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -217,9 +219,9 @@ running_time.xaxis.set_ticklabels(
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
 
 # Setting the number of ticks
-running_time.yaxis.set_ticks(np.arange(0, int(
-    max(max(bar_running_timed), max(bar_running_baking)))+1.5, 0.5), labelsize=20)
-running_time.tick_params(labelsize=20)
+# running_time.yaxis.set_ticks(np.arange(0, int(
+#     max(max(bar_running_timed), max(bar_running_baking)))+1.5, 0.5), labelsize=20)
+# running_time.tick_params(labelsize=20)
 
 plt.legend(
     ['AMPST', 'ATMP'],

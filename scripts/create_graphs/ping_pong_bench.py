@@ -116,7 +116,7 @@ ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, mark
 ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_loops_ampst, ampst, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
+ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
