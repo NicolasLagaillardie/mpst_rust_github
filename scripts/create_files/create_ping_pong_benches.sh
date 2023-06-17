@@ -5,17 +5,20 @@
 # Stop upon any error
 set -e
 
+start=1
+end=1
+
 if [ -z "$1" ]
 then
     echo "No argument supplied"
     exit 2
 elif [ -z "$2" ]
 then
-    $start=1
-    $end=$1
+    start=1
+    end=$1
 else
-    $start=$1
-    $end=$2
+    start=$1
+    end=$2
 fi
 
 # Check if ping_pong bench in Cargo.toml
@@ -58,33 +61,38 @@ cat benches/ping_pong_all_save/ping_pong_baking_timed_1.rs > benches/ping_pong_a
 cat benches/ping_pong_all_save/ping_pong_cancel_1.rs > benches/ping_pong_all/ping_pong_cancel_1.rs
 cat benches/ping_pong_all_save/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs
 
-# Update to start from correct $start
-cat benches/ping_pong_all/ping_pong_crossbeam_1.rs > benches/ping_pong_all/ping_pong_crossbeam_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_crossbeam_$start.rs
-cat benches/ping_pong_all/ping_pong_binary_1.rs > benches/ping_pong_all/ping_pong_binary_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_binary_$start.rs
-cat benches/ping_pong_all/ping_pong_mpst_1.rs > benches/ping_pong_all/ping_pong_mpst_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_mpst_$start.rs
-cat benches/ping_pong_all/ping_pong_baking_mpst_1.rs > benches/ping_pong_all/ping_pong_baking_mpst_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_baking_mpst_$start.rs
-cat benches/ping_pong_all/ping_pong_baking_ampst_1.rs > benches/ping_pong_all/ping_pong_baking_ampst_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_baking_ampst_$start.rs
-cat benches/ping_pong_all/ping_pong_baking_timed_1.rs > benches/ping_pong_all/ping_pong_baking_timed_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_baking_timed_$start.rs
-cat benches/ping_pong_all/ping_pong_cancel_1.rs > benches/ping_pong_all/ping_pong_cancel_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_cancel_$start.rs
-cat benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_$start.rs
-sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_cancel_broadcast_$start.rs
+if [ $start != 1 ]
+then
+    echo "Updating starting files"
 
-# Add to Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_crossbeam_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_crossbeam_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_binary_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_binary_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_mpst_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_mpst_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_mpst_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_mpst_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_ampst_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_ampst_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_timed_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_cancel_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_cancel_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_cancel_broadcast_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_cancel_broadcast_"$start".rs'"\nrequired-features = ["'full'"]\n,g' Cargo.toml
+    # Update to start from correct $start
+    cat benches/ping_pong_all/ping_pong_crossbeam_1.rs > benches/ping_pong_all/ping_pong_crossbeam_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_crossbeam_$start.rs
+    cat benches/ping_pong_all/ping_pong_binary_1.rs > benches/ping_pong_all/ping_pong_binary_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_binary_$start.rs
+    cat benches/ping_pong_all/ping_pong_mpst_1.rs > benches/ping_pong_all/ping_pong_mpst_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_mpst_$start.rs
+    cat benches/ping_pong_all/ping_pong_baking_mpst_1.rs > benches/ping_pong_all/ping_pong_baking_mpst_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_baking_mpst_$start.rs
+    cat benches/ping_pong_all/ping_pong_baking_ampst_1.rs > benches/ping_pong_all/ping_pong_baking_ampst_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_baking_ampst_$start.rs
+    cat benches/ping_pong_all/ping_pong_baking_timed_1.rs > benches/ping_pong_all/ping_pong_baking_timed_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_baking_timed_$start.rs
+    cat benches/ping_pong_all/ping_pong_cancel_1.rs > benches/ping_pong_all/ping_pong_cancel_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_cancel_$start.rs
+    cat benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs > benches/ping_pong_all/ping_pong_cancel_broadcast_$start.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$start"';,g' benches/ping_pong_all/ping_pong_cancel_broadcast_$start.rs
+
+    # Add to Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_crossbeam_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_crossbeam_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_binary_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_binary_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_mpst_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_mpst_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_mpst_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_mpst_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_ampst_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_ampst_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_timed_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_cancel_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_cancel_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+    sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_cancel_broadcast_"$start"'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_cancel_broadcast_"$start".rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+fi
 
 echo "Step 1/2 for bench files"
 
