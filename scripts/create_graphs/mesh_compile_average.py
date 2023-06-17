@@ -107,20 +107,20 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the crossbeam graph
+# Plot the Crossbeam graph
 ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
 # Plot the binary graph
 ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
 # Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#2ca02c')
+ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#d62728')
+ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
-# Plot the AMPST graph
-ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#9467bd')
+# Plot the ATMP graph
+ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -157,7 +157,14 @@ for label in ax.yaxis.get_majorticklabels():
 # plt.title('Compile time needed')
 
 # # show a legend on the plot
-# ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 200})
+# plt.legend(
+#     ['AMPST', 'ATMP'],
+#     loc='best',
+#     # bbox_to_anchor=(-0.5, -0.3),
+#     fancybox=True,
+#     shadow=True,
+#     ncol=1,
+#     fontsize=20)
 
 # Tight layout
 plt.tight_layout()
