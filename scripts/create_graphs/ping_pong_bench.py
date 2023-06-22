@@ -104,19 +104,19 @@ ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 # Plot the Crossbeam graph
-ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
+ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, color='#1f77b4')
 
 # Plot the binary graph
-ax.plot(nb_loops_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
+ax.plot(nb_loops_binary, binary, label='Binary', linestyle='solid', linewidth=20, color='#ff7f0e')
 
 # Plot the MPST graph
-ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
+ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
+ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
+ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -131,10 +131,10 @@ ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, mark
 # Label X and Y axis
 ax.set_xlabel('\# iterations', fontsize=200)
 ax.tick_params(axis='both', which='major', labelsize=200)
-ax.xaxis.set_ticks(np.arange(0, 510, 100))
-ax.yaxis.set_ticks(np.arange(0, 13, 4))
-ax.set_xlim(0, 500)
-ax.set_ylim(0, 12)
+ax.xaxis.set_ticks(np.arange(0, 510, 50))
+ax.yaxis.set_ticks(np.arange(0, 13, 1.25))
+ax.set_xlim(0, 250)
+ax.set_ylim(0, 2.5)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)

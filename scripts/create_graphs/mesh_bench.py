@@ -55,9 +55,9 @@ for d in directories:
 
         try:
             # If MPST of binary, append to related lists
-            if 'ATMP' in d and str_to_int[splitted[2]] >= 2:
+            if 'ATMP' in d and str_to_int[splitted[1]] >= 2:
                 atmp.append(int(test(d))/10**6)
-                nb_participants_atmp.append(str_to_int[splitted[2]])
+                nb_participants_atmp.append(str_to_int[splitted[1]])
             elif 'AMPST' in d and str_to_int[splitted[1]] >= 2:
                 ampst.append(int(test(d))/10**6)
                 nb_participants_ampst.append(str_to_int[splitted[1]])
@@ -126,13 +126,13 @@ ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidt
 ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=500)
-# ax.set_ylabel('Time (ms)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=500)
+ax.set_xlabel('\# roles', fontsize=300)
+# ax.set_ylabel('Time (ms)', fontsize=300)
+ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 21, 3))
-ax.yaxis.set_ticks(np.arange(0, 30, 6))
+ax.yaxis.set_ticks(np.arange(0, 30, 12))
 ax.set_xlim(2, 8)
-ax.set_ylim(0, 12)
+ax.set_ylim(0, 24)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 

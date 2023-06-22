@@ -131,11 +131,11 @@ ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=2
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=500)
-# ax.set_ylabel('Time (s)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=500)
+ax.set_xlabel('\# roles', fontsize=300)
+# ax.set_ylabel('Time (s)', fontsize=300)
+ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 11, 3))
-ax.yaxis.set_ticks(np.arange(18, 28, 4))
+ax.yaxis.set_ticks(np.arange(18, 28, 3))
 ax.set_xlim(2, 8)
 ax.set_ylim(18, 27)
 
@@ -170,7 +170,7 @@ for label in ax.yaxis.get_majorticklabels():
 plt.tight_layout()
 
 # Save fig
-plt.savefig(main_path + '/graphAverageCompileMesh.pdf')
+plt.savefig('./graphs_bench/graphAverageCompileMesh.pdf')
 
 # # function to show the plot
 # plt.show()
