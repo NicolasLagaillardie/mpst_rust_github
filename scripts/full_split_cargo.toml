@@ -136,55 +136,6 @@ required-features = []
 ################## Ping-Pong
 
 ######### Ping-Pong start
-
-[[bench]]
-name = "ping_pong_cancel_broadcast_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_cancel_broadcast_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_cancel_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_cancel_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_baking_timed_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_timed_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_baking_ampst_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_ampst_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_baking_mpst_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_mpst_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_mpst_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_mpst_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_binary_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_binary_1.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_crossbeam_1"
-harness = false
-path = "benches/ping_pong_all/ping_pong_crossbeam_1.rs"
-required-features = ["full"]
-
 ######### Ping-Pong end
 
 ################## Examples
@@ -378,13 +329,13 @@ required-features = ["full"]
 [[bench]]
 name = "example_logging_solo_interleaved"
 harness = false
-path = "benches/examples_all_interleaved/basic/logging_solo.rs"
+path = "benches/examples_all_interleaved/logging_solo.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_circuit_breaker_solo_interleaved"
 harness = false
-path = "benches/examples_all_interleaved/basic/circuit_breaker_solo.rs"
+path = "benches/examples_all_interleaved/circuit_breaker_solo.rs"
 required-features = ["full"]
 
 ######### Timed
