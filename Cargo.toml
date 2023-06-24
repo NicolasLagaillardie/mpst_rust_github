@@ -134,42 +134,6 @@ required-features = []
 ################## Ping-Pong
 
 ######### Ping-Pong start
-
-[[bench]]
-name = "ping_pong_baking_timed"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_timed.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_baking_ampst"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_ampst.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_baking_mpst"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_mpst.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_mpst"
-harness = false
-path = "benches/ping_pong_all/ping_pong_mpst.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_binary"
-harness = false
-path = "benches/ping_pong_all/ping_pong_binary.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ping_pong_crossbeam"
-harness = false
-path = "benches/ping_pong_all/ping_pong_crossbeam.rs"
-required-features = ["full"]
 ######### Ping-Pong end
 
 ################################### Profil
