@@ -34,20 +34,20 @@ type CtoL = SendTimed<
     'a',
     0,
     true,
-    1,
+    10,
     true,
     ' ',
-    RecvTimed<OutstandingWebFonts, 'a', 0, true, 1, true, ' ', End>,
+    RecvTimed<OutstandingWebFonts, 'a', 0, true, 10, true, ' ', End>,
 >;
 type CtoS = SendTimed<
     GetCurrentState,
     'a',
     0,
     true,
-    1,
+    10,
     true,
     ' ',
-    RecvTimed<DocumentLoading, 'a', 0, true, 1, true, ' ', End>,
+    RecvTimed<DocumentLoading, 'a', 0, true, 10, true, ' ', End>,
 >;
 
 //Layout thread
@@ -57,12 +57,12 @@ type LtoC = RecvTimed<
     'a',
     0,
     true,
-    1,
+    10,
     true,
     ' ',
-    SendTimed<OutstandingWebFonts, 'a', 0, true, 1, true, ' ', End>,
+    SendTimed<OutstandingWebFonts, 'a', 0, true, 10, true, ' ', End>,
 >;
-type LtoS = SendTimed<WebFontLoaded, 'a', 0, true, 1, true, ' ', End>;
+type LtoS = SendTimed<WebFontLoaded, 'a', 0, true, 10, true, ' ', End>;
 
 // Script thread
 
@@ -71,12 +71,12 @@ type StoC = RecvTimed<
     'a',
     0,
     true,
-    1,
+    10,
     true,
     ' ',
-    SendTimed<DocumentLoading, 'a', 0, true, 1, true, ' ', End>,
+    SendTimed<DocumentLoading, 'a', 0, true, 10, true, ' ', End>,
 >;
-type StoL = RecvTimed<WebFontLoaded, 'a', 0, true, 1, true, ' ', End>;
+type StoL = RecvTimed<WebFontLoaded, 'a', 0, true, 10, true, ' ', End>;
 
 // Orderings
 

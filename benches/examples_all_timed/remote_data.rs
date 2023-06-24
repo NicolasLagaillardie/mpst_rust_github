@@ -32,31 +32,31 @@ struct Data {
 // Types
 // Satellite
 type OfferFromServertoSatellite =
-    RecvTimed<BranchingFromServertoSatellite, 'a', 0, true, 1, true, 'a', End>;
+    RecvTimed<BranchingFromServertoSatellite, 'a', 0, true, 10, true, 'a', End>;
 
 type BinaryDataFromSensortoSatellite = SendTimed<
     GetData,
     'a',
     0,
     true,
-    1,
+    10,
     true,
     ' ',
-    RecvTimed<Data, 'a', 0, true, 1, true, ' ', End>,
+    RecvTimed<Data, 'a', 0, true, 10, true, ' ', End>,
 >;
 type BinaryDataFromServertoSatellite = RecvTimed<
     GetData,
     'a',
     0,
     true,
-    1,
+    10,
     true,
     ' ',
-    SendTimed<Data, 'a', 0, true, 1, true, 'a', OfferFromServertoSatellite>,
+    SendTimed<Data, 'a', 0, true, 10, true, 'a', OfferFromServertoSatellite>,
 >;
 
-type BinaryStopFromSensortoSatellite = SendTimed<Stop, 'a', 0, true, 1, true, ' ', End>;
-type BinaryStopFromServertoSatellite = RecvTimed<Stop, 'a', 0, true, 1, true, ' ', End>;
+type BinaryStopFromSensortoSatellite = SendTimed<Stop, 'a', 0, true, 10, true, ' ', End>;
+type BinaryStopFromServertoSatellite = RecvTimed<Stop, 'a', 0, true, 10, true, ' ', End>;
 
 enum BranchingFromServertoSatellite {
     Data(
@@ -79,7 +79,7 @@ enum BranchingFromServertoSatellite {
 
 // Sensor
 type OfferFromServertoSensor =
-    RecvTimed<BranchingFromServertoSensor, 'a', 0, true, 1, true, 'a', End>;
+    RecvTimed<BranchingFromServertoSensor, 'a', 0, true, 10, true, 'a', End>;
 
 type BinaryDataFromSatellitetoSensor = <BinaryDataFromSensortoSatellite as Session>::Dual;
 

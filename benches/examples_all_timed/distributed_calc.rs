@@ -25,8 +25,8 @@ baker_timed!(MeshedChannels, A, C, S);
 
 // Types
 // A
-type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>;
-type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ', End>;
+type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
+type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>;
 
 // A
 enum Branching0fromCtoA {
@@ -37,17 +37,27 @@ enum Branching0fromCtoA {
 // S
 enum Branching0fromCtoS {
     Sum(
-        MeshedChannels<End, SendTimed<i32, 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
+        MeshedChannels<
+            End,
+            SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+            RoleC<RoleEnd>,
+            NameS,
+        >,
     ),
     Diff(
-        MeshedChannels<End, SendTimed<i32, 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
+        MeshedChannels<
+            End,
+            SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+            RoleC<RoleEnd>,
+            NameS,
+        >,
     ),
 }
 
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannels<
-    RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>,
+    RecvTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>,
     End,
     RoleC<RoleEnd>,
     NameA,
@@ -61,10 +71,10 @@ type EndpointC = MeshedChannels<
         'a',
         0,
         true,
-        1,
+        10,
         true,
         ' ',
-        SendTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromCtoS>,
+        SendTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromCtoS>,
     >,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
@@ -78,7 +88,7 @@ type EndpointS = MeshedChannels<
         'a',
         0,
         true,
-        1,
+        10,
         true,
         ' ',
         RecvTimed<
@@ -86,10 +96,10 @@ type EndpointS = MeshedChannels<
             'a',
             0,
             true,
-            1,
+            10,
             true,
             ' ',
-            RecvTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ', End>,
+            RecvTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>,
         >,
     >,
     RoleC<RoleC<RoleC<RoleEnd>>>,

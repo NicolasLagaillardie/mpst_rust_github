@@ -30,10 +30,10 @@ enum Branching0fromAtoB {
                 'a',
                 0,
                 true,
-                1,
+                10,
                 true,
                 ' ',
-                SendTimed<(), 'a', 0, true, 1, true, ' ', RecursBtoA>,
+                SendTimed<(), 'a', 0, true, 10, true, ' ', RecursBtoA>,
             >,
             RoleA<RoleA<RoleA<RoleEnd>>>,
             NameB,
@@ -41,7 +41,7 @@ enum Branching0fromAtoB {
     ),
     Done(MeshedChannelsTwo<End, RoleEnd, NameB>),
 }
-type RecursBtoA = RecvTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>;
+type RecursBtoA = RecvTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // Creating the MP sessions
 type EndpointA = MeshedChannelsTwo<Choose0fromAtoB, RoleBroadcast, NameA>;

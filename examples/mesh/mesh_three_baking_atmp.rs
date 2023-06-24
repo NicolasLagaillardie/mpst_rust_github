@@ -21,8 +21,10 @@ baker_timed!(MeshedChannelsThree, A, B, C);
 
 // Types
 // SendTimed/RecvTimed
-type RS = RecvTimed<(), 'a', 0, true, 1, true, ' ', SendTimed<(), 'a', 0, true, 1, true, ' ', End>>;
-type SR = SendTimed<(), 'a', 0, true, 1, true, ' ', RecvTimed<(), 'a', 0, true, 1, true, ' ', End>>;
+type RS =
+    RecvTimed<(), 'a', 0, true, 10, true, ' ', SendTimed<(), 'a', 0, true, 10, true, ' ', End>>;
+type SR =
+    SendTimed<(), 'a', 0, true, 10, true, ' ', RecvTimed<(), 'a', 0, true, 10, true, ' ', End>>;
 
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
@@ -39,10 +41,10 @@ enum Branching0fromCtoA {
                 'a',
                 0,
                 true,
-                1,
+                10,
                 true,
                 ' ',
-                SendTimed<(), 'a', 0, true, 1, true, ' ', RecursAtoC>,
+                SendTimed<(), 'a', 0, true, 10, true, ' ', RecursAtoC>,
             >,
             R2C<R2B<RoleC<RoleEnd>>>,
             NameA,
@@ -50,7 +52,7 @@ enum Branching0fromCtoA {
     ),
     Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
-type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>;
+type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
 
 // B
 enum Branching0fromCtoB {
@@ -62,10 +64,10 @@ enum Branching0fromCtoB {
                 'a',
                 0,
                 true,
-                1,
+                10,
                 true,
                 ' ',
-                SendTimed<(), 'a', 0, true, 1, true, ' ', RecursBtoC>,
+                SendTimed<(), 'a', 0, true, 10, true, ' ', RecursBtoC>,
             >,
             R2C<R2A<RoleC<RoleEnd>>>,
             NameB,
@@ -73,31 +75,31 @@ enum Branching0fromCtoB {
     ),
     Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
-type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 1, true, ' ', End>;
+type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // C
-type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>;
-type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 1, true, ' ', End>;
+type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
+type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 10, true, ' ', End>;
 type EndpointMoreC = MeshedChannelsThree<
     SendTimed<
         (),
         'a',
         0,
         true,
-        1,
+        10,
         true,
         ' ',
-        RecvTimed<(), 'a', 0, true, 1, true, ' ', Choose0fromCtoA>,
+        RecvTimed<(), 'a', 0, true, 10, true, ' ', Choose0fromCtoA>,
     >,
     SendTimed<
         (),
         'a',
         0,
         true,
-        1,
+        10,
         true,
         ' ',
-        RecvTimed<(), 'a', 0, true, 1, true, ' ', Choose0fromCtoB>,
+        RecvTimed<(), 'a', 0, true, 10, true, ' ', Choose0fromCtoB>,
     >,
     R2A<R2B<RoleBroadcast>>,
     NameC,

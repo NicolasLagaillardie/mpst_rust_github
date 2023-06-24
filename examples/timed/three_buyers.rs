@@ -23,16 +23,26 @@ baker_timed!(MeshedChannels, A, C, S);
 
 // Types
 // A
-type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>;
-type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ', End>;
+type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
+type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>;
 
 // A
 enum Branching0fromCtoA {
     Accept(
-        MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, End, RoleC<RoleEnd>, NameA>,
+        MeshedChannels<
+            RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+            End,
+            RoleC<RoleEnd>,
+            NameA,
+        >,
     ),
     Quit(
-        MeshedChannels<RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, End, RoleC<RoleEnd>, NameA>,
+        MeshedChannels<
+            RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+            End,
+            RoleC<RoleEnd>,
+            NameA,
+        >,
     ),
 }
 
@@ -46,17 +56,22 @@ enum Branching0fromCtoS {
                 'a',
                 0,
                 true,
-                1,
+                10,
                 true,
                 ' ',
-                SendTimed<i32, 'a', 0, true, 1, true, ' ', End>,
+                SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             >,
             TwoRoleC,
             NameS,
         >,
     ),
     Quit(
-        MeshedChannels<End, RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>, RoleC<RoleEnd>, NameS>,
+        MeshedChannels<
+            End,
+            RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+            RoleC<RoleEnd>,
+            NameS,
+        >,
     ),
 }
 type TwoRoleC = RoleC<RoleC<RoleEnd>>;
@@ -69,48 +84,48 @@ type EndpointA = MeshedChannels<
         'a',
         0,
         true,
-        1,
+        10,
         true,
         ' ',
-        RecvTimed<Branching0fromCtoA, 'a', 0, true, 1, true, ' ', End>,
+        RecvTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>,
     >,
-    SendTimed<i32, 'a', 0, true, 1, true, ' ', RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>>,
+    SendTimed<i32, 'a', 0, true, 10, true, ' ', RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>>,
     RoleS<RoleS<TwoRoleC>>,
     NameA,
 >;
 
 // C
 type EndpointC = MeshedChannels<
-    RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromCtoA>,
-    RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromCtoS>,
+    RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromCtoA>,
+    RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromCtoS>,
     RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
 type EndpointCAccept = MeshedChannels<
-    SendTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-    SendTimed<i32, 'a', 0, true, 1, true, ' ', RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>>,
+    SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+    SendTimed<i32, 'a', 0, true, 10, true, ' ', RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>>,
     RoleA<RoleS<RoleS<RoleEnd>>>,
     NameC,
 >;
 type EndpointCQuit = MeshedChannels<
-    SendTimed<i32, 'a', 0, true, 1, true, ' ', End>,
-    SendTimed<i32, 'a', 0, true, 1, true, ' ', End>,
+    SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
+    SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     RoleS<RoleA<RoleEnd>>,
     NameC,
 >;
 
 // S
 type EndpointS = MeshedChannels<
-    RecvTimed<i32, 'a', 0, true, 1, true, ' ', SendTimed<i32, 'a', 0, true, 1, true, ' ', End>>,
+    RecvTimed<i32, 'a', 0, true, 10, true, ' ', SendTimed<i32, 'a', 0, true, 10, true, ' ', End>>,
     SendTimed<
         i32,
         'a',
         0,
         true,
-        1,
+        10,
         true,
         ' ',
-        RecvTimed<Branching0fromCtoS, 'a', 0, true, 1, true, ' ', End>,
+        RecvTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>,
     >,
     RoleA<RoleA<RoleC<RoleC<RoleEnd>>>>,
     NameS,

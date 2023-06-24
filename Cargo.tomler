@@ -136,12 +136,6 @@ required-features = []
 ######### Ping-Pong start
 
 [[bench]]
-name = "ping_pong_baking_timed"
-harness = false
-path = "benches/ping_pong_all/ping_pong_baking_timed.rs"
-required-features = ["full"]
-
-[[bench]]
 name = "ping_pong_baking_ampst"
 harness = false
 path = "benches/ping_pong_all/ping_pong_baking_ampst.rs"
