@@ -82,7 +82,7 @@ pub fn ping_pong_protocol_binary(c: &mut Criterion) {
 
 criterion_group! {
     name = bench;
-    config = Criterion::default().significance_level(0.1).sample_size(1000);
+    config = Criterion::default().significance_level(0.1).sample_size(10000);
     targets = ping_pong_protocol_binary
 }
 
