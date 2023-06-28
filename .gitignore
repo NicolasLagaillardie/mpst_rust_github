@@ -84,3 +84,5 @@ nohup.out
 # Ignore ping_pong files
 benches/ping_pong_all/*
 benches/ping_pong_mod_*.rs
+
+Cargo.tomler

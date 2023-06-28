@@ -233,9 +233,9 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-* **Nicolas Lagaillardie** - *Initial work* - [NicolasLagaillardie](https://github.com/NicolasLagaillardie)
-* **Rumyana Neykova** - *Initial work* - [RumyanaNeykova](https://github.com/rumineykova)
-* **Nobuko Yoshida** - *Initial work* - [NobukoYoshida](https://github.com/NobukoYoshida)
+* **Nicolas Lagaillardie** - *Initial work* - [Nicolas Lagaillardie](https://github.com/NicolasLagaillardie)
+* **Rumyana Neykova** - *Initial work* - [Rumyana Neykova](https://github.com/rumineykova)
+* **Nobuko Yoshida** - *Initial work* - [Nobuko Yoshida](https://github.com/NobukoYoshida)
 
 See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_rust_github/graphs/contributors) who participated in this project.
 
