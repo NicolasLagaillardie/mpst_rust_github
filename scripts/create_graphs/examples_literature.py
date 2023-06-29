@@ -27,16 +27,49 @@ result_folder = Path('results/')
 json_path = '/base/estimates.json'
 
 # Expected compile files
-compile_files = ['three_buyers', 'distributed_calc', 'three_travel', 'simple_voting', 'online_wallet',
-                 'fib', 'video_stream', 'o_auth', 'logging_baking', 'circuit_breaker_baking', 'smtp']
+compile_files = [
+    'three_buyers',
+    'distributed_calc',
+    'three_travel',
+    'simple_voting',
+    'online_wallet',
+    'fib',
+    'video_stream',
+    'o_auth',
+    'logging_baking',
+    'circuit_breaker_baking',
+    'smtp'
+]
 
 # Expected bench files
-bench_files = ['Circuit breaker baking', 'Distributed calculator baking', 'Fibo MPST 20 baking', 'Logging baking', 'oAuth MPST baking',
-               'Online wallet baking', 'Simple voting MPST baking', 'Video stream baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking']
+bench_files = [
+    'Circuit breaker baking',
+    'Distributed calculator baking',
+    'Fibo MPST 20 baking',
+    'Logging baking',
+    'oAuth MPST baking',
+    'Online wallet baking',
+    'Simple voting MPST baking',
+    'Video stream baking',
+    'SMTP baking',
+    'Travel MPST baking',
+    'Three buyers MPST baking'
+]
 
 # Expected bench files
-translate = {'Circuit breaker baking': 'circuit_breaker_baking', 'Distributed calculator baking': 'distributed_calc', 'Fibo MPST 20 baking': 'fib', 'Logging baking': 'logging_baking', 'oAuth MPST baking': 'o_auth',
-             'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'Video stream baking': 'video_stream', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers'}
+translate = {
+    'Circuit breaker baking': 'circuit_breaker_baking',
+    'Distributed calculator baking': 'distributed_calc',
+    'Fibo MPST 20 baking': 'fib',
+    'Logging baking': 'logging_baking',
+    'oAuth MPST baking': 'o_auth',
+    'Online wallet baking': 'online_wallet',
+    'Simple voting MPST baking': 'simple_voting',
+    'Video stream baking': 'video_stream',
+    'SMTP baking': 'smtp',
+    'Travel MPST baking': 'three_travel',
+    'Three buyers MPST baking': 'three_buyers'
+}
 
 
 def test(path):

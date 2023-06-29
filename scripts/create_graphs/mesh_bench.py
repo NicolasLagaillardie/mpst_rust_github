@@ -16,8 +16,20 @@ directories = os.listdir(main_path)
 path_file = '/base/estimates.json'
 
 # Dictionary for converting from string to int
-str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
-              'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
+str_to_int = {
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+    'eleven': 11,
+    'twenty': 20,
+    'empty': 0
+}
 
 # Lists for plots
 crossbeam = []
@@ -110,14 +122,14 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the Crossbeam graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
+# # Plot the Crossbeam graph
+# ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
-# Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
+# # Plot the binary graph
+# ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
-# Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
+# # Plot the MPST graph
+# ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
 ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
@@ -181,8 +193,33 @@ for label in ax.yaxis.get_majorticklabels():
 # Tight layout
 plt.tight_layout()
 
+# plt.legend(
+#     ['Crossbeam', 'Binary', 'MPST', 'AMPST'],
+#     loc='upper left',
+#     fancybox=True,
+#     shadow=True,
+#     ncol=1,
+#     fontsize=200
+# )
+
+plt.legend(
+    ['AMPST', 'ATMP'],
+    loc='upper left',
+    fancybox=True,
+    shadow=True,
+    ncol=1,
+    fontsize=200
+)
+
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/mesh/graph_mesh_runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/mesh/graph_mesh_runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphMesh'+number_of_loops+'.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()

@@ -1,7 +1,7 @@
 [package]
 name = "mpst-seq"
 version = "0.1.17"
-authors = ["NicolasLagaillardie <lagaillardie.nicolas@live.fr>"]
+authors = ["NicolasLagaillardie <nicolas.lagaillardie@tutanota.com>"]
 description = "A library with macro for mpstthree"
 edition = "2018"
 readme = "README.md"

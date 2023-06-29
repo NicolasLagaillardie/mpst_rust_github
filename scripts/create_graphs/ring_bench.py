@@ -16,8 +16,20 @@ directories_criterion = os.listdir(main_path_criterion)
 path_file = '/base/estimates.json'
 
 # Dictionary for converting from string to int
-str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
-              'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
+str_to_int = {
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+    'eleven': 11,
+    'twenty': 20,
+    'empty': 0
+}
 
 # Lists for plots
 crossbeam = []
@@ -193,8 +205,15 @@ for label in ax.yaxis.get_majorticklabels():
 # Tight layout
 plt.tight_layout()
 
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/ring/graph_ring_runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/ring/graph_ring_runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphRing'+number_of_loops+'.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()

@@ -30,8 +30,23 @@ nb_participants_cancel = []
 nb_participants_cancel_broadcast = []
 
 # Dictionary for converting from string to int
-str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
-              'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
+str_to_int = {
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+    'eleven': 11,
+    'twenty': 20,
+    'empty': 0
+}
+
+# Number of loops in the recursion
+number_of_loops = '100'
 
 # For each folder in main_path
 for d in directories:
@@ -119,8 +134,8 @@ ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=2
 # Plot the AMPST graph
 ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
-# Plot the ATMP graph
-ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
+# # Plot the ATMP graph
+# ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -156,21 +171,36 @@ for label in ax.yaxis.get_majorticklabels():
 # # giving a title to my graph
 # plt.title('Compile time needed')
 
-# # show a legend on the plot
-# plt.legend(
-#     ['AMPST', 'ATMP'],
-#     loc='best',
-#     # bbox_to_anchor=(-0.5, -0.3),
-#     fancybox=True,
-#     shadow=True,
-#     ncol=1,
-#     fontsize=20)
-
 # Tight layout
 plt.tight_layout()
 
+plt.legend(
+    ['Crossbeam', 'Binary', 'MPST', 'AMPST'],
+    loc='upper left',
+    fancybox=True,
+    shadow=True,
+    ncol=1,
+    fontsize=200
+)
+
+# plt.legend(
+#     ['AMPST', 'ATMP'],
+#     loc='upper left',
+#     fancybox=True,
+#     shadow=True,
+#     ncol=1,
+#     fontsize=200
+# )
+
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/mesh/graph_mesh_compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/mesh/graph_mesh_compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphAverageCompileMesh.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()
