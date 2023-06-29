@@ -138,13 +138,13 @@ ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidt
 ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=300)
+ax.set_xlabel('\# roles', fontsize=400)
 # ax.set_ylabel('Time (ms)', fontsize=300)
-ax.tick_params(axis='both', which='major', labelsize=300)
+ax.tick_params(axis='both', which='major', labelsize=400)
 ax.xaxis.set_ticks(np.arange(2, 21, 3))
-ax.yaxis.set_ticks(np.arange(0, 30, 12))
+ax.yaxis.set_ticks(np.arange(0, 30, 6))
 ax.set_xlim(2, 8)
-ax.set_ylim(0, 24)
+ax.set_ylim(0, 12)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
@@ -199,7 +199,7 @@ plt.tight_layout()
 #     fancybox=True,
 #     shadow=True,
 #     ncol=1,
-#     fontsize=200
+#     fontsize=300
 # )
 
 plt.legend(
@@ -208,7 +208,7 @@ plt.legend(
     fancybox=True,
     shadow=True,
     ncol=1,
-    fontsize=200
+    fontsize=300
 )
 
 # create the name for the new figure

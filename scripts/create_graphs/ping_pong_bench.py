@@ -193,7 +193,7 @@ plt.legend(
     fancybox=True,
     shadow=True,
     ncol=1,
-    fontsize=200
+    fontsize=300
 )
 
 # plt.legend(
@@ -202,7 +202,7 @@ plt.legend(
 #     fancybox=True,
 #     shadow=True,
 #     ncol=1,
-#     fontsize=200
+#     fontsize=300
 # )
 
 # create the name for the new figure

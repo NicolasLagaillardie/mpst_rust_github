@@ -122,14 +122,14 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the Crossbeam graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
+# # Plot the Crossbeam graph
+# ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
-# Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
+# # Plot the binary graph
+# ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
-# Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
+# # Plot the MPST graph
+# ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
 ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
@@ -144,9 +144,9 @@ ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=2
 # ax.plot(nb_participants_cancel_broadcast, cancel_broadcast, label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=300)
+ax.set_xlabel('\# roles', fontsize=400)
 # ax.set_ylabel('Time (s)', fontsize=200)
-ax.tick_params(axis='both', which='major', labelsize=300)
+ax.tick_params(axis='both', which='major', labelsize=400)
 ax.xaxis.set_ticks(np.arange(2, 11, 3))
 ax.yaxis.set_ticks(np.arange(18, 25, 1))
 ax.set_xlim(2, 8)
