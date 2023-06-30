@@ -30,8 +30,23 @@ nb_participants_cancel = []
 nb_participants_cancel_broadcast = []
 
 # Dictionary for converting from string to int
-str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
-              'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
+str_to_int = {
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+    'eleven': 11,
+    'twenty': 20,
+    'empty': 0
+}
+
+# Number of loops in the recursion
+number_of_loops = '100'
 
 # For each folder in main_path
 for d in directories:
@@ -107,14 +122,14 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the Crossbeam graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
+# # Plot the Crossbeam graph
+# ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
-# Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
+# # Plot the binary graph
+# ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
-# Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
+# # Plot the MPST graph
+# ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
 ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
@@ -129,9 +144,9 @@ ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=2
 # ax.plot(nb_participants_cancel_broadcast, cancel_broadcast, label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=300)
+ax.set_xlabel('\# roles', fontsize=400)
 # ax.set_ylabel('Time (s)', fontsize=200)
-ax.tick_params(axis='both', which='major', labelsize=300)
+ax.tick_params(axis='both', which='major', labelsize=400)
 ax.xaxis.set_ticks(np.arange(2, 11, 3))
 ax.yaxis.set_ticks(np.arange(18, 25, 1))
 ax.set_xlim(2, 8)
@@ -160,8 +175,15 @@ for label in ax.yaxis.get_majorticklabels():
 # Tight layout
 plt.tight_layout()
 
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/ring/graph_ring_compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/ring/graph_ring_compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphAverageCompileRing.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()

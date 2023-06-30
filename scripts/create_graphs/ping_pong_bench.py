@@ -115,8 +115,8 @@ ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, colo
 # Plot the AMPST graph
 ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, color='#d62728')
 
-# Plot the ATMP graph
-ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, color='#9467bd')
+# # Plot the ATMP graph
+# ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -129,6 +129,7 @@ ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, colo
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
+ax.set_ylabel('Time (ms)', fontsize=200)
 ax.set_xlabel('\# iterations', fontsize=200)
 ax.tick_params(axis='both', which='major', labelsize=200)
 ax.xaxis.set_ticks(np.arange(0, 510, 50))
@@ -186,8 +187,33 @@ for label in ax.yaxis.get_majorticklabels():
 # Tight layout
 plt.tight_layout()
 
+plt.legend(
+    ['Crossbeam', 'Binary', 'MPST', 'AMPST'],
+    loc='upper left',
+    fancybox=True,
+    shadow=True,
+    ncol=1,
+    fontsize=300
+)
+
+# plt.legend(
+#     ['AMPST', 'ATMP'],
+#     loc='upper left',
+#     fancybox=True,
+#     shadow=True,
+#     ncol=1,
+#     fontsize=300
+# )
+
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/ping_pong/graph_ping_pong_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/ping_pong/graph_ping_pong_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphPingPong.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()

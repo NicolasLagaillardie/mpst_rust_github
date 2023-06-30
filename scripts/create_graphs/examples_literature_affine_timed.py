@@ -32,22 +32,111 @@ result_folder = Path('results/')
 json_path = '/base/estimates.json'
 
 # Expected compile files
-compile_files = ['three_buyers', 'distributed_calc', 'three_travel',
-                 'simple_voting', 'online_wallet', 'o_auth', 'smtp', 'remote_data', 'servo', 'http']
+compile_files = [
+    'three_buyers',
+    'distributed_calc',
+    'three_travel',
+    'simple_voting',
+    'online_wallet',
+    'o_auth',
+    'smtp',
+    'remote_data',
+    'servo',
+    'http'
+]
 
 # Expected bench files
-bench_files = ['Distributed calculator baking', 'oAuth MPST baking', 'Online wallet baking', 'Simple voting MPST baking', 'SMTP baking', 'Travel MPST baking', 'Three buyers MPST baking',
-               'Timed Remote data', 'Timed Servo', 'Timed HTTP', 'HTTP baking', 'Servo baking', 'Remote data baking', 'Timed Distributed calculator baking', 'Timed oAuth MPST baking', 'Timed Online wallet baking', 'Timed Simple voting MPST baking', 'Timed SMTP baking', 'Timed Travel MPST baking', 'Timed Three buyers MPST baking']
+bench_files = [
+    'Distributed calculator baking',
+    'oAuth MPST baking',
+    'Online wallet baking',
+    'Simple voting MPST baking',
+    'SMTP baking',
+    'Travel MPST baking',
+    'Three buyers MPST baking',
+    'Timed Remote data',
+    'Timed Servo',
+    'Timed HTTP',
+    'HTTP baking',
+    'Servo baking',
+    'Remote data baking',
+    'Timed Distributed calculator baking',
+    'Timed oAuth MPST baking',
+    'Timed Online wallet baking',
+    'Timed Simple voting MPST baking',
+    'Timed SMTP baking',
+    'Timed Travel MPST baking',
+    'Timed Three buyers MPST baking'
+]
 
 # Expected bench files
-translate = {'Distributed calculator baking': 'distributed_calc', 'oAuth MPST baking': 'o_auth', 'Online wallet baking': 'online_wallet', 'Simple voting MPST baking': 'simple_voting', 'SMTP baking': 'smtp', 'Travel MPST baking': 'three_travel', 'Three buyers MPST baking': 'three_buyers', 'Timed Distributed calculator baking': 'distributed_calc_timed',
-             'Timed Servo': 'servo_timed', 'HTTP baking': 'http', 'Timed HTTP': 'http_timed', 'Servo baking': 'servo', 'Remote data baking': 'remote_data', 'Timed Remote data': 'remote_data_timed', 'Timed oAuth MPST baking': 'o_auth_timed', 'Timed Online wallet baking': 'online_wallet_timed', 'Timed Simple voting MPST baking': 'simple_voting_timed', 'Timed SMTP baking': 'smtp_timed', 'Timed Travel MPST baking': 'three_travel_timed', 'Timed Three buyers MPST baking': 'three_buyers_timed'}
+translate = {
+    'Distributed calculator baking': 'distributed_calc',
+    'oAuth MPST baking': 'o_auth',
+    'Online wallet baking': 'online_wallet',
+    'Simple voting MPST baking': 'simple_voting',
+    'SMTP baking': 'smtp',
+    'Travel MPST baking': 'three_travel',
+    'Three buyers MPST baking': 'three_buyers',
+    'Timed Distributed calculator baking': 'distributed_calc_timed',
+    'Timed Servo': 'servo_timed',
+    'HTTP baking': 'http',
+    'Timed HTTP': 'http_timed',
+    'Servo baking': 'servo',
+    'Remote data baking': 'remote_data',
+    'Timed Remote data': 'remote_data_timed',
+    'Timed oAuth MPST baking': 'o_auth_timed',
+    'Timed Online wallet baking': 'online_wallet_timed',
+    'Timed Simple voting MPST baking': 'simple_voting_timed',
+    'Timed SMTP baking': 'smtp_timed',
+    'Timed Travel MPST baking': 'three_travel_timed',
+    'Timed Three buyers MPST baking': 'three_buyers_timed'
+}
 
-# Indexung for bar lists
-index_bench = {'Distributed calculator baking': 0, 'Online wallet baking': 1, 'SMTP baking': 2, 'Simple voting MPST baking': 3, 'Three buyers MPST baking': 4, 'Timed Distributed calculator baking': 0, 'Timed Online wallet baking': 1, 'Timed Remote data': 8, 'Remote data baking': 8,
-               'Timed SMTP baking': 2, 'Servo baking': 9, 'HTTP': 7, 'Timed HTTP': 7, 'Timed Servo': 9, 'Timed Simple voting MPST baking': 3, 'Timed Three buyers MPST baking': 4, 'Timed Travel MPST baking': 5, 'Timed oAuth MPST baking': 6, 'Travel MPST baking': 5, 'oAuth MPST baking': 6}
-index_compile = {'distributed_calc': 0, 'online_wallet': 1, 'smtp': 2, 'simple_voting': 3, 'three_buyers': 4, 'distributed_calc_timed': 0, 'online_wallet_timed': 1,
-                 'remote_data_timed': 8, 'smtp_timed': 2, 'http': 7, 'http_timed': 7, 'servo_timed': 9, 'servo': 9, 'remote_data': 8, 'simple_voting_timed': 3, 'three_buyers_timed': 4, 'three_travel_timed': 5, 'o_auth_timed': 6, 'three_travel': 5, 'o_auth': 6}
+# Indexing for bar lists
+index_bench = {
+    'Distributed calculator baking': 0,
+    'Online wallet baking': 1,
+    'SMTP baking': 2,
+    'Simple voting MPST baking': 3,
+    'Three buyers MPST baking': 4,
+    'Timed Distributed calculator baking': 0,
+    'Timed Online wallet baking': 1,
+    'Timed Remote data': 8,
+    'Remote data baking': 8,
+    'Timed SMTP baking': 2,
+    'Servo baking': 9,
+    'HTTP': 7,
+    'Timed HTTP': 7,
+    'Timed Servo': 9,
+    'Timed Simple voting MPST baking': 3,
+    'Timed Three buyers MPST baking': 4,
+    'Timed Travel MPST baking': 5,
+    'Timed oAuth MPST baking': 6,
+    'Travel MPST baking': 5,
+    'oAuth MPST baking': 6}
+index_compile = {
+    'distributed_calc': 0,
+    'online_wallet': 1,
+    'smtp': 2,
+    'simple_voting': 3,
+    'three_buyers': 4,
+    'distributed_calc_timed': 0,
+    'online_wallet_timed': 1,
+    'remote_data_timed': 8,
+    'smtp_timed': 2,
+    'http': 7,
+    'http_timed': 7,
+    'servo_timed': 9,
+    'servo': 9,
+    'remote_data': 8,
+    'simple_voting_timed': 3,
+    'three_buyers_timed': 4,
+    'three_travel_timed': 5,
+    'o_auth_timed': 6,
+    'three_travel': 5,
+    'o_auth': 6
+}
 
 bar_compilation_baking = [0] * 10
 bar_running_baking = [0] * 10
@@ -230,17 +319,18 @@ plt.legend(
     fancybox=True,
     shadow=True,
     ncol=1,
-    fontsize=20)
+    fontsize=20
+)
 
 # adjust subplot position
 plt.tight_layout()
 
 # create the name for the new figure
 index_graphs = 0
-while os.path.isfile('results/graphs_examples_' + str(index_graphs) + '.pdf'):
+while os.path.isfile('graphs_bench/examples/graphs_examples_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
-name_graph = './results/graphs_examples_' + str(index_graphs) + '.pdf'
+name_graph = './graphs_bench/examples/graphs_examples_' + str(index_graphs) + '.pdf'
 
 # save the figure
 plt.savefig(name_graph)

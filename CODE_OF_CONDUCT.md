@@ -8,7 +8,7 @@ when interacting in these repositories as if they were rust-lang repositories.
 
 ## Enforcement
 
-Please contact David Tolnay at *lagaillardie.nicolas<!--disable autolink-->@live.fr* to
+Please contact Nicolas Lagaillardie at *nicolas.lagaillardie<!--disable autolink-->@tutanota.com* to
 call attention to code of conduct violations.
 
 Note that while we elect to follow the Rust Code of Conduct, this is not an

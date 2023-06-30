@@ -5,7 +5,7 @@
 ![Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/windows.yml/badge.svg)
 ![Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/mac.yml/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.59+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.70+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
 [![dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
@@ -233,9 +233,9 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-* **Nicolas Lagaillardie** - *Initial work* - [NicolasLagaillardie](https://github.com/NicolasLagaillardie)
-* **Rumyana Neykova** - *Initial work* - [RumyanaNeykova](https://github.com/rumineykova)
-* **Nobuko Yoshida** - *Initial work* - [NobukoYoshida](https://github.com/NobukoYoshida)
+* **Nicolas Lagaillardie** - *Initial work* - [Nicolas Lagaillardie](https://github.com/NicolasLagaillardie)
+* **Rumyana Neykova** - *Initial work* - [Rumyana Neykova](https://github.com/rumineykova)
+* **Nobuko Yoshida** - *Initial work* - [Nobuko Yoshida](https://github.com/NobukoYoshida)
 
 See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_rust_github/graphs/contributors) who participated in this project.
 

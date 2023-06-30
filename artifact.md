@@ -69,7 +69,7 @@ Depending on your test machine, the absolute values of the measurements produced
 
 To run all benchmarks reported in the paper, the reviewers need:
 
-* a minimum of 16GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
+* a minimum of 8GB RAM and 50 GB of disk space. The library itself is lightweight but the examples and benchmarks pose that requirement.
 * to enable localhost access (note that it should be enabled by default unless you disabled it beforehand)
 
 <!-- In addition, the tool needs access to `localhost` for the tests.
