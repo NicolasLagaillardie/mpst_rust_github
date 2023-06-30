@@ -51,7 +51,6 @@ sed -i '/^######### Ping-Pong start/,/^\######### Ping-Pong end/{/^######### Pin
 # }
 
 # Copy from save
-cat benches/ping_pong_all_save/mod.rs > benches/ping_pong_all/mod.rs
 cat benches/ping_pong_all_save/ping_pong_crossbeam_1.rs > benches/ping_pong_all/ping_pong_crossbeam_1.rs
 cat benches/ping_pong_all_save/ping_pong_binary_1.rs > benches/ping_pong_all/ping_pong_binary_1.rs
 cat benches/ping_pong_all_save/ping_pong_mpst_1.rs > benches/ping_pong_all/ping_pong_mpst_1.rs

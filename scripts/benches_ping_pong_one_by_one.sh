@@ -5,7 +5,6 @@
 # Stop upon any error
 set -e
 
-start=1
 end=1
 
 # Check if there is one argument at least
@@ -27,6 +26,8 @@ then
     echo "Error: ping_pong end bench section is not in Cargo.toml" 1>&2
     exit 3
 fi
+
+sleep 30m
 
 ### Clean compiled files
 cargo clean
