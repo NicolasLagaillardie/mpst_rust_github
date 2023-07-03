@@ -848,7 +848,7 @@ fn recurs_k(s: EndpointK, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (
         thread_a,
         thread_b,
@@ -895,7 +895,7 @@ static LOOPS: i64 = 100;
 pub fn ring_protocol_ampst(c: &mut Criterion) {
     c.bench_function(
         &format!("ring eleven baking protocol AMPST {LOOPS}"),
-        |b| b.iter(all_mpst)
+        |b| b.iter(aux)
     );
 }
 

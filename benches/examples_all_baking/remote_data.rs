@@ -203,7 +203,7 @@ fn recurs_server(s: EndpointServer0, loops: i32) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_satellite, thread_sensor, thread_server) = fork_mpst(
         black_box(endpoint_satellite),
         black_box(endpoint_sensor),
@@ -218,7 +218,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn remote_data(c: &mut Criterion) {
-    c.bench_function("Remote data baking", |b| b.iter(all_mpst));
+    c.bench_function("Remote data baking", |b| b.iter(aux));
 }
 
 /////////////////////////

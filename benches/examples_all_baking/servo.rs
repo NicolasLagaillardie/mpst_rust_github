@@ -104,7 +104,7 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 
 ////////////////////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_c, thread_l, thread_s) = fork_mpst(
         black_box(endpoint_c),
         black_box(endpoint_l),
@@ -119,7 +119,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn servo(c: &mut Criterion) {
-    c.bench_function("Servo baking", |b| b.iter(all_mpst));
+    c.bench_function("Servo baking", |b| b.iter(aux));
 }
 
 /////////////////////////

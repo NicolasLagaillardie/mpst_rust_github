@@ -306,7 +306,7 @@ fn recurs_c(
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_s, thread_c) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_c),
@@ -321,7 +321,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn online_wallet(c: &mut Criterion) {
-    c.bench_function("Timed Online wallet baking", |b| b.iter(all_mpst));
+    c.bench_function("Timed Online wallet baking", |b| b.iter(aux));
 }
 
 /////////////////////////

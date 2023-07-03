@@ -734,7 +734,7 @@ fn endpoint_s_10(s: EndpointS10, loops: i32) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_c, thread_s) = fork_mpst(black_box(endpoint_c_init), black_box(endpoint_s_init));
 
     thread_c.join().unwrap();
@@ -744,7 +744,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn smtp(c: &mut Criterion) {
-    c.bench_function("SMTP", |b| b.iter(all_mpst));
+    c.bench_function("SMTP", |b| b.iter(aux));
 }
 
 /////////////////////////

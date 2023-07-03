@@ -1091,7 +1091,7 @@ fn recurs_server(s: RecursServer) -> Result<(), Box<dyn Error>> {
 
 ////////////////////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_client, thread_proxyone, thread_proxytwo, thread_server) = fork_mpst(
         black_box(endpoint_client),
         black_box(endpoint_proxyone),
@@ -1108,7 +1108,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn http(c: &mut Criterion) {
-    c.bench_function("HTTP baking", |b| b.iter(all_mpst));
+    c.bench_function("HTTP baking", |b| b.iter(aux));
 }
 
 /////////////////////////

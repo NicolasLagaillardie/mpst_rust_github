@@ -4,6 +4,7 @@
     clippy::large_enum_variant,
     dead_code
 )]
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::baker_timed;
@@ -243,7 +244,7 @@ fn recurs_server(
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_satellite, thread_sensor, thread_server) = fork_mpst(
         black_box(endpoint_satellite),
         black_box(endpoint_sensor),
@@ -258,7 +259,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn remote_data(c: &mut Criterion) {
-    c.bench_function("Timed Remote data", |b| b.iter(all_mpst));
+    c.bench_function("Timed Remote data", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -216,7 +216,7 @@ fn recurs_1_logs(s: EndpointLogs1<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_controller, thread_logs) =
         fork_mpst(black_box(endpoint_controller), black_box(endpoint_logs));
 
@@ -227,7 +227,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn logging(c: &mut Criterion) {
-    c.bench_function("Logging", |b| b.iter(all_mpst));
+    c.bench_function("Logging", |b| b.iter(aux));
 }
 
 /////////////////////////

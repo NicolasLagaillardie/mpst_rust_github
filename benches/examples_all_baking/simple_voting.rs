@@ -131,7 +131,7 @@ fn choice_server(s: ChoiceServer) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_server, thread_voter) =
         fork_mpst(black_box(endpoint_server), black_box(endpoint_voter));
 
@@ -142,7 +142,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn simple_voting(c: &mut Criterion) {
-    c.bench_function("Simple voting MPST baking", |b| b.iter(all_mpst));
+    c.bench_function("Simple voting MPST baking", |b| b.iter(aux));
 }
 
 /////////////////////////

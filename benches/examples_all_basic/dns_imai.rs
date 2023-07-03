@@ -212,7 +212,7 @@ fn endpoint_server_recurs(s: EndpointServer, loops: i32) -> Result<(), Box<dyn E
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_other, thread_server, thread_client) = fork_mpst(
         black_box(endpoint_client),
         black_box(endpoint_other),
@@ -227,7 +227,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn dns_imai(c: &mut Criterion) {
-    c.bench_function("DNS Imai", |b| b.iter(all_mpst));
+    c.bench_function("DNS Imai", |b| b.iter(aux));
 }
 
 /////////////////////////

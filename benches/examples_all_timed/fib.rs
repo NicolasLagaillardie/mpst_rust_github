@@ -102,7 +102,7 @@ fn recurs_b(
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_b) = fork_mpst(black_box(endpoint_a), black_box(endpoint_b));
 
     thread_a.join().unwrap();
@@ -114,9 +114,7 @@ fn all_mpst() {
 static LOOPS: i32 = 20;
 
 pub fn fib(c: &mut Criterion) {
-    c.bench_function(&format!("Timed Fibo MPST baking {LOOPS}"), |b| {
-        b.iter(all_mpst)
-    });
+    c.bench_function(&format!("Timed Fibo MPST baking {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -406,6 +406,16 @@ harness = false
 path = "benches/examples_all_timed/http.rs"
 required-features = ["full"]
 
+[[bench]]
+name = "example_circuit_breaker"
+path = "benches/examples_all_timed/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging"
+path = "benches/examples_all_timed/logging.rs"
+required-features = ["full"]
+
 ################## Ring
 
 ######### Empty
@@ -2716,9 +2726,24 @@ path = "examples/timed/non_feasible.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "timed_sleeping_barber"
+name = "sleeping_barber_timed"
 path = "examples/timed/sleeping_barber.rs"
 required-features = ["baking_timed_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_timed"
+path = "examples/timed/circuit_breaker_logging.rs"
+required-features = ["full"]
+
+[[example]]
+name = "circuit_breaker_timed"
+path = "examples/timed/circuit_breaker.rs"
+required-features = ["full"]
+
+[[example]]
+name = "logging_timed"
+path = "examples/timed/logging.rs"
+required-features = ["full"]
 
 ################################### Mesh examples
 

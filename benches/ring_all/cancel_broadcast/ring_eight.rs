@@ -620,7 +620,7 @@ fn recurs_h(s: EndpointH, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (
         thread_central,
         thread_a,
@@ -661,7 +661,7 @@ static LOOPS: i64 = 100;
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("ring eight cancel broadcast protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
+        |b| b.iter(aux),
     );
 }
 

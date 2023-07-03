@@ -154,14 +154,14 @@ fn rec_loop_1(
 
 /////////////////////////
 
-fn all_mpst() {
+fn aux() {
     fork_mpst_solo(black_box(start)).unwrap();
 }
 
 /////////////////////////
 
 pub fn logging_solo(c: &mut Criterion) {
-    c.bench_function("Logging solo", |b| b.iter(all_mpst));
+    c.bench_function("Logging solo", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -835,7 +835,7 @@ fn recurs_k(s: EndpointK) -> Result<EndpointK, Box<dyn Error>> {
     Ok(s)
 }
 
-fn all_mpst() {
+fn aux() {
     let (
         thread_a,
         thread_b,
@@ -882,7 +882,7 @@ static LOOPS: i64 = 100;
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh eleven baking inline protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
+        |b| b.iter(aux),
     );
 }
 

@@ -137,7 +137,7 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_central, thread_a, thread_b) = fork_mpst(
         black_box(endpoint_central),
         black_box(endpoint_a),
@@ -156,7 +156,7 @@ static LOOPS: i64 = 1;
 pub fn ping_pong_protocol_mpst_cancel_broadcast(c: &mut Criterion) {
     c.bench_function(
         &format!("ping pong cancel broadcast protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
+        |b| b.iter(aux),
     );
 }
 

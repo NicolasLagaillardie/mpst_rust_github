@@ -1,5 +1,4 @@
 #![allow(clippy::type_complexity)]
-#![recursion_limit = "256"]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;

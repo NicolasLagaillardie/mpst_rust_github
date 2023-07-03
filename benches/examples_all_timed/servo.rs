@@ -141,7 +141,7 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
 ////////////////////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_c, thread_l, thread_s) = fork_mpst(
         black_box(endpoint_c),
         black_box(endpoint_l),
@@ -156,7 +156,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn servo(c: &mut Criterion) {
-    c.bench_function("Timed Servo", |b| b.iter(all_mpst));
+    c.bench_function("Timed Servo", |b| b.iter(aux));
 }
 
 /////////////////////////

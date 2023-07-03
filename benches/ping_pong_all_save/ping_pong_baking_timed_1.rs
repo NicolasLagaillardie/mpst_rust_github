@@ -96,7 +96,7 @@ fn recurs_b(s: EndpointB, all_clocks: &mut HashMap<char, Instant>) -> Result<(),
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_b) = fork_mpst(black_box(endpoint_a), black_box(endpoint_b));
 
     thread_a.join().unwrap();
@@ -109,7 +109,7 @@ static LOOPS: i64 = 1;
 
 pub fn ping_pong_protocol_timed(c: &mut Criterion) {
     c.bench_function(&format!("ping pong baking protocol ATMP {LOOPS}"), |b| {
-        b.iter(all_mpst)
+        b.iter(aux)
     });
 }
 

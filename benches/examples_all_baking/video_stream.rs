@@ -153,7 +153,7 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
 
 /////////////////////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_s, thread_c) = fork_mpst(
         black_box(authenticator),
         black_box(server),
@@ -168,7 +168,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn video_stream(c: &mut Criterion) {
-    c.bench_function("Video stream baking", |b| b.iter(all_mpst));
+    c.bench_function("Video stream baking", |b| b.iter(aux));
 }
 
 /////////////////////////

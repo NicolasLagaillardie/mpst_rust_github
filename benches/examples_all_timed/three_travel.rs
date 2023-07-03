@@ -305,7 +305,7 @@ fn choice_s(s: ChoiceS, all_clocks: &mut HashMap<char, Instant>) -> Result<(), B
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_c_init),
@@ -320,7 +320,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn travel(c: &mut Criterion) {
-    c.bench_function("Timed Travel MPST baking", |b| b.iter(all_mpst));
+    c.bench_function("Timed Travel MPST baking", |b| b.iter(aux));
 }
 
 /////////////////////////

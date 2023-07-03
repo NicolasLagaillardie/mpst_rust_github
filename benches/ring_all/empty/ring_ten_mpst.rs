@@ -784,7 +784,7 @@ fn recurs_j(s: EndpointJ, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (
         thread_a,
         thread_b,
@@ -827,7 +827,7 @@ static LOOPS: i64 = 0;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(&format!("ring ten empty protocol MPST {LOOPS}"), |b| {
-        b.iter(all_mpst)
+        b.iter(aux)
     });
 }
 

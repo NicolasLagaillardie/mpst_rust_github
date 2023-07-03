@@ -350,7 +350,7 @@ fn endpoint_user(s: EndpointUserInit) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////
 
-fn all_mpst() {
+fn aux() {
     let (thread_api, thread_controller, thread_storage, thread_user) = fork_mpst(
         black_box(endpoint_api),
         black_box(endpoint_controller),
@@ -367,7 +367,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn circuit_breaker(c: &mut Criterion) {
-    c.bench_function("Circuit breaker baking", |b| b.iter(all_mpst));
+    c.bench_function("Circuit breaker baking", |b| b.iter(aux));
 }
 
 /////////////////////////

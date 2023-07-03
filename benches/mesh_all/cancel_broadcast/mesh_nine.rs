@@ -786,7 +786,7 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (
         thread_central,
         thread_a,
@@ -830,7 +830,7 @@ static LOOPS: i64 = 100;
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh nine cancel broadcast protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
+        |b| b.iter(aux),
     );
 }
 

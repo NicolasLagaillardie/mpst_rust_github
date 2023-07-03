@@ -578,7 +578,7 @@ fn recurs_i(s: EndpointI, index: i64) -> Result<EndpointI, Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_b, thread_c, thread_d, thread_e, thread_f, thread_g, thread_h, thread_i) =
         fork_mpst(
             black_box(endpoint_a),
@@ -610,7 +610,7 @@ static LOOPS: i64 = 100;
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
         &format!("ring nine baking inline protocol MPST {LOOPS}"),
-        |b| b.iter(all_mpst),
+        |b| b.iter(aux),
     );
 }
 

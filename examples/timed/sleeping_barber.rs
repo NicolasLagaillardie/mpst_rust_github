@@ -1,5 +1,4 @@
 #![allow(clippy::type_complexity)]
-#![recursion_limit = "256"]
 
 use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, session::Session};

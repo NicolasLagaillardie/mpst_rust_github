@@ -169,7 +169,7 @@ fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_handler, thread_regional, thread_data) = fork_mpst(
         black_box(endpoint_data),
         black_box(endpoint_handler),
@@ -184,7 +184,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn dns_fowler(c: &mut Criterion) {
-    c.bench_function("DNS Fowler baking", |b| b.iter(all_mpst));
+    c.bench_function("DNS Fowler baking", |b| b.iter(aux));
 }
 
 /////////////////////////

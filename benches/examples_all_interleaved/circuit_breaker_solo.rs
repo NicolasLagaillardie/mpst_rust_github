@@ -313,14 +313,14 @@ fn rec_loop(
 
 /////////////////////////
 
-fn all_mpst() {
+fn aux() {
     fork_mpst_solo(black_box(start)).unwrap();
 }
 
 /////////////////////////
 
 pub fn circuit_breaker_solo(c: &mut Criterion) {
-    c.bench_function("Circuit breaker solo", |b| b.iter(all_mpst));
+    c.bench_function("Circuit breaker solo", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -261,7 +261,7 @@ fn choice_s(s: ChoiceS<i32>) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_init),
@@ -276,7 +276,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn travel(c: &mut Criterion) {
-    c.bench_function("Travel MPST", |b| b.iter(all_mpst));
+    c.bench_function("Travel MPST", |b| b.iter(aux));
 }
 
 /////////////////////////

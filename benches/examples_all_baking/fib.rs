@@ -107,7 +107,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_b),
@@ -124,7 +124,7 @@ fn all_mpst() {
 static LOOPS: i64 = 20;
 
 pub fn fibo_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo MPST baking {LOOPS}"), |b| b.iter(all_mpst));
+    c.bench_function(&format!("Fibo MPST baking {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

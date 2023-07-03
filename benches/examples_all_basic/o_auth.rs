@@ -171,7 +171,7 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_c),
@@ -186,7 +186,7 @@ fn all_mpst() {
 /////////////////////////
 
 pub fn o_auth(c: &mut Criterion) {
-    c.bench_function("oAuth MPST", |b| b.iter(all_mpst));
+    c.bench_function("oAuth MPST", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -112,7 +112,7 @@ fn recurs_c(s: EndpointC, index: i64) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn all_mpst() {
+fn aux() {
     let (thread_a, thread_b, thread_c) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_b),
@@ -130,7 +130,7 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_ampst(c: &mut Criterion) {
     c.bench_function(&format!("mesh three baking protocol AMPST {LOOPS}"), |b| {
-        b.iter(all_mpst)
+        b.iter(aux)
     });
 }
 
