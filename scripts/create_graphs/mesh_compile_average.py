@@ -146,9 +146,9 @@ ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=2
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=400)
+ax.set_xlabel('\# roles', fontsize=300)
 # ax.set_ylabel('Time (s)', fontsize=300)
-ax.tick_params(axis='both', which='major', labelsize=400)
+ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 11, 3))
 ax.yaxis.set_ticks(np.arange(18, 28, 3))
 ax.set_xlim(2, 8)

@@ -138,9 +138,9 @@ ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidt
 ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=400)
+ax.set_xlabel('\# roles', fontsize=300)
 # ax.set_ylabel('Time (ms)', fontsize=300)
-ax.tick_params(axis='both', which='major', labelsize=400)
+ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 21, 3))
 ax.yaxis.set_ticks(np.arange(0, 30, 6))
 ax.set_xlim(2, 8)
