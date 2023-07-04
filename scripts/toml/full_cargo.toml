@@ -2733,17 +2733,17 @@ required-features = ["baking_timed_interleaved"]
 [[example]]
 name = "circuit_breaker_logging_timed"
 path = "examples/timed/circuit_breaker_logging.rs"
-required-features = ["full"]
+required-features = ["baking_timed_interleaved"]
 
 [[example]]
 name = "circuit_breaker_timed"
 path = "examples/timed/circuit_breaker.rs"
-required-features = ["full"]
+required-features = ["baking_timed"]
 
 [[example]]
 name = "logging_timed"
 path = "examples/timed/logging.rs"
-required-features = ["full"]
+required-features = ["baking_timed"]
 
 ################################### Mesh examples
 
