@@ -616,7 +616,7 @@ pub fn smtp(c: &mut Criterion) {
 
 criterion_group! {
     name = bench;
-    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
     targets = smtp,
 }
 

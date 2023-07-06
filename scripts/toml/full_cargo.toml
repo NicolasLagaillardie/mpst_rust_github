@@ -408,11 +408,13 @@ required-features = ["full"]
 
 [[bench]]
 name = "example_circuit_breaker"
+harness = false
 path = "benches/examples_all_timed/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_logging"
+harness = false
 path = "benches/examples_all_timed/logging.rs"
 required-features = ["full"]
 

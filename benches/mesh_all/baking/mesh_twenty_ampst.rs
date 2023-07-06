@@ -1,5 +1,8 @@
-#![allow(clippy::large_enum_variant, clippy::type_complexity, clippy::too_many_arguments)]
-
+#![allow(
+    clippy::large_enum_variant,
+    clippy::type_complexity,
+    clippy::too_many_arguments
+)]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
@@ -3505,38 +3508,19 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_ampst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh twenty baking protocol AMPST {LOOPS}"),
-        |b| b.iter(aux)
-    );
+    c.bench_function(&format!("mesh twenty baking protocol AMPST {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
-
-
-
 
 /////////////////////////
 
 criterion_group! {
     name = bench;
-    config = Criterion::default().significance_level(0.1).sample_size(10000);
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
     targets = mesh_protocol_ampst,
 }
 
 criterion_main! {
     bench
 }
-
-
-
-/////////////////////////
-
-criterion_group! {
-    name = bench;
-    config = Criterion::default().significance_level(0.1).sample_size(10000);
-    targets = mesh_protocol_ampst,
-}
-
-criterion_main! {
-    bench
-}
-

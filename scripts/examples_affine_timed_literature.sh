@@ -72,14 +72,3 @@ mv -f target/criterion/* save/examples/
 echo "Examples full bench weight"
 du -s -m
 cargo clean
-
-## Concatenate all results in the results/benchmarks_main_from_literature.csv file
-# python3 scripts/create_graphs/examples_literature_affine_timed.py
-
-# cargo clean &&
-# cargo bench --bench examples_baking --all-features -- --verbose &&
-# mv -f target/criterion/ save/criterion/examples/ &&
-# cargo clean &&
-# cargo bench --bench examples_timed --all-features -- --verbose &&
-# mv -f target/criterion/ save/criterion/examples_timed/ &&
-# cargo clean
