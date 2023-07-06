@@ -87,7 +87,4 @@ benches/ping_pong_mod_*.rs
 
 Cargo.tomler
 
-done_curl.sh
-fail_curl.sh
-.done_mail
-.fail_mail
+scripts/curl/

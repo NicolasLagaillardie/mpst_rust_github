@@ -22,6 +22,8 @@ sleep 60s
 
     ## Run esh and ring and ping-pong
     bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
+
+    bash ./scripts/curl/done_curl.sh
 } || {
-    bash curl.sh
+    bash ./scripts/curl/fail_curl.sh
 }
