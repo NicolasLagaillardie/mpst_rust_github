@@ -7,17 +7,21 @@ set -e
 
 sleep 60s
 
-cargo clean
+{
+    cargo clean
 
-## Compile and run examples
-bash ./scripts/examples_affine_timed_literature.sh
+    ## Compile and run examples
+    bash ./scripts/examples_affine_timed_literature.sh
 
-cargo clean
+    cargo clean
 
-## Compile mesh and ring
-bash ./scripts/benches_compile_mesh_ring.sh
+    ## Compile mesh and ring
+    bash ./scripts/benches_compile_mesh_ring.sh
 
-cargo clean
+    cargo clean
 
-## Run esh and ring and ping-pong
-bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
+    ## Run esh and ring and ping-pong
+    bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
+} || {
+    bash curl.sh
+}
