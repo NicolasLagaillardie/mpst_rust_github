@@ -8,7 +8,10 @@ set -e
 sleep 60s
 
 {
+    # Saving Cargo.toml
     cat Cargo.toml > scripts/toml/save_cargo.toml
+
+    # Updating Cargo.toml
     cat scripts/toml/full_cargo.toml > Cargo.toml
 
     cargo clean
@@ -26,9 +29,12 @@ sleep 60s
     ## Run esh and ring and ping-pong
     bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
 
+    # Resetting Cargo.toml
     cat scripts/toml/save_cargo.toml > Cargo.toml
 
+    # Send done email
     bash ./scripts/curl/done_curl.sh
 } || {
+    # Send fail email
     bash ./scripts/curl/fail_curl.sh
 }
