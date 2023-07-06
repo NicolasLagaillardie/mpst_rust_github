@@ -86,3 +86,6 @@ benches/ping_pong_all/*
 benches/ping_pong_mod_*.rs
 
 Cargo.tomler
+
+curl.sh
+.mail
