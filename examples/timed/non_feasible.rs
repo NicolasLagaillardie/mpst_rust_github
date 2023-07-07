@@ -1,8 +1,8 @@
 #![allow(clippy::type_complexity, dead_code)]
 
-use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -13,7 +13,7 @@ use std::time::Instant;
 use rand::{thread_rng, Rng};
 
 // Create roles and implementations
-baker_timed!(MeshedChannels, Client, ProxyOne, ProxyTwo, Server);
+generate_timed!(MeshedChannels, Client, ProxyOne, ProxyTwo, Server);
 
 // Payload types
 

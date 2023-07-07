@@ -4,9 +4,9 @@
     clippy::large_enum_variant
 )]
 
-use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -17,7 +17,7 @@ use std::time::Instant;
 static LOOPS: i64 = 100;
 
 // Create new roles
-baker_timed!(MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
+generate_timed!(MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
 
 // Types
 // SendTimed/RecvTimed

@@ -6,10 +6,10 @@ use std::error::Error;
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::baker;
+use mpstthree::generate;
 
 // Create new roles
-baker!("basic", MeshedChannels, A, B, C);
+generate!("basic", MeshedChannels, A, B, C);
 
 // Those types will be code generated
 type OfferMpst<S0, S1, S2, S3, R0, R1, N0> =
@@ -136,7 +136,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn run_usecase_right() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         // Test end branch.
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_close);
@@ -146,13 +146,13 @@ pub fn run_usecase_right() {
             assert!(thread_c.join().is_ok());
         }
 
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }
 
 pub fn run_usecase_left() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         // Test video branch.
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client_video);
@@ -162,7 +162,7 @@ pub fn run_usecase_left() {
             assert!(thread_c.join().is_ok());
         }
 
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

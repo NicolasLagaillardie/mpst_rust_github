@@ -6,9 +6,9 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -16,7 +16,7 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;
 
-baker_timed!(MeshedChannelsEight, A, B, C, D, E, F, G, H);
+generate_timed!(MeshedChannelsEight, A, B, C, D, E, F, G, H);
 
 // Types
 // A

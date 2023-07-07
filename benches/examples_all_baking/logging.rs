@@ -6,8 +6,8 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -18,7 +18,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-baker!("rec_and_cancel", MeshedChannelsTwo, Controller, Logs);
+generate!("rec_and_cancel", MeshedChannelsTwo, Controller, Logs);
 
 // RoleController
 enum Branching0fromLtoC {

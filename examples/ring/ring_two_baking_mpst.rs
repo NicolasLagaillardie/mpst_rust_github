@@ -4,8 +4,8 @@
     clippy::large_enum_variant
 )]
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -14,7 +14,7 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-baker!("recursive", MeshedChannelsTwo, A, B);
+generate!("recursive", MeshedChannelsTwo, A, B);
 
 // Types
 // A

@@ -28,13 +28,13 @@ pub mod choose;
 /// # Basic example
 ///
 /// ```
-/// use mpstthree::baker_timed;
+/// use mpstthree::generate_timed;
 ///
-/// baker_timed!(MeshedChannelsThree, A, B, C);
+/// generate_timed!(MeshedChannelsThree, A, B, C);
 /// ```
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking_timed")))]
-macro_rules! baker_timed {
+macro_rules! generate_timed {
     (
         $meshedchannels_name: ident,
         $( $all_roles: ident),+ $(,)?

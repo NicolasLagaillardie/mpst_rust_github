@@ -158,7 +158,7 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>, index: i32) -> Result<(),
 /////////////////////////////////////////
 
 pub fn run_c_usecase_recursive() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
@@ -166,8 +166,8 @@ pub fn run_c_usecase_recursive() {
             assert!(thread_b.join().is_ok());
             assert!(thread_c.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }
 

@@ -1,12 +1,12 @@
 // Test for parametrisation on the number of roles
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 
 // Create new roles
-baker!("basic", MeshedChannels, A, B, C, D, E);
+generate!("basic", MeshedChannels, A, B, C, D, E);
 
 type SendMeshedChannelsD<N> = MeshedChannels<End, Send<N, End>, End, End, RoleB<RoleEnd>, NameD>;
 
@@ -40,7 +40,7 @@ fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_send() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_b, thread_c, thread_d, thread_e) =
                 fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
@@ -51,7 +51,7 @@ pub fn test_new_send() {
             assert!(thread_d.join().is_ok());
             assert!(thread_e.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

@@ -1,4 +1,4 @@
-//! Implementation for baker_timed!(...)
+//! Implementation for generate_timed!(...)
 
 use proc_macro2::TokenStream;
 use quote::quote;

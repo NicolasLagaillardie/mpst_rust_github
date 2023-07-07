@@ -1,7 +1,7 @@
 #![allow(clippy::type_complexity, dead_code)]
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -10,7 +10,7 @@ use std::error::Error;
 use rand::{thread_rng, Rng};
 
 // Create roles and implementations
-baker!(
+generate!(
     "rec_and_cancel",
     MeshedChannels,
     Client,

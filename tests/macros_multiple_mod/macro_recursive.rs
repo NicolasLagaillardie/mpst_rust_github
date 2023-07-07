@@ -170,7 +170,7 @@ fn client_recurs(
 /////////////////////////////////////////
 
 pub fn run_macro_recursive() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
@@ -178,7 +178,7 @@ pub fn run_macro_recursive() {
             assert!(thread_b.join().is_ok());
             assert!(thread_c.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

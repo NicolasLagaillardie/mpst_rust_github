@@ -3,14 +3,14 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, checker_concat};
+use mpstthree::{generate, checker_concat};
 
 use rand::{thread_rng, Rng};
 
 use std::error::Error;
 
 // Create new MeshedChannels for four participants
-baker!("rec_and_cancel", MeshedChannels, A, B, C);
+generate!("rec_and_cancel", MeshedChannels, A, B, C);
 
 type AtoCClose = End;
 type AtoBClose = End;

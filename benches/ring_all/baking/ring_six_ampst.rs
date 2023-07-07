@@ -6,8 +6,8 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -16,7 +16,7 @@ use std::error::Error;
 // use std::time::Duration;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsSix, A, B, C, D, E, F);
+generate!("rec_and_cancel", MeshedChannelsSix, A, B, C, D, E, F);
 
 // Types
 // A

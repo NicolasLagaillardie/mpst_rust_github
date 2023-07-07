@@ -1,4 +1,4 @@
-//! Implementation for baker!("rec_and_cancel", ...)
+//! Implementation for generate!("rec_and_cancel", ...)
 
 use proc_macro2::TokenStream;
 use quote::quote;

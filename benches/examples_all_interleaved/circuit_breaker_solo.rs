@@ -9,7 +9,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, close_mpst_interleaved, fork_mpst_multi_solo, offer_mpst_interleaved};
+use mpstthree::{close_mpst_interleaved, fork_mpst_multi_solo, generate, offer_mpst_interleaved};
 
 use rand::random;
 
@@ -21,7 +21,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-baker!(
+generate!(
     "rec_and_cancel",
     MeshedChannelsFour,
     Api,

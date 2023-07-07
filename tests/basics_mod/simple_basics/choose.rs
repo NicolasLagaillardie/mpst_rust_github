@@ -144,7 +144,7 @@ fn simple_store_pawn(s: EndpointChoiceC) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn simple_choice() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         // Test the left branch.
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(
@@ -170,9 +170,8 @@ pub fn simple_choice() {
             assert!(thread_b.join().is_ok());
             assert!(thread_c.join().is_ok());
         }
-
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }
 

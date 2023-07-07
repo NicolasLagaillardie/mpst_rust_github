@@ -5,7 +5,7 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::baker;
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -13,7 +13,7 @@ use std::error::Error;
 
 static LOOPS: i64 = 100;
 
-baker!("rec_and_cancel", MeshedChannelsEight, A, B, C, D, E, F, G, H);
+generate!("rec_and_cancel", MeshedChannelsEight, A, B, C, D, E, F, G, H);
 
 // Types
 // A

@@ -58,72 +58,72 @@ pub fn self_tail_str() {
 pub fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.sender.send(Signal::Stop) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.sender.send(Signal::Stop) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.receiver.recv() {
-            Ok(Signal::Stop) => Ok(()),
+            Ok(Signal::Stop) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.receiver.recv() {
-            Ok(Signal::Stop) => Ok(()),
+            Ok(Signal::Stop) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 }
 
 pub fn new_types_cancel() {
     let (session_end_1, session_end_2) = End::new();
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.sender.send(Signal::Cancel) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.sender.send(Signal::Cancel) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.receiver.recv() {
-            Ok(Signal::Cancel) => Ok(()),
+            Ok(Signal::Cancel) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.receiver.recv() {
-            Ok(Signal::Cancel) => Ok(()),
+            Ok(Signal::Cancel) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 }
 
@@ -144,7 +144,7 @@ pub fn ping_works() {
 // Test writing a program which duplicates a session.
 //
 // ```compile_fail
-// assert!(|| -> Result<(), Box<dyn Error>> {
+// assert!({
 //     let r1 = fork(move |s1: Se
 //         let s2 = se
 //         close(s2)?;
@@ -155,7 +155,7 @@ pub fn ping_works() {
 
 //     let ((),
 //
-// }()
+// }
 // .is_ok());
 /// ```
 
@@ -286,10 +286,10 @@ pub fn nice_calc_works() {
 pub fn cancel_recv_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         cancel(s);
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 
     assert!(other_thread.join().is_err());
@@ -301,10 +301,10 @@ pub fn cancel_send_works() {
         Ok(())
     });
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         let s = send((), s);
         close(s)
-    }()
+    }
     .is_err());
 
     assert!(other_thread.join().is_ok());
@@ -319,10 +319,10 @@ pub fn delegation_works() {
         Ok(())
     });
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         let u = send(s, u);
         close(u)
-    }()
+    }
     .is_err());
 
     assert!(other_thread1.join().is_err());
@@ -334,7 +334,7 @@ pub fn delegation_works() {
 pub fn closure_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
-    assert!(|| -> Result<i32, Box<dyn Error>> {
+    assert!({
         // Create a closure which uses the session.
         let _f = move |x: i32| -> Result<i32, Box<dyn Error>> {
             let s = choose!(CalcOp::Neg, s);
@@ -345,9 +345,9 @@ pub fn closure_works() {
         };
 
         // Let the closure go out of scope.
-        Err(Box::new(mpsc::RecvError))
+        Err::<i32, Box<mpsc::RecvError>>(Box::new(mpsc::RecvError))
         // f(5)
-    }()
+    }
     .is_err());
 
     assert!(other_thread.join().is_err());
@@ -421,10 +421,10 @@ pub fn cancel_recursion() {
 
     let (other_thread, s) = fork_with_thread_id(nice_sum_server);
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         cancel(s);
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 
     assert!(other_thread.join().is_err());

@@ -1,6 +1,6 @@
-use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::end::RoleEnd;
 
 use std::collections::HashMap;
@@ -8,7 +8,7 @@ use std::error::Error;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-baker_timed!(MeshedChannels, Constellation, Layout, Script);
+generate_timed!(MeshedChannels, Constellation, Layout, Script);
 
 // Payload types
 

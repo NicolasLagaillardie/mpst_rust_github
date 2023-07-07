@@ -1,13 +1,13 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 
-use mpstthree::baker;
+use mpstthree::generate;
 
 use mpstthree::name::Name;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 
 // Create new MeshedChannels for three participants
-baker!("basic", MeshedChannels, A, B, C);
+generate!("basic", MeshedChannels, A, B, C);
 
 // Creating the binary sessions
 type AtoB<N> = Send<N, End>;

@@ -530,7 +530,7 @@ described in Table 1 of the paper:
 The main function uses `fork_mpst` to fork the different threads.
 
 All those primitives are generated using
-the macro `baker!`.
+the macro `generate!`.
 
 Now, if you run again the file, it should run correctly:
 
@@ -725,7 +725,7 @@ __Need help?__: This example is implemented in `examples/basic.rs`, hence you ca
 
 ```rust
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
-use mpstthree::baker; // The macro for generating the roles and the MeshedChannels
+use mpstthree::generate; // The macro for generating the roles and the MeshedChannels
 use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles
 use mpstthree::checker_concat; // Used for checking the protocol
@@ -735,7 +735,7 @@ use std::error::Error; // Used for functions
 2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
 
 ```rust
-baker!("rec_and_cancel", MeshedChannels, A, B); // generates meshed channels for 3 roles
+generate!("rec_and_cancel", MeshedChannels, A, B); // generates meshed channels for 3 roles
 ```
 
 <!-- Replace `A, B` with the different names

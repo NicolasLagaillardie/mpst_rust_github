@@ -266,7 +266,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_choice_full() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
 
@@ -274,13 +274,13 @@ pub fn test_new_choice_full() {
             assert!(thread_pawn.join().is_ok());
             assert!(thread_d.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }
 
 pub fn test_new_choice_close() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         // Test end branch.
         {
             let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
@@ -289,8 +289,7 @@ pub fn test_new_choice_close() {
             assert!(thread_pawn.join().is_ok());
             assert!(thread_d.join().is_ok());
         }
-
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

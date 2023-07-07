@@ -1,7 +1,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, offer_mpst};
+use mpstthree::{generate, offer_mpst};
 
 use rand::{random, thread_rng, Rng};
 
@@ -10,7 +10,7 @@ use std::marker;
 
 // CB = circuit breaker
 
-baker!(
+generate!(
     "interleaved",
     MeshedChannelsFour,
     Api,

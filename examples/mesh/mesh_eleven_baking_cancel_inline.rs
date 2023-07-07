@@ -5,7 +5,7 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::baker;
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -14,7 +14,7 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-baker!("rec_and_cancel", MeshedChannelsEleven, A, B, C, D, E, F, G, H, I, J, K);
+generate!("rec_and_cancel", MeshedChannelsEleven, A, B, C, D, E, F, G, H, I, J, K);
 
 // Types
 // Send/Recv

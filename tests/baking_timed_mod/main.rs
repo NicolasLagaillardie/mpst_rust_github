@@ -1,9 +1,9 @@
 // Test for affine timed protocols
 use rand::{thread_rng, Rng};
 
-use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::{end::End, session::Session};
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -12,7 +12,7 @@ use std::error::Error;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-baker_timed!(MeshedChannels, A, B, D);
+generate_timed!(MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
@@ -304,7 +304,7 @@ fn client_recurs(
 ////////////////////////////////////////
 
 pub fn main() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
@@ -312,7 +312,7 @@ pub fn main() {
             assert!(thread_b.join().is_ok());
             assert!(thread_c.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

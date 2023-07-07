@@ -64,7 +64,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn simple_triple_endpoints() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
@@ -72,7 +72,7 @@ pub fn simple_triple_endpoints() {
             assert!(thread_b.join().is_ok());
             assert!(thread_c.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

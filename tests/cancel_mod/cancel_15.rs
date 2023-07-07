@@ -1,5 +1,5 @@
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::end::RoleEnd;
 
 use rand::random;
@@ -9,7 +9,7 @@ use std::error::Error;
 // A --> B.B--> C
 
 // Create new MeshedChannels for three participants
-baker!("cancel", MeshedChannelsThree, A, B, C);
+generate!("cancel", MeshedChannelsThree, A, B, C);
 
 // Types
 type EndpointA = MeshedChannelsThree<Send<i32, End>, End, RoleB<RoleEnd>, NameA>;

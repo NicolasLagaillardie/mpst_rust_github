@@ -1,8 +1,8 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, session::Session};
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -14,7 +14,7 @@ use std::time::Instant;
 
 // CB = circuit breaker
 
-baker!(
+generate!(
     "timed_interleaved",
     MeshedChannelsFour,
     Api,

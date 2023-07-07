@@ -4,7 +4,7 @@
     clippy::large_enum_variant
 )]
 
-use mpstthree::baker_timed;
+use mpstthree::generate_timed;
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -19,7 +19,7 @@ use std::time::Instant;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-baker_timed!(MeshedChannels, A, B);
+generate_timed!(MeshedChannels, A, B);
 
 // Types
 // A

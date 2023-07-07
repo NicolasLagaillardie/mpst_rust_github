@@ -1,4 +1,4 @@
-//! Implementation for baker!("timed_interleaved", ...)
+//! Implementation for generate!("timed_interleaved", ...)
 
 use proc_macro2::TokenStream;
 use quote::quote;

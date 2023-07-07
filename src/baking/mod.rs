@@ -10,7 +10,7 @@
 ///
 /// # Arguments
 ///
-/// * Type of baker (basic, recursive, cancel, rec_and_cancel, interleaved)
+/// * Type of generate (basic, recursive, cancel, rec_and_cancel, interleaved)
 /// * Name of the new SessionMST
 /// * Names of the new roles. They are called as RoleX where X is the name provided.
 ///
@@ -19,9 +19,9 @@
 /// ## Basic
 ///
 /// ```
-/// use mpstthree::baker;
+/// use mpstthree::generate;
 ///
-/// baker!("basic", MeshedChannelsThree, A, B, C);
+/// generate!("basic", MeshedChannelsThree, A, B, C);
 /// ```
 ///
 /// ## Recursive
@@ -38,9 +38,9 @@
 /// This macro creates the related `fork_mpst` function.
 ///
 /// ```
-/// use mpstthree::baker;
+/// use mpstthree::generate;
 ///
-/// baker!("recursive", MeshedChannelsThree, A, B, C);
+/// generate!("recursive", MeshedChannelsThree, A, B, C);
 /// ```
 ///
 /// ## Cancel
@@ -49,9 +49,9 @@
 /// checks the health of each participant and broadcasts any failure.
 ///
 /// ```
-/// use mpstthree::baker;
+/// use mpstthree::generate;
 ///
-/// baker!("cancel", MeshedChannelsThree, A, B, C);
+/// generate!("cancel", MeshedChannelsThree, A, B, C);
 /// ```
 ///
 /// ## Rec and Cancel
@@ -68,9 +68,9 @@
 /// This macro creates the related `fork_mpst` function.
 ///
 /// ```
-/// use mpstthree::baker;
+/// use mpstthree::generate;
 ///
-/// baker!("rec_and_cancel", MeshedChannelsThree, A, B, C);
+/// generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 /// ```
 ///
 /// ## Interleaved
@@ -80,9 +80,9 @@
 /// protocols)
 ///
 /// ```
-/// use mpstthree::baker;
+/// use mpstthree::generate;
 ///
-/// baker!(
+/// generate!(
 ///     "interleaved",
 ///     MeshedChannelsBarber,
 ///     Barber,
@@ -97,7 +97,7 @@
 /// ```
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
-macro_rules! baker {
+macro_rules! generate {
     (
         "basic",
         $meshedchannels_name: ident,

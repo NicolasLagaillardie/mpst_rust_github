@@ -1,12 +1,12 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, create_fn_choose_mpst_multi_to_all_bundle};
+use mpstthree::{generate, create_fn_choose_mpst_multi_to_all_bundle};
 
 use std::error::Error;
 
 // Create new roles
-baker!("basic", MeshedChannelsThree, A, B, C);
+generate!("basic", MeshedChannelsThree, A, B, C);
 
 // Types
 // Send/Recv

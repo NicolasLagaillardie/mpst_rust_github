@@ -158,7 +158,7 @@ fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>> {
 
 pub fn top_down_approach() {
     for _i in 0..200 {
-        assert!(|| -> Result<(), Box<dyn Error>> {
+        assert!({
             {
                 let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
@@ -166,8 +166,8 @@ pub fn top_down_approach() {
                 assert!(thread_b.join().is_ok());
                 assert!(thread_c.join().is_ok());
             }
-            Ok(())
-        }()
+            Ok::<(), Box<dyn Error>>(())
+        }
         .is_ok());
     }
 }

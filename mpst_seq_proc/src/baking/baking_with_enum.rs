@@ -1,4 +1,4 @@
-//! Implementation for baker!("recursive", ...)
+//! Implementation for generate!("recursive", ...)
 
 use proc_macro2::TokenStream;
 use quote::quote;

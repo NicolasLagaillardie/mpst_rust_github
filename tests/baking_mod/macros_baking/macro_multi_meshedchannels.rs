@@ -21,7 +21,7 @@ create_normal_name!(NameA);
 /////////////////////////////////////////
 
 pub fn basic_macros() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (sender1, _) = End::new();
             let (sender2, _) = End::new();
@@ -37,11 +37,11 @@ pub fn basic_macros() {
 
             let (_test2, _) = MeshedChannelsThree::<End, End, RoleEnd, NameA>::new();
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (sender1, _) = End::new();
             let (sender2, _) = End::new();
@@ -59,7 +59,7 @@ pub fn basic_macros() {
 
             let (_test2, _) = MeshedChannelsFour::<End, End, End, RoleEnd, NameA>::new();
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

@@ -6,8 +6,8 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -17,7 +17,7 @@ use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-baker!("rec_and_cancel", MeshedChannelsThree, A, C, S);
+generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
 
 // Payloads
 struct Start;

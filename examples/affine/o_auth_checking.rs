@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, checker_concat};
+use mpstthree::{checker_concat, generate};
 
 use rand::{thread_rng, Rng};
 
@@ -12,7 +12,7 @@ use std::fs::read_to_string;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-baker!("rec_and_cancel", MeshedChannelsThree, A, C, S);
+generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
 
 // Payloads
 struct Start;

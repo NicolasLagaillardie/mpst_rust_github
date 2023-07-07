@@ -1,15 +1,15 @@
 // Test for parametrisation on the number of roles
 use rand::{thread_rng, Rng};
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-baker!("recursive", MeshedChannels, A, B, D);
+generate!("recursive", MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
@@ -147,7 +147,7 @@ fn client_recurs(
 ////////////////////////////////////////
 
 pub fn new_run_usecase_recursive() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         {
             let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
@@ -155,7 +155,7 @@ pub fn new_run_usecase_recursive() {
             assert!(thread_b.join().is_ok());
             assert!(thread_c.join().is_ok());
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

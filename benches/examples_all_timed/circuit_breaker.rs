@@ -2,9 +2,9 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use mpstthree::baker_timed;
 use mpstthree::binary::struct_trait::{end::End, session::Session};
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -17,7 +17,7 @@ use std::time::Instant;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-baker_timed!(MeshedChannelsFour, Api, Controller, Storage, User);
+generate_timed!(MeshedChannelsFour, Api, Controller, Storage, User);
 
 static LOOPS: i32 = 100;
 

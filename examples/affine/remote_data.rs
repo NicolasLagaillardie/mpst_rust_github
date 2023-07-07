@@ -5,9 +5,9 @@
     dead_code
 )]
 
-use mpstthree::baker;
 use mpstthree::binary::struct_trait::session::Session;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -16,7 +16,7 @@ use rand::random;
 use std::error::Error;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-baker!("rec_and_cancel", MeshedChannels, Satellite, Sensor, Server);
+generate!("rec_and_cancel", MeshedChannels, Satellite, Sensor, Server);
 
 // Labels
 struct Stop {}

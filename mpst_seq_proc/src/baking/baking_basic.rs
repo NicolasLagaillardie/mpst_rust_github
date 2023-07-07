@@ -1,4 +1,4 @@
-//! Implementation for baker!("basic", ...)
+//! Implementation for generate!("basic", ...)
 
 use proc_macro2::TokenStream;
 use quote::quote;

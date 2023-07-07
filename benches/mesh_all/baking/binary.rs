@@ -13,7 +13,7 @@ use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{baker, choose, offer};
+use mpstthree::{generate, choose, offer};
 
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
