@@ -107,5 +107,3 @@ sed -i '/^######### Ping-Pong start/,/^\######### Ping-Pong end/{/^######### Pin
 # Echo done
 date
 echo "Done"
-
-exit 0
