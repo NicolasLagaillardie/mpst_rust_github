@@ -1,13 +1,9 @@
 #![allow(clippy::type_complexity)]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name_short,
-    create_multiple_normal_role_short, create_recv_mpst_session_bundle,
-    create_send_mpst_session_bundle, offer_mpst,
-};
 
 use rand::{random, thread_rng, Rng};
 
@@ -15,59 +11,8 @@ use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-// Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
-
-// Create new roles
-// normal
-create_multiple_normal_role_short!(A, C, S);
-
-// Create new names
-create_multiple_normal_name_short!(A, C, S);
-
-// Create new send functions
-// A
-create_send_mpst_session_bundle!(
-    send_mpst_a_to_c, RoleC, 1 |
-    send_mpst_a_to_s, RoleS, 2 | =>
-    NameA, MeshedChannelsThree, 3
-);
-
-// C
-create_send_mpst_session_bundle!(
-    send_mpst_c_to_a, RoleA, 1 |
-    send_mpst_c_to_s, RoleS, 2 | =>
-    NameC, MeshedChannelsThree, 3
-);
-
-// S
-create_send_mpst_session_bundle!(
-    send_mpst_s_to_a, RoleA, 1 |
-    send_mpst_s_to_c, RoleC, 2 | =>
-    NameS, MeshedChannelsThree, 3
-);
-
-// Create new recv functions and related types
-// A
-create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_c, RoleC, 1 |
-    recv_mpst_a_from_s, RoleS, 2 | =>
-    NameA, MeshedChannelsThree, 3
-);
-
-// C
-create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_a, RoleA, 1 |
-    recv_mpst_c_from_s, RoleS, 2 | =>
-    NameC, MeshedChannelsThree, 3
-);
-
-// S
-create_recv_mpst_session_bundle!(
-    recv_mpst_s_from_a, RoleA, 1 |
-    recv_mpst_s_from_c, RoleC, 2 | =>
-    NameS, MeshedChannelsThree, 3
-);
+// Create new MeshedChannels for four participants
+generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
 
 // Types
 // A
@@ -77,22 +22,21 @@ type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
 // A
 enum Branching0fromCtoA {
     Accept(MeshedChannelsThree<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
-    Quit(MeshedChannelsThree<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
+    Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
 }
 
 // S
 enum Branching0fromCtoS {
-    Accept(MeshedChannelsThree<End, Recv<i32, Send<i32, End>>, TwoRoleC, NameS>),
-    Quit(MeshedChannelsThree<End, Recv<i32, End>, RoleC<RoleEnd>, NameS>),
+    Accept(MeshedChannelsThree<End, Recv<i32, Send<i32, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
+    Quit(MeshedChannelsThree<End, End, RoleEnd, NameS>),
 }
-type TwoRoleC = RoleC<RoleC<RoleEnd>>;
 
 // Creating the MP sessions
 // A
 type EndpointA = MeshedChannelsThree<
     Send<i32, Recv<Branching0fromCtoA, End>>,
     Send<i32, Recv<i32, End>>,
-    RoleS<RoleS<TwoRoleC>>,
+    RoleS<RoleS<RoleC<RoleC<RoleEnd>>>>,
     NameA,
 >;
 
@@ -101,6 +45,12 @@ type EndpointC = MeshedChannelsThree<
     Recv<i32, Choose0fromCtoA>,
     Recv<i32, Choose0fromCtoS>,
     RoleS<RoleA<RoleBroadcast>>,
+    NameC,
+>;
+type EndpointCAccept = MeshedChannelsThree<
+    Send<i32, End>,
+    Send<i32, Recv<i32, End>>,
+    RoleA<RoleS<RoleS<RoleEnd>>>,
     NameC,
 >;
 
@@ -114,70 +64,53 @@ type EndpointS = MeshedChannelsThree<
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    let s = send_mpst_a_to_s(random(), s);
-    let (_empty2, s) = recv_mpst_a_from_s(s)?;
-    let s = send_mpst_a_to_c(random(), s);
-    offer_mpst!(s, recv_mpst_a_from_c, {
+    let s = s.send(random())?;
+    let (_empty2, s) = s.recv()?;
+    let s = s.send(random())?;
+    offer_mpst!(s, {
         Branching0fromCtoA::Accept(s) => {
-            let (_ok, s) = recv_mpst_a_from_c(s)?;
-            close_mpst_multi(s)
+            let (_ok, s) = s.recv()?;
+            s.close()
         },
         Branching0fromCtoA::Quit(s) => {
-            let (_ok, s) = recv_mpst_a_from_c(s)?;
-            close_mpst_multi(s)
+            s.close()
         },
     })
 }
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let (_empty3, s) = recv_mpst_c_from_s(s)?;
-    let (_empty4, s) = recv_mpst_c_from_a(s)?;
+    let (_empty3, s) = s.recv()?;
+    let (_empty4, s) = s.recv()?;
 
     let choice: i32 = thread_rng().gen_range(1..=3);
 
     if choice != 1 {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoA::Accept,
-            Branching0fromCtoS::Accept, =>
-            NameC,
-            MeshedChannelsThree,
-            2
-        );
+        let s: EndpointCAccept =
+            choose_mpst_c_to_all!(s, Branching0fromCtoA::Accept, Branching0fromCtoS::Accept);
 
-        let s = send_mpst_c_to_a(random(), s);
-        let s = send_mpst_c_to_s(random(), s);
-        let (_empty5, s) = recv_mpst_c_from_s(s)?;
+        let s = s.send(random())?;
+        let s = s.send(random())?;
+        let (_empty5, s) = s.recv()?;
 
-        close_mpst_multi(s)
+        s.close()
     } else {
-        let s = choose_mpst_multi_to_all!(
-            s,
-            Branching0fromCtoA::Quit,
-            Branching0fromCtoS::Quit, =>
-            NameC,
-            MeshedChannelsThree,
-            2
-        );
-        let s = send_mpst_c_to_s(random(), s);
-        let s = send_mpst_c_to_a(random(), s);
-        close_mpst_multi(s)
+        let s = choose_mpst_c_to_all!(s, Branching0fromCtoA::Quit, Branching0fromCtoS::Quit);
+        s.close()
     }
 }
 
 fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
-    let (_empty1, s) = recv_mpst_s_from_a(s)?;
-    let s = send_mpst_s_to_a(random(), s);
-    let s = send_mpst_s_to_c(random(), s);
-    offer_mpst!(s, recv_mpst_s_from_c, {
+    let (_empty1, s) = s.recv()?;
+    let s = s.send(random())?;
+    let s = s.send(random())?;
+    offer_mpst!(s, {
         Branching0fromCtoS::Accept(s) => {
-            let (_ok, s) = recv_mpst_s_from_c(s)?;
-            let s = send_mpst_s_to_c(random(), s);
-            close_mpst_multi(s)
+            let (_ok, s) = s.recv()?;
+            let s = s.send(random())?;
+            s.close()
         },
         Branching0fromCtoS::Quit(s) => {
-            let (_ok, s) = recv_mpst_s_from_c(s)?;
-            close_mpst_multi(s)
+            s.close()
         },
     })
 }

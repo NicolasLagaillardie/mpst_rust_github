@@ -124,7 +124,7 @@ fn choice_a(s: ChoiceA) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_init(s: EndpointC) -> Result<(), Box<dyn Error>> {
+fn endpoint_c_init(s: EndpointC) -> Result<(), Box<dyn Error>> {
     endpoint_c(s, 100)
 }
 
@@ -195,7 +195,7 @@ fn choice_s(s: ChoiceS) -> Result<(), Box<dyn Error>> {
 fn aux() {
     let (thread_a, thread_c, thread_s) = fork_mpst(
         black_box(endpoint_a),
-        black_box(endpoint_init),
+        black_box(endpoint_c_init),
         black_box(endpoint_s),
     );
 

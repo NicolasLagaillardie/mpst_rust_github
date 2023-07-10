@@ -1,127 +1,102 @@
 #![allow(clippy::type_complexity)]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name,
-    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
-    offer_mpst,
-};
-
-use rand::{thread_rng, Rng};
 
 use std::error::Error;
-use std::marker;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-// Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
-
-// Create new roles
-// normal
-create_multiple_normal_role!(
-    RoleA, RoleADual |
-    RoleB, RoleBDual |
-);
-
-// Create new names
-create_multiple_normal_name!(NameA, NameB);
-
-// Create new send functions
-// A
-create_send_mpst_session_bundle!(
-    send_mpst_a_to_b, RoleB, 1 | =>
-    NameA, MeshedChannelsTwo, 2
-);
-
-// B
-create_send_mpst_session_bundle!(
-    send_mpst_b_to_a, RoleA, 1 | =>
-    NameB, MeshedChannelsTwo, 2
-);
-
-// Create new recv functions and related types
-// A
-create_recv_mpst_session_bundle!(
-    recv_mpst_a_from_b, RoleB, 1 | =>
-    NameA, MeshedChannelsTwo, 2
-);
-
-// B
-create_recv_mpst_session_bundle!(
-    recv_mpst_b_from_a, RoleA, 1 | =>
-    NameB, MeshedChannelsTwo, 2
-);
+// Create new MeshedChannels for four participants
+generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 
 // Types
 // A
-type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
+type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
+type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
 
 // B
-enum Branching0fromAtoB<N: marker::Send> {
-    More(MeshedChannelsTwo<RSRecursBtoA<N>, ThreeRoleA, NameB>),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameB>),
+enum Branching0fromAtoB {
+    More(
+        MeshedChannelsThree<
+            Recv<i64, Send<i64, RecursBtoA>>,
+            End,
+            RoleA<RoleA<RoleA<RoleEnd>>>,
+            NameB,
+        >,
+    ),
+    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
 }
-type RSRecursBtoA<N> = Recv<N, Send<N, RecursBtoA<N>>>;
-type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
-type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
+type RecursBtoA = Recv<Branching0fromAtoB, End>;
+
+// C
+enum Branching0fromAtoC {
+    More(MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
+    Done(MeshedChannelsThree<End, End, RoleEnd, NameC>),
+}
+type RecursCtoA = Recv<Branching0fromAtoC, End>;
 
 // Creating the MP sessions
-type EndpointA<N> = MeshedChannelsTwo<Choose0fromAtoB<N>, RoleBroadcast, NameA>;
-type EndpointB<N> = MeshedChannelsTwo<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
+type EndpointA = MeshedChannelsThree<Choose0fromAtoB, Choose0fromAtoC, RoleBroadcast, NameA>;
+type EndpointAMore = MeshedChannelsThree<
+    Send<i64, Recv<i64, Choose0fromAtoB>>,
+    Choose0fromAtoC,
+    RoleB<RoleB<RoleBroadcast>>,
+    NameA,
+>;
+type EndpointB = MeshedChannelsThree<RecursBtoA, End, RoleA<RoleEnd>, NameB>;
+type EndpointC = MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
 // Functions
-fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
-    let choice: i64 = thread_rng().gen_range(1..=20);
-
-    recurs_a(s, choice, 1)
+fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+    recurs_a(s, LOOPS, 1)
 }
 
-fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
+fn recurs_a(s: EndpointA, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
     match index {
         0 => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                Branching0fromAtoB::<i64>::Done, =>
-                NameA,
-                MeshedChannelsTwo,
-                1
-            );
+            let s = choose_mpst_a_to_all!(s, Branching0fromAtoB::Done, Branching0fromAtoC::Done);
 
-            close_mpst_multi(s)
+            s.close()
         }
         i => {
-            let s = choose_mpst_multi_to_all!(
-                s,
-                Branching0fromAtoB::<i64>::More, =>
-                NameA,
-                MeshedChannelsTwo,
-                1
-            );
+            let s: EndpointAMore =
+                choose_mpst_a_to_all!(s, Branching0fromAtoB::More, Branching0fromAtoC::More);
 
-            let s = send_mpst_a_to_b(old, s);
-            let (new, s) = recv_mpst_a_from_b(s)?;
+            let s = s.send(old)?;
+            let (new, s) = s.recv()?;
 
             recurs_a(s, i - 1, new)
         }
     }
 }
 
-fn endpoint_b(s: EndpointB<i64>) -> Result<(), Box<dyn Error>> {
+fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
     recurs_b(s, 0)
 }
 
-fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_b_from_a, {
+fn recurs_b(s: EndpointB, old: i64) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
         Branching0fromAtoB::Done(s) => {
-            close_mpst_multi(s)
+            s.close()
         },
         Branching0fromAtoB::More(s) => {
-            let (new, s) = recv_mpst_b_from_a(s)?;
-            let s = send_mpst_b_to_a(new + old, s);
+            let (new, s) = s.recv()?;
+            let s = s.send(new + old)?;
             recurs_b(s, new + old)
+        },
+    })
+}
+
+fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
+    offer_mpst!(s, {
+        Branching0fromAtoC::Done(s) => {
+            s.close()
+        },
+        Branching0fromAtoC::More(s) => {
+            endpoint_c(s)
         },
     })
 }

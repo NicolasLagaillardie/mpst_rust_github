@@ -2504,17 +2504,24 @@ required-features = ["full"]
 
 ################################### Examples
 
-######### Affine
+######### Basic
+
+[[example]]
+name = "video_stream_basic"
+path = "examples/basic/video_stream_basic.rs"
+required-features = ["macros_simple"]
 
 [[example]]
 name = "circuit_breaker"
-path = "examples/affine/circuit_breaker.rs"
+path = "examples/basic/circuit_breaker.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
 name = "logging"
-path = "examples/affine/logging.rs"
+path = "examples/basic/logging.rs"
 required-features = ["macros_multiple"]
+
+######### Affine
 
 [[example]]
 name = "circuit_breaker_baking"
@@ -2529,7 +2536,7 @@ required-features = ["baking"]
 [[example]]
 name = "distributed_calc"
 path = "examples/affine/distributed_calc.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "dns_fowler"
@@ -2544,7 +2551,7 @@ required-features = ["baking_checking"]
 [[example]]
 name = "dns_imai"
 path = "examples/affine/dns_imai.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "o_auth"
@@ -2564,32 +2571,27 @@ required-features = ["transport_macros_multiple"]
 [[example]]
 name = "online_wallet"
 path = "examples/affine/online_wallet.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "simple_voting"
 path = "examples/affine/simple_voting.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "smtp"
 path = "examples/affine/smtp.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "three_buyers"
 path = "examples/affine/three_buyers.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "three_travel"
 path = "examples/affine/three_travel.rs"
-required-features = ["macros_multiple"]
-
-[[example]]
-name = "video_stream_basic"
-path = "examples/affine/video_stream_basic.rs"
-required-features = ["macros_simple"]
+required-features = ["baking"]
 
 [[example]]
 name = "servo"
