@@ -166,6 +166,16 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     })
 }
 
+fn main() {
+    checking();
+
+    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
+
+    assert!(thread_a.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_s.join().is_ok());
+}
+
 // Check for bottom-up approach
 fn checking() {
     let _ = checker_concat!(
@@ -195,14 +205,4 @@ fn checking() {
         \u{1b}[0m\n",
         read_to_string("outputs/o_auth_checking_1_kmc.txt").unwrap()
     );
-}
-
-fn main() {
-    checking();
-
-    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
-
-    assert!(thread_a.join().is_ok());
-    assert!(thread_c.join().is_ok());
-    assert!(thread_s.join().is_ok());
 }
