@@ -2,8 +2,6 @@
 
 use crossbeam_channel::bounded;
 
-
-
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::close::close;
@@ -87,7 +85,6 @@ pub fn mesh_protocol_binary(c: &mut Criterion) {
     );
 }
 
-
 /////////////////////////
 
 criterion_group! {
@@ -99,4 +96,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-

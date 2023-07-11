@@ -51,7 +51,6 @@ nb_participants_broadcast_cancel = []
 # Number of loops in the recursion
 number_of_loops = '100'
 
-
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
@@ -178,7 +177,6 @@ for label in ax.yaxis.get_majorticklabels():
 
 # # Add grid
 # ax.grid(which='both')
-
 
 # ax.grid(which='minor', alpha=0.2)
 # ax.grid(which='major', alpha=0.5)

@@ -71,13 +71,11 @@ translate = {
     'Three buyers MPST baking': 'three_buyers'
 }
 
-
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(criterion_path + '/' + path + json_path) as json_file:
         data = json.load(json_file)
         return data['mean']['point_estimate']
-
 
 # Lists for plots
 bench = {}

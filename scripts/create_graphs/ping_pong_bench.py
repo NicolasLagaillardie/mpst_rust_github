@@ -32,13 +32,11 @@ nb_loops_crossbeam = []
 nb_loops_cancel = []
 nb_loops_broadcast_cancel = []
 
-
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
         data = json.load(json_file)
         return data['mean']['point_estimate']
-
 
 # For each folder in main_path
 for d in directories:
@@ -170,7 +168,6 @@ for label in ax.yaxis.get_majorticklabels():
 
 # # Add grid
 # ax.grid(which='both')
-
 
 # ax.grid(which='minor', alpha=0.2)
 # ax.grid(which='major', alpha=0.5)

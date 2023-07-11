@@ -139,7 +139,6 @@ fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
                 let s = s.send(request + 1, all_clocks)?;
                 sleep(Duration::from_secs(4));
 
-
                 server_recurs(s, all_clocks)
             },
         }
@@ -163,7 +162,6 @@ fn server_recurs(
                 sleep(Duration::from_secs(2));
                 let s = s.send(request + 1, all_clocks)?;
                 sleep(Duration::from_secs(4));
-
 
                 server_recurs(s, all_clocks)
             },
@@ -201,7 +199,6 @@ fn authenticator(
                 let s = s.send(video + 1, all_clocks)?;
                 sleep(Duration::from_millis(1500));
 
-
                 authenticator_recurs(s, all_clocks)
             },
         }
@@ -229,7 +226,6 @@ fn authenticator_recurs(
                 sleep(Duration::from_secs(2));
                 let s = s.send(video + 1, all_clocks)?;
                 sleep(Duration::from_secs(2));
-
 
                 authenticator_recurs(s, all_clocks)
             },

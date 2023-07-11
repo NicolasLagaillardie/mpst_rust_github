@@ -121,13 +121,11 @@ bar_running_baking = [0] * 10
 
 bar_running_timed = [0] * 10
 
-
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(criterion_path + '/' + path + json_path) as json_file:
         data = json.load(json_file)
         return data['mean']['point_estimate']
-
 
 # Lists for plots
 bench = {}
@@ -204,9 +202,7 @@ for d in compile_directories:
     else:
         print("Issue with ", d)
 
-
 sorted_translate = dict(sorted(translate.items()))
-
 
 # Setting up the figure
 fig, ax = plt.subplots(figsize=(16, 6))

@@ -1,6 +1,5 @@
 #![allow(clippy::large_enum_variant, clippy::type_complexity, clippy::too_many_arguments)]
 
-
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::generate;
@@ -899,9 +898,6 @@ pub fn ring_protocol_ampst(c: &mut Criterion) {
     );
 }
 
-
-
-
 /////////////////////////
 
 criterion_group! {
@@ -913,4 +909,3 @@ criterion_group! {
 criterion_main! {
     bench
 }
-
