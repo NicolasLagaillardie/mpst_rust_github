@@ -26,7 +26,7 @@ sleep 60s
 
     cargo clean
 
-    ## Run esh and ring and ping-pong
+    ## Run mesh and ring and ping-pong
     bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
 
     # Resetting Cargo.toml
