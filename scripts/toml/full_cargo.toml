@@ -2512,25 +2512,30 @@ path = "examples/basic/video_stream_basic.rs"
 required-features = ["macros_simple"]
 
 [[example]]
-name = "circuit_breaker"
+name = "circuit_breaker_basic"
 path = "examples/basic/circuit_breaker.rs"
 required-features = ["macros_multiple"]
 
 [[example]]
-name = "logging"
+name = "logging_basic"
 path = "examples/basic/logging.rs"
 required-features = ["macros_multiple"]
 
 ######### Affine
 
 [[example]]
-name = "circuit_breaker_baking"
-path = "examples/affine/circuit_breaker_baking.rs"
+name = "fib"
+path = "examples/affine/fib.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "logging_baking"
-path = "examples/affine/logging_baking.rs"
+name = "circuit_breaker"
+path = "examples/affine/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging"
+path = "examples/affine/logging.rs"
 required-features = ["baking"]
 
 [[example]]
@@ -2637,27 +2642,46 @@ required-features = ["baking_checking"]
 
 ######### Interleaved
 
+#### Baking
+
 [[example]]
 name = "circuit_breaker_logging"
-path = "examples/interleaved/circuit_breaker_logging.rs"
+path = "examples/interleaved/baking/circuit_breaker_logging.rs"
 required-features = ["interleaved"]
 
 [[example]]
 name = "circuit_breaker_solo"
-path = "examples/interleaved/circuit_breaker_solo.rs"
+path = "examples/interleaved/baking/circuit_breaker_solo.rs"
 required-features = ["interleaved"]
 
 [[example]]
 name = "logging_solo"
-path = "examples/interleaved/logging_solo.rs"
+path = "examples/interleaved/baking/logging_solo.rs"
 required-features = ["interleaved"]
 
 [[example]]
 name = "sleeping_barber"
-path = "examples/interleaved/sleeping_barber.rs"
+path = "examples/interleaved/baking/sleeping_barber.rs"
 required-features = ["interleaved"]
 
+#### Timed
+
+[[example]]
+name = "sleeping_barber_timed"
+path = "examples/interleaved/timed/sleeping_barber.rs"
+required-features = ["baking_timed_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_timed"
+path = "examples/interleaved/timed/circuit_breaker_logging.rs"
+required-features = ["baking_timed_interleaved"]
+
 ######### Timed
+
+[[example]]
+name = "fib_timed"
+path = "examples/timed/fib.rs"
+required-features = ["baking_timed"]
 
 [[example]]
 name = "servo_timed"
@@ -2728,16 +2752,6 @@ required-features = ["baking_timed"]
 name = "non_feasible"
 path = "examples/timed/non_feasible.rs"
 required-features = ["baking_timed"]
-
-[[example]]
-name = "sleeping_barber_timed"
-path = "examples/timed/sleeping_barber.rs"
-required-features = ["baking_timed_interleaved"]
-
-[[example]]
-name = "circuit_breaker_logging_timed"
-path = "examples/timed/circuit_breaker_logging.rs"
-required-features = ["baking_timed_interleaved"]
 
 [[example]]
 name = "circuit_breaker_timed"
