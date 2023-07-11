@@ -9,6 +9,8 @@ use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
+static LOOPS: i64 = 20;
+
 // Create new MeshedChannels for four participants
 generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 
@@ -102,8 +104,10 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 }
 
 fn main() {
-    let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     assert!(thread_a.join().is_ok());
     assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }

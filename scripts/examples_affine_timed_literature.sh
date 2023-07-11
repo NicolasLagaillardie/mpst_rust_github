@@ -12,10 +12,10 @@ bash ./scripts/create_files/compile_full.sh distributed_calc 1 baking
 bash ./scripts/create_files/compile_full.sh three_buyers 1 baking
 bash ./scripts/create_files/compile_full.sh three_travel 1 baking
 bash ./scripts/create_files/compile_full.sh o_auth 1 baking
+bash ./scripts/create_files/compile_full.sh logging 1 baking
 bash ./scripts/create_files/compile_full.sh online_wallet 1 baking
 bash ./scripts/create_files/compile_full.sh smtp 1 baking
 bash ./scripts/create_files/compile_full.sh servo 1 baking
-bash ./scripts/create_files/compile_full.sh logging 1 baking
 bash ./scripts/create_files/compile_full.sh video_stream 1 baking
 bash ./scripts/create_files/compile_full.sh remote_data 1 baking
 bash ./scripts/create_files/compile_full.sh circuit_breaker 1 baking
@@ -29,11 +29,11 @@ bash ./scripts/create_files/compile_full.sh circuit_breaker 1 baking
 # bash ./scripts/create_files/compile_full.sh http 1 baking
 
 # ## Compile checking examples
-# bash ./scripts/create_files/compile_full.sh video_stream 1 baking_checking
-# bash ./scripts/create_files/compile_full.sh adder 1 baking_checking
-# bash ./scripts/create_files/compile_full.sh basic 1 baking_checking
-# bash ./scripts/create_files/compile_full.sh servo_8257_original 1 baking_checking
-# bash ./scripts/create_files/compile_full.sh servo_8257_fixed 1 baking_checking
+# bash ./scripts/create_files/compile_full.sh video_stream_checking 1 baking_checking
+# bash ./scripts/create_files/compile_full.sh adder_checking 1 baking_checking
+# bash ./scripts/create_files/compile_full.sh basic_checking 1 baking_checking
+# bash ./scripts/create_files/compile_full.sh servo_8257_original_checking 1 baking_checking
+# bash ./scripts/create_files/compile_full.sh servo_8257_fixed_checking 1 baking_checking
 
 # ## Compile interleaved examples
 # bash ./scripts/create_files/compile_full.sh circuit_breaker_logging 1 interleaved

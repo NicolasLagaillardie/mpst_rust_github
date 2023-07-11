@@ -407,15 +407,21 @@ path = "benches/examples_all_timed/http.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_circuit_breaker"
+name = "example_circuit_breaker_timed"
 harness = false
 path = "benches/examples_all_timed/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_logging"
+name = "example_logging_timed"
 harness = false
 path = "benches/examples_all_timed/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_timed"
+harness = false
+path = "benches/examples_all_timed/video_stream.rs"
 required-features = ["full"]
 
 ################## Ring
@@ -2613,31 +2619,46 @@ name = "http"
 path = "examples/affine/http.rs"
 required-features = ["baking"]
 
-######### Checking
-
 [[example]]
 name = "video_stream"
 path = "examples/affine/video_stream.rs"
-required-features = ["baking_checking"]
-
-[[example]]
-name = "adder"
-path = "examples/affine/adder.rs"
-required-features = ["baking_checking"]
-
-[[example]]
-name = "basic"
-path = "examples/affine/basic.rs"
-required-features = ["baking_checking"]
+required-features = ["baking"]
 
 [[example]]
 name = "servo_8257_original"
 path = "examples/affine/servo_8257_original.rs"
-required-features = ["baking_checking"]
+required-features = ["baking"]
 
 [[example]]
 name = "servo_8257_fixed"
 path = "examples/affine/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+######### Checking
+
+[[example]]
+name = "video_stream_checking"
+path = "examples/checking/video_stream.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "adder_checking"
+path = "examples/checking/adder.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "basic_checking"
+path = "examples/checking/basic.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_original_checking"
+path = "examples/checking/servo_8257_original.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed_checking"
+path = "examples/checking/servo_8257_fixed.rs"
 required-features = ["baking_checking"]
 
 ######### Interleaved
@@ -2761,6 +2782,11 @@ required-features = ["baking_timed"]
 [[example]]
 name = "logging_timed"
 path = "examples/timed/logging.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "video_stream_timed"
+path = "examples/timed/video_stream.rs"
 required-features = ["baking_timed"]
 
 ################################### Mesh examples

@@ -1,22 +1,13 @@
-#![allow(
-    clippy::large_enum_variant,
-    clippy::type_complexity,
-    clippy::too_many_arguments
-)]
+#![allow(clippy::type_complexity)]
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::role::broadcast::RoleBroadcast;
+use mpstthree::role::end::RoleEnd;
+use mpstthree::{checker_concat, generate};
 
 use rand::{thread_rng, Rng};
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
-
-use std::boxed::Box;
 use std::error::Error;
-
-// See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
 generate!("rec_and_cancel", MeshedChannels, A, B, C);
@@ -28,9 +19,9 @@ type AtoCVideo = Recv<i32, Send<i32, RecursAtoC>>;
 
 type InitA = Recv<i32, Send<i32, RecursAtoC>>;
 
-type BtoAClose = <AtoBClose as Session>::Dual;
+type BtoAClose = End;
 type BtoCClose = End;
-type BtoAVideo = <AtoBVideo as Session>::Dual;
+type BtoAVideo = Recv<i32, Send<i32, End>>;
 
 type RecursAtoC = Recv<Branches0AtoC, End>;
 type RecursBtoC = Recv<Branches0BtoC, End>;
@@ -64,13 +55,15 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 // Creating the MP sessions
 
 // For C
-type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
+type EndpointCEnd = MeshedChannels<End, End, RoleEnd, NameC>;
 type EndpointCVideo = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoB,
-    RoleA<RoleA<StackCRecurs>>,
+    RoleA<RoleA<RoleBroadcast>>,
     NameC,
 >;
+
+type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
 type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, NameC>;
 
 // For A
@@ -138,7 +131,7 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
             client_recurs(s, xs)
         }
         Option::None => {
-            let s = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
+            let s: EndpointCEnd = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
 
             s.close()
         }
@@ -147,32 +140,36 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
 
 /////////////////////////////////////////
 
-fn aux() {
-    let (thread_a, thread_s, thread_c) = fork_mpst(
-        black_box(authenticator),
-        black_box(server),
-        black_box(client),
-    );
-
-    thread_a.join().unwrap();
-    thread_s.join().unwrap();
-    thread_c.join().unwrap();
+// Check for bottom-up approach
+fn checking() {
+    let _ = checker_concat!(
+        "video_stream",
+        EndpointAFull,
+        EndpointCFull,
+        EndpointBRecurs
+        =>
+        [
+            EndpointCVideo,
+            Branches0AtoC, Video,
+            Branches0BtoC, Video,
+        ],
+        [
+            EndpointCEnd,
+            Branches0AtoC, End,
+            Branches0BtoC, End,
+        ]
+    )
+    .unwrap();
 }
 
-/////////////////////////
+/////////////////////////////////////////
 
-pub fn video_stream(c: &mut Criterion) {
-    c.bench_function("Video stream baking", |b| b.iter(aux));
-}
+fn main() {
+    checking();
 
-/////////////////////////
+    let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
-criterion_group! {
-    name = bench;
-    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
-    targets = video_stream,
-}
-
-criterion_main! {
-    bench
+    assert!(thread_a.join().is_ok());
+    assert!(thread_s.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }

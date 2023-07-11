@@ -32,9 +32,9 @@ type StoL = Recv<WebFontLoaded, End>;
 
 // Orderings
 
-type OrderingC = RoleLayout<RoleLayout<RoleScript<RoleScript<RoleEnd>>>>;
+type OrderingC = RoleScript<RoleScript<RoleLayout<RoleLayout<RoleEnd>>>>;
 
-type OrderingL = RoleConstellation<RoleConstellation<RoleScript<RoleEnd>>>;
+type OrderingL = RoleScript<RoleConstellation<RoleConstellation<RoleEnd>>>;
 
 type OrderingS = RoleConstellation<RoleConstellation<RoleLayout<RoleEnd>>>;
 
@@ -49,9 +49,9 @@ type EndpointS = MeshedChannels<StoC, StoL, OrderingS, NameScript>;
 /////////////////////////
 
 fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let s = s.send(GetWebPageLoadState {})?;
-    let (_, s) = s.recv()?;
     let s = s.send(GetCurrentState {})?;
+    let (_, s) = s.recv()?;
+    let s = s.send(GetWebPageLoadState {})?;
     let (_, s) = s.recv()?;
     s.close()
 }
@@ -59,9 +59,9 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
+    let s = s.send(WebFontLoaded {})?;
     let (_, s) = s.recv()?;
     let s = s.send(OutstandingWebFonts {})?;
-    let s = s.send(WebFontLoaded {})?;
     s.close()
 }
 
@@ -77,9 +77,36 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 fn main() {
+    checking();
+
     let (thread_c, thread_l, thread_s) = fork_mpst(endpoint_c, endpoint_l, endpoint_s);
 
     assert!(thread_c.join().is_ok());
     assert!(thread_l.join().is_ok());
     assert!(thread_s.join().is_ok());
+}
+
+/////////////////////////
+
+// Check for bottom-up approach
+fn checking() {
+    let (graphs, kmc) =
+        mpstthree::checker_concat!("servo_8257_original", EndpointC, EndpointL, EndpointS).unwrap();
+
+    println!(
+        "graph C: {:?}",
+        petgraph::dot::Dot::new(&graphs["RoleConstellation"])
+    );
+    println!("\n/////////////////////////\n");
+    println!(
+        "graph L: {:?}",
+        petgraph::dot::Dot::new(&graphs["RoleLayout"])
+    );
+    println!("\n/////////////////////////\n");
+    println!(
+        "graph S: {:?}",
+        petgraph::dot::Dot::new(&graphs["RoleScript"])
+    );
+    println!("\n/////////////////////////\n");
+    println!("min kMC: {kmc:?}");
 }

@@ -77,9 +77,36 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
 /////////////////////////
 
 fn main() {
+    checking();
+
     let (thread_c, thread_l, thread_s) = fork_mpst(endpoint_c, endpoint_l, endpoint_s);
 
     assert!(thread_c.join().is_ok());
     assert!(thread_l.join().is_ok());
     assert!(thread_s.join().is_ok());
+}
+
+/////////////////////////
+
+// Check for bottom-up approach
+fn checking() {
+    let (graphs, kmc) =
+        mpstthree::checker_concat!("servo_8257_original", EndpointC, EndpointL, EndpointS).unwrap();
+
+    println!(
+        "graph C: {:?}",
+        petgraph::dot::Dot::new(&graphs["RoleConstellation"])
+    );
+    println!("\n/////////////////////////\n");
+    println!(
+        "graph L: {:?}",
+        petgraph::dot::Dot::new(&graphs["RoleLayout"])
+    );
+    println!("\n/////////////////////////\n");
+    println!(
+        "graph S: {:?}",
+        petgraph::dot::Dot::new(&graphs["RoleScript"])
+    );
+    println!("\n/////////////////////////\n");
+    println!("min kMC: {kmc:?}");
 }

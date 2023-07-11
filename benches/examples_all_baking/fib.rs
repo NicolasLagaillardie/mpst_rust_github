@@ -15,7 +15,7 @@ use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-// Create new MeshedChannels for four participants
+// Create new MeshedChannels for three participants
 generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
 
 // Types

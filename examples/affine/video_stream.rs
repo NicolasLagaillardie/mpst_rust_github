@@ -1,13 +1,16 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{checker_concat, generate};
 
 use rand::{thread_rng, Rng};
 
+use std::boxed::Box;
 use std::error::Error;
+
+// See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
 generate!("rec_and_cancel", MeshedChannels, A, B, C);
@@ -19,9 +22,9 @@ type AtoCVideo = Recv<i32, Send<i32, RecursAtoC>>;
 
 type InitA = Recv<i32, Send<i32, RecursAtoC>>;
 
-type BtoAClose = End;
+type BtoAClose = <AtoBClose as Session>::Dual;
 type BtoCClose = End;
-type BtoAVideo = Recv<i32, Send<i32, End>>;
+type BtoAVideo = <AtoBVideo as Session>::Dual;
 
 type RecursAtoC = Recv<Branches0AtoC, End>;
 type RecursBtoC = Recv<Branches0BtoC, End>;
@@ -55,15 +58,13 @@ type StackCFull = RoleA<RoleA<StackCRecurs>>;
 // Creating the MP sessions
 
 // For C
-type EndpointCEnd = MeshedChannels<End, End, RoleEnd, NameC>;
+type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
 type EndpointCVideo = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoB,
-    RoleA<RoleA<RoleBroadcast>>,
+    RoleA<RoleA<StackCRecurs>>,
     NameC,
 >;
-
-type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
 type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, NameC>;
 
 // For A
@@ -131,7 +132,7 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
             client_recurs(s, xs)
         }
         Option::None => {
-            let s: EndpointCEnd = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
+            let s = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
 
             s.close()
         }
@@ -140,33 +141,7 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
 
 /////////////////////////////////////////
 
-// Check for bottom-up approach
-fn checking() {
-    let _ = checker_concat!(
-        "video_stream",
-        EndpointAFull,
-        EndpointCFull,
-        EndpointBRecurs
-        =>
-        [
-            EndpointCVideo,
-            Branches0AtoC, Video,
-            Branches0BtoC, Video,
-        ],
-        [
-            EndpointCEnd,
-            Branches0AtoC, End,
-            Branches0BtoC, End,
-        ]
-    )
-    .unwrap();
-}
-
-/////////////////////////////////////////
-
 fn main() {
-    checking();
-
     let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
     assert!(thread_a.join().is_ok());
