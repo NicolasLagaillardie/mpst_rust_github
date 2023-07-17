@@ -185,6 +185,6 @@ fn choice_server(
 fn main() {
     let (thread_server, thread_voter) = fork_mpst(endpoint_server, endpoint_voter);
 
-    assert!(thread_voter.join().is_ok());
-    assert!(thread_server.join().is_ok());
+    thread_voter.join().unwrap();
+    thread_server.join().unwrap();
 }

@@ -306,5 +306,5 @@ fn rec_loop(
 /////////////////////////
 
 fn main() {
-    assert!(fork_mpst_solo(start).is_ok());
+    fork_mpst_solo(start).unwrap();
 }

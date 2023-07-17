@@ -136,7 +136,7 @@ fn aux() {
 /////////////////////////
 
 pub fn three_buyers(c: &mut Criterion) {
-    c.bench_function("Three buyers MPST baking", |b| b.iter(aux));
+    c.bench_function("Three buyers", |b| b.iter(aux));
 }
 
 /////////////////////////

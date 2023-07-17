@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+#![allow(clippy::type_complexity)]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::generate;
@@ -104,32 +104,10 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn aux() {
-    let (thread_a, thread_c, thread_s) = fork_mpst(
-        black_box(endpoint_a),
-        black_box(endpoint_c),
-        black_box(endpoint_s),
-    );
+fn main() {
+    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
     thread_a.join().unwrap();
     thread_c.join().unwrap();
     thread_s.join().unwrap();
-}
-
-/////////////////////////
-
-pub fn distributed_calc(c: &mut Criterion) {
-    c.bench_function("Distributed calculator baking", |b| b.iter(aux));
-}
-
-/////////////////////////
-
-criterion_group! {
-    name = bench;
-    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
-    targets = distributed_calc,
-}
-
-criterion_main! {
-    bench
 }

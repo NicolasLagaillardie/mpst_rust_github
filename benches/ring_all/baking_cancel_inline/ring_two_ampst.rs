@@ -97,7 +97,7 @@ static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring two baking inline protocol MPST {LOOPS}"),
+        &format!("ring two baking inline protocol {LOOPS}"),
         |b| b.iter(aux),
     );
 }

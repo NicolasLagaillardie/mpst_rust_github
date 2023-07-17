@@ -227,7 +227,7 @@ fn aux() {
 /////////////////////////
 
 pub fn dns_imai(c: &mut Criterion) {
-    c.bench_function("DNS Imai", |b| b.iter(aux));
+    c.bench_function("DNS Imai basic", |b| b.iter(aux));
 }
 
 /////////////////////////

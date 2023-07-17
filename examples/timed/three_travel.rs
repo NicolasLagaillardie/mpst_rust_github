@@ -294,7 +294,7 @@ fn choice_s(s: ChoiceS, all_clocks: &mut HashMap<char, Instant>) -> Result<(), B
 fn main() {
     let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_c.join().is_ok());
-    assert!(thread_s.join().is_ok());
+    thread_a.join().unwrap();
+    thread_c.join().unwrap();
+    thread_s.join().unwrap();
 }

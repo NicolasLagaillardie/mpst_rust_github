@@ -191,7 +191,7 @@ fn aux() {
 /////////////////////////
 
 pub fn video_stream(c: &mut Criterion) {
-    c.bench_function("Video stream", |b| b.iter(aux));
+    c.bench_function("Video stream basic", |b| b.iter(aux));
 }
 
 /////////////////////////

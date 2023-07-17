@@ -1108,7 +1108,7 @@ fn aux() {
 /////////////////////////
 
 pub fn http(c: &mut Criterion) {
-    c.bench_function("HTTP baking", |b| b.iter(aux));
+    c.bench_function("HTTP", |b| b.iter(aux));
 }
 
 /////////////////////////

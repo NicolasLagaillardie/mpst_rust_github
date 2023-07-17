@@ -377,7 +377,7 @@ static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring five cancel broadcast protocol MPST {LOOPS}"),
+        &format!("ring five cancel broadcast protocol {LOOPS}"),
         |b| b.iter(aux),
     );
 }

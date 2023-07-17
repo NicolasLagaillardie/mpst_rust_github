@@ -744,7 +744,7 @@ fn aux() {
 /////////////////////////
 
 pub fn smtp(c: &mut Criterion) {
-    c.bench_function("SMTP", |b| b.iter(aux));
+    c.bench_function("SMTP basic", |b| b.iter(aux));
 }
 
 /////////////////////////

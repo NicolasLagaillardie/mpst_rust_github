@@ -1205,7 +1205,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh eleven cancel protocol MPST {LOOPS}"), |b| {
+    c.bench_function(&format!("mesh eleven cancel protocol {LOOPS}"), |b| {
         b.iter(aux)
     });
 }

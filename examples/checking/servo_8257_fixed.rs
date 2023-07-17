@@ -81,9 +81,9 @@ fn main() {
 
     let (thread_c, thread_l, thread_s) = fork_mpst(endpoint_c, endpoint_l, endpoint_s);
 
-    assert!(thread_c.join().is_ok());
-    assert!(thread_l.join().is_ok());
-    assert!(thread_s.join().is_ok());
+    thread_c.join().unwrap();
+    thread_l.join().unwrap();
+    thread_s.join().unwrap();
 }
 
 /////////////////////////

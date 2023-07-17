@@ -155,9 +155,9 @@ path = "benches/examples_all_basic/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_distributed_calc_basic"
+name = "example_calculator_basic"
 harness = false
-path = "benches/examples_all_basic/distributed_calc.rs"
+path = "benches/examples_all_basic/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -203,9 +203,9 @@ path = "benches/examples_all_basic/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_travel_basic"
+name = "example_travel_agency_basic"
 harness = false
-path = "benches/examples_all_basic/three_travel.rs"
+path = "benches/examples_all_basic/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -241,9 +241,9 @@ path = "benches/examples_all_baking/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_distributed_calc_baking"
+name = "example_calculator_baking"
 harness = false
-path = "benches/examples_all_baking/distributed_calc.rs"
+path = "benches/examples_all_baking/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -283,9 +283,9 @@ path = "benches/examples_all_baking/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_travel_baking"
+name = "example_travel_agency_baking"
 harness = false
-path = "benches/examples_all_baking/three_travel.rs"
+path = "benches/examples_all_baking/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -341,9 +341,9 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "example_distributed_calc_timed"
+name = "example_calculator_timed"
 harness = false
-path = "benches/examples_all_timed/distributed_calc.rs"
+path = "benches/examples_all_timed/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -383,9 +383,9 @@ path = "benches/examples_all_timed/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_travel_timed"
+name = "example_travel_agency_timed"
 harness = false
-path = "benches/examples_all_timed/three_travel.rs"
+path = "benches/examples_all_timed/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -404,6 +404,24 @@ required-features = ["full"]
 name = "example_http_timed"
 harness = false
 path = "benches/examples_all_timed/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_timed"
+harness = false
+path = "benches/examples_all_timed/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_timed"
+harness = false
+path = "benches/examples_all_timed/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_timed"
+harness = false
+path = "benches/examples_all_timed/video_stream.rs"
 required-features = ["full"]
 
 ################## Ring
@@ -704,42 +722,6 @@ harness = false
 path = "benches/ring_all/timed_baking_cancel/ring_four.rs"
 required-features = ["full"]
 
-[[bench]]
-name = "ring_five_mpst_timed_baking_cancel"
-harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_five.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_six_mpst_timed_baking_cancel"
-harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_six.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_seven_mpst_timed_baking_cancel"
-harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_seven.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_eight_mpst_timed_baking_cancel"
-harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_eight.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_nine_mpst_timed_baking_cancel"
-harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_nine.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_ten_mpst_timed_baking_cancel"
-harness = false
-path = "benches/ring_all/timed_baking_cancel/ring_ten.rs"
-required-features = ["full"]
-
 ################## Mesh
 
 ######### Empty
@@ -1038,68 +1020,46 @@ harness = false
 path = "benches/mesh_all/timed_baking_cancel/mesh_four.rs"
 required-features = ["full"]
 
-[[bench]]
-name = "mesh_five_mpst_timed_baking_cancel"
-harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_five.rs"
-required-features = ["full"]
+################################### Examples
 
-[[bench]]
-name = "mesh_six_mpst_timed_baking_cancel"
-harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_six.rs"
-required-features = ["full"]
+######### Basic
 
-[[bench]]
-name = "mesh_seven_mpst_timed_baking_cancel"
-harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_seven.rs"
-required-features = ["full"]
+[[example]]
+name = "video_stream_basic"
+path = "examples/basic/video_stream_basic.rs"
+required-features = ["macros_simple"]
 
-[[bench]]
-name = "mesh_eight_mpst_timed_baking_cancel"
-harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_eight.rs"
-required-features = ["full"]
+[[example]]
+name = "circuit_breaker_basic"
+path = "examples/basic/circuit_breaker.rs"
+required-features = ["macros_multiple"]
 
-[[bench]]
-name = "mesh_nine_mpst_timed_baking_cancel"
-harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_nine.rs"
-required-features = ["full"]
+[[example]]
+name = "logging_basic"
+path = "examples/basic/logging.rs"
+required-features = ["macros_multiple"]
 
-[[bench]]
-name = "mesh_ten_mpst_timed_baking_cancel"
-harness = false
-path = "benches/mesh_all/timed_baking_cancel/mesh_ten.rs"
-required-features = ["full"]
+######### Affine
 
-################################### Basic examples
+[[example]]
+name = "fib"
+path = "examples/affine/fib.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "circuit_breaker"
 path = "examples/affine/circuit_breaker.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "logging"
 path = "examples/affine/logging.rs"
-required-features = ["macros_multiple"]
-
-[[example]]
-name = "circuit_breaker_baking"
-path = "examples/affine/circuit_breaker_baking.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "logging_baking"
-path = "examples/affine/logging_baking.rs"
+name = "calculator"
+path = "examples/affine/calculator.rs"
 required-features = ["baking"]
-
-[[example]]
-name = "distributed_calc"
-path = "examples/affine/distributed_calc.rs"
-required-features = ["macros_multiple"]
 
 [[example]]
 name = "dns_fowler"
@@ -1114,7 +1074,7 @@ required-features = ["baking_checking"]
 [[example]]
 name = "dns_imai"
 path = "examples/affine/dns_imai.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "o_auth"
@@ -1134,32 +1094,27 @@ required-features = ["transport_macros_multiple"]
 [[example]]
 name = "online_wallet"
 path = "examples/affine/online_wallet.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "simple_voting"
 path = "examples/affine/simple_voting.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "smtp"
 path = "examples/affine/smtp.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
 name = "three_buyers"
 path = "examples/affine/three_buyers.rs"
-required-features = ["macros_multiple"]
+required-features = ["baking"]
 
 [[example]]
-name = "three_travel"
-path = "examples/affine/three_travel.rs"
-required-features = ["macros_multiple"]
-
-[[example]]
-name = "video_stream_basic"
-path = "examples/affine/video_stream_basic.rs"
-required-features = ["macros_simple"]
+name = "travel_agency"
+path = "examples/affine/travel_agency.rs"
+required-features = ["baking"]
 
 [[example]]
 name = "servo"
@@ -1176,34 +1131,90 @@ name = "http"
 path = "examples/affine/http.rs"
 required-features = ["baking"]
 
-################################### Checking examples
-
 [[example]]
 name = "video_stream"
 path = "examples/affine/video_stream.rs"
-required-features = ["baking_checking"]
-
-[[example]]
-name = "adder"
-path = "examples/affine/adder.rs"
-required-features = ["baking_checking"]
-
-[[example]]
-name = "basic"
-path = "examples/affine/basic.rs"
-required-features = ["baking_checking"]
+required-features = ["baking"]
 
 [[example]]
 name = "servo_8257_original"
 path = "examples/affine/servo_8257_original.rs"
-required-features = ["baking_checking"]
+required-features = ["baking"]
 
 [[example]]
 name = "servo_8257_fixed"
 path = "examples/affine/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+######### Checking
+
+[[example]]
+name = "video_stream_checking"
+path = "examples/checking/video_stream.rs"
 required-features = ["baking_checking"]
 
-################################### Timed examples
+[[example]]
+name = "adder_checking"
+path = "examples/checking/adder.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "basic_checking"
+path = "examples/checking/basic.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_original_checking"
+path = "examples/checking/servo_8257_original.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed_checking"
+path = "examples/checking/servo_8257_fixed.rs"
+required-features = ["baking_checking"]
+
+######### Interleaved
+
+#### Baking
+
+[[example]]
+name = "circuit_breaker_logging"
+path = "examples/interleaved/baking/circuit_breaker_logging.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "circuit_breaker_solo"
+path = "examples/interleaved/baking/circuit_breaker_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "logging_solo"
+path = "examples/interleaved/baking/logging_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "sleeping_barber"
+path = "examples/interleaved/baking/sleeping_barber.rs"
+required-features = ["interleaved"]
+
+#### Timed
+
+[[example]]
+name = "sleeping_barber_timed"
+path = "examples/interleaved/timed/sleeping_barber.rs"
+required-features = ["baking_timed_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_timed"
+path = "examples/interleaved/timed/circuit_breaker_logging.rs"
+required-features = ["baking_timed_interleaved"]
+
+######### Timed
+
+[[example]]
+name = "fib_timed"
+path = "examples/timed/fib.rs"
+required-features = ["baking_timed"]
 
 [[example]]
 name = "servo_timed"
@@ -1231,8 +1242,8 @@ path = "examples/timed/simple_voting.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "distributed_calc_timed"
-path = "examples/timed/distributed_calc.rs"
+name = "calculator_timed"
+path = "examples/timed/calculator.rs"
 required-features = ["baking_timed"]
 
 [[example]]
@@ -1256,8 +1267,8 @@ path = "examples/timed/three_buyers.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "three_travel_timed"
-path = "examples/timed/three_travel.rs"
+name = "travel_agency_timed"
+path = "examples/timed/travel_agency.rs"
 required-features = ["baking_timed"]
 
 [[example]]
@@ -1275,6 +1286,21 @@ name = "non_feasible"
 path = "examples/timed/non_feasible.rs"
 required-features = ["baking_timed"]
 
+[[example]]
+name = "circuit_breaker_timed"
+path = "examples/timed/circuit_breaker.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "logging_timed"
+path = "examples/timed/logging.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "video_stream_timed"
+path = "examples/timed/video_stream.rs"
+required-features = ["baking_timed"]
+
 ################################### Mesh examples
 
 ################## Crossbeam
@@ -1282,34 +1308,34 @@ required-features = ["baking_timed"]
 [[example]]
 name = "mesh_two_crossbeam"
 path = "examples/mesh/mesh_two_crossbeam.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "mesh_three_crossbeam"
 path = "examples/mesh/mesh_three_crossbeam.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "mesh_four_crossbeam"
 path = "examples/mesh/mesh_four_crossbeam.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 ################## Binary
 
 [[example]]
 name = "mesh_two_binary"
 path = "examples/mesh/mesh_two_binary.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "mesh_three_binary"
 path = "examples/mesh/mesh_three_binary.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "mesh_four_binary"
 path = "examples/mesh/mesh_four_binary.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 ################## MPST
 
@@ -1362,36 +1388,6 @@ name = "mesh_four_baking_atmp"
 path = "examples/mesh/mesh_four_baking_atmp.rs"
 required-features = ["baking_timed"]
 
-[[example]]
-name = "mesh_five_baking_atmp"
-path = "examples/mesh/mesh_five_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "mesh_six_baking_atmp"
-path = "examples/mesh/mesh_six_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "mesh_seven_baking_atmp"
-path = "examples/mesh/mesh_seven_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "mesh_eight_baking_atmp"
-path = "examples/mesh/mesh_eight_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "mesh_nine_baking_atmp"
-path = "examples/mesh/mesh_nine_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "mesh_ten_baking_atmp"
-path = "examples/mesh/mesh_ten_baking_atmp.rs"
-required-features = ["baking_timed"]
-
 ################################### Ring examples
 
 ################## Crossbeam
@@ -1399,34 +1395,34 @@ required-features = ["baking_timed"]
 [[example]]
 name = "ring_two_crossbeam"
 path = "examples/ring/ring_two_crossbeam.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "ring_three_crossbeam"
 path = "examples/ring/ring_three_crossbeam.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "ring_four_crossbeam"
 path = "examples/ring/ring_four_crossbeam.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 ################## Binary
 
 [[example]]
 name = "ring_two_binary"
 path = "examples/ring/ring_two_binary.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "ring_three_binary"
 path = "examples/ring/ring_three_binary.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 [[example]]
 name = "ring_four_binary"
 path = "examples/ring/ring_four_binary.rs"
-required-features = ["macros_multiple"]
+required-features = ["default"]
 
 ################## MPST
 
@@ -1479,35 +1475,12 @@ name = "ring_four_baking_atmp"
 path = "examples/ring/ring_four_baking_atmp.rs"
 required-features = ["baking_timed"]
 
-[[example]]
-name = "ring_five_baking_atmp"
-path = "examples/ring/ring_five_baking_atmp.rs"
-required-features = ["baking_timed"]
+# ################################### Example Test
 
-[[example]]
-name = "ring_six_baking_atmp"
-path = "examples/ring/ring_six_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "ring_seven_baking_atmp"
-path = "examples/ring/ring_seven_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "ring_eight_baking_atmp"
-path = "examples/ring/ring_eight_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "ring_nine_baking_atmp"
-path = "examples/ring/ring_nine_baking_atmp.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "ring_ten_baking_atmp"
-path = "examples/ring/ring_ten_baking_atmp.rs"
-required-features = ["baking_timed"]
+# [[example]]
+# name = "test"
+# path = "examples/test.rs"
+# required-features = ["full"]
 
 ################################### Profil
 

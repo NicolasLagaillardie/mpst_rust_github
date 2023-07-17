@@ -142,7 +142,7 @@ fn aux() {
 /////////////////////////
 
 pub fn simple_voting(c: &mut Criterion) {
-    c.bench_function("Simple voting MPST baking", |b| b.iter(aux));
+    c.bench_function("Simple voting", |b| b.iter(aux));
 }
 
 /////////////////////////

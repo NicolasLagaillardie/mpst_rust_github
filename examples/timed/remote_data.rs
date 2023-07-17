@@ -246,7 +246,7 @@ fn main() {
     let (thread_satellite, thread_sensor, thread_server) =
         fork_mpst(endpoint_satellite, endpoint_sensor, endpoint_server);
 
-    assert!(thread_satellite.join().is_ok());
-    assert!(thread_sensor.join().is_ok());
-    assert!(thread_server.join().is_ok());
+    thread_satellite.join().unwrap();
+    thread_sensor.join().unwrap();
+    thread_server.join().unwrap();
 }

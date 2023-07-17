@@ -119,7 +119,7 @@ fn aux() {
 /////////////////////////
 
 pub fn servo(c: &mut Criterion) {
-    c.bench_function("Servo baking", |b| b.iter(aux));
+    c.bench_function("Servo", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -155,9 +155,9 @@ path = "benches/examples_all_basic/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_distributed_calc_basic"
+name = "example_calculator_basic"
 harness = false
-path = "benches/examples_all_basic/distributed_calc.rs"
+path = "benches/examples_all_basic/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -203,9 +203,9 @@ path = "benches/examples_all_basic/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_travel_basic"
+name = "example_travel_agency_basic"
 harness = false
-path = "benches/examples_all_basic/three_travel.rs"
+path = "benches/examples_all_basic/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -241,9 +241,9 @@ path = "benches/examples_all_baking/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_distributed_calc_baking"
+name = "example_calculator_baking"
 harness = false
-path = "benches/examples_all_baking/distributed_calc.rs"
+path = "benches/examples_all_baking/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -283,9 +283,9 @@ path = "benches/examples_all_baking/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_travel_baking"
+name = "example_travel_agency_baking"
 harness = false
-path = "benches/examples_all_baking/three_travel.rs"
+path = "benches/examples_all_baking/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -341,9 +341,9 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "example_distributed_calc_timed"
+name = "example_calculator_timed"
 harness = false
-path = "benches/examples_all_timed/distributed_calc.rs"
+path = "benches/examples_all_timed/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -383,9 +383,9 @@ path = "benches/examples_all_timed/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_travel_timed"
+name = "example_travel_agency_timed"
 harness = false
-path = "benches/examples_all_timed/three_travel.rs"
+path = "benches/examples_all_timed/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2545,8 +2545,8 @@ path = "examples/affine/logging.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "distributed_calc"
-path = "examples/affine/distributed_calc.rs"
+name = "calculator"
+path = "examples/affine/calculator.rs"
 required-features = ["baking"]
 
 [[example]]
@@ -2600,8 +2600,8 @@ path = "examples/affine/three_buyers.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "three_travel"
-path = "examples/affine/three_travel.rs"
+name = "travel_agency"
+path = "examples/affine/travel_agency.rs"
 required-features = ["baking"]
 
 [[example]]
@@ -2730,8 +2730,8 @@ path = "examples/timed/simple_voting.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "distributed_calc_timed"
-path = "examples/timed/distributed_calc.rs"
+name = "calculator_timed"
+path = "examples/timed/calculator.rs"
 required-features = ["baking_timed"]
 
 [[example]]
@@ -2755,8 +2755,8 @@ path = "examples/timed/three_buyers.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "three_travel_timed"
-path = "examples/timed/three_travel.rs"
+name = "travel_agency_timed"
+path = "examples/timed/travel_agency.rs"
 required-features = ["baking_timed"]
 
 [[example]]

@@ -227,7 +227,7 @@ fn aux() {
 /////////////////////////
 
 pub fn logging(c: &mut Criterion) {
-    c.bench_function("Logging", |b| b.iter(aux));
+    c.bench_function("Logging basic", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -56,7 +56,7 @@ fn recurs_b_binary(
     Ok(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -91,7 +91,7 @@ fn all_binaries() {
 static LOOPS: i64 = 20;
 
 pub fn fib(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo binary {LOOPS}"), |b| b.iter(all_binaries));
+    c.bench_function(&format!("Fibo binary {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

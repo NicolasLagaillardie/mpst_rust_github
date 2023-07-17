@@ -392,7 +392,7 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
     c.bench_function(
-        &format!("mesh seven baking inline protocol MPST {LOOPS}"),
+        &format!("mesh seven baking inline protocol {LOOPS}"),
         |b| b.iter(aux),
     );
 }

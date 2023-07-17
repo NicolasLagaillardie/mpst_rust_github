@@ -216,7 +216,7 @@ fn aux() {
 /////////////////////////
 
 pub fn video_stream(c: &mut Criterion) {
-    c.bench_function("Timed Video stream baking", |b| b.iter(aux));
+    c.bench_function("Timed Video stream", |b| b.iter(aux));
 }
 
 /////////////////////////

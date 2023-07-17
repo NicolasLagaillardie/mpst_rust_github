@@ -223,6 +223,6 @@ fn recurs_1_logs(
 fn main() {
     let (thread_controller, thread_logs) = fork_mpst(endpoint_controller, endpoint_logs);
 
-    assert!(thread_controller.join().is_ok());
-    assert!(thread_logs.join().is_ok());
+    thread_controller.join().unwrap();
+    thread_logs.join().unwrap();
 }

@@ -897,7 +897,7 @@ fn aux() {
 /////////////////////////
 
 pub fn smtp(c: &mut Criterion) {
-    c.bench_function("Timed SMTP baking", |b| b.iter(aux));
+    c.bench_function("Timed SMTP", |b| b.iter(aux));
 }
 
 /////////////////////////

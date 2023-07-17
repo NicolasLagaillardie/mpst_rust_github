@@ -187,8 +187,8 @@ fn aux() {
 
 /////////////////////////
 
-pub fn distributed_calc(c: &mut Criterion) {
-    c.bench_function("Timed Distributed calculator baking", |b| b.iter(aux));
+pub fn calculator(c: &mut Criterion) {
+    c.bench_function("Timed Calculator", |b| b.iter(aux));
 }
 
 /////////////////////////
@@ -196,7 +196,7 @@ pub fn distributed_calc(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
-    targets = distributed_calc,
+    targets = calculator,
 }
 
 criterion_main! {

@@ -1274,8 +1274,8 @@ fn main() {
         endpoint_server,
     );
 
-    assert!(thread_client.join().is_ok());
-    assert!(thread_proxyone.join().is_ok());
-    assert!(thread_proxytwo.join().is_ok());
-    assert!(thread_server.join().is_ok());
+    thread_client.join().unwrap();
+    thread_proxyone.join().unwrap();
+    thread_proxytwo.join().unwrap();
+    thread_server.join().unwrap();
 }

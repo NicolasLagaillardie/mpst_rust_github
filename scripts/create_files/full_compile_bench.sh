@@ -12,7 +12,7 @@ sleep 2
 ./scripts/create_files/compile_full.sh fib 5 macros_multiple
 ./scripts/create_files/compile_full.sh simple_voting 5 macros_multiple
 ./scripts/create_files/compile_full.sh three_buyers 5 macros_multiple
-./scripts/create_files/compile_full.sh three_travel 5 macros_multiple
+./scripts/create_files/compile_full.sh travel_agency 5 macros_multiple
 ./scripts/create_files/compile_full.sh logging 5 macros_multiple
 ./scripts/create_files/compile_full.sh circuit_breaker 5 macros_multiple
 ./scripts/create_files/compile_full.sh logging_baking 5 baking
@@ -21,7 +21,7 @@ sleep 2
 ./scripts/create_files/compile_full.sh logging_solo 5 baking_interleaved
 ./scripts/create_files/compile_full.sh circuit_breaker_logging_interleaved 5 baking_interleaved
 ./scripts/create_files/compile_full.sh smtp 5 macros_multiple
-./scripts/create_files/compile_full.sh distributed_calc 5 macros_multiple
+./scripts/create_files/compile_full.sh calculator 5 macros_multiple
 ./scripts/create_files/compile_full.sh video_stream 5 macros_simple
 ./scripts/create_files/compile_full.sh online_wallet 5 macros_multiple
 ./scripts/create_files/compile_full.sh dns_fowler 5 baking_checking

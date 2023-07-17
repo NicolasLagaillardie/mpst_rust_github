@@ -135,8 +135,8 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, recurs_b);
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
 }
 
 /////////////////////////

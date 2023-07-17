@@ -207,7 +207,7 @@ fn aux() {
 /////////////////////////
 
 pub fn travel(c: &mut Criterion) {
-    c.bench_function("Travel MPST baking", |b| b.iter(aux));
+    c.bench_function("Travel agency", |b| b.iter(aux));
 }
 
 /////////////////////////

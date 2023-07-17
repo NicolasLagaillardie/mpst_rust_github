@@ -170,7 +170,7 @@ fn client_recurs(s: EndpointCRecurs<i32>, mut xs: Vec<i32>) -> Result<(), Box<dy
 fn main() {
     let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_s.join().is_ok());
-    assert!(thread_c.join().is_ok());
+    thread_a.join().unwrap();
+    thread_s.join().unwrap();
+    thread_c.join().unwrap();
 }

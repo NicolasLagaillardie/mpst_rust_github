@@ -1,4 +1,4 @@
-#![allow(clippy::type_complexity)]
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::generate;
@@ -104,10 +104,32 @@ fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn main() {
-    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
+fn aux() {
+    let (thread_a, thread_c, thread_s) = fork_mpst(
+        black_box(endpoint_a),
+        black_box(endpoint_c),
+        black_box(endpoint_s),
+    );
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_c.join().is_ok());
-    assert!(thread_s.join().is_ok());
+    thread_a.join().unwrap();
+    thread_c.join().unwrap();
+    thread_s.join().unwrap();
+}
+
+/////////////////////////
+
+pub fn calculator(c: &mut Criterion) {
+    c.bench_function("Calculator", |b| b.iter(aux));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
+    targets = calculator,
+}
+
+criterion_main! {
+    bench
 }

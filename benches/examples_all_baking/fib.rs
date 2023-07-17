@@ -124,7 +124,7 @@ fn aux() {
 static LOOPS: i64 = 20;
 
 pub fn fibo_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo MPST baking {LOOPS}"), |b| b.iter(aux));
+    c.bench_function(&format!("Fibo {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

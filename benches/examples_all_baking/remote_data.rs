@@ -218,7 +218,7 @@ fn aux() {
 /////////////////////////
 
 pub fn remote_data(c: &mut Criterion) {
-    c.bench_function("Remote data baking", |b| b.iter(aux));
+    c.bench_function("Remote data", |b| b.iter(aux));
 }
 
 /////////////////////////

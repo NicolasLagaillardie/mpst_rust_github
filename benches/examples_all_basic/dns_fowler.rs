@@ -184,7 +184,7 @@ fn aux() {
 /////////////////////////
 
 pub fn dns_fowler(c: &mut Criterion) {
-    c.bench_function("DNS Fowler", |b| b.iter(aux));
+    c.bench_function("DNS Fowler basic", |b| b.iter(aux));
 }
 
 /////////////////////////

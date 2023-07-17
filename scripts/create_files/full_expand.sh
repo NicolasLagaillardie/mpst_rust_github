@@ -12,7 +12,7 @@ cargo expand --example o_auth_transport > expand/o_auth_transport.txt
 cargo expand --example fib > expand/fib.txt
 cargo expand --example simple_voting > expand/simple_voting.txt
 cargo expand --example three_buyers > expand/three_buyers.txt
-cargo expand --example three_travel > expand/three_travel.txt
+cargo expand --example travel_agency > expand/travel_agency.txt
 cargo expand --example logging > expand/logging.txt
 cargo expand --example circuit_breaker > expand/circuit_breaker.txt
 cargo expand --example logging_baking > expand/logging_baking.txt
@@ -20,7 +20,7 @@ cargo expand --example circuit_breaker_baking > expand/circuit_breaker_baking.tx
 cargo expand --example logging_interleaved > expand/logging_interleaved.txt
 cargo expand --example circuit_breaker_logging_interleaved > expand/circuit_breaker_logging_interleaved.txt
 cargo expand --example smtp > expand/smtp.txt
-cargo expand --example distributed_calc > expand/distributed_calc.txt
+cargo expand --example calculator > expand/calculator.txt
 cargo expand --example video_stream > expand/video_stream.txt
 cargo expand --example online_wallet > expand/online_wallet.txt
 cargo expand --example dns_fowler > expand/dns_fowler.txt

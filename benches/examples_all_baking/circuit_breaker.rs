@@ -367,7 +367,7 @@ fn aux() {
 /////////////////////////
 
 pub fn circuit_breaker(c: &mut Criterion) {
-    c.bench_function("Circuit breaker baking", |b| b.iter(aux));
+    c.bench_function("Circuit breaker", |b| b.iter(aux));
 }
 
 /////////////////////////

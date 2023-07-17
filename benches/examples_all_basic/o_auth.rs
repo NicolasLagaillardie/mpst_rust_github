@@ -186,7 +186,7 @@ fn aux() {
 /////////////////////////
 
 pub fn o_auth(c: &mut Criterion) {
-    c.bench_function("oAuth MPST", |b| b.iter(aux));
+    c.bench_function("oAuth basic", |b| b.iter(aux));
 }
 
 /////////////////////////

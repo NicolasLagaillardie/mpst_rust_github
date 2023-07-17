@@ -8,9 +8,9 @@ set -e
 ## Compile baking examples
 bash ./scripts/create_files/compile_full.sh fib 20 baking
 bash ./scripts/create_files/compile_full.sh simple_voting 20 baking
-bash ./scripts/create_files/compile_full.sh distributed_calc 20 baking
+bash ./scripts/create_files/compile_full.sh calculator 20 baking
 bash ./scripts/create_files/compile_full.sh three_buyers 20 baking
-bash ./scripts/create_files/compile_full.sh three_travel 20 baking
+bash ./scripts/create_files/compile_full.sh travel_agency 20 baking
 bash ./scripts/create_files/compile_full.sh o_auth 20 baking
 bash ./scripts/create_files/compile_full.sh logging 20 baking
 bash ./scripts/create_files/compile_full.sh online_wallet 20 baking
@@ -44,9 +44,9 @@ bash ./scripts/create_files/compile_full.sh circuit_breaker 20 baking
 ## Compile timed examples
 bash ./scripts/create_files/compile_full.sh fib_timed 20 baking_timed
 bash ./scripts/create_files/compile_full.sh simple_voting_timed 20 baking_timed
-bash ./scripts/create_files/compile_full.sh distributed_calc_timed 20 baking_timed
+bash ./scripts/create_files/compile_full.sh calculator_timed 20 baking_timed
 bash ./scripts/create_files/compile_full.sh three_buyers_timed 20 baking_timed
-bash ./scripts/create_files/compile_full.sh three_travel_timed 20 baking_timed
+bash ./scripts/create_files/compile_full.sh travel_agency_timed 20 baking_timed
 bash ./scripts/create_files/compile_full.sh o_auth_timed 20 baking_timed
 bash ./scripts/create_files/compile_full.sh online_wallet_timed 20 baking_timed
 bash ./scripts/create_files/compile_full.sh smtp_timed 20 baking_timed

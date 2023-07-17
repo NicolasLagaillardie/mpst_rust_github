@@ -18,7 +18,11 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                       ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
+note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
+  --> src/binary/struct_trait/send.rs
+   |
+   | pub struct Send<T, S>
+   |            ^^^^
 note: required because it appears within the type `SumOp`
   --> tests/infinite_type/fail_3.rs:11:6
    |
@@ -27,6 +31,9 @@ note: required because it appears within the type `SumOp`
 note: required by a bound in `Recv`
   --> src/binary/struct_trait/recv.rs
    |
+   | pub struct Recv<T, S>
+   |            ---- required by a bound in this struct
+   | where
    |     T: marker::Send,
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
@@ -37,7 +44,11 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                             ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
+note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
+  --> src/binary/struct_trait/send.rs
+   |
+   | pub struct Send<T, S>
+   |            ^^^^
 note: required because it appears within the type `SumOp`
   --> tests/infinite_type/fail_3.rs:11:6
    |
@@ -46,6 +57,9 @@ note: required because it appears within the type `SumOp`
 note: required by a bound in `Recv`
   --> src/binary/struct_trait/recv.rs
    |
+   | pub struct Recv<T, S>
+   |            ---- required by a bound in this struct
+   | where
    |     T: marker::Send,
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
@@ -56,7 +70,11 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                             ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-   = note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
+note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
+  --> src/binary/struct_trait/send.rs
+   |
+   | pub struct Send<T, S>
+   |            ^^^^
 note: required because it appears within the type `SumOp`
   --> tests/infinite_type/fail_3.rs:11:6
    |

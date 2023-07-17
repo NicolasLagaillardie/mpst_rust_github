@@ -524,8 +524,8 @@ fn main() {
         endpoint_user,
     );
 
-    assert!(thread_api.join().is_ok());
-    assert!(thread_controller.join().is_ok());
-    assert!(thread_storage.join().is_ok());
-    assert!(thread_user.join().is_ok());
+    thread_api.join().unwrap();
+    thread_controller.join().unwrap();
+    thread_storage.join().unwrap();
+    thread_user.join().unwrap();
 }

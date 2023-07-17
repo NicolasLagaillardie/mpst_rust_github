@@ -314,7 +314,7 @@ fn aux() {
 /////////////////////////
 
 pub fn online_wallet(c: &mut Criterion) {
-    c.bench_function("Online wallet", |b| b.iter(aux));
+    c.bench_function("Online wallet basic", |b| b.iter(aux));
 }
 
 /////////////////////////
