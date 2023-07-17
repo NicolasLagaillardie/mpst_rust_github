@@ -135,7 +135,7 @@ with open(result_folder / result_file, 'a') as report_file:
     report_file.write('; ')
     report_file.write('\n')
 
-# For each folder in compile_path
+# For each protocol to be studied 
 for protocol, index in index_compile.items():
 
     name_file = protocol + '.txt'
@@ -189,11 +189,11 @@ for protocol, index in index_compile.items():
 range_compile_files = [i for i in range(len(compile_files))]
 ticklabels_compile_files = [chr(i + 97) for i in range(len(compile_files))]
 
+width = 0.3
+
 def create_and_save_fig(name_file, title_graph, list_baking, list_timed, scale):
     # Setting up the figure
     fig, ax = plt.subplots(figsize=(16, 6))
-
-    width = 0.3
 
     # Plotting compilation time
     ax.bar(np.arange(len(list_baking)) - width/2, list_baking, width=width, color='#d62728')
