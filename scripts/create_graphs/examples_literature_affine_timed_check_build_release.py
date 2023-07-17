@@ -66,47 +66,11 @@ bench_files = [
 ]
 
 # Indexing for bar lists
-index_compile = {
-    # Fibo
-   'fib': compile_files.index('fib'),
-   'fib_timed': compile_files.index('fib'),
-    # Simple voting
-   'simple_voting': compile_files.index('simple_voting'),
-   'simple_voting_timed': compile_files.index('simple_voting'),
-    # Calculator
-   'calculator': compile_files.index('calculator'),
-   'calculator_timed': compile_files.index('calculator'),
-    # Three buyers
-   'three_buyers': compile_files.index('three_buyers'),
-   'three_buyers_timed':3,
-    # Travel agency
-   'travel_agency': compile_files.index('travel_agency'),
-   'travel_agency_timed': compile_files.index('travel_agency'),
-    # oAuth2
-   'o_auth': compile_files.index('o_auth'),
-   'o_auth_timed': compile_files.index('o_auth'),
-    # Online wallet
-   'online_wallet': compile_files.index('online_wallet'),
-   'online_wallet_timed': compile_files.index('online_wallet'),
-    # SMTP
-   'smtp': compile_files.index('smtp'),
-   'smtp_timed': compile_files.index('smtp'),
-    # Servo
-   'servo': compile_files.index('servo'),
-   'servo_timed': compile_files.index('servo'),
-    # Logging
-   'logging': compile_files.index('logging'),
-   'logging_timed': compile_files.index('logging'),
-    # Video stream
-   'video_stream': compile_files.index('video_stream'),
-   'video_stream_timed': compile_files.index('video_stream'),
-    # Remote data
-   'remote_data': compile_files.index('remote_data'),
-   'remote_data_timed': compile_files.index('remote_data'),
-    # Circuit breaker
-   'circuit_breaker': compile_files.index('circuit_breaker'),
-   'circuit_breaker_timed': compile_files.index('circuit_breaker'),
-}
+index_compile = {}
+
+for index, elt in enumerate(compile_files):
+    index_compile[elt] = index
+    index_compile[elt + '_timed'] = index
 
 # Translate from compile files to bench files and vice_versa
 translate = {}
