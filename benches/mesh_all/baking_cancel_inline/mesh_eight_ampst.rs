@@ -485,10 +485,9 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh eight baking inline protocol {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("mesh eight baking inline protocol {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
 
 /////////////////////////

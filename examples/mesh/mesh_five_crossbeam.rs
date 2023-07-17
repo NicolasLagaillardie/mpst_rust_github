@@ -74,7 +74,5 @@ fn main() {
         threads.push(main);
     }
 
-    threads
-        .into_iter()
-        .for_each(|elt| elt.join().unwrap());
+    threads.into_iter().for_each(|elt| elt.join().unwrap());
 }

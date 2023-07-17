@@ -64,9 +64,7 @@ fn main() {
             .into_iter()
             .for_each(|s| close(choose!(BinaryA::Done, s)).unwrap());
 
-        threads
-            .into_iter()
-            .for_each(|elt| elt.join().unwrap());
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
     main.join().unwrap();
