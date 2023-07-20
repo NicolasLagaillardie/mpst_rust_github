@@ -26,7 +26,7 @@ create_multiple_normal_role!(
 );
 
 // Create Names
-create_multiple_normal_name!(NameController, NameLogs,);
+create_multiple_normal_name!(NameController, NameLogs);
 
 // Create send
 create_send_mpst_cancel_bundle!(

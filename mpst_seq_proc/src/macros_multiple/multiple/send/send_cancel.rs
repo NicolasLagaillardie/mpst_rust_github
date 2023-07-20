@@ -52,7 +52,7 @@ impl SendCancel {
         let meshedchannels_name = &self.meshedchannels_name;
         let msg = &self.msg;
 
-        // Build the vec with all the types S1,..,SN
+        // Build the vec with all the types S1,.., SN
         let session_types: Vec<Ident> = (1..(self.n_sessions - 1))
             .map(|i| format_ident!("S{}", i))
             .collect();

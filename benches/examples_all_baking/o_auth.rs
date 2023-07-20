@@ -139,7 +139,7 @@ fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
         Branching0fromAtoC::Success(s) => {
             let (_, s) = s.recv()?;
             let s = s.send(Success {  })?;
-            let (_,s) = s.recv()?;
+            let (_, s) = s.recv()?;
             s.close()
         },
         Branching0fromAtoC::Fail(s) => {

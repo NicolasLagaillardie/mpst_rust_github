@@ -30,6 +30,6 @@ parsers:
       macro: no # Might be changed
 
 comment:
-  layout: "reach,diff,flags,files,footer"
+  layout: "reach, diff, flags, files, footer"
   behavior: default
   require_changes: yes

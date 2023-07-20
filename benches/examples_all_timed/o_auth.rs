@@ -270,7 +270,7 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
         Branching0fromAtoC::Success(s) => {
             let (_, s) = s.recv(all_clocks)?;
             let s = s.send(Success {  }, all_clocks)?;
-            let (_,s) = s.recv(all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
             s.close()
         },
         Branching0fromAtoC::Fail(s) => {

@@ -27,8 +27,8 @@ type VecOfTuple = Vec<(String, usize)>;
 /// to
 ///
 /// [
-///     "Recv<Branches0AtoB,End>",
-///     "Recv<i32,Send<i32,End>>",
+///     "Recv<Branches0AtoB, End>",
+///     "Recv<i32, Send<i32, End>>",
 ///     "RoleC<RoleC<RoleB<RoleEnd>>>",
 ///     "RoleA<RoleEnd>",
 ///     "RoleA"
@@ -134,15 +134,15 @@ pub(crate) fn clean_sessions(
 // Separate the different _fields_ of a stringified type.
 //
 // From
-//     "MeshedChannels<Send<Branches0AtoB,End>,Send\
-//     <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
-//     <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
+//     "MeshedChannels<Send<Branches0AtoB, End>, Send\
+//     <i32, Recv<i32, Send<Branches0CtoB, End>>>, RoleC\
+//     <RoleC<RoleBroadcast>>, RoleB<RoleEnd>>"
 //
 // to
 //
 // [
-//     "Send<Branches0AtoB,End>",
-//     "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+//     "Send<Branches0AtoB, End>",
+//     "Send<i32, Recv<i32, Send<Branches0CtoB, End>>>",
 //     "RoleC<RoleC<RoleBroadcast>>",
 //     "RoleB<RoleEnd>",
 // ]
@@ -863,8 +863,8 @@ mod tests {
             ::name::a::NameA>";
 
         let clean_session_compare = vec![
-            "Recv<Branches0AtoB,End>",
-            "Recv<i32,Send<i32,End>>",
+            "Recv<Branches0AtoB, End>",
+            "Recv<i32, Send<i32, End>>",
             "RoleC<RoleC<RoleB<RoleEnd>>>",
             "RoleA<RoleEnd>",
             "RoleA",
@@ -913,14 +913,14 @@ mod tests {
             "RoleC".to_string(),
             vec![
                 "End".to_string(),
-                "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string(),
+                "Recv<i32, Send<i32, Recv<Branches0CtoB, End>>>".to_string(),
                 "RoleB<RoleB<RoleB<RoleEnd>>>".to_string(),
             ],
         );
         clean_sessions_compare.insert(
             "RoleA".to_string(),
             vec![
-                "Recv<Branches0AtoB,End>".to_string(),
+                "Recv<Branches0AtoB, End>".to_string(),
                 "End".to_string(),
                 "RoleB<RoleEnd>".to_string(),
             ],
@@ -928,8 +928,8 @@ mod tests {
         clean_sessions_compare.insert(
             "RoleB".to_string(),
             vec![
-                "Send<Branches0AtoB,End>".to_string(),
-                "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>".to_string(),
+                "Send<Branches0AtoB, End>".to_string(),
+                "Send<i32, Recv<i32, Send<Branches0CtoB, End>>>".to_string(),
                 "RoleC<RoleC<RoleBroadcast>>".to_string(),
             ],
         );
@@ -973,13 +973,13 @@ mod tests {
 
     #[test]
     fn test_get_blocks() {
-        let dirty_blocks = "MeshedChannels<Send<Branches0AtoB,End>,Send\
-        <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
-        <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>";
+        let dirty_blocks = "MeshedChannels<Send<Branches0AtoB, End>, Send\
+        <i32, Recv<i32, Send<Branches0CtoB, End>>>, RoleC\
+        <RoleC<RoleBroadcast>>, RoleB<RoleEnd>>";
 
         let clean_blocks = vec![
-            "Send<Branches0AtoB,End>",
-            "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+            "Send<Branches0AtoB, End>",
+            "Send<i32, Recv<i32, Send<Branches0CtoB, End>>>",
             "RoleC<RoleC<RoleBroadcast>>",
             "RoleB<RoleEnd>",
         ];
@@ -1007,9 +1007,9 @@ mod tests {
         );
 
         // Random
-        let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>";
+        let dirty_random = "Recv<i32, Send<i32, Recv<Branches0CtoB, End>>>";
 
-        let clean_random = vec!["Recv", "i32", "Send<i32,Recv<Branches0CtoB,End>>"];
+        let clean_random = vec!["Recv", "i32", "Send<i32, Recv<Branches0CtoB, End>>"];
 
         assert_eq!(
             clean_random,
@@ -1028,10 +1028,10 @@ mod tests {
 
     #[test]
     fn test_build_dual() {
-        let session = "Recv<i32,Send<Branches0CtoB,End>>";
+        let session = "Recv<i32, Send<Branches0CtoB, End>>";
 
         assert_eq!(
-            "Send<i32,Recv<Branches0CtoB,End>>",
+            "Send<i32, Recv<Branches0CtoB, End>>",
             build_dual(session).unwrap()
         );
     }
@@ -1039,7 +1039,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_build_dual_panic() {
-        let session = "Coco<i32,Banana<Branches0CtoB,End>>";
+        let session = "Coco<i32, Banana<Branches0CtoB, End>>";
 
         build_dual(session).unwrap();
     }
@@ -1059,7 +1059,7 @@ mod tests {
 
         let current_role = "RoleA";
 
-        let full_session = vec!["Recv<(),End>".to_string(), "RoleEnd".to_string()];
+        let full_session = vec!["Recv<(), End>".to_string(), "RoleEnd".to_string()];
 
         let roles = vec!["RoleA".to_string(), "RoleB".to_string()];
 
@@ -1122,7 +1122,7 @@ mod tests {
         let full_session = vec![
             "End".to_string(),
             "End".to_string(),
-            "RoleAtoAll<RoleEnd,RoleEnd>".to_string(),
+            "RoleAtoAll<RoleEnd, RoleEnd>".to_string(),
         ];
 
         let roles = vec![
@@ -1159,8 +1159,8 @@ mod tests {
 
         let full_session = vec![
             "End".to_string(),
-            "Send<(),End>".to_string(),
-            "RoleAtoAll<RoleEnd,RoleEnd>".to_string(),
+            "Send<(), End>".to_string(),
+            "RoleAtoAll<RoleEnd, RoleEnd>".to_string(),
         ];
 
         let roles = vec![
@@ -1196,9 +1196,9 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Recv<(),End>".to_string(),
-            "Recv<(),End>".to_string(),
-            "RoleAlltoB<RoleEnd,RoleEnd>".to_string(),
+            "Recv<(), End>".to_string(),
+            "Recv<(), End>".to_string(),
+            "RoleAlltoB<RoleEnd, RoleEnd>".to_string(),
         ];
 
         let roles = vec![
@@ -1265,8 +1265,8 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Send<Branching0AtoB,End>".to_string(),
-            "Send<Branching0AtoC,End>".to_string(),
+            "Send<Branching0AtoB, End>".to_string(),
+            "Send<Branching0AtoC, End>".to_string(),
             "RoleBroadcast".to_string(),
         ];
 
@@ -1334,7 +1334,7 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Recv<Branching0AtoB,End>".to_string(),
+            "Recv<Branching0AtoB, End>".to_string(),
             "End".to_string(),
             "RoleB<RoleEnd>".to_string(),
         ];
@@ -1385,8 +1385,8 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Send<Branching0AtoB,End>".to_string(),
-            "Send<Branching0AtoC,End>".to_string(),
+            "Send<Branching0AtoB, End>".to_string(),
+            "Send<Branching0AtoC, End>".to_string(),
             "RoleBroadcast".to_string(),
         ];
 

@@ -1,6 +1,6 @@
 #![allow(clippy::type_complexity)]
 
-use criterion::{black_box, criterion_group, criterion_main,Criterion};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::generate;

@@ -78,7 +78,7 @@ fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
             recurs_a(s)
         },
         Branches0AtoC::Bye(s) => {
-            let (_,s) = s.recv()?;
+            let (_, s) = s.recv()?;
             s.close()
         },
     })
@@ -91,7 +91,7 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
             recurs_a(s)
         },
         Branches0AtoC::Bye(s) => {
-            let (_,s) = s.recv()?;
+            let (_, s) = s.recv()?;
             s.close()
         },
     })
@@ -102,12 +102,12 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
 fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {
         Branches0BtoC::Add(s) => {
-            let (_,s) = s.recv()?;
+            let (_, s) = s.recv()?;
             let s = s.send(0)?;
             endpoint_b(s)
         },
         Branches0BtoC::Bye(s) => {
-            let (_,s) = s.recv()?;
+            let (_, s) = s.recv()?;
             let s = s.send(())?;
             s.close()
         },

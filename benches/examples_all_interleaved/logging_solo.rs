@@ -95,7 +95,7 @@ fn rec_loop_0(
             let s_logs: EndpointLogs0Success<i32> =
                 choose_mpst_logs_to_all!(s_logs, Branching0fromLtoC::Success);
 
-            let (s_controller,) =
+            let (s_controller, ) =
                 offer_mpst_interleaved!(s_controller, Branching0fromLtoC::Success);
 
             let s_logs = s_logs.send(loops - 1)?;
@@ -108,7 +108,7 @@ fn rec_loop_0(
             let s_logs: EndpointLogs0Failure<i32> =
                 choose_mpst_logs_to_all!(s_logs, Branching0fromLtoC::Failure);
 
-            let (s_controller,) =
+            let (s_controller, ) =
                 offer_mpst_interleaved!(s_controller, Branching0fromLtoC::Failure);
 
             let s_logs = s_logs.send(loops - 1)?;
@@ -130,7 +130,7 @@ fn rec_loop_1(
             let s_controller: EndpointController1Stop<i32> =
                 choose_mpst_controller_to_all!(s_controller, Branching1fromCtoL::Stop);
 
-            let (s_logs,) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Stop);
+            let (s_logs, ) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Stop);
 
             let s_controller = s_controller.send(loops - 1)?;
             let (_, s_logs) = s_logs.recv()?;
@@ -142,7 +142,7 @@ fn rec_loop_1(
             let s_controller: EndpointController1Restart<i32> =
                 choose_mpst_controller_to_all!(s_controller, Branching1fromCtoL::Restart);
 
-            let (s_logs,) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Restart);
+            let (s_logs, ) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Restart);
 
             let s_controller = s_controller.send(loops - 1)?;
             let (_, s_logs) = s_logs.recv()?;

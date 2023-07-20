@@ -25,7 +25,7 @@
 /// of protobuf runtime.
 const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_3_2_0;
 
-#[derive(PartialEq,Clone,Default,Debug)]
+#[derive(PartialEq, Clone, Default, Debug)]
 // @@protoc_insertion_point(message:Action)
 pub struct Action {
     // message fields
@@ -330,7 +330,7 @@ impl ::protobuf::reflect::ProtobufValue for Action {
 
 /// Nested message and enums of message `Action`
 pub mod action {
-    #[derive(PartialEq,Clone,Default,Debug)]
+    #[derive(PartialEq, Clone, Default, Debug)]
     // @@protoc_insertion_point(message:Action.Index)
     pub struct Index {
         // message fields
@@ -470,7 +470,7 @@ pub mod action {
         type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
     }
 
-    #[derive(Clone,Copy,PartialEq,Eq,Debug,Hash)]
+    #[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
     // @@protoc_insertion_point(enum:Action.ActionType)
     pub enum ActionType {
         // @@protoc_insertion_point(enum_value:Action.ActionType.SEND)
@@ -525,7 +525,7 @@ pub mod action {
     }
 }
 
-#[derive(PartialEq,Clone,Default,Debug)]
+#[derive(PartialEq, Clone, Default, Debug)]
 // @@protoc_insertion_point(message:GlobalType)
 pub struct GlobalType {
     // message fields

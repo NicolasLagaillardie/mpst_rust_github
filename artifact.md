@@ -234,7 +234,7 @@ builds the binaries.
 `cargo build --release` builds optimised binaries that are
 faster for running time and usually used for benchmarks.
 Hence, it is faster for checking a `Rust` file
-with `cargo check` than the two others,f
+with `cargo check` than the two others, f
 and `cargo build --release` is slower than `cargo build`
 as it optimises the output binaries.
 For higher accuracy and lower variance,
@@ -446,7 +446,7 @@ fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
            recurs_a(s)
        },
        Branches0AtoC::Bye(s) => {
-           let (_,s) = s.recv()?;
+           let (_, s) = s.recv()?;
            s.close()
        },
    })
@@ -459,7 +459,7 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
            recurs_a(s)
        },
        Branches0AtoC::Bye(s) => {
-           let (_,s) = s.recv()?;
+           let (_, s) = s.recv()?;
            s.close()
        },
    })
@@ -470,12 +470,12 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
 fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
    offer_mpst!(s, {
        Branches0BtoC::Add(s) => {
-           let (_,s) = s.recv()?;
+           let (_, s) = s.recv()?;
            let s = s.send(0)?;
            endpoint_b(s)
        },
        Branches0BtoC::Bye(s) => {
-           let (_,s) = s.recv()?;
+           let (_, s) = s.recv()?;
            let s = s.send(())?;
            s.close()
        },
