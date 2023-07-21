@@ -21,10 +21,10 @@ sleep 60s
 
     cargo clean
 
-    ## Compile mesh and ring
-    bash ./scripts/benches_compile_mesh_ring.sh
+    # ## Compile mesh and ring
+    # bash ./scripts/benches_compile_mesh_ring.sh
 
-    cargo clean
+    # cargo clean
 
     ## Run mesh and ring and ping-pong
     bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
