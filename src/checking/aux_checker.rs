@@ -863,8 +863,8 @@ mod tests {
             ::name::a::NameA>";
 
         let clean_session_compare = vec![
-            "Recv<Branches0AtoB, End>",
-            "Recv<i32, Send<i32, End>>",
+            "Recv<Branches0AtoB,End>",
+            "Recv<i32,Send<i32,End>>",
             "RoleC<RoleC<RoleB<RoleEnd>>>",
             "RoleA<RoleEnd>",
             "RoleA",
@@ -913,14 +913,14 @@ mod tests {
             "RoleC".to_string(),
             vec![
                 "End".to_string(),
-                "Recv<i32, Send<i32, Recv<Branches0CtoB, End>>>".to_string(),
+                "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>".to_string(),
                 "RoleB<RoleB<RoleB<RoleEnd>>>".to_string(),
             ],
         );
         clean_sessions_compare.insert(
             "RoleA".to_string(),
             vec![
-                "Recv<Branches0AtoB, End>".to_string(),
+                "Recv<Branches0AtoB,End>".to_string(),
                 "End".to_string(),
                 "RoleB<RoleEnd>".to_string(),
             ],
@@ -928,8 +928,8 @@ mod tests {
         clean_sessions_compare.insert(
             "RoleB".to_string(),
             vec![
-                "Send<Branches0AtoB, End>".to_string(),
-                "Send<i32, Recv<i32, Send<Branches0CtoB, End>>>".to_string(),
+                "Send<Branches0AtoB,End>".to_string(),
+                "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>".to_string(),
                 "RoleC<RoleC<RoleBroadcast>>".to_string(),
             ],
         );
@@ -978,8 +978,8 @@ mod tests {
         <RoleC<RoleBroadcast>>, RoleB<RoleEnd>>";
 
         let clean_blocks = vec![
-            "Send<Branches0AtoB, End>",
-            "Send<i32, Recv<i32, Send<Branches0CtoB, End>>>",
+            "Send<Branches0AtoB,End>",
+            "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
             "RoleC<RoleC<RoleBroadcast>>",
             "RoleB<RoleEnd>",
         ];
@@ -1009,7 +1009,7 @@ mod tests {
         // Random
         let dirty_random = "Recv<i32, Send<i32, Recv<Branches0CtoB, End>>>";
 
-        let clean_random = vec!["Recv", "i32", "Send<i32, Recv<Branches0CtoB, End>>"];
+        let clean_random = vec!["Recv", "i32", "Send<i32,Recv<Branches0CtoB,End>>"];
 
         assert_eq!(
             clean_random,
@@ -1031,7 +1031,7 @@ mod tests {
         let session = "Recv<i32, Send<Branches0CtoB, End>>";
 
         assert_eq!(
-            "Send<i32, Recv<Branches0CtoB, End>>",
+            "Send<i32,Recv<Branches0CtoB,End>>",
             build_dual(session).unwrap()
         );
     }
