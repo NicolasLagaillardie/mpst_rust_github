@@ -7,9 +7,9 @@ rustup update
 cargo install-update -a
 cargo update --workspace
 cargo fmt --all
-cargo +nightly clippy --all-targets --all-features --workspace
-cargo check --all-targets --verbose --workspace --all-features
-cargo test --all-targets --verbose --workspace --all-features
+RUSTFLAGS="-Z macro-backtrace" cargo +nightly clippy --all-targets --all-features --workspace
+RUSTFLAGS="-Z macro-backtrace" cargo check --all-targets --verbose --workspace --all-features
+RUSTFLAGS="-Z macro-backtrace" cargo test --all-targets --verbose --workspace --all-features
 cargo clean
 
 # # Check everything

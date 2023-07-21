@@ -17,9 +17,9 @@ grep -iE '[a-z|_]+ =' | \
 grep -iEwo '[a-z|_]+ ' | \
 while read -r line ; do
     echo "Processing $line"
-    cargo check --all-targets --verbose --workspace --features="$line"
+    RUSTFLAGS="-Z macro-backtrace" cargo check --all-targets --verbose --workspace --features="$line"
 done
-cargo check --all-targets --verbose --workspace --all-features
+RUSTFLAGS="-Z macro-backtrace" cargo check --all-targets --verbose --workspace --all-features
 
 # cargo test each feature
 cargo test --all-targets --verbose --workspace --no-default-features --no-run
@@ -28,9 +28,9 @@ grep -iE '[a-z|_]+ =' | \
 grep -iEwo '[a-z|_]+ ' | \
 while read -r line ; do
     echo "Processing $line"
-    cargo test --all-targets --verbose --workspace --features="$line"
+    RUSTFLAGS="-Z macro-backtrace" cargo test --all-targets --verbose --workspace --features="$line"
 done
-cargo test --all-targets --verbose --workspace --all-features
+RUSTFLAGS="-Z macro-backtrace" cargo test --all-targets --verbose --workspace --all-features
 
 # Reverse toml
 cat scripts/toml/save_cargo.toml > Cargo.toml
