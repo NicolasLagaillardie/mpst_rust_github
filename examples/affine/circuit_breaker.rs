@@ -47,13 +47,7 @@ enum Branching0fromCtoA<N: marker::Send> {
         >,
     ),
     Close(
-        MeshedChannels<
-            Recv<N, End>,
-            End,
-            Send<N, End>,
-            RoleController<RoleUser<RoleEnd>>,
-            NameApi,
-        >,
+        MeshedChannels<Recv<N, End>, End, Send<N, End>, RoleController<RoleUser<RoleEnd>>, NameApi>,
     ),
 }
 type Recurs0fromCtoA<N> = Recv<Branching0fromCtoA<N>, End>;
@@ -143,13 +137,8 @@ type EndpointControllerUp<N> = MeshedChannels<
     RoleApi<RoleApi<RoleBroadcast>>,
     NameController,
 >;
-type EndpointControllerClose<N> = MeshedChannels<
-    Send<N, End>,
-    Send<N, End>,
-    End,
-    RoleApi<RoleStorage<RoleEnd>>,
-    NameController,
->;
+type EndpointControllerClose<N> =
+    MeshedChannels<Send<N, End>, Send<N, End>, End, RoleApi<RoleStorage<RoleEnd>>, NameController>;
 type EndpointController0<N> = MeshedChannels<
     Recv<N, Choose0fromCtoA<N>>,
     Choose0fromCtoS<N>,

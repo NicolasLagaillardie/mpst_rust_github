@@ -26,9 +26,7 @@ enum Branching0fromLtoC<N: marker::Send> {
     Success(
         MeshedChannels<Recv<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>,
     ),
-    Failure(
-        MeshedChannels<Recv<N, Choose1fromCtoL<N>>, RoleLogs<RoleBroadcast>, NameController>,
-    ),
+    Failure(MeshedChannels<Recv<N, Choose1fromCtoL<N>>, RoleLogs<RoleBroadcast>, NameController>),
 }
 
 type Recurs0fromCtoL<N> = Recv<Branching0fromLtoC<N>, End>;
@@ -39,9 +37,7 @@ type Choose1fromCtoL<N> = Send<Branching1fromCtoL<N>, End>;
 type Choose0fromLtoC<N> = Send<Branching0fromLtoC<N>, End>;
 
 enum Branching1fromCtoL<N: marker::Send> {
-    Restart(
-        MeshedChannels<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>,
-    ),
+    Restart(MeshedChannels<Recv<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>),
     Stop(MeshedChannels<Recv<N, End>, RoleController<RoleEnd>, NameLogs>),
 }
 
@@ -49,12 +45,10 @@ type Recurs1fromLtoC<N> = Recv<Branching1fromCtoL<N>, End>;
 
 // Creating the MP sessions
 // RoleController
-type EndpointController1Stop<N> =
-    MeshedChannels<Send<N, End>, RoleLogs<RoleEnd>, NameController>;
+type EndpointController1Stop<N> = MeshedChannels<Send<N, End>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1Restart<N> =
     MeshedChannels<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
-type EndpointController0<N> =
-    MeshedChannels<Recurs0fromCtoL<N>, RoleLogs<RoleEnd>, NameController>;
+type EndpointController0<N> = MeshedChannels<Recurs0fromCtoL<N>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1<N> = MeshedChannels<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
 type EndpointControllerInit<N> =
     MeshedChannels<Send<N, Recurs0fromCtoL<N>>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
@@ -62,11 +56,8 @@ type EndpointControllerInit<N> =
 // RoleLogs
 type EndpointLogs0Success<N> =
     MeshedChannels<Send<N, Choose0fromLtoC<N>>, RoleController<RoleBroadcast>, NameLogs>;
-type EndpointLogs0Failure<N> = MeshedChannels<
-    Send<N, Recurs1fromLtoC<N>>,
-    RoleController<RoleController<RoleEnd>>,
-    NameLogs,
->;
+type EndpointLogs0Failure<N> =
+    MeshedChannels<Send<N, Recurs1fromLtoC<N>>, RoleController<RoleController<RoleEnd>>, NameLogs>;
 type EndpointLogs0<N> = MeshedChannels<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
 type EndpointLogs1<N> = MeshedChannels<Recurs1fromLtoC<N>, RoleController<RoleEnd>, NameLogs>;
 type EndpointLogsInit<N> =
@@ -95,7 +86,7 @@ fn rec_loop_0(
             let s_logs: EndpointLogs0Success<i32> =
                 choose_mpst_logs_to_all!(s_logs, Branching0fromLtoC::Success);
 
-            let (s_controller, ) =
+            let (s_controller,) =
                 offer_mpst_interleaved!(s_controller, Branching0fromLtoC::Success);
 
             let s_logs = s_logs.send(loops - 1)?;
@@ -108,7 +99,7 @@ fn rec_loop_0(
             let s_logs: EndpointLogs0Failure<i32> =
                 choose_mpst_logs_to_all!(s_logs, Branching0fromLtoC::Failure);
 
-            let (s_controller, ) =
+            let (s_controller,) =
                 offer_mpst_interleaved!(s_controller, Branching0fromLtoC::Failure);
 
             let s_logs = s_logs.send(loops - 1)?;
@@ -130,7 +121,7 @@ fn rec_loop_1(
             let s_controller: EndpointController1Stop<i32> =
                 choose_mpst_controller_to_all!(s_controller, Branching1fromCtoL::Stop);
 
-            let (s_logs, ) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Stop);
+            let (s_logs,) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Stop);
 
             let s_controller = s_controller.send(loops - 1)?;
             let (_, s_logs) = s_logs.recv()?;
@@ -142,7 +133,7 @@ fn rec_loop_1(
             let s_controller: EndpointController1Restart<i32> =
                 choose_mpst_controller_to_all!(s_controller, Branching1fromCtoL::Restart);
 
-            let (s_logs, ) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Restart);
+            let (s_logs,) = offer_mpst_interleaved!(s_logs, Branching1fromCtoL::Restart);
 
             let s_controller = s_controller.send(loops - 1)?;
             let (_, s_logs) = s_logs.recv()?;

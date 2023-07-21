@@ -399,9 +399,7 @@ enum Branching0fromKtoA {
             NameA,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoK = Recv<(End, Branching0fromKtoA), End>;
 
@@ -424,9 +422,7 @@ enum Branching0fromKtoB {
             NameB,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoK = Recv<(End, Branching0fromKtoB), End>;
 
@@ -449,9 +445,7 @@ enum Branching0fromKtoC {
             NameC,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoK = Recv<(End, Branching0fromKtoC), End>;
 
@@ -474,9 +468,7 @@ enum Branching0fromKtoD {
             NameD,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoK = Recv<(End, Branching0fromKtoD), End>;
 
@@ -499,9 +491,7 @@ enum Branching0fromKtoE {
             NameE,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoK = Recv<(End, Branching0fromKtoE), End>;
 
@@ -524,9 +514,7 @@ enum Branching0fromKtoF {
             NameF,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoK = Recv<(End, Branching0fromKtoF), End>;
 
@@ -549,9 +537,7 @@ enum Branching0fromKtoG {
             NameG,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoK = Recv<(End, Branching0fromKtoG), End>;
 
@@ -574,9 +560,7 @@ enum Branching0fromKtoH {
             NameH,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoK = Recv<(End, Branching0fromKtoH), End>;
 
@@ -599,9 +583,7 @@ enum Branching0fromKtoI {
             NameI,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoK = Recv<(End, Branching0fromKtoI), End>;
 
@@ -624,9 +606,7 @@ enum Branching0fromKtoJ {
             NameJ,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
 type RecursJtoK = Recv<(End, Branching0fromKtoJ), End>;
 
@@ -660,21 +640,8 @@ type EndpointMoreK = MeshedChannels<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RoleEnd,
-    NameCentral,
->;
+type EndpointCentral =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannels<
     End,
     End,

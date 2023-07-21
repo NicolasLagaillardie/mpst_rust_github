@@ -73,8 +73,7 @@ fork_mpst_multi!(fork_mpst, MeshedChannels, 4);
 // Types
 type EndpointA = MeshedChannels<End, End, End, RoleEnd, NameA>;
 type EndpointB = MeshedChannels<End, Recv<i32, End>, End, RoleC<RoleEnd>, NameB>;
-type EndpointC =
-    MeshedChannels<End, Send<i32, End>, Send<i32, End>, RoleB<RoleD<RoleEnd>>, NameC>;
+type EndpointC = MeshedChannels<End, Send<i32, End>, Send<i32, End>, RoleB<RoleD<RoleEnd>>, NameC>;
 type EndpointD = MeshedChannels<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

@@ -22,12 +22,7 @@ type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
 // B
 enum Branching0fromAtoB {
     More(
-        MeshedChannels<
-            Recv<i64, Send<i64, RecursBtoA>>,
-            End,
-            RoleA<RoleA<RoleA<RoleEnd>>>,
-            NameB,
-        >,
+        MeshedChannels<Recv<i64, Send<i64, RecursBtoA>>, End, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>,
     ),
     Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }

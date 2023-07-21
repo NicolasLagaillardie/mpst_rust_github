@@ -18,13 +18,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-generate!(
-    "rec_and_cancel",
-    MeshedChannels,
-    Data,
-    Handler,
-    Regional
-);
+generate!("rec_and_cancel", MeshedChannels, Data, Handler, Regional);
 
 // Payload types
 struct FindNearestZone;
@@ -83,8 +77,7 @@ type Offer0fromRegionalToHandler = Recv<Branching0fromRegionalToHandler, End>;
 
 // Creating the MP sessions
 // DATA
-type EndpointData =
-    MeshedChannels<End, Offer0fromRegionalToData, RoleRegional<RoleEnd>, NameData>;
+type EndpointData = MeshedChannels<End, Offer0fromRegionalToData, RoleRegional<RoleEnd>, NameData>;
 
 // HANDLER
 type EndpointHandler = MeshedChannels<

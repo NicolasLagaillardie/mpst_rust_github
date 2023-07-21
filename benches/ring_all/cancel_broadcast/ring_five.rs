@@ -104,9 +104,7 @@ create_recv_mpst_session_bundle!(
 // Types
 // A
 enum Branching0fromEtoA {
-    Forward(
-        MeshedChannels<End, Send<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>,
-    ),
+    Forward(MeshedChannels<End, Send<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),
     Backward(
         MeshedChannels<End, Recv<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>,
     ),

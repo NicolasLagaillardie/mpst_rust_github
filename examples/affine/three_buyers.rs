@@ -47,12 +47,8 @@ type EndpointC = MeshedChannels<
     RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCAccept = MeshedChannels<
-    Send<i32, End>,
-    Send<i32, Recv<i32, End>>,
-    RoleA<RoleS<RoleS<RoleEnd>>>,
-    NameC,
->;
+type EndpointCAccept =
+    MeshedChannels<Send<i32, End>, Send<i32, Recv<i32, End>>, RoleA<RoleS<RoleS<RoleEnd>>>, NameC>;
 
 // S
 type EndpointS = MeshedChannels<

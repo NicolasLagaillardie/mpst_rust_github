@@ -50,13 +50,7 @@ create_recv_mpst_session_bundle!(
     NameC, MeshedChannels, 3
 );
 
-send_cancel!(
-    cancel_mpst,
-    NameC,
-    MeshedChannels,
-    3,
-    "Session dropped"
-);
+send_cancel!(cancel_mpst, NameC, MeshedChannels, 3, "Session dropped");
 
 // Types
 // B

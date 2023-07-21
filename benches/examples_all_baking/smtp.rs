@@ -38,9 +38,7 @@ type EndpointS0 = MeshedChannels<Send<(), Offer0fromCtoS>, RoleC<RoleC<RoleEnd>>
 // C
 enum Branching1fromStoC {
     Continue(MeshedChannels<Recv<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(
-        MeshedChannels<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>,
-    ),
+    Loop(MeshedChannels<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
 type EndpointC1 = MeshedChannels<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
@@ -156,9 +154,7 @@ enum Branching9fromCtoS {
             NameS,
         >,
     ),
-    Loop(
-        MeshedChannels<Recv<(), Send<(), Offer9fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
+    Loop(MeshedChannels<Recv<(), Send<(), Offer9fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
 }
 type Offer9fromCtoS = <Choose9fromCtoS as Session>::Dual;
 type EndpointS9 = MeshedChannels<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
@@ -170,9 +166,7 @@ type EndpointC10 = MeshedChannels<Choose10fromCtoS, RoleBroadcast, NameC>;
 
 // S
 enum Branching10fromCtoS {
-    Data(
-        MeshedChannels<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
+    Data(MeshedChannels<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
     Subject(
         MeshedChannels<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
     ),

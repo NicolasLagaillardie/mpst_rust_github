@@ -107,12 +107,8 @@ type EndpointClient = MeshedChannels<
 >;
 
 // OTHER
-type EndpointOther = MeshedChannels<
-    End,
-    Recv<Branching0fromServerToOther, End>,
-    RoleServer<RoleEnd>,
-    NameOther,
->;
+type EndpointOther =
+    MeshedChannels<End, Recv<Branching0fromServerToOther, End>, RoleServer<RoleEnd>, NameOther>;
 
 // SERVER
 type EndpointServer = MeshedChannels<
@@ -122,12 +118,7 @@ type EndpointServer = MeshedChannels<
     NameServer,
 >;
 
-choose_mpst_create_multi_to_all!(
-    choose_mpst_server_to_all,
-    NameServer,
-    MeshedChannels,
-    3
-);
+choose_mpst_create_multi_to_all!(choose_mpst_server_to_all, NameServer, MeshedChannels, 3);
 
 // Functions
 fn endpoint_client(s: EndpointClient) -> Result<(), Box<dyn Error>> {

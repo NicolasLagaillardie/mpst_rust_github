@@ -111,14 +111,7 @@ enum Branching0fromCtoS<N: marker::Send> {
 }
 type Choice0fromCtoS<N> = Recv<Branching0fromCtoS<N>, End>;
 enum Branching1fromCtoS<N: marker::Send> {
-    Yes(
-        MeshedChannels<
-            Recv<N, End>,
-            Recv<N, Send<N, End>>,
-            RoleA<RoleC<RoleC<RoleEnd>>>,
-            NameS,
-        >,
-    ),
+    Yes(MeshedChannels<Recv<N, End>, Recv<N, Send<N, End>>, RoleA<RoleC<RoleC<RoleEnd>>>, NameS>),
     No(MeshedChannels<Recv<N, End>, End, RoleA<RoleEnd>, NameS>),
 }
 type Choice1fromCtoS<N> = Recv<Branching1fromCtoS<N>, End>;
@@ -130,8 +123,7 @@ type EndpointA<N> = MeshedChannels<Choice0fromCtoA<N>, End, RoleC<RoleEnd>, Name
 
 // C
 type ChoiceC<N> = MeshedChannels<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
-type EndpointC<N> =
-    MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoS<N>, RoleBroadcast, NameC>;
+type EndpointC<N> = MeshedChannels<Choose0fromCtoA<N>, Choose0fromCtoS<N>, RoleBroadcast, NameC>;
 
 // S
 type ChoiceS<N> = MeshedChannels<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;

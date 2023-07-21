@@ -133,12 +133,8 @@ type EndpointCContinueLoop<N> =
 type EndpointCDone<N> = MeshedChannels<End, Send<N, End>, RoleS<RoleEnd>, NameC>;
 
 enum Branching2fromStoC<N: marker::Send> {
-    Picture(
-        MeshedChannels<Choose1fromCtoA<N>, Recv<N, Choose1fromCtoS<N>>, RoleSBroad, NameC>,
-    ),
-    Refusal(
-        MeshedChannels<Choose1fromCtoA<N>, Recv<N, Choose1fromCtoS<N>>, RoleSBroad, NameC>,
-    ),
+    Picture(MeshedChannels<Choose1fromCtoA<N>, Recv<N, Choose1fromCtoS<N>>, RoleSBroad, NameC>),
+    Refusal(MeshedChannels<Choose1fromCtoA<N>, Recv<N, Choose1fromCtoS<N>>, RoleSBroad, NameC>),
 }
 
 type RoleSBroad = RoleS<RoleBroadcast>;
@@ -172,16 +168,11 @@ type EndpointSRefusal<N> =
 
 // Creating the MP sessions
 // A
-type EndpointA<N> = MeshedChannels<
-    Recv<N, Choose0fromAtoC<N>>,
-    Choose0fromAtoS<N>,
-    RoleC<RoleBroadcast>,
-    NameA,
->;
+type EndpointA<N> =
+    MeshedChannels<Recv<N, Choose0fromAtoC<N>>, Choose0fromAtoS<N>, RoleC<RoleBroadcast>, NameA>;
 
 // C
-type EndpointC<N> =
-    MeshedChannels<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+type EndpointC<N> = MeshedChannels<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 
 // S
 type EndpointS<N> = MeshedChannels<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;

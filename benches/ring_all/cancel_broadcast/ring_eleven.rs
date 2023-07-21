@@ -228,9 +228,7 @@ enum Branching0fromKtoA {
             NameA,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoK = <Choose0fromKtoA as Session>::Dual;
 
@@ -270,9 +268,7 @@ enum Branching0fromKtoB {
             NameB,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoK = <Choose0fromKtoB as Session>::Dual;
 
@@ -312,9 +308,7 @@ enum Branching0fromKtoC {
             NameC,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoK = <Choose0fromKtoC as Session>::Dual;
 
@@ -354,9 +348,7 @@ enum Branching0fromKtoD {
             NameD,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoK = <Choose0fromKtoD as Session>::Dual;
 
@@ -396,9 +388,7 @@ enum Branching0fromKtoE {
             NameE,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoK = <Choose0fromKtoE as Session>::Dual;
 
@@ -438,9 +428,7 @@ enum Branching0fromKtoF {
             NameF,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoK = <Choose0fromKtoF as Session>::Dual;
 
@@ -480,9 +468,7 @@ enum Branching0fromKtoG {
             NameG,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoK = <Choose0fromKtoG as Session>::Dual;
 
@@ -522,9 +508,7 @@ enum Branching0fromKtoH {
             NameH,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoK = <Choose0fromKtoH as Session>::Dual;
 
@@ -564,9 +548,7 @@ enum Branching0fromKtoI {
             NameI,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameI>),
 }
 type RecursItoK = <Choose0fromKtoI as Session>::Dual;
 
@@ -606,9 +588,7 @@ enum Branching0fromKtoJ {
             NameJ,
         >,
     ),
-    Done(
-        MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>,
-    ),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameJ>),
 }
 type RecursJtoK = <Choose0fromKtoJ as Session>::Dual;
 
@@ -657,21 +637,8 @@ type EndpointBackwardK = MeshedChannels<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RoleEnd,
-    NameCentral,
->;
+type EndpointCentral =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannels<
     End,
     End,

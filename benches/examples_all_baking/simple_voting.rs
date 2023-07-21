@@ -42,8 +42,7 @@ type Choice1fromStoV = Recv<Branching1fromVtoS, End>;
 
 // Creating the MP sessions
 // VOTER
-type ChoiceVoter =
-    MeshedChannels<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>;
+type ChoiceVoter = MeshedChannels<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>;
 type EndpointVoter = MeshedChannels<
     Send<i32, Recv<Branching0fromStoV, End>>,
     RoleServer<RoleServer<RoleEnd>>,

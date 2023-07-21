@@ -68,12 +68,8 @@ type EndpointA = MeshedChannels<Choice0fromCtoA, End, RoleC<RoleEnd>, NameA>;
 
 // C
 type ChoiceC = MeshedChannels<Choose1fromCtoA, Choose1fromCtoS, RoleBroadcast, NameC>;
-type ChoiceCYes = MeshedChannels<
-    Send<i32, End>,
-    Send<i32, Recv<i32, End>>,
-    RoleA<RoleS<RoleS<RoleEnd>>>,
-    NameC,
->;
+type ChoiceCYes =
+    MeshedChannels<Send<i32, End>, Send<i32, Recv<i32, End>>, RoleA<RoleS<RoleS<RoleEnd>>>, NameC>;
 type ChoiceCNo = MeshedChannels<Send<i32, End>, End, RoleA<RoleEnd>, NameC>;
 type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoS, RoleBroadcast, NameC>;
 type EndpointCLoop = MeshedChannels<

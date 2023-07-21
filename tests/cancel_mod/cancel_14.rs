@@ -80,14 +80,7 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB {
-    More(
-        MeshedChannels<
-            End,
-            Recv<(), Send<(), RecursBtoA>>,
-            RoleA<RoleA<RoleA<RoleEnd>>>,
-            NameB,
-        >,
-    ),
+    More(MeshedChannels<End, Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
     Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoA = Recv<(End, Branching0fromAtoB), End>;
@@ -95,12 +88,8 @@ type RecursBtoA = Recv<(End, Branching0fromAtoB), End>;
 // Creating the MP sessions
 
 type EndpointDoneA = MeshedChannels<End, End, RoleEnd, NameA>;
-type EndpointForwardA = MeshedChannels<
-    End,
-    Send<(), Recv<(), Choose0fromAtoB>>,
-    RoleB<RoleB<RoleBroadcast>>,
-    NameA,
->;
+type EndpointForwardA =
+    MeshedChannels<End, Send<(), Recv<(), Choose0fromAtoB>>, RoleB<RoleB<RoleBroadcast>>, NameA>;
 
 type EndpointCentral = MeshedChannels<End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannels<End, Choose0fromAtoB, RoleBroadcast, NameA>;

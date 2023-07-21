@@ -16,13 +16,13 @@ use std::time::Instant;
 
 generate!(
     "timed_interleaved",
-    MeshedChannels,
+    MeshedChannelsFour,
     Api,
     ControllerCB,
     Storage,
     User,
     2,
-    MeshedChannels,
+    MeshedChannelsTwo,
     ControllerLog,
     Logs,
     1,
@@ -32,7 +32,7 @@ generate!(
 // RoleApi
 enum Branching0fromCtoA {
     Up(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<
                 i32,
                 'a',
@@ -72,7 +72,7 @@ enum Branching0fromCtoA {
         >,
     ),
     Down(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<
                 i32,
                 'a',
@@ -99,7 +99,7 @@ enum Branching0fromCtoA {
         >,
     ),
     Close(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             End,
             SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
@@ -118,7 +118,7 @@ type Choose0fromCtoU = <Recurs0fromCtoU as Session>::Dual;
 // RoleStorage
 enum Branching0fromCtoS {
     Up(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<
                 i32,
                 'a',
@@ -136,7 +136,7 @@ enum Branching0fromCtoS {
         >,
     ),
     Down(
-        MeshedChannels<
+        MeshedChannelsFour<
             End,
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoS>,
             End,
@@ -145,7 +145,7 @@ enum Branching0fromCtoS {
         >,
     ),
     Close(
-        MeshedChannels<
+        MeshedChannelsFour<
             End,
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             End,
@@ -159,7 +159,7 @@ type Recurs0fromCtoS = RecvTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' '
 // RoleUser
 enum Branching0fromCtoU {
     Up(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<
                 i32,
                 'a',
@@ -177,7 +177,7 @@ enum Branching0fromCtoU {
         >,
     ),
     Down(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<
                 i32,
                 'a',
@@ -195,7 +195,7 @@ enum Branching0fromCtoU {
         >,
     ),
     Close(
-        MeshedChannels<
+        MeshedChannelsFour<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             End,
             End,
@@ -209,14 +209,14 @@ type Recurs0fromCtoU = RecvTimed<Branching0fromCtoU, 'a', 0, true, 10, true, ' '
 // RoleControllerLog
 enum Branching0fromLtoC {
     Success(
-        MeshedChannels<
+        MeshedChannelsTwo<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoL>,
             RoleLogs<RoleLogs<RoleEnd>>,
             NameControllerLog,
         >,
     ),
     Failure(
-        MeshedChannels<
+        MeshedChannelsTwo<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose1fromCtoL>,
             RoleLogs<RoleBroadcast>,
             NameControllerLog,
@@ -233,14 +233,14 @@ type Choose0fromLtoC = SendTimed<Branching0fromLtoC, 'a', 0, true, 10, true, ' '
 
 enum Branching1fromCtoL {
     Restart(
-        MeshedChannels<
+        MeshedChannelsTwo<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromLtoC>,
             RoleControllerLog<RoleBroadcast>,
             NameLogs,
         >,
     ),
     Stop(
-        MeshedChannels<
+        MeshedChannelsTwo<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             RoleControllerLog<RoleEnd>,
             NameLogs,
@@ -252,14 +252,14 @@ type Recurs1fromLtoC = RecvTimed<Branching1fromCtoL, 'a', 0, true, 10, true, ' '
 
 // Creating the MP sessions
 // RoleApi
-type EndpointApi0 = MeshedChannels<
+type EndpointApi0 = MeshedChannelsFour<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoA>,
     End,
     RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     RoleUser<RoleControllerCB<RoleControllerCB<RoleEnd>>>,
     NameApi,
 >;
-type EndpointApiInit = MeshedChannels<
+type EndpointApiInit = MeshedChannelsFour<
     RecvTimed<
         i32,
         'a',
@@ -277,7 +277,7 @@ type EndpointApiInit = MeshedChannels<
 >;
 
 // RoleControllerCB
-type EndpointCBControllerDown = MeshedChannels<
+type EndpointCBControllerDown = MeshedChannelsFour<
     SendTimed<
         i32,
         'a',
@@ -293,7 +293,7 @@ type EndpointCBControllerDown = MeshedChannels<
     RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>,
     NameControllerCB,
 >;
-type EndpointCBControllerUp = MeshedChannels<
+type EndpointCBControllerUp = MeshedChannelsFour<
     SendTimed<
         i32,
         'a',
@@ -309,21 +309,21 @@ type EndpointCBControllerUp = MeshedChannels<
     RoleApi<RoleApi<RoleBroadcast>>,
     NameControllerCB,
 >;
-type EndpointCBControllerClose = MeshedChannels<
+type EndpointCBControllerClose = MeshedChannelsFour<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     End,
     RoleApi<RoleStorage<RoleEnd>>,
     NameControllerCB,
 >;
-type EndpointCBController0 = MeshedChannels<
+type EndpointCBController0 = MeshedChannelsFour<
     RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromCtoA>,
     Choose0fromCtoS,
     Choose0fromCtoU,
     RoleApi<RoleBroadcast>,
     NameControllerCB,
 >;
-type EndpointCBControllerInit = MeshedChannels<
+type EndpointCBControllerInit = MeshedChannelsFour<
     SendTimed<
         i32,
         'a',
@@ -348,20 +348,20 @@ type EndpointCBControllerInit = MeshedChannels<
     RoleStorage<RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>>,
     NameControllerCB,
 >;
-type EndpointLogController1Stop = MeshedChannels<
+type EndpointLogController1Stop = MeshedChannelsTwo<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     RoleLogs<RoleEnd>,
     NameControllerLog,
 >;
-type EndpointLogController1Restart = MeshedChannels<
+type EndpointLogController1Restart = MeshedChannelsTwo<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoL>,
     RoleLogs<RoleLogs<RoleEnd>>,
     NameControllerLog,
 >;
 type EndpointLogController0 =
-    MeshedChannels<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameControllerLog>;
-type EndpointLogController1 = MeshedChannels<Choose1fromCtoL, RoleBroadcast, NameControllerLog>;
-type EndpointLogControllerInit = MeshedChannels<
+    MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameControllerLog>;
+type EndpointLogController1 = MeshedChannelsTwo<Choose1fromCtoL, RoleBroadcast, NameControllerLog>;
+type EndpointLogControllerInit = MeshedChannelsTwo<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoL>,
     RoleLogs<RoleLogs<RoleEnd>>,
     NameControllerLog,
@@ -369,8 +369,8 @@ type EndpointLogControllerInit = MeshedChannels<
 
 // RoleStorage
 type EndpointStorage0 =
-    MeshedChannels<End, Recurs0fromCtoS, End, RoleControllerCB<RoleEnd>, NameStorage>;
-type EndpointStorageInit = MeshedChannels<
+    MeshedChannelsFour<End, Recurs0fromCtoS, End, RoleControllerCB<RoleEnd>, NameStorage>;
+type EndpointStorageInit = MeshedChannelsFour<
     End,
     RecvTimed<
         i32,
@@ -388,7 +388,7 @@ type EndpointStorageInit = MeshedChannels<
 >;
 
 // RoleUser
-type EndpointUserInit = MeshedChannels<
+type EndpointUserInit = MeshedChannelsFour<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     Recurs0fromCtoU,
     End,
@@ -397,19 +397,19 @@ type EndpointUserInit = MeshedChannels<
 >;
 
 // RoleLogs
-type EndpointLogs0Success = MeshedChannels<
+type EndpointLogs0Success = MeshedChannelsTwo<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromLtoC>,
     RoleControllerLog<RoleBroadcast>,
     NameLogs,
 >;
-type EndpointLogs0Failure = MeshedChannels<
+type EndpointLogs0Failure = MeshedChannelsTwo<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', Recurs1fromLtoC>,
     RoleControllerLog<RoleControllerLog<RoleEnd>>,
     NameLogs,
 >;
-type EndpointLogs0 = MeshedChannels<Choose0fromLtoC, RoleBroadcast, NameLogs>;
-type EndpointLogs1 = MeshedChannels<Recurs1fromLtoC, RoleControllerLog<RoleEnd>, NameLogs>;
-type EndpointLogsInit = MeshedChannels<
+type EndpointLogs0 = MeshedChannelsTwo<Choose0fromLtoC, RoleBroadcast, NameLogs>;
+type EndpointLogs1 = MeshedChannelsTwo<Recurs1fromLtoC, RoleControllerLog<RoleEnd>, NameLogs>;
+type EndpointLogsInit = MeshedChannelsTwo<
     RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromLtoC>,
     RoleControllerLog<RoleBroadcast>,
     NameLogs,

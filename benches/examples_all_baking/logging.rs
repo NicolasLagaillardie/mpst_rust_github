@@ -55,11 +55,8 @@ type EndpointControllerInit =
 // RoleLogs
 type EndpointLogs0Success =
     MeshedChannels<Send<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
-type EndpointLogs0Failure = MeshedChannels<
-    Send<i32, Recurs1fromLtoC>,
-    RoleController<RoleController<RoleEnd>>,
-    NameLogs,
->;
+type EndpointLogs0Failure =
+    MeshedChannels<Send<i32, Recurs1fromLtoC>, RoleController<RoleController<RoleEnd>>, NameLogs>;
 type EndpointLogs0 = MeshedChannels<Choose0fromLtoC, RoleBroadcast, NameLogs>;
 type EndpointLogs1 = MeshedChannels<Recurs1fromLtoC, RoleController<RoleEnd>, NameLogs>;
 type EndpointLogsInit =

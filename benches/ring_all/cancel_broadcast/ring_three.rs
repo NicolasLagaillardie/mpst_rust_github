@@ -108,20 +108,10 @@ type RecursBtoC = <Choose0fromCtoB as Session>::Dual;
 type Choose0fromCtoA = Send<(End, Branching0fromCtoA), End>;
 type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>;
 type EndpointDoneC = MeshedChannels<End, End, End, RoleEnd, NameC>;
-type EndpointForwardC = MeshedChannels<
-    End,
-    Choose0fromCtoA,
-    Recv<(), Choose0fromCtoB>,
-    RoleB<RoleBroadcast>,
-    NameC,
->;
-type EndpointBackwardC = MeshedChannels<
-    End,
-    Choose0fromCtoA,
-    Send<(), Choose0fromCtoB>,
-    RoleB<RoleBroadcast>,
-    NameC,
->;
+type EndpointForwardC =
+    MeshedChannels<End, Choose0fromCtoA, Recv<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
+type EndpointBackwardC =
+    MeshedChannels<End, Choose0fromCtoA, Send<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
 
 // Creating the MP sessions
 type EndpointCentral = MeshedChannels<End, End, End, RoleEnd, NameCentral>;

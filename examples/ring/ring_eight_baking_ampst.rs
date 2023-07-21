@@ -13,18 +13,7 @@ use std::error::Error;
 
 static LOOPS: i64 = 100;
 
-generate!(
-    "rec_and_cancel",
-    MeshedChannels,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H
-);
+generate!("rec_and_cancel", MeshedChannels, A, B, C, D, E, F, G, H);
 
 // Types
 // A
@@ -283,20 +272,13 @@ type EndpointBackwardH = MeshedChannels<
 >;
 
 // Creating the MP sessions
-type EndpointA =
-    MeshedChannels<End, End, End, End, End, End, RecursAtoH, RoleH<RoleEnd>, NameA>;
-type EndpointB =
-    MeshedChannels<End, End, End, End, End, End, RecursBtoH, RoleH<RoleEnd>, NameB>;
-type EndpointC =
-    MeshedChannels<End, End, End, End, End, End, RecursCtoH, RoleH<RoleEnd>, NameC>;
-type EndpointD =
-    MeshedChannels<End, End, End, End, End, End, RecursDtoH, RoleH<RoleEnd>, NameD>;
-type EndpointE =
-    MeshedChannels<End, End, End, End, End, End, RecursEtoH, RoleH<RoleEnd>, NameE>;
-type EndpointF =
-    MeshedChannels<End, End, End, End, End, End, RecursFtoH, RoleH<RoleEnd>, NameF>;
-type EndpointG =
-    MeshedChannels<End, End, End, End, End, End, RecursGtoH, RoleH<RoleEnd>, NameG>;
+type EndpointA = MeshedChannels<End, End, End, End, End, End, RecursAtoH, RoleH<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, End, End, End, End, RecursBtoH, RoleH<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, End, End, End, End, RecursCtoH, RoleH<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, End, End, End, End, RecursDtoH, RoleH<RoleEnd>, NameD>;
+type EndpointE = MeshedChannels<End, End, End, End, End, End, RecursEtoH, RoleH<RoleEnd>, NameE>;
+type EndpointF = MeshedChannels<End, End, End, End, End, End, RecursFtoH, RoleH<RoleEnd>, NameF>;
+type EndpointG = MeshedChannels<End, End, End, End, End, End, RecursGtoH, RoleH<RoleEnd>, NameG>;
 type EndpointH = MeshedChannels<
     Choose0fromHtoA,
     Choose0fromHtoB,

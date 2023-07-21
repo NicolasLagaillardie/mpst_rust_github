@@ -19,9 +19,7 @@ generate!("rec_and_cancel", MeshedChannels, A, B, C, D, E, F);
 // Types
 // A
 enum Branching0fromFtoA {
-    Forward(
-        MeshedChannels<Send<(), End>, End, End, End, RecursAtoF, RoleB<RoleF<RoleEnd>>, NameA>,
-    ),
+    Forward(MeshedChannels<Send<(), End>, End, End, End, RecursAtoF, RoleB<RoleF<RoleEnd>>, NameA>),
     Backward(
         MeshedChannels<Recv<(), End>, End, End, End, RecursAtoF, RoleB<RoleF<RoleEnd>>, NameA>,
     ),

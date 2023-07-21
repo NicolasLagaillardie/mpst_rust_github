@@ -86,30 +86,14 @@ type R2C<R> = RoleC<RoleC<R>>;
 
 // A
 enum Branching0fromCtoA {
-    More(
-        MeshedChannels<
-            End,
-            RS,
-            Recv<(), Send<(), RecursAtoC>>,
-            R2C<R2B<RoleC<RoleEnd>>>,
-            NameA,
-        >,
-    ),
+    More(MeshedChannels<End, RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
     Done(MeshedChannels<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<(End, Branching0fromCtoA), End>;
 
 // B
 enum Branching0fromCtoB {
-    More(
-        MeshedChannels<
-            End,
-            SR,
-            Recv<(), Send<(), RecursBtoC>>,
-            R2C<R2A<RoleC<RoleEnd>>>,
-            NameB,
-        >,
-    ),
+    More(MeshedChannels<End, SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
     Done(MeshedChannels<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = Recv<(End, Branching0fromCtoB), End>;

@@ -336,18 +336,12 @@ type EndpointMoreG = MeshedChannels<
 
 // Creating the MP sessions
 type EndpointCentral = MeshedChannels<End, End, End, End, End, End, End, RoleEnd, NameCentral>;
-type EndpointA =
-    MeshedChannels<End, End, End, End, End, End, RecursAtoG, RoleG<RoleEnd>, NameA>;
-type EndpointB =
-    MeshedChannels<End, End, End, End, End, End, RecursBtoG, RoleG<RoleEnd>, NameB>;
-type EndpointC =
-    MeshedChannels<End, End, End, End, End, End, RecursCtoG, RoleG<RoleEnd>, NameC>;
-type EndpointD =
-    MeshedChannels<End, End, End, End, End, End, RecursDtoG, RoleG<RoleEnd>, NameD>;
-type EndpointE =
-    MeshedChannels<End, End, End, End, End, End, RecursEtoG, RoleG<RoleEnd>, NameE>;
-type EndpointF =
-    MeshedChannels<End, End, End, End, End, End, RecursFtoG, RoleG<RoleEnd>, NameF>;
+type EndpointA = MeshedChannels<End, End, End, End, End, End, RecursAtoG, RoleG<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, End, End, End, End, RecursBtoG, RoleG<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, End, End, End, End, RecursCtoG, RoleG<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, End, End, End, End, RecursDtoG, RoleG<RoleEnd>, NameD>;
+type EndpointE = MeshedChannels<End, End, End, End, End, End, RecursEtoG, RoleG<RoleEnd>, NameE>;
+type EndpointF = MeshedChannels<End, End, End, End, End, End, RecursFtoG, RoleG<RoleEnd>, NameF>;
 type EndpointG = MeshedChannels<
     End,
     Choose0fromGtoA,

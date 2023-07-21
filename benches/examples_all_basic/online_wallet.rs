@@ -140,14 +140,9 @@ type Choose1fromCtoS = <Recurs1StoC as Session>::Dual;
 // Creating the MP sessions
 // Step 1
 type EndpointA1 = MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
-type EndpointC1 = MeshedChannels<
-    Choose1fromCtoA,
-    Recv<(i64, i64), Choose1fromCtoS>,
-    RoleS<RoleBroadcast>,
-    NameC,
->;
-type EndpointS1 =
-    MeshedChannels<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
+type EndpointC1 =
+    MeshedChannels<Choose1fromCtoA, Recv<(i64, i64), Choose1fromCtoS>, RoleS<RoleBroadcast>, NameC>;
+type EndpointS1 = MeshedChannels<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
 
 // Step 0
 type EndpointA0 = MeshedChannels<

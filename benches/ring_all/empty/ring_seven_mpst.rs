@@ -134,28 +134,10 @@ create_recv_mpst_session_bundle!(
 // A
 enum Branching0fromGtoA {
     Forward(
-        MeshedChannels<
-            Send<(), End>,
-            End,
-            End,
-            End,
-            End,
-            RecursAtoG,
-            RoleB<RoleG<RoleEnd>>,
-            NameA,
-        >,
+        MeshedChannels<Send<(), End>, End, End, End, End, RecursAtoG, RoleB<RoleG<RoleEnd>>, NameA>,
     ),
     Backward(
-        MeshedChannels<
-            Recv<(), End>,
-            End,
-            End,
-            End,
-            End,
-            RecursAtoG,
-            RoleB<RoleG<RoleEnd>>,
-            NameA,
-        >,
+        MeshedChannels<Recv<(), End>, End, End, End, End, RecursAtoG, RoleB<RoleG<RoleEnd>>, NameA>,
     ),
     Done(MeshedChannels<End, End, End, End, End, End, RoleEnd, NameA>),
 }

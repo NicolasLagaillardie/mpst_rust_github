@@ -30,20 +30,10 @@ type RecursAtoC = <Choose0fromCtoA as Session>::Dual;
 // B
 enum Branching0fromCtoB {
     Forward(
-        MeshedChannels<
-            Recv<(), End>,
-            Send<(), RecursBtoC>,
-            RoleA<RoleC<RoleC<RoleEnd>>>,
-            NameB,
-        >,
+        MeshedChannels<Recv<(), End>, Send<(), RecursBtoC>, RoleA<RoleC<RoleC<RoleEnd>>>, NameB>,
     ),
     Backward(
-        MeshedChannels<
-            Send<(), End>,
-            Recv<(), RecursBtoC>,
-            RoleC<RoleA<RoleC<RoleEnd>>>,
-            NameB,
-        >,
+        MeshedChannels<Send<(), End>, Recv<(), RecursBtoC>, RoleC<RoleA<RoleC<RoleEnd>>>, NameB>,
     ),
     Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }

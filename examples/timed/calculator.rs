@@ -4,14 +4,13 @@
     clippy::large_enum_variant
 )]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::generate;
+use mpstthree::binary::struct_trait::end::End;
+use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use rand::{thread_rng, Rng};
-
-use std::error::Error;
 
 use std::collections::HashMap;
 use std::error::Error;
@@ -29,20 +28,8 @@ type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' '
 
 // S
 enum Branching0fromCtoS {
-    Sum(
-        MeshedChannels<
-            SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
-    ),
-    Diff(
-        MeshedChannels<
-            SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
-    ),
+    Sum(MeshedChannels<SendTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannels<SendTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
@@ -61,10 +48,6 @@ type EndpointC = MeshedChannels<
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCSum =
-    MeshedChannels<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
-type EndpointCDiff =
-    MeshedChannels<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
 
 // S
 type EndpointS = MeshedChannels<
@@ -76,7 +59,16 @@ type EndpointS = MeshedChannels<
         10,
         true,
         ' ',
-        RecvTimed<i32, 'a', 0, true, 10, true, ' ', RecvTimed<Branching0fromCtoS, End>>,
+        RecvTimed<
+            i32,
+            'a',
+            0,
+            true,
+            10,
+            true,
+            ' ',
+            RecvTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>,
+        >,
     >,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,

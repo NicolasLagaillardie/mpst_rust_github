@@ -563,132 +563,24 @@ type EndpointBackwardJ = MeshedChannels<
 // Creating the MP sessions
 type EndpointCentral =
     MeshedChannels<End, End, End, End, End, End, End, End, End, End, RoleEnd, NameCentral>;
-type EndpointA = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursAtoJ,
-    RoleJ<RoleEnd>,
-    NameA,
->;
-type EndpointB = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursBtoJ,
-    RoleJ<RoleEnd>,
-    NameB,
->;
-type EndpointC = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursCtoJ,
-    RoleJ<RoleEnd>,
-    NameC,
->;
-type EndpointD = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursDtoJ,
-    RoleJ<RoleEnd>,
-    NameD,
->;
-type EndpointE = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursEtoJ,
-    RoleJ<RoleEnd>,
-    NameE,
->;
-type EndpointF = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursFtoJ,
-    RoleJ<RoleEnd>,
-    NameF,
->;
-type EndpointG = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursGtoJ,
-    RoleJ<RoleEnd>,
-    NameG,
->;
-type EndpointH = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursHtoJ,
-    RoleJ<RoleEnd>,
-    NameH,
->;
-type EndpointI = MeshedChannels<
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    End,
-    RecursItoJ,
-    RoleJ<RoleEnd>,
-    NameI,
->;
+type EndpointA =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursAtoJ, RoleJ<RoleEnd>, NameA>;
+type EndpointB =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursBtoJ, RoleJ<RoleEnd>, NameB>;
+type EndpointC =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursCtoJ, RoleJ<RoleEnd>, NameC>;
+type EndpointD =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursDtoJ, RoleJ<RoleEnd>, NameD>;
+type EndpointE =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursEtoJ, RoleJ<RoleEnd>, NameE>;
+type EndpointF =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursFtoJ, RoleJ<RoleEnd>, NameF>;
+type EndpointG =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursGtoJ, RoleJ<RoleEnd>, NameG>;
+type EndpointH =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursHtoJ, RoleJ<RoleEnd>, NameH>;
+type EndpointI =
+    MeshedChannels<End, End, End, End, End, End, End, End, End, RecursItoJ, RoleJ<RoleEnd>, NameI>;
 type EndpointJ = MeshedChannels<
     End,
     Choose0fromJtoA,

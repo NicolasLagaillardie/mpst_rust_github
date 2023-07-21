@@ -48,12 +48,8 @@ type EndpointClient = MeshedChannels<
 >;
 
 // OTHER
-type EndpointOther = MeshedChannels<
-    End,
-    Recv<Branching0fromServerToOther, End>,
-    RoleServer<RoleEnd>,
-    NameOther,
->;
+type EndpointOther =
+    MeshedChannels<End, Recv<Branching0fromServerToOther, End>, RoleServer<RoleEnd>, NameOther>;
 
 // SERVER
 type EndpointQuery = MeshedChannels<

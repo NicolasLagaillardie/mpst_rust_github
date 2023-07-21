@@ -30,20 +30,8 @@ type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' '
 
 // S
 enum Branching0fromCtoS {
-    Sum(
-        MeshedChannels<
-            SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
-    ),
-    Diff(
-        MeshedChannels<
-            SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
-            RoleC<RoleEnd>,
-            NameS,
-        >,
-    ),
+    Sum(MeshedChannels<SendTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannels<SendTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
@@ -62,10 +50,6 @@ type EndpointC = MeshedChannels<
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCSum =
-    MeshedChannels<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
-type EndpointCDiff =
-    MeshedChannels<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
 
 // S
 type EndpointS = MeshedChannels<
@@ -77,7 +61,16 @@ type EndpointS = MeshedChannels<
         10,
         true,
         ' ',
-        RecvTimed<i32, 'a', 0, true, 10, true, ' ', RecvTimed<Branching0fromCtoS, End>>,
+        RecvTimed<
+            i32,
+            'a',
+            0,
+            true,
+            10,
+            true,
+            ' ',
+            RecvTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>,
+        >,
     >,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,

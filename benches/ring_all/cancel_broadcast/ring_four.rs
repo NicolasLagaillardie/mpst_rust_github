@@ -174,14 +174,8 @@ type EndpointCentral = MeshedChannels<End, End, End, End, RoleEnd, NameCentral>;
 type EndpointA = MeshedChannels<End, End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
 type EndpointB = MeshedChannels<End, End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
 type EndpointC = MeshedChannels<End, End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
-type EndpointD = MeshedChannels<
-    End,
-    Choose0fromDtoA,
-    Choose0fromDtoB,
-    Choose0fromDtoC,
-    RoleBroadcast,
-    NameD,
->;
+type EndpointD =
+    MeshedChannels<End, Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
 create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     done_from_d_to_all, forward_from_d_to_all, backward_from_d_to_all, =>

@@ -16,19 +16,7 @@ use std::error::Error;
 // use std::time::Duration;
 
 // Create new roles
-generate!(
-    "rec_and_cancel",
-    MeshedChannels,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I
-);
+generate!("rec_and_cancel", MeshedChannels, A, B, C, D, E, F, G, H, I);
 
 // Types
 // Send/Recv
