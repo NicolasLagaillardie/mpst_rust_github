@@ -133,7 +133,7 @@ required-features = []
 
 ################################### Benches
 
-################## Ping-Pong
+################################### Ping-Pong
 
 ######### Ping-Pong start
 ######### Ping-Pong end
@@ -2509,6 +2509,13 @@ path = "benches/mesh_all/timed_baking_cancel/mesh_ten.rs"
 required-features = ["full"]
 
 ################################### Examples
+
+######### Binary
+
+[[example]]
+name = "calculator_binary"
+path = "examples/binary/calculator.rs"
+required-features = ["binary"]
 
 ######### Basic
 

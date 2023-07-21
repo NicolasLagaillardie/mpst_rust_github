@@ -131,10 +131,17 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
-################## Ping-Pong
+################################### Ping-Pong
 
 ######### Ping-Pong start
 ######### Ping-Pong end
+
+################################### Examples
+
+[[example]]
+name = "circuit_breaker_binary"
+path = "examples/binary/circuit_breaker.rs"
+required-features = ["binary"]
 
 ################################### Profil
 

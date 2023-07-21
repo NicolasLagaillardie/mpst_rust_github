@@ -177,7 +177,7 @@ type EndpointS10 = MeshedChannels<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_c_init(s: EndpointC0) -> Result<(), Box<dyn Error>> {
-    endpoint_c_0(s, 100)
+    endpoint_c_0(s, LOOPS)
 }
 
 fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -601,6 +601,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn smtp(c: &mut Criterion) {
     c.bench_function("SMTP", |b| b.iter(aux));

@@ -17,8 +17,6 @@ use std::time::Instant;
 // Create new MeshedChannels for two participants
 generate_timed!(MeshedChannels, Controller, Logs);
 
-static LOOPS: i32 = 100;
-
 // RoleController
 enum Branching0fromLtoC {
     Success(
@@ -229,6 +227,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn logging(c: &mut Criterion) {
     c.bench_function("Timed Logging", |b| b.iter(aux));

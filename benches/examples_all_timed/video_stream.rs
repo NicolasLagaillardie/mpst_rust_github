@@ -167,34 +167,31 @@ fn authenticator_recurs(
 fn client(s: EndpointCFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let mut rng = thread_rng();
-    let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
-
     let s = s.send(0, all_clocks)?;
     let (_, s) = s.recv(all_clocks)?;
 
-    client_recurs(s, xs, all_clocks)
+    client_recurs(s, LOOPS, all_clocks)
 }
 
 fn client_recurs(
     s: EndpointCRecurs,
-    mut xs: Vec<i32>,
+    loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    match xs.pop() {
-        Option::Some(_) => {
+    match loops {
+        0 => {
+            let s = choose_mpst_c_to_all!(s, all_clocks, Branches0AtoC::End, Branches0BtoC::End);
+
+            s.close()
+        }
+        _ => {
             let s: EndpointCVideo =
                 choose_mpst_c_to_all!(s, all_clocks, Branches0AtoC::Video, Branches0BtoC::Video);
 
             let s = s.send(1, all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
-            client_recurs(s, xs, all_clocks)
-        }
-        Option::None => {
-            let s = choose_mpst_c_to_all!(s, all_clocks, Branches0AtoC::End, Branches0BtoC::End);
-
-            s.close()
+            client_recurs(s, loops - 1, all_clocks)
         }
     }
 }
@@ -214,6 +211,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn video_stream(c: &mut Criterion) {
     c.bench_function("Timed Video stream", |b| b.iter(aux));

@@ -19,8 +19,6 @@ use std::time::Instant;
 // Create new MeshedChannels for four participants
 generate_timed!(MeshedChannels, Api, Controller, Storage, User);
 
-static LOOPS: i32 = 100;
-
 // RoleApi
 enum Branching0fromCtoA {
     Up(
@@ -534,6 +532,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn circuit_breaker(c: &mut Criterion) {
     c.bench_function("Timed Circuit breaker", |b| b.iter(aux));

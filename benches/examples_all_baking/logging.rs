@@ -63,11 +63,9 @@ type EndpointLogsInit =
     MeshedChannels<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit) -> Result<(), Box<dyn Error>> {
-    let start: i32 = thread_rng().gen_range(5..100);
+    let s = s.send(LOOPS)?;
 
-    let s = s.send(start)?;
-
-    recurs_0_controller(s, start)
+    recurs_0_controller(s, LOOPS)
 }
 
 fn recurs_0_controller(s: EndpointController0, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -164,6 +162,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn logging(c: &mut Criterion) {
     c.bench_function("Logging", |b| b.iter(aux));

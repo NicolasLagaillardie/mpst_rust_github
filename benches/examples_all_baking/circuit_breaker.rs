@@ -236,11 +236,11 @@ fn recurs_api(s: EndpointApi0) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_controller(s: EndpointControllerInit) -> Result<(), Box<dyn Error>> {
-    let s = s.send(100)?;
-    let s = s.send(100)?;
+    let s = s.send(LOOPS)?;
+    let s = s.send(LOOPS)?;
     let (_hard_ping, s) = s.recv()?;
 
-    recurs_controller(s, 100)
+    recurs_controller(s, LOOPS)
 }
 
 fn recurs_controller(s: EndpointController0, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -365,6 +365,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn circuit_breaker(c: &mut Criterion) {
     c.bench_function("Circuit breaker", |b| b.iter(aux));

@@ -180,7 +180,7 @@ fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromAtoC::Login(s) => {
             let (_, s) = s.recv()?;
-            recurs_c(s, 100)
+            recurs_c(s, LOOPS)
         },
     })
 }
@@ -224,6 +224,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn online_wallet(c: &mut Criterion) {
     c.bench_function("Online wallet", |b| b.iter(aux));

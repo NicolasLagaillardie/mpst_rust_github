@@ -382,7 +382,7 @@ fn endpoint_c_init(
     s: EndpointC0,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    endpoint_c_0(s, 100, all_clocks)
+    endpoint_c_0(s, LOOPS, all_clocks)
 }
 
 fn endpoint_c_0(
@@ -895,6 +895,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn smtp(c: &mut Criterion) {
     c.bench_function("Timed SMTP", |b| b.iter(aux));

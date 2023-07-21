@@ -262,7 +262,7 @@ fn endpoint_c(
         },
         Branching0fromAtoC::Login(s) => {
             let (_, s) = s.recv(all_clocks)?;
-            recurs_c(s, 100, all_clocks)
+            recurs_c(s, LOOPS, all_clocks)
         },
     })
 }
@@ -319,6 +319,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn online_wallet(c: &mut Criterion) {
     c.bench_function("Timed Online wallet", |b| b.iter(aux));

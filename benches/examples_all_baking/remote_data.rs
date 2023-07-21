@@ -169,7 +169,7 @@ fn recurs_sensor(s: EndpointSensor0) -> Result<(), Box<dyn Error>> {
 
 // Server
 fn endpoint_server(s: EndpointServer0) -> Result<(), Box<dyn Error>> {
-    recurs_server(s, 100)
+    recurs_server(s, LOOPS)
 }
 
 fn recurs_server(s: EndpointServer0, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -216,6 +216,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn remote_data(c: &mut Criterion) {
     c.bench_function("Remote data", |b| b.iter(aux));

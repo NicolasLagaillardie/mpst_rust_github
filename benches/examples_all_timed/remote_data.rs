@@ -206,7 +206,7 @@ fn endpoint_server(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    recurs_server(s, 100, all_clocks)
+    recurs_server(s, LOOPS, all_clocks)
 }
 
 fn recurs_server(
@@ -257,6 +257,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn remote_data(c: &mut Criterion) {
     c.bench_function("Timed Remote data", |b| b.iter(aux));
