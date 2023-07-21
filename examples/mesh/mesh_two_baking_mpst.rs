@@ -14,24 +14,24 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-generate!("recursive", MeshedChannelsTwo, A, B);
+generate!("recursive", MeshedChannels, A, B);
 
 // Types
 // A
 enum Branching0fromBtoA {
-    More(MeshedChannelsTwo<Recv<(), Send<(), RecursAtoB>>, RoleB<RoleB<RoleB<RoleEnd>>>, NameA>),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
+    More(MeshedChannels<Recv<(), Send<(), RecursAtoB>>, RoleB<RoleB<RoleB<RoleEnd>>>, NameA>),
+    Done(MeshedChannels<End, RoleEnd, NameA>),
 }
 type RecursAtoB = Recv<Branching0fromBtoA, End>;
 
 // C
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
 type EndpointMoreB =
-    MeshedChannelsTwo<Send<(), Recv<(), Choose0fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
+    MeshedChannels<Send<(), Recv<(), Choose0fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwo<RecursAtoB, RoleB<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsTwo<Choose0fromBtoA, RoleBroadcast, NameB>;
+type EndpointA = MeshedChannels<RecursAtoB, RoleB<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {

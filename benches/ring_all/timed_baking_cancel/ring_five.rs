@@ -17,13 +17,13 @@ use std::error::Error;
 use std::time::Instant;
 
 // Create new roles
-generate_timed!(MeshedChannelsFive, A, B, C, D, E);
+generate_timed!(MeshedChannels, A, B, C, D, E);
 
 // Types
 // A
 enum Branching0fromEtoA {
     Forward(
-        MeshedChannelsFive<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
             End,
@@ -33,7 +33,7 @@ enum Branching0fromEtoA {
         >,
     ),
     Backward(
-        MeshedChannelsFive<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
             End,
@@ -42,14 +42,14 @@ enum Branching0fromEtoA {
             NameA,
         >,
     ),
-    Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoE = RecvTimed<Branching0fromEtoA, 'a', 0, true, 10, true, ' ', End>;
 
 // B
 enum Branching0fromEtoB {
     Forward(
-        MeshedChannelsFive<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
@@ -59,7 +59,7 @@ enum Branching0fromEtoB {
         >,
     ),
     Backward(
-        MeshedChannelsFive<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
@@ -68,14 +68,14 @@ enum Branching0fromEtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoE = RecvTimed<Branching0fromEtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // C
 enum Branching0fromEtoC {
     Forward(
-        MeshedChannelsFive<
+        MeshedChannels<
             End,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -85,7 +85,7 @@ enum Branching0fromEtoC {
         >,
     ),
     Backward(
-        MeshedChannelsFive<
+        MeshedChannels<
             End,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -94,14 +94,14 @@ enum Branching0fromEtoC {
             NameC,
         >,
     ),
-    Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannels<End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoE = RecvTimed<Branching0fromEtoC, 'a', 0, true, 10, true, ' ', End>;
 
 // D
 enum Branching0fromEtoD {
     Forward(
-        MeshedChannelsFive<
+        MeshedChannels<
             End,
             End,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -111,7 +111,7 @@ enum Branching0fromEtoD {
         >,
     ),
     Backward(
-        MeshedChannelsFive<
+        MeshedChannels<
             End,
             End,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -120,7 +120,7 @@ enum Branching0fromEtoD {
             NameD,
         >,
     ),
-    Done(MeshedChannelsFive<End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannels<End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoE = RecvTimed<Branching0fromEtoD, 'a', 0, true, 10, true, ' ', End>;
 
@@ -129,7 +129,7 @@ type Choose0fromEtoA = SendTimed<Branching0fromEtoA, 'a', 0, true, 10, true, ' '
 type Choose0fromEtoB = SendTimed<Branching0fromEtoB, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromEtoC = SendTimed<Branching0fromEtoC, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromEtoD = SendTimed<Branching0fromEtoD, 'a', 0, true, 10, true, ' ', End>;
-type EndpointForwardE = MeshedChannelsFive<
+type EndpointForwardE = MeshedChannels<
     Choose0fromEtoA,
     Choose0fromEtoB,
     Choose0fromEtoC,
@@ -137,7 +137,7 @@ type EndpointForwardE = MeshedChannelsFive<
     RoleD<RoleBroadcast>,
     NameE,
 >;
-type EndpointBackwardE = MeshedChannelsFive<
+type EndpointBackwardE = MeshedChannels<
     Choose0fromEtoA,
     Choose0fromEtoB,
     Choose0fromEtoC,
@@ -147,11 +147,11 @@ type EndpointBackwardE = MeshedChannelsFive<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsFive<End, End, End, RecursAtoE, RoleE<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsFive<End, End, End, RecursBtoE, RoleE<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsFive<End, End, End, RecursCtoE, RoleE<RoleEnd>, NameC>;
-type EndpointD = MeshedChannelsFive<End, End, End, RecursDtoE, RoleE<RoleEnd>, NameD>;
-type EndpointE = MeshedChannelsFive<
+type EndpointA = MeshedChannels<End, End, End, RecursAtoE, RoleE<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, End, RecursBtoE, RoleE<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, End, RecursCtoE, RoleE<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, End, RecursDtoE, RoleE<RoleEnd>, NameD>;
+type EndpointE = MeshedChannels<
     Choose0fromEtoA,
     Choose0fromEtoB,
     Choose0fromEtoC,

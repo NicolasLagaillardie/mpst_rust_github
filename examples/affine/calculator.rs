@@ -12,24 +12,27 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for three participants
-generate!("rec_and_cancel", MeshedChannelsThree, C, S);
+generate!("rec_and_cancel", MeshedChannels, C, S);
 
 // Types
+// C
+type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
+
 // S
 enum Branching0fromCtoS {
-    Sum(MeshedChannelsThree<Send<i32, End>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannelsThree<Send<i32, End>, RoleC<RoleEnd>, NameS>),
+    Sum(MeshedChannels<Send<i32, End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannels<Send<i32, End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
 // C
 type EndpointC =
-    MeshedChannelsThree<Send<i32, Send<i32, Choose0fromCtoS>>, RoleS<RoleS<RoleBroadcast>>, NameC>;
-type EndpointCSum = MeshedChannelsThree<Recv<i32, End>, RoleS<RoleEnd>, NameC>;
-type EndpointCDiff = MeshedChannelsThree<Recv<i32, End>, RoleS<RoleEnd>, NameC>;
+    MeshedChannels<Send<i32, Send<i32, Choose0fromCtoS>>, RoleS<RoleS<RoleBroadcast>>, NameC>;
+type EndpointCSum = MeshedChannels<Recv<i32, End>, RoleS<RoleEnd>, NameC>;
+type EndpointCDiff = MeshedChannels<Recv<i32, End>, RoleS<RoleEnd>, NameC>;
 
 // S
-type EndpointS = MeshedChannelsThree<
+type EndpointS = MeshedChannels<
     Recv<i32, Recv<i32, Recv<Branching0fromCtoS, End>>>,
     RoleC<RoleC<RoleC<RoleEnd>>>,
     NameS,

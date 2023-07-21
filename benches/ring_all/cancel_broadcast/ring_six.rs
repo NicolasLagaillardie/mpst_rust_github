@@ -21,7 +21,7 @@ use std::error::Error;
 // use std::time::Duration;
 
 // Create the new MeshedChannels for six participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsSeven, 7);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 7);
 
 // Create new roles
 // normal
@@ -34,41 +34,41 @@ create_multiple_normal_name_short!(Central, A, B, C, D, E, F);
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
-    NameA, MeshedChannelsSeven, 7
+    NameA, MeshedChannels, 7
 );
 
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
-    NameB, MeshedChannelsSeven, 7
+    NameB, MeshedChannels, 7
 );
 
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
-    NameC, MeshedChannelsSeven, 7
+    NameC, MeshedChannels, 7
 );
 
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 4 |
     send_mpst_d_to_e, RoleE, 5 | =>
-    NameD, MeshedChannelsSeven, 7
+    NameD, MeshedChannels, 7
 );
 
 // E
 create_send_check_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 5 |
     send_mpst_e_to_f, RoleF, 6 | =>
-    NameE, MeshedChannelsSeven, 7
+    NameE, MeshedChannels, 7
 );
 
 // F
 create_send_check_cancel_bundle!(
     send_mpst_f_to_e, RoleE, 6 | =>
-    NameF, MeshedChannelsSeven, 7
+    NameF, MeshedChannels, 7
 );
 
 // Create new recv functions and related types
@@ -76,7 +76,7 @@ create_send_check_cancel_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 |
     recv_mpst_a_from_f, RoleF, 6 | =>
-    NameA, MeshedChannelsSeven, 7
+    NameA, MeshedChannels, 7
 );
 
 // B
@@ -84,7 +84,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
     recv_mpst_b_from_c, RoleC, 3 |
     recv_mpst_b_from_f, RoleF, 6 | =>
-    NameB, MeshedChannelsSeven, 7
+    NameB, MeshedChannels, 7
 );
 
 // C
@@ -92,7 +92,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 |
     recv_mpst_c_from_d, RoleD, 4 |
     recv_mpst_c_from_f, RoleF, 6 | =>
-    NameC, MeshedChannelsSeven, 7
+    NameC, MeshedChannels, 7
 );
 
 // D
@@ -100,27 +100,27 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 4 |
     recv_mpst_d_from_e, RoleE, 5 |
     recv_mpst_d_from_f, RoleF, 6 | =>
-    NameD, MeshedChannelsSeven, 7
+    NameD, MeshedChannels, 7
 );
 
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 5 |
     recv_mpst_e_from_f, RoleF, 6 | =>
-    NameE, MeshedChannelsSeven, 7
+    NameE, MeshedChannels, 7
 );
 
 // F
 create_recv_mpst_session_bundle!(
     recv_mpst_f_from_e, RoleE, 6 | =>
-    NameF, MeshedChannelsSeven, 7
+    NameF, MeshedChannels, 7
 );
 
 // Types
 // A
 enum Branching0fromFtoA {
     Forward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             Send<(), End>,
             End,
@@ -132,7 +132,7 @@ enum Branching0fromFtoA {
         >,
     ),
     Backward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             Recv<(), End>,
             End,
@@ -143,14 +143,14 @@ enum Branching0fromFtoA {
             NameA,
         >,
     ),
-    Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoF = <Choose0fromFtoA as Session>::Dual;
 
 // B
 enum Branching0fromFtoB {
     Forward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             Recv<(), End>,
             Send<(), End>,
@@ -162,7 +162,7 @@ enum Branching0fromFtoB {
         >,
     ),
     Backward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             Send<(), End>,
             Recv<(), End>,
@@ -173,14 +173,14 @@ enum Branching0fromFtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoF = <Choose0fromFtoB as Session>::Dual;
 
 // C
 enum Branching0fromFtoC {
     Forward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             End,
             Recv<(), End>,
@@ -192,7 +192,7 @@ enum Branching0fromFtoC {
         >,
     ),
     Backward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             End,
             Send<(), End>,
@@ -203,14 +203,14 @@ enum Branching0fromFtoC {
             NameC,
         >,
     ),
-    Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannels<End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoF = <Choose0fromFtoC as Session>::Dual;
 
 // D
 enum Branching0fromFtoD {
     Forward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             End,
             End,
@@ -222,7 +222,7 @@ enum Branching0fromFtoD {
         >,
     ),
     Backward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             End,
             End,
@@ -233,14 +233,14 @@ enum Branching0fromFtoD {
             NameD,
         >,
     ),
-    Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannels<End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoF = <Choose0fromFtoD as Session>::Dual;
 
 // E
 enum Branching0fromFtoE {
     Forward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             End,
             End,
@@ -252,7 +252,7 @@ enum Branching0fromFtoE {
         >,
     ),
     Backward(
-        MeshedChannelsSeven<
+        MeshedChannels<
             End,
             End,
             End,
@@ -263,7 +263,7 @@ enum Branching0fromFtoE {
             NameE,
         >,
     ),
-    Done(MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameE>),
+    Done(MeshedChannels<End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoF = <Choose0fromFtoE as Session>::Dual;
 
@@ -273,8 +273,8 @@ type Choose0fromFtoB = Send<(End, Branching0fromFtoB), End>;
 type Choose0fromFtoC = Send<(End, Branching0fromFtoC), End>;
 type Choose0fromFtoD = Send<(End, Branching0fromFtoD), End>;
 type Choose0fromFtoE = Send<(End, Branching0fromFtoE), End>;
-type EndpointDoneF = MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameF>;
-type EndpointForwardF = MeshedChannelsSeven<
+type EndpointDoneF = MeshedChannels<End, End, End, End, End, End, RoleEnd, NameF>;
+type EndpointForwardF = MeshedChannels<
     End,
     Choose0fromFtoA,
     Choose0fromFtoB,
@@ -284,7 +284,7 @@ type EndpointForwardF = MeshedChannelsSeven<
     RoleE<RoleBroadcast>,
     NameF,
 >;
-type EndpointBackwardF = MeshedChannelsSeven<
+type EndpointBackwardF = MeshedChannels<
     End,
     Choose0fromFtoA,
     Choose0fromFtoB,
@@ -296,13 +296,13 @@ type EndpointBackwardF = MeshedChannelsSeven<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannelsSeven<End, End, End, End, End, End, RoleEnd, NameCentral>;
-type EndpointA = MeshedChannelsSeven<End, End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsSeven<End, End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsSeven<End, End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
-type EndpointD = MeshedChannelsSeven<End, End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
-type EndpointE = MeshedChannelsSeven<End, End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
-type EndpointF = MeshedChannelsSeven<
+type EndpointCentral = MeshedChannels<End, End, End, End, End, End, RoleEnd, NameCentral>;
+type EndpointA = MeshedChannels<End, End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
+type EndpointE = MeshedChannels<End, End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
+type EndpointF = MeshedChannels<
     End,
     Choose0fromFtoA,
     Choose0fromFtoB,
@@ -323,7 +323,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Branching0fromFtoD,
     Branching0fromFtoE, =>
     NameA, NameB, NameC, NameD, NameE, =>
-    NameCentral, NameF, MeshedChannelsSeven, 7
+    NameCentral, NameF, MeshedChannels, 7
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {

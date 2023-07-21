@@ -20,7 +20,7 @@ use std::error::Error;
 // Create new MeshedChannels for four participants
 generate!(
     "rec_and_cancel",
-    MeshedChannelsFour,
+    MeshedChannels,
     Api,
     Controller,
     Storage,
@@ -30,7 +30,7 @@ generate!(
 // RoleApi
 enum Branching0fromCtoA {
     Up(
-        MeshedChannelsFour<
+        MeshedChannels<
             Recv<i32, Send<i32, Recurs0fromCtoA>>,
             Send<i32, Recv<i32, End>>,
             Send<i32, Recv<i32, End>>,
@@ -43,7 +43,7 @@ enum Branching0fromCtoA {
         >,
     ),
     Down(
-        MeshedChannelsFour<
+        MeshedChannels<
             Recv<i32, Send<i32, Recurs0fromCtoA>>,
             End,
             Send<i32, Recv<i32, End>>,
@@ -52,7 +52,7 @@ enum Branching0fromCtoA {
         >,
     ),
     Close(
-        MeshedChannelsFour<
+        MeshedChannels<
             Recv<i32, End>,
             End,
             Send<i32, End>,
@@ -71,7 +71,7 @@ type Choose0fromCtoU = Send<Branching0fromCtoU, End>;
 // RoleStorage
 enum Branching0fromCtoS {
     Up(
-        MeshedChannelsFour<
+        MeshedChannels<
             Recv<i32, Send<i32, End>>,
             Recurs0fromCtoS,
             End,
@@ -80,7 +80,7 @@ enum Branching0fromCtoS {
         >,
     ),
     Down(
-        MeshedChannelsFour<
+        MeshedChannels<
             End,
             Recv<i32, Recurs0fromCtoS>,
             End,
@@ -88,14 +88,14 @@ enum Branching0fromCtoS {
             NameStorage,
         >,
     ),
-    Close(MeshedChannelsFour<End, Recv<i32, End>, End, RoleController<RoleEnd>, NameStorage>),
+    Close(MeshedChannels<End, Recv<i32, End>, End, RoleController<RoleEnd>, NameStorage>),
 }
 type Recurs0fromCtoS = Recv<Branching0fromCtoS, End>;
 
 // RoleUser
 enum Branching0fromCtoU {
     Up(
-        MeshedChannelsFour<
+        MeshedChannels<
             Recv<i32, Send<i32, End>>,
             Recurs0fromCtoU,
             End,
@@ -104,7 +104,7 @@ enum Branching0fromCtoU {
         >,
     ),
     Down(
-        MeshedChannelsFour<
+        MeshedChannels<
             Recv<i32, Send<i32, End>>,
             Recurs0fromCtoU,
             End,
@@ -112,20 +112,20 @@ enum Branching0fromCtoU {
             NameUser,
         >,
     ),
-    Close(MeshedChannelsFour<Recv<i32, End>, End, End, RoleApi<RoleEnd>, NameUser>),
+    Close(MeshedChannels<Recv<i32, End>, End, End, RoleApi<RoleEnd>, NameUser>),
 }
 type Recurs0fromCtoU = Recv<Branching0fromCtoU, End>;
 
 // Creating the MP sessions
 // RoleApi
-type EndpointApi0 = MeshedChannelsFour<
+type EndpointApi0 = MeshedChannels<
     Send<i32, Recurs0fromCtoA>,
     End,
     Recv<i32, End>,
     RoleUser<RoleController<RoleController<RoleEnd>>>,
     NameApi,
 >;
-type EndpointApiInit = MeshedChannelsFour<
+type EndpointApiInit = MeshedChannels<
     Recv<i32, Send<i32, Recurs0fromCtoA>>,
     End,
     Recv<i32, End>,
@@ -134,35 +134,35 @@ type EndpointApiInit = MeshedChannelsFour<
 >;
 
 // RoleController
-type EndpointControllerDown = MeshedChannelsFour<
+type EndpointControllerDown = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Send<i32, Choose0fromCtoS>,
     Choose0fromCtoU,
     RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>,
     NameController,
 >;
-type EndpointControllerUp = MeshedChannelsFour<
+type EndpointControllerUp = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoS,
     Choose0fromCtoU,
     RoleApi<RoleApi<RoleBroadcast>>,
     NameController,
 >;
-type EndpointControllerClose = MeshedChannelsFour<
+type EndpointControllerClose = MeshedChannels<
     Send<i32, End>,
     Send<i32, End>,
     End,
     RoleApi<RoleStorage<RoleEnd>>,
     NameController,
 >;
-type EndpointController0 = MeshedChannelsFour<
+type EndpointController0 = MeshedChannels<
     Recv<i32, Choose0fromCtoA>,
     Choose0fromCtoS,
     Choose0fromCtoU,
     RoleApi<RoleBroadcast>,
     NameController,
 >;
-type EndpointControllerInit = MeshedChannelsFour<
+type EndpointControllerInit = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Send<i32, Recv<i32, Choose0fromCtoS>>,
     Choose0fromCtoU,
@@ -172,8 +172,8 @@ type EndpointControllerInit = MeshedChannelsFour<
 
 // RoleStorage
 type EndpointStorage0 =
-    MeshedChannelsFour<End, Recurs0fromCtoS, End, RoleController<RoleEnd>, NameStorage>;
-type EndpointStorageInit = MeshedChannelsFour<
+    MeshedChannels<End, Recurs0fromCtoS, End, RoleController<RoleEnd>, NameStorage>;
+type EndpointStorageInit = MeshedChannels<
     End,
     Recv<i32, Send<i32, Recurs0fromCtoS>>,
     End,
@@ -182,7 +182,7 @@ type EndpointStorageInit = MeshedChannelsFour<
 >;
 
 // RoleUser
-type EndpointUserInit = MeshedChannelsFour<
+type EndpointUserInit = MeshedChannels<
     Send<i32, End>,
     Recurs0fromCtoU,
     End,

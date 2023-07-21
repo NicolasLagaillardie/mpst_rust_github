@@ -515,8 +515,8 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
-/// type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
-/// type EndpointMoreC = MeshedChannelsThree<
+/// type EndpointDoneC = MeshedChannels<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = MeshedChannels<
 ///     Send<(), Recv<(), Choose0fromCtoA>>,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
 ///     R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
@@ -528,7 +528,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
 ///     NameA, NameB, =>
-///     NameC, MeshedChannelsThree, 3
+///     NameC, MeshedChannels, 3
 /// );
 /// ```
 ///
@@ -579,8 +579,8 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
-/// type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
-/// type EndpointMoreC = MeshedChannelsThree<
+/// type EndpointDoneC = MeshedChannels<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = MeshedChannels<
 ///     End,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
 ///     R2A<R2B<RoleB<RoleEnd>>>,
@@ -592,7 +592,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
 ///     NameB, =>
-///     NameA, NameC, MeshedChannelsThree, 3
+///     NameA, NameC, MeshedChannels, 3
 /// );
 /// ```
 ///

@@ -14,7 +14,7 @@ use std::error::Error;
 // C-->D.A-->B
 
 // Create new MeshedChannels for three participants
-create_meshedchannels!(MeshedChannelsFour, 4);
+create_meshedchannels!(MeshedChannels, 4);
 
 // Create new roles
 // normal
@@ -30,7 +30,7 @@ create_multiple_normal_name!(NameA, NameB, NameC, NameD);
 
 // Create new send functions
 // A
-create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, NameA, MeshedChannelsFour, 4, 1);
+create_send_mpst_cancel!(send_cancel_a_to_b, RoleB, NameA, MeshedChannels, 4, 1);
 
 // C
 create_send_mpst_session_bundle!(
@@ -38,7 +38,7 @@ create_send_mpst_session_bundle!(
     RoleD,
     3 | =>
     NameC,
-    MeshedChannelsFour,
+    MeshedChannels,
     4
 );
 
@@ -49,7 +49,7 @@ create_recv_mpst_session_bundle!(
     RoleA,
     1 | =>
     NameB,
-    MeshedChannelsFour,
+    MeshedChannels,
     4
 );
 
@@ -59,21 +59,21 @@ create_recv_mpst_session_bundle!(
     RoleC,
     3 | =>
     NameD,
-    MeshedChannelsFour,
+    MeshedChannels,
     4
 );
 
 // Create close function
-close_mpst_cancel!(close_mpst_multi, MeshedChannelsFour, 4);
+close_mpst_cancel!(close_mpst_multi, MeshedChannels, 4);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst, MeshedChannelsFour, 4);
+fork_mpst_multi!(fork_mpst, MeshedChannels, 4);
 
 // Types
-type EndpointA = MeshedChannelsFour<Send<i32, End>, End, End, RoleB<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsFour<Recv<i32, End>, End, End, RoleA<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsFour<End, End, Send<i32, End>, RoleD<RoleEnd>, NameC>;
-type EndpointD = MeshedChannelsFour<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
+type EndpointA = MeshedChannels<Send<i32, End>, End, End, RoleB<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<Recv<i32, End>, End, End, RoleA<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, Send<i32, End>, RoleD<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, Recv<i32, End>, RoleC<RoleEnd>, NameD>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = send_cancel_a_to_b(random(), s)?;

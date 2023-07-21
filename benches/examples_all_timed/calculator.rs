@@ -25,17 +25,20 @@ use std::time::Instant;
 generate_timed!(MeshedChannels, C, S);
 
 // Types
+// C
+type Choose0fromCtoS = SendTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' ', End>;
+
 // S
 enum Branching0fromCtoS {
     Sum(
-        MeshedChannelsThree<
+        MeshedChannels<
             SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             RoleC<RoleEnd>,
             NameS,
         >,
     ),
     Diff(
-        MeshedChannelsThree<
+        MeshedChannels<
             SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             RoleC<RoleEnd>,
             NameS,
@@ -45,7 +48,7 @@ enum Branching0fromCtoS {
 
 // Creating the MP sessions
 // C
-type EndpointC = MeshedChannelsThree<
+type EndpointC = MeshedChannels<
     SendTimed<
         i32,
         'a',
@@ -60,12 +63,12 @@ type EndpointC = MeshedChannelsThree<
     NameC,
 >;
 type EndpointCSum =
-    MeshedChannelsThree<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
+    MeshedChannels<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
 type EndpointCDiff =
-    MeshedChannelsThree<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
+    MeshedChannels<RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>, RoleS<RoleEnd>, NameC>;
 
 // S
-type EndpointS = MeshedChannelsThree<
+type EndpointS = MeshedChannels<
     RecvTimed<
         i32,
         'a',

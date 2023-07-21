@@ -14,11 +14,11 @@ use std::time::Instant;
 
 generate!(
     "timed_interleaved",
-    MeshedChannelsBarber,
+    MeshedChannels,
     Barber,
     ShopBarber,
     2,
-    MeshedChannelsClient,
+    MeshedChannels,
     Client,
     ShopClient,
     2,
@@ -44,9 +44,9 @@ type Recurs0fromShopBarberToBarber =
     RecvTimed<Branching0fromShopBarberToBarber, 'a', 0, true, 10, true, ' ', End>;
 
 enum Branching0fromShopBarberToBarber {
-    Done(MeshedChannelsBarber<End, RoleEnd, NameBarber>),
+    Done(MeshedChannels<End, RoleEnd, NameBarber>),
     Available(
-        MeshedChannelsBarber<
+        MeshedChannels<
             SendTimed<Available, 'a', 0, true, 10, true, ' ', Recurs1fromShopBarberToBarber>,
             RoleShopBarber<RoleShopBarber<RoleEnd>>,
             NameBarber,
@@ -58,7 +58,7 @@ type Recurs1fromShopBarberToBarber =
 
 enum Branching1fromShopBarberToBarber {
     Available(
-        MeshedChannelsBarber<
+        MeshedChannels<
             RecvTimed<Customer, 'a', 0, true, 10, true, ' ', Recurs2fromShopBarberToBarber>,
             RoleShopBarber<RoleShopBarber<RoleEnd>>,
             NameBarber,
@@ -70,7 +70,7 @@ type Recurs2fromShopBarberToBarber =
 
 enum Branching2fromShopBarberToBarber {
     Available(
-        MeshedChannelsBarber<
+        MeshedChannels<
             RecvTimed<Description, 'a', 0, true, 10, true, ' ', Recurs3fromShopBarberToBarber>,
             RoleShopBarber<RoleShopBarber<RoleEnd>>,
             NameBarber,
@@ -82,7 +82,7 @@ type Recurs3fromShopBarberToBarber =
 
 enum Branching3fromShopBarberToBarber {
     Available(
-        MeshedChannelsBarber<
+        MeshedChannels<
             SendTimed<Haircut, 'a', 0, true, 10, true, ' ', Recurs4fromShopBarberToBarber>,
             RoleShopBarber<RoleShopBarber<RoleEnd>>,
             NameBarber,
@@ -94,7 +94,7 @@ type Recurs4fromShopBarberToBarber =
 
 enum Branching4fromShopBarberToBarber {
     Available(
-        MeshedChannelsBarber<
+        MeshedChannels<
             RecvTimed<Pay, 'a', 0, true, 10, true, ' ', Recurs5fromShopBarberToBarber>,
             RoleShopBarber<RoleShopBarber<RoleEnd>>,
             NameBarber,
@@ -117,9 +117,9 @@ type Recurs0fromShopClientToClient =
     RecvTimed<Branching0fromShopClientToClient, 'a', 0, true, 10, true, ' ', End>;
 
 enum Branching0fromShopClientToClient {
-    Done(MeshedChannelsClient<End, RoleEnd, NameClient>),
+    Done(MeshedChannels<End, RoleEnd, NameClient>),
     Full(
-        MeshedChannelsClient<
+        MeshedChannels<
             RecvTimed<
                 Full,
                 'a',
@@ -135,7 +135,7 @@ enum Branching0fromShopClientToClient {
         >,
     ),
     Available(
-        MeshedChannelsClient<
+        MeshedChannels<
             RecvTimed<Seat, 'a', 0, true, 10, true, ' ', Recurs1fromShopClientToClient>,
             RoleShopClient<RoleShopClient<RoleEnd>>,
             NameClient,
@@ -147,7 +147,7 @@ type Recurs1fromShopClientToClient =
 
 enum Branching1fromShopClientToClient {
     Available(
-        MeshedChannelsClient<
+        MeshedChannels<
             RecvTimed<Ready, 'a', 0, true, 10, true, ' ', Recurs2fromShopClientToClient>,
             RoleShopClient<RoleShopClient<RoleEnd>>,
             NameClient,
@@ -159,7 +159,7 @@ type Recurs2fromShopClientToClient =
 
 enum Branching2fromShopClientToClient {
     Available(
-        MeshedChannelsClient<
+        MeshedChannels<
             SendTimed<Description, 'a', 0, true, 10, true, ' ', Recurs3fromShopClientToClient>,
             RoleShopClient<RoleShopClient<RoleEnd>>,
             NameClient,
@@ -171,7 +171,7 @@ type Recurs3fromShopClientToClient =
 
 enum Branching3fromShopClientToClient {
     Available(
-        MeshedChannelsClient<
+        MeshedChannels<
             RecvTimed<Haircut, 'a', 0, true, 10, true, ' ', Recurs4fromShopClientToClient>,
             RoleShopClient<RoleShopClient<RoleEnd>>,
             NameClient,
@@ -183,7 +183,7 @@ type Recurs4fromShopClientToClient =
 
 enum Branching4fromShopClientToClient {
     Available(
-        MeshedChannelsClient<
+        MeshedChannels<
             SendTimed<Pay, 'a', 0, true, 10, true, ' ', Recurs5fromShopClientToClient>,
             RoleShopClient<RoleShopClient<RoleEnd>>,
             NameClient,
@@ -204,78 +204,78 @@ type Choose5fromShopClientToClient = <Recurs5fromShopClientToClient as Session>:
 // Creating the MP sessions
 // Barber
 type EndpointBarber0 =
-    MeshedChannelsBarber<Recurs0fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
+    MeshedChannels<Recurs0fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
 type EndpointBarber1 =
-    MeshedChannelsBarber<Recurs1fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
+    MeshedChannels<Recurs1fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
 type EndpointBarber2 =
-    MeshedChannelsBarber<Recurs2fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
+    MeshedChannels<Recurs2fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
 type EndpointBarber3 =
-    MeshedChannelsBarber<Recurs3fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
+    MeshedChannels<Recurs3fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
 type EndpointBarber4 =
-    MeshedChannelsBarber<Recurs4fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
+    MeshedChannels<Recurs4fromShopBarberToBarber, RoleShopBarber<RoleEnd>, NameBarber>;
 
 // ShopBarber
 type EndpointShopBarber0 =
-    MeshedChannelsBarber<Choose0fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
-type EndpointShopBarberDone = MeshedChannelsBarber<End, RoleEnd, NameShopBarber>;
+    MeshedChannels<Choose0fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
+type EndpointShopBarberDone = MeshedChannels<End, RoleEnd, NameShopBarber>;
 // Recurs
 type EndpointShopBarberRecurs1 =
-    MeshedChannelsBarber<Choose1fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
+    MeshedChannels<Choose1fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
 type EndpointShopBarberRecurs2 =
-    MeshedChannelsBarber<Choose2fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
+    MeshedChannels<Choose2fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
 type EndpointShopBarberRecurs3 =
-    MeshedChannelsBarber<Choose3fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
+    MeshedChannels<Choose3fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
 type EndpointShopBarberRecurs4 =
-    MeshedChannelsBarber<Choose4fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
+    MeshedChannels<Choose4fromShopBarberToBarber, RoleBroadcast, NameShopBarber>;
 // Full branches
-type EndpointShopBarberAvailabe = MeshedChannelsBarber<
+type EndpointShopBarberAvailabe = MeshedChannels<
     RecvTimed<Available, 'a', 0, true, 10, true, ' ', Choose1fromShopBarberToBarber>,
     RoleBarber<RoleBroadcast>,
     NameShopBarber,
 >;
-type EndpointShopBarberCustomer = MeshedChannelsBarber<
+type EndpointShopBarberCustomer = MeshedChannels<
     SendTimed<Customer, 'a', 0, true, 10, true, ' ', Choose2fromShopBarberToBarber>,
     RoleBarber<RoleBroadcast>,
     NameShopBarber,
 >;
-type EndpointShopBarberDescription = MeshedChannelsBarber<
+type EndpointShopBarberDescription = MeshedChannels<
     SendTimed<Description, 'a', 0, true, 10, true, ' ', Choose3fromShopBarberToBarber>,
     RoleBarber<RoleBroadcast>,
     NameShopBarber,
 >;
-type EndpointShopBarberHaircut = MeshedChannelsBarber<
+type EndpointShopBarberHaircut = MeshedChannels<
     RecvTimed<Haircut, 'a', 0, true, 10, true, ' ', Choose4fromShopBarberToBarber>,
     RoleBarber<RoleBroadcast>,
     NameShopBarber,
 >;
-type EndpointShopBarberPay = MeshedChannelsBarber<
+type EndpointShopBarberPay = MeshedChannels<
     SendTimed<Pay, 'a', 0, true, 10, true, ' ', Choose5fromShopBarberToBarber>,
     RoleBarber<RoleBroadcast>,
     NameShopBarber,
 >;
 
 // Client
-type EndpointClient0 = MeshedChannelsClient<
+type EndpointClient0 = MeshedChannels<
     RecvTimed<Branching0fromShopClientToClient, 'a', 0, true, 10, true, ' ', End>,
     RoleShopClient<RoleEnd>,
     NameClient,
 >;
-type EndpointClient1 = MeshedChannelsClient<
+type EndpointClient1 = MeshedChannels<
     RecvTimed<Branching1fromShopClientToClient, 'a', 0, true, 10, true, ' ', End>,
     RoleShopClient<RoleEnd>,
     NameClient,
 >;
-type EndpointClient2 = MeshedChannelsClient<
+type EndpointClient2 = MeshedChannels<
     RecvTimed<Branching2fromShopClientToClient, 'a', 0, true, 10, true, ' ', End>,
     RoleShopClient<RoleEnd>,
     NameClient,
 >;
-type EndpointClient3 = MeshedChannelsClient<
+type EndpointClient3 = MeshedChannels<
     RecvTimed<Branching3fromShopClientToClient, 'a', 0, true, 10, true, ' ', End>,
     RoleShopClient<RoleEnd>,
     NameClient,
 >;
-type EndpointClient4 = MeshedChannelsClient<
+type EndpointClient4 = MeshedChannels<
     RecvTimed<Branching4fromShopClientToClient, 'a', 0, true, 10, true, ' ', End>,
     RoleShopClient<RoleEnd>,
     NameClient,
@@ -283,44 +283,44 @@ type EndpointClient4 = MeshedChannelsClient<
 
 // ShopClient
 type EndpointShopClient0 =
-    MeshedChannelsClient<Choose0fromShopClientToClient, RoleBroadcast, NameShopClient>;
-type EndpointShopClientDone = MeshedChannelsClient<End, RoleEnd, NameShopClient>;
-type EndpointShopClientFull = MeshedChannelsClient<
+    MeshedChannels<Choose0fromShopClientToClient, RoleBroadcast, NameShopClient>;
+type EndpointShopClientDone = MeshedChannels<End, RoleEnd, NameShopClient>;
+type EndpointShopClientFull = MeshedChannels<
     SendTimed<Full, 'a', 0, true, 10, true, ' ', Choose5fromShopClientToClient>,
     RoleClient<RoleBroadcast>,
     NameShopClient,
 >;
 // Recurs
 type EndpointShopClientRecurs1 =
-    MeshedChannelsClient<Choose1fromShopClientToClient, RoleBroadcast, NameShopClient>;
+    MeshedChannels<Choose1fromShopClientToClient, RoleBroadcast, NameShopClient>;
 type EndpointShopClientRecurs2 =
-    MeshedChannelsClient<Choose2fromShopClientToClient, RoleBroadcast, NameShopClient>;
+    MeshedChannels<Choose2fromShopClientToClient, RoleBroadcast, NameShopClient>;
 type EndpointShopClientRecurs3 =
-    MeshedChannelsClient<Choose3fromShopClientToClient, RoleBroadcast, NameShopClient>;
+    MeshedChannels<Choose3fromShopClientToClient, RoleBroadcast, NameShopClient>;
 type EndpointShopClientRecurs4 =
-    MeshedChannelsClient<Choose4fromShopClientToClient, RoleBroadcast, NameShopClient>;
+    MeshedChannels<Choose4fromShopClientToClient, RoleBroadcast, NameShopClient>;
 // Full branches
-type EndpointShopClientSeat = MeshedChannelsClient<
+type EndpointShopClientSeat = MeshedChannels<
     SendTimed<Seat, 'a', 0, true, 10, true, ' ', Choose1fromShopClientToClient>,
     RoleClient<RoleBroadcast>,
     NameShopClient,
 >;
-type EndpointShopClientReady = MeshedChannelsClient<
+type EndpointShopClientReady = MeshedChannels<
     SendTimed<Ready, 'a', 0, true, 10, true, ' ', Choose2fromShopClientToClient>,
     RoleClient<RoleBroadcast>,
     NameShopClient,
 >;
-type EndpointShopClientDescription = MeshedChannelsClient<
+type EndpointShopClientDescription = MeshedChannels<
     RecvTimed<Description, 'a', 0, true, 10, true, ' ', Choose3fromShopClientToClient>,
     RoleClient<RoleBroadcast>,
     NameShopClient,
 >;
-type EndpointShopClientHaircut = MeshedChannelsClient<
+type EndpointShopClientHaircut = MeshedChannels<
     SendTimed<Haircut, 'a', 0, true, 10, true, ' ', Choose4fromShopClientToClient>,
     RoleClient<RoleBroadcast>,
     NameShopClient,
 >;
-type EndpointShopClientPay = MeshedChannelsClient<
+type EndpointShopClientPay = MeshedChannels<
     RecvTimed<Pay, 'a', 0, true, 10, true, ' ', Choose5fromShopClientToClient>,
     RoleClient<RoleBroadcast>,
     NameShopClient,

@@ -17,7 +17,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 3);
 
 // Create new roles
 // normal
@@ -31,21 +31,21 @@ create_multiple_normal_name_short!(A, C, S);
 create_send_mpst_http_bundle!(
     send_http_a_to_c, RoleC, 1 |
     send_http_a_to_s, RoleS, 2 | =>
-    NameA, MeshedChannelsThree, 3
+    NameA, MeshedChannels, 3
 );
 
 // C
 create_send_mpst_http_bundle!(
     send_http_c_to_a, RoleA, 1 |
     send_http_c_to_s, RoleS, 2 | =>
-    NameC, MeshedChannelsThree, 3
+    NameC, MeshedChannels, 3
 );
 
 // S
 create_send_mpst_http_bundle!(
     send_http_s_to_a, RoleA, 1 |
     send_http_s_to_c, RoleC, 2 | =>
-    NameS, MeshedChannelsThree, 3
+    NameS, MeshedChannels, 3
 );
 
 // Create new recv functions and related types
@@ -53,21 +53,21 @@ create_send_mpst_http_bundle!(
 create_recv_http_session_bundle!(
     recv_http_a_to_c, RoleC, 1 |
     recv_http_a_to_s, RoleS, 2 | =>
-    NameA, MeshedChannelsThree, 3
+    NameA, MeshedChannels, 3
 );
 
 // C
 create_recv_http_session_bundle!(
     recv_http_c_to_a, RoleA, 1 |
     recv_http_c_to_s, RoleS, 2 | =>
-    NameC, MeshedChannelsThree, 3
+    NameC, MeshedChannels, 3
 );
 
 // S
 create_recv_http_session_bundle!(
     recv_http_s_to_a, RoleA, 1 |
     recv_http_s_to_c, RoleC, 2 | =>
-    NameS, MeshedChannelsThree, 3
+    NameS, MeshedChannels, 3
 );
 
 // Types
@@ -95,55 +95,55 @@ type Choice2fromStoA<N> = <Choose2fromStoA<N> as Session>::Dual;
 // A
 
 type EndpointAAuth<N> =
-    MeshedChannelsThree<Send<N, Choice1fromCtoA<N>>, End, RoleC<RoleC<RoleEnd>>, NameA>;
+    MeshedChannels<Send<N, Choice1fromCtoA<N>>, End, RoleC<RoleC<RoleEnd>>, NameA>;
 
-type EndpointAAuthLoop<N> = MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
+type EndpointAAuthLoop<N> = MeshedChannels<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>;
 
-type EndpointADone<N> = MeshedChannelsThree<Send<N, End>, End, RoleC<RoleEnd>, NameA>;
+type EndpointADone<N> = MeshedChannels<Send<N, End>, End, RoleC<RoleEnd>, NameA>;
 
 enum Branching1fromCtoA<N: marker::Send> {
     Continue(
-        MeshedChannelsThree<
+        MeshedChannels<
             End,
             Recv<N, Send<N, Choice2fromStoA<N>>>,
             RoleS<RoleS<RoleS<RoleEnd>>>,
             NameA,
         >,
     ),
-    Close(MeshedChannelsThree<End, Recv<N, End>, RoleS<RoleEnd>, NameA>),
+    Close(MeshedChannels<End, Recv<N, End>, RoleS<RoleEnd>, NameA>),
 }
 
-type EndpointAContinue<N> = MeshedChannelsThree<End, Choice2fromStoA<N>, RoleS<RoleEnd>, NameA>;
+type EndpointAContinue<N> = MeshedChannels<End, Choice2fromStoA<N>, RoleS<RoleEnd>, NameA>;
 
 enum Branching2fromStoA<N: marker::Send> {
-    Picture(MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
-    Refusal(MeshedChannelsThree<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
+    Picture(MeshedChannels<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
+    Refusal(MeshedChannels<Choice1fromCtoA<N>, End, RoleC<RoleEnd>, NameA>),
 }
 
 // C
 enum Branching0fromAtoC<N: marker::Send> {
     Auth(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<N, Choose1fromCtoA<N>>,
             Choose1fromCtoS<N>,
             RoleA<RoleBroadcast>,
             NameC,
         >,
     ),
-    Done(MeshedChannelsThree<Recv<N, End>, Send<N, End>, RoleA<RoleS<RoleEnd>>, NameC>),
+    Done(MeshedChannels<Recv<N, End>, Send<N, End>, RoleA<RoleS<RoleEnd>>, NameC>),
 }
 
 type EndpointCContinue<N> =
-    MeshedChannelsThree<End, Send<N, Choice2fromStoC<N>>, RoleS<RoleS<RoleEnd>>, NameC>;
+    MeshedChannels<End, Send<N, Choice2fromStoC<N>>, RoleS<RoleS<RoleEnd>>, NameC>;
 
 type EndpointCContinueLoop<N> =
-    MeshedChannelsThree<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
+    MeshedChannels<Choose1fromCtoA<N>, Choose1fromCtoS<N>, RoleBroadcast, NameC>;
 
-type EndpointCDone<N> = MeshedChannelsThree<End, Send<N, End>, RoleS<RoleEnd>, NameC>;
+type EndpointCDone<N> = MeshedChannels<End, Send<N, End>, RoleS<RoleEnd>, NameC>;
 
 enum Branching2fromStoC<N: marker::Send> {
     Picture(
-        MeshedChannelsThree<
+        MeshedChannels<
             Choose1fromCtoA<N>,
             Recv<N, Choose1fromCtoS<N>>,
             RoleS<RoleBroadcast>,
@@ -151,7 +151,7 @@ enum Branching2fromStoC<N: marker::Send> {
         >,
     ),
     Refusal(
-        MeshedChannelsThree<
+        MeshedChannels<
             Choose1fromCtoA<N>,
             Recv<N, Choose1fromCtoS<N>>,
             RoleS<RoleBroadcast>,
@@ -160,40 +160,40 @@ enum Branching2fromStoC<N: marker::Send> {
     ),
 }
 
-type EndpointCPicture<N> = MeshedChannelsThree<End, Choice2fromStoC<N>, RoleS<RoleEnd>, NameC>;
+type EndpointCPicture<N> = MeshedChannels<End, Choice2fromStoC<N>, RoleS<RoleEnd>, NameC>;
 
 // S
 enum Branching0fromAtoS<N: marker::Send> {
-    Auth(MeshedChannelsThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>),
-    Done(MeshedChannelsThree<End, Recv<N, End>, RoleC<RoleEnd>, NameS>),
+    Auth(MeshedChannels<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>),
+    Done(MeshedChannels<End, Recv<N, End>, RoleC<RoleEnd>, NameS>),
 }
 
-type EndpointSContinue<N> = MeshedChannelsThree<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;
+type EndpointSContinue<N> = MeshedChannels<End, Choice1fromCtoS<N>, RoleC<RoleEnd>, NameS>;
 
 enum Branching1fromCtoS<N: marker::Send> {
     Continue(
-        MeshedChannelsThree<
+        MeshedChannels<
             Send<N, Recv<N, Choose2fromStoA<N>>>,
             Recv<N, Choose2fromStoC<N>>,
             RoleC<RoleA<RoleA<RoleBroadcast>>>,
             NameS,
         >,
     ),
-    Close(MeshedChannelsThree<Send<N, End>, Recv<N, End>, RoleC<RoleA<RoleEnd>>, NameS>),
+    Close(MeshedChannels<Send<N, End>, Recv<N, End>, RoleC<RoleA<RoleEnd>>, NameS>),
 }
 
 type EndpointSContinueLoop<N> =
-    MeshedChannelsThree<Choose2fromStoA<N>, Choose2fromStoC<N>, RoleBroadcast, NameS>;
+    MeshedChannels<Choose2fromStoA<N>, Choose2fromStoC<N>, RoleBroadcast, NameS>;
 
 type EndpointSPicture<N> =
-    MeshedChannelsThree<End, Send<N, Choice1fromCtoS<N>>, RoleC<RoleC<RoleEnd>>, NameS>;
+    MeshedChannels<End, Send<N, Choice1fromCtoS<N>>, RoleC<RoleC<RoleEnd>>, NameS>;
 
 type EndpointSRefusal<N> =
-    MeshedChannelsThree<End, Send<N, Choice1fromCtoS<N>>, RoleC<RoleC<RoleEnd>>, NameS>;
+    MeshedChannels<End, Send<N, Choice1fromCtoS<N>>, RoleC<RoleC<RoleEnd>>, NameS>;
 
 // Creating the MP sessions
 // A
-type EndpointA<N> = MeshedChannelsThree<
+type EndpointA<N> = MeshedChannels<
     Recv<N, Choose0fromAtoC<N>>,
     Choose0fromAtoS<N>,
     RoleC<RoleBroadcast>,
@@ -202,10 +202,10 @@ type EndpointA<N> = MeshedChannelsThree<
 
 // C
 type EndpointC<N> =
-    MeshedChannelsThree<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+    MeshedChannels<Send<N, Choice0fromAtoC<N>>, End, RoleA<RoleA<RoleEnd>>, NameC>;
 
 // S
-type EndpointS<N> = MeshedChannelsThree<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;
+type EndpointS<N> = MeshedChannels<Choice0fromAtoS<N>, End, RoleA<RoleEnd>, NameS>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     auth_from_a_to_all, again_from_a_to_all, =>
@@ -213,7 +213,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointAAuth<i32>, EndpointADone<i32>, =>
     Branching0fromAtoC::<i32>, Branching0fromAtoS::<i32>, =>
     NameC, NameS, =>
-    NameA, MeshedChannelsThree, 1
+    NameA, MeshedChannels, 1
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
@@ -222,7 +222,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointCContinue<i32>, EndpointCDone<i32>, =>
     Branching1fromCtoA::<i32>, Branching1fromCtoS::<i32>, =>
     NameA, NameS, =>
-    NameC, MeshedChannelsThree, 2
+    NameC, MeshedChannels, 2
 );
 
 create_fn_choose_mpst_multi_to_all_bundle!(
@@ -231,7 +231,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointSPicture<i32>, EndpointSRefusal<i32>, =>
     Branching2fromStoA::<i32>, Branching2fromStoC::<i32>, =>
     NameA, NameC, =>
-    NameS, MeshedChannelsThree, 3
+    NameS, MeshedChannels, 3
 );
 
 // Functions

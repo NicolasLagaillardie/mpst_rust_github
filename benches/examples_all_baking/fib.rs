@@ -16,7 +16,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for three participants
-generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
+generate!("rec_and_cancel", MeshedChannels, A, B, C);
 
 // Types
 // A
@@ -26,34 +26,34 @@ type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
 // B
 enum Branching0fromAtoB {
     More(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<i64, Send<i64, RecursBtoA>>,
             End,
             RoleA<RoleA<RoleA<RoleEnd>>>,
             NameB,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // C
 enum Branching0fromAtoC {
-    More(MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameC>),
+    More(MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
+    Done(MeshedChannels<End, End, RoleEnd, NameC>),
 }
 type RecursCtoA = Recv<Branching0fromAtoC, End>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsThree<Choose0fromAtoB, Choose0fromAtoC, RoleBroadcast, NameA>;
-type EndpointAMore = MeshedChannelsThree<
+type EndpointA = MeshedChannels<Choose0fromAtoB, Choose0fromAtoC, RoleBroadcast, NameA>;
+type EndpointAMore = MeshedChannels<
     Send<i64, Recv<i64, Choose0fromAtoB>>,
     Choose0fromAtoC,
     RoleB<RoleB<RoleBroadcast>>,
     NameA,
 >;
-type EndpointB = MeshedChannelsThree<RecursBtoA, End, RoleA<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
+type EndpointB = MeshedChannels<RecursBtoA, End, RoleA<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {

@@ -17,7 +17,7 @@ use std::time::Instant;
 static LOOPS: i64 = 100;
 
 // Create new roles
-generate_timed!(MeshedChannelsThree, A, B, C);
+generate_timed!(MeshedChannels, A, B, C);
 
 // Types
 // SendTimed/RecvTimed
@@ -34,7 +34,7 @@ type R2C<R> = RoleC<RoleC<R>>;
 // A
 enum Branching0fromCtoA {
     More(
-        MeshedChannelsThree<
+        MeshedChannels<
             RS,
             RecvTimed<
                 (),
@@ -50,14 +50,14 @@ enum Branching0fromCtoA {
             NameA,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
 
 // B
 enum Branching0fromCtoB {
     More(
-        MeshedChannelsThree<
+        MeshedChannels<
             SR,
             RecvTimed<
                 (),
@@ -73,14 +73,14 @@ enum Branching0fromCtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // C
 type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 10, true, ' ', End>;
-type EndpointMoreC = MeshedChannelsThree<
+type EndpointMoreC = MeshedChannels<
     SendTimed<
         (),
         'a',
@@ -106,9 +106,9 @@ type EndpointMoreC = MeshedChannelsThree<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = MeshedChannels<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());

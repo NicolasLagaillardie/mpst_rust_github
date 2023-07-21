@@ -17,13 +17,13 @@ use std::time::Instant;
 static LOOPS: i64 = 100;
 
 // Create new roles
-generate_timed!(MeshedChannelsNine, A, B, C, D, E, F, G, H, I);
+generate_timed!(MeshedChannels, A, B, C, D, E, F, G, H, I);
 
 // Types
 // A
 enum Branching0fromItoA {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
             End,
@@ -37,7 +37,7 @@ enum Branching0fromItoA {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
             End,
@@ -50,14 +50,14 @@ enum Branching0fromItoA {
             NameA,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoI = RecvTimed<Branching0fromItoA, 'a', 0, true, 10, true, ' ', End>;
 
 // B
 enum Branching0fromItoB {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
@@ -71,7 +71,7 @@ enum Branching0fromItoB {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
@@ -84,14 +84,14 @@ enum Branching0fromItoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoI = RecvTimed<Branching0fromItoB, 'a', 0, true, 10, true, ' ', End>;
 
 // C
 enum Branching0fromItoC {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -105,7 +105,7 @@ enum Branching0fromItoC {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -118,14 +118,14 @@ enum Branching0fromItoC {
             NameC,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoI = RecvTimed<Branching0fromItoC, 'a', 0, true, 10, true, ' ', End>;
 
 // D
 enum Branching0fromItoD {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -139,7 +139,7 @@ enum Branching0fromItoD {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
@@ -152,14 +152,14 @@ enum Branching0fromItoD {
             NameD,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoI = RecvTimed<Branching0fromItoD, 'a', 0, true, 10, true, ' ', End>;
 
 // E
 enum Branching0fromItoE {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -173,7 +173,7 @@ enum Branching0fromItoE {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -186,14 +186,14 @@ enum Branching0fromItoE {
             NameE,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoI = RecvTimed<Branching0fromItoE, 'a', 0, true, 10, true, ' ', End>;
 
 // F
 enum Branching0fromItoF {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -207,7 +207,7 @@ enum Branching0fromItoF {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -220,14 +220,14 @@ enum Branching0fromItoF {
             NameF,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameF>),
 }
 type RecursFtoI = RecvTimed<Branching0fromItoF, 'a', 0, true, 10, true, ' ', End>;
 
 // G
 enum Branching0fromItoG {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -241,7 +241,7 @@ enum Branching0fromItoG {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -254,14 +254,14 @@ enum Branching0fromItoG {
             NameG,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameG>),
 }
 type RecursGtoI = RecvTimed<Branching0fromItoG, 'a', 0, true, 10, true, ' ', End>;
 
 // H
 enum Branching0fromItoH {
     Forward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -275,7 +275,7 @@ enum Branching0fromItoH {
         >,
     ),
     Backward(
-        MeshedChannelsNine<
+        MeshedChannels<
             End,
             End,
             End,
@@ -288,7 +288,7 @@ enum Branching0fromItoH {
             NameH,
         >,
     ),
-    Done(MeshedChannelsNine<End, End, End, End, End, End, End, End, RoleEnd, NameH>),
+    Done(MeshedChannels<End, End, End, End, End, End, End, End, RoleEnd, NameH>),
 }
 type RecursHtoI = RecvTimed<Branching0fromItoH, 'a', 0, true, 10, true, ' ', End>;
 
@@ -301,7 +301,7 @@ type Choose0fromItoE = SendTimed<Branching0fromItoE, 'a', 0, true, 10, true, ' '
 type Choose0fromItoF = SendTimed<Branching0fromItoF, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromItoG = SendTimed<Branching0fromItoG, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromItoH = SendTimed<Branching0fromItoH, 'a', 0, true, 10, true, ' ', End>;
-type EndpointForwardI = MeshedChannelsNine<
+type EndpointForwardI = MeshedChannels<
     Choose0fromItoA,
     Choose0fromItoB,
     Choose0fromItoC,
@@ -313,7 +313,7 @@ type EndpointForwardI = MeshedChannelsNine<
     RoleH<RoleBroadcast>,
     NameI,
 >;
-type EndpointBackwardI = MeshedChannelsNine<
+type EndpointBackwardI = MeshedChannels<
     Choose0fromItoA,
     Choose0fromItoB,
     Choose0fromItoC,
@@ -328,22 +328,22 @@ type EndpointBackwardI = MeshedChannelsNine<
 
 // Creating the MP sessions
 type EndpointA =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursAtoI, RoleI<RoleEnd>, NameA>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursAtoI, RoleI<RoleEnd>, NameA>;
 type EndpointB =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursBtoI, RoleI<RoleEnd>, NameB>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursBtoI, RoleI<RoleEnd>, NameB>;
 type EndpointC =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursCtoI, RoleI<RoleEnd>, NameC>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursCtoI, RoleI<RoleEnd>, NameC>;
 type EndpointD =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursDtoI, RoleI<RoleEnd>, NameD>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursDtoI, RoleI<RoleEnd>, NameD>;
 type EndpointE =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursEtoI, RoleI<RoleEnd>, NameE>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursEtoI, RoleI<RoleEnd>, NameE>;
 type EndpointF =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursFtoI, RoleI<RoleEnd>, NameF>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursFtoI, RoleI<RoleEnd>, NameF>;
 type EndpointG =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursGtoI, RoleI<RoleEnd>, NameG>;
+    MeshedChannels<End, End, End, End, End, End, End, RecursGtoI, RoleI<RoleEnd>, NameG>;
 type EndpointH =
-    MeshedChannelsNine<End, End, End, End, End, End, End, RecursHtoI, RoleI<RoleEnd>, NameH>;
-type EndpointI = MeshedChannelsNine<
+    MeshedChannels<End, End, End, End, End, End, End, RecursHtoI, RoleI<RoleEnd>, NameH>;
+type EndpointI = MeshedChannels<
     Choose0fromItoA,
     Choose0fromItoB,
     Choose0fromItoC,

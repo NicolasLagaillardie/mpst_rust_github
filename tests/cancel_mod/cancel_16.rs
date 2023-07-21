@@ -9,12 +9,12 @@ use std::error::Error;
 // A --> B.B--> C
 
 // Create new MeshedChannels for three participants
-generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
+generate!("rec_and_cancel", MeshedChannels, A, B, C);
 
 // Types
-type EndpointA = MeshedChannelsThree<Send<i32, End>, End, RoleB<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsThree<Recv<i32, End>, Send<i32, End>, RoleA<RoleC<RoleEnd>>, NameB>;
-type EndpointC = MeshedChannelsThree<End, Recv<i32, End>, RoleB<RoleEnd>, NameC>;
+type EndpointA = MeshedChannels<Send<i32, End>, End, RoleB<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<Recv<i32, End>, Send<i32, End>, RoleA<RoleC<RoleEnd>>, NameB>;
+type EndpointC = MeshedChannels<End, Recv<i32, End>, RoleB<RoleEnd>, NameC>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     let s = s.send(random())?;

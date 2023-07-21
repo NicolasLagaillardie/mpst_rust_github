@@ -23,7 +23,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 3);
 
 // Create new roles
 // normal
@@ -42,32 +42,32 @@ create_multiple_normal_name!(NameA, NameB, NameC);
 create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 |
     send_mpst_a_to_c, RoleC, 2 | =>
-    NameA, MeshedChannelsThree, 3
+    NameA, MeshedChannels, 3
 );
 
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    NameB, MeshedChannelsThree, 3
+    NameB, MeshedChannels, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    NameA, MeshedChannelsThree, 3
+    NameA, MeshedChannels, 3
 );
 
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    NameB, MeshedChannelsThree, 3
+    NameB, MeshedChannels, 3
 );
 
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 1 | =>
-    NameC, MeshedChannelsThree, 3
+    NameC, MeshedChannels, 3
 );
 
 // Types
@@ -78,28 +78,28 @@ type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
 // B
 enum Branching0fromAtoB<N: marker::Send> {
     More(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<N, Send<N, RecursBtoA<N>>>,
             End,
             RoleA<RoleA<RoleA<RoleEnd>>>,
             NameB,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
 
 // C
 enum Branching0fromAtoC {
-    More(MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameC>),
+    More(MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
+    Done(MeshedChannels<End, End, RoleEnd, NameC>),
 }
 type RecursCtoA = Recv<Branching0fromAtoC, End>;
 
 // Creating the MP sessions
-type EndpointA<N> = MeshedChannelsThree<Choose0fromAtoB<N>, Choose0fromAtoC, RoleBroadcast, NameA>;
-type EndpointB<N> = MeshedChannelsThree<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
+type EndpointA<N> = MeshedChannels<Choose0fromAtoB<N>, Choose0fromAtoC, RoleBroadcast, NameA>;
+type EndpointB<N> = MeshedChannels<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
@@ -114,7 +114,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 Branching0fromAtoB::<i64>::Done,
                 Branching0fromAtoC::Done, =>
                 NameA,
-                MeshedChannelsThree,
+                MeshedChannels,
                 1
             );
 
@@ -126,7 +126,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
                 Branching0fromAtoB::<i64>::More,
                 Branching0fromAtoC::More, =>
                 NameA,
-                MeshedChannelsThree,
+                MeshedChannels,
                 1
             );
 

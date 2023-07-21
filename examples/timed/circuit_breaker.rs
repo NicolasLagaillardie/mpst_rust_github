@@ -15,12 +15,12 @@ use std::time::Instant;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-generate_timed!(MeshedChannelsFour, Api, Controller, Storage, User);
+generate_timed!(MeshedChannels, Api, Controller, Storage, User);
 
 // RoleApi
 enum Branching0fromCtoA {
     Up(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<
                 i32,
                 'a',
@@ -60,7 +60,7 @@ enum Branching0fromCtoA {
         >,
     ),
     Down(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<
                 i32,
                 'a',
@@ -87,7 +87,7 @@ enum Branching0fromCtoA {
         >,
     ),
     Close(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             End,
             SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
@@ -106,7 +106,7 @@ type Choose0fromCtoU = <Recurs0fromCtoU as Session>::Dual;
 // RoleStorage
 enum Branching0fromCtoS {
     Up(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<
                 i32,
                 'a',
@@ -124,7 +124,7 @@ enum Branching0fromCtoS {
         >,
     ),
     Down(
-        MeshedChannelsFour<
+        MeshedChannels<
             End,
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoS>,
             End,
@@ -133,7 +133,7 @@ enum Branching0fromCtoS {
         >,
     ),
     Close(
-        MeshedChannelsFour<
+        MeshedChannels<
             End,
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             End,
@@ -147,7 +147,7 @@ type Recurs0fromCtoS = RecvTimed<Branching0fromCtoS, 'a', 0, true, 10, true, ' '
 // RoleUser
 enum Branching0fromCtoU {
     Up(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<
                 i32,
                 'a',
@@ -165,7 +165,7 @@ enum Branching0fromCtoU {
         >,
     ),
     Down(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<
                 i32,
                 'a',
@@ -183,7 +183,7 @@ enum Branching0fromCtoU {
         >,
     ),
     Close(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
             End,
             End,
@@ -196,14 +196,14 @@ type Recurs0fromCtoU = RecvTimed<Branching0fromCtoU, 'a', 0, true, 10, true, ' '
 
 // Creating the MP sessions
 // RoleApi
-type EndpointApi0 = MeshedChannelsFour<
+type EndpointApi0 = MeshedChannels<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', Recurs0fromCtoA>,
     End,
     RecvTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     RoleUser<RoleController<RoleController<RoleEnd>>>,
     NameApi,
 >;
-type EndpointApiInit = MeshedChannelsFour<
+type EndpointApiInit = MeshedChannels<
     RecvTimed<
         i32,
         'a',
@@ -221,7 +221,7 @@ type EndpointApiInit = MeshedChannelsFour<
 >;
 
 // RoleController
-type EndpointControllerDown = MeshedChannelsFour<
+type EndpointControllerDown = MeshedChannels<
     SendTimed<
         i32,
         'a',
@@ -237,7 +237,7 @@ type EndpointControllerDown = MeshedChannelsFour<
     RoleApi<RoleStorage<RoleApi<RoleBroadcast>>>,
     NameController,
 >;
-type EndpointControllerUp = MeshedChannelsFour<
+type EndpointControllerUp = MeshedChannels<
     SendTimed<
         i32,
         'a',
@@ -253,21 +253,21 @@ type EndpointControllerUp = MeshedChannelsFour<
     RoleApi<RoleApi<RoleBroadcast>>,
     NameController,
 >;
-type EndpointControllerClose = MeshedChannelsFour<
+type EndpointControllerClose = MeshedChannels<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     End,
     RoleApi<RoleStorage<RoleEnd>>,
     NameController,
 >;
-type EndpointController0 = MeshedChannelsFour<
+type EndpointController0 = MeshedChannels<
     RecvTimed<i32, 'a', 0, true, 10, true, ' ', Choose0fromCtoA>,
     Choose0fromCtoS,
     Choose0fromCtoU,
     RoleApi<RoleBroadcast>,
     NameController,
 >;
-type EndpointControllerInit = MeshedChannelsFour<
+type EndpointControllerInit = MeshedChannels<
     SendTimed<
         i32,
         'a',
@@ -295,8 +295,8 @@ type EndpointControllerInit = MeshedChannelsFour<
 
 // RoleStorage
 type EndpointStorage0 =
-    MeshedChannelsFour<End, Recurs0fromCtoS, End, RoleController<RoleEnd>, NameStorage>;
-type EndpointStorageInit = MeshedChannelsFour<
+    MeshedChannels<End, Recurs0fromCtoS, End, RoleController<RoleEnd>, NameStorage>;
+type EndpointStorageInit = MeshedChannels<
     End,
     RecvTimed<
         i32,
@@ -314,7 +314,7 @@ type EndpointStorageInit = MeshedChannelsFour<
 >;
 
 // RoleUser
-type EndpointUserInit = MeshedChannelsFour<
+type EndpointUserInit = MeshedChannels<
     SendTimed<i32, 'a', 0, true, 10, true, ' ', End>,
     Recurs0fromCtoU,
     End,

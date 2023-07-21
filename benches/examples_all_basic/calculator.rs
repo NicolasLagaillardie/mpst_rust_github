@@ -19,7 +19,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 3);
 
 // Create new roles
 // normal
@@ -32,32 +32,32 @@ create_multiple_normal_name_short!(A, C, S);
 // C
 create_send_mpst_session_bundle!(
     send_mpst_c_to_s, RoleS, 2 | =>
-    NameC, MeshedChannelsThree, 3
+    NameC, MeshedChannels, 3
 );
 
 // S
 create_send_mpst_session_bundle!(
     send_mpst_s_to_c, RoleC, 2 | =>
-    NameS, MeshedChannelsThree, 3
+    NameS, MeshedChannels, 3
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_c, RoleC, 1 | =>
-    NameA, MeshedChannelsThree, 3
+    NameA, MeshedChannels, 3
 );
 
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_s, RoleS, 2 | =>
-    NameC, MeshedChannelsThree, 3
+    NameC, MeshedChannels, 3
 );
 
 // S
 create_recv_mpst_session_bundle!(
     recv_mpst_s_from_c, RoleC, 2 | =>
-    NameS, MeshedChannelsThree, 3
+    NameS, MeshedChannels, 3
 );
 
 // Types
@@ -67,22 +67,22 @@ type Choose0fromCtoS<N> = Send<Branching0fromCtoS<N>, End>;
 
 // A
 enum Branching0fromCtoA {
-    Sum(MeshedChannelsThree<End, End, RoleEnd, NameA>),
-    Diff(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    Sum(MeshedChannels<End, End, RoleEnd, NameA>),
+    Diff(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 
 // S
 enum Branching0fromCtoS<N: marker::Send> {
-    Sum(MeshedChannelsThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
-    Diff(MeshedChannelsThree<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
+    Sum(MeshedChannels<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
+    Diff(MeshedChannels<End, Send<N, End>, RoleC<RoleEnd>, NameS>),
 }
 
 // Creating the MP sessions
 // A
-type EndpointA = MeshedChannelsThree<Recv<Branching0fromCtoA, End>, End, RoleC<RoleEnd>, NameA>;
+type EndpointA = MeshedChannels<Recv<Branching0fromCtoA, End>, End, RoleC<RoleEnd>, NameA>;
 
 // C
-type EndpointC<N> = MeshedChannelsThree<
+type EndpointC<N> = MeshedChannels<
     Choose0fromCtoA,
     Send<N, Send<N, Choose0fromCtoS<N>>>,
     RoleS<RoleS<RoleBroadcast>>,
@@ -90,7 +90,7 @@ type EndpointC<N> = MeshedChannelsThree<
 >;
 
 // S
-type EndpointS<N> = MeshedChannelsThree<
+type EndpointS<N> = MeshedChannels<
     End,
     Recv<N, Recv<N, Recv<Branching0fromCtoS<N>, End>>>,
     RoleC<RoleC<RoleC<RoleEnd>>>,
@@ -121,7 +121,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             Branching0fromCtoA::Sum,
             Branching0fromCtoS::<i32>::Sum, =>
             NameC,
-            MeshedChannelsThree,
+            MeshedChannels,
             2
         );
 
@@ -134,7 +134,7 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
             Branching0fromCtoA::Diff,
             Branching0fromCtoS::<i32>::Diff, =>
             NameC,
-            MeshedChannelsThree,
+            MeshedChannels,
             2
         );
 

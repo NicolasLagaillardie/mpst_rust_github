@@ -17,13 +17,13 @@ use std::error::Error;
 use std::time::Instant;
 
 // Create new roles
-generate_timed!(MeshedChannelsThree, A, B, C);
+generate_timed!(MeshedChannels, A, B, C);
 
 // Types
 // A
 enum Branching0fromCtoA {
     Forward(
-        MeshedChannelsThree<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecursAtoC,
             RoleB<RoleC<RoleEnd>>,
@@ -31,21 +31,21 @@ enum Branching0fromCtoA {
         >,
     ),
     Backward(
-        MeshedChannelsThree<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecursAtoC,
             RoleB<RoleC<RoleEnd>>,
             NameA,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = RecvTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
 
 // B
 enum Branching0fromCtoB {
     Forward(
-        MeshedChannelsThree<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', RecursBtoC>,
             RoleA<RoleC<RoleC<RoleEnd>>>,
@@ -53,27 +53,27 @@ enum Branching0fromCtoB {
         >,
     ),
     Backward(
-        MeshedChannelsThree<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', RecursBtoC>,
             RoleC<RoleA<RoleC<RoleEnd>>>,
             NameB,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = RecvTimed<Branching0fromCtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // C
 type Choose0fromCtoA = SendTimed<Branching0fromCtoA, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromCtoB = SendTimed<Branching0fromCtoB, 'a', 0, true, 10, true, ' ', End>;
-type EndpointForwardC = MeshedChannelsThree<
+type EndpointForwardC = MeshedChannels<
     Choose0fromCtoA,
     RecvTimed<(), 'a', 0, true, 10, true, ' ', Choose0fromCtoB>,
     RoleB<RoleBroadcast>,
     NameC,
 >;
-type EndpointBackwardC = MeshedChannelsThree<
+type EndpointBackwardC = MeshedChannels<
     Choose0fromCtoA,
     SendTimed<(), 'a', 0, true, 10, true, ' ', Choose0fromCtoB>,
     RoleB<RoleBroadcast>,
@@ -81,9 +81,9 @@ type EndpointBackwardC = MeshedChannelsThree<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = MeshedChannels<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());

@@ -30,7 +30,7 @@ pub mod choose;
 /// ```
 /// use mpstthree::generate_timed;
 ///
-/// generate_timed!(MeshedChannelsThree, A, B, C);
+/// generate_timed!(MeshedChannels, A, B, C);
 /// ```
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "baking_timed")))]

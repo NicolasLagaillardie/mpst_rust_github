@@ -18,7 +18,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
+generate!("rec_and_cancel", MeshedChannels, A, C, S);
 
 // Types
 // A
@@ -27,19 +27,19 @@ type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
 
 // A
 enum Branching0fromCtoA {
-    Accept(MeshedChannelsThree<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
-    Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    Accept(MeshedChannels<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
+    Quit(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 
 // S
 enum Branching0fromCtoS {
-    Accept(MeshedChannelsThree<End, Recv<i32, Send<i32, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
-    Quit(MeshedChannelsThree<End, End, RoleEnd, NameS>),
+    Accept(MeshedChannels<End, Recv<i32, Send<i32, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
+    Quit(MeshedChannels<End, End, RoleEnd, NameS>),
 }
 
 // Creating the MP sessions
 // A
-type EndpointA = MeshedChannelsThree<
+type EndpointA = MeshedChannels<
     Send<i32, Recv<Branching0fromCtoA, End>>,
     Send<i32, Recv<i32, End>>,
     RoleS<RoleS<RoleC<RoleC<RoleEnd>>>>,
@@ -47,13 +47,13 @@ type EndpointA = MeshedChannelsThree<
 >;
 
 // C
-type EndpointC = MeshedChannelsThree<
+type EndpointC = MeshedChannels<
     Recv<i32, Choose0fromCtoA>,
     Recv<i32, Choose0fromCtoS>,
     RoleS<RoleA<RoleBroadcast>>,
     NameC,
 >;
-type EndpointCAccept = MeshedChannelsThree<
+type EndpointCAccept = MeshedChannels<
     Send<i32, End>,
     Send<i32, Recv<i32, End>>,
     RoleA<RoleS<RoleS<RoleEnd>>>,
@@ -61,7 +61,7 @@ type EndpointCAccept = MeshedChannelsThree<
 >;
 
 // S
-type EndpointS = MeshedChannelsThree<
+type EndpointS = MeshedChannels<
     Recv<i32, Send<i32, End>>,
     Send<i32, Recv<Branching0fromCtoS, End>>,
     RoleA<RoleA<RoleC<RoleC<RoleEnd>>>>,

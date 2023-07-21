@@ -17,7 +17,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-create_meshedchannels!(MeshedChannelsTwo, 2);
+create_meshedchannels!(MeshedChannels, 2);
 
 // Create Roles
 create_multiple_normal_role!(
@@ -34,7 +34,7 @@ create_send_mpst_cancel_bundle!(
     Logs,
     1 | =>
     NameController,
-    MeshedChannelsTwo,
+    MeshedChannels,
     2
 );
 create_send_mpst_cancel_bundle!(
@@ -42,7 +42,7 @@ create_send_mpst_cancel_bundle!(
     Controller,
     1 | =>
     NameLogs,
-    MeshedChannelsTwo,
+    MeshedChannels,
     2
 );
 
@@ -52,7 +52,7 @@ create_recv_mpst_session_bundle!(
     Logs,
     1 | =>
     NameController,
-    MeshedChannelsTwo,
+    MeshedChannels,
     2
 );
 create_recv_mpst_session_bundle!(
@@ -60,20 +60,20 @@ create_recv_mpst_session_bundle!(
     Controller,
     1 | =>
     NameLogs,
-    MeshedChannelsTwo,
+    MeshedChannels,
     2
 );
 
 // Create close function
-close_mpst!(close_mpst_multi, MeshedChannelsTwo, 2);
+close_mpst!(close_mpst_multi, MeshedChannels, 2);
 
 // Create fork function
-fork_mpst_multi!(fork_mpst, MeshedChannelsTwo, 2);
+fork_mpst_multi!(fork_mpst, MeshedChannels, 2);
 
 // Controller
 enum Branching0fromLtoC<N: marker::Send> {
-    Success(MeshedChannelsTwo<Recv<N, Recurs0fromCtoL<N>>, Logs<Logs<RoleEnd>>, NameController>),
-    Failure(MeshedChannelsTwo<Recv<N, Choose1fromCtoL<N>>, Logs<RoleBroadcast>, NameController>),
+    Success(MeshedChannels<Recv<N, Recurs0fromCtoL<N>>, Logs<Logs<RoleEnd>>, NameController>),
+    Failure(MeshedChannels<Recv<N, Choose1fromCtoL<N>>, Logs<RoleBroadcast>, NameController>),
 }
 
 type Recurs0fromCtoL<N> = Recv<Branching0fromLtoC<N>, End>;
@@ -84,24 +84,24 @@ type Choose1fromCtoL<N> = Send<Branching1fromCtoL<N>, End>;
 type Choose0fromLtoC<N> = Send<Branching0fromLtoC<N>, End>;
 
 enum Branching1fromCtoL<N: marker::Send> {
-    Restart(MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>),
-    Stop(MeshedChannelsTwo<Recv<N, End>, Controller<RoleEnd>, NameLogs>),
+    Restart(MeshedChannels<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>),
+    Stop(MeshedChannels<Recv<N, End>, Controller<RoleEnd>, NameLogs>),
 }
 
 type Recurs1fromLtoC<N> = Recv<Branching1fromCtoL<N>, End>;
 
 // Creating the MP sessions
 // Controller
-type EndpointController0<N> = MeshedChannelsTwo<Recurs0fromCtoL<N>, Logs<RoleEnd>, NameController>;
-type EndpointController1<N> = MeshedChannelsTwo<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
+type EndpointController0<N> = MeshedChannels<Recurs0fromCtoL<N>, Logs<RoleEnd>, NameController>;
+type EndpointController1<N> = MeshedChannels<Choose1fromCtoL<N>, RoleBroadcast, NameController>;
 type EndpointControllerInit<N> =
-    MeshedChannelsTwo<Send<N, Recurs0fromCtoL<N>>, Logs<Logs<RoleEnd>>, NameController>;
+    MeshedChannels<Send<N, Recurs0fromCtoL<N>>, Logs<Logs<RoleEnd>>, NameController>;
 
 // Logs
-type EndpointLogs0<N> = MeshedChannelsTwo<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
-type EndpointLogs1<N> = MeshedChannelsTwo<Recurs1fromLtoC<N>, Controller<RoleEnd>, NameLogs>;
+type EndpointLogs0<N> = MeshedChannels<Choose0fromLtoC<N>, RoleBroadcast, NameLogs>;
+type EndpointLogs1<N> = MeshedChannels<Recurs1fromLtoC<N>, Controller<RoleEnd>, NameLogs>;
 type EndpointLogsInit<N> =
-    MeshedChannelsTwo<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>;
+    MeshedChannels<Recv<N, Choose0fromLtoC<N>>, Controller<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
     let start: i32 = thread_rng().gen_range(5..100);
@@ -136,7 +136,7 @@ fn recurs_1_controller(s: EndpointController1<i32>, loops: i32) -> Result<(), Bo
                 s,
                 Branching1fromCtoL::Stop, =>
                 NameController,
-                MeshedChannelsTwo,
+                MeshedChannels,
                 2
             );
 
@@ -150,7 +150,7 @@ fn recurs_1_controller(s: EndpointController1<i32>, loops: i32) -> Result<(), Bo
                 s,
                 Branching1fromCtoL::Restart, =>
                 NameController,
-                MeshedChannelsTwo,
+                MeshedChannels,
                 2
             );
 
@@ -174,7 +174,7 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 s,
                 Branching0fromLtoC::Success, =>
                 NameLogs,
-                MeshedChannelsTwo,
+                MeshedChannels,
                 2
             );
 
@@ -188,7 +188,7 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
                 s,
                 Branching0fromLtoC::Failure, =>
                 NameLogs,
-                MeshedChannelsTwo,
+                MeshedChannels,
                 2
             );
 

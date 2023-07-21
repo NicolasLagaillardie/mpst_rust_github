@@ -24,7 +24,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsThree, 3);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 3);
 
 // Create new Roles
 // normal
@@ -37,40 +37,40 @@ create_multiple_normal_name_short!(Client, Other, Server);
 // CLIENT
 create_send_mpst_session_bundle!(
     send_mpst_client_to_server, RoleServer, 2 | =>
-    NameClient, MeshedChannelsThree, 3
+    NameClient, MeshedChannels, 3
 );
 
 // OTHER
 create_send_mpst_session_bundle!(
     send_mpst_other_to_server, RoleServer, 2 | =>
-    NameOther, MeshedChannelsThree, 3
+    NameOther, MeshedChannels, 3
 );
 
 // SERVER
 create_send_mpst_session_bundle!(
     send_mpst_server_to_client, RoleClient, 1 |
     send_mpst_server_to_other, RoleOther, 2 | =>
-    NameServer, MeshedChannelsThree, 3
+    NameServer, MeshedChannels, 3
 );
 
 // Create new recv functions and related types
 // CLIENT
 create_recv_mpst_session_bundle!(
     recv_mpst_client_from_server, RoleServer, 2 | =>
-    NameClient, MeshedChannelsThree, 3
+    NameClient, MeshedChannels, 3
 );
 
 // OTHER
 create_recv_mpst_session_bundle!(
     recv_mpst_other_from_server, RoleServer, 2 | =>
-    NameOther, MeshedChannelsThree, 3
+    NameOther, MeshedChannels, 3
 );
 
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_from_client, RoleClient, 1 |
     recv_mpst_server_from_other, RoleOther, 2 | =>
-    NameServer, MeshedChannelsThree, 3
+    NameServer, MeshedChannels, 3
 );
 
 // Types
@@ -80,15 +80,15 @@ type Choose0fromServerToOther = Send<Branching0fromServerToOther, End>;
 
 // CLIENT
 enum Branching0fromServerToClient {
-    Dummy(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
-    Query(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
+    Dummy(MeshedChannels<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
+    Query(MeshedChannels<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
 }
 
 // OTHER
 enum Branching0fromServerToOther {
-    Dummy(MeshedChannelsThree<End, Recv<(), End>, RoleServer<RoleEnd>, NameOther>),
+    Dummy(MeshedChannels<End, Recv<(), End>, RoleServer<RoleEnd>, NameOther>),
     Query(
-        MeshedChannelsThree<
+        MeshedChannels<
             End,
             Recv<(i32, i32), Send<(i32, i32), End>>,
             RoleServer<RoleServer<RoleEnd>>,
@@ -99,7 +99,7 @@ enum Branching0fromServerToOther {
 
 // Creating the MP sessions
 // CLIENT
-type EndpointClient = MeshedChannelsThree<
+type EndpointClient = MeshedChannels<
     End,
     Send<i32, Recv<Branching0fromServerToClient, End>>,
     RoleServer<RoleServer<RoleEnd>>,
@@ -107,7 +107,7 @@ type EndpointClient = MeshedChannelsThree<
 >;
 
 // OTHER
-type EndpointOther = MeshedChannelsThree<
+type EndpointOther = MeshedChannels<
     End,
     Recv<Branching0fromServerToOther, End>,
     RoleServer<RoleEnd>,
@@ -115,7 +115,7 @@ type EndpointOther = MeshedChannelsThree<
 >;
 
 // SERVER
-type EndpointServer = MeshedChannelsThree<
+type EndpointServer = MeshedChannels<
     Recv<i32, Choose0fromServerToClient>,
     Choose0fromServerToOther,
     RoleClient<RoleBroadcast>,
@@ -125,7 +125,7 @@ type EndpointServer = MeshedChannelsThree<
 choose_mpst_create_multi_to_all!(
     choose_mpst_server_to_all,
     NameServer,
-    MeshedChannelsThree,
+    MeshedChannels,
     3
 );
 

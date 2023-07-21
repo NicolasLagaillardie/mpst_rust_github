@@ -15,7 +15,7 @@ use std::fs::read_to_string;
 // Create the new MeshedChannels for three participants and the close and fork functions
 generate!(
     "rec_and_cancel",
-    MeshedChannelsThree,
+    MeshedChannels,
     Data,
     Handler,
     Regional
@@ -37,7 +37,7 @@ type Choose0fromRegionalToHandler = Send<Branching0fromRegionalToHandler, End>;
 // DATA
 enum Branching0fromRegionalToData {
     Loops(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<ZoneDataRequest, Send<ZoneDataResponse, End>>,
             Offer0fromRegionalToData,
             RoleHandler<RoleHandler<RoleRegional<RoleEnd>>>,
@@ -45,7 +45,7 @@ enum Branching0fromRegionalToData {
         >,
     ),
     Invalid(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<InvalidZone, Send<Received, End>>,
             End,
             RoleHandler<RoleHandler<RoleEnd>>,
@@ -58,7 +58,7 @@ type Offer0fromRegionalToData = Recv<Branching0fromRegionalToData, End>;
 // HANDLER
 enum Branching0fromRegionalToHandler {
     Loops(
-        MeshedChannelsThree<
+        MeshedChannels<
             Send<ZoneDataRequest, Recv<ZoneDataResponse, End>>,
             Recv<ZoneResponse, Send<FindNearestZone, Offer0fromRegionalToHandler>>,
             RoleRegional<RoleData<RoleData<RoleRegional<RoleRegional<RoleEnd>>>>>,
@@ -66,7 +66,7 @@ enum Branching0fromRegionalToHandler {
         >,
     ),
     Invalid(
-        MeshedChannelsThree<
+        MeshedChannels<
             Send<InvalidZone, Recv<Received, End>>,
             Recv<InvalidZone, End>,
             RoleRegional<RoleData<RoleData<RoleEnd>>>,
@@ -79,10 +79,10 @@ type Offer0fromRegionalToHandler = Recv<Branching0fromRegionalToHandler, End>;
 // Creating the MP sessions
 // DATA
 type EndpointData =
-    MeshedChannelsThree<End, Offer0fromRegionalToData, RoleRegional<RoleEnd>, NameData>;
+    MeshedChannels<End, Offer0fromRegionalToData, RoleRegional<RoleEnd>, NameData>;
 
 // HANDLER
-type EndpointHandler = MeshedChannelsThree<
+type EndpointHandler = MeshedChannels<
     End,
     Send<FindNearestZone, Offer0fromRegionalToHandler>,
     RoleRegional<RoleRegional<RoleEnd>>,
@@ -91,14 +91,14 @@ type EndpointHandler = MeshedChannelsThree<
 
 // REGIONAL
 type EndpointRegionalInvalid =
-    MeshedChannelsThree<End, Send<InvalidZone, End>, RoleHandler<RoleEnd>, NameRegional>;
-type EndpointRegionalLoops = MeshedChannelsThree<
+    MeshedChannels<End, Send<InvalidZone, End>, RoleHandler<RoleEnd>, NameRegional>;
+type EndpointRegionalLoops = MeshedChannels<
     Choose0fromRegionalToData,
     Send<ZoneResponse, Recv<FindNearestZone, Choose0fromRegionalToHandler>>,
     RoleHandler<RoleHandler<RoleBroadcast>>,
     NameRegional,
 >;
-type EndpointRegional = MeshedChannelsThree<
+type EndpointRegional = MeshedChannels<
     Choose0fromRegionalToData,
     Recv<FindNearestZone, Choose0fromRegionalToHandler>,
     RoleHandler<RoleBroadcast>,

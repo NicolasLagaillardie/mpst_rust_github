@@ -18,7 +18,7 @@ use std::error::Error;
 // Create new roles
 generate!(
     "recursive",
-    MeshedChannelsTwenty,
+    MeshedChannels,
     A,
     B,
     C,
@@ -45,7 +45,7 @@ generate!(
 // A
 enum Branching0fromTtoA {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             Send<(), End>,
             End,
             End,
@@ -70,7 +70,7 @@ enum Branching0fromTtoA {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             Recv<(), End>,
             End,
             End,
@@ -95,7 +95,7 @@ enum Branching0fromTtoA {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -125,7 +125,7 @@ type RecursAtoT = Recv<Branching0fromTtoA, End>;
 // B
 enum Branching0fromTtoB {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             Recv<(), End>,
             Send<(), End>,
             End,
@@ -150,7 +150,7 @@ enum Branching0fromTtoB {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             Send<(), End>,
             Recv<(), End>,
             End,
@@ -175,7 +175,7 @@ enum Branching0fromTtoB {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -205,7 +205,7 @@ type RecursBtoT = Recv<Branching0fromTtoB, End>;
 // C
 enum Branching0fromTtoC {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             Recv<(), End>,
             Send<(), End>,
@@ -230,7 +230,7 @@ enum Branching0fromTtoC {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             Send<(), End>,
             Recv<(), End>,
@@ -255,7 +255,7 @@ enum Branching0fromTtoC {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -285,7 +285,7 @@ type RecursCtoT = Recv<Branching0fromTtoC, End>;
 // D
 enum Branching0fromTtoD {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             Recv<(), End>,
@@ -310,7 +310,7 @@ enum Branching0fromTtoD {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             Send<(), End>,
@@ -335,7 +335,7 @@ enum Branching0fromTtoD {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -365,7 +365,7 @@ type RecursDtoT = Recv<Branching0fromTtoD, End>;
 // E
 enum Branching0fromTtoE {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -390,7 +390,7 @@ enum Branching0fromTtoE {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -415,7 +415,7 @@ enum Branching0fromTtoE {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -445,7 +445,7 @@ type RecursEtoT = Recv<Branching0fromTtoE, End>;
 // F
 enum Branching0fromTtoF {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -470,7 +470,7 @@ enum Branching0fromTtoF {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -495,7 +495,7 @@ enum Branching0fromTtoF {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -525,7 +525,7 @@ type RecursFtoT = Recv<Branching0fromTtoF, End>;
 // G
 enum Branching0fromTtoG {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -550,7 +550,7 @@ enum Branching0fromTtoG {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -575,7 +575,7 @@ enum Branching0fromTtoG {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -605,7 +605,7 @@ type RecursGtoT = Recv<Branching0fromTtoG, End>;
 // H
 enum Branching0fromTtoH {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -630,7 +630,7 @@ enum Branching0fromTtoH {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -655,7 +655,7 @@ enum Branching0fromTtoH {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -685,7 +685,7 @@ type RecursHtoT = Recv<Branching0fromTtoH, End>;
 // I
 enum Branching0fromTtoI {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -710,7 +710,7 @@ enum Branching0fromTtoI {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -735,7 +735,7 @@ enum Branching0fromTtoI {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -765,7 +765,7 @@ type RecursItoT = Recv<Branching0fromTtoI, End>;
 // J
 enum Branching0fromTtoJ {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -790,7 +790,7 @@ enum Branching0fromTtoJ {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -815,7 +815,7 @@ enum Branching0fromTtoJ {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -845,7 +845,7 @@ type RecursJtoT = Recv<Branching0fromTtoJ, End>;
 // K
 enum Branching0fromTtoK {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -870,7 +870,7 @@ enum Branching0fromTtoK {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -895,7 +895,7 @@ enum Branching0fromTtoK {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -925,7 +925,7 @@ type RecursKtoT = Recv<Branching0fromTtoK, End>;
 // L
 enum Branching0fromTtoL {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -950,7 +950,7 @@ enum Branching0fromTtoL {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -975,7 +975,7 @@ enum Branching0fromTtoL {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1005,7 +1005,7 @@ type RecursLtoT = Recv<Branching0fromTtoL, End>;
 // M
 enum Branching0fromTtoM {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1030,7 +1030,7 @@ enum Branching0fromTtoM {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1055,7 +1055,7 @@ enum Branching0fromTtoM {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1085,7 +1085,7 @@ type RecursMtoT = Recv<Branching0fromTtoM, End>;
 // N
 enum Branching0fromTtoN {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1110,7 +1110,7 @@ enum Branching0fromTtoN {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1135,7 +1135,7 @@ enum Branching0fromTtoN {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1165,7 +1165,7 @@ type RecursNtoT = Recv<Branching0fromTtoN, End>;
 // O
 enum Branching0fromTtoO {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1190,7 +1190,7 @@ enum Branching0fromTtoO {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1215,7 +1215,7 @@ enum Branching0fromTtoO {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1245,7 +1245,7 @@ type RecursOtoT = Recv<Branching0fromTtoO, End>;
 // P
 enum Branching0fromTtoP {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1270,7 +1270,7 @@ enum Branching0fromTtoP {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1295,7 +1295,7 @@ enum Branching0fromTtoP {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1325,7 +1325,7 @@ type RecursPtoT = Recv<Branching0fromTtoP, End>;
 // Q
 enum Branching0fromTtoQ {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1350,7 +1350,7 @@ enum Branching0fromTtoQ {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1375,7 +1375,7 @@ enum Branching0fromTtoQ {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1405,7 +1405,7 @@ type RecursQtoT = Recv<Branching0fromTtoQ, End>;
 // R
 enum Branching0fromTtoR {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1430,7 +1430,7 @@ enum Branching0fromTtoR {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1455,7 +1455,7 @@ enum Branching0fromTtoR {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1485,7 +1485,7 @@ type RecursRtoT = Recv<Branching0fromTtoR, End>;
 // S
 enum Branching0fromTtoS {
     Forward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1510,7 +1510,7 @@ enum Branching0fromTtoS {
         >,
     ),
     Backward(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1535,7 +1535,7 @@ enum Branching0fromTtoS {
         >,
     ),
     Done(
-        MeshedChannelsTwenty<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1582,7 +1582,7 @@ type Choose0fromTtoP = Send<Branching0fromTtoP, End>;
 type Choose0fromTtoQ = Send<Branching0fromTtoQ, End>;
 type Choose0fromTtoR = Send<Branching0fromTtoR, End>;
 type Choose0fromTtoS = Send<Branching0fromTtoS, End>;
-type EndpointForwardT = MeshedChannelsTwenty<
+type EndpointForwardT = MeshedChannels<
     Choose0fromTtoA,
     Choose0fromTtoB,
     Choose0fromTtoC,
@@ -1605,7 +1605,7 @@ type EndpointForwardT = MeshedChannelsTwenty<
     RoleS<RoleBroadcast>,
     NameT,
 >;
-type EndpointBackwardT = MeshedChannelsTwenty<
+type EndpointBackwardT = MeshedChannels<
     Choose0fromTtoA,
     Choose0fromTtoB,
     Choose0fromTtoC,
@@ -1630,7 +1630,7 @@ type EndpointBackwardT = MeshedChannelsTwenty<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwenty<
+type EndpointA = MeshedChannels<
     End,
     End,
     End,
@@ -1653,7 +1653,7 @@ type EndpointA = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameA,
 >;
-type EndpointB = MeshedChannelsTwenty<
+type EndpointB = MeshedChannels<
     End,
     End,
     End,
@@ -1676,7 +1676,7 @@ type EndpointB = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameB,
 >;
-type EndpointC = MeshedChannelsTwenty<
+type EndpointC = MeshedChannels<
     End,
     End,
     End,
@@ -1699,7 +1699,7 @@ type EndpointC = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameC,
 >;
-type EndpointD = MeshedChannelsTwenty<
+type EndpointD = MeshedChannels<
     End,
     End,
     End,
@@ -1722,7 +1722,7 @@ type EndpointD = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameD,
 >;
-type EndpointE = MeshedChannelsTwenty<
+type EndpointE = MeshedChannels<
     End,
     End,
     End,
@@ -1745,7 +1745,7 @@ type EndpointE = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameE,
 >;
-type EndpointF = MeshedChannelsTwenty<
+type EndpointF = MeshedChannels<
     End,
     End,
     End,
@@ -1768,7 +1768,7 @@ type EndpointF = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameF,
 >;
-type EndpointG = MeshedChannelsTwenty<
+type EndpointG = MeshedChannels<
     End,
     End,
     End,
@@ -1791,7 +1791,7 @@ type EndpointG = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameG,
 >;
-type EndpointH = MeshedChannelsTwenty<
+type EndpointH = MeshedChannels<
     End,
     End,
     End,
@@ -1814,7 +1814,7 @@ type EndpointH = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameH,
 >;
-type EndpointI = MeshedChannelsTwenty<
+type EndpointI = MeshedChannels<
     End,
     End,
     End,
@@ -1837,7 +1837,7 @@ type EndpointI = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameI,
 >;
-type EndpointJ = MeshedChannelsTwenty<
+type EndpointJ = MeshedChannels<
     End,
     End,
     End,
@@ -1860,7 +1860,7 @@ type EndpointJ = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameJ,
 >;
-type EndpointK = MeshedChannelsTwenty<
+type EndpointK = MeshedChannels<
     End,
     End,
     End,
@@ -1883,7 +1883,7 @@ type EndpointK = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameK,
 >;
-type EndpointL = MeshedChannelsTwenty<
+type EndpointL = MeshedChannels<
     End,
     End,
     End,
@@ -1906,7 +1906,7 @@ type EndpointL = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameL,
 >;
-type EndpointM = MeshedChannelsTwenty<
+type EndpointM = MeshedChannels<
     End,
     End,
     End,
@@ -1929,7 +1929,7 @@ type EndpointM = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameM,
 >;
-type EndpointN = MeshedChannelsTwenty<
+type EndpointN = MeshedChannels<
     End,
     End,
     End,
@@ -1952,7 +1952,7 @@ type EndpointN = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameN,
 >;
-type EndpointO = MeshedChannelsTwenty<
+type EndpointO = MeshedChannels<
     End,
     End,
     End,
@@ -1975,7 +1975,7 @@ type EndpointO = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameO,
 >;
-type EndpointP = MeshedChannelsTwenty<
+type EndpointP = MeshedChannels<
     End,
     End,
     End,
@@ -1998,7 +1998,7 @@ type EndpointP = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameP,
 >;
-type EndpointQ = MeshedChannelsTwenty<
+type EndpointQ = MeshedChannels<
     End,
     End,
     End,
@@ -2021,7 +2021,7 @@ type EndpointQ = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameQ,
 >;
-type EndpointR = MeshedChannelsTwenty<
+type EndpointR = MeshedChannels<
     End,
     End,
     End,
@@ -2044,7 +2044,7 @@ type EndpointR = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameR,
 >;
-type EndpointS = MeshedChannelsTwenty<
+type EndpointS = MeshedChannels<
     End,
     End,
     End,
@@ -2067,7 +2067,7 @@ type EndpointS = MeshedChannelsTwenty<
     RoleT<RoleEnd>,
     NameS,
 >;
-type EndpointT = MeshedChannelsTwenty<
+type EndpointT = MeshedChannels<
     Choose0fromTtoA,
     Choose0fromTtoB,
     Choose0fromTtoC,

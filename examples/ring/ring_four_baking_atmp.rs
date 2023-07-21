@@ -17,13 +17,13 @@ use std::time::Instant;
 static LOOPS: i64 = 100;
 
 // Create new roles
-generate_timed!(MeshedChannelsFour, A, B, C, D);
+generate_timed!(MeshedChannels, A, B, C, D);
 
 // Types
 // A
 enum Branching0fromDtoA {
     Forward(
-        MeshedChannelsFour<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
             RecursAtoD,
@@ -32,7 +32,7 @@ enum Branching0fromDtoA {
         >,
     ),
     Backward(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             End,
             RecursAtoD,
@@ -40,14 +40,14 @@ enum Branching0fromDtoA {
             NameA,
         >,
     ),
-    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoD = RecvTimed<Branching0fromDtoA, 'a', 0, true, 10, true, ' ', End>;
 
 // B
 enum Branching0fromDtoB {
     Forward(
-        MeshedChannelsFour<
+        MeshedChannels<
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecursBtoD,
@@ -56,7 +56,7 @@ enum Branching0fromDtoB {
         >,
     ),
     Backward(
-        MeshedChannelsFour<
+        MeshedChannels<
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecursBtoD,
@@ -64,14 +64,14 @@ enum Branching0fromDtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoD = RecvTimed<Branching0fromDtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // C
 enum Branching0fromDtoC {
     Forward(
-        MeshedChannelsFour<
+        MeshedChannels<
             End,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', End>,
             SendTimed<(), 'a', 0, true, 10, true, ' ', RecursCtoD>,
@@ -80,7 +80,7 @@ enum Branching0fromDtoC {
         >,
     ),
     Backward(
-        MeshedChannelsFour<
+        MeshedChannels<
             End,
             SendTimed<(), 'a', 0, true, 10, true, ' ', End>,
             RecvTimed<(), 'a', 0, true, 10, true, ' ', RecursCtoD>,
@@ -88,7 +88,7 @@ enum Branching0fromDtoC {
             NameC,
         >,
     ),
-    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannels<End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoD = RecvTimed<Branching0fromDtoC, 'a', 0, true, 10, true, ' ', End>;
 
@@ -96,14 +96,14 @@ type RecursCtoD = RecvTimed<Branching0fromDtoC, 'a', 0, true, 10, true, ' ', End
 type Choose0fromDtoA = SendTimed<Branching0fromDtoA, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromDtoB = SendTimed<Branching0fromDtoB, 'a', 0, true, 10, true, ' ', End>;
 type Choose0fromDtoC = SendTimed<Branching0fromDtoC, 'a', 0, true, 10, true, ' ', End>;
-type EndpointForwardD = MeshedChannelsFour<
+type EndpointForwardD = MeshedChannels<
     Choose0fromDtoA,
     Choose0fromDtoB,
     RecvTimed<(), 'a', 0, true, 10, true, ' ', Choose0fromDtoC>,
     RoleC<RoleBroadcast>,
     NameD,
 >;
-type EndpointBackwardD = MeshedChannelsFour<
+type EndpointBackwardD = MeshedChannels<
     Choose0fromDtoA,
     Choose0fromDtoB,
     SendTimed<(), 'a', 0, true, 10, true, ' ', Choose0fromDtoC>,
@@ -112,11 +112,11 @@ type EndpointBackwardD = MeshedChannelsFour<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsFour<End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsFour<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsFour<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
+type EndpointA = MeshedChannels<End, End, RecursAtoD, RoleD<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, RecursBtoD, RoleD<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, RecursCtoD, RoleD<RoleEnd>, NameC>;
 type EndpointD =
-    MeshedChannelsFour<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
+    MeshedChannels<Choose0fromDtoA, Choose0fromDtoB, Choose0fromDtoC, RoleBroadcast, NameD>;
 
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());

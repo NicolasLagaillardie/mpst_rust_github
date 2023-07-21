@@ -21,7 +21,7 @@
 /// ```
 /// use mpstthree::generate;
 ///
-/// generate!("basic", MeshedChannelsThree, A, B, C);
+/// generate!("basic", MeshedChannels, A, B, C);
 /// ```
 ///
 /// ## Recursive
@@ -40,7 +40,7 @@
 /// ```
 /// use mpstthree::generate;
 ///
-/// generate!("recursive", MeshedChannelsThree, A, B, C);
+/// generate!("recursive", MeshedChannels, A, B, C);
 /// ```
 ///
 /// ## Cancel
@@ -51,7 +51,7 @@
 /// ```
 /// use mpstthree::generate;
 ///
-/// generate!("cancel", MeshedChannelsThree, A, B, C);
+/// generate!("cancel", MeshedChannels, A, B, C);
 /// ```
 ///
 /// ## Rec and Cancel
@@ -70,7 +70,7 @@
 /// ```
 /// use mpstthree::generate;
 ///
-/// generate!("rec_and_cancel", MeshedChannelsThree, A, B, C);
+/// generate!("rec_and_cancel", MeshedChannels, A, B, C);
 /// ```
 ///
 /// ## Interleaved
@@ -84,11 +84,11 @@
 ///
 /// generate!(
 ///     "interleaved",
-///     MeshedChannelsBarber,
+///     MeshedChannels,
 ///     Barber,
 ///     ShopBarber,
 ///     2,
-///     MeshedChannelsClient,
+///     MeshedChannels,
 ///     Client,
 ///     ShopClient,
 ///     2,

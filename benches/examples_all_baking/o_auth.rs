@@ -17,7 +17,7 @@ use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
 
-generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
+generate!("rec_and_cancel", MeshedChannels, A, C, S);
 
 // Payloads
 struct Start;
@@ -39,7 +39,7 @@ type Choose0fromAtoS = <Choice0fromStoA as Session>::Dual;
 // C
 enum Branching0fromAtoC {
     Success(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<Success, End>,
             Send<Success, Recv<Token, End>>,
             RoleA<RoleS<RoleS<RoleEnd>>>,
@@ -47,7 +47,7 @@ enum Branching0fromAtoC {
         >,
     ),
     Fail(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<Fail, End>,
             Send<Fail, Recv<Received, End>>,
             RoleA<RoleS<RoleS<RoleEnd>>>,
@@ -60,27 +60,27 @@ type Choice0fromCtoA = Recv<Branching0fromAtoC, End>;
 // S
 enum Branching0fromAtoS {
     Success(
-        MeshedChannelsThree<
+        MeshedChannels<
             Send<Token, Recv<Token, End>>,
             Recv<Success, Send<Token, End>>,
             RoleC<RoleA<RoleA<RoleC<RoleEnd>>>>,
             NameS,
         >,
     ),
-    Fail(MeshedChannelsThree<End, Recv<Fail, Send<Received, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
+    Fail(MeshedChannels<End, Recv<Fail, Send<Received, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
 }
 type Choice0fromStoA = Recv<Branching0fromAtoS, End>;
 
 // Creating the MP sessions
 // A
-type EndpointASuccess = MeshedChannelsThree<
+type EndpointASuccess = MeshedChannels<
     Send<Success, End>,
     Recv<Token, Send<Token, End>>,
     RoleC<RoleS<RoleS<RoleEnd>>>,
     NameA,
 >;
-type EndpointAFail = MeshedChannelsThree<Send<Fail, End>, End, RoleC<RoleEnd>, NameA>;
-type EndpointA = MeshedChannelsThree<
+type EndpointAFail = MeshedChannels<Send<Fail, End>, End, RoleC<RoleEnd>, NameA>;
+type EndpointA = MeshedChannels<
     Recv<Login, Send<Auth, Recv<Password, Choose0fromAtoC>>>,
     Choose0fromAtoS,
     RoleC<RoleC<RoleC<RoleBroadcast>>>,
@@ -88,7 +88,7 @@ type EndpointA = MeshedChannelsThree<
 >;
 
 // C
-type EndpointC = MeshedChannelsThree<
+type EndpointC = MeshedChannels<
     Send<Login, Recv<Auth, Send<Password, Choice0fromCtoA>>>,
     Send<Start, Recv<Redirect, End>>,
     RoleS<RoleS<RoleA<RoleA<RoleA<RoleA<RoleEnd>>>>>>,
@@ -96,7 +96,7 @@ type EndpointC = MeshedChannelsThree<
 >;
 
 // S
-type EndpointS = MeshedChannelsThree<
+type EndpointS = MeshedChannels<
     Choice0fromStoA,
     Recv<Start, Send<Redirect, End>>,
     RoleC<RoleC<RoleA<RoleEnd>>>,

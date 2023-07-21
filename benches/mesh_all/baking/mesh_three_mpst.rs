@@ -16,7 +16,7 @@ use std::error::Error;
 // use std::time::Duration;
 
 // Create new roles
-generate!("recursive", MeshedChannelsThree, A, B, C);
+generate!("recursive", MeshedChannels, A, B, C);
 
 // Types
 // Send/Recv
@@ -30,22 +30,22 @@ type R2C<R> = RoleC<RoleC<R>>;
 
 // A
 enum Branching0fromCtoA {
-    More(MeshedChannelsThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    More(MeshedChannels<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
+    Done(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<Branching0fromCtoA, End>;
 
 // B
 enum Branching0fromCtoB {
-    More(MeshedChannelsThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    More(MeshedChannels<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = Recv<Branching0fromCtoB, End>;
 
 // C
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
-type EndpointMoreC = MeshedChannelsThree<
+type EndpointMoreC = MeshedChannels<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
     R2A<R2B<RoleBroadcast>>,
@@ -53,9 +53,9 @@ type EndpointMoreC = MeshedChannelsThree<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = MeshedChannels<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {

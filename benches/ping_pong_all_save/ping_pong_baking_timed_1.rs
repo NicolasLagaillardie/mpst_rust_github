@@ -15,7 +15,7 @@ use std::time::Instant;
 // use std::time::Duration;
 
 // Create new roles
-generate_timed!(MeshedChannelsTwo, A, B);
+generate_timed!(MeshedChannels, A, B);
 
 // Types
 // A
@@ -24,7 +24,7 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 // B
 enum Branching0fromAtoB {
     More(
-        MeshedChannelsTwo<
+        MeshedChannels<
             RecvTimed<
                 (),
                 'a',
@@ -39,13 +39,13 @@ enum Branching0fromAtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, RoleEnd, NameB>),
 }
 type RecursBtoA = RecvTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwo<Choose0fromAtoB, RoleBroadcast, NameA>;
-type EndpointB = MeshedChannelsTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
+type EndpointA = MeshedChannels<Choose0fromAtoB, RoleBroadcast, NameA>;
+type EndpointB = MeshedChannels<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {

@@ -18,14 +18,14 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants
-generate!("rec_and_cancel", MeshedChannelsTwo, Controller, Logs);
+generate!("rec_and_cancel", MeshedChannels, Controller, Logs);
 
 // RoleController
 enum Branching0fromLtoC {
     Success(
-        MeshedChannelsTwo<Recv<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>,
+        MeshedChannels<Recv<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>,
     ),
-    Failure(MeshedChannelsTwo<Recv<i32, Choose1fromCtoL>, RoleLogs<RoleBroadcast>, NameController>),
+    Failure(MeshedChannels<Recv<i32, Choose1fromCtoL>, RoleLogs<RoleBroadcast>, NameController>),
 }
 
 type Recurs0fromCtoL = Recv<Branching0fromLtoC, End>;
@@ -36,34 +36,34 @@ type Choose1fromCtoL = Send<Branching1fromCtoL, End>;
 type Choose0fromLtoC = Send<Branching0fromLtoC, End>;
 
 enum Branching1fromCtoL {
-    Restart(MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>),
-    Stop(MeshedChannelsTwo<Recv<i32, End>, RoleController<RoleEnd>, NameLogs>),
+    Restart(MeshedChannels<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>),
+    Stop(MeshedChannels<Recv<i32, End>, RoleController<RoleEnd>, NameLogs>),
 }
 
 type Recurs1fromLtoC = Recv<Branching1fromCtoL, End>;
 
 // Creating the MP sessions
 // RoleController
-type EndpointController1Stop = MeshedChannelsTwo<Send<i32, End>, RoleLogs<RoleEnd>, NameController>;
+type EndpointController1Stop = MeshedChannels<Send<i32, End>, RoleLogs<RoleEnd>, NameController>;
 type EndpointController1Restart =
-    MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
-type EndpointController0 = MeshedChannelsTwo<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameController>;
-type EndpointController1 = MeshedChannelsTwo<Choose1fromCtoL, RoleBroadcast, NameController>;
+    MeshedChannels<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
+type EndpointController0 = MeshedChannels<Recurs0fromCtoL, RoleLogs<RoleEnd>, NameController>;
+type EndpointController1 = MeshedChannels<Choose1fromCtoL, RoleBroadcast, NameController>;
 type EndpointControllerInit =
-    MeshedChannelsTwo<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
+    MeshedChannels<Send<i32, Recurs0fromCtoL>, RoleLogs<RoleLogs<RoleEnd>>, NameController>;
 
 // RoleLogs
 type EndpointLogs0Success =
-    MeshedChannelsTwo<Send<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
-type EndpointLogs0Failure = MeshedChannelsTwo<
+    MeshedChannels<Send<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
+type EndpointLogs0Failure = MeshedChannels<
     Send<i32, Recurs1fromLtoC>,
     RoleController<RoleController<RoleEnd>>,
     NameLogs,
 >;
-type EndpointLogs0 = MeshedChannelsTwo<Choose0fromLtoC, RoleBroadcast, NameLogs>;
-type EndpointLogs1 = MeshedChannelsTwo<Recurs1fromLtoC, RoleController<RoleEnd>, NameLogs>;
+type EndpointLogs0 = MeshedChannels<Choose0fromLtoC, RoleBroadcast, NameLogs>;
+type EndpointLogs1 = MeshedChannels<Recurs1fromLtoC, RoleController<RoleEnd>, NameLogs>;
 type EndpointLogsInit =
-    MeshedChannelsTwo<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
+    MeshedChannels<Recv<i32, Choose0fromLtoC>, RoleController<RoleBroadcast>, NameLogs>;
 
 fn endpoint_controller(s: EndpointControllerInit) -> Result<(), Box<dyn Error>> {
     let start: i32 = thread_rng().gen_range(5..100);

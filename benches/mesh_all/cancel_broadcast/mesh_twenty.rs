@@ -21,7 +21,7 @@ use std::error::Error;
 // use std::time::Duration;
 
 // Create the new MeshedChannels for twenty participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwentyOne, 21);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 21);
 
 // Create new roles
 // normal
@@ -56,7 +56,7 @@ create_send_check_cancel_bundle!(
     send_mpst_a_to_r, RoleR, 18 |
     send_mpst_a_to_s, RoleS, 19 |
     send_mpst_a_to_t, RoleT, 20 | =>
-    NameA, MeshedChannelsTwentyOne, 21
+    NameA, MeshedChannels, 21
 );
 
 // B
@@ -80,7 +80,7 @@ create_send_check_cancel_bundle!(
     send_mpst_b_to_r, RoleR, 18 |
     send_mpst_b_to_s, RoleS, 19 |
     send_mpst_b_to_t, RoleT, 20 | =>
-    NameB, MeshedChannelsTwentyOne, 21
+    NameB, MeshedChannels, 21
 );
 
 // C
@@ -104,7 +104,7 @@ create_send_check_cancel_bundle!(
     send_mpst_c_to_r, RoleR, 18 |
     send_mpst_c_to_s, RoleS, 19 |
     send_mpst_c_to_t, RoleT, 20 | =>
-    NameC, MeshedChannelsTwentyOne, 21
+    NameC, MeshedChannels, 21
 );
 
 // D
@@ -128,7 +128,7 @@ create_send_check_cancel_bundle!(
     send_mpst_d_to_r, RoleR, 18 |
     send_mpst_d_to_s, RoleS, 19 |
     send_mpst_d_to_t, RoleT, 20 | =>
-    NameD, MeshedChannelsTwentyOne, 21
+    NameD, MeshedChannels, 21
 );
 
 // E
@@ -152,7 +152,7 @@ create_send_check_cancel_bundle!(
     send_mpst_e_to_r, RoleR, 18 |
     send_mpst_e_to_s, RoleS, 19 |
     send_mpst_e_to_t, RoleT, 20 | =>
-    NameE, MeshedChannelsTwentyOne, 21
+    NameE, MeshedChannels, 21
 );
 
 // F
@@ -176,7 +176,7 @@ create_send_check_cancel_bundle!(
     send_mpst_f_to_r, RoleR, 18 |
     send_mpst_f_to_s, RoleS, 19 |
     send_mpst_f_to_t, RoleT, 20 | =>
-    NameF, MeshedChannelsTwentyOne, 21
+    NameF, MeshedChannels, 21
 );
 
 // G
@@ -200,7 +200,7 @@ create_send_check_cancel_bundle!(
     send_mpst_g_to_r, RoleR, 18 |
     send_mpst_g_to_s, RoleS, 19 |
     send_mpst_g_to_t, RoleT, 20 | =>
-    NameG, MeshedChannelsTwentyOne, 21
+    NameG, MeshedChannels, 21
 );
 
 // H
@@ -224,7 +224,7 @@ create_send_check_cancel_bundle!(
     send_mpst_h_to_r, RoleR, 18 |
     send_mpst_h_to_s, RoleS, 19 |
     send_mpst_h_to_t, RoleT, 20 | =>
-    NameH, MeshedChannelsTwentyOne, 21
+    NameH, MeshedChannels, 21
 );
 
 // I
@@ -248,7 +248,7 @@ create_send_check_cancel_bundle!(
     send_mpst_i_to_r, RoleR, 18 |
     send_mpst_i_to_s, RoleS, 19 |
     send_mpst_i_to_t, RoleT, 20 | =>
-    NameI, MeshedChannelsTwentyOne, 21
+    NameI, MeshedChannels, 21
 );
 
 // J
@@ -272,7 +272,7 @@ create_send_check_cancel_bundle!(
     send_mpst_j_to_r, RoleR, 18 |
     send_mpst_j_to_s, RoleS, 19 |
     send_mpst_j_to_t, RoleT, 20 | =>
-    NameJ, MeshedChannelsTwentyOne, 21
+    NameJ, MeshedChannels, 21
 );
 
 // K
@@ -296,7 +296,7 @@ create_send_check_cancel_bundle!(
     send_mpst_k_to_r, RoleR, 18 |
     send_mpst_k_to_s, RoleS, 19 |
     send_mpst_k_to_t, RoleT, 20 | =>
-    NameK, MeshedChannelsTwentyOne, 21
+    NameK, MeshedChannels, 21
 );
 
 // L
@@ -320,7 +320,7 @@ create_send_check_cancel_bundle!(
     send_mpst_l_to_r, RoleR, 18 |
     send_mpst_l_to_s, RoleS, 19 |
     send_mpst_l_to_t, RoleT, 20 | =>
-    NameL, MeshedChannelsTwentyOne, 21
+    NameL, MeshedChannels, 21
 );
 
 // M
@@ -344,7 +344,7 @@ create_send_check_cancel_bundle!(
     send_mpst_m_to_r, RoleR, 18 |
     send_mpst_m_to_s, RoleS, 19 |
     send_mpst_m_to_t, RoleT, 20 | =>
-    NameM, MeshedChannelsTwentyOne, 21
+    NameM, MeshedChannels, 21
 );
 
 // N
@@ -368,7 +368,7 @@ create_send_check_cancel_bundle!(
     send_mpst_n_to_r, RoleR, 18 |
     send_mpst_n_to_s, RoleS, 19 |
     send_mpst_n_to_t, RoleT, 20 | =>
-    NameN, MeshedChannelsTwentyOne, 21
+    NameN, MeshedChannels, 21
 );
 
 // O
@@ -392,7 +392,7 @@ create_send_check_cancel_bundle!(
     send_mpst_o_to_r, RoleR, 18 |
     send_mpst_o_to_s, RoleS, 19 |
     send_mpst_o_to_t, RoleT, 20 | =>
-    NameO, MeshedChannelsTwentyOne, 21
+    NameO, MeshedChannels, 21
 );
 
 // P
@@ -416,7 +416,7 @@ create_send_check_cancel_bundle!(
     send_mpst_p_to_r, RoleR, 18 |
     send_mpst_p_to_s, RoleS, 19 |
     send_mpst_p_to_t, RoleT, 20 | =>
-    NameP, MeshedChannelsTwentyOne, 21
+    NameP, MeshedChannels, 21
 );
 
 // Q
@@ -440,7 +440,7 @@ create_send_check_cancel_bundle!(
     send_mpst_q_to_r, RoleR, 18 |
     send_mpst_q_to_s, RoleS, 19 |
     send_mpst_q_to_t, RoleT, 20 | =>
-    NameQ, MeshedChannelsTwentyOne, 21
+    NameQ, MeshedChannels, 21
 );
 
 // R
@@ -464,7 +464,7 @@ create_send_check_cancel_bundle!(
     send_mpst_r_to_q, RoleQ, 18 |
     send_mpst_r_to_s, RoleS, 19 |
     send_mpst_r_to_t, RoleT, 20 | =>
-    NameR, MeshedChannelsTwentyOne, 21
+    NameR, MeshedChannels, 21
 );
 
 // S
@@ -488,7 +488,7 @@ create_send_check_cancel_bundle!(
     send_mpst_s_to_q, RoleQ, 18 |
     send_mpst_s_to_r, RoleR, 19 |
     send_mpst_s_to_t, RoleT, 20 | =>
-    NameS, MeshedChannelsTwentyOne, 21
+    NameS, MeshedChannels, 21
 );
 
 // T
@@ -512,7 +512,7 @@ create_send_check_cancel_bundle!(
     send_mpst_t_to_q, RoleQ, 18 |
     send_mpst_t_to_r, RoleR, 19 |
     send_mpst_t_to_s, RoleS, 20 | =>
-    NameT, MeshedChannelsTwentyOne, 21
+    NameT, MeshedChannels, 21
 );
 
 // Create new recv functions and related types
@@ -537,7 +537,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_a_from_r, RoleR, 18 |
     recv_mpst_a_from_s, RoleS, 19 |
     recv_mpst_a_from_t, RoleT, 20 | =>
-    NameA, MeshedChannelsTwentyOne, 21
+    NameA, MeshedChannels, 21
 );
 
 // B
@@ -561,7 +561,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_b_from_r, RoleR, 18 |
     recv_mpst_b_from_s, RoleS, 19 |
     recv_mpst_b_from_t, RoleT, 20 | =>
-    NameB, MeshedChannelsTwentyOne, 21
+    NameB, MeshedChannels, 21
 );
 
 // C
@@ -585,7 +585,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_c_from_r, RoleR, 18 |
     recv_mpst_c_from_s, RoleS, 19 |
     recv_mpst_c_from_t, RoleT, 20 | =>
-    NameC, MeshedChannelsTwentyOne, 21
+    NameC, MeshedChannels, 21
 );
 
 // D
@@ -609,7 +609,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_d_from_r, RoleR, 18 |
     recv_mpst_d_from_s, RoleS, 19 |
     recv_mpst_d_from_t, RoleT, 20 | =>
-    NameD, MeshedChannelsTwentyOne, 21
+    NameD, MeshedChannels, 21
 );
 
 // E
@@ -633,7 +633,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_e_from_r, RoleR, 18 |
     recv_mpst_e_from_s, RoleS, 19 |
     recv_mpst_e_from_t, RoleT, 20 | =>
-    NameE, MeshedChannelsTwentyOne, 21
+    NameE, MeshedChannels, 21
 );
 
 // F
@@ -657,7 +657,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_f_from_r, RoleR, 18 |
     recv_mpst_f_from_s, RoleS, 19 |
     recv_mpst_f_from_t, RoleT, 20 | =>
-    NameF, MeshedChannelsTwentyOne, 21
+    NameF, MeshedChannels, 21
 );
 
 // G
@@ -681,7 +681,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_g_from_r, RoleR, 18 |
     recv_mpst_g_from_s, RoleS, 19 |
     recv_mpst_g_from_t, RoleT, 20 | =>
-    NameG, MeshedChannelsTwentyOne, 21
+    NameG, MeshedChannels, 21
 );
 
 // H
@@ -705,7 +705,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_h_from_r, RoleR, 18 |
     recv_mpst_h_from_s, RoleS, 19 |
     recv_mpst_h_from_t, RoleT, 20 | =>
-    NameH, MeshedChannelsTwentyOne, 21
+    NameH, MeshedChannels, 21
 );
 
 // I
@@ -729,7 +729,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_i_from_r, RoleR, 18 |
     recv_mpst_i_from_s, RoleS, 19 |
     recv_mpst_i_from_t, RoleT, 20 | =>
-    NameI, MeshedChannelsTwentyOne, 21
+    NameI, MeshedChannels, 21
 );
 
 // J
@@ -753,7 +753,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_j_from_r, RoleR, 18 |
     recv_mpst_j_from_s, RoleS, 19 |
     recv_mpst_j_from_t, RoleT, 20 | =>
-    NameJ, MeshedChannelsTwentyOne, 21
+    NameJ, MeshedChannels, 21
 );
 
 // K
@@ -777,7 +777,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_k_from_r, RoleR, 18 |
     recv_mpst_k_from_s, RoleS, 19 |
     recv_mpst_k_from_t, RoleT, 20 | =>
-    NameK, MeshedChannelsTwentyOne, 21
+    NameK, MeshedChannels, 21
 );
 
 // L
@@ -801,7 +801,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_l_from_r, RoleR, 18 |
     recv_mpst_l_from_s, RoleS, 19 |
     recv_mpst_l_from_t, RoleT, 20 | =>
-    NameL, MeshedChannelsTwentyOne, 21
+    NameL, MeshedChannels, 21
 );
 
 // M
@@ -825,7 +825,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_m_from_r, RoleR, 18 |
     recv_mpst_m_from_s, RoleS, 19 |
     recv_mpst_m_from_t, RoleT, 20 | =>
-    NameM, MeshedChannelsTwentyOne, 21
+    NameM, MeshedChannels, 21
 );
 
 // N
@@ -849,7 +849,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_n_from_r, RoleR, 18 |
     recv_mpst_n_from_s, RoleS, 19 |
     recv_mpst_n_from_t, RoleT, 20 | =>
-    NameN, MeshedChannelsTwentyOne, 21
+    NameN, MeshedChannels, 21
 );
 
 // O
@@ -873,7 +873,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_o_from_r, RoleR, 18 |
     recv_mpst_o_from_s, RoleS, 19 |
     recv_mpst_o_from_t, RoleT, 20 | =>
-    NameO, MeshedChannelsTwentyOne, 21
+    NameO, MeshedChannels, 21
 );
 
 // P
@@ -897,7 +897,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_p_from_r, RoleR, 18 |
     recv_mpst_p_from_s, RoleS, 19 |
     recv_mpst_p_from_t, RoleT, 20 | =>
-    NameP, MeshedChannelsTwentyOne, 21
+    NameP, MeshedChannels, 21
 );
 
 // Q
@@ -921,7 +921,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_q_from_r, RoleR, 18 |
     recv_mpst_q_from_s, RoleS, 19 |
     recv_mpst_q_from_t, RoleT, 20 | =>
-    NameQ, MeshedChannelsTwentyOne, 21
+    NameQ, MeshedChannels, 21
 );
 
 // R
@@ -945,7 +945,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_r_from_q, RoleQ, 18 |
     recv_mpst_r_from_s, RoleS, 19 |
     recv_mpst_r_from_t, RoleT, 20 | =>
-    NameR, MeshedChannelsTwentyOne, 21
+    NameR, MeshedChannels, 21
 );
 
 // S
@@ -969,7 +969,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_s_from_q, RoleQ, 18 |
     recv_mpst_s_from_r, RoleR, 19 |
     recv_mpst_s_from_t, RoleT, 20 | =>
-    NameS, MeshedChannelsTwentyOne, 21
+    NameS, MeshedChannels, 21
 );
 
 // T
@@ -993,7 +993,7 @@ create_recv_mpst_session_bundle!(
     recv_mpst_t_from_q, RoleQ, 18 |
     recv_mpst_t_from_r, RoleR, 19 |
     recv_mpst_t_from_s, RoleS, 20 | =>
-    NameT, MeshedChannelsTwentyOne, 21
+    NameT, MeshedChannels, 21
 );
 
 // Types
@@ -1026,7 +1026,7 @@ type R2T<R> = RoleT<RoleT<R>>;
 // A
 enum Branching0fromTtoA {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             RS,
             RS,
@@ -1092,7 +1092,7 @@ enum Branching0fromTtoA {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1123,7 +1123,7 @@ type RecursAtoT = Recv<(End, Branching0fromTtoA), End>;
 // B
 enum Branching0fromTtoB {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             RS,
@@ -1189,7 +1189,7 @@ enum Branching0fromTtoB {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1220,7 +1220,7 @@ type RecursBtoT = Recv<(End, Branching0fromTtoB), End>;
 // C
 enum Branching0fromTtoC {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1286,7 +1286,7 @@ enum Branching0fromTtoC {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1317,7 +1317,7 @@ type RecursCtoT = Recv<(End, Branching0fromTtoC), End>;
 // D
 enum Branching0fromTtoD {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1383,7 +1383,7 @@ enum Branching0fromTtoD {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1414,7 +1414,7 @@ type RecursDtoT = Recv<(End, Branching0fromTtoD), End>;
 // E
 enum Branching0fromTtoE {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1480,7 +1480,7 @@ enum Branching0fromTtoE {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1511,7 +1511,7 @@ type RecursEtoT = Recv<(End, Branching0fromTtoE), End>;
 // F
 enum Branching0fromTtoF {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1577,7 +1577,7 @@ enum Branching0fromTtoF {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1608,7 +1608,7 @@ type RecursFtoT = Recv<(End, Branching0fromTtoF), End>;
 // G
 enum Branching0fromTtoG {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1674,7 +1674,7 @@ enum Branching0fromTtoG {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1705,7 +1705,7 @@ type RecursGtoT = Recv<(End, Branching0fromTtoG), End>;
 // H
 enum Branching0fromTtoH {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1771,7 +1771,7 @@ enum Branching0fromTtoH {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1802,7 +1802,7 @@ type RecursHtoT = Recv<(End, Branching0fromTtoH), End>;
 // I
 enum Branching0fromTtoI {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1868,7 +1868,7 @@ enum Branching0fromTtoI {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1899,7 +1899,7 @@ type RecursItoT = Recv<(End, Branching0fromTtoI), End>;
 // J
 enum Branching0fromTtoJ {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -1965,7 +1965,7 @@ enum Branching0fromTtoJ {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -1996,7 +1996,7 @@ type RecursJtoT = Recv<(End, Branching0fromTtoJ), End>;
 // K
 enum Branching0fromTtoK {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2062,7 +2062,7 @@ enum Branching0fromTtoK {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2093,7 +2093,7 @@ type RecursKtoT = Recv<(End, Branching0fromTtoK), End>;
 // L
 enum Branching0fromTtoL {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2159,7 +2159,7 @@ enum Branching0fromTtoL {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2190,7 +2190,7 @@ type RecursLtoT = Recv<(End, Branching0fromTtoL), End>;
 // M
 enum Branching0fromTtoM {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2256,7 +2256,7 @@ enum Branching0fromTtoM {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2287,7 +2287,7 @@ type RecursMtoT = Recv<(End, Branching0fromTtoM), End>;
 // N
 enum Branching0fromTtoN {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2353,7 +2353,7 @@ enum Branching0fromTtoN {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2384,7 +2384,7 @@ type RecursNtoT = Recv<(End, Branching0fromTtoN), End>;
 // O
 enum Branching0fromTtoO {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2450,7 +2450,7 @@ enum Branching0fromTtoO {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2481,7 +2481,7 @@ type RecursOtoT = Recv<(End, Branching0fromTtoO), End>;
 // P
 enum Branching0fromTtoP {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2547,7 +2547,7 @@ enum Branching0fromTtoP {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2578,7 +2578,7 @@ type RecursPtoT = Recv<(End, Branching0fromTtoP), End>;
 // Q
 enum Branching0fromTtoQ {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2644,7 +2644,7 @@ enum Branching0fromTtoQ {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2675,7 +2675,7 @@ type RecursQtoT = Recv<(End, Branching0fromTtoQ), End>;
 // R
 enum Branching0fromTtoR {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2741,7 +2741,7 @@ enum Branching0fromTtoR {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2772,7 +2772,7 @@ type RecursRtoT = Recv<(End, Branching0fromTtoR), End>;
 // S
 enum Branching0fromTtoS {
     More(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             SR,
             SR,
@@ -2838,7 +2838,7 @@ enum Branching0fromTtoS {
         >,
     ),
     Done(
-        MeshedChannelsTwentyOne<
+        MeshedChannels<
             End,
             End,
             End,
@@ -2886,7 +2886,7 @@ type Choose0fromTtoP = <RecursPtoT as Session>::Dual;
 type Choose0fromTtoQ = <RecursQtoT as Session>::Dual;
 type Choose0fromTtoR = <RecursRtoT as Session>::Dual;
 type Choose0fromTtoS = <RecursStoT as Session>::Dual;
-type EndpointDoneT = MeshedChannelsTwentyOne<
+type EndpointDoneT = MeshedChannels<
     End,
     End,
     End,
@@ -2910,7 +2910,7 @@ type EndpointDoneT = MeshedChannelsTwentyOne<
     RoleEnd,
     NameT,
 >;
-type EndpointMoreT = MeshedChannelsTwentyOne<
+type EndpointMoreT = MeshedChannels<
     End,
     Send<(), Recv<(), Choose0fromTtoA>>,
     Send<(), Recv<(), Choose0fromTtoB>>,
@@ -2962,7 +2962,7 @@ type EndpointMoreT = MeshedChannelsTwentyOne<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannelsTwentyOne<
+type EndpointCentral = MeshedChannels<
     End,
     End,
     End,
@@ -2986,7 +2986,7 @@ type EndpointCentral = MeshedChannelsTwentyOne<
     RoleEnd,
     NameCentral,
 >;
-type EndpointA = MeshedChannelsTwentyOne<
+type EndpointA = MeshedChannels<
     End,
     End,
     End,
@@ -3010,7 +3010,7 @@ type EndpointA = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameA,
 >;
-type EndpointB = MeshedChannelsTwentyOne<
+type EndpointB = MeshedChannels<
     End,
     End,
     End,
@@ -3034,7 +3034,7 @@ type EndpointB = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameB,
 >;
-type EndpointC = MeshedChannelsTwentyOne<
+type EndpointC = MeshedChannels<
     End,
     End,
     End,
@@ -3058,7 +3058,7 @@ type EndpointC = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameC,
 >;
-type EndpointD = MeshedChannelsTwentyOne<
+type EndpointD = MeshedChannels<
     End,
     End,
     End,
@@ -3082,7 +3082,7 @@ type EndpointD = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameD,
 >;
-type EndpointE = MeshedChannelsTwentyOne<
+type EndpointE = MeshedChannels<
     End,
     End,
     End,
@@ -3106,7 +3106,7 @@ type EndpointE = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameE,
 >;
-type EndpointF = MeshedChannelsTwentyOne<
+type EndpointF = MeshedChannels<
     End,
     End,
     End,
@@ -3130,7 +3130,7 @@ type EndpointF = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameF,
 >;
-type EndpointG = MeshedChannelsTwentyOne<
+type EndpointG = MeshedChannels<
     End,
     End,
     End,
@@ -3154,7 +3154,7 @@ type EndpointG = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameG,
 >;
-type EndpointH = MeshedChannelsTwentyOne<
+type EndpointH = MeshedChannels<
     End,
     End,
     End,
@@ -3178,7 +3178,7 @@ type EndpointH = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameH,
 >;
-type EndpointI = MeshedChannelsTwentyOne<
+type EndpointI = MeshedChannels<
     End,
     End,
     End,
@@ -3202,7 +3202,7 @@ type EndpointI = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameI,
 >;
-type EndpointJ = MeshedChannelsTwentyOne<
+type EndpointJ = MeshedChannels<
     End,
     End,
     End,
@@ -3226,7 +3226,7 @@ type EndpointJ = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameJ,
 >;
-type EndpointK = MeshedChannelsTwentyOne<
+type EndpointK = MeshedChannels<
     End,
     End,
     End,
@@ -3250,7 +3250,7 @@ type EndpointK = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameK,
 >;
-type EndpointL = MeshedChannelsTwentyOne<
+type EndpointL = MeshedChannels<
     End,
     End,
     End,
@@ -3274,7 +3274,7 @@ type EndpointL = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameL,
 >;
-type EndpointM = MeshedChannelsTwentyOne<
+type EndpointM = MeshedChannels<
     End,
     End,
     End,
@@ -3298,7 +3298,7 @@ type EndpointM = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameM,
 >;
-type EndpointN = MeshedChannelsTwentyOne<
+type EndpointN = MeshedChannels<
     End,
     End,
     End,
@@ -3322,7 +3322,7 @@ type EndpointN = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameN,
 >;
-type EndpointO = MeshedChannelsTwentyOne<
+type EndpointO = MeshedChannels<
     End,
     End,
     End,
@@ -3346,7 +3346,7 @@ type EndpointO = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameO,
 >;
-type EndpointP = MeshedChannelsTwentyOne<
+type EndpointP = MeshedChannels<
     End,
     End,
     End,
@@ -3370,7 +3370,7 @@ type EndpointP = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameP,
 >;
-type EndpointQ = MeshedChannelsTwentyOne<
+type EndpointQ = MeshedChannels<
     End,
     End,
     End,
@@ -3394,7 +3394,7 @@ type EndpointQ = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameQ,
 >;
-type EndpointR = MeshedChannelsTwentyOne<
+type EndpointR = MeshedChannels<
     End,
     End,
     End,
@@ -3418,7 +3418,7 @@ type EndpointR = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameR,
 >;
-type EndpointS = MeshedChannelsTwentyOne<
+type EndpointS = MeshedChannels<
     End,
     End,
     End,
@@ -3442,7 +3442,7 @@ type EndpointS = MeshedChannelsTwentyOne<
     RoleT<RoleEnd>,
     NameS,
 >;
-type EndpointT = MeshedChannelsTwentyOne<
+type EndpointT = MeshedChannels<
     End,
     Choose0fromTtoA,
     Choose0fromTtoB,
@@ -3509,7 +3509,7 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     NameQ,
     NameR,
     NameS, =>
-    NameCentral, NameT, MeshedChannelsTwentyOne, 21
+    NameCentral, NameT, MeshedChannels, 21
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {

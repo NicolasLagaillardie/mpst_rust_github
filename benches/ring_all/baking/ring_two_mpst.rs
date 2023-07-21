@@ -16,25 +16,25 @@ use std::error::Error;
 // use std::time::Duration;
 
 // Create new roles
-generate!("recursive", MeshedChannelsTwo, A, B);
+generate!("recursive", MeshedChannels, A, B);
 
 // Types
 // A
 enum Branching0fromBtoA {
-    Forward(MeshedChannelsTwo<Send<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
-    Backward(MeshedChannelsTwo<Recv<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
+    Forward(MeshedChannels<Send<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
+    Backward(MeshedChannels<Recv<(), RecursAtoB>, RoleB<RoleB<RoleEnd>>, NameA>),
+    Done(MeshedChannels<End, RoleEnd, NameA>),
 }
 type RecursAtoB = Recv<Branching0fromBtoA, End>;
 
 // B
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
-type EndpointForwardB = MeshedChannelsTwo<Recv<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
-type EndpointBackwardB = MeshedChannelsTwo<Send<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
+type EndpointForwardB = MeshedChannels<Recv<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
+type EndpointBackwardB = MeshedChannels<Send<(), Choose0fromBtoA>, RoleA<RoleBroadcast>, NameB>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwo<RecursAtoB, RoleB<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsTwo<Choose0fromBtoA, RoleBroadcast, NameB>;
+type EndpointA = MeshedChannels<RecursAtoB, RoleB<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {

@@ -18,7 +18,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
+generate!("rec_and_cancel", MeshedChannels, A, C, S);
 
 // Types
 // C0
@@ -31,9 +31,9 @@ type Choose1fromCtoS = <Choice1fromCtoS as Session>::Dual;
 
 // A
 enum Branching0fromCtoA {
-    Select(MeshedChannelsThree<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>),
+    Select(MeshedChannels<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>),
     Loop(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<i32, Send<i32, Choice0fromCtoA>>,
             Send<i32, End>,
             RoleC<RoleC<RoleS<RoleC<RoleEnd>>>>,
@@ -43,46 +43,46 @@ enum Branching0fromCtoA {
 }
 type Choice0fromCtoA = Recv<Branching0fromCtoA, End>;
 enum Branching1fromCtoA {
-    Yes(MeshedChannelsThree<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
-    No(MeshedChannelsThree<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
+    Yes(MeshedChannels<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
+    No(MeshedChannels<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
 }
 type Choice1fromCtoA = Recv<Branching1fromCtoA, End>;
 
 // S
 enum Branching0fromCtoS {
-    Select(MeshedChannelsThree<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>),
-    Loop(MeshedChannelsThree<Recv<i32, End>, Choice0fromCtoS, RoleA<RoleC<RoleEnd>>, NameS>),
+    Select(MeshedChannels<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>),
+    Loop(MeshedChannels<Recv<i32, End>, Choice0fromCtoS, RoleA<RoleC<RoleEnd>>, NameS>),
 }
 type Choice0fromCtoS = Recv<Branching0fromCtoS, End>;
 enum Branching1fromCtoS {
     Yes(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<i32, End>,
             Recv<i32, Send<i32, End>>,
             RoleA<RoleC<RoleC<RoleEnd>>>,
             NameS,
         >,
     ),
-    No(MeshedChannelsThree<Recv<i32, End>, End, RoleA<RoleEnd>, NameS>),
+    No(MeshedChannels<Recv<i32, End>, End, RoleA<RoleEnd>, NameS>),
 }
 type Choice1fromCtoS = Recv<Branching1fromCtoS, End>;
 
 // Creating the MP sessions
 // A
-type ChoiceA = MeshedChannelsThree<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>;
-type EndpointA = MeshedChannelsThree<Choice0fromCtoA, End, RoleC<RoleEnd>, NameA>;
+type ChoiceA = MeshedChannels<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>;
+type EndpointA = MeshedChannels<Choice0fromCtoA, End, RoleC<RoleEnd>, NameA>;
 
 // C
-type ChoiceC = MeshedChannelsThree<Choose1fromCtoA, Choose1fromCtoS, RoleBroadcast, NameC>;
-type ChoiceCYes = MeshedChannelsThree<
+type ChoiceC = MeshedChannels<Choose1fromCtoA, Choose1fromCtoS, RoleBroadcast, NameC>;
+type ChoiceCYes = MeshedChannels<
     Send<i32, End>,
     Send<i32, Recv<i32, End>>,
     RoleA<RoleS<RoleS<RoleEnd>>>,
     NameC,
 >;
-type ChoiceCNo = MeshedChannelsThree<Send<i32, End>, End, RoleA<RoleEnd>, NameC>;
-type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoS, RoleBroadcast, NameC>;
-type EndpointCLoop = MeshedChannelsThree<
+type ChoiceCNo = MeshedChannels<Send<i32, End>, End, RoleA<RoleEnd>, NameC>;
+type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoS, RoleBroadcast, NameC>;
+type EndpointCLoop = MeshedChannels<
     Send<i32, Recv<i32, Choose0fromCtoA>>,
     Choose0fromCtoS,
     RoleA<RoleA<RoleBroadcast>>,
@@ -90,8 +90,8 @@ type EndpointCLoop = MeshedChannelsThree<
 >;
 
 // S
-type ChoiceS = MeshedChannelsThree<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>;
-type EndpointS = MeshedChannelsThree<End, Choice0fromCtoS, RoleC<RoleEnd>, NameS>;
+type ChoiceS = MeshedChannels<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS = MeshedChannels<End, Choice0fromCtoS, RoleC<RoleEnd>, NameS>;
 
 // Functions
 // A

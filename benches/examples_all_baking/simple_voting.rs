@@ -18,7 +18,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannelsTwo, Voter, Server);
+generate!("rec_and_cancel", MeshedChannels, Voter, Server);
 
 // Types
 // SERVER
@@ -29,31 +29,31 @@ type Choose1fromVtoS = <Choice1fromStoV as Session>::Dual;
 
 // VOTER
 enum Branching0fromStoV {
-    Auth(MeshedChannelsTwo<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>),
-    Reject(MeshedChannelsTwo<Recv<i32, End>, RoleServer<RoleEnd>, NameVoter>),
+    Auth(MeshedChannels<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>),
+    Reject(MeshedChannels<Recv<i32, End>, RoleServer<RoleEnd>, NameVoter>),
 }
 
 // SERVER
 enum Branching1fromVtoS {
-    Yes(MeshedChannelsTwo<Recv<i32, End>, RoleVoter<RoleEnd>, NameServer>),
-    No(MeshedChannelsTwo<Recv<i32, End>, RoleVoter<RoleEnd>, NameServer>),
+    Yes(MeshedChannels<Recv<i32, End>, RoleVoter<RoleEnd>, NameServer>),
+    No(MeshedChannels<Recv<i32, End>, RoleVoter<RoleEnd>, NameServer>),
 }
 type Choice1fromStoV = Recv<Branching1fromVtoS, End>;
 
 // Creating the MP sessions
 // VOTER
 type ChoiceVoter =
-    MeshedChannelsTwo<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>;
-type EndpointVoter = MeshedChannelsTwo<
+    MeshedChannels<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>;
+type EndpointVoter = MeshedChannels<
     Send<i32, Recv<Branching0fromStoV, End>>,
     RoleServer<RoleServer<RoleEnd>>,
     NameVoter,
 >;
 
 // SERVER
-type ChoiceServer = MeshedChannelsTwo<Choice1fromStoV, RoleVoter<RoleEnd>, NameServer>;
+type ChoiceServer = MeshedChannels<Choice1fromStoV, RoleVoter<RoleEnd>, NameServer>;
 type EndpointServer =
-    MeshedChannelsTwo<Recv<i32, Choose0fromStoV>, RoleVoter<RoleBroadcast>, NameServer>;
+    MeshedChannels<Recv<i32, Choose0fromStoV>, RoleVoter<RoleBroadcast>, NameServer>;
 
 // Functions
 fn endpoint_voter(s: EndpointVoter) -> Result<(), Box<dyn Error>> {

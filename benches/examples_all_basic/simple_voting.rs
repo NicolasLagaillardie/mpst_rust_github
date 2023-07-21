@@ -19,7 +19,7 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 2);
 
 // Create new Roles
 // normal
@@ -32,26 +32,26 @@ create_multiple_normal_name_short!(Voter, Server);
 // SERVER
 create_send_mpst_session_bundle!(
     send_mpst_server_to_voter, RoleVoter, 1 | =>
-    NameServer, MeshedChannelsTwo, 2
+    NameServer, MeshedChannels, 2
 );
 
 // VOTER
 create_send_mpst_session_bundle!(
     send_mpst_voter_to_server, RoleServer, 1 | =>
-    NameVoter, MeshedChannelsTwo, 2
+    NameVoter, MeshedChannels, 2
 );
 
 // Create new recv functions and related types
 // SERVER
 create_recv_mpst_session_bundle!(
     recv_mpst_server_to_voter, RoleVoter, 1 | =>
-    NameServer, MeshedChannelsTwo, 2
+    NameServer, MeshedChannels, 2
 );
 
 // VOTER
 create_recv_mpst_session_bundle!(
     recv_mpst_voter_to_server, RoleServer, 1 | =>
-    NameVoter, MeshedChannelsTwo, 2
+    NameVoter, MeshedChannels, 2
 );
 
 // Types
@@ -63,31 +63,31 @@ type Choose1fromVtoS<N> = <Choice1fromStoV<N> as Session>::Dual;
 
 // VOTER
 enum Branching0fromStoV<N: marker::Send> {
-    Auth(MeshedChannelsTwo<Recv<N, Choose1fromVtoS<N>>, RoleServer<RoleBroadcast>, NameVoter>),
-    Reject(MeshedChannelsTwo<Recv<N, End>, RoleServer<RoleEnd>, NameVoter>),
+    Auth(MeshedChannels<Recv<N, Choose1fromVtoS<N>>, RoleServer<RoleBroadcast>, NameVoter>),
+    Reject(MeshedChannels<Recv<N, End>, RoleServer<RoleEnd>, NameVoter>),
 }
 
 // SERVER
 enum Branching1fromVtoS<N: marker::Send> {
-    Yes(MeshedChannelsTwo<Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
-    No(MeshedChannelsTwo<Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
+    Yes(MeshedChannels<Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
+    No(MeshedChannels<Recv<N, End>, RoleVoter<RoleEnd>, NameServer>),
 }
 type Choice1fromStoV<N> = Recv<Branching1fromVtoS<N>, End>;
 
 // Creating the MP sessions
 // VOTER
 type ChoiceVoter<N> =
-    MeshedChannelsTwo<Recv<N, Choose1fromVtoS<N>>, RoleServer<RoleBroadcast>, NameVoter>;
-type EndpointVoter<N> = MeshedChannelsTwo<
+    MeshedChannels<Recv<N, Choose1fromVtoS<N>>, RoleServer<RoleBroadcast>, NameVoter>;
+type EndpointVoter<N> = MeshedChannels<
     Send<N, Recv<Branching0fromStoV<N>, End>>,
     RoleServer<RoleServer<RoleEnd>>,
     NameVoter,
 >;
 
 // SERVER
-type ChoiceServer<N> = MeshedChannelsTwo<Choice1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
+type ChoiceServer<N> = MeshedChannels<Choice1fromStoV<N>, RoleVoter<RoleEnd>, NameServer>;
 type EndpointServer<N> =
-    MeshedChannelsTwo<Recv<N, Choose0fromStoV<N>>, RoleVoter<RoleBroadcast>, NameServer>;
+    MeshedChannels<Recv<N, Choose0fromStoV<N>>, RoleVoter<RoleBroadcast>, NameServer>;
 
 // Functions
 fn endpoint_voter(s: EndpointVoter<i32>) -> Result<(), Box<dyn Error>> {
@@ -118,7 +118,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromVtoS::<i32>::Yes, =>
             NameVoter,
-            MeshedChannelsTwo,
+            MeshedChannels,
             2
         );
 
@@ -130,7 +130,7 @@ fn choice_voter(s: ChoiceVoter<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching1fromVtoS::<i32>::No, =>
             NameVoter,
-            MeshedChannelsTwo,
+            MeshedChannels,
             2
         );
 
@@ -150,7 +150,7 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromStoV::<i32>::Reject, =>
             NameServer,
-            MeshedChannelsTwo,
+            MeshedChannels,
             2
         );
 
@@ -162,7 +162,7 @@ fn endpoint_server(s: EndpointServer<i32>) -> Result<(), Box<dyn Error>> {
             s,
             Branching0fromStoV::<i32>::Auth, =>
             NameServer,
-            MeshedChannelsTwo,
+            MeshedChannels,
             2
         );
 

@@ -12,7 +12,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-generate!("rec_and_cancel", MeshedChannelsThree, Client, Other, Server,);
+generate!("rec_and_cancel", MeshedChannels, Client, Other, Server,);
 
 // Types
 // SERVER
@@ -21,15 +21,15 @@ type Choose0fromServerToOther = Send<Branching0fromServerToOther, End>;
 
 // CLIENT
 enum Branching0fromServerToClient {
-    Dummy(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
-    Query(MeshedChannelsThree<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
+    Dummy(MeshedChannels<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
+    Query(MeshedChannels<End, Recv<(i32, i32), End>, RoleServer<RoleEnd>, NameClient>),
 }
 
 // OTHER
 enum Branching0fromServerToOther {
-    Dummy(MeshedChannelsThree<End, Recv<(), End>, RoleServer<RoleEnd>, NameOther>),
+    Dummy(MeshedChannels<End, Recv<(), End>, RoleServer<RoleEnd>, NameOther>),
     Query(
-        MeshedChannelsThree<
+        MeshedChannels<
             End,
             Recv<(i32, i32), Send<(i32, i32), End>>,
             RoleServer<RoleServer<RoleEnd>>,
@@ -40,7 +40,7 @@ enum Branching0fromServerToOther {
 
 // Creating the MP sessions
 // CLIENT
-type EndpointClient = MeshedChannelsThree<
+type EndpointClient = MeshedChannels<
     End,
     Send<i32, Recv<Branching0fromServerToClient, End>>,
     RoleServer<RoleServer<RoleEnd>>,
@@ -48,7 +48,7 @@ type EndpointClient = MeshedChannelsThree<
 >;
 
 // OTHER
-type EndpointOther = MeshedChannelsThree<
+type EndpointOther = MeshedChannels<
     End,
     Recv<Branching0fromServerToOther, End>,
     RoleServer<RoleEnd>,
@@ -56,19 +56,19 @@ type EndpointOther = MeshedChannelsThree<
 >;
 
 // SERVER
-type EndpointQuery = MeshedChannelsThree<
+type EndpointQuery = MeshedChannels<
     Send<(i32, i32), End>,
     Send<(i32, i32), Recv<(i32, i32), End>>,
     RoleOther<RoleOther<RoleClient<RoleEnd>>>,
     NameServer,
 >;
-type EndpointDummy = MeshedChannelsThree<
+type EndpointDummy = MeshedChannels<
     Send<(i32, i32), End>,
     Send<(), End>,
     RoleOther<RoleClient<RoleEnd>>,
     NameServer,
 >;
-type EndpointServer = MeshedChannelsThree<
+type EndpointServer = MeshedChannels<
     Recv<i32, Choose0fromServerToClient>,
     Choose0fromServerToOther,
     RoleClient<RoleBroadcast>,

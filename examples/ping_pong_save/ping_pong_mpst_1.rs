@@ -33,7 +33,7 @@ use std::error::Error;
 // }
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 2);
 
 // Create new roles
 // normal
@@ -46,26 +46,26 @@ create_multiple_normal_role!(
 // A
 create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
-    NameA, MeshedChannelsTwo, 2
+    NameA, MeshedChannels, 2
 );
 
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    NameB, MeshedChannelsTwo, 2
+    NameB, MeshedChannels, 2
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    NameA, MeshedChannelsTwo, 2
+    NameA, MeshedChannels, 2
 );
 
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    NameB, MeshedChannelsTwo, 2
+    NameB, MeshedChannels, 2
 );
 
 // Types
@@ -74,15 +74,15 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB {
-    More(MeshedChannelsTwo<Recv<(), Send<(), RecursBtoA>>, ThreeRoleA, NameB>),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameB>),
+    More(MeshedChannels<Recv<(), Send<(), RecursBtoA>>, ThreeRoleA, NameB>),
+    Done(MeshedChannels<End, RoleEnd, NameB>),
 }
 type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwo<Choose0fromAtoB, RoleBroadcast, NameA>;
-type EndpointB = MeshedChannelsTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
+type EndpointA = MeshedChannels<Choose0fromAtoB, RoleBroadcast, NameA>;
+type EndpointB = MeshedChannels<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
@@ -96,7 +96,7 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromAtoB::Done, =>
                 RoleA,
-                MeshedChannelsTwo,
+                MeshedChannels,
                 1
             );
 
@@ -107,7 +107,7 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
                 s,
                 Branching0fromAtoB::More, =>
                 RoleA,
-                MeshedChannelsTwo,
+                MeshedChannels,
                 1
             );
 

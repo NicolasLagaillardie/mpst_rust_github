@@ -16,7 +16,7 @@ use std::error::Error;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannelsThree, A, C, S);
+generate!("rec_and_cancel", MeshedChannels, A, C, S);
 
 // Types
 // A
@@ -24,8 +24,8 @@ type Choose0fromAtoS = <Recurs0StoA as Session>::Dual;
 type Choose0fromAtoC = <Recurs0CtoA as Session>::Dual;
 
 enum Branching1fromCtoA {
-    Pay(MeshedChannelsThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
-    Quit(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    Pay(MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
+    Quit(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 
 type Recurs1AtoC = Recv<Branching1fromCtoA, End>;
@@ -33,28 +33,28 @@ type Recurs1AtoC = Recv<Branching1fromCtoA, End>;
 // S
 enum Branching0fromAtoS {
     Login(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<(), End>,
             Send<(i64, i64), Recurs1StoC>,
             RoleA<RoleC<RoleC<RoleEnd>>>,
             NameS,
         >,
     ),
-    Fail(MeshedChannelsThree<Recv<String, End>, End, RoleA<RoleEnd>, NameS>),
+    Fail(MeshedChannels<Recv<String, End>, End, RoleA<RoleEnd>, NameS>),
 }
 
 type Recurs0StoA = Recv<Branching0fromAtoS, End>;
 
 enum Branching1fromCtoS {
     Pay(
-        MeshedChannelsThree<
+        MeshedChannels<
             End,
             Recv<(String, i64), Send<(i64, i64), Recurs1StoC>>,
             RoleC<RoleC<RoleC<RoleEnd>>>,
             NameS,
         >,
     ),
-    Quit(MeshedChannelsThree<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Quit(MeshedChannels<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 
 type Recurs1StoC = Recv<Branching1fromCtoS, End>;
@@ -62,14 +62,14 @@ type Recurs1StoC = Recv<Branching1fromCtoS, End>;
 // C
 enum Branching0fromAtoC {
     Login(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<(), Choose1fromCtoA>,
             Recv<(i64, i64), Choose1fromCtoS>,
             RoleA<RoleS<RoleBroadcast>>,
             NameC,
         >,
     ),
-    Fail(MeshedChannelsThree<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
+    Fail(MeshedChannels<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
 }
 type Recurs0CtoA = Recv<Branching0fromAtoC, End>;
 
@@ -78,36 +78,36 @@ type Choose1fromCtoS = <Recurs1StoC as Session>::Dual;
 
 // Creating the MP sessions
 // Step 1
-type EndpointA1 = MeshedChannelsThree<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
-type EndpointC1 = MeshedChannelsThree<
+type EndpointA1 = MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
+type EndpointC1 = MeshedChannels<
     Choose1fromCtoA,
     Recv<(i64, i64), Choose1fromCtoS>,
     RoleS<RoleBroadcast>,
     NameC,
 >;
-type EndpointC1Pay = MeshedChannelsThree<
+type EndpointC1Pay = MeshedChannels<
     Choose1fromCtoA,
     Send<(String, i64), Recv<(i64, i64), Choose1fromCtoS>>,
     RoleS<RoleS<RoleBroadcast>>,
     NameC,
 >;
 type EndpointS1 =
-    MeshedChannelsThree<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
+    MeshedChannels<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
 
 // Step 0
-type EndpointA0 = MeshedChannelsThree<
+type EndpointA0 = MeshedChannels<
     Recv<(String, String), Choose0fromAtoC>,
     Choose0fromAtoS,
     RoleC<RoleBroadcast>,
     NameA,
 >;
 type EndpointA0Fail =
-    MeshedChannelsThree<Send<String, End>, Send<String, End>, RoleC<RoleS<RoleEnd>>, NameA>;
+    MeshedChannels<Send<String, End>, Send<String, End>, RoleC<RoleS<RoleEnd>>, NameA>;
 type EndpointA0Login =
-    MeshedChannelsThree<Send<(), Recurs1AtoC>, Send<(), End>, RoleC<RoleS<RoleC<RoleEnd>>>, NameA>;
+    MeshedChannels<Send<(), Recurs1AtoC>, Send<(), End>, RoleC<RoleS<RoleC<RoleEnd>>>, NameA>;
 type EndpointC0 =
-    MeshedChannelsThree<Send<(String, String), Recurs0CtoA>, End, RoleA<RoleA<RoleEnd>>, NameC>;
-type EndpointS0 = MeshedChannelsThree<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
+    MeshedChannels<Send<(String, String), Recurs0CtoA>, End, RoleA<RoleA<RoleEnd>>, NameC>;
+type EndpointS0 = MeshedChannels<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
 
 // Functions
 fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {

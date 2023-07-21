@@ -6,7 +6,7 @@ use mpstthree::{generate, create_fn_choose_mpst_multi_to_all_bundle};
 use std::error::Error;
 
 // Create new roles
-generate!("basic", MeshedChannelsThree, A, B, C);
+generate!("basic", MeshedChannels, A, B, C);
 
 // Types
 // Send/Recv
@@ -20,23 +20,23 @@ type R2C<R> = RoleC<RoleC<R>>;
 
 // A
 enum Branching0fromCtoA {
-    More(MeshedChannelsThree<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    More(MeshedChannels<RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
+    Done(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<Branching0fromCtoA, End>;
 
 // B
 enum Branching0fromCtoB {
-    More(MeshedChannelsThree<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    More(MeshedChannels<SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = Recv<Branching0fromCtoB, End>;
 
 // C
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
-type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
-type EndpointMoreC = MeshedChannelsThree<
+type EndpointDoneC = MeshedChannels<End, End, RoleEnd, NameC>;
+type EndpointMoreC = MeshedChannels<
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
     RoleA<RoleA<RoleA<RoleB<RoleBroadcast>>>>,
@@ -44,9 +44,9 @@ type EndpointMoreC = MeshedChannelsThree<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = MeshedChannels<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 create_fn_choose_mpst_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
@@ -54,7 +54,7 @@ create_fn_choose_mpst_multi_to_all_bundle!(
     EndpointDoneC, EndpointMoreC, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
     NameA, NameB, =>
-    NameC, MeshedChannelsThree, 3
+    NameC, MeshedChannels, 3
 );
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
