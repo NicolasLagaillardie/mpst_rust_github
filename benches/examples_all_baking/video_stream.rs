@@ -6,8 +6,6 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-use rand::{thread_rng, Rng};
-
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
