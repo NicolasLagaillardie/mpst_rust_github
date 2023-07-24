@@ -1,179 +1,149 @@
 #![allow(clippy::type_complexity)]
 
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::{choose, offer};
+
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
-
-// See the folder scribble_protocols for the related Scribble protocol
-
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, C, S);
+use std::thread::spawn;
 
 // Types
 // Step 0
 // C
 type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
-type EndpointC0 = MeshedChannels<Recv<(), Choose0fromCtoS>, RoleS<RoleBroadcast>, NameC>;
-
+type EndpointC0 = Recv<(), Choose0fromCtoS>;
 // S
 enum Branching0fromCtoS {
-    Continue(
-        MeshedChannels<Recv<(), Recv<(), Choose1fromStoC>>, RoleC<RoleC<RoleBroadcast>>, NameS>,
-    ),
-    Quit(MeshedChannels<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(Recv<(), Recv<(), Choose1fromStoC>>),
+    Quit(Recv<(), End>),
 }
 type Offer0fromCtoS = <Choose0fromCtoS as Session>::Dual;
-type EndpointS0 = MeshedChannels<Send<(), Offer0fromCtoS>, RoleC<RoleC<RoleEnd>>, NameS>;
-
+type EndpointS0 = Send<(), Offer0fromCtoS>;
 // Step 1
 // C
 enum Branching1fromStoC {
-    Continue(MeshedChannels<Recv<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(
-        MeshedChannels<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>,
-    ),
+    Continue(Recv<(), Choose2fromCtoS>),
+    Loop(Recv<(), Recv<(), Offer1fromStoC>>),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
-type EndpointC1 = MeshedChannels<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
-
+type EndpointC1 = Offer1fromStoC;
 // S
 type Choose1fromStoC = Send<Branching1fromStoC, End>;
-type EndpointS1 = MeshedChannels<Choose1fromStoC, RoleBroadcast, NameS>;
-
+type EndpointS1 = Choose1fromStoC;
 // Step 2
 // C
 type Choose2fromCtoS = Send<Branching2fromCtoS, End>;
-type EndpointC2 = MeshedChannels<Choose2fromCtoS, RoleBroadcast, NameC>;
-
+type EndpointC2 = Choose2fromCtoS;
 // S
 enum Branching2fromCtoS {
-    Continue(
-        MeshedChannels<Recv<(), Send<(), Offer3fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
-    Quit(MeshedChannels<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(Recv<(), Send<(), Offer3fromCtoS>>),
+    Quit(Recv<(), End>),
 }
 type Offer2fromCtoS = <Choose2fromCtoS as Session>::Dual;
-type EndpointS2 = MeshedChannels<Offer2fromCtoS, RoleC<RoleEnd>, NameS>;
-
+type EndpointS2 = Offer2fromCtoS;
 // Step 3
 // C
 type Choose3fromCtoS = Send<Branching3fromCtoS, End>;
-type EndpointC3 = MeshedChannels<Choose3fromCtoS, RoleBroadcast, NameC>;
-
+type EndpointC3 = Choose3fromCtoS;
 // S
 enum Branching3fromCtoS {
-    Continue(MeshedChannels<Recv<(), Choose4fromStoC>, RoleC<RoleBroadcast>, NameS>),
-    Quit(MeshedChannels<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(Recv<(), Choose4fromStoC>),
+    Quit(Recv<(), End>),
 }
 type Offer3fromCtoS = <Choose3fromCtoS as Session>::Dual;
-type EndpointS3 = MeshedChannels<Offer3fromCtoS, RoleC<RoleEnd>, NameS>;
-
+type EndpointS3 = Offer3fromCtoS;
 // Step 4
 // C
 enum Branching4fromStoC {
-    Continue(MeshedChannels<Recv<(), Choose5fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<Recv<(), Offer4fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
+    Continue(Recv<(), Choose5fromCtoS>),
+    Loop(Recv<(), Offer4fromStoC>),
 }
 type Offer4fromStoC = <Choose4fromStoC as Session>::Dual;
-type EndpointC4 = MeshedChannels<Offer4fromStoC, RoleS<RoleEnd>, NameC>;
-
+type EndpointC4 = Offer4fromStoC;
 // S
 type Choose4fromStoC = Send<Branching4fromStoC, End>;
-type EndpointS4 = MeshedChannels<Choose4fromStoC, RoleBroadcast, NameS>;
-
+type EndpointS4 = Choose4fromStoC;
 // Step 5
 // C
 type Choose5fromCtoS = Send<Branching5fromCtoS, End>;
-type EndpointC5 = MeshedChannels<Choose5fromCtoS, RoleBroadcast, NameC>;
-
+type EndpointC5 = Choose5fromCtoS;
 // S
 enum Branching5fromCtoS {
-    Continue(MeshedChannels<Recv<(), Choose6fromStoC>, RoleC<RoleBroadcast>, NameS>),
-    Quit(MeshedChannels<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(Recv<(), Choose6fromStoC>),
+    Quit(Recv<(), End>),
 }
 type Offer5fromCtoS = <Choose5fromCtoS as Session>::Dual;
-type EndpointS5 = MeshedChannels<Offer5fromCtoS, RoleC<RoleEnd>, NameS>;
-
+type EndpointS5 = Offer5fromCtoS;
 // Step 6
 // C
 enum Branching6fromStoC {
-    Continue(MeshedChannels<Recv<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<Recv<(), Offer6fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
+    Continue(Recv<(), Choose7fromCtoS>),
+    Loop(Recv<(), Offer6fromStoC>),
 }
 type Offer6fromStoC = <Choose6fromStoC as Session>::Dual;
-type EndpointC6 = MeshedChannels<Offer6fromStoC, RoleS<RoleEnd>, NameC>;
-
+type EndpointC6 = Offer6fromStoC;
 // S
 type Choose6fromStoC = Send<Branching6fromStoC, End>;
-type EndpointS6 = MeshedChannels<Choose6fromStoC, RoleBroadcast, NameS>;
-
+type EndpointS6 = Choose6fromStoC;
 // Step 7
 // C
 type Choose7fromCtoS = Send<Branching7fromCtoS, End>;
-type EndpointC7 = MeshedChannels<Choose7fromCtoS, RoleBroadcast, NameC>;
-
+type EndpointC7 = Choose7fromCtoS;
 // S
 enum Branching7fromCtoS {
-    Continue(MeshedChannels<Recv<(), Choose8fromStoC>, RoleC<RoleBroadcast>, NameS>),
-    Quit(MeshedChannels<Recv<(), End>, RoleC<RoleEnd>, NameS>),
+    Continue(Recv<(), Choose8fromStoC>),
+    Quit(Recv<(), End>),
 }
 type Offer7fromCtoS = <Choose7fromCtoS as Session>::Dual;
-type EndpointS7 = MeshedChannels<Offer7fromCtoS, RoleC<RoleEnd>, NameS>;
-
+type EndpointS7 = Offer7fromCtoS;
 // Step 8
 // C
 enum Branching8fromStoC {
-    Continue(MeshedChannels<Recv<(), Choose9fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<Recv<(), Choose7fromCtoS>, RoleS<RoleBroadcast>, NameC>),
+    Continue(Recv<(), Choose9fromCtoS>),
+    Loop(Recv<(), Choose7fromCtoS>),
 }
 type Offer8fromStoC = <Choose8fromStoC as Session>::Dual;
-type EndpointC8 = MeshedChannels<Offer8fromStoC, RoleS<RoleEnd>, NameC>;
-
+type EndpointC8 = Offer8fromStoC;
 // S
 type Choose8fromStoC = Send<Branching8fromStoC, End>;
-type EndpointS8 = MeshedChannels<Choose8fromStoC, RoleBroadcast, NameS>;
-
+type EndpointS8 = Choose8fromStoC;
 // Step 9
 // C
 type Choose9fromCtoS = Send<Branching9fromCtoS, End>;
-type EndpointC9 = MeshedChannels<Choose9fromCtoS, RoleBroadcast, NameC>;
-
+type EndpointC9 = Choose9fromCtoS;
 // S
 enum Branching9fromCtoS {
-    Continue(
-        MeshedChannels<
-            Recv<(), Send<(), Recv<(), Recv<(), Offer10fromCtoS>>>>,
-            RoleC<RoleC<RoleC<RoleC<RoleC<RoleEnd>>>>>,
-            NameS,
-        >,
-    ),
-    Loop(
-        MeshedChannels<Recv<(), Send<(), Offer9fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
+    Continue(Recv<(), Send<(), Recv<(), Recv<(), Offer10fromCtoS>>>>),
+    Loop(Recv<(), Send<(), Offer9fromCtoS>>),
 }
 type Offer9fromCtoS = <Choose9fromCtoS as Session>::Dual;
-type EndpointS9 = MeshedChannels<Offer9fromCtoS, RoleC<RoleEnd>, NameS>;
-
+type EndpointS9 = Offer9fromCtoS;
 // Step 10
 // C
 type Choose10fromCtoS = Send<Branching10fromCtoS, End>;
-type EndpointC10 = MeshedChannels<Choose10fromCtoS, RoleBroadcast, NameC>;
-
+type EndpointC10 = Choose10fromCtoS;
 // S
 enum Branching10fromCtoS {
-    Data(
-        MeshedChannels<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
-    Subject(
-        MeshedChannels<Recv<(), Recv<(), Offer10fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>,
-    ),
-    End(MeshedChannels<Recv<(), Send<(), Offer7fromCtoS>>, RoleC<RoleC<RoleC<RoleEnd>>>, NameS>),
+    Data(Recv<(), Recv<(), Offer10fromCtoS>>),
+    Subject(Recv<(), Recv<(), Offer10fromCtoS>>),
+    End(Recv<(), Send<(), Offer7fromCtoS>>),
 }
 type Offer10fromCtoS = <Choose10fromCtoS as Session>::Dual;
-type EndpointS10 = MeshedChannels<Offer10fromCtoS, RoleC<RoleEnd>, NameS>;
+type EndpointS10 = Offer10fromCtoS;
+
+///////////////////////////
+
+
+
+
+
+
+
 
 // Functions
 fn endpoint_c_init(s: EndpointC0) -> Result<(), Box<dyn Error>> {
@@ -181,21 +151,21 @@ fn endpoint_c_init(s: EndpointC0) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
-    let (_, s) = s.recv()?;
+    let (_, s) = recv(s)?;
 
     match loops {
         0 => {
-            let s = choose_mpst_c_to_all!(s, Branching0fromCtoS::Quit);
+            let s = choose!(s, Branching0fromCtoS::Quit);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
-            s.close()
+            close(s)
         }
         _ => {
-            let s = choose_mpst_c_to_all!(s, Branching0fromCtoS::Continue);
+            let s = choose!(s, Branching0fromCtoS::Continue);
 
-            let s = s.send(())?;
-            let s = s.send(())?;
+            let s = send((), s);
+            let s = send((), s);
 
             endpoint_c_1(s, loops)
         }
@@ -203,15 +173,15 @@ fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c_1(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching1fromStoC::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_2(s, loops)
         },
         Branching1fromStoC::Loop(s) => {
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_1(s, loops)
         },
@@ -221,17 +191,17 @@ fn endpoint_c_1(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_c_to_all!(s, Branching2fromCtoS::Quit);
+            let s = choose!(s, Branching2fromCtoS::Quit);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
-            s.close()
+            close(s)
         }
         _ => {
-            let s = choose_mpst_c_to_all!(s, Branching2fromCtoS::Continue);
+            let s = choose!(s, Branching2fromCtoS::Continue);
 
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
+            let s = send((), s);
+            let (_, s) = recv(s)?;
 
             endpoint_c_3(s, loops)
         }
@@ -241,16 +211,16 @@ fn endpoint_c_2(s: EndpointC2, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_c_to_all!(s, Branching3fromCtoS::Quit);
+            let s = choose!(s, Branching3fromCtoS::Quit);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
-            s.close()
+            close(s)
         }
         _ => {
-            let s = choose_mpst_c_to_all!(s, Branching3fromCtoS::Continue);
+            let s = choose!(s, Branching3fromCtoS::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_c_4(s, loops)
         }
@@ -258,14 +228,14 @@ fn endpoint_c_3(s: EndpointC3, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c_4(s: EndpointC4, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching4fromStoC::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_5(s, loops)
         },
         Branching4fromStoC::Loop(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_4(s, loops)
         },
@@ -275,16 +245,16 @@ fn endpoint_c_4(s: EndpointC4, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_c_to_all!(s, Branching5fromCtoS::Quit);
+            let s = choose!(s, Branching5fromCtoS::Quit);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
-            s.close()
+            close(s)
         }
         _ => {
-            let s = choose_mpst_c_to_all!(s, Branching5fromCtoS::Continue);
+            let s = choose!(s, Branching5fromCtoS::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_c_6(s, loops)
         }
@@ -292,14 +262,14 @@ fn endpoint_c_5(s: EndpointC5, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c_6(s: EndpointC6, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching6fromStoC::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_7(s, loops)
         },
         Branching6fromStoC::Loop(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_6(s, loops)
         },
@@ -309,16 +279,16 @@ fn endpoint_c_6(s: EndpointC6, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_c_to_all!(s, Branching7fromCtoS::Quit);
+            let s = choose!(s, Branching7fromCtoS::Quit);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
-            s.close()
+            close(s)
         }
         _ => {
-            let s = choose_mpst_c_to_all!(s, Branching7fromCtoS::Continue);
+            let s = choose!(s, Branching7fromCtoS::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_c_8(s, loops)
         }
@@ -326,14 +296,14 @@ fn endpoint_c_7(s: EndpointC7, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c_8(s: EndpointC8, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching8fromStoC::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_9(s, loops)
         },
         Branching8fromStoC::Loop(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_c_7(s, loops)
         },
@@ -343,20 +313,20 @@ fn endpoint_c_8(s: EndpointC8, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_c_to_all!(s, Branching9fromCtoS::Loop);
+            let s = choose!(s, Branching9fromCtoS::Loop);
 
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
+            let s = send((), s);
+            let (_, s) = recv(s)?;
 
             endpoint_c_9(s, loops)
         }
         _ => {
-            let s = choose_mpst_c_to_all!(s, Branching9fromCtoS::Continue);
+            let s = choose!(s, Branching9fromCtoS::Continue);
 
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let s = s.send(())?;
+            let s = send((), s);
+            let (_, s) = recv(s)?;
+            let s = send((), s);
+            let s = send((), s);
 
             endpoint_c_10(s, loops)
         }
@@ -365,24 +335,24 @@ fn endpoint_c_9(s: EndpointC9, loops: i32) -> Result<(), Box<dyn Error>> {
 
 fn endpoint_c_10(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
     if loops == 0 {
-        let s = choose_mpst_c_to_all!(s, Branching10fromCtoS::End);
+        let s = choose!(s, Branching10fromCtoS::End);
 
-        let s = s.send(())?;
-        let (_, s) = s.recv()?;
+        let s = send((), s);
+        let (_, s) = recv(s)?;
 
         endpoint_c_7(s, loops)
     } else if loops % 2 == 1 {
-        let s = choose_mpst_c_to_all!(s, Branching10fromCtoS::Subject);
+        let s = choose!(s, Branching10fromCtoS::Subject);
 
-        let s = s.send(())?;
-        let s = s.send(())?;
+        let s = send((), s);
+        let s = send((), s);
 
         endpoint_c_10(s, loops - 1)
     } else {
-        let s = choose_mpst_c_to_all!(s, Branching10fromCtoS::Data);
+        let s = choose!(s, Branching10fromCtoS::Data);
 
-        let s = s.send(())?;
-        let s = s.send(())?;
+        let s = send((), s);
+        let s = send((), s);
 
         endpoint_c_10(s, loops - 1)
     }
@@ -394,17 +364,17 @@ fn endpoint_s_init(s: EndpointS0) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_0(s: EndpointS0, loops: i32) -> Result<(), Box<dyn Error>> {
-    let s = s.send(())?;
+    let s = send((), s);
 
-    offer_mpst!(s, {
+    offer!(s, {
         Branching0fromCtoS::Quit(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
-            s.close()
+            close(s)
         },
         Branching0fromCtoS::Continue(s) => {
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_1(s, loops)
         },
@@ -414,17 +384,17 @@ fn endpoint_s_0(s: EndpointS0, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_s_to_all!(s, Branching1fromStoC::Loop);
+            let s = choose!(s, Branching1fromStoC::Loop);
 
-            let s = s.send(())?;
-            let s = s.send(())?;
+            let s = send((), s);
+            let s = send((), s);
 
             endpoint_s_1(s, loops)
         }
         _ => {
-            let s = choose_mpst_s_to_all!(s, Branching1fromStoC::Continue);
+            let s = choose!(s, Branching1fromStoC::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_2(s, loops)
         }
@@ -432,15 +402,15 @@ fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_2(s: EndpointS2, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching2fromCtoS::Quit(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
-            s.close()
+            close(s)
         },
         Branching2fromCtoS::Continue(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = recv(s)?;
+            let s = send((), s);
 
             endpoint_s_3(s, loops)
         },
@@ -448,14 +418,14 @@ fn endpoint_s_2(s: EndpointS2, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_3(s: EndpointS3, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching3fromCtoS::Quit(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
-            s.close()
+            close(s)
         },
         Branching3fromCtoS::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_4(s, loops)
         },
@@ -465,16 +435,16 @@ fn endpoint_s_3(s: EndpointS3, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_s_to_all!(s, Branching4fromStoC::Loop);
+            let s = choose!(s, Branching4fromStoC::Loop);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_4(s, loops)
         }
         _ => {
-            let s = choose_mpst_s_to_all!(s, Branching4fromStoC::Continue);
+            let s = choose!(s, Branching4fromStoC::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_5(s, loops)
         }
@@ -482,14 +452,14 @@ fn endpoint_s_4(s: EndpointS4, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_5(s: EndpointS5, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching5fromCtoS::Quit(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
-            s.close()
+            close(s)
         },
         Branching5fromCtoS::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_6(s, loops)
         },
@@ -499,16 +469,16 @@ fn endpoint_s_5(s: EndpointS5, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_s_to_all!(s, Branching6fromStoC::Loop);
+            let s = choose!(s, Branching6fromStoC::Loop);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_6(s, loops)
         }
         _ => {
-            let s = choose_mpst_s_to_all!(s, Branching6fromStoC::Continue);
+            let s = choose!(s, Branching6fromStoC::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_7(s, loops)
         }
@@ -516,14 +486,14 @@ fn endpoint_s_6(s: EndpointS6, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_7(s: EndpointS7, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching7fromCtoS::Quit(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
-            s.close()
+            close(s)
         },
         Branching7fromCtoS::Continue(s) => {
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_8(s, loops)
         },
@@ -533,16 +503,16 @@ fn endpoint_s_7(s: EndpointS7, loops: i32) -> Result<(), Box<dyn Error>> {
 fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
     match loops {
         0 => {
-            let s = choose_mpst_s_to_all!(s, Branching8fromStoC::Loop);
+            let s = choose!(s, Branching8fromStoC::Loop);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_7(s, loops)
         }
         _ => {
-            let s = choose_mpst_s_to_all!(s, Branching8fromStoC::Continue);
+            let s = choose!(s, Branching8fromStoC::Continue);
 
-            let s = s.send(())?;
+            let s = send((), s);
 
             endpoint_s_9(s, loops)
         }
@@ -550,18 +520,18 @@ fn endpoint_s_8(s: EndpointS8, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_9(s: EndpointS9, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching9fromCtoS::Loop(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = recv(s)?;
+            let s = send((), s);
 
             endpoint_s_9(s, loops)
         },
         Branching9fromCtoS::Continue(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
+            let s = send((), s);
+            let (_, s) = recv(s)?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_10(s, loops)
         },
@@ -569,33 +539,68 @@ fn endpoint_s_9(s: EndpointS9, loops: i32) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_s_10(s: EndpointS10, loops: i32) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
+    offer!(s, {
         Branching10fromCtoS::Data(s) => {
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_10(s, loops - 1)
         },
         Branching10fromCtoS::Subject(s) => {
-            let (_, s) = s.recv()?;
-            let (_, s) = s.recv()?;
+            let (_, s) = recv(s)?;
+            let (_, s) = recv(s)?;
 
             endpoint_s_10(s, loops - 1)
         },
         Branching10fromCtoS::End(s) => {
-            let (_, s) = s.recv()?;
-            let s = s.send(())?;
+            let (_, s) = recv(s)?;
+            let s = send((), s);
 
             endpoint_s_7(s, loops - 1)
         },
     })
 }
 
-///
+////////////////////////////
 
 fn main() {
-    let (thread_c, thread_s) = fork_mpst(endpoint_c_init, endpoint_s_init);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    let session = send((), session);
+    let session = send((), session);
+    let session = send((), session);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        for _ in 0..LOOPS {
+            let choice = thread_rng().gen_range(1..=2);
+
+            if choice != 1 {
+                sessions = sessions
+                    .into_iter()
+                    .map(|s| binary_up_b(s).unwrap())
+                    .collect::<Vec<_>>();
+            } else {
+                sessions = sessions
+                    .into_iter()
+                    .map(|s| binary_failure_b(s).unwrap())
+                    .collect::<Vec<_>>();
+            }
+        }
+
+        sessions
+            .into_iter()
+            .for_each(|s| binary_close_b(s).unwrap());
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }
+
+static LOOPS: i32 = 100;
