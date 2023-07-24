@@ -150,6 +150,16 @@ name = "circuit_breaker_binary"
 path = "examples/binary/circuit_breaker.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "fib_binary"
+path = "examples/binary/fib.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "logging_binary"
+path = "examples/binary/logging.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
