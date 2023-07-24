@@ -185,6 +185,11 @@ name = "simple_voting_binary"
 path = "examples/binary/simple_voting.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "three_buyers_binary"
+path = "examples/binary/three_buyers.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
