@@ -175,6 +175,11 @@ name = "remote_data_binary"
 path = "examples/binary/remote_data.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "servo_binary"
+path = "examples/binary/servo.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]

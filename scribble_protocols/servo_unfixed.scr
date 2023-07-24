@@ -4,5 +4,5 @@ global protocol Servo(role C, role L, role S)
     DocumentLoading(bool) from S to C;
     WebFontLoaded(bool) from L to S;
     GetWebPageLoadState(bool) from C to L;
-    outstanding_web_fonts(bool) from L to C;
+    OutstandingWebFonts(bool) from L to C;
 }

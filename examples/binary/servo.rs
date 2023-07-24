@@ -1,105 +1,53 @@
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::generate;
-use mpstthree::role::end::RoleEnd;
+#![allow(clippy::type_complexity)]
+
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
 
 use std::error::Error;
+use std::thread::spawn;
 
-generate!(
-    "rec_and_cancel",
-    MeshedChannels,
-    Constellation,
-    Layout,
-    Script
-);
+// S
+type FullA = Recv<(), Recv<(), Recv<(), Recv<(), Recv<(), End>>>>>;
 
-// Payload types
+fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
+    let (_get_web_page_load_state, s) = recv(s)?;
+    let (_outstanding_web_fonts, s) = recv(s)?;
+    let (_get_current_state, s) = recv(s)?;
+    let (_document_loading, s) = recv(s)?;
+    let (_web_font_loaded, _s) = recv(s)?;
 
-struct GetCurrentState;
-struct DocumentLoading;
-struct WebFontLoaded;
-struct GetWebPageLoadState;
-struct OutstandingWebFonts;
-
-// Binary types
-
-// Constellation thread
-
-type CtoL = Send<GetWebPageLoadState, Recv<OutstandingWebFonts, End>>;
-type CtoS = Send<GetCurrentState, Recv<DocumentLoading, End>>;
-
-//Layout thread
-
-type LtoC = Recv<GetWebPageLoadState, Send<OutstandingWebFonts, End>>;
-type LtoS = Send<WebFontLoaded, End>;
-
-// Script thread
-
-type StoC = Recv<GetCurrentState, Send<DocumentLoading, End>>;
-type StoL = Recv<WebFontLoaded, End>;
-
-// Orderings
-
-type OrderingC = RoleScript<RoleScript<RoleLayout<RoleLayout<RoleEnd>>>>;
-
-type OrderingL = RoleScript<RoleConstellation<RoleConstellation<RoleEnd>>>;
-
-type OrderingS = RoleConstellation<RoleConstellation<RoleLayout<RoleEnd>>>;
-
-// MeshedChannels
-
-type EndpointC = MeshedChannels<CtoL, CtoS, OrderingC, NameConstellation>;
-
-type EndpointL = MeshedChannels<LtoC, LtoS, OrderingL, NameLayout>;
-
-type EndpointS = MeshedChannels<StoC, StoL, OrderingS, NameScript>;
-
-// Functions
-
-/////////////////////////
-
-// Functions related to endpoints
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let s = s.send(GetCurrentState {})?;
-
-    let (_, s) = s.recv()?;
-
-    // To "process" the information
-    let s = s.send(GetWebPageLoadState {})?;
-
-    let (_, s) = s.recv()?;
-
-    s.close()
+    Ok(())
 }
 
-/////////////////////////
+// C
+type FullB = <FullA as Session>::Dual;
 
-fn endpoint_l(s: EndpointL) -> Result<(), Box<dyn Error>> {
-    let s = s.send(WebFontLoaded {})?;
-
-    let (_, s) = s.recv()?;
-
-    let s = s.send(OutstandingWebFonts {})?;
-
-    s.close()
+fn binary_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
-
-/////////////////////////
-
-fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
-    let (_, s) = s.recv()?;
-    let s = s.send(DocumentLoading {})?;
-
-    let (_, s) = s.recv()?;
-
-    s.close()
-}
-
-////////////////////////////////////////
 
 fn main() {
-    let (thread_c, thread_l, thread_s) = fork_mpst(endpoint_c, endpoint_l, endpoint_s);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_c.join().unwrap();
-    thread_l.join().unwrap();
-    thread_s.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        sessions.into_iter().for_each(|s| binary_b(s).unwrap());
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }
