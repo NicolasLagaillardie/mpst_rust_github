@@ -1,112 +1,107 @@
-#![allow(clippy::type_complexity)]
+#![allow(
+    clippy::large_enum_variant,
+    clippy::type_complexity,
+    clippy::too_many_arguments
+)]
 
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::{choose, offer};
 
 use std::error::Error;
+use std::marker;
+use std::thread::{spawn, JoinHandle};
 
-// See the folder scribble_protocols for the related Scribble protocol
+// use std::time::Duration;
+
+// A
+enum BinaryA<N: marker::Send> {
+    More(Recv<N, Send<N, RecursA<N>>>),
+    Done(End),
+}
+type RecursA<N> = Recv<BinaryA<N>, End>;
+
+fn binary_a_to_b(s: RecursA<i64>) -> Result<(), Box<dyn Error>> {
+    recurs_a_binary(s, 1)
+}
+fn recurs_a_binary(s: RecursA<i64>, old: i64) -> Result<(), Box<dyn Error>> {
+    offer!(s, {
+        BinaryA::Done(s) => {
+            close(s)
+        },
+        BinaryA::More(s) => {
+            let (new, s) = recv(s)?;
+            let s = send(old + new, s);
+            recurs_a_binary(s, old + new)
+        },
+    })
+}
+
+// B
+type RecursB<N> = <RecursA<N> as Session>::Dual;
+fn binary_b_to_a(s: Send<i64, Recv<i64, RecursB<i64>>>) -> Result<RecursB<i64>, Box<dyn Error>> {
+    recurs_b_binary(s, 0)
+}
+fn recurs_b_binary(
+    s: Send<i64, Recv<i64, RecursB<i64>>>,
+    old: i64,
+) -> Result<RecursB<i64>, Box<dyn Error>> {
+    let s = send(old, s);
+    let (_, s) = recv(s)?;
+    Ok(s)
+}
+
+fn aux() {
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
+
+    for _ in 0..3 {
+        let (thread, s): (JoinHandle<()>, RecursB<i64>) =
+            fork_with_thread_id(black_box(binary_a_to_b));
+
+        threads.push(thread);
+        sessions.push(s);
+    }
+
+    let main = spawn(move || {
+        for _ in 0..LOOPS {
+            sessions = sessions
+                .into_iter()
+                .map(|s| binary_b_to_a(choose!(BinaryA::<i64>::More, s)).unwrap())
+                .collect::<Vec<_>>();
+        }
+
+        sessions
+            .into_iter()
+            .for_each(|s| close(choose!(BinaryA::<i64>::Done, s)).unwrap());
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
+}
+
+/////////////////////////
 
 static LOOPS: i64 = 20;
 
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, A, B, C);
-
-// Types
-// A
-type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
-type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
-
-// B
-enum Branching0fromAtoB {
-    More(
-        MeshedChannels<
-            Recv<i64, Send<i64, RecursBtoA>>,
-            End,
-            RoleA<RoleA<RoleA<RoleEnd>>>,
-            NameB,
-        >,
-    ),
-    Done(MeshedChannels<End, End, RoleEnd, NameB>),
-}
-type RecursBtoA = Recv<Branching0fromAtoB, End>;
-
-// C
-enum Branching0fromAtoC {
-    More(MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
-    Done(MeshedChannels<End, End, RoleEnd, NameC>),
-}
-type RecursCtoA = Recv<Branching0fromAtoC, End>;
-
-// Creating the MP sessions
-type EndpointA = MeshedChannels<Choose0fromAtoB, Choose0fromAtoC, RoleBroadcast, NameA>;
-type EndpointAMore = MeshedChannels<
-    Send<i64, Recv<i64, Choose0fromAtoB>>,
-    Choose0fromAtoC,
-    RoleB<RoleB<RoleBroadcast>>,
-    NameA,
->;
-type EndpointB = MeshedChannels<RecursBtoA, End, RoleA<RoleEnd>, NameB>;
-type EndpointC = MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
-
-// Functions
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    recurs_a(s, LOOPS, 1)
+pub fn fib(c: &mut Criterion) {
+    c.bench_function(&format!("Fibo binary {LOOPS}"), |b| b.iter(aux));
 }
 
-fn recurs_a(s: EndpointA, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
-            let s = choose_mpst_a_to_all!(s, Branching0fromAtoB::Done, Branching0fromAtoC::Done);
+/////////////////////////
 
-            s.close()
-        }
-        i => {
-            let s: EndpointAMore =
-                choose_mpst_a_to_all!(s, Branching0fromAtoB::More, Branching0fromAtoC::More);
-
-            let s = s.send(old)?;
-            let (new, s) = s.recv()?;
-
-            recurs_a(s, i - 1, new)
-        }
-    }
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
+    targets = fib,
 }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    recurs_b(s, 0)
-}
-
-fn recurs_b(s: EndpointB, old: i64) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching0fromAtoB::Done(s) => {
-            s.close()
-        },
-        Branching0fromAtoB::More(s) => {
-            let (new, s) = s.recv()?;
-            let s = s.send(new + old)?;
-            recurs_b(s, new + old)
-        },
-    })
-}
-
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching0fromAtoC::Done(s) => {
-            s.close()
-        },
-        Branching0fromAtoC::More(s) => {
-            endpoint_c(s)
-        },
-    })
-}
-
-fn main() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
-
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-    thread_c.join().unwrap();
+criterion_main! {
+    bench
 }
