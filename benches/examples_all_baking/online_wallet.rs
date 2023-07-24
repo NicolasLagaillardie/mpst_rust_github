@@ -168,8 +168,9 @@ fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
-    let id = String::from("id");
-    let pw = String::from("pw");
+    // Same id and password
+    let id = String::from("id_pw");
+    let pw = String::from("id_pw");
 
     let s = s.send((id, pw))?;
 

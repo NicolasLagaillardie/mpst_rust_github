@@ -1,219 +1,123 @@
-#![allow(clippy::type_complexity)]
+#![allow(clippy::type_complexity, dead_code)]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
+use mpstthree::{choose, offer};
 
 use std::error::Error;
-
-// See the folder scribble_protocols for the related Scribble protocol
-
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, A, C, S);
-
-// Types
-// A
-type Choose0fromAtoS = <Recurs0StoA as Session>::Dual;
-type Choose0fromAtoC = <Recurs0CtoA as Session>::Dual;
-
-enum Branching1fromCtoA {
-    Pay(MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>),
-    Quit(MeshedChannels<End, End, RoleEnd, NameA>),
-}
-
-type Recurs1AtoC = Recv<Branching1fromCtoA, End>;
+use std::thread::spawn;
 
 // S
-enum Branching0fromAtoS {
-    Login(
-        MeshedChannels<
-            Recv<(), End>,
-            Send<(i64, i64), Recurs1StoC>,
-            RoleA<RoleC<RoleC<RoleEnd>>>,
-            NameS,
-        >,
-    ),
-    Fail(MeshedChannels<Recv<String, End>, End, RoleA<RoleEnd>, NameS>),
+enum Binary0A {
+    Success(Recv<(), Recv<(), Offer1A>>),
+    // Not used
+    Failure(Recv<(), Recv<(), End>>),
+}
+enum Binary1A {
+    Continue(Recv<(), Offer1A>),
+    Quit(Recv<(), End>),
+}
+type Rec0A = Recv<Binary0A, End>;
+type Rec1A = Recv<Binary1A, End>;
+type Offer1A = Recv<(), Rec1A>;
+type FullA = Recv<(), Rec0A>;
+
+fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
+    let (_hard_ping, s) = recv(s)?;
+
+    recurs_0_a(s)
 }
 
-type Recurs0StoA = Recv<Branching0fromAtoS, End>;
-
-enum Branching1fromCtoS {
-    Pay(
-        MeshedChannels<
-            End,
-            Recv<(String, i64), Send<(i64, i64), Recurs1StoC>>,
-            RoleC<RoleC<RoleC<RoleEnd>>>,
-            NameS,
-        >,
-    ),
-    Quit(MeshedChannels<End, Recv<(), End>, RoleC<RoleEnd>, NameS>),
+fn recurs_0_a(s: Rec0A) -> Result<(), Box<dyn Error>> {
+    offer!(s, {
+        Binary0A::Success(s) => {
+            let (_login_ok_c, s) = recv(s)?;
+            let (_login_ok_s, s) = recv(s)?;
+            recurs_1_a(s)
+        },
+        Binary0A::Failure(s) => {
+            let (_login_fail_c, s) = recv(s)?;
+            let (_login_fail_s, s) = recv(s)?;
+            close(s)
+        },
+    })
 }
 
-type Recurs1StoC = Recv<Branching1fromCtoS, End>;
+fn recurs_1_a(s: Offer1A) -> Result<(), Box<dyn Error>> {
+    let (_account, s) = recv(s)?;
+
+    offer!(s, {
+        Binary1A::Continue(s) => {
+            let (_pay, s) = recv(s)?;
+            recurs_1_a(s)
+        },
+        Binary1A::Quit(s) => {
+            let (_quit, s) = recv(s)?;
+            close(s)
+        },
+    })
+}
 
 // C
-enum Branching0fromAtoC {
-    Login(
-        MeshedChannels<
-            Recv<(), Choose1fromCtoA>,
-            Recv<(i64, i64), Choose1fromCtoS>,
-            RoleA<RoleS<RoleBroadcast>>,
-            NameC,
-        >,
-    ),
-    Fail(MeshedChannels<Recv<String, End>, End, RoleA<RoleEnd>, NameC>),
-}
-type Recurs0CtoA = Recv<Branching0fromAtoC, End>;
+type Choice1B = <Offer1A as Session>::Dual;
+type FullB = <FullA as Session>::Dual;
 
-type Choose1fromCtoA = <Recurs1AtoC as Session>::Dual;
-type Choose1fromCtoS = <Recurs1StoC as Session>::Dual;
-
-// Creating the MP sessions
-// Step 1
-type EndpointA1 = MeshedChannels<Recurs1AtoC, End, RoleC<RoleEnd>, NameA>;
-type EndpointC1 = MeshedChannels<
-    Choose1fromCtoA,
-    Recv<(i64, i64), Choose1fromCtoS>,
-    RoleS<RoleBroadcast>,
-    NameC,
->;
-type EndpointC1Pay = MeshedChannels<
-    Choose1fromCtoA,
-    Send<(String, i64), Recv<(i64, i64), Choose1fromCtoS>>,
-    RoleS<RoleS<RoleBroadcast>>,
-    NameC,
->;
-type EndpointS1 =
-    MeshedChannels<End, Send<(i64, i64), Recurs1StoC>, RoleC<RoleC<RoleEnd>>, NameS>;
-
-// Step 0
-type EndpointA0 = MeshedChannels<
-    Recv<(String, String), Choose0fromAtoC>,
-    Choose0fromAtoS,
-    RoleC<RoleBroadcast>,
-    NameA,
->;
-type EndpointA0Fail =
-    MeshedChannels<Send<String, End>, Send<String, End>, RoleC<RoleS<RoleEnd>>, NameA>;
-type EndpointA0Login =
-    MeshedChannels<Send<(), Recurs1AtoC>, Send<(), End>, RoleC<RoleS<RoleC<RoleEnd>>>, NameA>;
-type EndpointC0 =
-    MeshedChannels<Send<(String, String), Recurs0CtoA>, End, RoleA<RoleA<RoleEnd>>, NameC>;
-type EndpointS0 = MeshedChannels<Recurs0StoA, End, RoleA<RoleEnd>, NameS>;
-
-// Functions
-fn endpoint_a(s: EndpointA0) -> Result<(), Box<dyn Error>> {
-    let ((id, pw), s) = s.recv()?;
-
-    if id != pw {
-        // actual condition id != pw
-        let s: EndpointA0Fail =
-            choose_mpst_a_to_all!(s, Branching0fromAtoC::Fail, Branching0fromAtoS::Fail);
-
-        let s = s.send("Fail".to_string())?;
-        let s = s.send("Fail".to_string())?;
-
-        s.close()
-    } else {
-        let s: EndpointA0Login =
-            choose_mpst_a_to_all!(s, Branching0fromAtoC::Login, Branching0fromAtoS::Login);
-
-        let s = s.send(())?;
-        let s = s.send(())?;
-
-        recurs_a(s)
-    }
+fn binary_success_pay_b(s: Choice1B) -> Result<Choice1B, Box<dyn Error>> {
+    let s = send((), s);
+    let s = choose!(Binary1A::Continue, s);
+    let s = send((), s);
+    Ok(s)
 }
 
-fn recurs_a(s: EndpointA1) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching1fromCtoA::Quit(s) => {
-            s.close()
-        },
-        Branching1fromCtoA::Pay(s) => {
-            recurs_a(s)
-        },
-    })
+fn binary_success_quit_b(s: Choice1B) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = choose!(Binary1A::Quit, s);
+    let s = send((), s);
+    close(s)
 }
 
-fn endpoint_s(s: EndpointS0) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching0fromAtoS::Fail(s) => {
-            let (_, s) = s.recv()?;
-            s.close()
-        },
-        Branching0fromAtoS::Login(s) => {
-            let (_, s) = s.recv()?;
-            recurs_s(s)
-        },
-    })
-}
-
-fn recurs_s(s: EndpointS1) -> Result<(), Box<dyn Error>> {
-    let s = s.send((1, 1))?;
-
-    offer_mpst!(s, {
-        Branching1fromCtoS::Quit(s) => {
-            let (_, s) = s.recv()?;
-            s.close()
-        },
-        Branching1fromCtoS::Pay(s) => {
-            let (_, s) = s.recv()?;
-            recurs_s(s)
-        },
-    })
-}
-
-fn endpoint_c(s: EndpointC0) -> Result<(), Box<dyn Error>> {
-    let id = String::from("id");
-    let pw = String::from("pw");
-
-    let s = s.send((id, pw))?;
-
-    offer_mpst!(s, {
-        Branching0fromAtoC::Fail(s) => {
-            let (_, s) = s.recv()?;
-            s.close()
-        },
-        Branching0fromAtoC::Login(s) => {
-            let (_, s) = s.recv()?;
-            recurs_c(s, 100)
-        },
-    })
-}
-
-fn recurs_c(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
-    let ((balance, overdraft), s) = s.recv()?;
-
-    match loops {
-        0 => {
-            let s = choose_mpst_c_to_all!(s, Branching1fromCtoA::Quit, Branching1fromCtoS::Quit);
-
-            let s = s.send(())?;
-
-            s.close()
-        }
-        _ => {
-            let s: EndpointC1Pay =
-                choose_mpst_c_to_all!(s, Branching1fromCtoA::Pay, Branching1fromCtoS::Pay);
-
-            let sum = balance + overdraft;
-
-            let payee = String::from("payee");
-
-            let s = s.send((payee, sum))?;
-
-            recurs_c(s, loops - 1)
-        }
-    }
+// Not used
+fn binary_quit_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = choose!(Binary0A::Failure, s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
 
 fn main() {
-    let (thread_a, thread_s, thread_c) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    let session = send((), session);
+    let session = choose!(Binary0A::Success, session);
+    let session = send((), session);
+    let session = send((), session);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        for _ in 0..LOOPS {
+            sessions = sessions
+                .into_iter()
+                .map(|s| binary_success_pay_b(s).unwrap())
+                .collect::<Vec<_>>();
+        }
+
+        sessions
+            .into_iter()
+            .for_each(|s| binary_success_quit_b(s).unwrap());
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }
+
+static LOOPS: i32 = 100;

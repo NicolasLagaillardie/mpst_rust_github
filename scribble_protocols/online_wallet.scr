@@ -1,7 +1,8 @@
 global protocol OnlineWallet(role S, role C, role A) {
     login(id: string, pw: string) from C to A;
     choice  at A {
-        login_ok () from A to C, S;
+        login_ok () from A to C;
+        login_ok () from A to S;
         rec  LOOP {
             account(balance: int, overdraft: int) from S to C;
             choice  at C {  @< amount <= balance+overdraft >
@@ -12,6 +13,7 @@ global protocol OnlineWallet(role S, role C, role A) {
             }
         }
     } or {
-        login_fail(error: string) from A to C, S;
+        login_fail(error: string) from A to C;
+        login_fail(error: string) from A to S;
     }
 }

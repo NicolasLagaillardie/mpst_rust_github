@@ -250,8 +250,9 @@ fn endpoint_c(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let id = String::from("id");
-    let pw = String::from("pw");
+    // Same id and password
+    let id = String::from("id_pw");
+    let pw = String::from("id_pw");
 
     let s = s.send((id, pw), all_clocks)?;
 
