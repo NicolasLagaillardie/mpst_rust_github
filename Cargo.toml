@@ -170,6 +170,11 @@ name = "online_wallet_binary"
 path = "examples/binary/online_wallet.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "remote_data_binary"
+path = "examples/binary/remote_data.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
