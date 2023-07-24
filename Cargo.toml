@@ -195,6 +195,11 @@ name = "travel_agency_binary"
 path = "examples/binary/travel_agency.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "video_stream_binary"
+path = "examples/binary/video_stream.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]

@@ -1,15 +1,16 @@
 global protocol VideoStreamingProtocol(role Auth, role Client, role Server) {
 	Declare(Id) from Client to Auth; // Sends a message labelled Declare with a payload Id
 	Accept(Answer) from Auth to Client; // The Auth role replies with an Accept message
-	rec Loop { 
-	 choice at Client { // Client makes a choice 
-	  RequestVideo(Request) from Client to Auth; // Client sends a request for a video, giving its name
-	  RequestVideo(Request) from Auth to Server; // Auth forwards the request
-	  SendVideo(Video) from Server to Auth; // Server sends the video file to the Auth
-	  SendVideo(Video) from Auth to Client; // Auth sends the video file to the client
-	  continue Loop; // A Recursive call
-	} or {
-	  Close() from Client to Auth; // Close the session between Client and Auth
-	  Close() from Auth to Server; // Close the session between Server and Auth
+	rec Loop {
+		choice at Client { // Client makes a choice 
+			RequestVideo(Request) from Client to Auth; // Client sends a request for a video, giving its name
+			RequestVideo(Request) from Auth to Server; // Auth forwards the request
+			SendVideo(Video) from Server to Auth; // Server sends the video file to the Auth
+			SendVideo(Video) from Auth to Client; // Auth sends the video file to the client
+			continue Loop; // A Recursive call
+		} or {
+			Close() from Client to Auth; // Close the session between Client and Auth
+			Close() from Auth to Server; // Close the session between Server and Auth
+		}
 	}
 }
