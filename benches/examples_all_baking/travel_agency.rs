@@ -121,7 +121,7 @@ fn choice_a(s: ChoiceA) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_c_init(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    endpoint_c(s, 100)
+    endpoint_c(s, LOOPS)
 }
 
 fn endpoint_c(s: EndpointC, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -201,6 +201,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn travel(c: &mut Criterion) {
     c.bench_function("Travel agency", |b| b.iter(aux));

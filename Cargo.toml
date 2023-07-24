@@ -190,6 +190,11 @@ name = "three_buyers_binary"
 path = "examples/binary/three_buyers.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "travel_agency_binary"
+path = "examples/binary/travel_agency.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]

@@ -213,7 +213,7 @@ fn endpoint_c_init(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    endpoint_c(s, 100, all_clocks)
+    endpoint_c(s, LOOPS, all_clocks)
 }
 
 fn endpoint_c(
@@ -318,6 +318,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn travel(c: &mut Criterion) {
     c.bench_function("Timed Travel agency", |b| b.iter(aux));
