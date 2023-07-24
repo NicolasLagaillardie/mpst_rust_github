@@ -160,6 +160,11 @@ name = "logging_binary"
 path = "examples/binary/logging.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "o_auth_binary"
+path = "examples/binary/o_auth.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
