@@ -1,14 +1,14 @@
-global protocol SimpleVoting(role VOTER, role SERVER){
-    Authenticate(String) from VOTER to SERVER;
-    choice at SERVER {
-        Ok(String) from SERVER to VOTER;
-        choice at VOTER {
-            Yes(String) from VOTER to SERVER;
+global protocol SimpleVoting(role Voter, role Server){
+    Authenticate(String) from Voter to Server;
+    choice at Server {
+        Ok(String) from Server to Voter;
+        choice at Voter {
+            Yes(String) from Voter to Server;
         } or {
-            No(String) from VOTER to SERVER;
+            No(String) from Voter to Server;
         }
-        Result(Int) from SERVER to VOTER;
+        Result(Int) from Server to Voter;
     } or {
-        Reject(String) from SERVER to VOTER;
+        Reject(String) from Server to Voter;
     }
 }

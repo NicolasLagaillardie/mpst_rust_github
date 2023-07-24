@@ -1,133 +1,105 @@
-#![allow(clippy::type_complexity)]
+#![allow(clippy::type_complexity, dead_code)]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
+use mpstthree::{choose, offer};
 
 use rand::{thread_rng, Rng};
 
 use std::error::Error;
+use std::thread::spawn;
 
-// See the folder scribble_protocols for the related Scribble protocol
-
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, Voter, Server);
-
-// Types
-// SERVER
-type Choose0fromStoV = Send<Branching0fromStoV, End>;
-
-// VOTER
-type Choose1fromVtoS = <Choice1fromStoV as Session>::Dual;
-
-// VOTER
-enum Branching0fromStoV {
-    Auth(MeshedChannels<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>),
-    Reject(MeshedChannels<Recv<i32, End>, RoleServer<RoleEnd>, NameVoter>),
+// S
+enum Binary0A {
+    Accept(Recv<(), Rec1A>),
+    // Not used
+    Reject(Recv<(), End>),
 }
-
-// SERVER
-enum Branching1fromVtoS {
-    Yes(MeshedChannels<Recv<i32, End>, RoleVoter<RoleEnd>, NameServer>),
-    No(MeshedChannels<Recv<i32, End>, RoleVoter<RoleEnd>, NameServer>),
+enum Binary1A {
+    Yes(Recv<(), End>),
+    No(Recv<(), End>),
 }
-type Choice1fromStoV = Recv<Branching1fromVtoS, End>;
+type Rec0A = Recv<Binary0A, End>;
+type Rec1A = Recv<Binary1A, End>;
+type FullA = Recv<(), Rec0A>;
 
-// Creating the MP sessions
-// VOTER
-type ChoiceVoter =
-    MeshedChannels<Recv<i32, Choose1fromVtoS>, RoleServer<RoleBroadcast>, NameVoter>;
-type EndpointVoter = MeshedChannels<
-    Send<i32, Recv<Branching0fromStoV, End>>,
-    RoleServer<RoleServer<RoleEnd>>,
-    NameVoter,
->;
+fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
+    let (_authenticate, s) = recv(s)?;
 
-// SERVER
-type ChoiceServer = MeshedChannels<Choice1fromStoV, RoleVoter<RoleEnd>, NameServer>;
-type EndpointServer =
-    MeshedChannels<Recv<i32, Choose0fromStoV>, RoleVoter<RoleBroadcast>, NameServer>;
+    offer!(s, {
+        Binary0A::Accept(s) => {
+            let (_ok, s) = recv(s)?;
 
-// Functions
-fn endpoint_voter(s: EndpointVoter) -> Result<(), Box<dyn Error>> {
-    let auth: i32 = thread_rng().gen_range(1..=2);
-
-    let s = s.send(auth)?;
-
-    offer_mpst!(s, {
-        Branching0fromStoV::Reject(s) => {
-
-            let (_, s) = s.recv()?;
-
-            s.close()
+            offer!(s, {
+                Binary1A::Yes(s) => {
+                    let (_yes, s) = recv(s)?;
+                    close(s)
+                },
+                Binary1A::No(s) => {
+                    let (_no, s) = recv(s)?;
+                    close(s)
+                },
+            })
         },
-        Branching0fromStoV::Auth(s) => {
-            choice_voter(s)
+        Binary0A::Reject(s) => {
+            let (_reject, s) = recv(s)?;
+            close(s)
         },
     })
 }
 
-fn choice_voter(s: ChoiceVoter) -> Result<(), Box<dyn Error>> {
-    let (ok, s) = s.recv()?;
+// C
+type FullB = <FullA as Session>::Dual;
 
-    let expected: i32 = thread_rng().gen_range(1..=2);
-
-    if ok == expected {
-        let s = choose_mpst_voter_to_all!(s, Branching1fromVtoS::Yes);
-
-        let s = s.send(1)?;
-
-        s.close()
-    } else {
-        let s = choose_mpst_voter_to_all!(s, Branching1fromVtoS::No);
-
-        let s = s.send(0)?;
-
-        s.close()
-    }
+fn binary_yes_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = choose!(Binary0A::Accept, s);
+    let s: mpstthree::binary::struct_trait::send::Send<Binary1A, End> = send((), s);
+    let s = choose!(Binary1A::Yes, s);
+    let s = send((), s);
+    close(s)
 }
 
-fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
-    let choice: i32 = thread_rng().gen_range(1..=2);
-
-    let (auth, s) = s.recv()?;
-
-    if choice == auth {
-        let s = choose_mpst_server_to_all!(s, Branching0fromStoV::Reject);
-
-        let s = s.send(0)?;
-
-        s.close()
-    } else {
-        let s = choose_mpst_server_to_all!(s, Branching0fromStoV::Auth);
-
-        let s = s.send(1)?;
-
-        choice_server(s)
-    }
+fn binary_no_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = choose!(Binary0A::Accept, s);
+    let s: mpstthree::binary::struct_trait::send::Send<Binary1A, End> = send((), s);
+    let s = choose!(Binary1A::No, s);
+    let s = send((), s);
+    close(s)
 }
 
-fn choice_server(s: ChoiceServer) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching1fromVtoS::Yes(s) => {
-
-            let (_answer, s) = s.recv()?;
-
-            s.close()
-        },
-        Branching1fromVtoS::No(s) => {
-
-            let (_answer, s) = s.recv()?;
-
-            s.close()
-        },
-    })
+// Not used
+fn binary_reject_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = choose!(Binary0A::Reject, s);
+    let s = send((), s);
+    close(s)
 }
 
 fn main() {
-    let (thread_server, thread_voter) = fork_mpst(endpoint_server, endpoint_voter);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_voter.join().unwrap();
-    thread_server.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        let choice = thread_rng().gen_range(1..=2);
+
+        if choice != 1 {
+            sessions.into_iter().for_each(|s| binary_yes_b(s).unwrap());
+        } else {
+            sessions.into_iter().for_each(|s| binary_no_b(s).unwrap());
+        }
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }

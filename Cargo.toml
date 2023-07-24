@@ -180,6 +180,11 @@ name = "servo_binary"
 path = "examples/binary/servo.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "simple_voting_binary"
+path = "examples/binary/simple_voting.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
