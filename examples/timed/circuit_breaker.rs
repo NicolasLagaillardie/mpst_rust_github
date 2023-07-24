@@ -6,7 +6,7 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{random, thread_rng, Rng};
+use rand::random;
 
 use std::collections::HashMap;
 use std::error::Error;
@@ -381,12 +381,11 @@ fn endpoint_controller(
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
-    let start: i32 = thread_rng().gen_range(50..100);
-    let s = s.send(start, all_clocks)?;
-    let s = s.send(start, all_clocks)?;
+    let s = s.send(LOOPS, all_clocks)?;
+    let s = s.send(LOOPS, all_clocks)?;
     let (_hard_ping, s) = s.recv(all_clocks)?;
 
-    recurs_controller(s, start, all_clocks)
+    recurs_controller(s, LOOPS, all_clocks)
 }
 
 fn recurs_controller(
@@ -515,6 +514,8 @@ fn endpoint_user(
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 fn main() {
     let (thread_api, thread_controller, thread_storage, thread_user) = fork_mpst(

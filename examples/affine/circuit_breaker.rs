@@ -5,7 +5,7 @@ use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{random, thread_rng, Rng};
+use rand::random;
 
 use std::error::Error;
 use std::marker;
@@ -220,12 +220,11 @@ fn recurs_api(s: EndpointApi0<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn endpoint_controller(s: EndpointControllerInit<i32>) -> Result<(), Box<dyn Error>> {
-    let start: i32 = thread_rng().gen_range(50..100);
-    let s = s.send(start)?;
-    let s = s.send(start)?;
+    let s = s.send(LOOPS)?;
+    let s = s.send(LOOPS)?;
     let (_hard_ping, s) = s.recv()?;
 
-    recurs_controller(s, start)
+    recurs_controller(s, LOOPS)
 }
 
 fn recurs_controller(s: EndpointController0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
@@ -334,6 +333,8 @@ fn endpoint_user(s: EndpointUserInit<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 fn main() {
     let (thread_api, thread_controller, thread_storage, thread_user) = fork_mpst(

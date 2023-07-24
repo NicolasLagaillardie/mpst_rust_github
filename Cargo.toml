@@ -136,6 +136,299 @@ required-features = []
 ######### Ping-Pong start
 ######### Ping-Pong end
 
+################################### Examples
+
+######### Binary
+
+[[example]]
+name = "calculator_binary"
+path = "examples/binary/calculator.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "circuit_breaker_binary"
+path = "examples/binary/circuit_breaker.rs"
+required-features = ["binary"]
+
+######### Basic
+
+[[example]]
+name = "video_stream_basic"
+path = "examples/basic/video_stream_basic.rs"
+required-features = ["macros_simple"]
+
+[[example]]
+name = "circuit_breaker_basic"
+path = "examples/basic/circuit_breaker.rs"
+required-features = ["macros_multiple"]
+
+[[example]]
+name = "logging_basic"
+path = "examples/basic/logging.rs"
+required-features = ["macros_multiple"]
+
+######### Affine
+
+[[example]]
+name = "fib"
+path = "examples/affine/fib.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker"
+path = "examples/affine/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging"
+path = "examples/affine/logging.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "calculator"
+path = "examples/affine/calculator.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler"
+path = "examples/affine/dns_fowler.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking"
+path = "examples/affine/dns_fowler_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "dns_imai"
+path = "examples/affine/dns_imai.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth"
+path = "examples/affine/o_auth.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking"
+path = "examples/affine/o_auth_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "o_auth_transport"
+path = "examples/affine/o_auth_transport.rs"
+required-features = ["transport_macros_multiple"]
+
+[[example]]
+name = "online_wallet"
+path = "examples/affine/online_wallet.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "simple_voting"
+path = "examples/affine/simple_voting.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "smtp"
+path = "examples/affine/smtp.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "three_buyers"
+path = "examples/affine/three_buyers.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "travel_agency"
+path = "examples/affine/travel_agency.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo"
+path = "examples/affine/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data"
+path = "examples/affine/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http"
+path = "examples/affine/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "video_stream"
+path = "examples/affine/video_stream.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_original"
+path = "examples/affine/servo_8257_original.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_fixed"
+path = "examples/affine/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+######### Checking
+
+[[example]]
+name = "video_stream_checking"
+path = "examples/checking/video_stream.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "adder_checking"
+path = "examples/checking/adder.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "basic_checking"
+path = "examples/checking/basic.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_original_checking"
+path = "examples/checking/servo_8257_original.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed_checking"
+path = "examples/checking/servo_8257_fixed.rs"
+required-features = ["baking_checking"]
+
+######### Interleaved
+
+#### Baking
+
+[[example]]
+name = "circuit_breaker_logging"
+path = "examples/interleaved/baking/circuit_breaker_logging.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "circuit_breaker_solo"
+path = "examples/interleaved/baking/circuit_breaker_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "logging_solo"
+path = "examples/interleaved/baking/logging_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "sleeping_barber"
+path = "examples/interleaved/baking/sleeping_barber.rs"
+required-features = ["interleaved"]
+
+#### Timed
+
+[[example]]
+name = "sleeping_barber_timed"
+path = "examples/interleaved/timed/sleeping_barber.rs"
+required-features = ["baking_timed_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_timed"
+path = "examples/interleaved/timed/circuit_breaker_logging.rs"
+required-features = ["baking_timed_interleaved"]
+
+######### Timed
+
+[[example]]
+name = "fib_timed"
+path = "examples/timed/fib.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_timed"
+path = "examples/timed/servo.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_failing"
+path = "examples/timed/servo_8257_async_failing.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_working"
+path = "examples/timed/servo_8257_async_working.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_fixed"
+path = "examples/timed/servo_8257_async_fixed.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "simple_voting_timed"
+path = "examples/timed/simple_voting.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "calculator_timed"
+path = "examples/timed/calculator.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "o_auth_timed"
+path = "examples/timed/o_auth.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "online_wallet_timed"
+path = "examples/timed/online_wallet.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "smtp_timed"
+path = "examples/timed/smtp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "three_buyers_timed"
+path = "examples/timed/three_buyers.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "travel_agency_timed"
+path = "examples/timed/travel_agency.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "remote_data_timed"
+path = "examples/timed/remote_data.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "http_timed"
+path = "examples/timed/http.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "non_feasible"
+path = "examples/timed/non_feasible.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "circuit_breaker_timed"
+path = "examples/timed/circuit_breaker.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "logging_timed"
+path = "examples/timed/logging.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "video_stream_timed"
+path = "examples/timed/video_stream.rs"
+required-features = ["baking_timed"]
+
 ################################### Profil
 
 [profile.release]
