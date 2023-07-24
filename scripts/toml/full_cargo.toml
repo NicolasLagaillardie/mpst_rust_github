@@ -2517,6 +2517,66 @@ name = "calculator_binary"
 path = "examples/binary/calculator.rs"
 required-features = ["binary"]
 
+[[example]]
+name = "circuit_breaker_binary"
+path = "examples/binary/circuit_breaker.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "fib_binary"
+path = "examples/binary/fib.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "logging_binary"
+path = "examples/binary/logging.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "o_auth_binary"
+path = "examples/binary/o_auth.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "online_wallet_binary"
+path = "examples/binary/online_wallet.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "remote_data_binary"
+path = "examples/binary/remote_data.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "servo_binary"
+path = "examples/binary/servo.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "simple_voting_binary"
+path = "examples/binary/simple_voting.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "smtp_binary"
+path = "examples/binary/smtp.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "three_buyers_binary"
+path = "examples/binary/three_buyers.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "travel_agency_binary"
+path = "examples/binary/travel_agency.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "video_stream_binary"
+path = "examples/binary/video_stream.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
