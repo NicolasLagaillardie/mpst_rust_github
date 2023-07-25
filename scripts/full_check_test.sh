@@ -17,7 +17,7 @@ set -e
     # cargo check each feature
     cargo check --all-targets --verbose --workspace --no-default-features
     # Clean everything
-    ./scripts/clean_all.sh
+    bash ./scripts/clean_all.sh
 
     sed -n '/^################################### Features$/,/^################################### Doc handling for all-features$/p' Cargo.toml | \
     grep -iE '[a-z|_]+ =' | \
