@@ -42,7 +42,7 @@ type EndpointC2 = Recv<Branching2fromCtoS, End>;
 type EndpointS2 = <EndpointC2 as Session>::Dual;
 
 enum Branching2fromCtoS {
-    Continue(Recv<(), Recv<(), EndpointC3>>),
+    Continue(Recv<(), EndpointC3>),
     Quit(Recv<(), End>),
 }
 
@@ -155,7 +155,6 @@ fn binary_s_quit_3(s: EndpointSInit) -> Result<(), Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Quit, s);
     let s = send((), s);
@@ -169,7 +168,6 @@ fn binary_s_x_4(s: EndpointSInit) -> Result<EndpointS4, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -185,7 +183,6 @@ fn binary_s_quit_5(s: EndpointSInit) -> Result<(), Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -203,7 +200,6 @@ fn binary_s_x_6(s: EndpointSInit) -> Result<EndpointS6, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -223,7 +219,6 @@ fn binary_s_quit_7(s: EndpointSInit) -> Result<(), Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -245,7 +240,6 @@ fn binary_s_x_8(s: EndpointSInit) -> Result<EndpointS7, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -269,7 +263,6 @@ fn binary_s_x_9(s: EndpointSInit) -> Result<EndpointS9, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -296,7 +289,6 @@ fn binary_s_end_10(s: EndpointSInit) -> Result<EndpointS7, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -328,7 +320,6 @@ fn binary_s_data_10(s: EndpointSInit) -> Result<EndpointS10, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -360,7 +351,6 @@ fn binary_s_subject_10(s: EndpointSInit) -> Result<EndpointS10, Box<dyn Error>> 
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -392,7 +382,6 @@ fn binary_s_init(s: EndpointSInit) -> Result<EndpointS10, Box<dyn Error>> {
     let s = choose!(Branching1fromCtoS::Continue, s);
     let s: Send<Branching2fromCtoS, End> = send((), s);
     let s = choose!(Branching2fromCtoS::Continue, s);
-    let s = send((), s);
     let s: Send<Branching3fromCtoS, End> = send((), s);
     let s = choose!(Branching3fromCtoS::Continue, s);
     let s: Send<Branching4fromCtoS, End> = send((), s);
@@ -485,7 +474,6 @@ fn endpoint_c_2(s: EndpointC2) -> Result<(), Box<dyn Error>> {
             close(s)
         },
         Branching2fromCtoS::Continue(s) => {
-            let (_, s) = recv(s)?;
             let (_, s) = recv(s)?;
 
             endpoint_c_3(s)

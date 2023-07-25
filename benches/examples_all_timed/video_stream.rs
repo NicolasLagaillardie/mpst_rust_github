@@ -8,8 +8,6 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-
-
 use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;

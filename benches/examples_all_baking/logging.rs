@@ -11,7 +11,6 @@ use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-
 use std::error::Error;
 
 // See the folder scribble_protocols for the related Scribble protocol
