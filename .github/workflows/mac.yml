@@ -41,7 +41,7 @@ jobs:
       run: cargo fmt --verbose --all -- --check
     - name: Clippy
       run: cargo clippy --workspace --all-features --all-targets --verbose -- -D warnings
-    - name: Check lib
+    - name: Build lib
       run: cargo build --verbose --workspace --all-features
     - name: Check and test all targets but skip kmc and transport_udp
       run: bash ./scripts/partial_check_test.sh

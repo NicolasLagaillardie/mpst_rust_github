@@ -68,9 +68,7 @@ type EndpointC0 = MeshedChannels<Recv<(), Choose0fromCtoS>, RoleS<RoleBroadcast>
 
 // S
 enum Branching0fromCtoS {
-    Continue(
-        MeshedChannels<Recv<(), Recv<(), Choose1fromStoC>>, RoleC<RoleC<RoleBroadcast>>, NameS>,
-    ),
+    Continue(MeshedChannels<Recv<(), Choose1fromStoC>, RoleC<RoleBroadcast>, NameS>),
     Quit(MeshedChannels<Recv<(), End>, RoleC<RoleEnd>, NameS>),
 }
 type Offer0fromCtoS = <Choose0fromCtoS as Session>::Dual;
@@ -80,7 +78,7 @@ type EndpointS0 = MeshedChannels<Send<(), Offer0fromCtoS>, RoleC<RoleC<RoleEnd>>
 // C
 enum Branching1fromStoC {
     Continue(MeshedChannels<Recv<(), Choose2fromCtoS>, RoleS<RoleBroadcast>, NameC>),
-    Loop(MeshedChannels<Recv<(), Recv<(), Offer1fromStoC>>, RoleS<RoleS<RoleS<RoleEnd>>>, NameC>),
+    Loop(MeshedChannels<Recv<(), Offer1fromStoC>, RoleS<RoleS<RoleEnd>>, NameC>),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
 type EndpointC1 = MeshedChannels<Offer1fromStoC, RoleS<RoleEnd>, NameC>;
@@ -245,7 +243,6 @@ fn endpoint_c_0(s: EndpointC0, loops: i32) -> Result<(), Box<dyn Error>> {
             );
 
             let s = send_mpst_c_to_s((), s);
-            let s = send_mpst_c_to_s((), s);
 
             endpoint_c_1(s, loops)
         }
@@ -260,7 +257,6 @@ fn endpoint_c_1(s: EndpointC1, loops: i32) -> Result<(), Box<dyn Error>> {
             endpoint_c_2(s, loops)
         },
         Branching1fromStoC::Loop(s) => {
-            let (_, s) = recv_mpst_c_from_s(s)?;
             let (_, s) = recv_mpst_c_from_s(s)?;
 
             endpoint_c_1(s, loops)
@@ -507,7 +503,6 @@ fn endpoint_s_0(s: EndpointS0, loops: i32) -> Result<(), Box<dyn Error>> {
         },
         Branching0fromCtoS::Continue(s) => {
             let (_, s) = recv_mpst_s_from_c(s)?;
-            let (_, s) = recv_mpst_s_from_c(s)?;
 
             endpoint_s_1(s, loops)
         },
@@ -523,7 +518,6 @@ fn endpoint_s_1(s: EndpointS1, loops: i32) -> Result<(), Box<dyn Error>> {
                 NameS, MeshedChannels, 2
             );
 
-            let s = send_mpst_s_to_c((), s);
             let s = send_mpst_s_to_c((), s);
 
             endpoint_s_1(s, loops)

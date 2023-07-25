@@ -26,10 +26,9 @@ generate_timed!(MeshedChannels, C, S);
 // C
 type ThreeRoleC = RoleC<RoleC<RoleC<RoleEnd>>>;
 type FiveRoleC = RoleC<RoleC<RoleC<RoleC<RoleC<RoleEnd>>>>>;
-type TwoRoleCBroadcast = RoleC<RoleC<RoleBroadcast>>;
 
 // S
-type ThreeRoleS = RoleS<RoleS<RoleS<RoleEnd>>>;
+type TwoRoleS = RoleS<RoleS<RoleEnd>>;
 
 // Types
 // Step 0
@@ -45,17 +44,8 @@ type EndpointC0 = MeshedChannels<
 enum Branching0fromCtoS {
     Continue(
         MeshedChannels<
-            RecvTimed<
-                (),
-                'a',
-                0,
-                true,
-                10,
-                true,
-                ' ',
-                RecvTimed<(), 'a', 0, true, 10, true, ' ', Choose1fromStoC>,
-            >,
-            TwoRoleCBroadcast,
+            RecvTimed<(), 'a', 0, true, 10, true, ' ', Choose1fromStoC>,
+            RoleC<RoleBroadcast>,
             NameS,
         >,
     ),
@@ -79,20 +69,7 @@ enum Branching1fromStoC {
         >,
     ),
     Loop(
-        MeshedChannels<
-            RecvTimed<
-                (),
-                'a',
-                0,
-                true,
-                10,
-                true,
-                ' ',
-                RecvTimed<(), 'a', 0, true, 10, true, ' ', Offer1fromStoC>,
-            >,
-            ThreeRoleS,
-            NameC,
-        >,
+        MeshedChannels<RecvTimed<(), 'a', 0, true, 10, true, ' ', Offer1fromStoC>, TwoRoleS, NameC>,
     ),
 }
 type Offer1fromStoC = <Choose1fromStoC as Session>::Dual;
@@ -392,7 +369,6 @@ fn endpoint_c_0(
         let s = choose_mpst_c_to_all!(s, all_clocks, Branching0fromCtoS::Continue);
 
         let s = s.send((), all_clocks)?;
-        let s = s.send((), all_clocks)?;
 
         endpoint_c_1(s, all_clocks)
     } else {
@@ -415,7 +391,6 @@ fn endpoint_c_1(
             endpoint_c_2(s, all_clocks)
         },
         Branching1fromStoC::Loop(s) => {
-            let (_, s) = s.recv(all_clocks)?;
             let (_, s) = s.recv(all_clocks)?;
 
             endpoint_c_1(s, all_clocks)
@@ -635,7 +610,6 @@ fn endpoint_s_0(
         },
         Branching0fromCtoS::Continue(s) => {
             let (_, s) = s.recv(all_clocks)?;
-            let (_, s) = s.recv(all_clocks)?;
 
             endpoint_s_1(s, all_clocks)
         },
@@ -657,7 +631,6 @@ fn endpoint_s_1(
     } else {
         let s = choose_mpst_s_to_all!(s, all_clocks, Branching1fromStoC::Loop);
 
-        let s = s.send((), all_clocks)?;
         let s = s.send((), all_clocks)?;
 
         endpoint_s_1(s, all_clocks)
