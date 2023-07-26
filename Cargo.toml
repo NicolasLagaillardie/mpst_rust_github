@@ -175,15 +175,15 @@ required-features = []
 # path = "examples/crossbeam/remote_data.rs"
 # required-features = ["default"]
 
-[[example]]
-name = "example_servo_crossbeam"
-path = "examples/crossbeam/servo.rs"
-required-features = ["default"]
-
 # [[example]]
-# name = "example_simple_voting_crossbeam"
-# path = "examples/crossbeam/simple_voting.rs"
+# name = "example_servo_crossbeam"
+# path = "examples/crossbeam/servo.rs"
 # required-features = ["default"]
+
+[[example]]
+name = "example_simple_voting_crossbeam"
+path = "examples/crossbeam/simple_voting.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_smtp_crossbeam"
