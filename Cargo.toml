@@ -140,15 +140,15 @@ required-features = []
 
 ######### Crossbeam
 
-[[example]]
-name = "example_calculator_crossbeam"
-path = "examples/crossbeam/calculator.rs"
-required-features = ["default"]
-
 # [[example]]
-# name = "example_circuit_breaker_crossbeam"
-# path = "examples/crossbeam/circuit_breaker.rs"
+# name = "example_calculator_crossbeam"
+# path = "examples/crossbeam/calculator.rs"
 # required-features = ["default"]
+
+[[example]]
+name = "example_circuit_breaker_crossbeam"
+path = "examples/crossbeam/circuit_breaker.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_fib_crossbeam"
