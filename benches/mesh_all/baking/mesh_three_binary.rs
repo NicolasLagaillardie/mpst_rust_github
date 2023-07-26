@@ -43,7 +43,7 @@ fn binary_b_to_a(s: Send<(), Recv<(), RecursB>>) -> Result<RecursB, Box<dyn Erro
     Ok(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -78,7 +78,7 @@ static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
     c.bench_function(&format!("mesh three baking protocol binary {LOOPS}"), |b| {
-        b.iter(all_binaries)
+        b.iter(aux)
     });
 }
 

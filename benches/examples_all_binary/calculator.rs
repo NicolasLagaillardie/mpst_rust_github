@@ -48,7 +48,7 @@ fn binary_c(s: FullC) -> Result<ChoiceC, Box<dyn Error>> {
     Ok(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let (thread, session) = fork_with_thread_id(black_box(binary_s));
 
     let main = spawn(move || {
@@ -75,7 +75,7 @@ fn all_binaries() {
 /////////////////////////
 
 pub fn calculator_binary(c: &mut Criterion) {
-    c.bench_function("Calculator binary", |b| b.iter(all_binaries));
+    c.bench_function("Calculator binary", |b| b.iter(aux));
 }
 
 /////////////////////////

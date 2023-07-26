@@ -63,7 +63,7 @@ fn binary_close_b(s: RecB) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -98,7 +98,7 @@ fn all_binaries() {
 static LOOPS: i64 = 100;
 
 pub fn video_stream_binary(c: &mut Criterion) {
-    c.bench_function("Video stream binary", |b| b.iter(all_binaries));
+    c.bench_function("Video stream binary", |b| b.iter(aux));
 }
 
 /////////////////////////

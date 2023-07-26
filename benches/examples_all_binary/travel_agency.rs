@@ -89,7 +89,7 @@ fn binary_query_b(s: FullB) -> Result<FullB, Box<dyn Error>> {
     Ok(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -125,7 +125,7 @@ fn all_binaries() {
 static LOOPS: i64 = 100;
 
 pub fn travel_agency_binary(c: &mut Criterion) {
-    c.bench_function("Travel agency binary", |b| b.iter(all_binaries));
+    c.bench_function("Travel agency binary", |b| b.iter(aux));
 }
 
 /////////////////////////

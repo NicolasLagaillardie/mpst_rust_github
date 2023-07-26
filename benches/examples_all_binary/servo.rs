@@ -36,7 +36,7 @@ fn binary_b(s: FullB) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -57,7 +57,7 @@ fn all_binaries() {
 /////////////////////////
 
 pub fn servo_binary(c: &mut Criterion) {
-    c.bench_function("Servo binary", |b| b.iter(all_binaries));
+    c.bench_function("Servo binary", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -93,7 +93,7 @@ fn binary_close_b(s: ChoiceB) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -138,7 +138,7 @@ fn all_binaries() {
 static LOOPS: i64 = 100;
 
 pub fn circuit_breaker_binary(c: &mut Criterion) {
-    c.bench_function("Circuit breaker binary", |b| b.iter(all_binaries));
+    c.bench_function("Circuit breaker binary", |b| b.iter(aux));
 }
 
 /////////////////////////

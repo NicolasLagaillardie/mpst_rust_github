@@ -1,70 +1,35 @@
-#![allow(clippy::type_complexity)]
-
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::{choose, offer};
-
-use rand::{thread_rng, Rng};
-
-use std::error::Error;
 use std::thread::spawn;
 
-// S
-enum BinaryS {
-    Sum(Send<i32, End>),
-    Diff(Send<i32, End>),
-}
-type OfferS = Recv<BinaryS, End>;
-type FullS = Recv<i32, Recv<i32, OfferS>>;
+use crossbeam_channel::{bounded, Receiver};
 
-fn binary_s(s: FullS) -> Result<(), Box<dyn Error>> {
-    let (elt_1, s) = recv(s)?;
-    let (elt_2, s) = recv(s)?;
-
-    offer!(s, {
-        BinaryS::Sum(s) => {
-            let s = send(elt_1 + elt_2, s);
-            close(s)
-        },
-        BinaryS::Diff(s) => {
-            let s = send(elt_1 - elt_2, s);
-            close(s)
-        },
-    })
-}
-
-// C
-type ChoiceC = <OfferS as Session>::Dual;
-type FullC = <FullS as Session>::Dual;
-
-fn binary_c(s: FullC) -> Result<ChoiceC, Box<dyn Error>> {
-    let s = send(thread_rng().gen_range(1..=100), s);
-    let s = send(thread_rng().gen_range(1..=100), s);
-    Ok(s)
-}
+type S0 = Receiver<Receiver<Receiver<Receiver<()>>>>;
+type S1 = Receiver<Receiver<Receiver<()>>>;
+type S2 = Receiver<Receiver<()>>;
+type S3 = Receiver<()>;
+type S4 = ();
 
 fn main() {
-    let (thread, session) = fork_with_thread_id(binary_s);
-
     let main = spawn(move || {
-        let choice: i32 = thread_rng().gen_range(1..=2);
+        let (sender_s_0, receiver_s_0) = bounded::<S0>(1);
+        let (sender_s_1, receiver_s_1) = bounded::<S1>(1);
+        let (sender_s_2, receiver_s_2) = bounded::<S2>(1);
+        let (sender_s_3, receiver_s_3) = bounded::<S3>(1);
+        let (sender_s_4, receiver_s_4) = bounded::<S4>(1);
 
-        let session = binary_c(session).unwrap();
+        sender_s_0.send(receiver_s_1).unwrap();
+        let receiver_s_1_bis = receiver_s_0.recv().unwrap();
 
-        if choice != 1 {
-            let session = choose!(BinaryS::Sum, session);
-            let (_, session) = recv(session).unwrap();
-            close(session).unwrap();
-        } else {
-            let session = choose!(BinaryS::Diff, session);
-            let (_, session) = recv(session).unwrap();
-            close(session).unwrap();
-        }
+        sender_s_1.send(receiver_s_2).unwrap();
+        let receiver_s_2_bis = receiver_s_1_bis.recv().unwrap();
 
-        thread.join().unwrap()
+        sender_s_2.send(receiver_s_3).unwrap();
+        let receiver_s_3_bis = receiver_s_2_bis.recv().unwrap();
+
+        sender_s_3.send(receiver_s_4).unwrap();
+        let receiver_s_4_bis = receiver_s_3_bis.recv().unwrap();
+
+        sender_s_4.send(()).unwrap();
+        receiver_s_4_bis.recv().unwrap();
     });
 
     main.join().unwrap();

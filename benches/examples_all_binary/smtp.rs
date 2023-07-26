@@ -617,7 +617,7 @@ fn endpoint_c_10(s: EndpointC10) -> Result<(), Box<dyn Error>> {
 
 ////////////////////////////
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -658,7 +658,7 @@ fn all_binaries() {
 static LOOPS: i64 = 100;
 
 pub fn smtp_binary(c: &mut Criterion) {
-    c.bench_function("SMTP binary", |b| b.iter(all_binaries));
+    c.bench_function("SMTP binary", |b| b.iter(aux));
 }
 
 /////////////////////////

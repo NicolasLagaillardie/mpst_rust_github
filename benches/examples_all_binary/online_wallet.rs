@@ -90,7 +90,7 @@ fn binary_quit_b(s: FullB) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -127,7 +127,7 @@ fn all_binaries() {
 static LOOPS: i64 = 100;
 
 pub fn online_wallet_binary(c: &mut Criterion) {
-    c.bench_function("Online wallet binary", |b| b.iter(all_binaries));
+    c.bench_function("Online wallet binary", |b| b.iter(aux));
 }
 
 /////////////////////////

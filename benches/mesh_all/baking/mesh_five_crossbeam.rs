@@ -8,20 +8,18 @@ use criterion::{criterion_group, criterion_main, Criterion};
 
 use std::thread::spawn;
 
-use crossbeam_channel::bounded;
+use crossbeam_channel::{bounded, Receiver, Sender};
 
-/////////////////////////
+type ReceivingSendingReceiving = Receiver<SendingReceiving>;
+type SendingReceivingSending = Sender<ReceivingSending>;
 
-type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
-type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
+type SendingReceiving = Sender<Receiving>;
+type ReceivingSending = Receiver<Sending>;
 
-type SendingReceiving = crossbeam_channel::Sender<Receiving>;
-type ReceivingSending = crossbeam_channel::Receiver<Sending>;
+type Receiving = Receiver<()>;
+type Sending = Sender<()>;
 
-type Receiving = crossbeam_channel::Receiver<()>;
-type Sending = crossbeam_channel::Sender<()>;
-
-fn all_crossbeam() {
+fn aux() {
     let mut threads = Vec::new();
 
     for _ in 0..10 {
@@ -88,7 +86,7 @@ static LOOPS: i64 = 100;
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("mesh five baking protocol crossbeam {LOOPS}"),
-        |b| b.iter(all_crossbeam),
+        |b| b.iter(aux),
     );
 }
 

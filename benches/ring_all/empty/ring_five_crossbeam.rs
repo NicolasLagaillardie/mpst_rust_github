@@ -4,22 +4,22 @@
     clippy::too_many_arguments
 )]
 
-use crossbeam_channel::bounded;
+use crossbeam_channel::{bounded, Receiver, Sender};
 
 use criterion::{criterion_group, criterion_main, Criterion};
 
 use std::thread::spawn;
 
-type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
-type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
+type ReceivingSendingReceiving = Receiver<SendingReceiving>;
+type SendingReceivingSending = Sender<ReceivingSending>;
 
-type SendingReceiving = crossbeam_channel::Sender<Receiving>;
-type ReceivingSending = crossbeam_channel::Receiver<Sending>;
+type SendingReceiving = Sender<Receiving>;
+type ReceivingSending = Receiver<Sending>;
 
-type Receiving = crossbeam_channel::Receiver<()>;
-type Sending = crossbeam_channel::Sender<()>;
+type Receiving = Receiver<()>;
+type Sending = Sender<()>;
 
-fn all_crossbeam() {
+fn aux() {
     let mut threads = Vec::new();
 
     for _ in 0..4 {
@@ -86,7 +86,7 @@ static LOOPS: i64 = 0;
 pub fn ring_protocol_crossbeam(c: &mut Criterion) {
     c.bench_function(
         &format!("ring five empty protocol crossbeam {LOOPS}"),
-        |b| b.iter(all_crossbeam),
+        |b| b.iter(aux),
     );
 }
 

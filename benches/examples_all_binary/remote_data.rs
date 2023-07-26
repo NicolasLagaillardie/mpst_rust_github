@@ -55,7 +55,7 @@ fn binary_close_b(s: RecB) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
@@ -88,7 +88,7 @@ static LOOPS: i64 = 100;
 
 pub fn remote_data_binary(c: &mut Criterion) {
     c.bench_function(&format!("Remote data binary {LOOPS}"), |b| {
-        b.iter(all_binaries)
+        b.iter(aux)
     });
 }
 

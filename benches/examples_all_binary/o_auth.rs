@@ -77,7 +77,7 @@ fn binary_failure_b(s: FullB) -> Result<(), Box<dyn Error>> {
     close(s)
 }
 
-fn all_binaries() {
+fn aux() {
     let (thread, session) = fork_with_thread_id(black_box(binary_a));
 
     let main = spawn(move || {
@@ -98,7 +98,7 @@ fn all_binaries() {
 /////////////////////////
 
 pub fn o_auth_binary(c: &mut Criterion) {
-    c.bench_function("OAuth binary", |b| b.iter(all_binaries));
+    c.bench_function("OAuth binary", |b| b.iter(aux));
 }
 
 /////////////////////////
