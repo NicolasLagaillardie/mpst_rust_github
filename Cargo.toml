@@ -150,15 +150,15 @@ required-features = []
 # path = "examples/crossbeam/circuit_breaker.rs"
 # required-features = ["default"]
 
-[[example]]
-name = "example_fib_crossbeam"
-path = "examples/crossbeam/fib.rs"
-required-features = ["default"]
-
 # [[example]]
-# name = "example_logging_crossbeam"
-# path = "examples/crossbeam/logging.rs"
+# name = "example_fib_crossbeam"
+# path = "examples/crossbeam/fib.rs"
 # required-features = ["default"]
+
+[[example]]
+name = "example_logging_crossbeam"
+path = "examples/crossbeam/logging.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_o_auth_crossbeam"

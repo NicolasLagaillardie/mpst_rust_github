@@ -1,123 +1,57 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::{choose, offer};
-
-use rand::{thread_rng, Rng};
-
-use std::error::Error;
 use std::thread::spawn;
 
-// S
-enum Binary0A {
-    Success(Recv<(), Rec0A>),
-    Failure(Recv<(), Rec1A>),
-}
-enum Binary1A {
-    Restart(Recv<(), Rec0A>),
-    Stop(Recv<(), End>),
-}
-type Rec0A = Recv<Binary0A, End>;
-type Rec1A = Recv<Binary1A, End>;
-type FullA = Recv<(), Rec0A>;
+use crossbeam_channel::{bounded, Receiver};
 
-fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
-    let (_start_logs, s) = recv(s)?;
-
-    recurs_0_a(s)
-}
-
-fn recurs_0_a(s: Rec0A) -> Result<(), Box<dyn Error>> {
-    offer!(s, {
-        Binary0A::Success(s) => {
-            let (_success, s) = recv(s)?;
-            recurs_0_a(s)
-        },
-        Binary0A::Failure(s) => {
-            let (_failure_controller, s) = recv(s)?;
-            recurs_1_a(s)
-        },
-    })
-}
-
-fn recurs_1_a(s: Rec1A) -> Result<(), Box<dyn Error>> {
-    offer!(s, {
-        Binary1A::Restart(s) => {
-            let (_restart_logs, s) = recv(s)?;
-            recurs_0_a(s)
-        },
-        Binary1A::Stop(s) => {
-            let (_stop_logs, s) = recv(s)?;
-            close(s)
-        },
-    })
-}
-
-// C
-type Choice0B = <Rec0A as Session>::Dual;
-
-fn binary_success_b(s: Choice0B) -> Result<Choice0B, Box<dyn Error>> {
-    let s = choose!(Binary0A::Success, s);
-    let s = send((), s);
-    Ok(s)
-}
-
-fn binary_failure_restart_b(s: Choice0B) -> Result<Choice0B, Box<dyn Error>> {
-    let s = choose!(Binary0A::Failure, s);
-    let s: Send<Binary1A, End> = send((), s);
-    let s = choose!(Binary1A::Restart, s);
-    let s = send((), s);
-    Ok(s)
-}
-
-fn binary_failure_close_b(s: Choice0B) -> Result<(), Box<dyn Error>> {
-    let s = choose!(Binary0A::Failure, s);
-    let s: Send<Binary1A, End> = send((), s);
-    let s = choose!(Binary1A::Stop, s);
-    let s = send((), s);
-    close(s)
-}
+type S0 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>;
+type S1 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>;
+type S2 = Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>;
+type S3 = Receiver<Receiver<Receiver<Receiver<()>>>>;
+type S4 = Receiver<Receiver<Receiver<()>>>;
+type S5 = Receiver<Receiver<()>>;
+type S6 = Receiver<()>;
+type S7 = ();
 
 fn main() {
-    let mut threads = Vec::new();
-    let mut sessions = Vec::new();
-
-    let (thread, session) = fork_with_thread_id(binary_a);
-
-    let session = send((), session);
-
-    threads.push(thread);
-    sessions.push(session);
-
     let main = spawn(move || {
         for _ in 0..LOOPS {
-            let choice = thread_rng().gen_range(1..=2);
+            let (sender_s_0, receiver_s_0) = bounded::<S0>(1);
+            let (sender_s_1, receiver_s_1) = bounded::<S1>(1);
+            let (sender_s_2, receiver_s_2) = bounded::<S2>(1);
+            let (sender_s_3, receiver_s_3) = bounded::<S3>(1);
+            let (sender_s_4, receiver_s_4) = bounded::<S4>(1);
+            let (sender_s_5, receiver_s_5) = bounded::<S5>(1);
+            let (sender_s_6, receiver_s_6) = bounded::<S6>(1);
+            let (sender_s_7, receiver_s_7) = bounded::<S7>(1);
 
-            if choice != 1 {
-                sessions = sessions
-                    .into_iter()
-                    .map(|s| binary_success_b(s).unwrap())
-                    .collect::<Vec<_>>();
-            } else {
-                sessions = sessions
-                    .into_iter()
-                    .map(|s| binary_failure_restart_b(s).unwrap())
-                    .collect::<Vec<_>>();
-            }
+            sender_s_0.send(receiver_s_1).unwrap();
+            let receiver_s_1_bis = receiver_s_0.recv().unwrap();
+
+            sender_s_1.send(receiver_s_2).unwrap();
+            let receiver_s_2_bis = receiver_s_1_bis.recv().unwrap();
+
+            sender_s_2.send(receiver_s_3).unwrap();
+            let receiver_s_3_bis = receiver_s_2_bis.recv().unwrap();
+
+            sender_s_3.send(receiver_s_4).unwrap();
+            let receiver_s_4_bis = receiver_s_3_bis.recv().unwrap();
+
+            sender_s_4.send(receiver_s_5).unwrap();
+            let receiver_s_5_bis = receiver_s_4_bis.recv().unwrap();
+
+            sender_s_5.send(receiver_s_6).unwrap();
+            let receiver_s_6_bis = receiver_s_5_bis.recv().unwrap();
+
+            sender_s_6.send(receiver_s_7).unwrap();
+            let receiver_s_7_bis = receiver_s_6_bis.recv().unwrap();
+
+            sender_s_7.send(()).unwrap();
+            receiver_s_7_bis.recv().unwrap();
         }
-
-        sessions
-            .into_iter()
-            .for_each(|s| binary_failure_close_b(s).unwrap());
-
-        threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
     main.join().unwrap();
 }
 
-static LOOPS: i32 = 100;
+static LOOPS: i64 = 100;
