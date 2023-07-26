@@ -4,6 +4,8 @@
     clippy::too_many_arguments
 )]
 
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
@@ -54,13 +56,13 @@ fn recurs_b_binary(
     Ok(s)
 }
 
-fn main() {
+fn aux() {
     let mut threads = Vec::new();
     let mut sessions = Vec::new();
 
     for _ in 0..3 {
         let (thread, s): (JoinHandle<()>, RecursB<i64>) =
-            fork_with_thread_id(binary_a_to_b);
+            fork_with_thread_id(black_box(binary_a_to_b));
 
         threads.push(thread);
         sessions.push(s);
@@ -87,3 +89,19 @@ fn main() {
 /////////////////////////
 
 static LOOPS: i64 = 20;
+
+pub fn fib(c: &mut Criterion) {
+    c.bench_function(&format!("Fibo binary {LOOPS}"), |b| b.iter(aux));
+}
+
+/////////////////////////
+
+criterion_group! {
+    name = bench;
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
+    targets = fib,
+}
+
+criterion_main! {
+    bench
+}

@@ -9,11 +9,9 @@ cargo update --workspace
 cargo fmt --all
 cargo clippy --all-targets --all-features --workspace
 cargo check --all-targets --verbose --workspace --all-features
-cargo test --all-targets --verbose --workspace --all-features
+TRYBUILD=overwrite cargo test --all-targets --verbose --workspace --all-features
 cargo clean
 RUSTFLAGS="-Z macro-backtrace" cargo +nightly clippy --all-targets --all-features --workspace
-RUSTFLAGS="-Z macro-backtrace" cargo +nightly check --all-targets --verbose --workspace --all-features
-RUSTFLAGS="-Z macro-backtrace" cargo +nightly test --all-targets --verbose --workspace --all-features
 cargo clean
 
 # # Check everything

@@ -136,6 +136,77 @@ required-features = []
 ######### Ping-Pong start
 ######### Ping-Pong end
 
+################################### Benches
+
+################## Examples
+
+######### Binary
+
+[[bench]]
+name = "example_calculator_binary"
+path = "benches/examples_all_binary/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_binary"
+path = "benches/examples_all_binary/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_binary"
+path = "benches/examples_all_binary/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_binary"
+path = "benches/examples_all_binary/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_binary"
+path = "benches/examples_all_binary/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_binary"
+path = "benches/examples_all_binary/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_binary"
+path = "benches/examples_all_binary/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_binary"
+path = "benches/examples_all_binary/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_binary"
+path = "benches/examples_all_binary/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_binary"
+path = "benches/examples_all_binary/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_binary"
+path = "benches/examples_all_binary/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_binary"
+path = "benches/examples_all_binary/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_binary"
+path = "benches/examples_all_binary/video_stream.rs"
+required-features = ["full"]
+
 ################################### Profil
 
 [profile.release]
