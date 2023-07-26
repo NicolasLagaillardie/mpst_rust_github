@@ -1,87 +1,37 @@
-#![allow(
-    clippy::large_enum_variant,
-    clippy::type_complexity,
-    clippy::too_many_arguments
-)]
+#![allow(clippy::type_complexity)]
 
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::{choose, offer};
+use std::thread::spawn;
 
-use std::error::Error;
-use std::marker;
-use std::thread::{spawn, JoinHandle};
+use crossbeam_channel::{bounded, Receiver};
 
-// A
-enum BinaryA<N: marker::Send> {
-    More(Recv<N, Send<N, RecursA<N>>>),
-    Done(End),
-}
-type RecursA<N> = Recv<BinaryA<N>, End>;
-
-fn binary_a_to_b(s: RecursA<i64>) -> Result<(), Box<dyn Error>> {
-    recurs_a_binary(s, 1)
-}
-fn recurs_a_binary(s: RecursA<i64>, old: i64) -> Result<(), Box<dyn Error>> {
-    offer!(s, {
-        BinaryA::Done(s) => {
-            close(s)
-        },
-        BinaryA::More(s) => {
-            let (new, s) = recv(s)?;
-            let s = send(old + new, s);
-            recurs_a_binary(s, old + new)
-        },
-    })
-}
-
-// B
-type RecursB<N> = <RecursA<N> as Session>::Dual;
-fn binary_b_to_a(s: Send<i64, Recv<i64, RecursB<i64>>>) -> Result<RecursB<i64>, Box<dyn Error>> {
-    recurs_b_binary(s, 0)
-}
-fn recurs_b_binary(
-    s: Send<i64, Recv<i64, RecursB<i64>>>,
-    old: i64,
-) -> Result<RecursB<i64>, Box<dyn Error>> {
-    let s = send(old, s);
-    let (_, s) = recv(s)?;
-    Ok(s)
-}
+type S0 = Receiver<Receiver<Receiver<()>>>;
+type S1 = Receiver<Receiver<()>>;
+type S2 = Receiver<()>;
+type S3 = ();
 
 fn main() {
-    let mut threads = Vec::new();
-    let mut sessions = Vec::new();
-
-    for _ in 0..3 {
-        let (thread, s): (JoinHandle<()>, RecursB<i64>) =
-            fork_with_thread_id(binary_a_to_b);
-
-        threads.push(thread);
-        sessions.push(s);
-    }
-
     let main = spawn(move || {
         for _ in 0..LOOPS {
-            sessions = sessions
-                .into_iter()
-                .map(|s| binary_b_to_a(choose!(BinaryA::<i64>::More, s)).unwrap())
-                .collect::<Vec<_>>();
+            let (sender_s_0, receiver_s_0) = bounded::<S0>(1);
+            let (sender_s_1, receiver_s_1) = bounded::<S1>(1);
+            let (sender_s_2, receiver_s_2) = bounded::<S2>(1);
+            let (sender_s_3, receiver_s_3) = bounded::<S3>(1);
+
+            sender_s_0.send(receiver_s_1).unwrap();
+            let receiver_s_1_bis = receiver_s_0.recv().unwrap();
+
+            sender_s_1.send(receiver_s_2).unwrap();
+            let receiver_s_2_bis = receiver_s_1_bis.recv().unwrap();
+
+            sender_s_2.send(receiver_s_3).unwrap();
+            let receiver_s_3_bis = receiver_s_2_bis.recv().unwrap();
+
+            sender_s_3.send(()).unwrap();
+            receiver_s_3_bis.recv().unwrap();
         }
-
-        sessions
-            .into_iter()
-            .for_each(|s| close(choose!(BinaryA::<i64>::Done, s)).unwrap());
-
-        threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
     main.join().unwrap();
 }
 
-/////////////////////////
-
-static LOOPS: i64 = 20;
+static LOOPS: i64 = 100;
