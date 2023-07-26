@@ -190,15 +190,15 @@ name = "example_smtp_crossbeam"
 path = "examples/crossbeam/smtp.rs"
 required-features = ["default"]
 
-[[example]]
-name = "example_three_buyers_crossbeam"
-path = "examples/crossbeam/three_buyers.rs"
-required-features = ["default"]
-
 # [[example]]
-# name = "example_travel_agency_crossbeam"
-# path = "examples/crossbeam/travel_agency.rs"
+# name = "example_three_buyers_crossbeam"
+# path = "examples/crossbeam/three_buyers.rs"
 # required-features = ["default"]
+
+[[example]]
+name = "example_travel_agency_crossbeam"
+path = "examples/crossbeam/travel_agency.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_video_stream_crossbeam"
