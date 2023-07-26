@@ -1,93 +1,81 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
-use mpstthree::{choose, offer};
-
-use rand::{thread_rng, Rng};
-
-use std::error::Error;
 use std::thread::spawn;
 
-// S
-enum BinaryA {
-    Success(Recv<(), Recv<(), Recv<(), Recv<(), Recv<(), End>>>>>),
-    Failure(Recv<(), Recv<(), Recv<(), End>>>),
-}
-type FullA = Recv<(), Recv<(), Recv<(), Recv<(), Recv<(), Recv<BinaryA, End>>>>>>;
+use crossbeam_channel::{bounded, Receiver};
 
-fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
-    let (_start, s) = recv(s)?;
-    let (_redirect, s) = recv(s)?;
-    let (_login, s) = recv(s)?;
-    let (_auth, s) = recv(s)?;
-    let (_password, s) = recv(s)?;
-
-    offer!(s, {
-        BinaryA::Success(s) => {
-            let (_success_c, s) = recv(s)?;
-            let (_success_s, s) = recv(s)?;
-            let (_get_token, s) = recv(s)?;
-            let (_put_token_s, s) = recv(s)?;
-            let (_put_token_c, s) = recv(s)?;
-            close(s)
-        },
-        BinaryA::Failure(s) => {
-            let (_failure_c, s) = recv(s)?;
-            let (_failures, s) = recv(s)?;
-            let (_received_c, s) = recv(s)?;
-            close(s)
-        },
-    })
-}
-
-// C
-type FullB = <FullA as Session>::Dual;
-
-fn binary_success_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = choose!(BinaryA::Success, s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    close(s)
-}
-
-fn binary_failure_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = choose!(BinaryA::Failure, s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    close(s)
-}
+type S0 = Receiver<
+    Receiver<
+        Receiver<
+            Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>>,
+        >,
+    >,
+>;
+type S1 = Receiver<
+    Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>>>,
+>;
+type S2 =
+    Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>>>;
+type S3 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>>;
+type S4 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>;
+type S5 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>;
+type S6 = Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>;
+type S7 = Receiver<Receiver<Receiver<Receiver<()>>>>;
+type S8 = Receiver<Receiver<Receiver<()>>>;
+type S9 = Receiver<Receiver<()>>;
+type S10 = Receiver<()>;
+type S11 = ();
 
 fn main() {
-    let (thread, session) = fork_with_thread_id(binary_a);
-
     let main = spawn(move || {
-        let choice = thread_rng().gen_range(1..=2);
+        let (sender_s_0, receiver_s_0) = bounded::<S0>(1);
+        let (sender_s_1, receiver_s_1) = bounded::<S1>(1);
+        let (sender_s_2, receiver_s_2) = bounded::<S2>(1);
+        let (sender_s_3, receiver_s_3) = bounded::<S3>(1);
+        let (sender_s_4, receiver_s_4) = bounded::<S4>(1);
+        let (sender_s_5, receiver_s_5) = bounded::<S5>(1);
+        let (sender_s_6, receiver_s_6) = bounded::<S6>(1);
+        let (sender_s_7, receiver_s_7) = bounded::<S7>(1);
+        let (sender_s_8, receiver_s_8) = bounded::<S8>(1);
+        let (sender_s_9, receiver_s_9) = bounded::<S9>(1);
+        let (sender_s_10, receiver_s_10) = bounded::<S10>(1);
+        let (sender_s_11, receiver_s_11) = bounded::<S11>(1);
 
-        if choice != 1 {
-            binary_success_b(session).unwrap();
-        } else {
-            binary_failure_b(session).unwrap();
-        }
+        sender_s_0.send(receiver_s_1).unwrap();
+        let receiver_s_1_bis = receiver_s_0.recv().unwrap();
 
-        thread.join().unwrap();
+        sender_s_1.send(receiver_s_2).unwrap();
+        let receiver_s_2_bis = receiver_s_1_bis.recv().unwrap();
+
+        sender_s_2.send(receiver_s_3).unwrap();
+        let receiver_s_3_bis = receiver_s_2_bis.recv().unwrap();
+
+        sender_s_3.send(receiver_s_4).unwrap();
+        let receiver_s_4_bis = receiver_s_3_bis.recv().unwrap();
+
+        sender_s_4.send(receiver_s_5).unwrap();
+        let receiver_s_5_bis = receiver_s_4_bis.recv().unwrap();
+
+        sender_s_5.send(receiver_s_6).unwrap();
+        let receiver_s_6_bis = receiver_s_5_bis.recv().unwrap();
+
+        sender_s_6.send(receiver_s_7).unwrap();
+        let receiver_s_7_bis = receiver_s_6_bis.recv().unwrap();
+
+        sender_s_7.send(receiver_s_8).unwrap();
+        let receiver_s_8_bis = receiver_s_7_bis.recv().unwrap();
+
+        sender_s_8.send(receiver_s_9).unwrap();
+        let receiver_s_9_bis = receiver_s_8_bis.recv().unwrap();
+
+        sender_s_9.send(receiver_s_10).unwrap();
+        let receiver_s_10_bis = receiver_s_9_bis.recv().unwrap();
+
+        sender_s_10.send(receiver_s_11).unwrap();
+        let receiver_s_11_bis = receiver_s_10_bis.recv().unwrap();
+
+        sender_s_11.send(()).unwrap();
+        receiver_s_11_bis.recv().unwrap();
     });
 
     main.join().unwrap();
