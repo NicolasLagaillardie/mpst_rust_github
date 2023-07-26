@@ -1,90 +1,57 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
-use mpstthree::{choose, offer};
-
-use rand::{thread_rng, Rng};
-
-use std::error::Error;
 use std::thread::spawn;
 
-// S
-enum BinaryA {
-    Accept(Recv<(), Recv<(), Recv<(), End>>>),
-    Quit(Recv<(), Recv<(), End>>),
-}
-type FullA = Recv<(), Recv<(), Recv<(), Recv<(), Recv<BinaryA, End>>>>>;
+use crossbeam_channel::{bounded, Receiver};
 
-fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
-    let (_empty_1, s) = recv(s)?;
-    let (_empty_2, s) = recv(s)?;
-    let (_empty_3, s) = recv(s)?;
-    let (_empty_4, s) = recv(s)?;
-
-    offer!(s, {
-        BinaryA::Accept(s) => {
-            let (_ok_a, s) = recv(s)?;
-            let (_ok_s, s) = recv(s)?;
-            let (_empty_5, s) = recv(s)?;
-            close(s)
-        },
-        BinaryA::Quit(s) => {
-            let (_quit_a, s) = recv(s)?;
-            let (_quit_s, s) = recv(s)?;
-            close(s)
-        },
-    })
-}
-
-// C
-type FullB = <FullA as Session>::Dual;
-
-fn binary_ok_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = choose!(BinaryA::Accept, s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    close(s)
-}
-
-fn binary_quit_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = choose!(BinaryA::Quit, s);
-    let s = send((), s);
-    let s = send((), s);
-    close(s)
-}
+type S0 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>>;
+type S1 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>>;
+type S2 = Receiver<Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>>;
+type S3 = Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>;
+type S4 = Receiver<Receiver<Receiver<Receiver<()>>>>;
+type S5 = Receiver<Receiver<Receiver<()>>>;
+type S6 = Receiver<Receiver<()>>;
+type S7 = Receiver<()>;
+type S8 = ();
 
 fn main() {
-    let mut threads = Vec::new();
-    let mut sessions = Vec::new();
-
-    let (thread, session) = fork_with_thread_id(binary_a);
-
-    threads.push(thread);
-    sessions.push(session);
-
     let main = spawn(move || {
-        let choice = thread_rng().gen_range(1..=2);
+        let (sender_s_0, receiver_s_0) = bounded::<S0>(1);
+        let (sender_s_1, receiver_s_1) = bounded::<S1>(1);
+        let (sender_s_2, receiver_s_2) = bounded::<S2>(1);
+        let (sender_s_3, receiver_s_3) = bounded::<S3>(1);
+        let (sender_s_4, receiver_s_4) = bounded::<S4>(1);
+        let (sender_s_5, receiver_s_5) = bounded::<S5>(1);
+        let (sender_s_6, receiver_s_6) = bounded::<S6>(1);
+        let (sender_s_7, receiver_s_7) = bounded::<S7>(1);
+        let (sender_s_8, receiver_s_8) = bounded::<S8>(1);
 
-        if choice != 1 {
-            sessions.into_iter().for_each(|s| binary_ok_b(s).unwrap());
-        } else {
-            sessions.into_iter().for_each(|s| binary_quit_b(s).unwrap());
-        }
+        sender_s_0.send(receiver_s_1).unwrap();
+        let receiver_s_1_bis = receiver_s_0.recv().unwrap();
 
-        threads.into_iter().for_each(|elt| elt.join().unwrap());
+        sender_s_1.send(receiver_s_2).unwrap();
+        let receiver_s_2_bis = receiver_s_1_bis.recv().unwrap();
+
+        sender_s_2.send(receiver_s_3).unwrap();
+        let receiver_s_3_bis = receiver_s_2_bis.recv().unwrap();
+
+        sender_s_3.send(receiver_s_4).unwrap();
+        let receiver_s_4_bis = receiver_s_3_bis.recv().unwrap();
+
+        sender_s_4.send(receiver_s_5).unwrap();
+        let receiver_s_5_bis = receiver_s_4_bis.recv().unwrap();
+
+        sender_s_5.send(receiver_s_6).unwrap();
+        let receiver_s_6_bis = receiver_s_5_bis.recv().unwrap();
+
+        sender_s_6.send(receiver_s_7).unwrap();
+        let receiver_s_7_bis = receiver_s_6_bis.recv().unwrap();
+
+        sender_s_7.send(receiver_s_8).unwrap();
+        let receiver_s_8_bis = receiver_s_7_bis.recv().unwrap();
+
+        sender_s_8.send(()).unwrap();
+        receiver_s_8_bis.recv().unwrap();
     });
 
     main.join().unwrap();

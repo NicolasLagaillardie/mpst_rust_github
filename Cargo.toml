@@ -180,20 +180,20 @@ required-features = []
 # path = "examples/crossbeam/servo.rs"
 # required-features = ["default"]
 
+# [[example]]
+# name = "example_simple_voting_crossbeam"
+# path = "examples/crossbeam/simple_voting.rs"
+# required-features = ["default"]
+
 [[example]]
-name = "example_simple_voting_crossbeam"
-path = "examples/crossbeam/simple_voting.rs"
+name = "example_smtp_crossbeam"
+path = "examples/crossbeam/smtp.rs"
 required-features = ["default"]
 
-# [[example]]
-# name = "example_smtp_crossbeam"
-# path = "examples/crossbeam/smtp.rs"
-# required-features = ["default"]
-
-# [[example]]
-# name = "example_three_buyers_crossbeam"
-# path = "examples/crossbeam/three_buyers.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_three_buyers_crossbeam"
+path = "examples/crossbeam/three_buyers.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_travel_agency_crossbeam"
