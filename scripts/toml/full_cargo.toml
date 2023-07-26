@@ -2646,70 +2646,70 @@ required-features = ["full"]
 
 ######### Crossbeam
 
-# [[example]]
-# name = "example_calculator_crossbeam"
-# path = "examples/crossbeam/calculator.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_calculator_crossbeam"
+path = "examples/crossbeam/calculator.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_circuit_breaker_crossbeam"
-# path = "examples/crossbeam/circuit_breaker.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_circuit_breaker_crossbeam"
+path = "examples/crossbeam/circuit_breaker.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_fib_crossbeam"
-# path = "examples/crossbeam/fib.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_fib_crossbeam"
+path = "examples/crossbeam/fib.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_logging_crossbeam"
-# path = "examples/crossbeam/logging.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_logging_crossbeam"
+path = "examples/crossbeam/logging.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_o_auth_crossbeam"
-# path = "examples/crossbeam/o_auth.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_o_auth_crossbeam"
+path = "examples/crossbeam/o_auth.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_online_wallet_crossbeam"
-# path = "examples/crossbeam/online_wallet.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_online_wallet_crossbeam"
+path = "examples/crossbeam/online_wallet.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_remote_data_crossbeam"
-# path = "examples/crossbeam/remote_data.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_remote_data_crossbeam"
+path = "examples/crossbeam/remote_data.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_servo_crossbeam"
-# path = "examples/crossbeam/servo.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_servo_crossbeam"
+path = "examples/crossbeam/servo.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_simple_voting_crossbeam"
-# path = "examples/crossbeam/simple_voting.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_simple_voting_crossbeam"
+path = "examples/crossbeam/simple_voting.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_smtp_crossbeam"
-# path = "examples/crossbeam/smtp.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_smtp_crossbeam"
+path = "examples/crossbeam/smtp.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_three_buyers_crossbeam"
-# path = "examples/crossbeam/three_buyers.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_three_buyers_crossbeam"
+path = "examples/crossbeam/three_buyers.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_travel_agency_crossbeam"
-# path = "examples/crossbeam/travel_agency.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_travel_agency_crossbeam"
+path = "examples/crossbeam/travel_agency.rs"
+required-features = ["default"]
 
-# [[example]]
-# name = "example_video_stream_crossbeam"
-# path = "examples/crossbeam/video_stream.rs"
-# required-features = ["default"]
+[[example]]
+name = "example_video_stream_crossbeam"
+path = "examples/crossbeam/video_stream.rs"
+required-features = ["default"]
 
 ######### Binary
 
