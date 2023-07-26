@@ -17,7 +17,7 @@ rm -rf save/*
 echo "Mesh full bench"
 date
 mkdir -p save/mesh/
-cargo bench --bench="bench_mesh_*" --all-features -- --verbose
+cargo bench --bench="mesh_*" --all-features -- --verbose
 find . -name "*.svg" -delete
 find target/ -name "raw.csv" -delete
 find target/ -name "benchmark.json" -delete
@@ -33,7 +33,7 @@ cargo clean
 echo "Ring full bench"
 date
 mkdir -p save/ring/
-cargo bench --bench="bench_ring_*" --all-features -- --verbose
+cargo bench --bench="ring_*" --all-features -- --verbose
 find . -name "*.svg" -delete
 find target/ -name "raw.csv" -delete
 find target/ -name "benchmark.json" -delete

@@ -57,8 +57,7 @@ fn main() {
     let mut sessions = Vec::new();
 
     for _ in 0..3 {
-        let (thread, s): (JoinHandle<()>, RecursB<i64>) =
-            fork_with_thread_id(binary_a_to_b);
+        let (thread, s): (JoinHandle<()>, RecursB<i64>) = fork_with_thread_id(binary_a_to_b);
 
         threads.push(thread);
         sessions.push(s);

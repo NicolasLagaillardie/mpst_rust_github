@@ -87,9 +87,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn remote_data_binary(c: &mut Criterion) {
-    c.bench_function(&format!("Remote data binary {LOOPS}"), |b| {
-        b.iter(aux)
-    });
+    c.bench_function(&format!("Remote data binary {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

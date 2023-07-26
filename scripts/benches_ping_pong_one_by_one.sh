@@ -53,12 +53,12 @@ cat benches/ping_pong_all_save/ping_pong_baking_ampst_1.rs > benches/ping_pong_a
 cat benches/ping_pong_all_save/ping_pong_baking_timed_1.rs > benches/ping_pong_all/ping_pong_baking_timed.rs
 
 # Add to Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'bench_ping_pong_crossbeam'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_crossbeam.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'bench_ping_pong_binary'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_binary.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'bench_ping_pong_mpst'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'bench_ping_pong_baking_mpst'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'bench_ping_pong_baking_ampst'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_ampst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'bench_ping_pong_baking_timed'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_timed.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_crossbeam'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_crossbeam.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_binary'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_binary.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_mpst'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_mpst'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_ampst'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_ampst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed'"\nharness = false\npath = "'benches/ping_pong_all/ping_pong_baking_timed.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 
 # Copy ping_pong benches i and create ping_pong benches i+1
 for i in $(eval echo {0..$end})
@@ -81,7 +81,7 @@ do
     # Clean unusued files
     find benches/ -name *.rser -delete
     # Benchmark
-    cargo bench --bench="bench_ping_pong_*" --all-features -- --verbose
+    cargo bench --bench="ping_pong_*" --all-features -- --verbose
     # Clean unusued files
     rm -rf target/criterion/report/
     find . -name "*.svg" -delete

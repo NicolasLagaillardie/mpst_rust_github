@@ -60,8 +60,7 @@ fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
 type FullB = <FullA as Session>::Dual;
 
 fn binary_yes_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s: Send<Binary1A, End> =
-        choose!(Binary0A::Accept, s);
+    let s: Send<Binary1A, End> = choose!(Binary0A::Accept, s);
     let s = choose!(Binary1A::Yes, s);
     let s = send((), s);
     let s = send((), s);
@@ -72,8 +71,7 @@ fn binary_yes_b(s: FullB) -> Result<(), Box<dyn Error>> {
 }
 
 fn binary_no_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s: Send<Binary1A, End> =
-        choose!(Binary0A::Accept, s);
+    let s: Send<Binary1A, End> = choose!(Binary0A::Accept, s);
     let s = choose!(Binary1A::No, s);
     let s = send((), s);
     let s = send((), s);

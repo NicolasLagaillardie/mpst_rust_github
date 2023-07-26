@@ -140,6 +140,140 @@ required-features = []
 
 ################## Examples
 
+######### Crossbeam
+
+[[bench]]
+name = "example_calculator_crossbeam"
+path = "benches/examples_all_crossbeam/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_crossbeam"
+path = "benches/examples_all_crossbeam/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_crossbeam"
+path = "benches/examples_all_crossbeam/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_crossbeam"
+path = "benches/examples_all_crossbeam/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_crossbeam"
+path = "benches/examples_all_crossbeam/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_crossbeam"
+path = "benches/examples_all_crossbeam/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_crossbeam"
+path = "benches/examples_all_crossbeam/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_crossbeam"
+path = "benches/examples_all_crossbeam/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_crossbeam"
+path = "benches/examples_all_crossbeam/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_crossbeam"
+path = "benches/examples_all_crossbeam/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_crossbeam"
+path = "benches/examples_all_crossbeam/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_crossbeam"
+path = "benches/examples_all_crossbeam/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_crossbeam"
+path = "benches/examples_all_crossbeam/video_stream.rs"
+required-features = ["full"]
+
+######### Binary
+
+[[bench]]
+name = "example_calculator_binary"
+path = "benches/examples_all_binary/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_binary"
+path = "benches/examples_all_binary/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_binary"
+path = "benches/examples_all_binary/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_binary"
+path = "benches/examples_all_binary/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_binary"
+path = "benches/examples_all_binary/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_binary"
+path = "benches/examples_all_binary/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_binary"
+path = "benches/examples_all_binary/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_binary"
+path = "benches/examples_all_binary/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_binary"
+path = "benches/examples_all_binary/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_binary"
+path = "benches/examples_all_binary/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_binary"
+path = "benches/examples_all_binary/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_binary"
+path = "benches/examples_all_binary/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_binary"
+path = "benches/examples_all_binary/video_stream.rs"
+required-features = ["full"]
+
 ######### Basic
 
 [[bench]]
@@ -1022,6 +1156,140 @@ required-features = ["full"]
 
 ################################### Examples
 
+######### Crossbeam
+
+[[example]]
+name = "calculator_crossbeam"
+path = "examples/crossbeam/calculator.rs"
+required-features = ["default"]
+
+[[example]]
+name = "circuit_breaker_crossbeam"
+path = "examples/crossbeam/circuit_breaker.rs"
+required-features = ["default"]
+
+[[example]]
+name = "fib_crossbeam"
+path = "examples/crossbeam/fib.rs"
+required-features = ["default"]
+
+[[example]]
+name = "logging_crossbeam"
+path = "examples/crossbeam/logging.rs"
+required-features = ["default"]
+
+[[example]]
+name = "o_auth_crossbeam"
+path = "examples/crossbeam/o_auth.rs"
+required-features = ["default"]
+
+[[example]]
+name = "online_wallet_crossbeam"
+path = "examples/crossbeam/online_wallet.rs"
+required-features = ["default"]
+
+[[example]]
+name = "remote_data_crossbeam"
+path = "examples/crossbeam/remote_data.rs"
+required-features = ["default"]
+
+[[example]]
+name = "servo_crossbeam"
+path = "examples/crossbeam/servo.rs"
+required-features = ["default"]
+
+[[example]]
+name = "simple_voting_crossbeam"
+path = "examples/crossbeam/simple_voting.rs"
+required-features = ["default"]
+
+[[example]]
+name = "smtp_crossbeam"
+path = "examples/crossbeam/smtp.rs"
+required-features = ["default"]
+
+[[example]]
+name = "three_buyers_crossbeam"
+path = "examples/crossbeam/three_buyers.rs"
+required-features = ["default"]
+
+[[example]]
+name = "travel_agency_crossbeam"
+path = "examples/crossbeam/travel_agency.rs"
+required-features = ["default"]
+
+[[example]]
+name = "video_stream_crossbeam"
+path = "examples/crossbeam/video_stream.rs"
+required-features = ["default"]
+
+######### Binary
+
+[[example]]
+name = "calculator_binary"
+path = "examples/binary/calculator.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "circuit_breaker_binary"
+path = "examples/binary/circuit_breaker.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "fib_binary"
+path = "examples/binary/fib.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "logging_binary"
+path = "examples/binary/logging.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "o_auth_binary"
+path = "examples/binary/o_auth.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "online_wallet_binary"
+path = "examples/binary/online_wallet.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "remote_data_binary"
+path = "examples/binary/remote_data.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "servo_binary"
+path = "examples/binary/servo.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "simple_voting_binary"
+path = "examples/binary/simple_voting.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "smtp_binary"
+path = "examples/binary/smtp.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "three_buyers_binary"
+path = "examples/binary/three_buyers.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "travel_agency_binary"
+path = "examples/binary/travel_agency.rs"
+required-features = ["binary"]
+
+[[example]]
+name = "video_stream_binary"
+path = "examples/binary/video_stream.rs"
+required-features = ["binary"]
+
 ######### Basic
 
 [[example]]
@@ -1474,13 +1742,6 @@ required-features = ["baking_timed"]
 name = "ring_four_baking_atmp"
 path = "examples/ring/ring_four_baking_atmp.rs"
 required-features = ["baking_timed"]
-
-# ################################### Example Test
-
-# [[example]]
-# name = "test"
-# path = "examples/test.rs"
-# required-features = ["full"]
 
 ################################### Profil
 

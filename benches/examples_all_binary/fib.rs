@@ -88,7 +88,7 @@ fn aux() {
 
 static LOOPS: i64 = 20;
 
-pub fn fib(c: &mut Criterion) {
+pub fn fib_binary(c: &mut Criterion) {
     c.bench_function(&format!("Fibo binary {LOOPS}"), |b| b.iter(aux));
 }
 
@@ -97,7 +97,7 @@ pub fn fib(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
-    targets = fib,
+    targets = fib_binary,
 }
 
 criterion_main! {
