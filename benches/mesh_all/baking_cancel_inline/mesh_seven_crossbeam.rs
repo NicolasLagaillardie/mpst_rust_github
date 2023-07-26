@@ -10,8 +10,6 @@ use criterion::{criterion_group, criterion_main, Criterion};
 
 use std::thread::spawn;
 
-// use std::time::Duration;
-
 type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
 type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
 

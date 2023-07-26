@@ -6,8 +6,6 @@ use std::thread::spawn;
 
 use crossbeam_channel::bounded;
 
-// use std::time::Duration;
-
 type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
 type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
 

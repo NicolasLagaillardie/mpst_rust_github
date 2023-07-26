@@ -9,8 +9,6 @@ use mpstthree::role::end::RoleEnd;
 
 use std::error::Error;
 
-// use std::time::Duration;
-
 // Create new roles
 generate!("rec_and_cancel", MeshedChannels, A, B);
 

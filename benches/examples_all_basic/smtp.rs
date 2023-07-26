@@ -17,8 +17,6 @@ use mpstthree::{
 
 use std::error::Error;
 
-// use std::time::Duration;
-
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new roles

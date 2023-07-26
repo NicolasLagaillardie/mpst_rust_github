@@ -1,126 +1,91 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
+use mpstthree::{choose, offer};
 
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 
 use std::error::Error;
-
-// See the folder scribble_protocols for the related Scribble protocol
-
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, A, C, S);
-
-// Types
-// A
-type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
-type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
-
-// A
-enum Branching0fromCtoA {
-    Accept(MeshedChannels<Recv<i32, End>, End, RoleC<RoleEnd>, NameA>),
-    Quit(MeshedChannels<End, End, RoleEnd, NameA>),
-}
+use std::thread::spawn;
 
 // S
-enum Branching0fromCtoS {
-    Accept(MeshedChannels<End, Recv<i32, Send<i32, End>>, RoleC<RoleC<RoleEnd>>, NameS>),
-    Quit(MeshedChannels<End, End, RoleEnd, NameS>),
+enum BinaryA {
+    Accept(Recv<(), Recv<(), Recv<(), End>>>),
+    Quit(Recv<(), Recv<(), End>>),
 }
+type FullA = Recv<(), Recv<(), Recv<(), Recv<(), Recv<BinaryA, End>>>>>;
 
-// Creating the MP sessions
-// A
-type EndpointA = MeshedChannels<
-    Send<i32, Recv<Branching0fromCtoA, End>>,
-    Send<i32, Recv<i32, End>>,
-    RoleS<RoleS<RoleC<RoleC<RoleEnd>>>>,
-    NameA,
->;
+fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
+    let (_empty_1, s) = recv(s)?;
+    let (_empty_2, s) = recv(s)?;
+    let (_empty_3, s) = recv(s)?;
+    let (_empty_4, s) = recv(s)?;
+
+    offer!(s, {
+        BinaryA::Accept(s) => {
+            let (_ok_a, s) = recv(s)?;
+            let (_ok_s, s) = recv(s)?;
+            let (_empty_5, s) = recv(s)?;
+            close(s)
+        },
+        BinaryA::Quit(s) => {
+            let (_quit_a, s) = recv(s)?;
+            let (_quit_s, s) = recv(s)?;
+            close(s)
+        },
+    })
+}
 
 // C
-type EndpointC = MeshedChannels<
-    Recv<i32, Choose0fromCtoA>,
-    Recv<i32, Choose0fromCtoS>,
-    RoleS<RoleA<RoleBroadcast>>,
-    NameC,
->;
-type EndpointCAccept = MeshedChannels<
-    Send<i32, End>,
-    Send<i32, Recv<i32, End>>,
-    RoleA<RoleS<RoleS<RoleEnd>>>,
-    NameC,
->;
+type FullB = <FullA as Session>::Dual;
 
-// S
-type EndpointS = MeshedChannels<
-    Recv<i32, Send<i32, End>>,
-    Send<i32, Recv<Branching0fromCtoS, End>>,
-    RoleA<RoleA<RoleC<RoleC<RoleEnd>>>>,
-    NameS,
->;
-
-// Functions
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    let s = s.send(random())?;
-    let (_empty2, s) = s.recv()?;
-    let s = s.send(random())?;
-    offer_mpst!(s, {
-        Branching0fromCtoA::Accept(s) => {
-            let (_ok, s) = s.recv()?;
-            s.close()
-        },
-        Branching0fromCtoA::Quit(s) => {
-            s.close()
-        },
-    })
+fn binary_ok_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = choose!(BinaryA::Accept, s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
 
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    let (_empty3, s) = s.recv()?;
-    let (_empty4, s) = s.recv()?;
-
-    let choice: i32 = thread_rng().gen_range(1..=3);
-
-    if choice != 1 {
-        let s: EndpointCAccept =
-            choose_mpst_c_to_all!(s, Branching0fromCtoA::Accept, Branching0fromCtoS::Accept);
-
-        let s = s.send(random())?;
-        let s = s.send(random())?;
-        let (_empty5, s) = s.recv()?;
-
-        s.close()
-    } else {
-        let s = choose_mpst_c_to_all!(s, Branching0fromCtoA::Quit, Branching0fromCtoS::Quit);
-        s.close()
-    }
+fn binary_quit_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = choose!(BinaryA::Quit, s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
-
-fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
-    let (_empty1, s) = s.recv()?;
-    let s = s.send(random())?;
-    let s = s.send(random())?;
-    offer_mpst!(s, {
-        Branching0fromCtoS::Accept(s) => {
-            let (_ok, s) = s.recv()?;
-            let s = s.send(random())?;
-            s.close()
-        },
-        Branching0fromCtoS::Quit(s) => {
-            s.close()
-        },
-    })
-}
-
-/////////////////////////////////////////
 
 fn main() {
-    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c, endpoint_s);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        let choice = thread_rng().gen_range(1..=2);
+
+        if choice != 1 {
+            sessions.into_iter().for_each(|s| binary_ok_b(s).unwrap());
+        } else {
+            sessions.into_iter().for_each(|s| binary_quit_b(s).unwrap());
+        }
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }

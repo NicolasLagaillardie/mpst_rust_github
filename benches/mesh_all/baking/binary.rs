@@ -16,8 +16,6 @@ use mpstthree::{generate, choose, offer};
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 
-// use std::time::Duration;
-
 // A
 enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),

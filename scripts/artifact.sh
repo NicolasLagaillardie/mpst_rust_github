@@ -1,5 +1,13 @@
 #!/bin/sh
 
+#### DOES NOT WORK RIGHT NOW
+
+echo "Does not work"
+
+exit 1
+
+####
+
 # Stop upon any error
 set -e
 

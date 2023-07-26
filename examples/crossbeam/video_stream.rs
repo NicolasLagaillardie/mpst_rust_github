@@ -1,150 +1,94 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
+use mpstthree::{choose, offer};
 
-use rand::{thread_rng, Rng};
-
-use std::boxed::Box;
 use std::error::Error;
+use std::thread::spawn;
 
-// See the folder scribble_protocols for the related Scribble protocol
-
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, A, B, C);
-
-type AtoCClose = End;
-type AtoBClose = End;
-type AtoBVideo = Send<i32, Recv<i32, End>>;
-type AtoCVideo = Recv<i32, Send<i32, RecursAtoC>>;
-
-type InitA = Recv<i32, Send<i32, RecursAtoC>>;
-
-type BtoAClose = <AtoBClose as Session>::Dual;
-type BtoCClose = End;
-type BtoAVideo = <AtoBVideo as Session>::Dual;
-
-type RecursAtoC = Recv<Branches0AtoC, End>;
-type RecursBtoC = Recv<Branches0BtoC, End>;
-
-enum Branches0AtoC {
-    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>),
-    Video(MeshedChannels<AtoBVideo, AtoCVideo, StackAVideo, NameA>),
+// S
+enum BinaryA {
+    Video(Recv<(), Recv<(), Recv<(), Recv<(), RecA>>>>),
+    Stop(Recv<(), Recv<(), End>>),
 }
-enum Branches0BtoC {
-    End(MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>),
-    Video(MeshedChannels<BtoAVideo, RecursBtoC, StackBVideo, NameB>),
+type RecA = Recv<BinaryA, End>;
+type FullA = Recv<(), Recv<(), RecA>>;
+
+fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
+    let (_declare, s) = recv(s)?;
+    let (_accept, s) = recv(s)?;
+
+    recurs_a(s)
 }
-type Choose0fromCtoA = Send<Branches0AtoC, End>;
-type Choose0fromCtoB = Send<Branches0BtoC, End>;
 
-type InitC = Send<i32, Recv<i32, Choose0fromCtoA>>;
-
-// Stacks
-type StackAEnd = RoleEnd;
-type StackAVideo = RoleC<RoleB<RoleB<RoleC<RoleC<RoleEnd>>>>>;
-type StackARecurs = RoleC<RoleEnd>;
-type StackAInit = RoleC<RoleC<RoleC<RoleEnd>>>;
-
-type StackBEnd = RoleEnd;
-type StackBVideo = RoleA<RoleA<RoleC<RoleEnd>>>;
-type StackBRecurs = RoleC<RoleEnd>;
-
-type StackCRecurs = RoleBroadcast;
-type StackCFull = RoleA<RoleA<StackCRecurs>>;
-
-// Creating the MP sessions
-
-// For C
-type EndpointCRecurs = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, StackCRecurs, NameC>;
-type EndpointCVideo = MeshedChannels<
-    Send<i32, Recv<i32, Choose0fromCtoA>>,
-    Choose0fromCtoB,
-    RoleA<RoleA<StackCRecurs>>,
-    NameC,
->;
-type EndpointCFull = MeshedChannels<InitC, Choose0fromCtoB, StackCFull, NameC>;
-
-// For A
-type EndpointARecurs = MeshedChannels<End, RecursAtoC, StackARecurs, NameA>;
-type EndpointAFull = MeshedChannels<End, InitA, StackAInit, NameA>;
-
-// For B
-type EndpointBRecurs = MeshedChannels<End, RecursBtoC, StackBRecurs, NameB>;
-
-// Functions related to endpoints
-fn server(s: EndpointBRecurs) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branches0BtoC::End(s) => {
-            s.close()
+fn recurs_a(s: RecA) -> Result<(), Box<dyn Error>> {
+    offer!(s, {
+        BinaryA::Video(s) => {
+            let (_request_video_auth, s) = recv(s)?;
+            let (_request_server, s) = recv(s)?;
+            let (_send_video_auth, s) = recv(s)?;
+            let (_send_video_server, s) = recv(s)?;
+            recurs_a(s)
         },
-        Branches0BtoC::Video(s) => {
-            let (request, s) = s.recv()?;
-            let s = s.send(request + 1)?;
-            server(s)
+        BinaryA::Stop(s) => {
+            let (_close_auth, s) = recv(s)?;
+            let (_close_server, s) = recv(s)?;
+            close(s)
         },
     })
 }
 
-fn authenticator(s: EndpointAFull) -> Result<(), Box<dyn Error>> {
-    let (id, s) = s.recv()?;
-    let s = s.send(id + 1)?;
+// C
+type RecB = <RecA as Session>::Dual;
 
-    authenticator_recurs(s)
+fn binary_video_b(s: RecB) -> Result<RecB, Box<dyn Error>> {
+    let s = choose!(BinaryA::Video, s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    Ok(s)
 }
 
-fn authenticator_recurs(s: EndpointARecurs) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branches0AtoC::End(s) => {
-            s.close()
-        },
-        Branches0AtoC::Video(s) => {
-            let (request, s) = s.recv()?;
-            let s = s.send(request + 1)?;
-            let (video, s) = s.recv()?;
-            let s = s.send(video + 1)?;
-            authenticator_recurs(s)
-        },
-    })
+fn binary_close_b(s: RecB) -> Result<(), Box<dyn Error>> {
+    let s = choose!(BinaryA::Stop, s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
-
-fn client(s: EndpointCFull) -> Result<(), Box<dyn Error>> {
-    let mut rng = thread_rng();
-    let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
-
-    let s = s.send(0)?;
-    let (_, s) = s.recv()?;
-
-    client_recurs(s, xs)
-}
-
-fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Error>> {
-    match xs.pop() {
-        Option::Some(_) => {
-            let s: EndpointCVideo =
-                choose_mpst_c_to_all!(s, Branches0AtoC::Video, Branches0BtoC::Video);
-
-            let s = s.send(1)?;
-            let (_, s) = s.recv()?;
-
-            client_recurs(s, xs)
-        }
-        Option::None => {
-            let s = choose_mpst_c_to_all!(s, Branches0AtoC::End, Branches0BtoC::End);
-
-            s.close()
-        }
-    }
-}
-
-/////////////////////////////////////////
 
 fn main() {
-    let (thread_a, thread_s, thread_c) = fork_mpst(authenticator, server, client);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_a.join().unwrap();
-    thread_s.join().unwrap();
-    thread_c.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    let session = send((), session);
+    let session = send((), session);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        for _ in 0..LOOPS {
+            sessions = sessions
+                .into_iter()
+                .map(|s| binary_video_b(s).unwrap())
+                .collect::<Vec<_>>();
+        }
+
+        sessions
+            .into_iter()
+            .for_each(|s| binary_close_b(s).unwrap());
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }
+
+static LOOPS: i32 = 100;

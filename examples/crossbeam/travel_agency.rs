@@ -1,195 +1,121 @@
 #![allow(clippy::type_complexity)]
 
+use mpstthree::binary::close::close;
+use mpstthree::binary::fork::fork_with_thread_id;
+use mpstthree::binary::recv::recv;
+use mpstthree::binary::send::send;
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
-use mpstthree::generate;
-use mpstthree::role::broadcast::RoleBroadcast;
-use mpstthree::role::end::RoleEnd;
+use mpstthree::{choose, offer};
 
 use rand::{thread_rng, Rng};
 
 use std::error::Error;
-
-// See the folder scribble_protocols for the related Scribble protocol
-
-// Create new MeshedChannels for four participants
-generate!("rec_and_cancel", MeshedChannels, A, C, S);
-
-// Types
-// C0
-type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
-type Choose0fromCtoS = Send<Branching0fromCtoS, End>;
-
-// C1
-type Choose1fromCtoA = <Choice1fromCtoA as Session>::Dual;
-type Choose1fromCtoS = <Choice1fromCtoS as Session>::Dual;
-
-// A
-enum Branching0fromCtoA {
-    Select(MeshedChannels<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>),
-    Loop(
-        MeshedChannels<
-            Recv<i32, Send<i32, Choice0fromCtoA>>,
-            Send<i32, End>,
-            RoleC<RoleC<RoleS<RoleC<RoleEnd>>>>,
-            NameA,
-        >,
-    ),
-}
-type Choice0fromCtoA = Recv<Branching0fromCtoA, End>;
-enum Branching1fromCtoA {
-    Yes(MeshedChannels<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
-    No(MeshedChannels<Recv<i32, End>, Send<i32, End>, RoleC<RoleS<RoleEnd>>, NameA>),
-}
-type Choice1fromCtoA = Recv<Branching1fromCtoA, End>;
+use std::thread::spawn;
 
 // S
-enum Branching0fromCtoS {
-    Select(MeshedChannels<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>),
-    Loop(MeshedChannels<Recv<i32, End>, Choice0fromCtoS, RoleA<RoleC<RoleEnd>>, NameS>),
+enum Binary0A {
+    Accept(Rec1A),
+    Query(Recv<(), Recv<(), Recv<(), Rec0A>>>),
 }
-type Choice0fromCtoS = Recv<Branching0fromCtoS, End>;
-enum Branching1fromCtoS {
-    Yes(
-        MeshedChannels<
-            Recv<i32, End>,
-            Recv<i32, Send<i32, End>>,
-            RoleA<RoleC<RoleC<RoleEnd>>>,
-            NameS,
-        >,
-    ),
-    No(MeshedChannels<Recv<i32, End>, End, RoleA<RoleEnd>, NameS>),
+enum Binary1A {
+    Yes(Recv<(), Recv<(), Recv<(), Recv<(), Recv<(), End>>>>>),
+    No(Recv<(), Recv<(), Recv<(), End>>>),
 }
-type Choice1fromCtoS = Recv<Branching1fromCtoS, End>;
+type Rec0A = Recv<Binary0A, End>;
+type Rec1A = Recv<Binary1A, End>;
+type FullA = Rec0A;
 
-// Creating the MP sessions
-// A
-type ChoiceA = MeshedChannels<Choice1fromCtoA, End, RoleC<RoleEnd>, NameA>;
-type EndpointA = MeshedChannels<Choice0fromCtoA, End, RoleC<RoleEnd>, NameA>;
+fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
+    offer!(s, {
+        Binary0A::Accept(s) => {
+            offer!(s, {
+                Binary1A::Yes(s) => {
+                    let (_yes_a, s) = recv(s)?;
+                    let (_yes_s, s) = recv(s)?;
+                    let (_payment, s) = recv(s)?;
+                    let (_ack, s) = recv(s)?;
+                    let (_bye, s) = recv(s)?;
+                    close(s)
+                },
+                Binary1A::No(s) => {
+                    let (_no_a, s) = recv(s)?;
+                    let (_no_s, s) = recv(s)?;
+                    let (_bye_a, s) = recv(s)?;
+                    close(s)
+                },
+            })
+        },
+        Binary0A::Query(s) => {
+            let (_query_a, s) = recv(s)?;
+            let (_quote_c, s) = recv(s)?;
+            let (_dummy_s, s) = recv(s)?;
+            binary_a(s)
+        },
+    })
+}
 
 // C
-type ChoiceC = MeshedChannels<Choose1fromCtoA, Choose1fromCtoS, RoleBroadcast, NameC>;
-type ChoiceCYes = MeshedChannels<
-    Send<i32, End>,
-    Send<i32, Recv<i32, End>>,
-    RoleA<RoleS<RoleS<RoleEnd>>>,
-    NameC,
->;
-type ChoiceCNo = MeshedChannels<Send<i32, End>, End, RoleA<RoleEnd>, NameC>;
-type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoS, RoleBroadcast, NameC>;
-type EndpointCLoop = MeshedChannels<
-    Send<i32, Recv<i32, Choose0fromCtoA>>,
-    Choose0fromCtoS,
-    RoleA<RoleA<RoleBroadcast>>,
-    NameC,
->;
+type FullB = <FullA as Session>::Dual;
 
-// S
-type ChoiceS = MeshedChannels<End, Choice1fromCtoS, RoleC<RoleEnd>, NameS>;
-type EndpointS = MeshedChannels<End, Choice0fromCtoS, RoleC<RoleEnd>, NameS>;
-
-// Functions
-// A
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching0fromCtoA::Select(s) => {
-            choice_a(s)
-        },
-        Branching0fromCtoA::Loop(s) => {
-            let (query, s) = s.recv()?;
-            let s = s.send(query)?;
-            let s = s.send(1)?;
-            endpoint_a(s)
-        },
-    })
+fn binary_yes_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s: Send<Binary1A, End> =
+        choose!(Binary0A::Accept, s);
+    let s = choose!(Binary1A::Yes, s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
 
-fn choice_a(s: ChoiceA) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching1fromCtoA::Yes(s) => {
-            let (yes, s) = s.recv()?;
-            let s = s.send(yes)?;
-            s.close()
-        },
-        Branching1fromCtoA::No(s) => {
-            let (no, s) = s.recv()?;
-            let s = s.send(no)?;
-            s.close()
-        },
-    })
+fn binary_no_b(s: FullB) -> Result<(), Box<dyn Error>> {
+    let s: Send<Binary1A, End> =
+        choose!(Binary0A::Accept, s);
+    let s = choose!(Binary1A::No, s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    close(s)
 }
 
-fn endpoint_c_init(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    endpoint_c(s, 100)
-}
-
-fn endpoint_c(s: EndpointC, loops: i32) -> Result<(), Box<dyn Error>> {
-    match loops {
-        0 => {
-            let s =
-                choose_mpst_c_to_all!(s, Branching0fromCtoA::Select, Branching0fromCtoS::Select);
-            choice_c(s)
-        }
-        _ => {
-            let s: EndpointCLoop =
-                choose_mpst_c_to_all!(s, Branching0fromCtoA::Loop, Branching0fromCtoS::Loop);
-
-            let s = s.send(1)?;
-            let (_quote, s) = s.recv()?;
-            endpoint_c(s, loops - 1)
-        }
-    }
-}
-
-fn choice_c(s: ChoiceC) -> Result<(), Box<dyn Error>> {
-    let choice: i32 = thread_rng().gen_range(1..3);
-
-    if choice != 1 {
-        let s: ChoiceCYes =
-            choose_mpst_c_to_all!(s, Branching1fromCtoA::Yes, Branching1fromCtoS::Yes);
-
-        let s = s.send(1)?;
-        let s = s.send(1)?;
-        let (_ack, s) = s.recv()?;
-        s.close()
-    } else {
-        let s: ChoiceCNo = choose_mpst_c_to_all!(s, Branching1fromCtoA::No, Branching1fromCtoS::No);
-
-        let s = s.send(0)?;
-        s.close()
-    }
-}
-
-fn endpoint_s(s: EndpointS) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching0fromCtoS::Select(s) => {
-            choice_s(s)
-        },
-        Branching0fromCtoS::Loop(s) => {
-            let (_dummy, s) = s.recv()?;
-            endpoint_s(s)
-        },
-    })
-}
-
-fn choice_s(s: ChoiceS) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching1fromCtoS::Yes(s) => {
-            let (_yes, s) = s.recv()?;
-            let (payment, s) = s.recv()?;
-            let s = s.send(payment)?;
-            s.close()
-        },
-        Branching1fromCtoS::No(s) => {
-            let (_no, s) = s.recv()?;
-            s.close()
-        },
-    })
+fn binary_query_b(s: FullB) -> Result<FullB, Box<dyn Error>> {
+    let s = choose!(Binary0A::Query, s);
+    let s = send((), s);
+    let s = send((), s);
+    let s = send((), s);
+    Ok(s)
 }
 
 fn main() {
-    let (thread_a, thread_c, thread_s) = fork_mpst(endpoint_a, endpoint_c_init, endpoint_s);
+    let mut threads = Vec::new();
+    let mut sessions = Vec::new();
 
-    thread_a.join().unwrap();
-    thread_c.join().unwrap();
-    thread_s.join().unwrap();
+    let (thread, session) = fork_with_thread_id(binary_a);
+
+    threads.push(thread);
+    sessions.push(session);
+
+    let main = spawn(move || {
+        for _ in 0..LOOPS {
+            sessions = sessions
+                .into_iter()
+                .map(|s| binary_query_b(s).unwrap())
+                .collect::<Vec<_>>();
+        }
+
+        let choice = thread_rng().gen_range(1..=2);
+
+        if choice != 1 {
+            sessions.into_iter().for_each(|s| binary_yes_b(s).unwrap());
+        } else {
+            sessions.into_iter().for_each(|s| binary_no_b(s).unwrap());
+        }
+
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
+    });
+
+    main.join().unwrap();
 }
+
+static LOOPS: i32 = 100;

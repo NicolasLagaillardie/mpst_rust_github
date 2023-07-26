@@ -6,7 +6,7 @@ use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::{choose, offer};
 
 use rand::{thread_rng, Rng};
@@ -60,7 +60,7 @@ fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
 type FullB = <FullA as Session>::Dual;
 
 fn binary_yes_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s: mpstthree::binary::struct_trait::send::Send<Binary1A, End> =
+    let s: Send<Binary1A, End> =
         choose!(Binary0A::Accept, s);
     let s = choose!(Binary1A::Yes, s);
     let s = send((), s);
@@ -72,7 +72,7 @@ fn binary_yes_b(s: FullB) -> Result<(), Box<dyn Error>> {
 }
 
 fn binary_no_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s: mpstthree::binary::struct_trait::send::Send<Binary1A, End> =
+    let s: Send<Binary1A, End> =
         choose!(Binary0A::Accept, s);
     let s = choose!(Binary1A::No, s);
     let s = send((), s);

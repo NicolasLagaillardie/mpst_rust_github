@@ -10,8 +10,6 @@ use rand::random;
 use std::error::Error;
 use std::marker;
 
-// use std::time::Duration;
-
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create new MeshedChannels for two participants

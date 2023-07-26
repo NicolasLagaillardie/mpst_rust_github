@@ -17,8 +17,6 @@ use std::error::Error;
 use std::marker;
 use std::thread::{spawn, JoinHandle};
 
-// use std::time::Duration;
-
 // A
 enum BinaryA<N: marker::Send> {
     More(Recv<N, Send<N, RecursA<N>>>),

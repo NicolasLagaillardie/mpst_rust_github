@@ -12,8 +12,6 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;
 
-// use std::time::Duration;
-
 // Create new roles
 generate_timed!(MeshedChannels, A, B);
 

@@ -4,7 +4,7 @@ use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;
 use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
+use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::{choose, offer};
 
 use rand::{thread_rng, Rng};
@@ -68,7 +68,7 @@ fn binary_success_b(s: Choice0B) -> Result<Choice0B, Box<dyn Error>> {
 
 fn binary_failure_restart_b(s: Choice0B) -> Result<Choice0B, Box<dyn Error>> {
     let s = choose!(Binary0A::Failure, s);
-    let s: mpstthree::binary::struct_trait::send::Send<Binary1A, End> = send((), s);
+    let s: Send<Binary1A, End> = send((), s);
     let s = choose!(Binary1A::Restart, s);
     let s = send((), s);
     Ok(s)
@@ -76,7 +76,7 @@ fn binary_failure_restart_b(s: Choice0B) -> Result<Choice0B, Box<dyn Error>> {
 
 fn binary_failure_close_b(s: Choice0B) -> Result<(), Box<dyn Error>> {
     let s = choose!(Binary0A::Failure, s);
-    let s: mpstthree::binary::struct_trait::send::Send<Binary1A, End> = send((), s);
+    let s: Send<Binary1A, End> = send((), s);
     let s = choose!(Binary1A::Stop, s);
     let s = send((), s);
     close(s)

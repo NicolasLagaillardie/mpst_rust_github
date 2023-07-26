@@ -19,8 +19,6 @@ use rand::{distributions::Alphanumeric, thread_rng, Rng};
 
 use std::error::Error;
 
-// use std::time::Duration;
-
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions

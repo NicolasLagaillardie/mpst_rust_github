@@ -13,8 +13,6 @@ use mpstthree::role::end::RoleEnd;
 
 use std::error::Error;
 
-// use std::time::Duration;
-
 generate!("recursive", MeshedChannels, A, B, C, D, E, F, G, H);
 
 // Types
