@@ -195,10 +195,10 @@ required-features = ["default"]
 # path = "examples/crossbeam/three_buyers.rs"
 # required-features = ["default"]
 
-[[example]]
-name = "example_travel_agency_crossbeam"
-path = "examples/crossbeam/travel_agency.rs"
-required-features = ["default"]
+# [[example]]
+# name = "example_travel_agency_crossbeam"
+# path = "examples/crossbeam/travel_agency.rs"
+# required-features = ["default"]
 
 # [[example]]
 # name = "example_video_stream_crossbeam"
