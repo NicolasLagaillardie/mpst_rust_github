@@ -165,15 +165,15 @@ required-features = []
 # path = "examples/crossbeam/o_auth.rs"
 # required-features = ["default"]
 
-[[example]]
-name = "example_online_wallet_crossbeam"
-path = "examples/crossbeam/online_wallet.rs"
-required-features = ["default"]
-
 # [[example]]
-# name = "example_remote_data_crossbeam"
-# path = "examples/crossbeam/remote_data.rs"
+# name = "example_online_wallet_crossbeam"
+# path = "examples/crossbeam/online_wallet.rs"
 # required-features = ["default"]
+
+[[example]]
+name = "example_remote_data_crossbeam"
+path = "examples/crossbeam/remote_data.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_servo_crossbeam"
