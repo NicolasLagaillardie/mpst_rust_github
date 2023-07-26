@@ -170,15 +170,15 @@ required-features = []
 # path = "examples/crossbeam/online_wallet.rs"
 # required-features = ["default"]
 
-[[example]]
-name = "example_remote_data_crossbeam"
-path = "examples/crossbeam/remote_data.rs"
-required-features = ["default"]
-
 # [[example]]
-# name = "example_servo_crossbeam"
-# path = "examples/crossbeam/servo.rs"
+# name = "example_remote_data_crossbeam"
+# path = "examples/crossbeam/remote_data.rs"
 # required-features = ["default"]
+
+[[example]]
+name = "example_servo_crossbeam"
+path = "examples/crossbeam/servo.rs"
+required-features = ["default"]
 
 # [[example]]
 # name = "example_simple_voting_crossbeam"

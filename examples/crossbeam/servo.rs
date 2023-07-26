@@ -1,53 +1,47 @@
 #![allow(clippy::type_complexity)]
 
-use mpstthree::binary::close::close;
-use mpstthree::binary::fork::fork_with_thread_id;
-use mpstthree::binary::recv::recv;
-use mpstthree::binary::send::send;
-use mpstthree::binary::struct_trait::{end::End, recv::Recv, session::Session};
-
-use std::error::Error;
 use std::thread::spawn;
 
-// S
-type FullA = Recv<(), Recv<(), Recv<(), Recv<(), Recv<(), End>>>>>;
+use crossbeam_channel::{bounded, Receiver};
 
-fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
-    let (_get_web_page_load_state, s) = recv(s)?;
-    let (_outstanding_web_fonts, s) = recv(s)?;
-    let (_get_current_state, s) = recv(s)?;
-    let (_document_loading, s) = recv(s)?;
-    let (_web_font_loaded, _s) = recv(s)?;
-
-    Ok(())
-}
-
-// C
-type FullB = <FullA as Session>::Dual;
-
-fn binary_b(s: FullB) -> Result<(), Box<dyn Error>> {
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    let s = send((), s);
-    close(s)
-}
+type S0 = Receiver<Receiver<Receiver<Receiver<Receiver<()>>>>>;
+type S1 = Receiver<Receiver<Receiver<Receiver<()>>>>;
+type S2 = Receiver<Receiver<Receiver<()>>>;
+type S3 = Receiver<Receiver<()>>;
+type S4 = Receiver<()>;
+type S5 = ();
 
 fn main() {
-    let mut threads = Vec::new();
-    let mut sessions = Vec::new();
-
-    let (thread, session) = fork_with_thread_id(binary_a);
-
-    threads.push(thread);
-    sessions.push(session);
-
     let main = spawn(move || {
-        sessions.into_iter().for_each(|s| binary_b(s).unwrap());
+        for _ in 0..LOOPS {
+            let (sender_s_0, receiver_s_0) = bounded::<S0>(1);
+            let (sender_s_1, receiver_s_1) = bounded::<S1>(1);
+            let (sender_s_2, receiver_s_2) = bounded::<S2>(1);
+            let (sender_s_3, receiver_s_3) = bounded::<S3>(1);
+            let (sender_s_4, receiver_s_4) = bounded::<S4>(1);
+            let (sender_s_5, receiver_s_5) = bounded::<S5>(1);
 
-        threads.into_iter().for_each(|elt| elt.join().unwrap());
+            sender_s_0.send(receiver_s_1).unwrap();
+            let receiver_s_1_bis = receiver_s_0.recv().unwrap();
+
+            sender_s_1.send(receiver_s_2).unwrap();
+            let receiver_s_2_bis = receiver_s_1_bis.recv().unwrap();
+
+            sender_s_2.send(receiver_s_3).unwrap();
+            let receiver_s_3_bis = receiver_s_2_bis.recv().unwrap();
+
+            sender_s_3.send(receiver_s_4).unwrap();
+            let receiver_s_4_bis = receiver_s_3_bis.recv().unwrap();
+
+            sender_s_4.send(receiver_s_5).unwrap();
+            let receiver_s_5_bis = receiver_s_4_bis.recv().unwrap();
+
+            sender_s_5.send(()).unwrap();
+            receiver_s_5_bis.recv().unwrap();
+        }
     });
 
     main.join().unwrap();
 }
+
+static LOOPS: i64 = 100;
