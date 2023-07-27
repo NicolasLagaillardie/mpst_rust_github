@@ -6,19 +6,19 @@
 set -e
 
 ## Compile crossbeam examples
-bash ./scripts/create_files/compile_full.sh fib_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh simple_voting_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh calculator_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh three_buyers_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh travel_agency_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh o_auth_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh logging_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh online_wallet_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh smtp_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh servo_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh video_stream_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh remote_data_crossbeam 20 crossbeam
-bash ./scripts/create_files/compile_full.sh circuit_breaker_crossbeam 20 crossbeam
+bash ./scripts/create_files/compile_full.sh fib_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh simple_voting_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh calculator_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh three_buyers_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh travel_agency_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh o_auth_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh logging_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh online_wallet_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh smtp_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh servo_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh video_stream_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh remote_data_crossbeam 20 default
+bash ./scripts/create_files/compile_full.sh circuit_breaker_crossbeam 20 default
 
 ## Compile binary examples
 bash ./scripts/create_files/compile_full.sh fib_binary 20 binary
