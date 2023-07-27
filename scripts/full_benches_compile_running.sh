@@ -35,6 +35,9 @@ sleep 60s
     # Send done email
     bash ./scripts/curl/done_curl.sh
 } || {
+    # Resetting Cargo.toml
+    cat scripts/toml/save_cargo.toml > Cargo.toml
+
     # Send fail email
     bash ./scripts/curl/fail_curl.sh
 }
