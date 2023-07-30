@@ -37,6 +37,8 @@ jobs:
     #     cd kmc-cav19
     #     ghc KMC -threaded
     #     ghc GenCFSMs
+    - name: Check Rust version
+      run: rustup --version
     - name: Format
       run: cargo fmt --verbose --all -- --check
     - name: Clippy
