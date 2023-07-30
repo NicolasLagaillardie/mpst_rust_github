@@ -84,10 +84,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh twenty baking protocol crossbeam {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("mesh twenty crossbeam {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

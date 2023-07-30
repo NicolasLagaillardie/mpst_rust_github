@@ -84,10 +84,9 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring nine baking inline protocol crossbeam {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("ring nine baking inline crossbeam {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
 
 /////////////////////////

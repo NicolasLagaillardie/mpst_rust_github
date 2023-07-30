@@ -77,7 +77,7 @@ fn aux() {
 static LOOPS: i64 = 0;
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("mesh twenty empty protocol binary {LOOPS}"), |b| {
+    c.bench_function(&format!("mesh twenty empty binary {LOOPS}"), |b| {
         b.iter(aux)
     });
 }

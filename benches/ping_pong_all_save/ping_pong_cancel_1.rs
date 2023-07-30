@@ -127,7 +127,7 @@ fn aux() {
 static LOOPS: i64 = 1;
 
 pub fn ping_pong_protocol_mpst_cancel(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong cancel protocol {LOOPS}"), |b| {
+    c.bench_function(&format!("ping pong cancel {LOOPS}"), |b| {
         b.iter(aux)
     });
 }

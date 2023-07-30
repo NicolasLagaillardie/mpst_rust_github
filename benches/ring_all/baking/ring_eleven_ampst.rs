@@ -891,7 +891,7 @@ static LOOPS: i64 = 100;
 
 pub fn ring_protocol_ampst(c: &mut Criterion) {
     c.bench_function(
-        &format!("ring eleven baking protocol AMPST {LOOPS}"),
+        &format!("ring eleven baking AMPST {LOOPS}"),
         |b| b.iter(aux)
     );
 }

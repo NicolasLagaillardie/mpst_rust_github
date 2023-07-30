@@ -824,7 +824,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn ring_protocol_mpst(c: &mut Criterion) {
-    c.bench_function(&format!("ring ten protocol {LOOPS}"), |b| b.iter(aux));
+    c.bench_function(&format!("ring ten {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

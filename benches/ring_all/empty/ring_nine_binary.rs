@@ -77,9 +77,7 @@ fn aux() {
 static LOOPS: i64 = 0;
 
 pub fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ring nine empty protocol binary {LOOPS}"), |b| {
-        b.iter(aux)
-    });
+    c.bench_function(&format!("ring nine empty binary {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

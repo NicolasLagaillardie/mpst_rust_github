@@ -84,10 +84,9 @@ fn aux() {
 static LOOPS: i64 = 0;
 
 pub fn mesh_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh eleven empty protocol crossbeam {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("mesh eleven empty crossbeam {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
 
 /////////////////////////

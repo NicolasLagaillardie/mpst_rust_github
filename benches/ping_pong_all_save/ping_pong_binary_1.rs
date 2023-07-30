@@ -71,7 +71,7 @@ fn aux() {
 static LOOPS: i64 = 1;
 
 pub fn ping_pong_protocol_binary(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong protocol binary {LOOPS}"), |b| {
+    c.bench_function(&format!("ping pong binary {LOOPS}"), |b| {
         b.iter(aux)
     });
 }

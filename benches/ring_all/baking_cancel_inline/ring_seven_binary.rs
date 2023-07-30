@@ -77,10 +77,9 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn ring_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring seven baking inline protocol binary {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("ring seven baking inline binary {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
 
 /////////////////////////

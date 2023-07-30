@@ -360,102 +360,200 @@ harness = false
 path = "benches/examples_all_basic/dns_imai.rs"
 required-features = ["full"]
 
-######### Baking
+######### MPST
 
 [[bench]]
-name = "example_logging_baking"
+name = "example_logging_mpst"
 harness = false
-path = "benches/examples_all_baking/logging.rs"
+path = "benches/examples_all_mpst/logging.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_circuit_breaker_baking"
+name = "example_circuit_breaker_mpst"
 harness = false
-path = "benches/examples_all_baking/circuit_breaker.rs"
+path = "benches/examples_all_mpst/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_calculator_baking"
+name = "example_calculator_mpst"
 harness = false
-path = "benches/examples_all_baking/calculator.rs"
+path = "benches/examples_all_mpst/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_fib_baking"
+name = "example_fib_mpst"
 harness = false
-path = "benches/examples_all_baking/fib.rs"
+path = "benches/examples_all_mpst/fib.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_o_auth_baking"
+name = "example_o_auth_mpst"
 harness = false
-path = "benches/examples_all_baking/o_auth.rs"
+path = "benches/examples_all_mpst/o_auth.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_online_wallet_baking"
+name = "example_online_wallet_mpst"
 harness = false
-path = "benches/examples_all_baking/online_wallet.rs"
+path = "benches/examples_all_mpst/online_wallet.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_simple_voting_baking"
+name = "example_simple_voting_mpst"
 harness = false
-path = "benches/examples_all_baking/simple_voting.rs"
+path = "benches/examples_all_mpst/simple_voting.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_smtp_baking"
+name = "example_smtp_mpst"
 harness = false
-path = "benches/examples_all_baking/smtp.rs"
+path = "benches/examples_all_mpst/smtp.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_buyers_baking"
+name = "example_three_buyers_mpst"
 harness = false
-path = "benches/examples_all_baking/three_buyers.rs"
+path = "benches/examples_all_mpst/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_travel_agency_baking"
+name = "example_travel_agency_mpst"
 harness = false
-path = "benches/examples_all_baking/travel_agency.rs"
+path = "benches/examples_all_mpst/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_video_stream_baking"
+name = "example_video_stream_mpst"
 harness = false
-path = "benches/examples_all_baking/video_stream.rs"
+path = "benches/examples_all_mpst/video_stream.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_dns_fowler_baking"
+name = "example_dns_fowler_mpst"
 harness = false
-path = "benches/examples_all_baking/dns_fowler.rs"
+path = "benches/examples_all_mpst/dns_fowler.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_dns_imai_baking"
+name = "example_dns_imai_mpst"
 harness = false
-path = "benches/examples_all_baking/dns_imai.rs"
+path = "benches/examples_all_mpst/dns_imai.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_servo_baking"
+name = "example_servo_mpst"
 harness = false
-path = "benches/examples_all_baking/servo.rs"
+path = "benches/examples_all_mpst/servo.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_remote_data_baking"
+name = "example_remote_data_mpst"
 harness = false
-path = "benches/examples_all_baking/remote_data.rs"
+path = "benches/examples_all_mpst/remote_data.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_http_baking"
+name = "example_http_mpst"
 harness = false
-path = "benches/examples_all_baking/http.rs"
+path = "benches/examples_all_mpst/http.rs"
+required-features = ["full"]
+
+######### AMPST
+
+[[bench]]
+name = "example_logging_ampst"
+harness = false
+path = "benches/examples_all_ampst/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_ampst"
+harness = false
+path = "benches/examples_all_ampst/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_ampst"
+harness = false
+path = "benches/examples_all_ampst/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_ampst"
+harness = false
+path = "benches/examples_all_ampst/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_ampst"
+harness = false
+path = "benches/examples_all_ampst/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_ampst"
+harness = false
+path = "benches/examples_all_ampst/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_ampst"
+harness = false
+path = "benches/examples_all_ampst/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_ampst"
+harness = false
+path = "benches/examples_all_ampst/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_ampst"
+harness = false
+path = "benches/examples_all_ampst/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_ampst"
+harness = false
+path = "benches/examples_all_ampst/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_ampst"
+harness = false
+path = "benches/examples_all_ampst/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_ampst"
+harness = false
+path = "benches/examples_all_ampst/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_ampst"
+harness = false
+path = "benches/examples_all_ampst/dns_imai.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_ampst"
+harness = false
+path = "benches/examples_all_ampst/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_ampst"
+harness = false
+path = "benches/examples_all_ampst/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_ampst"
+harness = false
+path = "benches/examples_all_ampst/http.rs"
 required-features = ["full"]
 
 ######### Interleaved
@@ -2795,111 +2893,218 @@ name = "logging_basic"
 path = "examples/basic/logging.rs"
 required-features = ["macros_multiple"]
 
-######### Affine
+######### MPST
 
 [[example]]
-name = "fib"
-path = "examples/affine/fib.rs"
+name = "fib_mpst"
+path = "examples/mpst/fib.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "circuit_breaker"
-path = "examples/affine/circuit_breaker.rs"
+name = "circuit_breaker_mpst"
+path = "examples/mpst/circuit_breaker.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "logging"
-path = "examples/affine/logging.rs"
+name = "logging_mpst"
+path = "examples/mpst/logging.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "calculator"
-path = "examples/affine/calculator.rs"
+name = "calculator_mpst"
+path = "examples/mpst/calculator.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "dns_fowler"
-path = "examples/affine/dns_fowler.rs"
+name = "dns_fowler_mpst"
+path = "examples/mpst/dns_fowler.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "dns_fowler_checking"
-path = "examples/affine/dns_fowler_checking.rs"
+name = "dns_fowler_checking_mpst"
+path = "examples/mpst/dns_fowler_checking.rs"
 required-features = ["baking_checking"]
 
 [[example]]
-name = "dns_imai"
-path = "examples/affine/dns_imai.rs"
+name = "dns_imai_mpst"
+path = "examples/mpst/dns_imai.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "o_auth"
-path = "examples/affine/o_auth.rs"
+name = "o_auth_mpst"
+path = "examples/mpst/o_auth.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "o_auth_checking"
-path = "examples/affine/o_auth_checking.rs"
+name = "o_auth_checking_mpst"
+path = "examples/mpst/o_auth_checking.rs"
 required-features = ["baking_checking"]
 
 [[example]]
-name = "o_auth_transport"
-path = "examples/affine/o_auth_transport.rs"
+name = "o_auth_transport_mpst"
+path = "examples/mpst/o_auth_transport.rs"
 required-features = ["transport_macros_multiple"]
 
 [[example]]
-name = "online_wallet"
-path = "examples/affine/online_wallet.rs"
+name = "online_wallet_mpst"
+path = "examples/mpst/online_wallet.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "simple_voting"
-path = "examples/affine/simple_voting.rs"
+name = "simple_voting_mpst"
+path = "examples/mpst/simple_voting.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "smtp"
-path = "examples/affine/smtp.rs"
+name = "smtp_mpst"
+path = "examples/mpst/smtp.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "three_buyers"
-path = "examples/affine/three_buyers.rs"
+name = "three_buyers_mpst"
+path = "examples/mpst/three_buyers.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "travel_agency"
-path = "examples/affine/travel_agency.rs"
+name = "travel_agency_mpst"
+path = "examples/mpst/travel_agency.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "servo"
-path = "examples/affine/servo.rs"
+name = "servo_mpst"
+path = "examples/mpst/servo.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "remote_data"
-path = "examples/affine/remote_data.rs"
+name = "remote_data_mpst"
+path = "examples/mpst/remote_data.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "http"
-path = "examples/affine/http.rs"
+name = "http_mpst"
+path = "examples/mpst/http.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "video_stream"
-path = "examples/affine/video_stream.rs"
+name = "video_stream_mpst"
+path = "examples/mpst/video_stream.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "servo_8257_original"
-path = "examples/affine/servo_8257_original.rs"
+name = "servo_8257_original_mpst"
+path = "examples/mpst/servo_8257_original.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "servo_8257_fixed"
-path = "examples/affine/servo_8257_fixed.rs"
+name = "servo_8257_fixed_mpst"
+path = "examples/mpst/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+######### AMPST
+
+[[example]]
+name = "fib_ampst"
+path = "examples/ampst/fib.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_ampst"
+path = "examples/ampst/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging_ampst"
+path = "examples/ampst/logging.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "calculator_ampst"
+path = "examples/ampst/calculator.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_ampst"
+path = "examples/ampst/dns_fowler.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking_ampst"
+path = "examples/ampst/dns_fowler_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "dns_imai_ampst"
+path = "examples/ampst/dns_imai.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_ampst"
+path = "examples/ampst/o_auth.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking_ampst"
+path = "examples/ampst/o_auth_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "o_auth_transport_ampst"
+path = "examples/ampst/o_auth_transport.rs"
+required-features = ["transport_macros_multiple"]
+
+[[example]]
+name = "online_wallet_ampst"
+path = "examples/ampst/online_wallet.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "simple_voting_ampst"
+path = "examples/ampst/simple_voting.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "smtp_ampst"
+path = "examples/ampst/smtp.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "three_buyers_ampst"
+path = "examples/ampst/three_buyers.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "travel_agency_ampst"
+path = "examples/ampst/travel_agency.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_ampst"
+path = "examples/ampst/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data_ampst"
+path = "examples/ampst/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http_ampst"
+path = "examples/ampst/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "video_stream_ampst"
+path = "examples/ampst/video_stream.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_original_ampst"
+path = "examples/ampst/servo_8257_original.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_fixed_ampst"
+path = "examples/ampst/servo_8257_fixed.rs"
 required-features = ["baking"]
 
 ######### Checking
@@ -2934,7 +3139,7 @@ required-features = ["baking_checking"]
 #### Baking
 
 [[example]]
-name = "circuit_breaker_logging"
+name = "circuit_breaker_logging_interleaved"
 path = "examples/interleaved/baking/circuit_breaker_logging.rs"
 required-features = ["interleaved"]
 
@@ -2949,19 +3154,19 @@ path = "examples/interleaved/baking/logging_solo.rs"
 required-features = ["interleaved"]
 
 [[example]]
-name = "sleeping_barber"
+name = "sleeping_barber_interleaved"
 path = "examples/interleaved/baking/sleeping_barber.rs"
 required-features = ["interleaved"]
 
 #### Timed
 
 [[example]]
-name = "sleeping_barber_timed"
+name = "sleeping_barber_interleaved_timed"
 path = "examples/interleaved/timed/sleeping_barber.rs"
 required-features = ["baking_timed_interleaved"]
 
 [[example]]
-name = "circuit_breaker_logging_timed"
+name = "circuit_breaker_logging_interleaved_timed"
 path = "examples/interleaved/timed/circuit_breaker_logging.rs"
 required-features = ["baking_timed_interleaved"]
 
@@ -2978,17 +3183,17 @@ path = "examples/timed/servo.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "servo_8257_async_failing"
+name = "servo_8257_async_failing_timed"
 path = "examples/timed/servo_8257_async_failing.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "servo_8257_async_working"
+name = "servo_8257_async_working_timed"
 path = "examples/timed/servo_8257_async_working.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "servo_8257_async_fixed"
+name = "servo_8257_async_fixed_timed"
 path = "examples/timed/servo_8257_async_fixed.rs"
 required-features = ["baking_timed"]
 
@@ -3038,7 +3243,7 @@ path = "examples/timed/http.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "non_feasible"
+name = "non_feasible_timed"
 path = "examples/timed/non_feasible.rs"
 required-features = ["baking_timed"]
 

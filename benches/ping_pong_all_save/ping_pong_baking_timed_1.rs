@@ -106,7 +106,7 @@ fn aux() {
 static LOOPS: i64 = 1;
 
 pub fn ping_pong_protocol_timed(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong baking protocol ATMP {LOOPS}"), |b| {
+    c.bench_function(&format!("ping pong baking ATMP {LOOPS}"), |b| {
         b.iter(aux)
     });
 }

@@ -78,7 +78,7 @@ fn aux() {
 static LOOPS: i64 = 1;
 
 pub fn ping_pong_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(&format!("ping pong protocol crossbeam {LOOPS}"), |b| {
+    c.bench_function(&format!("ping pong crossbeam {LOOPS}"), |b| {
         b.iter(aux)
     });
 }

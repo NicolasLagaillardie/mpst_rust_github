@@ -385,9 +385,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_ampst(c: &mut Criterion) {
-    c.bench_function(&format!("mesh seven baking protocol AMPST {LOOPS}"), |b| {
-        b.iter(aux)
-    });
+    c.bench_function(&format!("mesh seven baking AMPST {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

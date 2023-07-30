@@ -84,10 +84,9 @@ fn aux() {
 static LOOPS: i64 = 0;
 
 pub fn ring_protocol_crossbeam(c: &mut Criterion) {
-    c.bench_function(
-        &format!("ring nine empty protocol crossbeam {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("ring nine empty crossbeam {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
 
 /////////////////////////

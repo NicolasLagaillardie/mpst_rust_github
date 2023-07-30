@@ -76,10 +76,9 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn mesh_protocol_binary(c: &mut Criterion) {
-    c.bench_function(
-        &format!("mesh seven baking inline protocol binary {LOOPS}"),
-        |b| b.iter(aux),
-    );
+    c.bench_function(&format!("mesh seven baking inline binary {LOOPS}"), |b| {
+        b.iter(aux)
+    });
 }
 
 /////////////////////////

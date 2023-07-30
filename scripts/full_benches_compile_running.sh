@@ -17,7 +17,7 @@ sleep 60s
     cargo clean
 
     ## Compile and run examples
-    bash ./scripts/examples_affine_timed_literature.sh
+    bash ./scripts/examples_affine_timed_literature_extra.sh
 
     cargo clean
 

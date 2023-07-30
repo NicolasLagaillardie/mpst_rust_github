@@ -8,30 +8,6 @@ use mpstthree::{
 
 use std::error::Error;
 
-// global protocol ping_pong(role A, role B)
-// {
-//     rec PP
-//     {
-//         choice at A
-//         {
-//             ping(()) from A to B;
-
-//             pong(()) from B to A;
-
-//             continue PP;
-
-//         }
-
-//         or
-//         {
-//             stop() from A to B;
-
-//         }
-
-//     }
-
-// }
-
 // Create the new MeshedChannels for three participants and the close and fork functions
 bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 2);
 
