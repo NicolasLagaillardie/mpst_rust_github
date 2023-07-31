@@ -39,7 +39,7 @@ macro_rules! generate_timed {
         $meshedchannels_name: ident,
         $( $all_roles: ident),+ $(,)?
     ) => {
-        mpst_seq::baking_timed_with_enum_and_cancel!(
+        mpst_seq_proc::baking_timed_with_enum_and_cancel!(
             $meshedchannels_name ,
             $( $all_roles , )+
         );

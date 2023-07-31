@@ -15,7 +15,7 @@
 //! // If A is the current receiving role,
 //! // then its binary channel with B is the first
 //! // one.
-//! mpst_seq::recv_all_aux_simple!(s, 1)()
+//! mpst_seq_proc::recv_all_aux_simple!(s, 1)()
 //! ```
 
 use proc_macro2::TokenStream;

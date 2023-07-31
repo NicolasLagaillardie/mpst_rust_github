@@ -13,7 +13,7 @@
 //! // and A is the receiver.
 //! // Then the binary channel of A with B is the first
 //! // one.
-//! mpst_seq::recv_aux_simple!(s, 1)()
+//! mpst_seq_proc::recv_aux_simple!(s, 1)()
 //! ```
 
 use proc_macro2::TokenStream;

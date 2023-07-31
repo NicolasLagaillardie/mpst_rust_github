@@ -22,7 +22,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! send_cancel {
     ($func_name: ident, $name: ident, $meshedchannels_name: ident, $n_sessions: literal, $msg:expr) => {
-        mpst_seq::send_cancel!($func_name, $name, $meshedchannels_name, $n_sessions, $msg);
+        mpst_seq_proc::send_cancel!($func_name, $name, $meshedchannels_name, $n_sessions, $msg);
     };
 }
 
@@ -42,6 +42,6 @@ macro_rules! send_cancel {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! broadcast_cancel {
     ($session:expr, $n_sessions: literal) => {
-        mpst_seq::broadcast_cancel!($session, $n_sessions);
+        mpst_seq_proc::broadcast_cancel!($session, $n_sessions);
     };
 }

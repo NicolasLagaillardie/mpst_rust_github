@@ -49,7 +49,7 @@ macro_rules! create_send_mpst_session {
         $n_sessions: literal,
         $exclusion: literal
     ) => {
-        mpst_seq::create_send_mpst_session!(
+        mpst_seq_proc::create_send_mpst_session!(
             $func_name,
             $receiver,
             $sender,
@@ -105,7 +105,7 @@ macro_rules! create_send_mpst_cancel {
         $n_sessions: literal,
         $exclusion: literal
     ) => {
-        mpst_seq::create_send_mpst_cancel!(
+        mpst_seq_proc::create_send_mpst_cancel!(
             $func_name,
             $receiver,
             $sender,
@@ -175,7 +175,7 @@ macro_rules! create_send_check_cancel {
         $n_sessions: literal,
         $exclusion: literal
     ) => {
-        mpst_seq::create_send_check_cancel!(
+        mpst_seq_proc::create_send_check_cancel!(
             $func_name,
             $receiver,
             $sender,

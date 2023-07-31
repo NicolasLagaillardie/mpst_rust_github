@@ -40,7 +40,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_offer_mpst_session_1 {
     ($func_name: ident, $role: ident, $name: ident) => {
-        mpst_seq::create_offer_mpst_session_multi!(
+        mpst_seq_proc::create_offer_mpst_session_multi!(
             $func_name,
             OfferMpst,
             $role,
@@ -87,7 +87,7 @@ macro_rules! create_offer_mpst_session_1 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_offer_mpst_session_2 {
     ($func_name: ident, $role: ident, $name: ident) => {
-        mpst_seq::create_offer_mpst_session_multi!(
+        mpst_seq_proc::create_offer_mpst_session_multi!(
             $func_name,
             OfferMpst,
             $role,

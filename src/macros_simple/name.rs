@@ -143,7 +143,7 @@ macro_rules! create_multiple_normal_name {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_name_short {
     ($name: ident) => {
-        mpst_seq::create_normal_name_short!($name);
+        mpst_seq_proc::create_normal_name_short!($name);
     };
 }
 

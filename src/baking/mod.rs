@@ -103,7 +103,7 @@ macro_rules! generate {
         $meshedchannels_name: ident,
         $( $all_roles: ident ),+ $(,)?
     ) => {
-        mpst_seq::baking!(
+        mpst_seq_proc::baking!(
             $meshedchannels_name ,
             $( $all_roles , )+
         );
@@ -113,7 +113,7 @@ macro_rules! generate {
         $meshedchannels_name: ident,
         $( $all_roles: ident ),+ $(,)?
     ) => {
-        mpst_seq::baking_with_enum!(
+        mpst_seq_proc::baking_with_enum!(
             $meshedchannels_name ,
             $( $all_roles , )+
         );
@@ -123,7 +123,7 @@ macro_rules! generate {
         $meshedchannels_name: ident,
         $( $all_roles: ident ),+ $(,)?
     ) => {
-        mpst_seq::baking_with_cancel!(
+        mpst_seq_proc::baking_with_cancel!(
             $meshedchannels_name ,
             $( $all_roles , )+
         );
@@ -133,7 +133,7 @@ macro_rules! generate {
         $meshedchannels_name: ident,
         $( $all_roles: ident ),+ $(,)?
     ) => {
-        mpst_seq::baking_with_enum_and_cancel!(
+        mpst_seq_proc::baking_with_enum_and_cancel!(
             $meshedchannels_name ,
             $( $all_roles , )+
         );
@@ -148,7 +148,7 @@ macro_rules! generate {
         $index_tuple_two: literal,
         $func_name: ident
     ) => {
-        mpst_seq::baking_interleaved_with_enum_and_cancel!(
+        mpst_seq_proc::baking_interleaved_with_enum_and_cancel!(
             $meshedchannels_name_one ,
             ( $( ( $all_roles_one ) )+ ) ,
             $index_tuple_one ,
@@ -168,7 +168,7 @@ macro_rules! generate {
         $index_tuple_two: literal,
         $func_name: ident
     ) => {
-        mpst_seq::baking_timed_interleaved_with_enum_and_cancel!(
+        mpst_seq_proc::baking_timed_interleaved_with_enum_and_cancel!(
             $meshedchannels_name_one ,
             ( $( ( $all_roles_one ) )+ ) ,
             $index_tuple_one ,

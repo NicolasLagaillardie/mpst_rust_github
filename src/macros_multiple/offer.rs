@@ -28,7 +28,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_type_multi {
     ($type_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
-        mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $n_sessions);
+        mpst_seq_proc::create_offer_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -89,7 +89,7 @@ macro_rules! create_offer_mpst_session_multi {
         $n_sessions: literal,
         $exclusion: literal
     ) => {
-        mpst_seq::create_offer_mpst_session_multi!(
+        mpst_seq_proc::create_offer_mpst_session_multi!(
             $func_name,
             $type_name,
             $role,

@@ -1,8 +1,6 @@
-#![recursion_limit = "128"]
+#![recursion_limit = "256"]
 
 use proc_macro::TokenStream;
-use proc_macro_hack::proc_macro_hack;
-use std::usize;
 use syn::parse_macro_input;
 
 mod common_functions;
@@ -90,11 +88,6 @@ pub fn recv_aux_simple(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_recv_aux_simple(input: TokenStream) -> TokenStream {
-    recv_aux_simple(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -102,11 +95,6 @@ pub fn recv_all_aux_simple(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as RecvAllAuxSimple);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_recv_all_aux_simple(input: TokenStream) -> TokenStream {
-    recv_all_aux_simple(input)
 }
 
 //////////////////////////////////////
@@ -118,11 +106,6 @@ pub fn send_aux_simple(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_send_aux_simple(input: TokenStream) -> TokenStream {
-    send_aux_simple(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -130,11 +113,6 @@ pub fn choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ChooseMultiToAll);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_choose_mpst_multi_to_all(input: TokenStream) -> TokenStream {
-    choose_mpst_multi_to_all(input)
 }
 
 //////////////////////////////////////
@@ -146,11 +124,6 @@ pub fn create_normal_role_short(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_normal_role_short(input: TokenStream) -> TokenStream {
-    create_normal_role_short(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -158,11 +131,6 @@ pub fn create_normal_name_short(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CreateNormalNameShort);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_normal_name_short(input: TokenStream) -> TokenStream {
-    create_normal_name_short(input)
 }
 
 //////////////////////////////////////
@@ -174,11 +142,6 @@ pub fn create_broadcast_role_short(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_broadcast_role_short(input: TokenStream) -> TokenStream {
-    create_broadcast_role_short(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -186,11 +149,6 @@ pub fn create_offer_mpst_session_multi(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as OfferMPSTSessionMulti);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_offer_mpst_session_multi(input: TokenStream) -> TokenStream {
-    create_offer_mpst_session_multi(input)
 }
 
 //////////////////////////////////////
@@ -202,11 +160,6 @@ pub fn create_recv_mpst_session(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_recv_mpst_session(input: TokenStream) -> TokenStream {
-    create_recv_mpst_session(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -214,11 +167,6 @@ pub fn create_send_mpst_session(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CreateSendMPSTSession);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_send_mpst_session(input: TokenStream) -> TokenStream {
-    create_send_mpst_session(input)
 }
 
 //////////////////////////////////////
@@ -230,11 +178,6 @@ pub fn send_cancel(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_send_cancel(input: TokenStream) -> TokenStream {
-    send_cancel(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -242,11 +185,6 @@ pub fn broadcast_cancel(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as BroadcastCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_broadcast_cancel(input: TokenStream) -> TokenStream {
-    broadcast_cancel(input)
 }
 
 //////////////////////////////////////
@@ -258,11 +196,6 @@ pub fn close_mpst(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_close_mpst(input: TokenStream) -> TokenStream {
-    close_mpst(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -270,11 +203,6 @@ pub fn close_mpst_check_cancel(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CloseMpstCheckCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_close_mpst_check_cancel(input: TokenStream) -> TokenStream {
-    close_mpst_check_cancel(input)
 }
 
 //////////////////////////////////////
@@ -286,11 +214,6 @@ pub fn fork_mpst_multi(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_fork_mpst_multi(input: TokenStream) -> TokenStream {
-    fork_mpst_multi(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -298,11 +221,6 @@ pub fn create_choose_type_multi(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ChooseTypeMulti);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_choose_type_multi(input: TokenStream) -> TokenStream {
-    create_choose_type_multi(input)
 }
 
 //////////////////////////////////////
@@ -314,11 +232,6 @@ pub fn create_choose_mpst_session_multi_left(input: TokenStream) -> TokenStream 
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_choose_mpst_session_multi_left(input: TokenStream) -> TokenStream {
-    create_choose_mpst_session_multi_left(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -326,11 +239,6 @@ pub fn create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStream
     let input = parse_macro_input!(input as ChooseTypeMultiRight);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_choose_mpst_session_multi_right(input: TokenStream) -> TokenStream {
-    create_choose_mpst_session_multi_right(input)
 }
 
 //////////////////////////////////////
@@ -342,11 +250,6 @@ pub fn choose_mpst_multi_cancel_to_all(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_choose_mpst_multi_cancel_to_all(input: TokenStream) -> TokenStream {
-    choose_mpst_multi_cancel_to_all(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -354,11 +257,6 @@ pub fn create_fn_choose_mpst_multi_to_all_bundle(input: TokenStream) -> TokenStr
     let input = parse_macro_input!(input as ChooseTypeMultiToAllBundle);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_fn_choose_mpst_multi_to_all_bundle(input: TokenStream) -> TokenStream {
-    create_fn_choose_mpst_multi_to_all_bundle(input)
 }
 
 //////////////////////////////////////
@@ -370,11 +268,6 @@ pub fn create_fn_choose_mpst_cancel_multi_to_all_bundle(input: TokenStream) -> T
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_fn_choose_mpst_cancel_multi_to_all_bundle(input: TokenStream) -> TokenStream {
-    create_fn_choose_mpst_cancel_multi_to_all_bundle(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -382,11 +275,6 @@ pub fn create_offer_type_multi(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as OfferTypeMulti);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_offer_type_multi(input: TokenStream) -> TokenStream {
-    create_offer_type_multi(input)
 }
 
 //////////////////////////////////////
@@ -398,11 +286,6 @@ pub fn create_send_mpst_cancel(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_send_mpst_cancel(input: TokenStream) -> TokenStream {
-    create_send_mpst_cancel(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -410,11 +293,6 @@ pub fn create_send_check_cancel(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CreateSendCheckCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_send_check_cancel(input: TokenStream) -> TokenStream {
-    create_send_check_cancel(input)
 }
 
 //////////////////////////////////////
@@ -426,11 +304,6 @@ pub fn create_meshedchannels(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_meshedchannels(input: TokenStream) -> TokenStream {
-    create_meshedchannels(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -438,11 +311,6 @@ pub fn close_mpst_cancel(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CloseMpstCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_close_mpst_cancel(input: TokenStream) -> TokenStream {
-    close_mpst_cancel(input)
 }
 
 //////////////////////////////////////
@@ -454,11 +322,6 @@ pub fn choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_choose_mpst_create_multi_to_all(input: TokenStream) -> TokenStream {
-    choose_mpst_create_multi_to_all(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -466,11 +329,6 @@ pub fn fork_mpst_multi_solo(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ForkMPSTMultiSolo);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_fork_mpst_multi_solo(input: TokenStream) -> TokenStream {
-    fork_mpst_multi_solo(input)
 }
 
 //////////////////////////////////////
@@ -482,11 +340,6 @@ pub fn close_mpst_interleaved(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_close_mpst_interleaved(input: TokenStream) -> TokenStream {
-    close_mpst_interleaved(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -494,11 +347,6 @@ pub fn choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ChooseTypeMultiHttpToAll);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
-    choose_mpst_multi_http_to_all(input)
 }
 
 //////////////////////////////////////
@@ -510,11 +358,6 @@ pub fn create_recv_http_session(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_create_recv_http_session(input: TokenStream) -> TokenStream {
-    create_recv_http_session(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -522,11 +365,6 @@ pub fn create_send_http_session(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CreateSendHttpSession);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_create_send_http_session(input: TokenStream) -> TokenStream {
-    create_send_http_session(input)
 }
 
 //////////////////////////////////////
@@ -538,11 +376,6 @@ pub fn checking(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_checking(input: TokenStream) -> TokenStream {
-    checking(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -550,11 +383,6 @@ pub fn baking(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as Baking);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_baking(input: TokenStream) -> TokenStream {
-    baking(input)
 }
 
 //////////////////////////////////////
@@ -566,11 +394,6 @@ pub fn baking_with_enum(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_baking_with_enum(input: TokenStream) -> TokenStream {
-    baking_with_enum(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -580,11 +403,6 @@ pub fn baking_with_cancel(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_baking_with_cancel(input: TokenStream) -> TokenStream {
-    baking_with_cancel(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -592,11 +410,6 @@ pub fn baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as BakingWithEnumAndCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_baking_with_enum_and_cancel(input: TokenStream) -> TokenStream {
-    baking_with_enum_and_cancel(input)
 }
 
 //////////////////////////////////////
@@ -623,11 +436,6 @@ pub fn baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStrea
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
-    baking_interleaved_with_enum_and_cancel(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -635,11 +443,6 @@ pub fn baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as BakingTimedWithEnumAndCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
-    baking_timed_with_enum_and_cancel(input)
 }
 
 //////////////////////////////////////
@@ -651,11 +454,6 @@ pub fn choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-#[proc_macro_hack]
-pub fn e_choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
-    choose_timed_mpst_multi_to_all(input)
-}
-
 //////////////////////////////////////
 
 #[proc_macro]
@@ -663,9 +461,4 @@ pub fn baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> Toke
     let input = parse_macro_input!(input as BakingTimedInterleavedWithEnumAndCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
-}
-
-#[proc_macro_hack]
-pub fn e_baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
-    baking_timed_interleaved_with_enum_and_cancel(input)
 }

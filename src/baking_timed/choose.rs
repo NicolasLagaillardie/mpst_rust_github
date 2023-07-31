@@ -67,7 +67,7 @@ macro_rules! choose_timed_mpst_multi_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_timed_mpst_multi_to_all!(
+        mpst_seq_proc::choose_timed_mpst_multi_to_all!(
             $session ,
             $all_clocks ,
             ( $( ( $label ) )+ ) ,

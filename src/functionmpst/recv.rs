@@ -22,7 +22,7 @@ type ResultBoxError<T, S1, S2, R, N> = Result<(T, MeshedChannels<S1, S2, R, N>),
 #[macro_export]
 macro_rules! recv_aux_simple {
     ($session:expr, $exclusion: literal) => {
-        mpst_seq::recv_aux_simple!($session, $exclusion)
+        mpst_seq_proc::recv_aux_simple!($session, $exclusion)
     };
 }
 
@@ -30,7 +30,7 @@ macro_rules! recv_aux_simple {
 #[macro_export]
 macro_rules! recv_all_aux_simple {
     ($session:expr, $exclusion: literal) => {
-        mpst_seq::recv_all_aux_simple!($session, $exclusion)
+        mpst_seq_proc::recv_all_aux_simple!($session, $exclusion)
     };
 }
 

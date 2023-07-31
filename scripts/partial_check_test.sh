@@ -10,8 +10,8 @@ cat scripts/toml/full_cargo.toml > Cargo.toml
 bash ./scripts/clean_all.sh
 
 # Check all combinations of features
-cargo hack --feature-powerset --exclude-no-default-features clippy --locked --all-targets --skip kmc,transport_udp --workspace # -- -D warnings 
-cargo hack --feature-powerset --exclude-no-default-features test --locked --all-targets --skip kmc,transport_udp --workspace # -- -D warnings
+cargo hack --feature-powerset --exclude-no-default-features clippy --all-targets --skip kmc,transport_udp --workspace # -- -D warnings 
+cargo hack --feature-powerset --exclude-no-default-features test --all-targets --skip kmc,transport_udp --workspace # -- -D warnings
 
 # Clean everything
 bash ./scripts/clean_all.sh

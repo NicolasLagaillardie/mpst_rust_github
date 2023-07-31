@@ -2,7 +2,7 @@
 name = "mpstthree"
 version = "0.1.17"
 authors = ["NicolasLagaillardie <nicolas.lagaillardie@tutanota.com>"]
-edition = "2018"
+edition = "2021"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
 homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
@@ -50,7 +50,7 @@ autobenches = false
 ################################### Workspace
 
 [workspace]
-members = ["mpst_seq", "mpst_seq_proc"]
+members = ["mpst_seq_proc"]
 
 ################################### Lib
 
@@ -144,8 +144,8 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-mpst-seq = { path = "mpst_seq" }
-# mpst-seq = "0.1"
+mpst-seq-proc = { path = "mpst_seq_proc" }
+# mpst-seq-proc = "0.1"
 crossbeam-channel = "0.5"
 either = "1.6"
 # Extension libraries
@@ -191,7 +191,7 @@ transport_macros_multiple = [
     "macros_multiple",
     "transport",
 ] # For test compile examples
-protobuf = []
+protobuf_feature = []
 affine_timed = ["baking", "baking_timed"]
 full_without_checking = ["baking", "transport", "interleaved"]
 full = ["baking_checking", "transport", "baking_timed", "interleaved"]

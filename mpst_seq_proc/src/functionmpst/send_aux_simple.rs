@@ -14,7 +14,7 @@
 //! // A is the sender and x is the payload.
 //! // Then the binary channel of A with B is its first
 //! // channel.
-//! mpst_seq::send_aux_simple!(s, x, 1)()
+//! mpst_seq_proc::send_aux_simple!(s, x, 1)()
 //! ```
 
 use proc_macro2::TokenStream;
