@@ -1,4 +1,4 @@
-#![cfg(feature = "role")]
+#![cfg(feature = "mpst")]
 
 //! The main trait used for representing an ordering of a participant.
 //!

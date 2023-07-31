@@ -79,7 +79,7 @@ required-features = ["checking"]
 [[test]]
 name = "binary"
 path = "tests/binary.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[test]]
 name = "cancel"
@@ -124,7 +124,7 @@ required-features = ["baking_timed"]
 [[test]]
 name = "baking_message"
 path = "tests/baking_message.rs"
-required-features = ["baking", "message", "checking"]
+required-features = ["baking", "checking"]
 
 [[test]]
 name = "main"
@@ -171,20 +171,15 @@ rand = "0.8"
 ################################### Features
 
 [features]
-default = ["binary", "role", "name", "meshedchannels", "functionmpst"]
-binary = []
-functionmpst = []
-meshedchannels = []
-role = []
-name = []
-message = []
-binary_timed = []
-macros_simple = ["default"]
-macros_multiple = ["default", "macros_simple"]
+default = []
+mpst = ["default"]
+binary_timed = ["default"]
+macros_simple = ["mpst"]
+macros_multiple = ["mpst", "macros_simple"]
+checking = ["mpst", "regex", "petgraph"]
+baking = ["mpst", "macros_multiple"]
 interleaved = ["baking"] # For interleaved sessions
-checking = ["default", "regex", "petgraph"]
-baking = ["default", "macros_multiple"]
-baking_timed = ["binary_timed"]
+baking_timed = ["binary_timed", "mpst"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
 baking_timed_interleaved = ["baking_timed", "interleaved"]

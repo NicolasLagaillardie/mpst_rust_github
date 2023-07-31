@@ -297,22 +297,22 @@
 //!
 //! [`KMC`]: https://github.com/julien-lange/kmc
 
-#[cfg(feature = "binary")]
+#[cfg(feature = "default")]
 pub mod binary;
 
-#[cfg(feature = "role")]
-pub mod role;
-
-#[cfg(feature = "name")]
-pub mod name;
-
-#[cfg(feature = "message")]
+#[cfg(feature = "default")]
 pub mod message;
 
-#[cfg(feature = "meshedchannels")]
+#[cfg(feature = "mpst")]
+pub mod role;
+
+#[cfg(feature = "mpst")]
+pub mod name;
+
+#[cfg(feature = "mpst")]
 pub mod meshedchannels;
 
-#[cfg(feature = "functionmpst")]
+#[cfg(feature = "mpst")]
 pub mod functionmpst;
 
 #[cfg(feature = "checking")]

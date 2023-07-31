@@ -1,4 +1,4 @@
-#![cfg(feature = "binary")]
+#![cfg(feature = "binary_timed")]
 
 //! The slightly modified binary session type library.
 //!

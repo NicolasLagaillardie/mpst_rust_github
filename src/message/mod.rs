@@ -1,5 +1,3 @@
-#![cfg(feature = "message")]
-
 //! This feature only includes a message structure.
 //! It is parameterised with a label and a payload.
 

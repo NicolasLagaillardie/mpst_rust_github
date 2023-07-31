@@ -1,4 +1,4 @@
-#![cfg(feature = "name")]
+#![cfg(feature = "mpst")]
 
 //! The main trait used for representing the
 //! name of a participant.

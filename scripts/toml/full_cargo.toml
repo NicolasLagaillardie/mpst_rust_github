@@ -79,7 +79,7 @@ required-features = ["checking"]
 [[test]]
 name = "binary"
 path = "tests/binary.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[test]]
 name = "cancel"
@@ -124,7 +124,7 @@ required-features = ["baking_timed"]
 [[test]]
 name = "baking_message"
 path = "tests/baking_message.rs"
-required-features = ["baking", "message", "checking"]
+required-features = ["baking", "checking"]
 
 [[test]]
 name = "main"
@@ -2814,67 +2814,67 @@ required-features = ["default"]
 [[example]]
 name = "calculator_binary"
 path = "examples/binary/calculator.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "circuit_breaker_binary"
 path = "examples/binary/circuit_breaker.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "fib_binary"
 path = "examples/binary/fib.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "logging_binary"
 path = "examples/binary/logging.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "o_auth_binary"
 path = "examples/binary/o_auth.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "online_wallet_binary"
 path = "examples/binary/online_wallet.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "remote_data_binary"
 path = "examples/binary/remote_data.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "servo_binary"
 path = "examples/binary/servo.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "simple_voting_binary"
 path = "examples/binary/simple_voting.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "smtp_binary"
 path = "examples/binary/smtp.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "three_buyers_binary"
 path = "examples/binary/three_buyers.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "travel_agency_binary"
 path = "examples/binary/travel_agency.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 [[example]]
 name = "video_stream_binary"
 path = "examples/binary/video_stream.rs"
-required-features = ["binary"]
+required-features = ["default"]
 
 ######### Basic
 
@@ -3851,20 +3851,15 @@ rand = "0.8"
 ################################### Features
 
 [features]
-default = ["binary", "role", "name", "meshedchannels", "functionmpst"]
-binary = []
-functionmpst = []
-meshedchannels = []
-role = []
-name = []
-message = []
-binary_timed = []
-macros_simple = ["default"]
-macros_multiple = ["default", "macros_simple"]
+default = []
+mpst = ["default"]
+binary_timed = ["default"]
+macros_simple = ["mpst"]
+macros_multiple = ["mpst", "macros_simple"]
+checking = ["mpst", "regex", "petgraph"]
+baking = ["mpst", "macros_multiple"]
 interleaved = ["baking"] # For interleaved sessions
-checking = ["default", "regex", "petgraph"]
-baking = ["default", "macros_multiple"]
-baking_timed = ["binary_timed"]
+baking_timed = ["binary_timed", "mpst"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
 baking_timed_interleaved = ["baking_timed", "interleaved"]

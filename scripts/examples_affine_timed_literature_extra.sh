@@ -30,19 +30,19 @@ sleep 60s
     bash ./scripts/create_files/compile_full.sh video_stream_crossbeam 20 default
 
     ## Compile binary examples
-    bash ./scripts/create_files/compile_full.sh calculator_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh circuit_breaker_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh fib_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh logging_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh o_auth_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh online_wallet_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh remote_data_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh servo_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh simple_voting_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh smtp_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh three_buyers_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh travel_agency_binary 20 binary
-    bash ./scripts/create_files/compile_full.sh video_stream_binary 20 binary
+    bash ./scripts/create_files/compile_full.sh calculator_binary 20 default
+    bash ./scripts/create_files/compile_full.sh circuit_breaker_binary 20 default
+    bash ./scripts/create_files/compile_full.sh fib_binary 20 default
+    bash ./scripts/create_files/compile_full.sh logging_binary 20 default
+    bash ./scripts/create_files/compile_full.sh o_auth_binary 20 default
+    bash ./scripts/create_files/compile_full.sh online_wallet_binary 20 default
+    bash ./scripts/create_files/compile_full.sh remote_data_binary 20 default
+    bash ./scripts/create_files/compile_full.sh servo_binary 20 default
+    bash ./scripts/create_files/compile_full.sh simple_voting_binary 20 default
+    bash ./scripts/create_files/compile_full.sh smtp_binary 20 default
+    bash ./scripts/create_files/compile_full.sh three_buyers_binary 20 default
+    bash ./scripts/create_files/compile_full.sh travel_agency_binary 20 default
+    bash ./scripts/create_files/compile_full.sh video_stream_binary 20 default
 
     # ## Compile basic examples
     # bash ./scripts/create_files/compile_full.sh video_stream_basic 20 macros_simple
