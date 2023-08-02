@@ -17,9 +17,9 @@ fn binary_a(s: FullA) -> Result<(), Box<dyn Error>> {
     let (_outstanding_web_fonts, s) = recv(s)?;
     let (_get_current_state, s) = recv(s)?;
     let (_document_loading, s) = recv(s)?;
-    let (_web_font_loaded, _s) = recv(s)?;
+    let (_web_font_loaded, s) = recv(s)?;
 
-    Ok(())
+    close(s)
 }
 
 // C
