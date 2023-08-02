@@ -13,7 +13,7 @@ jobs:
         rust: [stable, 1.71.0]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     # - name: Install Haskell
     #   uses: actions/setup-haskell@v1.1
     #   with:
@@ -47,5 +47,5 @@ jobs:
       run: cargo build --verbose --workspace --all-features
     - name: Test all targets but skip kmc and transport_udp
       run: |
-        cargo test --verbose --all-targets --workspace --no-default-features -- --skip kmc --skip transport_udp
+        TRYBUILD=overwrite cargo test --verbose --all-targets --workspace -- --skip kmc --skip transport_udp
         cargo test --all-targets --verbose --workspace --all-features -- --skip kmc --skip transport_udp
