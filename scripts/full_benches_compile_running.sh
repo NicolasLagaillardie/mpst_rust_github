@@ -8,29 +8,39 @@ set -e
 sleep 60s
 
 {
+    # Stop upon any error
+    set -e
+
+    # Get date
+    date
+
     # Saving Cargo.toml
-    cat Cargo.toml > scripts/toml/save_cargo.toml
+    cat Cargo.toml > scripts/toml/save_cargo.toml &&
 
     # Updating Cargo.toml
-    cat scripts/toml/full_cargo.toml > Cargo.toml
+    cat scripts/toml/full_cargo.toml > Cargo.toml &&
 
-    cargo clean
+    # Create folders if they do not exist
+    mkdir -p save/
+    rm -rf save/*
+
+    cargo clean &&
 
     ## Compile and run examples
-    bash ./scripts/examples_affine_timed_literature_extra.sh
+    bash ./scripts/examples_affine_timed_literature_extra.sh &&
 
-    cargo clean
+    cargo clean &&
 
     ## Compile mesh and ring
-    bash ./scripts/benches_compile_mesh_ring.sh
+    bash ./scripts/benches_compile_mesh_ring.sh &&
 
-    cargo clean
+    cargo clean &&
 
     ## Run mesh and ring and ping-pong
-    bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh
+    bash ./scripts/benches_runtime_mesh_ring_ping_pong.sh &&
 
     # Resetting Cargo.toml
-    cat scripts/toml/save_cargo.toml > Cargo.toml
+    cat scripts/toml/save_cargo.toml > Cargo.toml &&
 
     # Send done email
     bash ./scripts/curl/done_curl.sh

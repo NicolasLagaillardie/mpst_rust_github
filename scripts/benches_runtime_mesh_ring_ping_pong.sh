@@ -7,11 +7,6 @@ set -e
 
 ### Clean compiled files
 cargo clean
-date
-
-# Create folders if they do not exist
-mkdir -p save/
-rm -rf save/*
 
 # Run all mesh benchmarks
 echo "Mesh full bench"
