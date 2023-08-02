@@ -128,7 +128,8 @@ bash ./scripts/create_files/compile_full.sh video_stream_timed 20 baking_timed
 
 ## Run and save benchmarks
 cargo clean
-rm -rf save/example/*
+mkdir -p save/examples/
+rm -rf save/examples/*
 echo "Examples full bench"
 cargo bench --bench="example_*" --all-features
 find . -name "*.svg" -delete

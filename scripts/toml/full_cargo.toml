@@ -150,66 +150,79 @@ required-features = []
 
 [[bench]]
 name = "example_calculator_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_circuit_breaker_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_fib_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/fib.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_logging_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/logging.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_o_auth_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/o_auth.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_online_wallet_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/online_wallet.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_remote_data_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/remote_data.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_servo_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/servo.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_simple_voting_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/simple_voting.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_smtp_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/smtp.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_three_buyers_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_travel_agency_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_video_stream_crossbeam"
+harness = false
 path = "benches/examples_all_crossbeam/video_stream.rs"
 required-features = ["full"]
 
@@ -217,66 +230,79 @@ required-features = ["full"]
 
 [[bench]]
 name = "example_calculator_binary"
+harness = false
 path = "benches/examples_all_binary/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_circuit_breaker_binary"
+harness = false
 path = "benches/examples_all_binary/circuit_breaker.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_fib_binary"
+harness = false
 path = "benches/examples_all_binary/fib.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_logging_binary"
+harness = false
 path = "benches/examples_all_binary/logging.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_o_auth_binary"
+harness = false
 path = "benches/examples_all_binary/o_auth.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_online_wallet_binary"
+harness = false
 path = "benches/examples_all_binary/online_wallet.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_remote_data_binary"
+harness = false
 path = "benches/examples_all_binary/remote_data.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_servo_binary"
+harness = false
 path = "benches/examples_all_binary/servo.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_simple_voting_binary"
+harness = false
 path = "benches/examples_all_binary/simple_voting.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_smtp_binary"
+harness = false
 path = "benches/examples_all_binary/smtp.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_three_buyers_binary"
+harness = false
 path = "benches/examples_all_binary/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_travel_agency_binary"
+harness = false
 path = "benches/examples_all_binary/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "example_video_stream_binary"
+harness = false
 path = "benches/examples_all_binary/video_stream.rs"
 required-features = ["full"]
 
