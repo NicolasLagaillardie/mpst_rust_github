@@ -3,9 +3,11 @@ use petgraph::Graph;
 
 use regex::Regex;
 
+use core::panic;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
+use std::fmt::Write;
 
 type VecOfStr = Vec<String>;
 type HashMapStrVecOfStr = HashMap<String, VecOfStr>;
@@ -212,15 +214,20 @@ pub(crate) fn extract_index_node(
     index_node: &[usize],
     depth_level: usize,
 ) -> Result<String, Box<dyn Error>> {
-    Ok(format!(
-        "{}{}",
-        index_node[..depth_level]
+    if index_node.len() < depth_level {
+        panic!("Error in extract_index_node: lenght of index_node < depth_level")
+    } else if index_node.len() == 1 {
+        Ok(index_node[0].to_string())
+    } else {
+        let first_elt = index_node[0].to_string();
+
+        Ok(index_node[1..=depth_level]
             .iter()
-            .copied()
-            .map(|i| format!("{i}."))
-            .collect::<String>(),
-        index_node[depth_level]
-    ))
+            .fold(first_elt, |mut s, &n| {
+                write!(s, ".{}", n).ok();
+                s
+            }))
+    }
 }
 
 // Switch all Send and Recv at the head of each session
