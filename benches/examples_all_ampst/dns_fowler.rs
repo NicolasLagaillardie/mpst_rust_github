@@ -184,7 +184,7 @@ pub fn dns_fowler(c: &mut Criterion) {
 
 criterion_group! {
     name = bench;
-    config = Criterion::default().significance_level(0.05).without_plots().sample_size(20000);
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(10000);
     targets = dns_fowler,
 }
 

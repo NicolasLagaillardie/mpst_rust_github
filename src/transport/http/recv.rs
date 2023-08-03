@@ -91,7 +91,7 @@ macro_rules! create_recv_http_session {
         $n_sessions: literal,
         $exclusion: literal
     ) => {
-        mpst_seq::create_recv_http_session!(
+        mpst_seq_proc::create_recv_http_session!(
             $func_name,
             $sender,
             $receiver,

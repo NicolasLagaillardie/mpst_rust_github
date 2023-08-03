@@ -69,7 +69,7 @@ macro_rules! choose_mpst_multi_http_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_http_to_all!(
+        mpst_seq_proc::choose_mpst_multi_http_to_all!(
             $session ,
             ( $( ( $label ) )+ ) ,
             ( $( ( $receiver ) )+ ) ,
