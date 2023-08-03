@@ -49,11 +49,8 @@ bash ./scripts/create_files/compile_full.sh circuit_breaker_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh logging_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh calculator_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh dns_fowler_mpst 10 baking
-bash ./scripts/create_files/compile_full.sh dns_fowler_checking_mpst 10 baking_checking
 bash ./scripts/create_files/compile_full.sh dns_imai_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh o_auth_mpst 10 baking
-bash ./scripts/create_files/compile_full.sh o_auth_checking_mpst 10 baking_checking
-bash ./scripts/create_files/compile_full.sh o_auth_transport_mpst 10 transport_macros_multiple
 bash ./scripts/create_files/compile_full.sh online_wallet_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh simple_voting_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh smtp_mpst 10 baking
@@ -72,11 +69,8 @@ bash ./scripts/create_files/compile_full.sh circuit_breaker_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh logging_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh calculator_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh dns_fowler_ampst 10 baking
-bash ./scripts/create_files/compile_full.sh dns_fowler_checking_ampst 10 baking_checking
 bash ./scripts/create_files/compile_full.sh dns_imai_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh o_auth_ampst 10 baking
-bash ./scripts/create_files/compile_full.sh o_auth_checking_ampst 10 baking_checking
-bash ./scripts/create_files/compile_full.sh o_auth_transport_ampst 10 transport_macros_multiple
 bash ./scripts/create_files/compile_full.sh online_wallet_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh simple_voting_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh smtp_ampst 10 baking
@@ -90,6 +84,10 @@ bash ./scripts/create_files/compile_full.sh servo_8257_original_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh servo_8257_fixed_ampst 10 baking
 
 ## Compile checking examples
+bash ./scripts/create_files/compile_full.sh dns_fowler_checking_mpst 10 baking_checking
+bash ./scripts/create_files/compile_full.sh o_auth_checking_mpst 10 baking_checking
+bash ./scripts/create_files/compile_full.sh dns_fowler_checking_ampst 10 baking_checking
+bash ./scripts/create_files/compile_full.sh o_auth_checking_ampst 10 baking_checking
 bash ./scripts/create_files/compile_full.sh video_stream_checking 10 baking_checking
 bash ./scripts/create_files/compile_full.sh adder_checking 10 baking_checking
 bash ./scripts/create_files/compile_full.sh basic_checking 10 baking_checking
@@ -125,6 +123,10 @@ bash ./scripts/create_files/compile_full.sh non_feasible_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh circuit_breaker_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh logging_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh video_stream_timed 10 baking_timed
+
+## Compile transport examples
+bash ./scripts/create_files/compile_full.sh o_auth_transport_mpst 10 transport_macros_multiple
+bash ./scripts/create_files/compile_full.sh o_auth_transport_ampst 10 transport_macros_multiple
 
 ## Run and save benchmarks
 cargo clean

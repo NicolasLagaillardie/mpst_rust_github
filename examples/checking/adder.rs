@@ -170,11 +170,11 @@ fn checking() {
     )
     .unwrap();
 
-    println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
-    println!("\n/////////////////////////\n");
-    println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
-    println!("\n/////////////////////////\n");
-    println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
-    println!("\n/////////////////////////\n");
-    println!("min kMC: {kmc:?}");
+    // println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
+    // println!("\n/////////////////////////\n");
+    // println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
+    // println!("\n/////////////////////////\n");
+    // println!("graph C: {:?}", petgraph::dot::Dot::new(&graphs["RoleC"]));
+    // println!("\n/////////////////////////\n");
+    // println!("min kMC: {kmc:?}");
 }

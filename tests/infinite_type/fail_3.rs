@@ -32,8 +32,7 @@ fn nice_sum_server_accum(s: NiceSumServer, x: i32) -> Result<(), Box<dyn Error>>
             let s = send::send(x, s);
             close::close(s)
         },
-    })?;
-    Ok(())
+    })
 }
 
 fn nice_sum_client_accum(s: NiceSumClient, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {

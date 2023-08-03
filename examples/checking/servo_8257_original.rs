@@ -93,20 +93,20 @@ fn checking() {
     let (graphs, kmc) =
         mpstthree::checker_concat!("servo_8257_original", EndpointC, EndpointL, EndpointS).unwrap();
 
-    println!(
-        "graph C: {:?}",
-        petgraph::dot::Dot::new(&graphs["RoleConstellation"])
-    );
-    println!("\n/////////////////////////\n");
-    println!(
-        "graph L: {:?}",
-        petgraph::dot::Dot::new(&graphs["RoleLayout"])
-    );
-    println!("\n/////////////////////////\n");
-    println!(
-        "graph S: {:?}",
-        petgraph::dot::Dot::new(&graphs["RoleScript"])
-    );
-    println!("\n/////////////////////////\n");
-    println!("min kMC: {kmc:?}");
+    // println!(
+    //     "graph C: {:?}",
+    //     petgraph::dot::Dot::new(&graphs["RoleConstellation"])
+    // );
+    // println!("\n/////////////////////////\n");
+    // println!(
+    //     "graph L: {:?}",
+    //     petgraph::dot::Dot::new(&graphs["RoleLayout"])
+    // );
+    // println!("\n/////////////////////////\n");
+    // println!(
+    //     "graph S: {:?}",
+    //     petgraph::dot::Dot::new(&graphs["RoleScript"])
+    // );
+    // println!("\n/////////////////////////\n");
+    // println!("min kMC: {kmc:?}");
 }

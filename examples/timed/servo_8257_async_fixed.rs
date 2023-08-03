@@ -95,35 +95,17 @@ fn endpoint_c(s: EndpointC, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     sleep(Duration::from_secs(1));
 
     let s = s.send(GetWebPageLoadState {}, all_clocks)?;
-    println!("send GetWebPageLoadState from C");
 
     let (_, s) = s.recv(all_clocks)?;
-    println!("recv OutstandingWebFonts on C");
-    println!(
-        "C: OutstandingWebFonts = 0 at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
-    println!(
-        "C: Fonts are loaded at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
 
     // To "process" the information
     sleep(Duration::from_secs(1));
 
     let s = s.send(GetCurrentState {}, all_clocks)?;
-    println!("send GetCurrentState from C");
 
     let (_, s) = s.recv(all_clocks)?;
-    println!("recv DocumentLoading on C");
-    println!(
-        "C: Current page loaded at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
 
-    s.close()?;
-    println!("C closed");
-    Ok(())
+    s.close()
 }
 
 /////////////////////////
@@ -133,21 +115,12 @@ fn endpoint_l(s: EndpointL, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     sleep(Duration::from_secs(1));
 
     let (_, s) = s.recv(all_clocks)?;
-    println!("recv GetWebPageLoadState on L");
 
     let s = s.send(OutstandingWebFonts {}, all_clocks)?;
-    println!("send OutstandingWebFonts from L");
 
     let s = s.send(WebFontLoaded {}, all_clocks)?;
-    println!("send WebFontLoaded from L");
-    println!(
-        "L: new font loaded at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
 
-    s.close()?;
-    println!("L closed");
-    Ok(())
+    s.close()
 }
 
 /////////////////////////
@@ -157,29 +130,15 @@ fn endpoint_s(s: EndpointS, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     sleep(Duration::from_secs(1));
 
     let (_, s) = s.recv(all_clocks)?;
-    println!("recv GetCurrentState on S");
 
     let s = s.send(DocumentLoading {}, all_clocks)?;
-    println!("send DocumentLoading from S");
 
     let (_, s) = s.recv(all_clocks)?;
-    println!("recv WebFontLoaded on S");
 
     // Simulate new fonts loaded AFTER the script thread said the page was loaded
-    println!("S: WebFontLoaded = false");
-    println!(
-        "S: starts redrawing the page at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
     sleep(Duration::from_secs(2));
-    println!(
-        "S: finishes redrawing the page at {:?} s",
-        all_clocks.get(&'a').unwrap().elapsed().as_secs()
-    );
 
-    s.close()?;
-    println!("S closed");
-    Ok(())
+    s.close()
 }
 
 ////////////////////////////////////////

@@ -64,9 +64,9 @@ note: required by a bound in `Recv`
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>: Session`
-  --> tests/infinite_type/fail_2.rs:44:29
+  --> tests/infinite_type/fail_2.rs:43:29
    |
-44 | fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+43 | fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
    |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
