@@ -47,5 +47,6 @@ jobs:
       run: cargo build --verbose --workspace --all-features
     - name: Test all targets but skip kmc and transport_udp
       run: |
+        cargo test --verbose --all-targets --workspace --no-default-features -- --skip kmc --skip transport_udp
         cargo test --verbose --all-targets --workspace -- --skip kmc --skip transport_udp
-        cargo test --all-targets --verbose --workspace --all-features -- --skip kmc --skip transport_udp
+        cargo test --verbose --all-targets --workspace --all-features -- --skip kmc --skip transport_udp
