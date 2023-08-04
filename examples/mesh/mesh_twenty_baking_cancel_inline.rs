@@ -16,7 +16,7 @@ static LOOPS: i64 = 100;
 
 // Create new roles
 generate!(
-    "rec_and_cancel", 
+    "rec_and_cancel",
     MeshedChannels,
     A,
     B,

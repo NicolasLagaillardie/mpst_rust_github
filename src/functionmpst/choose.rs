@@ -63,9 +63,9 @@ macro_rules! choose_mpst_a {
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
-        $receiver_1: ident,
-        $receiver_2: ident,
-        $sender: ident,
+        $receiver_1:ident,
+        $receiver_2:ident,
+        $sender:ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -124,9 +124,9 @@ macro_rules! choose_mpst_b {
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
-        $receiver_1: ident,
-        $receiver_2: ident,
-        $sender: ident,
+        $receiver_1:ident,
+        $receiver_2:ident,
+        $sender:ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -185,9 +185,9 @@ macro_rules! choose_mpst_c {
         $stack_1:ty,
         $stack_2:ty,
         $stack_3:ty,
-        $receiver_1: ident,
-        $receiver_2: ident,
-        $sender: ident,
+        $receiver_1:ident,
+        $receiver_2:ident,
+        $sender:ident,
         $session:expr,
         $pat:path
     ) => {{

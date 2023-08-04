@@ -456,7 +456,7 @@ fn recurs_0_shop(
 ) -> Result<(), Box<dyn Error>> {
     match loops {
         // If end of the day
-        i if i == 0 => {
+        0 => {
             let s_shop_barber: EndpointShopBarberDone = choose_mpst_shopbarber_to_all!(
                 s_shop_barber,
                 all_clocks_one,

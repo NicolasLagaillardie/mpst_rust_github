@@ -14,7 +14,7 @@ use std::marker;
 #[doc(hidden)]
 #[macro_export]
 macro_rules! send_aux_simple {
-    ($session:expr, $payload:expr, $exclusion: literal) => {
+    ($session:expr, $payload:expr, $exclusion:literal) => {
         mpst_seq_proc::send_aux_simple!($session, $payload, $exclusion)
     };
 }

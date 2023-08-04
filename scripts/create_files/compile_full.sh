@@ -20,7 +20,7 @@ do
     # Get time
     ts=$(date +%s%N)
     # Run command
-    cargo check --example=$1 --features="$3" 
+    cargo check --example=$1 --features="$3"
     # Get difference in ms
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference
@@ -35,7 +35,7 @@ do
     # Get time
     ts=$(date +%s%N)
     # Run command
-    cargo build --example=$1 --features="$3" 
+    cargo build --example=$1 --features="$3"
     # Get difference
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference
@@ -50,7 +50,7 @@ do
     # Get time
     ts=$(date +%s%N)
     # Run command
-    cargo build --release --example=$1 --features="$3" 
+    cargo build --release --example=$1 --features="$3"
     # Get difference
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference

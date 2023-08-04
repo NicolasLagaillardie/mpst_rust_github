@@ -16,11 +16,11 @@ type ByeAtoB = Recv<(),End>;
 type OrderingA24Full = RoleB<RoleEnd>;
 type EndpointA25 = MeshedChannels<ByeAtoB,End,OrderingA24Full,RoleA<RoleEnd>>;
 
-enum Branches0AtoC { 
-	Add(EndpointA23), 
-	Bye(EndpointA25), 
+enum Branches0AtoC {
+	Add(EndpointA23),
+	Bye(EndpointA25),
 }
-type Choose0forAtoC = Send<Branches0AtoC, End>; 
+type Choose0forAtoC = Send<Branches0AtoC, End>;
 
 type TestAtoC = Recv<i32,Recv<Branches0AtoC, End>>;
 
@@ -41,11 +41,11 @@ type ByeBtoC = Recv<(),End>;
 type OrderingB26Full = RoleC<RoleA<RoleEnd>>;
 type EndpointB27 = MeshedChannels<ByeBtoA,ByeBtoC,OrderingB26Full,RoleB<RoleEnd>>;
 
-enum Branches0BtoC { 
-	Add(EndpointB25), 
-	Bye(EndpointB27), 
+enum Branches0BtoC {
+	Add(EndpointB25),
+	Bye(EndpointB27),
 }
-type Choose0forBtoC = Send<Branches0BtoC, End>; 
+type Choose0forBtoC = Send<Branches0BtoC, End>;
 
 type OrderingB48 = RoleC<RoleEnd>;
 type OrderingB49Full = OrderingB48;

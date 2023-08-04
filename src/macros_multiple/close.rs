@@ -29,7 +29,7 @@
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! close_mpst {
-    ($func_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
+    ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::close_mpst!($func_name, $meshedchannels_name, $n_sessions);
     };
 }
@@ -58,7 +58,7 @@ macro_rules! close_mpst {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! close_mpst_check_cancel {
-    ($func_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
+    ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::close_mpst_check_cancel!($func_name, $meshedchannels_name, $n_sessions);
     };
 }
@@ -88,7 +88,7 @@ macro_rules! close_mpst_check_cancel {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! close_mpst_cancel {
-    ($func_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
+    ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::close_mpst_cancel!($func_name, $meshedchannels_name, $n_sessions);
     };
 }

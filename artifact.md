@@ -27,7 +27,7 @@ Scribble protocols
 ## Claims about functionality, reusability and availability
 
 1. **Functionality**:  MultiCrusty tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
-  
+
    * Use the MultiCrusty to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach.
    __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
 
@@ -38,15 +38,15 @@ Scribble protocols
    __Check the claim  by__: following [Part II: Step 1.3](#Step1.3)
 
 2. **Functionality**: Reproduce the benchmarks in Section 5 (i.e., Table 2 and Figure 9)
-  
+
    2.1 claim expressiveness (Section 5.2 in the paper): examples in Table 2 can be expressed using MultiCrusty.
 
    __Check the claim  by__: Table 2 can be reproduced following the instructions in [Part II: Step 2](#Step2)
-  
+
    2.1. claims on compile-time performance (line 886-892):
 
    * the more participants there are, the higher is the compilation time for MPST
-  
+
    2.2. claims on run-time performance (line 880-885):
 
    * MultiCrusty is faster than the BC implementation when there is a large number of interactions and participants (full-mesh protocol)
@@ -54,7 +54,7 @@ Scribble protocols
    * the worst-case scenario for MultiCrusty is protocols with many participants but no causalities between them which results in a slowdown when compared with BC. (ring protocol)
 
    * AMPST has a negligible overhead in comparison to MPST
-  
+
    __Check  claims 2.1 and 2.2 by__: Figure 9 can be reproduced following the instructions in [Part II: Step 3](#Step3)
 3. **Reusability**: The MultiCrusty tool can be used to verify your own communication protocols and programs, follow the instructions in [Part III](#PartIII)
 4. **Availability**: We agree our artifact to be published under a Creative Commons license on DARTS.
@@ -73,7 +73,7 @@ To run all benchmarks reported in the paper, the reviewers need:
 * to enable localhost access (note that it should be enabled by default unless you disabled it beforehand)
 
 <!-- In addition, the tool needs access to `localhost` for the tests.
- 
+
 /!\ To test it on your own computer, it is recommended to have
 16 GB of RAM: the library itself is lightweight,
 but all the examples and the benchmarks are very heavy and
@@ -240,7 +240,7 @@ as it optimises the output binaries.
 For higher accuracy and lower variance,
 each command is run 10 times on each example
 and the columns display the means.
- 
+
 The 5th column runs the command `cargo bench` with the arguments
 `main` and `--features=baking`.
 The first argument is the name of the file containing the files
@@ -252,7 +252,7 @@ Each benchmark is run 10.000 times and `criterion` saves the results
 (mean, median, confidence interval, ...) in the `target/criterion/` folder.
 They can be displayed separately by opening the file `index.html` in the
 `target/criterion/report/` folder.
- 
+
 Be aware that the scripts adds additional `benchmarks_main_from_literature_*.csv` files
 on top of the existing ones.
 </details> -->
@@ -293,12 +293,12 @@ For detailed instructions on how to copy a docker folder to a local folder check
 
 In short, open a terminal, type ```docker ps``` to check the name of the running docker container for multicrusty:latest.
 The command should return the id of the container, let assume it is c4a9485b3222.
-Then given that "Documents/Docker" is a local directory in your system, execute the command:  
+Then given that "Documents/Docker" is a local directory in your system, execute the command:
 ```
 docker cp c4a9485b3222:"home/multicrusty/mpst_rust_github/results" "Documents/Docker"
 ```
 The above will copy the results folder from the docker container to your directory Documents/Docker.
-Open the file graphs_0.pdf, it will contain 5 graphs that correspond to the graphs displayed in Figure 9. 
+Open the file graphs_0.pdf, it will contain 5 graphs that correspond to the graphs displayed in Figure 9.
 
 <details>
 <summary>
@@ -393,7 +393,7 @@ in [scribble-java/scribble-demos/scrib/fib/src/fib/Fib.scr](scribble-java/scribb
 <summary>
 Follow the steps to implement a simple *adder* example with Scribble and MultiCrusty
 </summary>
- 
+
 1️⃣ &nbsp; Generate Rust Types from Scribble
 
 ```bash
@@ -408,13 +408,13 @@ of the `mpst_rust_github` folder containing `multicrusty`
 and auto-format the file with `cargo fmt`.
 
 Now, you can open the `examples/adder_generated.rs` file using your preferred editor program before testing the protocol directly with `multicrusty`.
- 
+
 ➡️ &nbsp; From this point, we assume that you will remain in the `multicrusty` repository (the mpst_rust_github folder).
 
 <!-- Optional: You can check that the generated types are the same as the one provided in
 the [adder](examples/adder.rs) file in the [examples/](examples/) folder,
 up to line 73. -->
- 
+
 2️⃣ &nbsp; Compile the Rust types
 
 ```bash
@@ -433,12 +433,12 @@ This is because the `Scribble` API only generates `Rust` types
 and the `Rust` compiler needs at least a `main` function.
 
 Hereafter, we provide the code for the processes that implement the generated types.
- 
+
 3️⃣ &nbsp; Implement the endpoint programs for role `A`, `B` and `C`
 
 ```rust
 /////////////////////////
- 
+
 fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
    let (_, s) = s.recv()?;
    offer_mpst!(s, {
@@ -451,7 +451,7 @@ fn endpoint_a(s: EndpointA48) -> Result<(), Box<dyn Error>> {
        },
    })
 }
- 
+
 fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
    let (_, s) = s.recv()?;
    offer_mpst!(s, {
@@ -464,9 +464,9 @@ fn recurs_a(s: EndpointA23) -> Result<(), Box<dyn Error>> {
        },
    })
 }
- 
+
 /////////////////////////
- 
+
 fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
    offer_mpst!(s, {
        Branches0BtoC::Add(s) => {
@@ -481,33 +481,33 @@ fn endpoint_b(s: EndpointB50) -> Result<(), Box<dyn Error>> {
        },
    })
 }
- 
+
 /////////////////////////
- 
+
 fn endpoint_c(s: EndpointC13) -> Result<(), Box<dyn Error>> {
    let s = s.send(0)?;
    recurs_c(s, 5)
 }
- 
+
 fn recurs_c(s: EndpointC10, loops: i32) -> Result<(), Box<dyn Error>> {
    if loops <= 0 {
        let s: EndpointC7 = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
        let s = s.send(0)?;
- 
+
        recurs_c(s, loops - 1)
    } else {
        let s: EndpointC9 = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
        let s = s.send(())?;
- 
+
        s.close()
    }
 }
- 
+
 /////////////////////////
- 
+
 fn main() {
    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
- 
+
    assert!(thread_a.join().is_ok());
    assert!(thread_b.join().is_ok());
    assert!(thread_c.join().is_ok());
@@ -575,9 +575,9 @@ using our macro `checker_concat!`.
 For this purpose, append the following lines to the `adder_generated.rs` file:
 
 ```rust
- 
+
 /////////////////////////
- 
+
 fn checking() {
    let (graphs, kmc) = mpstthree::checker_concat!(
        "adder_checking",
@@ -597,7 +597,7 @@ fn checking() {
        ]
    )
    .unwrap();
- 
+
    println!("graph A: {:?}", petgraph::dot::Dot::new(&graphs["RoleA"]));
    println!("\n/////////////////////////\n");
    println!("graph B: {:?}", petgraph::dot::Dot::new(&graphs["RoleB"]));
@@ -613,9 +613,9 @@ and update the `main()` function by including `checking();` in it:
 ```rust
 fn main() {
    checking();
- 
+
    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
- 
+
    assert!(thread_a.join().is_ok());
    assert!(thread_b.join().is_ok());
    assert!(thread_c.join().is_ok());
@@ -694,7 +694,7 @@ cargo test --all-features --bins --workspace # Test all binaries
 cargo test --all-features --examples --workspace # Test all examples
 cargo test --all-features --tests --workspace # Test all tests
 cargo test --all-features --benches --workspace # Test all benchmarks
- 
+
 ```
 
 </details>
@@ -731,7 +731,7 @@ use mpstthree::role::end::RoleEnd; // The final type for the stacks and the name
 use mpstthree::checker_concat; // Used for checking the protocol
 use std::error::Error; // Used for functions
 ```
- 
+
 2️⃣ &nbsp;  Then create the **roles** and the **MeshedChannels** data structure:
 
 ```rust
@@ -744,7 +744,7 @@ They must be in alphabetical order,
 and a comma at the end is optional. -->
 The new generated types will be `MeshedChannels`
 and `RoleX` where `X` is the provided name in the macro inputs.
- 
+
 2️⃣ &nbsp;  Write the **MeshedChannels** types
 
 A good practice is to write the simplest types first,
@@ -757,7 +757,7 @@ used for representing the roles:
 struct Request;
 struct Response;
 struct Stop;
- 
+
 // Names
 type NameA = RoleA<RoleEnd>;
 type NameB = RoleB<RoleEnd>;
@@ -814,16 +814,16 @@ type EndpointAMore = MeshedChannels<MoreA1, OrderingMoreA1, NameA>;
 type EndpointADone = MeshedChannels<DoneA1, OrderingDoneA1, NameA>;
 type EndpointALoop = MeshedChannels<LoopA0, OrderingLoopA0, NameA>;
 type EndpointA = MeshedChannels<StartA0, OrderingA0, NameA>;
- 
+
 // B
 type EndpointBLoop = MeshedChannels<LoopB0, OrderingLoopB0, NameB>;
 type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 ```
- 
+
 3️⃣  &nbsp;  Check that the types are correct
 
 We can check that the written types are compatible using
-the `checker_concat!` macro which translates the types to Communicating Finite State machines (CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.  
+the `checker_concat!` macro which translates the types to Communicating Finite State machines (CFSM) and uses the kmc tool to check for compatibility. Note that, in practice, since this is a binary protocol, we do not need to invoke the kmc tool, since the duality between the types is enough to guarantee correctness.
 
 ```rust
 fn main() {
@@ -860,7 +860,7 @@ cargo run --example=my_basic --features=baking_checking
 
 After running the command above, the terminal should display
 the output from the kmc tool, which is the minimal **k** for this protocol. It is **1** for the protocol, as expected.
- 
+
 4️⃣ &nbsp;  Implement the endpoint processes for `A`, `B` by adding the following code after the **main** function:
 
 ```rust
@@ -902,8 +902,8 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Finally, uncomment the last three lines in the **main** function by removing the `//` at the beginning of each line.  
- 
+Finally, uncomment the last three lines in the **main** function by removing the `//` at the beginning of each line.
+
 5️⃣ &nbsp; Run the example again:
 
 ```bash

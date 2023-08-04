@@ -69,7 +69,7 @@ where
 #[macro_export]
 #[doc(hidden)]
 macro_rules! fork_mpst_multi_solo {
-    ($func_name: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
+    ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::fork_mpst_multi_solo!($func_name, $meshedchannels_name, $n_sessions);
     };
 }

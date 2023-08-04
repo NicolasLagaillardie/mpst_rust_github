@@ -102,7 +102,7 @@ fn main() {
     thread_a.join().unwrap();
     thread_b.join().unwrap();
 
-    let (_, kmc) = checker_concat!(
+    let (_, _kmc) = checker_concat!(
         "basic",
         EndpointA,
         EndpointB

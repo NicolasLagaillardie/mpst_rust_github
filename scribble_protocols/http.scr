@@ -64,7 +64,7 @@ global protocol HTTP(role Client, role Proxy1, role Proxy2, role Server)
                 RequestPost() from Client to Proxy1;
                 RequestPost() from Proxy1 to Proxy2;
                 RequestPost() from Proxy2 to Server;
-                
+
                 choice at Server
                 {
                     Response200() from Server to Proxy2;

@@ -37,7 +37,7 @@ exclude = [
     "cfsm/",
     "compile_time/",
     "graphs_bench/",
-    "rustfmt_2.toml",
+    "rustfmt_0.toml",
     "notes.txt",
     "result.rs",
     "results/",

@@ -147,7 +147,6 @@
 //! ```
 //!
 //! Here is the full description. First, you import the correct functions and types.
-//!
 //! ```ignore
 //! // Used for the functions that will process the protocol
 //! use std::boxed::Box;
@@ -184,7 +183,6 @@
 //! participants. Note that each created type can be reused as many time as needed.
 //! For our example, we create several times the same binary session type for clarity,
 //! but we could use only two of those types for the whole protocol instead.
-//!
 //! ```ignore
 //! // Creating the binary sessions
 //! // for A
@@ -201,7 +199,6 @@
 //! ```
 //!
 //! Add the **stacks** which give the correct order of the operations for each participant.
-//!
 //! ```ignore
 //! // Stacks
 //! // for A
@@ -214,7 +211,6 @@
 //!
 //! You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels**
 //! for each participant. We also add the names of the related roles.
-//!
 //! ```ignore
 //! // Creating the MP sessions
 //! // for A
@@ -228,7 +224,6 @@
 //! To run the protocol,
 //! we need to detail the behaviour of the participants with functions that input the **Endpoints**
 //! defined above.
-//!
 //! ```ignore
 //! // Function to process Endpoint of A
 //! fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -261,7 +256,6 @@
 //! In the end, you have to link/fork the threads,
 //! related to the functions above, together with **fork_mpst()**.
 //! Do not forget to **unwrap()** the returned threads.
-//!
 //! ```ignore
 //! // Fork all endpoints
 //! fn main() {

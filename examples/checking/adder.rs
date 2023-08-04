@@ -151,7 +151,7 @@ fn main() {
 
 // Check for bottom-up approach
 fn checking() {
-    let (graphs, kmc) = mpstthree::checker_concat!(
+    let (_graphs, _kmc) = mpstthree::checker_concat!(
         "Adder_checking",
         EndpointA48,
         EndpointC13,

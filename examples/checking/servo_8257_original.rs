@@ -90,7 +90,7 @@ fn main() {
 
 // Check for bottom-up approach
 fn checking() {
-    let (graphs, kmc) =
+    let (_graphs, _kmc) =
         mpstthree::checker_concat!("servo_8257_original", EndpointC, EndpointL, EndpointS).unwrap();
 
     // println!(

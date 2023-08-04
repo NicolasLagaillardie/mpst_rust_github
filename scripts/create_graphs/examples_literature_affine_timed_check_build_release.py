@@ -155,7 +155,7 @@ with open(result_folder / result_file, 'a') as report_file:
     report_file.write('; ')
     report_file.write('\n')
 
-# For each protocol to be studied 
+# For each protocol to be studied
 for protocol, index in index_compile.items():
 
     name_file = protocol + '.txt'

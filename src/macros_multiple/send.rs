@@ -42,12 +42,12 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_session {
     (
-        $func_name: ident,
-        $receiver: ident,
-        $sender: ident,
-        $meshedchannels_name: ident,
-        $n_sessions: literal,
-        $exclusion: literal
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $n_sessions:literal,
+        $exclusion:literal
     ) => {
         mpst_seq_proc::create_send_mpst_session!(
             $func_name,
@@ -98,12 +98,12 @@ macro_rules! create_send_mpst_session {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_mpst_cancel {
     (
-        $func_name: ident,
-        $receiver: ident,
-        $sender: ident,
-        $meshedchannels_name: ident,
-        $n_sessions: literal,
-        $exclusion: literal
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $n_sessions:literal,
+        $exclusion:literal
     ) => {
         mpst_seq_proc::create_send_mpst_cancel!(
             $func_name,
@@ -168,12 +168,12 @@ macro_rules! create_send_mpst_cancel {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_send_check_cancel {
     (
-        $func_name: ident,
-        $receiver: ident,
-        $sender: ident,
-        $meshedchannels_name: ident,
-        $n_sessions: literal,
-        $exclusion: literal
+        $func_name:ident,
+        $receiver:ident,
+        $sender:ident,
+        $meshedchannels_name:ident,
+        $n_sessions:literal,
+        $exclusion:literal
     ) => {
         mpst_seq_proc::create_send_check_cancel!(
             $func_name,
