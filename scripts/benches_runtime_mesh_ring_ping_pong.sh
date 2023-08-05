@@ -46,13 +46,4 @@ date
 mkdir -p save/ping_pong/
 # cargo bench --bench="ping_pong_*" --all-features -- --verbose
 bash ./scripts/benches_ping_pong_one_by_one.sh 250
-find . -name "*.svg" -delete
-find target/ -name "raw.csv" -delete
-find target/ -name "benchmark.json" -delete
-find target/ -name "tukey.json" -delete
-find target/ -name "index.html" -delete
-find target/ -name "sample.json" -delete
-mv -f target/criterion/* save/ping_pong/
 echo "Ping-pong full bench weight"
-du -s -m
-cargo clean
