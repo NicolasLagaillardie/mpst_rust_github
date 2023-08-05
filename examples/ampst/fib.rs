@@ -20,20 +20,15 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB {
-    More(
-        MeshedChannels<Recv<i64, Send<i64, RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>,
-    ),
+    More(MeshedChannels<Recv<i64, Send<i64, RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
     Done(MeshedChannels<End, RoleEnd, NameB>),
 }
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // Creating the MP sessions
 type EndpointA = MeshedChannels<Choose0fromAtoB, RoleBroadcast, NameA>;
-type EndpointAMore = MeshedChannels<
-    Send<i64, Recv<i64, Choose0fromAtoB>>,
-    RoleB<RoleB<RoleBroadcast>>,
-    NameA,
->;
+type EndpointAMore =
+    MeshedChannels<Send<i64, Recv<i64, Choose0fromAtoB>>, RoleB<RoleB<RoleBroadcast>>, NameA>;
 type EndpointB = MeshedChannels<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
@@ -49,8 +44,7 @@ fn recurs_a(s: EndpointA, index: i64, old: i64) -> Result<(), Box<dyn Error>> {
             s.close()
         }
         i => {
-            let s: EndpointAMore =
-                choose_mpst_a_to_all!(s, Branching0fromAtoB::More);
+            let s: EndpointAMore = choose_mpst_a_to_all!(s, Branching0fromAtoB::More);
 
             let s = s.send(old)?;
             let (new, s) = s.recv()?;

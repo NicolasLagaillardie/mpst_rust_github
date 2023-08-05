@@ -128,10 +128,7 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
 }
 
 fn aux() {
-    let (thread_a, thread_b) = fork_mpst(
-        black_box(endpoint_a),
-        black_box(endpoint_b),
-    );
+    let (thread_a, thread_b) = fork_mpst(black_box(endpoint_a), black_box(endpoint_b));
 
     thread_a.join().unwrap();
     thread_b.join().unwrap();
