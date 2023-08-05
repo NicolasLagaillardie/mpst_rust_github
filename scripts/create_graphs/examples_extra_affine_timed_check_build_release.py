@@ -224,7 +224,7 @@ ticklabels_compile_files = bench_files
 
 width = 0.3
 
-def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mpst, list_binary, list_crossbeam,scale):
+def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mpst, list_binary, list_crossbeam, scale, localisation):
     # Setting up the figure
     fig, ax = plt.subplots(figsize=(16, 6))
 
@@ -245,7 +245,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
 
     plt.legend(
         ['Crossbeam', 'Binary', 'MPST', 'AMPST', 'ATMP'],
-        loc='lower right',
+        loc=localisation,
         fancybox=True,
         shadow=True,
         ncol=1,
@@ -265,7 +265,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
     # save the figure
     plt.savefig(name_graph)
 
-create_and_save_fig('graphs_examples_extra_check_', 'Check time', bar_check_ampst, bar_check_timed, bar_check_mpst, bar_check_binary, bar_check_crossbeam, 'Time (s)')
-create_and_save_fig('graphs_examples_extra_build_', 'Build time', bar_build_ampst, bar_build_timed, bar_build_mpst, bar_build_binary, bar_build_crossbeam, 'Time (s)')
-create_and_save_fig('graphs_examples_extra_release_', 'Release time', bar_release_ampst, bar_release_timed, bar_release_mpst, bar_release_binary, bar_release_crossbeam, 'Time (s)')
-create_and_save_fig('graphs_examples_extra_run_', 'Runtime', bar_run_ampst, bar_run_timed, bar_run_mpst, bar_run_binary, bar_run_crossbeam, 'Time (ms)')
+create_and_save_fig('graphs_examples_extra_check_', 'Check time', bar_check_ampst, bar_check_timed, bar_check_mpst, bar_check_binary, bar_check_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('graphs_examples_extra_build_', 'Build time', bar_build_ampst, bar_build_timed, bar_build_mpst, bar_build_binary, bar_build_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('graphs_examples_extra_release_', 'Release time', bar_release_ampst, bar_release_timed, bar_release_mpst, bar_release_binary, bar_release_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('graphs_examples_extra_run_', 'Runtime', bar_run_ampst, bar_run_timed, bar_run_mpst, bar_run_binary, bar_run_crossbeam, 'Time (ms)', 'upper left')
