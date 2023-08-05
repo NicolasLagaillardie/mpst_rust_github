@@ -21,76 +21,59 @@ use std::marker;
 // See the folder scribble_protocols for the related Scribble protocol
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 3);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 2);
 
 // Create new roles
 // normal
 create_multiple_normal_role!(
     RoleA, RoleADual |
     RoleB, RoleBDual |
-    RoleC, RoleCDual |
 );
 
 // Create new roles
 // normal
-create_multiple_normal_name!(NameA, NameB, NameC);
+create_multiple_normal_name!(NameA, NameB);
 
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
-    send_mpst_a_to_b, RoleB, 1 |
-    send_mpst_a_to_c, RoleC, 2 | =>
-    NameA, MeshedChannels, 3
+    send_mpst_a_to_b, RoleB, 1 | =>
+    NameA, MeshedChannels, 2
 );
 
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    NameB, MeshedChannels, 3
+    NameB, MeshedChannels, 2
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    NameA, MeshedChannels, 3
+    NameA, MeshedChannels, 2
 );
 
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    NameB, MeshedChannels, 3
-);
-
-// C
-create_recv_mpst_session_bundle!(
-    recv_mpst_c_from_a, RoleA, 1 | =>
-    NameC, MeshedChannels, 3
+    NameB, MeshedChannels, 2
 );
 
 // Types
 // A
 type Choose0fromAtoB<N> = <RecursBtoA<N> as Session>::Dual;
-type Choose0fromAtoC = <RecursCtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB<N: marker::Send> {
-    More(MeshedChannels<Recv<N, Send<N, RecursBtoA<N>>>, End, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
-    Done(MeshedChannels<End, End, RoleEnd, NameB>),
+    More(MeshedChannels<Recv<N, Send<N, RecursBtoA<N>>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
+    Done(MeshedChannels<End, RoleEnd, NameB>),
 }
 type RecursBtoA<N> = Recv<Branching0fromAtoB<N>, End>;
 
-// C
-enum Branching0fromAtoC {
-    More(MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>),
-    Done(MeshedChannels<End, End, RoleEnd, NameC>),
-}
-type RecursCtoA = Recv<Branching0fromAtoC, End>;
-
 // Creating the MP sessions
-type EndpointA<N> = MeshedChannels<Choose0fromAtoB<N>, Choose0fromAtoC, RoleBroadcast, NameA>;
-type EndpointB<N> = MeshedChannels<RecursBtoA<N>, End, RoleA<RoleEnd>, NameB>;
-type EndpointC = MeshedChannels<RecursCtoA, End, RoleA<RoleEnd>, NameC>;
+type EndpointA<N> = MeshedChannels<Choose0fromAtoB<N>, RoleBroadcast, NameA>;
+type EndpointB<N> = MeshedChannels<RecursBtoA<N>, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA<i64>) -> Result<(), Box<dyn Error>> {
@@ -102,8 +85,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
         0 => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                Branching0fromAtoB::<i64>::Done,
-                Branching0fromAtoC::Done, =>
+                Branching0fromAtoB::<i64>::Done, =>
                 NameA,
                 MeshedChannels,
                 1
@@ -114,8 +96,7 @@ fn recurs_a(s: EndpointA<i64>, index: i64, old: i64) -> Result<(), Box<dyn Error
         i => {
             let s = choose_mpst_multi_to_all!(
                 s,
-                Branching0fromAtoB::<i64>::More,
-                Branching0fromAtoC::More, =>
+                Branching0fromAtoB::<i64>::More, =>
                 NameA,
                 MeshedChannels,
                 1
@@ -146,27 +127,14 @@ fn recurs_b(s: EndpointB<i64>, old: i64) -> Result<(), Box<dyn Error>> {
     })
 }
 
-fn endpoint_c(s: EndpointC) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, recv_mpst_c_from_a, {
-        Branching0fromAtoC::Done(s) => {
-            close_mpst_multi(s)
-        },
-        Branching0fromAtoC::More(s) => {
-            endpoint_c(s)
-        },
-    })
-}
-
 fn aux() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(
+    let (thread_a, thread_b) = fork_mpst(
         black_box(endpoint_a),
         black_box(endpoint_b),
-        black_box(endpoint_c),
     );
 
     thread_a.join().unwrap();
     thread_b.join().unwrap();
-    thread_c.join().unwrap();
 }
 
 /////////////////////////
