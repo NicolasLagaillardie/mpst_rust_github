@@ -1,4 +1,4 @@
-global protocol OAuth(role Auth, role Client, role Server) {
+global protocol oAuth(role Auth, role Client, role Server) {
     Authorization(Approval) from Client to Auth; // Request Authorization Approval
     choice at A
     {

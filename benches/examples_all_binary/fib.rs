@@ -89,7 +89,7 @@ fn aux() {
 static LOOPS: i64 = 20;
 
 pub fn fib_binary(c: &mut Criterion) {
-    c.bench_function(&format!("Fibo binary {LOOPS}"), |b| b.iter(aux));
+    c.bench_function(&format!("Fibo {LOOPS} binary"), |b| b.iter(aux));
 }
 
 /////////////////////////

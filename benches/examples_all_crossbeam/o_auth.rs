@@ -86,7 +86,7 @@ fn aux() {
 /////////////////////////
 
 pub fn o_auth_crossbeam(c: &mut Criterion) {
-    c.bench_function("OAuth crossbeam", |b| b.iter(aux));
+    c.bench_function("oAuth crossbeam", |b| b.iter(aux));
 }
 
 /////////////////////////

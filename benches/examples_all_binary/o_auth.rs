@@ -98,7 +98,7 @@ fn aux() {
 /////////////////////////
 
 pub fn o_auth_binary(c: &mut Criterion) {
-    c.bench_function("OAuth binary", |b| b.iter(aux));
+    c.bench_function("oAuth binary", |b| b.iter(aux));
 }
 
 /////////////////////////

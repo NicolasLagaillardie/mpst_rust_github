@@ -90,7 +90,7 @@ for key, value in index_compile.items():
         # translate[bench_files[value]] = key
         # reverse_translate[key] = bench_files[value]
         print("Issue with " + key + ' ' + value + ' while building translate and reverse_translate')
-        exit()
+        # exit()
 
 # Lists with metrics
 bar_check_ampst = [0] * len(compile_files)
@@ -132,7 +132,7 @@ for key, value in translate.items():
         bench[value] = int(test(key))
     else:
         print(key, "is missing")
-        # exit()
+        # # exit()
 
 # Get index of new csv result file
 index = 0
@@ -202,7 +202,7 @@ for protocol, index in index_compile.items():
                 bar_run_mpst[index] = bench[protocol]/10**6
             else:
                 print('Issue with ', name_file)
-                exit()
+                # exit()
 
             with open(result_folder / result_file, 'a') as report_file:
                 report_file.write(reverse_translate[protocol])
@@ -219,10 +219,10 @@ for protocol, index in index_compile.items():
 
         except:
             print('Issue with ', protocol)
-            # exit()
+            # # exit()
     else:
         print(protocol + " not in compiled files")
-        # exit()
+        # # exit()
 
 range_compile_files = [i for i in range(len(compile_files))]
 # ticklabels_compile_files = [chr(i + 97) for i in range(len(compile_files))]
