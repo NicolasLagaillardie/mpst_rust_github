@@ -28,10 +28,10 @@ Scribble protocols
 
 1. **Functionality**:  MultiCrusty tool can be used for safe communication programming in Rust. In particular, you should be able to verify three claims from the paper:
   
-   * Use the MultiCrusty to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e bottom-up approach.
+   * Use the MultiCrusty to write and verify affine protocols using MPST and Scribble as explained in Section 2 in the paper, i.e, bottom-up approach.
    __Check the claim  by__: following [Part II: Step 1.1](#Step1.1)
 
-   * Use the MultiCrusty to write and verify affine protocols using MPST and kmc, i.e top-down approach, as explained in Section 2 in the paper.
+   * Use the MultiCrusty to write and verify affine protocols using MPST and kmc, i.e, top-down approach, as explained in Section 2 in the paper.
    __Check the claim  by__: following [Part II: Step 1.2](#Step1.2)
 
    * Observe detected errors due to incompatible types, as explained in Section 2 (line 221-225) in the paper.
@@ -149,7 +149,7 @@ cargo test --benches --all-features --workspace # Test all benchmarks
 ```
 
 The above command may take up to 15 min.
-If your command results in an error (error: could not compile `mpstthree`; signal: 9, SIGKILL: kill), this indicated that you do not have a sufficient amount of RAM. Make sure that your docker is configured correctly, i.e open docker settings and increase the RAM usage to 16GB.
+If your command results in an error (error: could not compile `mpstthree`; signal: 9, SIGKILL: kill), this indicated that you do not have a sufficient amount of RAM. Make sure that your docker is configured correctly, i.e, open docker settings and increase the RAM usage to 16GB.
 See instructions for [MacOS](https://docs.docker.com/desktop/mac/) and [Windows](https://docs.docker.com/desktop/windows/).
 
 __Note__:
@@ -342,7 +342,7 @@ error: could not compile `mpstthree`
 ```
 -->
 
-To run the same set of benchmarks as in the paper, i.e ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
+To run the same set of benchmarks as in the paper, i.e, ping-pong for up to 500 iterations and ring and mesh for 10 participants) execute the following commands:
 
 ```bash
 ./scripts/full_library.sh # set up
