@@ -136,10 +136,10 @@ for key, value in translate.items():
 
 # Get index of new csv result file
 index = 0
-while os.path.isfile('results/benchmarks_main_from_literature_' + str(index) + '.csv'):
+while os.path.isfile('results/benchmarks_examples_literature_' + str(index) + '.csv'):
     index += 1
 
-result_file = 'benchmarks_main_from_literature_' + str(index) + '.csv'
+result_file = 'benchmarks_examples_literature_' + str(index) + '.csv'
 
 # Add name of columns
 with open(result_folder / result_file, 'a') as report_file:
@@ -271,7 +271,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
     # save the figure
     plt.savefig(name_graph)
 
-create_and_save_fig('graphs_examples_literature_check_', 'Check time', bar_check_ampst, bar_check_timed, bar_check_mpst, bar_check_binary, bar_check_crossbeam, 'Time (s)', 'lower right')
-create_and_save_fig('graphs_examples_literature_build_', 'Build time', bar_build_ampst, bar_build_timed, bar_build_mpst, bar_build_binary, bar_build_crossbeam, 'Time (s)', 'lower right')
-create_and_save_fig('graphs_examples_literature_release_', 'Release time', bar_release_ampst, bar_release_timed, bar_release_mpst, bar_release_binary, bar_release_crossbeam, 'Time (s)', 'lower right')
-create_and_save_fig('graphs_examples_literature_run_', 'Runtime', bar_run_ampst, bar_run_timed, bar_run_mpst, bar_run_binary, bar_run_crossbeam, 'Time (ms)', 'upper left')
+create_and_save_fig('literature_check_', 'Check time', bar_check_ampst, bar_check_timed, bar_check_mpst, bar_check_binary, bar_check_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('literature_build_', 'Build time', bar_build_ampst, bar_build_timed, bar_build_mpst, bar_build_binary, bar_build_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('literature_release_', 'Release time', bar_release_ampst, bar_release_timed, bar_release_mpst, bar_release_binary, bar_release_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('literature_run_', 'Runtime', bar_run_ampst, bar_run_timed, bar_run_mpst, bar_run_binary, bar_run_crossbeam, 'Time (ms)', 'upper left')

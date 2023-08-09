@@ -204,10 +204,10 @@ plt.tight_layout()
 
 # create the name for the new figure
 index_graphs = 0
-while os.path.isfile('graphs_bench/ring/graph_ring_runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+while os.path.isfile('graphs_bench/ring/runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
-name_graph = './graphs_bench/ring/graph_ring_runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+name_graph = './graphs_bench/ring/runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
 
 # Save fig
 plt.savefig(name_graph)

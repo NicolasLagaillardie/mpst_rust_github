@@ -51,11 +51,11 @@ number_of_loops = '100'
 # For each folder in main_path
 for d in directories:
 
-    if ".txt" in d and 'mesh' in d:
+    if ".txt" in d and 'ring' in d:
 
         file = open(main_path + '/' + d, "r")
 
-        name = d.split('.txt')[0].split('mesh_')[1].split('_')[0]
+        name = d.split('.txt')[0].split('ring_')[1].split('_')[0]
 
         build_time = []
         try:
@@ -109,11 +109,11 @@ if nb_participants_ampst and ampst:
 if nb_participants_atmp and atmp:
     nb_participants_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_participants_atmp, atmp))))
 
-# nb_participants_cancel, cancel = (list(t) for t in zip(
-#     *sorted(zip(nb_participants_cancel, cancel))))
+# nb_participants_cancel, cancel = (list(t)
+#                                           for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
 
-# nb_participants_cancel_broadcast, cancel_broadcast = (list(t) for t in zip(
-#     *sorted(zip(nb_participants_cancel_broadcast, cancel_broadcast))))
+# nb_participants_cancel_broadcast, cancel_broadcast = (list(t)
+#                                                               for t in zip(*sorted(zip(nb_participants_cancel_broadcast, cancel_broadcast))))
 
 # Change size
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -139,20 +139,18 @@ ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=2
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
-#     ax.plot(nb_participants_cancel, cancel, label='Cancel',
-#             linestyle='solid', linewidth=20, marker='*', markersize=70)
+#     ax.plot(nb_participants_cancel, cancel, label='Cancel', linestyle='solid', linewidth=20, marker='*', markersize=150)
 
-# ax.plot(nb_participants_cancel_broadcast, cancel_broadcast,
-#         label="Broadcast cancel", linestyle='dotted', linewidth=5)
+# ax.plot(nb_participants_cancel_broadcast, cancel_broadcast, label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
 ax.set_xlabel('\# roles', fontsize=300)
-# ax.set_ylabel('Time (s)', fontsize=300)
+# ax.set_ylabel('Time (s)', fontsize=200)
 ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 11, 3))
-ax.yaxis.set_ticks(np.arange(18, 28, 3))
+ax.yaxis.set_ticks(np.arange(18, 25, 1))
 ax.set_xlim(2, 8)
-ax.set_ylim(18, 27)
+ax.set_ylim(18, 21)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
@@ -171,33 +169,18 @@ for label in ax.yaxis.get_majorticklabels():
 # # giving a title to my graph
 # plt.title('Compile time needed')
 
+# show a legend on the plot
+# ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
+
 # Tight layout
 plt.tight_layout()
 
-# plt.legend(
-#     ['Crossbeam', 'Binary', 'MPST', 'AMPST'],
-#     loc='upper left',
-#     fancybox=True,
-#     shadow=True,
-#     ncol=1,
-#     fontsize=200
-# )
-
-plt.legend(
-    ['AMPST', 'ATMP'],
-    loc='upper left',
-    fancybox=True,
-    shadow=True,
-    ncol=1,
-    fontsize=300
-)
-
 # create the name for the new figure
 index_graphs = 0
-while os.path.isfile('graphs_bench/mesh/graph_mesh_compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+while os.path.isfile('graphs_bench/ring/compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
-name_graph = './graphs_bench/mesh/graph_mesh_compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+name_graph = './graphs_bench/ring/compile_time_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
 
 # Save fig
 plt.savefig(name_graph)

@@ -2,8 +2,9 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer_mpst,
 };
 
 use std::error::Error;
@@ -17,6 +18,9 @@ create_multiple_normal_role!(
     RoleA, RoleADual |
     RoleB, RoleBDual |
 );
+
+// Create new names
+create_multiple_normal_name!(NameA, NameB);
 
 // Create new send functions
 // A
@@ -50,10 +54,9 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB {
-    More(MeshedChannels<Recv<(), Send<(), RecursBtoA>>, ThreeRoleA, NameB>),
+    More(MeshedChannels<Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
     Done(MeshedChannels<End, RoleEnd, NameB>),
 }
-type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // Creating the MP sessions
@@ -71,7 +74,7 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::Done, =>
-                RoleA,
+                NameA,
                 MeshedChannels,
                 1
             );
@@ -82,7 +85,7 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::More, =>
-                RoleA,
+                NameA,
                 MeshedChannels,
                 1
             );

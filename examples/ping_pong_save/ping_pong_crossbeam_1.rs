@@ -1,6 +1,6 @@
-use crossbeam_channel::{bounded, Receiver, Sender};
-
 use std::thread::spawn;
+
+use crossbeam_channel::{bounded, Receiver, Sender};
 
 type ReceivingSendingReceiving = Receiver<SendingReceiving>;
 type SendingReceivingSending = Sender<ReceivingSending>;

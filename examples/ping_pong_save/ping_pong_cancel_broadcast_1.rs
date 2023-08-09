@@ -3,8 +3,9 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi,
-    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_check_cancel_bundle,
+    offer_cancel_mpst,
 };
 
 use std::error::Error;
@@ -19,6 +20,9 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
     RoleCentral, RoleCentralDual |
 );
+
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameCentral);
 
 // Create new send functions
 // A
@@ -52,10 +56,9 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB {
-    More(MeshedChannels<End, Recv<(), Send<(), RecursBtoA>>, ThreeRoleA, NameB>),
+    More(MeshedChannels<End, Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
     Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
-type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA = Recv<(End, Branching0fromAtoB), End>;
 
 // Creating the MP sessions

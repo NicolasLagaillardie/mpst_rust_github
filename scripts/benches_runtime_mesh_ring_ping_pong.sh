@@ -45,5 +45,5 @@ echo "Ping-pong full bench"
 date
 mkdir -p save/ping_pong/
 # cargo bench --bench="ping_pong_*" --all-features -- --verbose
-bash ./scripts/benches_ping_pong_one_by_one.sh 250
+bash ./scripts/benches_ping_pong.sh 250
 echo "Ping-pong full bench weight"

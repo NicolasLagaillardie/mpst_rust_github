@@ -50,7 +50,7 @@ perf.data.old
 cachegrind
 
 # Graphs
-graphs_bench
+graphs_bench/*
 
 # Results
 compile_time
@@ -82,8 +82,8 @@ results
 nohup.out
 
 # Ignore ping_pong files
-benches/ping_pong_all/*
-benches/ping_pong_mod_*.rs
+benches/ping_pong/*
+examples/ping_pong/*
 
 Cargo.tomler
 

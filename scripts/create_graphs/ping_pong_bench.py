@@ -204,10 +204,10 @@ plt.legend(
 
 # create the name for the new figure
 index_graphs = 0
-while os.path.isfile('graphs_bench/ping_pong/graph_ping_pong_' + str(index_graphs) + '.pdf'):
+while os.path.isfile('graphs_bench/ping_pong/runtime_' + str(index_graphs) + '.pdf'):
     index_graphs += 1
 
-name_graph = './graphs_bench/ping_pong/graph_ping_pong_' + str(index_graphs) + '.pdf'
+name_graph = './graphs_bench/ping_pong/runtime_' + str(index_graphs) + '.pdf'
 
 # Save fig
 plt.savefig(name_graph)
