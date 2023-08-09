@@ -5,7 +5,7 @@
 # Stop upon any error
 set -e
 
-end=1
+END=1
 
 # Check if there is one argument at least
 if [ -z "$1" ]
@@ -13,7 +13,7 @@ then
     echo "No argument supplied"
     exit 2
 else
-    end=$1
+    END=$1
 fi
 
 # Check if ping_pong bench in Cargo.toml
@@ -52,15 +52,15 @@ cat $PATH_BENCH/ping_pong_baking_ampst_1.rs > examples/ping_pong/ping_pong_bakin
 cat $PATH_BENCH/ping_pong_baking_timed_1.rs > examples/ping_pong/ping_pong_baking_timed.rs
 
 # Add to Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'example_ping_pong_crossbeam'"\npath = "'examples/ping_pong/ping_pong_crossbeam.rs'"\nrequired-features = ["'default'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'example_ping_pong_binary'"\npath = "'examples/ping_pong/ping_pong_binary.rs'"\nrequired-features = ["'default'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'example_ping_pong_mpst'"\npath = "'examples/ping_pong/ping_pong_mpst.rs'"\nrequired-features = ["'macros_multiple'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'example_ping_pong_baking_mpst'"\npath = "'examples/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'example_ping_pong_baking_ampst'"\npath = "'examples/ping_pong/ping_pong_baking_ampst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'example_ping_pong_baking_timed'"\npath = "'examples/ping_pong/ping_pong_baking_timed.rs'"\nrequired-features = ["'baking_timed'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_crossbeam'"\npath = "'examples/ping_pong/ping_pong_crossbeam.rs'"\nrequired-features = ["'default'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_binary'"\npath = "'examples/ping_pong/ping_pong_binary.rs'"\nrequired-features = ["'default'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_mpst'"\npath = "'examples/ping_pong/ping_pong_mpst.rs'"\nrequired-features = ["'macros_multiple'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_mpst'"\npath = "'examples/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_ampst'"\npath = "'examples/ping_pong/ping_pong_baking_ampst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_timed'"\npath = "'examples/ping_pong/ping_pong_baking_timed.rs'"\nrequired-features = ["'baking_timed'"],g' Cargo.toml
 
 # Copy ping_pong examples i and create ping_pong examples i+1
-for i in $(eval echo {0..$end})
+for i in $(eval echo {0..$END})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
     NEXT=$(($i+1))
@@ -80,22 +80,13 @@ do
     # Clean unusued files
     find examples/ -name *.rser -delete
     # Benchmark
-    bash ./scripts/create_files/compile_full.sh example_ping_pong_crossbeam 1 default
-    bash ./scripts/create_files/compile_full.sh example_ping_pong_binary 1 default
-    bash ./scripts/create_files/compile_full.sh example_ping_pong_mpst 1 macros_multiple
-    bash ./scripts/create_files/compile_full.sh example_ping_pong_baking_mpst 1 baking
-    bash ./scripts/create_files/compile_full.sh example_ping_pong_baking_ampst 1 baking
-    bash ./scripts/create_files/compile_full.sh example_ping_pong_baking_timed 1 baking_timed
-    # Clean unusued files
-    rm -rf target/criterion/report/
-    find . -name "*.svg" -delete
-    find target/ -name "raw.csv" -delete
-    find target/ -name "benchmark.json" -delete
-    find target/ -name "tukey.json" -delete
-    find target/ -name "index.html" -delete
-    find target/ -name "sample.json" -delete
-    # Move result to save folder
-    mv -f target/criterion/* compile_time/ping_pong/
+    bash ./scripts/create_files/compile_full.sh ping_pong_crossbeam 10 default ping_pong_crossbeam_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_binary 10 default ping_pong_binary_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_mpst 10 macros_multiple ping_pong_mpst_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_baking_mpst 10 baking ping_pong_baking_mpst_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_baking_ampst 10 baking ping_pong_baking_ampst_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_baking_timed 10 baking_timed ping_pong_baking_timed_$NEXT
+    
     # Clean built files
     cargo clean
     #

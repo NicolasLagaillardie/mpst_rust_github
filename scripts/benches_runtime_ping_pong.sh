@@ -5,7 +5,7 @@
 # Stop upon any error
 set -e
 
-end=1
+END=1
 
 # Check if there is one argument at least
 if [ -z "$1" ]
@@ -13,7 +13,7 @@ then
     echo "No argument supplied"
     exit 2
 else
-    end=$1
+    END=$1
 fi
 
 # Check if ping_pong bench in Cargo.toml
@@ -65,7 +65,7 @@ sed -ier 's,'$START_LINE'"'ping_pong_baking_timed'"'$HARNESS_LINE'"'$PATH_LINE/p
 
 # Copy ping_pong benches i and create ping_pong benches i+1
 STATIC_LOOPS='static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '
-for i in $(eval echo {0..$end})
+for i in $(eval echo {0..$END})
 do
     # prog "$((i/$(( $1 / 100 ))))" still working...
     NEXT=$(($i+1))
