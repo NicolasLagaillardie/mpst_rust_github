@@ -84,6 +84,22 @@ bash ./scripts/create_files/compile_full.sh mesh_ten_baking_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh mesh_ten_baking_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh mesh_ten_baking_timed 10 baking_timed
 
+### Eleven
+echo "Mesh eleven"
+bash ./scripts/create_files/compile_full.sh mesh_eleven_binary 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_eleven_crossbeam 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_eleven_baking_mpst 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_eleven_baking_ampst 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_eleven_baking_timed 10 baking_timed
+
+### Twenty
+echo "Mesh twenty"
+bash ./scripts/create_files/compile_full.sh mesh_twenty_binary 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_twenty_crossbeam 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_twenty_baking_mpst 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_twenty_baking_ampst 10 baking
+bash ./scripts/create_files/compile_full.sh mesh_twenty_baking_timed 10 baking_timed
+
 ## Ring
 date
 
@@ -158,3 +174,19 @@ bash ./scripts/create_files/compile_full.sh ring_ten_crossbeam 10 baking
 bash ./scripts/create_files/compile_full.sh ring_ten_baking_mpst 10 baking
 bash ./scripts/create_files/compile_full.sh ring_ten_baking_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh ring_ten_baking_timed 10 baking_timed
+
+### Eleven
+echo "Ring eleven"
+bash ./scripts/create_files/compile_full.sh ring_eleven_binary 10 baking
+bash ./scripts/create_files/compile_full.sh ring_eleven_crossbeam 10 baking
+bash ./scripts/create_files/compile_full.sh ring_eleven_baking_mpst 10 baking
+bash ./scripts/create_files/compile_full.sh ring_eleven_baking_ampst 10 baking
+bash ./scripts/create_files/compile_full.sh ring_eleven_baking_timed 10 baking_timed
+
+### Twenty
+echo "Ring twenty"
+bash ./scripts/create_files/compile_full.sh ring_twenty_binary 10 baking
+bash ./scripts/create_files/compile_full.sh ring_twenty_crossbeam 10 baking
+bash ./scripts/create_files/compile_full.sh ring_twenty_baking_mpst 10 baking
+bash ./scripts/create_files/compile_full.sh ring_twenty_baking_ampst 10 baking
+bash ./scripts/create_files/compile_full.sh ring_twenty_baking_timed 10 baking_timed

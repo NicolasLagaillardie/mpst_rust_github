@@ -3848,6 +3848,23 @@ name = "ring_ten_baking_atmp"
 path = "examples/ring/ring_ten_baking_atmp.rs"
 required-features = ["baking_timed"]
 
+################################### Artifact examples
+
+[[example]]
+name = "artifact_servo"
+path = "examples/artifact/servo.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "my_basic"
+path = "examples/artifact/my_basic.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "basic"
+path = "examples/artifact/basic.rs"
+required-features = ["baking_timed"]
+
 ################################### Profil
 
 [profile.release]

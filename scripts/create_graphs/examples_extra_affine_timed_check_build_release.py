@@ -25,9 +25,6 @@ compile_directories = os.listdir(compile_path)
 # Compile folder
 compile_folder = Path(compile_path + '/')
 
-# Result folder
-result_folder = Path('results/')
-
 # Relative path of the expected file
 json_path = '/base/estimates.json'
 
@@ -126,28 +123,7 @@ for key, value in translate.items():
         bench[value] = int(test(key))
     else:
         print(key, "is missing")
-        # # exit()
-
-# Get index of new csv result file
-index = 0
-while os.path.isfile('results/benchmarks_examples_extra_' + str(index) + '.csv'):
-    index += 1
-
-result_file = 'benchmarks_examples_extra_' + str(index) + '.csv'
-
-# Add name of columns
-with open(result_folder / result_file, 'a') as report_file:
-    report_file.write('Name of the protocol')
-    report_file.write('; ')
-    report_file.write('Check time')
-    report_file.write('; ')
-    report_file.write('Build time')
-    report_file.write('; ')
-    report_file.write('Release time')
-    report_file.write('; ')
-    report_file.write('Run time')
-    report_file.write('; ')
-    report_file.write('\n')
+        # exit()
 
 # For each protocol to be studied
 for protocol, index in index_compile.items():
@@ -198,25 +174,12 @@ for protocol, index in index_compile.items():
                 print('Issue with ', name_file)
                 # exit()
 
-            with open(result_folder / result_file, 'a') as report_file:
-                report_file.write(reverse_translate[protocol])
-                report_file.write('; ')
-                report_file.write(str(statistics.mean(temp_check)/10**6))
-                report_file.write('; ')
-                report_file.write(str(statistics.mean(temp_build)/10**6))
-                report_file.write('; ')
-                report_file.write(str(statistics.mean(temp_release)/10**6))
-                report_file.write('; ')
-                report_file.write(str(bench[protocol]/10**6))
-                report_file.write('; ')
-                report_file.write('\n')
-
         except:
             print('Issue with ', protocol)
-            # # exit()
+            # exit()
     else:
         print(protocol + " not in compiled files")
-        # # exit()
+        # exit()
 
 range_compile_files = [i for i in range(len(compile_files))]
 # ticklabels_compile_files = [chr(i + 97) for i in range(len(compile_files))]

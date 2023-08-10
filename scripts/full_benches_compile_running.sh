@@ -30,7 +30,7 @@ set -e
     cargo clean
 
     ## Compile mesh and ring
-    bash ./scripts/benches_compile_mesh_ring.sh
+    bash ./scripts/full_benches_compile_mesh_ring.sh
 
     cargo clean
 

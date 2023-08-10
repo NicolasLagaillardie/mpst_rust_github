@@ -76,7 +76,7 @@ save
 KMC
 
 # remove results folder
-results
+results/*
 
 # Remove nohup file
 nohup.out
