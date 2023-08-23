@@ -42,11 +42,11 @@ The artifact (after building the docker image) contains
 
    __Check the claim by__: Table 2 can be reproduced following the instructions in [Part II: Step 2](#Step2)
 
-   2.1. claims on compile-time performance (line 886-892):
+   2.1. claims on compile-time performance:
 
    * the more participants there are, the higher is the compilation time for MPST
 
-   2.2. claims on run-time performance (line 880-885):
+   2.2. claims on run-time performance:
 
    * **Anon** is faster than the BC implementation when there are numerous interactions and participants (full-mesh protocol)
 
