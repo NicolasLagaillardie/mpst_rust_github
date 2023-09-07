@@ -20,7 +20,7 @@ create_normal_name!(NameA);
 
 /////////////////////////////////////////
 
-pub fn basic_macros() {
+pub fn basic_macros_three() {
     assert!({
         {
             let (sender1, _) = End::new();
@@ -40,7 +40,9 @@ pub fn basic_macros() {
         Ok::<(), Box<dyn Error>>(())
     }
     .is_ok());
+}
 
+pub fn basic_macros_four() {
     assert!({
         {
             let (sender1, _) = End::new();

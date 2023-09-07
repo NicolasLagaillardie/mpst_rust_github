@@ -47,19 +47,23 @@ fn simple_basics() {
     basics_mod::simple_basics::simple::simple_triple_endpoints_checker();
 
     // Choose
-    basics_mod::simple_basics::choose::simple_choice();
+    basics_mod::simple_basics::choose::simple_choice_left();
+    basics_mod::simple_basics::choose::simple_choice_right();
     basics_mod::simple_basics::choose::simple_choice_checker();
 
     // Choose 2 A
-    basics_mod::simple_basics::a_choose::double_choice();
+    basics_mod::simple_basics::a_choose::double_choice_left();
+    basics_mod::simple_basics::a_choose::double_choice_right();
     basics_mod::simple_basics::a_choose::double_choice_checker();
 
     // Choose 2 A
-    basics_mod::simple_basics::b_choose::double_choice();
+    basics_mod::simple_basics::b_choose::double_choice_left();
+    basics_mod::simple_basics::b_choose::double_choice_right();
     basics_mod::simple_basics::b_choose::double_choice_checker();
 
     // Choose 2 A
-    basics_mod::simple_basics::c_choose::double_choice();
+    basics_mod::simple_basics::c_choose::double_choice_left();
+    basics_mod::simple_basics::c_choose::double_choice_right();
     basics_mod::simple_basics::c_choose::double_choice_checker();
 
     // Usecase simple A

@@ -177,36 +177,30 @@ fn simple_store_pawn(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-pub fn double_choice() {
-    assert!({
-        // Test the left branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(
-                simple_store_pawn,
-                simple_store_server,
-                simple_store_client_left,
-            );
+pub fn double_choice_left() {
+    // Test the left branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(
+        simple_store_pawn,
+        simple_store_server,
+        simple_store_client_left,
+    );
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+}
 
-        // Test the right branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(
-                simple_store_pawn,
-                simple_store_server,
-                simple_store_client_right,
-            );
+pub fn double_choice_right() {
+    // Test the right branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(
+        simple_store_pawn,
+        simple_store_server,
+        simple_store_client_right,
+    );
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn double_choice_checker() {

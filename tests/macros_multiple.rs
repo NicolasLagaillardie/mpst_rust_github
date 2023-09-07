@@ -44,7 +44,8 @@ fn unit_tests_meshedchannels() {
 #[test]
 fn macro_basics() {
     // Macro multi macros_multiple_mod
-    macros_multiple_mod::macro_multi_meshedchannels::basic_macros();
+    macros_multiple_mod::macro_multi_meshedchannels::basic_macros_three();
+    macros_multiple_mod::macro_multi_meshedchannels::basic_macros_four();
 
     // Macro multi send-recv
     macros_multiple_mod::macro_multi_send_recv_meshedchannels::test_new_send();

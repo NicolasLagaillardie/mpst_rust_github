@@ -18,19 +18,23 @@ fn simple_baking() {
     baking_mod::simple_baking::simple::simple_triple_endpoints_checker();
 
     // Choose
-    baking_mod::simple_baking::choose::simple_choice();
+    baking_mod::simple_baking::choose::simple_choice_left();
+    baking_mod::simple_baking::choose::simple_choice_right();
     baking_mod::simple_baking::choose::simple_choice_checker();
 
     // Choose 2 A
-    baking_mod::simple_baking::a_choose::double_choice();
+    baking_mod::simple_baking::a_choose::double_choice_left();
+    baking_mod::simple_baking::a_choose::double_choice_right();
     baking_mod::simple_baking::a_choose::double_choice_checker();
 
     // Choose 2 B
-    baking_mod::simple_baking::b_choose::double_choice();
+    baking_mod::simple_baking::b_choose::double_choice_left();
+    baking_mod::simple_baking::b_choose::double_choice_right();
     baking_mod::simple_baking::b_choose::double_choice_checker();
 
     // Choose 2 C
-    baking_mod::simple_baking::c_choose::double_choice();
+    baking_mod::simple_baking::c_choose::double_choice_left();
+    baking_mod::simple_baking::c_choose::double_choice_right();
     baking_mod::simple_baking::c_choose::double_choice_checker();
 
     // Usecase simple A
@@ -76,7 +80,8 @@ fn macro_baking() {
     baking_mod::macros_baking::macro_recursive::run_macro_recursive();
 
     // Macro multi basics
-    baking_mod::macros_baking::macro_multi_meshedchannels::basic_macros();
+    baking_mod::macros_baking::macro_multi_meshedchannels::basic_macros_three();
+    baking_mod::macros_baking::macro_multi_meshedchannels::basic_macros_four();
 
     // Macro multi send-recv
     baking_mod::macros_baking::macro_multi_send_recv_meshedchannels::test_new_send();

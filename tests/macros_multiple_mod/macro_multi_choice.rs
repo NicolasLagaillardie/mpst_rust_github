@@ -266,30 +266,19 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_choice_full() {
-    assert!({
-        {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
+    // Test video branch.
+    let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_pawn.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }
 
 pub fn test_new_choice_close() {
-    assert!({
-        // Test end branch.
-        {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
+    // Test end branch.
+    let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_pawn.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }

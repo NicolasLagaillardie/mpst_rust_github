@@ -40,18 +40,12 @@ fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_send() {
-    assert!({
-        {
-            let (thread_a, thread_b, thread_c, thread_d, thread_e) =
-                fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
+    let (thread_a, thread_b, thread_c, thread_d, thread_e) =
+        fork_mpst(pawn_a, recv_b_to_d, pawn_c, send_d_to_b, pawn_e);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-            assert!(thread_d.join().is_ok());
-            assert!(thread_e.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+    assert!(thread_d.join().is_ok());
+    assert!(thread_e.join().is_ok());
 }

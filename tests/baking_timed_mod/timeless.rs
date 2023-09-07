@@ -9,8 +9,7 @@ use mpstthree::role::end::RoleEnd;
 
 use std::collections::HashMap;
 use std::error::Error;
-use std::thread::sleep;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 generate_timed!(MeshedChannels, A, B, D);
 
@@ -26,25 +25,25 @@ type InitA = RecvTimed<
     'a',
     0,
     true,
-    2,
+    1,
     true,
     ' ',
-    SendTimed<i32, 'a', 2, true, 4, true, ' ', <Choose0fromDtoAOutLoop as Session>::Dual>,
+    SendTimed<i32, 'a', 0, true, 1, true, ' ', <Choose0fromDtoAOutLoop as Session>::Dual>,
 >;
 
 type AtoDClose = End;
 type AtoBClose = End;
 type AtoBVideo =
-    SendTimed<i32, 'a', 2, true, 4, true, ' ', RecvTimed<i32, 'a', 4, true, 6, true, ' ', End>>;
+    SendTimed<i32, 'a', 0, true, 1, true, ' ', RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>>;
 type AtoDVideo = RecvTimed<
     i32,
     'a',
     0,
     true,
-    2,
+    1,
     true,
     ' ',
-    SendTimed<i32, 'a', 6, true, 8, true, ' ', RecursAtoD>,
+    SendTimed<i32, 'a', 0, true, 1, true, ' ', RecursAtoD>,
 >;
 
 type RecursAtoD = <Choose0fromDtoAInLoop as Session>::Dual;
@@ -69,21 +68,21 @@ enum Branches0BtoD {
 }
 
 // D
-type Choose0fromDtoAInLoop = SendTimed<Branches0AtoD, 'a', 8, true, 10, true, 'a', End>;
-type Choose0fromDtoBInLoop = SendTimed<Branches0BtoD, 'a', 8, true, 10, true, 'a', End>;
+type Choose0fromDtoAInLoop = SendTimed<Branches0AtoD, 'a', 0, true, 1, true, 'a', End>;
+type Choose0fromDtoBInLoop = SendTimed<Branches0BtoD, 'a', 0, true, 1, true, 'a', End>;
 
-type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, 'a', 4, true, 6, true, 'a', End>;
-type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, 'a', 4, true, 6, true, 'a', End>;
+type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, 'a', 0, true, 1, true, 'a', End>;
+type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, 'a', 0, true, 1, true, 'a', End>;
 
 type InitD = SendTimed<
     i32,
     'a',
     0,
     true,
-    2,
+    1,
     true,
     ' ',
-    RecvTimed<i32, 'a', 2, true, 4, true, ' ', Choose0fromDtoAOutLoop>,
+    RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromDtoAOutLoop>,
 >;
 
 // Stacks
@@ -123,7 +122,6 @@ type EndpointBFull = MeshedChannels<End, InitB, StackBRecurs, NameB>;
 // Functions related to endpoints
 fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
-    sleep(Duration::from_secs(5));
 
     offer_mpst!(
         s,
@@ -133,11 +131,8 @@ fn server(s: EndpointBFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
                 s.close()
             },
             Branches0BtoD::Video(s) => {
-                sleep(Duration::from_secs(3));
                 let (request, s) = s.recv(all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let s = s.send(request + 1, all_clocks)?;
-                sleep(Duration::from_secs(4));
 
                 server_recurs(s, all_clocks)
             },
@@ -157,11 +152,8 @@ fn server_recurs(
                 s.close()
             },
             Branches0BtoD::Video(s) => {
-                sleep(Duration::from_secs(3));
                 let (request, s) = s.recv(all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let s = s.send(request + 1, all_clocks)?;
-                sleep(Duration::from_secs(4));
 
                 server_recurs(s, all_clocks)
             },
@@ -174,12 +166,9 @@ fn authenticator(
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
-    sleep(Duration::from_secs(1));
 
     let (id, s) = s.recv(all_clocks)?;
-    sleep(Duration::from_secs(2));
     let s = s.send(id + 1, all_clocks)?;
-    sleep(Duration::from_secs(2));
 
     offer_mpst!(
         s,
@@ -189,15 +178,10 @@ fn authenticator(
                 s.close()
             },
             Branches0AtoD::Video(s) => {
-                sleep(Duration::from_secs(1));
                 let (request, s) = s.recv(all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let s = s.send(request + 1, all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let (video, s) = s.recv(all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let s = s.send(video + 1, all_clocks)?;
-                sleep(Duration::from_millis(1500));
 
                 authenticator_recurs(s, all_clocks)
             },
@@ -217,15 +201,10 @@ fn authenticator_recurs(
                 s.close()
             },
             Branches0AtoD::Video(s) => {
-                sleep(Duration::from_secs(1));
                 let (request, s) = s.recv(all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let s = s.send(request + 1, all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let (video, s) = s.recv(all_clocks)?;
-                sleep(Duration::from_secs(2));
                 let s = s.send(video + 1, all_clocks)?;
-                sleep(Duration::from_secs(2));
 
                 authenticator_recurs(s, all_clocks)
             },
@@ -238,23 +217,16 @@ fn client(s: EndpointDFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     let mut xs: Vec<i32> = (1..5).map(|_| rng.gen()).collect();
     all_clocks.insert('a', Instant::now());
 
-    sleep(Duration::from_secs(1));
-
     let s = s.send(0, all_clocks)?;
-    sleep(Duration::from_secs(2));
     let (_, s) = s.recv(all_clocks)?;
-    sleep(Duration::from_secs(2));
 
     match xs.pop() {
         Option::Some(_) => {
             let s: EndpointDVideo =
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::Video, Branches0BtoD::Video);
 
-            sleep(Duration::from_secs(1));
             let s = s.send(1, all_clocks)?;
-            sleep(Duration::from_secs(6));
             let (_, s) = s.recv(all_clocks)?;
-            sleep(Duration::from_secs(2));
 
             client_recurs(s, all_clocks, xs, 2)
         }
@@ -278,11 +250,8 @@ fn client_recurs(
             let s: EndpointDVideo =
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::Video, Branches0BtoD::Video);
 
-            sleep(Duration::from_secs(1));
             let s = s.send(1, all_clocks)?;
-            sleep(Duration::from_secs(6));
             let (_, s) = s.recv(all_clocks)?;
-            sleep(Duration::from_secs(2));
 
             client_recurs(s, all_clocks, xs, index + 1)
         }
@@ -300,15 +269,9 @@ fn client_recurs(
 ////////////////////////////////////////
 
 pub fn main() {
-    assert!({
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
+    let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }

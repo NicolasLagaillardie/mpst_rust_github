@@ -202,33 +202,21 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn run_a_usecase_left() {
-    assert!({
-        // Test video branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
+    // Test video branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn run_a_usecase_right() {
-    assert!({
-        // Test end branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
+    // Test end branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-        Ok::<(), Box<dyn Error>>(())
-    }
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn run_a_usecase_checker() {
