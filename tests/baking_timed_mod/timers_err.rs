@@ -22,36 +22,36 @@ generate_timed!(MeshedChannels, A, B, D);
 
 // A
 type InitA = RecvTimed<
-i32,
-'a',
-0,
-true,
-1,
-true,
-' ',
-SendTimed<i32, 'a', 0, true, 1, true, ' ', <Choose0fromDtoAOutLoop as Session>::Dual>,
+    i32,
+    'a',
+    0,
+    true,
+    1,
+    true,
+    ' ',
+    SendTimed<i32, 'a', 0, true, 1, true, ' ', <Choose0fromDtoAOutLoop as Session>::Dual>,
 >;
 
 type AtoDClose = End;
 type AtoBClose = End;
 type AtoBVideo =
-SendTimed<i32, 'a', 0, true, 1, true, ' ', RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>>;
+    SendTimed<i32, 'a', 0, true, 1, true, ' ', RecvTimed<i32, 'a', 0, true, 1, true, ' ', End>>;
 type AtoDVideo = RecvTimed<
-i32,
-'a',
-0,
-true,
-1,
-true,
-' ',
-SendTimed<i32, 'a', 0, true, 1, true, ' ', RecursAtoD>,
+    i32,
+    'a',
+    0,
+    true,
+    1,
+    true,
+    ' ',
+    SendTimed<i32, 'a', 0, true, 1, true, ' ', RecursAtoD>,
 >;
 
 type RecursAtoD = <Choose0fromDtoAInLoop as Session>::Dual;
 
 enum Branches0AtoD {
-End(MeshedChannels<AtoBClose, AtoDClose, StackAEnd, NameA>),
-Video(MeshedChannels<AtoBVideo, AtoDVideo, StackAVideo, NameA>),
+    End(MeshedChannels<AtoBClose, AtoDClose, StackAEnd, NameA>),
+    Video(MeshedChannels<AtoBVideo, AtoDVideo, StackAVideo, NameA>),
 }
 
 // B
@@ -64,8 +64,8 @@ type BtoAVideo = <AtoBVideo as Session>::Dual;
 type RecursBtoD = <Choose0fromDtoBInLoop as Session>::Dual;
 
 enum Branches0BtoD {
-End(MeshedChannels<BtoAClose, BtoDClose, StackBEnd, NameB>),
-Video(MeshedChannels<BtoAVideo, RecursBtoD, StackBVideo, NameB>),
+    End(MeshedChannels<BtoAClose, BtoDClose, StackBEnd, NameB>),
+    Video(MeshedChannels<BtoAVideo, RecursBtoD, StackBVideo, NameB>),
 }
 
 // D
@@ -76,14 +76,14 @@ type Choose0fromDtoAOutLoop = SendTimed<Branches0AtoD, 'a', 0, true, 1, true, 'a
 type Choose0fromDtoBOutLoop = SendTimed<Branches0BtoD, 'a', 0, true, 1, true, 'a', End>;
 
 type InitD = SendTimed<
-i32,
-'a',
-0,
-true,
-1,
-true,
-' ',
-RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromDtoAOutLoop>,
+    i32,
+    'a',
+    0,
+    true,
+    1,
+    true,
+    ' ',
+    RecvTimed<i32, 'a', 0, true, 1, true, ' ', Choose0fromDtoAOutLoop>,
 >;
 
 // Stacks
@@ -102,14 +102,14 @@ type StackDFull = RoleA<RoleA<StackDRecurs>>;
 // Creating the MP sessions
 // For D
 type EndpointDVideo = MeshedChannels<
-<AtoDVideo as Session>::Dual,
-<RecursBtoD as Session>::Dual,
-RoleA<RoleA<RoleBroadcast>>,
-NameD,
+    <AtoDVideo as Session>::Dual,
+    <RecursBtoD as Session>::Dual,
+    RoleA<RoleA<RoleBroadcast>>,
+    NameD,
 >;
 type EndpointDEnd = MeshedChannels<End, End, RoleEnd, NameD>;
 type EndpointDRecurs =
-MeshedChannels<Choose0fromDtoAInLoop, Choose0fromDtoBInLoop, StackDRecurs, NameD>;
+    MeshedChannels<Choose0fromDtoAInLoop, Choose0fromDtoBInLoop, StackDRecurs, NameD>;
 type EndpointDFull = MeshedChannels<InitD, Choose0fromDtoBOutLoop, StackDFull, NameD>;
 
 // For A
