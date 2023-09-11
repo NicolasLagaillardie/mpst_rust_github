@@ -52,36 +52,34 @@ cat $PATH_BENCH/ping_pong_baking_ampst_1.rs > benches/ping_pong/ping_pong_baking
 cat $PATH_BENCH/ping_pong_baking_timed_1.rs > benches/ping_pong/ping_pong_baking_timed.rs
 
 # Add to Cargo.toml
-START_LINE='######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = '
-HARNESS_LINE='\nharness = false\npath = '
-PATH_LINE='benches/ping_pong'
-FEATURE_LINE='\nrequired-features = ["'full'"]'
-sed -ier 's,'$START_LINE'"'ping_pong_crossbeam'"'$HARNESS_LINE'"'$PATH_LINE/ping_pong_crossbeam.rs'"'$FEATURE_LINE',g' Cargo.toml
-sed -ier 's,'$START_LINE'"'ping_pong_binary'"'$HARNESS_LINE'"'$PATH_LINE/ping_pong_binary.rs'"'$FEATURE_LINE',g' Cargo.toml
-sed -ier 's,'$START_LINE'"'ping_pong_mpst'"'$HARNESS_LINE'"'$PATH_LINE/ping_pong_mpst.rs'"'$FEATURE_LINE',g' Cargo.toml
-sed -ier 's,'$START_LINE'"'ping_pong_baking_mpst'"'$HARNESS_LINE'"'$PATH_LINE/ping_pong_baking_mpst.rs'"'$FEATURE_LINE',g' Cargo.toml
-sed -ier 's,'$START_LINE'"'ping_pong_baking_ampst'"'$HARNESS_LINE'"'$PATH_LINE/ping_pong_baking_ampst.rs'"'$FEATURE_LINE',g' Cargo.toml
-sed -ier 's,'$START_LINE'"'ping_pong_baking_timed'"'$HARNESS_LINE'"'$PATH_LINE/ping_pong_baking_timed.rs'"'$FEATURE_LINE',g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_crossbeam'"\nharness = false\npath = "'benches/ping_pong/ping_pong_crossbeam.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_binary'"\nharness = false\npath = "'benches/ping_pong/ping_pong_binary.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_mpst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_mpst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_ampst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_ampst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_timed.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 
 # Copy ping_pong benches i and create ping_pong benches i+1
-STATIC_LOOPS='static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '
 for i in $(eval echo {0..$END})
 do
+
+    echo "Test"
+
     # prog "$((i/$(( $1 / 100 ))))" still working...
     NEXT=$(($i+1))
     # Modify content files
     ## Crossbeam
-    sed -ier 's,'$STATIC_LOOPS''"$NEXT"';,g' $PATH_LINE/ping_pong_crossbeam.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_crossbeam.rs
     ## Binary
-    sed -ier 's,'$STATIC_LOOPS''"$NEXT"';,g' $PATH_LINE/ping_pong_binary.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_binary.rs
     ## MPST
-    sed -ier 's,'$STATIC_LOOPS''"$NEXT"';,g' $PATH_LINE/ping_pong_mpst.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_mpst.rs
     ## Baking MPST
-    sed -ier 's,'$STATIC_LOOPS''"$NEXT"';,g' $PATH_LINE/ping_pong_baking_mpst.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_mpst.rs
     ## Baking AMPST
-    sed -ier 's,'$STATIC_LOOPS''"$NEXT"';,g' $PATH_LINE/ping_pong_baking_ampst.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_ampst.rs
     ## Baking ATMP
-    sed -ier 's,'$STATIC_LOOPS''"$NEXT"';,g' $PATH_LINE/ping_pong_baking_timed.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_timed.rs
     # Clean unusued files
     find benches/ -name *.rser -delete
     # Benchmark
@@ -103,7 +101,7 @@ do
 done
 
 # Clean ping_pong folder
-rm -rf $PATH_LINE/*
+rm -rf benches/ping_pong/*
 
 # Remove lines between "Ping-Pong start" and "Ping-Pong end" to Cargo.toml
 sed -i '/^######### Ping-Pong start/,/^\######### Ping-Pong end/{/^######### Ping-Pong start/!{/^\######### Ping-Pong end/!d;};}' Cargo.toml
