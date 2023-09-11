@@ -665,7 +665,7 @@ pub fn smtp_binary(c: &mut Criterion) {
 
 criterion_group! {
     name = bench;
-    config = Criterion::default().significance_level(0.05).without_plots().sample_size(10000);
+    config = Criterion::default().significance_level(0.05).without_plots().sample_size(100000);
     targets = smtp_binary,
 }
 

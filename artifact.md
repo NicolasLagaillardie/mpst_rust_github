@@ -338,7 +338,7 @@ Then you can run the script:
 ./scripts/full_benches_compile_running.sh # This will take more than 24 hours
 ```
 
-Each benchmark has a significance of 0.1 and a sample size of 10000 in this configuration.
+Each benchmark has a significance of 0.05 and a sample size of 100000 in this configuration.
 
 __Note__: we have executed this script on a workstation,
 and running the whole script took over 24 hours.
