@@ -1,4 +1,4 @@
-use proc_macro2::TokenStream;
+use proc_macro2::{Span, TokenStream};
 use quote::{format_ident, quote};
 use syn::parse::{Parse, ParseStream};
 use syn::{Expr, Ident, LitInt, Result, Token};
@@ -44,6 +44,13 @@ impl BroadcastCancel {
 
         let send_sessions = quote! { #( s.#field_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Cancel).unwrap_or(()); )* };
 
+        let stringify: Vec<TokenStream> = (1..n_sessions)
+            .map(|i| {
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
+                quote! { stringify!( #temp_session ) , }
+            })
+            .collect();
+
         quote! {
             {
                 #(
@@ -52,7 +59,7 @@ impl BroadcastCancel {
 
                 let mut s = #session;
 
-                let (size, mut s) = s.field_names();
+                let size = [ #( #stringify )* ];
 
                 if size.len() != #n_sessions - 1 {
                     panic!("Wrong number for $n_sessions: expected {:?}, found {:?}", size.len(), #n_sessions)

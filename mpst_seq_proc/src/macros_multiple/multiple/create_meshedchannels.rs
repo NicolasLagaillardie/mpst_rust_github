@@ -147,15 +147,6 @@ impl CreateMeshedChannels {
             })
             .collect();
 
-        let stringify: Vec<TokenStream> = (1..self.n_sessions)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
-                quote! {
-                    stringify!(#temp_ident),
-                }
-            })
-            .collect();
-
         quote! {
             #[must_use]
             #[derive(Debug)]
@@ -288,43 +279,6 @@ impl CreateMeshedChannels {
                         <R as mpstthree::role::Role>::tail_str(),
                         <N as mpstthree::name::Name>::head_str(),
                         <N as mpstthree::name::Name>::tail_str()
-                    )
-                }
-            }
-
-            #[doc(hidden)]
-            impl<
-                #(
-                    #sessions_struct
-                )*
-                R: mpstthree::role::Role,
-                N: mpstthree::name::Name
-            > #meshedchannels_name<
-                #(
-                    #sessions
-                )*
-                R,
-                N
-            > {
-                #[doc(hidden)]
-                pub fn field_names(self) ->
-                    (
-                        &'static [&'static str],
-                        #meshedchannels_name<
-                            #(
-                                #sessions
-                            )*
-                            R,
-                            N
-                        >
-                    ) {
-                    (
-                        &[
-                            #(
-                                #stringify
-                            )*
-                        ],
-                        self
                     )
                 }
             }

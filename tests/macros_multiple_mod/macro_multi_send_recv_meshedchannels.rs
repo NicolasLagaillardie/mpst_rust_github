@@ -42,34 +42,24 @@ type PawnC = MeshedChannels<End, End, End, End, RoleEnd, NameC>;
 type PawnE = MeshedChannels<End, End, End, End, RoleEnd, NameE>;
 
 fn send_d_to_b(s: SendMeshedChannelsD<i32>) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
     let s = send_mpst_d_to_b(0, s);
     close_mpst_multi(s)
 }
 
 fn recv_b_to_d(s: RecvMeshedChannelsB<i32>) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
     let (_, s) = recv_mpst_b_from_d(s)?;
     close_mpst_multi(s)
 }
 
 fn pawn_a(s: PawnA) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
     close_mpst_multi(s)
 }
 
 fn pawn_c(s: PawnC) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
     close_mpst_multi(s)
 }
 
 fn pawn_e(s: PawnE) -> Result<(), Box<dyn Error>> {
-    let (size, s) = s.field_names();
-    assert_eq!(size.len(), 4);
     close_mpst_multi(s)
 }
 

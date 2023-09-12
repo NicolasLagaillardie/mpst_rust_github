@@ -169,14 +169,6 @@ impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, 
     }
 }
 
-#[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Name> MeshedChannels<S1, S2, R, N> {
-    #[doc(hidden)]
-    pub fn field_names(self) -> (&'static [&'static str], MeshedChannels<S1, S2, R, N>) {
-        (&["session1", "session2"], self)
-    }
-}
-
 impl<S1: Session, S2: Session, R: Role, N: Name> MeshedChannels<S1, S2, R, N> {
     /// Cancel the session
     pub fn cancel(self) {

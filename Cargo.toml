@@ -140,18 +140,25 @@ required-features = []
 ################################### Artifact examples
 
 [[example]]
-name = "artifact_servo"
-path = "examples/artifact/servo.rs"
-required-features = ["baking_timed"]
-
-[[example]]
 name = "my_basic"
 path = "examples/artifact/my_basic.rs"
-required-features = ["baking_timed"]
+required-features = ["baking"]
 
 [[example]]
 name = "basic"
 path = "examples/artifact/basic.rs"
+required-features = ["baking"]
+
+################################### Timed artifact examples
+
+[[example]]
+name = "timed_my_basic"
+path = "examples/artifact_timed/my_basic.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "timed_basic"
+path = "examples/artifact_timed/basic.rs"
 required-features = ["baking_timed"]
 
 ################################### Ping-Pong
