@@ -1,3 +1,5 @@
+#![allow(dead_code, unused_imports)]
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
@@ -70,46 +72,48 @@ type EndpointC8 = MeshedChannels<Choose0forAtoC, Choose0forBtoC, RoleBroadcast, 
 type OrderingC10Full = RoleA<RoleEnd>;
 type EndpointC11 = MeshedChannels<TestCtoA, Choose0forBtoC, OrderingC10Full, NameC>;
 
-fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
-    let (_, s) = s.recv()?;
-    recurs_a(s, 5)
-}
+// fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
+//     let (_, s) = s.recv()?;
+//     recurs_a(s, 5)
+// }
 
-fn recurs_a(s: EndpointALoop, loops: i32) -> Result<(), Box<dyn Error>> {
-    if loops > 0 {
-        let s: EndpointAMore = choose_mpst_a_to_all!(s, Branching0fromAtoB::More);
+// fn recurs_a(s: EndpointALoop, loops: i32) -> Result<(), Box<dyn Error>> {
+//     if loops > 0 {
+//         let s: EndpointAMore = choose_mpst_a_to_all!(s, Branching0fromAtoB::More);
 
-        let (_, s) = s.recv()?;
-        recurs_a(s, loops - 1)
-    } else {
-        let s: EndpointADone = choose_mpst_a_to_all!(s, Branching0fromAtoB::Done);
+//         let (_, s) = s.recv()?;
+//         recurs_a(s, loops - 1)
+//     } else {
+//         let s: EndpointADone = choose_mpst_a_to_all!(s, Branching0fromAtoB::Done);
 
-        let (_, s) = s.recv()?;
-        s.close()
-    }
-}
+//         let (_, s) = s.recv()?;
+//         s.close()
+//     }
+// }
 
-fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
-    let s = s.send(Request {})?;
-    recurs_b(s)
-}
+// fn endpoint_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
+//     let s = s.send(Request {})?;
+//     recurs_b(s)
+// }
 
-fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
-    offer_mpst!(s, {
-        Branching0fromAtoB::More(s) => {
-            let s = s.send(Response {})?;
-            recurs_b(s)
-        },
-        Branching0fromAtoB::Done(s) => {
-            let s = s.send(Stop {})?;
-            s.close()
-        },
-    })
-}
+// fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
+//     offer_mpst!(s, {
+//         Branching0fromAtoB::More(s) => {
+//             let s = s.send(Response {})?;
+//             recurs_b(s)
+//         },
+//         Branching0fromAtoB::Done(s) => {
+//             let s = s.send(Stop {})?;
+//             s.close()
+//         },
+//     })
+// }
 
-fn main() {
-    let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
+// fn main() {
+//     let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
-}
+//     thread_a.join().unwrap();
+//     thread_b.join().unwrap();
+// }
+
+fn main() {}
