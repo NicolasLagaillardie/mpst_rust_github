@@ -317,7 +317,7 @@ fn aux() {
 
 static LOOPS: i64 = 100;
 
-pub fn mesh_protocol_ampst(c: &mut Criterion) {
+pub fn mesh(c: &mut Criterion) {
     c.bench_function(&format!("mesh six baking AMPST {LOOPS}"), |b| b.iter(aux));
 }
 
@@ -326,7 +326,7 @@ pub fn mesh_protocol_ampst(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.05).without_plots().sample_size(100000);
-    targets = mesh_protocol_ampst,
+    targets = mesh,
 }
 
 criterion_main! {

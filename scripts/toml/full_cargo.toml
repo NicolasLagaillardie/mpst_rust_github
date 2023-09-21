@@ -226,6 +226,12 @@ harness = false
 path = "benches/examples/crossbeam/video_stream.rs"
 required-features = ["full"]
 
+[[bench]]
+name = "example_distributed_calculators_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/distributed_calculators.rs"
+required-features = ["full"]
+
 ######### Binary
 
 [[bench]]
@@ -304,6 +310,12 @@ required-features = ["full"]
 name = "example_video_stream_binary"
 harness = false
 path = "benches/examples/binary/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_binary"
+harness = false
+path = "benches/examples/binary/distributed_calculators.rs"
 required-features = ["full"]
 
 ######### Basic
@@ -490,6 +502,12 @@ harness = false
 path = "benches/examples/mpst/http.rs"
 required-features = ["full"]
 
+[[bench]]
+name = "example_distributed_calculators_mpst"
+harness = false
+path = "benches/examples/mpst/distributed_calculators.rs"
+required-features = ["full"]
+
 ######### AMPST
 
 [[bench]]
@@ -586,6 +604,12 @@ required-features = ["full"]
 name = "example_http_ampst"
 harness = false
 path = "benches/examples/ampst/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_ampst"
+harness = false
+path = "benches/examples/ampst/distributed_calculators.rs"
 required-features = ["full"]
 
 ######### Interleaved
@@ -686,6 +710,12 @@ required-features = ["full"]
 name = "example_video_stream_timed"
 harness = false
 path = "benches/examples/timed/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_timed"
+harness = false
+path = "benches/examples/timed/distributed_calculators.rs"
 required-features = ["full"]
 
 ################## Ring
@@ -2841,6 +2871,11 @@ name = "video_stream_crossbeam"
 path = "examples/crossbeam/video_stream.rs"
 required-features = ["default"]
 
+[[example]]
+name = "distributed_calculators_crossbeam"
+path = "examples/crossbeam/distributed_calculators.rs"
+required-features = ["default"]
+
 ######### Binary
 
 [[example]]
@@ -2906,6 +2941,11 @@ required-features = ["default"]
 [[example]]
 name = "video_stream_binary"
 path = "examples/binary/video_stream.rs"
+required-features = ["default"]
+
+[[example]]
+name = "distributed_calculators_binary"
+path = "examples/binary/distributed_calculators.rs"
 required-features = ["default"]
 
 ######### Basic
@@ -3032,6 +3072,11 @@ name = "servo_8257_fixed_mpst"
 path = "examples/mpst/servo_8257_fixed.rs"
 required-features = ["baking"]
 
+[[example]]
+name = "distributed_calculators_mpst"
+path = "examples/mpst/distributed_calculators.rs"
+required-features = ["baking"]
+
 ######### AMPST
 
 [[example]]
@@ -3137,6 +3182,11 @@ required-features = ["baking"]
 [[example]]
 name = "servo_8257_fixed_ampst"
 path = "examples/ampst/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "distributed_calculators_ampst"
+path = "examples/ampst/distributed_calculators.rs"
 required-features = ["baking"]
 
 ######### Checking
@@ -3292,6 +3342,11 @@ required-features = ["baking_timed"]
 [[example]]
 name = "video_stream_timed"
 path = "examples/timed/video_stream.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "distributed_calculators_timed"
+path = "examples/timed/distributed_calculators.rs"
 required-features = ["baking_timed"]
 
 ################################### Mesh examples

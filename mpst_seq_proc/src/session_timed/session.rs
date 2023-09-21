@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use std::{collections::HashSet, mem};

@@ -1,8 +1,7 @@
 #![allow(
     clippy::type_complexity,
     clippy::too_many_arguments,
-    clippy::large_enum_variant,
-    dead_code
+    clippy::large_enum_variant
 )]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
@@ -14,8 +13,6 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::random;
-
 use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;
@@ -26,9 +23,7 @@ generate_timed!(MeshedChannels, Satellite, Sensor, Server);
 // Labels
 struct Stop {}
 struct GetData {}
-struct Data {
-    payload: i32,
-}
+struct Data {}
 
 // Types
 // Satellite
@@ -192,7 +187,7 @@ fn recurs_sensor(
             let (_get_data, s) = s.recv(all_clocks)?;
 
             // Send the data
-            let s = s.send(Data { payload : random::<i32>() }, all_clocks)?;
+            let s = s.send(Data {}, all_clocks)?;
 
             recurs_sensor(s, all_clocks)
         },

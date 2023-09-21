@@ -86,7 +86,7 @@ fn aux() {
 
 static LOOPS: i64 = 20;
 
-pub fn fibo_mpst(c: &mut Criterion) {
+pub fn fibo(c: &mut Criterion) {
     c.bench_function(&format!("Fibo {LOOPS} MPST"), |b| b.iter(aux));
 }
 
@@ -95,7 +95,7 @@ pub fn fibo_mpst(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.05).without_plots().sample_size(100000);
-    targets = fibo_mpst,
+    targets = fibo,
 }
 
 criterion_main! {

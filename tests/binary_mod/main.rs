@@ -18,7 +18,6 @@ use rand::{thread_rng, Rng};
 use std::boxed::Box;
 use std::error::Error;
 use std::marker;
-use std::mem;
 use std::sync::mpsc;
 use std::thread::sleep;
 use std::time::Duration;
@@ -469,57 +468,4 @@ pub fn selection_works() {
         let msg = format!("Thread {other_thread:?} crashed.");
         assert!(other_thread.join().is_ok(), "{}", msg);
     }
-}
-
-#[allow(dead_code)]
-fn deadlock_loop() {
-    let s = fork(move |s: Send<(), End>| {
-        loop {
-            // Let's trick the reachability checker
-            if false {
-                break;
-            }
-        }
-        let s = send((), s);
-        close(s)
-    });
-
-    || -> Result<(), Box<dyn Error>> {
-        let ((), s) = recv(s)?;
-        close(s)
-    }()
-    .unwrap();
-}
-
-#[allow(dead_code)]
-fn deadlock_forget() {
-    let s = fork(move |s: Send<(), End>| {
-        mem::forget(s);
-        Ok(())
-    });
-
-    || -> Result<(), Box<dyn Error>> {
-        let ((), s) = recv(s)?;
-        close(s)
-    }()
-    .unwrap();
-}
-
-#[allow(dead_code)]
-fn deadlock_new() {
-    let (s1, r1) = <Send<(), End>>::new();
-    let r2 = fork(move |s2: Send<(), End>| {
-        let (x, r1) = recv(r1)?;
-        let s2 = send(x, s2);
-        close(r1)?;
-        close(s2)
-    });
-
-    || -> Result<(), Box<dyn Error>> {
-        let (x, r2) = recv(r2)?;
-        let s1 = send(x, s1);
-        close(r2)?;
-        close(s1)
-    }()
-    .unwrap();
 }

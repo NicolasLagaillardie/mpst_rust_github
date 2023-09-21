@@ -1,12 +1,23 @@
+error: comparison operators cannot be chained
+  --> tests/infinite_type/fail_0.rs:17:28
+   |
+17 |     let _ = NiceCalcServer2<i32>::new();
+   |                            ^   ^
+   |
+help: use `::<...>` instead of `<...>` to specify lifetime, type, or const arguments
+   |
+17 |     let _ = NiceCalcServer2::<i32>::new();
+   |                            ++
+
 error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::send::Send<i64, Recv<i64, Recv<CalcOp2<N>, ...>>>: std::marker::Send`
-  --> tests/infinite_type/fail_0.rs:10:10
-   |
-10 |     More(Send<i64, Recv<i64, NiceCalcServer2<N>>>),
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
+ --> tests/infinite_type/fail_0.rs:9:10
+  |
+9 |     More(Send<i64, Recv<i64, NiceCalcServer2<N>>>),
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
 note: required because it appears within the type `CalcOp2<N>`
-  --> tests/infinite_type/fail_0.rs:9:6
-   |
-9  | enum CalcOp2<N: marker::Send> {
-   |      ^^^^^^^
-   = note: required for `Recv<CalcOp2<N>, mpstthree::binary::struct_trait::end::End>` to implement `Session`
+ --> tests/infinite_type/fail_0.rs:8:6
+  |
+8 | enum CalcOp2<N: marker::Send> {
+  |      ^^^^^^^
+  = note: required for `Recv<CalcOp2<N>, mpstthree::binary::struct_trait::end::End>` to implement `Session`

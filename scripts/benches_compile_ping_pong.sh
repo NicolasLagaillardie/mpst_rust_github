@@ -86,7 +86,7 @@ do
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_mpst 10 baking ping_pong_baking_mpst_$NEXT
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_ampst 10 baking ping_pong_baking_ampst_$NEXT
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_timed 10 baking_timed ping_pong_baking_timed_$NEXT
-    
+
     # Clean built files
     cargo clean
     #

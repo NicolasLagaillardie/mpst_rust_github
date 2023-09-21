@@ -1,8 +1,7 @@
 #![allow(
     clippy::type_complexity,
     clippy::too_many_arguments,
-    clippy::large_enum_variant,
-    dead_code
+    clippy::large_enum_variant
 )]
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
@@ -13,8 +12,6 @@ use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::random;
-
 use std::error::Error;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
@@ -23,9 +20,7 @@ generate!("rec_and_cancel", MeshedChannels, Satellite, Sensor, Server);
 // Labels
 struct Stop {}
 struct GetData {}
-struct Data {
-    payload: i32,
-}
+struct Data {}
 
 // Types
 // Satellite
@@ -158,7 +153,7 @@ fn recurs_sensor(s: EndpointSensor0) -> Result<(), Box<dyn Error>> {
             let (_get_data, s) = s.recv()?;
 
             // Send the data
-            let s = s.send(Data { payload : random::<i32>() })?;
+            let s = s.send(Data {})?;
 
             recurs_sensor(s)
         },

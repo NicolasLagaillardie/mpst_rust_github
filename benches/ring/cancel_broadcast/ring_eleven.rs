@@ -1087,7 +1087,7 @@ fn aux() {
 
 static LOOPS: i64 = 100;
 
-pub fn ring_protocol_mpst(c: &mut Criterion) {
+pub fn ring(c: &mut Criterion) {
     c.bench_function(&format!("ring eleven cancel broadcast {LOOPS}"), |b| {
         b.iter(aux)
     });
@@ -1098,7 +1098,7 @@ pub fn ring_protocol_mpst(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.05).without_plots().sample_size(100000);
-    targets = ring_protocol_mpst,
+    targets = ring,
 }
 
 criterion_main! {

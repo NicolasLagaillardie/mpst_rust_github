@@ -1,4 +1,3 @@
-#![allow(dead_code, clippy::large_enum_variant)]
 #![allow(
     clippy::type_complexity,
     clippy::too_many_arguments,
