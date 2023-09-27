@@ -33,7 +33,7 @@ date
 
 # Create clean save folder if it does not exist
 mkdir -p save/ping_pong/
-# rm -rf save/ping_pong/*
+rm -rf save/ping_pong/*
 
 # Create clean save ping_pong if it does not exist
 mkdir -p benches/ping_pong/
@@ -44,10 +44,10 @@ sed -i '/^######### Ping-Pong start/,/^\######### Ping-Pong end/{/^######### Pin
 
 # Copy from save
 PATH_BENCH='benches/ping_pong_save'
-cat $PATH_BENCH/ping_pong_baking_mpst_1.rs > benches/ping_pong/ping_pong_baking_mpst.rs
+cat $PATH_BENCH/ping_pong_baking_timed_1.rs > benches/ping_pong/ping_pong_baking_timed.rs
 
 # Add to Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_mpst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_timed.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 
 # Copy ping_pong benches i and create ping_pong benches i+1
 for i in $(eval echo {0..$END})
@@ -58,8 +58,8 @@ do
     # prog "$((i/$(( $1 / 100 ))))" still working...
     NEXT=$(($i+1))
     # Modify content files
-    ## Baking MPST
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_mpst.rs
+    ## Baking ATMP
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_timed.rs
     # Clean unusued files
     find benches/ -name *.rser -delete
     # Benchmark

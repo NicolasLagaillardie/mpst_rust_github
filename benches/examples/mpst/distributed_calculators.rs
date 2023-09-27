@@ -240,7 +240,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn distributed_calculators(c: &mut Criterion) {
-    c.bench_function("Distributed calculators AMPST", |b| b.iter(aux));
+    c.bench_function("Distributed calculators MPST", |b| b.iter(aux));
 }
 
 /////////////////////////
