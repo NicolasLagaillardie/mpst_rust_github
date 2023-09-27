@@ -34,6 +34,7 @@ compile_files = [
     'logging',
     'video_stream',
     'remote_data',
+    'distributed_calculators',
     'circuit_breaker',
 ]
 
@@ -43,6 +44,7 @@ bench_files = [
     'Logging',
     'Video stream',
     'Remote data',
+    'Distributed calculators',
     'Circuit breaker',
 ]
 
@@ -211,7 +213,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
         loc=localisation,
         fancybox=True,
         shadow=True,
-        ncol=1,
+        ncol=5,
         fontsize=20
     )
 

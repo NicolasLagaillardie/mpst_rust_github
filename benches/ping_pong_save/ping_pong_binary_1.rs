@@ -70,7 +70,7 @@ fn aux() {
 
 static LOOPS: i64 = 1;
 
-pub fn ping_pong_protocol_binary(c: &mut Criterion) {
+pub fn ping_pong(c: &mut Criterion) {
     c.bench_function(&format!("ping pong binary {LOOPS}"), |b| {
         b.iter(aux)
     });
@@ -81,7 +81,7 @@ pub fn ping_pong_protocol_binary(c: &mut Criterion) {
 criterion_group! {
     name = bench;
     config = Criterion::default().significance_level(0.05).without_plots().sample_size(100000);
-    targets = ping_pong_protocol_binary
+    targets = ping_pong
 }
 
 criterion_main! {
