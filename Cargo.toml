@@ -161,65 +161,6 @@ name = "timed_basic"
 path = "examples/artifact_timed/basic.rs"
 required-features = ["baking_timed"]
 
-################################### Examples
-
-[[example]]
-name = "distributed_calculators_crossbeam"
-path = "examples/crossbeam/distributed_calculators.rs"
-required-features = ["default"]
-
-[[example]]
-name = "distributed_calculators_binary"
-path = "examples/binary/distributed_calculators.rs"
-required-features = ["default"]
-
-[[example]]
-name = "distributed_calculators_mpst"
-path = "examples/mpst/distributed_calculators.rs"
-required-features = ["baking"]
-
-[[example]]
-name = "distributed_calculators_ampst"
-path = "examples/ampst/distributed_calculators.rs"
-required-features = ["baking"]
-
-[[example]]
-name = "distributed_calculators_timed"
-path = "examples/timed/distributed_calculators.rs"
-required-features = ["baking_timed"]
-
-################################### Benches examples
-
-[[bench]]
-name = "example_distributed_calculators_crossbeam"
-harness = false
-path = "benches/examples/crossbeam/distributed_calculators.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "example_distributed_calculators_binary"
-harness = false
-path = "benches/examples/binary/distributed_calculators.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "example_distributed_calculators_mpst"
-harness = false
-path = "benches/examples/mpst/distributed_calculators.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "example_distributed_calculators_ampst"
-harness = false
-path = "benches/examples/ampst/distributed_calculators.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "example_distributed_calculators_timed"
-harness = false
-path = "benches/examples/timed/distributed_calculators.rs"
-required-features = ["full"]
-
 ################################### Ping-Pong
 
 ######### Ping-Pong start

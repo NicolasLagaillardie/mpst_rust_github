@@ -34,10 +34,10 @@ compile_files = [
     'simple_voting',
     'calculator',
     'three_buyers',
-    'travel_agency',
     'o_auth',
-    'online_wallet',
     'smtp',
+    'online_wallet',
+    'travel_agency',
 ]
 
 # Expected bench files
@@ -46,10 +46,10 @@ bench_files = [
     'Simple voting',
     'Calculator',
     'Three buyers',
-    'Travel agency',
     'oAuth',
-    'Online wallet',
     'SMTP',
+    'Online wallet',
+    'Travel agency',
 ]
 
 # Indexing for bar lists
@@ -217,7 +217,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
         loc=localisation,
         fancybox=True,
         shadow=True,
-        ncol=1,
+        ncol=5,
         fontsize=20
     )
 
