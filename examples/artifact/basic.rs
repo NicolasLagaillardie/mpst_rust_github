@@ -1,6 +1,9 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
-use mpstthree::generate; // The macro for generating the roles and the MeshedChannels
-use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
+use mpstthree::generate; /* The macro for generating the roles and the MeshedChannels */
+use mpstthree::role::broadcast::RoleBroadcast; /* Optional: used
+                                                * only for protocols
+                                                * with choice/
+                                                * offer */
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles
 
 use std::error::Error; // Used for functions returning _affine_ types

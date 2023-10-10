@@ -1,7 +1,9 @@
 use mpstthree::binary::struct_trait::end::End; // The basic End types
 use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed}; // The basic timed types
-use mpstthree::generate_timed; // The macro for generating the roles and the MeshedChannels
-use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
+use mpstthree::generate_timed; /* The macro for generating the roles and
+                                * the MeshedChannels */
+use mpstthree::role::broadcast::RoleBroadcast; /* Optional: used only for protocols with
+                                                * choice/offer */
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles
 
 use std::collections::HashMap; // Used for storing clocks
