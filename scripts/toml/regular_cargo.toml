@@ -220,6 +220,13 @@ harness = false
 path = "benches/examples/timed/distributed_calculators.rs"
 required-features = ["full"]
 
+################################### Readme example
+
+[[example]]
+name = "readme"
+path = "examples/readme_example.rs"
+required-features = ["mpst"]
+
 ################################### Ping-Pong
 
 ######### Ping-Pong start

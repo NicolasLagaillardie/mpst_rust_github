@@ -2059,6 +2059,13 @@ name = "timed_basic"
 path = "examples/artifact_timed/basic.rs"
 required-features = ["baking_timed"]
 
+################################### Readme example
+
+[[example]]
+name = "readme"
+path = "examples/readme_example.rs"
+required-features = ["mpst"]
+
 ################################### Profil
 
 [profile.release]

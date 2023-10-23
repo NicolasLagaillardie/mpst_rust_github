@@ -138,11 +138,7 @@ Do not forget to **unwrap()** the returned threads.
 ```rust
 // Fork all endpoints
 fn main() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(
-        endpoint_a,
-        endpoint_b,
-        endpoint_c,
-    );
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     thread_a.join().unwrap();
     thread_b.join().unwrap();
@@ -155,8 +151,10 @@ fn main() {
 For running this example, assuming it is in the **examples/** folder, use:
 
 ```sh
-cargo run --example [name of your example]
+cargo run --example [name of your example] --features="mpst"
 ```
+
+where `--features="mpst"` is used for building the `mpst` feature of this library, which includes the `MeshedChannels` and `role`s types, among other things.
 
 ## Getting started
 
