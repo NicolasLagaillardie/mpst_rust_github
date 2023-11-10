@@ -129,14 +129,14 @@ bash ./scripts/create_files/compile_full.sh o_auth_transport_mpst 10 transport_m
 bash ./scripts/create_files/compile_full.sh o_auth_transport_ampst 10 transport_macros_multiple
 
 ## Compile rate-base examples, AMPST version
-bash ./scripts/create_files/compile_full.sh rate_based_car_key 10 baking
-bash ./scripts/create_files/compile_full.sh rate_based_pine_time 10 baking
-bash ./scripts/create_files/compile_full.sh rate_based_gravity_android 10 baking
+bash ./scripts/create_files/compile_full.sh gravity_android_ampst 10 baking
+bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_ampst 10 baking
+bash ./scripts/create_files/compile_full.sh proximity_based_car_key_ampst 10 baking
 
 ## Compile rate-base examples, ATMP version
-bash ./scripts/create_files/compile_full.sh timed_rate_based_car_key 10 baking_timed
-bash ./scripts/create_files/compile_full.sh timed_rate_based_pine_time 10 baking_timed
-bash ./scripts/create_files/compile_full.sh timed_rate_based_gravity_android 10 baking_timed
+bash ./scripts/create_files/compile_full.sh gravity_android_timed 10 baking_timed
+bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_timed 10 baking_timed
+bash ./scripts/create_files/compile_full.sh proximity_based_car_key_timed 10 baking_timed
 
 ## Run and save benchmarks
 cargo clean
