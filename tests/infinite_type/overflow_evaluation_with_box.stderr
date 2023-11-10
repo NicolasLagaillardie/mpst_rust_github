@@ -7,9 +7,6 @@ error[E0275]: overflow evaluating the requirement `Send<i32, Recv<i32, Recv<Test
    = note: required for `Unique<Send<i32, Recv<i32, Recv<Test9, End>>>>` to implement `std::marker::Send`
 note: required because it appears within the type `Box<Send<i32, Recv<i32, Recv<Test9, End>>>>`
   --> $RUST/alloc/src/boxed.rs
-   |
-   | pub struct Box<
-   |            ^^^
 note: required because it appears within the type `Test9`
   --> tests/infinite_type/overflow_evaluation_with_box.rs:83:6
    |
@@ -32,9 +29,6 @@ error[E0275]: overflow evaluating the requirement `Send<i32, Recv<i32, Send<Test
    = note: required for `Unique<Send<i32, Recv<i32, Send<Test10, End>>>>` to implement `std::marker::Send`
 note: required because it appears within the type `Box<Send<i32, Recv<i32, Send<Test10, End>>>>`
   --> $RUST/alloc/src/boxed.rs
-   |
-   | pub struct Box<
-   |            ^^^
 note: required because it appears within the type `Test10`
   --> tests/infinite_type/overflow_evaluation_with_box.rs:87:6
    |
@@ -57,9 +51,6 @@ error[E0275]: overflow evaluating the requirement `Send<i32, Send<i32, Recv<Test
    = note: required for `Unique<Send<i32, Send<i32, Recv<Test11, End>>>>` to implement `std::marker::Send`
 note: required because it appears within the type `Box<Send<i32, Send<i32, Recv<Test11, End>>>>`
   --> $RUST/alloc/src/boxed.rs
-   |
-   | pub struct Box<
-   |            ^^^
 note: required because it appears within the type `Test11`
   --> tests/infinite_type/overflow_evaluation_with_box.rs:91:6
    |
@@ -82,9 +73,6 @@ error[E0275]: overflow evaluating the requirement `Send<i32, Send<i32, Send<Test
    = note: required for `Unique<Send<i32, Send<i32, Send<Test12, End>>>>` to implement `std::marker::Send`
 note: required because it appears within the type `Box<Send<i32, Send<i32, Send<Test12, End>>>>`
   --> $RUST/alloc/src/boxed.rs
-   |
-   | pub struct Box<
-   |            ^^^
 note: required because it appears within the type `Test12`
   --> tests/infinite_type/overflow_evaluation_with_box.rs:95:6
    |
