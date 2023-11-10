@@ -1,7 +1,8 @@
 #![allow(
     clippy::type_complexity,
     clippy::too_many_arguments,
-    clippy::large_enum_variant
+    clippy::large_enum_variant,
+    clippy::upper_case_acronyms
 )]
 
 use mpstthree::binary::struct_trait::end::End;
