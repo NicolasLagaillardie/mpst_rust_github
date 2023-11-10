@@ -168,6 +168,23 @@ name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
 
+################################### Rate-based example
+
+[[example]]
+name = "rate_based_car_key"
+path = "examples/rate_based/proximity_based_car_key.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "rate_based_pine_time"
+path = "examples/rate_based/pinetime_heart_rate.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "rate_based_gravity_android"
+path = "examples/rate_based/gravity_android.rs"
+required-features = ["baking_timed"]
+
 ################################### Ping-Pong
 
 ######### Ping-Pong start
