@@ -176,8 +176,7 @@ fn recurs_sensormanager(
 /////////////////////////
 
 fn main() {
-    let (thread_sensor, thread_sensormanager) =
-        fork_mpst(endpoint_sensor, endpoint_sensormanager);
+    let (thread_sensor, thread_sensormanager) = fork_mpst(endpoint_sensor, endpoint_sensormanager);
 
     thread_sensor.join().unwrap();
     thread_sensormanager.join().unwrap();
