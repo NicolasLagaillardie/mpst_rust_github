@@ -612,6 +612,24 @@ harness = false
 path = "benches/examples/ampst/distributed_calculators.rs"
 required-features = ["full"]
 
+[[bench]]
+name = "example_gravity_android_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/proximity_based_car_key.rs"
+required-features = ["full"]
+
 ######### Interleaved
 
 [[bench]]
@@ -716,6 +734,24 @@ required-features = ["full"]
 name = "example_distributed_calculators_timed"
 harness = false
 path = "benches/examples/timed/distributed_calculators.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_gravity_android_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/proximity_based_car_key.rs"
 required-features = ["full"]
 
 ################## Ring
@@ -3189,6 +3225,21 @@ name = "distributed_calculators_ampst"
 path = "examples/ampst/distributed_calculators.rs"
 required-features = ["baking"]
 
+[[example]]
+name = "gravity_android_ampst"
+path = "examples/rate_based_atmp/gravity_android.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "pinetime_heart_rate_ampst"
+path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "proximity_based_car_key_ampst"
+path = "examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["baking"]
+
 ######### Checking
 
 [[example]]
@@ -3347,6 +3398,21 @@ required-features = ["baking_timed"]
 [[example]]
 name = "distributed_calculators_timed"
 path = "examples/timed/distributed_calculators.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "gravity_android_timed"
+path = "examples/rate_based_ampst/gravity_android.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "pinetime_heart_rate_timed"
+path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "proximity_based_car_key_timed"
+path = "examples/rate_based_ampst/proximity_based_car_key.rs"
 required-features = ["baking_timed"]
 
 ################################### Mesh examples

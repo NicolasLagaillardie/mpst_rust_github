@@ -128,6 +128,16 @@ bash ./scripts/create_files/compile_full.sh video_stream_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh o_auth_transport_mpst 10 transport_macros_multiple
 bash ./scripts/create_files/compile_full.sh o_auth_transport_ampst 10 transport_macros_multiple
 
+## Compile rate-base examples, AMPST version
+bash ./scripts/create_files/compile_full.sh rate_based_car_key 10 baking
+bash ./scripts/create_files/compile_full.sh rate_based_pine_time 10 baking
+bash ./scripts/create_files/compile_full.sh rate_based_gravity_android 10 baking
+
+## Compile rate-base examples, ATMP version
+bash ./scripts/create_files/compile_full.sh timed_rate_based_car_key 10 baking_timed
+bash ./scripts/create_files/compile_full.sh timed_rate_based_pine_time 10 baking_timed
+bash ./scripts/create_files/compile_full.sh timed_rate_based_gravity_android 10 baking_timed
+
 ## Run and save benchmarks
 cargo clean
 mkdir -p save/examples/

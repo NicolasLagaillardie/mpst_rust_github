@@ -220,6 +220,23 @@ harness = false
 path = "benches/examples/timed/distributed_calculators.rs"
 required-features = ["full"]
 
+################################### Rate-based examples
+
+[[example]]
+name = "rate_based_car_key"
+path = "examples/rate_based/proximity_based_car_key.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "rate_based_pine_time"
+path = "examples/rate_based/pinetime_heart_rate.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "rate_based_gravity_android"
+path = "examples/rate_based/gravity_android.rs"
+required-features = ["baking_timed"]
+
 ################################### Readme example
 
 [[example]]
