@@ -3227,17 +3227,17 @@ required-features = ["baking"]
 
 [[example]]
 name = "gravity_android_ampst"
-path = "examples/rate_based_atmp/gravity_android.rs"
+path = "examples/rate_based_ampst/gravity_android.rs"
 required-features = ["baking"]
 
 [[example]]
 name = "pinetime_heart_rate_ampst"
-path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
+path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
 required-features = ["baking"]
 
 [[example]]
 name = "proximity_based_car_key_ampst"
-path = "examples/rate_based_atmp/proximity_based_car_key.rs"
+path = "examples/rate_based_ampst/proximity_based_car_key.rs"
 required-features = ["baking"]
 
 ######### Checking
@@ -3402,17 +3402,17 @@ required-features = ["baking_timed"]
 
 [[example]]
 name = "gravity_android_timed"
-path = "examples/rate_based_ampst/gravity_android.rs"
+path = "examples/rate_based_atmp/gravity_android.rs"
 required-features = ["baking_timed"]
 
 [[example]]
 name = "pinetime_heart_rate_timed"
-path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
+path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
 required-features = ["baking_timed"]
 
 [[example]]
 name = "proximity_based_car_key_timed"
-path = "examples/rate_based_ampst/proximity_based_car_key.rs"
+path = "examples/rate_based_atmp/proximity_based_car_key.rs"
 required-features = ["baking_timed"]
 
 ################################### Mesh examples
