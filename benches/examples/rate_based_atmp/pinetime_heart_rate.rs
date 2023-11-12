@@ -16,6 +16,7 @@ use mpstthree::role::end::RoleEnd;
 
 use std::collections::HashMap;
 use std::error::Error;
+use std::time::Instant;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 generate_timed!(MeshedChannels, Scl, Sda);

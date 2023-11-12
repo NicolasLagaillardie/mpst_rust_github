@@ -13,8 +13,11 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
+use rand::{thread_rng, Rng};
+
 use std::collections::HashMap;
 use std::error::Error;
+use std::time::Instant;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 generate_timed!(MeshedChannels, Car, Key);
