@@ -13,12 +13,8 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{thread_rng, Rng};
-
 use std::collections::HashMap;
 use std::error::Error;
-use std::thread::sleep;
-use std::time::{Duration, Instant};
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 generate_timed!(MeshedChannels, Car, Key);
@@ -113,18 +109,15 @@ fn recurs_car(
     s: Endpoint0Car,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
 
     offer_mpst!(s, all_clocks, {
         Branching0FromKeyToCar::Stop(s) => {
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_stop, s) = s.recv(all_clocks)?;
 
             s.close()
         },
         Branching0FromKeyToCar::Absent(s) => {
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_absent, s) = s.recv(all_clocks)?;
 
             let s = s.send(Wake {}, all_clocks)?;
@@ -132,17 +125,14 @@ fn recurs_car(
             recurs_car(s, all_clocks)
         },
         Branching0FromKeyToCar::Present(s) => {
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_present, s) = s.recv(all_clocks)?;
 
             offer_mpst!(s, all_clocks, {
                 Branching1FromKeyToCar::Present(s) => {
-                    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                     let s = s.send(Challenge {}, all_clocks)?;
 
                     offer_mpst!(s, all_clocks, {
                         Branching2FromKeyToCar::Present(s) => {
-                            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                             let (_response, s) = s.recv(all_clocks)?;
 
                             let s = s.send(Wake {}, all_clocks)?;
@@ -173,14 +163,12 @@ fn recurs_key(
     all_clocks: &mut HashMap<char, Instant>,
     loops: i64,
 ) -> Result<(), Box<dyn Error>> {
-    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
 
     match loops {
         0 => {
             let s: Endpoint1KeyStop =
                 choose_mpst_key_to_all!(s, all_clocks, Branching0FromKeyToCar::Stop,);
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(Stop {}, all_clocks)?;
 
             s.close()
@@ -190,7 +178,6 @@ fn recurs_key(
                 let s: Endpoint1KeyAbsent =
                     choose_mpst_key_to_all!(s, all_clocks, Branching0FromKeyToCar::Absent);
 
-                sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                 let s = s.send(Absent {}, all_clocks)?;
 
                 let (_wake, s) = s.recv(all_clocks)?;
@@ -200,23 +187,18 @@ fn recurs_key(
                 let s: Endpoint1KeyData =
                     choose_mpst_key_to_all!(s, all_clocks, Branching0FromKeyToCar::Present);
 
-                sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                 let s = s.send(Present {}, all_clocks)?;
 
                 let s: Endpoint2KeyData =
                     choose_mpst_key_to_all!(s, all_clocks, Branching1FromKeyToCar::Present);
 
-                sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                 let (_challenge, s) = s.recv(all_clocks)?;
 
-                sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                 let s: Endpoint3KeyData =
                     choose_mpst_key_to_all!(s, all_clocks, Branching2FromKeyToCar::Present);
 
-                sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                 let s = s.send(Response {}, all_clocks)?;
 
-                sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
                 let (_wake, s) = s.recv(all_clocks)?;
 
                 recurs_key(s, all_clocks, i - 1)

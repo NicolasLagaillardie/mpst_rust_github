@@ -13,12 +13,8 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{thread_rng, Rng};
-
 use std::collections::HashMap;
 use std::error::Error;
-use std::thread::sleep;
-use std::time::{Duration, Instant};
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 generate_timed!(MeshedChannels, Sensor, SensorManager);
@@ -103,21 +99,17 @@ fn recurs_sensor(
     s: Endpoint0Car,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
 
     offer_mpst!(s, all_clocks, {
         Branching0FromSensorToSensorManager::Stop(s) => {
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_stop, s) = s.recv(all_clocks)?;
 
             s.close()
         },
         Branching0FromSensorToSensorManager::Loop(s) => {
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_buf, s) = s.recv(all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(Coordinates {}, all_clocks)?;
 
             recurs_sensor(s, all_clocks)
@@ -142,7 +134,6 @@ fn recurs_sensormanager(
     all_clocks: &mut HashMap<char, Instant>,
     loops: i64,
 ) -> Result<(), Box<dyn Error>> {
-    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
 
     match loops {
         0 => {
@@ -152,7 +143,6 @@ fn recurs_sensormanager(
                 Branching0FromSensorToSensorManager::Stop,
             );
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(Stop {}, all_clocks)?;
 
             s.close()
@@ -164,10 +154,8 @@ fn recurs_sensormanager(
                 Branching0FromSensorToSensorManager::Loop
             );
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(GetCoordinates {}, all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_buf, s) = s.recv(all_clocks)?;
 
             recurs_sensormanager(s, all_clocks, i - 1)

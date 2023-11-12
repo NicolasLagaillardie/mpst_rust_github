@@ -14,12 +14,8 @@ use mpstthree::generate_timed;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use rand::{thread_rng, Rng};
-
 use std::collections::HashMap;
 use std::error::Error;
-use std::thread::sleep;
-use std::time::{Duration, Instant};
 
 // Create the new MeshedChannels for three participants and the close and fork functions
 generate_timed!(MeshedChannels, Scl, Sda);
@@ -145,33 +141,25 @@ fn recurs_scl(
     s: Endpoint0Car,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
 
     offer_mpst!(s, all_clocks, {
         Branching0FromSclToSda::Stop(s) => {
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_stop, s) = s.recv(all_clocks)?;
 
             s.close()
         },
         Branching0FromSclToSda::Loop(s) => {
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_buf, s) = s.recv(all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_hdsta, s) = s.recv(all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_susta, s) = s.recv(all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_susto, s) = s.recv(all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_hddat, s) = s.recv(all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let (_sudat, s) = s.recv(all_clocks)?;
 
             recurs_scl(s, all_clocks)
@@ -196,14 +184,12 @@ fn recurs_sda(
     all_clocks: &mut HashMap<char, Instant>,
     loops: i64,
 ) -> Result<(), Box<dyn Error>> {
-    sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
 
     match loops {
         0 => {
             let s: Endpoint1KeyStop =
                 choose_mpst_sda_to_all!(s, all_clocks, Branching0FromSclToSda::Stop,);
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(Stop {}, all_clocks)?;
 
             s.close()
@@ -212,22 +198,16 @@ fn recurs_sda(
             let s: Endpoint1KeyLoop =
                 choose_mpst_sda_to_all!(s, all_clocks, Branching0FromSclToSda::Loop);
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(BUF {}, all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(HDSTA {}, all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(SUSTA {}, all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(SUSTO {}, all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(HDDAT {}, all_clocks)?;
 
-            sleep(Duration::from_millis(thread_rng().gen_range(0..=100)));
             let s = s.send(SUDAT {}, all_clocks)?;
 
             recurs_sda(s, all_clocks, i - 1)

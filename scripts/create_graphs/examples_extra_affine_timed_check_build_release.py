@@ -36,6 +36,9 @@ compile_files = [
     'remote_data',
     'distributed_calculators',
     'circuit_breaker',
+    'gravity_android',
+    'pinetime_heart_rate',
+    'proximity_based_car_key',
 ]
 
 # Expected bench files
@@ -46,6 +49,9 @@ bench_files = [
     'Remote data',
     'Distributed calculators',
     'Circuit breaker',
+    'Gravity Android',
+    'Heart Rate',
+    'Car-Key',
 ]
 
 # Indexing for bar lists
