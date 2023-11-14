@@ -64,30 +64,31 @@ for d in directories:
                     build_time.append(
                         int(line.split('build; ')[1].split('\n')[0]))
 
-                    # If MPST of binary, append to related lists
-            if 'baking_ampst' in d:
-                ampst.append(statistics.mean(build_time)/10**6)
-                nb_participants_ampst.append(str_to_int[name])
-            elif 'baking_mpst' in d:
-                mpst.append(statistics.mean(build_time)/10**6)
-                nb_participants_mpst.append(str_to_int[name])
-            elif 'baking_atmp' in d:
-                atmp.append(statistics.mean(build_time)/10**6)
-                nb_participants_atmp.append(str_to_int[name])
-            elif 'binary' in d:
-                binary.append(statistics.mean(build_time)/10**6)
-                nb_participants_binary.append(str_to_int[name])
-            elif 'cancel' in d:
-                if 'broadcast' in d:
-                    cancel_broadcast.append(
-                        statistics.mean(build_time)/10**6)
-                    nb_participants_cancel_broadcast.append(str_to_int[name])
-                else:
-                    cancel.append(statistics.mean(build_time)/10**6)
-                    nb_participants_cancel.append(str_to_int[name])
-            elif 'crossbeam' in d:
-                crossbeam.append(statistics.mean(build_time)/10**6)
-                nb_participants_crossbeam.append(str_to_int[name])
+            # If MPST of binary, append to related lists
+            if 'protocol' not in d:
+                if 'baking_ampst' in d:
+                    ampst.append(statistics.mean(build_time)/10**6)
+                    nb_participants_ampst.append(str_to_int[name])
+                elif 'baking_mpst' in d:
+                    mpst.append(statistics.mean(build_time)/10**6)
+                    nb_participants_mpst.append(str_to_int[name])
+                elif 'baking_atmp' in d:
+                    atmp.append(statistics.mean(build_time)/10**6)
+                    nb_participants_atmp.append(str_to_int[name])
+                elif 'binary' in d:
+                    binary.append(statistics.mean(build_time)/10**6)
+                    nb_participants_binary.append(str_to_int[name])
+                elif 'cancel' in d:
+                    if 'broadcast' in d:
+                        cancel_broadcast.append(
+                            statistics.mean(build_time)/10**6)
+                        nb_participants_cancel_broadcast.append(str_to_int[name])
+                    else:
+                        cancel.append(statistics.mean(build_time)/10**6)
+                        nb_participants_cancel.append(str_to_int[name])
+                elif 'crossbeam' in d:
+                    crossbeam.append(statistics.mean(build_time)/10**6)
+                    nb_participants_crossbeam.append(str_to_int[name])
         except:
             print('Issue with ', d)
 
@@ -132,10 +133,10 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 # ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
+ax.plot(nb_participants_ampst, ampst, label='MultiCrusty', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
+ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # if len(cancel) > 0:
 #     # Plot the cancel graph
@@ -184,7 +185,7 @@ plt.tight_layout()
 # )
 
 plt.legend(
-    ['AMPST', 'ATMP'],
+    ['Multicrusty', 'Anon'],
     loc='upper left',
     fancybox=True,
     shadow=True,

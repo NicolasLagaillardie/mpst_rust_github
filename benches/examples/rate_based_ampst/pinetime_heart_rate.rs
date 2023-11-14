@@ -151,7 +151,7 @@ static LOOPS: i64 = 100;
 /////////////////////////
 
 pub fn pinetime_heart_rate(c: &mut Criterion) {
-    c.bench_function("Timed Heart Rate", |b| b.iter(aux));
+    c.bench_function("Heart Rate AMPST", |b| b.iter(aux));
 }
 
 /////////////////////////

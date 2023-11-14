@@ -66,29 +66,30 @@ for d in directories:
 
         try:
             # If MPST of binary, append to related lists
-            if 'ATMP' in d and str_to_int[splitted[1]] >= 2:
-                atmp.append(int(test(d))/10**6)
-                nb_participants_atmp.append(str_to_int[splitted[1]])
-            elif 'AMPST' in d and str_to_int[splitted[1]] >= 2:
-                ampst.append(int(test(d))/10**6)
-                nb_participants_ampst.append(str_to_int[splitted[1]])
-            elif 'MPST' in d and str_to_int[splitted[1]] >= 2:
-                if 'broadcast' in d:
-                    broadcast_cancel.append(int(test(d))/10**6)
-                    nb_participants_broadcast_cancel.append(
-                        str_to_int[splitted[1]])
-                elif 'cancel' in d:
-                    cancel.append(int(test(d))/10**6)
-                    nb_participants_cancel.append(str_to_int[splitted[1]])
-                elif 'baking' in d:
-                    mpst.append(int(test(d))/10**6)
-                    nb_participants_mpst.append(str_to_int[splitted[1]])
-            elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
-                binary.append(int(test(d))/10**6)
-                nb_participants_binary.append(str_to_int[splitted[1]])
-            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
-                crossbeam.append(int(test(d))/10**6)
-                nb_participants_crossbeam.append(str_to_int[splitted[1]])
+            if 'protocol' not in d:
+                if 'ATMP' in d and str_to_int[splitted[1]] >= 2:
+                    atmp.append(int(test(d))/10**6)
+                    nb_participants_atmp.append(str_to_int[splitted[1]])
+                elif 'AMPST' in d and str_to_int[splitted[1]] >= 2:
+                    ampst.append(int(test(d))/10**6)
+                    nb_participants_ampst.append(str_to_int[splitted[1]])
+                elif 'MPST' in d and str_to_int[splitted[1]] >= 2:
+                    if 'broadcast' in d:
+                        broadcast_cancel.append(int(test(d))/10**6)
+                        nb_participants_broadcast_cancel.append(
+                            str_to_int[splitted[1]])
+                    elif 'cancel' in d:
+                        cancel.append(int(test(d))/10**6)
+                        nb_participants_cancel.append(str_to_int[splitted[1]])
+                    elif 'baking' in d:
+                        mpst.append(int(test(d))/10**6)
+                        nb_participants_mpst.append(str_to_int[splitted[1]])
+                elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
+                    binary.append(int(test(d))/10**6)
+                    nb_participants_binary.append(str_to_int[splitted[1]])
+                elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
+                    crossbeam.append(int(test(d))/10**6)
+                    nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
             print("Missing ", d)
 
@@ -131,10 +132,10 @@ ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 # ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
-ax.plot(nb_participants_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
+ax.plot(nb_participants_ampst, ampst, label='MultiCrusty', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
 
 # Plot the ATMP graph
-ax.plot(nb_participants_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
+ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 # Label X and Y axis
 ax.set_xlabel('\# roles', fontsize=300)
@@ -201,7 +202,7 @@ plt.tight_layout()
 # )
 
 plt.legend(
-    ['AMPST', 'ATMP'],
+    ['Multicrusty', 'Anon'],
     loc='upper left',
     fancybox=True,
     shadow=True,
