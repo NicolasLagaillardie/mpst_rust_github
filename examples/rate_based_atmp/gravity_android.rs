@@ -180,8 +180,6 @@ fn main() {
 
     thread_sensor.join().unwrap();
     thread_sensormanager.join().unwrap();
-
-    println!("Done");
 }
 
 static LOOPS: i64 = 100;

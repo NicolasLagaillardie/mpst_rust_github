@@ -230,8 +230,6 @@ fn main() {
 
     thread_car.join().unwrap();
     thread_key.join().unwrap();
-
-    println!("Done");
 }
 
 static LOOPS: i64 = 100;

@@ -240,8 +240,6 @@ fn main() {
 
     thread_scl.join().unwrap();
     thread_sda.join().unwrap();
-
-    println!("Done");
 }
 
 static LOOPS: i64 = 100;

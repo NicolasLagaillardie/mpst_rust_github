@@ -199,7 +199,7 @@ pub(crate) fn get_head_payload_continuation(full_block: &str) -> Result<VecOfStr
         // If the full block is a `End` type
         Ok(vec!["RoleEnd".to_string()])
     } else {
-        let mut result = vec![full_block.to_string().split('<').collect::<Vec<_>>()[0].to_string()];
+        let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
         result.append(&mut get_blocks(full_block)?);
 
         Ok(result)
