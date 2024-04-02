@@ -5,7 +5,7 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::role::a::RoleA;

@@ -21,7 +21,7 @@ use crate::binary::struct_trait::session::Session;
 use crate::name::Name;
 use crate::role::Role;
 
-use std::mem::drop;
+// use std::mem::drop;
 
 pub mod impl_a;
 pub mod impl_b;

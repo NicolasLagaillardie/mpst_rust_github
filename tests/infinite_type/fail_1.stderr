@@ -18,7 +18,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::b
    |                       ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
+note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
@@ -44,7 +44,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::b
    |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
+note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
@@ -70,7 +70,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::b
    |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
+note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>

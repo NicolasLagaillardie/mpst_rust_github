@@ -5,7 +5,7 @@ use crate::binary::struct_trait::{recv::Recv, session::Session};
 
 use crossbeam_channel::Select;
 
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::error::Error;
 use std::fmt;
 use std::marker;

@@ -2,7 +2,7 @@
 
 use proc_macro2::TokenStream;
 use quote::quote;
-use std::convert::TryFrom;
+// use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result, Token};
 

@@ -1,5 +1,5 @@
 use proc_macro2::TokenStream;
-use std::convert::TryFrom;
+// use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 

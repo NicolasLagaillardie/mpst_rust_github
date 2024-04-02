@@ -1,7 +1,7 @@
 //! This feature only includes a message structure.
 //! It is parameterised with a label and a payload.
 
-use std::marker::Send;
+// use std::marker::Send;
 
 /// A structure to represent a message as it should be
 /// in session types, with a label and a payload.

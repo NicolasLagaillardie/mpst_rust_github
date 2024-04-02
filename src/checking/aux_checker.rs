@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 use petgraph::graph::NodeIndex;
 use petgraph::Graph;
 

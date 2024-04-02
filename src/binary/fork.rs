@@ -3,7 +3,7 @@
 
 use crate::binary::struct_trait::session::Session;
 
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::error::Error;
 use std::marker;
 use std::panic;

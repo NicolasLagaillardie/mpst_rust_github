@@ -1,4 +1,11 @@
-// Test for parametrisation on the number of roles
+//! Test for parametrisation on the number of roles
+//! Checks that "generate!" macro works:
+//! check that the generated "send" and "recv",
+//! as well as the generated "offer_mpst!" and
+//! "choose_mpst!" macros work accordingly to the
+//! specifications in a non-recursive
+//! multiparty protocol.
+
 use rand::{thread_rng, Rng};
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
@@ -8,7 +15,8 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::{choose_mpst_create_multi_to_all, generate};
 
 use std::error::Error;
-use Option::{None, Some};
+use Option::None;
+// use Option::{None, Some};
 
 // Create new roles
 generate!("basic", MeshedChannels, A, B, D);

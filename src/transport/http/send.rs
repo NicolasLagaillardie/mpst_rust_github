@@ -9,7 +9,7 @@ use crate::binary::struct_trait::{send::Send, session::Session};
 use hyper::client::ResponseFuture;
 use hyper::{Body, Client, Method, Request};
 use hyper_tls::HttpsConnector;
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::error::Error;
 use std::marker;
 use std::panic;

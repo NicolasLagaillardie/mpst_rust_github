@@ -695,11 +695,13 @@ fn recv_lower_positive_both_included_lower_timeout_panics() {
 }
 
 #[test]
+#[should_panic]
 fn recv_lower_positive_both_included_reset_clock_send_missing_panics() {
     binary_timed_mod::panicking::recv::recv_lower_positive_both_included_reset_clock_send_missing_panics();
 }
 
 #[test]
+#[should_panic]
 fn recv_lower_positive_both_included_send_missing_panics() {
     binary_timed_mod::panicking::recv::recv_lower_positive_both_included_send_missing_panics();
 }
@@ -759,11 +761,13 @@ fn recv_lower_positive_lower_included_lower_timeout_panics() {
 }
 
 #[test]
+#[should_panic]
 fn recv_lower_positive_lower_included_lower_reset_clock_send_missing_panics() {
     binary_timed_mod::panicking::recv::recv_lower_positive_lower_included_lower_reset_clock_send_missing_panics();
 }
 
 #[test]
+#[should_panic]
 fn recv_lower_positive_lower_included_lower_send_missing_panics() {
     binary_timed_mod::panicking::recv::recv_lower_positive_lower_included_lower_send_missing_panics(
     );

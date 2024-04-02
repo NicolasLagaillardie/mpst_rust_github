@@ -6,7 +6,7 @@
 //! the `"transport"` feature or the `"transport_udp"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::error::Error;
 use std::marker;
 use std::net::UdpSocket;

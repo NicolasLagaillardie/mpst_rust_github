@@ -7,9 +7,9 @@ use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::session::Session;
 use crate::binary_timed::struct_trait::send::SendTimed;
 
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::collections::HashMap;
-use std::convert::TryFrom;
+// use std::convert::TryFrom;
 use std::error::Error;
 use std::marker;
 use std::panic;
@@ -35,6 +35,12 @@ where
     T: marker::Send,
     S: Session,
 {
+    // If the start of the time window is after its end, return an error
+    if s.start > s.end {
+        cancel(s);
+        panic!("The start of the time window is after its end")
+    }
+
     // if there is no lower bound
     if s.start < 0 {
         // if there is an upper bound

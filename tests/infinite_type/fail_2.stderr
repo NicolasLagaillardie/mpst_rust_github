@@ -1,32 +1,32 @@
 error[E0275]: overflow evaluating the requirement `mpstthree::binary::struct_trait::send::Send<N, Recv<N, Recv<SumOp<N>, ...>>>: std::marker::Send`
-  --> tests/infinite_type/fail_2.rs:13:10
+  --> tests/infinite_type/fail_2.rs:14:10
    |
-13 |     More(Send<N, Recv<N, NiceSumServer<N>>>),
+14 |     More(Send<N, Recv<N, NiceSumServer<N>>>),
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 note: required because it appears within the type `SumOp<N>`
-  --> tests/infinite_type/fail_2.rs:12:6
+  --> tests/infinite_type/fail_2.rs:13:6
    |
-12 | enum SumOp<N: marker::Send + 'static> {
+13 | enum SumOp<N: marker::Send + 'static> {
    |      ^^^^^
    = note: required for `Recv<SumOp<N>, mpstthree::binary::struct_trait::end::End>` to implement `Session`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>: Session`
-  --> tests/infinite_type/fail_2.rs:20:23
+  --> tests/infinite_type/fail_2.rs:21:23
    |
-20 | fn nice_sum_server(s: NiceSumServer<i32>) -> Result<(), Box<dyn Error>> {
+21 | fn nice_sum_server(s: NiceSumServer<i32>) -> Result<(), Box<dyn Error>> {
    |                       ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
+note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
    |            ^^^^
 note: required because it appears within the type `SumOp<i32>`
-  --> tests/infinite_type/fail_2.rs:12:6
+  --> tests/infinite_type/fail_2.rs:13:6
    |
-12 | enum SumOp<N: marker::Send + 'static> {
+13 | enum SumOp<N: marker::Send + 'static> {
    |      ^^^^^
 note: required by a bound in `Recv`
   --> src/binary/struct_trait/recv.rs
@@ -38,21 +38,21 @@ note: required by a bound in `Recv`
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>: Session`
-  --> tests/infinite_type/fail_2.rs:24:29
+  --> tests/infinite_type/fail_2.rs:25:29
    |
-24 | fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Error>> {
+25 | fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Error>> {
    |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
+note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
    |            ^^^^
 note: required because it appears within the type `SumOp<i32>`
-  --> tests/infinite_type/fail_2.rs:12:6
+  --> tests/infinite_type/fail_2.rs:13:6
    |
-12 | enum SumOp<N: marker::Send + 'static> {
+13 | enum SumOp<N: marker::Send + 'static> {
    |      ^^^^^
 note: required by a bound in `Recv`
   --> src/binary/struct_trait/recv.rs
@@ -64,20 +64,20 @@ note: required by a bound in `Recv`
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>: Session`
-  --> tests/infinite_type/fail_2.rs:43:29
+  --> tests/infinite_type/fail_2.rs:44:29
    |
-43 | fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
+44 | fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
    |                             ^^^^^^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `Send<i32, Recv<i32, Recv<SumOp<i32>, End>>>`
+note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
    |            ^^^^
 note: required because it appears within the type `SumOp<i32>`
-  --> tests/infinite_type/fail_2.rs:12:6
+  --> tests/infinite_type/fail_2.rs:13:6
    |
-12 | enum SumOp<N: marker::Send + 'static> {
+13 | enum SumOp<N: marker::Send + 'static> {
    |      ^^^^^
    = note: required for `Recv<SumOp<i32>, mpstthree::binary::struct_trait::end::End>` to implement `Session`

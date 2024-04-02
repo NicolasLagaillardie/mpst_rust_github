@@ -15,7 +15,7 @@ use mpstthree::choose;
 use mpstthree::offer;
 
 use rand::{thread_rng, Rng};
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::error::Error;
 use std::marker;
 use std::sync::mpsc;

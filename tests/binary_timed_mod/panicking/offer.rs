@@ -5,7 +5,7 @@ use mpstthree::binary::struct_trait::session::*;
 use mpstthree::binary_timed::choose::{choose_left, ChooseTimed};
 use mpstthree::binary_timed::offer::offer_either;
 
-use std::boxed::Box;
+// use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
 use std::thread::sleep;
