@@ -41,7 +41,8 @@ where
             panic::set_hook(Box::new(|_info| {
                 // do nothing
             }));
-            match p(there, copy_stream) {
+            match p(there, copy_stream)
+            {
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }

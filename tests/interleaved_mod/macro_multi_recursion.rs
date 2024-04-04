@@ -314,8 +314,10 @@ fn recurs_controller(
 ) -> Result<(), Box<dyn Error>> {
     let (_get_mode, s_circuit_breaker) = s_circuit_breaker.recv()?;
 
-    match loops_circuit_breaker {
-        i if i < 0 => {
+    match loops_circuit_breaker
+    {
+        i if i < 0 =>
+        {
             let s_circuit_breaker: EndpointCBControllerClose<i32> = choose_mpst_controllercb_to_all!(
                 s_circuit_breaker,
                 Branching0fromCtoA::Close,
@@ -330,7 +332,8 @@ fn recurs_controller(
                 loops_logging,
             )
         }
-        i if i % 2 == 0 => {
+        i if i % 2 == 0 =>
+        {
             let s_circuit_breaker: EndpointCBControllerUp<i32> = choose_mpst_controllercb_to_all!(
                 s_circuit_breaker,
                 Branching0fromCtoA::Up,
@@ -347,7 +350,8 @@ fn recurs_controller(
                 loops_logging,
             )
         }
-        _ => {
+        _ =>
+        {
             let s_circuit_breaker: EndpointCBControllerDown<i32> = choose_mpst_controllercb_to_all!(
                 s_circuit_breaker,
                 Branching0fromCtoA::Down,
@@ -392,8 +396,10 @@ fn recurs_2_controller(
     s_logging: EndpointLogController1<i32>,
     loops_logging: i32,
 ) -> Result<(), Box<dyn Error>> {
-    match loops_logging {
-        i if i <= 0 => {
+    match loops_logging
+    {
+        i if i <= 0 =>
+        {
             // Stop
             let s_logging: EndpointLogController1Stop<i32> =
                 choose_mpst_controllerlog_to_all!(s_logging, Branching1fromCtoL::Stop);
@@ -415,7 +421,8 @@ fn recurs_2_controller(
             s_circuit_breaker.close()?;
             s_logging.close()
         }
-        _ => {
+        _ =>
+        {
             // Restart
             let s_logging: EndpointLogController1Restart<i32> =
                 choose_mpst_controllerlog_to_all!(s_logging, Branching1fromCtoL::Restart);
@@ -456,8 +463,10 @@ fn recurs_2_controller_end(
     s_logging: EndpointLogController1<i32>,
     loops_logging: i32,
 ) -> Result<(), Box<dyn Error>> {
-    match loops_logging {
-        i if i <= 0 => {
+    match loops_logging
+    {
+        i if i <= 0 =>
+        {
             // Stop
             let s_logging: EndpointLogController1Stop<i32> =
                 choose_mpst_controllerlog_to_all!(s_logging, Branching1fromCtoL::Stop);
@@ -470,7 +479,8 @@ fn recurs_2_controller_end(
             s_circuit_breaker.close()?;
             s_logging.close()
         }
-        _ => {
+        _ =>
+        {
             // Restart
             let s_logging: EndpointLogController1Restart<i32> =
                 choose_mpst_controllerlog_to_all!(s_logging, Branching1fromCtoL::Restart);
@@ -551,8 +561,10 @@ fn endpoint_logs(s: EndpointLogsInit<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>> {
-    match loops {
-        i if i % 2 == 0 && i > 0 => {
+    match loops
+    {
+        i if i % 2 == 0 && i > 0 =>
+        {
             // Success
             let s: EndpointLogs0Success<i32> =
                 choose_mpst_logs_to_all!(s, Branching0fromLtoC::Success);
@@ -561,7 +573,8 @@ fn recurs_0_logs(s: EndpointLogs0<i32>, loops: i32) -> Result<(), Box<dyn Error>
 
             recurs_0_logs(s, loops - 1)
         }
-        _ => {
+        _ =>
+        {
             // Failure
             let s: EndpointLogs0Failure<i32> =
                 choose_mpst_logs_to_all!(s, Branching0fromLtoC::Failure);

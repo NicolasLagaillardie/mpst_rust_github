@@ -4,4 +4,4 @@
 
 mv rustfmt_0.toml rustfmt.toml
 cargo +nightly fmt --all
-mv rustfmt.toml rustfmt_2.toml
+mv rustfmt.toml rustfmt_0.toml

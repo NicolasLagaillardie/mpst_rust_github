@@ -90,7 +90,8 @@ impl Parse for ChooseTypeCancelMultiToAllBundle {
         // The number of functions
         let n_labels = u64::try_from(all_labels.len()).unwrap() + 2;
 
-        if n_branches != n_fn_names || n_branches != n_new_type || n_new_type != n_fn_names {
+        if n_branches != n_fn_names || n_branches != n_new_type || n_new_type != n_fn_names
+        {
             panic!(
                 "The number of new types, functions and branches are not the same: {} / {} / {} / {}",
                 n_branches,

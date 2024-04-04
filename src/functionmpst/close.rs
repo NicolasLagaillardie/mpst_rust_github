@@ -62,12 +62,16 @@ where
     s.session1.sender.send(Signal::Stop)?;
     s.session2.sender.send(Signal::Stop)?;
 
-    match s.session1.receiver.recv()? {
-        Signal::Stop => {}
+    match s.session1.receiver.recv()?
+    {
+        Signal::Stop =>
+        {}
         err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
-    match s.session2.receiver.recv()? {
-        Signal::Stop => {}
+    match s.session2.receiver.recv()?
+    {
+        Signal::Stop =>
+        {}
         err => panic!("Unexpected label, expected Signal::Stop, got {:?}", err),
     }
 

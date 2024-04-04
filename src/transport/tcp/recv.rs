@@ -37,8 +37,10 @@ where
 {
     let (v, s) = s.channel.recv()?;
     let mut data = [0_u8; 128];
-    match tcp {
-        true => {
+    match tcp
+    {
+        true =>
+        {
             // stream.shutdown(Shutdown::Write)?; // Force stream to be read only. Needed?
             stream.read_exact(&mut data)?
         }

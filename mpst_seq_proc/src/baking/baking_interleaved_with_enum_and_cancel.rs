@@ -111,7 +111,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|sender| {
                 (1..=self.number_roles_one)
                     .filter_map(|receiver| {
-                        if sender != receiver {
+                        if sender != receiver
+                        {
                             Some(send_canceled(
                                 &self.all_roles_one,
                                 sender,
@@ -121,7 +122,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_one,
                                 self.number_roles_one,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -133,7 +136,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles_one)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(recv(
                                 &self.all_roles_one,
                                 receiver,
@@ -143,7 +147,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_one,
                                 self.number_roles_one,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -155,7 +161,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles_one)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(recv_from_all(
                                 &self.all_roles_one,
                                 receiver,
@@ -165,7 +172,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_one,
                                 self.number_roles_one,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -177,7 +186,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles_one)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(offer(
                                 &self.all_roles_one,
                                 sender,
@@ -185,7 +195,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_one,
                                 self.number_roles_one,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -232,7 +244,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|sender| {
                 (1..=self.number_roles_two)
                     .filter_map(|receiver| {
-                        if sender != receiver {
+                        if sender != receiver
+                        {
                             Some(send_canceled(
                                 &self.all_roles_two,
                                 sender,
@@ -242,7 +255,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_two,
                                 self.number_roles_two,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -254,7 +269,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles_two)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(recv(
                                 &self.all_roles_two,
                                 receiver,
@@ -264,7 +280,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_two,
                                 self.number_roles_two,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -276,7 +294,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles_two)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(recv_from_all(
                                 &self.all_roles_two,
                                 receiver,
@@ -286,7 +305,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_two,
                                 self.number_roles_two,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -298,7 +319,8 @@ impl BakingInterleavedWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles_two)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(offer(
                                 &self.all_roles_two,
                                 sender,
@@ -306,7 +328,9 @@ impl BakingInterleavedWithEnumAndCancel {
                                 &self.meshedchannels_name_two,
                                 self.number_roles_two,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })

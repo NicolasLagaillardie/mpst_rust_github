@@ -37,10 +37,14 @@ where
     S: Session,
 {
     let (here, there) = S::new();
-    match s.channel.send(((x, *data), there)) {
-        Ok(()) => {
-            match tcp {
-                true => {
+    match s.channel.send(((x, *data), there))
+    {
+        Ok(()) =>
+        {
+            match tcp
+            {
+                true =>
+                {
                     // stream.shutdown(Shutdown::Read)?; // TODO: Force stream to be write only.
                     // Needed?
                     stream.write_all(data)?;

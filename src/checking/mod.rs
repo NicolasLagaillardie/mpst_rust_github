@@ -274,9 +274,12 @@ pub(crate) fn kmc_cli(name_file: &str, kmc_number: i32) -> Result<(bool, String)
 
     let stdout = String::from(str::from_utf8(&kmc.stdout)?);
 
-    if stdout.contains("False") {
+    if stdout.contains("False")
+    {
         Ok((false, stdout))
-    } else {
+    }
+    else
+    {
         // Write down the stdout of the previous command into
         // a corresponding file in the "outputs" folder
         let mut kmc_file = File::create(format!("outputs/{name_file}_{kmc_number}_kmc.txt"))?;
@@ -302,11 +305,13 @@ pub fn checker(
     let mut update_branches_receivers: HashMap<String, HashMap<String, Vec<String>>> =
         HashMap::with_hasher(state_branches);
 
-    for (choice, branches) in branches_receivers {
+    for (choice, branches) in branches_receivers
+    {
         let state_branch = RandomState::new();
         let mut temp_branch: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branch);
 
-        for (branch, session) in branches {
+        for (branch, session) in branches
+        {
             temp_branch.insert(branch, clean_session(&session)?);
         }
 
@@ -318,7 +323,8 @@ pub fn checker(
     let mut update_branching_sessions: HashMap<String, Vec<String>> =
         HashMap::with_hasher(state_branching_sessions);
 
-    for (branch, session) in branching_sessions {
+    for (branch, session) in branching_sessions
+    {
         let current_clean_session = clean_session(&session)?;
         update_branching_sessions.insert(
             branch.to_string(),
@@ -330,7 +336,8 @@ pub fn checker(
     let state_result = RandomState::new();
     let mut result: HashGraph = HashMap::with_hasher(state_result);
 
-    if !name_file.is_empty() {
+    if !name_file.is_empty()
+    {
         // If a name file has been provided
 
         // Create cfsm folder if missing
@@ -342,7 +349,8 @@ pub fn checker(
         let mut cfsm_sort = vec![vec!["".to_string()]; roles.len()];
 
         // Get all the graphs and add them to the result Hashmap
-        for (role, full_session) in clean_sessions {
+        for (role, full_session) in clean_sessions
+        {
             // Get the graph and the cfsm for the current role
             let (graph, cfsm) = get_graph_session(
                 &role,
@@ -362,8 +370,10 @@ pub fn checker(
         }
 
         // Write the cfsm into the file
-        for elt_cfsm in cfsm_sort.iter() {
-            for elt in elt_cfsm.iter() {
+        for elt_cfsm in cfsm_sort.iter()
+        {
+            for elt in elt_cfsm.iter()
+            {
                 writeln!(cfsm_file, "{elt}")?;
             }
 
@@ -374,23 +384,30 @@ pub fn checker(
         let mut kmc_number = 1;
         let mut kmc_result = kmc_cli(name_file, kmc_number)?;
 
-        while !kmc_result.0 && kmc_number < 50 {
+        while !kmc_result.0 && kmc_number < 50
+        {
             kmc_number += 1;
             kmc_result = kmc_cli(name_file, kmc_number)?;
         }
 
-        if kmc_number == 50 {
+        if kmc_number == 50
+        {
             println!(
                 "The protocol does not seem correct. Here is the last output: {:?}",
                 kmc_result.1
             );
             Ok((result, None))
-        } else {
+        }
+        else
+        {
             Ok((result, Some(kmc_number)))
         }
-    } else {
+    }
+    else
+    {
         // Get all the graphs and add them to the result Hashmap
-        for (role, full_session) in clean_sessions {
+        for (role, full_session) in clean_sessions
+        {
             // Get the graph and the cfsm for the current role
             let (graph, _) = get_graph_session(
                 &role,

@@ -38,11 +38,14 @@ where
 {
     let (here, there) = S::new();
 
-    let respfut = match http {
-        true => {
+    let respfut = match http
+    {
+        true =>
+        {
             let mut temp = Request::builder().method(method).uri(uri);
 
-            for elt in header {
+            for elt in header
+            {
                 temp = temp.header(elt.0, elt.1);
             }
 
@@ -53,7 +56,8 @@ where
 
             client.request(req)
         }
-        false => {
+        false =>
+        {
             let https = HttpsConnector::new();
             let client = Client::builder().build::<_, Body>(https);
 
@@ -63,7 +67,8 @@ where
 
     ////////////////
 
-    match s.channel.send((x, there)) {
+    match s.channel.send((x, there))
+    {
         Ok(_) => Ok((here, respfut)),
         Err(e) => panic!("{}", e.to_string()),
     }

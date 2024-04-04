@@ -421,7 +421,8 @@ pub fn branching(args: TokenStream, input: TokenStream) -> TokenStream {
     let ty = parse_macro_input!(input as syn::Item);
     assert!(args.is_empty());
 
-    if let Err(e) = branching_variants(ty) {
+    if let Err(e) = branching_variants(ty)
+    {
         out.extend(TokenStream::from(e.to_compile_error()));
     }
     out

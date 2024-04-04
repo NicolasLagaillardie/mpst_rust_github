@@ -23,7 +23,8 @@ where
             panic::set_hook(Box::new(|_info| {
                 // do nothing
             }));
-            match p(there) {
+            match p(there)
+            {
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }

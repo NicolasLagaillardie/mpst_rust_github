@@ -11,15 +11,21 @@ pub(crate) fn offer_basic(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_offer")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_offer")
     };
 
@@ -47,7 +53,8 @@ pub(crate) fn offer_basic(
     let offer_sessions: Vec<TokenStream> = (1..number_roles)
         .map(|k| {
             let cond = if k >= receiver { sender - 1 } else { sender };
-            if k == cond {
+            if k == cond
+            {
                 quote! {
                     mpstthree::binary::struct_trait::recv::Recv<
                         either::Either<
@@ -65,7 +72,9 @@ pub(crate) fn offer_basic(
                         mpstthree::binary::struct_trait::end::End
                     >,
                 }
-            } else {
+            }
+            else
+            {
                 quote! { mpstthree::binary::struct_trait::end::End, }
             }
         })
@@ -117,15 +126,21 @@ pub(crate) fn offer(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_offer")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_offer")
     };
 
@@ -153,7 +168,8 @@ pub(crate) fn offer(
     let offer_sessions: Vec<TokenStream> = (1..number_roles)
         .map(|k| {
             let cond = if k >= receiver { sender - 1 } else { sender };
-            if k == cond {
+            if k == cond
+            {
                 quote! {
                     mpstthree::binary::struct_trait::recv::Recv<
                         either::Either<
@@ -171,7 +187,9 @@ pub(crate) fn offer(
                         mpstthree::binary::struct_trait::end::End
                     >,
                 }
-            } else {
+            }
+            else
+            {
                 quote! { mpstthree::binary::struct_trait::end::End, }
             }
         })
@@ -223,15 +241,21 @@ pub(crate) fn offer_timed(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_offer")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_offer")
     };
 
@@ -259,7 +283,8 @@ pub(crate) fn offer_timed(
     let offer_sessions: Vec<TokenStream> = (1..number_roles)
         .map(|k| {
             let cond = if k >= receiver { sender - 1 } else { sender };
-            if k == cond {
+            if k == cond
+            {
                 quote! {
                     mpstthree::binary_timed::struct_trait::recv::RecvTimed<
                         either::Either<
@@ -283,7 +308,9 @@ pub(crate) fn offer_timed(
                         mpstthree::binary::struct_trait::end::End,
                     >,
                 }
-            } else {
+            }
+            else
+            {
                 quote! { mpstthree::binary::struct_trait::end::End, }
             }
         })

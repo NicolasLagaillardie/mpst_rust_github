@@ -146,8 +146,10 @@ fn client(s: EndpointDFull) -> Result<(), Box<dyn Error>> {
 }
 
 fn client_recurs(s: EndpointDRecurs, mut xs: Vec<i32>, index: i32) -> Result<(), Box<dyn Error>> {
-    match xs.pop() {
-        Some(_) => {
+    match xs.pop()
+    {
+        Some(_) =>
+        {
             let s: EndpointDVideo =
                 choose_mpst_client_to_all!(s, Branches0AtoD::Video, Branches0BtoD::Video);
 
@@ -160,7 +162,8 @@ fn client_recurs(s: EndpointDRecurs, mut xs: Vec<i32>, index: i32) -> Result<(),
 
             client_recurs(s, xs, index + 1)
         }
-        None => {
+        None =>
+        {
             let s = choose_mpst_client_to_all!(s, Branches0AtoD::End, Branches0BtoD::End);
 
             assert_eq!(index, 100);

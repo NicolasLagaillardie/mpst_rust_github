@@ -12,12 +12,17 @@ pub(crate) fn diag(number_roles: u64) -> VecOfTuple {
     // Create the upper diag
     (0..(diff * (diff + 1) / 2))
         .map(|i| {
-            if line == column {
+            if line == column
+            {
                 column += 1;
-            } else if column >= (number_roles - 1) {
+            }
+            else if column >= (number_roles - 1)
+            {
                 line += 1;
                 column = line + 1;
-            } else {
+            }
+            else
+            {
                 column += 1;
             }
             (line + 1, column + 1, i + 1)
@@ -35,9 +40,12 @@ pub(crate) fn diag_and_matrix(number_roles: u64) -> (Vec<VecOfTuple>, VecOfTuple
             .map(|i| {
                 diag.iter()
                     .filter_map(|(line, column, index)| {
-                        if i == *line || i == *column {
+                        if i == *line || i == *column
+                        {
                             Some((*line, *column, *index))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -50,18 +58,24 @@ pub(crate) fn diag_and_matrix(number_roles: u64) -> (Vec<VecOfTuple>, VecOfTuple
 
 /// Return (line, column, index) of matrix
 pub(crate) fn get_tuple_matrix(matrix: &[VecOfTuple], i: u64, j: u64) -> (u64, u64, u64) {
-    let list: VecOfTuple = if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap()) {
+    let list: VecOfTuple = if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap())
+    {
         temp.to_vec()
-    } else {
+    }
+    else
+    {
         panic!(
             "Error at get_tuple_matrix for i = {:?} / matrix = {:?}",
             i, matrix
         )
     };
 
-    if let Some((line, column, index)) = list.get(usize::try_from(j - 1).unwrap()) {
+    if let Some((line, column, index)) = list.get(usize::try_from(j - 1).unwrap())
+    {
         (*line, *column, *index)
-    } else {
+    }
+    else
+    {
         panic!(
             "Error at get_tuple_matrix for i = {:?} and j = {:?} with list = {:?} / matrix = {:?}",
             i, j, list, matrix
@@ -71,8 +85,10 @@ pub(crate) fn get_tuple_matrix(matrix: &[VecOfTuple], i: u64, j: u64) -> (u64, u
 
 /// Return (line, column) of diag from index
 pub(crate) fn get_line_column_from_diag(diag: &[(u64, u64, u64)], index: u64) -> (u64, u64) {
-    for i in diag {
-        if i.2 == index {
+    for i in diag
+    {
+        if i.2 == index
+        {
             return (i.0, i.1);
         }
     }
@@ -89,12 +105,17 @@ pub(crate) fn diag_w_offset(number_roles: u64) -> VecOfTuple {
     // Create the upper diag
     (0..=(diff * (diff + 1) / 2))
         .map(|i| {
-            if line == column {
+            if line == column
+            {
                 column += 1;
-            } else if column >= (number_roles - 1) {
+            }
+            else if column >= (number_roles - 1)
+            {
                 line += 1;
                 column = line + 1;
-            } else {
+            }
+            else
+            {
                 column += 1;
             }
             (line + 1, column + 1, i + 1)
@@ -113,9 +134,12 @@ pub(crate) fn diag_and_matrix_w_offset(number_roles: u64) -> (Vec<VecOfTuple>, V
                 diag_w_offset
                     .iter()
                     .filter_map(|(line, column, index)| {
-                        if i == *line || i == *column {
+                        if i == *line || i == *column
+                        {
                             Some((*line, *column, *index))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -128,9 +152,12 @@ pub(crate) fn diag_and_matrix_w_offset(number_roles: u64) -> (Vec<VecOfTuple>, V
 
 /// Return (line, column, index) of diag
 pub(crate) fn get_tuple_diag(diag: &[(u64, u64, u64)], i: u64) -> (u64, u64, u64) {
-    if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap()) {
+    if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap())
+    {
         (*line, *column, *index)
-    } else {
+    }
+    else
+    {
         panic!(
             "Error at get_tuple_diag for i = {:?} / diag = {:?}",
             i, diag

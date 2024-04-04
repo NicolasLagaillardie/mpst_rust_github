@@ -64,12 +64,15 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_a(s: EndpointALoop, loops: i32) -> Result<(), Box<dyn Error>> {
-    if loops > 0 {
+    if loops > 0
+    {
         let s: EndpointAMore = choose_mpst_a_to_all!(s, Branching0fromAtoB::More);
 
         let (_, s) = s.recv()?;
         recurs_a(s, loops - 1)
-    } else {
+    }
+    else
+    {
         let s: EndpointADone = choose_mpst_a_to_all!(s, Branching0fromAtoB::Done);
 
         let (_, s) = s.recv()?;

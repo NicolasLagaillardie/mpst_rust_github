@@ -63,25 +63,41 @@ impl<
 {
     #[doc(hidden)]
     pub fn constraint(&self) -> String {
-        if self.start < 0 {
-            if self.end >= 0 {
-                if self.include_end {
+        if self.start < 0
+        {
+            if self.end >= 0
+            {
+                if self.include_end
+                {
                     format!("{} <= {}", self.clock, self.end)
-                } else {
+                }
+                else
+                {
                     format!("{} < {}", self.clock, self.end)
                 }
-            } else {
+            }
+            else
+            {
                 panic!("Both start and end parameters are negative")
             }
-        } else {
-            if self.end < 0 {
-                if self.include_start {
+        }
+        else
+        {
+            if self.end < 0
+            {
+                if self.include_start
+                {
                     format!("{} <= {}", self.start, self.clock)
-                } else {
+                }
+                else
+                {
                     format!("{} < {}", self.start, self.clock)
                 }
-            } else {
-                match (self.include_start, self.include_end) {
+            }
+            else
+            {
+                match (self.include_start, self.include_end)
+                {
                     (true, true) => format!("{} <= {} <= {}", self.start, self.clock, self.end),
                     (true, false) => format!("{} <= {} < {}", self.start, self.clock, self.end),
                     (false, true) => format!("{} < {} <= {}", self.start, self.clock, self.end),

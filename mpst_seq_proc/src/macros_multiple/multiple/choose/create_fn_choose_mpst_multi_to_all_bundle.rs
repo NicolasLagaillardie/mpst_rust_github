@@ -83,7 +83,8 @@ impl Parse for ChooseTypeMultiToAllBundle {
         // The number of functions
         let n_new_type = u64::try_from(all_new_types.len()).unwrap() + 1;
 
-        if n_branches != n_fn_names || n_branches != n_new_type || n_new_type != n_fn_names {
+        if n_branches != n_fn_names || n_branches != n_new_type || n_new_type != n_fn_names
+        {
             panic!(
                 "The number of new types, functions and branches are not the same: {} / {} / {} / {}",
                 n_branches,
@@ -126,12 +127,15 @@ impl ChooseTypeMultiToAllBundle {
                 // Build Send<*enum*, mpstthree::binary::struct_trait::end::End>,
                 let send_types: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_label =
-                            if let Some(elt) = all_labels.get(usize::try_from(j - 1).unwrap()) {
-                                elt
-                            } else {
-                                panic!("Not enough labels")
-                            };
+                        let temp_label = if let Some(elt) =
+                            all_labels.get(usize::try_from(j - 1).unwrap())
+                        {
+                            elt
+                        }
+                        else
+                        {
+                            panic!("Not enough labels")
+                        };
 
                         quote! {
                             Send< #temp_label , mpstthree::binary::struct_trait::end::End> ,
@@ -184,12 +188,15 @@ impl ChooseTypeMultiToAllBundle {
                 let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                        let temp_channel = if j < self.exclusion {
+                        let temp_channel = if j < self.exclusion
+                        {
                             Ident::new(
                                 &format!("channel_{}_{j}", self.exclusion),
                                 Span::call_site(),
                             )
-                        } else {
+                        }
+                        else
+                        {
                             Ident::new(
                                 &format!("channel_{}_{}", self.exclusion, j + 1),
                                 Span::call_site(),
@@ -201,26 +208,35 @@ impl ChooseTypeMultiToAllBundle {
                     })
                     .collect();
 
-                let temp_fn_name =
-                    if let Some(elt) = self.fn_names.get(usize::try_from(i - 1).unwrap()) {
-                        elt
-                    } else {
-                        panic!("Not enough fn_names")
-                    };
+                let temp_fn_name = if let Some(elt) =
+                    self.fn_names.get(usize::try_from(i - 1).unwrap())
+                {
+                    elt
+                }
+                else
+                {
+                    panic!("Not enough fn_names")
+                };
 
-                let temp_new_type =
-                    if let Some(elt) = self.new_types.get(usize::try_from(i - 1).unwrap()) {
-                        elt
-                    } else {
-                        panic!("Not enough new_type")
-                    };
+                let temp_new_type = if let Some(elt) =
+                    self.new_types.get(usize::try_from(i - 1).unwrap())
+                {
+                    elt
+                }
+                else
+                {
+                    panic!("Not enough new_type")
+                };
 
-                let temp_branches =
-                    if let Some(elt) = self.branches.get(usize::try_from(i - 1).unwrap()) {
-                        elt
-                    } else {
-                        panic!("Not enough branches")
-                    };
+                let temp_branches = if let Some(elt) =
+                    self.branches.get(usize::try_from(i - 1).unwrap())
+                {
+                    elt
+                }
+                else
+                {
+                    panic!("Not enough branches")
+                };
 
                 let all_send: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
@@ -229,9 +245,12 @@ impl ChooseTypeMultiToAllBundle {
                                 let temp = if j >= self.exclusion { j + 1 } else { j };
                                 let temp_ident =
                                     Ident::new(&format!("session{k}"), Span::call_site());
-                                let temp_channel = if k < temp {
+                                let temp_channel = if k < temp
+                                {
                                     Ident::new(&format!("channel_{temp}_{k}"), Span::call_site())
-                                } else {
+                                }
+                                else
+                                {
                                     Ident::new(
                                         &format!("channel_{temp}_{}", k + 1),
                                         Span::call_site(),
@@ -247,11 +266,14 @@ impl ChooseTypeMultiToAllBundle {
                             .map(|k| {
                                 let temp_ident =
                                     Ident::new(&format!("session{k}"), Span::call_site());
-                                if j == k {
+                                if j == k
+                                {
                                     quote! {
                                         #temp_ident : new_session ,
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     quote! {
                                         #temp_ident : s.#temp_ident ,
                                     }
@@ -262,12 +284,15 @@ impl ChooseTypeMultiToAllBundle {
                         let temp_name = Ident::new(&format!("name_{j}"), Span::call_site());
                         let temp_stack = Ident::new(&format!("stack_{j}"), Span::call_site());
                         let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                        let temp_label =
-                            if let Some(elt) = all_labels.get(usize::try_from(j - 1).unwrap()) {
-                                elt
-                            } else {
-                                panic!("Not enough labels")
-                            };
+                        let temp_label = if let Some(elt) =
+                            all_labels.get(usize::try_from(j - 1).unwrap())
+                        {
+                            elt
+                        }
+                        else
+                        {
+                            panic!("Not enough labels")
+                        };
 
                         quote! {
                             let s = {

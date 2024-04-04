@@ -32,8 +32,10 @@ where
     S: Session,
 {
     // Await the response
-    let resp = match http {
-        true => {
+    let resp = match http
+    {
+        true =>
+        {
             let rt = Runtime::new()?;
             rt.block_on(req)?
         }

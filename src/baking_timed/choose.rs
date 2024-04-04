@@ -53,7 +53,7 @@
 ///    }
 /// }
 /// ```
-///
+/// 
 /// *This macro is available only if MultiCrusty is built with
 /// the `"baking_timed"` feature.*
 #[macro_export]

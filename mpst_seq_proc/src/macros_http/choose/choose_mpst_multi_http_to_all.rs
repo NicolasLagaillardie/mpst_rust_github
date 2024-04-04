@@ -123,9 +123,12 @@ impl ChooseTypeMultiHttpToAll {
 
                         let temp_ident = Ident::new(&format!("session{j}"), Span::call_site());
 
-                        let temp_channel = if j < temp {
+                        let temp_channel = if j < temp
+                        {
                             Ident::new(&format!("channel_{temp}_{j}"), Span::call_site())
-                        } else {
+                        }
+                        else
+                        {
                             Ident::new(&format!("channel_{temp}_{}", j + 1), Span::call_site())
                         };
 
@@ -144,7 +147,9 @@ impl ChooseTypeMultiHttpToAll {
                 let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 1).unwrap())
                 {
                     elt
-                } else {
+                }
+                else
+                {
                     panic!("Not enough labels")
                 };
 
@@ -170,12 +175,15 @@ impl ChooseTypeMultiHttpToAll {
         let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
-                let temp_channel = if i < self.exclusion {
+                let temp_channel = if i < self.exclusion
+                {
                     Ident::new(
                         &format!("channel_{}_{i}", self.exclusion),
                         Span::call_site(),
                     )
-                } else {
+                }
+                else
+                {
                     Ident::new(
                         &format!("channel_{}_{}", self.exclusion, i + 1),
                         Span::call_site(),

@@ -125,11 +125,14 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
 
     let s = send_mpst_c_to_a(0, s);
 
-    if x == 1 {
+    if x == 1
+    {
         let s = choose_mpst_c_to_all!(s, Branches0AtoC::Add, Branches0BtoC::Add);
         let s = send_mpst_c_to_b(1, s);
         close_mpst(s)
-    } else {
+    }
+    else
+    {
         let s = choose_mpst_c_to_all!(s, Branches0AtoC::Bye, Branches0BtoC::Bye);
         let s = send_mpst_c_to_b((), s);
         close_mpst(s)
@@ -139,7 +142,8 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn top_down_approach() {
-    for _ in 0..200 {
+    for _ in 0..200
+    {
         let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
         assert!(thread_a.join().is_ok());

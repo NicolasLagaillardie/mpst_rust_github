@@ -35,14 +35,20 @@ where
     S: Session,
 {
     let (here, there) = S::new();
-    match s.channel.send(((x, *data), there)) {
-        Ok(()) => match udp {
-            true => {
-                let result = socket.send(data)?;
-                Ok((here, result, socket))
+    match s.channel.send(((x, *data), there))
+    {
+        Ok(()) =>
+        {
+            match udp
+            {
+                true =>
+                {
+                    let result = socket.send(data)?;
+                    Ok((here, result, socket))
+                }
+                false => Ok((here, 0, socket)),
             }
-            false => Ok((here, 0, socket)),
-        },
+        }
         Err(e) => panic!("{}", e.to_string()),
     }
 }

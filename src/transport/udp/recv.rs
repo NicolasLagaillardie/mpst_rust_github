@@ -36,7 +36,8 @@ where
 {
     let (v, s) = s.channel.recv()?;
     let mut data = [0_u8; 128];
-    let r = match udp {
+    let r = match udp
+    {
         true => socket.recv(&mut data)?,
         false => 0_usize,
     };

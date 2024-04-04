@@ -44,20 +44,24 @@ fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Er
 }
 
 fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-    match xs.pop() {
-        Option::Some(x) if x % 2 == 0 => {
+    match xs.pop()
+    {
+        Option::Some(x) if x % 2 == 0 =>
+        {
             let s = choose!(SumOp::More, s);
             let s = send(x, s);
             let (_, s) = recv(s)?;
             nice_sum_client_accum(s, xs)
         }
-        Option::Some(x) => {
+        Option::Some(x) =>
+        {
             let s = choose!(SumOp::MoreToo, s);
             let s = send(x, s);
             let (_, s) = recv(s)?;
             nice_sum_client_accum(s, xs)
         }
-        Option::None => {
+        Option::None =>
+        {
             let s = choose!(SumOp::Done, s);
             let (sum, s) = recv(s)?;
             close(s)?;

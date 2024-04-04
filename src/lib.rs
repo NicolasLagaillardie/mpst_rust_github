@@ -145,7 +145,7 @@
 //! }
 
 //! ```
-//!
+//! 
 //! Here is the full description. First, you import the correct functions and types.
 //! ```ignore
 //! // Used for the functions that will process the protocol
@@ -178,7 +178,7 @@
 //! // Used for connecting all the roles, represented as MeshedChannels, together
 //! use mpstthree::functionmpst::fork::fork_mpst;
 //! ```
-//!
+//! 
 //! Then, you have to create the **binary session types** defining the interactions for each pair of
 //! participants. Note that each created type can be reused as many time as needed.
 //! For our example, we create several times the same binary session type for clarity,
@@ -197,7 +197,7 @@
 //! type CtoA<N> = Send<N, End>;
 //! type CtoB<N> = Recv<N, End>;
 //! ```
-//!
+//! 
 //! Add the **stacks** which give the correct order of the operations for each participant.
 //! ```ignore
 //! // Stacks
@@ -208,7 +208,7 @@
 //! // for C
 //! type StackC = RoleA<RoleB<RoleEnd>>;
 //! ```
-//!
+//! 
 //! You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels**
 //! for each participant. We also add the names of the related roles.
 //! ```ignore
@@ -220,7 +220,7 @@
 //! // for C
 //! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //! ```
-//!
+//! 
 //! To run the protocol,
 //! we need to detail the behaviour of the participants with functions that input the **Endpoints**
 //! defined above.
@@ -252,7 +252,7 @@
 //! }
 
 //! ```
-//!
+//! 
 //! In the end, you have to link/fork the threads,
 //! related to the functions above, together with **fork_mpst()**.
 //! Do not forget to **unwrap()** the returned threads.
@@ -271,7 +271,7 @@
 //! }
 
 //! ```
-//!
+//! 
 //! The different features available are:
 //!
 //! 1. `default`: default features, for implementing the basic example above.

@@ -19,8 +19,10 @@ enum SelectError {
 
 impl fmt::Display for SelectError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match *self {
-            SelectError::EmptyVec => {
+        match *self
+        {
+            SelectError::EmptyVec =>
+            {
                 write!(f, "please use a vector with at least one element")
             }
         }
@@ -29,13 +31,15 @@ impl fmt::Display for SelectError {
 
 impl Error for SelectError {
     fn description(&self) -> &str {
-        match *self {
+        match *self
+        {
             SelectError::EmptyVec => "empty vectors not allowed",
         }
     }
 
     fn cause(&self) -> Option<&dyn Error> {
-        match *self {
+        match *self
+        {
             SelectError::EmptyVec => None,
         }
     }
@@ -50,21 +54,28 @@ where
     T: marker::Send,
     S: Session,
 {
-    if rs.is_empty() {
+    if rs.is_empty()
+    {
         Err(Box::new(SelectError::EmptyVec))
-    } else {
+    }
+    else
+    {
         let (index, res) = {
             let mut sel = Select::new();
             let iter = rs.iter();
-            for r in iter {
+            for r in iter
+            {
                 sel.recv(&r.channel);
             }
-            loop {
+            loop
+            {
                 let index = sel.ready();
                 let res = rs[index].channel.try_recv();
 
-                if let Err(e) = res {
-                    if e.is_empty() {
+                if let Err(e) = res
+                {
+                    if e.is_empty()
+                    {
                         continue;
                     }
                 }
@@ -74,7 +85,8 @@ where
         };
 
         let _ = rs.swap_remove(index);
-        match res {
+        match res
+        {
             Ok(res) => Ok(res),
             Err(e) => Err(Box::new(e)),
         }

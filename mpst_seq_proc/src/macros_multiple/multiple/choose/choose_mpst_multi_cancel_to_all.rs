@@ -96,7 +96,8 @@ impl ChooseTypeMultiCancelToAll {
                     Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
                 let channel_right =
                     Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
-                if i < self.n_sessions {
+                if i < self.n_sessions
+                {
                     quote! {
                         let ( #channel_left , #channel_right ) =
                             <mpstthree::binary::struct_trait::end::End
@@ -104,7 +105,9 @@ impl ChooseTypeMultiCancelToAll {
 
                         temp.push( #channel_left );
                     }
-                } else {
+                }
+                else
+                {
                     quote! {
                         let ( #channel_left , #channel_right ) =
                             <_ as mpstthree::binary::struct_trait::session::Session>::new();
@@ -143,9 +146,12 @@ impl ChooseTypeMultiCancelToAll {
 
                         let temp_ident = Ident::new(&format!("session{j}"), Span::call_site());
 
-                        let temp_channel = if j < temp {
+                        let temp_channel = if j < temp
+                        {
                             Ident::new(&format!("channel_{temp}_{j}"), Span::call_site())
-                        } else {
+                        }
+                        else
+                        {
                             Ident::new(&format!("channel_{temp}_{}", j + 1), Span::call_site())
                         };
 
@@ -164,7 +170,9 @@ impl ChooseTypeMultiCancelToAll {
                 let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 2).unwrap())
                 {
                     elt
-                } else {
+                }
+                else
+                {
                     panic!("Not enough labels")
                 };
 
@@ -194,12 +202,15 @@ impl ChooseTypeMultiCancelToAll {
         let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
-                let temp_channel = if i < self.exclusion {
+                let temp_channel = if i < self.exclusion
+                {
                     Ident::new(
                         &format!("channel_{}_{i}", self.exclusion),
                         Span::call_site(),
                     )
-                } else {
+                }
+                else
+                {
                     Ident::new(
                         &format!("channel_{}_{}", self.exclusion, i + 1),
                         Span::call_site(),

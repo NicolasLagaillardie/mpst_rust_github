@@ -47,7 +47,8 @@ pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     let double_colon_regex = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
 
     // Replace with regex expression -> term1::term2::term3 by term3
-    for caps in double_colon_regex.captures_iter(session) {
+    for caps in double_colon_regex.captures_iter(session)
+    {
         double_colon_less = double_colon_less.replace(&caps[0], &caps[caps.len() - 1]);
     }
 
@@ -57,7 +58,8 @@ pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
     let mut name_to_role = double_colon_less.clone();
 
     // Replace with regex expression -> term1::term2::term3 by term3
-    for caps in name_regex.captures_iter(&double_colon_less) {
+    for caps in name_regex.captures_iter(&double_colon_less)
+    {
         name_to_role =
             name_to_role.replace(&caps[0], &format!("Role{}<RoleEnd>", &caps[caps.len() - 1]));
     }
@@ -102,7 +104,8 @@ pub(crate) fn clean_sessions(
 
     let mut size_sessions = 0;
 
-    for session in sessions {
+    for session in sessions
+    {
         let full_block = clean_session(&session)?;
 
         // The number of expected roles
@@ -122,7 +125,8 @@ pub(crate) fn clean_sessions(
     }
 
     // If the number of roles is different from the number of sessions
-    if roles.len() != size_sessions {
+    if roles.len() != size_sessions
+    {
         panic!("The numbers of roles and sessions are not equal")
     }
 
@@ -158,30 +162,47 @@ pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
     // Start at -1 because we want to remove the first `<` and the term before
     let mut index = -1;
 
-    for i in full_block.chars() {
-        if i == '&' || i.is_whitespace() {
-        } else if i == '>' && index == 0 {
+    for i in full_block.chars()
+    {
+        if i == '&' || i.is_whitespace()
+        {
+        }
+        else if i == '>' && index == 0
+        {
             result.push(temp.to_string());
             temp = "".to_string();
-        } else if i == '<' && index >= 0 {
+        }
+        else if i == '<' && index >= 0
+        {
             temp = format!("{temp}{i}");
             index += 1;
-        } else if i == '>' && index >= 0 {
+        }
+        else if i == '>' && index >= 0
+        {
             temp = format!("{temp}{i}");
             index -= 1;
-        } else if i == ',' && index == 0 {
+        }
+        else if i == ',' && index == 0
+        {
             result.push(temp);
             temp = "".to_string();
-        } else if index >= 0 {
+        }
+        else if index >= 0
+        {
             temp = format!("{temp}{i}");
-        } else if i == '<' {
+        }
+        else if i == '<'
+        {
             index += 1;
-        } else if i == '>' {
+        }
+        else if i == '>'
+        {
             index -= 1;
         }
     }
 
-    if !temp.is_empty() {
+    if !temp.is_empty()
+    {
         let mut chars = temp.chars();
         chars.next_back();
 
@@ -194,13 +215,18 @@ pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
 // Get the head of a Recv/Send session, its payload and its continuation.
 #[doc(hidden)]
 pub(crate) fn get_head_payload_continuation(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
-    if full_block == "End" {
+    if full_block == "End"
+    {
         // If the full block is a `End` type
         Ok(vec!["End".to_string()])
-    } else if full_block == "RoleEnd" {
+    }
+    else if full_block == "RoleEnd"
+    {
         // If the full block is a `End` type
         Ok(vec!["RoleEnd".to_string()])
-    } else {
+    }
+    else
+    {
         let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
         result.append(&mut get_blocks(full_block)?);
 
@@ -216,11 +242,16 @@ pub(crate) fn extract_index_node(
     index_node: &[usize],
     depth_level: usize,
 ) -> Result<String, Box<dyn Error>> {
-    if index_node.len() < depth_level {
+    if index_node.len() < depth_level
+    {
         panic!("Error in extract_index_node: lenght of index_node < depth_level")
-    } else if index_node.len() == 1 {
+    }
+    else if index_node.len() == 1
+    {
         Ok(index_node[0].to_string())
-    } else {
+    }
+    else
+    {
         let first_elt = index_node[0].to_string();
 
         Ok(index_node[1..=depth_level]
@@ -235,21 +266,31 @@ pub(crate) fn extract_index_node(
 // Switch all Send and Recv at the head of each session
 #[doc(hidden)]
 pub(crate) fn build_dual(session: &str) -> Result<String, Box<dyn Error>> {
-    if session == "End" {
+    if session == "End"
+    {
         Ok(session.to_string())
-    } else {
+    }
+    else
+    {
         let all_fields = get_head_payload_continuation(session)?;
-        match all_fields[0].as_str() {
-            "Recv" => Ok(format!(
-                "Send<{},{}>",
-                all_fields[1],
-                build_dual(&all_fields[2])?
-            )),
-            "Send" => Ok(format!(
-                "Recv<{},{}>",
-                all_fields[1],
-                build_dual(&all_fields[2])?
-            )),
+        match all_fields[0].as_str()
+        {
+            "Recv" =>
+            {
+                Ok(format!(
+                    "Send<{},{}>",
+                    all_fields[1],
+                    build_dual(&all_fields[2])?
+                ))
+            }
+            "Send" =>
+            {
+                Ok(format!(
+                    "Recv<{},{}>",
+                    all_fields[1],
+                    build_dual(&all_fields[2])?
+                ))
+            }
             _ => panic!("Wrong head"),
         }
     }
@@ -273,20 +314,24 @@ pub(crate) fn aux_get_graph(
     group_branches: HashMap<String, i32>,
     mut cfsm: VecOfTuple,
 ) -> Result<(GraphOfStrStr, VecOfTuple), Box<dyn Error>> {
-    if compare_end == full_session {
+    if compare_end == full_session
+    {
         index_node[depth_level] += 1;
         let new_node = g.add_node(extract_index_node(&index_node, depth_level)?);
         g.add_edge(previous_node, new_node, "0".to_string());
 
         Ok((g, cfsm))
-    } else {
+    }
+    else
+    {
         // Get the size of the full_session
         let size_full_session = full_session.len() - 1;
 
         // Get the head of the stack
         let stack = &get_head_payload_continuation(&full_session[size_full_session])?;
 
-        if stack.len() == 3 {
+        if stack.len() == 3
+        {
             // If it is a simple choice
 
             let mut number_of_send = 0;
@@ -306,8 +351,10 @@ pub(crate) fn aux_get_graph(
                     number_of_send,
                     number_of_recv,
                     pos,
-                ) {
-                    ("Send", n_send, 0, n_pos) if n_send == n_pos => {
+                )
+                {
+                    ("Send", n_send, 0, n_pos) if n_send == n_pos =>
+                    {
                         number_of_send += 1;
 
                         // Should be `Either<MC, MC>`
@@ -324,12 +371,15 @@ pub(crate) fn aux_get_graph(
                         let receiver =
                             &get_head_payload_continuation(&blocks_left[blocks_left.len() - 1])?[0];
 
-                        let index_receiver =
-                            if let Some(elt) = roles.iter().position(|r| r == receiver) {
-                                elt
-                            } else {
-                                panic!("Issue with roles {:?} and receiver {:?}", roles, receiver)
-                            };
+                        let index_receiver = if let Some(elt) =
+                            roles.iter().position(|r| r == receiver)
+                        {
+                            elt
+                        }
+                        else
+                        {
+                            panic!("Issue with roles {:?} and receiver {:?}", roles, receiver)
+                        };
 
                         // The offset depending on the relative positions of the roles
                         let offset = (index_current_role > index_receiver) as usize;
@@ -338,16 +388,19 @@ pub(crate) fn aux_get_graph(
                         choice_left.push(build_dual(&blocks_left[index_current_role - offset])?);
                         choice_right.push(build_dual(&blocks_right[index_current_role - offset])?);
                     }
-                    ("Recv", 0, 0, new_pos) => {
+                    ("Recv", 0, 0, new_pos) =>
+                    {
                         number_of_recv += 1;
                         pos_recv = new_pos;
                     }
-                    ("End", 0, _, _) => {}
+                    ("End", 0, _, _) =>
+                    {}
                     _ => panic!("Wrong session heads"),
                 }
             }
 
-            if number_of_recv == 0 && number_of_send == 0 {
+            if number_of_recv == 0 && number_of_send == 0
+            {
                 panic!("Expected choose or offer, only found End")
             }
 
@@ -357,7 +410,8 @@ pub(crate) fn aux_get_graph(
             // Increase the depth level
             depth_level += 1;
 
-            if number_of_recv == 1 {
+            if number_of_recv == 1
+            {
                 // If this is a passive role
 
                 // Should be `Either<MC, MC>`
@@ -407,7 +461,9 @@ pub(crate) fn aux_get_graph(
                     group_branches,
                     cfsm,
                 )
-            } else {
+            }
+            else
+            {
                 // If this is the active role
 
                 // Add the corresponding stacks
@@ -451,14 +507,19 @@ pub(crate) fn aux_get_graph(
                     cfsm,
                 )
             }
-        } else if stack.len() == 2 {
+        }
+        else if stack.len() == 2
+        {
             // If it is a simple interaction
             let head_stack = &stack[0];
 
             // The index of the head_stack among the roles
-            let index_head = if let Some(elt) = roles.iter().position(|r| r == head_stack) {
+            let index_head = if let Some(elt) = roles.iter().position(|r| r == head_stack)
+            {
                 elt
-            } else {
+            }
+            else
+            {
                 panic!(
                     "Issue with roles {:?} and head_stack {:?}",
                     roles, head_stack
@@ -473,7 +534,8 @@ pub(crate) fn aux_get_graph(
                 get_head_payload_continuation(&full_session[index_head - offset])?;
 
             // If Send/Recv, everything is good, else, panic
-            if running_session[0] == *"Send" {
+            if running_session[0] == *"Send"
+            {
                 // If send simple payload
 
                 // Increase the index for the nodes
@@ -510,13 +572,17 @@ pub(crate) fn aux_get_graph(
 
                 // Update the previous node
                 previous_node = new_node;
-            } else if running_session[0] == *"Recv" {
-                if let Some(choice) = branches_receivers.get(&running_session[1]) {
+            }
+            else if running_session[0] == *"Recv"
+            {
+                if let Some(choice) = branches_receivers.get(&running_session[1])
+                {
                     // If receive recursive choice
                     let mut all_branches = Vec::new();
                     let mut all_branches_vec = Vec::new();
 
-                    for (branch, session) in choice {
+                    for (branch, session) in choice
+                    {
                         all_branches.push((
                             format!("{}::{}", &running_session[1], &branch),
                             session.to_vec(),
@@ -530,20 +596,26 @@ pub(crate) fn aux_get_graph(
 
                     let mut node_added = false;
 
-                    for (current_branch, session) in all_branches.clone() {
-                        if let Some(new_node) = branches_already_seen.get(&current_branch) {
+                    for (current_branch, session) in all_branches.clone()
+                    {
+                        if let Some(new_node) = branches_already_seen.get(&current_branch)
+                        {
                             if !g.contains_edge(previous_node, *new_node)
                                 && previous_node != *new_node
                             {
                                 g.add_edge(previous_node, *new_node, "µ".to_string());
 
-                                if let Some(elt) = cfsm.pop() {
+                                if let Some(elt) = cfsm.pop()
+                                {
                                     cfsm.push((elt.0, new_node.index()));
                                 }
                             }
-                        } else {
+                        }
+                        else
+                        {
                             // If the node was not added
-                            if !node_added {
+                            if !node_added
+                            {
                                 // Increase the index for the nodes
                                 index_node.push(0);
 
@@ -555,7 +627,8 @@ pub(crate) fn aux_get_graph(
 
                             let mut temp_branches_already_seen = branches_already_seen.clone();
 
-                            for temp_current_branch in all_branches.clone() {
+                            for temp_current_branch in all_branches.clone()
+                            {
                                 temp_branches_already_seen
                                     .insert(temp_current_branch.0.clone(), previous_node);
                             }
@@ -581,15 +654,20 @@ pub(crate) fn aux_get_graph(
                             cfsm = result.1;
 
                             // Insert the new node/branch in the list of the ones already seen
-                            let index_group =
-                                if let Some(index) = group_branches.get(&current_branch) {
-                                    index
-                                } else {
-                                    panic!("Missing index")
-                                };
+                            let index_group = if let Some(index) =
+                                group_branches.get(&current_branch)
+                            {
+                                index
+                            }
+                            else
+                            {
+                                panic!("Missing index")
+                            };
 
-                            for (temp_current_branch, temp_index) in group_branches.clone() {
-                                if temp_index == *index_group {
+                            for (temp_current_branch, temp_index) in group_branches.clone()
+                            {
+                                if temp_index == *index_group
+                                {
                                     branches_already_seen
                                         .insert(temp_current_branch.clone(), previous_node);
                                 }
@@ -598,7 +676,9 @@ pub(crate) fn aux_get_graph(
                     }
 
                     return Ok((g, cfsm));
-                } else {
+                }
+                else
+                {
                     // If receive simple payload
 
                     index_node[depth_level] += 1;
@@ -627,7 +707,9 @@ pub(crate) fn aux_get_graph(
                     full_session[size_full_session] = stack[1].to_string();
                     previous_node = new_node;
                 }
-            } else {
+            }
+            else
+            {
                 panic!(
                     "Did not found a correct session for role {:?}. Found session: {:?}",
                     current_role, full_session
@@ -650,7 +732,9 @@ pub(crate) fn aux_get_graph(
                 group_branches,
                 cfsm,
             )
-        } else if stack.len() == 1 && stack[0] == "RoleBroadcast" {
+        }
+        else if stack.len() == 1 && stack[0] == "RoleBroadcast"
+        {
             // If it is a broadcasting role
 
             let mut number_of_send = 0;
@@ -667,19 +751,25 @@ pub(crate) fn aux_get_graph(
                     get_head_payload_continuation(session)?[0].as_str(),
                     number_of_send,
                     pos,
-                ) {
-                    ("Send", n_send, n_pos) if n_send == n_pos => {
+                )
+                {
+                    ("Send", n_send, n_pos) if n_send == n_pos =>
+                    {
                         number_of_send += 1;
 
                         // Should be a specific `enum`
                         let payload = &get_head_payload_continuation(session)?[1];
 
                         // Update all_choices
-                        if let Some(choice) = branches_receivers.get(payload) {
-                            for branch in choice.keys() {
+                        if let Some(choice) = branches_receivers.get(payload)
+                        {
+                            for branch in choice.keys()
+                            {
                                 all_branches.push(format!("{payload}::{branch}"));
                             }
-                        } else {
+                        }
+                        else
+                        {
                             panic!("Missing the enum {:?} in branches_receivers", payload)
                         }
                     }
@@ -691,18 +781,25 @@ pub(crate) fn aux_get_graph(
 
             all_branches.sort();
 
-            for current_branch in all_branches.clone() {
-                if let Some(new_node) = branches_already_seen.get(&current_branch) {
-                    if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node {
+            for current_branch in all_branches.clone()
+            {
+                if let Some(new_node) = branches_already_seen.get(&current_branch)
+                {
+                    if !g.contains_edge(previous_node, *new_node) && previous_node != *new_node
+                    {
                         g.add_edge(previous_node, *new_node, "µ".to_string());
 
-                        if let Some(elt) = cfsm.pop() {
+                        if let Some(elt) = cfsm.pop()
+                        {
                             cfsm.push((elt.0, new_node.index()));
                         }
                     }
-                } else {
+                }
+                else
+                {
                     // If the node was not added
-                    if !node_added {
+                    if !node_added
+                    {
                         // Increase the index for the nodes
                         index_node.push(0);
 
@@ -712,15 +809,19 @@ pub(crate) fn aux_get_graph(
                         node_added = true;
                     }
 
-                    let session = if let Some(session) = branching_sessions.get(&current_branch) {
+                    let session = if let Some(session) = branching_sessions.get(&current_branch)
+                    {
                         session[..(session.len() - 1)].to_vec()
-                    } else {
+                    }
+                    else
+                    {
                         panic!("Missing session")
                     };
 
                     let mut temp_branches_already_seen = branches_already_seen.clone();
 
-                    for temp_current_branch in all_branches.clone() {
+                    for temp_current_branch in all_branches.clone()
+                    {
                         temp_branches_already_seen
                             .insert(temp_current_branch.clone(), previous_node);
                     }
@@ -746,14 +847,19 @@ pub(crate) fn aux_get_graph(
                     cfsm = result.1;
 
                     // Insert the new node/branch in the list of the ones already seen
-                    let index_group = if let Some(index) = group_branches.get(&current_branch) {
+                    let index_group = if let Some(index) = group_branches.get(&current_branch)
+                    {
                         index
-                    } else {
+                    }
+                    else
+                    {
                         panic!("Missing index")
                     };
 
-                    for (temp_current_branch, temp_index) in group_branches.clone() {
-                        if temp_index == *index_group {
+                    for (temp_current_branch, temp_index) in group_branches.clone()
+                    {
+                        if temp_index == *index_group
+                        {
                             branches_already_seen
                                 .insert(temp_current_branch.clone(), previous_node);
                         }
@@ -762,7 +868,9 @@ pub(crate) fn aux_get_graph(
             }
 
             Ok((g, cfsm))
-        } else {
+        }
+        else
+        {
             panic!(
                 "Did not found a correct stack for role {}. \
                 Found stack and session: {:?} / {:?}",
@@ -797,9 +905,12 @@ pub(crate) fn get_graph_session(
 
     // The index of the current_role among the roles
 
-    let index_current_role = if let Some(elt) = roles.iter().position(|r| r == current_role) {
+    let index_current_role = if let Some(elt) = roles.iter().position(|r| r == current_role)
+    {
         elt
-    } else {
+    }
+    else
+    {
         panic!(
             "Issue with roles {:?} and current_role {:?}",
             roles, current_role

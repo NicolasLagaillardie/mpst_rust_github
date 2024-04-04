@@ -13,15 +13,21 @@ pub(crate) fn recv_basic(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("Role{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_recv")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_recv")
     };
 
@@ -31,9 +37,12 @@ pub(crate) fn recv_basic(
 
             let temp_type = Ident::new(&format!("S{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_type , }
             }
         })
@@ -45,17 +54,23 @@ pub(crate) fn recv_basic(
 
             let temp_session = Ident::new(&format!("session{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { #temp_session : new_session , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_session : self.#temp_session , }
             }
         })
         .collect();
 
-    let index = if sender >= receiver {
+    let index = if sender >= receiver
+    {
         sender - 1
-    } else {
+    }
+    else
+    {
         sender
     };
 
@@ -102,15 +117,21 @@ pub(crate) fn recv(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("Role{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_recv")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_recv")
     };
 
@@ -120,9 +141,12 @@ pub(crate) fn recv(
 
             let temp_type = Ident::new(&format!("S{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_type , }
             }
         })
@@ -134,17 +158,23 @@ pub(crate) fn recv(
 
             let temp_session = Ident::new(&format!("session{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { #temp_session : new_session , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_session : self.#temp_session , }
             }
         })
         .collect();
 
-    let index = if sender >= receiver {
+    let index = if sender >= receiver
+    {
         sender - 1
-    } else {
+    }
+    else
+    {
         sender
     };
 
@@ -192,15 +222,21 @@ pub(crate) fn recv_from_all_basic(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_recv_from_all")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
     };
 
@@ -210,9 +246,12 @@ pub(crate) fn recv_from_all_basic(
 
             let temp_type = Ident::new(&format!("S{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_type , }
             }
         })
@@ -224,17 +263,23 @@ pub(crate) fn recv_from_all_basic(
 
             let temp_session = Ident::new(&format!("session{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { #temp_session : new_session , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_session : self.#temp_session , }
             }
         })
         .collect();
 
-    let index = if sender >= receiver {
+    let index = if sender >= receiver
+    {
         sender - 1
-    } else {
+    }
+    else
+    {
         sender
     };
 
@@ -283,15 +328,21 @@ pub(crate) fn recv_from_all(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_recv_from_all")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
     };
 
@@ -301,9 +352,12 @@ pub(crate) fn recv_from_all(
 
             let temp_type = Ident::new(&format!("S{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_type , }
             }
         })
@@ -315,17 +369,23 @@ pub(crate) fn recv_from_all(
 
             let temp_session = Ident::new(&format!("session{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { #temp_session : new_session , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_session : self.#temp_session , }
             }
         })
         .collect();
 
-    let index = if sender >= receiver {
+    let index = if sender >= receiver
+    {
         sender - 1
-    } else {
+    }
+    else
+    {
         sender
     };
 
@@ -375,15 +435,21 @@ pub(crate) fn recv_timed(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("Role{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_recv")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_recv")
     };
 
@@ -393,7 +459,8 @@ pub(crate) fn recv_timed(
 
             let temp_type = Ident::new(&format!("S{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! {
                     mpstthree::binary_timed::struct_trait::recv::RecvTimed<
                         T,
@@ -406,7 +473,9 @@ pub(crate) fn recv_timed(
                         #temp_type,
                     > ,
                 }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_type , }
             }
         })
@@ -418,17 +487,23 @@ pub(crate) fn recv_timed(
 
             let temp_session = Ident::new(&format!("session{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { #temp_session : new_session , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_session : self.#temp_session , }
             }
         })
         .collect();
 
-    let index = if sender >= receiver {
+    let index = if sender >= receiver
+    {
         sender - 1
-    } else {
+    }
+    else
+    {
         sender
     };
 
@@ -492,15 +567,21 @@ pub(crate) fn recv_from_all_timed(
     meshedchannels_name: &Ident,
     number_roles: u64,
 ) -> TokenStream {
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
+    {
         Ident::new(&format!("RoleAllto{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for sender_ident in expand_recv_from_all")
     };
 
-    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
+    let receiver_ident = if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap())
+    {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    } else {
+    }
+    else
+    {
         panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
     };
 
@@ -510,7 +591,8 @@ pub(crate) fn recv_from_all_timed(
 
             let temp_type = Ident::new(&format!("S{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! {
                     mpstthree::binary_timed::struct_trait::recv::RecvTimed<
                         T,
@@ -523,7 +605,9 @@ pub(crate) fn recv_from_all_timed(
                         #temp_type,
                     > ,
                 }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_type , }
             }
         })
@@ -535,17 +619,23 @@ pub(crate) fn recv_from_all_timed(
 
             let temp_session = Ident::new(&format!("session{k}"), Span::call_site());
 
-            if k == cond {
+            if k == cond
+            {
                 quote! { #temp_session : new_session , }
-            } else {
+            }
+            else
+            {
                 quote! { #temp_session : self.#temp_session , }
             }
         })
         .collect();
 
-    let index = if sender >= receiver {
+    let index = if sender >= receiver
+    {
         sender - 1
-    } else {
+    }
+    else
+    {
         sender
     };
 

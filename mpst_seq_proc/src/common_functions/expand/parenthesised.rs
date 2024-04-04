@@ -5,9 +5,12 @@ use quote::quote;
 pub(crate) fn parenthesised(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 
-    if let Some(TokenTree::Group(group)) = stream.into_iter().next() {
-        for elt in group.stream().into_iter() {
-            if let TokenTree::Ident(i) = elt {
+    if let Some(TokenTree::Group(group)) = stream.into_iter().next()
+    {
+        for elt in group.stream().into_iter()
+        {
+            if let TokenTree::Ident(i) = elt
+            {
                 result.push(quote! {#i});
             }
         }
@@ -22,19 +25,26 @@ pub(crate) fn get_all_roles(stream: TokenStream) -> Vec<TokenStream> {
 
     let cloned_stream = stream.clone();
 
-    for elt_stream in stream.into_iter() {
-        if let TokenTree::Group(group) = elt_stream {
-            for elt_group in group.stream().into_iter() {
-                if let TokenTree::Ident(i) = elt_group {
+    for elt_stream in stream.into_iter()
+    {
+        if let TokenTree::Group(group) = elt_stream
+        {
+            for elt_group in group.stream().into_iter()
+            {
+                if let TokenTree::Ident(i) = elt_group
+                {
                     result.push(quote! {#i});
                 }
             }
         }
     }
 
-    if result.is_empty() {
+    if result.is_empty()
+    {
         get_all_roles_ident(cloned_stream)
-    } else {
+    }
+    else
+    {
         result
     }
 }
@@ -43,8 +53,10 @@ pub(crate) fn get_all_roles(stream: TokenStream) -> Vec<TokenStream> {
 fn get_all_roles_ident(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 
-    for elt_stream in stream.into_iter() {
-        if let TokenTree::Ident(ident) = elt_stream {
+    for elt_stream in stream.into_iter()
+    {
+        if let TokenTree::Ident(ident) = elt_stream
+        {
             result.push(quote! {#ident});
         }
     }
@@ -56,14 +68,22 @@ fn get_all_roles_ident(stream: TokenStream) -> Vec<TokenStream> {
 pub(crate) fn parenthesised_groups(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 
-    for tt in stream.into_iter() {
-        if let TokenTree::Group(group) = tt {
-            for elt in group.stream().into_iter() {
-                if let TokenTree::Group(i) = elt {
+    for tt in stream.into_iter()
+    {
+        if let TokenTree::Group(group) = tt
+        {
+            for elt in group.stream().into_iter()
+            {
+                if let TokenTree::Group(i) = elt
+                {
                     result.push(quote! {#i});
-                } else if let TokenTree::Ident(i) = elt {
+                }
+                else if let TokenTree::Ident(i) = elt
+                {
                     result.push(quote! {#i});
-                } else {
+                }
+                else
+                {
                     println!("Unexpected element: {elt:?}");
                     panic!("Unexpected element: {:?}", elt);
                 }

@@ -126,8 +126,10 @@ fn step_two_recurs(
     mut xs: Vec<i32>,
     index: i32,
 ) -> Result<(), Box<dyn Error>> {
-    match xs.pop() {
-        Option::Some(_) => {
+    match xs.pop()
+    {
+        Option::Some(_) =>
+        {
             let s_c = choose_mpst_to_all!(
                 s_c,
                 Branches0AtoC::Video,
@@ -146,7 +148,8 @@ fn step_two_recurs(
 
             step_three_recurs(s_a, s_b, s_c, xs, index)
         }
-        Option::None => {
+        Option::None =>
+        {
             let s_c = choose_mpst_to_all!(
                 s_c,
                 Branches0AtoC::End,

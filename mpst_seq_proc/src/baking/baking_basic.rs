@@ -63,7 +63,8 @@ impl Baking {
             .map(|sender| {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
-                        if sender != receiver {
+                        if sender != receiver
+                        {
                             Some(send_basic(
                                 &self.all_roles,
                                 sender,
@@ -73,7 +74,9 @@ impl Baking {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -85,7 +88,8 @@ impl Baking {
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(recv_basic(
                                 &self.all_roles,
                                 receiver,
@@ -95,7 +99,9 @@ impl Baking {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -107,7 +113,8 @@ impl Baking {
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(recv_from_all_basic(
                                 &self.all_roles,
                                 receiver,
@@ -117,7 +124,9 @@ impl Baking {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })
@@ -129,7 +138,8 @@ impl Baking {
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
-                        if receiver != sender {
+                        if receiver != sender
+                        {
                             Some(offer_basic(
                                 &self.all_roles,
                                 sender,
@@ -137,7 +147,9 @@ impl Baking {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        } else {
+                        }
+                        else
+                        {
                             None
                         }
                     })

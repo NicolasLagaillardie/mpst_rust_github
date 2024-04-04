@@ -143,8 +143,10 @@ fn endpoint_d(s: EndpointD) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
-    match index {
-        0 => {
+    match index
+    {
+        0 =>
+        {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
                 Branching0fromDtoB::Done,
@@ -159,7 +161,8 @@ fn recurs_d(s: EndpointD, index: i64) -> Result<(), Box<dyn Error>> {
 
             close_mpst_multi(s)
         }
-        i => {
+        i =>
+        {
             let s = choose_mpst_multi_cancel_to_all!(
                 s,
                 Branching0fromDtoB::More,
