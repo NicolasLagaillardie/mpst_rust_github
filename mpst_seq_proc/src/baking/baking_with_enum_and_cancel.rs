@@ -62,8 +62,7 @@ impl BakingWithEnumAndCancel {
             .map(|sender| {
                 (1..=self.number_roles)
                     .filter_map(|receiver| {
-                        if sender != receiver
-                        {
+                        if sender != receiver {
                             Some(send_canceled(
                                 &self.all_roles,
                                 sender,
@@ -73,9 +72,7 @@ impl BakingWithEnumAndCancel {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        }
-                        else
-                        {
+                        } else {
                             None
                         }
                     })
@@ -87,8 +84,7 @@ impl BakingWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
-                        if receiver != sender
-                        {
+                        if receiver != sender {
                             Some(recv(
                                 &self.all_roles,
                                 receiver,
@@ -98,9 +94,7 @@ impl BakingWithEnumAndCancel {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        }
-                        else
-                        {
+                        } else {
                             None
                         }
                     })
@@ -112,8 +106,7 @@ impl BakingWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
-                        if receiver != sender
-                        {
+                        if receiver != sender {
                             Some(recv_from_all(
                                 &self.all_roles,
                                 receiver,
@@ -123,9 +116,7 @@ impl BakingWithEnumAndCancel {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        }
-                        else
-                        {
+                        } else {
                             None
                         }
                     })
@@ -137,8 +128,7 @@ impl BakingWithEnumAndCancel {
             .map(|receiver| {
                 (1..=self.number_roles)
                     .filter_map(|sender| {
-                        if receiver != sender
-                        {
+                        if receiver != sender {
                             Some(offer(
                                 &self.all_roles,
                                 sender,
@@ -146,9 +136,7 @@ impl BakingWithEnumAndCancel {
                                 &self.meshedchannels_name,
                                 self.number_roles,
                             ))
-                        }
-                        else
-                        {
+                        } else {
                             None
                         }
                     })

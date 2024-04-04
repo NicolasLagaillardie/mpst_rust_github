@@ -24,10 +24,8 @@ use std::net::{Shutdown, TcpStream};
 pub fn close_tcp(s: End, stream: TcpStream, tcp: bool) -> Result<(), Box<dyn Error>> {
     s.sender.send(Signal::Stop)?;
     s.receiver.recv()?;
-    match tcp
-    {
-        true =>
-        {
+    match tcp {
+        true => {
             stream.shutdown(Shutdown::Both).unwrap_or(()); // Stop any operation on stream. Cannot fail as stream may already been stopped.
             mem::drop(stream); // close stream
             Ok(())

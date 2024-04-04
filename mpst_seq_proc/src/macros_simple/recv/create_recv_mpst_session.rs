@@ -76,12 +76,9 @@ impl CreateRecvMPSTSession {
 
         let all_recv: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                if i != self.exclusion
-                {
+                if i != self.exclusion {
                     quote! {}
-                }
-                else
-                {
+                } else {
                     let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         let (v, new_session) = mpstthree::binary::recv::recv(s.#temp_ident)?;
@@ -93,14 +90,11 @@ impl CreateRecvMPSTSession {
         let send_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
-                if i == self.exclusion
-                {
+                if i == self.exclusion {
                     quote! {
                         mpstthree::binary::struct_trait::recv::Recv<T, #temp_ident >,
                     }
-                }
-                else
-                {
+                } else {
                     quote! {
                         #temp_ident ,
                     }
@@ -111,14 +105,11 @@ impl CreateRecvMPSTSession {
         let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
-                if i == self.exclusion
-                {
+                if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,
                     }
-                }
-                else
-                {
+                } else {
                     quote! {
                         #temp_ident : s.#temp_ident ,
                     }

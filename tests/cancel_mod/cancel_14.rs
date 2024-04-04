@@ -90,16 +90,13 @@ fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
 }
 
 fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
-    match index
-    {
-        0 =>
-        {
+    match index {
+        0 => {
             let s = done_from_a_to_all(s)?;
 
             close_mpst_multi(s)
         }
-        i =>
-        {
+        i => {
             let s = more_from_a_to_all(s)?;
 
             let s = send_mpst_a_to_b((), s)?;

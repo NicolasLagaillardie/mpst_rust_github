@@ -249,10 +249,8 @@ fn client(s: EndpointDFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     let (_, s) = s.recv(all_clocks)?;
     sleep(Duration::from_secs(2));
 
-    match xs.pop()
-    {
-        Option::Some(_) =>
-        {
+    match xs.pop() {
+        Option::Some(_) => {
             let s: EndpointDVideo =
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::Video, Branches0BtoD::Video);
 
@@ -264,8 +262,7 @@ fn client(s: EndpointDFull, all_clocks: &mut HashMap<char, Instant>) -> Result<(
 
             client_recurs(s, all_clocks, xs, 2)
         }
-        Option::None =>
-        {
+        Option::None => {
             let s: EndpointDEnd =
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::End, Branches0BtoD::End);
 
@@ -280,10 +277,8 @@ fn client_recurs(
     mut xs: Vec<i32>,
     index: i32,
 ) -> Result<(), Box<dyn Error>> {
-    match xs.pop()
-    {
-        Option::Some(_) =>
-        {
+    match xs.pop() {
+        Option::Some(_) => {
             let s: EndpointDVideo =
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::Video, Branches0BtoD::Video);
 
@@ -295,8 +290,7 @@ fn client_recurs(
 
             client_recurs(s, all_clocks, xs, index + 1)
         }
-        Option::None =>
-        {
+        Option::None => {
             let s: EndpointDEnd =
                 choose_mpst_d_to_all!(s, all_clocks, Branches0AtoD::End, Branches0BtoD::End);
 

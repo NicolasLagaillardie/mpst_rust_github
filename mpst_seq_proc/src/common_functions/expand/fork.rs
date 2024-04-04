@@ -572,10 +572,8 @@ pub(crate) fn fork_interleaved_mpst(
                 .map(|j| {
                     let (line, column, _) = get_tuple_matrix(&matrix_one, i, j);
                     let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                    let temp_channel = match line
-                    {
-                        m if m == i =>
-                        {
+                    let temp_channel = match line {
+                        m if m == i => {
                             Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
                         }
                         _ => Ident::new(&format!("channel_{column}_{line}"), Span::call_site()),
@@ -608,30 +606,23 @@ pub(crate) fn fork_interleaved_mpst(
                 .map(|j| {
                     let (line, column, _) = get_tuple_matrix(&matrix_two, i, j);
                     let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                    let temp_channel = match line
-                    {
-                        m if m == i =>
-                        {
-                            Ident::new(
-                                &format!(
-                                    "channel_{}_{}",
-                                    number_roles_one + line,
-                                    number_roles_one + column
-                                ),
-                                Span::call_site(),
-                            )
-                        }
-                        _ =>
-                        {
-                            Ident::new(
-                                &format!(
-                                    "channel_{}_{}",
-                                    number_roles_one + column,
-                                    number_roles_one + line
-                                ),
-                                Span::call_site(),
-                            )
-                        }
+                    let temp_channel = match line {
+                        m if m == i => Ident::new(
+                            &format!(
+                                "channel_{}_{}",
+                                number_roles_one + line,
+                                number_roles_one + column
+                            ),
+                            Span::call_site(),
+                        ),
+                        _ => Ident::new(
+                            &format!(
+                                "channel_{}_{}",
+                                number_roles_one + column,
+                                number_roles_one + line
+                            ),
+                            Span::call_site(),
+                        ),
                     };
                     quote! {
                         #temp_session : #temp_channel ,
@@ -662,16 +653,11 @@ pub(crate) fn fork_interleaved_mpst(
 
     let new_threads: Vec<TokenStream> = (1..=(sum_nsessions - 2))
         .map(|i| {
-            let offset = if i < index_tuple_one
-            {
+            let offset = if i < index_tuple_one {
                 i
-            }
-            else if i >= index_tuple_one && i < number_roles_one - 1 + index_tuple_two
-            {
+            } else if i >= index_tuple_one && i < number_roles_one - 1 + index_tuple_two {
                 i + 1
-            }
-            else
-            {
+            } else {
                 i + 2
             };
             let temp_function = Ident::new(&format!("f{i}"), Span::call_site());
@@ -1051,10 +1037,8 @@ pub(crate) fn fork_timed_interleaved_mpst(
                 .map(|j| {
                     let (line, column, _) = get_tuple_matrix(&matrix_one, i, j);
                     let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                    let temp_channel = match line
-                    {
-                        m if m == i =>
-                        {
+                    let temp_channel = match line {
+                        m if m == i => {
                             Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
                         }
                         _ => Ident::new(&format!("channel_{column}_{line}"), Span::call_site()),
@@ -1087,30 +1071,23 @@ pub(crate) fn fork_timed_interleaved_mpst(
                 .map(|j| {
                     let (line, column, _) = get_tuple_matrix(&matrix_two, i, j);
                     let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
-                    let temp_channel = match line
-                    {
-                        m if m == i =>
-                        {
-                            Ident::new(
-                                &format!(
-                                    "channel_{}_{}",
-                                    number_roles_one + line,
-                                    number_roles_one + column
-                                ),
-                                Span::call_site(),
-                            )
-                        }
-                        _ =>
-                        {
-                            Ident::new(
-                                &format!(
-                                    "channel_{}_{}",
-                                    number_roles_one + column,
-                                    number_roles_one + line
-                                ),
-                                Span::call_site(),
-                            )
-                        }
+                    let temp_channel = match line {
+                        m if m == i => Ident::new(
+                            &format!(
+                                "channel_{}_{}",
+                                number_roles_one + line,
+                                number_roles_one + column
+                            ),
+                            Span::call_site(),
+                        ),
+                        _ => Ident::new(
+                            &format!(
+                                "channel_{}_{}",
+                                number_roles_one + column,
+                                number_roles_one + line
+                            ),
+                            Span::call_site(),
+                        ),
                     };
                     quote! {
                         #temp_session : #temp_channel ,
@@ -1141,16 +1118,11 @@ pub(crate) fn fork_timed_interleaved_mpst(
 
     let new_threads: Vec<TokenStream> = (1..=(sum_nsessions - 2))
         .map(|i| {
-            let offset = if i < index_tuple_one
-            {
+            let offset = if i < index_tuple_one {
                 i
-            }
-            else if i >= index_tuple_one && i < number_roles_one - 1 + index_tuple_two
-            {
+            } else if i >= index_tuple_one && i < number_roles_one - 1 + index_tuple_two {
                 i + 1
-            }
-            else
-            {
+            } else {
                 i + 2
             };
             let temp_function = Ident::new(&format!("f{i}"), Span::call_site());

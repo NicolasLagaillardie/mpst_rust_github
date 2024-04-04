@@ -1114,7 +1114,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///     }
 /// }
 /// ```
-/// 
+///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
 ///
 /// *This macro is available only if MultiCrusty is built with

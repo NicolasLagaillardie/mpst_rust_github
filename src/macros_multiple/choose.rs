@@ -281,7 +281,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///    }
 /// }
 /// ```
-/// 
+///
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
@@ -352,7 +352,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///     }
 /// }
 /// ```
-/// 
+///
 /// [`choose_mpst_multi_to_all`]: crate::choose_mpst_multi_to_all
 ///
 /// *This macro is available only if MultiCrusty is built with
@@ -418,7 +418,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///    }
 /// }
 /// ```
-/// 
+///
 /// # Compile fail
 ///
 /// Available on the *cancel/cancel_8* test.
@@ -470,7 +470,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///    }
 /// }
 /// ```
-/// 
+///
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]

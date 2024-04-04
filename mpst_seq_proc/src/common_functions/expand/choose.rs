@@ -16,21 +16,15 @@ pub(crate) fn choose_basic(
 ) -> TokenStream {
     let (matrix, diag) = diag_and_matrix(number_roles);
 
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
-    {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    }
-    else
-    {
+    } else {
         panic!("Not enough arguments for sender_ident in expand_choose")
     };
 
-    let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
-    {
+    let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Role{elt}toAll"), Span::call_site())
-    }
-    else
-    {
+    } else {
         panic!("Not enough arguments for sender_stack in expand_choose")
     };
 
@@ -228,21 +222,15 @@ pub(crate) fn choose_basic(
         .map(|j| {
             let (line, column) = get_line_column_from_diag(&diag, j);
 
-            let first_channel = if sender != line
-            {
+            let first_channel = if sender != line {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
-            let second_channel = if sender != line
-            {
+            let second_channel = if sender != line {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
@@ -297,33 +285,25 @@ pub(crate) fn choose_basic(
 
     let new_names: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
-            if sender != j
-            {
+            if sender != j {
                 let receiver_ident = if let Some(elt) =
                     all_roles.get(usize::try_from(j - 1).unwrap())
                 {
                     Ident::new(&format!("Name{elt}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                 };
 
-                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap())
-                {
+                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
                     Ident::new(&format!("name_{elt}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     panic!("Not enough arguments for new_name in new_names in expand_choose")
                 };
 
                 quote! {
                     let (#new_name, _) = < #receiver_ident as mpstthree::name::Name >::new();
                 }
-            }
-            else
-            {
+            } else {
                 quote! {}
             }
         })
@@ -444,14 +424,10 @@ pub(crate) fn choose_basic(
 
     let new_meshedchannels_sender: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
-            if sender != j
-            {
-                let new_choice_sender = if j < sender
-                {
+            if sender != j {
+                let new_choice_sender = if j < sender {
                     Ident::new(&format!("session{j}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     Ident::new(&format!("session{}", j - 1), Span::call_site())
                 };
 
@@ -461,9 +437,7 @@ pub(crate) fn choose_basic(
                 quote! {
                     #new_choice_sender : #new_channel_sender,
                 }
-            }
-            else
-            {
+            } else {
                 quote! {
                     // Empty
                 }
@@ -607,21 +581,15 @@ pub(crate) fn choose(
 ) -> TokenStream {
     let (matrix, diag) = diag_and_matrix(number_roles);
 
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
-    {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    }
-    else
-    {
+    } else {
         panic!("Not enough arguments for sender_ident in expand_choose")
     };
 
-    let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
-    {
+    let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Role{elt}toAll"), Span::call_site())
-    }
-    else
-    {
+    } else {
         panic!("Not enough arguments for sender_stack in expand_choose")
     };
 
@@ -819,21 +787,15 @@ pub(crate) fn choose(
         .map(|j| {
             let (line, column) = get_line_column_from_diag(&diag, j);
 
-            let first_channel = if sender != line
-            {
+            let first_channel = if sender != line {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
-            let second_channel = if sender != line
-            {
+            let second_channel = if sender != line {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
@@ -888,33 +850,25 @@ pub(crate) fn choose(
 
     let new_names: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
-            if sender != j
-            {
+            if sender != j {
                 let receiver_ident = if let Some(elt) =
                     all_roles.get(usize::try_from(j - 1).unwrap())
                 {
                     Ident::new(&format!("Name{elt}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                 };
 
-                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap())
-                {
+                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
                     Ident::new(&format!("name_{elt}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     panic!("Not enough arguments for new_name in new_names in expand_choose")
                 };
 
                 quote! {
                     let (#new_name, _) = < #receiver_ident as mpstthree::name::Name >::new();
                 }
-            }
-            else
-            {
+            } else {
                 quote! {}
             }
         })
@@ -1035,14 +989,10 @@ pub(crate) fn choose(
 
     let new_meshedchannels_sender: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
-            if sender != j
-            {
-                let new_choice_sender = if j < sender
-                {
+            if sender != j {
+                let new_choice_sender = if j < sender {
                     Ident::new(&format!("session{j}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     Ident::new(&format!("session{}", j - 1), Span::call_site())
                 };
 
@@ -1052,9 +1002,7 @@ pub(crate) fn choose(
                 quote! {
                     #new_choice_sender : #new_channel_sender,
                 }
-            }
-            else
-            {
+            } else {
                 quote! {
                     // Empty
                 }
@@ -1245,21 +1193,15 @@ pub(crate) fn choose_timed(
 ) -> TokenStream {
     let (matrix, diag) = diag_and_matrix(number_roles);
 
-    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
-    {
+    let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Name{elt}"), Span::call_site())
-    }
-    else
-    {
+    } else {
         panic!("Not enough arguments for sender_ident in expand_choose")
     };
 
-    let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap())
-    {
+    let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
         Ident::new(&format!("Role{elt}toAll"), Span::call_site())
-    }
-    else
-    {
+    } else {
         panic!("Not enough arguments for sender_stack in expand_choose")
     };
 
@@ -1425,18 +1367,12 @@ pub(crate) fn choose_timed(
 
     let choose_left_session: Vec<TokenStream> = (1..=number_roles)
         .filter_map(|j| {
-            if j == sender
-            {
+            if j == sender {
                 None
-            }
-            else
-            {
-                let (_, _, m) = if j > sender
-                {
+            } else {
+                let (_, _, m) = if j > sender {
                     get_tuple_matrix(&matrix, sender, j - 1)
-                }
-                else
-                {
+                } else {
                     get_tuple_matrix(&matrix, sender, j)
                 };
                 let temp_ident = Ident::new(&format!("S{m}"), Span::call_site());
@@ -1449,18 +1385,12 @@ pub(crate) fn choose_timed(
 
     let choose_right_session: Vec<TokenStream> = (1..=number_roles)
         .filter_map(|j| {
-            if j == sender
-            {
+            if j == sender {
                 None
-            }
-            else
-            {
-                let (_, _, m) = if j > sender
-                {
+            } else {
+                let (_, _, m) = if j > sender {
                     get_tuple_matrix(&matrix, sender, j - 1)
-                }
-                else
-                {
+                } else {
                     get_tuple_matrix(&matrix, sender, j)
                 };
                 let diff = number_roles - 1;
@@ -1478,21 +1408,15 @@ pub(crate) fn choose_timed(
         .map(|j| {
             let (line, column) = get_line_column_from_diag(&diag, j);
 
-            let first_channel = if sender != line
-            {
+            let first_channel = if sender != line {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
-            let second_channel = if sender != line
-            {
+            let second_channel = if sender != line {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
@@ -1510,21 +1434,15 @@ pub(crate) fn choose_timed(
             let (line, column) = get_line_column_from_diag(&diag, j);
             let diff = number_roles - 1;
 
-            let first_channel = if sender != line
-            {
+            let first_channel = if sender != line {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
             };
 
-            let second_channel = if sender != line
-            {
+            let second_channel = if sender != line {
                 Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
-            }
-            else
-            {
+            } else {
                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
             };
 
@@ -1558,33 +1476,25 @@ pub(crate) fn choose_timed(
 
     let new_names: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
-            if sender != j
-            {
+            if sender != j {
                 let receiver_ident = if let Some(elt) =
                     all_roles.get(usize::try_from(j - 1).unwrap())
                 {
                     Ident::new(&format!("Name{elt}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
                 };
 
-                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap())
-                {
+                let new_name = if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
                     Ident::new(&format!("name_{elt}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     panic!("Not enough arguments for new_name in new_names in expand_choose")
                 };
 
                 quote! {
                     let (#new_name, _) = < #receiver_ident as mpstthree::name::Name >::new();
                 }
-            }
-            else
-            {
+            } else {
                 quote! {}
             }
         })
@@ -1707,14 +1617,10 @@ pub(crate) fn choose_timed(
 
     let new_meshedchannels_sender: Vec<TokenStream> = (1..=number_roles)
         .map(|j| {
-            if sender != j
-            {
-                let new_choice_sender = if j < sender
-                {
+            if sender != j {
+                let new_choice_sender = if j < sender {
                     Ident::new(&format!("session{j}"), Span::call_site())
-                }
-                else
-                {
+                } else {
                     Ident::new(&format!("session{}", j - 1), Span::call_site())
                 };
 
@@ -1724,9 +1630,7 @@ pub(crate) fn choose_timed(
                 quote! {
                     #new_choice_sender : #new_channel_sender,
                 }
-            }
-            else
-            {
+            } else {
                 quote! {
                     // Empty
                 }

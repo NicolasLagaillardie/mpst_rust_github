@@ -17,26 +17,21 @@ fn attempt_extraction(input: ParseStream) -> Result<Vec<String>> {
     let token_stream = TokenStream::parse(&content)?;
 
     let mut temp_result: Vec<TokenStream> = Vec::new();
-    for tt in token_stream.into_iter()
-    {
-        let elt = match tt
-        {
+    for tt in token_stream.into_iter() {
+        let elt = match tt {
             TokenTree::Group(g) => Some(g.stream()),
             TokenTree::Ident(g) => Some(quote! { #g }),
             _ => None,
         };
-        if let Some(elt_tt) = elt
-        {
+        if let Some(elt_tt) = elt {
             temp_result.push(elt_tt)
         }
     }
 
     let mut result = Vec::new();
-    for elt in temp_result
-    {
+    for elt in temp_result {
         // let ident: proc_macro2::Ident = ;
-        if let Ok(temp_ident) = syn::parse2(elt)
-        {
+        if let Ok(temp_ident) = syn::parse2(elt) {
             let ident: proc_macro2::Ident = temp_ident;
             result.push(ident.to_string());
         }
@@ -50,15 +45,11 @@ impl Parse for CheckingInput {
         let state_branches = RandomState::new();
         let mut choices: HashMap<String, Vec<String>> = HashMap::with_hasher(state_branches);
 
-        while let Ok(result) = attempt_extraction(input)
-        {
-            let vec_to_add = if let Some(temp_vec) = choices.get_mut(&result[0])
-            {
+        while let Ok(result) = attempt_extraction(input) {
+            let vec_to_add = if let Some(temp_vec) = choices.get_mut(&result[0]) {
                 temp_vec.append(&mut result[1..].to_vec());
                 temp_vec.to_vec()
-            }
-            else
-            {
+            } else {
                 result[1..].to_vec()
             };
             choices.insert(result[0].to_string(), vec_to_add);
@@ -79,8 +70,7 @@ impl CheckingInput {
         let mut display: Vec<proc_macro2::TokenStream> = Vec::new();
         let mut new_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
 
-        for (key, value) in &self.choices
-        {
+        for (key, value) in &self.choices {
             let name_key = Ident::new(key, Span::call_site());
             let fn_key = Ident::new(&key.to_lowercase(), Span::call_site());
 

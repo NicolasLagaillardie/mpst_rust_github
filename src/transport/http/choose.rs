@@ -52,7 +52,7 @@
 ///    }
 /// }
 /// ```
-/// 
+///
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]

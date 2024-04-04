@@ -29,11 +29,9 @@ where
     S: Session,
 {
     let (here, there) = S::new();
-    match s.channel.send((x, there))
-    {
+    match s.channel.send((x, there)) {
         Ok(_) => Ok(here),
-        Err(e) =>
-        {
+        Err(e) => {
             cancel(s);
             panic!("{}", e.to_string())
         }

@@ -108,15 +108,12 @@ fn recurs_a(
     loops: i32,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-    if loops > 0
-    {
+    if loops > 0 {
         let s: EndpointAMore = choose_mpst_a_to_all!(s, all_clocks, Branching0fromAtoB::More);
 
         let (_, s) = s.recv(all_clocks)?;
         recurs_a(s, loops - 1, all_clocks)
-    }
-    else
-    {
+    } else {
         let s: EndpointADone = choose_mpst_a_to_all!(s, all_clocks, Branching0fromAtoB::Done);
 
         let (_, s) = s.recv(all_clocks)?;

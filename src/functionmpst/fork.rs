@@ -28,8 +28,7 @@ where
             set_hook(Box::new(|_info| {
                 // do nothing
             }));
-            match p(s)
-            {
+            match p(s) {
                 Ok(()) => (),
                 Err(e) => panic!("{:?}", e),
             }
@@ -114,7 +113,7 @@ where
 /// thread_b.join().unwrap();
 /// thread_c.join().unwrap();
 /// ```
-/// 
+///
 /// Creates 3 pairs of endpoints, each pair of type `S` and
 /// `S::Dual`. Creates 3 `Role` for each stack.
 /// Creates 3 `MeshedChannels`, linked together with the pairs

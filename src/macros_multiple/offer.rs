@@ -131,7 +131,7 @@ macro_rules! create_offer_mpst_session_multi {
 
 /// )?;
 /// ```
-/// 
+///
 /// # Baking example
 /// ```ignore
 /// offer_mpst!(
@@ -151,7 +151,7 @@ macro_rules! create_offer_mpst_session_multi {
 
 /// )?;
 /// ```
-/// 
+///
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]

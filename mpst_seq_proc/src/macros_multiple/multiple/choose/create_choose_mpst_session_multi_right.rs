@@ -81,15 +81,12 @@ impl ChooseTypeMultiRight {
 
         let all_roles: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
-                if i % 3 == 0
-                {
+                if i % 3 == 0 {
                     let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                     quote! {
                         #temp_ident ,
                     }
-                }
-                else
-                {
+                } else {
                     let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                     quote! {
                         #temp_ident ,
@@ -100,15 +97,12 @@ impl ChooseTypeMultiRight {
 
         let all_roles_struct_and_struct: Vec<TokenStream> = (1..(3 * self.n_sessions))
             .map(|i| {
-                if i % 3 == 0
-                {
+                if i % 3 == 0 {
                     let temp_ident = Ident::new(&format!("N{i}"), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::name::Name + 'a ,
                     }
-                }
-                else
-                {
+                } else {
                     let temp_ident = Ident::new(&format!("R{i}"), Span::call_site());
                     quote! {
                         #temp_ident : mpstthree::role::Role + 'a ,
@@ -273,10 +267,8 @@ impl ChooseTypeMultiRight {
 
                         let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
 
-                        let temp_channel = match line
-                        {
-                            m if m == i =>
-                            {
+                        let temp_channel = match line {
+                            m if m == i => {
                                 Ident::new(&format!("channel_{line}_{column}"), Span::call_site())
                             }
                             _ => Ident::new(&format!("channel_{column}_{line}"), Span::call_site()),
@@ -334,10 +326,8 @@ impl ChooseTypeMultiRight {
         let new_session_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let (line, column, _) = get_tuple_matrix(&matrix, self.n_sessions, i);
-                let temp_channel = match line
-                {
-                    m if m == i =>
-                    {
+                let temp_channel = match line {
+                    m if m == i => {
                         Ident::new(&format!("channel_{column}_{line}"), Span::call_site())
                     }
                     _ => Ident::new(&format!("channel_{line}_{column}"), Span::call_site()),

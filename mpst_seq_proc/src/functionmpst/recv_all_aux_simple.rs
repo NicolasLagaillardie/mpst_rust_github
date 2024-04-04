@@ -53,15 +53,11 @@ impl RecvAllAuxSimple {
 
         let mut new_sessions = Vec::new();
         let mut all_sessions = Vec::new();
-        for i in 1..3
-        {
+        for i in 1..3 {
             all_sessions.push(format_ident!("session{}", i));
-            if i == self.exclusion
-            {
+            if i == self.exclusion {
                 new_sessions.push(quote! { new_session });
-            }
-            else
-            {
+            } else {
                 let temp = format_ident!("session{}", i);
                 new_sessions.push(quote! { #session.#temp });
             }

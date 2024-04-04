@@ -58,8 +58,7 @@ pub fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 
     assert!({
-        match session_end_1.sender.send(Signal::Stop)
-        {
+        match session_end_1.sender.send(Signal::Stop) {
             Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -67,8 +66,7 @@ pub fn new_types() {
     .is_ok());
 
     assert!({
-        match session_end_2.sender.send(Signal::Stop)
-        {
+        match session_end_2.sender.send(Signal::Stop) {
             Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -76,8 +74,7 @@ pub fn new_types() {
     .is_ok());
 
     assert!({
-        match session_end_1.receiver.recv()
-        {
+        match session_end_1.receiver.recv() {
             Ok(Signal::Stop) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -85,8 +82,7 @@ pub fn new_types() {
     .is_ok());
 
     assert!({
-        match session_end_2.receiver.recv()
-        {
+        match session_end_2.receiver.recv() {
             Ok(Signal::Stop) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -98,8 +94,7 @@ pub fn new_types_cancel() {
     let (session_end_1, session_end_2) = End::new();
 
     assert!({
-        match session_end_1.sender.send(Signal::Cancel)
-        {
+        match session_end_1.sender.send(Signal::Cancel) {
             Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -107,8 +102,7 @@ pub fn new_types_cancel() {
     .is_ok());
 
     assert!({
-        match session_end_2.sender.send(Signal::Cancel)
-        {
+        match session_end_2.sender.send(Signal::Cancel) {
             Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -116,8 +110,7 @@ pub fn new_types_cancel() {
     .is_ok());
 
     assert!({
-        match session_end_1.receiver.recv()
-        {
+        match session_end_1.receiver.recv() {
             Ok(Signal::Cancel) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -125,8 +118,7 @@ pub fn new_types_cancel() {
     .is_ok());
 
     assert!({
-        match session_end_2.receiver.recv()
-        {
+        match session_end_2.receiver.recv() {
             Ok(Signal::Cancel) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
@@ -387,16 +379,13 @@ fn nice_sum_server_accum(s: NiceSumServer<i32>, x: i32) -> Result<(), Box<dyn Er
 }
 
 fn nice_sum_client_accum(s: NiceSumClient<i32>, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
-    match xs.pop()
-    {
-        Option::Some(x) =>
-        {
+    match xs.pop() {
+        Option::Some(x) => {
             let s = choose!(SumOp::More, s);
             let s = send(x, s);
             nice_sum_client_accum(s, xs)
         }
-        Option::None =>
-        {
+        Option::None => {
             let s = choose!(SumOp::Done, s);
             let (sum, s) = recv(s)?;
             close(s)?;
@@ -446,8 +435,7 @@ pub fn selection_works() {
     let mut other_threads = Vec::new();
     let mut rs = Vec::new();
 
-    for i in 0..10
-    {
+    for i in 0..10 {
         let (other_thread, s) = fork_with_thread_id(move |s: Send<u64, End>| {
             sleep(Duration::from_millis(i * 1000));
             let s = send(9 - i, s);
@@ -460,14 +448,10 @@ pub fn selection_works() {
     assert!(
         || -> Result<(), Box<dyn Error>> {
             let mut current_index = 9;
-            loop
-            {
-                if rs.is_empty()
-                {
+            loop {
+                if rs.is_empty() {
                     break Ok(());
-                }
-                else
-                {
+                } else {
                     let (i, r) = select_mut(&mut rs)?;
                     close(r)?;
                     assert_eq!(current_index, i, "Messages were received out of order.");
@@ -480,8 +464,7 @@ pub fn selection_works() {
         "Main thread crashed."
     );
 
-    for other_thread in other_threads
-    {
+    for other_thread in other_threads {
         let msg = format!("Thread {other_thread:?} crashed.");
         assert!(other_thread.join().is_ok(), "{}", msg);
     }

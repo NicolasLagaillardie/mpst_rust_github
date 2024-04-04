@@ -30,8 +30,7 @@ where
 
             // let mut all_clocks = HashMap::<char, Instant>::new();
 
-            match p(there, &mut HashMap::<char, Instant>::new())
-            {
+            match p(there, &mut HashMap::<char, Instant>::new()) {
                 Ok(()) => (),
                 Err(e) => panic!("{}", e.to_string()),
             }
