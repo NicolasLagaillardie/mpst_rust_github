@@ -3,7 +3,7 @@
 # Create the compilation time and benchmarks files for the examples
 
 # Stop upon any error
-set -e
+set -eou pipefail
 
 END=1
 

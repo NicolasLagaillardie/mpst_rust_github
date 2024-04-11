@@ -3,7 +3,7 @@
 # Publish all workspaces
 
 # Exit if error
-set -e
+set -eou pipefail
 
 # mpst_seq_proc
 cd mpst_seq_proc/

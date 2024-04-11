@@ -2,7 +2,7 @@
 
 # Create the flamegraphs of the examples
 
-set -e
+set -eou pipefail
 
 sleep 5
 

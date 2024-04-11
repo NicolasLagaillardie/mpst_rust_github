@@ -2,7 +2,7 @@
 
 # Create the expanded version of the examples
 
-set -e
+set -eou pipefail
 
 sleep 5
 

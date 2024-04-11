@@ -3,7 +3,7 @@
 # clean all workspace
 
 # Exit if error
-set -e
+set -eou pipefail
 
 cargo clean
 

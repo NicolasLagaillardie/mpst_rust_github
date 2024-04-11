@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# set -e
+# set -eou pipefail
 
 # Replace toml
 cat Cargo.toml > scripts/toml/save_cargo.toml

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eou pipefail
 
 # Remove previous benchmarks
 rm -rf compile_time/$1.txt

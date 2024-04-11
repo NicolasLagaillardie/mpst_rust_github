@@ -9,7 +9,7 @@ exit 1
 ####
 
 # Stop upon any error
-set -e
+set -eou pipefail
 
 cargo test --tests --all-features --workspace # Test all tests
 cargo test --examples --all-features --workspace # Test all examples

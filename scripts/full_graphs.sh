@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eou pipefail
 
 # Create the graph from the benchmarks of Mesh
 python3 scripts/create_graphs/mesh_bench.py

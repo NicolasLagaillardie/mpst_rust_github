@@ -3,11 +3,11 @@
 # Create the compilation time and benchmarks files for the examples
 
 # Stop upon any error
-set -e
+set -eou pipefail
 
 {
     # Stop upon any error
-    set -e
+    set -eou pipefail
 
     # Get date
     date

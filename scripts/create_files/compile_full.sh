@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eou pipefail
 
 # Create folder if it does not exist
 mkdir -p compile_time/
