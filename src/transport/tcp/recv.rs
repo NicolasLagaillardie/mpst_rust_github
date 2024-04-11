@@ -6,7 +6,6 @@
 //! the `"transport"` feature or the `"transport_tcp"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
-// use std::boxed::Box;
 use std::error::Error;
 use std::io::Read;
 use std::marker;

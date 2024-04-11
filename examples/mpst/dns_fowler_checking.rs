@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{checker_concat, generate};
+use mpstthree::{checker_concat, checker_concat_impl, generate};
 
 use rand::{thread_rng, Rng};
 
@@ -156,6 +156,23 @@ fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
         s.close()
     }
 }
+
+checker_concat_impl!(
+    [
+        EndpointRegionalLoops,
+        Branching0fromRegionalToData,
+        Loops,
+        Branching0fromRegionalToHandler,
+        Loops,
+    ],
+    [
+        EndpointRegionalInvalid,
+        Branching0fromRegionalToData,
+        Invalid,
+        Branching0fromRegionalToHandler,
+        Invalid,
+    ]
+);
 
 // Check for bottom-up approach
 fn checking() {

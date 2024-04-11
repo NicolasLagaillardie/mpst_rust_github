@@ -5,7 +5,6 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
-// use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::role::a::RoleA;
@@ -161,8 +160,13 @@ pub fn run_a_usecase_right() {
 }
 
 pub fn run_a_usecase_checker() {
-    let (graphs, kmc) =
-        checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>).unwrap();
+    let (graphs, kmc) = checker_concat!(
+        "",
+        EndpointAFull<i32>,
+        EndpointBFull<i32>,
+        EndpointCFull<i32>
+    )
+    .unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

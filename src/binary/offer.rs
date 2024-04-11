@@ -8,7 +8,6 @@ use crate::binary::struct_trait::{end::End, recv::Recv, session::Session};
 
 use either::Either;
 
-// use std::boxed::Box;
 use std::error::Error;
 
 /// Offer a choice between two sessions `S1` and `S1`.

@@ -1,4 +1,3 @@
-// use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -205,6 +204,7 @@ pub fn double_choice_right() {
 
 pub fn double_choice_checker() {
     let (graphs, kmc) = checker_concat!(
+        "",
         EndpointChoiceA<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceB<i32>

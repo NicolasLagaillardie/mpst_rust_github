@@ -1,5 +1,4 @@
 // Used for the functions that will process the protocol
-// use std::boxed::Box;
 use std::error::Error;
 
 // Used for creating the types

@@ -11,7 +11,6 @@ use mpstthree::binary_timed::struct_trait::recv::RecvTimed;
 use mpstthree::binary_timed::struct_trait::send::SendTimed;
 
 use rand::{thread_rng, Rng};
-// use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
 use std::thread::sleep;

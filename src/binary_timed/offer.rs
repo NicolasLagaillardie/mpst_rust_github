@@ -9,7 +9,6 @@ use crate::binary_timed::struct_trait::recv::RecvTimed;
 
 use either::Either;
 
-// use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
 use std::time::Instant;

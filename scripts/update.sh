@@ -15,5 +15,5 @@ cargo +nightly clippy --workspace --all-features --all-targets --verbose
 # cargo hack --feature-powerset --clean-per-run test --all-targets --workspace
 TRYBUILD=overwrite cargo test --all-targets --verbose --workspace --all-features
 cargo clean
-RUSTFLAGS="-Z macro-backtrace" cargo +nightly clippy --all-targets --all-features --workspace
+RUSTFLAGS="-Z macro-backtrace" cargo +nightly clippy --workspace --all-targets --all-features --verbose
 cargo clean

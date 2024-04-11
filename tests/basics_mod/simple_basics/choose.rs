@@ -1,4 +1,3 @@
-// use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -170,8 +169,13 @@ pub fn simple_choice_right() {
 }
 
 pub fn simple_choice_checker() {
-    let (graphs, kmc) =
-        checker_concat!(EndpointChoiceC, EndpointChoiceA<i32>, EndpointChoiceB<i32>).unwrap();
+    let (graphs, kmc) = checker_concat!(
+        "",
+        EndpointChoiceC,
+        EndpointChoiceA<i32>,
+        EndpointChoiceB<i32>
+    )
+    .unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

@@ -7,12 +7,13 @@
 //! `"transport_tcp"` feature or the
 //! `"transport_http"` feature.*
 
-#[cfg(feature = "transport_http")]
-#[cfg_attr(
-    doc_cfg,
-    doc(cfg(any(feature = "transport", feature = "transport_http")))
-)]
-pub mod http;
+// !!! THIS MODULE DOES NOT WORK !!!
+// #[cfg(feature = "transport_http")]
+// #[cfg_attr(
+//     doc_cfg,
+//     doc(cfg(any(feature = "transport", feature = "transport_http")))
+// )]
+// pub mod http;
 
 #[cfg(feature = "transport_tcp")]
 #[cfg_attr(

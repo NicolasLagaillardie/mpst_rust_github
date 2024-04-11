@@ -2,7 +2,6 @@
 // B → Y → C
 // C → Z → A
 
-// use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
@@ -161,6 +160,7 @@ pub fn double_choice_right() {
 
 pub fn double_choice_checker() {
     let (graphs, kmc) = checker_concat!(
+        "",
         EndpointChoiceA<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceB<i32>

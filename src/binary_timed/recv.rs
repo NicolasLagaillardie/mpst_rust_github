@@ -7,7 +7,6 @@ use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::session::Session;
 use crate::binary_timed::struct_trait::recv::RecvTimed;
 
-// use std::boxed::Box;
 use std::collections::HashMap;
 // use std::convert::TryFrom;
 use std::error::Error;

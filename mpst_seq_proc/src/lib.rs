@@ -49,15 +49,16 @@ mod interleaved;
 use interleaved::close_mpst_interleaved::CloseMpstInterleaved;
 use interleaved::fork_mpst_multi_solo::ForkMPSTMultiSolo;
 
-mod macros_http;
+/// !!! THIS MODULE DOES NOT WORK !!!
+// mod macros_http;
 
-use macros_http::choose::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAll;
-use macros_http::recv::create_recv_http_session::CreateRecvHttpSession;
-use macros_http::send::create_send_http_session::CreateSendHttpSession;
-
+// use macros_http::choose::choose_mpst_multi_http_to_all::ChooseTypeMultiHttpToAll;
+// use macros_http::recv::create_recv_http_session::CreateRecvHttpSession;
+// use macros_http::send::create_send_http_session::CreateSendHttpSession;
 mod checking;
 
 use checking::aux_checking::CheckingInput;
+use checking::aux_checking_impl::CheckingInputImpl;
 use checking::branching::branching_variants;
 
 mod baking;
@@ -340,38 +341,47 @@ pub fn close_mpst_interleaved(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-//////////////////////////////////////
+// //////////////////////////////////////
 
-#[proc_macro]
-pub fn choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ChooseTypeMultiHttpToAll);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
+// #[proc_macro]
+// pub fn choose_mpst_multi_http_to_all(input: TokenStream) -> TokenStream {
+//     let input = parse_macro_input!(input as ChooseTypeMultiHttpToAll);
+//     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+//     output.into()
+// }
 
-//////////////////////////////////////
+// //////////////////////////////////////
 
-#[proc_macro]
-pub fn create_recv_http_session(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as CreateRecvHttpSession);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
+// #[proc_macro]
+// pub fn create_recv_http_session(input: TokenStream) -> TokenStream {
+//     let input = parse_macro_input!(input as CreateRecvHttpSession);
+//     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+//     output.into()
+// }
 
-//////////////////////////////////////
+// //////////////////////////////////////
 
-#[proc_macro]
-pub fn create_send_http_session(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as CreateSendHttpSession);
-    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
-    output.into()
-}
+// #[proc_macro]
+// pub fn create_send_http_session(input: TokenStream) -> TokenStream {
+//     let input = parse_macro_input!(input as CreateSendHttpSession);
+//     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+//     output.into()
+// }
 
 //////////////////////////////////////
 
 #[proc_macro]
 pub fn checking(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as CheckingInput);
+    let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
+    output.into()
+}
+
+//////////////////////////////////////
+
+#[proc_macro]
+pub fn checking_impl(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as CheckingInputImpl);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }

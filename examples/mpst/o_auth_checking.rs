@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{checker_concat, generate};
+use mpstthree::{checker_concat, checker_concat_impl, generate};
 
 use rand::{thread_rng, Rng};
 
@@ -175,6 +175,23 @@ fn main() {
     thread_c.join().unwrap();
     thread_s.join().unwrap();
 }
+
+checker_concat_impl!(
+    [
+        EndpointASuccess,
+        Branching0fromAtoC,
+        Success,
+        Branching0fromAtoS,
+        Success,
+    ],
+    [
+        EndpointAFail,
+        Branching0fromAtoC,
+        Fail,
+        Branching0fromAtoS,
+        Fail,
+    ]
+);
 
 // Check for bottom-up approach
 fn checking() {

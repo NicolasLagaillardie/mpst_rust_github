@@ -7,7 +7,8 @@ use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
 use mpstthree::{
-    checker_concat, create_meshedchannels, create_multiple_normal_name, create_multiple_normal_role,
+    checker_concat, checker_concat_impl, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role,
 };
 
 use petgraph::dot::Dot;
@@ -84,6 +85,18 @@ type EndpointBExtend2 = MeshedChannels<End, RoleEnd, NameB>;
 type EndpointBFull = MeshedChannels<Recurs0BfromA, RoleA<RoleEnd>, NameB>;
 
 /////////////////////////////////////////
+
+checker_concat_impl!(
+    [Branches0BfromA, End],
+    [Branches0BfromA, Start],
+    [Branches0BfromA, Stop],
+    [Branches1AfromB, End],
+    [Branches1AfromB, Looping],
+    [Branches1AfromB, Extend],
+    [Branches2AfromB, End],
+    [Branches2AfromB, Looping],
+    [Branches2AfromB, Extend]
+);
 
 pub fn main() {
     let (graphs, kmc) = checker_concat!(

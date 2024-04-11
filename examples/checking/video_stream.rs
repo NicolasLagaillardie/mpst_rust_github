@@ -3,7 +3,7 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{checker_concat, generate};
+use mpstthree::{checker_concat, checker_concat_impl, generate};
 
 use rand::{thread_rng, Rng};
 
@@ -139,6 +139,11 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
 }
 
 /////////////////////////////////////////
+///
+checker_concat_impl!(
+    [EndpointCVideo, Branches0AtoC, Video, Branches0BtoC, Video,],
+    [EndpointCEnd, Branches0AtoC, End, Branches0BtoC, End,]
+);
 
 // Check for bottom-up approach
 fn checking() {

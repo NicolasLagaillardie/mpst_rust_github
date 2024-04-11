@@ -3,7 +3,6 @@
 
 use crate::binary::struct_trait::{end::End, end::Signal};
 
-// use std::boxed::Box;
 use std::error::Error;
 
 /// Closes a session. Synchronises with the partner, and

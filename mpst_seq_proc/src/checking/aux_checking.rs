@@ -67,90 +67,23 @@ impl From<CheckingInput> for TokenStream {
 
 impl CheckingInput {
     fn expand(&self) -> TokenStream {
-        let mut display: Vec<proc_macro2::TokenStream> = Vec::new();
-        let mut new_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
+        let mut branches_receivers_hashmap: Vec<proc_macro2::TokenStream> = Vec::new();
 
-        for (key, value) in &self.choices {
+        for key in self.choices.keys() {
             let name_key = Ident::new(key, Span::call_site());
             let fn_key = Ident::new(&key.to_lowercase(), Span::call_site());
 
-            let branches: Vec<proc_macro2::TokenStream> = value
-                .iter()
-                .map(|branch| {
-                    let branch_ident = Ident::new(branch, Span::call_site());
-                    quote! {
-                        #name_key::#branch_ident(s) => {
-                            write!(
-                                f,
-                                "{}\n{}",
-                                stringify!(#branch_ident),
-                                type_of(&s)
-                            )
-                        }
-                    }
-                })
-                .collect();
-
-            display.push(quote! {
-                impl std::fmt::Display for #name_key {
-                    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-                        match self {
-                            #( #branches )*
-                            _ => {
-                                println!("The provided variant and enum do not exist");
-                                panic!("The provided variant and enum do not exist");
-                            }
-                        }
-                    }
-                }
-            });
-
-            let branches_hashmap: Vec<proc_macro2::TokenStream> = value.iter()
-            .map(|branch| {
-                let temp = Ident::new(&format!("temp_{branch}").to_lowercase(), Span::call_site());
-                let branch_ident = Ident::new(branch, Span::call_site());
-                let branch_name = Ident::new(&branch.to_lowercase(), Span::call_site());
-                quote! {
-                    let #temp =
-                        (#name_key::#branch_ident(<_ as mpstthree::binary::struct_trait::session::Session>::new().0))
-                            .to_string();
-
-                    let #branch_name = #temp
-                        .split('\n')
-                        .filter(|s| !s.is_empty())
-                        .collect::<Vec<_>>();
-
-                    all_branches.insert(String::from(#branch_name[0]), String::from(#branch_name[1]));
-                }
-            })
-            .collect();
-
-            new_hashmap.push(quote! {
-                fn #fn_key() -> std::collections::HashMap<String, String> {
-                    let state_branches_receivers = std::collections::hash_map::RandomState::new();
-                    let mut all_branches: std::collections::HashMap<String, String> =
-                        std::collections::HashMap::with_hasher(state_branches_receivers);
-
-                    #( #branches_hashmap )*
-
-                    all_branches
-                }
-
+            branches_receivers_hashmap.push(quote! {
                 branches_receivers.insert(String::from(stringify!(#name_key)), #fn_key());
             });
         }
 
         quote! {
-            fn type_of<T>(_: T) -> &'static str {
-                std::any::type_name::<T>()
-            }
-
             let state_branches = std::collections::hash_map::RandomState::new();
             let mut branches_receivers: std::collections::HashMap<String, std::collections::HashMap<String, String>> =
                 std::collections::HashMap::with_hasher(state_branches);
 
-            #( #display )*
-            #( #new_hashmap )*
+            #( #branches_receivers_hashmap )*
         }
     }
 }

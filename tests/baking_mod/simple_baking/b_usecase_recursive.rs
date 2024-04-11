@@ -5,7 +5,7 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
-use mpstthree::checker_concat;
+use mpstthree::{checker_concat, checker_concat_impl};
 
 // use std::boxed::Box;
 use std::error::Error;
@@ -165,8 +165,14 @@ pub fn run_b_usecase_recursive() {
     assert!(thread_c.join().is_ok());
 }
 
+checker_concat_impl!(
+    [Branches0CtoB, Video, Branches0AtoB, Video],
+    [Branches0CtoB, End, Branches0AtoB, End]
+);
+
 pub fn run_b_usecase_recursive_checker() {
     let (graphs, kmc) = checker_concat!(
+        "",
         EndpointAFull,
         EndpointCFull,
         EndpointBFull

@@ -1,8 +1,8 @@
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send}; // The basic types
-use mpstthree::checker_concat;
 use mpstthree::generate; /* The macro for generating the roles and the MeshedChannels */
-use mpstthree::role::broadcast::RoleBroadcast; /* Optional: used only for protocols with
-                                                * choice/offer */
+use mpstthree::role::broadcast::RoleBroadcast;
+use mpstthree::{checker_concat, checker_concat_impl}; /* Optional: used only for protocols with
+                                                       * choice/offer */
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles // Used for checking the protocol
 
 use std::error::Error;
@@ -95,6 +95,11 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
         },
     })
 }
+
+checker_concat_impl!(
+    [EndpointAMore, Branching0fromAtoB, More,],
+    [EndpointADone, Branching0fromAtoB, Done,]
+);
 
 fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);

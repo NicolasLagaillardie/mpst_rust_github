@@ -3,7 +3,6 @@
 
 use crate::binary::struct_trait::session::Session;
 
-// use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
 use std::marker;

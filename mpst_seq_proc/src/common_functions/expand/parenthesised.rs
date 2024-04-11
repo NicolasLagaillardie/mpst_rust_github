@@ -2,6 +2,7 @@ use proc_macro2::{TokenStream, TokenTree};
 use quote::quote;
 
 /// Expand parenthesised blocks
+#[allow(dead_code)]
 pub(crate) fn parenthesised(stream: TokenStream) -> Vec<TokenStream> {
     let mut result: Vec<TokenStream> = Vec::new();
 

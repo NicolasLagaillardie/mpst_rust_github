@@ -1,0 +1,2206 @@
+[package]
+name = "mpanon"
+version = "0.1.17"
+authors = ["XXX"]
+edition = "2021"
+rust-version = "1.77.2"
+description = "A library implementing Multiparty Session Types for 2 or more participants"
+readme = "README.md"
+homepage = "XXX"
+repository = "XXX"
+license = "MIT OR Apache-2.0"
+keywords = ["multiparty", "session", "affine", "timed"]
+documentation = "https://docs.rs/mpanon"
+categories = ["concurrency"]
+# include = [
+#     "/benches/**",
+#     "/build.rs",
+#     "/Cargo.toml",
+#     "/LICENSE-APACHE",
+#     "/LICENSE-MIT",
+#     "/README.md",
+#     "/src/**",
+#     "/tests/**",
+#     "/examples/**",
+#     "main.rs",
+# ]
+exclude = [
+    ".vscode/",
+    ".travis.yml",
+    "codecov.yml",
+    ".gitignore",
+    ".github/",
+    ".cargo_vcs_info.json",
+    "scripts/",
+    "example/",
+    "outputs/",
+    "cfsm/",
+    "compile_time/",
+    "graphs_bench/",
+    "rustfmt_0.toml",
+    "notes.txt",
+    "result.rs",
+    "results/",
+    "save/",
+    "expand/",
+    "target/",
+]
+autotests = false
+autobenches = false
+
+################################### Workspace
+
+[workspace]
+members = ["mpst_seq_proc"]
+
+################################### Lib
+
+[lib]
+bench = false
+
+################################### Badges
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+################################### Bin
+
+[[bin]]
+name = "mpst"
+path = "main.rs"
+bench = false
+
+################################### Tests
+
+[[test]]
+name = "checking"
+path = "tests/checking.rs"
+required-features = ["macros_multiple", "checking"]
+
+[[test]]
+name = "basics"
+path = "tests/basics.rs"
+required-features = ["checking"]
+
+[[test]]
+name = "binary"
+path = "tests/binary.rs"
+required-features = ["default"]
+
+[[test]]
+name = "cancel"
+path = "tests/cancel.rs"
+required-features = ["baking"]
+
+[[test]]
+name = "macros_multiple"
+path = "tests/macros_multiple.rs"
+required-features = ["macros_multiple"]
+
+[[test]]
+name = "macros_simple"
+path = "tests/macros_simple.rs"
+required-features = ["macros_simple"]
+
+[[test]]
+name = "baking"
+path = "tests/baking.rs"
+required-features = ["baking", "checking"]
+
+[[test]]
+name = "extra"
+path = "tests/extra.rs"
+required-features = ["baking"]
+
+[[test]]
+name = "interleaved"
+path = "tests/interleaved.rs"
+required-features = ["baking_interleaved"]
+
+[[test]]
+name = "binary_timed"
+path = "tests/binary_timed.rs"
+required-features = ["binary_timed"]
+
+[[test]]
+name = "baking_timed"
+path = "tests/baking_timed.rs"
+required-features = ["baking_timed"]
+
+[[test]]
+name = "baking_message"
+path = "tests/baking_message.rs"
+required-features = ["baking", "checking"]
+
+[[test]]
+name = "main"
+path = "tests/main.rs"
+required-features = []
+
+################################### Benches
+
+################################### Ping-Pong
+
+######### Ping-Pong start
+######### Ping-Pong end
+
+################## Examples
+
+######### Crossbeam
+
+[[bench]]
+name = "example_calculator_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/distributed_calculators.rs"
+required-features = ["full"]
+
+######### Binary
+
+[[bench]]
+name = "example_calculator_binary"
+harness = false
+path = "benches/examples/binary/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_binary"
+harness = false
+path = "benches/examples/binary/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_binary"
+harness = false
+path = "benches/examples/binary/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_binary"
+harness = false
+path = "benches/examples/binary/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_binary"
+harness = false
+path = "benches/examples/binary/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_binary"
+harness = false
+path = "benches/examples/binary/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_binary"
+harness = false
+path = "benches/examples/binary/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_binary"
+harness = false
+path = "benches/examples/binary/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_binary"
+harness = false
+path = "benches/examples/binary/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_binary"
+harness = false
+path = "benches/examples/binary/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_binary"
+harness = false
+path = "benches/examples/binary/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_binary"
+harness = false
+path = "benches/examples/binary/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_binary"
+harness = false
+path = "benches/examples/binary/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_binary"
+harness = false
+path = "benches/examples/binary/distributed_calculators.rs"
+required-features = ["full"]
+
+######### Basic
+
+[[bench]]
+name = "example_logging_basic"
+harness = false
+path = "benches/examples/basic/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_basic"
+harness = false
+path = "benches/examples/basic/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_basic"
+harness = false
+path = "benches/examples/basic/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_binary_basic"
+harness = false
+path = "benches/examples/basic/fib_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_mpst_basic"
+harness = false
+path = "benches/examples/basic/fib_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_basic"
+harness = false
+path = "benches/examples/basic/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_basic"
+harness = false
+path = "benches/examples/basic/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_basic"
+harness = false
+path = "benches/examples/basic/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_basic"
+harness = false
+path = "benches/examples/basic/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_basic"
+harness = false
+path = "benches/examples/basic/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_basic"
+harness = false
+path = "benches/examples/basic/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_basic"
+harness = false
+path = "benches/examples/basic/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_basic"
+harness = false
+path = "benches/examples/basic/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_basic"
+harness = false
+path = "benches/examples/basic/dns_imai.rs"
+required-features = ["full"]
+
+######### MPST
+
+[[bench]]
+name = "example_logging_mpst"
+harness = false
+path = "benches/examples/mpst/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_mpst"
+harness = false
+path = "benches/examples/mpst/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_mpst"
+harness = false
+path = "benches/examples/mpst/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_mpst"
+harness = false
+path = "benches/examples/mpst/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_mpst"
+harness = false
+path = "benches/examples/mpst/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_mpst"
+harness = false
+path = "benches/examples/mpst/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_mpst"
+harness = false
+path = "benches/examples/mpst/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_mpst"
+harness = false
+path = "benches/examples/mpst/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_mpst"
+harness = false
+path = "benches/examples/mpst/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_mpst"
+harness = false
+path = "benches/examples/mpst/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_mpst"
+harness = false
+path = "benches/examples/mpst/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_mpst"
+harness = false
+path = "benches/examples/mpst/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_mpst"
+harness = false
+path = "benches/examples/mpst/dns_imai.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_mpst"
+harness = false
+path = "benches/examples/mpst/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_mpst"
+harness = false
+path = "benches/examples/mpst/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_mpst"
+harness = false
+path = "benches/examples/mpst/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_mpst"
+harness = false
+path = "benches/examples/mpst/distributed_calculators.rs"
+required-features = ["full"]
+
+######### AMPST
+
+[[bench]]
+name = "example_logging_ampst"
+harness = false
+path = "benches/examples/ampst/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_ampst"
+harness = false
+path = "benches/examples/ampst/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_ampst"
+harness = false
+path = "benches/examples/ampst/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_ampst"
+harness = false
+path = "benches/examples/ampst/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_ampst"
+harness = false
+path = "benches/examples/ampst/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_ampst"
+harness = false
+path = "benches/examples/ampst/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_ampst"
+harness = false
+path = "benches/examples/ampst/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_ampst"
+harness = false
+path = "benches/examples/ampst/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_ampst"
+harness = false
+path = "benches/examples/ampst/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_ampst"
+harness = false
+path = "benches/examples/ampst/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_ampst"
+harness = false
+path = "benches/examples/ampst/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_ampst"
+harness = false
+path = "benches/examples/ampst/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_ampst"
+harness = false
+path = "benches/examples/ampst/dns_imai.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_ampst"
+harness = false
+path = "benches/examples/ampst/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_ampst"
+harness = false
+path = "benches/examples/ampst/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_ampst"
+harness = false
+path = "benches/examples/ampst/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_ampst"
+harness = false
+path = "benches/examples/ampst/distributed_calculators.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_gravity_android_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/proximity_based_car_key.rs"
+required-features = ["full"]
+
+######### Interleaved
+
+[[bench]]
+name = "example_logging_solo_interleaved"
+harness = false
+path = "benches/examples/interleaved/logging_solo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_solo_interleaved"
+harness = false
+path = "benches/examples/interleaved/circuit_breaker_solo.rs"
+required-features = ["full"]
+
+######### Timed
+
+[[bench]]
+name = "example_calculator_timed"
+harness = false
+path = "benches/examples/timed/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_timed"
+harness = false
+path = "benches/examples/timed/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_timed"
+harness = false
+path = "benches/examples/timed/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_timed"
+harness = false
+path = "benches/examples/timed/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_timed"
+harness = false
+path = "benches/examples/timed/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_timed"
+harness = false
+path = "benches/examples/timed/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_timed"
+harness = false
+path = "benches/examples/timed/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_timed"
+harness = false
+path = "benches/examples/timed/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_timed"
+harness = false
+path = "benches/examples/timed/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_timed"
+harness = false
+path = "benches/examples/timed/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_timed"
+harness = false
+path = "benches/examples/timed/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_timed"
+harness = false
+path = "benches/examples/timed/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_timed"
+harness = false
+path = "benches/examples/timed/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_timed"
+harness = false
+path = "benches/examples/timed/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_timed"
+harness = false
+path = "benches/examples/timed/distributed_calculators.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_gravity_android_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["full"]
+
+################## Ring
+
+######### Empty
+
+[[bench]]
+name = "ring_two_mpst_empty"
+harness = false
+path = "benches/ring/empty/ring_two_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_empty"
+harness = false
+path = "benches/ring/empty/ring_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/ring_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_empty"
+harness = false
+path = "benches/ring/empty/ring_three_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_empty"
+harness = false
+path = "benches/ring/empty/ring_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/ring_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_empty"
+harness = false
+path = "benches/ring/empty/ring_four_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_empty"
+harness = false
+path = "benches/ring/empty/ring_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/ring_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Normal
+
+[[bench]]
+name = "ring_two_mpst_normal"
+harness = false
+path = "benches/ring/normal/ring_two_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_normal"
+harness = false
+path = "benches/ring/normal/ring_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/ring_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_normal"
+harness = false
+path = "benches/ring/normal/ring_three_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_normal"
+harness = false
+path = "benches/ring/normal/ring_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/ring_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_normal"
+harness = false
+path = "benches/ring/normal/ring_four_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_normal"
+harness = false
+path = "benches/ring/normal/ring_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/ring_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Cancel Broadcast
+
+[[bench]]
+name = "ring_three_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_four.rs"
+required-features = ["full"]
+
+######### Cancel
+
+[[bench]]
+name = "ring_two_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_four.rs"
+required-features = ["full"]
+
+######### Baking
+
+[[bench]]
+name = "ring_two_mpst_baking"
+harness = false
+path = "benches/ring/baking/ring_two_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_ampst_baking"
+harness = false
+path = "benches/ring/baking/ring_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_baking"
+harness = false
+path = "benches/ring/baking/ring_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/ring_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_baking"
+harness = false
+path = "benches/ring/baking/ring_three_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_ampst_baking"
+harness = false
+path = "benches/ring/baking/ring_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_baking"
+harness = false
+path = "benches/ring/baking/ring_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/ring_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_baking"
+harness = false
+path = "benches/ring/baking/ring_four_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_ampst_baking"
+harness = false
+path = "benches/ring/baking/ring_four_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_baking"
+harness = false
+path = "benches/ring/baking/ring_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/ring_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Baking Cancel Inline
+
+[[bench]]
+name = "ring_two_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_four_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Baking Cancel
+
+[[bench]]
+name = "ring_two_mpst_timed_baking_cancel"
+harness = false
+path = "benches/ring/timed_baking_cancel/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_timed_baking_cancel"
+harness = false
+path = "benches/ring/timed_baking_cancel/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_timed_baking_cancel"
+harness = false
+path = "benches/ring/timed_baking_cancel/ring_four.rs"
+required-features = ["full"]
+
+################## Mesh
+
+######### Empty
+
+[[bench]]
+name = "mesh_two_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mesh_two_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_binary_empty"
+harness = false
+path = "benches/mesh/empty/mesh_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/mesh_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mesh_three_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_empty"
+harness = false
+path = "benches/mesh/empty/mesh_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/mesh_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mesh_four_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_empty"
+harness = false
+path = "benches/mesh/empty/mesh_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/mesh_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Normal
+
+[[bench]]
+name = "mesh_two_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mesh_two_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_binary_normal"
+harness = false
+path = "benches/mesh/normal/mesh_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/mesh_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mesh_three_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_normal"
+harness = false
+path = "benches/mesh/normal/mesh_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/mesh_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mesh_four_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_normal"
+harness = false
+path = "benches/mesh/normal/mesh_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/mesh_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Cancel Broadcast
+
+[[bench]]
+name = "mesh_three_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_four.rs"
+required-features = ["full"]
+
+######### Cancel
+
+[[bench]]
+name = "mesh_two_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_four.rs"
+required-features = ["full"]
+
+######### Baking
+
+[[bench]]
+name = "mesh_two_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_two_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_ampst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_binary_baking"
+harness = false
+path = "benches/mesh/baking/mesh_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/mesh_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_three_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_ampst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_baking"
+harness = false
+path = "benches/mesh/baking/mesh_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/mesh_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_four_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_ampst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_four_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_baking"
+harness = false
+path = "benches/mesh/baking/mesh_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/mesh_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Baking Cancel Inline
+
+[[bench]]
+name = "mesh_two_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_four_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_four_crossbeam.rs"
+required-features = ["full"]
+
+######### Baking Cancel
+
+[[bench]]
+name = "mesh_two_mpst_timed_baking_cancel"
+harness = false
+path = "benches/mesh/timed_baking_cancel/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_timed_baking_cancel"
+harness = false
+path = "benches/mesh/timed_baking_cancel/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_timed_baking_cancel"
+harness = false
+path = "benches/mesh/timed_baking_cancel/mesh_four.rs"
+required-features = ["full"]
+
+################################### Examples
+
+######### Crossbeam
+
+[[example]]
+name = "calculator_crossbeam"
+path = "examples/crossbeam/calculator.rs"
+required-features = ["default"]
+
+[[example]]
+name = "circuit_breaker_crossbeam"
+path = "examples/crossbeam/circuit_breaker.rs"
+required-features = ["default"]
+
+[[example]]
+name = "fib_crossbeam"
+path = "examples/crossbeam/fib.rs"
+required-features = ["default"]
+
+[[example]]
+name = "logging_crossbeam"
+path = "examples/crossbeam/logging.rs"
+required-features = ["default"]
+
+[[example]]
+name = "o_auth_crossbeam"
+path = "examples/crossbeam/o_auth.rs"
+required-features = ["default"]
+
+[[example]]
+name = "online_wallet_crossbeam"
+path = "examples/crossbeam/online_wallet.rs"
+required-features = ["default"]
+
+[[example]]
+name = "remote_data_crossbeam"
+path = "examples/crossbeam/remote_data.rs"
+required-features = ["default"]
+
+[[example]]
+name = "servo_crossbeam"
+path = "examples/crossbeam/servo.rs"
+required-features = ["default"]
+
+[[example]]
+name = "simple_voting_crossbeam"
+path = "examples/crossbeam/simple_voting.rs"
+required-features = ["default"]
+
+[[example]]
+name = "smtp_crossbeam"
+path = "examples/crossbeam/smtp.rs"
+required-features = ["default"]
+
+[[example]]
+name = "three_buyers_crossbeam"
+path = "examples/crossbeam/three_buyers.rs"
+required-features = ["default"]
+
+[[example]]
+name = "travel_agency_crossbeam"
+path = "examples/crossbeam/travel_agency.rs"
+required-features = ["default"]
+
+[[example]]
+name = "video_stream_crossbeam"
+path = "examples/crossbeam/video_stream.rs"
+required-features = ["default"]
+
+[[example]]
+name = "distributed_calculators_crossbeam"
+path = "examples/crossbeam/distributed_calculators.rs"
+required-features = ["default"]
+
+######### Binary
+
+[[example]]
+name = "calculator_binary"
+path = "examples/binary/calculator.rs"
+required-features = ["default"]
+
+[[example]]
+name = "circuit_breaker_binary"
+path = "examples/binary/circuit_breaker.rs"
+required-features = ["default"]
+
+[[example]]
+name = "fib_binary"
+path = "examples/binary/fib.rs"
+required-features = ["default"]
+
+[[example]]
+name = "logging_binary"
+path = "examples/binary/logging.rs"
+required-features = ["default"]
+
+[[example]]
+name = "o_auth_binary"
+path = "examples/binary/o_auth.rs"
+required-features = ["default"]
+
+[[example]]
+name = "online_wallet_binary"
+path = "examples/binary/online_wallet.rs"
+required-features = ["default"]
+
+[[example]]
+name = "remote_data_binary"
+path = "examples/binary/remote_data.rs"
+required-features = ["default"]
+
+[[example]]
+name = "servo_binary"
+path = "examples/binary/servo.rs"
+required-features = ["default"]
+
+[[example]]
+name = "simple_voting_binary"
+path = "examples/binary/simple_voting.rs"
+required-features = ["default"]
+
+[[example]]
+name = "smtp_binary"
+path = "examples/binary/smtp.rs"
+required-features = ["default"]
+
+[[example]]
+name = "three_buyers_binary"
+path = "examples/binary/three_buyers.rs"
+required-features = ["default"]
+
+[[example]]
+name = "travel_agency_binary"
+path = "examples/binary/travel_agency.rs"
+required-features = ["default"]
+
+[[example]]
+name = "video_stream_binary"
+path = "examples/binary/video_stream.rs"
+required-features = ["default"]
+
+[[example]]
+name = "distributed_calculators_binary"
+path = "examples/binary/distributed_calculators.rs"
+required-features = ["default"]
+
+######### Basic
+
+[[example]]
+name = "video_stream_basic"
+path = "examples/basic/video_stream_basic.rs"
+required-features = ["macros_simple"]
+
+[[example]]
+name = "circuit_breaker_basic"
+path = "examples/basic/circuit_breaker.rs"
+required-features = ["macros_multiple"]
+
+[[example]]
+name = "logging_basic"
+path = "examples/basic/logging.rs"
+required-features = ["macros_multiple"]
+
+######### MPST
+
+[[example]]
+name = "fib_mpst"
+path = "examples/mpst/fib.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_mpst"
+path = "examples/mpst/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging_mpst"
+path = "examples/mpst/logging.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "calculator_mpst"
+path = "examples/mpst/calculator.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_mpst"
+path = "examples/mpst/dns_fowler.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking_mpst"
+path = "examples/mpst/dns_fowler_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "dns_imai_mpst"
+path = "examples/mpst/dns_imai.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_mpst"
+path = "examples/mpst/o_auth.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking_mpst"
+path = "examples/mpst/o_auth_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "o_auth_transport_mpst"
+path = "examples/mpst/o_auth_transport.rs"
+required-features = ["transport_macros_multiple"]
+
+[[example]]
+name = "online_wallet_mpst"
+path = "examples/mpst/online_wallet.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "simple_voting_mpst"
+path = "examples/mpst/simple_voting.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "smtp_mpst"
+path = "examples/mpst/smtp.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "three_buyers_mpst"
+path = "examples/mpst/three_buyers.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "travel_agency_mpst"
+path = "examples/mpst/travel_agency.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_mpst"
+path = "examples/mpst/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data_mpst"
+path = "examples/mpst/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http_mpst"
+path = "examples/mpst/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "video_stream_mpst"
+path = "examples/mpst/video_stream.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_original_mpst"
+path = "examples/mpst/servo_8257_original.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_fixed_mpst"
+path = "examples/mpst/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "distributed_calculators_mpst"
+path = "examples/mpst/distributed_calculators.rs"
+required-features = ["baking"]
+
+######### AMPST
+
+[[example]]
+name = "fib_ampst"
+path = "examples/ampst/fib.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_ampst"
+path = "examples/ampst/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging_ampst"
+path = "examples/ampst/logging.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "calculator_ampst"
+path = "examples/ampst/calculator.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_ampst"
+path = "examples/ampst/dns_fowler.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking_ampst"
+path = "examples/ampst/dns_fowler_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "dns_imai_ampst"
+path = "examples/ampst/dns_imai.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_ampst"
+path = "examples/ampst/o_auth.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking_ampst"
+path = "examples/ampst/o_auth_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "o_auth_transport_ampst"
+path = "examples/ampst/o_auth_transport.rs"
+required-features = ["transport_macros_multiple"]
+
+[[example]]
+name = "online_wallet_ampst"
+path = "examples/ampst/online_wallet.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "simple_voting_ampst"
+path = "examples/ampst/simple_voting.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "smtp_ampst"
+path = "examples/ampst/smtp.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "three_buyers_ampst"
+path = "examples/ampst/three_buyers.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "travel_agency_ampst"
+path = "examples/ampst/travel_agency.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_ampst"
+path = "examples/ampst/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data_ampst"
+path = "examples/ampst/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http_ampst"
+path = "examples/ampst/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "video_stream_ampst"
+path = "examples/ampst/video_stream.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_original_ampst"
+path = "examples/ampst/servo_8257_original.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_fixed_ampst"
+path = "examples/ampst/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "distributed_calculators_ampst"
+path = "examples/ampst/distributed_calculators.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "gravity_android_ampst"
+path = "examples/rate_based_ampst/gravity_android.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "pinetime_heart_rate_ampst"
+path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "proximity_based_car_key_ampst"
+path = "examples/rate_based_ampst/proximity_based_car_key.rs"
+required-features = ["baking"]
+
+######### Checking
+
+[[example]]
+name = "video_stream_checking"
+path = "examples/checking/video_stream.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "adder_checking"
+path = "examples/checking/adder.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "basic_checking"
+path = "examples/checking/basic.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_original_checking"
+path = "examples/checking/servo_8257_original.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed_checking"
+path = "examples/checking/servo_8257_fixed.rs"
+required-features = ["baking_checking"]
+
+######### Interleaved
+
+#### Baking
+
+[[example]]
+name = "circuit_breaker_logging_interleaved"
+path = "examples/interleaved/baking/circuit_breaker_logging.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "circuit_breaker_solo"
+path = "examples/interleaved/baking/circuit_breaker_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "logging_solo"
+path = "examples/interleaved/baking/logging_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "sleeping_barber_interleaved"
+path = "examples/interleaved/baking/sleeping_barber.rs"
+required-features = ["interleaved"]
+
+#### Timed
+
+[[example]]
+name = "sleeping_barber_interleaved_timed"
+path = "examples/interleaved/timed/sleeping_barber.rs"
+required-features = ["baking_timed_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_interleaved_timed"
+path = "examples/interleaved/timed/circuit_breaker_logging.rs"
+required-features = ["baking_timed_interleaved"]
+
+######### Timed
+
+[[example]]
+name = "fib_timed"
+path = "examples/timed/fib.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_timed"
+path = "examples/timed/servo.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_failing_timed"
+path = "examples/timed/servo_8257_async_failing.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_working_timed"
+path = "examples/timed/servo_8257_async_working.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_fixed_timed"
+path = "examples/timed/servo_8257_async_fixed.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "simple_voting_timed"
+path = "examples/timed/simple_voting.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "calculator_timed"
+path = "examples/timed/calculator.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "o_auth_timed"
+path = "examples/timed/o_auth.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "online_wallet_timed"
+path = "examples/timed/online_wallet.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "smtp_timed"
+path = "examples/timed/smtp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "three_buyers_timed"
+path = "examples/timed/three_buyers.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "travel_agency_timed"
+path = "examples/timed/travel_agency.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "remote_data_timed"
+path = "examples/timed/remote_data.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "http_timed"
+path = "examples/timed/http.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "non_feasible_timed"
+path = "examples/timed/non_feasible.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "circuit_breaker_timed"
+path = "examples/timed/circuit_breaker.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "logging_timed"
+path = "examples/timed/logging.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "video_stream_timed"
+path = "examples/timed/video_stream.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "distributed_calculators_timed"
+path = "examples/timed/distributed_calculators.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "gravity_android_timed"
+path = "examples/rate_based_atmp/gravity_android.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "pinetime_heart_rate_timed"
+path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "proximity_based_car_key_timed"
+path = "examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["baking_timed"]
+
+################################### Mesh examples
+
+################## Crossbeam
+
+[[example]]
+name = "mesh_two_crossbeam"
+path = "examples/mesh/mesh_two_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_three_crossbeam"
+path = "examples/mesh/mesh_three_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_four_crossbeam"
+path = "examples/mesh/mesh_four_crossbeam.rs"
+required-features = ["default"]
+
+################## Binary
+
+[[example]]
+name = "mesh_two_binary"
+path = "examples/mesh/mesh_two_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_three_binary"
+path = "examples/mesh/mesh_three_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_four_binary"
+path = "examples/mesh/mesh_four_binary.rs"
+required-features = ["default"]
+
+################## MPST
+
+[[example]]
+name = "mesh_two_baking_mpst"
+path = "examples/mesh/mesh_two_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_three_baking_mpst"
+path = "examples/mesh/mesh_three_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_four_baking_mpst"
+path = "examples/mesh/mesh_four_baking_mpst.rs"
+required-features = ["baking"]
+
+################## Baking
+
+[[example]]
+name = "mesh_two_baking_ampst"
+path = "examples/mesh/mesh_two_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_three_baking_ampst"
+path = "examples/mesh/mesh_three_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_four_baking_ampst"
+path = "examples/mesh/mesh_four_baking_ampst.rs"
+required-features = ["baking"]
+
+################## Timed
+
+[[example]]
+name = "mesh_two_baking_atmp"
+path = "examples/mesh/mesh_two_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "mesh_three_baking_atmp"
+path = "examples/mesh/mesh_three_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "mesh_four_baking_atmp"
+path = "examples/mesh/mesh_four_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+################################### Ring examples
+
+################## Crossbeam
+
+[[example]]
+name = "ring_two_crossbeam"
+path = "examples/ring/ring_two_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_three_crossbeam"
+path = "examples/ring/ring_three_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_four_crossbeam"
+path = "examples/ring/ring_four_crossbeam.rs"
+required-features = ["default"]
+
+################## Binary
+
+[[example]]
+name = "ring_two_binary"
+path = "examples/ring/ring_two_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_three_binary"
+path = "examples/ring/ring_three_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_four_binary"
+path = "examples/ring/ring_four_binary.rs"
+required-features = ["default"]
+
+################## MPST
+
+[[example]]
+name = "ring_two_baking_mpst"
+path = "examples/ring/ring_two_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_three_baking_mpst"
+path = "examples/ring/ring_three_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_four_baking_mpst"
+path = "examples/ring/ring_four_baking_mpst.rs"
+required-features = ["baking"]
+
+################## Baking
+
+[[example]]
+name = "ring_two_baking_ampst"
+path = "examples/ring/ring_two_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_three_baking_ampst"
+path = "examples/ring/ring_three_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_four_baking_ampst"
+path = "examples/ring/ring_four_baking_ampst.rs"
+required-features = ["baking"]
+
+################## Timed
+
+[[example]]
+name = "ring_two_baking_atmp"
+path = "examples/ring/ring_two_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "ring_three_baking_atmp"
+path = "examples/ring/ring_three_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "ring_four_baking_atmp"
+path = "examples/ring/ring_four_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+################################### Artifact examples
+
+[[example]]
+name = "my_basic"
+path = "examples/artifact/my_basic.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "basic"
+path = "examples/artifact/basic.rs"
+required-features = ["baking"]
+
+################################### Timed artifact examples
+
+[[example]]
+name = "timed_my_basic"
+path = "examples/artifact_timed/my_basic.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "timed_basic"
+path = "examples/artifact_timed/basic.rs"
+required-features = ["baking_timed"]
+
+################################### Readme example
+
+[[example]]
+name = "readme"
+path = "examples/readme_example.rs"
+required-features = ["mpst"]
+
+################################### Profil
+
+[profile.release]
+debug = true
+
+################################### Dependencies
+
+[dependencies]
+mpst-seq-proc = { path = "mpst_seq_proc" }
+# mpst-seq-proc = "0.1"
+crossbeam-channel = "0.5.8"
+either = "1.9.0"
+# Extension libraries
+hyper = { version = "0.14.27", features = ["full"], optional = true }
+hyper-tls = { version = "0.5.0", optional = true }
+tokio = { version = "1.33.0", features = ["full"], optional = true }
+# For kMC
+regex = { version = "1.10.0", optional = true }
+petgraph = { version = "0.6.4", optional = true }
+# Protobuf libraries
+protobuf = { version = "3.3.0", features = ["with-bytes"] }
+protobuf-codegen = "3.3.0"
+protoc-bin-vendored = "3.0.0"
+
+################################### Dev-dependencies for tests/benches
+
+[dev-dependencies]
+criterion = { version = "0.5.1", features = ["html_reports"] }
+trybuild = "1.0.85"
+ntest = "0.9.0"
+rand = "0.8.5"
+
+################################### Features
+
+[features]
+default = []
+mpst = ["default"]
+binary_timed = ["default"]
+macros_simple = ["mpst"]
+macros_multiple = ["mpst", "macros_simple"]
+checking = ["mpst", "regex", "petgraph"]
+baking = ["mpst", "macros_multiple"]
+interleaved = ["baking"] # For interleaved sessions
+baking_timed = ["binary_timed", "mpst"]
+baking_interleaved = ["baking", "interleaved"]
+baking_checking = ["baking", "checking"]
+baking_timed_interleaved = ["baking_timed", "interleaved"]
+transport_tcp = ["default"]
+transport_udp = ["default"]
+# transport_http = ["default", "hyper", "hyper-tls", "tokio"]
+# transport = ["transport_tcp", "transport_udp", "transport_http"]
+transport = ["transport_tcp", "transport_udp"]
+transport_macros_multiple = [
+    "macros_multiple",
+    "transport",
+] # For test compile examples
+protobuf_feature = []
+affine_timed = ["baking", "baking_timed"]
+full_without_checking = ["baking", "transport", "interleaved"]
+full = ["baking_checking", "transport", "baking_timed", "interleaved"]
+
+################################### Doc handling for all-features
+
+# docs.rs-specific configuration
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "doc_cfg"]
+
+################################### Rust playground features
+
+[package.metadata.playground]
+features = ["full", "interleaved"]

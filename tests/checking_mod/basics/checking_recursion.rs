@@ -2,7 +2,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
-use mpstthree::checker_concat;
+use mpstthree::{checker_concat, checker_concat_impl};
 
 use petgraph::dot::Dot;
 
@@ -74,6 +74,11 @@ type EndpointCFull = MeshedChannels<End, InitC, StackCInit, NameC>;
 type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, NameA>;
 
 /////////////////////////////////////////
+
+checker_concat_impl!(
+    [Branches0AtoB, Video, Branches0CtoB, Video],
+    [Branches0AtoB, End, Branches0CtoB, End]
+);
 
 pub fn main() {
     let (graphs, kmc) = checker_concat!(

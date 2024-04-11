@@ -5,7 +5,6 @@ use mpstthree::binary::struct_trait::session::*;
 use mpstthree::binary_timed::recv::recv;
 use mpstthree::binary_timed::struct_trait::recv::RecvTimed;
 
-// use std::boxed::Box;
 use std::collections::HashMap;
 use std::error::Error;
 use std::thread::sleep;
