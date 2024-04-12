@@ -4,14 +4,12 @@ global protocol Logging(role Controller, role Logs)
     rec Loop {
         choice at Logs
         {
-            Success(int) from Logs to Controller within [0;1] using a and resetting ();
-            continue Loop;
+            Success(int) from Logs to Controller within [0;1] using a and resetting (a);            continue Loop;
         } or {
             Failure(int) from Logs to Controller within [0;1] using a and resetting ();
             choice at Controller
             {
-                Restart(int) from Controller to Logs within [0;1] using a and resetting ();
-                continue Loop;
+                Restart(int) from Controller to Logs within [0;1] using a and resetting (a);                continue Loop;
             } or {
                 Stop(int) from Controller to Logs within [0;1] using a and resetting ();
             }

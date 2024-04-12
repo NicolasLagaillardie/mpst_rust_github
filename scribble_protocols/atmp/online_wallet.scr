@@ -6,8 +6,7 @@ global protocol OnlineWallet(role S, role C, role A) {
         rec LOOP {
             account(balance: int, overdraft: int) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             choice at C {  @< amount <= balance+overdraft >
-                pay(payee: string, amount: int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-                continue LOOP;
+                pay(payee: string, amount: int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting (a);                continue LOOP;
             } or {
                 quit() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             }

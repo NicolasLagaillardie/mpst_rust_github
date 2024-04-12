@@ -28,8 +28,7 @@ global protocol HandleDNSRequest(role Handler, role Regional, role Data) {
         choice at Regional {
             ZoneResponse(ZonePID) from Regional to Handler within [0;1] using a and resetting ();
             ZoneDataRequest() from Handler to Data within [0;1] using a and resetting ();
-            ZoneDataResponse(RRTree) from Data to Handler within [0;1] using a and resetting ();
-            continue QueryResolution;
+            ZoneDataResponse(RRTree) from Data to Handler within [0;1] using a and resetting (a);            continue QueryResolution;
         } or {
             InvalidZone() from Regional to Handler within [0;1] using a and resetting ();
             InvalidZone() from Handler to Data within [0;1] using a and resetting ();

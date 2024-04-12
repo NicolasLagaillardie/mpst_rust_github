@@ -8,8 +8,7 @@ global protocol SleepingBarber(role barber as B, role selector as S, role room a
             choice at R {
                 full() from R to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 returned() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-                wait() from R to B within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-                continue Loop;
+                wait() from R to B within [0;1] using a and resetting ()  within [0;1] using a and resetting (a);                continue Loop;
             } or {
                 wait() from R to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 enter() from R to B within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
@@ -17,8 +16,7 @@ global protocol SleepingBarber(role barber as B, role selector as S, role room a
                 stop() from B to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 done() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 next() from B to R within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-                wait() from R to B within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-                continue Loop;
+                wait() from R to B within [0;1] using a and resetting ()  within [0;1] using a and resetting (a);                continue Loop;
             }
         } or {
             done() from S to R within [0;1] using a and resetting ()  within [0;1] using a and resetting ();

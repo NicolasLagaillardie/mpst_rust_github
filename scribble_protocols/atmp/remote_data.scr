@@ -6,8 +6,7 @@ global protocol RemoteData(role Sensor, role Satellite, role Server) {
             GetData() from Satellite to Sensor within [1;2] using b and resetting ()  within [0;1] using a and resetting ();
 
             Data(int) from Sensor to Satellite within [2;4] using b and resetting (a)  within [0;1] using a and resetting ();
-            Data(int) from Satellite to Server within [4;6] using a and resetting (a)  within [0;1] using a and resetting ();
-
+            Data(int) from Satellite to Server within [4;6] using a and resetting (a)  within [0;1] using a and resetting (a);
             continue Loop
         } or {
             Stop() from Server to Satellite within [0;1] using a and resetting ()  within [0;1] using a and resetting ();

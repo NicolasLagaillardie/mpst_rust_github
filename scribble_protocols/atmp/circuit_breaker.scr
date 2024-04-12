@@ -11,13 +11,11 @@ global protocol API(role API, role Controller, role Storage, role User)
             Up() from Controller to API within [0;1] using a and resetting ();
             Request(int) from API to Storage within [0;1] using a and resetting ();
             Reponse(int) from Storage to Api within [0;1] using a and resetting ();
-            Response(int) from API to User within [0;1] using a and resetting ();
-            continue Loop;
+            Response(int) from API to User within [0;1] using a and resetting (a);            continue Loop;
         } or {
             Failure() from Controller to API within [0;1] using a and resetting ();
             Restart() from Controller to Storage()  within [0;1] using a and resetting ();
-            Failure() from API to User within [0;1] using a and resetting ();
-            continue Loop;
+            Failure() from API to User within [0;1] using a and resetting (a);            continue Loop;
         } or {
             Stop() from Controller to API within [0;1] using a and resetting ();
             Stop() from Controller to Storage()  within [0;1] using a and resetting ();

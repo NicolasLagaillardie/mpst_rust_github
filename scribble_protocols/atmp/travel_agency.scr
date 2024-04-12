@@ -21,8 +21,7 @@ global protocol Booking(role C, role A, role S)
         {
             Query(int) from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             Quote(int) from A to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-            Dummy() from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-            continue Loop;
+            Dummy() from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting (a);            continue Loop;
         }
     }
 }

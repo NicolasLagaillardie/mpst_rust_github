@@ -5,8 +5,7 @@ global protocol Fibonacci(role A, role B)
         choice at A
         {
             fibonacci(Long) from A to B within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-            fibonacci(Long) from B to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-            continue Fib;
+            fibonacci(Long) from B to A within [0;1] using a and resetting ()  within [0;1] using a and resetting (a);            continue Fib;
         }
         or
         {
