@@ -1561,9 +1561,9 @@ path = "examples/mpst/o_auth_checking.rs"
 required-features = ["baking_checking"]
 
 [[example]]
-name = "o_auth_transport_mpst"
-path = "examples/mpst/o_auth_transport.rs"
-required-features = ["transport_macros_multiple"]
+# name = "o_auth_transport_mpst"
+# path = "examples/mpst/o_auth_transport.rs"
+# required-features = ["transport_macros_multiple"]
 
 [[example]]
 name = "online_wallet_mpst"
@@ -1672,10 +1672,10 @@ name = "o_auth_checking_ampst"
 path = "examples/ampst/o_auth_checking.rs"
 required-features = ["baking_checking"]
 
-[[example]]
-name = "o_auth_transport_ampst"
-path = "examples/ampst/o_auth_transport.rs"
-required-features = ["transport_macros_multiple"]
+# [[example]]
+# name = "o_auth_transport_ampst"
+# path = "examples/ampst/o_auth_transport.rs"
+# required-features = ["transport_macros_multiple"]
 
 [[example]]
 name = "online_wallet_ampst"
