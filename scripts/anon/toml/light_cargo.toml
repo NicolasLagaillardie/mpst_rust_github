@@ -1,15 +1,15 @@
 [package]
 name = "mpstthree"
 version = "0.1.17"
-authors = ["NicolasLagaillardie <nicolas.lagaillardie@tutanota.com>"]
+authors = ["XXX"]
 edition = "2021"
 rust-version = "1.77"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
-homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
-repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+homepage = "XXX"
+repository = "XXX"
 license = "MIT OR Apache-2.0"
-keywords = ["multiparty", "session", "affine", "multicrusty", "timed"]
+keywords = ["multiparty", "session", "affine", "timed"]
 documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
 # include = [
@@ -137,17 +137,320 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
-################################### Artifact examples
+################################### Benches
+
+################################### Ping-Pong
+
+######### Ping-Pong start
+######### Ping-Pong end
+
+################## Examples
+
+######### Timed
+
+[[bench]]
+name = "example_calculator_timed"
+harness = false
+path = "benches/examples/timed/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_timed"
+harness = false
+path = "benches/examples/timed/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_timed"
+harness = false
+path = "benches/examples/timed/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_timed"
+harness = false
+path = "benches/examples/timed/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_timed"
+harness = false
+path = "benches/examples/timed/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_timed"
+harness = false
+path = "benches/examples/timed/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_timed"
+harness = false
+path = "benches/examples/timed/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_timed"
+harness = false
+path = "benches/examples/timed/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_timed"
+harness = false
+path = "benches/examples/timed/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_timed"
+harness = false
+path = "benches/examples/timed/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_timed"
+harness = false
+path = "benches/examples/timed/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_timed"
+harness = false
+path = "benches/examples/timed/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_timed"
+harness = false
+path = "benches/examples/timed/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_timed"
+harness = false
+path = "benches/examples/timed/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_timed"
+harness = false
+path = "benches/examples/timed/distributed_calculators.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_gravity_android_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["full"]
+
+################## Ring
+
+######### Baking Cancel
+
+[[bench]]
+name = "ring_two_mpst_timed_baking_cancel"
+harness = false
+path = "benches/ring/timed_baking_cancel/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_timed_baking_cancel"
+harness = false
+path = "benches/ring/timed_baking_cancel/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_timed_baking_cancel"
+harness = false
+path = "benches/ring/timed_baking_cancel/ring_four.rs"
+required-features = ["full"]
+
+################## Mesh
+
+######### Baking Cancel
+
+[[bench]]
+name = "mesh_two_mpst_timed_baking_cancel"
+harness = false
+path = "benches/mesh/timed_baking_cancel/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_timed_baking_cancel"
+harness = false
+path = "benches/mesh/timed_baking_cancel/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_timed_baking_cancel"
+harness = false
+path = "benches/mesh/timed_baking_cancel/mesh_four.rs"
+required-features = ["full"]
+
+################################### Examples
+
+######### Timed
 
 [[example]]
-name = "my_basic"
-path = "examples/artifact/my_basic.rs"
-required-features = ["baking"]
+name = "fib_timed"
+path = "examples/timed/fib.rs"
+required-features = ["baking_timed"]
 
 [[example]]
-name = "basic"
-path = "examples/artifact/basic.rs"
-required-features = ["baking"]
+name = "servo_timed"
+path = "examples/timed/servo.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_failing_timed"
+path = "examples/timed/servo_8257_async_failing.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_working_timed"
+path = "examples/timed/servo_8257_async_working.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "servo_8257_async_fixed_timed"
+path = "examples/timed/servo_8257_async_fixed.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "simple_voting_timed"
+path = "examples/timed/simple_voting.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "calculator_timed"
+path = "examples/timed/calculator.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "o_auth_timed"
+path = "examples/timed/o_auth.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "online_wallet_timed"
+path = "examples/timed/online_wallet.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "smtp_timed"
+path = "examples/timed/smtp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "three_buyers_timed"
+path = "examples/timed/three_buyers.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "travel_agency_timed"
+path = "examples/timed/travel_agency.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "remote_data_timed"
+path = "examples/timed/remote_data.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "http_timed"
+path = "examples/timed/http.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "non_feasible_timed"
+path = "examples/timed/non_feasible.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "circuit_breaker_timed"
+path = "examples/timed/circuit_breaker.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "logging_timed"
+path = "examples/timed/logging.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "video_stream_timed"
+path = "examples/timed/video_stream.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "distributed_calculators_timed"
+path = "examples/timed/distributed_calculators.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "gravity_android_timed"
+path = "examples/rate_based_atmp/gravity_android.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "pinetime_heart_rate_timed"
+path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "proximity_based_car_key_timed"
+path = "examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["baking_timed"]
+
+################################### Mesh examples
+
+################## Timed
+
+[[example]]
+name = "mesh_two_baking_atmp"
+path = "examples/mesh/mesh_two_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "mesh_three_baking_atmp"
+path = "examples/mesh/mesh_three_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "mesh_four_baking_atmp"
+path = "examples/mesh/mesh_four_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+################################### Ring examples
+
+################## Timed
+
+[[example]]
+name = "ring_two_baking_atmp"
+path = "examples/ring/ring_two_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "ring_three_baking_atmp"
+path = "examples/ring/ring_three_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "ring_four_baking_atmp"
+path = "examples/ring/ring_four_baking_atmp.rs"
+required-features = ["baking_timed"]
 
 ################################### Timed artifact examples
 
@@ -167,11 +470,6 @@ required-features = ["baking_timed"]
 name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
-
-################################### Ping-Pong
-
-######### Ping-Pong start
-######### Ping-Pong end
 
 ################################### Profil
 
