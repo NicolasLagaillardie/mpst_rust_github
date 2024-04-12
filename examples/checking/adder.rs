@@ -150,8 +150,8 @@ fn main() {
 /////////////////////////
 
 mpstthree::checker_concat_impl!(
-    [EndpointC7, Branches0AtoC, Add, Branches0BtoC, Add,],
-    [EndpointC9, Branches0AtoC, Bye, Branches0BtoC, Bye,]
+    [Branches0AtoC, Add, Branches0BtoC, Add,],
+    [Branches0AtoC, Bye, Branches0BtoC, Bye,]
 );
 
 // Check for bottom-up approach

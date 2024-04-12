@@ -97,8 +97,8 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 }
 
 checker_concat_impl!(
-    [EndpointAMore, Branching0fromAtoB, More,],
-    [EndpointADone, Branching0fromAtoB, Done,]
+    [Branching0fromAtoB, More,],
+    [Branching0fromAtoB, Done,]
 );
 
 fn main() {
