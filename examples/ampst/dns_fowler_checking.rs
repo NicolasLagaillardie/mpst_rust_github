@@ -174,6 +174,21 @@ checker_concat_impl!(
     ]
 );
 
+checker_concat_impl!(
+    [
+        Branching0fromRegionalToData,
+        Loops,
+        Branching0fromRegionalToHandler,
+        Loops,
+    ],
+    [
+        Branching0fromRegionalToData,
+        Invalid,
+        Branching0fromRegionalToHandler,
+        Invalid,
+    ]
+);
+
 // Check for bottom-up approach
 fn checking() {
     let _ = checker_concat!(
