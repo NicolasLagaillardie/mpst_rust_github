@@ -1,8 +1,8 @@
 global protocol Servo(role C, role L, role S)
 {
-    GetWebPageLoadState(bool) from C to L;
-    OutstandingWebFonts(bool) from L to C;
-    GetCurrentState(bool) from C to S;
-    DocumentLoading(bool) from S to C;
-    WebFontLoaded(bool) from L to S;
+    GetWebPageLoadState(bool) from C to L within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+    OutstandingWebFonts(bool) from L to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+    GetCurrentState(bool) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+    DocumentLoading(bool) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+    WebFontLoaded(bool) from L to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
 }

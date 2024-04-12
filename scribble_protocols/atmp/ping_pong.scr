@@ -5,15 +5,15 @@ global protocol ping_pong(role A, role B)
     {
         choice at A
         {
-            ping(()) from A to B;
+            ping(()) from A to B within [0;1] using a and resetting ();
 
-            pong(()) from B to A;
+            pong(()) from B to A within [0;1] using a and resetting ();
 
             continue PP;
         }
         or
         {
-            stop() from A to B;
+            stop() from A to B within [0;1] using a and resetting ();
         }
     }
 }

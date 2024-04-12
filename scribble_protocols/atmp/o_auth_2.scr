@@ -1,28 +1,28 @@
 global protocol oAuth(role Auth, role Client, role Server) {
-    Authorization(Approval) from Client to Auth; // Request Authorization Approval
+    Authorization(Approval) from Client to Auth within [0;1] using a and resetting (); // Request Authorization Approval
     choice at A
     {
-        Access(Token) from Auth to Client;
+        Access(Token) from Auth to Client within [0;1] using a and resetting ();
         rec Loop {
             choice at Client { // Client makes a choice
-                RequestPicture(Token) from Client to Server; // Client sends a request for a picture, giving its access token
-                GetAuth(Token) from Server to Auth; // Server checks the Token with Auth
-                SendAuth(Token) from Auth to Server; // Auth answers the check
+                RequestPicture(Token) from Client to Server within [0;1] using a and resetting (); // Client sends a request for a picture, giving its access token
+                GetAuth(Token) from Server to Auth within [0;1] using a and resetting (); // Server checks the Token with Auth
+                SendAuth(Token) from Auth to Server within [0;1] using a and resetting (); // Auth answers the check
                 choice at S
                 {
-                    SendPicture(Answer) from Server to Client; // Server sends the picture file to the client
+                    SendPicture(Answer) from Server to Client within [0;1] using a and resetting (); // Server sends the picture file to the client
                     continue Loop; // A Recursive call
                 } or {
-                    SendRefusal(Answer) from Server to Client; // Server sends refusal to the client
+                    SendRefusal(Answer) from Server to Client within [0;1] using a and resetting (); // Server sends refusal to the client
                     continue Loop; // A Recursive call
                 }
             } or {
-                Close() from Client to Server; // Close the session between Client and Server
-                Close() from Server to Auth; // Close the session between Server and Auth
+                Close() from Client to Server within [0;1] using a and resetting (); // Close the session between Client and Server
+                Close() from Server to Auth within [0;1] using a and resetting (); // Close the session between Server and Auth
             }
         }
     } or {
-        Close() from Auth to Client; // Close the session between Client and Auth
-        Close() from Client to Server; // Close the session between Client and Server
+        Close() from Auth to Client within [0;1] using a and resetting (); // Close the session between Client and Auth
+        Close() from Client to Server within [0;1] using a and resetting (); // Close the session between Client and Server
     }
 }

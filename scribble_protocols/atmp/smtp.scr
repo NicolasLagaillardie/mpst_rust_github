@@ -1,96 +1,96 @@
 global protocol Smtp(role S, role C)
 {
-    220() from S to C;
+    220() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
     choice at C // Choice 0
     {
-        Ehlo1() from C to S;
+        Ehlo1() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
         rec X
         {
             choice at S // Choice 1
             {
-                250d() from S to C;
+                250d() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 continue X;
             }
             or
             {
-                250() from S to C;
+                250() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 choice at C // Choice 2
                 {
-                    StartTls() from C to S;
-                    220() from S to C;
+                    StartTls() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                    220() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                     // Do TLS handshake here: level below the application level protocol (like regular TCP handshake)
                     choice at C // Choice 3
                     {
-                         Ehlo2() from C to S;
+                         Ehlo2() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                          rec X
                         {
                             choice at S // Choice 4
                             {
-                                250d1() from S to C;
+                                250d1() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                 continue X;
                             }
                             or
                             {
-                                2501() from S to C;
+                                2501() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                 rec Y
                                 {
                                     choice at C // Choice 5
                                     {
-                                        Auth() from C to S;
+                                        Auth() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                         choice at S // Choice 6
                                         {
-                                            235() from S to C;
+                                            235() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                             rec Z1
                                             {
                                                 choice at C // Choice 7
                                                 {
-                                                    Mail() from C to S; //Mail from:<a@b.com>
+                                                    Mail() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                     choice at S // Choice 8
                                                     {
-                                                        501() from S to C;
+                                                        501() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                         continue Z1;
                                                     }
                                                     or
                                                     {
-                                                        2502() from S to C;
+                                                        2502() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                         rec Z2
                                                         {
                                                             choice at C // Choice 9
                                                             {
-                                                                Rcpt() from C to S; //Rcpt to:<c@d.com>
+                                                                Rcpt() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                                 choice at S // What is this choice???  // Choice X
                                                                 {
-                                                                    2503() from S to C;
+                                                                    2503() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                                     continue Z2;
                                                                 }
                                                             }
                                                             or
                                                             {
-                                                                Data() from C to S;
-                                                                354() from S to C;
+                                                                Data() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                                                                354() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
 
-                                                                too from C to S; //to:<you>
+                                                                too from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
 
-                                                                froom from C to S; //from:<me>
+                                                                froom from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
 
                                                                 rec Z3
                                                                 {
                                                                     choice at C // Choice 10
                                                                     {
-                                                                        DataLine() from C to S;
-                                                                        DataLine() from C to S;
+                                                                        DataLine() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                                                                        DataLine() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                                         continue Z3;
                                                                     }
                                                                     or
                                                                     {
-                                                                        Subject() from C to S; //Subject:<my Subject>
-                                                                        Subject() from C to S; //Subject:<my Subject>
+                                                                        Subject() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                                                                        Subject() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                                         continue Z3;
                                                                     }
                                                                     or
                                                                     {
-                                                                        EndOfData() from C to S; // CRLF.CRLF
-                                                                        2504() from S to C;
+                                                                        EndOfData() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                                                                        2504() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                                         continue Z1;
                                                                     }
                                                                 }
@@ -100,14 +100,14 @@ global protocol Smtp(role S, role C)
                                                 }
                                                 or
                                                 {
-                                                     Quit5() from C to S;
-                                                     221() from S to C;
+                                                     Quit5() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                                                     221() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                                  }
                                             }
                                         }
                                         or
                                         {
-                                            535() from S to C;
+                                            535() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                                              continue Y;
                                         }
                                         //.. 501 Invalid base64 Data
@@ -122,18 +122,18 @@ global protocol Smtp(role S, role C)
                     }
                     or
                     {
-                        Quit3() from C to S;
+                        Quit3() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                     }
                 }
                 or
                 {
-                    Quit2() from C to S;
+                    Quit2() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
                 }
             }
         }
     }
     or
     {
-        Quit1() from C to S;
+        Quit1() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
     }
 }

@@ -5,23 +5,23 @@ global protocol Booking(role C, role A, role S)
         {
             choice at C
             {
-                Yes() from C to A;
-                Yes() from A to S;
-                Payment(int) from C to S;
-                Ack() from S to C;
+                Yes() from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                Yes() from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                Payment(int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                Ack() from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             }
             or
             {
-                No() from C to A;
-                No() from A to S;
+                No() from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+                No() from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             }
-            Bye() from C to A;
+            Bye() from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
         }
         or
         {
-            Query(int) from C to A;
-            Quote(int) from A to C;
-            Dummy() from A to S;   // Dummy
+            Query(int) from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+            Quote(int) from A to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+            Dummy() from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             continue Loop;
         }
     }

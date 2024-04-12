@@ -4,13 +4,13 @@ global protocol Fibonacci(role A, role B)
     {
         choice at A
         {
-            fibonacci(Long) from A to B;
-            fibonacci(Long) from B to A;
+            fibonacci(Long) from A to B within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+            fibonacci(Long) from B to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
             continue Fib;
         }
         or
         {
-            stop() from A to B;
+            stop() from A to B within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
         }
     }
 }

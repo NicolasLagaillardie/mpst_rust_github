@@ -1,27 +1,27 @@
 global protocol API(role API, role Controller, role Storage, role User)
     {
-    Start(int) from Controller to Storage;
-    Start(int) from Controller to API ;
-    HardPing() from Storage to Controller;
+    Start(int) from Controller to Storage within [0;1] using a and resetting ();
+    Start(int) from Controller to API within [0;1] using a and resetting ();
+    HardPing() from Storage to Controller within [0;1] using a and resetting ();
     rec Loop {
-        Request() from User to API;
-        GetMode() from API to Controller;
+        Request() from User to API within [0;1] using a and resetting ();
+        GetMode() from API to Controller within [0;1] using a and resetting ();
         choice at Controller
         {
-            Up() from Controller to API;
-            Request(int) from API to Storage;
-            Reponse(int) from Storage to Api;
-            Response(int) from API to User;
+            Up() from Controller to API within [0;1] using a and resetting ();
+            Request(int) from API to Storage within [0;1] using a and resetting ();
+            Reponse(int) from Storage to Api within [0;1] using a and resetting ();
+            Response(int) from API to User within [0;1] using a and resetting ();
             continue Loop;
         } or {
-            Failure() from Controller to API;
-            Restart() from Controller to Storage();
-            Failure() from API to User;
+            Failure() from Controller to API within [0;1] using a and resetting ();
+            Restart() from Controller to Storage()  within [0;1] using a and resetting ();
+            Failure() from API to User within [0;1] using a and resetting ();
             continue Loop;
         } or {
-            Stop() from Controller to API;
-            Stop() from Controller to Storage();
-            Stop() from API to User;
+            Stop() from Controller to API within [0;1] using a and resetting ();
+            Stop() from Controller to Storage()  within [0;1] using a and resetting ();
+            Stop() from API to User within [0;1] using a and resetting ();
         }
     }
 }

@@ -1,91 +1,91 @@
 global protocol HTTP(role Client, role Proxy1, role Proxy2, role Server)
 {
-    OpenTCPConnection() from Client to Proxy1;
-    OpenTCPConnection() from Proxy1 to Proxy2;
-    OpenTCPConnection() from Proxy2 to Server;
+    OpenTCPConnection() from Client to Proxy1  within [0;1] using a and resetting ();
+    OpenTCPConnection() from Proxy1 to Proxy2  within [0;1] using a and resetting ();
+    OpenTCPConnection() from Proxy2 to Server within [0;1] using a and resetting ();
 
     choice at Server
     {
-        Fail() from Server to Proxy2;
-        Fail() from Proxy2 to Proxy1;
-        Fail() from Proxy1 to Client;
+        Fail() from Server to Proxy2  within [0;1] using a and resetting ();
+        Fail() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+        Fail() from Proxy1 to Client within [0;1] using a and resetting ();
     } or {
-        Success() from Server to Proxy2;
-        Success() from Proxy2 to Proxy1;
-        Success() from Proxy1 to Client;
+        Success() from Server to Proxy2  within [0;1] using a and resetting ();
+        Success() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+        Success() from Proxy1 to Client within [0;1] using a and resetting ();
 
         rec Loop {
             choice at Client
             {
-                RequestGet() from Client to Proxy1;
-                RequestGet() from Proxy1 to Proxy2;
-                RequestGet() from Proxy2 to Server;
+                RequestGet() from Client to Proxy1  within [0;1] using a and resetting ();
+                RequestGet() from Proxy1 to Proxy2  within [0;1] using a and resetting ();
+                RequestGet() from Proxy2 to Server within [0;1] using a and resetting ();
 
                 choice at Server
                 {
-                    Response200() from Server to Proxy2;
-                    Response200() from Proxy2 to Proxy1;
-                    Response200() from Proxy1 to Client;
+                    Response200() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response200() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response200() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 } or {
-                    Response404() from Server to Proxy2;
-                    Response404() from Proxy2 to Proxy1;
-                    Response404() from Proxy1 to Client;
+                    Response404() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response404() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response404() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 } or {
-                    Response418() from Server to Proxy2;
-                    Response418() from Proxy2 to Proxy1;
-                    Response418() from Proxy1 to Client;
+                    Response418() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response418() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response418() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 }
             } or {
-                RequestPut() from Client to Proxy1;
-                RequestPut() from Proxy1 to Proxy2;
-                RequestPut() from Proxy2 to Server;
+                RequestPut() from Client to Proxy1  within [0;1] using a and resetting ();
+                RequestPut() from Proxy1 to Proxy2  within [0;1] using a and resetting ();
+                RequestPut() from Proxy2 to Server within [0;1] using a and resetting ();
 
                 choice at Server
                 {
-                    Response200() from Server to Proxy2;
-                    Response200() from Proxy2 to Proxy1;
-                    Response200() from Proxy1 to Client;
+                    Response200() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response200() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response200() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 } or {
-                    Response404() from Server to Proxy2;
-                    Response404() from Proxy2 to Proxy1;
-                    Response404() from Proxy1 to Client;
+                    Response404() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response404() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response404() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 } or {
-                    Response418() from Server to Proxy2;
-                    Response418() from Proxy2 to Proxy1;
-                    Response418() from Proxy1 to Client;
+                    Response418() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response418() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response418() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 }
             } or {
-                RequestPost() from Client to Proxy1;
-                RequestPost() from Proxy1 to Proxy2;
-                RequestPost() from Proxy2 to Server;
+                RequestPost() from Client to Proxy1  within [0;1] using a and resetting ();
+                RequestPost() from Proxy1 to Proxy2  within [0;1] using a and resetting ();
+                RequestPost() from Proxy2 to Server within [0;1] using a and resetting ();
 
                 choice at Server
                 {
-                    Response200() from Server to Proxy2;
-                    Response200() from Proxy2 to Proxy1;
-                    Response200() from Proxy1 to Client;
+                    Response200() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response200() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response200() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 } or {
-                    Response404() from Server to Proxy2;
-                    Response404() from Proxy2 to Proxy1;
-                    Response404() from Proxy1 to Client;
+                    Response404() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response404() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response404() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 } or {
-                    Response418() from Server to Proxy2;
-                    Response418() from Proxy2 to Proxy1;
-                    Response418() from Proxy1 to Client;
+                    Response418() from Server to Proxy2  within [0;1] using a and resetting ();
+                    Response418() from Proxy2 to Proxy1  within [0;1] using a and resetting ();
+                    Response418() from Proxy1 to Client within [0;1] using a and resetting ();
                     continue Loop;
                 }
             } or {
-                Close() from Client to Proxy1;
-                Close() from Proxy1 to Proxy2;
-                Close() from Proxy2 to Server;
+                Close() from Client to Proxy1  within [0;1] using a and resetting ();
+                Close() from Proxy1 to Proxy2  within [0;1] using a and resetting ();
+                Close() from Proxy2 to Server within [0;1] using a and resetting ();
             }
         }
     }
