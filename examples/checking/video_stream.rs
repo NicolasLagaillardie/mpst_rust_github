@@ -139,10 +139,10 @@ fn client_recurs(s: EndpointCRecurs, mut xs: Vec<i32>) -> Result<(), Box<dyn Err
 }
 
 /////////////////////////////////////////
-///
+
 checker_concat_impl!(
-    [EndpointCVideo, Branches0AtoC, Video, Branches0BtoC, Video,],
-    [EndpointCEnd, Branches0AtoC, End, Branches0BtoC, End,]
+    [Branches0AtoC, Video, Branches0BtoC, Video,],
+    [Branches0AtoC, End, Branches0BtoC, End,]
 );
 
 // Check for bottom-up approach
