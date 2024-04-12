@@ -1,0 +1,22 @@
+global protocol Proto(role A, role C, role S)
+{
+    start(Int) from C to S;
+    redirect(Int) from S to C;
+    login(Int) from C to A;
+    auth(Int) from A to C;
+    password(Int) from C to A;
+    choice at A
+    {
+        success(Int) from A to C;
+        success(Int) from C to S;
+        get(Token) from S to A;
+        put(Token) from A to S;
+        put(Token) from S to C;
+    }
+    or
+    {
+        fail(Int) from A to C;
+        fail(Int) from C to S;
+        received(Int) from S to C;
+    }
+}

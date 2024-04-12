@@ -1,0 +1,19 @@
+global protocol ThreeBuyer(role A, role C, role S)
+{
+    empty1(int) from A to S;
+    empty2(int) from S to A;
+    empty3(int) from S to C;
+    empty4(int) from A to C;
+
+    choice at C
+    {
+        ok(int) from C to A;
+        ok(int) from C to S;
+        empty5(int) from S to C;
+    }
+    or
+    {
+        quit() from C to A;
+        quit() from C to S;
+    }
+}

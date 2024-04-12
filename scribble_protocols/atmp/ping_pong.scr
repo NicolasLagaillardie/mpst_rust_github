@@ -1,0 +1,19 @@
+
+global protocol ping_pong(role A, role B)
+{
+    rec PP
+    {
+        choice at A
+        {
+            ping(()) from A to B;
+
+            pong(()) from B to A;
+
+            continue PP;
+        }
+        or
+        {
+            stop() from A to B;
+        }
+    }
+}

@@ -1,0 +1,92 @@
+global protocol HTTP(role Client, role Proxy1, role Proxy2, role Server)
+{
+    OpenTCPConnection() from Client to Proxy1;
+    OpenTCPConnection() from Proxy1 to Proxy2;
+    OpenTCPConnection() from Proxy2 to Server;
+
+    choice at Server
+    {
+        Fail() from Server to Proxy2;
+        Fail() from Proxy2 to Proxy1;
+        Fail() from Proxy1 to Client;
+    } or {
+        Success() from Server to Proxy2;
+        Success() from Proxy2 to Proxy1;
+        Success() from Proxy1 to Client;
+
+        rec Loop {
+            choice at Client
+            {
+                RequestGet() from Client to Proxy1;
+                RequestGet() from Proxy1 to Proxy2;
+                RequestGet() from Proxy2 to Server;
+
+                choice at Server
+                {
+                    Response200() from Server to Proxy2;
+                    Response200() from Proxy2 to Proxy1;
+                    Response200() from Proxy1 to Client;
+                    continue Loop;
+                } or {
+                    Response404() from Server to Proxy2;
+                    Response404() from Proxy2 to Proxy1;
+                    Response404() from Proxy1 to Client;
+                    continue Loop;
+                } or {
+                    Response418() from Server to Proxy2;
+                    Response418() from Proxy2 to Proxy1;
+                    Response418() from Proxy1 to Client;
+                    continue Loop;
+                }
+            } or {
+                RequestPut() from Client to Proxy1;
+                RequestPut() from Proxy1 to Proxy2;
+                RequestPut() from Proxy2 to Server;
+
+                choice at Server
+                {
+                    Response200() from Server to Proxy2;
+                    Response200() from Proxy2 to Proxy1;
+                    Response200() from Proxy1 to Client;
+                    continue Loop;
+                } or {
+                    Response404() from Server to Proxy2;
+                    Response404() from Proxy2 to Proxy1;
+                    Response404() from Proxy1 to Client;
+                    continue Loop;
+                } or {
+                    Response418() from Server to Proxy2;
+                    Response418() from Proxy2 to Proxy1;
+                    Response418() from Proxy1 to Client;
+                    continue Loop;
+                }
+            } or {
+                RequestPost() from Client to Proxy1;
+                RequestPost() from Proxy1 to Proxy2;
+                RequestPost() from Proxy2 to Server;
+
+                choice at Server
+                {
+                    Response200() from Server to Proxy2;
+                    Response200() from Proxy2 to Proxy1;
+                    Response200() from Proxy1 to Client;
+                    continue Loop;
+                } or {
+                    Response404() from Server to Proxy2;
+                    Response404() from Proxy2 to Proxy1;
+                    Response404() from Proxy1 to Client;
+                    continue Loop;
+                } or {
+                    Response418() from Server to Proxy2;
+                    Response418() from Proxy2 to Proxy1;
+                    Response418() from Proxy1 to Client;
+                    continue Loop;
+                }
+            } or {
+                Close() from Client to Proxy1;
+                Close() from Proxy1 to Proxy2;
+                Close() from Proxy2 to Server;
+            }
+        }
+    }
+}
