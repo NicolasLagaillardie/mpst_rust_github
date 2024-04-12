@@ -1,5 +1,5 @@
 [package]
-name = "mpanon"
+name = "mpstthree"
 version = "0.1.17"
 authors = ["XXX"]
 edition = "2021"
@@ -10,7 +10,7 @@ homepage = "XXX"
 repository = "XXX"
 license = "MIT OR Apache-2.0"
 keywords = ["multiparty", "session", "affine", "timed"]
-documentation = "https://docs.rs/mpanon"
+documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
 # include = [
 #     "/benches/**",
