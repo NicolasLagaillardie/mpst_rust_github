@@ -159,14 +159,12 @@ fn endpoint_regional(s: EndpointRegional) -> Result<(), Box<dyn Error>> {
 
 checker_concat_impl!(
     [
-        EndpointRegionalLoops,
         Branching0fromRegionalToData,
         Loops,
         Branching0fromRegionalToHandler,
         Loops,
     ],
     [
-        EndpointRegionalInvalid,
         Branching0fromRegionalToData,
         Invalid,
         Branching0fromRegionalToHandler,

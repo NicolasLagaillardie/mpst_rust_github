@@ -177,20 +177,8 @@ fn main() {
 }
 
 checker_concat_impl!(
-    [
-        EndpointASuccess,
-        Branching0fromAtoC,
-        Success,
-        Branching0fromAtoS,
-        Success,
-    ],
-    [
-        EndpointAFail,
-        Branching0fromAtoC,
-        Fail,
-        Branching0fromAtoS,
-        Fail,
-    ]
+    [Branching0fromAtoC, Success, Branching0fromAtoS, Success,],
+    [Branching0fromAtoC, Fail, Branching0fromAtoS, Fail,]
 );
 
 // Check for bottom-up approach
