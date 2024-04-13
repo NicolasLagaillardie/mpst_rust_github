@@ -177,19 +177,19 @@ required-features = ["full"]
 ######### Baking Cancel
 
 [[bench]]
-name = "ring_two_mpst_timed"
+name = "ring_two_timed"
 harness = false
 path = "benches/ring/timed/ring_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_three_mpst_timed"
+name = "ring_three_timed"
 harness = false
 path = "benches/ring/timed/ring_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_four_mpst_timed"
+name = "ring_four_timed"
 harness = false
 path = "benches/ring/timed/ring_four.rs"
 required-features = ["full"]
@@ -199,19 +199,19 @@ required-features = ["full"]
 ######### Baking Cancel
 
 [[bench]]
-name = "mesh_two_mpst_timed"
+name = "mesh_two_timed"
 harness = false
 path = "benches/mesh/timed/mesh_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_three_mpst_timed"
+name = "mesh_three_timed"
 harness = false
 path = "benches/mesh/timed/mesh_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_four_mpst_timed"
+name = "mesh_four_timed"
 harness = false
 path = "benches/mesh/timed/mesh_four.rs"
 required-features = ["full"]

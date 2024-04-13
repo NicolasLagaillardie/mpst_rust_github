@@ -1,15 +1,15 @@
 [package]
 name = "mpstthree"
 version = "0.1.17"
-authors = ["NicolasLagaillardie <nicolas.lagaillardie@tutanota.com>"]
+authors = ["XXX"]
 edition = "2021"
 rust-version = "1.77"
 description = "A library implementing Multiparty Session Types for 2 or more participants"
 readme = "README.md"
-homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
-repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+homepage = "XXX"
+repository = "XXX"
 license = "MIT OR Apache-2.0"
-keywords = ["multiparty", "session", "affine", "multicrusty", "timed"]
+keywords = ["multiparty", "session", "affine", "timed"]
 documentation = "https://docs.rs/mpstthree"
 categories = ["concurrency"]
 # include = [
@@ -137,17 +137,146 @@ name = "main"
 path = "tests/main.rs"
 required-features = []
 
-################################### Artifact examples
+################################### Benches
+
+################################### Ping-Pong
+
+######### Ping-Pong start
+######### Ping-Pong end
+
+################## Examples
+
+######### Timed
+
+[[bench]]
+name = "example_remote_data_timed"
+harness = false
+path = "benches/examples/timed/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_timed"
+harness = false
+path = "benches/examples/timed/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_timed"
+harness = false
+path = "benches/examples/timed/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_timed"
+harness = false
+path = "benches/examples/timed/video_stream.rs"
+required-features = ["full"]
+
+################## Ring
+
+######### Baking Cancel
+
+[[bench]]
+name = "ring_two_timed"
+harness = false
+path = "benches/ring/timed/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_timed"
+harness = false
+path = "benches/ring/timed/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_timed"
+harness = false
+path = "benches/ring/timed/ring_four.rs"
+required-features = ["full"]
+
+################## Mesh
+
+######### Baking Cancel
+
+[[bench]]
+name = "mesh_two_timed"
+harness = false
+path = "benches/mesh/timed/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_timed"
+harness = false
+path = "benches/mesh/timed/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_timed"
+harness = false
+path = "benches/mesh/timed/mesh_four.rs"
+required-features = ["full"]
+
+################################### Examples
+
+######### Timed
 
 [[example]]
-name = "my_basic"
-path = "examples/artifact/my_basic.rs"
-required-features = ["baking"]
+name = "remote_data_timed"
+path = "examples/timed/remote_data.rs"
+required-features = ["baking_timed"]
 
 [[example]]
-name = "basic"
-path = "examples/artifact/basic.rs"
-required-features = ["baking"]
+name = "http_timed"
+path = "examples/timed/http.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "circuit_breaker_timed"
+path = "examples/timed/circuit_breaker.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "video_stream_timed"
+path = "examples/timed/video_stream.rs"
+required-features = ["baking_timed"]
+
+################################### Mesh examples
+
+################## Timed
+
+[[example]]
+name = "mesh_two_baking_atmp"
+path = "examples/mesh/mesh_two_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "mesh_three_baking_atmp"
+path = "examples/mesh/mesh_three_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "mesh_four_baking_atmp"
+path = "examples/mesh/mesh_four_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+################################### Ring examples
+
+################## Timed
+
+[[example]]
+name = "ring_two_baking_atmp"
+path = "examples/ring/ring_two_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "ring_three_baking_atmp"
+path = "examples/ring/ring_three_baking_atmp.rs"
+required-features = ["baking_timed"]
+
+[[example]]
+name = "ring_four_baking_atmp"
+path = "examples/ring/ring_four_baking_atmp.rs"
+required-features = ["baking_timed"]
 
 ################################### Timed artifact examples
 
@@ -167,11 +296,6 @@ required-features = ["baking_timed"]
 name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
-
-################################### Ping-Pong
-
-######### Ping-Pong start
-######### Ping-Pong end
 
 ################################### Profil
 

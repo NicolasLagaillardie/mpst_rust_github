@@ -10,6 +10,9 @@ use std::collections::HashMap; // Used for storing clocks
 use std::error::Error; // Used for functions returning _affine_ types
 use std::time::Instant; // Used for clocks
 
+// use std::thread::sleep; // Used for pausing a thread
+// use std::time::Duration; // Used for declaring the duration for sleep
+
 generate_timed!(MeshedChannels, A, B); // generates meshed channels for 3 roles
 
 // Payload types
@@ -23,29 +26,29 @@ type StartA0 = RecvTimed<
     'a',
     0,
     true,
-    10,
+    1,
     true,
     ' ',
-    SendTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>,
+    SendTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>,
 >; // RecvTimed a Request then SendTimed a choice
 type OrderingA0 = RoleB<RoleBroadcast>; // Stack for recv then sending a choice
 
-type LoopA0 = SendTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>; // SendTimed a choice
+type LoopA0 = SendTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>; // SendTimed a choice
 type OrderingLoopA0 = RoleBroadcast; // Stack for sending a choice
 
-type MoreA1 = RecvTimed<
+type MoreA1 = SendTimed<
     Response,
     'a',
     0,
     true,
-    10,
+    1,
     true,
     ' ',
-    SendTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>,
+    SendTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>,
 >; // RecvTimed Response then send a choice
 type OrderingMoreA1 = RoleB<RoleBroadcast>; // Stack for the previous binary type
 
-type DoneA1 = RecvTimed<Stop, 'a', 0, true, 10, true, ' ', End>; // RecvTimed Stop
+type DoneA1 = SendTimed<Stop, 'a', 0, true, 1, true, ' ', End>; // RecvTimed Stop
 type OrderingDoneA1 = RoleB<RoleEnd>; // Stack for the previous binary type
 
 // Binary types for B
@@ -54,29 +57,29 @@ type StartB0 = SendTimed<
     'a',
     0,
     true,
-    10,
+    1,
     true,
     ' ',
-    RecvTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>,
+    RecvTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>,
 >; // SendTimed a Request then RecvTimed a choice
 type OrderingB0 = RoleA<RoleA<RoleEnd>>; // Stack for send then receiving a choice from A
 
-type LoopB0 = RecvTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>; // RecvTimed a choice
+type LoopB0 = RecvTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>; // RecvTimed a choice
 type OrderingLoopB0 = RoleA<RoleEnd>; // Stack for recv a choice
 
-type MoreB1 = SendTimed<
+type MoreB1 = RecvTimed<
     Response,
     'a',
     0,
     true,
-    10,
+    1,
     true,
     ' ',
-    RecvTimed<Branching0fromAtoB, 'a', 0, true, 10, true, ' ', End>,
+    RecvTimed<Branching0fromAtoB, 'a', 0, true, 1, true, ' ', End>,
 >; // RecvTimed Request then SendTimed Response then receive a choice
 type OrderingMoreB1 = RoleA<RoleA<RoleEnd>>; // Stack for the previous binary type
 
-type DoneB1 = SendTimed<Stop, 'a', 0, true, 10, true, ' ', End>; // SendTimed Stop
+type DoneB1 = RecvTimed<Stop, 'a', 0, true, 1, true, ' ', End>; // SendTimed Stop
 type OrderingDoneB1 = RoleA<RoleEnd>; // Stack for the previous binary type
 
 enum Branching0fromAtoB {
@@ -100,6 +103,7 @@ fn endpoint_a(s: EndpointA, all_clocks: &mut HashMap<char, Instant>) -> Result<(
     all_clocks.insert('a', Instant::now());
 
     let (_, s) = s.recv(all_clocks)?;
+
     recurs_a(s, 5, all_clocks)
 }
 
@@ -111,12 +115,14 @@ fn recurs_a(
     if loops > 0 {
         let s: EndpointAMore = choose_mpst_a_to_all!(s, all_clocks, Branching0fromAtoB::More);
 
-        let (_, s) = s.recv(all_clocks)?;
+        let s = s.send(Response {}, all_clocks)?;
+
         recurs_a(s, loops - 1, all_clocks)
     } else {
         let s: EndpointADone = choose_mpst_a_to_all!(s, all_clocks, Branching0fromAtoB::Done);
 
-        let (_, s) = s.recv(all_clocks)?;
+        let s = s.send(Stop {}, all_clocks)?;
+
         s.close()
     }
 }
@@ -124,7 +130,10 @@ fn recurs_a(
 fn endpoint_b(s: EndpointB, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
     all_clocks.insert('a', Instant::now());
 
+    // sleep(Duration::from_secs(2));
+
     let s = s.send(Request {}, all_clocks)?;
+
     recurs_b(s, all_clocks)
 }
 
@@ -134,11 +143,13 @@ fn recurs_b(
 ) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, all_clocks, {
         Branching0fromAtoB::More(s) => {
-            let s = s.send(Response {}, all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
+
             recurs_b(s, all_clocks)
         },
         Branching0fromAtoB::Done(s) => {
-            let s = s.send(Stop {}, all_clocks)?;
+            let (_, s) = s.recv(all_clocks)?;
+
             s.close()
         },
     })
@@ -147,6 +158,6 @@ fn recurs_b(
 fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
+    println!("Thread a: {:?}", thread_a.join());
+    println!("Thread b: {:?}", thread_b.join());
 }

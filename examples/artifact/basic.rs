@@ -98,6 +98,6 @@ fn recurs_b(s: EndpointBLoop) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, endpoint_b);
 
-    thread_a.join().unwrap();
-    thread_b.join().unwrap();
+    println!("Thread a: {:?}", thread_a.join());
+    println!("Thread b: {:?}", thread_b.join());
 }
