@@ -1743,57 +1743,57 @@ required-features = ["full"]
 ######### Baking Cancel
 
 [[bench]]
-name = "ring_two_mpst_timed_baking_cancel"
+name = "ring_two_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_two.rs"
+path = "benches/ring/timed/ring_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_three_mpst_timed_baking_cancel"
+name = "ring_three_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_three.rs"
+path = "benches/ring/timed/ring_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_four_mpst_timed_baking_cancel"
+name = "ring_four_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_four.rs"
+path = "benches/ring/timed/ring_four.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_five_mpst_timed_baking_cancel"
+name = "ring_five_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_five.rs"
+path = "benches/ring/timed/ring_five.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_six_mpst_timed_baking_cancel"
+name = "ring_six_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_six.rs"
+path = "benches/ring/timed/ring_six.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_seven_mpst_timed_baking_cancel"
+name = "ring_seven_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_seven.rs"
+path = "benches/ring/timed/ring_seven.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_eight_mpst_timed_baking_cancel"
+name = "ring_eight_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_eight.rs"
+path = "benches/ring/timed/ring_eight.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_nine_mpst_timed_baking_cancel"
+name = "ring_nine_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_nine.rs"
+path = "benches/ring/timed/ring_nine.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_ten_mpst_timed_baking_cancel"
+name = "ring_ten_mpst_timed"
 harness = false
-path = "benches/ring/timed_baking_cancel/ring_ten.rs"
+path = "benches/ring/timed/ring_ten.rs"
 required-features = ["full"]
 
 ################## Mesh
@@ -2785,57 +2785,57 @@ required-features = ["full"]
 ######### Baking Cancel
 
 [[bench]]
-name = "mesh_two_mpst_timed_baking_cancel"
+name = "mesh_two_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_two.rs"
+path = "benches/mesh/timed/mesh_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_three_mpst_timed_baking_cancel"
+name = "mesh_three_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_three.rs"
+path = "benches/mesh/timed/mesh_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_four_mpst_timed_baking_cancel"
+name = "mesh_four_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_four.rs"
+path = "benches/mesh/timed/mesh_four.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_five_mpst_timed_baking_cancel"
+name = "mesh_five_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_five.rs"
+path = "benches/mesh/timed/mesh_five.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_six_mpst_timed_baking_cancel"
+name = "mesh_six_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_six.rs"
+path = "benches/mesh/timed/mesh_six.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_seven_mpst_timed_baking_cancel"
+name = "mesh_seven_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_seven.rs"
+path = "benches/mesh/timed/mesh_seven.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_eight_mpst_timed_baking_cancel"
+name = "mesh_eight_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_eight.rs"
+path = "benches/mesh/timed/mesh_eight.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_nine_mpst_timed_baking_cancel"
+name = "mesh_nine_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_nine.rs"
+path = "benches/mesh/timed/mesh_nine.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_ten_mpst_timed_baking_cancel"
+name = "mesh_ten_mpst_timed"
 harness = false
-path = "benches/mesh/timed_baking_cancel/mesh_ten.rs"
+path = "benches/mesh/timed/mesh_ten.rs"
 required-features = ["full"]
 
 ################################### Examples
