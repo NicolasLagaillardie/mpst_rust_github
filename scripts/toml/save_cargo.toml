@@ -183,8 +183,8 @@ debug = true
 [dependencies]
 mpst-seq-proc = { path = "mpst_seq_proc" }
 # mpst-seq-proc = "0.1"
-crossbeam-channel = "0.5.8"
-either = "1.9.0"
+crossbeam-channel = "0.5.12"
+either = "1.11.0"
 # For HTTP
 # hyper = { version = "1.2.0", features = ["full"], optional = true }
 # hyper-tls = { version = "0.6.0", optional = true }
@@ -192,11 +192,11 @@ either = "1.9.0"
 # http-body-util = "0.1"
 # tokio = { version = "1.33.0", features = ["full"], optional = true }
 # For kMC
-regex = { version = "1.10.0", optional = true }
+regex = { version = "1.10.4", optional = true }
 petgraph = { version = "0.6.4", optional = true }
 # Protobuf libraries
-protobuf = { version = "3.3.0", features = ["with-bytes"] }
-protobuf-codegen = "3.3.0"
+protobuf = { version = "3.4.0", features = ["with-bytes"] }
+protobuf-codegen = "3.4.0"
 protoc-bin-vendored = "3.0.0"
 
 ################################### Dev-dependencies for tests/benches
