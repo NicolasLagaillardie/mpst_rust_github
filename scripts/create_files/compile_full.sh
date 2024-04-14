@@ -6,13 +6,12 @@ set -eou pipefail
 mkdir -p compile_time/
 
 # Remove previous benchmarks
-rm -rf compile_time/$1*.txt
-# if [ -z "$4" ]
-#     then
-#         rm -rf compile_time/$1*.txt
-#     else
-#         rm -rf compile_time/$4*.txt
-# fi
+if [ "$#" -eq 4 ]
+    then
+        rm -rf compile_time/$4*.txt
+    else
+        rm -rf compile_time/$1*.txt
+fi
 
 cargo check --example=$1 --features="$3" || command_failed=1
 
@@ -30,13 +29,12 @@ do
     # Get difference in ms
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference
-    printf "check; $tt\n" >> compile_time/$1.txt
-    # if [ -z "$4" ]
-    #     then
-    #         printf "check; $tt\n" >> compile_time/$1.txt
-    #     else
-    #         printf "check; $tt\n" >> compile_time/$4.txt
-    # fi
+    if [ "$#" -eq 4 ]
+        then
+            printf "check; $tt\n" >> compile_time/$4.txt
+        else
+            printf "check; $tt\n" >> compile_time/$1.txt
+    fi
 done
 
 # Loop build
@@ -51,13 +49,12 @@ do
     # Get difference
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference
-    printf "build; $tt\n" >> compile_time/$1.txt
-    # if [ -z "$4" ]
-    #     then
-    #         printf "build; $tt\n" >> compile_time/$1.txt
-    #     else
-    #         printf "build; $tt\n" >> compile_time/$4.txt
-    # fi
+    if [ "$#" -eq 4 ]
+        then
+            printf "build; $tt\n" >> compile_time/$4.txt
+        else
+            printf "build; $tt\n" >> compile_time/$1.txt
+    fi
 done
 
 # Loop build --release
@@ -72,12 +69,11 @@ do
     # Get difference
     tt=$((($(date +%s%N) - $ts)/1000))
     # Output difference
-    printf "release; $tt\n" >> compile_time/$1.txt
-    # if [ -z "$4" ]
-    #     then
-    #         printf "release; $tt\n" >> compile_time/$1.txt
-    #     else
-    #         printf "release; $tt\n" >> compile_time/$4.txt
-    # fi
+    if [ "$#" -eq 4 ]
+        then
+            printf "release; $tt\n" >> compile_time/$4.txt
+        else
+            printf "release; $tt\n" >> compile_time/$1.txt
+    fi
 done
 # fi
