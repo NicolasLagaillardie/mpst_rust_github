@@ -24,17 +24,17 @@ rm -rf save/*
 cargo clean
 
 ## Compile and run examples
-bash ./scripts/anon/toml/light_benches_examples.sh
+bash ./scripts/anon/sh/light_benches_examples.sh
 
 cargo clean
 
 ## Compile mesh and ring
-bash ./scripts/anon/toml/light_benches_compile_mesh_ring.sh
+bash ./scripts/anon/sh/light_benches_compile_mesh_ring.sh
 
 cargo clean
 
 ## Run mesh and ring
-bash ./scripts/anon/toml/light_benches_runtime_mesh_ring.sh
+bash ./scripts/anon/sh/light_benches_runtime_mesh_ring.sh
 
 # Run the Python scripts
 python3 scripts/create_graphs/mesh_bench.py # Create graph for the runtime benchmarks for the mesh protocols

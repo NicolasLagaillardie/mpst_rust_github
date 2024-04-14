@@ -12,7 +12,7 @@ date
 cat Cargo.toml > scripts/anon/toml/save_cargo.toml
 
 # Increase the sample size to 100,000
-find ./ -type f | xargs sed -i 's/10000/100000/g'
+find ./ -type f | xargs sed -i 's/100000/10000/g'
 
 # Updating Cargo.toml
 cat scripts/anon/toml/full_cargo.toml > Cargo.toml
@@ -24,17 +24,17 @@ rm -rf save/*
 cargo clean
 
 ## Compile and run examples
-bash ./scripts/anon/toml/full_benches_examples.sh
+bash ./scripts/anon/sh/full_benches_examples.sh
 
 cargo clean
 
 ## Compile mesh and ring
-bash ./scripts/anon/toml/full_benches_compile_mesh_ring.sh
+bash ./scripts/anon/sh/full_benches_compile_mesh_ring.sh
 
 cargo clean
 
 ## Run mesh and ring
-bash ./scripts/anon/toml/full_benches_runtime_mesh_ring.sh
+bash ./scripts/anon/sh/full_benches_runtime_mesh_ring.sh
 
 # Run the Python scripts
 python3 scripts/create_graphs/mesh_bench.py # Create graph for the runtime benchmarks for the mesh protocols
