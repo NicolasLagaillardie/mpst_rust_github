@@ -1,3 +1,5 @@
+set number
+
 call plug#begin('~/.data/plugged')
 
 Plug 'neovim/nvim-lspconfig'

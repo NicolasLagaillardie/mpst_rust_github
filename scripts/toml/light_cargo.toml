@@ -146,6 +146,26 @@ required-features = []
 
 ################## Examples
 
+######### AMPST
+
+[[bench]]
+name = "example_remote_data_ampst"
+harness = false
+path = "benches/examples/ampst/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_ampst"
+harness = false
+path = "benches/examples/ampst/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["full"]
+
 ######### Timed
 
 [[bench]]
@@ -161,42 +181,34 @@ path = "benches/examples/timed/http.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_circuit_breaker_timed"
+name = "example_pinetime_heart_rate_atmp"
 harness = false
-path = "benches/examples/timed/circuit_breaker.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "example_video_stream_timed"
-harness = false
-path = "benches/examples/timed/video_stream.rs"
-required-features = ["full"]
-
-################## Ring
-
-######### Baking Cancel
-
-[[bench]]
-name = "ring_two_timed"
-harness = false
-path = "benches/ring/timed/ring_two.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_three_timed"
-harness = false
-path = "benches/ring/timed/ring_three.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "ring_four_timed"
-harness = false
-path = "benches/ring/timed/ring_four.rs"
+path = "benches/examples/rate_based_atmp/pinetime_heart_rate.rs"
 required-features = ["full"]
 
 ################## Mesh
 
-######### Baking Cancel
+######### Baking
+
+[[bench]]
+name = "mesh_two_ampst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_ampst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_ampst_baking"
+harness = false
+path = "benches/mesh/baking/mesh_four_ampst.rs"
+required-features = ["full"]
+
+######### Timed
 
 [[bench]]
 name = "mesh_two_timed"
@@ -216,7 +228,66 @@ harness = false
 path = "benches/mesh/timed/mesh_four.rs"
 required-features = ["full"]
 
+################## Ring
+
+######### Baking
+
+[[bench]]
+name = "ring_two_ampst_baking"
+harness = false
+path = "benches/ring/baking/ring_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_ampst_baking"
+harness = false
+path = "benches/ring/baking/ring_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_ampst_baking"
+harness = false
+path = "benches/ring/baking/ring_four_ampst.rs"
+required-features = ["full"]
+
+######### Timed
+
+[[bench]]
+name = "ring_two_timed"
+harness = false
+path = "benches/ring/timed/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_timed"
+harness = false
+path = "benches/ring/timed/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_timed"
+harness = false
+path = "benches/ring/timed/ring_four.rs"
+required-features = ["full"]
+
 ################################### Examples
+
+######### AMPST
+
+[[example]]
+name = "remote_data_ampst"
+path = "examples/ampst/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http_ampst"
+path = "examples/ampst/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "pinetime_heart_rate_ampst"
+path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["baking"]
 
 ######### Timed
 
@@ -231,16 +302,28 @@ path = "examples/timed/http.rs"
 required-features = ["baking_timed"]
 
 [[example]]
-name = "circuit_breaker_timed"
-path = "examples/timed/circuit_breaker.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "video_stream_timed"
-path = "examples/timed/video_stream.rs"
+name = "pinetime_heart_rate_timed"
+path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
 required-features = ["baking_timed"]
 
 ################################### Mesh examples
+
+################## AMPST
+
+[[example]]
+name = "mesh_two_baking_ampst"
+path = "examples/mesh/mesh_two_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_three_baking_ampst"
+path = "examples/mesh/mesh_three_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_four_baking_ampst"
+path = "examples/mesh/mesh_four_baking_ampst.rs"
+required-features = ["baking"]
 
 ################## Timed
 
@@ -260,6 +343,23 @@ path = "examples/mesh/mesh_four_baking_atmp.rs"
 required-features = ["baking_timed"]
 
 ################################### Ring examples
+
+################## AMPST
+
+[[example]]
+name = "ring_two_baking_ampst"
+path = "examples/ring/ring_two_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_three_baking_ampst"
+path = "examples/ring/ring_three_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_four_baking_ampst"
+path = "examples/ring/ring_four_baking_ampst.rs"
+required-features = ["baking"]
 
 ################## Timed
 

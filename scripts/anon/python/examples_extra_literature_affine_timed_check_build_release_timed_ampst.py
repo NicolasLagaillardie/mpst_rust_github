@@ -30,37 +30,16 @@ json_path = '/base/estimates.json'
 
 # Expected compile files
 compile_files = [
-    'calculator',
-    'online_wallet',
-    'smtp',
-    'simple_voting',
-    'three_buyers',
-    'travel_agency',
-    'o_auth',
     'http',
     'remote_data',
-    'servo',
-    'gravity_android',
     'pinetime_heart_rate',
-    'proximity_based_car_key',
 ]
 
 # Expected bench files
 bench_files = [
-    'Calculator',
-    'Online wallet',
-    'SMTP',
-    'Simple voting',
-    'Three buyers',
-    'Travel agency',
-    'oAuth',
     'HTTP',
     'Remote data',
-    'Servo',
-    'Circuit breaker',
-    'Gravity Android',
     'Heart Rate',
-    'Car-Key',
 ]
 
 # Indexing for bar lists
@@ -160,8 +139,8 @@ for protocol, index in index_compile.items():
         # # exit()
 
 range_compile_files = [i for i in range(len(compile_files))]
-ticklabels_compile_files = [chr(i + 97) for i in range(len(compile_files))]
-# ticklabels_compile_files = bench_files
+# ticklabels_compile_files = [chr(i + 97) for i in range(len(compile_files))]
+ticklabels_compile_files = bench_files
 
 width = 0.3
 
@@ -178,7 +157,7 @@ axsLeft.yaxis.set_major_locator(MaxNLocator(integer=True))
 axsLeft.tick_params(axis='both', which='major', labelsize=20)
 axsLeft.set_ylabel('Time (s)', fontsize=30)
 axsLeft.xaxis.set_ticks(range_compile_files)
-axsLeft.xaxis.set_ticklabels(ticklabels_compile_files, ha='right')
+axsLeft.xaxis.set_ticklabels(ticklabels_compile_files, ha='right', rotation=45)
 
 # Plotting compilation time
 axsRight.bar(np.arange(len(bar_run_ampst)) - width/2, bar_run_ampst, width=width, color='#d62728')

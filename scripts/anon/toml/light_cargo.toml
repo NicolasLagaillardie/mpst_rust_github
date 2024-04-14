@@ -149,12 +149,6 @@ required-features = []
 ######### AMPST
 
 [[bench]]
-name = "example_dns_fowler_ampst"
-harness = false
-path = "benches/examples/ampst/dns_fowler.rs"
-required-features = ["full"]
-
-[[bench]]
 name = "example_remote_data_ampst"
 harness = false
 path = "benches/examples/ampst/remote_data.rs"
@@ -184,12 +178,6 @@ required-features = ["full"]
 name = "example_http_timed"
 harness = false
 path = "benches/examples/timed/http.rs"
-required-features = ["full"]
-
-[[bench]]
-name = "example_video_stream_timed"
-harness = false
-path = "benches/examples/timed/video_stream.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -297,11 +285,6 @@ path = "examples/ampst/http.rs"
 required-features = ["baking"]
 
 [[example]]
-name = "video_stream_ampst"
-path = "examples/ampst/video_stream.rs"
-required-features = ["baking"]
-
-[[example]]
 name = "pinetime_heart_rate_ampst"
 path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
 required-features = ["baking"]
@@ -316,11 +299,6 @@ required-features = ["baking_timed"]
 [[example]]
 name = "http_timed"
 path = "examples/timed/http.rs"
-required-features = ["baking_timed"]
-
-[[example]]
-name = "video_stream_timed"
-path = "examples/timed/video_stream.rs"
 required-features = ["baking_timed"]
 
 [[example]]
