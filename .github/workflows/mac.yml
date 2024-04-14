@@ -13,7 +13,7 @@ jobs:
         rust: [stable, 1.77]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     # - name: Install Haskell
     #   uses: actions/setup-haskell@v1.1
     #   with:
