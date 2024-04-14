@@ -1,15 +1,13 @@
 # Multiparty session types for Rust
 
-<!-- [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github) -->
 ![Ubuntu](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/ubuntu.yml/badge.svg)
 ![Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/windows.yml/badge.svg)
 ![Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/mac.yml/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.71+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.77+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
-[![dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
-<!-- [![License: "MIT OR Apache-2.0"](https://img.shields.io/crates/l/mpstthree.svg)](#license) -->
+[![Dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
 It relies on [sesh](https://github.com/wenkokke/sesh).
