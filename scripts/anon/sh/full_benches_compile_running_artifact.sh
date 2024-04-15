@@ -24,7 +24,7 @@ rm -rf save/*
 cargo clean
 
 ## Compile and run examples
-bash ./scripts/anon/sh/full_benches_examples.sh
+bash ./scripts/anon/sh/full_benches_compile_examples.sh
 
 # Create graph for the compile and run benchmarks for the example protocols
 python3 scripts/create_graphs/examples_extra_literature_affine_timed_check_build_release_timed_ampst.py 

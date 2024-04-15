@@ -7,7 +7,7 @@ import numpy as np
 matplotlib.rcParams['text.usetex'] = True
 
 # Path for criterion
-main_path_criterion = './target/criterion'
+main_path_criterion = './save/ring'
 
 # Get all directories_criterion in main_path_criterion
 directories_criterion = os.listdir(main_path_criterion)

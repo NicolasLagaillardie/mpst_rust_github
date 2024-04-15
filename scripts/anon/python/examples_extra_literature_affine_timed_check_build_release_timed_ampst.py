@@ -11,7 +11,7 @@ from matplotlib.ticker import MaxNLocator
 import matplotlib.ticker as mticker
 
 # Path for criterion
-criterion_path = './target/criterion'
+criterion_path = './save/examples'
 
 # Path for compile-time
 compile_path = 'compile_time'
