@@ -49,7 +49,7 @@ cat $PATH_BENCH/ping_pong_binary_1.rs > benches/ping_pong/ping_pong_binary.rs
 cat $PATH_BENCH/ping_pong_mpst_1.rs > benches/ping_pong/ping_pong_mpst.rs
 cat $PATH_BENCH/ping_pong_baking_mpst_1.rs > benches/ping_pong/ping_pong_baking_mpst.rs
 cat $PATH_BENCH/ping_pong_baking_ampst_1.rs > benches/ping_pong/ping_pong_baking_ampst.rs
-cat $PATH_BENCH/ping_pong_baking_timed_1.rs > benches/ping_pong/ping_pong_baking_timed.rs
+cat $PATH_BENCH/ping_pong_baking_atmp_1.rs > benches/ping_pong/ping_pong_baking_atmp.rs
 
 # Add to Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_crossbeam'"\nharness = false\npath = "'benches/ping_pong/ping_pong_crossbeam.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
@@ -57,7 +57,7 @@ sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nna
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_mpst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_mpst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_ampst'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_ampst.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_timed'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_timed.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[bench]]\nname = "'ping_pong_baking_atmp'"\nharness = false\npath = "'benches/ping_pong/ping_pong_baking_atmp.rs'"\nrequired-features = ["'full'"],g' Cargo.toml
 
 # Copy ping_pong benches i and create ping_pong benches i+1
 for i in $(eval echo {0..$END})
@@ -79,7 +79,7 @@ do
     ## Baking AMPST
     sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_ampst.rs
     ## Baking ATMP
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_timed.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' benches/ping_pong/ping_pong_baking_atmp.rs
     # Clean unusued files
     find benches/ -name *.rser -delete
     # Benchmark

@@ -49,7 +49,7 @@ cat $PATH_BENCH/ping_pong_binary_1.rs > examples/ping_pong/ping_pong_binary.rs
 cat $PATH_BENCH/ping_pong_mpst_1.rs > examples/ping_pong/ping_pong_mpst.rs
 cat $PATH_BENCH/ping_pong_baking_mpst_1.rs > examples/ping_pong/ping_pong_baking_mpst.rs
 cat $PATH_BENCH/ping_pong_baking_ampst_1.rs > examples/ping_pong/ping_pong_baking_ampst.rs
-cat $PATH_BENCH/ping_pong_baking_timed_1.rs > examples/ping_pong/ping_pong_baking_timed.rs
+cat $PATH_BENCH/ping_pong_baking_atmp_1.rs > examples/ping_pong/ping_pong_baking_atmp.rs
 
 # Add to Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_crossbeam'"\npath = "'examples/ping_pong/ping_pong_crossbeam.rs'"\nrequired-features = ["'default'"],g' Cargo.toml
@@ -57,7 +57,7 @@ sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\n
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_mpst'"\npath = "'examples/ping_pong/ping_pong_mpst.rs'"\nrequired-features = ["'macros_multiple'"],g' Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_mpst'"\npath = "'examples/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_ampst'"\npath = "'examples/ping_pong/ping_pong_baking_ampst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_timed'"\npath = "'examples/ping_pong/ping_pong_baking_timed.rs'"\nrequired-features = ["'baking_timed'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_atmp'"\npath = "'examples/ping_pong/ping_pong_baking_atmp.rs'"\nrequired-features = ["'baking_timed'"],g' Cargo.toml
 
 # Copy ping_pong examples i and create ping_pong examples i+1
 for i in $(eval echo {0..$END})
@@ -76,7 +76,7 @@ do
     ## Baking AMPST
     sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' examples/ping_pong/ping_pong_baking_ampst.rs
     ## Baking ATMP
-    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' examples/ping_pong/ping_pong_baking_timed.rs
+    sed -ier 's,static LOOPS: i64 = [0-9]\+;,static LOOPS: i64 = '"$NEXT"';,g' examples/ping_pong/ping_pong_baking_atmp.rs
     # Clean unusued files
     find examples/ -name *.rser -delete
     # Benchmark
@@ -85,7 +85,7 @@ do
     bash ./scripts/create_files/compile_full.sh ping_pong_mpst 10 macros_multiple ping_pong_mpst_$NEXT
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_mpst 10 baking ping_pong_baking_mpst_$NEXT
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_ampst 10 baking ping_pong_baking_ampst_$NEXT
-    bash ./scripts/create_files/compile_full.sh ping_pong_baking_timed 10 baking_timed ping_pong_baking_timed_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_baking_atmp 10 baking_timed ping_pong_baking_atmp_$NEXT
 
     # Clean built files
     cargo clean
