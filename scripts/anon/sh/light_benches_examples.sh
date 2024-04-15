@@ -11,11 +11,9 @@ date
 ## Compile ampst examples
 bash ./scripts/create_files/compile_full.sh remote_data_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh http_ampst 10 baking
-bash ./scripts/create_files/compile_full.sh video_stream_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_ampst 10 baking
 
 ## Compile timed examples
-bash ./scripts/create_files/compile_full.sh video_stream_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh remote_data_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh http_timed 10 baking_timed
 bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_timed 10 baking_timed
