@@ -7,7 +7,7 @@ import numpy as np
 matplotlib.rcParams['text.usetex'] = True
 
 # Path for criterion
-main_path = './target/criterion'
+main_path = './save/ping_pong/'
 
 # Get all directories in main_path
 directories = os.listdir(main_path)
