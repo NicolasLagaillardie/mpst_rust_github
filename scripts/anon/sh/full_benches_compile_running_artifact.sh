@@ -26,22 +26,30 @@ cargo clean
 ## Compile and run examples
 bash ./scripts/anon/sh/full_benches_examples.sh
 
+# Create graph for the runtime benchmarks for the mesh protocols
+python3 scripts/create_graphs/mesh_bench.py 
+
+# Create graph for the runtime benchmarks for the ring protocols
+python3 scripts/create_graphs/ring_bench.py 
+
 cargo clean
 
 ## Compile mesh and ring
-bash ./scripts/anon/sh/full_benches_compile_mesh_ring.sh
+bash ./scripts/anon/sh/light_benches_compile_mesh_ring.sh
+
+# Create graph for the compile benchmarks for the mesh protocols
+python3 scripts/create_graphs/mesh_compile.py 
+
+# Create graph for the compile benchmarks for the ring protocols
+python3 scripts/create_graphs/ring_compile.py 
 
 cargo clean
 
 ## Run mesh and ring
-bash ./scripts/anon/sh/full_benches_runtime_mesh_ring.sh
+bash ./scripts/anon/sh/light_benches_runtime_mesh_ring.sh
 
-# Run the Python scripts
-python3 scripts/create_graphs/mesh_bench.py # Create graph for the runtime benchmarks for the mesh protocols
-python3 scripts/create_graphs/mesh_compile.py # Create graph for the compile benchmarks for the mesh protocols
-python3 scripts/create_graphs/ring_bench.py # Create graph for the runtime benchmarks for the ring protocols
-python3 scripts/create_graphs/ring_compile.py # Create graph for the compile benchmarks for the ring protocols
-python3 scripts/create_graphs/examples_extra_literature_affine_timed_check_build_release_timed_ampst.py # Create graph for the compile benchmarks for the example protocols
+# Create graph for the compile and run benchmarks for the example protocols
+python3 scripts/create_graphs/examples_extra_literature_affine_timed_check_build_release_timed_ampst.py 
 
 cargo clean
 
