@@ -20,6 +20,7 @@ note: required for `Recv<Test9, End>` to implement `Session`
    |         |
    |         unsatisfied trait bound introduced here
 
+error[E0275]: overflow evaluating the requirement `Send<i32, Recv<i32, Send<Test10, End>>>: std::marker::Send`
   --> tests/infinite_type/overflow_evaluation_with_box.rs:89:12
    |
 89 |     Branch(Box<Send<i32, Recv<i32, Send<Test10, End>>>>),
