@@ -78,7 +78,7 @@ ax.plot(nb_participants_ampst, ampst, label='MultiCrusty', linestyle='solid', li
 # Plot the ATMP graph
 ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
-min_ampst_atmp = int(min(min(ampst), min(atmp))) - 1
+min_ampst_atmp = int(min(min(ampst), min(atmp)))
 max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1
 
 # Label X and Y axis
@@ -86,9 +86,9 @@ ax.set_xlabel('\# roles', fontsize=300)
 # ax.set_ylabel('Time (ms)', fontsize=300)
 ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 5, 1))
-ax.yaxis.set_ticks(np.arange(min_ampst_atmp, min_ampst_atmp, 1))
+ax.yaxis.set_ticks(np.arange(min_ampst_atmp, max_ampst_atmp, 1))
 ax.set_xlim(2, 4)
-ax.set_ylim(min_ampst_atmp, min_ampst_atmp)
+ax.set_ylim(min_ampst_atmp, max_ampst_atmp)
 
 # maxi1 = max(mpst)
 # maxi2 = max(binary)
