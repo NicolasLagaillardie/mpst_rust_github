@@ -1,4 +1,4 @@
-#![allow(dead_code, unused_variables)]
+#![allow(dead_code, unused_variables, clippy::needless_borrows_for_generic_args)]
 
 //! TODO
 
