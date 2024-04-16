@@ -27,7 +27,7 @@ cargo clean
 bash ./scripts/anon/sh/light_benches_compile_examples.sh
 
 # Create graph for the compile and run benchmarks for the example protocols
-python3 scripts/create_graphs/anon/python/examples_extra_literature_affine_timed_check_build_release_timed_ampst.py 
+python3 scripts/anon/python/examples_extra_literature_affine_timed_check_build_release_timed_ampst.py 
 
 cargo clean
 
@@ -35,10 +35,10 @@ cargo clean
 bash ./scripts/anon/sh/light_benches_compile_mesh_ring.sh
 
 # Create graph for the compile benchmarks for the mesh protocols
-python3 scripts/create_graphs/anon/python/mesh_compile.py 
+python3 scripts/anon/python/mesh_compile.py 
 
 # Create graph for the compile benchmarks for the ring protocols
-python3 scripts/create_graphs/anon/python/ring_compile.py 
+python3 scripts/anon/python/ring_compile.py 
 
 cargo clean
 
