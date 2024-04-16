@@ -17,14 +17,9 @@ fn read_file_line_by_line() -> Result<(), Box<dyn std::error::Error>> {
     let reader = BufReader::new(file);
 
     let set = RegexSet::new(&[
-        r"\w+",
-        r"\d+",
-        r"\pL+",
-        r"foo",
-        r"bar",
-        r"barfoo",
-        r"foobar",
-    ]).unwrap();
+        r"\w+", r"\d+", r"\pL+", r"foo", r"bar", r"barfoo", r"foobar",
+    ])
+    .unwrap();
 
     for line in reader.lines() {
         println!("{}", line?);
