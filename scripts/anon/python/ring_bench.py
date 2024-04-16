@@ -79,7 +79,7 @@ ax.plot(nb_participants_ampst, ampst, label='MultiCrusty', linestyle='solid', li
 ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
 
 min_ampst_atmp = int(min(min(ampst), min(atmp)))
-max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1
+max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1.5
 
 # Label X and Y axis
 ax.set_xlabel('\# roles', fontsize=300)

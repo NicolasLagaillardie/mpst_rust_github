@@ -144,14 +144,17 @@ ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=2
 
 # ax.plot(nb_participants_cancel_broadcast, cancel_broadcast, label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
+min_ampst_atmp = int(min(min(ampst), min(atmp)))
+max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1.5
+
 # Label X and Y axis
 ax.set_xlabel('\# roles', fontsize=300)
 # ax.set_ylabel('Time (s)', fontsize=200)
 ax.tick_params(axis='both', which='major', labelsize=300)
 ax.xaxis.set_ticks(np.arange(2, 11, 3))
-ax.yaxis.set_ticks(np.arange(18, 25, 1))
+ax.yaxis.set_ticks(np.arange(min_ampst_atmp, max_ampst_atmp, 1))
 ax.set_xlim(2, 8)
-ax.set_ylim(18, 21)
+ax.set_ylim(min_ampst_atmp, max_ampst_atmp)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
