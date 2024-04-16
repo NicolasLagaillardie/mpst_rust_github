@@ -11,10 +11,10 @@ global protocol oAuth(role Auth, role Client, role Server) {
                 choice at S
                 {
                     SendPicture(Answer) from Server to Client within [0;1] using a and resetting (); // Server sends the picture file to the client
-                    continue Loop; // A Recursive call
+                    continue Loop within [0;1] using a and resetting (); // A Recursive call
                 } or {
                     SendRefusal(Answer) from Server to Client within [0;1] using a and resetting (); // Server sends refusal to the client
-                    continue Loop; // A Recursive call
+                    continue Loop within [0;1] using a and resetting (); // A Recursive call
                 }
             } or {
                 Close() from Client to Server within [0;1] using a and resetting (); // Close the session between Client and Server

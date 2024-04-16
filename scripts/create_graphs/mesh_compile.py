@@ -147,7 +147,7 @@ ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=2
 #         label="Broadcast cancel", linestyle='dotted', linewidth=5)
 
 min_ampst_atmp = int(min(min(ampst), min(atmp)))
-max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1.5
+max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1.1
 
 # Label X and Y axis
 ax.set_xlabel('\# roles', fontsize=300)

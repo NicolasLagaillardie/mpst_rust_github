@@ -5,8 +5,8 @@
 //$         FindNearestZone(DomainName) from Handler to Regional within [0;1] using a and resetting ();
 //$         choice at Regional {
 //$             ZoneResponse(ZonePID) from Regional to Handler within [0;1] using a and resetting ();
-//$             Handler initiates GetZoneData(Handler, new Data);
-//$             continue QueryResolution;
+//$             Handler initiates GetZoneData(Handler, new Data) within [0;1] using a and resetting ();
+//$             continue QueryResolution within [0;1] using a and resetting ();
 //$         } or {
 //$             InvalidZone() from Regional to Handler within [0;1] using a and resetting ();
 //$         }
@@ -28,7 +28,8 @@ global protocol HandleDNSRequest(role Handler, role Regional, role Data) {
         choice at Regional {
             ZoneResponse(ZonePID) from Regional to Handler within [0;1] using a and resetting ();
             ZoneDataRequest() from Handler to Data within [0;1] using a and resetting ();
-            ZoneDataResponse(RRTree) from Data to Handler within [0;1] using a and resetting (a);            continue QueryResolution;
+            ZoneDataResponse(RRTree) from Data to Handler within [0;1] using a and resetting ();
+            continue QueryResolution within [0;1] using a and resetting ();
         } or {
             InvalidZone() from Regional to Handler within [0;1] using a and resetting ();
             InvalidZone() from Handler to Data within [0;1] using a and resetting ();

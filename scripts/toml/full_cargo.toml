@@ -1327,9 +1327,9 @@ path = "benches/ring/baking/ring_seven_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_height_crossbeam_baking"
+name = "ring_eight_crossbeam_baking"
 harness = false
-path = "benches/ring/baking/ring_height_crossbeam.rs"
+path = "benches/ring/baking/ring_eight_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -1395,9 +1395,9 @@ path = "benches/ring/baking/ring_seven_binary.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_height_binary_baking"
+name = "ring_eight_binary_baking"
 harness = false
-path = "benches/ring/baking/ring_height_binary.rs"
+path = "benches/ring/baking/ring_eight_binary.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -1463,9 +1463,9 @@ path = "benches/ring/baking/ring_seven_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_height_mpst_baking"
+name = "ring_eight_mpst_baking"
 harness = false
-path = "benches/ring/baking/ring_height_mpst.rs"
+path = "benches/ring/baking/ring_eight_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -1531,9 +1531,9 @@ path = "benches/ring/baking/ring_seven_ampst.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_height_ampst_baking"
+name = "ring_eight_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_height_ampst.rs"
+path = "benches/ring/baking/ring_eight_ampst.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -1859,9 +1859,9 @@ path = "benches/mesh/empty/mesh_seven_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_crossbeam_empty"
+name = "mesh_eight_crossbeam_empty"
 harness = false
-path = "benches/mesh/empty/mesh_height_crossbeam.rs"
+path = "benches/mesh/empty/mesh_eight_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -1927,9 +1927,9 @@ path = "benches/mesh/empty/mesh_seven_binary.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_binary_empty"
+name = "mesh_eight_binary_empty"
 harness = false
-path = "benches/mesh/empty/mesh_height_binary.rs"
+path = "benches/mesh/empty/mesh_eight_binary.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -1995,9 +1995,9 @@ path = "benches/mesh/empty/mesh_seven_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_mpst_empty"
+name = "mesh_eight_mpst_empty"
 harness = false
-path = "benches/mesh/empty/mesh_height_mpst.rs"
+path = "benches/mesh/empty/mesh_eight_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2065,9 +2065,9 @@ path = "benches/mesh/normal/mesh_seven_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_crossbeam_normal"
+name = "mesh_eight_crossbeam_normal"
 harness = false
-path = "benches/mesh/normal/mesh_height_crossbeam.rs"
+path = "benches/mesh/normal/mesh_eight_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2133,9 +2133,9 @@ path = "benches/mesh/normal/mesh_seven_binary.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_binary_normal"
+name = "mesh_eight_binary_normal"
 harness = false
-path = "benches/mesh/normal/mesh_height_binary.rs"
+path = "benches/mesh/normal/mesh_eight_binary.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2201,9 +2201,9 @@ path = "benches/mesh/normal/mesh_seven_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_mpst_normal"
+name = "mesh_eight_mpst_normal"
 harness = false
-path = "benches/mesh/normal/mesh_height_mpst.rs"
+path = "benches/mesh/normal/mesh_eight_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2401,9 +2401,9 @@ path = "benches/mesh/baking/mesh_seven_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_crossbeam_baking"
+name = "mesh_eight_crossbeam_baking"
 harness = false
-path = "benches/mesh/baking/mesh_height_crossbeam.rs"
+path = "benches/mesh/baking/mesh_eight_crossbeam.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2469,9 +2469,9 @@ path = "benches/mesh/baking/mesh_seven_binary.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_binary_baking"
+name = "mesh_eight_binary_baking"
 harness = false
-path = "benches/mesh/baking/mesh_height_binary.rs"
+path = "benches/mesh/baking/mesh_eight_binary.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2537,9 +2537,9 @@ path = "benches/mesh/baking/mesh_seven_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_mpst_baking"
+name = "mesh_eight_mpst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_height_mpst.rs"
+path = "benches/mesh/baking/mesh_eight_mpst.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -2605,9 +2605,9 @@ path = "benches/mesh/baking/mesh_seven_ampst.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_height_ampst_baking"
+name = "mesh_eight_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_height_ampst.rs"
+path = "benches/mesh/baking/mesh_eight_ampst.rs"
 required-features = ["full"]
 
 [[bench]]

@@ -20,33 +20,14 @@ str_to_int = {
     'two': 2,
     'three': 3,
     'four': 4,
-    'five': 5,
-    'six': 6,
-    'seven': 7,
-    'eight': 8,
-    'nine': 9,
-    'ten': 10,
-    'eleven': 11,
-    'twenty': 20,
-    'empty': 0
 }
 
 # Lists for plots
-crossbeam = []
-binary = []
-mpst = []
 ampst = []
 atmp = []
-cancel = []
-broadcast_cancel = []
 
-nb_participants_crossbeam = []
-nb_participants_binary = []
-nb_participants_mpst = []
 nb_participants_ampst = []
 nb_participants_atmp = []
-nb_participants_cancel = []
-nb_participants_broadcast_cancel = []
 
 # Number of loops in the recursion
 number_of_loops = '100'
@@ -73,47 +54,15 @@ for d in directories:
                 elif 'AMPST' in d and str_to_int[splitted[1]] >= 2:
                     ampst.append(int(test(d))/10**6)
                     nb_participants_ampst.append(str_to_int[splitted[1]])
-                elif 'MPST' in d and str_to_int[splitted[1]] >= 2:
-                    if 'broadcast' in d:
-                        broadcast_cancel.append(int(test(d))/10**6)
-                        nb_participants_broadcast_cancel.append(
-                            str_to_int[splitted[1]])
-                    elif 'cancel' in d:
-                        cancel.append(int(test(d))/10**6)
-                        nb_participants_cancel.append(str_to_int[splitted[1]])
-                    elif 'baking' in d:
-                        mpst.append(int(test(d))/10**6)
-                        nb_participants_mpst.append(str_to_int[splitted[1]])
-                elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
-                    binary.append(int(test(d))/10**6)
-                    nb_participants_binary.append(str_to_int[splitted[1]])
-                elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
-                    crossbeam.append(int(test(d))/10**6)
-                    nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
             print("Missing ", d)
 
 # Sort the lists in pair
-if nb_participants_crossbeam and crossbeam:
-    nb_participants_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
-
-if nb_participants_binary and binary:
-    nb_participants_binary, binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, binary))))
-
-if nb_participants_mpst and mpst:
-    nb_participants_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_participants_mpst, mpst))))
-
 if nb_participants_ampst and ampst:
     nb_participants_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_participants_ampst, ampst))))
 
 if nb_participants_atmp and atmp:
     nb_participants_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_participants_atmp, atmp))))
-
-if nb_participants_cancel and cancel:
-    nb_participants_cancel, cancel = (list(t) for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
-
-if nb_participants_broadcast_cancel and broadcast_cancel:
-    nb_participants_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
 
 # ax = plt.figure(figsize=(50, 50)).gca()
 fig, ax = plt.subplots(figsize=(60, 60))
@@ -121,15 +70,6 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-
-# # Plot the Crossbeam graph
-# ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
-
-# # Plot the binary graph
-# ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
-
-# # Plot the MPST graph
-# ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
 # Plot the AMPST graph
 ax.plot(nb_participants_ampst, ampst, label='MultiCrusty', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
@@ -144,9 +84,9 @@ max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1.1
 ax.set_xlabel('\# roles', fontsize=300)
 # ax.set_ylabel('Time (ms)', fontsize=300)
 ax.tick_params(axis='both', which='major', labelsize=300)
-ax.xaxis.set_ticks(np.arange(2, 21, 3))
+ax.xaxis.set_ticks(np.arange(2, 5, 1))
 ax.yaxis.set_ticks(np.arange(min_ampst_atmp, max_ampst_atmp, 1))
-ax.set_xlim(2, 8)
+ax.set_xlim(2, 4)
 ax.set_ylim(min_ampst_atmp, max_ampst_atmp)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)

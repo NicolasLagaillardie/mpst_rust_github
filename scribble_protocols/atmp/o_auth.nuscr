@@ -1,22 +1,22 @@
 global protocol Proto(role A, role C, role S)
 {
-    start(Int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    redirect(Int) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    login(Int) from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    auth(Int) from A to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    password(Int) from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+    start(Int) from C to S within [0;1] using a and resetting ();
+    redirect(Int) from S to C within [0;1] using a and resetting ();
+    login(Int) from C to A within [0;1] using a and resetting ();
+    auth(Int) from A to C within [0;1] using a and resetting ();
+    password(Int) from C to A within [0;1] using a and resetting ();
     choice at A
     {
-        success(Int) from A to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        success(Int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        get(Token) from S to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        put(Token) from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        put(Token) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+        success(Int) from A to C within [0;1] using a and resetting ();
+        success(Int) from C to S within [0;1] using a and resetting ();
+        get(Token) from S to A within [0;1] using a and resetting ();
+        put(Token) from A to S within [0;1] using a and resetting ();
+        put(Token) from S to C within [0;1] using a and resetting ();
     }
     or
     {
-        fail(Int) from A to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        fail(Int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        received(Int) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+        fail(Int) from A to C within [0;1] using a and resetting ();
+        fail(Int) from C to S within [0;1] using a and resetting ();
+        received(Int) from S to C within [0;1] using a and resetting ();
     }
 }

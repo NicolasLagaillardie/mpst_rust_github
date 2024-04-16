@@ -198,6 +198,8 @@ petgraph = { version = "0.6.4", optional = true }
 protobuf = { version = "3.4.0", features = ["with-bytes"] }
 protobuf-codegen = "3.4.0"
 protoc-bin-vendored = "3.0.0"
+# Parser for Top-Down
+once_cell = {version = "1.19.0", optional = true}
 
 ################################### Dev-dependencies for tests/benches
 
@@ -217,14 +219,14 @@ macros_simple = ["mpst"]
 macros_multiple = ["mpst", "macros_simple"]
 checking = ["mpst", "regex", "petgraph"]
 baking = ["mpst", "macros_multiple"]
-interleaved = ["baking"] # For interleaved sessions
+interleaved = ["baking"]                                   # For interleaved sessions
 baking_timed = ["binary_timed", "mpst"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
 baking_timed_interleaved = ["baking_timed", "interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
-top_down_nuscr = ["default"]
+top_down_nuscr = ["default", "regex", "once_cell"]
 # transport_http = ["default", "hyper", "hyper-tls", "tokio"]
 # transport = ["transport_tcp", "transport_udp", "transport_http"]
 transport = ["transport_tcp", "transport_udp"]

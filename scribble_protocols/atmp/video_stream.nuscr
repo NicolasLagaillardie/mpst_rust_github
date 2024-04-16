@@ -7,7 +7,7 @@ global protocol VideoStreamingProtocol(role Auth, role Client, role Server) {
 			RequestVideo(Request) from Auth to Server within [0;1] using a and resetting (); // Auth forwards the request
 			SendVideo(Video) from Server to Auth within [0;1] using a and resetting (); // Server sends the video file to the Auth
 			SendVideo(Video) from Auth to Client within [0;1] using a and resetting (); // Auth sends the video file to the client
-			continue Loop; // A Recursive call
+			continue Loop within [0;1] using a and resetting (); // A Recursive call
 		} or {
 			Close() from Client to Auth within [0;1] using a and resetting (); // Close the session between Client and Auth
 			Close() from Auth to Server within [0;1] using a and resetting (); // Close the session between Server and Auth

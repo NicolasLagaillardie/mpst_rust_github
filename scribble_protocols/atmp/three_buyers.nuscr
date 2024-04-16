@@ -1,19 +1,19 @@
 global protocol ThreeBuyer(role A, role C, role S)
 {
-    empty1(int) from A to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    empty2(int) from S to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    empty3(int) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-    empty4(int) from A to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+    empty1(int) from A to S within [0;1] using a and resetting ();
+    empty2(int) from S to A within [0;1] using a and resetting ();
+    empty3(int) from S to C within [0;1] using a and resetting ();
+    empty4(int) from A to C within [0;1] using a and resetting ();
 
     choice at C
     {
-        ok(int) from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        ok(int) from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        empty5(int) from S to C within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+        ok(int) from C to A within [0;1] using a and resetting ();
+        ok(int) from C to S within [0;1] using a and resetting ();
+        empty5(int) from S to C within [0;1] using a and resetting ();
     }
     or
     {
-        quit() from C to A within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
-        quit() from C to S within [0;1] using a and resetting ()  within [0;1] using a and resetting ();
+        quit() from C to A within [0;1] using a and resetting ();
+        quit() from C to S within [0;1] using a and resetting ();
     }
 }
