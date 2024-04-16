@@ -68,14 +68,8 @@ for key, value in index_compile.items():
         # exit()
 
 # Lists with metrics
-bar_check_timed = [0] * len(compile_files)
-bar_check_ampst = [0] * len(compile_files)
-
 bar_build_timed = [0] * len(compile_files)
 bar_build_ampst = [0] * len(compile_files)
-
-bar_release_timed = [0] * len(compile_files)
-bar_release_ampst = [0] * len(compile_files)
 
 bar_run_timed = [0] * len(compile_files)
 bar_run_ampst = [0] * len(compile_files)
@@ -118,14 +112,10 @@ for protocol, index in index_compile.items():
                         temp_release.append(int(line.split('; ')[1]))
 
             if 'timed' in name_file:
-                bar_check_timed[index] = statistics.mean(temp_check)/10**6
                 bar_build_timed[index] = statistics.mean(temp_build)/10**6
-                bar_release_timed[index] = statistics.mean(temp_release)/10**6
                 bar_run_timed[index] = bench[protocol]/10**6
             elif 'ampst' in name_file:
-                bar_check_ampst[index] = statistics.mean(temp_check)/10**6
                 bar_build_ampst[index] = statistics.mean(temp_build)/10**6
-                bar_release_ampst[index] = statistics.mean(temp_release)/10**6
                 bar_run_ampst[index] = bench[protocol]/10**6
             else:
                 print('Issue with ', name_file)

@@ -341,4 +341,7 @@ pub mod transport;
 #[cfg(feature = "protobuf")]
 pub mod protobuf;
 
+#[cfg(feature = "top_down_nuscr")]
+pub mod top_down_nuscr;
+
 pub mod attempt;
