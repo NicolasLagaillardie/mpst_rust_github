@@ -186,7 +186,7 @@ Next,
 we highlight how concurrency errors are ruled out by **Anon**
 (i.e., the ultimate practical purpose of **Anon**).
 After each modification,
-compile and run the program with `cargo run --example=servo_generated --features="baking_timed"` and observe the reported error(s).
+compile and run the program with `cargo run --example=servo_generated --features="baking_atmp"` and observe the reported error(s).
 
 * Open the file [servo_generated.rs](examples/servo_generated.rs) in the `examples/` folder,
 containing the Servo program,
@@ -209,9 +209,9 @@ The examples in this table are located in the folder `examples/`.
 The data for these benchmarks can be re-generated using the following script:
 
 ```bash
-./scripts/examples_affine_timed_literature_extra.sh # Will take up to one hour, progress is displayed in the terminal
-python scripts/create_graphs/examples_literature_affine_timed_check_build_release.py
-python scripts/create_graphs/examples_extra_affine_timed_check_build_release.py
+./scripts/examples_affine_atmp_literature_extra.sh # Will take up to one hour, progress is displayed in the terminal
+python scripts/create_graphs/examples_literature_affine_atmp_check_build_release.py
+python scripts/create_graphs/examples_extra_affine_atmp_check_build_release.py
 ```
 
 Each example is compiled 10 times and is run 10,000 times.
@@ -408,7 +408,7 @@ up to line 73. -->
 2️⃣ &nbsp; Compile the `Rust` types
 
 ```bash
-cargo run --example adder_generated  --features baking_timed
+cargo run --example adder_generated  --features baking_atmp
 ```
 
 This command contains four parts:
@@ -416,7 +416,7 @@ This command contains four parts:
 1. `cargo` which calls the `Rust` compiler
 2. `run` for compiling and running one or more `Rust` files
 3. `--example adder_generated` for running the specific *example* `adder_generated`
-4. `--features baking_timed` for compiling only specific parts of **Anon** used for the example.
+4. `--features baking_atmp` for compiling only specific parts of **Anon** used for the example.
 
 You will have an error and several warnings when running the previous command.
 This is because the `Nuscr` API only generates `Rust` types,
@@ -621,8 +621,8 @@ hence you can use the file as a reference implementation.
 
 ```rust
 use mpstthree::binary::struct_trait::end::End; // The basic End types
-use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed}; // The basic timed types
-use mpstthree::generate_timed; // The macro for generating the roles and the MeshedChannels
+use mpstthree::binary_atmp::struct_trait::{recv::RecvTimed, send::SendTimed}; // The basic timed types
+use mpstthree::generate_atmp; // The macro for generating the roles and the MeshedChannels
 use mpstthree::role::broadcast::RoleBroadcast; // Optional: used only for protocols with choice/offer
 use mpstthree::role::end::RoleEnd; // The final type for the stacks and the names of the roles
 
@@ -634,7 +634,7 @@ use std::time::Instant; // Used for clocks
 2️⃣ &nbsp; Then create the **roles** and the **MeshedChannels** data structure:
 
 ```rust
-generate_timed!(MeshedChannels, A, B); // generates meshed channels for 3 roles
+generate_atmp!(MeshedChannels, A, B); // generates meshed channels for 3 roles
 ```
 
 <!-- Replace `A, B` with the different names
@@ -718,7 +718,7 @@ type EndpointB = MeshedChannels<StartB0, OrderingB0, NameB>;
 3️⃣ &nbsp; Check that the types are correct with:
 
 ```bash
-cargo check --example my_basic --features baking_timed
+cargo check --example my_basic --features baking_atmp
 ```
 
 No errors should be displayed,
@@ -780,7 +780,7 @@ fn main() {
 5️⃣ &nbsp; Run the example again:
 
 ```bash
-cargo run --example my_basic --features baking_timed
+cargo run --example my_basic --features baking_atmp
 ```
 
 </details>

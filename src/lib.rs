@@ -329,11 +329,11 @@ pub mod baking;
 #[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
 pub mod interleaved;
 
-#[cfg(feature = "binary_timed")]
-pub mod binary_timed;
+#[cfg(feature = "binary_atmp")]
+pub mod binary_atmp;
 
-#[cfg(feature = "baking_timed")]
-pub mod baking_timed;
+#[cfg(feature = "baking_atmp")]
+pub mod baking_atmp;
 
 #[cfg(feature = "transport")]
 pub mod transport;

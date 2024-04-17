@@ -199,11 +199,11 @@ mod test_check_generator {
             .map(char::from)
             .collect::<String>();
 
-        assert!(check_or(&format!("}}or{{")));
-        assert!(check_or(&format!("}} or{{")));
-        assert!(check_or(&format!("}}or {{")));
-        assert!(check_or(&format!("}}   or   {{")));
-        assert!(check_or(&format!("   }} or   {{    ")));
+        assert!(check_or("}}or{{"));
+        assert!(check_or("}} or{{"));
+        assert!(check_or("}}or {{"));
+        assert!(check_or("}}   or   {{"));
+        assert!(check_or("   }} or   {{    "));
         assert!(check_or(&format!("   }} or {}  {{    ", &random_string)));
     }
 

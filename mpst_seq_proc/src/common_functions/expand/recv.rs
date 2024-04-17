@@ -366,7 +366,7 @@ pub(crate) fn recv_from_all(
 }
 
 /// Expand timed receive methods
-pub(crate) fn recv_timed(
+pub(crate) fn recv_atmp(
     all_roles: &[TokenStream],
     receiver: u64,
     sender: u64,
@@ -395,7 +395,7 @@ pub(crate) fn recv_timed(
 
             if k == cond {
                 quote! {
-                    mpstthree::binary_timed::struct_trait::recv::RecvTimed<
+                    mpstthree::binary_atmp::struct_trait::recv::RecvTimed<
                         T,
                         CLOCK,
                         START,
@@ -464,7 +464,7 @@ pub(crate) fn recv_timed(
                 >),
                 Box<dyn std::error::Error>
             > {
-                let (v, new_session) = mpstthree::binary_timed::recv::recv(
+                let (v, new_session) = mpstthree::binary_atmp::recv::recv(
                     all_clocks,
                     self.#new_session
                 )?;
@@ -483,7 +483,7 @@ pub(crate) fn recv_timed(
 }
 
 /// Expand receive from all methods
-pub(crate) fn recv_from_all_timed(
+pub(crate) fn recv_from_all_atmp(
     all_roles: &[TokenStream],
     receiver: u64,
     sender: u64,
@@ -512,7 +512,7 @@ pub(crate) fn recv_from_all_timed(
 
             if k == cond {
                 quote! {
-                    mpstthree::binary_timed::struct_trait::recv::RecvTimed<
+                    mpstthree::binary_atmp::struct_trait::recv::RecvTimed<
                         T,
                         CLOCK,
                         START,
@@ -580,7 +580,7 @@ pub(crate) fn recv_from_all_timed(
                 >),
                 Box<dyn std::error::Error>
             > {
-                let (v, new_session) = mpstthree::binary_timed::recv::recv(
+                let (v, new_session) = mpstthree::binary_atmp::recv::recv(
                     all_clocks,
                     self.#new_session
                 )?;

@@ -83,7 +83,7 @@ fn augment_type(mut ty: &mut Type, exclude: &HashSet<Ident>) {
     }
 }
 
-// If session_timed is a type
+// If session_atmp is a type
 fn session_type(mut input: ItemType) -> TokenStream {
     let exclude = idents_set(&input.generics.params);
     punctuated_prepend(
@@ -94,7 +94,7 @@ fn session_type(mut input: ItemType) -> TokenStream {
     input.into_token_stream()
 }
 
-/// If session_timed is an enum
+/// If session_atmp is an enum
 fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
     // If no variants, return error
     if input.variants.is_empty() {
@@ -219,7 +219,7 @@ fn session_enum(mut input: ItemEnum) -> Result<TokenStream> {
 }
 
 /// Maych given timed session with either a type of an enum
-pub fn session_timed(attr: TokenStream, input: TokenStream) -> Result<TokenStream> {
+pub fn session_atmp(attr: TokenStream, input: TokenStream) -> Result<TokenStream> {
     let Nothing = parse2(attr)?;
     match parse2::<Item>(input)? {
         Item::Type(input) => Ok(session_type(input)),

@@ -26,21 +26,21 @@ bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_ampst 100 baki
 bash ./scripts/create_files/compile_normal.sh proximity_based_car_key_ampst 100 baking
 
 ## Compile timed examples
-bash ./scripts/create_files/compile_normal.sh calculator_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh online_wallet_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh smtp_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh simple_voting_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh three_buyers_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh travel_agency_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh o_auth_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh http_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh remote_data_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh servo_timed 100 baking_timed
+bash ./scripts/create_files/compile_normal.sh calculator_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh online_wallet_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh smtp_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh simple_voting_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh three_buyers_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh travel_agency_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh o_auth_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh http_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh remote_data_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh servo_atmp 100 baking_atmp
 
 ## Compile rate-base examples, ATMP version
-bash ./scripts/create_files/compile_normal.sh gravity_android_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_timed 100 baking_timed
-bash ./scripts/create_files/compile_normal.sh proximity_based_car_key_timed 100 baking_timed
+bash ./scripts/create_files/compile_normal.sh gravity_android_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_atmp 100 baking_atmp
+bash ./scripts/create_files/compile_normal.sh proximity_based_car_key_atmp 100 baking_atmp
 
 ## Run and save benchmarks
 cargo clean

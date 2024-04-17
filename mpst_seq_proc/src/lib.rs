@@ -69,16 +69,14 @@ use baking::baking_with_cancel::BakingWithCancel;
 use baking::baking_with_enum::BakingWithEnum;
 use baking::baking_with_enum_and_cancel::BakingWithEnumAndCancel;
 
-mod baking_timed;
+mod baking_atmp;
 
-use baking_timed::baking_timed_interleaved_with_enum_and_cancel::BakingTimedInterleavedWithEnumAndCancel;
-use baking_timed::baking_timed_with_enum_and_cancel::BakingTimedWithEnumAndCancel;
+use baking_atmp::baking_atmp_interleaved_with_enum_and_cancel::BakingATMPInterleavedWithEnumAndCancel;
+use baking_atmp::baking_atmp_with_enum_and_cancel::BakingATMPWithEnumAndCancel;
 
-mod choose_timed_mpst_multi_to_all;
+mod choose_atmp_mpst_multi_to_all;
 
-use choose_timed_mpst_multi_to_all::ChooseTimedMultiToAll;
-
-// mod session_timed;
+use choose_atmp_mpst_multi_to_all::ChooseATMPMultiToAll;
 
 //////////////////////////////////////
 
@@ -449,8 +447,8 @@ pub fn baking_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStrea
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as BakingTimedWithEnumAndCancel);
+pub fn baking_atmp_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingATMPWithEnumAndCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
@@ -458,8 +456,8 @@ pub fn baking_timed_with_enum_and_cancel(input: TokenStream) -> TokenStream {
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as ChooseTimedMultiToAll);
+pub fn choose_atmp_mpst_multi_to_all(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ChooseATMPMultiToAll);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }
@@ -467,8 +465,8 @@ pub fn choose_timed_mpst_multi_to_all(input: TokenStream) -> TokenStream {
 //////////////////////////////////////
 
 #[proc_macro]
-pub fn baking_timed_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as BakingTimedInterleavedWithEnumAndCancel);
+pub fn baking_atmp_interleaved_with_enum_and_cancel(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as BakingATMPInterleavedWithEnumAndCancel);
     let output: proc_macro2::TokenStream = proc_macro2::TokenStream::from(input);
     output.into()
 }

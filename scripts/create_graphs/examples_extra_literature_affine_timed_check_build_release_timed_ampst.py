@@ -68,7 +68,7 @@ index_compile = {}
 
 for index, elt in enumerate(compile_files):
     # index_compile[elt] = index
-    index_compile[elt + '_timed'] = index
+    index_compile[elt + '_atmp'] = index
     index_compile[elt + '_ampst'] = index
 
 # Translate from compile files to bench files and vice_versa
@@ -89,16 +89,16 @@ for key, value in index_compile.items():
         # exit()
 
 # Lists with metrics
-bar_check_timed = [0] * len(compile_files)
+bar_check_atmp = [0] * len(compile_files)
 bar_check_ampst = [0] * len(compile_files)
 
-bar_build_timed = [0] * len(compile_files)
+bar_build_atmp = [0] * len(compile_files)
 bar_build_ampst = [0] * len(compile_files)
 
-bar_release_timed = [0] * len(compile_files)
+bar_release_atmp = [0] * len(compile_files)
 bar_release_ampst = [0] * len(compile_files)
 
-bar_run_timed = [0] * len(compile_files)
+bar_run_atmp = [0] * len(compile_files)
 bar_run_ampst = [0] * len(compile_files)
 
 def test(path):
@@ -139,10 +139,10 @@ for protocol, index in index_compile.items():
                         temp_release.append(int(line.split('; ')[1]))
 
             if 'timed' in name_file:
-                bar_check_timed[index] = statistics.mean(temp_check)/10**6
-                bar_build_timed[index] = statistics.mean(temp_build)/10**6
-                bar_release_timed[index] = statistics.mean(temp_release)/10**6
-                bar_run_timed[index] = bench[protocol]/10**6
+                bar_check_atmp[index] = statistics.mean(temp_check)/10**6
+                bar_build_atmp[index] = statistics.mean(temp_build)/10**6
+                bar_release_atmp[index] = statistics.mean(temp_release)/10**6
+                bar_run_atmp[index] = bench[protocol]/10**6
             elif 'ampst' in name_file:
                 bar_check_ampst[index] = statistics.mean(temp_check)/10**6
                 bar_build_ampst[index] = statistics.mean(temp_build)/10**6
@@ -170,7 +170,7 @@ fig, (axsLeft, axsRight) = plt.subplots(1, 2, figsize=(32, 6))
 
 # Plotting compilation time
 axsLeft.bar(np.arange(len(bar_build_ampst)) - width/2, bar_build_ampst, width=width, color='#d62728')
-axsLeft.bar(np.arange(len(bar_build_timed)) + width/2, bar_build_timed, width=width, color='#9467bd')
+axsLeft.bar(np.arange(len(bar_build_atmp)) + width/2, bar_build_atmp, width=width, color='#9467bd')
 
 axsLeft.set_title('Build time', pad=10, fontsize=30)
 axsLeft.xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -182,7 +182,7 @@ axsLeft.xaxis.set_ticklabels(ticklabels_compile_files, ha='right')
 
 # Plotting compilation time
 axsRight.bar(np.arange(len(bar_run_ampst)) - width/2, bar_run_ampst, width=width, color='#d62728')
-axsRight.bar(np.arange(len(bar_run_timed)) + width/2, bar_run_timed, width=width, color='#9467bd')
+axsRight.bar(np.arange(len(bar_run_atmp)) + width/2, bar_run_atmp, width=width, color='#9467bd')
 
 axsRight.set_title('Runtime', pad=10, fontsize=30)
 axsRight.xaxis.set_major_locator(MaxNLocator(integer=True))

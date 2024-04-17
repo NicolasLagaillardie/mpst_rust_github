@@ -169,7 +169,7 @@ pub(crate) fn fork_mpst(meshedchannels_name: &Ident, number_roles: u64) -> Token
 }
 
 /// Expand fork timed methods
-pub(crate) fn fork_timed_mpst(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
+pub(crate) fn fork_atmp_mpst(meshedchannels_name: &Ident, number_roles: u64) -> TokenStream {
     let (matrix, _diag) = diag_and_matrix(number_roles);
     let (matrix_w_offset, diag_w_offset) = diag_and_matrix_w_offset(number_roles);
 
@@ -789,7 +789,7 @@ pub(crate) fn fork_interleaved_mpst(
 }
 
 /// Expand fork timed interleaved methods
-pub(crate) fn fork_timed_interleaved_mpst(
+pub(crate) fn fork_atmp_interleaved_mpst(
     func_name: &Ident,
     meshedchannels_name_one: &Ident,
     number_roles_one: u64,

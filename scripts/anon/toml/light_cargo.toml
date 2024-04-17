@@ -118,14 +118,14 @@ path = "tests/interleaved.rs"
 required-features = ["baking_interleaved"]
 
 [[test]]
-name = "binary_timed"
-path = "tests/binary_timed.rs"
-required-features = ["binary_timed"]
+name = "binary_atmp"
+path = "tests/binary_atmp.rs"
+required-features = ["binary_atmp"]
 
 [[test]]
-name = "baking_timed"
-path = "tests/baking_timed.rs"
-required-features = ["baking_timed"]
+name = "baking_atmp"
+path = "tests/baking_atmp.rs"
+required-features = ["baking_atmp"]
 
 [[test]]
 name = "baking_message"
@@ -169,15 +169,15 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "example_remote_data_timed"
+name = "example_remote_data_atmp"
 harness = false
-path = "benches/examples/timed/remote_data.rs"
+path = "benches/examples/atmp/remote_data.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_http_timed"
+name = "example_http_atmp"
 harness = false
-path = "benches/examples/timed/http.rs"
+path = "benches/examples/atmp/http.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -211,19 +211,19 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "mesh_two_timed"
+name = "mesh_two_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_three_timed"
+name = "mesh_three_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_four_timed"
+name = "mesh_four_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_four.rs"
 required-features = ["full"]
@@ -253,19 +253,19 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "ring_two_timed"
+name = "ring_two_atmp"
 harness = false
 path = "benches/ring/timed/ring_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_three_timed"
+name = "ring_three_atmp"
 harness = false
 path = "benches/ring/timed/ring_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_four_timed"
+name = "ring_four_atmp"
 harness = false
 path = "benches/ring/timed/ring_four.rs"
 required-features = ["full"]
@@ -292,19 +292,19 @@ required-features = ["baking"]
 ######### Timed
 
 [[example]]
-name = "remote_data_timed"
-path = "examples/timed/remote_data.rs"
-required-features = ["baking_timed"]
+name = "remote_data_atmp"
+path = "examples/atmp/remote_data.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "http_timed"
-path = "examples/timed/http.rs"
-required-features = ["baking_timed"]
+name = "http_atmp"
+path = "examples/atmp/http.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "pinetime_heart_rate_timed"
+name = "pinetime_heart_rate_atmp"
 path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 ################################### Mesh examples
 
@@ -330,17 +330,17 @@ required-features = ["baking"]
 [[example]]
 name = "mesh_two_baking_atmp"
 path = "examples/mesh/mesh_two_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_three_baking_atmp"
 path = "examples/mesh/mesh_three_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_four_baking_atmp"
 path = "examples/mesh/mesh_four_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 ################################### Ring examples
 
@@ -366,29 +366,29 @@ required-features = ["baking"]
 [[example]]
 name = "ring_two_baking_atmp"
 path = "examples/ring/ring_two_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_three_baking_atmp"
 path = "examples/ring/ring_three_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_four_baking_atmp"
 path = "examples/ring/ring_four_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 ################################### Timed artifact examples
 
 [[example]]
 name = "timed_my_basic"
-path = "examples/artifact_timed/my_basic.rs"
-required-features = ["baking_timed"]
+path = "examples/artifact_atmp/my_basic.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "timed_basic"
-path = "examples/artifact_timed/basic.rs"
-required-features = ["baking_timed"]
+path = "examples/artifact_atmp/basic.rs"
+required-features = ["baking_atmp"]
 
 ################################### Readme example
 
@@ -438,16 +438,16 @@ rand = "0.8.5"
 [features]
 default = []
 mpst = ["default"]
-binary_timed = ["default"]
+binary_atmp = ["default"]
 macros_simple = ["mpst"]
 macros_multiple = ["mpst", "macros_simple"]
 checking = ["mpst", "regex", "petgraph"]
 baking = ["mpst", "macros_multiple"]
 interleaved = ["baking"] # For interleaved sessions
-baking_timed = ["binary_timed", "mpst"]
+baking_atmp = ["binary_atmp", "mpst"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
-baking_timed_interleaved = ["baking_timed", "interleaved"]
+baking_atmp_interleaved = ["baking_atmp", "interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
 top_down_nuscr = ["default", "regex", "once_cell"]
@@ -459,9 +459,9 @@ transport_macros_multiple = [
     "transport",
 ] # For test compile examples
 protobuf_feature = []
-affine_timed = ["baking", "baking_timed"]
+affine_atmp = ["baking", "baking_atmp"]
 full_without_checking = ["baking", "transport", "interleaved"]
-full = ["baking_checking", "transport", "baking_timed", "interleaved"]
+full = ["baking_checking", "transport", "baking_atmp", "interleaved"]
 
 ################################### Doc handling for all-features
 

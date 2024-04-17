@@ -168,7 +168,7 @@ macro_rules! generate {
         $index_tuple_two: literal,
         $func_name: ident
     ) => {
-        mpst_seq_proc::baking_timed_interleaved_with_enum_and_cancel!(
+        mpst_seq_proc::baking_atmp_interleaved_with_enum_and_cancel!(
             $meshedchannels_name_one ,
             ( $( ( $all_roles_one ) )+ ) ,
             $index_tuple_one ,

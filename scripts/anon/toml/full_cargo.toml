@@ -118,14 +118,14 @@ path = "tests/interleaved.rs"
 required-features = ["baking_interleaved"]
 
 [[test]]
-name = "binary_timed"
-path = "tests/binary_timed.rs"
-required-features = ["binary_timed"]
+name = "binary_atmp"
+path = "tests/binary_atmp.rs"
+required-features = ["binary_atmp"]
 
 [[test]]
-name = "baking_timed"
-path = "tests/baking_timed.rs"
-required-features = ["baking_timed"]
+name = "baking_atmp"
+path = "tests/baking_atmp.rs"
+required-features = ["baking_atmp"]
 
 [[test]]
 name = "baking_message"
@@ -224,63 +224,63 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "example_calculator_timed"
+name = "example_calculator_atmp"
 harness = false
-path = "benches/examples/timed/calculator.rs"
+path = "benches/examples/atmp/calculator.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_o_auth_timed"
+name = "example_o_auth_atmp"
 harness = false
-path = "benches/examples/timed/o_auth.rs"
+path = "benches/examples/atmp/o_auth.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_online_wallet_timed"
+name = "example_online_wallet_atmp"
 harness = false
-path = "benches/examples/timed/online_wallet.rs"
+path = "benches/examples/atmp/online_wallet.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_simple_voting_timed"
+name = "example_simple_voting_atmp"
 harness = false
-path = "benches/examples/timed/simple_voting.rs"
+path = "benches/examples/atmp/simple_voting.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_smtp_timed"
+name = "example_smtp_atmp"
 harness = false
-path = "benches/examples/timed/smtp.rs"
+path = "benches/examples/atmp/smtp.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_three_buyers_timed"
+name = "example_three_buyers_atmp"
 harness = false
-path = "benches/examples/timed/three_buyers.rs"
+path = "benches/examples/atmp/three_buyers.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_travel_agency_timed"
+name = "example_travel_agency_atmp"
 harness = false
-path = "benches/examples/timed/travel_agency.rs"
+path = "benches/examples/atmp/travel_agency.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_servo_timed"
+name = "example_servo_atmp"
 harness = false
-path = "benches/examples/timed/servo.rs"
+path = "benches/examples/atmp/servo.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_remote_data_timed"
+name = "example_remote_data_atmp"
 harness = false
-path = "benches/examples/timed/remote_data.rs"
+path = "benches/examples/atmp/remote_data.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "example_http_timed"
+name = "example_http_atmp"
 harness = false
-path = "benches/examples/timed/http.rs"
+path = "benches/examples/atmp/http.rs"
 required-features = ["full"]
 
 [[bench]]
@@ -352,43 +352,43 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "ring_two_timed"
+name = "ring_two_atmp"
 harness = false
 path = "benches/ring/timed/ring_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_three_timed"
+name = "ring_three_atmp"
 harness = false
 path = "benches/ring/timed/ring_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_four_timed"
+name = "ring_four_atmp"
 harness = false
 path = "benches/ring/timed/ring_four.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_five_timed"
+name = "ring_five_atmp"
 harness = false
 path = "benches/ring/timed/ring_five.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_six_timed"
+name = "ring_six_atmp"
 harness = false
 path = "benches/ring/timed/ring_six.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_seven_timed"
+name = "ring_seven_atmp"
 harness = false
 path = "benches/ring/timed/ring_seven.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "ring_eight_timed"
+name = "ring_eight_atmp"
 harness = false
 path = "benches/ring/timed/ring_eight.rs"
 required-features = ["full"]
@@ -444,43 +444,43 @@ required-features = ["full"]
 ######### Timed
 
 [[bench]]
-name = "mesh_two_timed"
+name = "mesh_two_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_two.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_three_timed"
+name = "mesh_three_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_three.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_four_timed"
+name = "mesh_four_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_four.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_five_timed"
+name = "mesh_five_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_five.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_six_timed"
+name = "mesh_six_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_six.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_seven_timed"
+name = "mesh_seven_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_seven.rs"
 required-features = ["full"]
 
 [[bench]]
-name = "mesh_eight_timed"
+name = "mesh_eight_atmp"
 harness = false
 path = "benches/mesh/timed/mesh_eight.rs"
 required-features = ["full"]
@@ -557,69 +557,69 @@ required-features = ["baking"]
 ######### Timed
 
 [[example]]
-name = "calculator_timed"
-path = "examples/timed/calculator.rs"
-required-features = ["baking_timed"]
+name = "calculator_atmp"
+path = "examples/atmp/calculator.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "o_auth_timed"
-path = "examples/timed/o_auth.rs"
-required-features = ["baking_timed"]
+name = "o_auth_atmp"
+path = "examples/atmp/o_auth.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "online_wallet_timed"
-path = "examples/timed/online_wallet.rs"
-required-features = ["baking_timed"]
+name = "online_wallet_atmp"
+path = "examples/atmp/online_wallet.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "simple_voting_timed"
-path = "examples/timed/simple_voting.rs"
-required-features = ["baking_timed"]
+name = "simple_voting_atmp"
+path = "examples/atmp/simple_voting.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "smtp_timed"
-path = "examples/timed/smtp.rs"
-required-features = ["baking_timed"]
+name = "smtp_atmp"
+path = "examples/atmp/smtp.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "three_buyers_timed"
-path = "examples/timed/three_buyers.rs"
-required-features = ["baking_timed"]
+name = "three_buyers_atmp"
+path = "examples/atmp/three_buyers.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "travel_agency_timed"
-path = "examples/timed/travel_agency.rs"
-required-features = ["baking_timed"]
+name = "travel_agency_atmp"
+path = "examples/atmp/travel_agency.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "servo_timed"
-path = "examples/timed/servo.rs"
-required-features = ["baking_timed"]
+name = "servo_atmp"
+path = "examples/atmp/servo.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "remote_data_timed"
-path = "examples/timed/remote_data.rs"
-required-features = ["baking_timed"]
+name = "remote_data_atmp"
+path = "examples/atmp/remote_data.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "http_timed"
-path = "examples/timed/http.rs"
-required-features = ["baking_timed"]
+name = "http_atmp"
+path = "examples/atmp/http.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "gravity_android_timed"
+name = "gravity_android_atmp"
 path = "examples/rate_based_atmp/gravity_android.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "pinetime_heart_rate_timed"
+name = "pinetime_heart_rate_atmp"
 path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
-name = "proximity_based_car_key_timed"
+name = "proximity_based_car_key_atmp"
 path = "examples/rate_based_atmp/proximity_based_car_key.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 ################################### Mesh examples
 
@@ -665,37 +665,37 @@ required-features = ["baking"]
 [[example]]
 name = "mesh_two_baking_atmp"
 path = "examples/mesh/mesh_two_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_three_baking_atmp"
 path = "examples/mesh/mesh_three_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_four_baking_atmp"
 path = "examples/mesh/mesh_four_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_five_baking_atmp"
 path = "examples/mesh/mesh_five_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_six_baking_atmp"
 path = "examples/mesh/mesh_six_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_seven_baking_atmp"
 path = "examples/mesh/mesh_seven_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "mesh_eight_baking_atmp"
 path = "examples/mesh/mesh_eight_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 ################################### Ring examples
 
@@ -741,37 +741,37 @@ required-features = ["baking"]
 [[example]]
 name = "ring_two_baking_atmp"
 path = "examples/ring/ring_two_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_three_baking_atmp"
 path = "examples/ring/ring_three_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_four_baking_atmp"
 path = "examples/ring/ring_four_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_five_baking_atmp"
 path = "examples/ring/ring_five_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_six_baking_atmp"
 path = "examples/ring/ring_six_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_seven_baking_atmp"
 path = "examples/ring/ring_seven_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "ring_eight_baking_atmp"
 path = "examples/ring/ring_eight_baking_atmp.rs"
-required-features = ["baking_timed"]
+required-features = ["baking_atmp"]
 
 ################################### Artifact examples
 
@@ -789,13 +789,13 @@ required-features = ["baking"]
 
 [[example]]
 name = "timed_my_basic"
-path = "examples/artifact_timed/my_basic.rs"
-required-features = ["baking_timed"]
+path = "examples/artifact_atmp/my_basic.rs"
+required-features = ["baking_atmp"]
 
 [[example]]
 name = "timed_basic"
-path = "examples/artifact_timed/basic.rs"
-required-features = ["baking_timed"]
+path = "examples/artifact_atmp/basic.rs"
+required-features = ["baking_atmp"]
 
 ################################### Readme example
 
@@ -845,16 +845,16 @@ rand = "0.8.5"
 [features]
 default = []
 mpst = ["default"]
-binary_timed = ["default"]
+binary_atmp = ["default"]
 macros_simple = ["mpst"]
 macros_multiple = ["mpst", "macros_simple"]
 checking = ["mpst", "regex", "petgraph"]
 baking = ["mpst", "macros_multiple"]
 interleaved = ["baking"] # For interleaved sessions
-baking_timed = ["binary_timed", "mpst"]
+baking_atmp = ["binary_atmp", "mpst"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
-baking_timed_interleaved = ["baking_timed", "interleaved"]
+baking_atmp_interleaved = ["baking_atmp", "interleaved"]
 transport_tcp = ["default"]
 transport_udp = ["default"]
 top_down_nuscr = ["default", "regex", "once_cell"]
@@ -866,9 +866,9 @@ transport_macros_multiple = [
     "transport",
 ] # For test compile examples
 protobuf_feature = []
-affine_timed = ["baking", "baking_timed"]
+affine_atmp = ["baking", "baking_atmp"]
 full_without_checking = ["baking", "transport", "interleaved"]
-full = ["baking_checking", "transport", "baking_timed", "interleaved"]
+full = ["baking_checking", "transport", "baking_atmp", "interleaved"]
 
 ################################### Doc handling for all-features
 

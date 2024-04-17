@@ -14,9 +14,9 @@ bash ./scripts/create_files/compile_normal.sh http_ampst 5 baking
 bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_ampst 5 baking
 
 ## Compile timed examples
-bash ./scripts/create_files/compile_normal.sh remote_data_timed 5 baking_timed
-bash ./scripts/create_files/compile_normal.sh http_timed 5 baking_timed
-bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_timed 5 baking_timed
+bash ./scripts/create_files/compile_normal.sh remote_data_atmp 5 baking_atmp
+bash ./scripts/create_files/compile_normal.sh http_atmp 5 baking_atmp
+bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_atmp 5 baking_atmp
 
 ## Run and save benchmarks
 cargo clean

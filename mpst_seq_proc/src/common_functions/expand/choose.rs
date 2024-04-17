@@ -1185,7 +1185,7 @@ pub(crate) fn choose_mpst_create_multi_to_all(
 }
 
 /// Expand choose left and right timed methods
-pub(crate) fn choose_timed(
+pub(crate) fn choose_atmp(
     all_roles: &[TokenStream],
     sender: u64,
     meshedchannels_name: &Ident,
@@ -1326,7 +1326,7 @@ pub(crate) fn choose_timed(
                         };
 
                     quote! {
-                        mpstthree::binary_timed::struct_trait::send::SendTimed<
+                        mpstthree::binary_atmp::struct_trait::send::SendTimed<
                             either::Either<
                                 #meshedchannels_name<
                                     #(
@@ -1574,7 +1574,7 @@ pub(crate) fn choose_timed(
             let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
-                let #new_session_sender = mpstthree::binary_timed::send::send(
+                let #new_session_sender = mpstthree::binary_atmp::send::send(
                     either::Either::Left(#new_choice_sender),
                     all_clocks,
                     self.#session_sender
@@ -1593,7 +1593,7 @@ pub(crate) fn choose_timed(
             let session_sender = Ident::new(&format!("session{j}"), Span::call_site());
 
             quote! {
-                let #new_session_sender = mpstthree::binary_timed::send::send(
+                let #new_session_sender = mpstthree::binary_atmp::send::send(
                     either::Either::Right(#new_choice_sender),
                     all_clocks,
                     self.#session_sender
@@ -1787,12 +1787,12 @@ pub(crate) fn choose_timed(
 }
 
 /// Expand choose methods for interleaved sessions
-pub(crate) fn choose_timed_mpst_create_multi_to_all(
+pub(crate) fn choose_atmp_mpst_create_multi_to_all(
     meshedchannels_name: &Ident,
     all_roles: &[TokenStream],
     number_roles: u64,
 ) -> TokenStream {
-    let choose_timed_mpst_create_multi_to_all: Vec<TokenStream> = (1..=number_roles)
+    let choose_atmp_mpst_create_multi_to_all: Vec<TokenStream> = (1..=number_roles)
         .map(|sender| {
 
             let name_macro = if let Some(elt) =
@@ -1825,7 +1825,7 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
                         $all_clocks: expr,
                         $( $label: path ),+ $(,)?
                     ) => {
-                        mpstthree::choose_timed_mpst_multi_to_all!(
+                        mpstthree::choose_atmp_mpst_multi_to_all!(
                             $session ,
                             $all_clocks ,
                             $( $label , )+ =>
@@ -1840,6 +1840,6 @@ pub(crate) fn choose_timed_mpst_create_multi_to_all(
         .collect();
 
     quote! {
-        #( #choose_timed_mpst_create_multi_to_all )*
+        #( #choose_atmp_mpst_create_multi_to_all )*
     }
 }

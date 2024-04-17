@@ -101,28 +101,28 @@ bash ./scripts/create_files/compile_full.sh logging_solo 10 interleaved
 bash ./scripts/create_files/compile_full.sh sleeping_barber_interleaved 10 interleaved
 
 ## Compile interleaved timed examples
-bash ./scripts/create_files/compile_full.sh sleeping_barber_interleaved_timed 10 baking_timed_interleaved
-bash ./scripts/create_files/compile_full.sh circuit_breaker_logging_interleaved_timed 10 baking_timed_interleaved
+bash ./scripts/create_files/compile_full.sh sleeping_barber_interleaved_atmp 10 baking_atmp_interleaved
+bash ./scripts/create_files/compile_full.sh circuit_breaker_logging_interleaved_atmp 10 baking_atmp_interleaved
 
 ## Compile timed examples
-bash ./scripts/create_files/compile_full.sh fib_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh servo_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh servo_8257_async_failing_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh servo_8257_async_working_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh servo_8257_async_fixed_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh simple_voting_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh calculator_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh o_auth_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh online_wallet_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh smtp_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh three_buyers_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh travel_agency_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh remote_data_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh http_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh non_feasible_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh circuit_breaker_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh logging_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh video_stream_timed 10 baking_timed
+bash ./scripts/create_files/compile_full.sh fib_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh servo_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh servo_8257_async_failing_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh servo_8257_async_working_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh servo_8257_async_fixed_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh simple_voting_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh calculator_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh o_auth_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh online_wallet_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh smtp_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh three_buyers_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh travel_agency_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh remote_data_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh http_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh non_feasible_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh circuit_breaker_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh logging_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh video_stream_atmp 10 baking_atmp
 
 ## Compile transport examples
 bash ./scripts/create_files/compile_full.sh o_auth_transport_mpst 10 transport_macros_multiple
@@ -134,9 +134,9 @@ bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_ampst 10 baking
 bash ./scripts/create_files/compile_full.sh proximity_based_car_key_ampst 10 baking
 
 ## Compile rate-base examples, ATMP version
-bash ./scripts/create_files/compile_full.sh gravity_android_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_timed 10 baking_timed
-bash ./scripts/create_files/compile_full.sh proximity_based_car_key_timed 10 baking_timed
+bash ./scripts/create_files/compile_full.sh gravity_android_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh pinetime_heart_rate_atmp 10 baking_atmp
+bash ./scripts/create_files/compile_full.sh proximity_based_car_key_atmp 10 baking_atmp
 
 ## Run and save benchmarks
 cargo clean

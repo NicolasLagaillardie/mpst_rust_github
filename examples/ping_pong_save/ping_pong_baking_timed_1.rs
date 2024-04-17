@@ -1,6 +1,6 @@
 use mpstthree::binary::struct_trait::{end::End, session::Session};
-use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
-use mpstthree::generate_timed;
+use mpstthree::binary_atmp::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_atmp;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -9,7 +9,7 @@ use std::error::Error;
 use std::time::Instant;
 
 // Create new roles
-generate_timed!(MeshedChannels, A, B);
+generate_atmp!(MeshedChannels, A, B);
 
 // Types
 // A

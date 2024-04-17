@@ -57,7 +57,7 @@ index_compile = {}
 
 for index, elt in enumerate(compile_files):
     # index_compile[elt] = index
-    index_compile[elt + '_timed'] = index
+    index_compile[elt + '_atmp'] = index
     index_compile[elt + '_binary'] = index
     index_compile[elt + '_crossbeam'] = index
     index_compile[elt + '_mpst'] = index
@@ -91,25 +91,25 @@ for key, value in index_compile.items():
 
 # Lists with metrics
 bar_check_ampst = [0] * len(compile_files)
-bar_check_timed = [0] * len(compile_files)
+bar_check_atmp = [0] * len(compile_files)
 bar_check_binary = [0] * len(compile_files)
 bar_check_crossbeam = [0] * len(compile_files)
 bar_check_mpst = [0] * len(compile_files)
 
 bar_build_ampst = [0] * len(compile_files)
-bar_build_timed = [0] * len(compile_files)
+bar_build_atmp = [0] * len(compile_files)
 bar_build_binary = [0] * len(compile_files)
 bar_build_crossbeam = [0] * len(compile_files)
 bar_build_mpst = [0] * len(compile_files)
 
 bar_release_ampst = [0] * len(compile_files)
-bar_release_timed = [0] * len(compile_files)
+bar_release_atmp = [0] * len(compile_files)
 bar_release_binary = [0] * len(compile_files)
 bar_release_crossbeam = [0] * len(compile_files)
 bar_release_mpst = [0] * len(compile_files)
 
 bar_run_ampst = [0] * len(compile_files)
-bar_run_timed = [0] * len(compile_files)
+bar_run_atmp = [0] * len(compile_files)
 bar_run_binary = [0] * len(compile_files)
 bar_run_crossbeam = [0] * len(compile_files)
 bar_run_mpst = [0] * len(compile_files)
@@ -152,10 +152,10 @@ for protocol, index in index_compile.items():
                         temp_release.append(int(line.split('; ')[1]))
 
             if 'timed' in name_file:
-                bar_check_timed[index] = statistics.mean(temp_check)/10**6
-                bar_build_timed[index] = statistics.mean(temp_build)/10**6
-                bar_release_timed[index] = statistics.mean(temp_release)/10**6
-                bar_run_timed[index] = bench[protocol]/10**6
+                bar_check_atmp[index] = statistics.mean(temp_check)/10**6
+                bar_build_atmp[index] = statistics.mean(temp_build)/10**6
+                bar_release_atmp[index] = statistics.mean(temp_release)/10**6
+                bar_run_atmp[index] = bench[protocol]/10**6
             elif 'binary' in name_file:
                 bar_check_binary[index] = statistics.mean(temp_check)/10**6
                 bar_build_binary[index] = statistics.mean(temp_build)/10**6
@@ -193,7 +193,7 @@ ticklabels_compile_files = bench_files
 
 width = 0.3
 
-def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mpst, list_binary, list_crossbeam, scale, localisation):
+def create_and_save_fig(name_file, title_graph, list_ampst, list_atmp, list_mpst, list_binary, list_crossbeam, scale, localisation):
     # Setting up the figure
     fig, ax = plt.subplots(figsize=(16, 6))
 
@@ -202,7 +202,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
     ax.bar(np.arange(len(list_binary)) - 2*width/5, list_binary, width=2*width/5, color='#1f77b4')
     ax.bar(np.arange(len(list_mpst)), list_mpst, width=2*width/5, color='#2ca02c')
     ax.bar(np.arange(len(list_ampst)) + 2*width/5, list_ampst, width=2*width/5, color='#d62728')
-    ax.bar(np.arange(len(list_timed)) + 4*width/5, list_timed, width=2*width/5, color='#9467bd')
+    ax.bar(np.arange(len(list_atmp)) + 4*width/5, list_atmp, width=2*width/5, color='#9467bd')
 
     ax.set_title(title_graph, pad=10, fontsize=30)
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -234,7 +234,7 @@ def create_and_save_fig(name_file, title_graph, list_ampst, list_timed, list_mps
     # save the figure
     plt.savefig(name_graph)
 
-create_and_save_fig('literature_check_', 'Check time', bar_check_ampst, bar_check_timed, bar_check_mpst, bar_check_binary, bar_check_crossbeam, 'Time (s)', 'lower right')
-create_and_save_fig('literature_build_', 'Build time', bar_build_ampst, bar_build_timed, bar_build_mpst, bar_build_binary, bar_build_crossbeam, 'Time (s)', 'lower right')
-create_and_save_fig('literature_release_', 'Release time', bar_release_ampst, bar_release_timed, bar_release_mpst, bar_release_binary, bar_release_crossbeam, 'Time (s)', 'lower right')
-create_and_save_fig('literature_run_', 'Runtime', bar_run_ampst, bar_run_timed, bar_run_mpst, bar_run_binary, bar_run_crossbeam, 'Time (ms)', 'upper left')
+create_and_save_fig('literature_check_', 'Check time', bar_check_ampst, bar_check_atmp, bar_check_mpst, bar_check_binary, bar_check_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('literature_build_', 'Build time', bar_build_ampst, bar_build_atmp, bar_build_mpst, bar_build_binary, bar_build_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('literature_release_', 'Release time', bar_release_ampst, bar_release_atmp, bar_release_mpst, bar_release_binary, bar_release_crossbeam, 'Time (s)', 'lower right')
+create_and_save_fig('literature_run_', 'Runtime', bar_run_ampst, bar_run_atmp, bar_run_mpst, bar_run_binary, bar_run_crossbeam, 'Time (ms)', 'upper left')

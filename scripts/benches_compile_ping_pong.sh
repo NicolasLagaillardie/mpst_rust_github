@@ -57,7 +57,7 @@ sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\n
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_mpst'"\npath = "'examples/ping_pong/ping_pong_mpst.rs'"\nrequired-features = ["'macros_multiple'"],g' Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_mpst'"\npath = "'examples/ping_pong/ping_pong_baking_mpst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
 sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_ampst'"\npath = "'examples/ping_pong/ping_pong_baking_ampst.rs'"\nrequired-features = ["'baking'"],g' Cargo.toml
-sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_atmp'"\npath = "'examples/ping_pong/ping_pong_baking_atmp.rs'"\nrequired-features = ["'baking_timed'"],g' Cargo.toml
+sed -ier 's,######### Ping-Pong start,######### Ping-Pong start\n\n[[example]]\nname = "'ping_pong_baking_atmp'"\npath = "'examples/ping_pong/ping_pong_baking_atmp.rs'"\nrequired-features = ["'baking_atmp'"],g' Cargo.toml
 
 # Copy ping_pong examples i and create ping_pong examples i+1
 for i in $(eval echo {0..$END})
@@ -85,7 +85,7 @@ do
     bash ./scripts/create_files/compile_full.sh ping_pong_mpst 10 macros_multiple ping_pong_mpst_$NEXT
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_mpst 10 baking ping_pong_baking_mpst_$NEXT
     bash ./scripts/create_files/compile_full.sh ping_pong_baking_ampst 10 baking ping_pong_baking_ampst_$NEXT
-    bash ./scripts/create_files/compile_full.sh ping_pong_baking_atmp 10 baking_timed ping_pong_baking_atmp_$NEXT
+    bash ./scripts/create_files/compile_full.sh ping_pong_baking_atmp 10 baking_atmp ping_pong_baking_atmp_$NEXT
 
     # Clean built files
     cargo clean

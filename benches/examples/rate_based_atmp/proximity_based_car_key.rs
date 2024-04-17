@@ -8,8 +8,8 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary::struct_trait::session::Session;
-use mpstthree::binary_timed::struct_trait::{recv::RecvTimed, send::SendTimed};
-use mpstthree::generate_timed;
+use mpstthree::binary_atmp::struct_trait::{recv::RecvTimed, send::SendTimed};
+use mpstthree::generate_atmp;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -20,7 +20,7 @@ use std::error::Error;
 use std::time::Instant;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-generate_timed!(MeshedChannels, Car, Key);
+generate_atmp!(MeshedChannels, Car, Key);
 
 // Labels
 struct Wake {}

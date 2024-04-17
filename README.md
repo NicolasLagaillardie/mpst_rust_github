@@ -211,7 +211,7 @@ The different features available are:
 2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
 3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
 4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
-5. `baking_timed`: feature for implementing _asynchronous_ _timed_ protocols with any number of participants and using associated functions instead of functions.
+5. `baking_atmp`: feature for implementing _asynchronous_ _atmp_ protocols with any number of participants and using associated functions instead of functions.
 6. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
 7. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
 8. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.

@@ -175,7 +175,7 @@ pub(crate) fn send_canceled(
 }
 
 /// Expand send methods for baking with cancelation and timed
-pub(crate) fn send_timed_canceled(
+pub(crate) fn send_atmp_canceled(
     all_roles: &[TokenStream],
     sender: u64,
     receiver: u64,
@@ -204,7 +204,7 @@ pub(crate) fn send_timed_canceled(
 
             if k == cond {
                 quote! {
-                    mpstthree::binary_timed::struct_trait::send::SendTimed<
+                    mpstthree::binary_atmp::struct_trait::send::SendTimed<
                         T,
                         CLOCK,
                         START,
@@ -273,7 +273,7 @@ pub(crate) fn send_timed_canceled(
                 >,
                 Box<dyn std::error::Error>
             > {
-                let new_session = mpstthree::binary_timed::send::send(
+                let new_session = mpstthree::binary_atmp::send::send(
                     payload,
                     all_clocks,
                     self.#new_session

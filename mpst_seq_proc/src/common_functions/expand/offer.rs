@@ -216,7 +216,7 @@ pub(crate) fn offer(
 }
 
 /// Expand offer methods
-pub(crate) fn offer_timed(
+pub(crate) fn offer_atmp(
     all_roles: &[TokenStream],
     sender: u64,
     receiver: u64,
@@ -261,7 +261,7 @@ pub(crate) fn offer_timed(
             let cond = if k >= receiver { sender - 1 } else { sender };
             if k == cond {
                 quote! {
-                    mpstthree::binary_timed::struct_trait::recv::RecvTimed<
+                    mpstthree::binary_atmp::struct_trait::recv::RecvTimed<
                         either::Either<
                             #meshedchannels_name<
                                 #( #left_sessions )*

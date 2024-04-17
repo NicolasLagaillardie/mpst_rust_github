@@ -4,7 +4,7 @@ use syn::Ident;
 
 use crate::common_functions::expand::name::name;
 use crate::common_functions::expand::role::role;
-use crate::common_functions::expand::role_timed::role_timed;
+use crate::common_functions::expand::role_atmp::role_atmp;
 
 /// Create session types
 pub(crate) fn create_session_types(from: u64, to: u64) -> Vec<Ident> {
@@ -29,10 +29,10 @@ pub(crate) fn create_role_structs(all_roles: &[TokenStream]) -> Vec<TokenStream>
 }
 
 /// Create timed role structs
-pub(crate) fn create_timed_role_structs(all_roles: &[TokenStream]) -> Vec<TokenStream> {
+pub(crate) fn create_atmp_role_structs(all_roles: &[TokenStream]) -> Vec<TokenStream> {
     all_roles
         .iter()
-        .map(|i| role_timed(format!("{i}")))
+        .map(|i| role_atmp(format!("{i}")))
         .collect()
 }
 
