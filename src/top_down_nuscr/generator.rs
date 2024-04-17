@@ -19,7 +19,7 @@ fn check_global(input: &str) -> bool {
 
 /// Check each role
 fn check_role(input: &str) -> bool {
-    static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(role ?P<name>\w+,?)").unwrap());
+    static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"role (?P<name>\w+)").unwrap());
     RE.is_match(input)
 }
 
@@ -122,20 +122,22 @@ pub fn generator(filepath: &str) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-// #[cfg(test)]
-// mod tests {
-//     // Note this useful idiom: importing names from outer (for mod tests) scope.
-//     use super::*;
+#[cfg(test)]
+mod test_check_generator {
+    use super::*;
 
-//     #[test]
-//     fn test_add() {
-//         assert_eq!(add(1, 2), 3);
-//     }
+    #[test]
+    fn test_check_global() {
+        assert!(check_global("timed global protocol RemoteData(role A) {"));
+        assert!(check_global("timed global protocol RemoteData(role A, role B, role C) {"));
+        assert!(check_global("timed global protocol RemoteData(role A, role B, role C,) {"));
+        assert!(!check_global("global protocol RemoteData(role A,) {"));
+        assert!(!check_global("global protocol RemoteData(role A, role B, role C) {"));
+    }
 
-//     #[test]
-//     fn test_bad_add() {
-//         // This assert would fire and test will fail.
-//         // Please note, that private functions can be tested too!
-//         assert_eq!(bad_add(1, 2), 3);
-//     }
-// }
+    #[test]
+    fn test_check_role() {
+        assert!(check_role("role A"));
+        assert!(!check_role("ro le A"));
+    }
+}

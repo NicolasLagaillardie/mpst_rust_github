@@ -1,4 +1,4 @@
-global protocol RemoteData(role A, role B, role C) {
+timed global protocol RemoteData(role A, role B, role C) {
     rec Loop {
         choice at A
         {
