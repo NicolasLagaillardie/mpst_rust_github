@@ -221,7 +221,7 @@ harness = false
 path = "benches/examples/rate_based_ampst/proximity_based_car_key.rs"
 required-features = ["full"]
 
-######### Timed
+######### ATMP
 
 [[bench]]
 name = "example_calculator_atmp"
@@ -310,87 +310,87 @@ required-features = ["full"]
 [[bench]]
 name = "ring_two_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_two_ampst.rs"
+path = "benches/ring/baking/ampst/ring_two.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_three_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_three_ampst.rs"
+path = "benches/ring/baking/ampst/ring_three.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_four_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_four_ampst.rs"
+path = "benches/ring/baking/ampst/ring_four.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_five_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_five_ampst.rs"
+path = "benches/ring/baking/ampst/ring_five.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_six_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_six_ampst.rs"
+path = "benches/ring/baking/ampst/ring_six.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_seven_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_seven_ampst.rs"
+path = "benches/ring/baking/ampst/ring_seven.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_eight_ampst_baking"
 harness = false
-path = "benches/ring/baking/ring_eight_ampst.rs"
+path = "benches/ring/baking/ampst/ring_eight.rs"
 required-features = ["full"]
 
-######### Timed
+######### ATMP
 
 [[bench]]
 name = "ring_two_atmp"
 harness = false
-path = "benches/ring/timed/ring_two.rs"
+path = "benches/ring/atmp/ring_two.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_three_atmp"
 harness = false
-path = "benches/ring/timed/ring_three.rs"
+path = "benches/ring/atmp/ring_three.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_four_atmp"
 harness = false
-path = "benches/ring/timed/ring_four.rs"
+path = "benches/ring/atmp/ring_four.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_five_atmp"
 harness = false
-path = "benches/ring/timed/ring_five.rs"
+path = "benches/ring/atmp/ring_five.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_six_atmp"
 harness = false
-path = "benches/ring/timed/ring_six.rs"
+path = "benches/ring/atmp/ring_six.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_seven_atmp"
 harness = false
-path = "benches/ring/timed/ring_seven.rs"
+path = "benches/ring/atmp/ring_seven.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "ring_eight_atmp"
 harness = false
-path = "benches/ring/timed/ring_eight.rs"
+path = "benches/ring/atmp/ring_eight.rs"
 required-features = ["full"]
 
 ################## Mesh
@@ -402,87 +402,87 @@ required-features = ["full"]
 [[bench]]
 name = "mesh_two_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_two_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_two.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_three_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_three_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_three.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_four_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_four_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_four.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_five_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_five_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_five.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_six_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_six_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_six.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_seven_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_seven_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_seven.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_eight_ampst_baking"
 harness = false
-path = "benches/mesh/baking/mesh_eight_ampst.rs"
+path = "benches/mesh/baking/ampst/mesh_eight.rs"
 required-features = ["full"]
 
-######### Timed
+######### ATMP
 
 [[bench]]
 name = "mesh_two_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_two.rs"
+path = "benches/mesh/atmp/mesh_two.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_three_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_three.rs"
+path = "benches/mesh/atmp/mesh_three.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_four_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_four.rs"
+path = "benches/mesh/atmp/mesh_four.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_five_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_five.rs"
+path = "benches/mesh/atmp/mesh_five.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_six_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_six.rs"
+path = "benches/mesh/atmp/mesh_six.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_seven_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_seven.rs"
+path = "benches/mesh/atmp/mesh_seven.rs"
 required-features = ["full"]
 
 [[bench]]
 name = "mesh_eight_atmp"
 harness = false
-path = "benches/mesh/timed/mesh_eight.rs"
+path = "benches/mesh/atmp/mesh_eight.rs"
 required-features = ["full"]
 
 ################################### Examples
@@ -554,7 +554,7 @@ name = "proximity_based_car_key_ampst"
 path = "examples/rate_based_ampst/proximity_based_car_key.rs"
 required-features = ["baking"]
 
-######### Timed
+######### ATMP
 
 [[example]]
 name = "calculator_atmp"
@@ -660,7 +660,7 @@ name = "mesh_eight_baking_ampst"
 path = "examples/mesh/mesh_eight_baking_ampst.rs"
 required-features = ["baking"]
 
-################## Timed
+################## ATMP
 
 [[example]]
 name = "mesh_two_baking_atmp"
@@ -736,7 +736,7 @@ name = "ring_eight_baking_ampst"
 path = "examples/ring/ring_eight_baking_ampst.rs"
 required-features = ["baking"]
 
-################## Timed
+################## ATMP
 
 [[example]]
 name = "ring_two_baking_atmp"
@@ -785,15 +785,15 @@ name = "basic"
 path = "examples/artifact/basic.rs"
 required-features = ["baking"]
 
-################################### Timed artifact examples
+################################### ATMP artifact examples
 
 [[example]]
-name = "timed_my_basic"
+name = "atmp_my_basic"
 path = "examples/artifact_atmp/my_basic.rs"
 required-features = ["baking_atmp"]
 
 [[example]]
-name = "timed_basic"
+name = "atmp_basic"
 path = "examples/artifact_atmp/basic.rs"
 required-features = ["baking_atmp"]
 

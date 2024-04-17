@@ -149,15 +149,15 @@ name = "basic"
 path = "examples/artifact/basic.rs"
 required-features = ["baking"]
 
-################################### Timed artifact examples
+################################### ATMP artifact examples
 
 [[example]]
-name = "timed_my_basic"
+name = "atmp_my_basic"
 path = "examples/artifact_atmp/my_basic.rs"
 required-features = ["baking_atmp"]
 
 [[example]]
-name = "timed_basic"
+name = "atmp_basic"
 path = "examples/artifact_atmp/basic.rs"
 required-features = ["baking_atmp"]
 

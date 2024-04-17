@@ -159,7 +159,7 @@ macro_rules! generate {
         );
     };
     (
-        "timed_interleaved",
+        "atmp_interleaved",
         $meshedchannels_name_one: ident,
         $( $all_roles_one: ident , )+
         $index_tuple_one: literal,

@@ -1,4 +1,4 @@
-//! Implementation for generate!("timed_interleaved", ...)
+//! Implementation for generate!("atmp_interleaved", ...)
 
 use proc_macro2::TokenStream;
 use quote::quote;
