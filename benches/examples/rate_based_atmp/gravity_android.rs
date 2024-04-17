@@ -181,7 +181,7 @@ static LOOPS: i64 = 100;
 /////////////////////////
 
 pub fn gravity_android(c: &mut Criterion) {
-    c.bench_function("Timed Gravity Android", |b| b.iter(aux));
+    c.bench_function("ATMP Gravity Android", |b| b.iter(aux));
 }
 
 /////////////////////////

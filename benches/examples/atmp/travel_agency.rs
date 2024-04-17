@@ -322,7 +322,7 @@ fn aux() {
 static LOOPS: i32 = 100;
 
 pub fn travel(c: &mut Criterion) {
-    c.bench_function("Timed Travel agency", |b| b.iter(aux));
+    c.bench_function("ATMP Travel agency", |b| b.iter(aux));
 }
 
 /////////////////////////

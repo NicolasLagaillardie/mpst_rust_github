@@ -142,7 +142,6 @@ fn recurs_scl(
     s: Endpoint0Car,
     all_clocks: &mut HashMap<char, Instant>,
 ) -> Result<(), Box<dyn Error>> {
-
     offer_mpst!(s, all_clocks, {
         Branching0FromSclToSda::Stop(s) => {
 
@@ -185,7 +184,6 @@ fn recurs_sda(
     all_clocks: &mut HashMap<char, Instant>,
     loops: i64,
 ) -> Result<(), Box<dyn Error>> {
-
     match loops {
         0 => {
             let s: Endpoint1KeyStop =
@@ -230,7 +228,7 @@ static LOOPS: i64 = 100;
 /////////////////////////
 
 pub fn pinetime_heart_rate(c: &mut Criterion) {
-    c.bench_function("Timed Heart Rate", |b| b.iter(aux));
+    c.bench_function("ATMP Heart Rate", |b| b.iter(aux));
 }
 
 /////////////////////////

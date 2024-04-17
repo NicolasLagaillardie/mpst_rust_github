@@ -306,7 +306,7 @@ fn aux() {
 static LOOPS: i64 = 100;
 
 pub fn distributed_calculators(c: &mut Criterion) {
-    c.bench_function("Timed Distributed calculators", |b| b.iter(aux));
+    c.bench_function("ATMP Distributed calculators", |b| b.iter(aux));
 }
 
 /////////////////////////

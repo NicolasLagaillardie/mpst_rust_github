@@ -324,7 +324,7 @@ fn aux() {
 static LOOPS: i32 = 100;
 
 pub fn online_wallet(c: &mut Criterion) {
-    c.bench_function("Timed Online wallet", |b| b.iter(aux));
+    c.bench_function("ATMP Online wallet", |b| b.iter(aux));
 }
 
 /////////////////////////

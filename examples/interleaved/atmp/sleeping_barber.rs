@@ -13,7 +13,7 @@ use std::error::Error;
 use std::time::Instant;
 
 generate!(
-    "timed_interleaved",
+    "atmp_interleaved",
     MeshedChannelsBarber,
     Barber,
     ShopBarber,

@@ -131,7 +131,7 @@ fn aux() {
 /////////////////////////
 
 pub fn calculator(c: &mut Criterion) {
-    c.bench_function("Timed Calculator", |b| b.iter(aux));
+    c.bench_function("ATMP Calculator", |b| b.iter(aux));
 }
 
 /////////////////////////

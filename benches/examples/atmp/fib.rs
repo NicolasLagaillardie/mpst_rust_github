@@ -114,7 +114,7 @@ fn aux() {
 static LOOPS: i32 = 20;
 
 pub fn fib(c: &mut Criterion) {
-    c.bench_function(&format!("Timed Fibo {LOOPS}"), |b| b.iter(aux));
+    c.bench_function(&format!("ATMP Fibo {LOOPS}"), |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -76,7 +76,7 @@ translate = {}
 reverse_translate = {}
 
 for key, value in index_compile.items():
-    if 'timed' in key:
+    if 'atmp' in key:
         translate['Timed ' + bench_files[value]] = key
         reverse_translate[key] = 'Timed ' + bench_files[value]
     elif 'ampst' in key:
@@ -126,7 +126,7 @@ for protocol, index in index_compile.items():
                     if 'build' in line:
                         temp_build.append(int(line.split('; ')[1]))
 
-            if 'timed' in name_file:
+            if 'atmp' in name_file:
                 bar_build_atmp[index] = statistics.mean(temp_build)/10**6
                 bar_run_atmp[index] = bench[protocol]/10**6
             elif 'ampst' in name_file:

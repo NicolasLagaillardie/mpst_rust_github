@@ -15,7 +15,7 @@ use std::time::Instant;
 // CB = circuit breaker
 
 generate!(
-    "timed_interleaved",
+    "atmp_interleaved",
     MeshedChannelsFour,
     Api,
     ControllerCB,

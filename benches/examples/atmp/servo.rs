@@ -156,7 +156,7 @@ fn aux() {
 /////////////////////////
 
 pub fn servo(c: &mut Criterion) {
-    c.bench_function("Timed Servo", |b| b.iter(aux));
+    c.bench_function("ATMP Servo", |b| b.iter(aux));
 }
 
 /////////////////////////

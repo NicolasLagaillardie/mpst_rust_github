@@ -872,7 +872,7 @@ fn aux() {
 static LOOPS: i32 = 100;
 
 pub fn smtp(c: &mut Criterion) {
-    c.bench_function("Timed SMTP", |b| b.iter(aux));
+    c.bench_function("ATMP SMTP", |b| b.iter(aux));
 }
 
 /////////////////////////

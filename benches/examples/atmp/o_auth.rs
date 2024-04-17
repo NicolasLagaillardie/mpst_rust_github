@@ -319,7 +319,7 @@ fn aux() {
 /////////////////////////
 
 pub fn o_auth(c: &mut Criterion) {
-    c.bench_function("Timed oAuth", |b| b.iter(aux));
+    c.bench_function("ATMP oAuth", |b| b.iter(aux));
 }
 
 /////////////////////////

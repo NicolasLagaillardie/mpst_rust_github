@@ -536,7 +536,7 @@ fn aux() {
 static LOOPS: i32 = 100;
 
 pub fn circuit_breaker(c: &mut Criterion) {
-    c.bench_function("Timed Circuit breaker", |b| b.iter(aux));
+    c.bench_function("ATMP Circuit breaker", |b| b.iter(aux));
 }
 
 /////////////////////////

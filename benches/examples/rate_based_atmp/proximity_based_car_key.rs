@@ -224,7 +224,7 @@ static LOOPS: i64 = 100;
 /////////////////////////
 
 pub fn proximity_based_car_key(c: &mut Criterion) {
-    c.bench_function("Timed Car-Key", |b| b.iter(aux));
+    c.bench_function("ATMP Car-Key", |b| b.iter(aux));
 }
 
 /////////////////////////

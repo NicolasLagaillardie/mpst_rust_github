@@ -1292,7 +1292,7 @@ fn aux() {
 /////////////////////////
 
 pub fn http(c: &mut Criterion) {
-    c.bench_function("Timed HTTP", |b| b.iter(aux));
+    c.bench_function("ATMP HTTP", |b| b.iter(aux));
 }
 
 /////////////////////////

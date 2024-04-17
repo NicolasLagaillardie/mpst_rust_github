@@ -213,7 +213,7 @@ fn aux() {
 static LOOPS: i32 = 100;
 
 pub fn video_stream(c: &mut Criterion) {
-    c.bench_function("Timed Video stream", |b| b.iter(aux));
+    c.bench_function("ATMP Video stream", |b| b.iter(aux));
 }
 
 /////////////////////////

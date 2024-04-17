@@ -195,7 +195,7 @@ fn aux() {
 /////////////////////////
 
 pub fn simple_voting(c: &mut Criterion) {
-    c.bench_function("Timed Simple voting", |b| b.iter(aux));
+    c.bench_function("ATMP Simple voting", |b| b.iter(aux));
 }
 
 /////////////////////////

@@ -256,7 +256,7 @@ fn aux() {
 static LOOPS: i32 = 100;
 
 pub fn remote_data(c: &mut Criterion) {
-    c.bench_function("Timed Remote data", |b| b.iter(aux));
+    c.bench_function("ATMP Remote data", |b| b.iter(aux));
 }
 
 /////////////////////////
