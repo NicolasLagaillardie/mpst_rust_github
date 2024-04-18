@@ -88,3 +88,7 @@ examples/ping_pong/*
 Cargo.tomler
 
 scripts/curl/
+
+# Do not include push
+push.sh
+scripts/stderr/
