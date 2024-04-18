@@ -12,8 +12,8 @@ generate_atmp!(MeshedChannels, A, B, C);
 struct payload;
 struct Test1;
 struct Test3;
-struct Test4 { payload: payload }
 struct Test2 { payload: payload }
+struct Test4 { payload: payload }
 
 type Message0FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message1FromAToB>;
 type Message1FromAToB = SendTimed<Test2, 'a', 0, true, 1, true, ' ', Message2FromAToB>;

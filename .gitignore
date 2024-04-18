@@ -92,3 +92,7 @@ scripts/curl/
 # Do not include push
 push.sh
 scripts/stderr/
+
+tests/generator/Basic.rs
+tests/generator/Choice.rs
+tests/generator/Recursive.rs

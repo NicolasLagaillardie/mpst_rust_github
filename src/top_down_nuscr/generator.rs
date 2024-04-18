@@ -4,95 +4,14 @@
 
 use std::fs::File;
 
-use std::io::{BufRead, BufReader, Error, Write};
-
-use crate::macros_simple::role;
-
-use {once_cell::sync::Lazy, regex::Regex};
+use std::io::{BufRead, BufReader};
 
 use std::collections::{HashMap, HashSet};
 
-static GLOBAL_PROTOCOL: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"timed( +)global( +)protocol( +)(?P<name>\w+)\(((role( +)\w+( *),?( *))+)\)( *)\{")
-        .unwrap()
-});
-
-static ROLE: Lazy<Regex> = Lazy::new(|| Regex::new(r"role (?P<name>\w+)").unwrap());
-
-static CHOICE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"choice( +)at( +)(?P<choice>\w+)( *)\{?").unwrap());
-
-static OR: Lazy<Regex> = Lazy::new(|| Regex::new(r"\}( *)or( *)\{?").unwrap());
-
-static MESSAGE: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?P<message>\w+)\(\w*\)( +)from( +)(?P<sender>\w+)( +)to( +)(?P<receiver>\w+)( +)within( +)(?P<left_bracket>(\[|\]))( *)(?P<left_bound>\d+)( *);( *)(?P<right_bound>\d+)( *)(?P<right_bracket>(\[|\]))( +)using( +)(?P<clock>\w+)( +)and( +)resetting( +)\(\w*\)( *);").unwrap()
-});
-
-static MESSAGE_WITH_PAYLOAD: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?P<message>\w+)\((?P<payload>\w+)\)( +)from( +)(?P<sender>\w+)( +)to( +)(?P<receiver>\w+)( +)within( +)(?P<left_bracket>(\[|\]))( *)(?P<left_bound>\d+)( *);( *)(?P<right_bound>\d+)( *)(?P<right_bracket>(\[|\]))( +)using( +)(?P<clock>\w+)( +)and( +)resetting( +)\(\)( *);").unwrap()
-});
-
-static MESSAGE_WITH_RESET: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?P<message>\w+)\(\)( +)from( +)(?P<sender>\w+)( +)to( +)(?P<receiver>\w+)( +)within( +)(?P<left_bracket>(\[|\]))( *)(?P<left_bound>\d+)( *);( *)(?P<right_bound>\d+)( *)(?P<right_bracket>(\[|\]))( +)using( +)(?P<clock>\w+)( +)and( +)resetting( +)\((?P<reset>\w+)\)( *);").unwrap()
-});
-
-static MESSAGE_WITH_PAYLOAD_AND_RESET: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?P<message>\w+)\((?P<payload>\w+)\)( +)from( +)(?P<sender>\w+)( +)to( +)(?P<receiver>\w+)( +)within( +)(?P<left_bracket>(\[|\]))( *)(?P<left_bound>\d+)( *);( *)(?P<right_bound>\d+)( *)(?P<right_bracket>(\[|\]))( +)using( +)(?P<clock>\w+)( +)and( +)resetting( +)\((?P<reset>\w+)\)( *);").unwrap()
-});
-
-static REC: Lazy<Regex> = Lazy::new(|| Regex::new(r"rec( +)(?P<loop>\w+)").unwrap());
-
-static CONTINUE: Lazy<Regex> = Lazy::new(|| Regex::new(r"continue( +)(?P<loop>\w+)( *)").unwrap());
-
-/// Check whether the input is the first line of any new nuscrT protocol
-fn check_global(input: &str) -> bool {
-    GLOBAL_PROTOCOL.is_match(input)
-}
-
-/// Check each role
-fn check_role(input: &str) -> bool {
-    ROLE.is_match(input)
-}
-
-/// Check whether this is a choice
-fn check_choice(input: &str) -> bool {
-    CHOICE.is_match(input)
-}
-
-/// Check whether this is a branching
-fn check_or(input: &str) -> bool {
-    OR.is_match(input)
-}
-
-/// Check whether this is a shared message
-fn check_message(input: &str) -> bool {
-    MESSAGE.is_match(input)
-}
-
-/// Check whether this is a shared message with payload
-fn check_message_with_payload(input: &str) -> bool {
-    MESSAGE_WITH_PAYLOAD.is_match(input)
-}
-
-/// Check whether this is a shared message with resetting clock
-fn check_message_with_resetting_clock(input: &str) -> bool {
-    MESSAGE_WITH_RESET.is_match(input)
-}
-
-/// Check whether this is a shared message with payload and resetting clock
-fn check_message_with_payload_and_resetting_clock(input: &str) -> bool {
-    MESSAGE_WITH_PAYLOAD_AND_RESET.is_match(input)
-}
-
-/// Check whether this is the start of a recursive loop
-fn check_rec(input: &str) -> bool {
-    REC.is_match(input)
-}
-
-/// Check whether this is the continue of a recursive loop
-fn check_continue(input: &str) -> bool {
-    CONTINUE.is_match(input)
-}
+use super::auxiliary_objects::{
+    check_brackets::check_brackets, code_generate::generate_everything,
+    messages_and_stacks_update::messages_and_stacks_update, regex::*, MessageParameters,
+};
 
 /// Generate endpoints from a nuscr file
 /// with timed global protocol
@@ -107,37 +26,26 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     let mut payloads: HashSet<String> = HashSet::new();
     let mut message_with_payloads: HashMap<String, String> = HashMap::new();
     let mut choices: Vec<String> = vec![];
+    let mut loops: Vec<String> = vec![];
     let mut messages: HashMap<String, Vec<String>> = HashMap::new();
     let mut last_messages: HashMap<String, String> = HashMap::new();
     let mut clocks: HashMap<String, Vec<String>> = HashMap::new();
+    let mut stacks: HashMap<String, Vec<String>> = HashMap::new();
+    let mut last_stacks: HashMap<String, String> = HashMap::new();
 
     let mut opening_brackets = 0;
     let mut closing_brackets = 0;
+    let mut is_recursive = false;
 
     for (line_number, line) in reader.lines().enumerate() {
         let temp_line = line?;
 
-        println!(
-            "global: {} / role: {} / choice: {} / or: {} / message: {} / message payload: {} / message reset: {} / message payload and reset: {} / rec: {} / continue: {}",
-            check_global(&temp_line),
-            check_role(&temp_line),
-            check_choice(&temp_line),
-            check_or(&temp_line),
-            check_message(&temp_line),
-            check_message_with_payload(&temp_line),
-            check_message_with_resetting_clock(&temp_line),
-            check_message_with_payload_and_resetting_clock(&temp_line),
-            check_rec(&temp_line),
-            check_continue(&temp_line)
-        );
-        println!("{}", &temp_line);
-
-        opening_brackets += temp_line.matches("{").count();
-        closing_brackets += temp_line.matches("}").count();
-
-        if opening_brackets < closing_brackets {
-            return Err("There are too many closing brackets".into());
-        }
+        check_brackets(
+            &mut opening_brackets,
+            &mut closing_brackets,
+            &temp_line,
+            &line_number,
+        )?;
 
         if check_global(&temp_line) && line_number == 0 {
             let captured_fields = GLOBAL_PROTOCOL.captures(&temp_line).unwrap();
@@ -150,38 +58,10 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
 
             for (_, [role]) in ROLE.captures_iter(&temp_line).map(|c| c.extract()) {
                 roles.push(role.into());
-                last_messages.insert(role.to_string(), format!("Message0From{}", role).into());
                 messages.insert(role.to_string(), vec![]);
-            }
-
-            match output.as_mut() {
-                Some(generated_file) => {
-                    // Write the imports of necessary crates
-                    write!(
-                        generated_file,
-                        "use mpstthree::binary::struct_trait::end::End;\n"
-                    )?;
-                    write!(
-                    generated_file,
-                    "use mpstthree::binary_atmp::struct_trait::{{recv::RecvTimed, send::SendTimed}};\n"
-                )?;
-                    write!(generated_file, "use mpstthree::generate_atmp;\n")?;
-                    write!(
-                        generated_file,
-                        "use mpstthree::role::broadcast::RoleBroadcast;\n"
-                    )?;
-                    write!(generated_file, "use mpstthree::role::end::RoleEnd;\n")?;
-                    write!(generated_file, "use std::collections::HashMap;\n")?;
-                    write!(generated_file, "use std::error::Error;\n")?;
-                    write!(generated_file, "use std::time::Instant;\n\n")?;
-
-                    write!(
-                        generated_file,
-                        "{}",
-                        format!("generate_atmp!(MeshedChannels, {});\n\n", roles.join(", "))
-                    )?;
-                }
-                None => return Err("Generated file was not initialised.".into()),
+                last_messages.insert(role.to_string(), format!("Message0From{}", role));
+                stacks.insert(role.to_string(), vec![]);
+                last_stacks.insert(role.to_string(), format!("Ordering0By{}", role));
             }
         } else if !check_global(&temp_line) && line_number > 0 {
             if check_message(&temp_line) {
@@ -198,13 +78,25 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
 
                 // Check if sender and receiver exist in roles
                 if !roles.contains(&String::from(sender)) {
-                    return Err(format!("{} is not in the roles: {:?}", sender, roles).into());
+                    return Err(format!(
+                        "{} is not in the roles: {:?}. See line: {}.",
+                        sender, roles, line_number
+                    )
+                    .into());
                 }
                 if !roles.contains(&String::from(receiver)) {
-                    return Err(format!("{} is not in the roles: {:?}", receiver, roles).into());
+                    return Err(format!(
+                        "{} is not in the roles: {:?}. See line : {}.",
+                        receiver, roles, line_number
+                    )
+                    .into());
                 }
                 if sender == receiver {
-                    return Err("Sender and receiver must be different".into());
+                    return Err(format!(
+                        "Sender and receiver must be different. See line: {}",
+                        line_number
+                    )
+                    .into());
                 }
 
                 // Add clock to clocks of sender and receiver
@@ -229,36 +121,23 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
                     payloads.insert(payload.into());
                     message_with_payloads.insert(message.into(), payload.into());
 
-                    let messages_sender = messages.get_mut(sender).unwrap();
-                    let size_messages_sender = messages_sender.len();
-
-                    messages_sender.push(
-                            format!(
-                                "type Message{}From{}To{} = SendTimed<{}, '{}', {}, {}, {}, {}, '{}', Message{}From{}To{}>;",
-                                size_messages_sender,
-                                sender,
-                                receiver,
-                                message,
-                                clock,
-                                left_bound,
-                                left_bracket == "[",
-                                right_bound,
-                                right_bracket == "]",
-                                reset,
-                                size_messages_sender + 1,
-                                sender,
-                                receiver
-                            ).into()
-                        );
-
-                    let last_messages_sender = last_messages.get_mut(sender).unwrap();
-
-                    *last_messages_sender = String::from(format!(
-                        "Message{}From{}To{}",
-                        size_messages_sender + 1,
-                        sender,
-                        receiver
-                    ));
+                    messages_and_stacks_update(
+                        &mut messages,
+                        &mut last_messages,
+                        &mut stacks,
+                        &mut last_stacks,
+                        &MessageParameters {
+                            sender: sender.to_string(),
+                            receiver: receiver.to_string(),
+                            message: message.to_string(),
+                            clock: clock.to_string(),
+                            left_bound: left_bound.to_string(),
+                            left_bracket: left_bracket.to_string(),
+                            right_bound: right_bound.to_string(),
+                            right_bracket: right_bracket.to_string(),
+                            reset: reset.to_string(),
+                        },
+                    );
                 } else if check_message_with_resetting_clock(&temp_line) {
                     let captured_fields = MESSAGE_WITH_RESET.captures(&temp_line).unwrap();
 
@@ -266,36 +145,23 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
 
                     message_with_payloads.insert(message.into(), "".into());
 
-                    let messages_sender = messages.get_mut(sender).unwrap();
-                    let size_messages_sender = messages_sender.len();
-
-                    messages_sender.push(
-                            format!(
-                                "type Message{}From{}To{} = SendTimed<{}, '{}', {}, {}, {}, {}, '{}', Message{}From{}To{}>;",
-                                size_messages_sender,
-                                sender,
-                                receiver,
-                                message,
-                                clock,
-                                left_bound,
-                                left_bracket == "[",
-                                right_bound,
-                                right_bracket == "]",
-                                reset,
-                                size_messages_sender + 1,
-                                sender,
-                                receiver
-                            ).into()
-                        );
-
-                    let last_messages_sender = last_messages.get_mut(sender).unwrap();
-
-                    *last_messages_sender = String::from(format!(
-                        "Message{}From{}To{}",
-                        size_messages_sender + 1,
-                        sender,
-                        receiver
-                    ));
+                    messages_and_stacks_update(
+                        &mut messages,
+                        &mut last_messages,
+                        &mut stacks,
+                        &mut last_stacks,
+                        &MessageParameters {
+                            sender: sender.to_string(),
+                            receiver: receiver.to_string(),
+                            message: message.to_string(),
+                            clock: clock.to_string(),
+                            left_bound: left_bound.to_string(),
+                            left_bracket: left_bracket.to_string(),
+                            right_bound: right_bound.to_string(),
+                            right_bracket: right_bracket.to_string(),
+                            reset: reset.to_string(),
+                        },
+                    );
                 } else if check_message_with_payload(&temp_line) {
                     let captured_fields = MESSAGE_WITH_PAYLOAD.captures(&temp_line).unwrap();
 
@@ -304,114 +170,71 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
                     payloads.insert(payload.into());
                     message_with_payloads.insert(message.into(), payload.into());
 
-                    let messages_sender = messages.get_mut(sender).unwrap();
-                    let size_messages_sender = messages_sender.len();
-
-                    messages_sender.push(
-                            format!(
-                                "type Message{}From{}To{} = SendTimed<{}, '{}', {}, {}, {}, {}, ' ', Message{}From{}To{}>;",
-                                size_messages_sender,
-                                sender,
-                                receiver,
-                                message,
-                                clock,
-                                left_bound,
-                                left_bracket == "[",
-                                right_bound,
-                                right_bracket == "]",
-                                size_messages_sender + 1,
-                                sender,
-                                receiver
-                            ).into()
-                        );
-
-                    let last_messages_sender = last_messages.get_mut(sender).unwrap();
-
-                    *last_messages_sender = String::from(format!(
-                        "Message{}From{}To{}",
-                        size_messages_sender + 1,
-                        sender,
-                        receiver
-                    ));
+                    messages_and_stacks_update(
+                        &mut messages,
+                        &mut last_messages,
+                        &mut stacks,
+                        &mut last_stacks,
+                        &MessageParameters {
+                            sender: sender.to_string(),
+                            receiver: receiver.to_string(),
+                            message: message.to_string(),
+                            clock: clock.to_string(),
+                            left_bound: left_bound.to_string(),
+                            left_bracket: left_bracket.to_string(),
+                            right_bound: right_bound.to_string(),
+                            right_bracket: right_bracket.to_string(),
+                            reset: " ".to_string(),
+                        },
+                    );
                 } else {
                     message_with_payloads.insert(message.into(), "".into());
 
-                    let messages_sender = messages.get_mut(sender).unwrap();
-                    let size_messages_sender = messages_sender.len();
-
-                    messages_sender.push(
-                            format!(
-                                "type Message{}From{}To{} = SendTimed<{}, '{}', {}, {}, {}, {}, ' ', Message{}From{}To{}>;",
-                                size_messages_sender,
-                                sender,
-                                receiver,
-                                message,
-                                clock,
-                                left_bound,
-                                left_bracket == "[",
-                                right_bound,
-                                right_bracket == "]",
-                                size_messages_sender + 1,
-                                sender,
-                                receiver
-                            ).into()
-                        );
-
-                    let last_messages_sender = last_messages.get_mut(sender).unwrap();
-
-                    *last_messages_sender = String::from(format!(
-                        "Message{}From{}To{}",
-                        size_messages_sender + 1,
-                        sender,
-                        receiver
-                    ));
+                    messages_and_stacks_update(
+                        &mut messages,
+                        &mut last_messages,
+                        &mut stacks,
+                        &mut last_stacks,
+                        &MessageParameters {
+                            sender: sender.to_string(),
+                            receiver: receiver.to_string(),
+                            message: message.to_string(),
+                            clock: clock.to_string(),
+                            left_bound: left_bound.to_string(),
+                            left_bracket: left_bracket.to_string(),
+                            right_bound: right_bound.to_string(),
+                            right_bracket: right_bracket.to_string(),
+                            reset: " ".to_string(),
+                        },
+                    );
                 }
             }
 
             if check_choice(&temp_line) {
+                let captured_fields = CHOICE.captures(&temp_line).unwrap();
+
+                choices.push(captured_fields["choice"].to_string());
             } else if check_or(&temp_line) {
             } else if check_rec(&temp_line) {
+                is_recursive = true;
+
+                let captured_fields = REC.captures(&temp_line).unwrap();
+
+                loops.push(captured_fields["loop"].to_string());
             } else if check_continue(&temp_line) {
+                let captured_fields = CONTINUE.captures(&temp_line).unwrap();
+
+                if !loops.contains(&(captured_fields["loop"].to_string())) {
+                    return Err(format!(
+                        "There is a continue loop without an initialisation. See line: {}",
+                        line_number
+                    )
+                    .into());
+                }
             }
         } else {
             return Err("This is not a timed global protocol.".into());
         }
-    }
-
-    match output.as_mut() {
-        Some(generated_file) => {
-            for payload in payloads.into_iter() {
-                write!(*generated_file, "{}", format!("struct {};\n", payload))?;
-            }
-            for (name_message, payload) in message_with_payloads.into_iter() {
-                if payload.is_empty() {
-                    write!(*generated_file, "{}", format!("struct {};\n", name_message))?;
-                } else {
-                    write!(
-                        *generated_file,
-                        "{}",
-                        format!("struct {} {{ payload: {} }}\n", name_message, payload)
-                    )?;
-                }
-            }
-            write!(generated_file, "\n")?;
-
-            for (role, role_messages) in messages.into_iter() {
-                for message in role_messages {
-                    write!(*generated_file, "{}", format!("{}\n", message))?;
-                }
-                write!(
-                    *generated_file,
-                    "type {} = End;\n",
-                    format!("{}", last_messages.get(&role).unwrap())
-                )?;
-            }
-            write!(generated_file, "\n")?;
-
-            write!(generated_file, "// Write your functions here.\n\n")?;
-            write!(generated_file, "fn main(){{}}")?;
-        }
-        None => return Err("Generated file was not initialised.".into()),
     }
 
     if opening_brackets != closing_brackets {
@@ -421,568 +244,15 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         );
     }
 
+    generate_everything(
+        &mut output,
+        &roles,
+        &payloads,
+        &message_with_payloads,
+        &messages,
+        &last_messages,
+        is_recursive,
+    )?;
+
     Ok(())
-}
-
-#[cfg(test)]
-mod test_check_generator {
-    use super::*;
-    use rand::{distributions::Alphanumeric, Rng};
-
-    #[test]
-    fn test_check_global() {
-        let random_string = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_global(&format!(
-            "timed global protocol {}(role A) {{",
-            &random_string
-        )));
-        assert!(check_global(&format!(
-            "timed global protocol {}(role A, role B, role C) {{",
-            &random_string
-        )));
-        assert!(check_global(&format!(
-            "timed global protocol {}(role A, role B, role C,) {{",
-            &random_string
-        )));
-        assert!(check_global(&format!(
-            "timed global protocol {}(role A   , role B, role    C,  ) {{",
-            &random_string
-        )));
-        assert!(!check_global(&format!(
-            "global protocol {}(role A,) {{",
-            &random_string
-        )));
-        assert!(!check_global(&format!(
-            "global protocol {}(role A, role B, role C) {{",
-            &random_string
-        )));
-    }
-
-    #[test]
-    fn test_check_role() {
-        let random_string = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_role(&format!("role {}", &random_string)));
-        assert!(!check_role(&format!("r {}", &random_string)));
-        assert!(!check_role(&format!("ro {}", &random_string)));
-        assert!(!check_role(&format!("rol {}", &random_string)));
-    }
-
-    #[test]
-    fn test_check_choice() {
-        let random_string = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_choice(&format!("choice at {}", &random_string)));
-        assert!(check_choice(&format!("choice at {}{{", &random_string)));
-        assert!(check_choice(&format!("choice at {} {{", &random_string)));
-        assert!(!check_choice(&format!("choice t {} {{", &random_string)));
-        assert!(!check_choice(&format!("offer at {} {{", &random_string)));
-    }
-
-    #[test]
-    fn test_check_or() {
-        let random_string = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_or("}}or{{"));
-        assert!(check_or("}} or{{"));
-        assert!(check_or("}}or {{"));
-        assert!(check_or("}}   or   {{"));
-        assert!(check_or("   }} or   {{    "));
-        assert!(check_or(&format!("   }} or {}  {{    ", &random_string)));
-    }
-
-    #[test]
-    fn test_check_message() {
-        let random_string_message = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_payload = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_sender = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_receiver = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_left = rand::thread_rng().gen_range(1..=100);
-        let random_string_right = rand::thread_rng().gen_range(1..=100);
-        let random_string_clock = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_reset = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_message(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message(&format!(
-            "{}() from {} to {} within ]{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message(&format!(
-            "{}() from {} to {} within [{};{}[ using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message(&format!(
-            "{}() from {} to {} within ]{};{}[ using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-    }
-
-    #[test]
-    fn test_check_message_with_payload() {
-        let random_string_message = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_payload = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_sender = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_receiver = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_left = rand::thread_rng().gen_range(1..=100);
-        let random_string_right = rand::thread_rng().gen_range(1..=100);
-        let random_string_clock = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_reset = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(!check_message_with_payload(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message_with_payload(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message_with_payload(&format!(
-            "{}({}) from {} to {} within ]{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message_with_payload(&format!(
-            "{}({}) from {} to {} within [{};{}[ using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message_with_payload(&format!(
-            "{}({}) from {} to {} within ]{};{}[ using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(!check_message_with_payload(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(!check_message_with_payload(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-    }
-
-    #[test]
-    fn test_check_message_with_resetting_clock() {
-        let random_string_message = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_payload = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_sender = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_receiver = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_left = rand::thread_rng().gen_range(1..=100);
-        let random_string_right = rand::thread_rng().gen_range(1..=100);
-        let random_string_clock = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_reset = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(!check_message_with_resetting_clock(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(!check_message_with_resetting_clock(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(check_message_with_resetting_clock(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_resetting_clock(&format!(
-            "{}() from {} to {} within ]{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_resetting_clock(&format!(
-            "{}() from {} to {} within [{};{}[ using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_resetting_clock(&format!(
-            "{}() from {} to {} within ]{};{}[ using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(!check_message_with_resetting_clock(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-    }
-
-    #[test]
-    fn test_check_message_with_payload_and_resetting_clock() {
-        let random_string_message = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_payload = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_sender = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_receiver = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_left = rand::thread_rng().gen_range(1..=100);
-        let random_string_right = rand::thread_rng().gen_range(1..=100);
-        let random_string_clock = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-        let random_string_reset = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(!check_message_with_payload_and_resetting_clock(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(!check_message_with_payload_and_resetting_clock(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ();",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock
-        )));
-
-        assert!(!check_message_with_payload_and_resetting_clock(&format!(
-            "{}() from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_payload_and_resetting_clock(&format!(
-            "{}({}) from {} to {} within [{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_payload_and_resetting_clock(&format!(
-            "{}({}) from {} to {} within ]{};{}] using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_payload_and_resetting_clock(&format!(
-            "{}({}) from {} to {} within [{};{}[ using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-
-        assert!(check_message_with_payload_and_resetting_clock(&format!(
-            "{}({}) from {} to {} within ]{};{}[ using {} and resetting ({});",
-            &random_string_message,
-            &random_string_payload,
-            &random_string_sender,
-            &random_string_receiver,
-            &random_string_left,
-            &random_string_right,
-            &random_string_clock,
-            &random_string_reset
-        )));
-    }
-
-    #[test]
-    fn test_check_rec() {
-        let random_string = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_rec(&format!("rec {}", &random_string)));
-        assert!(check_rec(&format!("rec {} {{", &random_string)));
-        assert!(!check_rec(&format!("rece {}", &random_string)));
-        assert!(check_rec(&format!("rec {} }}", &random_string)));
-    }
-
-    #[test]
-    fn test_check_continue() {
-        let random_string = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(7)
-            .map(char::from)
-            .collect::<String>();
-
-        assert!(check_continue(&format!("continue {}", &random_string)));
-        assert!(!check_continue(&format!("conti nue {}", &random_string)));
-    }
 }
