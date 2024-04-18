@@ -9,7 +9,7 @@ use std::io::{BufRead, BufReader};
 use std::collections::{HashMap, HashSet};
 
 use super::auxiliary_objects::{
-    check_brackets::check_brackets, code_generate::generate_everything,
+    check_brackets::check_brackets, code_generate::*,
     messages_and_stacks_update::messages_and_stacks_update, regex::*, MessageParameters,
 };
 
@@ -27,8 +27,8 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     let mut message_with_payloads: HashMap<String, String> = HashMap::new();
     let mut choices: Vec<String> = vec![];
     let mut loops: Vec<String> = vec![];
-    let mut messages: HashMap<String, Vec<String>> = HashMap::new();
-    let mut last_messages: HashMap<String, String> = HashMap::new();
+    let mut messages: HashMap<String, HashMap<String, Vec<String>>> = HashMap::new();
+    let mut last_messages: HashMap<String, HashMap<String, String>> = HashMap::new();
     let mut clocks: HashMap<String, Vec<String>> = HashMap::new();
     let mut stacks: HashMap<String, Vec<String>> = HashMap::new();
     let mut last_stacks: HashMap<String, String> = HashMap::new();
@@ -58,10 +58,31 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
 
             for (_, [role]) in ROLE.captures_iter(&temp_line).map(|c| c.extract()) {
                 roles.push(role.into());
-                messages.insert(role.to_string(), vec![]);
-                last_messages.insert(role.to_string(), format!("Message0From{}", role));
+                messages.insert(role.to_string(), HashMap::new());
+                last_messages.insert(role.to_string(), HashMap::new());
                 stacks.insert(role.to_string(), vec![]);
-                last_stacks.insert(role.to_string(), format!("Ordering0By{}", role));
+                last_stacks.insert(role.to_string(), format!("Ordering0For{}", role));
+            }
+
+            roles.sort();
+
+            for (role, channels) in messages.iter_mut() {
+                for other_role in roles.iter() {
+                    if other_role != role {
+                        channels.insert(other_role.to_string(), vec![]);
+                    }
+                }
+            }
+
+            for (role, channels) in last_messages.iter_mut() {
+                for other_role in roles.iter() {
+                    if other_role != role {
+                        channels.insert(
+                            other_role.to_string(),
+                            format!("Message0From{}To{}", role, other_role),
+                        );
+                    }
+                }
             }
         } else if !check_global(&temp_line) && line_number > 0 {
             if check_message(&temp_line) {
@@ -244,15 +265,17 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         );
     }
 
-    generate_everything(
-        &mut output,
-        &roles,
-        &payloads,
-        &message_with_payloads,
-        &messages,
-        &last_messages,
-        is_recursive,
-    )?;
+    generate_imports(&mut output, &roles, is_recursive)?;
+
+    generate_structs(&mut output, &payloads, &message_with_payloads)?;
+
+    generate_sessions(&mut output, &messages, &last_messages)?;
+
+    generate_stacks(&mut output, &stacks, &last_stacks)?;
+
+    generate_endpoints(&mut output, &roles)?;
+
+    generate_fn(&mut output)?;
 
     Ok(())
 }
