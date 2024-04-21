@@ -218,31 +218,30 @@ pub(crate) fn generate_endpoints(
             // Generate the endpoints
             for role in global_elements.roles.iter() {
                 writeln!(generated_file, "// Endpoint for role {}", role)?;
-                write!(
-                    generated_file,
-                    "type {} = MeshedChannels<",
-                    main_tree.endpoints.get(role).unwrap()[0]
-                )?;
-                for other_role in global_elements.roles.iter() {
-                    if other_role != role {
-                        write!(
-                            generated_file,
-                            "{}, ",
-                            main_tree
-                                .first_message
-                                .get(role)
-                                .unwrap()
-                                .get(other_role)
-                                .unwrap()
-                        )?;
+
+                for endpoint in main_tree.endpoints.get(role).unwrap() {
+                    write!(generated_file, "type {} = MeshedChannels<", endpoint)?;
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            write!(
+                                generated_file,
+                                "{}, ",
+                                main_tree
+                                    .first_message
+                                    .get(role)
+                                    .unwrap()
+                                    .get(other_role)
+                                    .unwrap()
+                            )?;
+                        }
                     }
+                    writeln!(
+                        generated_file,
+                        "{}, Name{}>;",
+                        main_tree.first_stack.get(role).unwrap(),
+                        role
+                    )?;
                 }
-                writeln!(
-                    generated_file,
-                    "{}, Name{}>;",
-                    main_tree.first_stack.get(role).unwrap(),
-                    role
-                )?;
                 writeln!(generated_file)?;
             }
 

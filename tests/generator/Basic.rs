@@ -9,16 +9,15 @@ use std::time::Instant;
 generate_atmp!(MeshedChannels, A, B, C);
 
 // Types of the payloads
+struct Integer;
 struct Stri;
 struct Payload;
-struct Integer;
 struct Test3 { payload: Stri }
-struct Test1 { payload: Payload }
 struct Test2 { payload: Integer }
+struct Test1 { payload: Payload }
 struct Test4 { payload: Payload }
 
 // Binary sessions for A
-type Message_0_v_0_FromAToC = End;
 type Message_0_v_0_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromAToB>;
 type Message_0_v_1_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromAToB>;
 type Message_0_v_2_FromAToB = SendTimed<Test1, 'a', 0, true, 1, false, ' ', Message_0_v_3_FromAToB>;
@@ -27,11 +26,12 @@ type Message_0_v_4_FromAToB = SendTimed<Test2, 'a', 0, true, 1, true, ' ', Messa
 type Message_0_v_5_FromAToB = SendTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_v_6_FromAToB>;
 type Message_0_v_6_FromAToB = SendTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_v_7_FromAToB>;
 type Message_0_v_7_FromAToB = End;
+type Message_0_v_0_FromAToC = End;
 
 // Binary sessions for C
-type Message_0_v_0_FromCToA = End;
 type Message_0_v_0_FromCToB = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromCToB>;
 type Message_0_v_1_FromCToB = End;
+type Message_0_v_0_FromCToA = End;
 
 // Binary sessions for B
 type Message_0_v_0_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromBToA>;
@@ -55,6 +55,10 @@ type Ordering_0_v_5_ForA = RoleB<Ordering_0_v_6_ForA>;
 type Ordering_0_v_6_ForA = RoleB<Ordering_0_v_7_ForA>;
 type Ordering_0_v_7_ForA = RoleEnd;
 
+// Stacks for C
+type Ordering_0_v_0_ForC = RoleB<Ordering_0_v_1_ForC>;
+type Ordering_0_v_1_ForC = RoleEnd;
+
 // Stacks for B
 type Ordering_0_v_0_ForB = RoleA<Ordering_0_v_1_ForB>;
 type Ordering_0_v_1_ForB = RoleC<Ordering_0_v_2_ForB>;
@@ -65,10 +69,6 @@ type Ordering_0_v_5_ForB = RoleA<Ordering_0_v_6_ForB>;
 type Ordering_0_v_6_ForB = RoleA<Ordering_0_v_7_ForB>;
 type Ordering_0_v_7_ForB = RoleA<Ordering_0_v_8_ForB>;
 type Ordering_0_v_8_ForB = RoleEnd;
-
-// Stacks for C
-type Ordering_0_v_0_ForC = RoleB<Ordering_0_v_1_ForC>;
-type Ordering_0_v_1_ForC = RoleEnd;
 
 // Endpoint for role A
 type Endpoint_0_v_0_ForA = MeshedChannels<Message_0_v_0_FromAToB, Message_0_v_0_FromAToC, Ordering_0_v_0_ForA, NameA>;

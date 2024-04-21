@@ -140,6 +140,8 @@ pub(crate) fn process_line(
                         sub_trees: vec![],
                     };
 
+                    let index = subtree.index[subtree.index.len() - 1];
+
                     subtree
                         .enums
                         .insert(current_index_string.to_string(), (sender.to_string(), 0));
@@ -153,18 +155,6 @@ pub(crate) fn process_line(
                             .last_message
                             .insert(role.to_string(), HashMap::new());
                         subtree.stacks.insert(role.to_string(), vec![]);
-                        subtree.first_stack.insert(
-                            role.to_string(),
-                            format!("Ordering_{}_v_0_For{}", current_index_string, role),
-                        );
-                        subtree.last_stack.insert(
-                            role.to_string(),
-                            format!("Ordering_{}_v_0_For{}", current_index_string, role),
-                        );
-                        subtree.endpoints.insert(
-                            role.to_string(),
-                            vec![format!("Endpoint_{}_v_0_For{}", current_index_string, role)],
-                        );
                     }
 
                     for (role, channels) in subtree.messages.iter_mut() {
@@ -178,11 +168,13 @@ pub(crate) fn process_line(
                     for (role, channels) in subtree.first_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
+                                println!("First message Message_{}_v_{}_From{}To{}",
+                                current_index_string, index, role, other_role);
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
-                                        "Message_{}_v_0_From{}To{}",
-                                        current_index_string, role, other_role
+                                        "Message_{}_v_{}_From{}To{}",
+                                        current_index_string, index, role, other_role
                                     ),
                                 );
                             }
@@ -192,15 +184,35 @@ pub(crate) fn process_line(
                     for (role, channels) in subtree.last_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
+                                println!("Last message Message_{}_v_{}_From{}To{}",
+                                current_index_string, index, role, other_role);
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
-                                        "Message_{}_v_0_From{}To{}",
-                                        current_index_string, role, other_role
+                                        "Message_{}_v_{}_From{}To{}",
+                                        current_index_string, index, role, other_role
                                     ),
                                 );
                             }
                         }
+                    }
+
+                    for role in global_elements.roles.iter() {
+                        subtree.first_stack.insert(
+                            role.to_string(),
+                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+                        );
+                        subtree.last_stack.insert(
+                            role.to_string(),
+                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+                        );
+                        subtree.endpoints.insert(
+                            role.to_string(),
+                            vec![format!(
+                                "Endpoint_{}_v_{}_For{}",
+                                current_index_string, index, role
+                            )],
+                        );
                     }
 
                     for receiver in global_elements.roles.iter() {
@@ -293,6 +305,19 @@ pub(crate) fn process_line(
                         .into());
                     }
 
+                    let previous_index_string = main_tree
+                        .index
+                        .iter()
+                        .map(|&id| id.to_string())
+                        .collect::<Vec<_>>()
+                        .join("_");
+
+                    main_tree.enums.get_mut(&previous_index_string).unwrap().1 += 1;
+
+                    let main_tree_index = main_tree.index.len();
+
+                    main_tree.index[main_tree_index - 1] += 1;
+
                     let current_index_string = main_tree
                         .index
                         .iter()
@@ -300,22 +325,14 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    main_tree.enums.get_mut(&current_index_string).unwrap().1 += 1;
-
-                    let main_tree_index = main_tree.index.len();
-
-                    main_tree.index[main_tree_index - 1] += 1;
-
-                    let index = main_tree.index[main_tree_index - 1];
-
                     for (role, channels) in main_tree.first_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
-                                        "Message_{}_v_{}_From{}To{}",
-                                        current_index_string, index, role, other_role
+                                        "Message_{}_v_0_From{}To{}",
+                                        current_index_string, role, other_role
                                     ),
                                 );
                             }
@@ -328,8 +345,8 @@ pub(crate) fn process_line(
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
-                                        "Message_{}_v_{}_From{}To{}",
-                                        current_index_string, index, role, other_role
+                                        "Message_{}_v_0_From{}To{}",
+                                        current_index_string, role, other_role
                                     ),
                                 );
                             }
@@ -339,17 +356,18 @@ pub(crate) fn process_line(
                     for role in global_elements.roles.iter() {
                         main_tree.first_stack.insert(
                             role.to_string(),
-                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+                            format!("Ordering_{}_v_0_For{}", current_index_string, role),
                         );
                         main_tree.last_stack.insert(
                             role.to_string(),
-                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+                            format!("Ordering_{}_v_0_For{}", current_index_string, role),
                         );
 
-                        main_tree.endpoints.get_mut(role).unwrap().push(format!(
-                            "Endpoint_{}_v_{}_For{}",
-                            current_index_string, index, role
-                        ));
+                        main_tree
+                            .endpoints
+                            .get_mut(role)
+                            .unwrap()
+                            .push(format!("Endpoint_{}_v_0_For{}", current_index_string, role));
                     }
                 } else if check_rec(&line) {
                     let captured_fields = REC.captures(&line).unwrap();
