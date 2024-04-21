@@ -107,16 +107,15 @@ pub(crate) fn generate_sessions(
                     for message in role_messages {
                         writeln!(generated_file, "{}", message)?;
                     }
-                    writeln!(
-                        generated_file,
-                        "type {} = End;",
-                        main_tree
-                            .last_message
-                            .get(role)
-                            .unwrap()
-                            .get(other_role)
-                            .unwrap()
-                    )?;
+                    let message = main_tree
+                        .last_message
+                        .get(role)
+                        .unwrap()
+                        .get(other_role)
+                        .unwrap();
+                    if !message.is_empty() {
+                        writeln!(generated_file, "type {} = End;", message)?;
+                    }
                 }
                 writeln!(generated_file)?;
             }
@@ -145,11 +144,10 @@ pub(crate) fn generate_stacks(
                 for stack in role_stacks {
                     writeln!(generated_file, "{}", stack)?;
                 }
-                writeln!(
-                    generated_file,
-                    "type {} = RoleEnd;",
-                    main_tree.last_stack.get(role).unwrap()
-                )?;
+                let stack = main_tree.last_stack.get(role).unwrap();
+                if !stack.is_empty() {
+                    writeln!(generated_file, "type {} = RoleEnd;", stack)?;
+                }
                 writeln!(generated_file)?;
             }
 
@@ -187,7 +185,7 @@ pub(crate) fn generate_enums(
                         for i in 0..=elt.1 {
                             writeln!(
                                 generated_file,
-                                "\tBranching_{}({}),",
+                                "\tBranching{}({}),",
                                 i, endpoints_role[i as usize]
                             )?;
                         }

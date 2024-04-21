@@ -209,7 +209,6 @@ pub(crate) fn process_line(
                             let channels_sender = main_tree.messages.get_mut(sender).unwrap();
 
                             let messages_sender = channels_sender.get_mut(receiver).unwrap();
-                            let size_messages_sender = messages_sender.len();
 
                             let last_channel_sender =
                                 main_tree.last_message.get_mut(sender).unwrap();
@@ -226,16 +225,12 @@ pub(crate) fn process_line(
                                 )
                             );
 
-                            *last_messages_sender = format!(
-                                "Message_{}_v_{}_From{}To{}",
-                                current_index_string, size_messages_sender, sender, receiver
-                            );
+                            *last_messages_sender = "".to_string();
 
                             // The receiver must receive the choice from the sender
                             let channels_receiver = main_tree.messages.get_mut(receiver).unwrap();
 
                             let messages_receiver = channels_receiver.get_mut(sender).unwrap();
-                            let size_messages_receiver = messages_receiver.len();
 
                             let last_channel_receiver =
                                 main_tree.last_message.get_mut(receiver).unwrap();
@@ -252,15 +247,11 @@ pub(crate) fn process_line(
                                 )
                             );
 
-                            *last_messages_receiver = format!(
-                                "Message_{}_v_{}_From{}To{}",
-                                current_index_string, size_messages_receiver, receiver, sender
-                            );
+                            *last_messages_receiver = "".to_string();
 
                             // Update stack for the receiver:
                             // they must receive the choice from the sender
                             let stack_receiver = main_tree.stacks.get_mut(receiver).unwrap();
-                            let size_stack_receiver = stack_receiver.len();
 
                             let last_stacks_receiver =
                                 main_tree.last_stack.get_mut(receiver).unwrap();
@@ -270,29 +261,18 @@ pub(crate) fn process_line(
                                 last_stacks_receiver, sender
                             ));
 
-                            *last_stacks_receiver = format!(
-                                "Ordering_{}_v_{}_For{}",
-                                current_index_string,
-                                size_stack_receiver + 1,
-                                receiver
-                            );
+                            *last_stacks_receiver = "".to_string();
                         } else {
                             // Update stack for the sender:
                             // they must broadcast their choice
                             let stack_sender = main_tree.stacks.get_mut(sender).unwrap();
-                            let size_stack_sender = stack_sender.len();
 
                             let last_stacks_sender = main_tree.last_stack.get_mut(sender).unwrap();
 
                             stack_sender
                                 .push(format!("type {} = RoleBroadcast;", last_stacks_sender));
 
-                            *last_stacks_sender = format!(
-                                "Ordering_{}_v_{}_For{}",
-                                current_index_string,
-                                size_stack_sender + 1,
-                                sender
-                            );
+                            *last_stacks_sender = "".to_string();
                         }
                     }
 
