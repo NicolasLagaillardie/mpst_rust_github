@@ -10,5 +10,10 @@ timed global protocol Choice(role A, role B, role C) {
         Test6(payload) from A to B within [0;1] using a and resetting ();
         Test7() from A to B within [0;1] using a and resetting (a);
         Test8(payload) from A to B within [0;1] using a and resetting (a);
+    } or {
+        Test5() from A to B within [0;1] using a and resetting ();
+        Test6(payload) from A to B within [0;1] using a and resetting ();
+        Test7() from A to B within [0;1] using a and resetting (a);
+        Test8(payload) from A to B within [0;1] using a and resetting (a);
     }
 }

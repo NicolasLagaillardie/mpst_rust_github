@@ -317,6 +317,9 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
+                    println!("parent_tree.choice_makers: {:?}", parent_tree.choice_makers);
+                    println!("basic_index_string: {:?}", basic_index_string);
+
                     let sender = parent_tree.choice_makers.get(&basic_index_string).unwrap();
 
                     // Update everything in the main_tree
@@ -493,9 +496,9 @@ pub(crate) fn process_line(
                     process_line(
                         lines_iter,
                         global_elements,
-                        main_tree,
+                        parent_tree,
                         &mut sub_tree,
-                        bracket_offset + 1,
+                        bracket_offset,
                     )?;
 
                     main_tree.sub_trees.push(sub_tree);
