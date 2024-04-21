@@ -42,6 +42,7 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         first_stack: HashMap::new(),
         last_stack: HashMap::new(),
         enums: HashMap::new(),
+        choice_makers: HashMap::new(),
         loops: vec![],
         endpoints: HashMap::new(),
         sub_trees: vec![],
@@ -53,7 +54,27 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         .enumerate()
         .map(|(line_number, line)| (line_number, line.unwrap()));
 
-    process_line(&mut lines_iter, &mut global_elements, &mut main_tree, 0)?;
+    process_line(
+        &mut lines_iter,
+        &mut global_elements,
+        &mut Tree {
+            index: vec![],
+            message_with_payloads: HashMap::new(),
+            messages: HashMap::new(),
+            first_message: HashMap::new(),
+            last_message: HashMap::new(),
+            stacks: HashMap::new(),
+            first_stack: HashMap::new(),
+            last_stack: HashMap::new(),
+            enums: HashMap::new(),
+            choice_makers: HashMap::new(),
+            loops: vec![],
+            endpoints: HashMap::new(),
+            sub_trees: vec![],
+        },
+        &mut main_tree,
+        0,
+    )?;
 
     // Check if number of opening and closing brackets are the same
     if global_elements.opening_brackets != global_elements.closing_brackets {

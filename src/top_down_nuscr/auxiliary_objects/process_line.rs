@@ -13,6 +13,7 @@ pub(crate) fn process_line(
         impl FnMut((usize, Result<String, Error>)) -> (usize, String),
     >,
     global_elements: &mut GlobalElements,
+    parent_tree: &mut Tree,
     main_tree: &mut Tree,
     bracket_offset: usize,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -108,8 +109,7 @@ pub(crate) fn process_line(
                         &mut global_elements.payloads,
                         main_tree,
                     )?;
-                }
-                if check_choice(&line) {
+                } else if check_choice(&line) {
                     global_elements.has_choice = true;
 
                     let captured_fields = CHOICE.captures(&line).unwrap();
@@ -125,7 +125,11 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    let mut subtree = Tree {
+                    main_tree
+                        .choice_makers
+                        .insert(current_index_string.to_string(), sender.to_string());
+
+                    let mut sub_tree = Tree {
                         index: temp_index,
                         message_with_payloads: HashMap::new(),
                         messages: HashMap::new(),
@@ -134,30 +138,31 @@ pub(crate) fn process_line(
                         stacks: HashMap::new(),
                         first_stack: HashMap::new(),
                         last_stack: HashMap::new(),
+                        choice_makers: HashMap::new(),
                         enums: HashMap::new(),
                         loops: vec![],
                         endpoints: HashMap::new(),
                         sub_trees: vec![],
                     };
 
-                    let index = subtree.index[subtree.index.len() - 1];
+                    let index = sub_tree.index[sub_tree.index.len() - 1];
 
-                    subtree
+                    sub_tree
                         .enums
                         .insert(current_index_string.to_string(), (sender.to_string(), 0));
 
                     for role in global_elements.roles.iter() {
-                        subtree.messages.insert(role.to_string(), HashMap::new());
-                        subtree
+                        sub_tree.messages.insert(role.to_string(), HashMap::new());
+                        sub_tree
                             .first_message
                             .insert(role.to_string(), HashMap::new());
-                        subtree
+                        sub_tree
                             .last_message
                             .insert(role.to_string(), HashMap::new());
-                        subtree.stacks.insert(role.to_string(), vec![]);
+                        sub_tree.stacks.insert(role.to_string(), vec![]);
                     }
 
-                    for (role, channels) in subtree.messages.iter_mut() {
+                    for (role, channels) in sub_tree.messages.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
                                 channels.insert(other_role.to_string(), vec![]);
@@ -165,11 +170,9 @@ pub(crate) fn process_line(
                         }
                     }
 
-                    for (role, channels) in subtree.first_message.iter_mut() {
+                    for (role, channels) in sub_tree.first_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
-                                println!("First message Message_{}_v_{}_From{}To{}",
-                                current_index_string, index, role, other_role);
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
@@ -181,11 +184,9 @@ pub(crate) fn process_line(
                         }
                     }
 
-                    for (role, channels) in subtree.last_message.iter_mut() {
+                    for (role, channels) in sub_tree.last_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
-                                println!("Last message Message_{}_v_{}_From{}To{}",
-                                current_index_string, index, role, other_role);
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
@@ -198,15 +199,15 @@ pub(crate) fn process_line(
                     }
 
                     for role in global_elements.roles.iter() {
-                        subtree.first_stack.insert(
+                        sub_tree.first_stack.insert(
                             role.to_string(),
                             format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
                         );
-                        subtree.last_stack.insert(
+                        sub_tree.last_stack.insert(
                             role.to_string(),
                             format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
                         );
-                        subtree.endpoints.insert(
+                        sub_tree.endpoints.insert(
                             role.to_string(),
                             vec![format!(
                                 "Endpoint_{}_v_{}_For{}",
@@ -291,11 +292,12 @@ pub(crate) fn process_line(
                     process_line(
                         lines_iter,
                         global_elements,
-                        &mut subtree,
+                        main_tree,
+                        &mut sub_tree,
                         bracket_offset + 1,
                     )?;
 
-                    main_tree.sub_trees.push(subtree);
+                    main_tree.sub_trees.push(sub_tree);
                 } else if check_or(&line) {
                     if !global_elements.has_choice {
                         return Err(format!(
@@ -304,49 +306,93 @@ pub(crate) fn process_line(
                         )
                         .into());
                     }
+                    // Get the original sender of the choice
+                    let mut temp_basic_index = main_tree.index.clone();
+                    let temp_basic_index_len = temp_basic_index.len() - 1;
+                    temp_basic_index[temp_basic_index_len] = 0;
 
-                    let previous_index_string = main_tree
-                        .index
+                    let basic_index_string = temp_basic_index
                         .iter()
                         .map(|&id| id.to_string())
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    main_tree.enums.get_mut(&previous_index_string).unwrap().1 += 1;
+                    let sender = parent_tree.choice_makers.get(&basic_index_string).unwrap();
 
-                    let main_tree_index = main_tree.index.len();
+                    // Update everything in the main_tree
+                    let mut temp_index = main_tree.index.clone();
+                    let temp_index_len = temp_index.len() - 1;
+                    temp_index[temp_index_len] += 1;
 
-                    main_tree.index[main_tree_index - 1] += 1;
-
-                    let current_index_string = main_tree
-                        .index
+                    let current_index_string = temp_index
                         .iter()
                         .map(|&id| id.to_string())
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    for (role, channels) in main_tree.first_message.iter_mut() {
+                    let mut sub_tree = Tree {
+                        index: temp_index,
+                        message_with_payloads: HashMap::new(),
+                        messages: HashMap::new(),
+                        first_message: HashMap::new(),
+                        last_message: HashMap::new(),
+                        stacks: HashMap::new(),
+                        first_stack: HashMap::new(),
+                        last_stack: HashMap::new(),
+                        enums: HashMap::new(),
+                        choice_makers: HashMap::new(),
+                        loops: vec![],
+                        endpoints: HashMap::new(),
+                        sub_trees: vec![],
+                    };
+
+                    let index = sub_tree.index[sub_tree.index.len() - 1];
+
+                    sub_tree
+                        .enums
+                        .insert(current_index_string.to_string(), (sender.to_string(), 0));
+
+                    for role in global_elements.roles.iter() {
+                        sub_tree.messages.insert(role.to_string(), HashMap::new());
+                        sub_tree
+                            .first_message
+                            .insert(role.to_string(), HashMap::new());
+                        sub_tree
+                            .last_message
+                            .insert(role.to_string(), HashMap::new());
+                        sub_tree.stacks.insert(role.to_string(), vec![]);
+                    }
+
+                    for (role, channels) in sub_tree.messages.iter_mut() {
+                        for other_role in global_elements.roles.iter() {
+                            if other_role != role {
+                                channels.insert(other_role.to_string(), vec![]);
+                            }
+                        }
+                    }
+
+                    for (role, channels) in sub_tree.first_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
-                                        "Message_{}_v_0_From{}To{}",
-                                        current_index_string, role, other_role
+                                        "Message_{}_v_{}_From{}To{}",
+                                        current_index_string, index, role, other_role
                                     ),
                                 );
                             }
                         }
                     }
 
-                    for (role, channels) in main_tree.last_message.iter_mut() {
+                    for (role, channels) in sub_tree.last_message.iter_mut() {
                         for other_role in global_elements.roles.iter() {
                             if other_role != role {
                                 channels.insert(
                                     other_role.to_string(),
                                     format!(
-                                        "Message_{}_v_0_From{}To{}",
-                                        current_index_string, role, other_role
+                                        "Message_{}_v_{}_From{}To{}",
+                                        current_index_string, index, role, other_role
                                     ),
                                 );
                             }
@@ -354,21 +400,105 @@ pub(crate) fn process_line(
                     }
 
                     for role in global_elements.roles.iter() {
-                        main_tree.first_stack.insert(
+                        sub_tree.first_stack.insert(
                             role.to_string(),
-                            format!("Ordering_{}_v_0_For{}", current_index_string, role),
+                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
                         );
-                        main_tree.last_stack.insert(
+                        sub_tree.last_stack.insert(
                             role.to_string(),
-                            format!("Ordering_{}_v_0_For{}", current_index_string, role),
+                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
                         );
-
-                        main_tree
-                            .endpoints
-                            .get_mut(role)
-                            .unwrap()
-                            .push(format!("Endpoint_{}_v_0_For{}", current_index_string, role));
+                        sub_tree.endpoints.insert(
+                            role.to_string(),
+                            vec![format!(
+                                "Endpoint_{}_v_{}_For{}",
+                                current_index_string, index, role
+                            )],
+                        );
                     }
+
+                    for receiver in global_elements.roles.iter() {
+                        if receiver != sender {
+                            // The sender must send the choice to each other role (receiver)
+                            let channels_sender = main_tree.messages.get_mut(sender).unwrap();
+
+                            let messages_sender = channels_sender.get_mut(receiver).unwrap();
+
+                            let last_channel_sender =
+                                main_tree.last_message.get_mut(sender).unwrap();
+                            let last_messages_sender =
+                                last_channel_sender.get_mut(receiver).unwrap();
+
+                            messages_sender.push(
+                                format!(
+                                    "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
+                                    last_messages_sender,
+                                    current_index_string,
+                                    sender,
+                                    receiver,
+                                )
+                            );
+
+                            *last_messages_sender = "".to_string();
+
+                            // The receiver must receive the choice from the sender
+                            let channels_receiver = main_tree.messages.get_mut(receiver).unwrap();
+
+                            let messages_receiver = channels_receiver.get_mut(sender).unwrap();
+
+                            let last_channel_receiver =
+                                main_tree.last_message.get_mut(receiver).unwrap();
+                            let last_messages_receiver =
+                                last_channel_receiver.get_mut(sender).unwrap();
+
+                            messages_receiver.push(
+                                format!(
+                                    "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
+                                    last_messages_receiver,
+                                    current_index_string,
+                                    sender,
+                                    receiver,
+                                )
+                            );
+
+                            *last_messages_receiver = "".to_string();
+
+                            // Update stack for the receiver:
+                            // they must receive the choice from the sender
+                            let stack_receiver = main_tree.stacks.get_mut(receiver).unwrap();
+
+                            let last_stacks_receiver =
+                                main_tree.last_stack.get_mut(receiver).unwrap();
+
+                            stack_receiver.push(format!(
+                                "type {} = Role{}<RoleEnd>;",
+                                last_stacks_receiver, sender
+                            ));
+
+                            *last_stacks_receiver = "".to_string();
+                        } else {
+                            // Update stack for the sender:
+                            // they must broadcast their choice
+                            let stack_sender = main_tree.stacks.get_mut(sender).unwrap();
+
+                            let last_stacks_sender = main_tree.last_stack.get_mut(sender).unwrap();
+
+                            stack_sender
+                                .push(format!("type {} = RoleBroadcast;", last_stacks_sender));
+
+                            *last_stacks_sender = "".to_string();
+                        }
+                    }
+
+                    process_line(
+                        lines_iter,
+                        global_elements,
+                        main_tree,
+                        &mut sub_tree,
+                        bracket_offset + 1,
+                    )?;
+
+                    main_tree.sub_trees.push(sub_tree);
                 } else if check_rec(&line) {
                     let captured_fields = REC.captures(&line).unwrap();
 
@@ -391,7 +521,13 @@ pub(crate) fn process_line(
                 return Err("This is not a timed global protocol.".into());
             }
 
-            process_line(lines_iter, global_elements, main_tree, bracket_offset)
+            process_line(
+                lines_iter,
+                global_elements,
+                parent_tree,
+                main_tree,
+                bracket_offset,
+            )
         }
     }
 }
